@@ -1,0 +1,6 @@
+# MacOSX
+.DS_Store
+
+# XCode
+*.pbxuser
+xcuserdata

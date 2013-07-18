@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="2.0" toolsVersion="3084" systemVersion="12E55" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="bJn-7E-zuy">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="2083"/>
+    </dependencies>
+    <scenes>
+        <!--Map Renderer Controller-->
+        <scene sceneID="wgk-yH-OVu">
+            <objects>
+                <viewController id="bJn-7E-zuy" customClass="UIMapRendererController" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="Y57-tE-rFU"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="4Pc-om-AgY" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-1494" y="82"/>
+        </scene>
+    </scenes>
+    <classes>
+        <class className="UIMapRendererController" superclassName="UIViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/UIMapRendererController.h"/>
+        </class>
+    </classes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
+</document>

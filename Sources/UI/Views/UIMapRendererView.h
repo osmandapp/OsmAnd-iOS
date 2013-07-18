@@ -10,4 +10,8 @@
 
 @interface UIMapRendererView : UIView
 
+@property (readonly) BOOL isRenderingSuspended;
+- (BOOL)suspendRendering;
+- (BOOL)resumeRendering;
+
 @end

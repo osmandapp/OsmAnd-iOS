@@ -1,5 +1,5 @@
 //
-//  UIMapViewController.h
+//  UIMapRendererController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/18/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIMapViewController : UIViewController
+@interface UIMapRendererController : UIViewController
 
 @end

@@ -17,6 +17,10 @@
 		BB098D091793F7FD00423944 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D081793F7FD00423944 /* Default@2x.png */; };
 		BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D0A1793F7FD00423944 /* Default-568h@2x.png */; };
 		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
+		BB2545B61798163200E80B58 /* UIMapRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B51798163200E80B58 /* UIMapRendererView.m */; };
+		BB2545BA179816A300E80B58 /* UIMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B9179816A300E80B58 /* UIMapViewController.m */; };
+		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
+		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +37,12 @@
 		BB098D081793F7FD00423944 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BB098D0A1793F7FD00423944 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
+		BB2545B41798163200E80B58 /* UIMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMapRendererView.h; path = UI/Views/UIMapRendererView.h; sourceTree = "<group>"; };
+		BB2545B51798163200E80B58 /* UIMapRendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMapRendererView.m; path = UI/Views/UIMapRendererView.m; sourceTree = "<group>"; };
+		BB2545B8179816A300E80B58 /* UIMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIMapViewController.h; path = UI/Controllers/UIMapViewController.h; sourceTree = "<group>"; };
+		BB2545B9179816A300E80B58 /* UIMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = UIMapViewController.m; path = UI/Controllers/UIMapViewController.m; sourceTree = "<group>"; };
+		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
+				BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */,
 				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
 				BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */,
 				BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */,
@@ -53,7 +65,6 @@
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
-				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
@@ -71,6 +82,9 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB2545BD1798254B00E80B58 /* QuartzCore.framework */,
+				BB2545BB1798253E00E80B58 /* OpenGLES.framework */,
+				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
 				BB098CF41793F7FD00423944 /* UIKit.framework */,
 				BB098CF61793F7FD00423944 /* Foundation.framework */,
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
@@ -81,6 +95,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				BB2545B21798160A00E80B58 /* UI */,
 				BB098D031793F7FD00423944 /* OsmAndAppDelegate.h */,
 				BB098D041793F7FD00423944 /* OsmAndAppDelegate.m */,
 				BB098CFB1793F7FD00423944 /* Supporting Files */,
@@ -99,6 +114,33 @@
 				BB098D0A1793F7FD00423944 /* Default-568h@2x.png */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		BB2545B21798160A00E80B58 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				BB2545B71798167600E80B58 /* Controllers */,
+				BB2545B31798161500E80B58 /* Views */,
+			);
+			name = UI;
+			sourceTree = "<group>";
+		};
+		BB2545B31798161500E80B58 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				BB2545B41798163200E80B58 /* UIMapRendererView.h */,
+				BB2545B51798163200E80B58 /* UIMapRendererView.m */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		BB2545B71798167600E80B58 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				BB2545B8179816A300E80B58 /* UIMapViewController.h */,
+				BB2545B9179816A300E80B58 /* UIMapViewController.m */,
+			);
+			name = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -169,6 +211,8 @@
 			files = (
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OsmAndAppDelegate.m in Sources */,
+				BB2545B61798163200E80B58 /* UIMapRendererView.m in Sources */,
+				BB2545BA179816A300E80B58 /* UIMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

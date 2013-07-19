@@ -1,14 +1,14 @@
 //
-//  OsmAndAppDelegate.m
+//  OAAppDelegate.m
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/15/13.
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OsmAndAppDelegate.h"
+#import "OAAppDelegate.h"
 
-@implementation OsmAndAppDelegate
+@implementation OAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

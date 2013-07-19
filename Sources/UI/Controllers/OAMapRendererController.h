@@ -1,5 +1,5 @@
 //
-//  UIMapRendererController.h
+//  OAMapRendererController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/18/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIMapRendererController : UIViewController
+@interface OAMapRendererController : UIViewController
 
 @end

@@ -1,5 +1,5 @@
 //
-//  OsmAndAppDelegate.h
+//  OAAppDelegate.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/15/13.
@@ -8,8 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OsmAndAppDelegate : UIResponder <UIApplicationDelegate>
+@interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) UIWindow* window;
 
 @end

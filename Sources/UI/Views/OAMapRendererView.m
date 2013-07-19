@@ -1,12 +1,12 @@
 //
-//  UIMapRendererView.m
+//  OAMapRendererView.m
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/18/13.
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "UIMapRendererView.h"
+#import "OAMapRendererView.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -20,9 +20,8 @@
 #   define validateGL()
 #endif
 
-@implementation UIMapRendererView
+@implementation OAMapRendererView
 {
-    CAEAGLLayer* _eaglLayer;
     EAGLContext* _glContext;
     
     GLuint _depthRenderBuffer;
@@ -61,17 +60,31 @@
 - (void)ctor
 {
     // Set default values
-    _eaglLayer = nil;
     _glContext = nil;
     _depthRenderBuffer = 0;
     _colorRenderBuffer = 0;
     _frameBuffer = 0;
     _displayLink = nil;
-    
-    _eaglLayer = (CAEAGLLayer*)self.layer;
+}
+
+- (void)dtor
+{
+    // Just to be sure, try to release context
+    [self releaseContext];
+}
+
+- (void)createContext
+{
+    if(_glContext != nil)
+        return;
+
+#if defined(DEBUG)
+    NSLog(@"[MapRenderView] Creating context");
+#endif
     
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
-    _eaglLayer.opaque = YES;
+    CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
+    eaglLayer.opaque = YES;
     
     // Create OpenGLES 2.0 context
     _glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -87,14 +100,21 @@
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES context"];
         return;
     }
-
+    
     //TODO: create IMapRenderer
     
     // Rendering needs to be resumed/started manually, since render target is created yet
 }
 
-- (void)dtor
+- (void)releaseContext
 {
+    if(_glContext == nil)
+        return;
+
+#if defined(DEBUG)
+    NSLog(@"[MapRenderView] Releasing context");
+#endif
+    
     // Stop rendering (if it was running)
     [self suspendRendering];
     
@@ -165,7 +185,7 @@
     NSAssert(_colorRenderBuffer != 0, @"Failed to allocate render buffer (color component)");
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
-    if(![_glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:_eaglLayer])
+    if(![_glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
         [NSException raise:NSGenericException format:@"Failed to create render buffer (color component)"];
         return;
@@ -179,17 +199,17 @@
 #endif
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
-/*
+
     // Setup render buffer (depth component)
     glGenRenderbuffers(1, &_depthRenderBuffer);
     validateGL();
     NSAssert(_depthRenderBuffer != 0, @"Failed to allocate render buffer (depth component)");
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     validateGL();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, _viewWidth, _viewHeight);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewWidth, _viewHeight);
     validateGL();
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
-    validateGL();*/
+    validateGL();
     
     // Check that we've initialized our framebuffer fully
     if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
@@ -245,7 +265,7 @@
 
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
     glClearDepthf(1.0f);
-    glClearDepthf(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     validateGL();
     
     //draw..draw

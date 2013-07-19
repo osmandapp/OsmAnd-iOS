@@ -1,5 +1,5 @@
 //
-//  UIMapRendererView.h
+//  OAMapRendererView.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/18/13.
@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIMapRendererView : UIView
+@interface OAMapRendererView : UIView
+
+- (void)createContext;
+- (void)releaseContext;
 
 @property (readonly) BOOL isRenderingSuspended;
 - (BOOL)suspendRendering;

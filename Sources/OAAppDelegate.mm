@@ -8,11 +8,17 @@
 
 #import "OAAppDelegate.h"
 
+#include <OsmAndCore.h>
+
 @implementation OAAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    
+    // Initialize OsmAnd core
+    OsmAnd::InitializeCore();
+
     return YES;
 }
 
@@ -41,6 +47,9 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    
+    // Release OsmAnd core
+    OsmAnd::ReleaseCore();
 }
 
 @end

@@ -12,7 +12,7 @@
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
 		BB098CFF1793F7FD00423944 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB098CFD1793F7FD00423944 /* InfoPlist.strings */; };
 		BB098D011793F7FD00423944 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
-		BB098D051793F7FD00423944 /* OAAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.m */; };
+		BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
 		BB098D071793F7FD00423944 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D061793F7FD00423944 /* Default.png */; };
 		BB098D091793F7FD00423944 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D081793F7FD00423944 /* Default@2x.png */; };
 		BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D0A1793F7FD00423944 /* Default-568h@2x.png */; };
@@ -36,6 +36,7 @@
 		BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDD179BC9E4004C5567 /* libpng_ios.a */; };
 		BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */; };
 		BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDF179BC9E4004C5567 /* libz_ios.a */; };
+		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +48,7 @@
 		BB098CFE1793F7FD00423944 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB098D001793F7FD00423944 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BB098D031793F7FD00423944 /* OAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppDelegate.h; sourceTree = "<group>"; };
-		BB098D041793F7FD00423944 /* OAAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAppDelegate.m; sourceTree = "<group>"; };
+		BB098D041793F7FD00423944 /* OAAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
 		BB098D061793F7FD00423944 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		BB098D081793F7FD00423944 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		BB098D0A1793F7FD00423944 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 		BBB34EDD179BC9E4004C5567 /* libpng_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libpng_ios.a; path = "../core/externals/libpng/build/Release-iphoneos/libpng_ios.a"; sourceTree = "<group>"; };
 		BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libprotobuf_ios.a; path = "../core/externals/protobuf/build/Release-iphoneos/libprotobuf_ios.a"; sourceTree = "<group>"; };
 		BBB34EDF179BC9E4004C5567 /* libz_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libz_ios.a; path = "../core/externals/zlib/build/Release-iphoneos/libz_ios.a"; sourceTree = "<group>"; };
+		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +92,7 @@
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
 				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
+				BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */,
 				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
 				BBB34ED3179BC2CE004C5567 /* libskia_ios.a in Frameworks */,
 				BBB34ED9179BC6C3004C5567 /* libexpat_ios.a in Frameworks */,
@@ -129,6 +132,7 @@
 				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
+				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
 				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
 				BBB34ED2179BC2CE004C5567 /* libskia_ios.a */,
 				BBB34ED8179BC6C3004C5567 /* libexpat_ios.a */,
@@ -153,7 +157,7 @@
 			children = (
 				BB2545B21798160A00E80B58 /* UI */,
 				BB098D031793F7FD00423944 /* OAAppDelegate.h */,
-				BB098D041793F7FD00423944 /* OAAppDelegate.m */,
+				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
 				BB098CFB1793F7FD00423944 /* Supporting Files */,
 			);
 			path = Sources;
@@ -270,7 +274,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB098D011793F7FD00423944 /* main.m in Sources */,
-				BB098D051793F7FD00423944 /* OAAppDelegate.m in Sources */,
+				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
 				BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */,
 				BB2545BA179816A300E80B58 /* OAMapRendererController.m in Sources */,
 			);

@@ -16,6 +16,10 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+///
+#include <QStandardPaths>
+#include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
+///
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
@@ -31,8 +35,7 @@
     GLuint _frameBuffer;
     CADisplayLink* _displayLink;
     
-    int _viewWidth;
-    int _viewHeight;
+    OsmAnd::PointI _viewSize;
     
     std::shared_ptr<OsmAnd::IMapRenderer> _mapRenderer;
 }
@@ -106,6 +109,17 @@
     
     // Create OpenGLES map renderer
     _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
+    ///
+    std::shared_ptr<OsmAnd::IMapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
+    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
+    onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
+    _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
+    _mapRenderer->setAzimuth(69.4f);
+    _mapRenderer->setElevationAngle(13.0f);
+    _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
+    _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
+    _mapRenderer->setZoom(12.5f);
+    ///
     if(!_mapRenderer->initializeRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2 map renderer"];
@@ -166,9 +180,8 @@
     NSLog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
 #endif
 
-    // Recreate render and frame buffers since view has resized
+    // Kill buffers, since window was resized
     [self releaseRenderAndFrameBuffers];
-    [self allocateRenderAndFrameBuffers];
 }
 
 - (void)allocateRenderAndFrameBuffers
@@ -200,12 +213,12 @@
         [NSException raise:NSGenericException format:@"Failed to create render buffer (color component)"];
         return;
     }
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_viewWidth);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_viewSize.x);
     validateGL();
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewHeight);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] View size %dx%d", _viewWidth, _viewHeight);
+    NSLog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
 #endif
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
@@ -216,7 +229,7 @@
     NSAssert(_depthRenderBuffer != 0, @"Failed to allocate render buffer (depth component)");
     glBindRenderbuffer(GL_RENDERBUFFER, _depthRenderBuffer);
     validateGL();
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewWidth, _viewHeight);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24_OES, _viewSize.x, _viewSize.y);
     validateGL();
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _depthRenderBuffer);
     validateGL();
@@ -269,8 +282,23 @@
         return;
     }
     
+    // Allocate buffers if they are not yet allocated
+    if(_frameBuffer == 0)
+    {
+        // Allocate new buffers
+        [self allocateRenderAndFrameBuffers];
+        
+        // Update size of renderer window and viewport
+        _mapRenderer->setWindowSize(_viewSize);
+        _mapRenderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
+    }
+    
     // Activate framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    validateGL();
+    
+    // Clear buffer
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     validateGL();
 
     // Perform rendering

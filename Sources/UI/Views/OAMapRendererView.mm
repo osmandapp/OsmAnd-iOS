@@ -14,6 +14,9 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
+
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -23,15 +26,15 @@
 @implementation OAMapRendererView
 {
     EAGLContext* _glContext;
-    
     GLuint _depthRenderBuffer;
     GLuint _colorRenderBuffer;
     GLuint _frameBuffer;
-    
     CADisplayLink* _displayLink;
     
     int _viewWidth;
     int _viewHeight;
+    
+    std::shared_ptr<OsmAnd::IMapRenderer> _mapRenderer;
 }
 
 + (Class)layerClass
@@ -101,7 +104,8 @@
         return;
     }
     
-    //TODO: create IMapRenderer
+    // Create OpenGLES map renderer
+    _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
     
     // Rendering needs to be resumed/started manually, since render target is created yet
 }
@@ -118,7 +122,8 @@
     // Stop rendering (if it was running)
     [self suspendRendering];
     
-    //TODO: release IMapRenderer
+    // Release map renderer
+    _mapRenderer.reset();
     
     // Release render-buffers and framebuffer
     [self releaseRenderAndFrameBuffers];

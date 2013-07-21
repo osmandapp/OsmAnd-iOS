@@ -17,7 +17,7 @@
 		BB098D091793F7FD00423944 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D081793F7FD00423944 /* Default@2x.png */; };
 		BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D0A1793F7FD00423944 /* Default-568h@2x.png */; };
 		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
-		BB2545B61798163200E80B58 /* OAMapRendererView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B51798163200E80B58 /* OAMapRendererView.m */; };
+		BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B51798163200E80B58 /* OAMapRendererView.mm */; };
 		BB2545BA179816A300E80B58 /* OAMapRendererController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B9179816A300E80B58 /* OAMapRendererController.m */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
@@ -40,7 +40,7 @@
 		BB098D0A1793F7FD00423944 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
 		BB2545B41798163200E80B58 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = UI/Views/OAMapRendererView.h; sourceTree = "<group>"; };
-		BB2545B51798163200E80B58 /* OAMapRendererView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapRendererView.m; path = UI/Views/OAMapRendererView.m; sourceTree = "<group>"; };
+		BB2545B51798163200E80B58 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = UI/Views/OAMapRendererView.mm; sourceTree = "<group>"; };
 		BB2545B8179816A300E80B58 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = UI/Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
 		BB2545B9179816A300E80B58 /* OAMapRendererController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapRendererController.m; path = UI/Controllers/OAMapRendererController.m; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -135,7 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				BB2545B41798163200E80B58 /* OAMapRendererView.h */,
-				BB2545B51798163200E80B58 /* OAMapRendererView.m */,
+				BB2545B51798163200E80B58 /* OAMapRendererView.mm */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -219,7 +219,7 @@
 			files = (
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.m in Sources */,
-				BB2545B61798163200E80B58 /* OAMapRendererView.m in Sources */,
+				BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */,
 				BB2545BA179816A300E80B58 /* OAMapRendererController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -266,6 +266,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PLATFORM_DEFINITIONS = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -292,6 +293,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PLATFORM_DEFINITIONS = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -303,11 +305,21 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
+				);
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include/QtCore",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
+				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -318,11 +330,18 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				GCC_PREFIX_HEADER = "";
+				GCC_PREPROCESSOR_DEFINITIONS = "$(PLATFORM_DEFINITIONS)";
+				HEADER_SEARCH_PATHS = (
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include/QtCore",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
+				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

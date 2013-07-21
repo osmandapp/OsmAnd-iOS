@@ -29,6 +29,13 @@
 		BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
 		BBB34ED3179BC2CE004C5567 /* libskia_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED2179BC2CE004C5567 /* libskia_ios.a */; };
 		BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
+		BBB34ED9179BC6C3004C5567 /* libexpat_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED8179BC6C3004C5567 /* libexpat_ios.a */; };
+		BBB34EE0179BC9E4004C5567 /* libgdal_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDA179BC9E4004C5567 /* libgdal_ios.a */; };
+		BBB34EE1179BC9E4004C5567 /* libgif_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDB179BC9E4004C5567 /* libgif_ios.a */; };
+		BBB34EE2179BC9E4004C5567 /* libjpeg_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDC179BC9E4004C5567 /* libjpeg_ios.a */; };
+		BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDD179BC9E4004C5567 /* libpng_ios.a */; };
+		BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */; };
+		BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDF179BC9E4004C5567 /* libz_ios.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -59,6 +66,13 @@
 		BBB34EA8179BBD21004C5567 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BBB34ED2179BC2CE004C5567 /* libskia_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libskia_ios.a; path = "../core/externals/skia/build/Release-iphoneos/libskia_ios.a"; sourceTree = "<group>"; };
 		BBB34ED6179BC516004C5567 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
+		BBB34ED8179BC6C3004C5567 /* libexpat_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libexpat_ios.a; path = "../core/externals/expat/build/Release-iphoneos/libexpat_ios.a"; sourceTree = "<group>"; };
+		BBB34EDA179BC9E4004C5567 /* libgdal_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libgdal_ios.a; path = "../core/externals/gdal/build/Release-iphoneos/libgdal_ios.a"; sourceTree = "<group>"; };
+		BBB34EDB179BC9E4004C5567 /* libgif_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libgif_ios.a; path = "../core/externals/giflib/build/Release-iphoneos/libgif_ios.a"; sourceTree = "<group>"; };
+		BBB34EDC179BC9E4004C5567 /* libjpeg_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libjpeg_ios.a; path = "../core/externals/jpeg/build/Release-iphoneos/libjpeg_ios.a"; sourceTree = "<group>"; };
+		BBB34EDD179BC9E4004C5567 /* libpng_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libpng_ios.a; path = "../core/externals/libpng/build/Release-iphoneos/libpng_ios.a"; sourceTree = "<group>"; };
+		BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libprotobuf_ios.a; path = "../core/externals/protobuf/build/Release-iphoneos/libprotobuf_ios.a"; sourceTree = "<group>"; };
+		BBB34EDF179BC9E4004C5567 /* libz_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libz_ios.a; path = "../core/externals/zlib/build/Release-iphoneos/libz_ios.a"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +92,13 @@
 				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
 				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
 				BBB34ED3179BC2CE004C5567 /* libskia_ios.a in Frameworks */,
+				BBB34ED9179BC6C3004C5567 /* libexpat_ios.a in Frameworks */,
+				BBB34EE0179BC9E4004C5567 /* libgdal_ios.a in Frameworks */,
+				BBB34EE1179BC9E4004C5567 /* libgif_ios.a in Frameworks */,
+				BBB34EE2179BC9E4004C5567 /* libjpeg_ios.a in Frameworks */,
+				BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */,
+				BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */,
+				BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +131,13 @@
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
 				BBB34ED2179BC2CE004C5567 /* libskia_ios.a */,
+				BBB34ED8179BC6C3004C5567 /* libexpat_ios.a */,
+				BBB34EDA179BC9E4004C5567 /* libgdal_ios.a */,
+				BBB34EDB179BC9E4004C5567 /* libgif_ios.a */,
+				BBB34EDC179BC9E4004C5567 /* libjpeg_ios.a */,
+				BBB34EDD179BC9E4004C5567 /* libpng_ios.a */,
+				BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */,
+				BBB34EDF179BC9E4004C5567 /* libz_ios.a */,
 				BB2545BD1798254B00E80B58 /* QuartzCore.framework */,
 				BB2545BB1798253E00E80B58 /* OpenGLES.framework */,
 				BB098CF41793F7FD00423944 /* UIKit.framework */,

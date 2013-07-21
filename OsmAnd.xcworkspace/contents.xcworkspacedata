@@ -1,9 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <FileRef
-      location = "group:../core/externals/skia/skia_ios.xcodeproj">
-   </FileRef>
+   <Group
+      location = "container:"
+      name = "Externals">
+      <FileRef
+         location = "group:../core/externals/zlib/zlib_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/protobuf/protobuf_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/libpng/libpng_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/jpeg/jpeg_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/giflib/giflib_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/gdal/gdal_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/expat/expat_ios.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:../core/externals/skia/skia_ios.xcodeproj">
+      </FileRef>
+   </Group>
    <FileRef
       location = "group:../core/OsmAndCore_ios.xcodeproj">
    </FileRef>

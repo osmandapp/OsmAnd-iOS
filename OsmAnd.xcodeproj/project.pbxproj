@@ -23,6 +23,10 @@
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 		BB2545FB1798292E00E80B58 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB2545FA1798292E00E80B58 /* iPhone.storyboard */; };
 		BBB34E6717991344004C5567 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBB34E6617991344004C5567 /* iPad.storyboard */; };
+		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
+		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
+		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
+		BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +51,10 @@
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB2545FA1798292E00E80B58 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = UI/iPhone.storyboard; sourceTree = "<group>"; };
 		BBB34E6617991344004C5567 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPad.storyboard; path = UI/iPad.storyboard; sourceTree = "<group>"; };
+		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
+		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
+		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
+		BBB34EA8179BBD21004C5567 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,10 +64,14 @@
 			files = (
 				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
 				BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */,
-				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
 				BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */,
 				BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */,
 				BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */,
+				BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */,
+				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
+				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
+				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
+				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,9 +98,13 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBB34EA2179BB42A004C5567 /* libQt5Core.a */,
+				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
+				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
+				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
+				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BB2545BD1798254B00E80B58 /* QuartzCore.framework */,
 				BB2545BB1798253E00E80B58 /* OpenGLES.framework */,
-				BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */,
 				BB098CF41793F7FD00423944 /* UIKit.framework */,
 				BB098CF61793F7FD00423944 /* Foundation.framework */,
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
@@ -317,6 +333,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.universal/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
@@ -339,6 +356,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.universal/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";

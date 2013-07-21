@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:../core/externals/skia/skia_ios.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:../core/OsmAndCore_ios.xcodeproj">
    </FileRef>
    <FileRef

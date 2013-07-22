@@ -109,13 +109,14 @@
     
     // Create OpenGLES map renderer
     _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
+    _mapRenderer->setDisplayDensityFactor(self.contentScaleFactor);
     ///
     std::shared_ptr<OsmAnd::IMapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
     _mapRenderer->setAzimuth(69.4f);
-    _mapRenderer->setElevationAngle(13.0f);
+    _mapRenderer->setElevationAngle(25.0f);
     _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
     _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
     _mapRenderer->setZoom(12.5f);
@@ -293,6 +294,17 @@
         _mapRenderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
     }
     
+    // Process rendering
+    if(!_mapRenderer->processRendering())
+    {
+        [NSException raise:NSGenericException format:@"Failed to process rendering using OpenGLES2 map renderer"];
+        return;
+    }
+    
+    // Skip rendering if we don't have invalidated frame
+    if(!_mapRenderer->frameInvalidated)
+        return;
+    
     // Activate framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
     validateGL();
@@ -302,11 +314,23 @@
     validateGL();
 
     // Perform rendering
-    if(!_mapRenderer->performRendering())
+    if(!_mapRenderer->renderFrame())
     {
         [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
         return;
     }
+    validateGL();
+    
+    //TODO: apply multisampling?
+    
+    // Erase depthbuffer, since not needed
+    const GLenum buffersToDiscard[] =
+    {
+        GL_DEPTH_ATTACHMENT
+    };
+    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+    validateGL();
+    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, buffersToDiscard);
     validateGL();
     
     // Present results

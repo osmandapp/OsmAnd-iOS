@@ -52,6 +52,7 @@
     // Inflate map renderer view
     OAMapRendererView* view = [[OAMapRendererView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    view.contentScaleFactor = [[UIScreen mainScreen] scale];
     self.view = view;
 #if !__has_feature(objc_arc)
     [view release];

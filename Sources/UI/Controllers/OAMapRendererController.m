@@ -71,6 +71,19 @@
     // Tell view to create context
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView createContext];
+    
+    // Attach gesture recognizers:
+    mapView.userInteractionEnabled = YES;
+    
+    // - Zoom gesture
+    UIPinchGestureRecognizer* grZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomGestureDetected:)];
+    [mapView addGestureRecognizer:grZoom];
+    /*
+    // - Panning
+    UIPanGestureRecognizer* grPan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panGestureDetected:)];
+    [mapView addGestureRecognizer:grPan];
+*/
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -90,10 +103,17 @@
     [mapView suspendRendering];
 }
 
+- (void)zoomGestureDetected:(UIPinchGestureRecognizer*)recognizer
+{
+    NSLog(@"zoom gesture %f %f", recognizer.scale, recognizer.velocity);
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+    
+    NSLog(@"MEMWARNING");
 }
 
 @end

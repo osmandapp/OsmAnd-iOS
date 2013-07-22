@@ -367,13 +367,13 @@
 				);
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.universal/lib",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
@@ -390,13 +390,13 @@
 				GCC_PREPROCESSOR_DEFINITIONS = "$(PLATFORM_DEFINITIONS)";
 				HEADER_SEARCH_PATHS = (
 					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.device/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.universal/lib",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";

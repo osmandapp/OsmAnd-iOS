@@ -302,8 +302,8 @@
     }
     
     // Skip rendering if we don't have invalidated frame
-    if(!_mapRenderer->frameInvalidated)
-        return;
+    /*if(!_mapRenderer->frameInvalidated)
+        return;*/
     
     // Activate framebuffer
     glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);

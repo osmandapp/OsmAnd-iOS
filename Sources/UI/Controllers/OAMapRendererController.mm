@@ -10,6 +10,8 @@
 
 #import "OAMapRendererView.h"
 
+#include <QtMath>
+
 @interface OAMapRendererController ()
 
 @end
@@ -154,29 +156,28 @@
     else if(recognizer.state == UIGestureRecognizerStateChanged)
     {
         // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-        CGPoint movement = [recognizer translationInView:recognizer.view];
+        CGPoint translation = [recognizer translationInView:recognizer.view];
+        translation.x *= mapView.contentScaleFactor;
+        translation.y *= mapView.contentScaleFactor;
 
-        // Take into account current azimuth. Azimuth is defined clockwise, but since we need reverse rotation,
-        // just treat it counterclockwise
-        const float& angle = mapView.mapRenderer->configuration.azimuth;
+        // Take into account current azimuth and reproject to map space (points)
+        const float angle = qDegreesToRadians(mapView.mapRenderer->configuration.azimuth);
         const float cosAngle = cosf(angle);
         const float sinAngle = sinf(angle);
-        const double xDelta = movement.x * cosAngle - movement.y * sinAngle;
-        const double yDelta = movement.x * sinAngle + movement.y * cosAngle;
-
-        NSLog(@"ddmove(%f) %f(%f) %f(%f)", angle, xDelta, movement.x, yDelta, movement.y);
+        CGPoint translationInMapSpace;
+        translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
+        translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
 
         // Taking into account current zoom, get how many 31-coordinates there are in 1 point
         int32_t tileSize31 = 1;
         if(mapView.mapRenderer->configuration.zoomBase != 31)
             tileSize31 = (1u << (31 - mapView.mapRenderer->configuration.zoomBase)) - 1;
-        float tileSizePoints = mapView.mapRenderer->getTileSizeInPixels() / mapView.mapRenderer->configuration.displayDensityFactor;
-        const double scale31 = static_cast<double>(tileSize31) / tileSizePoints;
+        const double scale31 = static_cast<double>(tileSize31) / mapView.mapRenderer->getScaledTileSizeOnScreen();
 
         // Rescale movement to 31 coordinates
         OsmAnd::PointI newTarget31;
-        newTarget31.x = _initialPositionDuringMove.x + static_cast<int32_t>(round(xDelta * scale31));
-        newTarget31.y = _initialPositionDuringMove.y + static_cast<int32_t>(round(yDelta * scale31));
+        newTarget31.x = _initialPositionDuringMove.x - static_cast<int32_t>(round(translationInMapSpace.x * scale31));
+        newTarget31.y = _initialPositionDuringMove.y - static_cast<int32_t>(round(translationInMapSpace.y * scale31));
 
         mapView.mapRenderer->setTarget(newTarget31);
     }

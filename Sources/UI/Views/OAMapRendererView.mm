@@ -119,10 +119,10 @@
     onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
     _mapRenderer->setAzimuth(0.0f);
-    _mapRenderer->setElevationAngle(25.0f);
+    _mapRenderer->setElevationAngle(90.0f);
     _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
     _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    _mapRenderer->setZoom(12.5f);
+    _mapRenderer->setZoom(10.0f);
     ///
     if(!_mapRenderer->initializeRendering())
     {

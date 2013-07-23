@@ -8,7 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
+
 @interface OAMapRendererView : UIView
+
+@property (readonly) OsmAnd::IMapRenderer* mapRenderer;
 
 - (void)createContext;
 - (void)releaseContext;

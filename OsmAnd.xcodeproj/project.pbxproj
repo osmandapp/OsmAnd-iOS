@@ -18,7 +18,7 @@
 		BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D0A1793F7FD00423944 /* Default-568h@2x.png */; };
 		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
 		BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B51798163200E80B58 /* OAMapRendererView.mm */; };
-		BB2545BA179816A300E80B58 /* OAMapRendererController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B9179816A300E80B58 /* OAMapRendererController.m */; };
+		BB2545BA179816A300E80B58 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B9179816A300E80B58 /* OAMapRendererController.mm */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 		BB2545FB1798292E00E80B58 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB2545FA1798292E00E80B58 /* iPhone.storyboard */; };
@@ -56,7 +56,7 @@
 		BB2545B41798163200E80B58 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = UI/Views/OAMapRendererView.h; sourceTree = "<group>"; };
 		BB2545B51798163200E80B58 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = UI/Views/OAMapRendererView.mm; sourceTree = "<group>"; };
 		BB2545B8179816A300E80B58 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = UI/Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
-		BB2545B9179816A300E80B58 /* OAMapRendererController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapRendererController.m; path = UI/Controllers/OAMapRendererController.m; sourceTree = "<group>"; };
+		BB2545B9179816A300E80B58 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = UI/Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB2545FA1798292E00E80B58 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = UI/iPhone.storyboard; sourceTree = "<group>"; };
@@ -200,7 +200,7 @@
 			isa = PBXGroup;
 			children = (
 				BB2545B8179816A300E80B58 /* OAMapRendererController.h */,
-				BB2545B9179816A300E80B58 /* OAMapRendererController.m */,
+				BB2545B9179816A300E80B58 /* OAMapRendererController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -276,7 +276,7 @@
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
 				BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */,
-				BB2545BA179816A300E80B58 /* OAMapRendererController.m in Sources */,
+				BB2545BA179816A300E80B58 /* OAMapRendererController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

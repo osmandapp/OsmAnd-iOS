@@ -14,8 +14,6 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/IMapRenderer.h>
 ///
 #include <QStandardPaths>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
@@ -79,6 +77,11 @@
     [self releaseContext];
 }
 
+- (OsmAnd::IMapRenderer*)mapRenderer
+{
+    return _mapRenderer.get();
+}
+
 - (void)createContext
 {
     if(_glContext != nil)
@@ -115,7 +118,7 @@
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
-    _mapRenderer->setAzimuth(69.4f);
+    _mapRenderer->setAzimuth(0.0f);
     _mapRenderer->setElevationAngle(25.0f);
     _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
     _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));

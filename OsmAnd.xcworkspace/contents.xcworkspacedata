@@ -5,6 +5,9 @@
       location = "container:"
       name = "Externals">
       <FileRef
+         location = "group:../core/externals/glsl-optimizer/glsl-optimizer_ios.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:../core/externals/zlib/zlib_ios.xcodeproj">
       </FileRef>
       <FileRef

@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		BB6B848917C263E000ACD753 /* OsmAnd Generators */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Generators" */;
+			buildPhases = (
+				BB6B848D17C263ED00ACD753 /* ShellScript */,
+			);
+			dependencies = (
+			);
+			name = "OsmAnd Generators";
+			productName = "OsmAnd Generators";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
@@ -21,7 +35,6 @@
 		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
 		BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F317C222DC00AADCC7 /* iPad.storyboard */; };
 		BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F417C222DC00AADCC7 /* iPhone.storyboard */; };
-		BBA858FC17C222DC00AADCC7 /* OsmAnd-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
 		BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
 		BBA8591217C24E9B00AADCC7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591117C24E9B00AADCC7 /* Default.png */; };
@@ -50,6 +63,16 @@
 		BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDF179BC9E4004C5567 /* libz_ios.a */; };
 		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BB6B848E17C2651900ACD753 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB6B848917C263E000ACD753;
+			remoteInfo = "OsmAnd Generators";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		BB098CF11793F7FD00423944 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,7 +106,7 @@
 		BBAC895717C252B2003CD1A4 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/AppIcons/Icon-72.png"; sourceTree = "<group>"; };
 		BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "Resources/AppIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
-		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon.png"; path = "Resources/AppIcons/Icon.png"; sourceTree = "<group>"; };
+		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -262,6 +285,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				BB6B848F17C2651900ACD753 /* PBXTargetDependency */,
 			);
 			name = OsmAnd;
 			productName = OsmAnd;
@@ -291,6 +315,7 @@
 			projectRoot = "";
 			targets = (
 				BB098CF01793F7FD00423944 /* OsmAnd */,
+				BB6B848917C263E000ACD753 /* OsmAnd Generators */,
 			);
 		};
 /* End PBXProject section */
@@ -303,7 +328,6 @@
 				BBA858EC17C222C500AADCC7 /* README.md in Resources */,
 				BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */,
 				BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */,
-				BBA858FC17C222DC00AADCC7 /* OsmAnd-Info.plist in Resources */,
 				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
 				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
@@ -322,6 +346,22 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		BB6B848D17C263ED00ACD753 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appversion.sh\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		BB098CED1793F7FD00423944 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -335,6 +375,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		BB6B848F17C2651900ACD753 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB6B848917C263E000ACD753 /* OsmAnd Generators */;
+			targetProxy = BB6B848E17C2651900ACD753 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		BB098D0C1793F7FD00423944 /* Debug */ = {
@@ -363,6 +411,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
+				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PLATFORM_DEFINITIONS = "";
@@ -390,6 +440,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
+				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "";
@@ -448,6 +500,20 @@
 			};
 			name = Release;
 		};
+		BB6B848B17C263E000ACD753 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BB6B848C17C263E000ACD753 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -468,6 +534,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Generators" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB6B848B17C263E000ACD753 /* Debug */,
+				BB6B848C17C263E000ACD753 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

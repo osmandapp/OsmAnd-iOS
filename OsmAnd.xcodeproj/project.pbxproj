@@ -10,20 +10,31 @@
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
-		BB098CFF1793F7FD00423944 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB098CFD1793F7FD00423944 /* InfoPlist.strings */; };
 		BB098D011793F7FD00423944 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
 		BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
-		BB098D071793F7FD00423944 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D061793F7FD00423944 /* Default.png */; };
-		BB098D091793F7FD00423944 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D081793F7FD00423944 /* Default@2x.png */; };
-		BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB098D0A1793F7FD00423944 /* Default-568h@2x.png */; };
 		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
-		BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B51798163200E80B58 /* OAMapRendererView.mm */; };
-		BB2545BA179816A300E80B58 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB2545B9179816A300E80B58 /* OAMapRendererController.mm */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
-		BB2545FB1798292E00E80B58 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB2545FA1798292E00E80B58 /* iPhone.storyboard */; };
 		BB35368917ACDD4E00AD6357 /* libglsl-optimizer_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */; };
-		BBB34E6717991344004C5567 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBB34E6617991344004C5567 /* iPad.storyboard */; };
+		BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */; };
+		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
+		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
+		BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F317C222DC00AADCC7 /* iPad.storyboard */; };
+		BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F417C222DC00AADCC7 /* iPhone.storyboard */; };
+		BBA858FC17C222DC00AADCC7 /* OsmAnd-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */; };
+		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
+		BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
+		BBA8591217C24E9B00AADCC7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591117C24E9B00AADCC7 /* Default.png */; };
+		BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591317C24EB500AADCC7 /* Default-Portrait~ipad.png */; };
+		BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */; };
+		BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */; };
+		BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */; };
+		BBAC895517C25230003CD1A4 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895017C25230003CD1A4 /* iTunesArtwork.png */; };
+		BBAC895617C25230003CD1A4 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */; };
+		BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895717C252B2003CD1A4 /* Icon-72.png */; };
+		BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */; };
+		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
+		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -45,24 +56,34 @@
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BB098CF61793F7FD00423944 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		BB098CF81793F7FD00423944 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		BB098CFC1793F7FD00423944 /* OsmAnd-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "OsmAnd-Info.plist"; sourceTree = "<group>"; };
-		BB098CFE1793F7FD00423944 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		BB098D001793F7FD00423944 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BB098D031793F7FD00423944 /* OAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppDelegate.h; sourceTree = "<group>"; };
 		BB098D041793F7FD00423944 /* OAAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
-		BB098D061793F7FD00423944 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		BB098D081793F7FD00423944 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		BB098D0A1793F7FD00423944 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
-		BB2545B41798163200E80B58 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = UI/Views/OAMapRendererView.h; sourceTree = "<group>"; };
-		BB2545B51798163200E80B58 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = UI/Views/OAMapRendererView.mm; sourceTree = "<group>"; };
-		BB2545B8179816A300E80B58 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = UI/Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
-		BB2545B9179816A300E80B58 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = UI/Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		BB2545FA1798292E00E80B58 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = UI/iPhone.storyboard; sourceTree = "<group>"; };
-		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
-		BBB34E6617991344004C5567 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPad.storyboard; path = UI/iPad.storyboard; sourceTree = "<group>"; };
+		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
+		BBA858E517C222B200AADCC7 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
+		BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
+		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
+		BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = Views/OAMapRendererView.mm; sourceTree = "<group>"; };
+		BBA858EB17C222C500AADCC7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
+		BBA858F317C222DC00AADCC7 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPad.storyboard; path = Resources/iPad.storyboard; sourceTree = "<group>"; };
+		BBA858F417C222DC00AADCC7 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = Resources/iPhone.storyboard; sourceTree = "<group>"; };
+		BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "OsmAnd-Info.plist"; path = "Resources/OsmAnd-Info.plist"; sourceTree = "<group>"; };
+		BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/LaunchImages/Default-568h@2x.png"; sourceTree = "<group>"; };
+		BBA8590F17C24E9500AADCC7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/LaunchImages/Default@2x.png"; sourceTree = "<group>"; };
+		BBA8591117C24E9B00AADCC7 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = Resources/LaunchImages/Default.png; sourceTree = "<group>"; };
+		BBA8591317C24EB500AADCC7 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait~ipad.png"; path = "Resources/LaunchImages/Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "Resources/LaunchImages/Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "Resources/LaunchImages/Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "Resources/LaunchImages/Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		BBAC895017C25230003CD1A4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/AppIcons/iTunesArtwork.png; sourceTree = "<group>"; };
+		BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iTunesArtwork@2x.png"; path = "Resources/AppIcons/iTunesArtwork@2x.png"; sourceTree = "<group>"; };
+		BBAC895717C252B2003CD1A4 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/AppIcons/Icon-72.png"; sourceTree = "<group>"; };
+		BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "Resources/AppIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
+		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
+		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon.png"; path = "Resources/AppIcons/Icon.png"; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -114,6 +135,8 @@
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
+				BBA858EB17C222C500AADCC7 /* README.md */,
+				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
@@ -159,43 +182,20 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				BB2545B21798160A00E80B58 /* UI */,
-				BB098D031793F7FD00423944 /* OAAppDelegate.h */,
-				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
-				BB098CFB1793F7FD00423944 /* Supporting Files */,
-			);
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		BB098CFB1793F7FD00423944 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				BB098CFC1793F7FD00423944 /* OsmAnd-Info.plist */,
-				BB098CFD1793F7FD00423944 /* InfoPlist.strings */,
-				BB098D001793F7FD00423944 /* main.m */,
-				BB098D061793F7FD00423944 /* Default.png */,
-				BB098D081793F7FD00423944 /* Default@2x.png */,
-				BB098D0A1793F7FD00423944 /* Default-568h@2x.png */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		BB2545B21798160A00E80B58 /* UI */ = {
-			isa = PBXGroup;
-			children = (
 				BB2545B71798167600E80B58 /* Controllers */,
 				BB2545B31798161500E80B58 /* Views */,
-				BB2545FA1798292E00E80B58 /* iPhone.storyboard */,
-				BBB34E6617991344004C5567 /* iPad.storyboard */,
+				BB098D001793F7FD00423944 /* main.m */,
+				BB098D031793F7FD00423944 /* OAAppDelegate.h */,
+				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
 			);
-			name = UI;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				BB2545B41798163200E80B58 /* OAMapRendererView.h */,
-				BB2545B51798163200E80B58 /* OAMapRendererView.mm */,
+				BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */,
+				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -203,10 +203,49 @@
 		BB2545B71798167600E80B58 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				BB2545B8179816A300E80B58 /* OAMapRendererController.h */,
-				BB2545B9179816A300E80B58 /* OAMapRendererController.mm */,
+				BBA858E517C222B200AADCC7 /* OAMapRendererController.h */,
+				BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		BBA858FD17C222FC00AADCC7 /* AppIcons */ = {
+			isa = PBXGroup;
+			children = (
+				BBAC895D17C25A67003CD1A4 /* Icon.png */,
+				BBAC895B17C252CD003CD1A4 /* Icon@2x.png */,
+				BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */,
+				BBAC895717C252B2003CD1A4 /* Icon-72.png */,
+				BBAC895017C25230003CD1A4 /* iTunesArtwork.png */,
+				BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */,
+			);
+			name = AppIcons;
+			sourceTree = "<group>";
+		};
+		BBA858FE17C2230200AADCC7 /* LaunchImages */ = {
+			isa = PBXGroup;
+			children = (
+				BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */,
+				BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */,
+				BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */,
+				BBA8591317C24EB500AADCC7 /* Default-Portrait~ipad.png */,
+				BBA8591117C24E9B00AADCC7 /* Default.png */,
+				BBA8590F17C24E9500AADCC7 /* Default@2x.png */,
+				BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */,
+			);
+			name = LaunchImages;
+			sourceTree = "<group>";
+		};
+		BBE57D4F17C2208600C349CC /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BBA858FE17C2230200AADCC7 /* LaunchImages */,
+				BBA858FD17C222FC00AADCC7 /* AppIcons */,
+				BBA858F317C222DC00AADCC7 /* iPad.storyboard */,
+				BBA858F417C222DC00AADCC7 /* iPhone.storyboard */,
+				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -261,12 +300,23 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB098CFF1793F7FD00423944 /* InfoPlist.strings in Resources */,
-				BB098D071793F7FD00423944 /* Default.png in Resources */,
-				BB098D091793F7FD00423944 /* Default@2x.png in Resources */,
-				BB098D0B1793F7FD00423944 /* Default-568h@2x.png in Resources */,
-				BB2545FB1798292E00E80B58 /* iPhone.storyboard in Resources */,
-				BBB34E6717991344004C5567 /* iPad.storyboard in Resources */,
+				BBA858EC17C222C500AADCC7 /* README.md in Resources */,
+				BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */,
+				BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */,
+				BBA858FC17C222DC00AADCC7 /* OsmAnd-Info.plist in Resources */,
+				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
+				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
+				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
+				BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */,
+				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
+				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
+				BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */,
+				BBAC895517C25230003CD1A4 /* iTunesArtwork.png in Resources */,
+				BBAC895617C25230003CD1A4 /* iTunesArtwork@2x.png in Resources */,
+				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
+				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
+				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
+				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,23 +329,12 @@
 			files = (
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
-				BB2545B61798163200E80B58 /* OAMapRendererView.mm in Sources */,
-				BB2545BA179816A300E80B58 /* OAMapRendererController.mm in Sources */,
+				BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */,
+				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		BB098CFD1793F7FD00423944 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BB098CFE1793F7FD00423944 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BB098D0C1793F7FD00423944 /* Debug */ = {
@@ -374,7 +413,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
@@ -397,7 +436,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Sources/OsmAnd-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",

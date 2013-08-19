@@ -1,3 +1,6 @@
+# Ignore all externals upstream files
+/externals/**/upstream.*
+
 # MacOSX
 .DS_Store
 

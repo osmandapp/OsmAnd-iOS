@@ -19,9 +19,7 @@ echo "Build:       $BUILD"
 APPVERSION_FILE="$BUILD_ROOT/appversion.prefix"
 rm -f "$APPVERSION_FILE"
 echo "" > "$APPVERSION_FILE"
-echo "#define OSMAND_VERSION $VERSION" >> "$APPVERSION_FILE"
-echo "#define OSMAND_REVISION $REVISION" >> "$APPVERSION_FILE"
-echo "#define OSMAND_RELEASE $RELEASE" >> "$APPVERSION_FILE"
+echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
 echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
 
 # Touch plist file

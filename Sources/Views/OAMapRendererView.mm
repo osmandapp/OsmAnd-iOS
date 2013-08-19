@@ -110,19 +110,27 @@
         return;
     }
     
-    // Create OpenGLES map renderer
+    // Create OpenGLES map renderer, setup configure it
     _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
-    //_mapRenderer->setDisplayDensityFactor(self.contentScaleFactor);
+    
+    OsmAnd::MapRendererSetupOptions rendererSetup;
+    rendererSetup.displayDensityFactor = self.contentScaleFactor;
+    //TODO: enable background worker
+    _mapRenderer->setup(rendererSetup);
+    
+    OsmAnd::MapRendererConfiguration rendererConfig;
+    rendererConfig.altasTexturesAllowed = false;
+    rendererConfig.texturesFilteringQuality = OsmAnd::MapRendererConfiguration::TextureFilteringQuality::Good;
+    _mapRenderer->setConfiguration(rendererConfig);
     ///
-    /*std::shared_ptr<OsmAnd::IMapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-    _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
+    _mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
     _mapRenderer->setAzimuth(0.0f);
     _mapRenderer->setElevationAngle(90.0f);
-    _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
     _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    _mapRenderer->setZoom(10.0f);*/
+    _mapRenderer->setZoom(10.0f);
     ///
     if(!_mapRenderer->initializeRendering())
     {
@@ -130,7 +138,7 @@
         return;
     }
     
-    // Rendering needs to be resumed/started manually, since render target is created yet
+    // Rendering needs to be resumed/started manually, since render target is not created yet
 }
 
 - (void)releaseContext
@@ -340,6 +348,8 @@
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
     [_glContext presentRenderbuffer:GL_RENDERBUFFER];
+    
+    _mapRenderer->postprocessRendering();
 }
 
 - (BOOL)isRenderingSuspended

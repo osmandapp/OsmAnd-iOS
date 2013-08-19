@@ -122,7 +122,6 @@
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
         // Save initial value of zoom
-        _initialZoomLevelDuringPinch = mapView.mapRenderer->configuration.requestedZoom;
     }
     else if(recognizer.state == UIGestureRecognizerStateChanged)
     {
@@ -151,12 +150,11 @@
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
         // Save initial position of moving
-        _initialPositionDuringMove = mapView.mapRenderer->configuration.target31;
     }
     else if(recognizer.state == UIGestureRecognizerStateChanged)
     {
         // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-        CGPoint translation = [recognizer translationInView:recognizer.view];
+        /*CGPoint translation = [recognizer translationInView:recognizer.view];
         translation.x *= mapView.contentScaleFactor;
         translation.y *= mapView.contentScaleFactor;
 
@@ -179,12 +177,12 @@
         newTarget31.x = _initialPositionDuringMove.x - static_cast<int32_t>(round(translationInMapSpace.x * scale31));
         newTarget31.y = _initialPositionDuringMove.y - static_cast<int32_t>(round(translationInMapSpace.y * scale31));
 
-        mapView.mapRenderer->setTarget(newTarget31);
+        mapView.mapRenderer->setTarget(newTarget31);*/
     }
     else if(recognizer.state == UIGestureRecognizerStateCancelled)
     {
         // Since gesture was cancelled, restore initial target
-        mapView.mapRenderer->setTarget(_initialPositionDuringMove);
+        //mapView.mapRenderer->setTarget(_initialPositionDuringMove);
     }
     else if(recognizer.state == UIGestureRecognizerStateEnded)
     {

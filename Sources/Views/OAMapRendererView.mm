@@ -112,9 +112,9 @@
     
     // Create OpenGLES map renderer
     _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
-    _mapRenderer->setDisplayDensityFactor(self.contentScaleFactor);
+    //_mapRenderer->setDisplayDensityFactor(self.contentScaleFactor);
     ///
-    std::shared_ptr<OsmAnd::IMapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
+    /*std::shared_ptr<OsmAnd::IMapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
     _mapRenderer->setTileProvider(OsmAnd::IMapRenderer::RasterMap, tileProvider);
@@ -122,7 +122,7 @@
     _mapRenderer->setElevationAngle(90.0f);
     _mapRenderer->setFogColor(1.0f, 1.0f, 1.0f);
     _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    _mapRenderer->setZoom(10.0f);
+    _mapRenderer->setZoom(10.0f);*/
     ///
     if(!_mapRenderer->initializeRendering())
     {

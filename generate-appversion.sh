@@ -10,10 +10,7 @@ VERSION="${BASH_REMATCH[1]}"
 RELEASE="${BASH_REMATCH[2]}"
 REVISION="${BASH_REMATCH[3]}"
 BUILD="${BASH_REMATCH[4]}"
-echo "Version:     $VERSION"
-echo "Release:     $RELEASE"
-echo "Revision:    $REVISION"
-echo "Build:       $BUILD"
+echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
 
 # Generate appversion.prefix
 APPVERSION_FILE="$BUILD_ROOT/appversion.prefix"

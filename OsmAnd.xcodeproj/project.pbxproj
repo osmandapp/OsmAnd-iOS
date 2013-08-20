@@ -34,6 +34,7 @@
 		BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
 		BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
 		BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
+		BB63334217C3697F00903AB1 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334117C3697F00903AB1 /* OARootViewController.m */; };
 		BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
@@ -98,6 +99,8 @@
 		BB63333A17C3648500903AB1 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JASidePanelController.m; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.m; sourceTree = "<group>"; };
 		BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
+		BB63334017C3697F00903AB1 /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARootViewController.h; path = Controllers/OARootViewController.h; sourceTree = "<group>"; };
+		BB63334117C3697F00903AB1 /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
 		BBA858E517C222B200AADCC7 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
 		BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
@@ -240,6 +243,8 @@
 		BB2545B71798167600E80B58 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				BB63334017C3697F00903AB1 /* OARootViewController.h */,
+				BB63334117C3697F00903AB1 /* OARootViewController.m */,
 				BBA858E517C222B200AADCC7 /* OAMapRendererController.h */,
 				BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */,
 			);
@@ -433,6 +438,7 @@
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
+				BB63334217C3697F00903AB1 /* OARootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

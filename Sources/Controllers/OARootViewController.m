@@ -33,6 +33,9 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    
+    //TEST:
+    [self showLeftPanelAnimated:NO];
 }
 
 - (void)didReceiveMemoryWarning
@@ -49,7 +52,8 @@
     self.shouldResizeLeftPanel = YES;
     self.shouldResizeRightPanel = YES;
     
-    // Disallow gestures to exclude interference with map
+    // Initially disallow pan gesture to exclude interference with map
+    // (it should be enabled after side panel is shown until it's not hidden)
     self.recognizesPanGesture = NO;
     
     // Allow rotation, without respect to current active panel

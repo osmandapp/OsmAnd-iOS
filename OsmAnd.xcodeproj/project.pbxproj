@@ -7,15 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		BB6B848917C263E000ACD753 /* OsmAnd Generators */ = {
+		BB6B848917C263E000ACD753 /* OsmAnd Preparation */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Generators" */;
+			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */;
 			buildPhases = (
-				BB6B848D17C263ED00ACD753 /* ShellScript */,
+				BB6B848D17C263ED00ACD753 /* Generate appversion */,
+				BB63333F17C364B100903AB1 /* Configure externals */,
 			);
 			dependencies = (
 			);
-			name = "OsmAnd Generators";
+			name = "OsmAnd Preparation";
 			productName = "OsmAnd Generators";
 		};
 /* End PBXAggregateTarget section */
@@ -30,6 +31,9 @@
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 		BB35368917ACDD4E00AD6357 /* libglsl-optimizer_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */; };
+		BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
+		BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
+		BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
 		BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
@@ -86,6 +90,14 @@
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
+		BB63333317C3643B00903AB1 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = externals/TestFlight/libTestFlight.a; sourceTree = "<group>"; };
+		BB63333417C3643B00903AB1 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = externals/TestFlight/TestFlight.h; sourceTree = "<group>"; };
+		BB63333517C3643B00903AB1 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+AsyncLogging.h"; path = "externals/TestFlight/TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
+		BB63333617C3643B00903AB1 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+ManualSessions.h"; path = "externals/TestFlight/TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
+		BB63333917C3648500903AB1 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JASidePanelController.h; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.h; sourceTree = "<group>"; };
+		BB63333A17C3648500903AB1 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JASidePanelController.m; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.m; sourceTree = "<group>"; };
+		BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
+		BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		BBA858E517C222B200AADCC7 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
 		BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
@@ -149,6 +161,7 @@
 				BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */,
 				BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */,
 				BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */,
+				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,6 +175,7 @@
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
+				BB63333117C363F400903AB1 /* Externals */,
 				BB098CF21793F7FD00423944 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -230,6 +244,37 @@
 				BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */,
 			);
 			name = Controllers;
+			sourceTree = "<group>";
+		};
+		BB63333117C363F400903AB1 /* Externals */ = {
+			isa = PBXGroup;
+			children = (
+				BB63333817C3644400903AB1 /* JASidePanels */,
+				BB63333217C3642300903AB1 /* TestFlight */,
+			);
+			name = Externals;
+			sourceTree = "<group>";
+		};
+		BB63333217C3642300903AB1 /* TestFlight */ = {
+			isa = PBXGroup;
+			children = (
+				BB63333317C3643B00903AB1 /* libTestFlight.a */,
+				BB63333417C3643B00903AB1 /* TestFlight.h */,
+				BB63333517C3643B00903AB1 /* TestFlight+AsyncLogging.h */,
+				BB63333617C3643B00903AB1 /* TestFlight+ManualSessions.h */,
+			);
+			name = TestFlight;
+			sourceTree = "<group>";
+		};
+		BB63333817C3644400903AB1 /* JASidePanels */ = {
+			isa = PBXGroup;
+			children = (
+				BB63333917C3648500903AB1 /* JASidePanelController.h */,
+				BB63333A17C3648500903AB1 /* JASidePanelController.m */,
+				BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */,
+				BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */,
+			);
+			name = JASidePanels;
 			sourceTree = "<group>";
 		};
 		BBA858FD17C222FC00AADCC7 /* AppIcons */ = {
@@ -315,7 +360,7 @@
 			projectRoot = "";
 			targets = (
 				BB098CF01793F7FD00423944 /* OsmAnd */,
-				BB6B848917C263E000ACD753 /* OsmAnd Generators */,
+				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};
 /* End PBXProject section */
@@ -347,13 +392,28 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BB6B848D17C263ED00ACD753 /* ShellScript */ = {
+		BB63333F17C364B100903AB1 /* Configure externals */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Configure externals";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/externals/configure.sh\"";
+		};
+		BB6B848D17C263ED00ACD753 /* Generate appversion */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate appversion";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,6 +431,8 @@
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
+				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
+				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,7 +441,7 @@
 /* Begin PBXTargetDependency section */
 		BB6B848F17C2651900ACD753 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Generators */;
+			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
 			targetProxy = BB6B848E17C2651900ACD753 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -470,6 +532,7 @@
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/externals/TestFlight\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -493,6 +556,7 @@
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
+					"\"$(SRCROOT)/externals/TestFlight\"",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -535,13 +599,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Generators" */ = {
+		BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BB6B848B17C263E000ACD753 /* Debug */,
 				BB6B848C17C263E000ACD753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

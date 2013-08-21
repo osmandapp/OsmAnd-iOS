@@ -12,7 +12,7 @@ fi
 # Extract upstream if needed
 if [ ! -d "$SRCLOC/upstream.original" ]; then
 	echo "Downloading '$NAME' upstream..."
-	git clone https://github.com/gotosleep/JASidePanels.git "$SRCLOC/upstream.original" -b master --depth=1
+	git clone https://github.com/osmandapp/OsmAnd-external-JASidePanels.git "$SRCLOC/upstream.original" -b master --depth=1
 fi
 
 # Patch

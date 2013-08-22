@@ -35,16 +35,12 @@
 	<string>OSMAND_VERSION</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>UIFileSharingEnabled</key>
-	<true/>
 	<key>CFBundleVersion</key>
 	<string>OSMAND_BUILD</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>UIMainStoryboardFile</key>
-	<string>iPhone</string>
-	<key>UIMainStoryboardFile~ipad</key>
-	<string>iPad</string>
+	<key>UIFileSharingEnabled</key>
+	<true/>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -27,6 +27,7 @@
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
 		BB098D011793F7FD00423944 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
 		BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
+		BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
 		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
@@ -34,15 +35,15 @@
 		BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
 		BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
 		BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
-		BB63334217C3697F00903AB1 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334117C3697F00903AB1 /* OARootViewController.m */; };
 		BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.m */; };
 		BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */; };
 		BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */; };
-		BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */; };
+		BB63335117C4CFD600903AB1 /* OAMapHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335017C4CFD600903AB1 /* OAMapHudViewController.m */; };
+		BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */; };
+		BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
+		BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
-		BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F317C222DC00AADCC7 /* iPad.storyboard */; };
-		BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BBA858F417C222DC00AADCC7 /* iPhone.storyboard */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
 		BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
 		BBA8591217C24E9B00AADCC7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591117C24E9B00AADCC7 /* Default.png */; };
@@ -50,12 +51,12 @@
 		BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */; };
 		BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */; };
 		BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */; };
-		BBAC895517C25230003CD1A4 /* iTunesArtwork.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895017C25230003CD1A4 /* iTunesArtwork.png */; };
-		BBAC895617C25230003CD1A4 /* iTunesArtwork@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */; };
 		BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895717C252B2003CD1A4 /* Icon-72.png */; };
 		BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */; };
 		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
+		BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10717C61B1700EBA761 /* OptionsPanel.xib */; };
+		BBACF10A17C61D8500EBA761 /* MapHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapHUD.xib */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -73,12 +74,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BB6B848E17C2651900ACD753 /* PBXContainerItemProxy */ = {
+		BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Generators";
+			remoteInfo = "OsmAnd Preparation";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -90,6 +91,8 @@
 		BB098D001793F7FD00423944 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BB098D031793F7FD00423944 /* OAAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAppDelegate.h; sourceTree = "<group>"; };
 		BB098D041793F7FD00423944 /* OAAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
+		BB0EA14717C60AF9007B572D /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARootViewController.h; path = Controllers/OARootViewController.h; sourceTree = "<group>"; };
+		BB0EA14817C60AF9007B572D /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
 		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -102,21 +105,23 @@
 		BB63333A17C3648500903AB1 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JASidePanelController.m; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.m; sourceTree = "<group>"; };
 		BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
 		BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
-		BB63334017C3697F00903AB1 /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARootViewController.h; path = Controllers/OARootViewController.h; sourceTree = "<group>"; };
-		BB63334117C3697F00903AB1 /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
 		BB63334317C3DE6F00903AB1 /* OAOptionsPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOptionsPanelViewController.h; path = Controllers/OAOptionsPanelViewController.h; sourceTree = "<group>"; };
 		BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOptionsPanelViewController.m; path = Controllers/OAOptionsPanelViewController.m; sourceTree = "<group>"; };
 		BB63334617C3DF5600903AB1 /* OAContextPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAContextPanelViewController.h; path = Controllers/OAContextPanelViewController.h; sourceTree = "<group>"; };
 		BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAContextPanelViewController.m; path = Controllers/OAContextPanelViewController.m; sourceTree = "<group>"; };
 		BB63334917C3DF8100903AB1 /* OAMapPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapPanelViewController.h; path = Controllers/OAMapPanelViewController.h; sourceTree = "<group>"; };
 		BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapPanelViewController.m; path = Controllers/OAMapPanelViewController.m; sourceTree = "<group>"; };
-		BBA858E517C222B200AADCC7 /* OAMapRendererController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererController.h; path = Controllers/OAMapRendererController.h; sourceTree = "<group>"; };
-		BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererController.mm; path = Controllers/OAMapRendererController.mm; sourceTree = "<group>"; };
+		BB63334F17C4CFD600903AB1 /* OAMapHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapHudViewController.h; path = Controllers/OAMapHudViewController.h; sourceTree = "<group>"; };
+		BB63335017C4CFD600903AB1 /* OAMapHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapHudViewController.m; path = Controllers/OAMapHudViewController.m; sourceTree = "<group>"; };
+		BB63335517C4E3DE00903AB1 /* OAMapHudRootView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapHudRootView.h; path = Views/OAMapHudRootView.h; sourceTree = "<group>"; };
+		BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapHudRootView.m; path = Views/OAMapHudRootView.m; sourceTree = "<group>"; };
+		BB63335917C5388A00903AB1 /* UIViewController+OARootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+OARootVC.h"; path = "Controllers/UIViewController+OARootVC.h"; sourceTree = "<group>"; };
+		BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+OARootVC.m"; path = "Controllers/UIViewController+OARootVC.m"; sourceTree = "<group>"; };
+		BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewController.h; path = Controllers/OAMapRendererViewController.h; sourceTree = "<group>"; };
+		BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererViewController.mm; path = Controllers/OAMapRendererViewController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
 		BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = Views/OAMapRendererView.mm; sourceTree = "<group>"; };
 		BBA858EB17C222C500AADCC7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		BBA858F317C222DC00AADCC7 /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPad.storyboard; path = Resources/iPad.storyboard; sourceTree = "<group>"; };
-		BBA858F417C222DC00AADCC7 /* iPhone.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = iPhone.storyboard; path = Resources/iPhone.storyboard; sourceTree = "<group>"; };
 		BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "OsmAnd-Info.plist"; path = "Resources/OsmAnd-Info.plist"; sourceTree = "<group>"; };
 		BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "Resources/LaunchImages/Default-568h@2x.png"; sourceTree = "<group>"; };
 		BBA8590F17C24E9500AADCC7 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "Resources/LaunchImages/Default@2x.png"; sourceTree = "<group>"; };
@@ -125,12 +130,12 @@
 		BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "Resources/LaunchImages/Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "Resources/LaunchImages/Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "Resources/LaunchImages/Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
-		BBAC895017C25230003CD1A4 /* iTunesArtwork.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = iTunesArtwork.png; path = Resources/AppIcons/iTunesArtwork.png; sourceTree = "<group>"; };
-		BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "iTunesArtwork@2x.png"; path = "Resources/AppIcons/iTunesArtwork@2x.png"; sourceTree = "<group>"; };
 		BBAC895717C252B2003CD1A4 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72.png"; path = "Resources/AppIcons/Icon-72.png"; sourceTree = "<group>"; };
 		BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "Resources/AppIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
+		BBACF10717C61B1700EBA761 /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
+		BBACF10917C61D8500EBA761 /* MapHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapHUD.xib; path = Resources/MapHUD.xib; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -245,6 +250,8 @@
 			children = (
 				BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */,
 				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
+				BB63335517C4E3DE00903AB1 /* OAMapHudRootView.h */,
+				BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -252,16 +259,20 @@
 		BB2545B71798167600E80B58 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				BB63334017C3697F00903AB1 /* OARootViewController.h */,
-				BB63334117C3697F00903AB1 /* OARootViewController.m */,
-				BBA858E517C222B200AADCC7 /* OAMapRendererController.h */,
-				BBA858E617C222B200AADCC7 /* OAMapRendererController.mm */,
+				BB0EA14717C60AF9007B572D /* OARootViewController.h */,
+				BB0EA14817C60AF9007B572D /* OARootViewController.m */,
 				BB63334317C3DE6F00903AB1 /* OAOptionsPanelViewController.h */,
 				BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.m */,
 				BB63334617C3DF5600903AB1 /* OAContextPanelViewController.h */,
 				BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */,
 				BB63334917C3DF8100903AB1 /* OAMapPanelViewController.h */,
 				BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */,
+				BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */,
+				BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */,
+				BB63334F17C4CFD600903AB1 /* OAMapHudViewController.h */,
+				BB63335017C4CFD600903AB1 /* OAMapHudViewController.m */,
+				BB63335917C5388A00903AB1 /* UIViewController+OARootVC.h */,
+				BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -304,8 +315,6 @@
 				BBAC895B17C252CD003CD1A4 /* Icon@2x.png */,
 				BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */,
 				BBAC895717C252B2003CD1A4 /* Icon-72.png */,
-				BBAC895017C25230003CD1A4 /* iTunesArtwork.png */,
-				BBAC895117C25230003CD1A4 /* iTunesArtwork@2x.png */,
 			);
 			name = AppIcons;
 			sourceTree = "<group>";
@@ -329,9 +338,9 @@
 			children = (
 				BBA858FE17C2230200AADCC7 /* LaunchImages */,
 				BBA858FD17C222FC00AADCC7 /* AppIcons */,
-				BBA858F317C222DC00AADCC7 /* iPad.storyboard */,
-				BBA858F417C222DC00AADCC7 /* iPhone.storyboard */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
+				BBACF10717C61B1700EBA761 /* OptionsPanel.xib */,
+				BBACF10917C61D8500EBA761 /* MapHUD.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -350,7 +359,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				BB6B848F17C2651900ACD753 /* PBXTargetDependency */,
+				BB9B57BF17C5F817002EA93C /* PBXTargetDependency */,
 			);
 			name = OsmAnd;
 			productName = OsmAnd;
@@ -391,8 +400,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBA858EC17C222C500AADCC7 /* README.md in Resources */,
-				BBA858FA17C222DC00AADCC7 /* iPad.storyboard in Resources */,
-				BBA858FB17C222DC00AADCC7 /* iPhone.storyboard in Resources */,
 				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
 				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
@@ -400,12 +407,12 @@
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
 				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
 				BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */,
-				BBAC895517C25230003CD1A4 /* iTunesArtwork.png in Resources */,
-				BBAC895617C25230003CD1A4 /* iTunesArtwork@2x.png in Resources */,
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
 				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
+				BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */,
+				BBACF10A17C61D8500EBA761 /* MapHUD.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -449,24 +456,27 @@
 			files = (
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
-				BBA858E717C222B200AADCC7 /* OAMapRendererController.mm in Sources */,
+				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
-				BB63334217C3697F00903AB1 /* OARootViewController.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
+				BB63335117C4CFD600903AB1 /* OAMapHudViewController.m in Sources */,
+				BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */,
+				BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */,
+				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BB6B848F17C2651900ACD753 /* PBXTargetDependency */ = {
+		BB9B57BF17C5F817002EA93C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BB6B848E17C2651900ACD753 /* PBXContainerItemProxy */;
+			targetProxy = BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -500,7 +510,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PLATFORM_DEFINITIONS = "";
 				SDKROOT = iphoneos;
@@ -533,7 +543,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "";
 				SDKROOT = iphoneos;

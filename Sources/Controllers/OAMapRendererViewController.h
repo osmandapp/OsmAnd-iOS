@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapRendererController : UIViewController
+@interface OAMapRendererViewController : UIViewController
+
+- (void)activateMapnik;
+- (void)activateCyclemap;
+- (void)activateOffline;
 
 @end

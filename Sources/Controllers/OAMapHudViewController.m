@@ -1,20 +1,19 @@
 //
-//  OAOptionsPanelViewController.m
+//  OAMapHudViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Pelykh on 8/20/13.
+//  Created by Alexey Pelykh on 8/21/13.
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAOptionsPanelViewController.h"
+#import "OAMapHudViewController.h"
+#import "UIViewController+JASidePanel.h"
 
-#import "UIViewController+OARootVC.h"
-
-@interface OAOptionsPanelViewController ()
+@interface OAMapHudViewController ()
 
 @end
 
-@implementation OAOptionsPanelViewController
+@implementation OAMapHudViewController
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -37,15 +36,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)activateMapnik:(id)sender {
-    
-    [self.rootViewController.mapPanel.rendererViewController activateMapnik];
-    
-}
-- (IBAction)activateCyclemap:(id)sender {
-    [self.rootViewController.mapPanel.rendererViewController activateCyclemap];
-}
-- (IBAction)activateOffline:(id)sender {
+- (IBAction)showLeftPanel:(id)sender {
+    [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
 @end

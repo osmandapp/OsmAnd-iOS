@@ -14,11 +14,6 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
-///
-#include <QStandardPaths>
-#include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
-///
-
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -55,10 +50,6 @@
 - (void)dealloc
 {
     [self dtor];
-    
-#if !__has_feature(objc_arc)
-    [super dealloc];
-#endif
 }
 
 - (void)ctor
@@ -120,18 +111,10 @@
     
     OsmAnd::MapRendererConfiguration rendererConfig;
     rendererConfig.altasTexturesAllowed = false;
-    rendererConfig.texturesFilteringQuality = OsmAnd::MapRendererConfiguration::TextureFilteringQuality::Good;
+    rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _mapRenderer->setConfiguration(rendererConfig);
-    ///
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
-    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
-    onlineTileProvider->setLocalCachePath(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)));
-    _mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
-    _mapRenderer->setAzimuth(0.0f);
-    _mapRenderer->setElevationAngle(90.0f);
-    _mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    _mapRenderer->setZoom(10.0f);
-    ///
+
+    // Initialize rendering
     if(!_mapRenderer->initializeRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2 map renderer"];
@@ -167,9 +150,6 @@
     // Tear down context
     if([EAGLContext currentContext] == _glContext)
         [EAGLContext setCurrentContext:nil];
-#if !__has_feature(objc_arc)
-    [_glContext release];
-#endif
     _glContext = nil;
 }
 
@@ -312,44 +292,42 @@
         return;
     }
     
-    // Skip rendering if we don't have invalidated frame
-    /*if(!_mapRenderer->frameInvalidated)
-        return;*/
+    // Perform rendering only if frame is marked as invalidated
+    if(_mapRenderer->prepareFrame() && (_mapRenderer->frameInvalidated || true))
+    {
+        // Activate framebuffer
+        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+        validateGL();
     
-    // Activate framebuffer
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    validateGL();
-    
-    // Clear buffer
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    validateGL();
+        // Clear buffer
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        validateGL();
 
-    // Perform rendering
-    if(!_mapRenderer->renderFrame())
-    {
-        [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
-        return;
+        // Perform rendering
+        if(!_mapRenderer->renderFrame())
+        {
+            [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
+            return;
+        }
+        validateGL();
+    
+        //TODO: apply multisampling?
+    
+        // Erase depthbuffer, since not needed
+        const GLenum buffersToDiscard[] =
+        {
+            GL_DEPTH_ATTACHMENT
+        };
+        glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
+        validateGL();
+        glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, buffersToDiscard);
+        validateGL();
+    
+        // Present results
+        glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
+        validateGL();
+        [_glContext presentRenderbuffer:GL_RENDERBUFFER];
     }
-    validateGL();
-    
-    //TODO: apply multisampling?
-    
-    // Erase depthbuffer, since not needed
-    const GLenum buffersToDiscard[] =
-    {
-        GL_DEPTH_ATTACHMENT
-    };
-    glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
-    validateGL();
-    glDiscardFramebufferEXT(GL_FRAMEBUFFER, 1, buffersToDiscard);
-    validateGL();
-    
-    // Present results
-    glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
-    validateGL();
-    [_glContext presentRenderbuffer:GL_RENDERBUFFER];
-    
-    _mapRenderer->postprocessRendering();
 }
 
 - (BOOL)isRenderingSuspended

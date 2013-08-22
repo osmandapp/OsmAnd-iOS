@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OAMapRendererViewController.h"
+
 @interface OAMapPanelViewController : UIViewController
+
+@property (nonatomic, strong, readonly) OAMapRendererViewController* rendererViewController;
 
 @end

@@ -6,17 +6,20 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAMapRendererController.h"
+#import "OAMapRendererViewController.h"
 
 #import "OAMapRendererView.h"
 
 #include <QtMath>
+#include <QStandardPaths>
+#include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
+#include <OsmAndCore/Map/OfflineMapDataProvider.h>
 
-@interface OAMapRendererController ()
+@interface OAMapRendererViewController ()
 
 @end
 
-@implementation OAMapRendererController
+@implementation OAMapRendererViewController
 {
     float _initialZoomLevelDuringPinch;
     OsmAnd::PointI _initialPositionDuringMove;
@@ -34,9 +37,6 @@
 - (void)dealloc
 {
     [self dtor];
-#if !__has_feature(objc_arc)
-    [super dealloc];
-#endif
 }
 
 - (void)ctor
@@ -55,21 +55,13 @@
 
 - (void)loadView
 {
-    NSLog(@"Creating Map Renderer View...");
+    NSLog(@"Creating Map Renderer view...");
     
     // Inflate map renderer view
-    OAMapRendererView* view = [[OAMapRendererView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    OAMapRendererView* view = [[OAMapRendererView alloc] init];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.contentScaleFactor = [[UIScreen mainScreen] scale];
     self.view = view;
-#if !__has_feature(objc_arc)
-    [view release];
-#endif
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
-{
-    return TRUE;
 }
 
 - (void)viewDidLoad
@@ -197,6 +189,57 @@
     // Dispose of any resources that can be recreated.
     
     NSLog(@"MEMWARNING");
+}
+
+- (void)activateMapnik
+{
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
+    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
+    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("Mapnik cache")));
+    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
+    mapView.mapRenderer->setAzimuth(0.0f);
+    mapView.mapRenderer->setElevationAngle(90.0f);
+    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
+    mapView.mapRenderer->setZoom(10.0f);
+}
+
+- (void)activateCyclemap
+{
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createCycleMapProvider();
+    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
+    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("CycleMap cache")));
+    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
+    mapView.mapRenderer->setAzimuth(0.0f);
+    mapView.mapRenderer->setElevationAngle(90.0f);
+    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
+    mapView.mapRenderer->setZoom(10.0f);
+}
+
+- (void)activateOffline
+{
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createCycleMapProvider();
+    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
+    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("CycleMap cache")));
+    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
+    mapView.mapRenderer->setAzimuth(0.0f);
+    mapView.mapRenderer->setElevationAngle(90.0f);
+    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
+    mapView.mapRenderer->setZoom(10.0f);
 }
 
 @end

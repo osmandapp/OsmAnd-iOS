@@ -8,16 +8,25 @@
 
 #import "OAAppDelegate.h"
 
+#import "OARootViewController.h"
+
 #include <OsmAndCore.h>
 
 @implementation OAAppDelegate
 
+@synthesize window = _window;
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
-    
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
+
+    // Create window
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    // Create root view controller
+    self.window.rootViewController = [[OARootViewController alloc] init];
+    [self.window makeKeyAndVisible];
 
     return YES;
 }

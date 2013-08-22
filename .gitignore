@@ -7,3 +7,7 @@
 # XCode
 *.pbxuser
 xcuserdata
+
+# AppCode
+/.idea
+

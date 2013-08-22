@@ -19,33 +19,24 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self ctor];
+    if (self) {  
+        // Create panels
+        [self setLeftPanel:[[OAOptionsPanelViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
+        [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
+        //[self setRightPanel:[[OAContextPanelViewController alloc] initWithNibName:@"ContextPanel" bundle:nil]];
     }
     return self;
 }
 
-- (void)ctor
+- (void)loadView
 {
+    self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
-    
-    //TEST:
-    [self showLeftPanelAnimated:NO];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)awakeFromNib
-{
+	
     // 80% of smallest device width in portait mode (320px)
     self.leftFixedWidth = 256;
     self.rightFixedWidth = 256;
@@ -58,14 +49,24 @@
     
     // Allow rotation, without respect to current active panel
     self.shouldDelegateAutorotateToVisiblePanel = NO;
-    
-    // Create panels
-    [self setLeftPanel:
-        [self.storyboard instantiateViewControllerWithIdentifier:@"optionsPanelViewController"]];
-    [self setCenterPanel:
-        [self.storyboard instantiateViewControllerWithIdentifier:@"mapPanelViewController"]];
-    [self setRightPanel:
-        [self.storyboard instantiateViewControllerWithIdentifier:@"contextPanelViewController"]];
+        
+    //TEST:
+    [self showLeftPanelAnimated:NO];
+}
+
+- (OAOptionsPanelViewController*)optionsPanel
+{
+    return (OAOptionsPanelViewController*)self.leftPanel;
+}
+
+- (OAMapPanelViewController*)mapPanel
+{
+    return (OAMapPanelViewController*)self.centerPanel;
+}
+
+- (OAContextPanelViewController*)contextPanel
+{
+    return (OAContextPanelViewController*)self.rightPanel;
 }
 
 @end

@@ -57,6 +57,7 @@
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
 		BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10717C61B1700EBA761 /* OptionsPanel.xib */; };
 		BBACF10A17C61D8500EBA761 /* MapHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapHUD.xib */; };
+		BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -136,6 +137,8 @@
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
 		BBACF10717C61B1700EBA761 /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
 		BBACF10917C61D8500EBA761 /* MapHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapHUD.xib; path = Resources/MapHUD.xib; sourceTree = "<group>"; };
+		BBACF10B17C6293300EBA761 /* OsmAndApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndApp.h; sourceTree = "<group>"; };
+		BBACF10C17C6293300EBA761 /* OsmAndApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndApp.mm; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -241,6 +244,8 @@
 				BB098D001793F7FD00423944 /* main.m */,
 				BB098D031793F7FD00423944 /* OAAppDelegate.h */,
 				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
+				BBACF10B17C6293300EBA761 /* OsmAndApp.h */,
+				BBACF10C17C6293300EBA761 /* OsmAndApp.mm */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -467,6 +472,7 @@
 				BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
+				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

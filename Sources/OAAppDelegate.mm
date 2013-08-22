@@ -8,6 +8,7 @@
 
 #import "OAAppDelegate.h"
 
+#import "OsmAndApp.h"
 #import "OARootViewController.h"
 
 #include <OsmAndCore.h>
@@ -18,6 +19,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [OsmAndApp instance];
+    
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
 

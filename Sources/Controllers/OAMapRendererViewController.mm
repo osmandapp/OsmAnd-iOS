@@ -8,12 +8,14 @@
 
 #import "OAMapRendererViewController.h"
 
+#import "OsmAndApp.h"
 #import "OAMapRendererView.h"
 
 #include <QtMath>
 #include <QStandardPaths>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
+#include <OsmAndCore/Map/OfflineMapRasterTileProvider.h>
 
 @interface OAMapRendererViewController ()
 
@@ -232,9 +234,11 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createCycleMapProvider();
-    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
-    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("CycleMap cache")));
+    std::shared_ptr<OsmAnd::MapStyle> mapStyle;
+    [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
+    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
+    
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider(offlineMapDP, 2.0f));
     mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
     mapView.mapRenderer->setAzimuth(0.0f);
     mapView.mapRenderer->setElevationAngle(90.0f);

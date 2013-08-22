@@ -46,6 +46,7 @@
     [self.rootViewController.mapPanel.rendererViewController activateCyclemap];
 }
 - (IBAction)activateOffline:(id)sender {
+    [self.rootViewController.mapPanel.rendererViewController activateOffline];
 }
 
 @end

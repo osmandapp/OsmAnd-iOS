@@ -23,8 +23,6 @@
 
 @implementation OAMapRendererViewController
 {
-    float _initialZoomLevelDuringPinch;
-    OsmAnd::PointI _initialPositionDuringMove;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -111,26 +109,12 @@
     if(![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
-    if(recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        // Save initial value of zoom
-    }
-    else if(recognizer.state == UIGestureRecognizerStateChanged)
-    {
-        mapView.mapRenderer->setZoom(_initialZoomLevelDuringPinch - (1.0f - recognizer.scale));
-    }
-    else if(recognizer.state == UIGestureRecognizerStateCancelled)
-    {
-        // Since gesture was cancelled, restore initial zoom
-        mapView.mapRenderer->setZoom(_initialZoomLevelDuringPinch);
-    }
-    else if(recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        float initialZoomLevelForAnimation = _initialZoomLevelDuringPinch - (1.0f - recognizer.scale);
-        //TODO: proceed gesture with given velocity
-    }
+    //OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    //OsmAnd::MapRendererState state = mapView.mapRenderer->state;
+    //state.requestedZoom += recognizer.scale;
+    //mapView.mapRenderer->setZoom(state.requestedZoom);
+    NSLog(@"scale = %f", recognizer.scale);
+    //recognizer.scale = 1.0f;
 }
 
 - (void)moveGestureDetected:(UIPanGestureRecognizer*)recognizer

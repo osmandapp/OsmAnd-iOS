@@ -9,6 +9,7 @@
 #import "OARootViewController.h"
 
 #import "JASidePanelController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface OARootViewController ()
 
@@ -51,7 +52,15 @@
     self.shouldDelegateAutorotateToVisiblePanel = NO;
         
     //TEST:
-    [self showLeftPanelAnimated:NO];
+    //[self showLeftPanelAnimated:NO];
+}
+
+- (void)stylePanel:(UIView *)panel
+{
+    [super stylePanel:panel];
+    
+    // Setting corner radius on EGL layer will drop (or better to say, cap) framerate to 40 fps
+    panel.layer.cornerRadius = 0.0f;
 }
 
 - (OAOptionsPanelViewController*)optionsPanel

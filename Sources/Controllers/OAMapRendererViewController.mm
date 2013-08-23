@@ -23,6 +23,7 @@
 
 @implementation OAMapRendererViewController
 {
+    CGFloat _initialZoomLevelDuringGesture;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -109,12 +110,26 @@
     if(![self isViewLoaded])
         return;
     
-    //OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    //OsmAnd::MapRendererState state = mapView.mapRenderer->state;
-    //state.requestedZoom += recognizer.scale;
-    //mapView.mapRenderer->setZoom(state.requestedZoom);
-    NSLog(@"scale = %f", recognizer.scale);
-    //recognizer.scale = 1.0f;
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    switch (recognizer.state)
+    {
+        case UIGestureRecognizerStateBegan:
+            _initialZoomLevelDuringGesture = mapView.zoom;
+            break;
+        case UIGestureRecognizerStateChanged:
+            mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+            break;
+        case UIGestureRecognizerStateEnded:
+            mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+            break;
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:
+            mapView.zoom = _initialZoomLevelDuringGesture;
+            
+        default:
+            break;
+    }
 }
 
 - (void)moveGestureDetected:(UIPanGestureRecognizer*)recognizer
@@ -187,11 +202,11 @@
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("Mapnik cache")));
-    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
-    mapView.mapRenderer->setAzimuth(0.0f);
-    mapView.mapRenderer->setElevationAngle(90.0f);
-    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    mapView.mapRenderer->setZoom(10.0f);
+    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+    mapView.azimuth = 0.0f;
+    mapView.elevationAngle = 90.0f;
+    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
+    mapView.zoom = 10.0f;
 }
 
 - (void)activateCyclemap
@@ -204,11 +219,11 @@
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createCycleMapProvider();
     OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
     onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("CycleMap cache")));
-    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
-    mapView.mapRenderer->setAzimuth(0.0f);
-    mapView.mapRenderer->setElevationAngle(90.0f);
-    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    mapView.mapRenderer->setZoom(10.0f);
+    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+    mapView.azimuth = 0.0f;
+    mapView.elevationAngle = 90.0f;
+    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
+    mapView.zoom = 10.0f;
 }
 
 - (void)activateOffline
@@ -223,11 +238,11 @@
     std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
     
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider(offlineMapDP, 2.0f));
-    mapView.mapRenderer->setRasterLayerProvider(OsmAnd::RasterMapLayerId::BaseLayer, tileProvider);
-    mapView.mapRenderer->setAzimuth(0.0f);
-    mapView.mapRenderer->setElevationAngle(90.0f);
-    mapView.mapRenderer->setTarget(OsmAnd::PointI(1102430866, 704978668));
-    mapView.mapRenderer->setZoom(10.0f);
+    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+    mapView.azimuth = 0.0f;
+    mapView.elevationAngle = 90.0f;
+    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
+    mapView.zoom = 10.0f;
 }
 
 @end

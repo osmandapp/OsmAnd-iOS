@@ -14,6 +14,9 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
+
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -30,7 +33,7 @@
     
     OsmAnd::PointI _viewSize;
     
-    std::shared_ptr<OsmAnd::IMapRenderer> _mapRenderer;
+    std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
 }
 
 + (Class)layerClass
@@ -60,6 +63,14 @@
     _colorRenderBuffer = 0;
     _frameBuffer = 0;
     _displayLink = nil;
+    
+    // Create map renderer instance
+    _renderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
+    
+    OsmAnd::MapRendererConfiguration rendererConfig;
+    rendererConfig.altasTexturesAllowed = false;
+    rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
+    _renderer->setConfiguration(rendererConfig);
 }
 
 - (void)dtor
@@ -68,9 +79,104 @@
     [self releaseContext];
 }
 
-- (OsmAnd::IMapRenderer*)mapRenderer
+- (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
 {
-    return _mapRenderer.get();
+    return _renderer->state.rasterLayerProviders[static_cast<int>(layer)];
+}
+
+- (void)setProvider:(std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer
+{
+    _renderer->setRasterLayerProvider(layer, provider);
+}
+
+- (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer
+{
+    _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapBitmapTileProvider>());
+}
+
+- (CGFloat)opacityOf:(OsmAnd::RasterMapLayerId)layer
+{
+    return _renderer->state.rasterLayerOpacity[static_cast<int>(layer)];
+}
+
+- (void)setOpacity:(CGFloat)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
+{
+    _renderer->setRasterLayerOpacity(layer, opacity);
+}
+
+- (std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
+{
+    return _renderer->state.elevationDataProvider;
+}
+
+- (void)setElevationDataProvider:(std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
+{
+    _renderer->setElevationDataProvider(elevationDataProvider);
+}
+
+- (CGFloat)elevationDataScale
+{
+    return _renderer->state.elevationDataScaleFactor;
+}
+
+- (void)removeElevationDataProvider
+{
+    _renderer->setElevationDataProvider(std::shared_ptr<OsmAnd::IMapElevationDataProvider>());
+}
+
+- (void)setElevationDataScale:(CGFloat)elevationDataScale
+{
+    _renderer->setElevationDataScaleFactor(elevationDataScale);
+}
+
+- (CGFloat)fieldOfView
+{
+    return _renderer->state.fieldOfView;
+}
+
+- (void)setFieldOfView:(CGFloat)fieldOfView
+{
+    _renderer->setFieldOfView(fieldOfView);
+}
+
+- (CGFloat)azimuth
+{
+    return _renderer->state.azimuth;
+}
+
+- (void)setAzimuth:(CGFloat)azimuth
+{
+    _renderer->setAzimuth(azimuth);
+}
+
+- (CGFloat)elevationAngle
+{
+    return _renderer->state.elevationAngle;
+}
+
+- (void)setElevationAngle:(CGFloat)elevationAngle
+{
+    _renderer->setElevationAngle(elevationAngle);
+}
+
+- (OsmAnd::PointI)target31
+{
+    return _renderer->state.target31;
+}
+
+- (void)setTarget31:(OsmAnd::PointI)target31
+{
+    _renderer->setTarget(target31);
+}
+
+- (CGFloat)zoom
+{
+    return _renderer->state.requestedZoom;
+}
+
+- (void)setZoom:(CGFloat)zoom
+{
+    _renderer->setZoom(zoom);
 }
 
 - (void)createContext
@@ -101,21 +207,13 @@
         return;
     }
     
-    // Create OpenGLES map renderer, setup configure it
-    _mapRenderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
-    
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.displayDensityFactor = self.contentScaleFactor;
     //TODO: enable background worker
-    _mapRenderer->setup(rendererSetup);
-    
-    OsmAnd::MapRendererConfiguration rendererConfig;
-    rendererConfig.altasTexturesAllowed = false;
-    rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
-    _mapRenderer->setConfiguration(rendererConfig);
+    _renderer->setup(rendererSetup);
 
     // Initialize rendering
-    if(!_mapRenderer->initializeRendering())
+    if(!_renderer->initializeRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2 map renderer"];
         return;
@@ -137,12 +235,11 @@
     [self suspendRendering];
     
     // Release map renderer
-    if(!_mapRenderer->releaseRendering())
+    if(!_renderer->releaseRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to release OpenGLES2 map renderer"];
         return;
     }
-    _mapRenderer.reset();
     
     // Release render-buffers and framebuffer
     [self releaseRenderAndFrameBuffers];
@@ -281,19 +378,19 @@
         [self allocateRenderAndFrameBuffers];
         
         // Update size of renderer window and viewport
-        _mapRenderer->setWindowSize(_viewSize);
-        _mapRenderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
+        _renderer->setWindowSize(_viewSize);
+        _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
     }
     
     // Process rendering
-    if(!_mapRenderer->processRendering())
+    if(!_renderer->processRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to process rendering using OpenGLES2 map renderer"];
         return;
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if(_mapRenderer->prepareFrame() && (_mapRenderer->frameInvalidated || true))
+    if(_renderer->prepareFrame() && (_renderer->frameInvalidated || true))
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -304,7 +401,7 @@
         validateGL();
 
         // Perform rendering
-        if(!_mapRenderer->renderFrame())
+        if(!_renderer->renderFrame())
         {
             [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
             return;

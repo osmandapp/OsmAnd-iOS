@@ -10,6 +10,7 @@
 
 @interface OAMapHudViewController : UIViewController
 
+@property (weak, nonatomic) IBOutlet UILabel *fpsLabel;
 - (IBAction)showLeftPanel:(id)sender;
 
 @end

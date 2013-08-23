@@ -88,6 +88,11 @@
     grMove.minimumNumberOfTouches = 1;
     grMove.maximumNumberOfTouches = 2;
     [mapView addGestureRecognizer:grMove];
+    
+    // - Rotation gesture
+    UIRotationGestureRecognizer* grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateGestureDetected:)];
+    grRotate.delegate = self;
+    [mapView addGestureRecognizer:grRotate];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -130,6 +135,7 @@
             break;
         case UIGestureRecognizerStateEnded:
             mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+            NSLog(@"zoom end velocity = %f", recognizer.velocity);
             break;
         case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateCancelled:
@@ -150,7 +156,6 @@
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
     CGPoint translation = [recognizer translationInView:recognizer.view];
-    [recognizer setTranslation:CGPointZero inView:mapView];
     translation.x *= mapView.contentScaleFactor;
     translation.y *= mapView.contentScaleFactor;
 
@@ -173,6 +178,60 @@
     target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
     target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
     mapView.target31 = target31;
+    
+    if(recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        CGPoint velocity = [recognizer velocityInView:self.view];
+        NSLog(@"move velocity %f %f", velocity.x, velocity.y);
+    }
+    [recognizer setTranslation:CGPointZero inView:mapView];
+}
+
+- (void)rotateGestureDetected:(UIRotationGestureRecognizer*)recognizer
+{
+    // Ignore gesture if we have no view
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    // Get center of all touches as centroid
+    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    {
+        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+        
+        centerPoint.x += touchPoint.x;
+        centerPoint.y += touchPoint.y;
+    }
+    centerPoint.x /= recognizer.numberOfTouches;
+    centerPoint.y /= recognizer.numberOfTouches;
+    centerPoint.x *= mapView.contentScaleFactor;
+    centerPoint.y *= mapView.contentScaleFactor;
+    
+    // Convert point from screen to location
+    OsmAnd::PointI centerLocation;
+    [mapView convert:centerPoint toLocation:&centerLocation];
+    
+    // Rotate current target around center location
+    OsmAnd::PointI target = mapView.target31;
+    target -= centerLocation;
+    OsmAnd::PointI newTarget;
+    const float cosAngle = cosf(-recognizer.rotation);
+    const float sinAngle = sinf(-recognizer.rotation);
+    newTarget.x = target.x * cosAngle - target.y * sinAngle;
+    newTarget.y = target.x * sinAngle + target.y * cosAngle;
+    newTarget += centerLocation;
+    mapView.target31 = newTarget;
+    
+    // Set rotation
+    mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
+    
+    if(recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        NSLog(@"rotate velocity %f", recognizer.velocity);
+    }
+    [recognizer setRotation:0];
 }
 
 - (void)didReceiveMemoryWarning

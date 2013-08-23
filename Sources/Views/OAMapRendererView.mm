@@ -189,6 +189,13 @@
     return _renderer->getScaledTileSizeOnScreen();
 }
 
+- (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
+{
+    if(!location)
+        return NO;
+    return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+}
+
 - (void)createContext
 {
     if(_glContext != nil)

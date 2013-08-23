@@ -44,4 +44,6 @@
 @property (nonatomic, readonly) OsmAnd::ZoomLevel zoomLevel;
 @property (nonatomic, readonly) CGFloat scaledTileSizeOnScreen;
 
+- (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
+
 @end

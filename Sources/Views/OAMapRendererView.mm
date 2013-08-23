@@ -179,6 +179,16 @@
     _renderer->setZoom(zoom);
 }
 
+- (OsmAnd::ZoomLevel)zoomLevel
+{
+    return _renderer->state.zoomBase;
+}
+
+- (CGFloat)scaledTileSizeOnScreen
+{
+    return _renderer->getScaledTileSizeOnScreen();
+}
+
 - (void)createContext
 {
     if(_glContext != nil)

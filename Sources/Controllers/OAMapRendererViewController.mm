@@ -71,19 +71,22 @@
 
     // Tell view to create context
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    mapView.userInteractionEnabled = YES;
+    mapView.multipleTouchEnabled = YES;
     [mapView createContext];
     
     // Attach gesture recognizers:
-    mapView.userInteractionEnabled = YES;
     
     // - Zoom gesture
     UIPinchGestureRecognizer* grZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomGestureDetected:)];
+    grZoom.delegate = self;
     [mapView addGestureRecognizer:grZoom];
 
     // - Move gesture
     UIPanGestureRecognizer* grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGestureDetected:)];
+    grMove.delegate = self;
     grMove.minimumNumberOfTouches = 1;
-    grMove.maximumNumberOfTouches = 1;
+    grMove.maximumNumberOfTouches = 2;
     [mapView addGestureRecognizer:grMove];
 }
 
@@ -102,6 +105,11 @@
     // Suspend rendering
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView suspendRendering];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 - (void)zoomGestureDetected:(UIPinchGestureRecognizer*)recognizer
@@ -140,48 +148,31 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    if(recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        // Save initial position of moving
-    }
-    else if(recognizer.state == UIGestureRecognizerStateChanged)
-    {
-        // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-        /*CGPoint translation = [recognizer translationInView:recognizer.view];
-        translation.x *= mapView.contentScaleFactor;
-        translation.y *= mapView.contentScaleFactor;
+    // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
+    CGPoint translation = [recognizer translationInView:recognizer.view];
+    [recognizer setTranslation:CGPointZero inView:mapView];
+    translation.x *= mapView.contentScaleFactor;
+    translation.y *= mapView.contentScaleFactor;
 
-        // Take into account current azimuth and reproject to map space (points)
-        const float angle = qDegreesToRadians(mapView.mapRenderer->configuration.azimuth);
-        const float cosAngle = cosf(angle);
-        const float sinAngle = sinf(angle);
-        CGPoint translationInMapSpace;
-        translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
-        translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
+    // Take into account current azimuth and reproject to map space (points)
+    const float angle = qDegreesToRadians(mapView.azimuth);
+    const float cosAngle = cosf(angle);
+    const float sinAngle = sinf(angle);
+    CGPoint translationInMapSpace;
+    translationInMapSpace.x = translation.x * cosAngle - translation.y * sinAngle;
+    translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
 
-        // Taking into account current zoom, get how many 31-coordinates there are in 1 point
-        int32_t tileSize31 = 1;
-        if(mapView.mapRenderer->configuration.zoomBase != 31)
-            tileSize31 = (1u << (31 - mapView.mapRenderer->configuration.zoomBase)) - 1;
-        const double scale31 = static_cast<double>(tileSize31) / mapView.mapRenderer->getScaledTileSizeOnScreen();
+    // Taking into account current zoom, get how many 31-coordinates there are in 1 point
+    int32_t tileSize31 = 1;
+    if(mapView.zoomLevel != OsmAnd::ZoomLevel31)
+        tileSize31 = (1u << (31 - mapView.zoomLevel)) - 1;
+    const double scale31 = static_cast<double>(tileSize31) / mapView.scaledTileSizeOnScreen;
 
-        // Rescale movement to 31 coordinates
-        OsmAnd::PointI newTarget31;
-        newTarget31.x = _initialPositionDuringMove.x - static_cast<int32_t>(round(translationInMapSpace.x * scale31));
-        newTarget31.y = _initialPositionDuringMove.y - static_cast<int32_t>(round(translationInMapSpace.y * scale31));
-
-        mapView.mapRenderer->setTarget(newTarget31);*/
-    }
-    else if(recognizer.state == UIGestureRecognizerStateCancelled)
-    {
-        // Since gesture was cancelled, restore initial target
-        //mapView.mapRenderer->setTarget(_initialPositionDuringMove);
-    }
-    else if(recognizer.state == UIGestureRecognizerStateEnded)
-    {
-        //float initialZoomLevelForAnimation = _initialZoomLevelDuringPinch - (1.0f - recognizer.scale);
-        //TODO: proceed gesture with given velocity
-    }
+    // Rescale movement to 31 coordinates
+    OsmAnd::PointI target31 = mapView.target31;
+    target31.x -= static_cast<int32_t>(round(translationInMapSpace.x * scale31));
+    target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
+    mapView.target31 = target31;
 }
 
 - (void)didReceiveMemoryWarning

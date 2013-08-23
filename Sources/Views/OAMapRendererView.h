@@ -41,5 +41,7 @@
 @property (nonatomic) CGFloat elevationAngle;
 @property (nonatomic) OsmAnd::PointI target31;
 @property (nonatomic) CGFloat zoom;
+@property (nonatomic, readonly) OsmAnd::ZoomLevel zoomLevel;
+@property (nonatomic, readonly) CGFloat scaledTileSizeOnScreen;
 
 @end

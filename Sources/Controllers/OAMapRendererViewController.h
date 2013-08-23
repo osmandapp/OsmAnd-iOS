@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapRendererViewController : UIViewController
+@interface OAMapRendererViewController : UIViewController <UIGestureRecognizerDelegate>
 
 - (void)activateMapnik;
 - (void)activateCyclemap;

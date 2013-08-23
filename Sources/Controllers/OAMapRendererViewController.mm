@@ -17,6 +17,10 @@
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider.h>
 
+#define kElevationGestureMaxThreshold 50
+#define kElevationGestureMinAngle 30
+#define kElevationGesturePointsPerDegree 3
+
 @interface OAMapRendererViewController ()
 
 @end
@@ -24,6 +28,11 @@
 @implementation OAMapRendererViewController
 {
     CGFloat _initialZoomLevelDuringGesture;
+    
+    UIPinchGestureRecognizer* _grZoom;
+    UIPanGestureRecognizer* _grMove;
+    UIRotationGestureRecognizer* _grRotate;
+    UIPanGestureRecognizer* _grElevation;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,6 +51,25 @@
 
 - (void)ctor
 {
+    // Create gesture recognizers:
+    
+    // - Zoom gesture
+    _grZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomGestureDetected:)];
+    _grZoom.delegate = self;
+    
+    // - Move gesture
+    _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGestureDetected:)];
+    _grMove.delegate = self;
+    
+    // - Rotation gesture
+    _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateGestureDetected:)];
+    _grRotate.delegate = self;
+    
+    // - Elevation gesture
+    _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(elevationGestureDetected:)];
+    _grElevation.delegate = self;
+    _grElevation.minimumNumberOfTouches = 2;
+    _grElevation.maximumNumberOfTouches = 2;
 }
 
 - (void)dtor
@@ -76,23 +104,10 @@
     [mapView createContext];
     
     // Attach gesture recognizers:
-    
-    // - Zoom gesture
-    UIPinchGestureRecognizer* grZoom = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(zoomGestureDetected:)];
-    grZoom.delegate = self;
-    [mapView addGestureRecognizer:grZoom];
-
-    // - Move gesture
-    UIPanGestureRecognizer* grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveGestureDetected:)];
-    grMove.delegate = self;
-    grMove.minimumNumberOfTouches = 1;
-    grMove.maximumNumberOfTouches = 2;
-    [mapView addGestureRecognizer:grMove];
-    
-    // - Rotation gesture
-    UIRotationGestureRecognizer* grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateGestureDetected:)];
-    grRotate.delegate = self;
-    [mapView addGestureRecognizer:grRotate];
+    [mapView addGestureRecognizer:_grZoom];
+    [mapView addGestureRecognizer:_grMove];
+    [mapView addGestureRecognizer:_grRotate];
+    [mapView addGestureRecognizer:_grElevation];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -112,8 +127,34 @@
     [mapView suspendRendering];
 }
 
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if(![self isViewLoaded])
+        return NO;
+    
+    if(gestureRecognizer == _grElevation)
+    {
+        if(gestureRecognizer.numberOfTouches != 2)
+            return NO;
+            
+        CGPoint touch1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
+        CGPoint touch2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
+        
+        CGFloat verticalDistance = fabsf(touch1.y - touch2.y);
+
+        if(verticalDistance >= kElevationGestureMaxThreshold)
+            return NO;
+    }
+    
+    return YES;
+}
+
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
+    // Elevation gesture recognizer should not be mixed with others
+    if(gestureRecognizer == _grElevation || otherGestureRecognizer == _grElevation)
+        return NO;
+    
     return YES;
 }
 
@@ -155,7 +196,7 @@
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
-    CGPoint translation = [recognizer translationInView:recognizer.view];
+    CGPoint translation = [recognizer translationInView:self.view];
     translation.x *= mapView.contentScaleFactor;
     translation.y *= mapView.contentScaleFactor;
 
@@ -184,7 +225,7 @@
         CGPoint velocity = [recognizer velocityInView:self.view];
         NSLog(@"move velocity %f %f", velocity.x, velocity.y);
     }
-    [recognizer setTranslation:CGPointZero inView:mapView];
+    [recognizer setTranslation:CGPointZero inView:self.view];
 }
 
 - (void)rotateGestureDetected:(UIRotationGestureRecognizer*)recognizer
@@ -232,6 +273,24 @@
         NSLog(@"rotate velocity %f", recognizer.velocity);
     }
     [recognizer setRotation:0];
+}
+
+- (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer
+{
+    // Ignore gesture if we have no view
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    CGPoint translation = [recognizer translationInView:self.view];
+    CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
+    CGFloat angle = mapView.elevationAngle;
+    angle -= angleDelta;
+    if(angle < kElevationGestureMinAngle)
+        angle = kElevationGestureMinAngle;
+    mapView.elevationAngle = angle;
+    [recognizer setTranslation:CGPointZero inView:self.view];
 }
 
 - (void)didReceiveMemoryWarning

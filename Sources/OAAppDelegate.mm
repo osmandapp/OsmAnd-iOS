@@ -11,6 +11,8 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 
+#import "TestFlight.h"
+
 #include <OsmAndCore.h>
 
 @implementation OAAppDelegate
@@ -19,6 +21,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    // Initialize TestFlight SDK
+    [TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
+
+    // Create instance of OsmAnd application
     [OsmAndApp instance];
     
     // Initialize OsmAnd core

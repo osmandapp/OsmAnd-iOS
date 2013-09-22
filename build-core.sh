@@ -8,7 +8,7 @@ if [[ -z "$OSMAND_BUILD_CPU_CORES_NUM" ]]; then
 fi
 
 # Prepare core dependencies
-DEPS="expat gdal giflib glm glsl-optimizer jpeg libpng protobuf qtbase-ios skia zlib"
+DEPS=qtbase-ios expat gdal giflib glm glsl-optimizer jpeg libpng protobuf skia zlib
 "$ROOT/core/externals/configure.sh" $DEPS
 "$ROOT/core/externals/build.sh" $DEPS
 

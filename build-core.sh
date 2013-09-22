@@ -14,7 +14,22 @@ echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
 
 # Build core library with different flavours
-("$ROOT/build/simulator-ios.sh" debug && (cd "$ROOT/baked/simulator-ios-clang-debug.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static))
-("$ROOT/build/simulator-ios.sh" release && (cd "$ROOT/baked/simulator-ios-clang-release.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static))
-("$ROOT/build/device-ios.sh" debug && (cd "$ROOT/baked/device-ios-clang-debug.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static))
-("$ROOT/build/device-ios.sh" release && (cd "$ROOT/baked/device-ios-clang-release.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static))
+if [ ! -d "$ROOT/baked/simulator-ios-clang-debug.makefile" ]; then
+	"$ROOT/build/simulator-ios.sh" debug
+fi
+(cd "$ROOT/baked/simulator-ios-clang-debug.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static)
+
+if [ ! -d "$ROOT/baked/simulator-ios-clang-release.makefile" ]; then
+	"$ROOT/build/simulator-ios.sh" release
+fi
+(cd "$ROOT/baked/simulator-ios-clang-release.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static)
+
+if [ ! -d "$ROOT/baked/device-ios-clang-debug.makefile" ]; then
+	"$ROOT/build/device-ios.sh" debug
+fi
+(cd "$ROOT/baked/device-ios-clang-debug.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static)
+
+if [ ! -d "$ROOT/baked/device-ios-clang-release.makefile" ]; then
+	"$ROOT/build/device-ios.sh" release
+fi
+(cd "$ROOT/baked/device-ios-clang-release.makefile" && make -j$OSMAND_BUILD_CPU_CORES_NUM OsmAndCore_static)

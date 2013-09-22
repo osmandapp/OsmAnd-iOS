@@ -342,7 +342,7 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    std::shared_ptr<OsmAnd::MapStyle> mapStyle;
+    std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
     [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
     std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
     

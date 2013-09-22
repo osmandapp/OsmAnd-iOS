@@ -94,7 +94,7 @@
 		BB098D041793F7FD00423944 /* OAAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
 		BB0EA14717C60AF9007B572D /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARootViewController.h; path = Controllers/OARootViewController.h; sourceTree = "<group>"; };
 		BB0EA14817C60AF9007B572D /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
-		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
+		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "${CONFIGURATION_BUILD_DIR}/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
@@ -576,8 +576,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/externals/TestFlight\"",
+					"${CONFIGURATION_BUILD_DIR}",
+					"$(SRCROOT)/externals/TestFlight",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -600,8 +600,8 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
-					"\"$(SRCROOT)/../../../../../Library/Developer/Xcode/DerivedData/OsmAnd-fayquylhwgsoqhciphgsuzdpufbf/Build/Products/Debug-iphoneos\"",
-					"\"$(SRCROOT)/externals/TestFlight\"",
+					"${CONFIGURATION_BUILD_DIR}",
+					"$(SRCROOT)/externals/TestFlight",
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";

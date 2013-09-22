@@ -9,7 +9,7 @@ fi
 
 # Prepare core dependencies
 echo "Configuring dependencies..."
-"$ROOT/core/externals/configure.sh" qtbase-ios expat gdal giflib glm glsl-optimizer jpeg libpng protobuf skia zlib
+"$ROOT/core/externals/configure.sh" qtbase-ios expat freetype giflib jpeg zlib libpng protobuf skia gdal glsl-optimizer glm
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
 

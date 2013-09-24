@@ -15,7 +15,7 @@
 #include <QStandardPaths>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
-#include <OsmAndCore/Map/OfflineMapRasterTileProvider.h>
+#include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
 
 #define kElevationGestureMaxThreshold 50
 #define kElevationGestureMinAngle 30
@@ -346,7 +346,7 @@
     [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
     std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
     
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider(offlineMapDP, 2.0f));
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 2.0f));
     [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
     mapView.azimuth = 0.0f;
     mapView.elevationAngle = 90.0f;

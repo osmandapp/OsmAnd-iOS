@@ -1,15 +1,19 @@
 #!/bin/bash
 
-# Get version tag string
-VERSION_TAG=`(cd $PROJECT_DIR && git describe --long)`
-echo "Version tag: $VERSION_TAG"
+# Get version tag/hash strings
+IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`
+echo "iOS git tag: $IOS_GIT_TAG"
+CORE_GIT_HASH=`(cd "$PROJECT_DIR/../core" && git log --pretty=format:'%h' -n 1)`
+echo "Core git hash: $CORE_GIT_HASH"
+RESOURCES_GIT_HASH=`(cd "$PROJECT_DIR/../resources" && git log --pretty=format:'%h' -n 1)`
+echo "Resources git hash: $RESOURCES_GIT_HASH"
 
 # Parse version tag string
-[[ $VERSION_TAG =~ v([[:digit:]\.]+)([[:alpha:]]?)-([[:digit:]]+)-g([[:xdigit:]]+) ]]
+[[ $IOS_GIT_TAG =~ v([[:digit:]\.]+)([[:alpha:]]?)-([[:digit:]]+)-g([[:xdigit:]]+) ]]
 VERSION="${BASH_REMATCH[1]}"
 RELEASE="${BASH_REMATCH[2]}"
 REVISION="${BASH_REMATCH[3]}"
-BUILD="${BASH_REMATCH[4]}"
+BUILD="${BASH_REMATCH[4]}/${CORE_GIT_HASH}/${RESOURCES_GIT_HASH}"
 echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
 
 # Generate appversion.prefix

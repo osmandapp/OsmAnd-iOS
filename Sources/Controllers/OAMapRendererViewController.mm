@@ -346,7 +346,7 @@
     [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
     std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
     
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 2.0f));
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * 2, 2.0f));
     [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
     mapView.azimuth = 0.0f;
     mapView.elevationAngle = 90.0f;

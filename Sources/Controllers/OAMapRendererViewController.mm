@@ -20,6 +20,7 @@
 #define kElevationGestureMaxThreshold 50
 #define kElevationGestureMinAngle 30
 #define kElevationGesturePointsPerDegree 3
+#define kRotationGestureThresholdDegrees 5
 
 @interface OAMapRendererViewController ()
 
@@ -27,11 +28,14 @@
 
 @implementation OAMapRendererViewController
 {
-    CGFloat _initialZoomLevelDuringGesture;
-    
     UIPinchGestureRecognizer* _grZoom;
+    CGFloat _initialZoomLevelDuringGesture;
+
     UIPanGestureRecognizer* _grMove;
+    
     UIRotationGestureRecognizer* _grRotate;
+    CGFloat _accumulatedRotationAngle;
+    
     UIPanGestureRecognizer* _grElevation;
 }
 
@@ -134,16 +138,23 @@
     
     if(gestureRecognizer == _grElevation)
     {
+        // Elevation gesture recognizer requires 2 touch points
         if(gestureRecognizer.numberOfTouches != 2)
             return NO;
-            
-        CGPoint touch1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
-        CGPoint touch2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
-        
-        CGFloat verticalDistance = fabsf(touch1.y - touch2.y);
 
+        // Calculate vertical distance between touches
+        const auto touch1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
+        const auto touch2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
+        const auto verticalDistance = fabsf(touch1.y - touch2.y);
+
+        // Ignore this touch if vertical distance is too large
         if(verticalDistance >= kElevationGestureMaxThreshold)
+        {
+#if defined(DEBUG)
+            NSLog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
+#endif
             return NO;
+        }
     }
     
     return YES;
@@ -235,6 +246,19 @@
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    // Zeroify accumulated rotation on gesture begin
+    if(recognizer.state == UIGestureRecognizerStateBegan)
+        _accumulatedRotationAngle = 0.0f;
+    
+    // Check if accumulated rotation is greater than threshold
+    if(fabs(_accumulatedRotationAngle) < kRotationGestureThresholdDegrees)
+    {
+        _accumulatedRotationAngle += qRadiansToDegrees(recognizer.rotation);
+        [recognizer setRotation:0];
+
+        return;
+    }
     
     // Get center of all touches as centroid
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];

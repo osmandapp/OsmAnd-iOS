@@ -329,6 +329,14 @@
     if(recognizer.state != UIGestureRecognizerStateEnded)
         return;
     
+    // Put tap location to center of screen
+    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    centerPoint.x *= mapView.contentScaleFactor;
+    centerPoint.y *= mapView.contentScaleFactor;
+    OsmAnd::PointI centerLocation;
+    [mapView convert:centerPoint toLocation:&centerLocation];
+    mapView.target31 = centerLocation;
+    
     // Increate zoom by 1
     mapView.zoom += 1.0f;
 }
@@ -344,6 +352,23 @@
     // Handle gesture only when it is ended
     if(recognizer.state != UIGestureRecognizerStateEnded)
         return;
+
+    // Put tap location to center of screen
+    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    {
+        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+        
+        centerPoint.x += touchPoint.x;
+        centerPoint.y += touchPoint.y;
+    }
+    centerPoint.x /= recognizer.numberOfTouches;
+    centerPoint.y /= recognizer.numberOfTouches;
+    centerPoint.x *= mapView.contentScaleFactor;
+    centerPoint.y *= mapView.contentScaleFactor;
+    OsmAnd::PointI centerLocation;
+    [mapView convert:centerPoint toLocation:&centerLocation];
+    mapView.target31 = centerLocation;
     
     // Decrease zoom by 1
     mapView.zoom -= 1.0f;

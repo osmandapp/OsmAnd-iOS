@@ -36,6 +36,10 @@
     UIRotationGestureRecognizer* _grRotate;
     CGFloat _accumulatedRotationAngle;
     
+    UITapGestureRecognizer* _grZoomIn;
+    
+    UITapGestureRecognizer* _grZoomOut;
+    
     UIPanGestureRecognizer* _grElevation;
 }
 
@@ -68,6 +72,18 @@
     // - Rotation gesture
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self action:@selector(rotateGestureDetected:)];
     _grRotate.delegate = self;
+    
+    // - Zoom-in gesture
+    _grZoomIn = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoomInGestureDetected:)];
+    _grZoomIn.delegate = self;
+    _grZoomIn.numberOfTapsRequired = 2;
+    _grZoomIn.numberOfTouchesRequired = 1;
+    
+    // - Zoom-out gesture
+    _grZoomOut = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoomOutGestureDetected:)];
+    _grZoomOut.delegate = self;
+    _grZoomOut.numberOfTapsRequired = 2;
+    _grZoomOut.numberOfTouchesRequired = 2;
     
     // - Elevation gesture
     _grElevation = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(elevationGestureDetected:)];
@@ -111,6 +127,8 @@
     [mapView addGestureRecognizer:_grZoom];
     [mapView addGestureRecognizer:_grMove];
     [mapView addGestureRecognizer:_grRotate];
+    [mapView addGestureRecognizer:_grZoomIn];
+    [mapView addGestureRecognizer:_grZoomOut];
     [mapView addGestureRecognizer:_grElevation];
 }
 
@@ -297,6 +315,38 @@
         NSLog(@"rotate velocity %f", recognizer.velocity);
     }
     [recognizer setRotation:0];
+}
+
+- (void)zoomInGestureDetected:(UITapGestureRecognizer*)recognizer
+{
+    // Ignore gesture if we have no view
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    // Handle gesture only when it is ended
+    if(recognizer.state != UIGestureRecognizerStateEnded)
+        return;
+    
+    // Increate zoom by 1
+    mapView.zoom += 1.0f;
+}
+
+- (void)zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer
+{
+    // Ignore gesture if we have no view
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    // Handle gesture only when it is ended
+    if(recognizer.state != UIGestureRecognizerStateEnded)
+        return;
+    
+    // Decrease zoom by 1
+    mapView.zoom -= 1.0f;
 }
 
 - (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer

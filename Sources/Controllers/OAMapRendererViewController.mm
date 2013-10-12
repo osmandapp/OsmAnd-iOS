@@ -195,24 +195,49 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    switch (recognizer.state)
+    // If gesture has just began, just capture current zoom
+    if(recognizer.state == UIGestureRecognizerStateBegan)
     {
-        case UIGestureRecognizerStateBegan:
-            _initialZoomLevelDuringGesture = mapView.zoom;
-            break;
-        case UIGestureRecognizerStateChanged:
-            mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
-            break;
-        case UIGestureRecognizerStateEnded:
-            mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
-            NSLog(@"zoom end velocity = %f", recognizer.velocity);
-            break;
-        case UIGestureRecognizerStateFailed:
-        case UIGestureRecognizerStateCancelled:
-            mapView.zoom = _initialZoomLevelDuringGesture;
-            
-        default:
-            break;
+        _initialZoomLevelDuringGesture = mapView.zoom;
+        return;
+    }
+    
+    // If gesture has been cancelled or failed, restore previous zoom
+    if(recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        mapView.zoom = _initialZoomLevelDuringGesture;
+        return;
+    }
+    
+    // Capture current touch center point
+    CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
+    for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
+    {
+        CGPoint touchPoint = [recognizer locationOfTouch:touchIdx inView:self.view];
+        
+        centerPoint.x += touchPoint.x;
+        centerPoint.y += touchPoint.y;
+    }
+    centerPoint.x /= recognizer.numberOfTouches;
+    centerPoint.y /= recognizer.numberOfTouches;
+    centerPoint.x *= mapView.contentScaleFactor;
+    centerPoint.y *= mapView.contentScaleFactor;
+    OsmAnd::PointI centerLocationBefore;
+    [mapView convert:centerPoint toLocation:&centerLocationBefore];
+    
+    // Change zoom
+    mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
+    
+    // Adjust current target position to keep touch center the same
+    OsmAnd::PointI centerLocationAfter;
+    [mapView convert:centerPoint toLocation:&centerLocationAfter];
+    const auto centerLocationDelta = centerLocationAfter - centerLocationBefore;
+    [mapView setTarget31:mapView.target31 - centerLocationDelta];
+    
+    // If this is the end of gesture, get velocity for animation
+    if(recognizer.state == UIGestureRecognizerStateEnded)
+    {
+        NSLog(@"zoom end velocity = %f", recognizer.velocity);
     }
 }
 

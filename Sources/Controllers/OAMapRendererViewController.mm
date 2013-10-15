@@ -21,6 +21,9 @@
 #define kElevationGestureMinAngle 30
 #define kElevationGesturePointsPerDegree 3
 #define kRotationGestureThresholdDegrees 5
+#define kZoomDeceleration 40.0f
+#define kTargetMoveDeceleration 2400.0f
+#define kRotateDeceleration 500.0f
 
 @interface OAMapRendererViewController ()
 
@@ -104,7 +107,9 @@
 
 - (void)loadView
 {
+#if defined(DEBUG)
     NSLog(@"Creating Map Renderer view...");
+#endif
     
     // Inflate map renderer view
     OAMapRendererView* view = [[OAMapRendererView alloc] init];
@@ -198,6 +203,8 @@
     // If gesture has just began, just capture current zoom
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
+        [mapView cancelAnimation];
+        
         _initialZoomLevelDuringGesture = mapView.zoom;
         return;
     }
@@ -237,7 +244,8 @@
     // If this is the end of gesture, get velocity for animation
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
-        NSLog(@"zoom end velocity = %f", recognizer.velocity);
+        [mapView animateZoomWith:recognizer.velocity andDeceleration:kZoomDeceleration];
+        [mapView resumeAnimation];
     }
 }
 
@@ -248,6 +256,11 @@
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    if(recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        [mapView cancelAnimation];
+    }
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
     CGPoint translation = [recognizer translationInView:self.view];
@@ -276,8 +289,13 @@
     
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
-        CGPoint velocity = [recognizer velocityInView:self.view];
-        NSLog(@"move velocity %f %f", velocity.x, velocity.y);
+        CGPoint screenVelocity = [recognizer velocityInView:self.view];
+        OsmAnd::PointD velocity;
+        velocity.x = -screenVelocity.x * scale31;
+        velocity.y = -screenVelocity.y * scale31;
+        
+        [mapView animateTargetWith:velocity andDeceleration:OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31)];
+        [mapView resumeAnimation];
     }
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
@@ -292,7 +310,11 @@
     
     // Zeroify accumulated rotation on gesture begin
     if(recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        [mapView cancelAnimation];
+        
         _accumulatedRotationAngle = 0.0f;
+    }
     
     // Check if accumulated rotation is greater than threshold
     if(fabs(_accumulatedRotationAngle) < kRotationGestureThresholdDegrees)
@@ -337,7 +359,8 @@
     
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
-        NSLog(@"rotate velocity %f", recognizer.velocity);
+        [mapView animateAzimuthWith:-qRadiansToDegrees(recognizer.velocity) andDeceleration:kRotateDeceleration];
+        [mapView resumeAnimation];
     }
     [recognizer setRotation:0];
 }
@@ -354,16 +377,26 @@
     if(recognizer.state != UIGestureRecognizerStateEnded)
         return;
     
+    // Cancel animation (if any)
+    [mapView cancelAnimation];
+    
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     centerPoint.x *= mapView.contentScaleFactor;
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.target31 = centerLocation;
+    OsmAnd::PointI currentLocation = mapView.target31;
+    OsmAnd::PointI64 deltaMovement;
+    deltaMovement.x = static_cast<int64_t>(centerLocation.x) - static_cast<int64_t>(currentLocation.x);
+    deltaMovement.y = static_cast<int64_t>(centerLocation.y) - static_cast<int64_t>(currentLocation.y);
+    [mapView animateTargetBy64:deltaMovement during:1.0f];
     
-    // Increate zoom by 1
-    mapView.zoom += 1.0f;
+    // Increate zoom by 1 using animation
+    [mapView animateZoomBy:1.0f during:1.0f];
+    
+    // Launch animation
+    [mapView resumeAnimation];
 }
 
 - (void)zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer
@@ -378,6 +411,9 @@
     if(recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
+    // Cancel animation (if any)
+    [mapView cancelAnimation];
+    
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     for(NSInteger touchIdx = 1; touchIdx < recognizer.numberOfTouches; touchIdx++)
@@ -393,10 +429,17 @@
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.target31 = centerLocation;
+    OsmAnd::PointI currentLocation = mapView.target31;
+    OsmAnd::PointI64 deltaMovement;
+    deltaMovement.x = static_cast<int64_t>(centerLocation.x) - static_cast<int64_t>(currentLocation.x);
+    deltaMovement.y = static_cast<int64_t>(centerLocation.y) - static_cast<int64_t>(currentLocation.y);
+    [mapView animateTargetBy64:deltaMovement during:1.0f];
     
     // Decrease zoom by 1
-    mapView.zoom -= 1.0f;
+    [mapView animateZoomBy:-1.0f during:1.0f];
+    
+    // Launch animation
+    [mapView resumeAnimation];
 }
 
 - (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer

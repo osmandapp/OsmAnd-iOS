@@ -45,5 +45,17 @@
 @property (nonatomic, readonly) CGFloat scaledTileSizeOnScreen;
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
+- (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
+
+- (void)cancelAnimation;
+- (void)resumeAnimation;
+
+- (void)animateZoomWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
+- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration;
+- (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration;
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration;
+- (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
+- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration;
 
 @end

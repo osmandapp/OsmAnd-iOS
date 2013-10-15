@@ -16,6 +16,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+#include <OsmAndCore/Map/MapAnimator.h>
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
@@ -34,6 +35,7 @@
     OsmAnd::PointI _viewSize;
     
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
+    std::shared_ptr<OsmAnd::MapAnimator> _animator;
 }
 
 + (Class)layerClass
@@ -71,6 +73,10 @@
     rendererConfig.altasTexturesAllowed = false;
     rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
+    
+    // Create animator for that map
+    _animator.reset(new OsmAnd::MapAnimator());
+    _animator->setMapRenderer(_renderer);
 }
 
 - (void)dtor
@@ -194,6 +200,58 @@
     if(!location)
         return NO;
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+}
+
+- (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location
+{
+    if(!location)
+        return NO;
+    return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+}
+
+- (void)cancelAnimation
+{
+    _animator->cancelAnimation();
+}
+
+- (void)resumeAnimation
+{
+    _animator->resumeAnimation();
+}
+
+- (void)animateZoomWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+{
+    _animator->animateZoomWith(velocity, deceleration);
+}
+
+- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration
+{
+    _animator->animateZoomBy(deltaValue, duration);
+}
+
+- (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration
+{
+    _animator->animateTargetWith(velocity, deceleration);
+}
+
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration
+{
+    _animator->animateTargetBy(deltaValue, duration);
+}
+
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration
+{
+    _animator->animateTargetBy(deltaValue, duration);
+}
+
+- (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+{
+    _animator->animateAzimuthWith(velocity, deceleration);
+}
+
+- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration
+{
+    _animator->animateAzimuthBy(deltaValue, duration);
 }
 
 - (void)createContext
@@ -387,6 +445,9 @@
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
     }
+    
+    // Update animator
+    _animator->update(displayLink.duration * displayLink.frameInterval);
     
     // Allocate buffers if they are not yet allocated
     if(_frameBuffer == 0)

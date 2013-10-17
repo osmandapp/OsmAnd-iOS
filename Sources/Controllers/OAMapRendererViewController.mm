@@ -22,7 +22,7 @@
 #define kElevationGesturePointsPerDegree 3
 #define kRotationGestureThresholdDegrees 5
 #define kZoomDeceleration 40.0f
-#define kTargetMoveDeceleration 2400.0f
+#define kTargetMoveDeceleration 4800.0f
 #define kRotateDeceleration 500.0f
 
 @interface OAMapRendererViewController ()
@@ -276,9 +276,7 @@
     translationInMapSpace.y = translation.x * sinAngle + translation.y * cosAngle;
 
     // Taking into account current zoom, get how many 31-coordinates there are in 1 point
-    int32_t tileSize31 = 1;
-    if(mapView.zoomLevel != OsmAnd::ZoomLevel31)
-        tileSize31 = (1u << (31 - mapView.zoomLevel)) - 1;
+    const uint32_t tileSize31 = (1u << (31 - mapView.zoomLevel));
     const double scale31 = static_cast<double>(tileSize31) / mapView.scaledTileSizeOnScreen;
 
     // Rescale movement to 31 coordinates
@@ -289,10 +287,20 @@
     
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
+        // Obtain velocity from recognizer
         CGPoint screenVelocity = [recognizer velocityInView:self.view];
+        screenVelocity.x *= mapView.contentScaleFactor;
+        screenVelocity.y *= mapView.contentScaleFactor;
+        
+        // Take into account current azimuth and reproject to map space (points)
+        CGPoint velocityInMapSpace;
+        velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
+        velocityInMapSpace.y = screenVelocity.x * sinAngle + screenVelocity.y * cosAngle;
+        
+        // Rescale speed to 31 coordinates
         OsmAnd::PointD velocity;
-        velocity.x = -screenVelocity.x * scale31;
-        velocity.y = -screenVelocity.y * scale31;
+        velocity.x = -velocityInMapSpace.x * scale31;
+        velocity.y = -velocityInMapSpace.y * scale31;
         
         [mapView animateTargetWith:velocity andDeceleration:OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31)];
         [mapView resumeAnimation];

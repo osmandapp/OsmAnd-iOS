@@ -10,6 +10,7 @@
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapTypes.h>
+#include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/IMapBitmapTileProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
 

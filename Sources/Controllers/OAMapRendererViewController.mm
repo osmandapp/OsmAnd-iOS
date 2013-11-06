@@ -519,7 +519,7 @@
     
     std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
     [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
-    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle));
+    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle, mapView.contentScaleFactor));
     
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = std::shared_ptr<OsmAnd::IMapBitmapTileProvider>(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * 2, 2.0f));
     [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];

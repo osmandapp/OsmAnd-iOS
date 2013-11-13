@@ -14,6 +14,7 @@
 #import <OpenGLES/ES2/gl.h>
 #import <OpenGLES/ES2/glext.h>
 
+#include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapAnimator.h>

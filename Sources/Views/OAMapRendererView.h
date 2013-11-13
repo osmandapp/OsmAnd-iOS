@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapTypes.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>

@@ -135,6 +135,21 @@
     _renderer->setElevationDataScaleFactor(elevationDataScale);
 }
 
+- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider
+{
+    _renderer->addSymbolProvider(provider);
+}
+
+- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider
+{
+    _renderer->removeSymbolProvider(provider);
+}
+
+- (void)removeAllSymbolProviders
+{
+    _renderer->removeAllSymbolProviders();
+}
+
 - (CGFloat)fieldOfView
 {
     return _renderer->state.fieldOfView;

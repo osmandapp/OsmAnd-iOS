@@ -14,6 +14,7 @@
 #include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/IMapBitmapTileProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
+#include <OsmAndCore/Map/IMapSymbolProvider.h>
 
 @interface OAMapRendererView : UIView
 
@@ -34,7 +35,10 @@
 - (void)removeElevationDataProvider;
 @property (nonatomic) CGFloat elevationDataScale;
 
-//TODO: symbol providers
+- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider;
+- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider;
+- (void)removeAllSymbolProviders;
+//TODO: return array of symbol providers
 
 @property (nonatomic) CGFloat fieldOfView;
 //virtual void setDistanceToFog(const float& fogDistance, bool forcedUpdate = false) = 0;

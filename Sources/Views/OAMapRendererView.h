@@ -29,9 +29,13 @@
 - (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer;
 - (CGFloat)opacityOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setOpacity:(CGFloat)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer;
+
 @property (nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 - (void)removeElevationDataProvider;
 @property (nonatomic) CGFloat elevationDataScale;
+
+//TODO: symbol providers
+
 @property (nonatomic) CGFloat fieldOfView;
 //virtual void setDistanceToFog(const float& fogDistance, bool forcedUpdate = false) = 0;
 //virtual void setFogOriginFactor(const float& factor, bool forcedUpdate = false) = 0;

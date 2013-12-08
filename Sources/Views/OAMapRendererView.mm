@@ -71,7 +71,6 @@
     _renderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
     
     OsmAnd::MapRendererConfiguration rendererConfig;
-    rendererConfig.altasTexturesAllowed = false;
     rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
     

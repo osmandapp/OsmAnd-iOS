@@ -1,4 +1,12 @@
-## 2.0
+## 2.0.2
+
+- Fixed a bug where the sdk would cause an app's CPU usage to rise significantly if the device had no internet connection when the app started
+
+## 2.0.1
+
+- Fixed rare `8badf00d` crash in TFNetworkManager that happened when the app was in the background
+
+## 2.0 - August 12, 2013
 
 Improvements
 

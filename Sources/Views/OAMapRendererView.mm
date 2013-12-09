@@ -515,7 +515,7 @@
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if(_renderer->prepareFrame() && (_renderer->frameInvalidated || true))
+    if(_renderer->prepareFrame() && _renderer->frameInvalidated)
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);

@@ -18,6 +18,8 @@
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
 #include <OsmAndCore/Map/OfflineMapSymbolProvider.h>
 
+#include "ExternalResourcesProvider.h"
+
 #define kElevationGestureMaxThreshold 50
 #define kElevationGestureMinAngle 30
 #define kElevationGesturePointsPerDegree 3
@@ -520,9 +522,9 @@
     
     std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
     [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
-    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle, mapView.contentScaleFactor));
+    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle, mapView.contentScaleFactor, std::shared_ptr<OsmAnd::IExternalResourcesProvider>(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f))));
     
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * 2, 2.0f));
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * mapView.contentScaleFactor, mapView.contentScaleFactor));
     [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
     
     std::shared_ptr<OsmAnd::IMapSymbolProvider> symbolProvider(new OsmAnd::OfflineMapSymbolProvider(offlineMapDP));

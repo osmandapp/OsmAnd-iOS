@@ -13,7 +13,12 @@
 
 #import "TestFlight.h"
 
+#include <QStandardPaths>
+#include <QDir>
+#include <QFile>
+
 #include <OsmAndCore.h>
+#include <OsmAndCore/Logging.h>
 
 @implementation OAAppDelegate
 
@@ -29,6 +34,13 @@
     
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
+    
+    // If this is a debug build, duplicate all core logs to a file
+#if defined(DEBUG)
+    std::shared_ptr<QIODevice> loggingDevice(new QFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "core.log"));
+    loggingDevice->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+    OsmAnd::SaveLogsTo(loggingDevice, true);
+#endif
 
     // Create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

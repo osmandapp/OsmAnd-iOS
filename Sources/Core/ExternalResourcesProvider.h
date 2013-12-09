@@ -12,7 +12,7 @@
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
 
-#include <OsmAndCore/Map/IExternalResourcesProvider.h>
+#include <OsmAndCore/IExternalResourcesProvider.h>
 
 class ExternalResourcesProvider : public OsmAnd::IExternalResourcesProvider
 {

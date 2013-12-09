@@ -657,7 +657,7 @@
 		BBBE45441854DEA400F1C144 /* mx_user_defined.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBE42FB1854DEA400F1C144 /* mx_user_defined.png */; };
 		BBBE45451854DEA400F1C144 /* mx_waterway_lock_gate.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBE42FC1854DEA400F1C144 /* mx_waterway_lock_gate.png */; };
 		BBBE45461854DEA400F1C144 /* mx_wikipedia.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBE42FD1854DEA400F1C144 /* mx_wikipedia.png */; };
-		BBBE45491854DF1200F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE45471854DF1200F1C144 /* ExternalResourcesProvider.mm */; };
+		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1324,8 +1324,8 @@
 		BBBE42FB1854DEA400F1C144 /* mx_user_defined.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mx_user_defined.png; path = "../resources/rendering_styles/style-icons/drawable-xhdpi/mx_user_defined.png"; sourceTree = "<group>"; };
 		BBBE42FC1854DEA400F1C144 /* mx_waterway_lock_gate.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mx_waterway_lock_gate.png; path = "../resources/rendering_styles/style-icons/drawable-xhdpi/mx_waterway_lock_gate.png"; sourceTree = "<group>"; };
 		BBBE42FD1854DEA400F1C144 /* mx_wikipedia.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = mx_wikipedia.png; path = "../resources/rendering_styles/style-icons/drawable-xhdpi/mx_wikipedia.png"; sourceTree = "<group>"; };
-		BBBE45471854DF1200F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/Map/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
-		BBBE45481854DF1200F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/Map/ExternalResourcesProvider.h; sourceTree = "<group>"; };
+		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
+		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1515,18 +1515,10 @@
 		BBBE40B01854DD7C00F1C144 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				BBBE40B11854DD8300F1C144 /* Map */,
+				BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */,
+				BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */,
 			);
 			name = Core;
-			sourceTree = "<group>";
-		};
-		BBBE40B11854DD8300F1C144 /* Map */ = {
-			isa = PBXGroup;
-			children = (
-				BBBE45471854DF1200F1C144 /* ExternalResourcesProvider.mm */,
-				BBBE45481854DF1200F1C144 /* ExternalResourcesProvider.h */,
-			);
-			name = Map;
 			sourceTree = "<group>";
 		};
 		BBBE40B21854DDA800F1C144 /* Embedded */ = {
@@ -2849,6 +2841,7 @@
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
+				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
@@ -2857,7 +2850,6 @@
 				BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
-				BBBE45491854DF1200F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

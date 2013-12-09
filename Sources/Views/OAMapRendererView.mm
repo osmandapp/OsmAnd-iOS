@@ -27,7 +27,9 @@
 
 @implementation OAMapRendererView
 {
-    EAGLContext* _glContext;
+    EAGLSharegroup* _glShareGroup;
+    EAGLContext* _glRenderContext;
+    EAGLContext* _glWorkerContext;
     GLuint _depthRenderBuffer;
     GLuint _colorRenderBuffer;
     GLuint _frameBuffer;
@@ -61,7 +63,9 @@
 - (void)ctor
 {
     // Set default values
-    _glContext = nil;
+    _glShareGroup = nil;
+    _glRenderContext = nil;
+    _glWorkerContext = nil;
     _depthRenderBuffer = 0;
     _colorRenderBuffer = 0;
     _frameBuffer = 0;
@@ -271,7 +275,7 @@
 
 - (void)createContext
 {
-    if(_glContext != nil)
+    if(_glShareGroup != nil)
         return;
 
 #if defined(DEBUG)
@@ -282,16 +286,28 @@
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
     
-    // Create OpenGLES 2.0 context
-    _glContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    if(!_glContext)
+    // Create OpenGLES 2.0 contexts
+    _glRenderContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
+    if(!_glRenderContext)
     {
-        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 context"];
+        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context"];
+        return;
+    }
+    _glShareGroup = [_glRenderContext sharegroup];
+    if(!_glShareGroup)
+    {
+        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context has no sharegroup"];
+        return;
+    }
+    _glWorkerContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_glShareGroup];
+    if(!_glWorkerContext)
+    {
+        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 worker context"];
         return;
     }
     
     // Set created context as current active
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -299,7 +315,21 @@
     
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.displayDensityFactor = self.contentScaleFactor;
-    //TODO: enable background worker
+    rendererSetup.gpuWorkerThread.enabled = true;
+    const auto capturedWorkerContext = _glWorkerContext;
+    rendererSetup.gpuWorkerThread.prologue = [capturedWorkerContext]()
+    {
+        // Activate worker context
+        if(![EAGLContext setCurrentContext:capturedWorkerContext])
+        {
+            [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context in GPU worker thread"];
+            return;
+        }
+    };
+    rendererSetup.gpuWorkerThread.epilogue = []()
+    {
+        // Nothing to do
+    };
     _renderer->setup(rendererSetup);
 
     // Initialize rendering
@@ -314,7 +344,7 @@
 
 - (void)releaseContext
 {
-    if(_glContext == nil)
+    if(_glShareGroup == nil)
         return;
 
 #if defined(DEBUG)
@@ -334,10 +364,12 @@
     // Release render-buffers and framebuffer
     [self releaseRenderAndFrameBuffers];
     
-    // Tear down context
-    if([EAGLContext currentContext] == _glContext)
+    // Tear down contexts
+    if([EAGLContext currentContext] == _glRenderContext || [EAGLContext currentContext] == _glWorkerContext)
         [EAGLContext setCurrentContext:nil];
-    _glContext = nil;
+    _glWorkerContext = nil;
+    _glRenderContext = nil;
+    _glShareGroup = nil;
 }
 
 #if defined(DEBUG)
@@ -368,7 +400,7 @@
 #if defined(DEBUG)
     NSLog(@"[MapRenderView] Allocating render and frame buffers");
 #endif
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -387,7 +419,7 @@
     NSAssert(_colorRenderBuffer != 0, @"Failed to allocate render buffer (color component)");
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
-    if(![_glContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
+    if(![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
         [NSException raise:NSGenericException format:@"Failed to create render buffer (color component)"];
         return;
@@ -427,7 +459,7 @@
 #if defined(DEBUG)
     NSLog(@"[MapRenderView] Releasing render and frame buffers");
 #endif
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -455,7 +487,7 @@
 
 - (void)render:(CADisplayLink*)displayLink
 {
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -516,7 +548,7 @@
         // Present results
         glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
         validateGL();
-        [_glContext presentRenderbuffer:GL_RENDERBUFFER];
+        [_glRenderContext presentRenderbuffer:GL_RENDERBUFFER];
     }
 }
 
@@ -530,7 +562,7 @@
     if(_displayLink != nil)
         return FALSE;
     
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return FALSE;
@@ -552,7 +584,7 @@
     if(_displayLink == nil)
         return FALSE;
     
-    if(![EAGLContext setCurrentContext:_glContext])
+    if(![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return FALSE;

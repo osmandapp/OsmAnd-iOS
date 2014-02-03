@@ -40,7 +40,7 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     const auto resourcePath = [[NSBundle mainBundle]
                                pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
                                ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
-                               inDirectory:@"Embedded/HD"];
+                               inDirectory:@"drawable-xhdpi"];
     if(resourcePath == nil)
     {
         if(ok)
@@ -83,7 +83,7 @@ bool ExternalResourcesProvider::containsResource(const QString& name) const
     const auto resourcePath = [[NSBundle mainBundle]
                                pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
                                ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
-                               inDirectory:@"Embedded/HD"];
+                               inDirectory:@"drawable-xhdpi"];
     
     return (resourcePath != nil);
 }

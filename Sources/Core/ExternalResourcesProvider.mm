@@ -36,13 +36,11 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     resourceFileName = resourceFileName.replace(QLatin1String("map/shaders/"), QLatin1String("h_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/map_icons/"), QLatin1String("mm_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
-    
     const auto fileNameParts = resourceFileName.split('.');
-    
     const auto resourcePath = [[NSBundle mainBundle]
-                       pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
-                       ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]];
-
+                               pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
+                               ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
+                               inDirectory:@"Embedded/HD"];
     if(resourcePath == nil)
     {
         if(ok)
@@ -81,12 +79,11 @@ bool ExternalResourcesProvider::containsResource(const QString& name) const
     resourceFileName = resourceFileName.replace(QLatin1String("map/shaders/"), QLatin1String("h_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/map_icons/"), QLatin1String("mm_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
-    
     const auto fileNameParts = resourceFileName.split('.');
-    
     const auto resourcePath = [[NSBundle mainBundle]
                                pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
-                               ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]];
+                               ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
+                               inDirectory:@"Embedded/HD"];
     
     return (resourcePath != nil);
 }

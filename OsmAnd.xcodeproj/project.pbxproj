@@ -615,6 +615,7 @@
 					"${PROJECT_DIR}/../core/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
@@ -639,6 +640,7 @@
 					"${PROJECT_DIR}/../core/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				LIBRARY_SEARCH_PATHS = (

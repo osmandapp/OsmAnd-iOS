@@ -72,6 +72,7 @@
 		BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */; };
 		BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDF179BC9E4004C5567 /* libz_ios.a */; };
 		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
+		BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */ = {isa = PBXBuildFile; fileRef = BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */; };
 /* End PBXBuildFile section */
@@ -155,6 +156,7 @@
 		BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_ios.a; path = "../core/externals/protobuf/build/Release-iphoneos/libprotobuf_ios.a"; sourceTree = "<group>"; };
 		BBB34EDF179BC9E4004C5567 /* libz_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_ios.a; path = "../core/externals/zlib/build/Release-iphoneos/libz_ios.a"; sourceTree = "<group>"; };
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
+		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
 		BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "drawable-xhdpi"; path = "../resources/rendering_styles/style-icons/drawable-xhdpi"; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */,
 				BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */,
 				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
 				BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */,
@@ -231,6 +234,7 @@
 				BBB34EDD179BC9E4004C5567 /* libpng_ios.a */,
 				BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */,
 				BBB34EDF179BC9E4004C5567 /* libz_ios.a */,
+				BBB3F6AA18A4DEF0001C3175 /* Security.framework */,
 				BB2545BD1798254B00E80B58 /* QuartzCore.framework */,
 				BB2545BB1798253E00E80B58 /* OpenGLES.framework */,
 				BB098CF41793F7FD00423944 /* UIKit.framework */,

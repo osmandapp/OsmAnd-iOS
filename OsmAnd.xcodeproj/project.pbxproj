@@ -28,10 +28,18 @@
 		BB098D011793F7FD00423944 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
 		BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
 		BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
-		BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
-		BB35368917ACDD4E00AD6357 /* libglsl-optimizer_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */; };
+		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
+		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
+		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
+		BB5D90DE18A662C800EFAD92 /* libglsl-optimizer_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D418A662C700EFAD92 /* libglsl-optimizer_static.a */; };
+		BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D518A662C700EFAD92 /* libjpeg_static.a */; };
+		BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */; };
+		BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D718A662C700EFAD92 /* libpng_static.a */; };
+		BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */; };
+		BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D918A662C700EFAD92 /* libskia_static.a */; };
+		BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90DA18A662C700EFAD92 /* libz_static.a */; };
 		BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
 		BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
 		BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
@@ -62,15 +70,7 @@
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
 		BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
-		BBB34ED3179BC2CE004C5567 /* libskia_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED2179BC2CE004C5567 /* libskia_ios.a */; };
 		BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
-		BBB34ED9179BC6C3004C5567 /* libexpat_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED8179BC6C3004C5567 /* libexpat_ios.a */; };
-		BBB34EE0179BC9E4004C5567 /* libgdal_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDA179BC9E4004C5567 /* libgdal_ios.a */; };
-		BBB34EE1179BC9E4004C5567 /* libgif_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDB179BC9E4004C5567 /* libgif_ios.a */; };
-		BBB34EE2179BC9E4004C5567 /* libjpeg_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDC179BC9E4004C5567 /* libjpeg_ios.a */; };
-		BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDD179BC9E4004C5567 /* libpng_ios.a */; };
-		BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDE179BC9E4004C5567 /* libprotobuf_ios.a */; };
-		BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EDF179BC9E4004C5567 /* libz_ios.a */; };
 		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 		BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
@@ -101,6 +101,16 @@
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
+		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
+		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
+		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
+		BB5D90D418A662C700EFAD92 /* libglsl-optimizer_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_static.a"; path = "../binaries/ios/fat/Debug/libglsl-optimizer_static.a"; sourceTree = "<group>"; };
+		BB5D90D518A662C700EFAD92 /* libjpeg_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg_static.a; path = ../binaries/ios/fat/Debug/libjpeg_static.a; sourceTree = "<group>"; };
+		BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_static.a; path = ../binaries/ios/fat/Debug/libOsmAndCore_static.a; sourceTree = "<group>"; };
+		BB5D90D718A662C700EFAD92 /* libpng_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng_static.a; path = ../binaries/ios/fat/Debug/libpng_static.a; sourceTree = "<group>"; };
+		BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_static.a; path = ../binaries/ios/fat/Debug/libprotobuf_static.a; sourceTree = "<group>"; };
+		BB5D90D918A662C700EFAD92 /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libskia_static.a; path = ../binaries/ios/fat/Debug/libskia_static.a; sourceTree = "<group>"; };
+		BB5D90DA18A662C700EFAD92 /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = ../binaries/ios/fat/Debug/libz_static.a; sourceTree = "<group>"; };
 		BB63333317C3643B00903AB1 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = externals/TestFlight/libTestFlight.a; sourceTree = "<group>"; };
 		BB63333417C3643B00903AB1 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = externals/TestFlight/TestFlight.h; sourceTree = "<group>"; };
 		BB63333517C3643B00903AB1 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+AsyncLogging.h"; path = "externals/TestFlight/TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
@@ -177,18 +187,18 @@
 				BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */,
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
+				BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */,
+				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
+				BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */,
+				BB5D90DE18A662C800EFAD92 /* libglsl-optimizer_static.a in Frameworks */,
+				BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */,
+				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
+				BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */,
+				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
+				BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */,
+				BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */,
 				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
 				BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */,
-				BB2545AE1797287300E80B58 /* libOsmAndCore_ios.a in Frameworks */,
-				BBB34ED3179BC2CE004C5567 /* libskia_ios.a in Frameworks */,
-				BBB34ED9179BC6C3004C5567 /* libexpat_ios.a in Frameworks */,
-				BBB34EE0179BC9E4004C5567 /* libgdal_ios.a in Frameworks */,
-				BB35368917ACDD4E00AD6357 /* libglsl-optimizer_ios.a in Frameworks */,
-				BBB34EE1179BC9E4004C5567 /* libgif_ios.a in Frameworks */,
-				BBB34EE2179BC9E4004C5567 /* libjpeg_ios.a in Frameworks */,
-				BBB34EE3179BC9E4004C5567 /* libpng_ios.a in Frameworks */,
-				BBB34EE4179BC9E4004C5567 /* libprotobuf_ios.a in Frameworks */,
-				BBB34EE5179BC9E4004C5567 /* libz_ios.a in Frameworks */,
 				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -219,6 +229,16 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
+				BB5D90D218A662C700EFAD92 /* libgdal_static.a */,
+				BB5D90D318A662C700EFAD92 /* libgif_static.a */,
+				BB5D90D418A662C700EFAD92 /* libglsl-optimizer_static.a */,
+				BB5D90D518A662C700EFAD92 /* libjpeg_static.a */,
+				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,
+				BB5D90D718A662C700EFAD92 /* libpng_static.a */,
+				BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */,
+				BB5D90D918A662C700EFAD92 /* libskia_static.a */,
+				BB5D90DA18A662C700EFAD92 /* libz_static.a */,
 				BBB34EA2179BB42A004C5567 /* libQt5Core.a */,
 				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
@@ -627,6 +647,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"${CONFIGURATION_BUILD_DIR}",
 					"$(SRCROOT)/externals/TestFlight",
+					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios/fat/Debug,
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -652,6 +673,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"${CONFIGURATION_BUILD_DIR}",
 					"$(SRCROOT)/externals/TestFlight",
+					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios/fat/Debug,
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";

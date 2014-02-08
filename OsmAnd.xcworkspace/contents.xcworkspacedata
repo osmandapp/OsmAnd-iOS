@@ -5,37 +5,6 @@
       location = "group:OsmAnd.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../core/OsmAndCore_ios.xcodeproj">
+      location = "group:../baked/fat-ios-clang.xcode/OsmAnd_projects.xcodeproj">
    </FileRef>
-   <Group
-      location = "container:"
-      name = "Externals">
-      <FileRef
-         location = "group:../core/externals/glsl-optimizer/glsl-optimizer_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/zlib/zlib_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/protobuf/protobuf_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/libpng/libpng_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/jpeg/jpeg_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/giflib/giflib_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/gdal/gdal_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/expat/expat_ios.xcodeproj">
-      </FileRef>
-      <FileRef
-         location = "group:../core/externals/skia/skia_ios.xcodeproj">
-      </FileRef>
-   </Group>
 </Workspace>

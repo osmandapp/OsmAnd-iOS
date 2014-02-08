@@ -177,6 +177,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
+				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
+				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
+				BB5D90DE18A662C800EFAD92 /* libglsl-optimizer_static.a in Frameworks */,
+				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
+				BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */,
+				BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */,
+				BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */,
+				BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */,
+				BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */,
+				BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */,
 				BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */,
 				BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */,
 				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
@@ -187,19 +198,8 @@
 				BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */,
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
-				BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */,
-				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
-				BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */,
-				BB5D90DE18A662C800EFAD92 /* libglsl-optimizer_static.a in Frameworks */,
-				BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */,
-				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
-				BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */,
-				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
-				BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */,
-				BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */,
 				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
 				BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */,
-				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -648,6 +648,7 @@
 					"${CONFIGURATION_BUILD_DIR}",
 					"$(SRCROOT)/externals/TestFlight",
 					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios/fat/Debug,
+					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/ios/externals/TestFlight,
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -674,6 +675,7 @@
 					"${CONFIGURATION_BUILD_DIR}",
 					"$(SRCROOT)/externals/TestFlight",
 					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios/fat/Debug,
+					/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/ios/externals/TestFlight,
 				);
 				PLATFORM_DEFINITIONS = "OSMAND_TARGET_OS_ios NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_SUPPORT_GPU=0 SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "$(TARGET_NAME)";

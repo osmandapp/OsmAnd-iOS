@@ -10,7 +10,5 @@ echo "Configuring dependencies..."
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
 
-# Build core projects for XCode
-if [ ! -d "$ROOT/baked/fat-ios-clang.xcode" ]; then
-	OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
-fi
+# Bake or update core projects for XCode
+OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"

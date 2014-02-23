@@ -22,6 +22,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
@@ -88,6 +89,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		BB08E4F518B960F600BC6638 /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicu4c_static.a; path = "../binaries/ios-iphoneos/Debug/libicu4c_static.a"; sourceTree = "<group>"; };
 		BB098CF11793F7FD00423944 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BB098CF61793F7FD00423944 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -179,6 +181,7 @@
 			files = (
 				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
 				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
+				BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */,
 				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
 				BB5D90DE18A662C800EFAD92 /* libglsl-optimizer_static.a in Frameworks */,
 				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
@@ -229,6 +232,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
 				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
 				BB5D90D218A662C700EFAD92 /* libgdal_static.a */,
 				BB5D90D318A662C700EFAD92 /* libgif_static.a */,

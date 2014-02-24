@@ -10,7 +10,12 @@
 
 @interface OAMapHudViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UILabel *fpsLabel;
+@property (weak, nonatomic) IBOutlet UIView *compassBox;
+@property (weak, nonatomic) IBOutlet UIButton *compassButton;
+@property (weak, nonatomic) IBOutlet UIImageView *compassImage;
+
+@property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
+
 - (IBAction)showLeftPanel:(id)sender;
 
 @end

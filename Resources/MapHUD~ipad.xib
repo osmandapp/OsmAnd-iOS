@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+    <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
+            <connections>
+                <outlet property="compassBox" destination="dO9-1W-wXk" id="y5Q-4g-4lT"/>
+                <outlet property="compassButton" destination="6j0-Z1-XzZ" id="iYL-AF-OJX"/>
+                <outlet property="compassImage" destination="uXd-Gr-cf4" id="fca-SX-QFo"/>
+                <outlet property="mapModeButton" destination="DC9-wD-2Rc" id="DB0-gO-j5v"/>
+                <outlet property="view" destination="1" id="h9T-rl-WfS"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="1" customClass="OAMapHudRootView">
+            <rect key="frame" x="0.0" y="0.0" width="768" height="1004"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Iag-or-ayC" userLabel="optionsMenuButton">
+                    <rect key="frame" x="12" y="32" width="48" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="Hbb-Hn-hju"/>
+                        <constraint firstAttribute="width" constant="48" id="xzk-Dc-kRe"/>
+                    </constraints>
+                    <state key="normal" image="optionsMenuButton.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="showLeftPanel:" destination="-1" eventType="touchUpInside" id="7I8-NR-rrs"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DC9-wD-2Rc" userLabel="mapModeButton">
+                    <rect key="frame" x="708" y="944" width="48" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="48" id="QmX-pj-uz3"/>
+                        <constraint firstAttribute="height" constant="48" id="RCW-e0-IE8"/>
+                    </constraints>
+                    <state key="normal" image="freeMapMode.png" backgroundImage="mapModeButtonBackground.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO9-1W-wXk" userLabel="compassBox">
+                    <rect key="frame" x="708" y="32" width="48" height="48"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6j0-Z1-XzZ" userLabel="compassButton">
+                            <rect key="frame" x="0.0" y="0.0" width="48" height="48"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" backgroundImage="compassButtonBackground.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="compassDirectionN.png" translatesAutoresizingMaskIntoConstraints="NO" id="uXd-Gr-cf4" userLabel="compassImage">
+                            <rect key="frame" x="8" y="8" width="32" height="32"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <accessibility key="accessibilityConfiguration">
+                                <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
+                            </accessibility>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="32" id="r7v-HQ-5H6"/>
+                                <constraint firstAttribute="height" constant="32" id="sZP-3D-EWr"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="48" id="0pX-cH-gd2"/>
+                        <constraint firstAttribute="centerX" secondItem="6j0-Z1-XzZ" secondAttribute="centerX" id="23p-7p-htz"/>
+                        <constraint firstItem="6j0-Z1-XzZ" firstAttribute="height" secondItem="dO9-1W-wXk" secondAttribute="height" id="THp-mi-cY5"/>
+                        <constraint firstAttribute="centerY" secondItem="uXd-Gr-cf4" secondAttribute="centerY" id="eq3-66-caF"/>
+                        <constraint firstItem="6j0-Z1-XzZ" firstAttribute="width" secondItem="dO9-1W-wXk" secondAttribute="width" id="rhw-3M-ecl"/>
+                        <constraint firstAttribute="width" constant="48" id="uq9-bM-UOj"/>
+                        <constraint firstAttribute="centerY" secondItem="6j0-Z1-XzZ" secondAttribute="centerY" id="wIG-qK-Sk3"/>
+                        <constraint firstAttribute="centerX" secondItem="uXd-Gr-cf4" secondAttribute="centerX" id="zGO-Rb-wHS"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="DC9-wD-2Rc" secondAttribute="trailing" constant="12" id="2bb-Ay-Arp"/>
+                <constraint firstAttribute="bottom" secondItem="DC9-wD-2Rc" secondAttribute="bottom" constant="12" id="Hga-5h-Jf7"/>
+                <constraint firstItem="Iag-or-ayC" firstAttribute="top" secondItem="1" secondAttribute="top" constant="32" id="Lyy-QB-IgU"/>
+                <constraint firstItem="Iag-or-ayC" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="12" id="SJd-SA-3AR"/>
+                <constraint firstAttribute="trailing" secondItem="dO9-1W-wXk" secondAttribute="trailing" constant="12" id="gS1-Ji-lfx"/>
+                <constraint firstItem="dO9-1W-wXk" firstAttribute="top" secondItem="1" secondAttribute="top" constant="32" id="hbD-Gl-Fcb"/>
+            </constraints>
+            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="blackOpaque"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="compassButtonBackground.png" width="48" height="48"/>
+        <image name="compassDirectionN.png" width="32" height="32"/>
+        <image name="freeMapMode.png" width="32" height="32"/>
+        <image name="mapModeButtonBackground.png" width="48" height="48"/>
+        <image name="optionsMenuButton.png" width="32" height="32"/>
+    </resources>
+</document>

@@ -16,6 +16,6 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 
-- (IBAction)showLeftPanel:(id)sender;
+- (IBAction)onOptionsMenuButtonClicked:(id)sender;
 
 @end

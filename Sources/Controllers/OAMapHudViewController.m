@@ -36,7 +36,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)showLeftPanel:(id)sender {
+- (IBAction)onOptionsMenuButtonClicked:(id)sender {
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
 

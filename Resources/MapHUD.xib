@@ -30,7 +30,7 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
-                        <action selector="showLeftPanel:" destination="-1" eventType="touchUpInside" id="7"/>
+                        <action selector="onOptionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="Zy3-bJ-yDH"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">

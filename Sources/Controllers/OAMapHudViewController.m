@@ -36,8 +36,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)onMapModeButtonClicked:(id)sender {
+}
+
 - (IBAction)onOptionsMenuButtonClicked:(id)sender {
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
+- (IBAction)onCompassButtonClicked:(id)sender {
+}
 @end

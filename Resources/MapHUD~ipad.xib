@@ -43,6 +43,9 @@
                     <state key="normal" image="freeMapMode.png" backgroundImage="mapModeButtonBackground.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
+                    <connections>
+                        <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="sdN-Bm-kGg"/>
+                    </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dO9-1W-wXk" userLabel="compassBox">
                     <rect key="frame" x="708" y="32" width="48" height="48"/>
@@ -54,6 +57,9 @@
                             <state key="normal" backgroundImage="compassButtonBackground.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="Vza-Yw-gKm"/>
+                            </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="compassDirectionN.png" translatesAutoresizingMaskIntoConstraints="NO" id="uXd-Gr-cf4" userLabel="compassImage">
                             <rect key="frame" x="8" y="8" width="32" height="32"/>

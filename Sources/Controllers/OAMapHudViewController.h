@@ -13,8 +13,10 @@
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
+- (IBAction)onCompassButtonClicked:(id)sender;
 
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
+- (IBAction)onMapModeButtonClicked:(id)sender;
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender;
 

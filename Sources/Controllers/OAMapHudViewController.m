@@ -130,7 +130,9 @@
 
 - (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    self.compassImage.transform = CGAffineTransformMakeRotation([value floatValue] / 180.0f * M_PI);
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
+    });
 }
 
 - (IBAction)onCompassButtonClicked:(id)sender

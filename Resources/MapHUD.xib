@@ -68,8 +68,8 @@
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
                             </accessibility>
                             <constraints>
-                                <constraint firstAttribute="width" constant="24" id="D2K-He-0RO"/>
-                                <constraint firstAttribute="height" constant="24" id="OeU-xv-6F8"/>
+                                <constraint firstAttribute="width" constant="24" placeholder="YES" id="D2K-He-0RO"/>
+                                <constraint firstAttribute="height" constant="24" placeholder="YES" id="OeU-xv-6F8"/>
                             </constraints>
                         </imageView>
                     </subviews>

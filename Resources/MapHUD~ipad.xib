@@ -68,8 +68,8 @@
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
                             </accessibility>
                             <constraints>
-                                <constraint firstAttribute="width" constant="32" id="r7v-HQ-5H6"/>
-                                <constraint firstAttribute="height" constant="32" id="sZP-3D-EWr"/>
+                                <constraint firstAttribute="width" constant="32" placeholder="YES" id="r7v-HQ-5H6"/>
+                                <constraint firstAttribute="height" constant="32" placeholder="YES" id="sZP-3D-EWr"/>
                             </constraints>
                         </imageView>
                     </subviews>

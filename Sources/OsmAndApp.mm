@@ -19,7 +19,7 @@
     static OsmAndAppImpl* instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[self alloc] init];
+        instance = [[OsmAndAppImpl alloc] init];
     });
     return instance;
 }

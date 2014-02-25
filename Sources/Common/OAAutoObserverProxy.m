@@ -27,7 +27,7 @@
     return self;
 }
 
-- (id)initWith:(id<OAObserverProtocol>)owner_ withHandler:(SEL)handler_
+- (id)initWith:(id)owner_ withHandler:(SEL)handler_
 {
     self = [super init];
     if (self) {
@@ -42,7 +42,7 @@
     [self dtor];
 }
 
-- (void)ctor:(id<OAObserverProtocol>)owner_ handler:(SEL)handler_
+- (void)ctor:(id)owner_ handler:(SEL)handler_
 {
     _owner = owner_;
     _handler = handler_;

@@ -14,9 +14,9 @@
 @interface OAAutoObserverProxy : NSObject <OAObserverProtocol>
 
 - (id)initWith:(id<OAObserverProtocol>)owner_;
-- (id)initWith:(id<OAObserverProtocol>)owner_ withHandler:(SEL)selector_;
+- (id)initWith:(id)owner_ withHandler:(SEL)selector_;
 
-@property(weak, readonly) id<OAObserverProtocol> owner;
+@property(weak, readonly) id owner;
 @property(readonly) SEL handler;
 
 @property(weak, readonly) id<OAObservableProtocol> observable;

@@ -13,7 +13,10 @@
 
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol>
 
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
+@property(nonatomic, setter = setMapMode:) OAMapMode mapMode;
+@property(readonly) OAObservable* mapModeObservable;
+
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
 
 @end

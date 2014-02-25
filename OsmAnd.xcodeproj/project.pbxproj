@@ -240,6 +240,7 @@
 		BBBDADB018BCBE7B00E4A359 /* OsmAndAppCppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppCppProtocol.h; sourceTree = "<group>"; };
 		BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppImpl.h; sourceTree = "<group>"; };
 		BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndAppImpl.mm; sourceTree = "<group>"; };
+		BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTypes.h; sourceTree = "<group>"; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
 		BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "drawable-xhdpi"; path = "../resources/rendering_styles/style-icons/drawable-xhdpi"; sourceTree = "<group>"; };
@@ -356,6 +357,7 @@
 				BBBDADB018BCBE7B00E4A359 /* OsmAndAppCppProtocol.h */,
 				BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */,
 				BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */,
+				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
 			);
 			path = Sources;
 			sourceTree = "<group>";

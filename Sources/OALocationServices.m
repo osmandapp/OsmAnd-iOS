@@ -23,13 +23,15 @@
     BOOL _compassActive;
     
     OAAutoObserverProxy* _mapModeObserver;
+    
+    BOOL _waitingForAuthorization;
 }
 
-- (id)init
+- (id)initWith:(OsmAndAppInstance)app
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self ctor:app];
     }
     return self;
 }
@@ -39,9 +41,9 @@
     [self dtor];
 }
 
-- (void)ctor
+- (void)ctor:(OsmAndAppInstance)app
 {
-    _app = [OsmAndApp instance];
+    _app = app;
     
     _locationActive = NO;
     _compassActive = NO;
@@ -56,6 +58,10 @@
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
+    
+    _waitingForAuthorization = NO;
+    
+    _updateObserver = [[OAObservable alloc] init];
 }
 
 - (void)dtor
@@ -81,35 +87,56 @@
 
 - (OALocationServicesStatus)status
 {
-    //TODO:
-    return OALocationServicesStatusAuthorizing;//(_locationActive || _compassActive);
+    if(_waitingForAuthorization)
+        return OALocationServicesStatusAuthorizing;
+    return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
 }
 
 @synthesize statusObservable = _statusObservable;
 
 - (void)start
 {
+    // Do nothing if waiting for authorization
+    if(self.status == OALocationServicesStatusAuthorizing)
+        return;
+    
+    BOOL didChange = NO;
+    
     //TODO: use different accuracy modes
     // kCLLocationAccuracyBestForNavigation (when plugged in) && kCLLocationAccuracyBest - during navigation
     
     // Set desired accuracy depending on app mode, and query for updates
-    _manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
-    [_manager startUpdatingLocation];
-    _locationActive = YES;
+    if(!_locationActive)
+    {
+        _waitingForAuthorization = !self.allowed;
+        
+        _manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+        [_manager startUpdatingLocation];
+        _locationActive = YES;
+        didChange = YES;
+    }
     
     // Also, if compass is available, query it for updates
-    if([CLLocationManager headingAvailable])
+    if(!_compassActive && [CLLocationManager headingAvailable])
     {
        [_manager startUpdatingHeading];
         _compassActive = YES;
+        didChange = YES;
     }
     
-    [_statusObservable notifyEvent];
+    if(didChange)
+        [_statusObservable notifyEvent];
 }
 
 - (void)stop
 {
     BOOL didChange = NO;
+    
+    if(_waitingForAuthorization)
+    {
+        _waitingForAuthorization = NO;
+        didChange = YES;
+    }
     
     if(_locationActive)
     {
@@ -127,12 +154,15 @@
     
     if(didChange)
        [_statusObservable notifyEvent];
+    
+    // If location services are stopped, set free mode for map, since to location data available
+    _app.mapMode = OAMapModeFree;
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     // If services were running, but now authorization was revoked, stop them
-    if(status != kCLAuthorizationStatusAuthorized && (_locationActive || _compassActive))
+    if(status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
         [self stop];
     
     [_stateObservable notifyEvent];
@@ -140,20 +170,42 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    if(error.code == kCLErrorDenied)
+    if(error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
     {
-        //TODO: User have denied services, stop the services
+        // User have denied services or revoked authorization, stop the services
+        // If services were running, but now authorization was revoked, stop them
+        if(_locationActive || _compassActive)
+            [self stop];
+        return;
     }
+    
+    NSLog(@"CLLocationManager didFailWithError %@", error);
 }
+
+@synthesize updateObserver = _updateObserver;
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    // If was waiting for authorization, now it's granted
+    if(_waitingForAuthorization)
+    {
+        [_statusObservable notifyEvent];
+        _waitingForAuthorization = NO;
+    }
     
+    [_updateObserver notifyEvent];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
+    // If was waiting for authorization, now it's granted
+    if(_waitingForAuthorization)
+    {
+        [_statusObservable notifyEvent];
+        _waitingForAuthorization = NO;
+    }
     
+    [_updateObserver notifyEvent];
 }
 
 - (void)onMapModeChanged

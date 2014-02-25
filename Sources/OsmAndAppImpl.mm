@@ -46,11 +46,11 @@
     [self initObfsCollection];
     [self initMapStyles];
     
-    _locationServices = [[OALocationServices alloc] init];
-    if(_locationServices.available && _locationServices.allowed)
-       [_locationServices start];
-    
     _mapModeObservable = [[OAObservable alloc] init];
+    
+    _locationServices = [[OALocationServices alloc] initWith:self];
+    if(_locationServices.available && _locationServices.allowed)
+        [_locationServices start];
 }
 
 - (void)initObfsCollection

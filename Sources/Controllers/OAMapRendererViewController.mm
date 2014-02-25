@@ -559,11 +559,11 @@
             return;
             
         case OAMapModePositionTrack:
-            //TODO: animate view to last known location
+            //TODO: animate view to last known location (if it's available)
             break;
             
         case OAMapModeFollow:
-            //TODO: animate view to last known location + change blablabla
+            //TODO: animate view to last known location + change blablabla (if it's available)
             break;
             
         default:

@@ -11,6 +11,10 @@
 
 #import <Foundation/Foundation.h>
 
+@protocol OsmAndAppProtocol;
+@protocol OsmAndAppCppProtocol;
+typedef id<OsmAndAppProtocol, OsmAndAppCppProtocol> OsmAndAppInstance;
+
 typedef NS_ENUM(NSInteger, OAMapMode)
 {
     OAMapModeFree,

@@ -15,8 +15,6 @@
     @protocol OsmAndAppCppProtocol;
 #endif
 
-typedef id<OsmAndAppProtocol, OsmAndAppCppProtocol> OsmAndAppInstance;
-
 @interface OsmAndApp : NSObject
 
 + (id<OsmAndAppProtocol, OsmAndAppCppProtocol>)instance;

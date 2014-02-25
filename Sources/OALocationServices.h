@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#import "CommonTypes.h"
 #import "OAObservable.h"
 
 typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
@@ -20,6 +21,8 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 
 @interface OALocationServices : NSObject
 
+- (id)initWith:(OsmAndAppInstance)app;
+
 @property(readonly) BOOL available;
 @property(readonly) BOOL compassPresent;
 @property(readonly) BOOL allowed;
@@ -29,5 +32,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property(readonly) OAObservable* statusObservable;
 - (void)start;
 - (void)stop;
+
+@property(readonly) OAObservable* updateObserver;
 
 @end

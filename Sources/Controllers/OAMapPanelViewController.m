@@ -41,15 +41,15 @@
     [_rendererViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:_rendererViewController.view];
     [self.view addConstraints:[NSLayoutConstraint
-                                                  constraintsWithVisualFormat:@"H:|[view]|"
-                                                  options:0
-                                                  metrics:nil
-                                                  views:@{@"view":_rendererViewController.view}]];
+                               constraintsWithVisualFormat:@"H:|[view]|"
+                               options:0
+                               metrics:nil
+                               views:@{@"view":_rendererViewController.view}]];
     [self.view addConstraints:[NSLayoutConstraint
-                                                  constraintsWithVisualFormat:@"V:|[view]|"
-                                                  options:0
-                                                  metrics:nil
-                                                  views:@{@"view":_rendererViewController.view}]];
+                               constraintsWithVisualFormat:@"V:|[view]|"
+                               options:0
+                               metrics:nil
+                               views:@{@"view":_rendererViewController.view}]];
     
     // Instantiate map HUD
     UIViewController* mapHudVC = [[OAMapHudViewController alloc] initWithNibName:@"MapHUD" bundle:nil];

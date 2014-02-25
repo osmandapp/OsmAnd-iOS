@@ -34,6 +34,8 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 - (void)start;
 - (void)stop;
 
+@property(readonly) CLLocation* lastKnownLocation;
+@property(readonly) CLLocationDirection lastKnownHeading;
 @property(readonly) OAObservable* updateObserver;
 
 + (void)showDeniedAlert;

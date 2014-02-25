@@ -27,6 +27,9 @@
     OAAutoObserverProxy* _mapModeObserver;
     
     BOOL _waitingForAuthorization;
+    
+    CLLocation* _lastLocation;
+    CLLocationDirection _lastHeading;
 }
 
 - (id)initWith:(OsmAndAppInstance)app
@@ -63,6 +66,8 @@
     
     _waitingForAuthorization = NO;
     
+    _lastLocation = nil;
+    _lastHeading = NAN;
     _updateObserver = [[OAObservable alloc] init];
 }
 
@@ -189,6 +194,20 @@
     NSLog(@"CLLocationManager didFailWithError %@", error);
 }
 
+- (CLLocation*)lastKnownLocation
+{
+    if(_lastLocation != nil)
+        return _lastLocation;
+    return _manager.location;
+}
+
+- (CLLocationDirection)lastKnownHeading
+{
+    if(!isnan(_lastHeading))
+        return _lastHeading;
+    return _manager.heading.trueHeading;
+}
+
 @synthesize updateObserver = _updateObserver;
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
@@ -200,6 +219,7 @@
         _waitingForAuthorization = NO;
     }
     
+    _lastLocation = [locations lastObject];
     [_updateObserver notifyEvent];
 }
 
@@ -212,6 +232,7 @@
         _waitingForAuthorization = NO;
     }
     
+    _lastHeading = newHeading.trueHeading;
     [_updateObserver notifyEvent];
 }
 

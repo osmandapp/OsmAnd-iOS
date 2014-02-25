@@ -8,6 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAObserver : NSObject
+@interface OAAutoObserverProxy : NSObject
 
 @end

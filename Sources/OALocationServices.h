@@ -26,6 +26,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property(readonly) BOOL available;
 @property(readonly) BOOL compassPresent;
 @property(readonly) BOOL allowed;
+@property(readonly) BOOL denied;
 @property(readonly) OAObservable* stateObservable;
 
 @property(readonly) OALocationServicesStatus status;
@@ -34,5 +35,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 - (void)stop;
 
 @property(readonly) OAObservable* updateObserver;
+
++ (void)showDeniedAlert;
 
 @end

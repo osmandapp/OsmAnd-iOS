@@ -8,6 +8,8 @@
 
 #import "OALocationServices.h"
 
+#import <UIKit/UIKit.h>
+
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 
@@ -81,6 +83,11 @@
 - (BOOL)allowed
 {
     return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusAuthorized);
+}
+
+- (BOOL)denied
+{
+    return ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied);
 }
 
 @synthesize stateObservable = _stateObservable;
@@ -222,6 +229,16 @@
     if(status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
         return;
     [self start];
+}
+
++ (void)showDeniedAlert
+{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"title"
+                                                        message:@"msg"
+                                                       delegate:nil
+                                              cancelButtonTitle:@"ok"
+                                              otherButtonTitles:nil];
+    [alertView show];
 }
 
 @end

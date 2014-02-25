@@ -67,22 +67,33 @@
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
+    OAMapMode newMode = _app.mapMode;
     switch (_app.mapMode)
     {
         case OAMapModeFree:
-            _app.mapMode = OAMapModePositionTrack;
+            newMode = OAMapModePositionTrack;
             break;
             
         case OAMapModePositionTrack:
             // Perform switch to follow-mode only in case location services have compass
             if(_app.locationServices.compassPresent)
-                _app.mapMode = OAMapModeFollow;
+                newMode = OAMapModeFollow;
             break;
             
         case OAMapModeFollow:
-            _app.mapMode = OAMapModePositionTrack;
+            newMode = OAMapModePositionTrack;
             break;
     }
+    
+    // If user have denied location services for the application, show notification about that and
+    // don't change the mode
+    if(_app.locationServices.denied && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
+    {
+        [OALocationServices showDeniedAlert];
+        return;
+    }
+    
+    _app.mapMode = newMode;
 }
 
 - (void)onMapModeChanged

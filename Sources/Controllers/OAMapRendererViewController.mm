@@ -542,6 +542,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
     [mapView animateAzimuthBy:-mapView.azimuth during:1.0f];
+    [mapView resumeAnimation];
 }
 
 - (void)onMapModeChanged

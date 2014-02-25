@@ -40,6 +40,8 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
+    OAAutoObserverProxy* _stateObserver;
+    
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
 
@@ -85,6 +87,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [_mapModeObserver observe:_app.mapModeObservable];
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationServicesUpdate)];
     [_locationServicesUpdateObserver observe:_app.locationServices.updateObserver];
+    
+    _azimuthObservable = [[OAObservable alloc] init];
+    _stateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapRendererStateChanged:withKey:)];
     
     // Create gesture recognizers:
     
@@ -141,6 +146,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OAMapRendererView* view = [[OAMapRendererView alloc] init];
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.contentScaleFactor = [[UIScreen mainScreen] scale];
+    [_stateObserver observe:view.stateObservable];
     self.view = view;
 }
 
@@ -505,6 +511,23 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Dispose of any resources that can be recreated.
     
     NSLog(@"MEMWARNING");
+}
+
+@synthesize azimuthObservable = _azimuthObservable;
+
+- (void)onMapRendererStateChanged:(id)observer withKey:(id)key
+{
+    if(![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    switch ([key unsignedIntegerValue])
+    {
+        case OAMapViewStateEntryAzimuth:
+            [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
+            return;
+    }
 }
 
 - (void)animatedAlignAzimuthToNorth

@@ -21,6 +21,7 @@
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _mapModeObserver;
+    OAAutoObserverProxy* _mapAzimuthObserver;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -42,6 +43,8 @@
     _app = [OsmAndApp instance];
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
+    _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)];
+    [_mapAzimuthObserver observe:[OAMapRendererViewController instance].azimuthObservable];
 }
 
 - (void)dtor
@@ -123,6 +126,11 @@
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
 {
     [self.sidePanelController showLeftPanelAnimated:YES];
+}
+
+- (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    self.compassImage.transform = CGAffineTransformMakeRotation([value floatValue] / 180.0f * M_PI);
 }
 
 - (IBAction)onCompassButtonClicked:(id)sender

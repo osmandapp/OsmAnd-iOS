@@ -62,6 +62,8 @@
 
 - (void)ctor
 {
+    _stateObservable = [[OAObservable alloc] init];
+    
     // Set default values
     _glShareGroup = nil;
     _glRenderContext = nil;
@@ -77,6 +79,11 @@
     OsmAnd::MapRendererConfiguration rendererConfig;
     rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
+    OAObservable* stateObservable = _stateObservable;
+    _renderer->registerStateChangeObserver(reinterpret_cast<void*>((uintptr_t)stateObservable),
+        [stateObservable](const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges){
+            [stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:(OAMapViewStateEntry)thisChange]];
+        });
     
     // Create animator for that map
     _animator.reset(new OsmAnd::MapAnimator());
@@ -87,6 +94,10 @@
 {
     // Just to be sure, try to release context
     [self releaseContext];
+    
+    // Unregister observer
+    OAObservable* stateObservable = _stateObservable;
+    _renderer->unregisterStateChangeObserver(reinterpret_cast<void*>((uintptr_t)stateObservable));
 }
 
 - (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
@@ -213,6 +224,8 @@
 {
     return _renderer->getScaledTileSizeOnScreen();
 }
+
+@synthesize stateObservable = _stateObservable;
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
 {

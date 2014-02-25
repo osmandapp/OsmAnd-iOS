@@ -91,7 +91,8 @@
 {
     if(_handler != nil)
     {
-        NSMethodSignature* handlerSignature = [OAAutoObserverProxy instanceMethodSignatureForSelector:_handler];
+        NSMethodSignature* handlerSignature = [_owner methodSignatureForSelector:_handler];
+        NSAssert(handlerSignature != nil, @"Whoa! Something is messed up with selector %@ in %@", NSStringFromSelector(_handler), _owner);
         NSUInteger handlerArgsCount = [handlerSignature numberOfArguments] - 2; // Subtract "self" and "cmd_"
 
         if(handlerArgsCount == 3)

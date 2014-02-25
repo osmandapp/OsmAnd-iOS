@@ -562,11 +562,17 @@
             return;
             
         case OAMapModePositionTrack:
-            //TODO: animate view to last known location (if it's available)
+            if(_app.locationServices.lastKnownLocation != nil)
+            {
+                //TODO: fly-animate view to last known location
+            }
             break;
             
         case OAMapModeFollow:
-            //TODO: animate view to last known location + change blablabla (if it's available)
+            if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
+            {
+                //TODO: fly-animate view to last known location + change blablabla
+            }
             break;
     }
 }

@@ -52,10 +52,7 @@
 - (void)dtor
 {
     if(_observable != nil)
-    {
         [_observable unregisterObserver:self];
-        _observable = nil;
-    }
 }
 
 @synthesize observable = _observable;

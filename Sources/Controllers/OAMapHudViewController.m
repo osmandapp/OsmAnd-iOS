@@ -45,8 +45,6 @@
 
 - (void)dtor
 {
-    _mapModeObserver = nil;
-    _app = nil;
 }
 
 - (void)viewDidLoad

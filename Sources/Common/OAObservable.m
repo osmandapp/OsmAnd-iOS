@@ -43,7 +43,6 @@
     [_observersLock lock];
     _observers = nil;
     [_observersLock unlock];
-    _observers = nil;
 }
 
 - (void)registerObserver:(id<OAObserverProtocol>)observer

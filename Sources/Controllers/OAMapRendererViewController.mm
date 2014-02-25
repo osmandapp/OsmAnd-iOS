@@ -34,6 +34,8 @@
 
 @implementation OAMapRendererViewController
 {
+    OsmAndAppInstance _app;
+    
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
 
@@ -65,6 +67,8 @@
 
 - (void)ctor
 {
+    _app = [OsmAndApp instance];
+    
     // Create gesture recognizers:
     
     // - Zoom gesture
@@ -207,6 +211,7 @@
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
+        _app.mapMode = OAMapModeFree;
         
         _initialZoomLevelDuringGesture = mapView.zoom;
         return;
@@ -263,6 +268,7 @@
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
+        _app.mapMode = OAMapModeFree;
     }
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
@@ -323,6 +329,7 @@
     if(recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
+        _app.mapMode = OAMapModeFree;
         
         _accumulatedRotationAngle = 0.0f;
     }
@@ -390,6 +397,7 @@
     
     // Cancel animation (if any)
     [mapView cancelAnimation];
+    _app.mapMode = OAMapModeFree;
     
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
@@ -424,6 +432,7 @@
 
     // Cancel animation (if any)
     [mapView cancelAnimation];
+    _app.mapMode = OAMapModeFree;
     
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
@@ -521,8 +530,8 @@
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-    [OsmAndApp instance].mapStyles->obtainStyle("default", mapStyle);
-    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider([OsmAndApp instance].obfsCollection, mapStyle, mapView.contentScaleFactor, std::shared_ptr<OsmAnd::IExternalResourcesProvider>(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f))));
+    _app.mapStyles->obtainStyle("default", mapStyle);
+    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider(_app.obfsCollection, mapStyle, mapView.contentScaleFactor, std::shared_ptr<OsmAnd::IExternalResourcesProvider>(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f))));
     
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * mapView.contentScaleFactor, mapView.contentScaleFactor));
     [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];

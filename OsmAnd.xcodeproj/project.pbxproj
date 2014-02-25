@@ -107,6 +107,7 @@
 		BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
 		BBBDADB718BCE77400E4A359 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB618BCE77400E4A359 /* OALocationServices.m */; };
+		BBBDADB918BCF53500E4A359 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBDADB818BCF53500E4A359 /* CoreLocation.framework */; };
 		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */ = {isa = PBXBuildFile; fileRef = BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */; };
 /* End PBXBuildFile section */
@@ -244,6 +245,7 @@
 		BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTypes.h; sourceTree = "<group>"; };
 		BBBDADB518BCE77400E4A359 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationServices.h; sourceTree = "<group>"; };
 		BBBDADB618BCE77400E4A359 /* OALocationServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALocationServices.m; sourceTree = "<group>"; };
+		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
 		BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "drawable-xhdpi"; path = "../resources/rendering_styles/style-icons/drawable-xhdpi"; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */,
 				BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */,
 				BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */,
+				BBBDADB918BCF53500E4A359 /* CoreLocation.framework in Frameworks */,
 				BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */,
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
@@ -307,6 +310,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BBBDADB818BCF53500E4A359 /* CoreLocation.framework */,
 				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
 				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
 				BB5D90D218A662C700EFAD92 /* libgdal_static.a */,

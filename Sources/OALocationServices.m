@@ -9,6 +9,7 @@
 #import "OALocationServices.h"
 
 #import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -20,6 +21,8 @@
     CLLocationManager* _manager;
     BOOL _locationActive;
     BOOL _compassActive;
+    
+    OAAutoObserverProxy* _mapModeObserver;
 }
 
 - (id)init
@@ -50,6 +53,9 @@
     _manager.delegate = self;
     _manager.distanceFilter = kCLDistanceFilterNone;
     _manager.pausesLocationUpdatesAutomatically = NO;
+    
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
+    [_mapModeObserver observe:_app.mapModeObservable];
 }
 
 - (void)dtor
@@ -148,6 +154,22 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     
+}
+
+- (void)onMapModeChanged
+{
+    if(_app.mapMode == OAMapModeFree)
+    {
+        //TODO: if running, reduce accuracy to near-10-meter?
+        return;
+    }
+    
+    // If mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
+    // launch them (except if waiting for user authorization).
+    OALocationServicesStatus status = self.status;
+    if(status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+        return;
+    [self start];
 }
 
 @end

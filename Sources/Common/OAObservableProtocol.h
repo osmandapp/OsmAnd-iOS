@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObserverProtocol.h"
+@protocol OAObserverProtocol;
 
 @protocol OAObservableProtocol <NSObject>
 

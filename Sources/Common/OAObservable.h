@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAObservable : NSObject
+#import "OAObservableProtocol.h"
+
+@interface OAObservable : NSObject <OAObservableProtocol>
+
+- (void)registerObserver:(id<OAObserverProtocol>)observer;
+- (void)unregisterObserver:(id<OAObserverProtocol>)observer;
+
+- (void)notifyEvent;
+- (void)notifyEventWithKey:(id)key;
+- (void)notifyEventWithKey:(id)key andValue:(id)value;
 
 @end

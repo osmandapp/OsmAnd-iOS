@@ -74,14 +74,13 @@
             break;
             
         case OAMapModePositionTrack:
-            _app.mapMode = OAMapModeFollow;
+            // Perform switch to follow-mode only in case location services have compass
+            if(_app.locationServices.compassPresent)
+                _app.mapMode = OAMapModeFollow;
             break;
             
         case OAMapModeFollow:
             _app.mapMode = OAMapModePositionTrack;
-            break;
-            
-        default:
             break;
     }
 }
@@ -101,9 +100,6 @@
             
         case OAMapModeFollow:
             modeImage = [UIImage imageNamed:@"followMapMode.png"];
-            break;
-            
-        default:
             break;
     }
     

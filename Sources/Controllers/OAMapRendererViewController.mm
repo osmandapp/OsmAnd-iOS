@@ -55,6 +55,13 @@
     UIPanGestureRecognizer* _grElevation;
 }
 
+static OAMapRendererViewController* __weak s_OAMapRendererViewController_instance = nil;
+
++ (OAMapRendererViewController*)instance
+{
+    return s_OAMapRendererViewController_instance;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -71,6 +78,8 @@
 
 - (void)ctor
 {
+    s_OAMapRendererViewController_instance = self;
+    
     _app = [OsmAndApp instance];
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
@@ -118,6 +127,8 @@
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         [mapView releaseContext];
     }
+    
+    s_OAMapRendererViewController_instance = nil;
 }
 
 - (void)loadView
@@ -496,6 +507,52 @@
     NSLog(@"MEMWARNING");
 }
 
+- (void)animatedAlignAzimuthToNorth
+{
+    if(![self isViewLoaded])
+        return;
+    
+    // Since user iteracts with map, set mode to free
+    _app.mapMode = OAMapModeFree;
+    
+    // Animate azimuth change to north during 1 second
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView cancelAnimation];
+    [mapView animateAzimuthBy:-mapView.azimuth during:1.0f];
+}
+
+- (void)onMapModeChanged
+{
+    switch (_app.mapMode)
+    {
+        case OAMapModeFree:
+            // Do nothing
+            return;
+            
+        case OAMapModePositionTrack:
+            if(_app.locationServices.lastKnownLocation != nil)
+            {
+                //TODO: fly-animate view to last known location
+            }
+            break;
+            
+        case OAMapModeFollow:
+            if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
+            {
+                //TODO: fly-animate view to last known location + change blablabla
+            }
+            break;
+    }
+}
+
+- (void)onLocationServicesUpdate
+{
+    //TODO: obtain fresh location&heading
+    //TODO: update marker position
+    
+    //TODO: If map mode is position-track or follow, fly to that postion
+}
+
 - (void)activateMapnik
 {
     if(![self isViewLoaded])
@@ -551,38 +608,6 @@
     mapView.elevationAngle = 90.0f;
     mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
     mapView.zoom = 10.0f;
-}
-
-- (void)onMapModeChanged
-{
-    switch (_app.mapMode)
-    {
-        case OAMapModeFree:
-            // Do nothing
-            return;
-            
-        case OAMapModePositionTrack:
-            if(_app.locationServices.lastKnownLocation != nil)
-            {
-                //TODO: fly-animate view to last known location
-            }
-            break;
-            
-        case OAMapModeFollow:
-            if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
-            {
-                //TODO: fly-animate view to last known location + change blablabla
-            }
-            break;
-    }
-}
-
-- (void)onLocationServicesUpdate
-{
-    //TODO: obtain fresh location&heading
-    //TODO: update marker position
-    
-    //TODO: If map mode is position-track or follow, fly to that postion
 }
 
 @end

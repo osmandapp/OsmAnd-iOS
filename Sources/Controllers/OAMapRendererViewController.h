@@ -10,6 +10,10 @@
 
 @interface OAMapRendererViewController : UIViewController <UIGestureRecognizerDelegate>
 
++ (OAMapRendererViewController*)instance;
+
+- (void)animatedAlignAzimuthToNorth;
+
 - (void)activateMapnik;
 - (void)activateCyclemap;
 - (void)activateOffline;

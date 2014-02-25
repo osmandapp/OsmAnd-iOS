@@ -11,6 +11,7 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMapRendererViewController.h"
 
 @interface OAMapHudViewController ()
 
@@ -126,6 +127,7 @@
 
 - (IBAction)onCompassButtonClicked:(id)sender
 {
+    [[OAMapRendererViewController instance] animatedAlignAzimuthToNorth];
 }
 
 @end

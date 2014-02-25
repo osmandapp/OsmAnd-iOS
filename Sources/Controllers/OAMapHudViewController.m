@@ -9,6 +9,8 @@
 #import "OAMapHudViewController.h"
 #import "UIViewController+JASidePanel.h"
 
+#import "OsmAndApp.h"
+
 @interface OAMapHudViewController ()
 
 @end

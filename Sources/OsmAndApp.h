@@ -8,15 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Data/ObfsCollection.h>
-#include <OsmAndCore/Map/MapStyles.h>
+#import "OsmAndAppProtocol.h"
+#if defined(__cplusplus)
+#   import "OsmAndAppCppProtocol.h"
+#else
+    @protocol OsmAndAppCppProtocol;
+#endif
 
 @interface OsmAndApp : NSObject
 
-+ (OsmAndApp*)instance;
-
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
++ (id<OsmAndAppProtocol, OsmAndAppCppProtocol>)instance;
 
 @end

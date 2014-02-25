@@ -105,6 +105,7 @@
 		BBBDADA218BC08C100E4A359 /* compassButtonBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9E18BC08C100E4A359 /* compassButtonBackground~ipad.png */; };
 		BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
 		BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
+		BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
 		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */ = {isa = PBXBuildFile; fileRef = BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */; };
 /* End PBXBuildFile section */
@@ -235,6 +236,10 @@
 		BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAAutoObserverProxy.m; path = Common/OAAutoObserverProxy.m; sourceTree = "<group>"; };
 		BBBDADA918BC965100E4A359 /* OAObservable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAObservable.h; path = Common/OAObservable.h; sourceTree = "<group>"; };
 		BBBDADAA18BC965100E4A359 /* OAObservable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAObservable.m; path = Common/OAObservable.m; sourceTree = "<group>"; };
+		BBBDADAF18BCBE6000E4A359 /* OsmAndAppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppProtocol.h; sourceTree = "<group>"; };
+		BBBDADB018BCBE7B00E4A359 /* OsmAndAppCppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppCppProtocol.h; sourceTree = "<group>"; };
+		BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppImpl.h; sourceTree = "<group>"; };
+		BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndAppImpl.mm; sourceTree = "<group>"; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
 		BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "drawable-xhdpi"; path = "../resources/rendering_styles/style-icons/drawable-xhdpi"; sourceTree = "<group>"; };
@@ -347,6 +352,10 @@
 				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
 				BBACF10B17C6293300EBA761 /* OsmAndApp.h */,
 				BBACF10C17C6293300EBA761 /* OsmAndApp.mm */,
+				BBBDADAF18BCBE6000E4A359 /* OsmAndAppProtocol.h */,
+				BBBDADB018BCBE7B00E4A359 /* OsmAndAppCppProtocol.h */,
+				BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */,
+				BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -729,6 +738,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */,
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,

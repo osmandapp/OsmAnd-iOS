@@ -38,6 +38,7 @@
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _mapModeObserver;
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -73,6 +74,8 @@
     _app = [OsmAndApp instance];
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationServicesUpdate)];
+    [_locationServicesUpdateObserver observe:_app.locationServices.updateObserver];
     
     // Create gesture recognizers:
     
@@ -565,10 +568,15 @@
         case OAMapModeFollow:
             //TODO: animate view to last known location + change blablabla (if it's available)
             break;
-            
-        default:
-            break;
     }
+}
+
+- (void)onLocationServicesUpdate
+{
+    //TODO: obtain fresh location&heading
+    //TODO: update marker position
+    
+    //TODO: If map mode is position-track or follow, fly to that postion
 }
 
 @end

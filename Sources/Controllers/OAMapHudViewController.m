@@ -89,7 +89,7 @@
 - (void)onMapModeChanged
 {
     UIImage* modeImage = nil;
-    switch ([OsmAndApp instance].mapMode)
+    switch (_app.mapMode)
     {
         case OAMapModeFree:
             modeImage = [UIImage imageNamed:@"freeMapMode.png"];

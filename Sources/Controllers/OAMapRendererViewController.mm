@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "OAMapRendererView.h"
+#import "OAAutoObserverProxy.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -35,6 +36,8 @@
 @implementation OAMapRendererViewController
 {
     OsmAndAppInstance _app;
+    
+    OAAutoObserverProxy* _mapModeObserver;
     
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -68,6 +71,8 @@
 - (void)ctor
 {
     _app = [OsmAndApp instance];
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
+    [_mapModeObserver observe:_app.mapModeObservable];
     
     // Create gesture recognizers:
     
@@ -543,6 +548,27 @@
     mapView.elevationAngle = 90.0f;
     mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
     mapView.zoom = 10.0f;
+}
+
+- (void)onMapModeChanged
+{
+    switch (_app.mapMode)
+    {
+        case OAMapModeFree:
+            // Do nothing
+            return;
+            
+        case OAMapModePositionTrack:
+            //TODO: animate view to last known location
+            break;
+            
+        case OAMapModeFollow:
+            //TODO: animate view to last known location + change blablabla
+            break;
+            
+        default:
+            break;
+    }
 }
 
 @end

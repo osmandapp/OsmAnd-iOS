@@ -46,6 +46,10 @@
     [self initObfsCollection];
     [self initMapStyles];
     
+    _locationServices = [[OALocationServices alloc] init];
+    if(_locationServices.available && _locationServices.allowed)
+       [_locationServices start];
+    
     _mapModeObservable = [[OAObservable alloc] init];
 }
 
@@ -61,6 +65,8 @@
 {
     _mapStyles.reset(new OsmAnd::MapStyles());
 }
+
+@synthesize locationServices = _locationServices;
 
 @synthesize mapMode = _mapMode;
 @synthesize mapModeObservable = _mapModeObservable;

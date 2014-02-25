@@ -17,7 +17,7 @@
 - (id)initWith:(id<OAObserverProtocol>)owner_ withHandler:(SEL)selector_;
 
 @property(weak, readonly) id<OAObserverProtocol> owner;
-@property(weak, readonly) SEL handler;
+@property(readonly) SEL handler;
 
 @property(weak, readonly) id<OAObservableProtocol> observable;
 - (void)observe:(id<OAObservableProtocol>)observable;

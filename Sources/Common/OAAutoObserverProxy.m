@@ -8,6 +8,8 @@
 
 #import "OAAutoObserverProxy.h"
 
+#include <objc/message.h>
+
 @implementation OAAutoObserverProxy
 {
 }
@@ -92,48 +94,34 @@
 {
     if(_handler != nil)
     {
-        NSMethodSignature* handlerSignature = [_owner methodSignatureForSelector:_handler];
+        NSMethodSignature* handlerSignature = [OAAutoObserverProxy instanceMethodSignatureForSelector:_handler];
         NSUInteger handlerArgsCount = [handlerSignature numberOfArguments] - 2; // Subtract "self" and "cmd_"
-        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:handlerSignature];
-        [invocation setTarget:_owner];
-        [invocation setSelector:_handler];
 
         if(handlerArgsCount == 3)
         {
-            [invocation setArgument:observer
-                            atIndex:2+0];
-            [invocation setArgument:key
-                            atIndex:2+1];
-            [invocation setArgument:value
-                            atIndex:2+2];
-            [invocation invoke];
+            objc_msgSend(_owner, _handler, observer, key, value);
             return;
         }
         
         if(handlerArgsCount == 2)
         {
-            [invocation setArgument:observer
-                            atIndex:2+0];
-            [invocation setArgument:key
-                            atIndex:2+1];
-            [invocation invoke];
+            objc_msgSend(_owner, _handler, observer, key);
             return;
         }
         
         if(handlerArgsCount == 1)
         {
-            [invocation setArgument:observer
-                            atIndex:2+0];
-            [invocation invoke];
+            objc_msgSend(_owner, _handler, observer);
             return;
         }
         
-        [invocation invoke];
+        objc_msgSend(_owner, _handler);
+        return;
     }
     
     if([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
     {
-        [_owner handleObservedEventFrom:self
+        [_owner handleObservedEventFrom:observer
                                 withKey:key
                                andValue:value];
         return;
@@ -141,14 +129,14 @@
     
     if([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
     {
-        [_owner handleObservedEventFrom:self
+        [_owner handleObservedEventFrom:observer
                                 withKey:key];
         return;
     }
     
     if([_owner respondsToSelector:@selector(handleObservedEventFrom:)])
     {
-        [_owner handleObservedEventFrom:self];
+        [_owner handleObservedEventFrom:observer];
         return;
     }
     

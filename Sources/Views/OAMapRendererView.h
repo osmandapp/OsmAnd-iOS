@@ -19,9 +19,9 @@
 
 #import "OAObservable.h"
 
-#define _DECLARE_ENTRY(name) \
-    OAMapViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
-typedef NS_OPTIONS(NSUInteger, OAMapViewStateEntry)
+#define _DECLARE_ENTRY(name)                                                                                                \
+    OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
+typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 {
     _DECLARE_ENTRY(RasterLayers_Providers),
     _DECLARE_ENTRY(RasterLayers_Opacity),
@@ -38,6 +38,27 @@ typedef NS_OPTIONS(NSUInteger, OAMapViewStateEntry)
     _DECLARE_ENTRY(Target),
     _DECLARE_ENTRY(Zoom)
 };
+#undef _DECLARE_ENTRY
+
+#define _DECLARE_ENTRY(name)                                                                                                \
+    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
+#define _DECLARE_TIMING_FUNCTION(name)                                                                                      \
+    _DECLARE_ENTRY(EaseIn##name),                                                                                           \
+    _DECLARE_ENTRY(EaseOut##name),                                                                                          \
+    _DECLARE_ENTRY(EaseInOut##name),                                                                                        \
+    _DECLARE_ENTRY(EaseOutIn##name)
+typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
+{
+    _DECLARE_ENTRY(Invalid),
+    _DECLARE_ENTRY(Linear),
+    _DECLARE_TIMING_FUNCTION(Quadratic),
+    _DECLARE_TIMING_FUNCTION(Cubic),
+    _DECLARE_TIMING_FUNCTION(Quartic),
+    _DECLARE_TIMING_FUNCTION(Sinusoidal),
+    _DECLARE_TIMING_FUNCTION(Exponential),
+    _DECLARE_TIMING_FUNCTION(Circular)
+};
+#undef _DECLARE_TIMING_FUNCTION
 #undef _DECLARE_ENTRY
 
 @interface OAMapRendererView : UIView
@@ -86,11 +107,11 @@ typedef NS_OPTIONS(NSUInteger, OAMapViewStateEntry)
 - (void)resumeAnimation;
 
 - (void)animateZoomWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
-- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration;
+- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
 - (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration;
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration;
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
 - (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
-- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration;
+- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
 
 @end

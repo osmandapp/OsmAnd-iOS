@@ -14,6 +14,8 @@
 
 #include <QtMath>
 #include <QStandardPaths>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
@@ -434,10 +436,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OsmAnd::PointI64 deltaMovement;
     deltaMovement.x = static_cast<int64_t>(centerLocation.x) - static_cast<int64_t>(currentLocation.x);
     deltaMovement.y = static_cast<int64_t>(centerLocation.y) - static_cast<int64_t>(currentLocation.y);
-    [mapView animateTargetBy64:deltaMovement during:1.0f];
+    [mapView animateTargetBy64:deltaMovement during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     
     // Increate zoom by 1 using animation
-    [mapView animateZoomBy:1.0f during:1.0f];
+    [mapView animateZoomBy:1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     
     // Launch animation
     [mapView resumeAnimation];
@@ -478,10 +480,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OsmAnd::PointI64 deltaMovement;
     deltaMovement.x = static_cast<int64_t>(centerLocation.x) - static_cast<int64_t>(currentLocation.x);
     deltaMovement.y = static_cast<int64_t>(centerLocation.y) - static_cast<int64_t>(currentLocation.y);
-    [mapView animateTargetBy64:deltaMovement during:1.0f];
+    [mapView animateTargetBy64:deltaMovement during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     
     // Decrease zoom by 1
-    [mapView animateZoomBy:-1.0f during:1.0f];
+    [mapView animateZoomBy:-1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     
     // Launch animation
     [mapView resumeAnimation];
@@ -524,7 +526,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     switch ([key unsignedIntegerValue])
     {
-        case OAMapViewStateEntryAzimuth:
+        case OAMapRendererViewStateEntryAzimuth:
             [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
             return;
     }
@@ -541,7 +543,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Animate azimuth change to north during 1 second
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
-    [mapView animateAzimuthBy:-mapView.azimuth during:1.0f];
+    [mapView animateAzimuthBy:-mapView.azimuth during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
 }
 
@@ -571,10 +573,35 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onLocationServicesUpdate
 {
+    if(![self isViewLoaded])
+        return;
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
     //TODO: obtain fresh location&heading
     //TODO: update marker position
     
-    //TODO: If map mode is position-track or follow, fly to that postion
+    // If map mode is position-track or follow, move to that position
+    if(_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+    {
+        [mapView cancelAnimation];
+        
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        OsmAnd::PointI newTarget31(
+            OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+        OsmAnd::PointI64 targetDelta = OsmAnd::PointI64(newTarget31) - OsmAnd::PointI64(mapView.target31);
+        [mapView animateTargetBy64:targetDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+        
+        // Update azimuth
+        if(_app.mapMode == OAMapModeFollow && !isnan(_app.locationServices.lastKnownHeading))
+        {
+            CGFloat azimuthDelta = _app.locationServices.lastKnownHeading - mapView.azimuth;
+            
+            [mapView animateAzimuthBy:azimuthDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+        }
+        
+        [mapView resumeAnimation];
+    }
 }
 
 - (void)activateMapnik

@@ -82,7 +82,7 @@
     OAObservable* stateObservable = _stateObservable;
     _renderer->registerStateChangeObserver(reinterpret_cast<void*>((uintptr_t)stateObservable),
         [stateObservable](const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges){
-            [stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:(OAMapViewStateEntry)thisChange]];
+            [stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:(OAMapRendererViewStateEntry)thisChange]];
         });
     
     // Create animator for that map
@@ -256,9 +256,9 @@
     _animator->animateZoomWith(velocity, deceleration);
 }
 
-- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration
+- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
 {
-    _animator->animateZoomBy(deltaValue, duration);
+    _animator->animateZoomBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
 - (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration
@@ -266,14 +266,14 @@
     _animator->animateTargetWith(velocity, deceleration);
 }
 
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
 {
-    _animator->animateTargetBy(deltaValue, duration);
+    _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
 {
-    _animator->animateTargetBy(deltaValue, duration);
+    _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
 - (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
@@ -281,9 +281,9 @@
     _animator->animateAzimuthWith(velocity, deceleration);
 }
 
-- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration
+- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
 {
-    _animator->animateAzimuthBy(deltaValue, duration);
+    _animator->animateAzimuthBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
 - (void)createContext

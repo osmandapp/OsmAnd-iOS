@@ -328,9 +328,9 @@
     
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.displayDensityFactor = self.contentScaleFactor;
-    rendererSetup.gpuWorkerThread.enabled = true;
+    rendererSetup.gpuWorkerThreadEnabled = true;
     const auto capturedWorkerContext = _glWorkerContext;
-    rendererSetup.gpuWorkerThread.prologue = [capturedWorkerContext]()
+    rendererSetup.gpuWorkerThreadPrologue = [capturedWorkerContext]()
     {
         // Activate worker context
         if(![EAGLContext setCurrentContext:capturedWorkerContext])
@@ -339,7 +339,7 @@
             return;
         }
     };
-    rendererSetup.gpuWorkerThread.epilogue = []()
+    rendererSetup.gpuWorkerThreadEpilogue = []()
     {
         // Nothing to do
     };

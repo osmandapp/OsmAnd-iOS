@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$BASH_VERSION" ]; then
+	exec bash "$0" "$@"
+	exit $?
+fi
+
 # Get version tag/hash strings
 IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`
 echo "iOS git tag: $IOS_GIT_TAG"

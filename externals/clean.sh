@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$BASH_VERSION" ]; then
+	exec bash "$0" "$@"
+	exit $?
+fi
+
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 OSMAND_EXTERNALS_SET=($*)

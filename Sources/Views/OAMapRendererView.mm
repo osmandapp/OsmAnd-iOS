@@ -74,7 +74,7 @@
     _displayLink = nil;
     
     // Create map renderer instance
-    _renderer = OsmAnd::createAtlasMapRenderer_OpenGLES2();
+    _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2);
     
     OsmAnd::MapRendererConfiguration rendererConfig;
     rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;

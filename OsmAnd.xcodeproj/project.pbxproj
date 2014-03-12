@@ -29,6 +29,7 @@
 		BB098D011793F7FD00423944 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
 		BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
 		BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
+		BB10503318D058D0005322D8 /* ShippedResources in Resources */ = {isa = PBXBuildFile; fileRef = BB10503218D058D0005322D8 /* ShippedResources */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
@@ -133,6 +134,7 @@
 		BB098D041793F7FD00423944 /* OAAppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
 		BB0EA14717C60AF9007B572D /* OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARootViewController.h; path = Controllers/OARootViewController.h; sourceTree = "<group>"; };
 		BB0EA14817C60AF9007B572D /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
+		BB10503218D058D0005322D8 /* ShippedResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ShippedResources; sourceTree = "<group>"; };
 		BB2545AD1797287300E80B58 /* libOsmAndCore_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_ios.a; path = "${CONFIGURATION_BUILD_DIR}/libOsmAndCore_ios.a"; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -291,6 +293,7 @@
 			isa = PBXGroup;
 			children = (
 				BBA858EB17C222C500AADCC7 /* README.md */,
+				BB10503218D058D0005322D8 /* ShippedResources */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
@@ -670,6 +673,7 @@
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
 				BBBDAD9018BC008D00E4A359 /* mapModeButtonBackground~ipad.png in Resources */,
 				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
+				BB10503318D058D0005322D8 /* ShippedResources in Resources */,
 				BBBDAD8518BBFC0F00E4A359 /* positionTrackMapMode@2x.png in Resources */,
 				BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */,
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,

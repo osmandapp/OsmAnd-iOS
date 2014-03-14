@@ -38,7 +38,7 @@
 {
     [super viewDidLoad];
 	
-    // 80% of smallest device width in portait mode (320px)
+    // 80% of smallest device width in portait mode (320 points)
     self.leftFixedWidth = 256;
     self.rightFixedWidth = 256;
     self.shouldResizeLeftPanel = YES;
@@ -50,9 +50,6 @@
     
     // Allow rotation, without respect to current active panel
     self.shouldDelegateAutorotateToVisiblePanel = NO;
-        
-    //TEST:
-    //[self showLeftPanelAnimated:NO];
 }
 
 - (void)stylePanel:(UIView *)panel

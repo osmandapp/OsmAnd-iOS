@@ -38,8 +38,8 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
     const auto fileNameParts = resourceFileName.split('.');
     const auto resourcePath = [[NSBundle mainBundle]
-                               pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
-                               ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
+                               pathForResource:fileNameParts[0].toNSString()
+                               ofType:fileNameParts[1].toNSString()
                                inDirectory:@"drawable-xhdpi"];
     if(resourcePath == nil)
     {
@@ -48,7 +48,7 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
         return QByteArray();
     }
     
-    QFile resourceFile(QString::fromUtf8([resourcePath UTF8String]));
+    QFile resourceFile(QString::fromNSString(resourcePath));
     if(!resourceFile.exists())
     {
         if(ok)
@@ -81,8 +81,8 @@ bool ExternalResourcesProvider::containsResource(const QString& name) const
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
     const auto fileNameParts = resourceFileName.split('.');
     const auto resourcePath = [[NSBundle mainBundle]
-                               pathForResource:[NSString stringWithUTF8String:fileNameParts[0].toUtf8().constData()]
-                               ofType:[NSString stringWithUTF8String:fileNameParts[1].toUtf8().constData()]
+                               pathForResource:fileNameParts[0].toNSString()
+                               ofType:fileNameParts[1].toNSString()
                                inDirectory:@"drawable-xhdpi"];
     
     return (resourcePath != nil);

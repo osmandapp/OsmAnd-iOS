@@ -35,9 +35,11 @@
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
     
-    // If this is a debug build, duplicate all core logs to a file
 #if defined(DEBUG)
-    std::shared_ptr<QIODevice> loggingDevice(new QFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation) + QDir::separator() + "core.log"));
+    // If this is a debug build, duplicate all core logs to a file
+    std::shared_ptr<QIODevice> loggingDevice(new QFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
+                                                       + QDir::separator()
+                                                       + QLatin1String("core.log")));
     loggingDevice->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     OsmAnd::SaveLogsTo(loggingDevice, true);
 #endif

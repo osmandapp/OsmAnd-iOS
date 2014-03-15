@@ -20,3 +20,6 @@ OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
 
 # Download all shipped resources
 "$SRCLOC/download-shipped-resources.sh"
+
+# Generate resources from SVG
+"$SRCLOC/rasterize-resources.sh"

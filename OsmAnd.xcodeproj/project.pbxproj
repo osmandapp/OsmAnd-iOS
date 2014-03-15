@@ -53,7 +53,6 @@
 		BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
 		BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
-		BBA858EC17C222C500AADCC7 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = BBA858EB17C222C500AADCC7 /* README.md */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
 		BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
 		BBA8591217C24E9B00AADCC7 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591117C24E9B00AADCC7 /* Default.png */; };
@@ -75,6 +74,7 @@
 		BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
 		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 		BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
+		BBB9AA2618D4BF690034AEAF /* GeneratedResources in Resources */ = {isa = PBXBuildFile; fileRef = BBB9AA2518D4BF690034AEAF /* GeneratedResources */; };
 		BBBDAD5A18BBE74400E4A359 /* MapHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD5918BBE74400E4A359 /* MapHUD~ipad.xib */; };
 		BBBDAD7818BBFC0F00E4A359 /* compassDirectionN.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */; };
 		BBBDAD7918BBFC0F00E4A359 /* compassDirectionN@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */; };
@@ -205,6 +205,7 @@
 		BBB34EDF179BC9E4004C5567 /* libz_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_ios.a; path = "../core/externals/zlib/build/Release-iphoneos/libz_ios.a"; sourceTree = "<group>"; };
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		BBB9AA2518D4BF690034AEAF /* GeneratedResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GeneratedResources; sourceTree = "<group>"; };
 		BBBDAD5918BBE74400E4A359 /* MapHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MapHUD~ipad.xib"; path = "Resources/MapHUD~ipad.xib"; sourceTree = "<group>"; };
 		BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compassDirectionN.png; sourceTree = "<group>"; };
 		BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN@2x.png"; sourceTree = "<group>"; };
@@ -294,6 +295,7 @@
 			children = (
 				BBA858EB17C222C500AADCC7 /* README.md */,
 				BB10503218D058D0005322D8 /* ShippedResources */,
+				BBB9AA2518D4BF690034AEAF /* GeneratedResources */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
@@ -667,7 +669,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBA858EC17C222C500AADCC7 /* README.md in Resources */,
 				BBBDAD8418BBFC0F00E4A359 /* positionTrackMapMode.png in Resources */,
 				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
@@ -695,6 +696,7 @@
 				BBBDAD7A18BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
 				BBBDADA218BC08C100E4A359 /* compassButtonBackground~ipad.png in Resources */,
+				BBB9AA2618D4BF690034AEAF /* GeneratedResources in Resources */,
 				BBBDAD7818BBFC0F00E4A359 /* compassDirectionN.png in Resources */,
 				BBBDAD9F18BC08C100E4A359 /* compassButtonBackground.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,

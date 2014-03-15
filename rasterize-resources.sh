@@ -59,4 +59,4 @@ rasterize_resource() {
 }
 export -f rasterize_resource
 (cd "$SRCLOC/Resources.svg" && \
-	find . -type f -name "*.svg" -print0 | xargs -0 -i bash -c 'rasterize_resource "$@"' _ {})
+	find . -type f -name "*.svg" -exec bash -c 'rasterize_resource "$@"' _ {} \;)

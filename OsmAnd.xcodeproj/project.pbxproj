@@ -32,6 +32,10 @@
 		BB10503318D058D0005322D8 /* ShippedResources in Resources */ = {isa = PBXBuildFile; fileRef = BB10503218D058D0005322D8 /* ShippedResources */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
+		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
+		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
+		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
+		BB476B7018D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -65,7 +69,7 @@
 		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
 		BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10717C61B1700EBA761 /* OptionsPanel.xib */; };
-		BBACF10A17C61D8500EBA761 /* MapHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapHUD.xib */; };
+		BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapModeHUD.xib */; };
 		BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
@@ -75,7 +79,7 @@
 		BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
 		BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBB9AA2618D4BF690034AEAF /* GeneratedResources in Resources */ = {isa = PBXBuildFile; fileRef = BBB9AA2518D4BF690034AEAF /* GeneratedResources */; };
-		BBBDAD5A18BBE74400E4A359 /* MapHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD5918BBE74400E4A359 /* MapHUD~ipad.xib */; };
+		BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */; };
 		BBBDAD7818BBFC0F00E4A359 /* compassDirectionN.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */; };
 		BBBDAD7918BBFC0F00E4A359 /* compassDirectionN@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */; };
 		BBBDAD7A18BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6718BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png */; };
@@ -139,6 +143,10 @@
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB35368817ACDD4E00AD6357 /* libglsl-optimizer_ios.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libglsl-optimizer_ios.a"; path = "../core/externals/glsl-optimizer/build/Release-iphoneos/libglsl-optimizer_ios.a"; sourceTree = "<group>"; };
+		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
+		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
+		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
+		BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "NavigationModeHUD~ipad.xib"; path = "Resources/NavigationModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -187,7 +195,7 @@
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
 		BBACF10717C61B1700EBA761 /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
-		BBACF10917C61D8500EBA761 /* MapHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapHUD.xib; path = Resources/MapHUD.xib; sourceTree = "<group>"; };
+		BBACF10917C61D8500EBA761 /* MapModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapModeHUD.xib; path = Resources/MapModeHUD.xib; sourceTree = "<group>"; };
 		BBACF10B17C6293300EBA761 /* OsmAndApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndApp.h; sourceTree = "<group>"; };
 		BBACF10C17C6293300EBA761 /* OsmAndApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndApp.mm; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
@@ -206,7 +214,7 @@
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBB9AA2518D4BF690034AEAF /* GeneratedResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GeneratedResources; sourceTree = "<group>"; };
-		BBBDAD5918BBE74400E4A359 /* MapHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MapHUD~ipad.xib"; path = "Resources/MapHUD~ipad.xib"; sourceTree = "<group>"; };
+		BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MapModeHUD~ipad.xib"; path = "Resources/MapModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compassDirectionN.png; sourceTree = "<group>"; };
 		BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN@2x.png"; sourceTree = "<group>"; };
 		BBBDAD6718BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN@2x~ipad.png"; sourceTree = "<group>"; };
@@ -609,8 +617,12 @@
 				BBA858FD17C222FC00AADCC7 /* AppIcons */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
 				BBACF10717C61B1700EBA761 /* OptionsPanel.xib */,
-				BBACF10917C61D8500EBA761 /* MapHUD.xib */,
-				BBBDAD5918BBE74400E4A359 /* MapHUD~ipad.xib */,
+				BBACF10917C61D8500EBA761 /* MapModeHUD.xib */,
+				BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */,
+				BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */,
+				BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */,
+				BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */,
+				BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -672,6 +684,7 @@
 				BBBDAD8418BBFC0F00E4A359 /* positionTrackMapMode.png in Resources */,
 				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
+				BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */,
 				BBBDAD9018BC008D00E4A359 /* mapModeButtonBackground~ipad.png in Resources */,
 				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
 				BB10503318D058D0005322D8 /* ShippedResources in Resources */,
@@ -681,6 +694,7 @@
 				BBBDAD7B18BBFC0F00E4A359 /* compassDirectionN~ipad.png in Resources */,
 				BBBDAD7E18BBFC0F00E4A359 /* followMapMode@2x~ipad.png in Resources */,
 				BBBDADA018BC08C100E4A359 /* compassButtonBackground@2x.png in Resources */,
+				BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */,
 				BBBDAD9818BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png in Resources */,
 				BBBDAD8F18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png in Resources */,
 				BBBDAD8E18BC008D00E4A359 /* mapModeButtonBackground@2x.png in Resources */,
@@ -693,6 +707,7 @@
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
 				BBBDAD7D18BBFC0F00E4A359 /* followMapMode@2x.png in Resources */,
 				BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */,
+				BB476B7018D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib in Resources */,
 				BBBDAD7A18BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
 				BBBDADA218BC08C100E4A359 /* compassButtonBackground~ipad.png in Resources */,
@@ -710,9 +725,10 @@
 				BBBDAD7F18BBFC0F00E4A359 /* followMapMode~ipad.png in Resources */,
 				BBBDAD7918BBFC0F00E4A359 /* compassDirectionN@2x.png in Resources */,
 				BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */,
-				BBACF10A17C61D8500EBA761 /* MapHUD.xib in Resources */,
+				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
+				BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */,
 				BBBDAD9918BC05EA00E4A359 /* optionsMenuButton~ipad.png in Resources */,
-				BBBDAD5A18BBE74400E4A359 /* MapHUD~ipad.xib in Resources */,
+				BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */,
 				BBBDADA118BC08C100E4A359 /* compassButtonBackground@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

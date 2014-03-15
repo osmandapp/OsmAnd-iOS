@@ -27,8 +27,8 @@ rasterize_resource() {
 	OUTPUT_FILENAME="${FILENAME}.png"
 	SUBPATH="${1%/*}"
 	INPUT="Resources.svg/$SUBPATH/$INPUT_FILENAME"
-	OUTPUT="Resources/Generated/$SUBPATH/$OUTPUT_FILENAME"
-	OUTPUT_PATH="$ORIGIN/Resources/Generated/$SUBPATH"
+	OUTPUT="GeneratedResources/$SUBPATH/$OUTPUT_FILENAME"
+	OUTPUT_PATH="$ORIGIN/GeneratedResources/$SUBPATH"
 	echo "Rasterizing '$FILENAME' (\"$SUBPATH\")"
 	mkdir -p "$OUTPUT_PATH"
 	

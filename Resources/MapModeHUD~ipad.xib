@@ -17,7 +17,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RN3-8J-1UX" userLabel="searchQueryTextview">
-                    <rect key="frame" x="72" y="26" width="79" height="30"/>
+                    <rect key="frame" x="72" y="26" width="288" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="search"/>
@@ -140,6 +140,7 @@
                 <constraint firstAttribute="centerY" secondItem="Wxb-EL-Pln" secondAttribute="top" constant="-8" id="kte-Hn-NKh"/>
                 <constraint firstItem="jLp-qw-2pN" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="o8I-Mg-qmS"/>
                 <constraint firstAttribute="trailing" secondItem="OAx-cr-GZm" secondAttribute="trailing" constant="16" id="vCT-g1-z9F"/>
+                <constraint firstAttribute="centerX" secondItem="RN3-8J-1UX" secondAttribute="trailing" constant="24" id="zek-5H-qFN"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>

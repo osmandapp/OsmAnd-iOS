@@ -18,6 +18,10 @@ fi
 echo "Using $RSVG_CONVERT..."
 export RSVG_CONVERT
 
+# Remove previous
+rm -rf "$SRCLOC/Resources.svg"
+
+# Rasterize resources
 export _SRCLOC
 rasterize_resource() {
 	ORIGIN="$(pwd)/.."

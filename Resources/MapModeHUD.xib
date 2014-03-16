@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
@@ -15,18 +16,35 @@
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="1" customClass="OAMapHudRootView">
+        <view contentMode="scaleToFill" id="1" userLabel="root" customClass="OAMapHudRootView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton">
-                    <rect key="frame" x="8" y="28" width="32" height="32"/>
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="VmE-Nw-lfi" userLabel="searchQueryTextview">
+                    <rect key="frame" x="8" y="21" width="304" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                    <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="search"/>
+                </textField>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iT3-1A-Wkq" userLabel="actionsMenuButton">
+                    <rect key="frame" x="305" y="59" width="15" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="32" id="4WX-bO-JiS"/>
-                        <constraint firstAttribute="width" constant="32" id="bpd-5D-t0W"/>
+                        <constraint firstAttribute="height" constant="40" id="j9R-Ep-U48"/>
+                        <constraint firstAttribute="width" constant="15" id="nHw-R6-tm8"/>
                     </constraints>
-                    <state key="normal" image="optionsMenuButton.png">
+                    <state key="normal" image="HUD_more_halfbutton.png" backgroundImage="HUD_right_narrowbutton_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton">
+                    <rect key="frame" x="0.0" y="59" width="15" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="4WX-bO-JiS"/>
+                        <constraint firstAttribute="width" constant="15" id="bpd-5D-t0W"/>
+                    </constraints>
+                    <state key="normal" image="HUD_left_menu_narrowbutton.png" backgroundImage="HUD_left_narrowbutton_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -34,13 +52,13 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">
-                    <rect key="frame" x="280" y="528" width="32" height="32"/>
+                    <rect key="frame" x="272" y="520" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="32" id="TQb-bI-8oS"/>
-                        <constraint firstAttribute="height" constant="32" id="TWc-JP-daA"/>
+                        <constraint firstAttribute="width" constant="40" id="TQb-bI-8oS"/>
+                        <constraint firstAttribute="height" constant="40" id="TWc-JP-daA"/>
                     </constraints>
-                    <state key="normal" image="freeMapMode.png" backgroundImage="mapModeButtonBackground.png">
+                    <state key="normal" image="freeMapMode.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -48,60 +66,110 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
-                    <rect key="frame" x="280" y="28" width="32" height="32"/>
+                    <rect key="frame" x="13" y="525" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duk-mu-8Hu" userLabel="compassButton">
-                            <rect key="frame" x="0.0" y="0.0" width="32" height="32"/>
+                            <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" backgroundImage="compassButtonBackground.png">
+                            <state key="normal" backgroundImage="HUD_compass_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
                                 <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="tcA-jH-xge"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="compassDirectionN.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
-                            <rect key="frame" x="4" y="4" width="24" height="24"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
+                            <rect key="frame" x="12" y="6" width="6" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration">
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
                             </accessibility>
                             <constraints>
-                                <constraint firstAttribute="width" constant="24" placeholder="YES" id="D2K-He-0RO"/>
-                                <constraint firstAttribute="height" constant="24" placeholder="YES" id="OeU-xv-6F8"/>
+                                <constraint firstAttribute="width" constant="6" placeholder="YES" id="D2K-He-0RO"/>
+                                <constraint firstAttribute="height" constant="18" placeholder="YES" id="OeU-xv-6F8"/>
                             </constraints>
                         </imageView>
                     </subviews>
                     <constraints>
                         <constraint firstItem="duk-mu-8Hu" firstAttribute="height" secondItem="zKf-ZI-4L4" secondAttribute="height" id="0PZ-EB-oC9"/>
-                        <constraint firstAttribute="height" constant="32" id="8lf-7i-txh"/>
+                        <constraint firstAttribute="height" constant="30" id="8lf-7i-txh"/>
                         <constraint firstAttribute="centerY" secondItem="qfF-4i-ios" secondAttribute="centerY" id="D9L-zS-1rc"/>
                         <constraint firstItem="duk-mu-8Hu" firstAttribute="width" secondItem="zKf-ZI-4L4" secondAttribute="width" id="DsN-bf-v4B"/>
-                        <constraint firstAttribute="width" constant="32" id="n0C-vS-mbv"/>
+                        <constraint firstAttribute="width" constant="30" id="n0C-vS-mbv"/>
                         <constraint firstAttribute="centerX" secondItem="qfF-4i-ios" secondAttribute="centerX" id="r0z-JV-yAV"/>
                         <constraint firstAttribute="centerY" secondItem="duk-mu-8Hu" secondAttribute="centerY" id="r93-YU-cd1"/>
                         <constraint firstAttribute="centerX" secondItem="duk-mu-8Hu" secondAttribute="centerX" id="tWH-GU-HR5"/>
                     </constraints>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
+                    <rect key="frame" x="224" y="520" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="QxX-Ge-7Mq"/>
+                        <constraint firstAttribute="height" constant="40" id="etr-57-YrC"/>
+                    </constraints>
+                    <state key="normal" image="driveMode.png" backgroundImage="HUD_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GgY-iA-GiG" userLabel="zoomInButton">
+                    <rect key="frame" x="272" y="240" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="bQD-Lv-EaY"/>
+                        <constraint firstAttribute="width" constant="40" id="jia-Rh-Ul9"/>
+                    </constraints>
+                    <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l4t-EI-ihD" userLabel="zoomOutButton">
+                    <rect key="frame" x="272" y="288" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="SjB-MY-jqd"/>
+                        <constraint firstAttribute="height" constant="40" id="aPE-fD-TCk"/>
+                    </constraints>
+                    <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <constraints>
-                <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="28" id="JE7-ap-Nw3"/>
+                <constraint firstItem="4" firstAttribute="top" secondItem="VmE-Nw-lfi" secondAttribute="bottom" constant="8" id="4d8-RZ-4i2"/>
+                <constraint firstAttribute="bottom" secondItem="QPn-ok-Vxm" secondAttribute="bottom" constant="8" id="6AR-jH-Xsi"/>
+                <constraint firstItem="zKf-ZI-4L4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="13" id="7q5-Kj-4id"/>
+                <constraint firstAttribute="trailing" secondItem="VmE-Nw-lfi" secondAttribute="trailing" constant="8" id="Aif-9k-rFW"/>
+                <constraint firstAttribute="trailing" secondItem="GgY-iA-GiG" secondAttribute="trailing" constant="8" id="Hoh-Mb-b9j"/>
                 <constraint firstAttribute="bottom" secondItem="Tol-6L-Amr" secondAttribute="bottom" constant="8" id="KPq-Ez-m9y"/>
                 <constraint firstAttribute="trailing" secondItem="Tol-6L-Amr" secondAttribute="trailing" constant="8" id="Lwc-fK-jme"/>
-                <constraint firstAttribute="trailing" secondItem="zKf-ZI-4L4" secondAttribute="trailing" constant="8" id="NTn-CA-mgl"/>
-                <constraint firstItem="zKf-ZI-4L4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="28" id="OZb-tz-dpE"/>
-                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="ZCM-q0-xr1"/>
+                <constraint firstAttribute="bottom" secondItem="zKf-ZI-4L4" secondAttribute="bottom" constant="13" id="NHh-cf-ckd"/>
+                <constraint firstItem="Tol-6L-Amr" firstAttribute="leading" secondItem="QPn-ok-Vxm" secondAttribute="trailing" constant="8" id="Ocu-d3-bcV"/>
+                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="ZCM-q0-xr1"/>
+                <constraint firstAttribute="trailing" secondItem="l4t-EI-ihD" secondAttribute="trailing" constant="8" id="cCX-eE-Mmz"/>
+                <constraint firstItem="iT3-1A-Wkq" firstAttribute="top" secondItem="VmE-Nw-lfi" secondAttribute="bottom" constant="8" id="d4U-rW-Yqv"/>
+                <constraint firstAttribute="trailing" secondItem="iT3-1A-Wkq" secondAttribute="trailing" id="eM3-LC-gw7"/>
+                <constraint firstItem="VmE-Nw-lfi" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="iFZ-ol-YhZ"/>
+                <constraint firstAttribute="centerY" secondItem="l4t-EI-ihD" secondAttribute="top" constant="-4" id="qVY-D9-xK1"/>
+                <constraint firstAttribute="centerY" secondItem="GgY-iA-GiG" secondAttribute="bottom" constant="4" id="rzP-kx-fRW"/>
+                <constraint firstItem="VmE-Nw-lfi" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="wV8-nd-S9O"/>
             </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>
     </objects>
     <resources>
-        <image name="compassButtonBackground.png" width="32" height="32"/>
-        <image name="compassDirectionN.png" width="24" height="24"/>
-        <image name="freeMapMode.png" width="24" height="24"/>
-        <image name="mapModeButtonBackground.png" width="32" height="32"/>
-        <image name="optionsMenuButton.png" width="24" height="24"/>
+        <image name="HUD_button_bg.png" width="40" height="40"/>
+        <image name="HUD_compass.png" width="6" height="18"/>
+        <image name="HUD_compass_bg.png" width="30" height="30"/>
+        <image name="HUD_left_menu_narrowbutton.png" width="15" height="25"/>
+        <image name="HUD_left_narrowbutton_bg.png" width="15" height="40"/>
+        <image name="HUD_more_halfbutton.png" width="13" height="25"/>
+        <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
+        <image name="HUD_zoom_in_button.png" width="25" height="25"/>
+        <image name="HUD_zoom_out_button.png" width="25" height="25"/>
+        <image name="driveMode.png" width="25" height="25"/>
+        <image name="freeMapMode.png" width="25" height="25"/>
     </resources>
 </document>

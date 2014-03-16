@@ -80,34 +80,6 @@
 		BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBB9AA2618D4BF690034AEAF /* GeneratedResources in Resources */ = {isa = PBXBuildFile; fileRef = BBB9AA2518D4BF690034AEAF /* GeneratedResources */; };
 		BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */; };
-		BBBDAD7818BBFC0F00E4A359 /* compassDirectionN.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */; };
-		BBBDAD7918BBFC0F00E4A359 /* compassDirectionN@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */; };
-		BBBDAD7A18BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6718BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png */; };
-		BBBDAD7B18BBFC0F00E4A359 /* compassDirectionN~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6818BBFC0F00E4A359 /* compassDirectionN~ipad.png */; };
-		BBBDAD7C18BBFC0F00E4A359 /* followMapMode.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6A18BBFC0F00E4A359 /* followMapMode.png */; };
-		BBBDAD7D18BBFC0F00E4A359 /* followMapMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6B18BBFC0F00E4A359 /* followMapMode@2x.png */; };
-		BBBDAD7E18BBFC0F00E4A359 /* followMapMode@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6C18BBFC0F00E4A359 /* followMapMode@2x~ipad.png */; };
-		BBBDAD7F18BBFC0F00E4A359 /* followMapMode~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6D18BBFC0F00E4A359 /* followMapMode~ipad.png */; };
-		BBBDAD8018BBFC0F00E4A359 /* freeMapMode.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD6F18BBFC0F00E4A359 /* freeMapMode.png */; };
-		BBBDAD8118BBFC0F00E4A359 /* freeMapMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7018BBFC0F00E4A359 /* freeMapMode@2x.png */; };
-		BBBDAD8218BBFC0F00E4A359 /* freeMapMode@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7118BBFC0F00E4A359 /* freeMapMode@2x~ipad.png */; };
-		BBBDAD8318BBFC0F00E4A359 /* freeMapMode~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7218BBFC0F00E4A359 /* freeMapMode~ipad.png */; };
-		BBBDAD8418BBFC0F00E4A359 /* positionTrackMapMode.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7418BBFC0F00E4A359 /* positionTrackMapMode.png */; };
-		BBBDAD8518BBFC0F00E4A359 /* positionTrackMapMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7518BBFC0F00E4A359 /* positionTrackMapMode@2x.png */; };
-		BBBDAD8618BBFC0F00E4A359 /* positionTrackMapMode@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7618BBFC0F00E4A359 /* positionTrackMapMode@2x~ipad.png */; };
-		BBBDAD8718BBFC0F00E4A359 /* positionTrackMapMode~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD7718BBFC0F00E4A359 /* positionTrackMapMode~ipad.png */; };
-		BBBDAD8D18BC008D00E4A359 /* mapModeButtonBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD8918BC008D00E4A359 /* mapModeButtonBackground.png */; };
-		BBBDAD8E18BC008D00E4A359 /* mapModeButtonBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD8A18BC008D00E4A359 /* mapModeButtonBackground@2x.png */; };
-		BBBDAD8F18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD8B18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png */; };
-		BBBDAD9018BC008D00E4A359 /* mapModeButtonBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD8C18BC008D00E4A359 /* mapModeButtonBackground~ipad.png */; };
-		BBBDAD9618BC05EA00E4A359 /* optionsMenuButton.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9218BC05EA00E4A359 /* optionsMenuButton.png */; };
-		BBBDAD9718BC05EA00E4A359 /* optionsMenuButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9318BC05EA00E4A359 /* optionsMenuButton@2x.png */; };
-		BBBDAD9818BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9418BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png */; };
-		BBBDAD9918BC05EA00E4A359 /* optionsMenuButton~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9518BC05EA00E4A359 /* optionsMenuButton~ipad.png */; };
-		BBBDAD9F18BC08C100E4A359 /* compassButtonBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9B18BC08C100E4A359 /* compassButtonBackground.png */; };
-		BBBDADA018BC08C100E4A359 /* compassButtonBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9C18BC08C100E4A359 /* compassButtonBackground@2x.png */; };
-		BBBDADA118BC08C100E4A359 /* compassButtonBackground@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9D18BC08C100E4A359 /* compassButtonBackground@2x~ipad.png */; };
-		BBBDADA218BC08C100E4A359 /* compassButtonBackground~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD9E18BC08C100E4A359 /* compassButtonBackground~ipad.png */; };
 		BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
 		BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
@@ -215,34 +187,6 @@
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBB9AA2518D4BF690034AEAF /* GeneratedResources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GeneratedResources; sourceTree = "<group>"; };
 		BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MapModeHUD~ipad.xib"; path = "Resources/MapModeHUD~ipad.xib"; sourceTree = "<group>"; };
-		BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compassDirectionN.png; sourceTree = "<group>"; };
-		BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN@2x.png"; sourceTree = "<group>"; };
-		BBBDAD6718BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD6818BBFC0F00E4A359 /* compassDirectionN~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassDirectionN~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD6A18BBFC0F00E4A359 /* followMapMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = followMapMode.png; sourceTree = "<group>"; };
-		BBBDAD6B18BBFC0F00E4A359 /* followMapMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "followMapMode@2x.png"; sourceTree = "<group>"; };
-		BBBDAD6C18BBFC0F00E4A359 /* followMapMode@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "followMapMode@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD6D18BBFC0F00E4A359 /* followMapMode~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "followMapMode~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD6F18BBFC0F00E4A359 /* freeMapMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = freeMapMode.png; sourceTree = "<group>"; };
-		BBBDAD7018BBFC0F00E4A359 /* freeMapMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "freeMapMode@2x.png"; sourceTree = "<group>"; };
-		BBBDAD7118BBFC0F00E4A359 /* freeMapMode@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "freeMapMode@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD7218BBFC0F00E4A359 /* freeMapMode~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "freeMapMode~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD7418BBFC0F00E4A359 /* positionTrackMapMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = positionTrackMapMode.png; sourceTree = "<group>"; };
-		BBBDAD7518BBFC0F00E4A359 /* positionTrackMapMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "positionTrackMapMode@2x.png"; sourceTree = "<group>"; };
-		BBBDAD7618BBFC0F00E4A359 /* positionTrackMapMode@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "positionTrackMapMode@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD7718BBFC0F00E4A359 /* positionTrackMapMode~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "positionTrackMapMode~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD8918BC008D00E4A359 /* mapModeButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mapModeButtonBackground.png; sourceTree = "<group>"; };
-		BBBDAD8A18BC008D00E4A359 /* mapModeButtonBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mapModeButtonBackground@2x.png"; sourceTree = "<group>"; };
-		BBBDAD8B18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mapModeButtonBackground@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD8C18BC008D00E4A359 /* mapModeButtonBackground~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mapModeButtonBackground~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD9218BC05EA00E4A359 /* optionsMenuButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = optionsMenuButton.png; sourceTree = "<group>"; };
-		BBBDAD9318BC05EA00E4A359 /* optionsMenuButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "optionsMenuButton@2x.png"; sourceTree = "<group>"; };
-		BBBDAD9418BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "optionsMenuButton@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD9518BC05EA00E4A359 /* optionsMenuButton~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "optionsMenuButton~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD9B18BC08C100E4A359 /* compassButtonBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = compassButtonBackground.png; sourceTree = "<group>"; };
-		BBBDAD9C18BC08C100E4A359 /* compassButtonBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassButtonBackground@2x.png"; sourceTree = "<group>"; };
-		BBBDAD9D18BC08C100E4A359 /* compassButtonBackground@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassButtonBackground@2x~ipad.png"; sourceTree = "<group>"; };
-		BBBDAD9E18BC08C100E4A359 /* compassButtonBackground~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "compassButtonBackground~ipad.png"; sourceTree = "<group>"; };
 		BBBDADA418BC95EF00E4A359 /* OAObserverProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAObserverProtocol.h; path = Common/OAObserverProtocol.h; sourceTree = "<group>"; };
 		BBBDADA518BC961200E4A359 /* OAObservableProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAObservableProtocol.h; path = Common/OAObservableProtocol.h; sourceTree = "<group>"; };
 		BBBDADA618BC963800E4A359 /* OAAutoObserverProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAutoObserverProxy.h; path = Common/OAAutoObserverProxy.h; sourceTree = "<group>"; };
@@ -472,104 +416,6 @@
 			name = LaunchImages;
 			sourceTree = "<group>";
 		};
-		BBBDAD3B18BBE6AD00E4A359 /* Icons */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD9A18BC08C100E4A359 /* compassButtonBackground */,
-				BBBDAD9118BC05EA00E4A359 /* optionsMenuButton */,
-				BBBDAD8818BC008D00E4A359 /* mapModeButtonBackground */,
-				BBBDAD6418BBFC0F00E4A359 /* compassDirectionN */,
-				BBBDAD6918BBFC0F00E4A359 /* followMapMode */,
-				BBBDAD6E18BBFC0F00E4A359 /* freeMapMode */,
-				BBBDAD7318BBFC0F00E4A359 /* positionTrackMapMode */,
-			);
-			name = Icons;
-			sourceTree = "<group>";
-		};
-		BBBDAD6418BBFC0F00E4A359 /* compassDirectionN */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD6518BBFC0F00E4A359 /* compassDirectionN.png */,
-				BBBDAD6618BBFC0F00E4A359 /* compassDirectionN@2x.png */,
-				BBBDAD6718BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png */,
-				BBBDAD6818BBFC0F00E4A359 /* compassDirectionN~ipad.png */,
-			);
-			name = compassDirectionN;
-			path = Resources/Icons/compassDirectionN;
-			sourceTree = "<group>";
-		};
-		BBBDAD6918BBFC0F00E4A359 /* followMapMode */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD6A18BBFC0F00E4A359 /* followMapMode.png */,
-				BBBDAD6B18BBFC0F00E4A359 /* followMapMode@2x.png */,
-				BBBDAD6C18BBFC0F00E4A359 /* followMapMode@2x~ipad.png */,
-				BBBDAD6D18BBFC0F00E4A359 /* followMapMode~ipad.png */,
-			);
-			name = followMapMode;
-			path = Resources/Icons/followMapMode;
-			sourceTree = "<group>";
-		};
-		BBBDAD6E18BBFC0F00E4A359 /* freeMapMode */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD6F18BBFC0F00E4A359 /* freeMapMode.png */,
-				BBBDAD7018BBFC0F00E4A359 /* freeMapMode@2x.png */,
-				BBBDAD7118BBFC0F00E4A359 /* freeMapMode@2x~ipad.png */,
-				BBBDAD7218BBFC0F00E4A359 /* freeMapMode~ipad.png */,
-			);
-			name = freeMapMode;
-			path = Resources/Icons/freeMapMode;
-			sourceTree = "<group>";
-		};
-		BBBDAD7318BBFC0F00E4A359 /* positionTrackMapMode */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD7418BBFC0F00E4A359 /* positionTrackMapMode.png */,
-				BBBDAD7518BBFC0F00E4A359 /* positionTrackMapMode@2x.png */,
-				BBBDAD7618BBFC0F00E4A359 /* positionTrackMapMode@2x~ipad.png */,
-				BBBDAD7718BBFC0F00E4A359 /* positionTrackMapMode~ipad.png */,
-			);
-			name = positionTrackMapMode;
-			path = Resources/Icons/positionTrackMapMode;
-			sourceTree = "<group>";
-		};
-		BBBDAD8818BC008D00E4A359 /* mapModeButtonBackground */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD8918BC008D00E4A359 /* mapModeButtonBackground.png */,
-				BBBDAD8A18BC008D00E4A359 /* mapModeButtonBackground@2x.png */,
-				BBBDAD8B18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png */,
-				BBBDAD8C18BC008D00E4A359 /* mapModeButtonBackground~ipad.png */,
-			);
-			name = mapModeButtonBackground;
-			path = Resources/Icons/mapModeButtonBackground;
-			sourceTree = "<group>";
-		};
-		BBBDAD9118BC05EA00E4A359 /* optionsMenuButton */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD9218BC05EA00E4A359 /* optionsMenuButton.png */,
-				BBBDAD9318BC05EA00E4A359 /* optionsMenuButton@2x.png */,
-				BBBDAD9418BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png */,
-				BBBDAD9518BC05EA00E4A359 /* optionsMenuButton~ipad.png */,
-			);
-			name = optionsMenuButton;
-			path = Resources/Icons/optionsMenuButton;
-			sourceTree = "<group>";
-		};
-		BBBDAD9A18BC08C100E4A359 /* compassButtonBackground */ = {
-			isa = PBXGroup;
-			children = (
-				BBBDAD9B18BC08C100E4A359 /* compassButtonBackground.png */,
-				BBBDAD9C18BC08C100E4A359 /* compassButtonBackground@2x.png */,
-				BBBDAD9D18BC08C100E4A359 /* compassButtonBackground@2x~ipad.png */,
-				BBBDAD9E18BC08C100E4A359 /* compassButtonBackground~ipad.png */,
-			);
-			name = compassButtonBackground;
-			path = Resources/Icons/compassButtonBackground;
-			sourceTree = "<group>";
-		};
 		BBBDADA318BC958A00E4A359 /* Common */ = {
 			isa = PBXGroup;
 			children = (
@@ -611,7 +457,6 @@
 		BBE57D4F17C2208600C349CC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BBBDAD3B18BBE6AD00E4A359 /* Icons */,
 				BBBE40B21854DDA800F1C144 /* Embedded */,
 				BBA858FE17C2230200AADCC7 /* LaunchImages */,
 				BBA858FD17C222FC00AADCC7 /* AppIcons */,
@@ -681,55 +526,27 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBBDAD8418BBFC0F00E4A359 /* positionTrackMapMode.png in Resources */,
 				BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */,
 				BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */,
 				BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */,
-				BBBDAD9018BC008D00E4A359 /* mapModeButtonBackground~ipad.png in Resources */,
 				BBA8591217C24E9B00AADCC7 /* Default.png in Resources */,
 				BB10503318D058D0005322D8 /* ShippedResources in Resources */,
-				BBBDAD8518BBFC0F00E4A359 /* positionTrackMapMode@2x.png in Resources */,
 				BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */,
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
-				BBBDAD7B18BBFC0F00E4A359 /* compassDirectionN~ipad.png in Resources */,
-				BBBDAD7E18BBFC0F00E4A359 /* followMapMode@2x~ipad.png in Resources */,
-				BBBDADA018BC08C100E4A359 /* compassButtonBackground@2x.png in Resources */,
 				BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */,
-				BBBDAD9818BC05EA00E4A359 /* optionsMenuButton@2x~ipad.png in Resources */,
-				BBBDAD8F18BC008D00E4A359 /* mapModeButtonBackground@2x~ipad.png in Resources */,
-				BBBDAD8E18BC008D00E4A359 /* mapModeButtonBackground@2x.png in Resources */,
-				BBBDAD8318BBFC0F00E4A359 /* freeMapMode~ipad.png in Resources */,
 				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
 				BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */,
-				BBBDAD7C18BBFC0F00E4A359 /* followMapMode.png in Resources */,
-				BBBDAD8018BBFC0F00E4A359 /* freeMapMode.png in Resources */,
-				BBBDAD8118BBFC0F00E4A359 /* freeMapMode@2x.png in Resources */,
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
-				BBBDAD7D18BBFC0F00E4A359 /* followMapMode@2x.png in Resources */,
 				BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */,
 				BB476B7018D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib in Resources */,
-				BBBDAD7A18BBFC0F00E4A359 /* compassDirectionN@2x~ipad.png in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
-				BBBDADA218BC08C100E4A359 /* compassButtonBackground~ipad.png in Resources */,
 				BBB9AA2618D4BF690034AEAF /* GeneratedResources in Resources */,
-				BBBDAD7818BBFC0F00E4A359 /* compassDirectionN.png in Resources */,
-				BBBDAD9F18BC08C100E4A359 /* compassButtonBackground.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
-				BBBDAD8218BBFC0F00E4A359 /* freeMapMode@2x~ipad.png in Resources */,
-				BBBDAD9618BC05EA00E4A359 /* optionsMenuButton.png in Resources */,
 				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
-				BBBDAD8718BBFC0F00E4A359 /* positionTrackMapMode~ipad.png in Resources */,
-				BBBDAD9718BC05EA00E4A359 /* optionsMenuButton@2x.png in Resources */,
-				BBBDAD8618BBFC0F00E4A359 /* positionTrackMapMode@2x~ipad.png in Resources */,
-				BBBDAD8D18BC008D00E4A359 /* mapModeButtonBackground.png in Resources */,
-				BBBDAD7F18BBFC0F00E4A359 /* followMapMode~ipad.png in Resources */,
-				BBBDAD7918BBFC0F00E4A359 /* compassDirectionN@2x.png in Resources */,
 				BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */,
 				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
 				BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */,
-				BBBDAD9918BC05EA00E4A359 /* optionsMenuButton~ipad.png in Resources */,
 				BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */,
-				BBBDADA118BC08C100E4A359 /* compassButtonBackground@2x~ipad.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -19,7 +19,7 @@ echo "Using $RSVG_CONVERT..."
 export RSVG_CONVERT
 
 # Remove previous
-rm -rf "$SRCLOC/Resources.svg"
+rm -rf "$SRCLOC/GeneratedResources"
 
 # Rasterize resources
 export _SRCLOC

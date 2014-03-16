@@ -29,7 +29,7 @@
                         <constraint firstAttribute="width" constant="40" id="B37-BR-aoc"/>
                         <constraint firstAttribute="height" constant="40" id="Ijp-tM-cgm"/>
                     </constraints>
-                    <state key="normal" image="HUD_left_menu_narrowbutton.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="HUD_left_menu_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
@@ -150,7 +150,7 @@
         <image name="HUD_button_bg.png" width="40" height="40"/>
         <image name="HUD_compass.png" width="6" height="18"/>
         <image name="HUD_compass_bg.png" width="30" height="30"/>
-        <image name="HUD_left_menu_narrowbutton.png" width="15" height="25"/>
+        <image name="HUD_left_menu_button.png" width="25" height="25"/>
         <image name="HUD_more_halfbutton.png" width="13" height="25"/>
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>

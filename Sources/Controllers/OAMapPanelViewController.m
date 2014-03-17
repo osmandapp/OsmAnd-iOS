@@ -8,7 +8,7 @@
 
 #import "OAMapPanelViewController.h"
 
-#import "OAMapHudViewController.h"
+#import "OAMapModeHudViewController.h"
 
 @interface OAMapPanelViewController ()
 
@@ -52,7 +52,7 @@
                                views:@{@"view":_rendererViewController.view}]];
     
     // Instantiate map HUD
-    UIViewController* mapHudVC = [[OAMapHudViewController alloc] initWithNibName:@"MapHUD" bundle:nil];
+    UIViewController* mapHudVC = [[OAMapModeHudViewController alloc] initWithNibName:@"MapModeHUD" bundle:nil];
     [self addChildViewController:mapHudVC];
     [mapHudVC.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:mapHudVC.view];

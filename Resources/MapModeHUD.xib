@@ -6,7 +6,7 @@
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapHudViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
             <connections>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="lws-kx-F17"/>
                 <outlet property="compassButton" destination="duk-mu-8Hu" id="BG2-87-dwJ"/>
@@ -24,7 +24,7 @@
                     <rect key="frame" x="8" y="21" width="304" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="search"/>
+                    <textInputTraits key="textInputTraits" returnKeyType="search"/>
                 </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iT3-1A-Wkq" userLabel="actionsMenuButton">
                     <rect key="frame" x="305" y="59" width="15" height="40"/>

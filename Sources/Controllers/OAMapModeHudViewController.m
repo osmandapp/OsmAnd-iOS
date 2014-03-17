@@ -6,18 +6,18 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAMapHudViewController.h"
+#import "OAMapModeHudViewController.h"
 #import "UIViewController+JASidePanel.h"
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapRendererViewController.h"
 
-@interface OAMapHudViewController ()
+@interface OAMapModeHudViewController ()
 
 @end
 
-@implementation OAMapHudViewController
+@implementation OAMapModeHudViewController
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _mapModeObserver;

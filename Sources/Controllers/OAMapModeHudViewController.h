@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapHudViewController : UIViewController
+@interface OAMapModeHudViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;

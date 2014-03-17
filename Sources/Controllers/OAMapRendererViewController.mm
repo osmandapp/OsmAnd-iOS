@@ -597,6 +597,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onMapModeChanged
 {
+    if(![self isViewLoaded])
+        return;
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
     switch (_app.mapMode)
     {
         case OAMapModeFree:
@@ -606,7 +610,20 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         case OAMapModePositionTrack:
             if(_app.locationServices.lastKnownLocation != nil)
             {
-                //TODO: fly-animate view to last known location
+                // Fly to that position without changing anything but target
+                [mapView cancelAnimation];
+                
+                CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+                OsmAnd::PointI newTarget31(
+                    OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                    OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+                OsmAnd::PointI64 targetDelta = OsmAnd::PointI64(newTarget31) - OsmAnd::PointI64(mapView.target31);
+                [mapView parabolicAnimateTargetBy64:targetDelta
+                                             during:1.0f
+                                       targetTiming:OAMapAnimationTimingFunctionEaseInOutQuadratic
+                                         zoomTiming:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+                
+                [mapView resumeAnimation];
             }
             break;
             
@@ -614,6 +631,16 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
             {
                 //TODO: fly-animate view to last known location + change blablabla
+                /*[mapView cancelAnimation];
+                
+                CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+                OsmAnd::PointI newTarget31(
+                    OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                    OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+                OsmAnd::PointI64 targetDelta = OsmAnd::PointI64(newTarget31) - OsmAnd::PointI64(mapView.target31);
+                [mapView animateTargetBy64:targetDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+                
+                [mapView resumeAnimation];*/
             }
             break;
     }
@@ -625,7 +652,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         return;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    //TODO: obtain fresh location&heading
+    // Obtain fresh location and heading
+    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+    
     //TODO: update marker position
     
     // If map mode is position-track or follow, move to that position
@@ -633,17 +663,19 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     {
         [mapView cancelAnimation];
         
-        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         OsmAnd::PointI newTarget31(
             OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
             OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
         OsmAnd::PointI64 targetDelta = OsmAnd::PointI64(newTarget31) - OsmAnd::PointI64(mapView.target31);
-        [mapView animateTargetBy64:targetDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+        [mapView parabolicAnimateTargetBy64:targetDelta
+                                     during:1.0f
+                               targetTiming:OAMapAnimationTimingFunctionEaseInOutQuadratic
+                                 zoomTiming:OAMapAnimationTimingFunctionEaseInOutQuadratic];
         
         // Update azimuth
-        if(_app.mapMode == OAMapModeFollow && !isnan(_app.locationServices.lastKnownHeading))
+        if(_app.mapMode == OAMapModeFollow && !isnan(newHeading))
         {
-            CGFloat azimuthDelta = _app.locationServices.lastKnownHeading - mapView.azimuth;
+            CGFloat azimuthDelta = newHeading - mapView.azimuth;
             
             [mapView animateAzimuthBy:azimuthDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
         }

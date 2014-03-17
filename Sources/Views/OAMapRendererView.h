@@ -20,7 +20,7 @@
 #import "OAObservable.h"
 
 #define _DECLARE_ENTRY(name)                                                                                                \
-    OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
+OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
 typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 {
     _DECLARE_ENTRY(RasterLayers_Providers),
@@ -41,12 +41,12 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 #undef _DECLARE_ENTRY
 
 #define _DECLARE_ENTRY(name)                                                                                                \
-    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
+OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
 #define _DECLARE_TIMING_FUNCTION(name)                                                                                      \
-    _DECLARE_ENTRY(EaseIn##name),                                                                                           \
-    _DECLARE_ENTRY(EaseOut##name),                                                                                          \
-    _DECLARE_ENTRY(EaseInOut##name),                                                                                        \
-    _DECLARE_ENTRY(EaseOutIn##name)
+_DECLARE_ENTRY(EaseIn##name),                                                                                           \
+_DECLARE_ENTRY(EaseOut##name),                                                                                          \
+_DECLARE_ENTRY(EaseInOut##name),                                                                                        \
+_DECLARE_ENTRY(EaseOutIn##name)
 typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 {
     _DECLARE_ENTRY(Invalid),
@@ -114,7 +114,30 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 - (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
 - (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
 - (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
+- (void)parabolicAnimateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
+- (void)parabolicAnimateTargetBy:(OsmAnd::PointI)deltaValue
+                          during:(CGFloat)duration
+                    targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
+                      zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction;
+- (void)parabolicAnimateTargetBy64:(OsmAnd::PointI64)deltaValue
+                            during:(CGFloat)duration
+                      targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
+                        zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction;
 - (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
 - (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
+- (void)animateMoveBy:(OsmAnd::PointI)deltaValue
+               during:(CGFloat)duration
+       zeroizeAzimuth:(BOOL)zeroizeAzimuth
+invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
+               timing:(OAMapAnimationTimingFunction)function;
+- (void)animateMoveBy64:(OsmAnd::PointI64)deltaValue
+                 during:(CGFloat)duration
+         zeroizeAzimuth:(BOOL)zeroizeAzimuth
+invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
+                 timing:(OAMapAnimationTimingFunction)function;
+- (void)animateMoveWith:(OsmAnd::PointD)velocity
+        andDeceleration:(OsmAnd::PointD)deceleration
+         zeroizeAzimuth:(BOOL)zeroizeAzimuth
+invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle;
 
 @end

@@ -8,7 +8,14 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
             <connections>
+                <outlet property="actionsMenuButton" destination="eDo-iY-wKm" id="8qk-98-E1H"/>
+                <outlet property="debugButton" destination="GYM-Vp-fod" id="oVQ-su-Htp"/>
+                <outlet property="driveModeButton" destination="Fb1-sd-BAZ" id="WJH-KP-reU"/>
+                <outlet property="optionsMenuButton" destination="jLp-qw-2pN" id="IQE-Bc-5XZ"/>
+                <outlet property="searchQueryTextview" destination="RN3-8J-1UX" id="nVv-Vp-kfZ"/>
                 <outlet property="view" destination="1" id="h9T-rl-WfS"/>
+                <outlet property="zoomInButton" destination="sEk-aI-0VV" id="Pg9-gN-uXJ"/>
+                <outlet property="zoomOutButton" destination="Wxb-EL-Pln" id="BS4-Ei-5fT"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

@@ -15,6 +15,18 @@
 
 @interface OAMapModeHudViewController ()
 
+@property (weak, nonatomic) IBOutlet UIView *compassBox;
+@property (weak, nonatomic) IBOutlet UIButton *compassButton;
+@property (weak, nonatomic) IBOutlet UIImageView *compassImage;
+@property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
+@property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
+@property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
+@property (weak, nonatomic) IBOutlet UIButton *driveModeButton;
+@property (weak, nonatomic) IBOutlet UIButton *debugButton;
+@property (weak, nonatomic) IBOutlet UITextField *searchQueryTextview;
+@property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
+@property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
+
 @end
 
 @implementation OAMapModeHudViewController

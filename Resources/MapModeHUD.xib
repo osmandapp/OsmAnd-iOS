@@ -8,11 +8,18 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
             <connections>
+                <outlet property="actionsMenuButton" destination="iT3-1A-Wkq" id="rDs-SG-UrC"/>
                 <outlet property="compassBox" destination="zKf-ZI-4L4" id="lws-kx-F17"/>
                 <outlet property="compassButton" destination="duk-mu-8Hu" id="BG2-87-dwJ"/>
                 <outlet property="compassImage" destination="qfF-4i-ios" id="Emu-SW-uo0"/>
+                <outlet property="debugButton" destination="zUK-AA-Umg" id="W0Q-by-MH6"/>
+                <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="7aa-Nk-5ej"/>
+                <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
+                <outlet property="searchQueryTextview" destination="VmE-Nw-lfi" id="ngK-u5-H9f"/>
                 <outlet property="view" destination="1" id="3"/>
+                <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
+                <outlet property="zoomOutButton" destination="l4t-EI-ihD" id="3j2-Rn-C1L"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

@@ -68,6 +68,8 @@
 		BB451DD318D70B5B005FBE09 /* HUD_zoom_out_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAF18D70B5B005FBE09 /* HUD_zoom_out_button@2x.png */; };
 		BB451DD418D70B5B005FBE09 /* positionTrackMapMode.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DB018D70B5B005FBE09 /* positionTrackMapMode.png */; };
 		BB451DD518D70B5B005FBE09 /* positionTrackMapMode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DB118D70B5B005FBE09 /* positionTrackMapMode@2x.png */; };
+		BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD618D71121005FBE09 /* HUD_debug_button.png */; };
+		BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -186,6 +188,8 @@
 		BB451DAF18D70B5B005FBE09 /* HUD_zoom_out_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_zoom_out_button@2x.png"; sourceTree = "<group>"; };
 		BB451DB018D70B5B005FBE09 /* positionTrackMapMode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = positionTrackMapMode.png; sourceTree = "<group>"; };
 		BB451DB118D70B5B005FBE09 /* positionTrackMapMode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "positionTrackMapMode@2x.png"; sourceTree = "<group>"; };
+		BB451DD618D71121005FBE09 /* HUD_debug_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_button.png; sourceTree = "<group>"; };
+		BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_button@2x.png"; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -448,6 +452,8 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				BB451DD618D71121005FBE09 /* HUD_debug_button.png */,
+				BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */,
 				BB451D8E18D70B5B005FBE09 /* driveMode.png */,
 				BB451D8F18D70B5B005FBE09 /* driveMode@2x.png */,
 				BB451D9018D70B5B005FBE09 /* followMapMode.png */,
@@ -667,6 +673,7 @@
 				BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */,
 				BB451DC418D70B5B005FBE09 /* HUD_menu_halfbutton.png in Resources */,
 				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
+				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
 				BB451DB618D70B5B005FBE09 /* freeMapMode.png in Resources */,
 				BB451DB718D70B5B005FBE09 /* freeMapMode@2x.png in Resources */,
 				BB451DCF18D70B5B005FBE09 /* HUD_search_icon@2x.png in Resources */,
@@ -695,6 +702,7 @@
 				BB451DD118D70B5B005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
 				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
 				BB451DB818D70B5B005FBE09 /* HUD_button_bg.png in Resources */,
+				BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				BB451DC018D70B5B005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
 				BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */,
 				BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */,

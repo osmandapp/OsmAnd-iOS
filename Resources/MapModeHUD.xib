@@ -135,10 +135,22 @@
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                 </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUK-AA-Umg" userLabel="debugButton">
+                    <rect key="frame" x="8" y="264" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="1QA-pp-s0L"/>
+                        <constraint firstAttribute="width" constant="40" id="si9-Ab-N3G"/>
+                    </constraints>
+                    <state key="normal" image="HUD_debug_button.png" backgroundImage="HUD_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstItem="4" firstAttribute="top" secondItem="VmE-Nw-lfi" secondAttribute="bottom" constant="8" id="4d8-RZ-4i2"/>
                 <constraint firstAttribute="bottom" secondItem="QPn-ok-Vxm" secondAttribute="bottom" constant="8" id="6AR-jH-Xsi"/>
+                <constraint firstItem="zUK-AA-Umg" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="7GN-gJ-dLn"/>
                 <constraint firstItem="zKf-ZI-4L4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="13" id="7q5-Kj-4id"/>
                 <constraint firstAttribute="trailing" secondItem="VmE-Nw-lfi" secondAttribute="trailing" constant="8" id="Aif-9k-rFW"/>
                 <constraint firstAttribute="trailing" secondItem="GgY-iA-GiG" secondAttribute="trailing" constant="8" id="Hoh-Mb-b9j"/>
@@ -151,6 +163,7 @@
                 <constraint firstItem="iT3-1A-Wkq" firstAttribute="top" secondItem="VmE-Nw-lfi" secondAttribute="bottom" constant="8" id="d4U-rW-Yqv"/>
                 <constraint firstAttribute="trailing" secondItem="iT3-1A-Wkq" secondAttribute="trailing" id="eM3-LC-gw7"/>
                 <constraint firstItem="VmE-Nw-lfi" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="iFZ-ol-YhZ"/>
+                <constraint firstAttribute="centerY" secondItem="zUK-AA-Umg" secondAttribute="centerY" id="k6M-io-JfZ"/>
                 <constraint firstAttribute="centerY" secondItem="l4t-EI-ihD" secondAttribute="top" constant="-4" id="qVY-D9-xK1"/>
                 <constraint firstAttribute="centerY" secondItem="GgY-iA-GiG" secondAttribute="bottom" constant="4" id="rzP-kx-fRW"/>
                 <constraint firstItem="VmE-Nw-lfi" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="wV8-nd-S9O"/>
@@ -163,6 +176,7 @@
         <image name="HUD_button_bg.png" width="40" height="40"/>
         <image name="HUD_compass.png" width="6" height="18"/>
         <image name="HUD_compass_bg.png" width="30" height="30"/>
+        <image name="HUD_debug_button.png" width="25" height="25"/>
         <image name="HUD_left_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_menu_narrowbutton.png" width="9" height="25"/>
         <image name="HUD_more_halfbutton.png" width="13" height="25"/>

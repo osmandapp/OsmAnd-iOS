@@ -100,6 +100,9 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 @property(nonatomic, readonly) CGFloat scaledTileSizeOnScreen;
 @property(readonly) OAObservable* stateObservable;
 
+@property(nonatomic, readonly) CGFloat minZoom;
+@property(nonatomic, readonly) CGFloat maxZoom;
+
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 

@@ -16,7 +16,7 @@
                 <outlet property="driveModeButton" destination="Fb1-sd-BAZ" id="WJH-KP-reU"/>
                 <outlet property="mapModeButton" destination="OAx-cr-GZm" id="D6t-2c-aKX"/>
                 <outlet property="optionsMenuButton" destination="jLp-qw-2pN" id="IQE-Bc-5XZ"/>
-                <outlet property="searchQueryTextview" destination="RN3-8J-1UX" id="nVv-Vp-kfZ"/>
+                <outlet property="searchQueryTextfield" destination="RN3-8J-1UX" id="B37-Oy-6mJ"/>
                 <outlet property="view" destination="1" id="h9T-rl-WfS"/>
                 <outlet property="zoomInButton" destination="sEk-aI-0VV" id="Pg9-gN-uXJ"/>
                 <outlet property="zoomOutButton" destination="Wxb-EL-Pln" id="BS4-Ei-5fT"/>
@@ -27,7 +27,7 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RN3-8J-1UX" userLabel="searchQueryTextview">
+                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RN3-8J-1UX" userLabel="searchQueryTextfield">
                     <rect key="frame" x="72" y="26" width="288" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

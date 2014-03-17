@@ -15,8 +15,13 @@
 + (OAMapRendererViewController*)instance;
 
 @property(readonly) OAObservable* azimuthObservable;
-
 - (void)animatedAlignAzimuthToNorth;
+
+@property(readonly) OAObservable* zoomObservable;
+- (BOOL)canZoomIn;
+- (void)animatedZoomIn;
+- (BOOL)canZoomOut;
+- (void)animatedZoomOut;
 
 - (void)activateMapnik;
 - (void)activateCyclemap;

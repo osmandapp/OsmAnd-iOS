@@ -91,6 +91,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [_locationServicesUpdateObserver observe:_app.locationServices.updateObserver];
     
     _azimuthObservable = [[OAObservable alloc] init];
+    _zoomObservable = [[OAObservable alloc] init];
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapRendererStateChanged:withKey:)];
     
     // Create gesture recognizers:
@@ -529,6 +530,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         case OAMapRendererViewStateEntryAzimuth:
             [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
             return;
+        case OAMapRendererViewStateEntryZoom:
+            [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.zoom]];
+            return;
     }
 }
 
@@ -544,6 +548,50 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
     [mapView animateAzimuthBy:-mapView.azimuth during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+    [mapView resumeAnimation];
+}
+
+@synthesize zoomObservable = _zoomObservable;
+
+- (BOOL)canZoomIn
+{
+    if(![self isViewLoaded])
+        return NO;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    return (mapView.zoom < mapView.maxZoom);
+}
+
+- (void)animatedZoomIn
+{
+    if(![self isViewLoaded])
+        return;
+    
+    // Animate zoom-in by +1
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView cancelAnimation];
+    [mapView animateZoomBy:+1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+    [mapView resumeAnimation];
+}
+
+- (BOOL)canZoomOut
+{
+    if(![self isViewLoaded])
+        return NO;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    return (mapView.zoom > mapView.minZoom);
+}
+
+- (void)animatedZoomOut
+{
+    if(![self isViewLoaded])
+        return;
+    
+    // Animate zoom-in by -1
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView cancelAnimation];
+    [mapView animateZoomBy:-1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
 }
 

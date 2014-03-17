@@ -24,7 +24,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
 @property (weak, nonatomic) IBOutlet UIButton *driveModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *debugButton;
-@property (weak, nonatomic) IBOutlet UITextField *searchQueryTextview;
+@property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 
@@ -35,6 +35,7 @@
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
+    OAAutoObserverProxy* _mapZoomObserver;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -54,15 +55,18 @@
 - (void)ctor
 {
     _app = [OsmAndApp instance];
-    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
+    
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
-    _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)];
+    
+    _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                    withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)];
     [_mapAzimuthObserver observe:[OAMapRendererViewController instance].azimuthObservable];
     
-    if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-        [_driveModeButton showAndEnableInput];
-    else
-        [_driveModeButton hideAndDisableInput];
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                    withHandler:@selector(onMapZoomChanged:withKey:andValue:)];
+    [_mapZoomObserver observe:[OAMapRendererViewController instance].zoomObservable];
 }
 
 - (void)dtor
@@ -72,7 +76,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+	
+    if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+        [_driveModeButton showAndEnableInput];
+    else
+        [_driveModeButton hideAndDisableInput];
+    
+    _zoomInButton.enabled = [[OAMapRendererViewController instance] canZoomIn];
+    _zoomOutButton.enabled = [[OAMapRendererViewController instance] canZoomOut];
 }
 
 - (void)didReceiveMemoryWarning
@@ -153,7 +164,7 @@
 - (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
+        _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
     });
 }
 
@@ -164,10 +175,20 @@
 
 - (IBAction)onZoomInButtonClicked:(id)sender
 {
+    [[OAMapRendererViewController instance] animatedZoomIn];
 }
 
 - (IBAction)onZoomOutButtonClicked:(id)sender
 {
+    [[OAMapRendererViewController instance] animatedZoomOut];
+}
+
+- (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _zoomInButton.enabled = [[OAMapRendererViewController instance] canZoomIn];
+        _zoomOutButton.enabled = [[OAMapRendererViewController instance] canZoomOut];
+    });
 }
 
 - (IBAction)onDriveModeButtonClicked:(id)sender

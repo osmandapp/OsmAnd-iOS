@@ -225,6 +225,16 @@
     return _renderer->getScaledTileSizeOnScreen();
 }
 
+- (CGFloat)minZoom
+{
+    return _renderer->getMinZoom();
+}
+
+- (CGFloat)maxZoom
+{
+    return _renderer->getMaxZoom();
+}
+
 @synthesize stateObservable = _stateObservable;
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location

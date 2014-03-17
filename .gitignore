@@ -1,12 +1,6 @@
 # Ignore all externals upstream files
 /externals/**/upstream.*
 
-# Ignore all shipped resources (since they are downloadable)
-/ShippedResources
-
-# Ignore all generated resources
-/GeneratedResources
-
 # MacOSX
 .DS_Store
 
@@ -16,4 +10,3 @@ xcuserdata
 
 # AppCode
 /.idea
-

@@ -15,7 +15,7 @@
 #import <Foundation/Foundation.h>
 
 ExternalResourcesProvider::ExternalResourcesProvider(const bool useHD_)
-    : useHD(useHD_)
+: useHD(useHD_)
 {
 }
 
@@ -37,10 +37,9 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     resourceFileName = resourceFileName.replace(QLatin1String("map/map_icons/"), QLatin1String("mm_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
     const auto fileNameParts = resourceFileName.split('.');
-    const auto resourcePath = [[NSBundle mainBundle]
-                               pathForResource:fileNameParts[0].toNSString()
-                               ofType:fileNameParts[1].toNSString()
-                               inDirectory:@"drawable-xhdpi"];
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:fileNameParts[0].toNSString()
+                                                              ofType:fileNameParts[1].toNSString()
+                                                         inDirectory:@"drawable-xhdpi"];
     if(resourcePath == nil)
     {
         if(ok)
@@ -64,7 +63,7 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     
     const auto data = resourceFile.readAll();
     resourceFile.close();
-
+    
     if(ok)
         *ok = true;
     return data;
@@ -80,10 +79,9 @@ bool ExternalResourcesProvider::containsResource(const QString& name) const
     resourceFileName = resourceFileName.replace(QLatin1String("map/map_icons/"), QLatin1String("mm_"));
     resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
     const auto fileNameParts = resourceFileName.split('.');
-    const auto resourcePath = [[NSBundle mainBundle]
-                               pathForResource:fileNameParts[0].toNSString()
-                               ofType:fileNameParts[1].toNSString()
-                               inDirectory:@"drawable-xhdpi"];
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:fileNameParts[0].toNSString()
+                                                              ofType:fileNameParts[1].toNSString()
+                                                         inDirectory:@"drawable-xhdpi"];
     
     return (resourcePath != nil);
 }

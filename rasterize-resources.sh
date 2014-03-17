@@ -19,7 +19,7 @@ echo "Using $RSVG_CONVERT..."
 export RSVG_CONVERT
 
 # Remove previous
-rm -rf "$SRCLOC/GeneratedResources"
+rm -rf "$SRCLOC/Resources/Rasterized"
 
 # Rasterize resources
 export _SRCLOC
@@ -31,8 +31,8 @@ rasterize_resource() {
 	OUTPUT_FILENAME="${FILENAME}.png"
 	SUBPATH="${1%/*}"
 	INPUT="Resources.svg/$SUBPATH/$INPUT_FILENAME"
-	OUTPUT="GeneratedResources/$SUBPATH/$OUTPUT_FILENAME"
-	OUTPUT_PATH="$ORIGIN/GeneratedResources/$SUBPATH"
+	OUTPUT="Resources/Rasterized/$SUBPATH/$OUTPUT_FILENAME"
+	OUTPUT_PATH="$ORIGIN/Resources/Rasterized/$SUBPATH"
 	echo "Rasterizing '$FILENAME' (\"$SUBPATH\")"
 	mkdir -p "$OUTPUT_PATH"
 	

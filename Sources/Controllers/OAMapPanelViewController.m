@@ -40,32 +40,29 @@
     [self addChildViewController:_rendererViewController];
     [_rendererViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:_rendererViewController.view];
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"H:|[view]|"
-                               options:0
-                               metrics:nil
-                               views:@{@"view":_rendererViewController.view}]];
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"V:|[view]|"
-                               options:0
-                               metrics:nil
-                               views:@{@"view":_rendererViewController.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_rendererViewController.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_rendererViewController.view}]];
     
     // Instantiate map HUD
-    UIViewController* mapHudVC = [[OAMapModeHudViewController alloc] initWithNibName:@"MapModeHUD" bundle:nil];
+    UIViewController* mapHudVC = [[OAMapModeHudViewController alloc] initWithNibName:@"MapModeHUD"
+                                                                              bundle:nil];
     [self addChildViewController:mapHudVC];
     [mapHudVC.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:mapHudVC.view];
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"H:|[view]|"
-                               options:0
-                               metrics:nil
-                               views:@{@"view":mapHudVC.view}]];
-    [self.view addConstraints:[NSLayoutConstraint
-                               constraintsWithVisualFormat:@"V:|[view]|"
-                               options:0
-                               metrics:nil
-                               views:@{@"view":mapHudVC.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":mapHudVC.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":mapHudVC.view}]];
 }
 
 @end

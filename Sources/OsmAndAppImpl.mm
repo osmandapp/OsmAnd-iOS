@@ -41,10 +41,10 @@
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                         ofType:@"obf"
-                                                   inDirectory:@"ShippedResources"];
+                                                   inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
                                                                       ofType:@"stamp"
-                                                                 inDirectory:@"ShippedResources"];
+                                                                 inDirectory:@"Shipped"];
     NSError* versionError = nil;
     NSString* worldMiniBasemapStampContents = [NSString stringWithContentsOfFile:worldMiniBasemapStamp
                                                                   encoding:NSASCIIStringEncoding

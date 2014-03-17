@@ -9,12 +9,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
             <connections>
                 <outlet property="actionsMenuButton" destination="iT3-1A-Wkq" id="rDs-SG-UrC"/>
-                <outlet property="compassBox" destination="zKf-ZI-4L4" id="lws-kx-F17"/>
-                <outlet property="compassButton" destination="duk-mu-8Hu" id="BG2-87-dwJ"/>
-                <outlet property="compassImage" destination="qfF-4i-ios" id="Emu-SW-uo0"/>
+                <outlet property="compassBox" destination="zKf-ZI-4L4" id="8yD-MW-KXd"/>
+                <outlet property="compassButton" destination="duk-mu-8Hu" id="vvC-Wd-07Q"/>
+                <outlet property="compassImage" destination="qfF-4i-ios" id="lwK-mx-JcJ"/>
                 <outlet property="debugButton" destination="zUK-AA-Umg" id="W0Q-by-MH6"/>
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
-                <outlet property="mapModeButton" destination="Tol-6L-Amr" id="7aa-Nk-5ej"/>
+                <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
                 <outlet property="searchQueryTextview" destination="VmE-Nw-lfi" id="ngK-u5-H9f"/>
                 <outlet property="view" destination="1" id="3"/>
@@ -112,7 +112,7 @@
                         <constraint firstAttribute="centerX" secondItem="duk-mu-8Hu" secondAttribute="centerX" id="tWH-GU-HR5"/>
                     </constraints>
                 </view>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
                     <rect key="frame" x="224" y="520" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
@@ -154,7 +154,7 @@
                         <action selector="onZoomOutButtonClicked:" destination="-1" eventType="touchUpInside" id="dJ8-gr-dnc"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUK-AA-Umg" userLabel="debugButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUK-AA-Umg" userLabel="debugButton">
                     <rect key="frame" x="8" y="264" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>

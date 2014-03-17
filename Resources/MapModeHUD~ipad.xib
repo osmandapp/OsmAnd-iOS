@@ -9,8 +9,12 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
             <connections>
                 <outlet property="actionsMenuButton" destination="eDo-iY-wKm" id="8qk-98-E1H"/>
+                <outlet property="compassBox" destination="zDY-H9-DjN" id="g2g-jI-ch2"/>
+                <outlet property="compassButton" destination="9Vz-tj-y6t" id="wc9-3z-K6b"/>
+                <outlet property="compassImage" destination="UOO-Qs-Cfs" id="EXY-74-dML"/>
                 <outlet property="debugButton" destination="GYM-Vp-fod" id="oVQ-su-Htp"/>
                 <outlet property="driveModeButton" destination="Fb1-sd-BAZ" id="WJH-KP-reU"/>
+                <outlet property="mapModeButton" destination="OAx-cr-GZm" id="D6t-2c-aKX"/>
                 <outlet property="optionsMenuButton" destination="jLp-qw-2pN" id="IQE-Bc-5XZ"/>
                 <outlet property="searchQueryTextview" destination="RN3-8J-1UX" id="nVv-Vp-kfZ"/>
                 <outlet property="view" destination="1" id="h9T-rl-WfS"/>
@@ -71,7 +75,7 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="r9g-gK-95N"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fb1-sd-BAZ" userLabel="driveModeButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fb1-sd-BAZ" userLabel="driveModeButton">
                     <rect key="frame" x="656" y="968" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
@@ -150,7 +154,7 @@
                         <action selector="onZoomOutButtonClicked:" destination="-1" eventType="touchUpInside" id="mYa-Ez-b1E"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYM-Vp-fod" userLabel="debugButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYM-Vp-fod" userLabel="debugButton">
                     <rect key="frame" x="16" y="492" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>

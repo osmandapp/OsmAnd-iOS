@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapRendererViewController.h"
+#import "UIView+VisibilityAndInput.h"
 
 @interface OAMapModeHudViewController ()
 
@@ -57,6 +58,11 @@
     [_mapModeObserver observe:_app.mapModeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)];
     [_mapAzimuthObserver observe:[OAMapRendererViewController instance].azimuthObservable];
+    
+    if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+        [_driveModeButton showAndEnableInput];
+    else
+        [_driveModeButton hideAndDisableInput];
 }
 
 - (void)dtor
@@ -131,6 +137,10 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
+        if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+            [_driveModeButton showAndEnableInput];
+        else
+            [_driveModeButton hideAndDisableInput];
         [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
     });
 }
@@ -168,7 +178,8 @@
 {
 }
 
-- (IBAction)onDebugButtonClicked:(id)sender {
+- (IBAction)onDebugButtonClicked:(id)sender
+{
 }
 
 @end

@@ -140,4 +140,23 @@
     [[OAMapRendererViewController instance] animatedAlignAzimuthToNorth];
 }
 
+- (IBAction)onZoomInButtonClicked:(id)sender
+{
+}
+
+- (IBAction)onZoomOutButtonClicked:(id)sender
+{
+}
+
+- (IBAction)onDriveModeButtonClicked:(id)sender
+{
+}
+
+- (IBAction)onActionsMenuButtonClicked:(id)sender
+{
+}
+
+- (IBAction)onDebugButtonClicked:(id)sender {
+}
+
 @end

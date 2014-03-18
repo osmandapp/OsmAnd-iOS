@@ -113,6 +113,15 @@
         return;
     
     BOOL didChange = NO;
+
+    // Listen to device orientation change
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(deviceOrientationDidChange)
+                                                 name:UIDeviceOrientationDidChangeNotification
+                                               object:nil];
+    
+    // Set current device orientation
+    [self updateDeviceOrientation];
     
     //TODO: use different accuracy modes
     // kCLLocationAccuracyBestForNavigation (when plugged in) && kCLLocationAccuracyBest - during navigation
@@ -163,6 +172,10 @@
         _compassActive = NO;
         didChange = YES;
     }
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIDeviceOrientationDidChangeNotification
+                                                  object:nil];
     
     if(didChange)
        [_statusObservable notifyEvent];
@@ -250,6 +263,44 @@
     if(status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
         return;
     [self start];
+}
+
+- (void)deviceOrientationDidChange
+{
+    [self updateDeviceOrientation];
+}
+
+- (void)updateDeviceOrientation
+{
+    const UIDeviceOrientation uiDeviceOrientation = [UIDevice currentDevice].orientation;
+    CLDeviceOrientation clDeviceOrientation;
+    switch (uiDeviceOrientation)
+    {
+        case UIDeviceOrientationPortrait:
+            clDeviceOrientation = CLDeviceOrientationPortrait;
+            break;
+        case UIDeviceOrientationPortraitUpsideDown:
+            clDeviceOrientation = CLDeviceOrientationPortraitUpsideDown;
+            break;
+        case UIDeviceOrientationLandscapeLeft:
+            clDeviceOrientation = CLDeviceOrientationLandscapeLeft;
+            break;
+        case UIDeviceOrientationLandscapeRight:
+            clDeviceOrientation = CLDeviceOrientationLandscapeRight;
+            break;
+        case UIDeviceOrientationFaceUp:
+            clDeviceOrientation = CLDeviceOrientationFaceUp;
+            break;
+        case UIDeviceOrientationFaceDown:
+            clDeviceOrientation = CLDeviceOrientationFaceDown;
+            break;
+
+        case UIDeviceOrientationUnknown:
+        default:
+            clDeviceOrientation = CLDeviceOrientationUnknown;
+            break;
+    }
+    _manager.headingOrientation = clDeviceOrientation;
 }
 
 + (void)showDeniedAlert

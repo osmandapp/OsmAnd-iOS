@@ -8,6 +8,8 @@
 
 #import "OAAppDelegate.h"
 
+#import <UIKit/UIKit.h>
+
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 
@@ -29,6 +31,9 @@
     // Initialize TestFlight SDK
     [TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
 
+    // Configure device
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    
     // Create instance of OsmAnd application
     [OsmAndApp instance];
     
@@ -82,6 +87,9 @@
     
     // Release OsmAnd core
     OsmAnd::ReleaseCore();
+    
+    // Deconfigure device
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
 }
 
 @end

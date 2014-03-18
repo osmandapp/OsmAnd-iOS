@@ -23,13 +23,14 @@
 
 #include "ExternalResourcesProvider.h"
 
-#define kElevationGestureMaxThreshold 50
-#define kElevationGestureMinAngle 30
-#define kElevationGesturePointsPerDegree 3
-#define kRotationGestureThresholdDegrees 5
+#define kElevationGestureMaxThreshold 50.0f
+#define kElevationMinAngle 30.0f
+#define kElevationGesturePointsPerDegree 3.0f
+#define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f
 #define kTargetMoveDeceleration 4800.0f
 #define kRotateDeceleration 500.0f
+#define kMapModeFollowZoom 18.0f
 
 @interface OAMapRendererViewController ()
 
@@ -502,8 +503,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
     CGFloat angle = mapView.elevationAngle;
     angle -= angleDelta;
-    if(angle < kElevationGestureMinAngle)
-        angle = kElevationGestureMinAngle;
+    if(angle < kElevationMinAngle)
+        angle = kElevationMinAngle;
     mapView.elevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
@@ -547,7 +548,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Animate azimuth change to north during 1 second
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
-    [mapView animateAzimuthBy:-mapView.azimuth during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+    [mapView animateAzimuthBy:-mapView.azimuth
+                       during:1.0f
+                       timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
 }
 
@@ -570,7 +573,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Animate zoom-in by +1
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
-    [mapView animateZoomBy:+1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+    [mapView animateZoomBy:+1.0f
+                    during:1.0f
+                    timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
 }
 
@@ -591,7 +596,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Animate zoom-in by -1
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView cancelAnimation];
-    [mapView animateZoomBy:-1.0f during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+    [mapView animateZoomBy:-1.0f
+                    during:1.0f
+                    timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
 }
 
@@ -610,7 +617,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         case OAMapModePositionTrack:
             if(_app.locationServices.lastKnownLocation != nil)
             {
-                // Fly to that position without changing anything but target
+                // Fly to last-known position without changing anything but target
+                
                 [mapView cancelAnimation];
                 
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
@@ -630,17 +638,37 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         case OAMapModeFollow:
             if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
             {
-                //TODO: fly-animate view to last known location + change blablabla
-                /*[mapView cancelAnimation];
+                // Fly to last-known position, change heading to last-known heading,
+                // set zoom to kMapModeFollowZoom and elevation angle to kElevationMinAngle
+                
+                [mapView cancelAnimation];
+                
+                const float zoomDelta = kMapModeFollowZoom - mapView.zoom;
+                [mapView animateZoomBy:zoomDelta
+                                during:1.0f
+                                timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+                
+                const float elevationAngleDelta = kElevationMinAngle - mapView.elevationAngle;
+                [mapView animateElevationAngleBy:elevationAngleDelta
+                                          during:1.0f
+                                          timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
                 
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
                 OsmAnd::PointI64 targetDelta = OsmAnd::PointI64(newTarget31) - OsmAnd::PointI64(mapView.target31);
-                [mapView animateTargetBy64:targetDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+                [mapView animateTargetBy64:targetDelta
+                                    during:1.0f
+                                    timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
                 
-                [mapView resumeAnimation];*/
+                const CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+                const CGFloat azimuthDelta = OsmAnd::Utilities::normalizedAngleDegrees(newHeading - mapView.azimuth);
+                [mapView animateAzimuthBy:azimuthDelta
+                                   during:1.0f
+                                   timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+                
+                [mapView resumeAnimation];
             }
             break;
     }
@@ -663,6 +691,19 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     {
         [mapView cancelAnimation];
         
+        if(_app.mapMode == OAMapModeFollow)
+        {
+            const CGFloat zoomDelta = kMapModeFollowZoom - mapView.zoom;
+            [mapView animateZoomBy:zoomDelta
+                            during:1.0f
+                            timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+            
+            const CGFloat elevationAngleDelta = kElevationMinAngle - mapView.elevationAngle;
+            [mapView animateElevationAngleBy:elevationAngleDelta
+                                      during:1.0f
+                                      timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+        }
+        
         OsmAnd::PointI newTarget31(
             OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
             OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
@@ -675,9 +716,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         // Update azimuth
         if(_app.mapMode == OAMapModeFollow && !isnan(newHeading))
         {
-            CGFloat azimuthDelta = newHeading - mapView.azimuth;
-            
-            [mapView animateAzimuthBy:azimuthDelta during:1.0f timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
+            const CGFloat azimuthDelta = OsmAnd::Utilities::normalizedAngleDegrees(newHeading - mapView.azimuth);
+            [mapView animateAzimuthBy:azimuthDelta
+                               during:1.0f
+                               timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
         }
         
         [mapView resumeAnimation];

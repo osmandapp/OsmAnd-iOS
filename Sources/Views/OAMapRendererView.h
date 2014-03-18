@@ -125,6 +125,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
                         zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction;
 - (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
 - (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
+- (void)animateElevationAngleWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration;
+- (void)animateElevationAngleBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function;
 - (void)animateMoveBy:(OsmAnd::PointI)deltaValue
                during:(CGFloat)duration
        zeroizeAzimuth:(BOOL)zeroizeAzimuth

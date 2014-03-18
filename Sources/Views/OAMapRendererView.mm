@@ -323,6 +323,16 @@
     _animator->animateAzimuthBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
+- (void)animateElevationAngleWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+{
+    _animator->animateElevationAngleWith(velocity, deceleration);
+}
+
+- (void)animateElevationAngleBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+{
+    _animator->animateElevationAngleBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
+}
+
 - (void)animateMoveBy:(OsmAnd::PointI)deltaValue
                during:(CGFloat)duration
        zeroizeAzimuth:(BOOL)zeroizeAzimuth

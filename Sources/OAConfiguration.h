@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "OAObservable.h"
+#import "OAMapSourcePreset.h"
 
 // Values of map_source are:
 // - "offline:<style-name>"
@@ -26,6 +27,9 @@
 @property(readonly) OAObservable* observable;
 
 @property(getter = getMapSource, setter = setMapSource:) NSString* mapSource;
-@property(getter = getMapSourcesPresets, setter = setMapSourcesPresets:) NSDictionary* mapSourcesPresets;
+
+@property(readonly, getter = getMapSourcesPresets) NSDictionary* mapSourcesPresets;
+- (NSUUID*)addMapSourcePreset:(OAMapSourcePreset*)preset forMapSource:(NSString*)mapSource;
+- (BOOL)removeMapSourcePresetWithId:(NSUUID*)presetId forMapSource:(NSString*)mapSource;
 
 @end

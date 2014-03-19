@@ -62,20 +62,30 @@
     [defaults setObject:kDefaultMapSource
                  forKey:kMapSource];
     NSMutableDictionary* mapSourcesPresets = [[NSMutableDictionary alloc] init];
-    [mapSourcesPresets setObject:@[[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
-                                                                               andType:OAMapSourcePresetTypeGeneral
-                                                                             andValues:@{ @"appMode" : @"browse map" }],
-                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeCar"
-                                                                               andType:OAMapSourcePresetTypeCar
-                                                                             andValues:@{ @"appMode" : @"car" }],
-                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeBicycle"
-                                                                               andType:OAMapSourcePresetTypeBicycle
-                                                                             andValues:@{ @"appMode" : @"bicycle" }],
-                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypePedestrian"
-                                                                               andType:OAMapSourcePresetTypePedestrian
-                                                                             andValues:@{ @"appMode" : @"pedestrian" }]]
+    OAMapSourcePreset* defaultGeneralPreset = [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
+                                                                                          andType:OAMapSourcePresetTypeGeneral
+                                                                                        andValues:@{ @"appMode" : @"browse map" }];
+    OAMapSourcePreset* defaultCarPreset = [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeCar"
+                                                                                      andType:OAMapSourcePresetTypeCar
+                                                                                    andValues:@{ @"appMode" : @"car" }];
+    OAMapSourcePreset* defaultBicyclePreset = [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeBicycle"
+                                                                                          andType:OAMapSourcePresetTypeBicycle
+                                                                                        andValues:@{ @"appMode" : @"bicycle" }];
+    OAMapSourcePreset* defaultPedestrianPreset = [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypePedestrian"
+                                                                                             andType:OAMapSourcePresetTypePedestrian
+                                                                                           andValues:@{ @"appMode" : @"pedestrian" }];
+    NSMutableDictionary* encodedDefaultPresets = [[NSMutableDictionary alloc] init];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultGeneralPreset]
+                              forKey:@"05111A11-D000-0000-0001-000000000DEF"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultCarPreset]
+                              forKey:@"05111A11-D000-0000-0002-000000000CAA"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultBicyclePreset]
+                              forKey:@"05111A11-D000-0000-0003-0000000B1CCE"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultPedestrianPreset]
+                              forKey:@"05111A11-D000-0000-0004-00000000F001"];
+    [mapSourcesPresets setObject:encodedDefaultPresets
                           forKey:kDefaultMapSource];
-    [defaults setObject:[NSDictionary dictionaryWithDictionary:mapSourcesPresets]
+    [defaults setObject:mapSourcesPresets
                  forKey:kMapSourcesPresets];
     
     // Register defaults
@@ -111,18 +121,78 @@
 
 - (NSDictionary*)getMapSourcesPresets
 {
+    NSDictionary* container = nil;
     @synchronized(self)
     {
-        return [_storage objectForKey:kMapSourcesPresets];
+        container = [_storage objectForKey:kMapSourcesPresets];
     }
+    
+    NSMutableDictionary* result = [[NSMutableDictionary alloc] init];
+    
+    [container enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSString* mapSource = key;
+        NSDictionary* encodedPresets = obj;
+        NSMutableDictionary* decodedPresets = [[NSMutableDictionary alloc] init];
+        [encodedPresets enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSUUID* presetId = key;
+            NSData* data = obj;
+            OAMapSourcePreset* preset = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            
+            [decodedPresets setObject:preset forKey:presetId];
+        }];
+        
+        [result setObject:decodedPresets forKey:mapSource];
+    }];
+    
+    return [NSDictionary dictionaryWithDictionary:result];
+
 }
 
-- (void)setMapSourcesPresets:(NSDictionary*)mapSourcesPresets
+- (NSUUID*)addMapSourcePreset:(OAMapSourcePreset*)preset forMapSource:(NSString*)mapSource
 {
+    NSData* encodedPreset = [NSKeyedArchiver archivedDataWithRootObject:preset];
+    
+    NSUUID* presetId;
     @synchronized(self)
     {
-        [_storage setObject:mapSourcesPresets forKey:kMapSourcesPresets];
-        [_observable notifyEventWithKey:kMapSourcesPresets andValue:mapSourcesPresets];
+        NSMutableDictionary* container = [_storage objectForKey:kMapSourcesPresets];
+        if(container == nil)
+            container = [[NSMutableDictionary alloc] init];
+        
+        NSMutableDictionary* innerContainer = [container objectForKey:mapSource];
+        if(innerContainer == nil)
+            innerContainer = [[NSMutableDictionary alloc] init];
+        for(;;)
+        {
+            presetId = [NSUUID UUID];
+            if([innerContainer objectForKey:presetId] == nil)
+                break;
+        }
+        [innerContainer setObject:encodedPreset forKey:[presetId UUIDString]];
+        
+        [_storage setObject:container forKey:kMapSourcesPresets];
+        [_observable notifyEventWithKey:kMapSourcesPresets andValue:presetId];
+    }
+    
+    return presetId;
+}
+
+- (BOOL)removeMapSourcePresetWithId:(NSUUID*)presetId forMapSource:(NSString*)mapSource
+{
+    NSString* presetIdAsString = [presetId UUIDString];
+    @synchronized(self)
+    {
+        NSMutableDictionary* container = [_storage objectForKey:kMapSourcesPresets];
+        NSMutableDictionary* innerContainer = [container objectForKey:mapSource];
+        if(innerContainer == nil)
+            return NO;
+        BOOL hadPreset = ([innerContainer objectForKey:presetIdAsString] != nil);
+        if(hadPreset)
+            [innerContainer removeObjectForKey:presetIdAsString];
+
+        [_observable notifyEventWithKey:kMapSourcesPresets andValue:presetId];
+        
+        return hadPreset;
     }
 }
 

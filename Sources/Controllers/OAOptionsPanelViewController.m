@@ -27,6 +27,9 @@
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _configurationObserver;
+    
+    NSDictionary* _mapSourcePresets;
+    NSArray* _mapSourcePresetIds;
 }
 
 #define kMapsSection 0
@@ -61,7 +64,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view.
+
+    [self refreshCachedData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -76,9 +80,16 @@
     {
         // Force reload of list content
         dispatch_async(dispatch_get_main_queue(), ^{
+            [self refreshCachedData];
             [_optionsTableview reloadData];
         });
     }
+}
+
+- (void)refreshCachedData
+{
+    _mapSourcePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
+    _mapSourcePresetIds = [_mapSourcePresets allKeys];
 }
 
 #pragma mark - UITableViewDataSource
@@ -97,9 +108,8 @@
             NSInteger rowsCount = 1 /* 'Maps' */;
             
             // Append rows to show all available presets for current map source
-            NSArray* availablePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
-            if(availablePresets != nil)
-                rowsCount += [availablePresets count];
+            if(_mapSourcePresets != nil)
+                rowsCount += [_mapSourcePresets count];
             
             return rowsCount;
         } break;
@@ -134,8 +144,8 @@
             }
             else
             {
-                NSArray* availablePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
-                OAMapSourcePreset* preset = [availablePresets objectAtIndex:indexPath.row - 1];
+                NSUUID* presetId = [_mapSourcePresetIds objectAtIndex:indexPath.row - 1];
+                OAMapSourcePreset* preset = [_mapSourcePresets objectForKey:presetId];
                 
                 cellTypeId = checkboxCellId;
                 if(preset.iconImageName != nil)

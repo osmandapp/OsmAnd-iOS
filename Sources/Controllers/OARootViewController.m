@@ -16,17 +16,28 @@
 @end
 
 @implementation OARootViewController
+{
+    UIStoryboard* _optionsPanelStoryboard;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {  
-        // Create panels
-        [self setLeftPanel:[[OAOptionsPanelViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
-        [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
-        //[self setRightPanel:[[OAContextPanelViewController alloc] initWithNibName:@"ContextPanel" bundle:nil]];
+        [self ctor];
     }
     return self;
+}
+
+- (void)ctor
+{
+    // Load storyboards
+    _optionsPanelStoryboard = [UIStoryboard storyboardWithName:@"OptionsPanel" bundle:nil];
+    
+    // Create panels
+    [self setLeftPanel:[_optionsPanelStoryboard instantiateInitialViewController]];
+    [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
+    //[self setRightPanel:...];
 }
 
 - (void)loadView

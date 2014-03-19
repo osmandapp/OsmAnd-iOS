@@ -12,6 +12,7 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#include "Localization.h"
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -305,10 +306,10 @@
 
 + (void)showDeniedAlert
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"title"
-                                                        message:@"msg"
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Access denied")
+                                                        message:OALocalizedString(@"Access to location service has been denied")
                                                        delegate:nil
-                                              cancelButtonTitle:@"ok"
+                                              cancelButtonTitle:OALocalizedString(@"OK")
                                               otherButtonTitles:nil];
     [alertView show];
 }

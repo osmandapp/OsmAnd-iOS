@@ -71,6 +71,16 @@
 		BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD618D71121005FBE09 /* HUD_debug_button.png */; };
 		BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */; };
 		BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */; };
+		BB451DDE18D8DB48005FBE09 /* OptionsPanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */; };
+		BB451DE718D8E5F0005FBE09 /* menu_bicycle_map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DDF18D8E5F0005FBE09 /* menu_bicycle_map_icon.png */; };
+		BB451DE818D8E5F0005FBE09 /* menu_bicycle_map_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE018D8E5F0005FBE09 /* menu_bicycle_map_icon@2x.png */; };
+		BB451DE918D8E5F0005FBE09 /* menu_car_map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE118D8E5F0005FBE09 /* menu_car_map_icon.png */; };
+		BB451DEA18D8E5F0005FBE09 /* menu_car_map_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE218D8E5F0005FBE09 /* menu_car_map_icon@2x.png */; };
+		BB451DEB18D8E5F0005FBE09 /* menu_general_map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE318D8E5F0005FBE09 /* menu_general_map_icon.png */; };
+		BB451DEC18D8E5F0005FBE09 /* menu_general_map_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE418D8E5F0005FBE09 /* menu_general_map_icon@2x.png */; };
+		BB451DED18D8E5F0005FBE09 /* menu_pedestrian_map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE518D8E5F0005FBE09 /* menu_pedestrian_map_icon.png */; };
+		BB451DEE18D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE618D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png */; };
+		BB451DF118D8F7D7005FBE09 /* Localization.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localization.strings */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -107,7 +117,6 @@
 		BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */; };
 		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
-		BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10717C61B1700EBA761 /* OptionsPanel.xib */; };
 		BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapModeHUD.xib */; };
 		BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
@@ -193,6 +202,17 @@
 		BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_button@2x.png"; sourceTree = "<group>"; };
 		BB451DDA18D71883005FBE09 /* UIView+VisibilityAndInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+VisibilityAndInput.h"; path = "Common/UIView+VisibilityAndInput.h"; sourceTree = "<group>"; };
 		BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+VisibilityAndInput.m"; path = "Common/UIView+VisibilityAndInput.m"; sourceTree = "<group>"; };
+		BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = OptionsPanel.storyboard; path = Resources/OptionsPanel.storyboard; sourceTree = "<group>"; };
+		BB451DDF18D8E5F0005FBE09 /* menu_bicycle_map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_bicycle_map_icon.png; sourceTree = "<group>"; };
+		BB451DE018D8E5F0005FBE09 /* menu_bicycle_map_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_bicycle_map_icon@2x.png"; sourceTree = "<group>"; };
+		BB451DE118D8E5F0005FBE09 /* menu_car_map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_car_map_icon.png; sourceTree = "<group>"; };
+		BB451DE218D8E5F0005FBE09 /* menu_car_map_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_car_map_icon@2x.png"; sourceTree = "<group>"; };
+		BB451DE318D8E5F0005FBE09 /* menu_general_map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_general_map_icon.png; sourceTree = "<group>"; };
+		BB451DE418D8E5F0005FBE09 /* menu_general_map_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_general_map_icon@2x.png"; sourceTree = "<group>"; };
+		BB451DE518D8E5F0005FBE09 /* menu_pedestrian_map_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_pedestrian_map_icon.png; sourceTree = "<group>"; };
+		BB451DE618D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_pedestrian_map_icon@2x.png"; sourceTree = "<group>"; };
+		BB451DF218D8F7D7005FBE09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localization.strings; sourceTree = "<group>"; };
+		BB451DF418D8F956005FBE09 /* Localization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localization.h; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -244,7 +264,6 @@
 		BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon-72@2x.png"; path = "Resources/AppIcons/Icon-72@2x.png"; sourceTree = "<group>"; };
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
-		BBACF10717C61B1700EBA761 /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
 		BBACF10917C61D8500EBA761 /* MapModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapModeHUD.xib; path = Resources/MapModeHUD.xib; sourceTree = "<group>"; };
 		BBACF10B17C6293300EBA761 /* OsmAndApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndApp.h; sourceTree = "<group>"; };
 		BBACF10C17C6293300EBA761 /* OsmAndApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndApp.mm; sourceTree = "<group>"; };
@@ -399,6 +418,7 @@
 				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
 				BBBDADB518BCE77400E4A359 /* OALocationServices.h */,
 				BBBDADB618BCE77400E4A359 /* OALocationServices.m */,
+				BB451DF418D8F956005FBE09 /* Localization.h */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -455,6 +475,14 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				BB451DDF18D8E5F0005FBE09 /* menu_bicycle_map_icon.png */,
+				BB451DE018D8E5F0005FBE09 /* menu_bicycle_map_icon@2x.png */,
+				BB451DE118D8E5F0005FBE09 /* menu_car_map_icon.png */,
+				BB451DE218D8E5F0005FBE09 /* menu_car_map_icon@2x.png */,
+				BB451DE318D8E5F0005FBE09 /* menu_general_map_icon.png */,
+				BB451DE418D8E5F0005FBE09 /* menu_general_map_icon@2x.png */,
+				BB451DE518D8E5F0005FBE09 /* menu_pedestrian_map_icon.png */,
+				BB451DE618D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png */,
 				BB451DD618D71121005FBE09 /* HUD_debug_button.png */,
 				BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */,
 				BB451D8E18D70B5B005FBE09 /* driveMode.png */,
@@ -594,13 +622,14 @@
 				BBA858FE17C2230200AADCC7 /* LaunchImages */,
 				BBA858FD17C222FC00AADCC7 /* AppIcons */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
-				BBACF10717C61B1700EBA761 /* OptionsPanel.xib */,
 				BBACF10917C61D8500EBA761 /* MapModeHUD.xib */,
 				BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */,
 				BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */,
 				BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */,
 				BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */,
 				BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */,
+				BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */,
+				BB451DF318D8F7D7005FBE09 /* Localization.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -675,17 +704,24 @@
 				BB451DC518D70B5B005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
 				BB451DCA18D70B5B005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
 				BB451DB918D70B5B005FBE09 /* HUD_button_bg@2x.png in Resources */,
+				BB451DEC18D8E5F0005FBE09 /* menu_general_map_icon@2x.png in Resources */,
 				BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */,
+				BB451DF118D8F7D7005FBE09 /* Localization.strings in Resources */,
 				BB451DC418D70B5B005FBE09 /* HUD_menu_halfbutton.png in Resources */,
 				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
+				BB451DEA18D8E5F0005FBE09 /* menu_car_map_icon@2x.png in Resources */,
 				BB451DB618D70B5B005FBE09 /* freeMapMode.png in Resources */,
+				BB451DE718D8E5F0005FBE09 /* menu_bicycle_map_icon.png in Resources */,
 				BB451DB718D70B5B005FBE09 /* freeMapMode@2x.png in Resources */,
 				BB451DCF18D70B5B005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451DCB18D70B5B005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
+				BB451DED18D8E5F0005FBE09 /* menu_pedestrian_map_icon.png in Resources */,
 				BB451DC118D70B5B005FBE09 /* HUD_left_narrowbutton_bg@2x.png in Resources */,
 				BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */,
+				BB451DEB18D8E5F0005FBE09 /* menu_general_map_icon.png in Resources */,
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
+				BB451DEE18D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png in Resources */,
 				BB451DBF18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451DD318D70B5B005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
 				BB451DBD18D70B5B005FBE09 /* HUD_compass_bg@2x.png in Resources */,
@@ -699,12 +735,14 @@
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
 				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
+				BB451DE818D8E5F0005FBE09 /* menu_bicycle_map_icon@2x.png in Resources */,
 				BB451DB418D70B5B005FBE09 /* followMapMode.png in Resources */,
 				BB451DC318D70B5B005FBE09 /* HUD_menu_button@2x.png in Resources */,
 				BB451DD218D70B5B005FBE09 /* HUD_zoom_out_button.png in Resources */,
-				BBACF10817C61B1700EBA761 /* OptionsPanel.xib in Resources */,
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
+				BB451DDE18D8DB48005FBE09 /* OptionsPanel.storyboard in Resources */,
 				BB451DD118D70B5B005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
+				BB451DE918D8E5F0005FBE09 /* menu_car_map_icon.png in Resources */,
 				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
 				BB451DB818D70B5B005FBE09 /* HUD_button_bg.png in Resources */,
 				BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */,
@@ -790,6 +828,18 @@
 			targetProxy = BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		BB451DF318D8F7D7005FBE09 /* Localization.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BB451DF218D8F7D7005FBE09 /* Base */,
+			);
+			name = Localization.strings;
+			path = Resources;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BB098D0C1793F7FD00423944 /* Debug */ = {

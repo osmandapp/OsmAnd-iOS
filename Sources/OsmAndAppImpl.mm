@@ -38,6 +38,9 @@
 
 - (void)ctor
 {
+    // First of all, initialize configuration
+    _configuration = [[OAConfiguration alloc] init];
+    
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                         ofType:@"obf"
@@ -94,6 +97,8 @@
 {
     _mapStyles.reset(new OsmAnd::MapStyles());
 }
+
+@synthesize configuration = _configuration;
 
 @synthesize locationServices = _locationServices;
 

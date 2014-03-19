@@ -8,7 +8,10 @@
 
 #import "OAOptionsPanelViewController.h"
 
+#import "OsmAndApp.h"
 #import "UIViewController+OARootVC.h"
+#import "OAAutoObserverProxy.h"
+#import "OAConfiguration.h"
 
 #include "Localization.h"
 
@@ -19,6 +22,11 @@
 @end
 
 @implementation OAOptionsPanelViewController
+{
+    OsmAndAppInstance _app;
+    
+    OAAutoObserverProxy* _configurationObserver;
+}
 
 #define kMapsSection 0
 #define kMapsSection_Sources 0
@@ -38,9 +46,20 @@
     return self;
 }
 
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self ctor];
+    }
+    return self;
+}
+
 - (void)ctor
 {
+    _app = [OsmAndApp instance];
     
+    _configurationObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onConfigurationChanged:withKey:andValue:)];
 }
 
 - (void)viewDidLoad
@@ -55,6 +74,17 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    if([kMapSourceId isEqualToString:key])
+    {
+        // Force reload of list content
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_optionsTableview reloadData];
+        });
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -67,7 +97,13 @@
     switch (section)
     {
         case kMapsSection:
-            return 5 /* Sources, General, Car, Bicycle, Pedestrian */;
+        {
+            NSInteger rowsCount = 1 /* 'Maps' */;
+            if([_app.configuration.mapSourceId isEqualToString:kMapSourceId_OfflineMaps])
+                rowsCount += 4 /* 'General', 'Car', 'Bicycle', 'Pedestrian' */;
+                
+            return rowsCount;
+        } break;
         case kLayersSection:
             return 10;
         case kSettingsSection:
@@ -92,32 +128,39 @@
     switch (indexPath.section)
     {
         case kMapsSection:
-            switch (indexPath.row)
+            if(indexPath.row == kMapsSection_Sources)
             {
-                case kMapsSection_Sources:
-                    cellTypeId = basicCellId;
-                    caption = OALocalizedString(@"Maps");
-                    break;
-                case kMapsSection_General:
-                    cellTypeId = checkboxCellId;
-                    icon = [UIImage imageNamed:@"menu_general_map_icon.png"];
-                    caption = OALocalizedString(@"General");
-                    break;
-                case kMapsSection_Car:
-                    cellTypeId = checkboxCellId;
-                    icon = [UIImage imageNamed:@"menu_car_map_icon.png"];
-                    caption = OALocalizedString(@"Car");
-                    break;
-                case kMapsSection_Bicycle:
-                    cellTypeId = checkboxCellId;
-                    icon = [UIImage imageNamed:@"menu_bicycle_map_icon.png"];
-                    caption = OALocalizedString(@"Bicycle");
-                    break;
-                case kMapsSection_Pedestrian:
-                    cellTypeId = checkboxCellId;
-                    icon = [UIImage imageNamed:@"menu_pedestrian_map_icon.png"];
-                    caption = OALocalizedString(@"Pedestrian");
-                    break;
+                cellTypeId = submenuCellId;
+                caption = OALocalizedString(@"Maps");
+            }
+            else
+            {
+                if([_app.configuration.mapSourceId isEqualToString:kMapSourceId_OfflineMaps])
+                {
+                    switch (indexPath.row)
+                    {
+                        case kMapsSection_General:
+                            cellTypeId = checkboxCellId;
+                            icon = [UIImage imageNamed:@"menu_general_map_icon.png"];
+                            caption = OALocalizedString(@"General");
+                            break;
+                        case kMapsSection_Car:
+                            cellTypeId = checkboxCellId;
+                            icon = [UIImage imageNamed:@"menu_car_map_icon.png"];
+                            caption = OALocalizedString(@"Car");
+                            break;
+                        case kMapsSection_Bicycle:
+                            cellTypeId = checkboxCellId;
+                            icon = [UIImage imageNamed:@"menu_bicycle_map_icon.png"];
+                            caption = OALocalizedString(@"Bicycle");
+                            break;
+                        case kMapsSection_Pedestrian:
+                            cellTypeId = checkboxCellId;
+                            icon = [UIImage imageNamed:@"menu_pedestrian_map_icon.png"];
+                            caption = OALocalizedString(@"Pedestrian");
+                            break;
+                    }
+                }
             }
             break;
         case kLayersSection:

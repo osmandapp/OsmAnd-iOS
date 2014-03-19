@@ -81,6 +81,7 @@
 		BB451DED18D8E5F0005FBE09 /* menu_pedestrian_map_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE518D8E5F0005FBE09 /* menu_pedestrian_map_icon.png */; };
 		BB451DEE18D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DE618D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png */; };
 		BB451DF118D8F7D7005FBE09 /* Localization.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localization.strings */; };
+		BB451DF718D9BC52005FBE09 /* OAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF618D9BC52005FBE09 /* OAConfiguration.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -213,6 +214,8 @@
 		BB451DE618D8E5F0005FBE09 /* menu_pedestrian_map_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_pedestrian_map_icon@2x.png"; sourceTree = "<group>"; };
 		BB451DF218D8F7D7005FBE09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localization.strings; sourceTree = "<group>"; };
 		BB451DF418D8F956005FBE09 /* Localization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localization.h; sourceTree = "<group>"; };
+		BB451DF518D9BC52005FBE09 /* OAConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfiguration.h; sourceTree = "<group>"; };
+		BB451DF618D9BC52005FBE09 /* OAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAConfiguration.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -419,6 +422,8 @@
 				BBBDADB518BCE77400E4A359 /* OALocationServices.h */,
 				BBBDADB618BCE77400E4A359 /* OALocationServices.m */,
 				BB451DF418D8F956005FBE09 /* Localization.h */,
+				BB451DF518D9BC52005FBE09 /* OAConfiguration.h */,
+				BB451DF618D9BC52005FBE09 /* OAConfiguration.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -815,6 +820,7 @@
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BBBDADB718BCE77400E4A359 /* OALocationServices.m in Sources */,
 				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
+				BB451DF718D9BC52005FBE09 /* OAConfiguration.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

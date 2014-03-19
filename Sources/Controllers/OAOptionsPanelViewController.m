@@ -12,6 +12,7 @@
 #import "UIViewController+OARootVC.h"
 #import "OAAutoObserverProxy.h"
 #import "OAConfiguration.h"
+#import "OAMapSourcePreset.h"
 
 #include "Localization.h"
 
@@ -29,11 +30,6 @@
 }
 
 #define kMapsSection 0
-#define kMapsSection_Sources 0
-#define kMapsSection_General 1
-#define kMapsSection_Car 2
-#define kMapsSection_Bicycle 3
-#define kMapsSection_Pedestrian 4
 #define kLayersSection 1
 #define kSettingsSection 2
 
@@ -76,7 +72,7 @@
 
 - (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    if([kMapSourceId isEqualToString:key])
+    if([kMapSource isEqualToString:key] || [kMapSourcesPresets isEqualToString:key])
     {
         // Force reload of list content
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -99,9 +95,12 @@
         case kMapsSection:
         {
             NSInteger rowsCount = 1 /* 'Maps' */;
-            if([_app.configuration.mapSourceId isEqualToString:kMapSourceId_OfflineMaps])
-                rowsCount += 4 /* 'General', 'Car', 'Bicycle', 'Pedestrian' */;
-                
+            
+            // Append rows to show all available presets for current map source
+            NSArray* availablePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
+            if(availablePresets != nil)
+                rowsCount += [availablePresets count];
+            
             return rowsCount;
         } break;
         case kLayersSection:
@@ -128,39 +127,40 @@
     switch (indexPath.section)
     {
         case kMapsSection:
-            if(indexPath.row == kMapsSection_Sources)
+            if(indexPath.row == 0)
             {
                 cellTypeId = submenuCellId;
                 caption = OALocalizedString(@"Maps");
             }
             else
             {
-                if([_app.configuration.mapSourceId isEqualToString:kMapSourceId_OfflineMaps])
+                NSArray* availablePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
+                OAMapSourcePreset* preset = [availablePresets objectAtIndex:indexPath.row - 1];
+                
+                cellTypeId = checkboxCellId;
+                if(preset.iconImageName != nil)
+                    icon = [UIImage imageNamed:preset.iconImageName];
+                else
                 {
-                    switch (indexPath.row)
+                    switch (preset.type)
                     {
-                        case kMapsSection_General:
-                            cellTypeId = checkboxCellId;
-                            icon = [UIImage imageNamed:@"menu_general_map_icon.png"];
-                            caption = OALocalizedString(@"General");
+                        default:
+                        case OAMapSourcePresetTypeUndefined:
+                        case OAMapSourcePresetTypeGeneral:
+                            icon = [UIImage imageNamed:@"map_source_preset_type_general_icon.png"];
                             break;
-                        case kMapsSection_Car:
-                            cellTypeId = checkboxCellId;
-                            icon = [UIImage imageNamed:@"menu_car_map_icon.png"];
-                            caption = OALocalizedString(@"Car");
+                        case OAMapSourcePresetTypeCar:
+                            icon = [UIImage imageNamed:@"map_source_preset_type_car_icon.png"];
                             break;
-                        case kMapsSection_Bicycle:
-                            cellTypeId = checkboxCellId;
-                            icon = [UIImage imageNamed:@"menu_bicycle_map_icon.png"];
-                            caption = OALocalizedString(@"Bicycle");
+                        case OAMapSourcePresetTypeBicycle:
+                            icon = [UIImage imageNamed:@"map_source_preset_type_bicycle_icon.png"];
                             break;
-                        case kMapsSection_Pedestrian:
-                            cellTypeId = checkboxCellId;
-                            icon = [UIImage imageNamed:@"menu_pedestrian_map_icon.png"];
-                            caption = OALocalizedString(@"Pedestrian");
+                        case OAMapSourcePresetTypePedestrian:
+                            icon = [UIImage imageNamed:@"map_source_preset_type_pedestrian_icon.png"];
                             break;
                     }
                 }
+                caption = preset.name;
             }
             break;
         case kLayersSection:
@@ -187,17 +187,4 @@
 
 #pragma mark -
 
-/*
-- (IBAction)activateMapnik:(id)sender {
-    
-    [self.rootViewController.mapPanel.rendererViewController activateMapnik];
-    
-}
-- (IBAction)activateCyclemap:(id)sender {
-    [self.rootViewController.mapPanel.rendererViewController activateCyclemap];
-}
-- (IBAction)activateOffline:(id)sender {
-    [self.rootViewController.mapPanel.rendererViewController activateOffline];
-}
-*/
 @end

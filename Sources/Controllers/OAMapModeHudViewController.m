@@ -135,15 +135,15 @@
     switch (_app.mapMode)
     {
         case OAMapModeFree:
-            modeImage = [UIImage imageNamed:@"freeMapMode.png"];
+            modeImage = [UIImage imageNamed:@"free_map_mode_button.png"];
             break;
             
         case OAMapModePositionTrack:
-            modeImage = [UIImage imageNamed:@"positionTrackMapMode.png"];
+            modeImage = [UIImage imageNamed:@"position_track_map_mode_button.png"];
             break;
             
         case OAMapModeFollow:
-            modeImage = [UIImage imageNamed:@"followMapMode.png"];
+            modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
             break;
     }
     

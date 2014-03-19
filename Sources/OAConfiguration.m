@@ -8,6 +8,8 @@
 
 #import "OAConfiguration.h"
 
+#import "OAMapSourcePreset.h"
+
 #define kVersion @"version"
 #define vCurrentVersion 1
 
@@ -54,11 +56,30 @@
         */
     }
     
-    // Set defaults
     NSMutableDictionary* defaults = [[NSMutableDictionary alloc] init];
-    [defaults setObject:kMapSourceId_OfflineMaps
-                 forKey:kMapSourceId];
-    [_storage registerDefaults:defaults];
+    
+    // Map sources defaults
+    [defaults setObject:kDefaultMapSource
+                 forKey:kMapSource];
+    NSMutableDictionary* mapSourcesPresets = [[NSMutableDictionary alloc] init];
+    [mapSourcesPresets setObject:@[[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
+                                                                               andType:OAMapSourcePresetTypeGeneral
+                                                                             andValues:@{ @"appMode" : @"browse map" }],
+                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeCar"
+                                                                               andType:OAMapSourcePresetTypeCar
+                                                                             andValues:@{ @"appMode" : @"car" }],
+                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeBicycle"
+                                                                               andType:OAMapSourcePresetTypeBicycle
+                                                                             andValues:@{ @"appMode" : @"bicycle" }],
+                                   [[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypePedestrian"
+                                                                               andType:OAMapSourcePresetTypePedestrian
+                                                                             andValues:@{ @"appMode" : @"pedestrian" }]]
+                          forKey:kDefaultMapSource];
+    [defaults setObject:[NSDictionary dictionaryWithDictionary:mapSourcesPresets]
+                 forKey:kMapSourcesPresets];
+    
+    // Register defaults
+    [_storage registerDefaults:[NSDictionary dictionaryWithDictionary:defaults]];
     [_storage setInteger:vCurrentVersion
                   forKey:kVersion];
     [_storage synchronize];
@@ -71,16 +92,38 @@
 
 @synthesize observable = _observable;
 
-- (NSString*)getMapSourceId
+- (NSString*)getMapSource
 {
-    return [_storage stringForKey:kMapSourceId];
+    @synchronized(self)
+    {
+        return [_storage stringForKey:kMapSource];
+    }
 }
 
-- (void)setMapSourceId:(NSString*)mapSourceId
+- (void)setMapSource:(NSString*)mapSource
 {
-    [_storage setObject:mapSourceId forKey:kMapSourceId];
+    @synchronized(self)
+    {
+        [_storage setObject:mapSource forKey:kMapSource];
+        [_observable notifyEventWithKey:kMapSource andValue:mapSource];
+    }
+}
 
-    [_observable notifyEventWithKey:kMapSourceId andValue:mapSourceId];
+- (NSDictionary*)getMapSourcesPresets
+{
+    @synchronized(self)
+    {
+        return [_storage objectForKey:kMapSourcesPresets];
+    }
+}
+
+- (void)setMapSourcesPresets:(NSDictionary*)mapSourcesPresets
+{
+    @synchronized(self)
+    {
+        [_storage setObject:mapSourcesPresets forKey:kMapSourcesPresets];
+        [_observable notifyEventWithKey:kMapSourcesPresets andValue:mapSourcesPresets];
+    }
 }
 
 @end

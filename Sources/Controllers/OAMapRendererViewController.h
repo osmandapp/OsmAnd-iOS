@@ -23,8 +23,4 @@
 - (BOOL)canZoomOut;
 - (void)animatedZoomOut;
 
-- (void)activateMapnik;
-- (void)activateCyclemap;
-- (void)activateOffline;
-
 @end

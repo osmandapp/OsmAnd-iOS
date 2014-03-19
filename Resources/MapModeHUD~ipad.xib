@@ -68,7 +68,7 @@
                         <constraint firstAttribute="height" constant="40" id="8DK-RZ-MHF"/>
                         <constraint firstAttribute="width" constant="40" id="xRK-u8-wpa"/>
                     </constraints>
-                    <state key="normal" image="freeMapMode.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="free_map_mode_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -82,7 +82,7 @@
                         <constraint firstAttribute="width" constant="40" id="ab9-KT-4KH"/>
                         <constraint firstAttribute="height" constant="40" id="hGG-5c-SbS"/>
                     </constraints>
-                    <state key="normal" image="driveMode.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="drive_mode_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -204,7 +204,7 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
-        <image name="driveMode.png" width="25" height="25"/>
-        <image name="freeMapMode.png" width="25" height="25"/>
+        <image name="drive_mode_button.png" width="25" height="25"/>
+        <image name="free_map_mode_button.png" width="25" height="25"/>
     </resources>
 </document>

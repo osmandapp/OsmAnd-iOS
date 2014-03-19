@@ -9,6 +9,7 @@
 #import "OAMapRendererViewController.h"
 
 #import "OsmAndApp.h"
+#import "OAConfiguration.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
@@ -39,6 +40,8 @@
 @implementation OAMapRendererViewController
 {
     OsmAndAppInstance _app;
+    
+    OAAutoObserverProxy* _configurationObserver;
     
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -86,8 +89,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     s_OAMapRendererViewController_instance = self;
     
     _app = [OsmAndApp instance];
+    
+    _configurationObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onConfigurationChanged:withKey:andValue:)];
+    [_configurationObserver observe:_app.configuration.observable];
+    
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
+    
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationServicesUpdate)];
     [_locationServicesUpdateObserver observe:_app.locationServices.updateObserver];
     
@@ -726,6 +734,17 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     }
 }
 
+- (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    if([kMapSource isEqualToString:key])
+    {
+        // Force reload of list content
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //TODO: activate proper
+        });
+    }
+}
+/*
 - (void)activateMapnik
 {
     if(![self isViewLoaded])
@@ -781,6 +800,6 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     mapView.elevationAngle = 90.0f;
     mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
     mapView.zoom = 10.0f;
-}
+}*/
 
 @end

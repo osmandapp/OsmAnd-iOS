@@ -10,15 +10,22 @@
 
 #import "OAObservable.h"
 
-#define kMapSourceId @"map_source_id"
-#define kMapSourceId_OfflineMaps @"offline"
-#define kOnlineMapSourceIdPrefix @"online:"
+// Values of map_source are:
+// - "offline:<style-name>"
+// - "online:<provider-id>"
+#define kMapSource @"map_source"
+#define kMapSource_OfflinePrefix @"offline:"
+#define kMapSource_OnlinePrefix @"online:"
+#define kDefaultMapSource @"offline:default"
+
+#define kMapSourcesPresets @"map_sources_presets"
 
 @interface OAConfiguration : NSObject
 
 - (BOOL)save;
 @property(readonly) OAObservable* observable;
 
-@property(getter = getMapSourceId, setter = setMapSourceId:) NSString* mapSourceId;
+@property(getter = getMapSource, setter = setMapSource:) NSString* mapSource;
+@property(getter = getMapSourcesPresets, setter = setMapSourcesPresets:) NSDictionary* mapSourcesPresets;
 
 @end

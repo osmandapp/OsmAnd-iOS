@@ -68,7 +68,7 @@
                         <constraint firstAttribute="width" constant="40" id="TQb-bI-8oS"/>
                         <constraint firstAttribute="height" constant="40" id="TWc-JP-daA"/>
                     </constraints>
-                    <state key="normal" image="freeMapMode.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="free_map_mode_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -119,7 +119,7 @@
                         <constraint firstAttribute="width" constant="40" id="QxX-Ge-7Mq"/>
                         <constraint firstAttribute="height" constant="40" id="etr-57-YrC"/>
                     </constraints>
-                    <state key="normal" image="driveMode.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="drive_mode_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -205,7 +205,7 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
-        <image name="driveMode.png" width="25" height="25"/>
-        <image name="freeMapMode.png" width="25" height="25"/>
+        <image name="drive_mode_button.png" width="25" height="25"/>
+        <image name="free_map_mode_button.png" width="25" height="25"/>
     </resources>
 </document>

@@ -134,7 +134,7 @@
         NSDictionary* encodedPresets = obj;
         NSMutableDictionary* decodedPresets = [[NSMutableDictionary alloc] init];
         [encodedPresets enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-            NSUUID* presetId = key;
+            NSUUID* presetId = [[NSUUID alloc] initWithUUIDString:key];
             NSData* data = obj;
             OAMapSourcePreset* preset = [NSKeyedUnarchiver unarchiveObjectWithData:data];
             

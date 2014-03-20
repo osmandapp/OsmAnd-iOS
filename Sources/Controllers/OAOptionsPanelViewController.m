@@ -64,9 +64,12 @@
     [_configurationObserver observe:_app.configuration.observable];
     
     // Collect initial data from configuration
-    _mapSource = _app.configuration.mapSource;
-    _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
-    _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
+    @synchronized(self)
+    {
+        _mapSource = _app.configuration.mapSource;
+        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+        _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
+    }
 }
 
 - (void)viewDidLoad

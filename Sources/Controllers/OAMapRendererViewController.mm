@@ -10,6 +10,8 @@
 
 #import "OsmAndApp.h"
 #import "OAConfiguration.h"
+#import "OAMapSourcePresets.h"
+#import "OAMapSourcePreset.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
@@ -42,6 +44,11 @@
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _configurationObserver;
+    
+    BOOL _mapSourceInvalidated;
+    NSString* _mapSource;
+    OAMapSourcePresets* _mapSourcePresets;
+    NSUUID* _activeMapSourcePreset;
     
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -92,6 +99,14 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     _configurationObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onConfigurationChanged:withKey:andValue:)];
     [_configurationObserver observe:_app.configuration.observable];
+    
+    // Collect initial data from configuration
+    @synchronized(self)
+    {
+        _mapSource = _app.configuration.mapSource;
+        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+        _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
+    }
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
@@ -179,6 +194,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [mapView addGestureRecognizer:_grZoomIn];
     [mapView addGestureRecognizer:_grZoomOut];
     [mapView addGestureRecognizer:_grElevation];
+    
+    // Mark that map source is no longer valid
+    _mapSourceInvalidated = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -186,6 +204,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Resume rendering
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView resumeRendering];
+    
+    // Update map source
+    [self updateCurrentMapSource];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -736,14 +757,43 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    if([kMapSource isEqualToString:key])
+    if([kMapSource isEqualToString:key] ||
+       ([kSelectedMapSourcePresets isEqualToString:key] && [_mapSource isEqualToString:value]))
     {
+        @synchronized(self)
+        {
+            _mapSource = _app.configuration.mapSource;
+            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
+            
+            // Invalidate current map-source
+            _mapSourceInvalidated = YES;
+        }
+        
         // Force reload of list content
         dispatch_async(dispatch_get_main_queue(), ^{
-            //TODO: activate proper
+            [self updateCurrentMapSource];
         });
     }
 }
+
+- (void)updateCurrentMapSource
+{
+    if(![self isViewLoaded])
+        return;
+    
+    @synchronized(self)
+    {
+        if(!_mapSourceInvalidated)
+            return;
+
+        //TODO: actually set new raster map providers
+        NSLog(@"right now I should've activated %@ with %@", _mapSource, [_activeMapSourcePreset UUIDString]);
+        
+        _mapSourceInvalidated = YES;
+    }
+}
+
 /*
 - (void)activateMapnik
 {

@@ -366,29 +366,13 @@
         if(![_activeMapSourcePreset isEqual:newPresetId])
             [_app.configuration selectMapSourcePreset:newPresetId for:_mapSource];
     }
-    
-    NSLog(@"selected %d.%d", indexPath.section, indexPath.row);
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"will deselect %d.%d", indexPath.section, indexPath.row);
-    return indexPath;
-}
-
-- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"deselected %d.%d", indexPath.section, indexPath.row);
-}
-
-- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"highlighted %d.%d", indexPath.section, indexPath.row);
-}
-
-- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"unhighlighted %d.%d", indexPath.section, indexPath.row);
+    // Disallow deselection completely
+    //NOTE: maybe eventually allow to hide slide-out menus by deselection
+    return nil;
 }
 
 #pragma mark -

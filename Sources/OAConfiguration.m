@@ -249,6 +249,13 @@
 
         [_observable notifyEventWithKey:kMapSourcesPresets andValue:mapSource];
         
+        // If preset existed and it was selected, select any-first other
+        if(presetExists && [[self selectedMapSourcePresetFor:mapSource] isEqual:presetId])
+        {
+            NSUUID* newSelection = [[NSUUID alloc] initWithUUIDString:[order firstObject]];
+            [self selectMapSourcePreset:newSelection for:mapSource];
+        }
+        
         return presetExists;
     }
 }

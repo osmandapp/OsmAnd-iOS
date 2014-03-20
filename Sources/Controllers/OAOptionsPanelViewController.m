@@ -125,6 +125,10 @@
         @synchronized(self)
         {
             _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            
+            // In case current selection is no longer available, select any first
+            if(![_mapSourcePresets.order containsObject:_activeMapSourcePreset])
+                _activeMapSourcePreset = [_mapSourcePresets.order firstObject];
         }
         
         // Change of available set of presets for current map-source triggers
@@ -167,10 +171,38 @@
                 }
                 [_optionsTableview reloadRowsAtIndexPaths:affectedRows
                                          withRowAnimation:UITableViewRowAnimationAutomatic];
+                
+                // Verify selection:
+
+                // Get currently selected (if such exists)
+                __block NSUUID* currentlySelectedPreset = nil;
+                __block NSIndexPath* currentlySelectedPresetIndexPath = nil;
+                [[_optionsTableview indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+                    NSIndexPath* indexPath = obj;
+                    if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
+                        return;
+                    currentlySelectedPreset = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
+                    currentlySelectedPresetIndexPath = indexPath;
+                    *stop = YES;
+                }];
+                
+                // If selection differs, or selection index differ
+                NSInteger actualizedSelectionIndex = [_mapSourcePresets.order indexOfObject:_activeMapSourcePreset];
+                if(![_activeMapSourcePreset isEqual:currentlySelectedPreset] ||
+                   actualizedSelectionIndex != (currentlySelectedPresetIndexPath.row - 1))
+                {
+                    // Deselect old
+                    if(currentlySelectedPreset != nil)
+                        [_optionsTableview deselectRowAtIndexPath:currentlySelectedPresetIndexPath animated:YES];
+                    
+                    // Select new
+                    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:actualizedSelectionIndex + 1
+                                                                               inSection:kMapSourcesAndPresetsSection]
+                                                   animated:YES
+                                             scrollPosition:UITableViewScrollPositionNone];
+                }
             }
         });
-        
-        //TODO: deal also with selection! since old selection may not be present in new one, or selection index may have changed
     }
     else if([kSelectedMapSourcePresets isEqualToString:key] && [_mapSource isEqualToString:value])
     {
@@ -192,7 +224,7 @@
                 }];
                 
                 // If selection differs, select proper preset
-                if(_activeMapSourcePreset != currentlySelectedPreset)
+                if(![_activeMapSourcePreset isEqual:currentlySelectedPreset])
                 {
                     // Deselect old
                     if(currentlySelectedPreset != nil)

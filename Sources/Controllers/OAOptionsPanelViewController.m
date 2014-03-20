@@ -32,7 +32,7 @@
     OAMapSourcePresets* _mapSourcePresets;
 }
 
-#define kMapsSection 0
+#define kMapSourcesAndPresetsSection 0
 #define kLayersSection 1
 #define kSettingsSection 2
 
@@ -102,7 +102,7 @@
 {
     switch (section)
     {
-        case kMapsSection:
+        case kMapSourcesAndPresetsSection:
         {
             NSInteger rowsCount = 1 /* 'Maps' */;
             
@@ -124,10 +124,11 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const basicCellId = @"basicCell";
-    static NSString* const onOffCellId = @"onOffCell";
-    static NSString* const checkboxCellId = @"cellWithCheckbox";
-    static NSString* const submenuCellId = @"cellWithSubmenu";
+    static NSString* const submenuCell = @"submenuCell";
+    static NSString* const layerCell_Checked = @"layerCell_Checked";
+    static NSString* const layerCell_Unchecked = @"layerCell_Unchecked";
+    static NSString* const menuItemCell = @"menuItemCell";
+    static NSString* const mapSourcePresetCell = @"mapSourcePresetCell";
     
     // Get content for cell and it's type id
     NSString* cellTypeId = nil;
@@ -135,10 +136,10 @@
     NSString* caption = nil;
     switch (indexPath.section)
     {
-        case kMapsSection:
+        case kMapSourcesAndPresetsSection:
             if(indexPath.row == 0)
             {
-                cellTypeId = submenuCellId;
+                cellTypeId = submenuCell;
                 caption = OALocalizedString(@"Maps");
             }
             else
@@ -146,7 +147,7 @@
                 NSUUID* presetId = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
                 OAMapSourcePreset* preset = [_mapSourcePresets.presets objectForKey:presetId];
                 
-                cellTypeId = checkboxCellId;
+                cellTypeId = mapSourcePresetCell;
                 if(preset.iconImageName != nil)
                     icon = [UIImage imageNamed:preset.iconImageName];
                 else
@@ -178,7 +179,7 @@
             break;
     }
     if(cellTypeId == nil)
-        cellTypeId = basicCellId;
+        cellTypeId = menuItemCell;
     
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
@@ -193,6 +194,81 @@
 }
 
 #pragma mark - UITableViewDelegate
+
+- (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Allow selection only of:
+    //  - map-sources menu
+    //  - map-source preset set
+    //  - layers menu
+    //  - settings menu
+    BOOL selectionAllowed = NO;
+    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row == 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection && indexPath.row == 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kSettingsSection && indexPath.row == 0);
+    if(!selectionAllowed)
+        return nil;
+    
+    // Obtain current selection
+    NSArray* currentSelections = [tableView indexPathsForSelectedRows];
+    
+    // Only one menu is allowed to be selected
+    if((indexPath.section == kMapSourcesAndPresetsSection ||
+        indexPath.section == kLayersSection ||
+        indexPath.section == kSettingsSection) && indexPath.row == 0 )
+    {
+        for (NSIndexPath* selection in currentSelections)
+        {
+            if((selection.section == kMapSourcesAndPresetsSection ||
+                selection.section == kLayersSection ||
+                selection.section == kSettingsSection) && selection.row == 0)
+            {
+                if(selection.section != indexPath.section)
+                    [tableView deselectRowAtIndexPath:selection animated:YES];
+            }
+        }
+    }
+    
+    // Only one preset is allowed to be selected
+    if(indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0)
+    {
+        for (NSIndexPath* selection in currentSelections)
+        {
+            if(selection.section == kMapSourcesAndPresetsSection && selection.row > 0 && selection.row != indexPath.row)
+                [tableView deselectRowAtIndexPath:selection animated:YES];
+        }
+    }
+    
+//    NSLog(@"will select %d.%d", indexPath.section, indexPath.row);
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"selected %d.%d", indexPath.section, indexPath.row);
+}
+
+- (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"will deselect %d.%d", indexPath.section, indexPath.row);
+    return indexPath;
+}
+
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"deselected %d.%d", indexPath.section, indexPath.row);
+}
+
+- (void)tableView:(UITableView *)tableView didHighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"highlighted %d.%d", indexPath.section, indexPath.row);
+}
+
+- (void)tableView:(UITableView *)tableView didUnhighlightRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"unhighlighted %d.%d", indexPath.section, indexPath.row);
+}
 
 #pragma mark -
 

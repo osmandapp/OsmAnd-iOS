@@ -84,6 +84,7 @@
                                in:defaultMapSourcePresets];
     [defaults setObject:[[NSMutableDictionary alloc] initWithDictionary:@{ kDefaultMapSource : defaultMapSourcePresets }]
                  forKey:kMapSourcesPresets];
+    [defaults setObject:@"05111A11-D000-0000-0001-000000000DEF" forKey:kMapSourcePreset];
     
     // Register defaults
     [_storage registerDefaults:[NSDictionary dictionaryWithDictionary:defaults]];
@@ -267,6 +268,23 @@
         [_observable notifyEventWithKey:kMapSourcesPresets andValue:presetId];
         
         return presetExists;
+    }
+}
+
+- (NSUUID*)getMapSourcePreset
+{
+    @synchronized(self)
+    {
+        return [[NSUUID alloc] initWithUUIDString:[_storage stringForKey:kMapSourcePreset]];
+    }
+}
+
+- (void)setMapSourcePreset:(NSUUID *)mapSourcePreset
+{
+    @synchronized(self)
+    {
+        [_storage setObject:[mapSourcePreset UUIDString] forKey:kMapSourcePreset];
+        [_observable notifyEventWithKey:kMapSourcePreset andValue:mapSourcePreset];
     }
 }
 

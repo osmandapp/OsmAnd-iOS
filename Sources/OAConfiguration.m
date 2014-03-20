@@ -82,12 +82,13 @@
                                                                             andValues:@{ @"appMode" : @"pedestrian" }]
                            withId:@"05111A11-D000-0000-0004-00000000F001"
                                in:defaultMapSourcePresets];
-    [defaults setObject:[[NSMutableDictionary alloc] initWithDictionary:@{ kDefaultMapSource : defaultMapSourcePresets }]
+    [defaults setObject:[@{ kDefaultMapSource : defaultMapSourcePresets } mutableCopy]
                  forKey:kMapSourcesPresets];
-    [defaults setObject:@"05111A11-D000-0000-0001-000000000DEF" forKey:kMapSourcePreset];
+    [defaults setObject:[@{ kDefaultMapSource : @"05111A11-D000-0000-0001-000000000DEF" } mutableCopy]
+                 forKey:kSelectedMapSourcePresets];
     
     // Register defaults
-    [_storage registerDefaults:[NSDictionary dictionaryWithDictionary:defaults]];
+    [_storage registerDefaults:defaults];
     [_storage setInteger:vCurrentVersion
                   forKey:kVersion];
     [_storage synchronize];
@@ -125,17 +126,13 @@
     
     [storage setObject:encodedPreset forKey:presetId];
 
-    NSMutableArray* order = [storage objectForKey:kMapSourcesPresetsOrder];
-    BOOL orderWasInflated = NO;
+    NSMutableArray* order = [[storage objectForKey:kMapSourcesPresetsOrder] mutableCopy];
     if(order == nil)
-    {
         order = [[NSMutableArray alloc] initWithCapacity:1];
-        orderWasInflated = YES;
-    }
+
     [order addObject:presetId];
     
-    if(orderWasInflated)
-        [storage setObject:order forKey:kMapSourcesPresetsOrder];
+    [storage setObject:order forKey:kMapSourcesPresetsOrder];
 }
 
 - (OAMapSourcePresets*)mapSourcePresetsFor:(NSString*)mapSource
@@ -148,7 +145,7 @@
             return [[OAMapSourcePresets alloc] initEmpty];
         
         // Get container for presets of specific map-source
-        NSMutableDictionary* innerContainer = [container objectForKey:mapSource];
+        NSDictionary* innerContainer = [container objectForKey:mapSource];
         if(container == nil)
             return [[OAMapSourcePresets alloc] initEmpty];
         
@@ -184,22 +181,14 @@
     @synchronized(self)
     {
         // Get container of all presets (by map-source identifier)
-        NSMutableDictionary* container = [_storage objectForKey:kMapSourcesPresets];
-        BOOL containerWasInflated = NO;
+        NSMutableDictionary* container = [[_storage objectForKey:kMapSourcesPresets] mutableCopy];
         if(container == nil)
-        {
             container = [[NSMutableDictionary alloc] initWithCapacity:1];
-            containerWasInflated = YES;
-        }
         
         // Get container for presets of specific map-source
-        NSMutableDictionary* innerContainer = [container objectForKey:mapSource];
-        BOOL innerContainerWasInflated = NO;
+        NSMutableDictionary* innerContainer = [[container objectForKey:mapSource] mutableCopy];
         if(innerContainer == nil)
-        {
             innerContainer = [[NSMutableDictionary alloc] initWithCapacity:2];
-            innerContainerWasInflated = YES;
-        }
         
         // Generate unique UUID and insert preset into container
         for(;;)
@@ -211,25 +200,18 @@
         [innerContainer setObject:encodedPreset forKey:[presetId UUIDString]];
         
         // Insert new UUID into order array
-        NSMutableArray* order = [innerContainer objectForKey:kMapSourcesPresetsOrder];
-        BOOL orderWasInflated = NO;
+        NSMutableArray* order = [[innerContainer objectForKey:kMapSourcesPresetsOrder] mutableCopy];
         if(order == nil)
-        {
             order = [[NSMutableArray alloc] initWithCapacity:1];
-            orderWasInflated = YES;
-        }
         [order addObject:[presetId UUIDString]];
         
         // Save changes
-        if(orderWasInflated)
-            [innerContainer setObject:order forKey:kMapSourcesPresetsOrder];
-        if(innerContainerWasInflated)
-            [container setObject:innerContainer forKey:mapSource];
-        if(containerWasInflated)
-            [_storage setObject:container forKey:kMapSourcesPresets];
+        [innerContainer setObject:order forKey:kMapSourcesPresetsOrder];
+        [container setObject:innerContainer forKey:mapSource];
+        [_storage setObject:container forKey:kMapSourcesPresets];
         
         // Notify about change
-        [_observable notifyEventWithKey:kMapSourcesPresets andValue:presetId];
+        [_observable notifyEventWithKey:kMapSourcesPresets andValue:mapSource];
     }
     
     return presetId;
@@ -265,26 +247,36 @@
         if([innerContainer count] == 0)
             [container removeObjectForKey:mapSource];
 
-        [_observable notifyEventWithKey:kMapSourcesPresets andValue:presetId];
+        [_observable notifyEventWithKey:kMapSourcesPresets andValue:mapSource];
         
         return presetExists;
     }
 }
 
-- (NSUUID*)getMapSourcePreset
+- (NSUUID*)selectedMapSourcePresetFor:(NSString*)mapSource
 {
     @synchronized(self)
     {
-        return [[NSUUID alloc] initWithUUIDString:[_storage stringForKey:kMapSourcePreset]];
+        NSMutableDictionary* collection = [_storage objectForKey:kSelectedMapSourcePresets];
+        if(collection == nil)
+            return nil;
+        
+        return [[NSUUID alloc] initWithUUIDString:[collection objectForKey:mapSource]];
     }
 }
 
-- (void)setMapSourcePreset:(NSUUID *)mapSourcePreset
+- (void)selectMapSourcePreset:(NSUUID*)preset for:(NSString*)mapSource
 {
     @synchronized(self)
     {
-        [_storage setObject:[mapSourcePreset UUIDString] forKey:kMapSourcePreset];
-        [_observable notifyEventWithKey:kMapSourcePreset andValue:mapSourcePreset];
+        NSMutableDictionary* collection = [[_storage objectForKey:kSelectedMapSourcePresets] mutableCopy];
+        if(collection == nil)
+            collection = [[NSMutableDictionary alloc] initWithCapacity:1];
+        
+        [collection setObject:[preset UUIDString] forKey:mapSource];
+        
+        [_storage setObject:collection forKey:kSelectedMapSourcePresets];
+        [_observable notifyEventWithKey:kSelectedMapSourcePresets andValue:mapSource];
     }
 }
 

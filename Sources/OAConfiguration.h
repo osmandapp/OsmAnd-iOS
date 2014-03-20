@@ -22,7 +22,7 @@
 
 #define kMapSourcesPresets @"map_sources_presets"
 
-#define kMapSourcePreset @"map_source_preset"
+#define kSelectedMapSourcePresets @"selected_map_source_presets"
 
 @interface OAConfiguration : NSObject
 
@@ -35,6 +35,7 @@
 - (NSUUID*)addMapSourcePreset:(OAMapSourcePreset*)preset forMapSource:(NSString*)mapSource;
 - (BOOL)removeMapSourcePresetWithId:(NSUUID*)presetId forMapSource:(NSString*)mapSource;
 
-@property(getter = getMapSourcePreset, setter = setMapSourcePreset:) NSUUID* mapSourcePreset;
+- (NSUUID*)selectedMapSourcePresetFor:(NSString*)mapSource;
+- (void)selectMapSourcePreset:(NSUUID*)preset for:(NSString*)mapSource;
 
 @end

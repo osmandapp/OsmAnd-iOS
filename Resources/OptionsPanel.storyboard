@@ -17,7 +17,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="EGh-Cd-vs6" userLabel="optionsTableview">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="EGh-Cd-vs6" userLabel="optionsTableview">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -109,7 +109,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="TKc-ft-cBj" firstAttribute="top" secondItem="EGh-Cd-vs6" secondAttribute="bottom" id="7Xa-zi-j7r"/>
-                            <constraint firstItem="EGh-Cd-vs6" firstAttribute="top" secondItem="mF8-rm-BeN" secondAttribute="bottom" constant="-20" id="d2S-1e-C4v"/>
+                            <constraint firstItem="EGh-Cd-vs6" firstAttribute="top" secondItem="mF8-rm-BeN" secondAttribute="bottom" id="ax9-7a-5Da"/>
                             <constraint firstItem="EGh-Cd-vs6" firstAttribute="leading" secondItem="8ua-Iw-uJD" secondAttribute="leading" id="iIv-Ou-Tmd"/>
                             <constraint firstAttribute="trailing" secondItem="EGh-Cd-vs6" secondAttribute="trailing" id="k9Q-Iv-6WU"/>
                         </constraints>

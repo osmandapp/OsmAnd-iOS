@@ -23,6 +23,9 @@
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
 #include <OsmAndCore/Map/OfflineMapSymbolProvider.h>
+#include <OsmAndCore/Map/RasterizerEnvironment.h>
+#include <OsmAndCore/Map/MapStyleValueDefinition.h>
+#include <OsmAndCore/Map/MapStyleValue.h>
 
 #include "ExternalResourcesProvider.h"
 
@@ -814,11 +817,30 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             const auto styleResolved = _app.mapStyles->obtainStyle(QString::fromNSString(styleName), mapStyle);
             NSAssert(styleResolved, @"Failed to resolve style with name '%@'", styleName);
             
+            // Obtain settings from selected preset
+            __block QHash< std::shared_ptr<const OsmAnd::MapStyleValueDefinition>, OsmAnd::MapStyleValue > styleSettings;
+            OAMapSourcePreset* mapSourcePreset = [_mapSourcePresets.presets objectForKey:_activeMapSourcePreset];
+            [mapSourcePreset.values enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+                NSString* name = key;
+                NSString* value = obj;
+                
+                // Resolve style value definition
+                std::shared_ptr<const OsmAnd::MapStyleValueDefinition> styleValueDefinition;
+                mapStyle->resolveValueDefinition(QString::fromNSString(name), styleValueDefinition);
+                
+                // Parse style value
+                OsmAnd::MapStyleValue styleValue;
+                
+                //styleSettings.insert(styleValueDefinition, styleValue);
+            }];
+            
+            // Configure offline map data provider with given settings
             const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
             _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.obfsCollection,
                                                                              mapStyle,
                                                                              mapView.contentScaleFactor,
                                                                              externalResourcesProvider));
+            _offlineMapDataProvider->rasterizerEnvironment->setSettings(styleSettings);
             _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
                                                                                        256 * mapView.contentScaleFactor,
                                                                                        mapView.contentScaleFactor));

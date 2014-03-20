@@ -50,6 +50,13 @@
     OAMapSourcePresets* _mapSourcePresets;
     NSUUID* _activeMapSourcePreset;
     
+    // Current provider of raster map
+    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> _rasterMapProvider;
+    
+    // Offline-specific providers & resources
+    std::shared_ptr<OsmAnd::OfflineMapDataProvider> _offlineMapDataProvider;
+    std::shared_ptr<OsmAnd::IMapSymbolProvider> _offlineMapSymbolsProvider;
+    
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
@@ -782,74 +789,51 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     if(![self isViewLoaded])
         return;
     
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
     @synchronized(self)
     {
         if(!_mapSourceInvalidated)
             return;
-
-        //TODO: actually set new raster map providers
-        NSLog(@"right now I should've activated %@ with %@", _mapSource, [_activeMapSourcePreset UUIDString]);
         
+        // Release previously-used resources (if any)
+        _rasterMapProvider.reset();
+        _offlineMapDataProvider.reset();
+        if(_offlineMapSymbolsProvider)
+            [mapView removeSymbolProvider:_offlineMapSymbolsProvider];
+        _offlineMapSymbolsProvider.reset();
+        
+        // Determine what type of map-source is being activated
+        if([_mapSource hasPrefix:kMapSource_OfflinePrefix])
+        {
+            // Get style name
+            NSString* styleName = [_mapSource substringFromIndex:[kMapSource_OfflinePrefix length]];
+            
+            // Obtain style with that name
+            std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
+            const auto styleResolved = _app.mapStyles->obtainStyle(QString::fromNSString(styleName), mapStyle);
+            NSAssert(styleResolved, @"Failed to resolve style with name '%@'", styleName);
+            
+            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
+            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.obfsCollection,
+                                                                             mapStyle,
+                                                                             mapView.contentScaleFactor,
+                                                                             externalResourcesProvider));
+            _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
+                                                                                       256 * mapView.contentScaleFactor,
+                                                                                       mapView.contentScaleFactor));
+            [mapView setProvider:_rasterMapProvider
+                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+            _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
+            [mapView addSymbolProvider:_offlineMapSymbolsProvider];
+        }
+        else if([_mapSource hasPrefix:kMapSource_OnlinePrefix])
+        {
+            NSLog(@"right now I should've activated %@ with %@", _mapSource, [_activeMapSourcePreset UUIDString]);
+        }
+
         _mapSourceInvalidated = YES;
     }
 }
-
-/*
-- (void)activateMapnik
-{
-    if(![self isViewLoaded])
-        return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createMapnikProvider();
-    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
-    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("Mapnik cache")));
-    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-    mapView.azimuth = 0.0f;
-    mapView.elevationAngle = 90.0f;
-    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
-    mapView.zoom = 10.0f;
-}
-
-- (void)activateCyclemap
-{
-    if(![self isViewLoaded])
-        return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider = OsmAnd::OnlineMapRasterTileProvider::createCycleMapProvider();
-    OsmAnd::OnlineMapRasterTileProvider* onlineTileProvider = dynamic_cast<OsmAnd::OnlineMapRasterTileProvider*>(tileProvider.get());
-    onlineTileProvider->setLocalCachePath(QDir(QDir(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).filePath("CycleMap cache")));
-    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-    mapView.azimuth = 0.0f;
-    mapView.elevationAngle = 90.0f;
-    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
-    mapView.zoom = 10.0f;
-}
-
-- (void)activateOffline
-{
-    if(![self isViewLoaded])
-        return;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
-    std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-    _app.mapStyles->obtainStyle("default", mapStyle);
-    std::shared_ptr<OsmAnd::OfflineMapDataProvider> offlineMapDP(new OsmAnd::OfflineMapDataProvider(_app.obfsCollection, mapStyle, mapView.contentScaleFactor, std::shared_ptr<OsmAnd::IExternalResourcesProvider>(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f))));
-    
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> tileProvider(new OsmAnd::OfflineMapRasterTileProvider_Software(offlineMapDP, 256 * mapView.contentScaleFactor, mapView.contentScaleFactor));
-    [mapView setProvider:tileProvider ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-    
-    std::shared_ptr<OsmAnd::IMapSymbolProvider> symbolProvider(new OsmAnd::OfflineMapSymbolProvider(offlineMapDP));
-    [mapView addSymbolProvider:symbolProvider];
-    
-    mapView.azimuth = 0.0f;
-    mapView.elevationAngle = 90.0f;
-    mapView.target31 = OsmAnd::PointI(1102430866, 704978668);
-    mapView.zoom = 10.0f;
-}*/
 
 @end

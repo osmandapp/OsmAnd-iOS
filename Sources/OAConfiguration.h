@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "OAObservable.h"
+#import "OAMapSourcePresets.h"
 #import "OAMapSourcePreset.h"
 
 // Values of map_source are:
@@ -28,7 +29,7 @@
 
 @property(getter = getMapSource, setter = setMapSource:) NSString* mapSource;
 
-@property(readonly, getter = getMapSourcesPresets) NSDictionary* mapSourcesPresets;
+- (OAMapSourcePresets*)mapSourcePresetsFor:(NSString*)mapSource;
 - (NSUUID*)addMapSourcePreset:(OAMapSourcePreset*)preset forMapSource:(NSString*)mapSource;
 - (BOOL)removeMapSourcePresetWithId:(NSUUID*)presetId forMapSource:(NSString*)mapSource;
 

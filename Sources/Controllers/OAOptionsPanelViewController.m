@@ -12,6 +12,7 @@
 #import "UIViewController+OARootVC.h"
 #import "OAAutoObserverProxy.h"
 #import "OAConfiguration.h"
+#import "OAMapSourcePresets.h"
 #import "OAMapSourcePreset.h"
 
 #include "Localization.h"
@@ -28,8 +29,7 @@
     
     OAAutoObserverProxy* _configurationObserver;
     
-    NSDictionary* _mapSourcePresets;
-    NSArray* _mapSourcePresetIds;
+    OAMapSourcePresets* _mapSourcePresets;
 }
 
 #define kMapsSection 0
@@ -88,8 +88,7 @@
 
 - (void)refreshCachedData
 {
-    _mapSourcePresets = [_app.configuration.mapSourcesPresets objectForKey:_app.configuration.mapSource];
-    _mapSourcePresetIds = [_mapSourcePresets allKeys];
+    _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
 }
 
 #pragma mark - UITableViewDataSource
@@ -109,7 +108,7 @@
             
             // Append rows to show all available presets for current map source
             if(_mapSourcePresets != nil)
-                rowsCount += [_mapSourcePresets count];
+                rowsCount += [_mapSourcePresets.presets count];
             
             return rowsCount;
         } break;
@@ -144,8 +143,8 @@
             }
             else
             {
-                NSUUID* presetId = [_mapSourcePresetIds objectAtIndex:indexPath.row - 1];
-                OAMapSourcePreset* preset = [_mapSourcePresets objectForKey:presetId];
+                NSUUID* presetId = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
+                OAMapSourcePreset* preset = [_mapSourcePresets.presets objectForKey:presetId];
                 
                 cellTypeId = checkboxCellId;
                 if(preset.iconImageName != nil)

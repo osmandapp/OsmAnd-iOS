@@ -98,6 +98,8 @@
         @synchronized(self)
         {
             _mapSource = _app.configuration.mapSource;
+            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
         }
         
         // Change of map-source requires reloading of entire map section,
@@ -106,8 +108,15 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             @synchronized(self)
             {
+                // Reload entire section
                 [_optionsTableview reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+                
+                // Perform selection of proper preset
+                [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_mapSourcePresets.order indexOfObject:_activeMapSourcePreset] + 1
+                                                                           inSection:kMapSourcesAndPresetsSection]
+                                               animated:YES
+                                         scrollPosition:UITableViewScrollPositionNone];
             }
         });
     }

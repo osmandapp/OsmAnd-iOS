@@ -75,14 +75,14 @@
                                                                                              andType:OAMapSourcePresetTypePedestrian
                                                                                            andValues:@{ @"appMode" : @"pedestrian" }];
     NSMutableDictionary* encodedDefaultPresets = [[NSMutableDictionary alloc] init];
-    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultGeneralPreset]
-                              forKey:@"05111A11-D000-0000-0001-000000000DEF"];
-    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultCarPreset]
-                              forKey:@"05111A11-D000-0000-0002-000000000CAA"];
-    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultBicyclePreset]
-                              forKey:@"05111A11-D000-0000-0003-0000000B1CCE"];
     [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultPedestrianPreset]
                               forKey:@"05111A11-D000-0000-0004-00000000F001"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultBicyclePreset]
+                              forKey:@"05111A11-D000-0000-0003-0000000B1CCE"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultCarPreset]
+                              forKey:@"05111A11-D000-0000-0002-000000000CAA"];
+    [encodedDefaultPresets setObject:[NSKeyedArchiver archivedDataWithRootObject:defaultGeneralPreset]
+                              forKey:@"05111A11-D000-0000-0001-000000000DEF"];
     [mapSourcesPresets setObject:encodedDefaultPresets
                           forKey:kDefaultMapSource];
     [defaults setObject:mapSourcesPresets

@@ -818,20 +818,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             NSAssert(styleResolved, @"Failed to resolve style with name '%@'", styleName);
             
             // Obtain settings from selected preset
-            __block QHash< std::shared_ptr<const OsmAnd::MapStyleValueDefinition>, OsmAnd::MapStyleValue > styleSettings;
+            __block QHash< QString, QString > styleSettings;
             OAMapSourcePreset* mapSourcePreset = [_mapSourcePresets.presets objectForKey:_activeMapSourcePreset];
             [mapSourcePreset.values enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
                 NSString* name = key;
                 NSString* value = obj;
                 
-                // Resolve style value definition
-                std::shared_ptr<const OsmAnd::MapStyleValueDefinition> styleValueDefinition;
-                mapStyle->resolveValueDefinition(QString::fromNSString(name), styleValueDefinition);
-                
-                // Parse style value
-                OsmAnd::MapStyleValue styleValue;
-                
-                //styleSettings.insert(styleValueDefinition, styleValue);
+                styleSettings.insert(QString::fromNSString(name), QString::fromNSString(value));
             }];
             
             // Configure offline map data provider with given settings

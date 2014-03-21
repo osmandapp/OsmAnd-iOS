@@ -333,7 +333,7 @@
 		BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "position_track_map_mode_button@2x.png"; sourceTree = "<group>"; };
 		BB451E1B18DAFB55005FBE09 /* OAMapSourcePresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSourcePresets.h; sourceTree = "<group>"; };
 		BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapSourcePresets.m; sourceTree = "<group>"; };
-		BB451E9A18DCD224005FBE09 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB451E9A18DCD224005FBE09 /* OsmAnd (prebuilt Core).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd (prebuilt Core).app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -496,7 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				BB098CF11793F7FD00423944 /* OsmAnd.app */,
-				BB451E9A18DCD224005FBE09 /* OsmAnd.app */,
+				BB451E9A18DCD224005FBE09 /* OsmAnd (prebuilt Core).app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -819,7 +819,7 @@
 			);
 			name = "OsmAnd (prebuilt Core)";
 			productName = OsmAnd;
-			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd.app */;
+			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd (prebuilt Core).app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -1174,7 +1174,7 @@
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
-				PRODUCT_NAME = OsmAnd;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -1230,7 +1230,7 @@
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
-				PRODUCT_NAME = OsmAnd;
+				PRODUCT_NAME = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -1241,6 +1241,7 @@
 		BB098D0F1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1248,6 +1249,7 @@
 		BB098D101793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1269,6 +1271,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_NAME = "OsmAnd (prebuilt Core)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1290,6 +1293,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
+				PRODUCT_NAME = "OsmAnd (prebuilt Core)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

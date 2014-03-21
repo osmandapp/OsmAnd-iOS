@@ -84,6 +84,110 @@
 		BB451E1918DA4180005FBE09 /* position_track_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */; };
 		BB451E1A18DA4180005FBE09 /* position_track_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */; };
 		BB451E1D18DAFB55005FBE09 /* OAMapSourcePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */; };
+		BB451E2218DCD224005FBE09 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
+		BB451E2318DCD224005FBE09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
+		BB451E2418DCD224005FBE09 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
+		BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
+		BB451E2618DCD224005FBE09 /* OAMapSourcePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */; };
+		BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
+		BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
+		BB451E2918DCD224005FBE09 /* OAMapSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF918DA2E2A005FBE09 /* OAMapSourcePreset.m */; };
+		BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
+		BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
+		BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
+		BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.m */; };
+		BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */; };
+		BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */; };
+		BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */; };
+		BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */; };
+		BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */; };
+		BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
+		BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
+		BB451E3518DCD224005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB618BCE77400E4A359 /* OALocationServices.m */; };
+		BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
+		BB451E3718DCD224005FBE09 /* OAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF618D9BC52005FBE09 /* OAConfiguration.m */; };
+		BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
+		BB451E3A18DCD224005FBE09 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
+		BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
+		BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
+		BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
+		BB451E4918DCD224005FBE09 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
+		BB451E4A18DCD224005FBE09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
+		BB451E4B18DCD224005FBE09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
+		BB451E4C18DCD224005FBE09 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
+		BB451E4D18DCD224005FBE09 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBDADB818BCF53500E4A359 /* CoreLocation.framework */; };
+		BB451E4E18DCD224005FBE09 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
+		BB451E4F18DCD224005FBE09 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
+		BB451E5018DCD224005FBE09 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
+		BB451E5118DCD224005FBE09 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
+		BB451E5218DCD224005FBE09 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
+		BB451E5418DCD224005FBE09 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
+		BB451E5518DCD224005FBE09 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
+		BB451E5618DCD224005FBE09 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
+		BB451E5718DCD224005FBE09 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591117C24E9B00AADCC7 /* Default.png */; };
+		BB451E5818DCD224005FBE09 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
+		BB451E5918DCD224005FBE09 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591317C24EB500AADCC7 /* Default-Portrait~ipad.png */; };
+		BB451E5A18DCD224005FBE09 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591517C24EC700AADCC7 /* Default-Portrait@2x~ipad.png */; };
+		BB451E5B18DCD224005FBE09 /* HUD_more_halfbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA418D70B5B005FBE09 /* HUD_more_halfbutton.png */; };
+		BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAC18D70B5B005FBE09 /* HUD_zoom_in_button.png */; };
+		BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9A18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png */; };
+		BB451E5E18DCD224005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA118D70B5B005FBE09 /* HUD_menu_halfbutton@2x.png */; };
+		BB451E5F18DCD224005FBE09 /* HUD_right_halfbutton_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA618D70B5B005FBE09 /* HUD_right_halfbutton_bg.png */; };
+		BB451E6018DCD224005FBE09 /* position_track_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */; };
+		BB451E6118DCD224005FBE09 /* position_track_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */; };
+		BB451E6218DCD224005FBE09 /* HUD_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9518D70B5B005FBE09 /* HUD_button_bg@2x.png */; };
+		BB451E6318DCD224005FBE09 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
+		BB451E6418DCD224005FBE09 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
+		BB451E6518DCD224005FBE09 /* map_source_preset_type_bicycle_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0718DA4180005FBE09 /* map_source_preset_type_bicycle_icon.png */; };
+		BB451E6618DCD224005FBE09 /* HUD_menu_halfbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA018D70B5B005FBE09 /* HUD_menu_halfbutton.png */; };
+		BB451E6718DCD224005FBE09 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591717C24EDA00AADCC7 /* Default-Landscape~ipad.png */; };
+		BB451E6818DCD224005FBE09 /* drive_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFB18DA4176005FBE09 /* drive_mode_button.png */; };
+		BB451E6918DCD224005FBE09 /* map_source_preset_type_general_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0C18DA4180005FBE09 /* map_source_preset_type_general_icon@2x.png */; };
+		BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0E18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png */; };
+		BB451E6B18DCD224005FBE09 /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFD18DA4176005FBE09 /* follow_map_mode_button.png */; };
+		BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD618D71121005FBE09 /* HUD_debug_button.png */; };
+		BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAB18D70B5B005FBE09 /* HUD_search_icon@2x.png */; };
+		BB451E6E18DCD224005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA718D70B5B005FBE09 /* HUD_right_halfbutton_bg@2x.png */; };
+		BB451E6F18DCD224005FBE09 /* HUD_left_narrowbutton_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9D18D70B5B005FBE09 /* HUD_left_narrowbutton_bg@2x.png */; };
+		BB451E7018DCD224005FBE09 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8591917C24EE800AADCC7 /* Default-Landscape@2x~ipad.png */; };
+		BB451E7118DCD224005FBE09 /* follow_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFE18DA4176005FBE09 /* follow_map_mode_button@2x.png */; };
+		BB451E7218DCD224005FBE09 /* free_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFF18DA4176005FBE09 /* free_map_mode_button.png */; };
+		BB451E7318DCD224005FBE09 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895717C252B2003CD1A4 /* Icon-72.png */; };
+		BB451E7418DCD224005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9B18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png */; };
+		BB451E7518DCD224005FBE09 /* drive_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFC18DA4176005FBE09 /* drive_mode_button@2x.png */; };
+		BB451E7618DCD224005FBE09 /* HUD_zoom_out_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAF18D70B5B005FBE09 /* HUD_zoom_out_button@2x.png */; };
+		BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9918D70B5B005FBE09 /* HUD_compass_bg@2x.png */; };
+		BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA318D70B5B005FBE09 /* HUD_menu_narrowbutton@2x.png */; };
+		BB451E7918DCD224005FBE09 /* drawable-xhdpi in Resources */ = {isa = PBXBuildFile; fileRef = BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */; };
+		BB451E7A18DCD224005FBE09 /* NavigationModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */; };
+		BB451E7B18DCD224005FBE09 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895917C252B8003CD1A4 /* Icon-72@2x.png */; };
+		BB451E7C18DCD224005FBE09 /* free_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0018DA4176005FBE09 /* free_map_mode_button@2x.png */; };
+		BB451E7D18DCD224005FBE09 /* HUD_compass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9718D70B5B005FBE09 /* HUD_compass@2x.png */; };
+		BB451E7E18DCD224005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA918D70B5B005FBE09 /* HUD_right_narrowbutton_bg@2x.png */; };
+		BB451E7F18DCD224005FBE09 /* HUD_more_halfbutton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA518D70B5B005FBE09 /* HUD_more_halfbutton@2x.png */; };
+		BB451E8018DCD224005FBE09 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
+		BB451E8118DCD224005FBE09 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
+		BB451E8218DCD224005FBE09 /* HUD_menu_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9F18D70B5B005FBE09 /* HUD_menu_button@2x.png */; };
+		BB451E8318DCD224005FBE09 /* HUD_zoom_out_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAE18D70B5B005FBE09 /* HUD_zoom_out_button.png */; };
+		BB451E8418DCD224005FBE09 /* map_source_preset_type_general_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0B18DA4180005FBE09 /* map_source_preset_type_general_icon.png */; };
+		BB451E8518DCD224005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA818D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png */; };
+		BB451E8618DCD224005FBE09 /* OptionsPanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */; };
+		BB451E8718DCD224005FBE09 /* HUD_zoom_in_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAD18D70B5B005FBE09 /* HUD_zoom_in_button@2x.png */; };
+		BB451E8818DCD224005FBE09 /* MapModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapModeHUD.xib */; };
+		BB451E8918DCD224005FBE09 /* HUD_button_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9418D70B5B005FBE09 /* HUD_button_bg.png */; };
+		BB451E8A18DCD224005FBE09 /* HUD_debug_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */; };
+		BB451E8B18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0D18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon.png */; };
+		BB451E8C18DCD224005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9C18D70B5B005FBE09 /* HUD_left_narrowbutton_bg.png */; };
+		BB451E8D18DCD224005FBE09 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
+		BB451E8E18DCD224005FBE09 /* map_source_preset_type_car_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0918DA4180005FBE09 /* map_source_preset_type_car_icon.png */; };
+		BB451E8F18DCD224005FBE09 /* map_source_preset_type_bicycle_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0818DA4180005FBE09 /* map_source_preset_type_bicycle_icon@2x.png */; };
+		BB451E9018DCD224005FBE09 /* MapModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBBDAD5918BBE74400E4A359 /* MapModeHUD~ipad.xib */; };
+		BB451E9118DCD224005FBE09 /* map_source_preset_type_car_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0A18DA4180005FBE09 /* map_source_preset_type_car_icon@2x.png */; };
+		BB451E9218DCD224005FBE09 /* HUD_search_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DAA18D70B5B005FBE09 /* HUD_search_icon.png */; };
+		BB451E9318DCD224005FBE09 /* HUD_menu_narrowbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DA218D70B5B005FBE09 /* HUD_menu_narrowbutton.png */; };
+		BB451E9418DCD224005FBE09 /* HUD_compass_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9818D70B5B005FBE09 /* HUD_compass_bg.png */; };
+		BB451E9518DCD224005FBE09 /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9618D70B5B005FBE09 /* HUD_compass.png */; };
+		BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9E18D70B5B005FBE09 /* HUD_menu_button.png */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -140,6 +244,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BB6B848917C263E000ACD753;
+			remoteInfo = "OsmAnd Preparation";
+		};
 		BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
@@ -222,6 +333,7 @@
 		BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "position_track_map_mode_button@2x.png"; sourceTree = "<group>"; };
 		BB451E1B18DAFB55005FBE09 /* OAMapSourcePresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSourcePresets.h; sourceTree = "<group>"; };
 		BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapSourcePresets.m; sourceTree = "<group>"; };
+		BB451E9A18DCD224005FBE09 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -344,6 +456,27 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB451E3918DCD224005FBE09 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB451E3A18DCD224005FBE09 /* libTestFlight.a in Frameworks */,
+				BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */,
+				BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */,
+				BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */,
+				BB451E4918DCD224005FBE09 /* OpenGLES.framework in Frameworks */,
+				BB451E4A18DCD224005FBE09 /* UIKit.framework in Frameworks */,
+				BB451E4B18DCD224005FBE09 /* Foundation.framework in Frameworks */,
+				BB451E4C18DCD224005FBE09 /* CoreGraphics.framework in Frameworks */,
+				BB451E4D18DCD224005FBE09 /* CoreLocation.framework in Frameworks */,
+				BB451E4E18DCD224005FBE09 /* libQt5Core.a in Frameworks */,
+				BB451E4F18DCD224005FBE09 /* libQt5Network.a in Frameworks */,
+				BB451E5018DCD224005FBE09 /* libQt5Sql.a in Frameworks */,
+				BB451E5118DCD224005FBE09 /* libz.dylib in Frameworks */,
+				BB451E5218DCD224005FBE09 /* libiconv.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -363,6 +496,7 @@
 			isa = PBXGroup;
 			children = (
 				BB098CF11793F7FD00423944 /* OsmAnd.app */,
+				BB451E9A18DCD224005FBE09 /* OsmAnd.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -670,6 +804,24 @@
 			productReference = BB098CF11793F7FD00423944 /* OsmAnd.app */;
 			productType = "com.apple.product-type.application";
 		};
+		BB451E1E18DCD224005FBE09 /* OsmAnd (prebuilt Core) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BB451E9718DCD224005FBE09 /* Build configuration list for PBXNativeTarget "OsmAnd (prebuilt Core)" */;
+			buildPhases = (
+				BB451E2118DCD224005FBE09 /* Sources */,
+				BB451E3918DCD224005FBE09 /* Frameworks */,
+				BB451E5318DCD224005FBE09 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				BB451E1F18DCD224005FBE09 /* PBXTargetDependency */,
+			);
+			name = "OsmAnd (prebuilt Core)";
+			productName = OsmAnd;
+			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd.app */;
+			productType = "com.apple.product-type.application";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -693,6 +845,7 @@
 			projectRoot = "";
 			targets = (
 				BB098CF01793F7FD00423944 /* OsmAnd */,
+				BB451E1E18DCD224005FBE09 /* OsmAnd (prebuilt Core) */,
 				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};
@@ -773,6 +926,80 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB451E5318DCD224005FBE09 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB451E5418DCD224005FBE09 /* Default-568h@2x.png in Resources */,
+				BB451E5518DCD224005FBE09 /* Default@2x.png in Resources */,
+				BB451E5618DCD224005FBE09 /* DriveModeHUD.xib in Resources */,
+				BB451E5718DCD224005FBE09 /* Default.png in Resources */,
+				BB451E5818DCD224005FBE09 /* Shipped in Resources */,
+				BB451E5918DCD224005FBE09 /* Default-Portrait~ipad.png in Resources */,
+				BB451E5A18DCD224005FBE09 /* Default-Portrait@2x~ipad.png in Resources */,
+				BB451E5B18DCD224005FBE09 /* HUD_more_halfbutton.png in Resources */,
+				BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */,
+				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
+				BB451E5E18DCD224005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
+				BB451E5F18DCD224005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
+				BB451E6018DCD224005FBE09 /* position_track_map_mode_button@2x.png in Resources */,
+				BB451E6118DCD224005FBE09 /* position_track_map_mode_button.png in Resources */,
+				BB451E6218DCD224005FBE09 /* HUD_button_bg@2x.png in Resources */,
+				BB451E6318DCD224005FBE09 /* DriveModeHUD~ipad.xib in Resources */,
+				BB451E6418DCD224005FBE09 /* Localizable.strings in Resources */,
+				BB451E6518DCD224005FBE09 /* map_source_preset_type_bicycle_icon.png in Resources */,
+				BB451E6618DCD224005FBE09 /* HUD_menu_halfbutton.png in Resources */,
+				BB451E6718DCD224005FBE09 /* Default-Landscape~ipad.png in Resources */,
+				BB451E6818DCD224005FBE09 /* drive_mode_button.png in Resources */,
+				BB451E6918DCD224005FBE09 /* map_source_preset_type_general_icon@2x.png in Resources */,
+				BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
+				BB451E6B18DCD224005FBE09 /* follow_map_mode_button.png in Resources */,
+				BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */,
+				BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */,
+				BB451E6E18DCD224005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
+				BB451E6F18DCD224005FBE09 /* HUD_left_narrowbutton_bg@2x.png in Resources */,
+				BB451E7018DCD224005FBE09 /* Default-Landscape@2x~ipad.png in Resources */,
+				BB451E7118DCD224005FBE09 /* follow_map_mode_button@2x.png in Resources */,
+				BB451E7218DCD224005FBE09 /* free_map_mode_button.png in Resources */,
+				BB451E7318DCD224005FBE09 /* Icon-72.png in Resources */,
+				BB451E7418DCD224005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
+				BB451E7518DCD224005FBE09 /* drive_mode_button@2x.png in Resources */,
+				BB451E7618DCD224005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
+				BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */,
+				BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
+				BB451E7918DCD224005FBE09 /* drawable-xhdpi in Resources */,
+				BB451E7A18DCD224005FBE09 /* NavigationModeHUD~ipad.xib in Resources */,
+				BB451E7B18DCD224005FBE09 /* Icon-72@2x.png in Resources */,
+				BB451E7C18DCD224005FBE09 /* free_map_mode_button@2x.png in Resources */,
+				BB451E7D18DCD224005FBE09 /* HUD_compass@2x.png in Resources */,
+				BB451E7E18DCD224005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
+				BB451E7F18DCD224005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
+				BB451E8018DCD224005FBE09 /* Icon@2x.png in Resources */,
+				BB451E8118DCD224005FBE09 /* Icon.png in Resources */,
+				BB451E8218DCD224005FBE09 /* HUD_menu_button@2x.png in Resources */,
+				BB451E8318DCD224005FBE09 /* HUD_zoom_out_button.png in Resources */,
+				BB451E8418DCD224005FBE09 /* map_source_preset_type_general_icon.png in Resources */,
+				BB451E8518DCD224005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
+				BB451E8618DCD224005FBE09 /* OptionsPanel.storyboard in Resources */,
+				BB451E8718DCD224005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
+				BB451E8818DCD224005FBE09 /* MapModeHUD.xib in Resources */,
+				BB451E8918DCD224005FBE09 /* HUD_button_bg.png in Resources */,
+				BB451E8A18DCD224005FBE09 /* HUD_debug_button@2x.png in Resources */,
+				BB451E8B18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,
+				BB451E8C18DCD224005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
+				BB451E8D18DCD224005FBE09 /* NavigationModeHUD.xib in Resources */,
+				BB451E8E18DCD224005FBE09 /* map_source_preset_type_car_icon.png in Resources */,
+				BB451E8F18DCD224005FBE09 /* map_source_preset_type_bicycle_icon@2x.png in Resources */,
+				BB451E9018DCD224005FBE09 /* MapModeHUD~ipad.xib in Resources */,
+				BB451E9118DCD224005FBE09 /* map_source_preset_type_car_icon@2x.png in Resources */,
+				BB451E9218DCD224005FBE09 /* HUD_search_icon.png in Resources */,
+				BB451E9318DCD224005FBE09 /* HUD_menu_narrowbutton.png in Resources */,
+				BB451E9418DCD224005FBE09 /* HUD_compass_bg.png in Resources */,
+				BB451E9518DCD224005FBE09 /* HUD_compass.png in Resources */,
+				BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
@@ -837,9 +1064,44 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BB451E2118DCD224005FBE09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BB451E2218DCD224005FBE09 /* OsmAndAppImpl.mm in Sources */,
+				BB451E2318DCD224005FBE09 /* main.m in Sources */,
+				BB451E2418DCD224005FBE09 /* OAAppDelegate.mm in Sources */,
+				BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */,
+				BB451E2618DCD224005FBE09 /* OAMapSourcePresets.m in Sources */,
+				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
+				BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */,
+				BB451E2918DCD224005FBE09 /* OAMapSourcePreset.m in Sources */,
+				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
+				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
+				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
+				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
+				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
+				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
+				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
+				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
+				BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */,
+				BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */,
+				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
+				BB451E3518DCD224005FBE09 /* OALocationServices.m in Sources */,
+				BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */,
+				BB451E3718DCD224005FBE09 /* OAConfiguration.m in Sources */,
+				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		BB451E1F18DCD224005FBE09 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
+			targetProxy = BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */;
+		};
 		BB9B57BF17C5F817002EA93C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
@@ -878,12 +1140,13 @@
 				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BUILD_$(CONFIGURATION)",
 					"DEBUG=1",
 					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
@@ -893,11 +1156,26 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
+					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"$(SRCROOT)/externals/TestFlight",
+				);
 				ONLY_ACTIVE_ARCH = YES;
-				PLATFORM_DEFINITIONS = "";
+				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
+				PRODUCT_NAME = OsmAnd;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "$(ARCHS_STANDARD_32_BIT)";
@@ -922,9 +1200,11 @@
 				CONFIGURATION_BUILD_DIR = "${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"BUILD_$(CONFIGURATION)",
 					"$(inherited)",
+					"$(PLATFORM_DEFINITIONS)",
 				);
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -933,11 +1213,26 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
+					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"$(SRCROOT)/externals/TestFlight",
+				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PLATFORM_DEFINITIONS = "";
+				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
+				PRODUCT_NAME = OsmAnd;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -948,27 +1243,6 @@
 		BB098D0F1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"$(inherited)",
-					"$(PLATFORM_DEFINITIONS)",
-				);
-				HEADER_SEARCH_PATHS = (
-					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
-					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
-					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
-					"$(SRCROOT)/externals/TestFlight",
-				);
-				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -976,24 +1250,48 @@
 		BB098D101793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				GCC_PREPROCESSOR_DEFINITIONS = "$(PLATFORM_DEFINITIONS)";
-				HEADER_SEARCH_PATHS = (
-					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
-					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
-				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				LIBRARY_SEARCH_PATHS = (
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		BB451E9818DCD224005FBE09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
-					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
-					"$(SRCROOT)/externals/TestFlight",
+					"-lOsmAndCore_static",
+					"-licu4c_static",
+					"-lprotobuf_static",
+					"-lglsl-optimizer_static",
+					"-lgdal_static",
+					"-lskia_static",
+					"-lexpat_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
 				);
-				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BB451E9918DCD224005FBE09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-lOsmAndCore_static",
+					"-licu4c_static",
+					"-lprotobuf_static",
+					"-lglsl-optimizer_static",
+					"-lgdal_static",
+					"-lskia_static",
+					"-lexpat_static",
+					"-lgif_static",
+					"-ljpeg_static",
+					"-lpng_static",
+					"-lz_static",
+				);
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1029,6 +1327,15 @@
 			buildConfigurations = (
 				BB098D0F1793F7FD00423944 /* Debug */,
 				BB098D101793F7FD00423944 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BB451E9718DCD224005FBE09 /* Build configuration list for PBXNativeTarget "OsmAnd (prebuilt Core)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BB451E9818DCD224005FBE09 /* Debug */,
+				BB451E9918DCD224005FBE09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

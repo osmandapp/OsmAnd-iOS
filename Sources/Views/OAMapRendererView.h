@@ -41,12 +41,12 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 #undef _DECLARE_ENTRY
 
 #define _DECLARE_ENTRY(name)                                                                                                \
-OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
+    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
 #define _DECLARE_TIMING_FUNCTION(name)                                                                                      \
-_DECLARE_ENTRY(EaseIn##name),                                                                                           \
-_DECLARE_ENTRY(EaseOut##name),                                                                                          \
-_DECLARE_ENTRY(EaseInOut##name),                                                                                        \
-_DECLARE_ENTRY(EaseOutIn##name)
+    _DECLARE_ENTRY(EaseIn##name),                                                                                           \
+    _DECLARE_ENTRY(EaseOut##name),                                                                                          \
+    _DECLARE_ENTRY(EaseInOut##name),                                                                                        \
+    _DECLARE_ENTRY(EaseOutIn##name)
 typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 {
     _DECLARE_ENTRY(Invalid),

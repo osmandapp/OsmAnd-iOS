@@ -20,7 +20,7 @@
 #import "OAObservable.h"
 
 #define _DECLARE_ENTRY(name)                                                                                                \
-OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
+    OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
 typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 {
     _DECLARE_ENTRY(RasterLayers_Providers),

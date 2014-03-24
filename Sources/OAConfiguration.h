@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+#include "CommonTypes.h"
 #import "OAObservable.h"
 #import "OAMapSourcePresets.h"
 #import "OAMapSourcePreset.h"
@@ -15,7 +16,7 @@
 // Values of map_source are:
 // - "offline:<style-name>"
 // - "online:<provider-id>"
-#define kMapSource @"map_source"
+#define kActiveMapSource @"active_map_source"
 #define kMapSource_OfflinePrefix @"offline:"
 #define kMapSource_OnlinePrefix @"online:"
 #define kDefaultMapSource @"offline:default"
@@ -24,12 +25,18 @@
 
 #define kSelectedMapSourcePresets @"selected_map_source_presets"
 
+#define kLastViewedTarget31 @"last_viewed_target31"
+#define kLastViewedZoom @"last_viewed_zoom"
+#define kLastViewedAzimuth @"last_viewed_azimuth"
+#define kLastViewedElevationAngle @"last_viewed_elevation_angle"
+
 @interface OAConfiguration : NSObject
 
 - (BOOL)save;
+
 @property(readonly) OAObservable* observable;
 
-@property(getter = getMapSource, setter = setMapSource:) NSString* mapSource;
+@property(getter = getActiveMapSource, setter = setActiveMapSource:) NSString* activeMapSource;
 
 - (OAMapSourcePresets*)mapSourcePresetsFor:(NSString*)mapSource;
 - (NSUUID*)addMapSourcePreset:(OAMapSourcePreset*)preset forMapSource:(NSString*)mapSource;
@@ -37,5 +44,10 @@
 
 - (NSUUID*)selectedMapSourcePresetFor:(NSString*)mapSource;
 - (void)selectMapSourcePreset:(NSUUID*)preset for:(NSString*)mapSource;
+
+@property(getter = getLastViewedTarget31, setter = setLastViewedTarget31:) Point31 lastViewedTarget31;
+@property(getter = getLastViewedZoom, setter = setLastViewedZoom:) float lastViewedZoom;
+@property(getter = getLastViewedAzimuth, setter = setLastViewedAzimuth:) float lastViewedAzimuth;
+@property(getter = getLastViewedElevationAngle, setter = setLastViewedElevationAngle:) float lastViewedElevationAngle;
 
 @end

@@ -113,8 +113,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Collect initial data from configuration
     @synchronized(self)
     {
-        _mapSource = _app.configuration.mapSource;
-        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+        _mapSource = _app.configuration.activeMapSource;
+        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
         _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
     }
     
@@ -767,13 +767,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    if([kMapSource isEqualToString:key] ||
+    if([kActiveMapSource isEqualToString:key] ||
        ([kSelectedMapSourcePresets isEqualToString:key] && [_mapSource isEqualToString:value]))
     {
         @synchronized(self)
         {
-            _mapSource = _app.configuration.mapSource;
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            _mapSource = _app.configuration.activeMapSource;
+            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
             _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
             
             // Invalidate current map-source

@@ -22,4 +22,9 @@ typedef NS_ENUM(NSInteger, OAMapMode)
     OAMapModeFollow
 };
 
+typedef struct Point31
+{
+    int32_t x, y;
+} Point31;
+
 #endif

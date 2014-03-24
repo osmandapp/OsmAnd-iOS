@@ -66,8 +66,8 @@
     // Collect initial data from configuration
     @synchronized(self)
     {
-        _mapSource = _app.configuration.mapSource;
-        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+        _mapSource = _app.configuration.activeMapSource;
+        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
         _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
     }
 }
@@ -96,12 +96,12 @@
 
 - (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
 {
-    if([kMapSource isEqualToString:key])
+    if([kActiveMapSource isEqualToString:key])
     {
         @synchronized(self)
         {
-            _mapSource = _app.configuration.mapSource;
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            _mapSource = _app.configuration.activeMapSource;
+            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
             _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
         }
         
@@ -127,7 +127,7 @@
     {
         @synchronized(self)
         {
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_app.configuration.mapSource];
+            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
             
             // In case current selection is no longer available, select any first
             if(![_mapSourcePresets.order containsObject:_activeMapSourcePreset])

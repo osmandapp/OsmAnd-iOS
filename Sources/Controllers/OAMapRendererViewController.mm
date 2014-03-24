@@ -205,6 +205,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [mapView addGestureRecognizer:_grZoomOut];
     [mapView addGestureRecognizer:_grElevation];
     
+    // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
+    Point31 lastViewedTarget31 = _app.configuration.lastViewedTarget31;
+    mapView.target31 = OsmAnd::PointI(lastViewedTarget31.x, lastViewedTarget31.y);
+    mapView.zoom = _app.configuration.lastViewedZoom;
+    mapView.azimuth = _app.configuration.lastViewedAzimuth;
+    mapView.elevationAngle = _app.configuration.lastViewedElevationAngle;
+    
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
 }
@@ -569,9 +576,21 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     {
         case OAMapRendererViewStateEntryAzimuth:
             [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
+            _app.configuration.lastViewedAzimuth = mapView.azimuth;
             return;
         case OAMapRendererViewStateEntryZoom:
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.zoom]];
+            _app.configuration.lastViewedZoom = mapView.zoom;
+            return;
+        case OAMapRendererViewStateEntryElevationAngle:
+            _app.configuration.lastViewedElevationAngle = mapView.elevationAngle;
+            return;
+        case OAMapRendererViewStateEntryTarget:
+            OsmAnd::PointI newTarget31 = mapView.target31;
+            Point31 newTarget31_converted;
+            newTarget31_converted.x = newTarget31.x;
+            newTarget31_converted.y = newTarget31.y;
+            _app.configuration.lastViewedTarget31 = newTarget31_converted;
             return;
     }
 }

@@ -123,6 +123,12 @@
     [defaults setObject:@{ kDefaultMapSource : @"05111A11-D000-0000-0001-000000000DEF" }
                  forKey:kSelectedMapSourcePresets];
     
+    [defaults setObject:[NSNumber numberWithInt:INT32_MAX>>1] forKey:kLastViewedTarget31".x"];
+    [defaults setObject:[NSNumber numberWithInt:INT32_MAX>>1] forKey:kLastViewedTarget31".y"];
+    [defaults setObject:[NSNumber numberWithFloat:1.0f] forKey:kLastViewedZoom];
+    [defaults setObject:[NSNumber numberWithFloat:0.0f] forKey:kLastViewedAzimuth];
+    [defaults setObject:[NSNumber numberWithFloat:90.0f] forKey:kLastViewedElevationAngle];
+    
     return defaults;
 }
 
@@ -168,8 +174,8 @@
         [_selectedMapSourcePresets setObject:[[NSUUID alloc] initWithUUIDString:obj] forKey:key];
     }];
     
-    _lastViewedTarget31.x = [_storage floatForKey:kLastViewedTarget31".x"];
-    _lastViewedTarget31.y = [_storage floatForKey:kLastViewedTarget31".y"];
+    _lastViewedTarget31.x = [_storage integerForKey:kLastViewedTarget31".x"];
+    _lastViewedTarget31.y = [_storage integerForKey:kLastViewedTarget31".y"];
     _lastViewedZoom = [_storage floatForKey:kLastViewedZoom];
     _lastViewedAzimuth = [_storage floatForKey:kLastViewedAzimuth];
     _lastViewedElevationAngle = [_storage floatForKey:kLastViewedElevationAngle];
@@ -229,8 +235,8 @@
         
         if(_lastViewedTarget31Invalidated)
         {
-            [_storage setFloat:_lastViewedTarget31.x forKey:kLastViewedTarget31".x"];
-            [_storage setFloat:_lastViewedTarget31.y forKey:kLastViewedTarget31".y"];
+            [_storage setInteger:_lastViewedTarget31.x forKey:kLastViewedTarget31".x"];
+            [_storage setInteger:_lastViewedTarget31.y forKey:kLastViewedTarget31".y"];
          
             _lastViewedTarget31Invalidated = NO;
         }

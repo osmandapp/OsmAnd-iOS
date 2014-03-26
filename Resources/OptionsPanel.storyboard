@@ -106,7 +106,7 @@
                                 </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="TKc-ft-cBj" firstAttribute="top" secondItem="EGh-Cd-vs6" secondAttribute="bottom" id="7Xa-zi-j7r"/>
                             <constraint firstItem="EGh-Cd-vs6" firstAttribute="top" secondItem="mF8-rm-BeN" secondAttribute="bottom" id="ax9-7a-5Da"/>

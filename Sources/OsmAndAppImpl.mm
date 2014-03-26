@@ -41,7 +41,7 @@
 - (void)ctor
 {
     // First of all, initialize user defaults
-    [self initUserDefaults];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
 
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
@@ -96,14 +96,6 @@
     
     // Register "Documents" directory (which is accessible from iTunes)
     _obfsCollection->registerDirectory(_documentsPath);
-}
-
-- (void)initUserDefaults
-{
-    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-
-    // Register defaults
-    [userDefaults registerDefaults:[self inflateInitialUserDefaults]];
 }
 
 - (NSDictionary*)inflateInitialUserDefaults

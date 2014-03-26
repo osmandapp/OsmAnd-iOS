@@ -79,7 +79,8 @@
     [super viewWillAppear:animated];
     
     // Perform selection of proper preset
-    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_app.data.mapSources indexOfMapSourceWithId:_app.data.activeMapSourceId] + 1
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
                                                                inSection:kMapSourcesAndPresetsSection]
                                    animated:animated
                              scrollPosition:UITableViewScrollPositionNone];

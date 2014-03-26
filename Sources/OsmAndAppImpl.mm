@@ -110,7 +110,7 @@
 {
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
 
-    [initialUserDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]]
+    [initialUserDefaults setValue:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]
                             forKey:kAppData];
 
     return initialUserDefaults;

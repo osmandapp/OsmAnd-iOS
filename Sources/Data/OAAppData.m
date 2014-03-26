@@ -65,6 +65,40 @@
 
 @synthesize mapLastViewedState = _mapLastViewedState;
 
+#pragma mark - defaults
+
++ (OAAppData*)defaults
+{
+    OAAppData* defaults = [[OAAppData alloc] init];
+
+    Point31 centerOfWorld;
+    centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
+    defaults.mapLastViewedState.target31 = centerOfWorld;
+    defaults.mapLastViewedState.zoom = 1.0f;
+    defaults.mapLastViewedState.azimuth = 0.0f;
+    defaults.mapLastViewedState.elevationAngle = 90.0f;
+
+    OAMapSource* defaultMapSource = [[OAMapSource alloc] initWithLocalizedNameKey:@"OsmAndOfflineMapSource"
+                                                                          andType:OAMapSourceTypeOffline
+                                                              andTypedReferenceId:@"default"];
+    defaultMapSource.activePresetId =
+    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
+                                                                                               andType:OAMapSourcePresetTypeGeneral
+                                                                                             andValues:@{ @"appMode" : @"browse map" }]];
+    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeCar"
+                                                                                               andType:OAMapSourcePresetTypeCar
+                                                                                             andValues:@{ @"appMode" : @"car" }]];
+    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeBicycle"
+                                                                                               andType:OAMapSourcePresetTypeBicycle
+                                                                                             andValues:@{ @"appMode" : @"bicycle" }]];
+    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypePedestrian"
+                                                                                               andType:OAMapSourcePresetTypePedestrian
+                                                                                             andValues:@{ @"appMode" : @"pedestrian" }]];
+    defaults.activeMapSourceId = [defaults.mapSources registerAndAddMapSource:defaultMapSource];
+
+    return defaults;
+}
+
 #pragma mark - NSCoding
 
 #define kActiveMapSourceId @"active_map_source_id"

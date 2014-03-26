@@ -22,4 +22,6 @@
 @property(nonatomic) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
+- (void)saveState;
+
 @end

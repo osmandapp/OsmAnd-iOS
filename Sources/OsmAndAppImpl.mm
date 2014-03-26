@@ -36,12 +36,16 @@
     return self;
 }
 
+#define kAppData @"app_data"
+
 - (void)ctor
 {
-    // First of all, initialize application data
-    _data = [[OAAppData alloc] init];
-//    [self initUserDefaults];
-    
+    // First of all, initialize user defaults
+    [self initUserDefaults];
+
+    // Unpack app data
+    _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
+
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                         ofType:@"obf"
@@ -96,46 +100,19 @@
 
 - (void)initUserDefaults
 {
-    static NSString* const kUserDefaultsVersion = @"version";
-    static const NSInteger vUserDefaultsCurrentVersion = 1;
-    
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
-    
-    // Perform upgrade procedures (if such required)
-    for(;;)
-    {
-        const NSInteger storedVersion = [userDefaults integerForKey:kUserDefaultsVersion];
-        
-        // If no previous version was stored or stored version equals current version,
-        // nothing needs to be upgraded
-        if(storedVersion == 0 || storedVersion == vUserDefaultsCurrentVersion)
-            break;
-        
-        //NOTE: Here place the upgrade code. Template provided
-        /*
-        if(storedVersion == 4)
-        {
-            //NOTE: Operations to upgrade from version 4 to version 5
-         
-            // Save version
-            [_storage setInteger:storedVersion+1
-                          forKey:kUserDefaultsVersion];
-            [_storage synchronize];
-        }
-        */
-    }
-    
+
     // Register defaults
     [userDefaults registerDefaults:[self inflateInitialUserDefaults]];
-    [userDefaults setInteger:vUserDefaultsCurrentVersion
-                      forKey:kUserDefaultsVersion];
-    [userDefaults synchronize];
 }
 
 - (NSDictionary*)inflateInitialUserDefaults
 {
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
-    
+
+    [initialUserDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]]
+                            forKey:kAppData];
+
     return initialUserDefaults;
 }
 
@@ -157,6 +134,16 @@
         return;
     _mapMode = mapMode;
     [_mapModeObservable notifyEvent];
+}
+
+- (void)saveState
+{
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+
+    // Save app data to user-defaults
+    [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
+                                              forKey:kAppData];
+    [userDefaults synchronize];
 }
 
 @end

@@ -21,4 +21,6 @@
 
 @property(readonly) OAMapCrossSessionState* mapLastViewedState;
 
++ (OAAppData*)defaults;
+
 @end

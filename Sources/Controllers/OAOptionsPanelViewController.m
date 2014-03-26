@@ -27,6 +27,7 @@
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _activeMapSourceIdObserver;
+    OAAutoObserverProxy* _mapSourceNameObserver;
     OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
     OAAutoObserverProxy* _mapSourcePresetsObserver;
 }
@@ -61,6 +62,9 @@
                                                            withHandler:@selector(onActiveMapSourceIdChanged)
                                                             andObserve:_app.data.activeMapSourceIdChangeObservable];
     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    _mapSourceNameObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onMapSourceNameChanged)
+                                                        andObserve:activeMapSource.nameChangeObservable];
     _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                  withHandler:@selector(onMapSourceActivePresetIdChanged)
                                                                   andObserve:activeMapSource.activePresetIdChangeObservable];
@@ -99,17 +103,18 @@
     // set of presets available
     dispatch_async(dispatch_get_main_queue(), ^{
         // Detach from previous active map source
-        [_mapSourceActivePresetIdObserver detach];
-        [_mapSourcePresetsObserver detach];
+        if(_mapSourceNameObserver.isAttached)
+            [_mapSourceNameObserver detach];
+        if(_mapSourceActivePresetIdObserver.isAttached)
+            [_mapSourceActivePresetIdObserver detach];
+        if(_mapSourcePresetsObserver.isAttached)
+            [_mapSourcePresetsObserver detach];
 
         // Attach to new one
         OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-        _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                     withHandler:@selector(onMapSourceActivePresetIdChanged)
-                                                                      andObserve:activeMapSource.activePresetIdChangeObservable];
-        _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(onMapSourcePresetsCollectionChanged)
-                                                               andObserve:activeMapSource.presets.collectionChangeObservable];
+        [_mapSourceNameObserver observe:activeMapSource.nameChangeObservable];
+        [_mapSourceActivePresetIdObserver observe:activeMapSource.activePresetIdChangeObservable];
+        [_mapSourcePresetsObserver observe:activeMapSource.presets.collectionChangeObservable];
 
         // Reload entire section
         [_optionsTableview reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
@@ -120,6 +125,15 @@
                                                                    inSection:kMapSourcesAndPresetsSection]
                                        animated:YES
                                  scrollPosition:UITableViewScrollPositionNone];
+    });
+}
+
+- (void)onMapSourceNameChanged
+{
+    // Reload row with name of map source
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_optionsTableview reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:kMapSourcesAndPresetsSection] ]
+                                 withRowAnimation:UITableViewRowAnimationAutomatic];
     });
 }
 
@@ -283,8 +297,10 @@
         case kMapSourcesAndPresetsSection:
             if(indexPath.row == 0)
             {
+                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+
                 cellTypeId = submenuCell;
-                caption = OALocalizedString(@"Maps");
+                caption = activeMapSource.name;
             }
             else
             {

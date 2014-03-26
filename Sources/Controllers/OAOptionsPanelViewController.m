@@ -382,17 +382,17 @@
             switch(indexPath.row)
             {
                 case kOptionsSection_SettingsRow:
-                    cellTypeId = menuItemCell;
+                    cellTypeId = submenuCell;
                     caption = OALocalizedString(@"Settings");
                     icon = [UIImage imageNamed:@"menu_item_settings_icon.png"];
                     break;
                 case kOptionsSection_DownloadsRow:
-                    cellTypeId = menuItemCell;
+                    cellTypeId = submenuCell;
                     caption = OALocalizedString(@"Downloads");
                     icon = [UIImage imageNamed:@"menu_item_downloads_icon.png"];
                     break;
                 case kOptionsSection_MyDataRow:
-                    cellTypeId = menuItemCell;
+                    cellTypeId = submenuCell;
                     caption = OALocalizedString(@"My data");
                     icon = [UIImage imageNamed:@"menu_item_my_data_icon.png"];
                     break;

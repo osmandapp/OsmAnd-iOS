@@ -263,18 +263,19 @@
     switch (section)
     {
         case kMapSourcesAndPresetsSection:
-        {
-            NSInteger rowsCount = 1 /* 'Maps' */;
-            
-            // Append rows to show all available presets for current map source
-            OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-            if(activeMapSource != nil)
-                rowsCount += [activeMapSource.presets count];
+            {
+                NSInteger rowsCount = 1 /* '[current map source name]' */;
 
-            return rowsCount;
-        } break;
+                // Append rows to show all available presets for current map source
+                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+                if(activeMapSource != nil)
+                    rowsCount += [activeMapSource.presets count];
+
+                return rowsCount;
+            }
+            break;
         case kLayersSection:
-            return 10;
+            return 4;
         case kOptionsSection:
             return 3; /* 'Settings', 'Downloads', 'My data' */
             

@@ -46,7 +46,7 @@
     
     OAAutoObserverProxy* _activeMapSourceIdObserver;
     OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
-    OAAutoObserverProxy* _mapSourcePresetsObserver;
+    OAAutoObserverProxy* _mapSourcePresetValuesObserver;
     
     BOOL _mapSourceInvalidated;
     
@@ -111,9 +111,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                  withHandler:@selector(onMapSourceActivePresetIdChanged)
                                                                   andObserve:activeMapSource.activePresetIdChangeObservable];
-    _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onMapSourcePresetsCollectionChanged)
-                                                           andObserve:activeMapSource.presets.collectionChangeObservable];
+    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
+    _mapSourcePresetValuesObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onMapSourcePresetValuesChanged)
+                                                                andObserve:activePreset.values.changeObservable];
 
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
@@ -788,6 +789,16 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Invalidate current map-source
     _mapSourceInvalidated = YES;
 
+    // Hook to new map source
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
+    if(_mapSourceActivePresetIdObserver.isAttached)
+        [_mapSourceActivePresetIdObserver detach];
+    [_mapSourceActivePresetIdObserver observe:activeMapSource.activePresetIdChangeObservable];
+    if(_mapSourcePresetValuesObserver.isAttached)
+        [_mapSourcePresetValuesObserver detach];
+    [_mapSourcePresetValuesObserver observe:activePreset.values.changeObservable];
+
     // Force reload of list content
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateCurrentMapSource];
@@ -799,13 +810,20 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Invalidate current map-source
     _mapSourceInvalidated = YES;
 
+    // Hook to new preset
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
+    if(_mapSourcePresetValuesObserver.isAttached)
+        [_mapSourcePresetValuesObserver detach];
+    [_mapSourcePresetValuesObserver observe:activePreset.values.changeObservable];
+
     // Force reload of list content
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateCurrentMapSource];
     });
 }
 
-- (void)onMapSourcePresetsCollectionChanged
+- (void)onMapSourcePresetValuesChanged
 {
     // Invalidate current map-source
     _mapSourceInvalidated = YES;

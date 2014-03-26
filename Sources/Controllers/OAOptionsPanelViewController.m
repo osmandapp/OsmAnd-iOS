@@ -362,14 +362,17 @@
                 case kOptionsSection_SettingsRow:
                     cellTypeId = menuItemCell;
                     caption = OALocalizedString(@"Settings");
+                    icon = [UIImage imageNamed:@"menu_item_settings_icon.png"];
                     break;
                 case kOptionsSection_DownloadsRow:
                     cellTypeId = menuItemCell;
                     caption = OALocalizedString(@"Downloads");
+                    icon = [UIImage imageNamed:@"menu_item_downloads_icon.png"];
                     break;
                 case kOptionsSection_MyDataRow:
                     cellTypeId = menuItemCell;
                     caption = OALocalizedString(@"My data");
+                    icon = [UIImage imageNamed:@"menu_item_my_data_icon.png"];
                     break;
             }
             break;

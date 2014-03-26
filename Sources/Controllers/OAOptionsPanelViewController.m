@@ -34,7 +34,10 @@
 
 #define kMapSourcesAndPresetsSection 0
 #define kLayersSection 1
-#define kSettingsSection 2
+#define kOptionsSection 2
+#define kOptionsSection_SettingsRow 0
+#define kOptionsSection_DownloadsRow 1
+#define kOptionsSection_MyDataRow 2
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -272,11 +275,27 @@
         } break;
         case kLayersSection:
             return 10;
-        case kSettingsSection:
-            return 1;
+        case kOptionsSection:
+            return 3; /* 'Settings', 'Downloads', 'My data' */
             
         default:
             return 0;
+    }
+}
+
+- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section)
+    {
+        case kMapSourcesAndPresetsSection:
+            return OALocalizedString(@"Maps");
+        case kLayersSection:
+            return OALocalizedString(@"Layers");
+        case kOptionsSection:
+            return OALocalizedString(@"Options");
+
+        default:
+            return nil;
     }
 }
 
@@ -337,7 +356,22 @@
             break;
         case kLayersSection:
             break;
-        case kSettingsSection:
+        case kOptionsSection:
+            switch(indexPath.row)
+            {
+                case kOptionsSection_SettingsRow:
+                    cellTypeId = menuItemCell;
+                    caption = OALocalizedString(@"Settings");
+                    break;
+                case kOptionsSection_DownloadsRow:
+                    cellTypeId = menuItemCell;
+                    caption = OALocalizedString(@"Downloads");
+                    break;
+                case kOptionsSection_MyDataRow:
+                    cellTypeId = menuItemCell;
+                    caption = OALocalizedString(@"My data");
+                    break;
+            }
             break;
     }
     if(cellTypeId == nil)
@@ -363,12 +397,12 @@
     //  - map-sources menu
     //  - map-source preset set
     //  - layers menu
-    //  - settings menu
+    //  - options menu
     BOOL selectionAllowed = NO;
     selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row == 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection && indexPath.row == 0);
-    selectionAllowed = selectionAllowed || (indexPath.section == kSettingsSection && indexPath.row == 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kOptionsSection);
     if(!selectionAllowed)
         return nil;
     
@@ -376,17 +410,17 @@
     NSArray* currentSelections = [tableView indexPathsForSelectedRows];
     
     // Only one menu is allowed to be selected
-    if((indexPath.section == kMapSourcesAndPresetsSection ||
-        indexPath.section == kLayersSection ||
-        indexPath.section == kSettingsSection) && indexPath.row == 0 )
+    if(((indexPath.section == kMapSourcesAndPresetsSection ||
+         indexPath.section == kLayersSection) && indexPath.row == 0) ||
+       indexPath.section == kOptionsSection)
     {
         for (NSIndexPath* selection in currentSelections)
         {
-            if((selection.section == kMapSourcesAndPresetsSection ||
-                selection.section == kLayersSection ||
-                selection.section == kSettingsSection) && selection.row == 0)
+            if(((selection.section == kMapSourcesAndPresetsSection ||
+                 selection.section == kLayersSection) && selection.row == 0) ||
+               selection.section == kOptionsSection)
             {
-                if(selection.section != indexPath.section)
+                if(![selection isEqual:indexPath])
                     [tableView deselectRowAtIndexPath:selection animated:YES];
             }
         }

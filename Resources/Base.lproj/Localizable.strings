@@ -5,7 +5,7 @@
   Created by Alexey Pelykh on 3/18/14.
   Copyright (c) 2014 OsmAnd. All rights reserved.
 */
-"OsmAndOfflineMapSource" = "OsmAnd (powered by OSM)";
+"OsmAndOfflineMapSource" = "OsmAnd (offline)";
 "OAMapSourcePresetTypeGeneral" = "General";
 "OAMapSourcePresetTypeCar" = "Car";
 "OAMapSourcePresetTypeBicycle" = "Bicycle";

@@ -445,16 +445,47 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == kMapSourcesAndPresetsSection && indexPath.row == 0)
+    if(indexPath.section == kMapSourcesAndPresetsSection)
     {
-        //TODO: open menu
-    }
-    else if(indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0)
-    {
-        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+        if(indexPath.row == 0)
+        {
+            //TODO: open menu
+            NSLog(@"open map sources menu");
+        }
+        else
+        {
+            OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 
-        NSUUID* newPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
-        activeMapSource.activePresetId = newPresetId;
+            NSUUID* newPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
+            activeMapSource.activePresetId = newPresetId;
+        }
+    }
+    else if(indexPath.section == kLayersSection)
+    {
+        if(indexPath.row == 0)
+        {
+            //TODO: open menu
+            NSLog(@"open layers menu");
+        }
+        else
+        {
+            NSLog(@"activate/deactivate layer");
+        }
+    }
+    else if(indexPath.section == kOptionsSection)
+    {
+        switch (indexPath.row)
+        {
+            case kOptionsSection_SettingsRow:
+                NSLog(@"open settings menu");
+                break;
+            case kOptionsSection_DownloadsRow:
+                NSLog(@"open downloads menu");
+                break;
+            case kOptionsSection_MyDataRow:
+                NSLog(@"open my-data menu");
+                break;
+        }
     }
 }
 

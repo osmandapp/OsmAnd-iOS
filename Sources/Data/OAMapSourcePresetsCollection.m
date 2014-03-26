@@ -36,10 +36,7 @@
     return self;
 }
 
-- (void)setOwner:(OAMapSource*)owner
-{
-    _owner = owner;
-}
+@synthesize owner = _owner;
 
 - (void)ctor
 {

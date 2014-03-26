@@ -8,6 +8,9 @@
 
 #import "OAMapSourcePreset.h"
 
+#import "OAMapSourcePresetsCollection.h"
+#import "OAMapSource.h"
+
 @implementation OAMapSourcePreset
 {
     OAMapSourcePresetsCollection* _owner;
@@ -71,6 +74,7 @@
 
         [_nameChangeObservable notifyEventWithKey:self andValue:_name];
         [_changeObservable notifyEventWithKey:self];
+        [_owner.owner.anyPresetChangeObservable notifyEventWithKey:self];
     }
 }
 
@@ -98,6 +102,7 @@
 
         [_iconImageNameChangeObservable notifyEventWithKey:self andValue:_iconImageName];
         [_changeObservable notifyEventWithKey:self];
+        [_owner.owner.anyPresetChangeObservable notifyEventWithKey:self];
     }
 }
 
@@ -123,6 +128,7 @@
 
         [_typeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithInteger:_type]];
         [_changeObservable notifyEventWithKey:self];
+        [_owner.owner.anyPresetChangeObservable notifyEventWithKey:self];
     }
 }
 

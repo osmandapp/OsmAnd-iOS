@@ -39,6 +39,7 @@
     _changeObservable = [[OAObservable alloc] init];
     _nameChangeObservable = [[OAObservable alloc] init];
     _activePresetIdChangeObservable = [[OAObservable alloc] init];
+    _anyPresetChangeObservable = [[OAObservable alloc] init];
 }
 
 - (void)registerAs:(NSUUID*)uniqueId in:(OAMapSourcesCollection*)owner
@@ -91,7 +92,9 @@
 
 @synthesize type = _type;
 @synthesize typedReferenceId = _typedReferenceId;
+
 @synthesize presets = _presets;
+@synthesize anyPresetChangeObservable = _anyPresetChangeObservable;
 
 @synthesize activePresetId = _activePresetId;
 @synthesize activePresetIdChangeObservable = _activePresetIdChangeObservable;

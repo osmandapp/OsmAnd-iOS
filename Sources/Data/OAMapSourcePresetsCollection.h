@@ -16,7 +16,7 @@
 @interface OAMapSourcePresetsCollection : NSObject <NSCoding>
 
 - (id)initWithOwner:(OAMapSource*)owner;
-- (void)setOwner:(OAMapSource*)owner;
+@property OAMapSource* owner;
 
 - (NSUInteger)count;
 - (NSUInteger)indexOfPresetWithId:(NSUUID*)presetId;

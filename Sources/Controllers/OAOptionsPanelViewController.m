@@ -30,6 +30,7 @@
     OAAutoObserverProxy* _mapSourceNameObserver;
     OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
     OAAutoObserverProxy* _mapSourcePresetsObserver;
+    OAAutoObserverProxy* _mapSourceAnyPresetChangeObserver;
 }
 
 #define kMapSourcesAndPresetsSection 0
@@ -74,6 +75,9 @@
     _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onMapSourcePresetsCollectionChanged)
                                                            andObserve:activeMapSource.presets.collectionChangeObservable];
+    _mapSourceAnyPresetChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                  withHandler:@selector(onMapSourcePresetChanged:)
+                                                                   andObserve:activeMapSource.anyPresetChangeObservable];
 }
 
 - (void)viewDidLoad
@@ -112,12 +116,15 @@
             [_mapSourceActivePresetIdObserver detach];
         if(_mapSourcePresetsObserver.isAttached)
             [_mapSourcePresetsObserver detach];
+        if(_mapSourceAnyPresetChangeObserver.isAttached)
+            [_mapSourceAnyPresetChangeObserver detach];
 
         // Attach to new one
         OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
         [_mapSourceNameObserver observe:activeMapSource.nameChangeObservable];
         [_mapSourceActivePresetIdObserver observe:activeMapSource.activePresetIdChangeObservable];
         [_mapSourcePresetsObserver observe:activeMapSource.presets.collectionChangeObservable];
+        [_mapSourceAnyPresetChangeObserver observe:activeMapSource.anyPresetChangeObservable];
 
         // Reload entire section
         [_optionsTableview reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
@@ -246,6 +253,20 @@
                                            animated:YES
                                      scrollPosition:UITableViewScrollPositionNone];
         }
+    });
+}
+
+- (void)onMapSourcePresetChanged:(id)key
+{
+    // Key contains map-source preset that was changed. Since something in it have changed,
+    // ask to reload it's row completely
+    OAMapSourcePreset* preset = key;
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    NSUInteger indexOfPreset = [activeMapSource.presets indexOfPresetWithId:preset.uniqueId];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_optionsTableview reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:indexOfPreset+1
+                                                                        inSection:kMapSourcesAndPresetsSection] ]
+                                 withRowAnimation:YES];
     });
 }
 

@@ -35,7 +35,9 @@ typedef NS_ENUM(NSInteger, OAMapSourceType)
 @property(readonly, copy) NSString* localizedNameKey;
 @property(readonly) OAMapSourceType type;
 @property(readonly, copy) NSString* typedReferenceId;
+
 @property(readonly) OAMapSourcePresetsCollection* presets;
+@property(readonly) OAObservable* anyPresetChangeObservable;
 
 @property NSUUID* activePresetId;
 @property(readonly) OAObservable* activePresetIdChangeObservable;

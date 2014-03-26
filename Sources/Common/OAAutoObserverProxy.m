@@ -17,22 +17,44 @@
 @synthesize owner = _owner;
 @synthesize handler = _handler;
 
-- (id)initWith:(id<OAObserverProtocol>)owner_
+- (id)initWith:(id<OAObserverProtocol>)owner
 {
     self = [super init];
     if (self) {
-        [self ctor:owner_
+        [self ctor:owner
            handler:nil];
     }
     return self;
 }
 
-- (id)initWith:(id)owner_ withHandler:(SEL)handler_
+- (id)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable
 {
     self = [super init];
     if (self) {
-        [self ctor:owner_
-           handler:handler_];
+        [self ctor:owner
+           handler:nil];
+        [self observe:observable];
+    }
+    return self;
+}
+
+- (id)initWith:(id)owner withHandler:(SEL)selector
+{
+    self = [super init];
+    if (self) {
+        [self ctor:owner
+           handler:selector];
+    }
+    return self;
+}
+
+- (id)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;
+{
+    self = [super init];
+    if (self) {
+        [self ctor:owner
+           handler:selector];
+        [self observe:observable];
     }
     return self;
 }
@@ -42,31 +64,29 @@
     [self dtor];
 }
 
-- (void)ctor:(id)owner_ handler:(SEL)handler_
+- (void)ctor:(id)owner handler:(SEL)selector
 {
-    _owner = owner_;
-    _handler = handler_;
+    _owner = owner;
+    _handler = selector;
     _observable = nil;
 }
 
 - (void)dtor
 {
-    if(_observable != nil)
-        [_observable unregisterObserver:self];
+    [self detach];
 }
 
 @synthesize observable = _observable;
 
 - (void)observe:(id<OAObservableProtocol>)observable
 {
-    if(_observable != nil)
+    @synchronized(self)
     {
-        [_observable unregisterObserver:self];
-        _observable = nil;
-    }
+        [self detach];
 
-    _observable = observable;
-    [_observable registerObserver:self];
+        _observable = observable;
+        [_observable registerObserver:self];
+    }
 }
 
 - (void)handleObservedEvent
@@ -139,6 +159,25 @@
     }
     
     [_owner handleObservedEvent];
+}
+
+- (BOOL)isAttached
+{
+    return (_observable != nil);
+}
+
+- (BOOL)detach
+{
+    @synchronized(self)
+    {
+        if(_observable == nil)
+            return NO;
+
+        [_observable unregisterObserver:self];
+        _observable = nil;
+
+        return YES;
+    }
 }
 
 @end

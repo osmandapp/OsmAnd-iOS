@@ -9,9 +9,7 @@
 #import "OAMapRendererViewController.h"
 
 #import "OsmAndApp.h"
-#import "OAConfiguration.h"
-#import "OAMapSourcePresets.h"
-#import "OAMapSourcePreset.h"
+#import "OAAppData.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
@@ -46,12 +44,11 @@
 {
     OsmAndAppInstance _app;
     
-    OAAutoObserverProxy* _configurationObserver;
+    OAAutoObserverProxy* _activeMapSourceIdObserver;
+    OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
+    OAAutoObserverProxy* _mapSourcePresetsObserver;
     
     BOOL _mapSourceInvalidated;
-    NSString* _mapSource;
-    OAMapSourcePresets* _mapSourcePresets;
-    NSUUID* _activeMapSourcePreset;
     
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapBitmapTileProvider> _rasterMapProvider;
@@ -107,22 +104,24 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     _app = [OsmAndApp instance];
     
-    _configurationObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onConfigurationChanged:withKey:andValue:)];
-    [_configurationObserver observe:_app.configuration.observable];
-    
-    // Collect initial data from configuration
-    @synchronized(self)
-    {
-        _mapSource = _app.configuration.activeMapSource;
-        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
-        _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
-    }
-    
-    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
-    [_mapModeObserver observe:_app.mapModeObservable];
-    
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocationServicesUpdate)];
-    [_locationServicesUpdateObserver observe:_app.locationServices.updateObserver];
+    _activeMapSourceIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onActiveMapSourceIdChanged)
+                                                            andObserve:_app.data.activeMapSourceIdChangeObservable];
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onMapSourceActivePresetIdChanged)
+                                                                  andObserve:activeMapSource.activePresetIdChangeObservable];
+    _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onMapSourcePresetsCollectionChanged)
+                                                           andObserve:activeMapSource.presets.collectionChangeObservable];
+
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
+
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:_app.locationServices.updateObserver];
     
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
@@ -206,11 +205,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [mapView addGestureRecognizer:_grElevation];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    Point31 lastViewedTarget31 = _app.configuration.lastViewedTarget31;
-    mapView.target31 = OsmAnd::PointI(lastViewedTarget31.x, lastViewedTarget31.y);
-    mapView.zoom = _app.configuration.lastViewedZoom;
-    mapView.azimuth = _app.configuration.lastViewedAzimuth;
-    mapView.elevationAngle = _app.configuration.lastViewedElevationAngle;
+    mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+                                      _app.data.mapLastViewedState.target31.y);
+    mapView.zoom = _app.data.mapLastViewedState.zoom;
+    mapView.azimuth = _app.data.mapLastViewedState.azimuth;
+    mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
@@ -576,21 +575,21 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     {
         case OAMapRendererViewStateEntryAzimuth:
             [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
-            _app.configuration.lastViewedAzimuth = mapView.azimuth;
+            _app.data.mapLastViewedState.azimuth = mapView.azimuth;
             return;
         case OAMapRendererViewStateEntryZoom:
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.zoom]];
-            _app.configuration.lastViewedZoom = mapView.zoom;
+            _app.data.mapLastViewedState.zoom = mapView.zoom;
             return;
         case OAMapRendererViewStateEntryElevationAngle:
-            _app.configuration.lastViewedElevationAngle = mapView.elevationAngle;
+            _app.data.mapLastViewedState.elevationAngle = mapView.elevationAngle;
             return;
         case OAMapRendererViewStateEntryTarget:
             OsmAnd::PointI newTarget31 = mapView.target31;
             Point31 newTarget31_converted;
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
-            _app.configuration.lastViewedTarget31 = newTarget31_converted;
+            _app.data.mapLastViewedState.target31 = newTarget31_converted;
             return;
     }
 }
@@ -784,26 +783,37 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     }
 }
 
-- (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
+- (void)onActiveMapSourceIdChanged
 {
-    if([kActiveMapSource isEqualToString:key] ||
-       ([kSelectedMapSourcePresets isEqualToString:key] && [_mapSource isEqualToString:value]))
-    {
-        @synchronized(self)
-        {
-            _mapSource = _app.configuration.activeMapSource;
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
-            _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
-            
-            // Invalidate current map-source
-            _mapSourceInvalidated = YES;
-        }
-        
-        // Force reload of list content
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateCurrentMapSource];
-        });
-    }
+    // Invalidate current map-source
+    _mapSourceInvalidated = YES;
+
+    // Force reload of list content
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateCurrentMapSource];
+    });
+}
+
+- (void)onMapSourceActivePresetIdChanged
+{
+    // Invalidate current map-source
+    _mapSourceInvalidated = YES;
+
+    // Force reload of list content
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateCurrentMapSource];
+    });
+}
+
+- (void)onMapSourcePresetsCollectionChanged
+{
+    // Invalidate current map-source
+    _mapSourceInvalidated = YES;
+
+    // Force reload of list content
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateCurrentMapSource];
+    });
 }
 
 - (void)updateCurrentMapSource
@@ -826,24 +836,19 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         _offlineMapSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
-        if([_mapSource hasPrefix:kMapSource_OfflinePrefix])
+        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+        OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
+        if(activeMapSource.type == OAMapSourceTypeOffline)
         {
-            // Get style name
-            NSString* styleName = [_mapSource substringFromIndex:[kMapSource_OfflinePrefix length]];
-            
             // Obtain style with that name
             std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-            const auto styleResolved = _app.mapStyles->obtainStyle(QString::fromNSString(styleName), mapStyle);
-            NSAssert(styleResolved, @"Failed to resolve style with name '%@'", styleName);
+            const auto styleResolved = _app.mapStyles->obtainStyle(QString::fromNSString(activeMapSource.typedReferenceId), mapStyle);
+            NSAssert(styleResolved, @"Failed to resolve style with name '%@'", activeMapSource.typedReferenceId);
             
             // Obtain settings from selected preset
             __block QHash< QString, QString > styleSettings;
-            OAMapSourcePreset* mapSourcePreset = [_mapSourcePresets.presets objectForKey:_activeMapSourcePreset];
-            [mapSourcePreset.values enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
-                NSString* name = key;
-                NSString* value = obj;
-                
-                styleSettings.insert(QString::fromNSString(name), QString::fromNSString(value));
+            [activePreset.values enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
+                styleSettings.insert(QString::fromNSString(key), QString::fromNSString(value));
             }];
             
             // Configure offline map data provider with given settings
@@ -861,9 +866,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
             [mapView addSymbolProvider:_offlineMapSymbolsProvider];
         }
-        else if([_mapSource hasPrefix:kMapSource_OnlinePrefix])
+        else if(activeMapSource.type == OAMapSourceTypeOnline)
         {
-            NSLog(@"right now I should've activated %@ with %@", _mapSource, [_activeMapSourcePreset UUIDString]);
+            NSLog(@"right now I should've activated %@ with %@", activeMapSource.typedReferenceId, [activeMapSource.uniqueId UUIDString]);
         }
 
         _mapSourceInvalidated = YES;

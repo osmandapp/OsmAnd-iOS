@@ -13,8 +13,10 @@
 
 @interface OAAutoObserverProxy : NSObject <OAObserverProtocol>
 
-- (id)initWith:(id<OAObserverProtocol>)owner_;
-- (id)initWith:(id)owner_ withHandler:(SEL)selector_;
+- (id)initWith:(id<OAObserverProtocol>)owner;
+- (id)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable;
+- (id)initWith:(id)owner withHandler:(SEL)selector;
+- (id)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;;
 
 @property(weak, readonly) id owner;
 @property(readonly) SEL handler;
@@ -26,5 +28,8 @@
 - (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer;
 - (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key;
 - (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value;
+
+@property(readonly) BOOL isAttached;
+- (BOOL)detach;
 
 @end

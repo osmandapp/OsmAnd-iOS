@@ -65,8 +65,6 @@
 		BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */; };
 		BB451DDE18D8DB48005FBE09 /* OptionsPanel.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */; };
 		BB451DF118D8F7D7005FBE09 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
-		BB451DF718D9BC52005FBE09 /* OAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF618D9BC52005FBE09 /* OAConfiguration.m */; };
-		BB451DFA18DA2E2A005FBE09 /* OAMapSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF918DA2E2A005FBE09 /* OAMapSourcePreset.m */; };
 		BB451E0118DA4176005FBE09 /* drive_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFB18DA4176005FBE09 /* drive_mode_button.png */; };
 		BB451E0218DA4176005FBE09 /* drive_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFC18DA4176005FBE09 /* drive_mode_button@2x.png */; };
 		BB451E0318DA4176005FBE09 /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451DFD18DA4176005FBE09 /* follow_map_mode_button.png */; };
@@ -83,15 +81,12 @@
 		BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0E18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png */; };
 		BB451E1918DA4180005FBE09 /* position_track_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */; };
 		BB451E1A18DA4180005FBE09 /* position_track_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */; };
-		BB451E1D18DAFB55005FBE09 /* OAMapSourcePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */; };
 		BB451E2218DCD224005FBE09 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
 		BB451E2318DCD224005FBE09 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BB098D001793F7FD00423944 /* main.m */; };
 		BB451E2418DCD224005FBE09 /* OAAppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB098D041793F7FD00423944 /* OAAppDelegate.mm */; };
 		BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
-		BB451E2618DCD224005FBE09 /* OAMapSourcePresets.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */; };
 		BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
-		BB451E2918DCD224005FBE09 /* OAMapSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF918DA2E2A005FBE09 /* OAMapSourcePreset.m */; };
 		BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
@@ -103,9 +98,7 @@
 		BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */; };
 		BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
 		BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
-		BB451E3518DCD224005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB618BCE77400E4A359 /* OALocationServices.m */; };
 		BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
-		BB451E3718DCD224005FBE09 /* OAConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DF618D9BC52005FBE09 /* OAConfiguration.m */; };
 		BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
 		BB451E3A18DCD224005FBE09 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
 		BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
@@ -188,6 +181,22 @@
 		BB451E9418DCD224005FBE09 /* HUD_compass_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9818D70B5B005FBE09 /* HUD_compass_bg.png */; };
 		BB451E9518DCD224005FBE09 /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9618D70B5B005FBE09 /* HUD_compass.png */; };
 		BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9E18D70B5B005FBE09 /* HUD_menu_button.png */; };
+		BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */; };
+		BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */; };
+		BB451EB118E19376005FBE09 /* OAMapSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EAA18E19376005FBE09 /* OAMapSourcePreset.m */; };
+		BB451EB218E19376005FBE09 /* OAMapSourcePreset.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EAA18E19376005FBE09 /* OAMapSourcePreset.m */; };
+		BB451EB318E19376005FBE09 /* OAMapSourcePresetsCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EAC18E19376005FBE09 /* OAMapSourcePresetsCollection.m */; };
+		BB451EB418E19376005FBE09 /* OAMapSourcePresetsCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EAC18E19376005FBE09 /* OAMapSourcePresetsCollection.m */; };
+		BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
+		BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
+		BB451EBC18E1B118005FBE09 /* OAMapSourcesCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBB18E1B118005FBE09 /* OAMapSourcesCollection.m */; };
+		BB451EBD18E1B118005FBE09 /* OAMapSourcesCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBB18E1B118005FBE09 /* OAMapSourcesCollection.m */; };
+		BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBF18E1E590005FBE09 /* OAAppData.m */; };
+		BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBF18E1E590005FBE09 /* OAAppData.m */; };
+		BB451EC418E200BA005FBE09 /* OAMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EC318E200BA005FBE09 /* OAMapSource.m */; };
+		BB451EC518E200BA005FBE09 /* OAMapSource.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EC318E200BA005FBE09 /* OAMapSource.m */; };
+		BB451EC918E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EC818E32A4C005FBE09 /* OAMapSourcePresetValues.m */; };
+		BB451ECA18E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EC818E32A4C005FBE09 /* OAMapSourcePresetValues.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -237,7 +246,6 @@
 		BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
 		BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */; };
-		BBBDADB718BCE77400E4A359 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADB618BCE77400E4A359 /* OALocationServices.m */; };
 		BBBDADB918BCF53500E4A359 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBBDADB818BCF53500E4A359 /* CoreLocation.framework */; };
 		BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */ = {isa = PBXBuildFile; fileRef = BBD49BA318A01E80009DB4D5 /* drawable-xhdpi */; };
@@ -311,10 +319,6 @@
 		BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = OptionsPanel.storyboard; path = Resources/OptionsPanel.storyboard; sourceTree = "<group>"; };
 		BB451DF218D8F7D7005FBE09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BB451DF418D8F956005FBE09 /* Localization.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Localization.h; sourceTree = "<group>"; };
-		BB451DF518D9BC52005FBE09 /* OAConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAConfiguration.h; sourceTree = "<group>"; };
-		BB451DF618D9BC52005FBE09 /* OAConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAConfiguration.m; sourceTree = "<group>"; };
-		BB451DF818DA2E2A005FBE09 /* OAMapSourcePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSourcePreset.h; sourceTree = "<group>"; };
-		BB451DF918DA2E2A005FBE09 /* OAMapSourcePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapSourcePreset.m; sourceTree = "<group>"; };
 		BB451DFB18DA4176005FBE09 /* drive_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drive_mode_button.png; sourceTree = "<group>"; };
 		BB451DFC18DA4176005FBE09 /* drive_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drive_mode_button@2x.png"; sourceTree = "<group>"; };
 		BB451DFD18DA4176005FBE09 /* follow_map_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = follow_map_mode_button.png; sourceTree = "<group>"; };
@@ -331,9 +335,23 @@
 		BB451E0E18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_source_preset_type_pedestrian_icon@2x.png"; sourceTree = "<group>"; };
 		BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = position_track_map_mode_button.png; sourceTree = "<group>"; };
 		BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "position_track_map_mode_button@2x.png"; sourceTree = "<group>"; };
-		BB451E1B18DAFB55005FBE09 /* OAMapSourcePresets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapSourcePresets.h; sourceTree = "<group>"; };
-		BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapSourcePresets.m; sourceTree = "<group>"; };
 		BB451E9A18DCD224005FBE09 /* OsmAnd (prebuilt Core).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd (prebuilt Core).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB451EA718E19376005FBE09 /* OAMapCrossSessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapCrossSessionState.h; path = Data/OAMapCrossSessionState.h; sourceTree = "<group>"; };
+		BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapCrossSessionState.m; path = Data/OAMapCrossSessionState.m; sourceTree = "<group>"; };
+		BB451EA918E19376005FBE09 /* OAMapSourcePreset.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSourcePreset.h; path = Data/OAMapSourcePreset.h; sourceTree = "<group>"; };
+		BB451EAA18E19376005FBE09 /* OAMapSourcePreset.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSourcePreset.m; path = Data/OAMapSourcePreset.m; sourceTree = "<group>"; };
+		BB451EAB18E19376005FBE09 /* OAMapSourcePresetsCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSourcePresetsCollection.h; path = Data/OAMapSourcePresetsCollection.h; sourceTree = "<group>"; };
+		BB451EAC18E19376005FBE09 /* OAMapSourcePresetsCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSourcePresetsCollection.m; path = Data/OAMapSourcePresetsCollection.m; sourceTree = "<group>"; };
+		BB451EB618E1938F005FBE09 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationServices.h; path = Services/OALocationServices.h; sourceTree = "<group>"; };
+		BB451EB718E1938F005FBE09 /* OALocationServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OALocationServices.m; path = Services/OALocationServices.m; sourceTree = "<group>"; };
+		BB451EBA18E1B118005FBE09 /* OAMapSourcesCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSourcesCollection.h; path = Data/OAMapSourcesCollection.h; sourceTree = "<group>"; };
+		BB451EBB18E1B118005FBE09 /* OAMapSourcesCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSourcesCollection.m; path = Data/OAMapSourcesCollection.m; sourceTree = "<group>"; };
+		BB451EBE18E1E590005FBE09 /* OAAppData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAppData.h; path = Data/OAAppData.h; sourceTree = "<group>"; };
+		BB451EBF18E1E590005FBE09 /* OAAppData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAAppData.m; path = Data/OAAppData.m; sourceTree = "<group>"; };
+		BB451EC218E200BA005FBE09 /* OAMapSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSource.h; path = Data/OAMapSource.h; sourceTree = "<group>"; };
+		BB451EC318E200BA005FBE09 /* OAMapSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSource.m; path = Data/OAMapSource.m; sourceTree = "<group>"; };
+		BB451EC718E32A4C005FBE09 /* OAMapSourcePresetValues.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSourcePresetValues.h; path = Data/OAMapSourcePresetValues.h; sourceTree = "<group>"; };
+		BB451EC818E32A4C005FBE09 /* OAMapSourcePresetValues.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSourcePresetValues.m; path = Data/OAMapSourcePresetValues.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -415,8 +433,6 @@
 		BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppImpl.h; sourceTree = "<group>"; };
 		BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndAppImpl.mm; sourceTree = "<group>"; };
 		BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTypes.h; sourceTree = "<group>"; };
-		BBBDADB518BCE77400E4A359 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationServices.h; sourceTree = "<group>"; };
-		BBBDADB618BCE77400E4A359 /* OALocationServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALocationServices.m; sourceTree = "<group>"; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; };
@@ -549,6 +565,8 @@
 				BBBE40B01854DD7C00F1C144 /* Core */,
 				BB2545B71798167600E80B58 /* Controllers */,
 				BB2545B31798161500E80B58 /* Views */,
+				BB451EA418E19293005FBE09 /* Data */,
+				BB451EB518E1937C005FBE09 /* Services */,
 				BB098D001793F7FD00423944 /* main.m */,
 				BB098D031793F7FD00423944 /* OAAppDelegate.h */,
 				BB098D041793F7FD00423944 /* OAAppDelegate.mm */,
@@ -559,15 +577,7 @@
 				BBBDADB118BCBE9700E4A359 /* OsmAndAppImpl.h */,
 				BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */,
 				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
-				BBBDADB518BCE77400E4A359 /* OALocationServices.h */,
-				BBBDADB618BCE77400E4A359 /* OALocationServices.m */,
 				BB451DF418D8F956005FBE09 /* Localization.h */,
-				BB451DF518D9BC52005FBE09 /* OAConfiguration.h */,
-				BB451DF618D9BC52005FBE09 /* OAConfiguration.m */,
-				BB451DF818DA2E2A005FBE09 /* OAMapSourcePreset.h */,
-				BB451DF918DA2E2A005FBE09 /* OAMapSourcePreset.m */,
-				BB451E1B18DAFB55005FBE09 /* OAMapSourcePresets.h */,
-				BB451E1C18DAFB55005FBE09 /* OAMapSourcePresets.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -672,6 +682,36 @@
 				BB451DAF18D70B5B005FBE09 /* HUD_zoom_out_button@2x.png */,
 			);
 			path = Drawables;
+			sourceTree = "<group>";
+		};
+		BB451EA418E19293005FBE09 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				BB451EA718E19376005FBE09 /* OAMapCrossSessionState.h */,
+				BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */,
+				BB451EC718E32A4C005FBE09 /* OAMapSourcePresetValues.h */,
+				BB451EC818E32A4C005FBE09 /* OAMapSourcePresetValues.m */,
+				BB451EA918E19376005FBE09 /* OAMapSourcePreset.h */,
+				BB451EAA18E19376005FBE09 /* OAMapSourcePreset.m */,
+				BB451EAB18E19376005FBE09 /* OAMapSourcePresetsCollection.h */,
+				BB451EAC18E19376005FBE09 /* OAMapSourcePresetsCollection.m */,
+				BB451EC218E200BA005FBE09 /* OAMapSource.h */,
+				BB451EC318E200BA005FBE09 /* OAMapSource.m */,
+				BB451EBA18E1B118005FBE09 /* OAMapSourcesCollection.h */,
+				BB451EBB18E1B118005FBE09 /* OAMapSourcesCollection.m */,
+				BB451EBE18E1E590005FBE09 /* OAAppData.h */,
+				BB451EBF18E1E590005FBE09 /* OAAppData.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		BB451EB518E1937C005FBE09 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				BB451EB618E1938F005FBE09 /* OALocationServices.h */,
+				BB451EB718E1938F005FBE09 /* OALocationServices.m */,
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 		BB63333117C363F400903AB1 /* Externals */ = {
@@ -1039,28 +1079,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBBDADB318BCBE9700E4A359 /* OsmAndAppImpl.mm in Sources */,
+				BB451EBC18E1B118005FBE09 /* OAMapSourcesCollection.m in Sources */,
 				BB098D011793F7FD00423944 /* main.m in Sources */,
 				BB098D051793F7FD00423944 /* OAAppDelegate.mm in Sources */,
+				BB451EB318E19376005FBE09 /* OAMapSourcePresetsCollection.m in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
-				BB451E1D18DAFB55005FBE09 /* OAMapSourcePresets.m in Sources */,
+				BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
+				BB451EB118E19376005FBE09 /* OAMapSourcePreset.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
-				BB451DFA18DA2E2A005FBE09 /* OAMapSourcePreset.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
+				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
+				BB451EC918E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
-				BBBDADB718BCE77400E4A359 /* OALocationServices.m in Sources */,
+				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
-				BB451DF718D9BC52005FBE09 /* OAConfiguration.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
+				BB451EC418E200BA005FBE09 /* OAMapSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1069,28 +1113,32 @@
 			buildActionMask = 2147483647;
 			files = (
 				BB451E2218DCD224005FBE09 /* OsmAndAppImpl.mm in Sources */,
+				BB451EBD18E1B118005FBE09 /* OAMapSourcesCollection.m in Sources */,
 				BB451E2318DCD224005FBE09 /* main.m in Sources */,
 				BB451E2418DCD224005FBE09 /* OAAppDelegate.mm in Sources */,
+				BB451EB418E19376005FBE09 /* OAMapSourcePresetsCollection.m in Sources */,
 				BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */,
-				BB451E2618DCD224005FBE09 /* OAMapSourcePresets.m in Sources */,
+				BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
+				BB451EB218E19376005FBE09 /* OAMapSourcePreset.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */,
-				BB451E2918DCD224005FBE09 /* OAMapSourcePreset.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
+				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
+				BB451ECA18E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
-				BB451E3518DCD224005FBE09 /* OALocationServices.m in Sources */,
+				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */,
-				BB451E3718DCD224005FBE09 /* OAConfiguration.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
+				BB451EC518E200BA005FBE09 /* OAMapSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,8 @@
 
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol>
 
+@property(readonly) OAAppData* data;
+
 @property(nonatomic, setter = setMapMode:) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;
 

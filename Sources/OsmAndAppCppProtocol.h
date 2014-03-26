@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+#import "OAMapCrossSessionState.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/ObfsCollection.h>
 #include <OsmAndCore/Map/MapStyles.h>
 
 @protocol OsmAndAppCppProtocol <NSObject>
 
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
-@property (nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
 
 @end

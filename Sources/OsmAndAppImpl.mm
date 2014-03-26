@@ -38,8 +38,9 @@
 
 - (void)ctor
 {
-    // First of all, initialize configuration
-    _configuration = [[OAConfiguration alloc] init];
+    // First of all, initialize application data
+    _data = [[OAAppData alloc] init];
+//    [self initUserDefaults];
     
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
@@ -93,12 +94,57 @@
     _obfsCollection->registerDirectory(_documentsPath);
 }
 
+- (void)initUserDefaults
+{
+    static NSString* const kUserDefaultsVersion = @"version";
+    static const NSInteger vUserDefaultsCurrentVersion = 1;
+    
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    
+    // Perform upgrade procedures (if such required)
+    for(;;)
+    {
+        const NSInteger storedVersion = [userDefaults integerForKey:kUserDefaultsVersion];
+        
+        // If no previous version was stored or stored version equals current version,
+        // nothing needs to be upgraded
+        if(storedVersion == 0 || storedVersion == vUserDefaultsCurrentVersion)
+            break;
+        
+        //NOTE: Here place the upgrade code. Template provided
+        /*
+        if(storedVersion == 4)
+        {
+            //NOTE: Operations to upgrade from version 4 to version 5
+         
+            // Save version
+            [_storage setInteger:storedVersion+1
+                          forKey:kUserDefaultsVersion];
+            [_storage synchronize];
+        }
+        */
+    }
+    
+    // Register defaults
+    [userDefaults registerDefaults:[self inflateInitialUserDefaults]];
+    [userDefaults setInteger:vUserDefaultsCurrentVersion
+                      forKey:kUserDefaultsVersion];
+    [userDefaults synchronize];
+}
+
+- (NSDictionary*)inflateInitialUserDefaults
+{
+    NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
+    
+    return initialUserDefaults;
+}
+
 - (void)initMapStyles
 {
     _mapStyles.reset(new OsmAnd::MapStyles());
 }
 
-@synthesize configuration = _configuration;
+@synthesize data = _data;
 
 @synthesize locationServices = _locationServices;
 

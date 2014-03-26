@@ -11,8 +11,7 @@
 #import "OsmAndApp.h"
 #import "UIViewController+OARootVC.h"
 #import "OAAutoObserverProxy.h"
-#import "OAConfiguration.h"
-#import "OAMapSourcePresets.h"
+#import "OAAppData.h"
 #import "OAMapSourcePreset.h"
 
 #include "Localization.h"
@@ -27,11 +26,9 @@
 {
     OsmAndAppInstance _app;
     
-    OAAutoObserverProxy* _configurationObserver;
-    
-    NSString* _mapSource;
-    OAMapSourcePresets* _mapSourcePresets;
-    NSUUID* _activeMapSourcePreset;
+    OAAutoObserverProxy* _activeMapSourceIdObserver;
+    OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
+    OAAutoObserverProxy* _mapSourcePresetsObserver;
 }
 
 #define kMapSourcesAndPresetsSection 0
@@ -60,16 +57,16 @@
 {
     _app = [OsmAndApp instance];
     
-    _configurationObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onConfigurationChanged:withKey:andValue:)];
-    [_configurationObserver observe:_app.configuration.observable];
-    
-    // Collect initial data from configuration
-    @synchronized(self)
-    {
-        _mapSource = _app.configuration.activeMapSource;
-        _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
-        _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
-    }
+    _activeMapSourceIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onActiveMapSourceIdChanged)
+                                                            andObserve:_app.data.activeMapSourceIdChangeObservable];
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onMapSourceActivePresetIdChanged)
+                                                                  andObserve:activeMapSource.activePresetIdChangeObservable];
+    _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onMapSourcePresetsCollectionChanged)
+                                                           andObserve:activeMapSource.presets.collectionChangeObservable];
 }
 
 - (void)viewDidLoad
@@ -82,7 +79,7 @@
     [super viewWillAppear:animated];
     
     // Perform selection of proper preset
-    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_mapSourcePresets.order indexOfObject:_activeMapSourcePreset] + 1
+    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_app.data.mapSources indexOfMapSourceWithId:_app.data.activeMapSourceId] + 1
                                                                inSection:kMapSourcesAndPresetsSection]
                                    animated:animated
                              scrollPosition:UITableViewScrollPositionNone];
@@ -94,154 +91,144 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)onConfigurationChanged:(id)observable withKey:(id)key andValue:(id)value
+- (void)onActiveMapSourceIdChanged
 {
-    if([kActiveMapSource isEqualToString:key])
-    {
-        @synchronized(self)
-        {
-            _mapSource = _app.configuration.activeMapSource;
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
-            _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
-        }
-        
-        // Change of map-source requires reloading of entire map section,
-        // since not only name of active map source have changed, but also
-        // set of presets available
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @synchronized(self)
-            {
-                // Reload entire section
-                [_optionsTableview reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
-                                 withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-                // Perform selection of proper preset
-                [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_mapSourcePresets.order indexOfObject:_activeMapSourcePreset] + 1
-                                                                           inSection:kMapSourcesAndPresetsSection]
-                                               animated:YES
-                                         scrollPosition:UITableViewScrollPositionNone];
-            }
-        });
-    }
-    else if([kMapSourcesPresets isEqualToString:key] && [_mapSource isEqualToString:value])
-    {
-        @synchronized(self)
-        {
-            _mapSourcePresets = [_app.configuration mapSourcePresetsFor:_mapSource];
-            
-            // In case current selection is no longer available, select any first
-            if(![_mapSourcePresets.order containsObject:_activeMapSourcePreset])
-                _activeMapSourcePreset = [_mapSourcePresets.order firstObject];
-        }
-        
-        // Change of available set of presets for current map-source triggers
-        // removal of all previous preset rows and inserting new ones,
-        // along with chaning selection
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @synchronized(self)
-            {
-                [_optionsTableview beginUpdates];
-                NSInteger numberOfOldRows = [_optionsTableview numberOfRowsInSection:kMapSourcesAndPresetsSection] - 1;
-                NSInteger deltaBetweenNumberOfRows = numberOfOldRows - [_mapSourcePresets.presets count];
-                if(deltaBetweenNumberOfRows > 0)
-                {
-                    NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:deltaBetweenNumberOfRows];
-                    for(NSInteger rowIdx = 0; rowIdx < deltaBetweenNumberOfRows; rowIdx++)
-                    {
-                        [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows - rowIdx - 1
-                                                                   inSection:kMapSourcesAndPresetsSection]];
-                    }
-                    [_optionsTableview deleteRowsAtIndexPaths:affectedRows
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                else if(deltaBetweenNumberOfRows < 0)
-                {
-                    NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:-deltaBetweenNumberOfRows];
-                    for(NSInteger rowIdx = 0; rowIdx < -deltaBetweenNumberOfRows; rowIdx++)
-                    {
-                        [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows + rowIdx
-                                                                   inSection:kMapSourcesAndPresetsSection]];
-                    }
-                    [_optionsTableview insertRowsAtIndexPaths:affectedRows
-                                             withRowAnimation:UITableViewRowAnimationAutomatic];
-                }
-                [_optionsTableview endUpdates];
-                NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:[_mapSourcePresets.presets count]];
-                for(NSInteger rowIdx = 0; rowIdx < [_mapSourcePresets.presets count]; rowIdx++)
-                {
-                    [affectedRows addObject:[NSIndexPath indexPathForRow:rowIdx
-                                                               inSection:kMapSourcesAndPresetsSection]];
-                }
-                [_optionsTableview reloadRowsAtIndexPaths:affectedRows
-                                         withRowAnimation:UITableViewRowAnimationAutomatic];
-                
-                // Verify selection:
+    // Change of map-source requires reloading of entire map section,
+    // since not only name of active map source have changed, but also
+    // set of presets available
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // Detach from previous active map source
+        [_mapSourceActivePresetIdObserver detach];
+        [_mapSourcePresetsObserver detach];
 
-                // Get currently selected (if such exists)
-                __block NSUUID* currentlySelectedPreset = nil;
-                __block NSIndexPath* currentlySelectedPresetIndexPath = nil;
-                [[_optionsTableview indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSIndexPath* indexPath = obj;
-                    if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
-                        return;
-                    currentlySelectedPreset = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
-                    currentlySelectedPresetIndexPath = indexPath;
-                    *stop = YES;
-                }];
-                
-                // If selection differs, or selection index differ
-                NSInteger actualizedSelectionIndex = [_mapSourcePresets.order indexOfObject:_activeMapSourcePreset];
-                if(![_activeMapSourcePreset isEqual:currentlySelectedPreset] ||
-                   actualizedSelectionIndex != (currentlySelectedPresetIndexPath.row - 1))
-                {
-                    // Deselect old
-                    if(currentlySelectedPreset != nil)
-                        [_optionsTableview deselectRowAtIndexPath:currentlySelectedPresetIndexPath animated:YES];
-                    
-                    // Select new
-                    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:actualizedSelectionIndex + 1
-                                                                               inSection:kMapSourcesAndPresetsSection]
-                                                   animated:YES
-                                             scrollPosition:UITableViewScrollPositionNone];
-                }
-            }
-        });
-    }
-    else if([kSelectedMapSourcePresets isEqualToString:key] && [_mapSource isEqualToString:value])
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            @synchronized(self)
+        // Attach to new one
+        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+        _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                     withHandler:@selector(onMapSourceActivePresetIdChanged)
+                                                                      andObserve:activeMapSource.activePresetIdChangeObservable];
+        _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onMapSourcePresetsCollectionChanged)
+                                                               andObserve:activeMapSource.presets.collectionChangeObservable];
+
+        // Reload entire section
+        [_optionsTableview reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
+                         withRowAnimation:UITableViewRowAnimationAutomatic];
+
+        // Perform selection of proper preset
+        [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
+                                                                   inSection:kMapSourcesAndPresetsSection]
+                                       animated:YES
+                                 scrollPosition:UITableViewScrollPositionNone];
+    });
+}
+
+- (void)onMapSourceActivePresetIdChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+        OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
+
+        // Get currently selected (if such exists)
+        __block NSUUID* uiSelectedPresetId = nil;
+        __block NSIndexPath* uiSelectedPresetIndexPath = nil;
+        [[_optionsTableview indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSIndexPath* indexPath = obj;
+            if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
+                return;
+            uiSelectedPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
+            uiSelectedPresetIndexPath = indexPath;
+            *stop = YES;
+        }];
+
+        // If selection differs, select proper preset
+        if(![activePreset.uniqueId isEqual:uiSelectedPresetId])
+        {
+            // Deselect old
+            if(uiSelectedPresetId != nil)
+                [_optionsTableview deselectRowAtIndexPath:uiSelectedPresetIndexPath animated:YES];
+
+            // Select new
+            [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
+                                                                       inSection:kMapSourcesAndPresetsSection]
+                                           animated:YES
+                                     scrollPosition:UITableViewScrollPositionNone];
+        }
+    });
+}
+
+- (void)onMapSourcePresetsCollectionChanged
+{
+    // Change of available set of presets for current map-source triggers
+    // removal of all previous preset rows and inserting new ones,
+    // along with chaning selection
+    dispatch_async(dispatch_get_main_queue(), ^{
+        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+
+        [_optionsTableview beginUpdates];
+        NSInteger numberOfOldRows = [_optionsTableview numberOfRowsInSection:kMapSourcesAndPresetsSection] - 1;
+        NSInteger deltaBetweenNumberOfRows = numberOfOldRows - [activeMapSource.presets count];
+        if(deltaBetweenNumberOfRows > 0)
+        {
+            NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:deltaBetweenNumberOfRows];
+            for(NSInteger rowIdx = 0; rowIdx < deltaBetweenNumberOfRows; rowIdx++)
             {
-                _activeMapSourcePreset = [_app.configuration selectedMapSourcePresetFor:_mapSource];
-                
-                // Get currently selected (if such exists)
-                __block NSUUID* currentlySelectedPreset = nil;
-                __block NSIndexPath* currentlySelectedPresetIndexPath = nil;
-                [[_optionsTableview indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-                    NSIndexPath* indexPath = obj;
-                    if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
-                        return;
-                    currentlySelectedPreset = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
-                    currentlySelectedPresetIndexPath = indexPath;
-                    *stop = YES;
-                }];
-                
-                // If selection differs, select proper preset
-                if(![_activeMapSourcePreset isEqual:currentlySelectedPreset])
-                {
-                    // Deselect old
-                    if(currentlySelectedPreset != nil)
-                        [_optionsTableview deselectRowAtIndexPath:currentlySelectedPresetIndexPath animated:YES];
-                    
-                    // Select new
-                    [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:[_mapSourcePresets.order indexOfObject:_activeMapSourcePreset] + 1
-                                                                               inSection:kMapSourcesAndPresetsSection]
-                                                   animated:YES
-                                             scrollPosition:UITableViewScrollPositionNone];
-                }
+                [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows - rowIdx - 1
+                                                           inSection:kMapSourcesAndPresetsSection]];
             }
-        });
-    }
+            [_optionsTableview deleteRowsAtIndexPaths:affectedRows
+                                     withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        else if(deltaBetweenNumberOfRows < 0)
+        {
+            NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:-deltaBetweenNumberOfRows];
+            for(NSInteger rowIdx = 0; rowIdx < -deltaBetweenNumberOfRows; rowIdx++)
+            {
+                [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows + rowIdx
+                                                           inSection:kMapSourcesAndPresetsSection]];
+            }
+            [_optionsTableview insertRowsAtIndexPaths:affectedRows
+                                     withRowAnimation:UITableViewRowAnimationAutomatic];
+        }
+        [_optionsTableview endUpdates];
+        NSMutableArray* affectedRows = [[NSMutableArray alloc] initWithCapacity:[activeMapSource.presets count]];
+        for(NSInteger rowIdx = 0; rowIdx < [activeMapSource.presets count]; rowIdx++)
+        {
+            [affectedRows addObject:[NSIndexPath indexPathForRow:rowIdx
+                                                       inSection:kMapSourcesAndPresetsSection]];
+        }
+        [_optionsTableview reloadRowsAtIndexPaths:affectedRows
+                                 withRowAnimation:UITableViewRowAnimationAutomatic];
+
+        // Verify selection:
+
+        // Get currently selected (if such exists)
+        __block NSUUID* uiSelectedPresetId = nil;
+        __block NSIndexPath* uiSelectedPresetIndexPath = nil;
+        [[_optionsTableview indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSIndexPath* indexPath = obj;
+            if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
+                return;
+            uiSelectedPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
+            uiSelectedPresetIndexPath = indexPath;
+            *stop = YES;
+        }];
+
+        // If selection differs, or selection index differ
+        NSInteger actualizedSelectionIndex = [activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId];
+        if(![activeMapSource.activePresetId isEqual:uiSelectedPresetId] ||
+           actualizedSelectionIndex != (uiSelectedPresetIndexPath.row - 1))
+        {
+            // Deselect old
+            if(uiSelectedPresetId != nil)
+                [_optionsTableview deselectRowAtIndexPath:uiSelectedPresetIndexPath animated:YES];
+
+            // Select new
+            [_optionsTableview selectRowAtIndexPath:[NSIndexPath indexPathForRow:actualizedSelectionIndex + 1
+                                                                       inSection:kMapSourcesAndPresetsSection]
+                                           animated:YES
+                                     scrollPosition:UITableViewScrollPositionNone];
+        }
+    });
 }
 
 //- (void)updateMapSourcesAnd
@@ -262,9 +249,10 @@
             NSInteger rowsCount = 1 /* 'Maps' */;
             
             // Append rows to show all available presets for current map source
-            if(_mapSourcePresets != nil)
-                rowsCount += [_mapSourcePresets.presets count];
-            
+            OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+            if(activeMapSource != nil)
+                rowsCount += [activeMapSource.presets count];
+
             return rowsCount;
         } break;
         case kLayersSection:
@@ -299,8 +287,10 @@
             }
             else
             {
-                NSUUID* presetId = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
-                OAMapSourcePreset* preset = [_mapSourcePresets.presets objectForKey:presetId];
+                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+
+                NSUUID* presetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
+                OAMapSourcePreset* preset = [activeMapSource.presets presetWithId:presetId];
                 
                 cellTypeId = mapSourcePresetCell;
                 if(preset.iconImageName != nil)
@@ -406,9 +396,10 @@
     }
     else if(indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0)
     {
-        NSUUID* newPresetId = [_mapSourcePresets.order objectAtIndex:indexPath.row - 1];
-        if(![_activeMapSourcePreset isEqual:newPresetId])
-            [_app.configuration selectMapSourcePreset:newPresetId for:_mapSource];
+        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+
+        NSUUID* newPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
+        activeMapSource.activePresetId = newPresetId;
     }
 }
 

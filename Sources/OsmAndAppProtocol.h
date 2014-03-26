@@ -10,12 +10,12 @@
 
 #include "CommonTypes.h"
 #import "OAObservable.h"
-#import "OAConfiguration.h"
+#import "OAAppData.h"
 #import "OALocationServices.h"
 
 @protocol OsmAndAppProtocol <NSObject>
 
-@property(readonly) OAConfiguration* configuration;
+@property(readonly) OAAppData* data;
 
 @property(readonly) OALocationServices* locationServices;
 

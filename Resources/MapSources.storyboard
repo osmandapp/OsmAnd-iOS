@@ -8,7 +8,7 @@
         <!--Map Sources List View Controller-->
         <scene sceneID="pHh-hp-Wuq">
             <objects>
-                <tableViewController title="Available maps" id="7Qm-zc-bZa" userLabel="Map Sources List View Controller" sceneMemberID="viewController">
+                <tableViewController title="Available maps" id="7Qm-zc-bZa" userLabel="Map Sources List View Controller" customClass="OAMapSourcesListViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="8RB-dR-EmG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

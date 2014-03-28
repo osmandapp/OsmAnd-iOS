@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapSourcesListViewController : UIViewController
+@interface OAMapSourcesListViewController : UITableViewController
 
 @end

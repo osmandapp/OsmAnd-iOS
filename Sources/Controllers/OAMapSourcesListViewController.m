@@ -8,6 +8,8 @@
 
 #import "OAMapSourcesListViewController.h"
 
+#import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
 #include "Localization.h"
 
 @interface OAMapSourcesListViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -15,6 +17,15 @@
 @end
 
 @implementation OAMapSourcesListViewController
+{
+    OsmAndAppInstance _app;
+
+    OAAutoObserverProxy* _activeMapSourceIdObserver;
+    OAAutoObserverProxy* _mapSourcesCollectionObserver;
+
+    NSMutableArray* _offlineMapSourcesIds;
+    NSMutableArray* _onlineMapSourcesIds;
+}
 
 #define kOfflineSourcesSection 0
 #define kOnlineSourcesSection 1
@@ -37,20 +48,69 @@
     return self;
 }
 
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if (self) {
+        [self ctor];
+    }
+    return self;
+}
+
 - (void)ctor
 {
+    _app = [OsmAndApp instance];
+
+    _activeMapSourceIdObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onActiveMapSourceIdChanged)
+                                                            andObserve:_app.data.activeMapSourceIdChangeObservable];
+    _mapSourcesCollectionObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onMapSourcesCollectionChanged)
+                                                               andObserve:_app.data.mapSources.collectionChangeObservable];
+
+    _offlineMapSourcesIds = [[NSMutableArray alloc] init];
+    _onlineMapSourcesIds = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    // Obtain initial map sources list
+    [self obtainMapSourcesList];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)obtainMapSourcesList
+{
+    [_offlineMapSourcesIds removeAllObjects];
+    [_onlineMapSourcesIds removeAllObjects];
+
+    [_app.data.mapSources enumerateMapSourcesUsingBlock:^(OAMapSource *mapSource, BOOL *stop) {
+        if(mapSource.type == OAMapSourceTypeOffline)
+            [_offlineMapSourcesIds addObject:mapSource.uniqueId];
+        else //if(mapSource.type == OAMapSourceTypeOnline)
+            [_onlineMapSourcesIds addObject:mapSource.uniqueId];
+    }];
+}
+
+- (void)onActiveMapSourceIdChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+    });
+}
+
+- (void)onMapSourcesCollectionChanged
+{
+    [self obtainMapSourcesList];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 /*

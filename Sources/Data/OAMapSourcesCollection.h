@@ -27,6 +27,8 @@
 - (BOOL)removeMapSourceWithId:(NSUUID*)mapSourceId;
 - (void)removeMapSourceAtIndex:(NSUInteger)index;
 
+- (void)enumerateMapSourcesUsingBlock:(void (^)(OAMapSource* mapSource, BOOL *stop))block;
+
 @property(readonly) OAObservable* collectionChangeObservable;
 
 @end

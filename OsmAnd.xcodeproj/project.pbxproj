@@ -851,8 +851,8 @@
 				BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */,
 				BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */,
 				BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */,
-				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 				BB451EDD18E37417005FBE09 /* MapSources.storyboard */,
+				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

@@ -86,7 +86,7 @@
     }
 }
 
-- (void)enumerateKeysAndObjectsUsingBlock:(void (^)(NSString* key, NSString* value, BOOL *stop))block
+- (void)enumerateValuesUsingBlock:(void (^)(NSString* key, NSString* value, BOOL *stop))block
 {
     @synchronized(self)
     {

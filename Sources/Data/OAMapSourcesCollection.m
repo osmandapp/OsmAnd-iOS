@@ -141,6 +141,16 @@
     }
 }
 
+- (void)enumerateMapSourcesUsingBlock:(void (^)(OAMapSource* mapSource, BOOL *stop))block
+{
+    @synchronized(self)
+    {
+        [_mapSources enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            block(obj, stop);
+        }];
+    }
+}
+
 @synthesize collectionChangeObservable = _collectionChangeObservable;
 
 #pragma mark - NSCoding

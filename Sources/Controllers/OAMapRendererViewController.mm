@@ -865,7 +865,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             
             // Obtain settings from selected preset
             __block QHash< QString, QString > styleSettings;
-            [activePreset.values enumerateKeysAndObjectsUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
+            [activePreset.values enumerateValuesUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
                 styleSettings.insert(QString::fromNSString(key), QString::fromNSString(value));
             }];
             

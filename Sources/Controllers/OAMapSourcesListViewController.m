@@ -80,6 +80,14 @@
     [self obtainMapSourcesList];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // Perform selection of proper preset
+    [self selectActiveMapSource:animated];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -99,9 +107,26 @@
     }];
 }
 
+- (void)selectActiveMapSource:(BOOL)animated
+{
+    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+    NSUInteger activeMapSourceIndex;
+    if(activeMapSource.type == OAMapSourceTypeOffline)
+        activeMapSourceIndex = [_offlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
+    else //if(mapSource.type == OAMapSourceTypeOnline)
+        activeMapSourceIndex = [_onlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
+    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:activeMapSourceIndex
+                                                            inSection:kOfflineSourcesSection]
+                                animated:animated
+                          scrollPosition:UITableViewScrollPositionNone];
+}
+
 - (void)onActiveMapSourceIdChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow]
+                                      animated:YES];
+        [self selectActiveMapSource:YES];
     });
 }
 
@@ -136,11 +161,9 @@
     switch (section)
     {
         case kOfflineSourcesSection:
-            //TODO: return number of offline sources
-            return 1;
+            return [_offlineMapSourcesIds count];
         case kOnlineSourcesSection:
-            //TODO: return number of online sources
-            return 4;
+            return [_onlineMapSourcesIds count];
 
         default:
             return 0;
@@ -166,11 +189,10 @@
     static NSString* const mapSourceItemCell = @"mapSourceItemCell";
 
     // Get content for cell and it's type id
-    NSString* caption = nil;
+    NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSourcesIds : _onlineMapSourcesIds;
+    OAMapSource* mapSource = [_app.data.mapSources mapSourceWithId:[collection objectAtIndex:indexPath.row]];
+    NSString* caption = mapSource.name;
     NSString* description = nil;
-    switch (indexPath.section)
-    {
-    }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];

@@ -228,6 +228,10 @@
     NSUUID* newActiveMapSourceId = [collection objectAtIndex:indexPath.row];
 
     _app.data.activeMapSourceId = newActiveMapSourceId;
+
+    // For iPhone/iPod, since this menu wasn't opened in popover, return
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath

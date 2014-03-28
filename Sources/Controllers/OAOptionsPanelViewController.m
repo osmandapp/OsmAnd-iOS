@@ -150,6 +150,14 @@
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
 
+        // If current menu origin cell is from this section, maintain selection
+        if(_lastMenuOriginCellPath != nil && _lastMenuOriginCellPath.section == kMapSourcesAndPresetsSection)
+        {
+            [self.tableView selectRowAtIndexPath:_lastMenuOriginCellPath
+                                        animated:YES
+                                  scrollPosition:UITableViewScrollPositionNone];
+        }
+
         // Perform selection of proper preset
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
                                                                 inSection:kMapSourcesAndPresetsSection]

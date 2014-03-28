@@ -110,13 +110,17 @@
 - (void)selectActiveMapSource:(BOOL)animated
 {
     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    NSUInteger activeMapSourceIndex;
+    NSIndexPath* newSelected;
     if(activeMapSource.type == OAMapSourceTypeOffline)
-        activeMapSourceIndex = [_offlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
+    {
+        newSelected = [NSIndexPath indexPathForRow:[_offlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId]
+                                         inSection:kOfflineSourcesSection];
+    }
     else //if(mapSource.type == OAMapSourceTypeOnline)
-        activeMapSourceIndex = [_onlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
-    NSIndexPath* newSelected = [NSIndexPath indexPathForRow:activeMapSourceIndex
-                                                  inSection:kOfflineSourcesSection];
+    {
+        newSelected = [NSIndexPath indexPathForRow:[_onlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId]
+                                         inSection:kOnlineSourcesSection];
+    }
 
     NSIndexPath* currentSelected = [self.tableView indexPathForSelectedRow];
     if(currentSelected != nil)
@@ -218,7 +222,15 @@
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Everything is selectable
+    // Deselect any currently selected (if not the same)
+    NSIndexPath* currentlySelected = [tableView indexPathForSelectedRow];
+    if(currentlySelected != nil)
+    {
+        if([currentlySelected isEqual:indexPath])
+            return indexPath;
+        [tableView deselectRowAtIndexPath:currentlySelected animated:YES];
+    }
+
     return indexPath;
 }
 
@@ -236,7 +248,7 @@
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Disallow deselection completely
+    // Disallow manual deselection of any map source
     return nil;
 }
 

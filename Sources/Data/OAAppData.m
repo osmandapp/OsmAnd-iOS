@@ -78,6 +78,7 @@
     defaults.mapLastViewedState.azimuth = 0.0f;
     defaults.mapLastViewedState.elevationAngle = 90.0f;
 
+    // Offline maps
     OAMapSource* defaultMapSource = [[OAMapSource alloc] initWithLocalizedNameKey:@"OsmAndOfflineMapSource"
                                                                           andType:OAMapSourceTypeOffline
                                                               andTypedReferenceId:@"default"];
@@ -95,6 +96,16 @@
                                                                                                andType:OAMapSourcePresetTypePedestrian
                                                                                              andValues:@{ @"appMode" : @"pedestrian" }]];
     defaults.activeMapSourceId = [defaults.mapSources registerAndAddMapSource:defaultMapSource];
+
+    // Mapnik (host by OsmAnd)
+    OAMapSource* ownMapnikMapSource = [[OAMapSource alloc] initWithLocalizedNameKey:@"OsmAndOnlineMapSource_Mapnik"
+                                                                            andType:OAMapSourceTypeOnline
+                                                                andTypedReferenceId:@"mapnik_osmand"];
+    ownMapnikMapSource.activePresetId =
+    [ownMapnikMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
+                                                                                                 andType:OAMapSourcePresetTypeGeneral
+                                                                                               andValues:@{}]];
+    [defaults.mapSources registerAndAddMapSource:ownMapnikMapSource];
 
     return defaults;
 }

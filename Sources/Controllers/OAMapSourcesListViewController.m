@@ -115,8 +115,18 @@
         activeMapSourceIndex = [_offlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
     else //if(mapSource.type == OAMapSourceTypeOnline)
         activeMapSourceIndex = [_onlineMapSourcesIds indexOfObject:_app.data.activeMapSourceId];
-    [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:activeMapSourceIndex
-                                                            inSection:kOfflineSourcesSection]
+    NSIndexPath* newSelected = [NSIndexPath indexPathForRow:activeMapSourceIndex
+                                                  inSection:kOfflineSourcesSection];
+
+    NSIndexPath* currentSelected = [self.tableView indexPathForSelectedRow];
+    if(currentSelected != nil)
+    {
+        if([currentSelected isEqual:newSelected])
+            return;
+        [self.tableView deselectRowAtIndexPath:currentSelected animated:YES];
+    };
+
+    [self.tableView selectRowAtIndexPath:newSelected
                                 animated:animated
                           scrollPosition:UITableViewScrollPositionNone];
 }
@@ -124,8 +134,6 @@
 - (void)onActiveMapSourceIdChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView deselectRowAtIndexPath:[self.tableView indexPathForSelectedRow]
-                                      animated:YES];
         [self selectActiveMapSource:YES];
     });
 }
@@ -216,7 +224,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    //TODO: perform change of active map source
+    NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSourcesIds : _onlineMapSourcesIds;
+    NSUUID* newActiveMapSourceId = [collection objectAtIndex:indexPath.row];
+
+    _app.data.activeMapSourceId = newActiveMapSourceId;
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath

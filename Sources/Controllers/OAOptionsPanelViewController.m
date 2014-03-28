@@ -98,6 +98,16 @@
                                                                inSection:kMapSourcesAndPresetsSection]
                                    animated:animated
                              scrollPosition:UITableViewScrollPositionNone];
+
+    // Deselect menu origin cell if reopened (on iPhone/iPod)
+    if(_lastMenuOriginCellPath != nil &&
+       [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        [_optionsTableview deselectRowAtIndexPath:_lastMenuOriginCellPath
+                                         animated:animated];
+
+        _lastMenuOriginCellPath = nil;
+    }
 }
 
 - (void)didReceiveMemoryWarning

@@ -1,5 +1,5 @@
 //
-//  UIViewController+OARootVC.h
+//  UIViewController+OARootViewController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -10,7 +10,7 @@
 
 #import "OARootViewController.h"
 
-@interface UIViewController (OARootVC)
+@interface UIViewController (OARootViewController)
 
 @property (nonatomic, weak, readonly) OARootViewController *rootViewController;
 

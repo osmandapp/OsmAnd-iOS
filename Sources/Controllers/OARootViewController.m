@@ -63,6 +63,44 @@
     self.shouldDelegateAutorotateToVisiblePanel = NO;
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [super viewWillAppear:animated];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [self.navigationController setNavigationBarHidden:NO animated:animated];
+    [super viewDidDisappear:animated];
+}
+
+- (void)styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration
+{
+    if([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+    {
+        // For iOS 7.0+ disable casting shadow. Instead use border for left and right panels
+        container.clipsToBounds = NO;
+
+        if(container == self.centerPanelContainer && [[container.layer sublayers] count] == 1)
+        {
+            CALayer* rightBorderLayer = [CALayer layer];
+            rightBorderLayer.borderColor = [UIColor darkGrayColor].CGColor;
+            rightBorderLayer.borderWidth = 1.0f;
+            rightBorderLayer.frame = CGRectMake(-1.0f,
+                                                -1.0f,
+                                                CGRectGetWidth(container.frame) + 2.0f,
+                                                CGRectGetHeight(container.frame) + 2.0f);
+            [container.layer addSublayer:rightBorderLayer];
+        }
+    }
+    else
+    {
+        // For previous version keep default behavior
+        [super styleContainer:container animate:animate duration:duration];
+    }
+}
+
 - (void)stylePanel:(UIView *)panel
 {
     [super stylePanel:panel];

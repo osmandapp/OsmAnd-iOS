@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAOptionsPanelViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface OAOptionsPanelViewController : UIViewController
 
 @end

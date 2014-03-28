@@ -56,7 +56,7 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Create root view controller
-    self.window.rootViewController = [[OARootViewController alloc] init];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[OARootViewController alloc] init]];
     [self.window makeKeyAndVisible];
 
     return YES;

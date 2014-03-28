@@ -9,14 +9,14 @@
 #import "OAOptionsPanelViewController.h"
 
 #import "OsmAndApp.h"
-#import "UIViewController+OARootVC.h"
+#import "UIViewController+OARootViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #import "OAMapSourcePreset.h"
 
 #include "Localization.h"
 
-@interface OAOptionsPanelViewController ()
+@interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *optionsTableview;
 
@@ -31,6 +31,9 @@
     OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
     OAAutoObserverProxy* _mapSourcePresetsObserver;
     OAAutoObserverProxy* _mapSourceAnyPresetChangeObserver;
+
+    NSIndexPath* _lastMenuOriginCellPath;
+    UIPopoverController* _lastMenuPopoverController;
 }
 
 #define kMapSourcesAndPresetsSection 0
@@ -270,7 +273,45 @@
     });
 }
 
-//- (void)updateMapSourcesAnd
+- (void)openMenu:(UIViewController*)menuViewController forCellAt:(NSIndexPath*)indexPath
+{
+    _lastMenuOriginCellPath = indexPath;
+
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        // For iPhone and iPod, push menu to navigation controller
+        [self.navigationController pushViewController:menuViewController
+                                             animated:YES];
+    }
+    else //if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        // For iPad, open menu in a popover with it's own navigation controller
+        UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+        _lastMenuPopoverController = [[UIPopoverController alloc] initWithContentViewController:popoverNavigationController];
+        _lastMenuPopoverController.delegate = self;
+
+        UITableViewCell* originCell = [_optionsTableview cellForRowAtIndexPath:_lastMenuOriginCellPath];
+        [_lastMenuPopoverController presentPopoverFromRect:originCell.frame
+                                         inView:_optionsTableview
+                       permittedArrowDirections:UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight
+                                       animated:YES];
+    }
+}
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
+       _lastMenuPopoverController == popoverController)
+    {
+        // Deselect menu item that was origin for this popover
+        [_optionsTableview deselectRowAtIndexPath:_lastMenuOriginCellPath animated:YES];
+
+        _lastMenuOriginCellPath = nil;
+        _lastMenuPopoverController = nil;
+    }
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -294,7 +335,6 @@
 
                 return rowsCount;
             }
-            break;
         case kLayersSection:
             return 4;
         case kOptionsSection:
@@ -470,8 +510,8 @@
     {
         if(indexPath.row == 0)
         {
-            //TODO: open menu
-            NSLog(@"open map sources menu");
+            UIViewController* mapSourcesMenuViewController = [[UIStoryboard storyboardWithName:@"MapSources" bundle:nil] instantiateInitialViewController];
+            [self openMenu:mapSourcesMenuViewController forCellAt:indexPath];
         }
         else
         {
@@ -513,7 +553,6 @@
 - (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Disallow deselection completely
-    //NOTE: maybe eventually allow to hide slide-out menus by deselection
     return nil;
 }
 

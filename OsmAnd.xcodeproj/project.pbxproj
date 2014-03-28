@@ -96,7 +96,7 @@
 		BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */; };
 		BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */; };
 		BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */; };
-		BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
+		BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */; };
 		BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
 		BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBACF10C17C6293300EBA761 /* OsmAndApp.mm */; };
 		BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
@@ -209,6 +209,10 @@
 		BB451EDA18E36BFB005FBE09 /* menu_item_settings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451ECF18E36BFB005FBE09 /* menu_item_settings_icon.png */; };
 		BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451ED018E36BFB005FBE09 /* menu_item_settings_icon@2x.png */; };
 		BB451EDC18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451ED018E36BFB005FBE09 /* menu_item_settings_icon@2x.png */; };
+		BB451EDE18E37417005FBE09 /* MapSources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451EDD18E37417005FBE09 /* MapSources.storyboard */; };
+		BB451EDF18E37417005FBE09 /* MapSources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451EDD18E37417005FBE09 /* MapSources.storyboard */; };
+		BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */; };
+		BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -231,7 +235,7 @@
 		BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */; };
 		BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */; };
 		BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */; };
-		BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */; };
+		BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */; };
 		BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
@@ -370,6 +374,9 @@
 		BB451ECE18E36BFB005FBE09 /* menu_item_my_data_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_my_data_icon@2x.png"; sourceTree = "<group>"; };
 		BB451ECF18E36BFB005FBE09 /* menu_item_settings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_settings_icon.png; sourceTree = "<group>"; };
 		BB451ED018E36BFB005FBE09 /* menu_item_settings_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_settings_icon@2x.png"; sourceTree = "<group>"; };
+		BB451EDD18E37417005FBE09 /* MapSources.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = MapSources.storyboard; path = Resources/MapSources.storyboard; sourceTree = "<group>"; };
+		BB451EE018E58712005FBE09 /* OAMapSourcesListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSourcesListViewController.h; path = Controllers/OAMapSourcesListViewController.h; sourceTree = "<group>"; };
+		BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSourcesListViewController.m; path = Controllers/OAMapSourcesListViewController.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -402,8 +409,8 @@
 		BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapModeHudViewController.m; path = Controllers/OAMapModeHudViewController.m; sourceTree = "<group>"; };
 		BB63335517C4E3DE00903AB1 /* OAMapHudRootView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapHudRootView.h; path = Views/OAMapHudRootView.h; sourceTree = "<group>"; };
 		BB63335617C4E3DE00903AB1 /* OAMapHudRootView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapHudRootView.m; path = Views/OAMapHudRootView.m; sourceTree = "<group>"; };
-		BB63335917C5388A00903AB1 /* UIViewController+OARootVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+OARootVC.h"; path = "Controllers/UIViewController+OARootVC.h"; sourceTree = "<group>"; };
-		BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+OARootVC.m"; path = "Controllers/UIViewController+OARootVC.m"; sourceTree = "<group>"; };
+		BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+OARootViewController.h"; path = "Controllers/UIViewController+OARootViewController.h"; sourceTree = "<group>"; };
+		BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+OARootViewController.m"; path = "Controllers/UIViewController+OARootViewController.m"; sourceTree = "<group>"; };
 		BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewController.h; path = Controllers/OAMapRendererViewController.h; sourceTree = "<group>"; };
 		BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererViewController.mm; path = Controllers/OAMapRendererViewController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
@@ -626,8 +633,10 @@
 				BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */,
 				BB63334F17C4CFD600903AB1 /* OAMapModeHudViewController.h */,
 				BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */,
-				BB63335917C5388A00903AB1 /* UIViewController+OARootVC.h */,
-				BB63335A17C5388A00903AB1 /* UIViewController+OARootVC.m */,
+				BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */,
+				BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */,
+				BB451EE018E58712005FBE09 /* OAMapSourcesListViewController.h */,
+				BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -843,6 +852,7 @@
 				BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */,
 				BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
+				BB451EDD18E37417005FBE09 /* MapSources.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -946,6 +956,7 @@
 				BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB451E0318DA4176005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451ED318E36BFB005FBE09 /* menu_item_downloads_icon@2x.png in Resources */,
+				BB451EDE18E37417005FBE09 /* MapSources.storyboard in Resources */,
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
 				BB451DCF18D70B5B005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451DCB18D70B5B005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
@@ -1026,6 +1037,7 @@
 				BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB451E6B18DCD224005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451ED418E36BFB005FBE09 /* menu_item_downloads_icon@2x.png in Resources */,
+				BB451EDF18E37417005FBE09 /* MapSources.storyboard in Resources */,
 				BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */,
 				BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451E6E18DCD224005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
@@ -1126,6 +1138,7 @@
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
+				BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
@@ -1135,7 +1148,7 @@
 				BB451EC918E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAMapHudRootView.m in Sources */,
-				BB63335B17C5388A00903AB1 /* UIViewController+OARootVC.m in Sources */,
+				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
@@ -1160,6 +1173,7 @@
 				BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
+				BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
@@ -1169,7 +1183,7 @@
 				BB451ECA18E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAMapHudRootView.m in Sources */,
-				BB451E3318DCD224005FBE09 /* UIViewController+OARootVC.m in Sources */,
+				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */,

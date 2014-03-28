@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapRendererViewController.h"
+#import "OADebugHudViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
 @interface OAMapModeHudViewController ()
@@ -36,6 +37,8 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
+
+    OADebugHudViewController* _debugHudViewController;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -201,6 +204,20 @@
 
 - (IBAction)onDebugButtonClicked:(id)sender
 {
+    if(_debugHudViewController == nil)
+    {
+        _debugHudViewController = [[OADebugHudViewController alloc] initWithNibName:@"DebugHUD" bundle:nil];
+        [self addChildViewController:_debugHudViewController];
+        _debugHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _debugHudViewController.view.frame = self.view.frame;
+        [self.view addSubview:_debugHudViewController.view];
+    }
+    else
+    {
+        [_debugHudViewController.view removeFromSuperview];
+        [_debugHudViewController removeFromParentViewController];
+        _debugHudViewController = nil;
+    }
 }
 
 @end

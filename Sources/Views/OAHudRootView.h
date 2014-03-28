@@ -1,5 +1,5 @@
 //
-//  OAMapHudRootView.h
+//  OAHudRootView.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapHudRootView : UIView
+@interface OAHudRootView : UIView
 
 @end

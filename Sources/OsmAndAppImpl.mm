@@ -8,21 +8,27 @@
 
 #import "OsmAndAppImpl.h"
 
+#import "OsmAndApp.h"
+
 #include <algorithm>
 
-#include <QStandardPaths>
 #include <QList>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/ObfFile.h>
 #include <OsmAndCore/Data/ObfReader.h>
+#include <OsmAndCore/Map/OnlineMapRasterTileProvidersDB.h>
 
 @implementation OsmAndAppImpl
 {
     std::shared_ptr<OsmAnd::ObfFile> _worldMiniBasemap;
-    QString _documentsPath;
-    QString _cachePath;
 }
+
+@synthesize dataPath = _dataPath;
+@synthesize documentsPath = _documentsPath;
+@synthesize cachePath = _cachePath;
+
+@synthesize installedOnlineTileProvidersDBPath = _installedOnlineTileProvidersDBPath;
 
 @synthesize obfsCollection = _obfsCollection;
 @synthesize mapStyles = _mapStyles;
@@ -40,11 +46,28 @@
 
 - (void)ctor
 {
+    // Get default paths
+    _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
+    NSLog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
+    _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
+    NSLog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
+    _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
+    NSLog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
+
     // First of all, initialize user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
 
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
+
+    // Initialize online tile providers DB (if needed)
+    _installedOnlineTileProvidersDBPath = _dataPath.absoluteFilePath(QLatin1String(kInstalledOnlineTileProvidersDBFilename));
+    if(!QFile::exists(_installedOnlineTileProvidersDBPath))
+    {
+        NSLog(@"Copying default online tile providers DB to '%@'...", _installedOnlineTileProvidersDBPath.toNSString());
+        if(!OsmAnd::OnlineMapRasterTileProvidersDB::createDefaultDB()->saveTo(_installedOnlineTileProvidersDBPath))
+            NSLog(@"ERROR: Failed to copy default online tile providers DB to '%@'", _installedOnlineTileProvidersDBPath.toNSString());
+    }
 
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
@@ -60,13 +83,7 @@
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSLog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, worldMiniBasemapFilename);
     _worldMiniBasemap.reset(new OsmAnd::ObfFile(QString::fromNSString(worldMiniBasemapFilename)));
-    
-    // Get default paths
-    _documentsPath = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    NSLog(@"Documents path: %s", qPrintable(_documentsPath));
-    _cachePath = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    NSLog(@"Cache path: %s", qPrintable(_cachePath));
-    
+
     [self initObfsCollection];
     [self initMapStyles];
     

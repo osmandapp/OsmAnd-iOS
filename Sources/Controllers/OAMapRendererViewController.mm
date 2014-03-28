@@ -17,6 +17,7 @@
 #include <QStandardPaths>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/OnlineMapRasterTileProvidersDB.h>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
@@ -886,7 +887,15 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         }
         else if(activeMapSource.type == OAMapSourceTypeOnline)
         {
-            NSLog(@"right now I should've activated %@ with %@", activeMapSource.typedReferenceId, [activeMapSource.uniqueId UUIDString]);
+            const auto& installedOnlineTileProvidersDB = OsmAnd::OnlineMapRasterTileProvidersDB::loadFrom(_app.installedOnlineTileProvidersDBPath);
+
+            const auto& onlineMapTileProvider = installedOnlineTileProvidersDB->createProvider(QString::fromNSString(activeMapSource.typedReferenceId));
+            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%@'", activeMapSource.typedReferenceId);
+            onlineMapTileProvider->setLocalCachePath(_app.cachePath);
+            _rasterMapProvider = onlineMapTileProvider;
+            [mapView setProvider:_rasterMapProvider
+                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+
         }
 
         _mapSourceInvalidated = YES;

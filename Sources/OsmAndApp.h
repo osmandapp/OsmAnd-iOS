@@ -15,6 +15,8 @@
     @protocol OsmAndAppCppProtocol;
 #endif
 
+#define kInstalledOnlineTileProvidersDBFilename "onlineTileProviders.db"
+
 @interface OsmAndApp : NSObject
 
 + (id<OsmAndAppProtocol, OsmAndAppCppProtocol>)instance;

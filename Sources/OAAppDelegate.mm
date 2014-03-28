@@ -15,7 +15,6 @@
 
 #import "TestFlight.h"
 
-#include <QStandardPaths>
 #include <QDir>
 #include <QFile>
 
@@ -45,9 +44,7 @@
     
 #if defined(DEBUG)
     // If this is a debug build, duplicate all core logs to a file
-    std::shared_ptr<QIODevice> loggingDevice(new QFile(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)
-                                                       + QDir::separator()
-                                                       + QLatin1String("core.log")));
+    std::shared_ptr<QIODevice> loggingDevice(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
     loggingDevice->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     OsmAnd::SaveLogsTo(loggingDevice, true);
 #endif

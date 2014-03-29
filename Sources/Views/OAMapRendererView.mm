@@ -63,6 +63,7 @@
 - (void)ctor
 {
     _stateObservable = [[OAObservable alloc] init];
+    _settingsObservable = [[OAObservable alloc] init];
 
     _forcedRenderingOnEachFrame = NO;
     
@@ -581,12 +582,14 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     }
 }
 
+@synthesize settingsObservable = _settingsObservable;
+
 @synthesize forcedRenderingOnEachFrame = _forcedRenderingOnEachFrame;
 - (void)setForcedRenderingOnEachFrame:(BOOL)forcedRenderingOnEachFrame
 {
     _forcedRenderingOnEachFrame = forcedRenderingOnEachFrame;
 
-    [_stateObservable notifyEvent];
+    [_settingsObservable notifyEvent];
 }
 
 - (void)render:(CADisplayLink*)displayLink

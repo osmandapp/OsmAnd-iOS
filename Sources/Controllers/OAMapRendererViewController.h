@@ -18,6 +18,7 @@
 
 @property(weak, readonly) OAMapRendererView* mapRendererView;
 @property(readonly) OAObservable* stateObservable;
+@property(readonly) OAObservable* settingsObservable;
 
 @property(readonly) OAObservable* azimuthObservable;
 - (void)animatedAlignAzimuthToNorth;

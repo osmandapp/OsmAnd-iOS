@@ -71,6 +71,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 - (BOOL)resumeRendering;
 
 @property(nonatomic) BOOL forcedRenderingOnEachFrame;
+@property(readonly) OAObservable* settingsObservable;
 
 - (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;

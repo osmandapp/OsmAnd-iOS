@@ -25,6 +25,7 @@
 @implementation OADebugHudViewController
 {
     OAAutoObserverProxy* _rendererStateObserver;
+    OAAutoObserverProxy* _rendererSettingsObserver;
     UIStoryboard* _debugActionsStoryboard;
     UIPopoverController* _lastMenuPopoverController;
 }
@@ -41,6 +42,7 @@
 - (void)ctor
 {
     _rendererStateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererStateChanged)];
+    _rendererSettingsObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererSettingsChanged)];
     _debugActionsStoryboard = [UIStoryboard storyboardWithName:@"DebugActions" bundle:nil];
 }
 
@@ -50,6 +52,7 @@
 
     [self collectState];
     [_rendererStateObserver observe:[OAMapRendererViewController instance].stateObservable];
+    [_rendererSettingsObserver observe:[OAMapRendererViewController instance].settingsObservable];
 
     [self._debugPinOverlayButton setImage:[UIImage imageNamed:
                                            self._overlayContainer.userInteractionEnabled
@@ -120,6 +123,13 @@
 }
 
 - (void)onRendererStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self collectState];
+    });
+}
+
+- (void)onRendererSettingsChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self collectState];

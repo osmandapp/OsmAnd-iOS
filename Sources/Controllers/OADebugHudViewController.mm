@@ -81,8 +81,12 @@
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 
-    [stateDump appendFormat:@"Zoom          : %f\n", mapRendererView.zoom];
-    [stateDump appendFormat:@"Zoom level    : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
+    [stateDump appendFormat:@"target          : %d %d\n", mapRendererView.target31.x, mapRendererView.target31.y];
+    [stateDump appendFormat:@"zoom            : %f\n", mapRendererView.zoom];
+    [stateDump appendFormat:@"zoom level      : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
+    [stateDump appendFormat:@"azimuth         : %f\n", mapRendererView.azimuth];
+    [stateDump appendFormat:@"elevation angle : %f\n", mapRendererView.elevationAngle];
+//    [stateDump appendFormat:@"zoom            : %f\n", mapRendererView.zoom];
 
     [self._stateTextview setText:stateDump];
 }

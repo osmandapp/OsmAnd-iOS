@@ -588,21 +588,21 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         case OAMapRendererViewStateEntryAzimuth:
             [_azimuthObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.azimuth]];
             _app.data.mapLastViewedState.azimuth = mapView.azimuth;
-            return;
+            break;
         case OAMapRendererViewStateEntryZoom:
             [_zoomObservable notifyEventWithKey:nil andValue:[NSNumber numberWithFloat:mapView.zoom]];
             _app.data.mapLastViewedState.zoom = mapView.zoom;
-            return;
+            break;
         case OAMapRendererViewStateEntryElevationAngle:
             _app.data.mapLastViewedState.elevationAngle = mapView.elevationAngle;
-            return;
+            break;
         case OAMapRendererViewStateEntryTarget:
             OsmAnd::PointI newTarget31 = mapView.target31;
             Point31 newTarget31_converted;
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
-            return;
+            break;
     }
 
     [_stateObservable notifyEventWithKey:key];

@@ -219,8 +219,8 @@
 		BB451EE918E60EBB005FBE09 /* HUD_debug_actions_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EE518E60EBB005FBE09 /* HUD_debug_actions_button@2x.png */; };
 		BB451EEB18E60F12005FBE09 /* DebugHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EEA18E60F12005FBE09 /* DebugHUD.xib */; };
 		BB451EEC18E60F12005FBE09 /* DebugHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EEA18E60F12005FBE09 /* DebugHUD.xib */; };
-		BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.m */; };
-		BB451EF018E60F5A005FBE09 /* OADebugHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.m */; };
+		BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */; };
+		BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */; };
 		BB451EF318E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */; };
 		BB451EF418E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */; };
 		BB451EF518E617F4005FBE09 /* HUD_debug_pin_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */; };
@@ -399,7 +399,7 @@
 		BB451EE518E60EBB005FBE09 /* HUD_debug_actions_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_actions_button@2x.png"; sourceTree = "<group>"; };
 		BB451EEA18E60F12005FBE09 /* DebugHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DebugHUD.xib; path = Resources/DebugHUD.xib; sourceTree = "<group>"; };
 		BB451EED18E60F5A005FBE09 /* OADebugHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADebugHudViewController.h; path = Controllers/OADebugHudViewController.h; sourceTree = "<group>"; };
-		BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADebugHudViewController.m; path = Controllers/OADebugHudViewController.m; sourceTree = "<group>"; };
+		BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADebugHudViewController.mm; path = Controllers/OADebugHudViewController.mm; sourceTree = "<group>"; };
 		BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_button.png; sourceTree = "<group>"; };
 		BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_pin_button@2x.png"; sourceTree = "<group>"; };
 		BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_filled_button.png; sourceTree = "<group>"; };
@@ -666,7 +666,7 @@
 				BB451EE018E58712005FBE09 /* OAMapSourcesListViewController.h */,
 				BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */,
 				BB451EED18E60F5A005FBE09 /* OADebugHudViewController.h */,
-				BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.m */,
+				BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1196,7 +1196,7 @@
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
-				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.m in Sources */,
+				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
@@ -1232,7 +1232,7 @@
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
-				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.m in Sources */,
+				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,

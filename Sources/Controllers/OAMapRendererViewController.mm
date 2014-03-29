@@ -124,7 +124,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
-    
+
+    _stateObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapRendererStateChanged:withKey:)];
@@ -564,6 +565,15 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     NSLog(@"MEMWARNING");
 }
 
+- (OAMapRendererView*)mapRendererView
+{
+    if(![self isViewLoaded])
+        return nil;
+    return (OAMapRendererView*)self.view;
+}
+
+@synthesize stateObservable = _stateObservable;
+
 @synthesize azimuthObservable = _azimuthObservable;
 
 - (void)onMapRendererStateChanged:(id)observer withKey:(id)key
@@ -594,6 +604,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
             return;
     }
+
+    [_stateObservable notifyEventWithKey:key];
 }
 
 - (void)animatedAlignAzimuthToNorth

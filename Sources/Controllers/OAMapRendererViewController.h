@@ -10,9 +10,14 @@
 
 #import "OAObservable.h"
 
+@class OAMapRendererView;
+
 @interface OAMapRendererViewController : UIViewController <UIGestureRecognizerDelegate>
 
 + (OAMapRendererViewController*)instance;
+
+@property(weak, readonly) OAMapRendererView* mapRendererView;
+@property(readonly) OAObservable* stateObservable;
 
 @property(readonly) OAObservable* azimuthObservable;
 - (void)animatedAlignAzimuthToNorth;

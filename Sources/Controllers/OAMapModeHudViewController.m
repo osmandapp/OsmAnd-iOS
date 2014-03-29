@@ -60,16 +60,14 @@
     _app = [OsmAndApp instance];
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapModeChanged)];
-    [_mapModeObserver observe:_app.mapModeObservable];
-    
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                    withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)];
-    [_mapAzimuthObserver observe:[OAMapRendererViewController instance].azimuthObservable];
-    
+                                                    withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
+                                                     andObserve:[OAMapRendererViewController instance].azimuthObservable];
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                    withHandler:@selector(onMapZoomChanged:withKey:andValue:)];
-    [_mapZoomObserver observe:[OAMapRendererViewController instance].zoomObservable];
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:[OAMapRendererViewController instance].zoomObservable];
 }
 
 - (void)dtor

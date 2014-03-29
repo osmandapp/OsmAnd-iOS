@@ -8,6 +8,10 @@
 
 #import "OADebugHudViewController.h"
 
+#import "OAMapRendererViewController.h"
+#import "OAMapRendererView.h"
+#import "OAAutoObserverProxy.h"
+
 @interface OADebugHudViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *_overlayContainer;
@@ -19,19 +23,30 @@
 @end
 
 @implementation OADebugHudViewController
+{
+    OAAutoObserverProxy* _rendererStateObserver;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        [self ctor];
     }
     return self;
+}
+
+- (void)ctor
+{
+    _rendererStateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererStateChanged)];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    [self collectState];
+    [_rendererStateObserver observe:[OAMapRendererViewController instance].stateObservable];
 
     [self._debugPinOverlayButton setImage:[UIImage imageNamed:
                                            self._overlayContainer.userInteractionEnabled
@@ -58,6 +73,25 @@
                                            ? @"HUD_debug_pin_filled_button.png"
                                            : @"HUD_debug_pin_button.png"]
                                  forState:UIControlStateNormal];
+}
+
+- (void)collectState
+{
+    __weak OAMapRendererView* mapRendererView = [[OAMapRendererViewController instance] mapRendererView];
+
+    NSMutableString* stateDump = [[NSMutableString alloc] init];
+
+    [stateDump appendFormat:@"Zoom          : %f\n", mapRendererView.zoom];
+    [stateDump appendFormat:@"Zoom level    : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
+
+    [self._stateTextview setText:stateDump];
+}
+
+- (void)onRendererStateChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self collectState];
+    });
 }
 
 /*

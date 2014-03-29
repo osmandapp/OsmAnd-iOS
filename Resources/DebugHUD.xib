@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADebugHudViewController">
             <connections>
+                <outlet property="_debugActionsButton" destination="Uhq-jc-VGA" id="4Op-FA-XnT"/>
+                <outlet property="_debugPinOverlayButton" destination="gS3-2f-JMh" id="c9c-Mn-cbu"/>
                 <outlet property="_outputTextview" destination="vKk-Gn-XYj" id="6Ly-jf-LLF"/>
                 <outlet property="_overlayContainer" destination="dg7-c4-uNN" id="goh-JA-0DU"/>
                 <outlet property="_stateTextview" destination="GDY-zL-QNz" id="wrJ-2G-Ipt"/>

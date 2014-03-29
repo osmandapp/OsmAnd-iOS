@@ -225,6 +225,12 @@
 		BB451EF418E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */; };
 		BB451EF518E617F4005FBE09 /* HUD_debug_pin_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */; };
 		BB451EF618E617F4005FBE09 /* HUD_debug_pin_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */; };
+		BB451EF918E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */; };
+		BB451EFA18E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */; };
+		BB451EFB18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */; };
+		BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */; };
+		BB451EFE18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
+		BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -396,6 +402,9 @@
 		BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADebugHudViewController.m; path = Controllers/OADebugHudViewController.m; sourceTree = "<group>"; };
 		BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_button.png; sourceTree = "<group>"; };
 		BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_pin_button@2x.png"; sourceTree = "<group>"; };
+		BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_filled_button.png; sourceTree = "<group>"; };
+		BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_pin_filled_button@2x.png"; sourceTree = "<group>"; };
+		BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DebugHUD~ipad.xib"; path = "Resources/DebugHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -710,6 +719,8 @@
 				BB451EE518E60EBB005FBE09 /* HUD_debug_actions_button@2x.png */,
 				BB451EF118E617F4005FBE09 /* HUD_debug_pin_button.png */,
 				BB451EF218E617F4005FBE09 /* HUD_debug_pin_button@2x.png */,
+				BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */,
+				BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */,
 				BB451D9418D70B5B005FBE09 /* HUD_button_bg.png */,
 				BB451D9518D70B5B005FBE09 /* HUD_button_bg@2x.png */,
 				BB451D9618D70B5B005FBE09 /* HUD_compass.png */,
@@ -877,8 +888,9 @@
 				BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */,
 				BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */,
 				BB451EDD18E37417005FBE09 /* MapSources.storyboard */,
-				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
+				BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */,
+				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -980,6 +992,7 @@
 				BBA8591817C24EDB00AADCC7 /* Default-Landscape~ipad.png in Resources */,
 				BB451E0118DA4176005FBE09 /* drive_mode_button.png in Resources */,
 				BB451E1618DA4180005FBE09 /* map_source_preset_type_general_icon@2x.png in Resources */,
+				BB451EFB18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB451E0318DA4176005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451ED318E36BFB005FBE09 /* menu_item_downloads_icon@2x.png in Resources */,
@@ -993,6 +1006,7 @@
 				BBA8591A17C24EE800AADCC7 /* Default-Landscape@2x~ipad.png in Resources */,
 				BB451E0418DA4176005FBE09 /* follow_map_mode_button@2x.png in Resources */,
 				BB451E0518DA4176005FBE09 /* free_map_mode_button.png in Resources */,
+				BB451EFE18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */,
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
 				BB451DBF18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451E0218DA4176005FBE09 /* drive_mode_button@2x.png in Resources */,
@@ -1013,6 +1027,7 @@
 				BB451DD218D70B5B005FBE09 /* HUD_zoom_out_button.png in Resources */,
 				BB451E1518DA4180005FBE09 /* map_source_preset_type_general_icon.png in Resources */,
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
+				BB451EF918E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
 				BB451DDE18D8DB48005FBE09 /* OptionsPanel.storyboard in Resources */,
 				BB451DD118D70B5B005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
 				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
@@ -1066,6 +1081,7 @@
 				BB451E6718DCD224005FBE09 /* Default-Landscape~ipad.png in Resources */,
 				BB451E6818DCD224005FBE09 /* drive_mode_button.png in Resources */,
 				BB451E6918DCD224005FBE09 /* map_source_preset_type_general_icon@2x.png in Resources */,
+				BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB451E6B18DCD224005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451ED418E36BFB005FBE09 /* menu_item_downloads_icon@2x.png in Resources */,
@@ -1079,6 +1095,7 @@
 				BB451E7018DCD224005FBE09 /* Default-Landscape@2x~ipad.png in Resources */,
 				BB451E7118DCD224005FBE09 /* follow_map_mode_button@2x.png in Resources */,
 				BB451E7218DCD224005FBE09 /* free_map_mode_button.png in Resources */,
+				BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */,
 				BB451E7318DCD224005FBE09 /* Icon-72.png in Resources */,
 				BB451E7418DCD224005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451E7518DCD224005FBE09 /* drive_mode_button@2x.png in Resources */,
@@ -1099,6 +1116,7 @@
 				BB451E8318DCD224005FBE09 /* HUD_zoom_out_button.png in Resources */,
 				BB451E8418DCD224005FBE09 /* map_source_preset_type_general_icon.png in Resources */,
 				BB451E8518DCD224005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
+				BB451EFA18E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
 				BB451E8618DCD224005FBE09 /* OptionsPanel.storyboard in Resources */,
 				BB451E8718DCD224005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
 				BB451E8818DCD224005FBE09 /* MapModeHUD.xib in Resources */,

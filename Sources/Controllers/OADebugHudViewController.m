@@ -13,6 +13,8 @@
 @property (weak, nonatomic) IBOutlet UIView *_overlayContainer;
 @property (weak, nonatomic) IBOutlet UITextView *_stateTextview;
 @property (weak, nonatomic) IBOutlet UITextView *_outputTextview;
+@property (weak, nonatomic) IBOutlet UIButton *_debugActionsButton;
+@property (weak, nonatomic) IBOutlet UIButton *_debugPinOverlayButton;
 
 @end
 
@@ -30,7 +32,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    [self._debugPinOverlayButton setImage:[UIImage imageNamed:
+                                           self._overlayContainer.userInteractionEnabled
+                                           ? @"HUD_debug_pin_filled_button.png"
+                                           : @"HUD_debug_pin_button.png"]
+                                 forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning
@@ -46,6 +53,11 @@
 - (IBAction)onDebugPinOverlayButtonClicked:(id)sender
 {
     self._overlayContainer.userInteractionEnabled = !self._overlayContainer.userInteractionEnabled;
+    [self._debugPinOverlayButton setImage:[UIImage imageNamed:
+                                           self._overlayContainer.userInteractionEnabled
+                                           ? @"HUD_debug_pin_filled_button.png"
+                                           : @"HUD_debug_pin_button.png"]
+                                 forState:UIControlStateNormal];
 }
 
 /*

@@ -231,6 +231,10 @@
 		BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */; };
 		BB451EFE18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
 		BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
+		BB451F0118E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
+		BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
+		BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */; };
+		BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -405,6 +409,9 @@
 		BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_filled_button.png; sourceTree = "<group>"; };
 		BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_pin_filled_button@2x.png"; sourceTree = "<group>"; };
 		BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DebugHUD~ipad.xib"; path = "Resources/DebugHUD~ipad.xib"; sourceTree = "<group>"; };
+		BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = DebugActions.storyboard; path = Resources/DebugActions.storyboard; sourceTree = "<group>"; };
+		BB451F0318E6DA2E005FBE09 /* OADebugActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADebugActionsViewController.h; path = Controllers/OADebugActionsViewController.h; sourceTree = "<group>"; };
+		BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADebugActionsViewController.m; path = Controllers/OADebugActionsViewController.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -667,6 +674,8 @@
 				BB451EE118E58712005FBE09 /* OAMapSourcesListViewController.m */,
 				BB451EED18E60F5A005FBE09 /* OADebugHudViewController.h */,
 				BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */,
+				BB451F0318E6DA2E005FBE09 /* OADebugActionsViewController.h */,
+				BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -891,6 +900,7 @@
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
+				BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -976,6 +986,7 @@
 				BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */,
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451DC818D70B5B005FBE09 /* HUD_more_halfbutton.png in Resources */,
+				BB451F0118E6D8C1005FBE09 /* DebugActions.storyboard in Resources */,
 				BB451DD018D70B5B005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE618E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -1065,6 +1076,7 @@
 				BB451E5918DCD224005FBE09 /* Default-Portrait~ipad.png in Resources */,
 				BB451E5A18DCD224005FBE09 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451E5B18DCD224005FBE09 /* HUD_more_halfbutton.png in Resources */,
+				BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */,
 				BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -1198,6 +1210,7 @@
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
+				BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451EC918E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
@@ -1234,6 +1247,7 @@
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
+				BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
 				BB451ECA18E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,

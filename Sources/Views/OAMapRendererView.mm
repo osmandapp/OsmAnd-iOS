@@ -63,6 +63,8 @@
 - (void)ctor
 {
     _stateObservable = [[OAObservable alloc] init];
+
+    _forcedRenderingOnEachFrame = NO;
     
     // Set default values
     _glShareGroup = nil;
@@ -579,6 +581,8 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     }
 }
 
+@synthesize forcedRenderingOnEachFrame = _forcedRenderingOnEachFrame;
+
 - (void)render:(CADisplayLink*)displayLink
 {
     if(![EAGLContext setCurrentContext:_glRenderContext])
@@ -609,7 +613,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if(_renderer->prepareFrame() && _renderer->isFrameInvalidated())
+    if(_renderer->prepareFrame() && (_renderer->isFrameInvalidated() || _forcedRenderingOnEachFrame))
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);

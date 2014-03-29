@@ -70,7 +70,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 - (BOOL)suspendRendering;
 - (BOOL)resumeRendering;
 
-@property BOOL forcedRenderingOnEachFrame;
+@property(nonatomic) BOOL forcedRenderingOnEachFrame;
 
 - (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;

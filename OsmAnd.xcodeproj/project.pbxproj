@@ -233,8 +233,10 @@
 		BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
 		BB451F0118E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
 		BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
-		BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */; };
-		BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */; };
+		BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */; };
+		BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */; };
+		BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
+		BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -411,7 +413,9 @@
 		BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DebugHUD~ipad.xib"; path = "Resources/DebugHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = DebugActions.storyboard; path = Resources/DebugActions.storyboard; sourceTree = "<group>"; };
 		BB451F0318E6DA2E005FBE09 /* OADebugActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADebugActionsViewController.h; path = Controllers/OADebugActionsViewController.h; sourceTree = "<group>"; };
-		BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADebugActionsViewController.m; path = Controllers/OADebugActionsViewController.m; sourceTree = "<group>"; };
+		BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADebugActionsViewController.mm; path = Controllers/OADebugActionsViewController.mm; sourceTree = "<group>"; };
+		BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithSwitch.h; path = Views/OATableViewCellWithSwitch.h; sourceTree = "<group>"; };
+		BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithSwitch.m; path = Views/OATableViewCellWithSwitch.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -649,6 +653,8 @@
 				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
 				BB63335517C4E3DE00903AB1 /* OAHudRootView.h */,
 				BB63335617C4E3DE00903AB1 /* OAHudRootView.m */,
+				BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */,
+				BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -675,7 +681,7 @@
 				BB451EED18E60F5A005FBE09 /* OADebugHudViewController.h */,
 				BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */,
 				BB451F0318E6DA2E005FBE09 /* OADebugActionsViewController.h */,
-				BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.m */,
+				BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -899,8 +905,8 @@
 				BB451EDD18E37417005FBE09 /* MapSources.storyboard */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */,
-				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 				BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */,
+				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1210,7 +1216,7 @@
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.m in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
-				BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */,
+				BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451EC918E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
@@ -1221,6 +1227,7 @@
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBACF10D17C6293300EBA761 /* OsmAndApp.mm in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
+				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BB451EC418E200BA005FBE09 /* OAMapSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1247,7 +1254,7 @@
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.m in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
-				BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.m in Sources */,
+				BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
 				BB451ECA18E32A4C005FBE09 /* OAMapSourcePresetValues.m in Sources */,
@@ -1258,6 +1265,7 @@
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				BB451E3618DCD224005FBE09 /* OsmAndApp.mm in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
+				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BB451EC518E200BA005FBE09 /* OAMapSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

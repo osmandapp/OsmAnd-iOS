@@ -1,5 +1,5 @@
 //
-//  OADebugActionsViewController.m
+//  OADebugActionsViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 3/29/14.
@@ -8,7 +8,11 @@
 
 #import "OADebugActionsViewController.h"
 
-@interface OADebugActionsViewController () <UITableViewDelegate, UITableViewDataSource>
+#import "OATableViewCellWithSwitch.h"
+#import "OAMapRendererView.h"
+#import "OAMapRendererViewController.h"
+
+@interface OADebugActionsViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewWithSwitchDelegate>
 
 @end
 
@@ -57,20 +61,23 @@
     // Dispose of any resources that can be recreated.
 }
 
+#define kRenderingSection 0
+#define kRenderingSection_ForcedRendering 0
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section)
     {
-        /*case kOfflineSourcesSection:
-            return [_offlineMapSourcesIds count];
-        case kOnlineSourcesSection:
+        case kRenderingSection:
+            return 1;
+        /*case kOnlineSourcesSection:
             return [_onlineMapSourcesIds count];*/
 
         default:
@@ -82,9 +89,9 @@
 {
     switch (section)
     {
-        /*case kOfflineSourcesSection:
-            return OALocalizedString(@"Offline maps");
-        case kOnlineSourcesSection:
+        case kRenderingSection:
+            return @"Rendering";
+        /*case kOnlineSourcesSection:
             return OALocalizedString(@"Online maps");*/
 
         default:
@@ -94,24 +101,69 @@
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*static NSString* const mapSourceItemCell = @"mapSourceItemCell";
+    static NSString* const submenuCell = @"submenuCell";
+    static NSString* const switchCell = @"switchCell";
 
-    // Get content for cell and it's type id
-    NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSourcesIds : _onlineMapSourcesIds;
-    OAMapSource* mapSource = [_app.data.mapSources mapSourceWithId:[collection objectAtIndex:indexPath.row]];
-    NSString* caption = mapSource.name;
-    NSString* description = nil;
+    NSString* cellTypeId = nil;
+    UIImage* icon = nil;
+    NSString* caption = nil;
+    BOOL boolValue = NO;
+    switch (indexPath.section)
+    {
+        case kRenderingSection:
+            switch(indexPath.row)
+            {
+                case kRenderingSection_ForcedRendering:
+                    caption = @"Forced rendering";
+                    cellTypeId = switchCell;
+                    boolValue = [OAMapRendererViewController instance].mapRendererView.forcedRenderingOnEachFrame;;
+                    break;
+            }
+            break;
+    }
 
     // Obtain reusable cell or create one
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if(cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
+    {
+        if([cellTypeId isEqualToString:switchCell])
+            cell = [[OATableViewCellWithSwitch alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
+        else
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
+    }
 
     // Fill cell content
+    cell.imageView.image = icon;
     cell.textLabel.text = caption;
-    cell.detailTextLabel.text = description;
+    if([cellTypeId isEqualToString:switchCell])
+    {
+        OATableViewCellWithSwitch* switchCell = (OATableViewCellWithSwitch*)cell;
+        [switchCell.switchView setOn:boolValue];
+    }
 
-    return cell;*/
+    return cell;
+
+}
+
+#pragma mark - OATableViewWithSwitchDelegate
+
+- (void)tableView:(UITableView *)tableView accessorySwitchChangedStateForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    switch (indexPath.section)
+    {
+        case kRenderingSection:
+            switch(indexPath.row)
+            {
+                case kRenderingSection_ForcedRendering:
+                    {
+                        OATableViewCellWithSwitch* cell = (OATableViewCellWithSwitch*)[tableView cellForRowAtIndexPath:indexPath];
+                        __weak OAMapRendererView* mapRendererView = [OAMapRendererViewController instance].mapRendererView;
+                        mapRendererView.forcedRenderingOnEachFrame = cell.switchView.on;
+                    }
+                    break;
+            }
+            break;
+    }
 }
 
 #pragma mark - UITableViewDelegate

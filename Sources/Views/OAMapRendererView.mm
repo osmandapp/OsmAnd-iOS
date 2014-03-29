@@ -582,6 +582,12 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 }
 
 @synthesize forcedRenderingOnEachFrame = _forcedRenderingOnEachFrame;
+- (void)setForcedRenderingOnEachFrame:(BOOL)forcedRenderingOnEachFrame
+{
+    _forcedRenderingOnEachFrame = forcedRenderingOnEachFrame;
+
+    [_stateObservable notifyEvent];
+}
 
 - (void)render:(CADisplayLink*)displayLink
 {

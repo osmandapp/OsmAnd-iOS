@@ -118,12 +118,12 @@
     _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapBitmapTileProvider>());
 }
 
-- (CGFloat)opacityOf:(OsmAnd::RasterMapLayerId)layer
+- (float)opacityOf:(OsmAnd::RasterMapLayerId)layer
 {
     return _renderer->state.rasterLayerOpacity[static_cast<int>(layer)];
 }
 
-- (void)setOpacity:(CGFloat)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
+- (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
 {
     _renderer->setRasterLayerOpacity(layer, opacity);
 }
@@ -138,7 +138,7 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
-- (CGFloat)elevationDataScale
+- (float)elevationDataScale
 {
     return _renderer->state.elevationDataScaleFactor;
 }
@@ -148,7 +148,7 @@
     _renderer->setElevationDataProvider(std::shared_ptr<OsmAnd::IMapElevationDataProvider>());
 }
 
-- (void)setElevationDataScale:(CGFloat)elevationDataScale
+- (void)setElevationDataScale:(float)elevationDataScale
 {
     _renderer->setElevationDataScaleFactor(elevationDataScale);
 }
@@ -168,32 +168,32 @@
     _renderer->removeAllSymbolProviders();
 }
 
-- (CGFloat)fieldOfView
+- (float)fieldOfView
 {
     return _renderer->state.fieldOfView;
 }
 
-- (void)setFieldOfView:(CGFloat)fieldOfView
+- (void)setFieldOfView:(float)fieldOfView
 {
     _renderer->setFieldOfView(fieldOfView);
 }
 
-- (CGFloat)azimuth
+- (float)azimuth
 {
     return _renderer->state.azimuth;
 }
 
-- (void)setAzimuth:(CGFloat)azimuth
+- (void)setAzimuth:(float)azimuth
 {
     _renderer->setAzimuth(azimuth);
 }
 
-- (CGFloat)elevationAngle
+- (float)elevationAngle
 {
     return _renderer->state.elevationAngle;
 }
 
-- (void)setElevationAngle:(CGFloat)elevationAngle
+- (void)setElevationAngle:(float)elevationAngle
 {
     _renderer->setElevationAngle(elevationAngle);
 }
@@ -208,12 +208,12 @@
     _renderer->setTarget(target31);
 }
 
-- (CGFloat)zoom
+- (float)zoom
 {
     return _renderer->state.requestedZoom;
 }
 
-- (void)setZoom:(CGFloat)zoom
+- (void)setZoom:(float)zoom
 {
     _renderer->setZoom(zoom);
 }
@@ -223,17 +223,17 @@
     return _renderer->state.zoomBase;
 }
 
-- (CGFloat)scaledTileSizeOnScreen
+- (float)scaledTileSizeOnScreen
 {
     return _renderer->getScaledTileSizeOnScreen();
 }
 
-- (CGFloat)minZoom
+- (float)minZoom
 {
     return _renderer->getMinZoom();
 }
 
-- (CGFloat)maxZoom
+- (float)maxZoom
 {
     return _renderer->getMaxZoom();
 }
@@ -264,12 +264,12 @@
     _animator->resumeAnimation();
 }
 
-- (void)animateZoomWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateZoomWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateZoomWith(velocity, deceleration);
 }
 
-- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateZoomBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateZoomBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
@@ -279,12 +279,12 @@
     _animator->animateTargetWith(velocity, deceleration);
 }
 
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
@@ -295,7 +295,7 @@
 }
 
 - (void)parabolicAnimateTargetBy:(OsmAnd::PointI)deltaValue
-                          during:(CGFloat)duration
+                          during:(float)duration
                     targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
                       zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
 {
@@ -306,7 +306,7 @@
 }
 
 - (void)parabolicAnimateTargetBy64:(OsmAnd::PointI64)deltaValue
-                            during:(CGFloat)duration
+                            during:(float)duration
                       targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
                         zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
 {
@@ -316,28 +316,28 @@
                                         static_cast<OsmAnd::MapAnimatorTimingFunction>(zoomTimingFunction));
 }
 
-- (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateAzimuthWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateAzimuthWith(velocity, deceleration);
 }
 
-- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateAzimuthBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateAzimuthBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
-- (void)animateElevationAngleWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateElevationAngleWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateElevationAngleWith(velocity, deceleration);
 }
 
-- (void)animateElevationAngleBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateElevationAngleBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateElevationAngleBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
 - (void)animateMoveBy:(OsmAnd::PointI)deltaValue
-               during:(CGFloat)duration
+               during:(float)duration
        zeroizeAzimuth:(BOOL)zeroizeAzimuth
 invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
                timing:(OAMapAnimationTimingFunction)function
@@ -350,7 +350,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 }
 
 - (void)animateMoveBy64:(OsmAnd::PointI64)deltaValue
-                 during:(CGFloat)duration
+                 during:(float)duration
          zeroizeAzimuth:(BOOL)zeroizeAzimuth
 invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
                  timing:(OAMapAnimationTimingFunction)function

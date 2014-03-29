@@ -569,7 +569,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     NSLog(@"MEMWARNING");
 }
 
-- (OAMapRendererView*)mapRendererView
+- (id<OAMapRendererViewProtocol>)mapRendererView
 {
     if(![self isViewLoaded])
         return nil;

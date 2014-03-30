@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UITextView *_outputTextview;
 @property (weak, nonatomic) IBOutlet UIButton *_debugActionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *_debugPinOverlayButton;
+@property (weak, nonatomic) IBOutlet UILabel *_stateTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *_outputTitleLabel;
 
 @end
 

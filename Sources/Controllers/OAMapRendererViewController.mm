@@ -27,6 +27,7 @@
 #include <OsmAndCore/Map/MapStyleValue.h>
 
 #include "ExternalResourcesProvider.h"
+#include "OALog.h"
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 30.0f
@@ -181,7 +182,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)loadView
 {
 #if defined(DEBUG)
-    NSLog(@"Creating Map Renderer view...");
+    OALog(@"Creating Map Renderer view...");
 #endif
     
     // Inflate map renderer view
@@ -262,7 +263,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if(verticalDistance >= kElevationGestureMaxThreshold)
         {
 #if defined(DEBUG)
-            NSLog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
+            OALog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
 #endif
             return NO;
         }
@@ -566,7 +567,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     
-    NSLog(@"MEMWARNING");
+    OALog(@"MEMWARNING");
 }
 
 - (id<OAMapRendererViewProtocol>)mapRendererView

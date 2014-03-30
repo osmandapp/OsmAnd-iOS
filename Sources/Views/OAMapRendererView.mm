@@ -19,6 +19,8 @@
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 
+#include "OALog.h"
+
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -376,7 +378,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         return;
 
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Creating context");
+    OALog(@"[MapRenderView] Creating context");
 #endif
     
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
@@ -445,7 +447,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         return;
 
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Releasing context");
+    OALog(@"[MapRenderView] Releasing context");
 #endif
     
     // Stop rendering (if it was running)
@@ -476,7 +478,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     if(result == GL_NO_ERROR)
         return result;
     
-    NSLog(@"OpenGLES error 0x%08x", result);
+    OALog(@"OpenGLES error 0x%08x", result);
     
     return result;
 }
@@ -485,7 +487,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)layoutSubviews
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
+    OALog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
 #endif
 
     // Kill buffers, since window was resized
@@ -495,7 +497,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)allocateRenderAndFrameBuffers
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Allocating render and frame buffers");
+    OALog(@"[MapRenderView] Allocating render and frame buffers");
 #endif
     if(![EAGLContext setCurrentContext:_glRenderContext])
     {
@@ -526,7 +528,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
+    OALog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
 #endif
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
@@ -554,7 +556,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)releaseRenderAndFrameBuffers
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Releasing render and frame buffers");
+    OALog(@"[MapRenderView] Releasing render and frame buffers");
 #endif
     if(![EAGLContext setCurrentContext:_glRenderContext])
     {
@@ -680,7 +682,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Rendering resumed");
+    OALog(@"[MapRenderView] Rendering resumed");
 #endif
     
     return TRUE;
@@ -702,7 +704,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     _displayLink = nil;
     
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Rendering suspended");
+    OALog(@"[MapRenderView] Rendering suspended");
 #endif
     
     return TRUE;

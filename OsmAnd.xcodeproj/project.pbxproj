@@ -237,6 +237,8 @@
 		BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */; };
 		BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
+		BB451F0E18E81AB8005FBE09 /* OALog.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0D18E81AB8005FBE09 /* OALog.mm */; };
+		BB451F0F18E81AB8005FBE09 /* OALog.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0D18E81AB8005FBE09 /* OALog.mm */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */; };
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
@@ -417,6 +419,8 @@
 		BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithSwitch.h; path = Views/OATableViewCellWithSwitch.h; sourceTree = "<group>"; };
 		BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithSwitch.m; path = Views/OATableViewCellWithSwitch.m; sourceTree = "<group>"; };
 		BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewProtocol.h; path = Views/OAMapRendererViewProtocol.h; sourceTree = "<group>"; };
+		BB451F0C18E81A4E005FBE09 /* OALog.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OALog.h; sourceTree = "<group>"; };
+		BB451F0D18E81AB8005FBE09 /* OALog.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OALog.mm; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveModeHUD.xib; path = Resources/DriveModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
@@ -643,6 +647,8 @@
 				BBBDADB218BCBE9700E4A359 /* OsmAndAppImpl.mm */,
 				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
 				BB451DF418D8F956005FBE09 /* Localization.h */,
+				BB451F0C18E81A4E005FBE09 /* OALog.h */,
+				BB451F0D18E81AB8005FBE09 /* OALog.mm */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1212,6 +1218,7 @@
 				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
+				BB451F0E18E81AB8005FBE09 /* OALog.mm in Sources */,
 				BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
@@ -1250,6 +1257,7 @@
 				BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
+				BB451F0F18E81AB8005FBE09 /* OALog.mm in Sources */,
 				BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.m in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,

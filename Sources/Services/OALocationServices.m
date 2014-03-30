@@ -13,6 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #include "Localization.h"
+#include "OALog.h"
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -205,7 +206,7 @@
         return;
     }
     
-    NSLog(@"CLLocationManager didFailWithError %@", error);
+    OALog(@"CLLocationManager didFailWithError %@", error);
 }
 
 - (CLLocation*)lastKnownLocation

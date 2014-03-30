@@ -8,6 +8,8 @@
 
 #import "OATableViewCellWithSwitch.h"
 
+#include "OALog.h"
+
 @implementation OATableViewCellWithSwitch
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
@@ -54,7 +56,7 @@
     NSIndexPath* ownPath = [tableView indexPathForCell:self];
     if(tableView == nil || ![tableView.delegate conformsToProtocol:@protocol(OATableViewWithSwitchDelegate) ] || ownPath == nil)
     {
-        NSLog(@"Warning: lost state change");
+        OALog(@"Warning: lost state change");
         return;
     }
 

@@ -9,7 +9,7 @@
 #import "OsmAndAppImpl.h"
 
 #import "OsmAndApp.h"
-#include "OALog.h"
+#import "OALog.h"
 
 #include <algorithm>
 
@@ -72,8 +72,8 @@
 
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
-                                                        ofType:@"obf"
-                                                   inDirectory:@"Shipped"];
+                                                                         ofType:@"obf"
+                                                                    inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
@@ -121,7 +121,7 @@
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
 
     [initialUserDefaults setValue:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]
-                            forKey:kAppData];
+                           forKey:kAppData];
 
     return initialUserDefaults;
 }

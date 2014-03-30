@@ -13,7 +13,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #include "Localization.h"
-#include "OALog.h"
+#import "OALog.h"
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end

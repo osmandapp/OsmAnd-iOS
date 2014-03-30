@@ -9,7 +9,7 @@
 #import "OAMapPanelViewController.h"
 
 #import "OAMapModeHudViewController.h"
-#include "OALog.h"
+#import "OALog.h"
 
 @interface OAMapPanelViewController ()
 

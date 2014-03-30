@@ -19,7 +19,7 @@
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 
-#include "OALog.h"
+#import "OALog.h"
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]

@@ -15,7 +15,7 @@
 #import "OAMapSourcePreset.h"
 
 #include "Localization.h"
-#include "OALog.h"
+#import "OALog.h"
 
 @interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, UIPopoverControllerDelegate>
 

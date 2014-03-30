@@ -8,7 +8,7 @@
 
 #import "OATableViewCellWithSwitch.h"
 
-#include "OALog.h"
+#import "OALog.h"
 
 @implementation OATableViewCellWithSwitch
 

@@ -19,6 +19,8 @@
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 
+#import "OALog.h"
+
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]
 #else
@@ -63,6 +65,9 @@
 - (void)ctor
 {
     _stateObservable = [[OAObservable alloc] init];
+    _settingsObservable = [[OAObservable alloc] init];
+
+    _forcedRenderingOnEachFrame = NO;
     
     // Set default values
     _glShareGroup = nil;
@@ -115,12 +120,12 @@
     _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapBitmapTileProvider>());
 }
 
-- (CGFloat)opacityOf:(OsmAnd::RasterMapLayerId)layer
+- (float)opacityOf:(OsmAnd::RasterMapLayerId)layer
 {
     return _renderer->state.rasterLayerOpacity[static_cast<int>(layer)];
 }
 
-- (void)setOpacity:(CGFloat)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
+- (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
 {
     _renderer->setRasterLayerOpacity(layer, opacity);
 }
@@ -135,7 +140,7 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
-- (CGFloat)elevationDataScale
+- (float)elevationDataScale
 {
     return _renderer->state.elevationDataScaleFactor;
 }
@@ -145,7 +150,7 @@
     _renderer->setElevationDataProvider(std::shared_ptr<OsmAnd::IMapElevationDataProvider>());
 }
 
-- (void)setElevationDataScale:(CGFloat)elevationDataScale
+- (void)setElevationDataScale:(float)elevationDataScale
 {
     _renderer->setElevationDataScaleFactor(elevationDataScale);
 }
@@ -165,32 +170,32 @@
     _renderer->removeAllSymbolProviders();
 }
 
-- (CGFloat)fieldOfView
+- (float)fieldOfView
 {
     return _renderer->state.fieldOfView;
 }
 
-- (void)setFieldOfView:(CGFloat)fieldOfView
+- (void)setFieldOfView:(float)fieldOfView
 {
     _renderer->setFieldOfView(fieldOfView);
 }
 
-- (CGFloat)azimuth
+- (float)azimuth
 {
     return _renderer->state.azimuth;
 }
 
-- (void)setAzimuth:(CGFloat)azimuth
+- (void)setAzimuth:(float)azimuth
 {
     _renderer->setAzimuth(azimuth);
 }
 
-- (CGFloat)elevationAngle
+- (float)elevationAngle
 {
     return _renderer->state.elevationAngle;
 }
 
-- (void)setElevationAngle:(CGFloat)elevationAngle
+- (void)setElevationAngle:(float)elevationAngle
 {
     _renderer->setElevationAngle(elevationAngle);
 }
@@ -205,12 +210,12 @@
     _renderer->setTarget(target31);
 }
 
-- (CGFloat)zoom
+- (float)zoom
 {
     return _renderer->state.requestedZoom;
 }
 
-- (void)setZoom:(CGFloat)zoom
+- (void)setZoom:(float)zoom
 {
     _renderer->setZoom(zoom);
 }
@@ -220,17 +225,17 @@
     return _renderer->state.zoomBase;
 }
 
-- (CGFloat)scaledTileSizeOnScreen
+- (float)scaledTileSizeOnScreen
 {
     return _renderer->getScaledTileSizeOnScreen();
 }
 
-- (CGFloat)minZoom
+- (float)minZoom
 {
     return _renderer->getMinZoom();
 }
 
-- (CGFloat)maxZoom
+- (float)maxZoom
 {
     return _renderer->getMaxZoom();
 }
@@ -261,12 +266,12 @@
     _animator->resumeAnimation();
 }
 
-- (void)animateZoomWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateZoomWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateZoomWith(velocity, deceleration);
 }
 
-- (void)animateZoomBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateZoomBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateZoomBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
@@ -276,12 +281,12 @@
     _animator->animateTargetWith(velocity, deceleration);
 }
 
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
@@ -292,7 +297,7 @@
 }
 
 - (void)parabolicAnimateTargetBy:(OsmAnd::PointI)deltaValue
-                          during:(CGFloat)duration
+                          during:(float)duration
                     targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
                       zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
 {
@@ -303,7 +308,7 @@
 }
 
 - (void)parabolicAnimateTargetBy64:(OsmAnd::PointI64)deltaValue
-                            during:(CGFloat)duration
+                            during:(float)duration
                       targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
                         zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
 {
@@ -313,28 +318,28 @@
                                         static_cast<OsmAnd::MapAnimatorTimingFunction>(zoomTimingFunction));
 }
 
-- (void)animateAzimuthWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateAzimuthWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateAzimuthWith(velocity, deceleration);
 }
 
-- (void)animateAzimuthBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateAzimuthBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateAzimuthBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
-- (void)animateElevationAngleWith:(CGFloat)velocity andDeceleration:(CGFloat)deceleration
+- (void)animateElevationAngleWith:(float)velocity andDeceleration:(float)deceleration
 {
     _animator->animateElevationAngleWith(velocity, deceleration);
 }
 
-- (void)animateElevationAngleBy:(CGFloat)deltaValue during:(CGFloat)duration timing:(OAMapAnimationTimingFunction)function
+- (void)animateElevationAngleBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
 {
     _animator->animateElevationAngleBy(deltaValue, duration, static_cast<OsmAnd::MapAnimatorTimingFunction>(function));
 }
 
 - (void)animateMoveBy:(OsmAnd::PointI)deltaValue
-               during:(CGFloat)duration
+               during:(float)duration
        zeroizeAzimuth:(BOOL)zeroizeAzimuth
 invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
                timing:(OAMapAnimationTimingFunction)function
@@ -347,7 +352,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 }
 
 - (void)animateMoveBy64:(OsmAnd::PointI64)deltaValue
-                 during:(CGFloat)duration
+                 during:(float)duration
          zeroizeAzimuth:(BOOL)zeroizeAzimuth
 invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
                  timing:(OAMapAnimationTimingFunction)function
@@ -373,7 +378,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         return;
 
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Creating context");
+    OALog(@"[MapRenderView] Creating context");
 #endif
     
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
@@ -442,7 +447,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         return;
 
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Releasing context");
+    OALog(@"[MapRenderView] Releasing context");
 #endif
     
     // Stop rendering (if it was running)
@@ -473,7 +478,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     if(result == GL_NO_ERROR)
         return result;
     
-    NSLog(@"OpenGLES error 0x%08x", result);
+    OALog(@"OpenGLES error 0x%08x", result);
     
     return result;
 }
@@ -482,7 +487,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)layoutSubviews
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
+    OALog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
 #endif
 
     // Kill buffers, since window was resized
@@ -492,7 +497,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)allocateRenderAndFrameBuffers
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Allocating render and frame buffers");
+    OALog(@"[MapRenderView] Allocating render and frame buffers");
 #endif
     if(![EAGLContext setCurrentContext:_glRenderContext])
     {
@@ -523,7 +528,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
+    OALog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
 #endif
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
@@ -551,7 +556,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (void)releaseRenderAndFrameBuffers
 {
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Releasing render and frame buffers");
+    OALog(@"[MapRenderView] Releasing render and frame buffers");
 #endif
     if(![EAGLContext setCurrentContext:_glRenderContext])
     {
@@ -577,6 +582,16 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         _depthRenderBuffer = 0;
         validateGL();
     }
+}
+
+@synthesize settingsObservable = _settingsObservable;
+
+@synthesize forcedRenderingOnEachFrame = _forcedRenderingOnEachFrame;
+- (void)setForcedRenderingOnEachFrame:(BOOL)forcedRenderingOnEachFrame
+{
+    _forcedRenderingOnEachFrame = forcedRenderingOnEachFrame;
+
+    [_settingsObservable notifyEvent];
 }
 
 - (void)render:(CADisplayLink*)displayLink
@@ -609,7 +624,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if(_renderer->prepareFrame() && _renderer->isFrameInvalidated())
+    if(_renderer->prepareFrame() && (_renderer->isFrameInvalidated() || _forcedRenderingOnEachFrame))
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -667,7 +682,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Rendering resumed");
+    OALog(@"[MapRenderView] Rendering resumed");
 #endif
     
     return TRUE;
@@ -689,7 +704,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     _displayLink = nil;
     
 #if defined(DEBUG)
-    NSLog(@"[MapRenderView] Rendering suspended");
+    OALog(@"[MapRenderView] Rendering suspended");
 #endif
     
     return TRUE;

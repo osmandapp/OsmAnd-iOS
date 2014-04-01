@@ -10,8 +10,10 @@
                 <outlet property="_debugActionsButton" destination="Bgj-2j-50a" id="xgX-dt-5dr"/>
                 <outlet property="_debugPinOverlayButton" destination="kit-tm-1ep" id="A1w-kX-JIk"/>
                 <outlet property="_outputTextview" destination="RLb-5v-cDw" id="9GI-Oi-QoP"/>
+                <outlet property="_outputTitleLabel" destination="JaY-cq-fVV" id="66y-tO-yix"/>
                 <outlet property="_overlayContainer" destination="Ysm-i8-dc9" id="glD-7s-EK7"/>
                 <outlet property="_stateTextview" destination="qDy-SH-Kdi" id="yWX-XZ-2MZ"/>
+                <outlet property="_stateTitleLabel" destination="2Xi-dO-sUd" id="6HW-mp-nxm"/>
                 <outlet property="view" destination="iN0-l3-epB" id="O32-h7-Qv1"/>
             </connections>
         </placeholder>
@@ -24,31 +26,31 @@
                     <rect key="frame" x="64" y="64" width="640" height="896"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-dO-sUd">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="State:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Xi-dO-sUd" userLabel="stateTitleLabel">
                             <rect key="frame" x="4" y="4" width="632" height="12"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="10"/>
-                            <color key="textColor" red="0.2643675593" green="0.9990234375" blue="0.24790519759999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qDy-SH-Kdi" userLabel="stateTextview">
                             <rect key="frame" x="4" y="20" width="632" height="422"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="textColor" red="0.2643675593" green="0.9990234375" blue="0.24790519759999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="10"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Output:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaY-cq-fVV">
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Output:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JaY-cq-fVV" userLabel="outputTitleLabel">
                             <rect key="frame" x="4" y="446" width="632" height="12"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="10"/>
-                            <color key="textColor" red="0.2643675593" green="0.9990234375" blue="0.24790519759999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLb-5v-cDw" userLabel="outputTextView">
                             <rect key="frame" x="4" y="462" width="632" height="430"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="textColor" red="0.2643675593" green="0.9990234375" blue="0.24790519759999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <fontDescription key="fontDescription" name="CourierNewPSMT" family="Courier New" pointSize="10"/>
                             <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                         </textView>

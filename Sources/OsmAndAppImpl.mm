@@ -9,6 +9,7 @@
 #import "OsmAndAppImpl.h"
 
 #import "OsmAndApp.h"
+#import "OALog.h"
 
 #include <algorithm>
 
@@ -48,11 +49,11 @@
 {
     // Get default paths
     _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
-    NSLog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
+    OALog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
     _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
-    NSLog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
+    OALog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
     _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
-    NSLog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
+    OALog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
 
     // First of all, initialize user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
@@ -64,15 +65,15 @@
     _installedOnlineTileProvidersDBPath = _dataPath.absoluteFilePath(QLatin1String(kInstalledOnlineTileProvidersDBFilename));
     if(!QFile::exists(_installedOnlineTileProvidersDBPath))
     {
-        NSLog(@"Copying default online tile providers DB to '%@'...", _installedOnlineTileProvidersDBPath.toNSString());
+        OALog(@"Copying default online tile providers DB to '%@'...", _installedOnlineTileProvidersDBPath.toNSString());
         if(!OsmAnd::OnlineMapRasterTileProvidersDB::createDefaultDB()->saveTo(_installedOnlineTileProvidersDBPath))
-            NSLog(@"ERROR: Failed to copy default online tile providers DB to '%@'", _installedOnlineTileProvidersDBPath.toNSString());
+            OALog(@"ERROR: Failed to copy default online tile providers DB to '%@'", _installedOnlineTileProvidersDBPath.toNSString());
     }
 
     // Get location of a shipped world mini-basemap and it's version stamp
     NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
-                                                        ofType:@"obf"
-                                                   inDirectory:@"Shipped"];
+                                                                         ofType:@"obf"
+                                                                    inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
@@ -81,7 +82,7 @@
                                                                   encoding:NSASCIIStringEncoding
                                                                      error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    NSLog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, worldMiniBasemapFilename);
+    OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, worldMiniBasemapFilename);
     _worldMiniBasemap.reset(new OsmAnd::ObfFile(QString::fromNSString(worldMiniBasemapFilename)));
 
     [self initObfsCollection];
@@ -120,7 +121,7 @@
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];
 
     [initialUserDefaults setValue:[NSKeyedArchiver archivedDataWithRootObject:[OAAppData defaults]]
-                            forKey:kAppData];
+                           forKey:kAppData];
 
     return initialUserDefaults;
 }

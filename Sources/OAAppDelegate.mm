@@ -20,6 +20,8 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Logging.h>
+#include <OsmAndCore/QIODeviceLogSink.h>
+#include <OsmAndCore/LambdaLogSink.h>
 
 @implementation OAAppDelegate
 {
@@ -44,9 +46,28 @@
     
 #if defined(DEBUG)
     // If this is a debug build, duplicate all core logs to a file
-    std::shared_ptr<QIODevice> loggingDevice(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
-    loggingDevice->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
-    OsmAnd::SaveLogsTo(loggingDevice, true);
+    std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
+    logFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
+    OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
+#else
+    const auto testflightLog =
+    [](OsmAnd::LambdaLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
+    {
+        NSString* prefix;
+        if(level == OsmAnd::LogSeverityLevel::Error)
+            prefix = @"ERROR: ";
+        else if(level == OsmAnd::LogSeverityLevel::Info)
+            prefix = @"INFO: ";
+        else if(level == OsmAnd::LogSeverityLevel::Warning)
+            prefix = @"WARN: ";
+        else
+            prefix = @"DEBUG: ";
+        NSString* line = [[NSString alloc] initWithFormat:[[NSString alloc] initWithCString:format
+                                                                                   encoding:NSASCIIStringEncoding]
+                                                arguments:args];
+        TFLogPreFormatted([prefix stringByAppendingString:line]);
+    };
+    OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::LambdaLogSink(testflightLog, nullptr)));
 #endif
 
     // Create window

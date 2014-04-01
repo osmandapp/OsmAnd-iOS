@@ -9,6 +9,7 @@
 #import "OAMapPanelViewController.h"
 
 #import "OAMapModeHudViewController.h"
+#import "OALog.h"
 
 @interface OAMapPanelViewController ()
 
@@ -29,7 +30,7 @@
 
 - (void)loadView
 {
-    NSLog(@"Creating Map Panel views...");
+    OALog(@"Creating Map Panel views...");
     
     // Create root view
     UIView* rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];

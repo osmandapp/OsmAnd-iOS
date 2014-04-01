@@ -15,6 +15,7 @@
 #import "OAMapSourcePreset.h"
 
 #include "Localization.h"
+#import "OALog.h"
 
 @interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, UIPopoverControllerDelegate>
 
@@ -551,11 +552,11 @@
         if(indexPath.row == 0)
         {
             //TODO: open menu
-            NSLog(@"open layers menu");
+            OALog(@"open layers menu");
         }
         else
         {
-            NSLog(@"activate/deactivate layer");
+            OALog(@"activate/deactivate layer");
         }
     }
     else if(indexPath.section == kOptionsSection)
@@ -563,13 +564,13 @@
         switch (indexPath.row)
         {
             case kOptionsSection_SettingsRow:
-                NSLog(@"open settings menu");
+                OALog(@"open settings menu");
                 break;
             case kOptionsSection_DownloadsRow:
-                NSLog(@"open downloads menu");
+                OALog(@"open downloads menu");
                 break;
             case kOptionsSection_MyDataRow:
-                NSLog(@"open my-data menu");
+                OALog(@"open my-data menu");
                 break;
         }
     }

@@ -82,7 +82,8 @@
         [_driveModeButton showAndEnableInput];
     else
         [_driveModeButton hideAndDisableInput];
-    
+
+    _compassImage.transform = CGAffineTransformMakeRotation(-[OAMapRendererViewController instance].mapRendererView.azimuth / 180.0f * M_PI);
     _zoomInButton.enabled = [[OAMapRendererViewController instance] canZoomIn];
     _zoomOutButton.enabled = [[OAMapRendererViewController instance] canZoomOut];
 }

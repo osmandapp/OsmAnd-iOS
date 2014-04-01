@@ -12,19 +12,24 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OADebugHudViewController ()
+@interface OADebugHudViewController () <UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *_overlayContainer;
 @property (weak, nonatomic) IBOutlet UITextView *_stateTextview;
 @property (weak, nonatomic) IBOutlet UITextView *_outputTextview;
 @property (weak, nonatomic) IBOutlet UIButton *_debugActionsButton;
 @property (weak, nonatomic) IBOutlet UIButton *_debugPinOverlayButton;
+@property (weak, nonatomic) IBOutlet UILabel *_stateTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *_outputTitleLabel;
 
 @end
 
 @implementation OADebugHudViewController
 {
     OAAutoObserverProxy* _rendererStateObserver;
+    OAAutoObserverProxy* _rendererSettingsObserver;
+    UIStoryboard* _debugActionsStoryboard;
+    UIPopoverController* _lastMenuPopoverController;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -39,6 +44,8 @@
 - (void)ctor
 {
     _rendererStateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererStateChanged)];
+    _rendererSettingsObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererSettingsChanged)];
+    _debugActionsStoryboard = [UIStoryboard storyboardWithName:@"DebugActions" bundle:nil];
 }
 
 - (void)viewDidLoad
@@ -47,6 +54,7 @@
 
     [self collectState];
     [_rendererStateObserver observe:[OAMapRendererViewController instance].stateObservable];
+    [_rendererSettingsObserver observe:[OAMapRendererViewController instance].settingsObservable];
 
     [self._debugPinOverlayButton setImage:[UIImage imageNamed:
                                            self._overlayContainer.userInteractionEnabled
@@ -61,8 +69,32 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)openMenu:(UIViewController*)menuViewController fromView:(UIView*)view
+{
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        // For iPhone and iPod, push menu to navigation controller
+        [self.navigationController pushViewController:menuViewController
+                                             animated:YES];
+    }
+    else //if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        // For iPad, open menu in a popover with it's own navigation controller
+        UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+        _lastMenuPopoverController = [[UIPopoverController alloc] initWithContentViewController:popoverNavigationController];
+        _lastMenuPopoverController.delegate = self;
+
+        [_lastMenuPopoverController presentPopoverFromRect:view.frame
+                                                    inView:self.view
+                                  permittedArrowDirections:UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight
+                                                  animated:YES];
+    }
+}
+
 - (IBAction)onDebugActionsButtonClicked:(id)sender
 {
+    [self openMenu:[_debugActionsStoryboard instantiateInitialViewController]
+          fromView:self._debugActionsButton];
 }
 
 - (IBAction)onDebugPinOverlayButtonClicked:(id)sender
@@ -81,12 +113,13 @@
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 
-    [stateDump appendFormat:@"target          : %d %d\n", mapRendererView.target31.x, mapRendererView.target31.y];
-    [stateDump appendFormat:@"zoom            : %f\n", mapRendererView.zoom];
-    [stateDump appendFormat:@"zoom level      : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
-    [stateDump appendFormat:@"azimuth         : %f\n", mapRendererView.azimuth];
-    [stateDump appendFormat:@"elevation angle : %f\n", mapRendererView.elevationAngle];
-//    [stateDump appendFormat:@"zoom            : %f\n", mapRendererView.zoom];
+    [stateDump appendFormat:@"forced re-rendering  : %s\n", mapRendererView.forcedRenderingOnEachFrame ? "yes" : "no"];
+    [stateDump appendFormat:@"target               : %d %d\n", mapRendererView.target31.x, mapRendererView.target31.y];
+    [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
+    [stateDump appendFormat:@"zoom level           : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
+    [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];
+    [stateDump appendFormat:@"elevation angle      : %f\n", mapRendererView.elevationAngle];
+//    [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
 
     [self._stateTextview setText:stateDump];
 }
@@ -98,15 +131,24 @@
     });
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+- (void)onRendererSettingsChanged
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self collectState];
+    });
 }
-*/
+
+#pragma mark - UIPopoverControllerDelegate
+
+- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+{
+    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
+       _lastMenuPopoverController == popoverController)
+    {
+        _lastMenuPopoverController = nil;
+    }
+}
+
+#pragma mark -
 
 @end

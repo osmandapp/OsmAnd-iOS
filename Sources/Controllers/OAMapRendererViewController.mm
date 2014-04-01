@@ -27,14 +27,17 @@
 #include <OsmAndCore/Map/MapStyleValue.h>
 
 #include "ExternalResourcesProvider.h"
+#import "OALog.h"
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 30.0f
 #define kElevationGesturePointsPerDegree 3.0f
 #define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f
+#define kZoomVelocityAbsLimit 10.0f
 #define kTargetMoveDeceleration 4800.0f
 #define kRotateDeceleration 500.0f
+#define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModeFollowZoom 18.0f
 
 @interface OAMapRendererViewController ()
@@ -62,6 +65,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     OAAutoObserverProxy* _stateObserver;
+    OAAutoObserverProxy* _settingsObserver;
     
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -126,9 +130,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                                  andObserve:_app.locationServices.updateObserver];
 
     _stateObservable = [[OAObservable alloc] init];
+    _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapRendererStateChanged:withKey:)];
+    _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapRendererSettingsChanged:withKey:)];
     
     // Create gesture recognizers:
     
@@ -178,7 +184,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)loadView
 {
 #if defined(DEBUG)
-    NSLog(@"Creating Map Renderer view...");
+    OALog(@"Creating Map Renderer view...");
 #endif
     
     // Inflate map renderer view
@@ -186,6 +192,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.contentScaleFactor = [[UIScreen mainScreen] scale];
     [_stateObserver observe:view.stateObservable];
+    [_settingsObserver observe:view.settingsObservable];
     self.view = view;
 }
 
@@ -258,7 +265,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if(verticalDistance >= kElevationGestureMaxThreshold)
         {
 #if defined(DEBUG)
-            NSLog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
+            OALog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
 #endif
             return NO;
         }
@@ -319,7 +326,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     // Change zoom
     mapView.zoom = _initialZoomLevelDuringGesture - (1.0f - recognizer.scale);
-    
+
     // Adjust current target position to keep touch center the same
     OsmAnd::PointI centerLocationAfter;
     [mapView convert:centerPoint toLocation:&centerLocationAfter];
@@ -329,7 +336,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // If this is the end of gesture, get velocity for animation
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [mapView animateZoomWith:recognizer.velocity andDeceleration:kZoomDeceleration];
+        float velocity = qBound(-kZoomVelocityAbsLimit, recognizer.velocity, kZoomVelocityAbsLimit);
+        [mapView animateZoomWith:velocity andDeceleration:kZoomDeceleration];
         [mapView resumeAnimation];
     }
 }
@@ -388,7 +396,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         velocity.x = -velocityInMapSpace.x * scale31;
         velocity.y = -velocityInMapSpace.y * scale31;
         
-        [mapView animateTargetWith:velocity andDeceleration:OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31)];
+        [mapView animateTargetWith:velocity
+                   andDeceleration:OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31)];
         [mapView resumeAnimation];
     }
     [recognizer setTranslation:CGPointZero inView:self.view];
@@ -454,7 +463,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     if(recognizer.state == UIGestureRecognizerStateEnded)
     {
-        [mapView animateAzimuthWith:-qRadiansToDegrees(recognizer.velocity) andDeceleration:kRotateDeceleration];
+        float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees(recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
+        [mapView animateAzimuthWith:velocity andDeceleration:kRotateDeceleration];
         [mapView resumeAnimation];
     }
     [recognizer setRotation:0];
@@ -562,10 +572,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
     
-    NSLog(@"MEMWARNING");
+    OALog(@"MEMWARNING");
 }
 
-- (OAMapRendererView*)mapRendererView
+- (id<OAMapRendererViewProtocol>)mapRendererView
 {
     if(![self isViewLoaded])
         return nil;
@@ -573,6 +583,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 }
 
 @synthesize stateObservable = _stateObservable;
+@synthesize settingsObservable = _settingsObservable;
 
 @synthesize azimuthObservable = _azimuthObservable;
 
@@ -605,6 +616,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             break;
     }
 
+    [_stateObservable notifyEventWithKey:key];
+}
+
+- (void)onMapRendererSettingsChanged:(id)observer withKey:(id)key
+{
     [_stateObservable notifyEventWithKey:key];
 }
 

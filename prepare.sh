@@ -11,7 +11,7 @@ ROOT="$SRCLOC/.."
 
 # Prepare core dependencies
 echo "Configuring dependencies..."
-"$ROOT/core/externals/configure.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glsl-optimizer glm icu4c
+"$ROOT/core/externals/configure.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glsl-optimizer glm icu4c libarchive
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
 

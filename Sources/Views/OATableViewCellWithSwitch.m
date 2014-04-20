@@ -30,7 +30,7 @@
 {
     UISwitch* switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
     [switchView addTarget:self
-                   action:@selector(switchStateChanged:)
+                   action:@selector(onSwitchStateChanged:)
          forControlEvents:UIControlEventValueChanged];
     self.accessoryView = switchView;
 }
@@ -49,7 +49,7 @@
     return (UITableView*)view;
 }
 
-- (void)switchStateChanged:(id)sender
+- (void)onSwitchStateChanged:(id)sender
 {
     // Obtain tableview and locate self
     UITableView* tableView = [self getTableView];

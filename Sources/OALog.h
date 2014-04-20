@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 #if __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
     void OALog(NSString *format, ...) __attribute__((format(__NSString__, 1, 2)));
 #if __cplusplus

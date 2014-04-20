@@ -12,7 +12,8 @@
 #include <OsmAndCore/Logging.h>
 
 #if __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
     void OALog(NSString *format, ...)
     {

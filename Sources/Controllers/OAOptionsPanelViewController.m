@@ -536,8 +536,8 @@
     {
         if(indexPath.row == 0)
         {
-            UIViewController* mapSourcesMenuViewController = [[UIStoryboard storyboardWithName:@"MapSources" bundle:nil] instantiateInitialViewController];
-            [self openMenu:mapSourcesMenuViewController forCellAt:indexPath];
+            [self openMenu:[[UIStoryboard storyboardWithName:@"MapSources" bundle:nil] instantiateInitialViewController]
+                 forCellAt:indexPath];
         }
         else
         {
@@ -564,10 +564,12 @@
         switch (indexPath.row)
         {
             case kOptionsSection_SettingsRow:
-                OALog(@"open settings menu");
+                [self openMenu:[[UIStoryboard storyboardWithName:@"Settings" bundle:nil] instantiateInitialViewController]
+                     forCellAt:indexPath];
                 break;
             case kOptionsSection_DownloadsRow:
-                OALog(@"open downloads menu");
+                [self openMenu:[[UIStoryboard storyboardWithName:@"Downloads" bundle:nil] instantiateInitialViewController]
+                     forCellAt:indexPath];
                 break;
             case kOptionsSection_MyDataRow:
                 OALog(@"open my-data menu");

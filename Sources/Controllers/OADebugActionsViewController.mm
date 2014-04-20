@@ -142,7 +142,6 @@
     }
 
     return cell;
-
 }
 
 #pragma mark - OATableViewWithSwitchDelegate

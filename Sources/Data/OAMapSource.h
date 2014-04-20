@@ -21,9 +21,12 @@ typedef NS_ENUM(NSInteger, OAMapSourceType)
 
 @interface OAMapSource : NSObject <NSCoding>
 
-- (id)initWithLocalizedNameKey:(NSString*)localizedNameKey andType:(OAMapSourceType)type andTypedReferenceId:(NSString*)typedReferenceId;
+- (id)initWithLocalizedNameKey:(NSString*)localizedNameKey
+                       andType:(OAMapSourceType)type
+           andTypedReferenceId:(NSString*)typedReferenceId;
 
-- (void)registerAs:(NSUUID*)uniqueId in:(OAMapSourcesCollection*)owner;
+- (void)registerAs:(NSUUID*)uniqueId
+                in:(OAMapSourcesCollection*)owner;
 
 @property(readonly) OAObservable* changeObservable;
 

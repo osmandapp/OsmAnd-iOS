@@ -18,7 +18,6 @@
 @property(nonatomic, setter = setMapMode:) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 
 @end

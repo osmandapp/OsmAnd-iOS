@@ -17,7 +17,9 @@
 #include <QStandardPaths>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/OnlineMapRasterTileProvidersDB.h>
+#include <OsmAndCore/Map/MapStylesPresets.h>
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
@@ -48,10 +50,8 @@
 {
     OsmAndAppInstance _app;
     
-    OAAutoObserverProxy* _activeMapSourceIdObserver;
-    OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
-    OAAutoObserverProxy* _mapSourcePresetValuesObserver;
-    
+    OAAutoObserverProxy* _lastMapSourceChangeObserver;
+
     BOOL _mapSourceInvalidated;
     
     // Current provider of raster map
@@ -109,17 +109,20 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     
     _app = [OsmAndApp instance];
     
-    _activeMapSourceIdObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                           withHandler:@selector(onActiveMapSourceIdChanged)
-                                                            andObserve:_app.data.activeMapSourceIdChangeObservable];
-    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onMapSourceActivePresetIdChanged)
-                                                                  andObserve:activeMapSource.activePresetIdChangeObservable];
-    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
-    _mapSourcePresetValuesObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onMapSourcePresetValuesChanged)
-                                                                andObserve:activePreset.values.changeObservable];
+    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLastMapSourceChanged)
+                                                              andObserve:_app.data.lastMapSourceChangeObservable];
+    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                                 [self]
+                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                  const QList< QString >& added,
+                                                                  const QList< QString >& removed,
+                                                                  const QList< QString >& updated)
+                                                                 {
+                                                                     QList< QString > merged;
+                                                                     merged << added << removed << updated;
+                                                                     [self onLocalResourcesChanged:merged];
+                                                                 });
 
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
@@ -171,6 +174,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)dtor
 {
+    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+
     // Allow view to tear down OpenGLES context
     if([self isViewLoaded])
     {
@@ -813,20 +818,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     }
 }
 
-- (void)onActiveMapSourceIdChanged
+- (void)onLastMapSourceChanged
 {
     // Invalidate current map-source
     _mapSourceInvalidated = YES;
-
-    // Hook to new map source
-    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
-    if(_mapSourceActivePresetIdObserver.isAttached)
-        [_mapSourceActivePresetIdObserver detach];
-    [_mapSourceActivePresetIdObserver observe:activeMapSource.activePresetIdChangeObservable];
-    if(_mapSourcePresetValuesObserver.isAttached)
-        [_mapSourcePresetValuesObserver detach];
-    [_mapSourcePresetValuesObserver observe:activePreset.values.changeObservable];
 
     // Force reload of list content
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -834,25 +829,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     });
 }
 
-- (void)onMapSourceActivePresetIdChanged
-{
-    // Invalidate current map-source
-    _mapSourceInvalidated = YES;
-
-    // Hook to new preset
-    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
-    if(_mapSourcePresetValuesObserver.isAttached)
-        [_mapSourcePresetValuesObserver detach];
-    [_mapSourcePresetValuesObserver observe:activePreset.values.changeObservable];
-
-    // Force reload of list content
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateCurrentMapSource];
-    });
-}
-
-- (void)onMapSourcePresetValuesChanged
+- (void)onLocalResourcesChanged:(const QList< QString >&)ids
 {
     // Invalidate current map-source
     _mapSourceInvalidated = YES;
@@ -883,28 +860,30 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         _offlineMapSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
-        OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-        OAMapSourcePreset* activePreset = [activeMapSource.presets presetWithId:activeMapSource.activePresetId];
-        if(activeMapSource.type == OAMapSourceTypeOffline)
+        typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+        const auto resourceId = QString::fromNSString(_app.data.lastMapSource.resourceId);
+        const auto subresourceId = QString::fromNSString(_app.data.lastMapSource.subresourceId);
+        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+        if(mapSourceResource->type == OsmAndResourceType::MapStylesPresets)
         {
-            // Obtain style with that name
+            const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(mapSourceResource->metadata)->presets;
+
+            // Get preset
+            const auto preset = presets->getPresetByName(subresourceId);
+            NSAssert(preset, @"Failed to resolve map style preset with name '%s'", qPrintable(subresourceId));
+
+            // Get map style for that preset
             std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-            const auto styleResolved = _app.mapStyles->obtainStyle(QString::fromNSString(activeMapSource.typedReferenceId), mapStyle);
-            NSAssert(styleResolved, @"Failed to resolve style with name '%@'", activeMapSource.typedReferenceId);
-            
-            // Obtain settings from selected preset
-            __block QHash< QString, QString > styleSettings;
-            [activePreset.values enumerateValuesUsingBlock:^(NSString* key, NSString* value, BOOL *stop) {
-                styleSettings.insert(QString::fromNSString(key), QString::fromNSString(value));
-            }];
-            
+            const auto styleResolved = _app.resourcesManager->mapStylesCollection->obtainBakedStyle(preset->styleName, mapStyle);
+            NSAssert(styleResolved, @"Failed to resolve style with name '%s'", qPrintable(preset->styleName));
+
             // Configure offline map data provider with given settings
             const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
-            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.obfsCollection,
+            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.resourcesManager->obfsCollection,
                                                                              mapStyle,
                                                                              mapView.contentScaleFactor,
                                                                              externalResourcesProvider));
-            _offlineMapDataProvider->rasterizerEnvironment->setSettings(styleSettings);
+            _offlineMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
             _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
                                                                                        256 * mapView.contentScaleFactor,
                                                                                        mapView.contentScaleFactor));
@@ -913,17 +892,34 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
             [mapView addSymbolProvider:_offlineMapSymbolsProvider];
         }
-        else if(activeMapSource.type == OAMapSourceTypeOnline)
+        else if(mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
-            const auto& installedOnlineTileProvidersDB = OsmAnd::OnlineMapRasterTileProvidersDB::loadFrom(_app.installedOnlineTileProvidersDBPath);
+            const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
 
-            const auto& onlineMapTileProvider = installedOnlineTileProvidersDB->createProvider(QString::fromNSString(activeMapSource.typedReferenceId));
-            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%@'", activeMapSource.typedReferenceId);
+            // Configure offline map data provider with given settings
+            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
+            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.resourcesManager->obfsCollection,
+                                                                             mapStyle,
+                                                                             mapView.contentScaleFactor,
+                                                                             externalResourcesProvider));
+            _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
+                                                                                       256 * mapView.contentScaleFactor,
+                                                                                       mapView.contentScaleFactor));
+            [mapView setProvider:_rasterMapProvider
+                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+            _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
+            [mapView addSymbolProvider:_offlineMapSymbolsProvider];
+        }
+        else if(mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+
+            const auto& onlineMapTileProvider = onlineTileSources->createProviderFor(subresourceId);
+            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%s'", qPrintable(subresourceId));
             onlineMapTileProvider->setLocalCachePath(_app.cachePath);
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-
         }
 
         _mapSourceInvalidated = YES;

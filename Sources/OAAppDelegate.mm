@@ -21,7 +21,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Logging.h>
 #include <OsmAndCore/QIODeviceLogSink.h>
-#include <OsmAndCore/LambdaLogSink.h>
+#include <OsmAndCore/FunctorLogSink.h>
 
 @implementation OAAppDelegate
 {
@@ -51,7 +51,8 @@
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
 #else
     const auto testflightLog =
-    [](OsmAnd::LambdaLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
+    []
+    (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
     {
         NSString* prefix;
         if(level == OsmAnd::LogSeverityLevel::Error)
@@ -67,7 +68,7 @@
                                                 arguments:args];
         TFLogPreFormatted([prefix stringByAppendingString:line]);
     };
-    OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::LambdaLogSink(testflightLog, nullptr)));
+    OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::FunctorLogSink(testflightLog, nullptr)));
 #endif
 
     // Create window

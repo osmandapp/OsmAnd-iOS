@@ -12,6 +12,7 @@
 
 @implementation OAAppData
 {
+    NSMutableDictionary* _lastMapSources;
 }
 
 - (id)init
@@ -19,8 +20,8 @@
     self = [super init];
     if (self) {
         [self ctor];
-        _activeMapSourceId = nil;
-        _mapSources = [[OAMapSourcesCollection alloc] initWithOwner:self];
+        _lastMapSource = nil;
+        _lastMapSources = [[NSMutableDictionary alloc] init];
         _mapLastViewedState = [[OAMapCrossSessionState alloc] init];
     }
     return self;
@@ -28,38 +29,49 @@
 
 - (void)ctor
 {
-    _activeMapSourceIdChangeObservable = [[OAObservable alloc] init];
+    _lastMapSourceChangeObservable = [[OAObservable alloc] init];
 }
 
-@synthesize activeMapSourceId = _activeMapSourceId;
+@synthesize lastMapSource = _lastMapSource;
 
-- (NSUUID*)activeMapSourceId
+- (OAMapSource*)lastMapSource
 {
     @synchronized(self)
     {
-        return _activeMapSourceId;
+        return _lastMapSource;
     }
 }
 
-- (void)setActiveMapSourceId:(NSUUID *)activeMapSourceId
+- (void)setLastMapSource:(OAMapSource*)lastMapSource
 {
     @synchronized(self)
     {
-        _activeMapSourceId = [activeMapSourceId copy];
-        
-        [_activeMapSourceIdChangeObservable notifyEventWithKey:self andValue:_activeMapSourceId];
+        // Store previous, if such exists
+        if(_lastMapSource != nil)
+        {
+            [_lastMapSources setObject:_lastMapSource.subresourceId
+                                forKey:_lastMapSource.resourceId];
+        }
+
+        // Save new one
+        _lastMapSource = [lastMapSource copy];
+
+        [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
     }
 }
 
-@synthesize activeMapSourceIdChangeObservable = _activeMapSourceIdChangeObservable;
+@synthesize lastMapSourceChangeObservable = _lastMapSourceChangeObservable;
 
-@synthesize mapSources = _mapSources;
-
-- (OAMapSourcesCollection*)mapSources
+- (OAMapSource*)lastMapSourceByResourceName:(NSString*)resourceName
 {
     @synchronized(self)
     {
-        return _mapSources;
+        NSString* subresourceId = [_lastMapSources objectForKey:resourceName];
+        if(subresourceId == nil)
+            return nil;
+
+        return [[OAMapSource alloc] initWithResource:resourceName
+                                      andSubresource:subresourceId];
     }
 }
 
@@ -71,6 +83,7 @@
 {
     OAAppData* defaults = [[OAAppData alloc] init];
 
+    // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;
     defaults.mapLastViewedState.target31 = centerOfWorld;
@@ -78,48 +91,23 @@
     defaults.mapLastViewedState.azimuth = 0.0f;
     defaults.mapLastViewedState.elevationAngle = 90.0f;
 
-    // Offline maps
-    OAMapSource* defaultMapSource = [[OAMapSource alloc] initWithLocalizedNameKey:@"OsmAndOfflineMapSource"
-                                                                          andType:OAMapSourceTypeOffline
-                                                              andTypedReferenceId:@"default"];
-    defaultMapSource.activePresetId =
-    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
-                                                                                               andType:OAMapSourcePresetTypeGeneral
-                                                                                             andValues:@{ @"appMode" : @"browse map" }]];
-    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeCar"
-                                                                                               andType:OAMapSourcePresetTypeCar
-                                                                                             andValues:@{ @"appMode" : @"car" }]];
-    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeBicycle"
-                                                                                               andType:OAMapSourcePresetTypeBicycle
-                                                                                             andValues:@{ @"appMode" : @"bicycle" }]];
-    [defaultMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypePedestrian"
-                                                                                               andType:OAMapSourcePresetTypePedestrian
-                                                                                             andValues:@{ @"appMode" : @"pedestrian" }]];
-    defaults.activeMapSourceId = [defaults.mapSources registerAndAddMapSource:defaultMapSource];
-
-    // Mapnik (host by OsmAnd)
-    OAMapSource* ownMapnikMapSource = [[OAMapSource alloc] initWithLocalizedNameKey:@"OsmAndOnlineMapSource_Mapnik"
-                                                                            andType:OAMapSourceTypeOnline
-                                                                andTypedReferenceId:@"mapnik_osmand"];
-    ownMapnikMapSource.activePresetId =
-    [ownMapnikMapSource.presets registerAndAddPreset:[[OAMapSourcePreset alloc] initWithLocalizedNameKey:@"OAMapSourcePresetTypeGeneral"
-                                                                                                 andType:OAMapSourcePresetTypeGeneral
-                                                                                               andValues:@{}]];
-    [defaults.mapSources registerAndAddMapSource:ownMapnikMapSource];
+    // Set offline maps as default map source
+    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.mapStylesPresets.xml"
+                                                    andSubresource:@"General"];
 
     return defaults;
 }
 
 #pragma mark - NSCoding
 
-#define kActiveMapSourceId @"active_map_source_id"
-#define kMapSourcesContainer @"map_sources_container"
+#define kLastMapSource @"last_map_source"
+#define kLastMapSources @"last_map_sources"
 #define kMapLastViewedState @"map_last_viewed_state"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
-    [aCoder encodeObject:_activeMapSourceId forKey:kActiveMapSourceId];
-    [aCoder encodeObject:_mapSources forKey:kMapSourcesContainer];
+    [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
+    [aCoder encodeObject:_lastMapSources forKey:kLastMapSources];
     [aCoder encodeObject:_mapLastViewedState forKey:kMapLastViewedState];
 }
 
@@ -128,9 +116,8 @@
     self = [super init];
     if (self) {
         [self ctor];
-        _activeMapSourceId = [aDecoder decodeObjectForKey:kActiveMapSourceId];
-        _mapSources = [aDecoder decodeObjectForKey:kMapSourcesContainer];
-        [_mapSources setOwner:self];
+        _lastMapSource = [aDecoder decodeObjectForKey:kLastMapSource];
+        _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
     }
     return self;

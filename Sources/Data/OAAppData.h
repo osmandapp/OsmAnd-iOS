@@ -9,15 +9,15 @@
 #import <Foundation/Foundation.h>
 
 #import "OAObservable.h"
-#import "OAMapSourcesCollection.h"
 #import "OAMapCrossSessionState.h"
+#import "OAMapSource.h"
 
 @interface OAAppData : NSObject <NSCoding>
 
-@property NSUUID* activeMapSourceId;
-@property(readonly) OAObservable* activeMapSourceIdChangeObservable;
+@property OAMapSource* lastMapSource;
+@property(readonly) OAObservable* lastMapSourceChangeObservable;
 
-@property(readonly) OAMapSourcesCollection* mapSources;
+- (OAMapSource*)lastMapSourceByResourceName:(NSString*)resourceName;
 
 @property(readonly) OAMapCrossSessionState* mapLastViewedState;
 

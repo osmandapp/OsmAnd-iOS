@@ -16,23 +16,17 @@
 #include <QList>
 
 #include <OsmAndCore.h>
-#include <OsmAndCore/Data/ObfFile.h>
-#include <OsmAndCore/Data/ObfReader.h>
-#include <OsmAndCore/Map/OnlineMapRasterTileProvidersDB.h>
 
 @implementation OsmAndAppImpl
 {
-    std::shared_ptr<OsmAnd::ObfFile> _worldMiniBasemap;
+    NSString* _worldMiniBasemapFilename;
 }
 
 @synthesize dataPath = _dataPath;
 @synthesize documentsPath = _documentsPath;
 @synthesize cachePath = _cachePath;
 
-@synthesize installedOnlineTileProvidersDBPath = _installedOnlineTileProvidersDBPath;
-
-@synthesize obfsCollection = _obfsCollection;
-@synthesize mapStyles = _mapStyles;
+@synthesize resourcesManager = _resourcesManager;
 
 - (id)init
 {
@@ -61,19 +55,10 @@
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 
-    // Initialize online tile providers DB (if needed)
-    _installedOnlineTileProvidersDBPath = _dataPath.absoluteFilePath(QLatin1String(kInstalledOnlineTileProvidersDBFilename));
-    if(!QFile::exists(_installedOnlineTileProvidersDBPath))
-    {
-        OALog(@"Copying default online tile providers DB to '%@'...", _installedOnlineTileProvidersDBPath.toNSString());
-        if(!OsmAnd::OnlineMapRasterTileProvidersDB::createDefaultDB()->saveTo(_installedOnlineTileProvidersDBPath))
-            OALog(@"ERROR: Failed to copy default online tile providers DB to '%@'", _installedOnlineTileProvidersDBPath.toNSString());
-    }
-
     // Get location of a shipped world mini-basemap and it's version stamp
-    NSString* worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
-                                                                         ofType:@"obf"
-                                                                    inDirectory:@"Shipped"];
+    _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
+                                                                ofType:@"obf"
+                                                           inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
@@ -82,12 +67,10 @@
                                                                   encoding:NSASCIIStringEncoding
                                                                      error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
-    OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, worldMiniBasemapFilename);
-    _worldMiniBasemap.reset(new OsmAnd::ObfFile(QString::fromNSString(worldMiniBasemapFilename)));
+    OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
 
-    [self initObfsCollection];
-    [self initMapStyles];
-    
+    [self initResources];
+
     _mapModeObservable = [[OAObservable alloc] init];
     
     _locationServices = [[OALocationServices alloc] initWith:self];
@@ -95,25 +78,18 @@
         [_locationServices start];
 }
 
-- (void)initObfsCollection
+- (void)initResources
 {
-    _obfsCollection.reset(new OsmAnd::ObfsCollection());
-    
-    // Set modifier to add world mini-basemap if there's no other basemap available
-    _obfsCollection->setSourcesSetModifier([self](const OsmAnd::ObfsCollection& collection, QList< std::shared_ptr<OsmAnd::ObfReader> >& inOutSources)
-    {
-        const auto basemapPresent = std::any_of(inOutSources.cbegin(), inOutSources.cend(), [](const std::shared_ptr<OsmAnd::ObfReader>& obfReader)
-        {
-            return obfReader->obtainInfo()->isBasemap;
-        });
-        
-        // If there's no basemap present, add mini-basemap
-        if(!basemapPresent)
-            inOutSources.push_back(std::shared_ptr<OsmAnd::ObfReader>(new OsmAnd::ObfReader(_worldMiniBasemap)));
-    });
-    
-    // Register "Documents" directory (which is accessible from iTunes)
-    _obfsCollection->registerDirectory(_documentsPath);
+    // Initialize resources manager
+    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
+                                                         _documentsPath.absolutePath(),
+                                                         QList<QString>(),
+                                                         _worldMiniBasemapFilename != nil
+                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                            : QString::null,
+                                                         QString::fromNSString(NSTemporaryDirectory())));
+
+    //TODO: Verify previous application data
 }
 
 - (NSDictionary*)inflateInitialUserDefaults
@@ -124,11 +100,6 @@
                            forKey:kAppData];
 
     return initialUserDefaults;
-}
-
-- (void)initMapStyles
-{
-    _mapStyles.reset(new OsmAnd::MapStyles());
 }
 
 @synthesize data = _data;

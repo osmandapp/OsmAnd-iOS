@@ -14,8 +14,7 @@
 #include <QDir>
 
 #include <OsmAndCore.h>
-#include <OsmAndCore/Data/ObfsCollection.h>
-#include <OsmAndCore/Map/MapStyles.h>
+#include <OsmAndCore/ResourcesManager.h>
 
 @protocol OsmAndAppCppProtocol <NSObject>
 
@@ -23,9 +22,6 @@
 @property(nonatomic, readonly) QDir documentsPath;
 @property(nonatomic, readonly) QDir cachePath;
 
-@property(nonatomic, readonly) QString installedOnlineTileProvidersDBPath;
-
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ObfsCollection> obfsCollection;
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapStyles> mapStyles;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 
 @end

@@ -156,7 +156,7 @@
                 case kRenderingSection_ForcedRendering:
                     {
                         OATableViewCellWithSwitch* cell = (OATableViewCellWithSwitch*)[tableView cellForRowAtIndexPath:indexPath];
-                        __weak OAMapRendererView* mapRendererView = [OAMapRendererViewController instance].mapRendererView;
+                        OAMapRendererView* __weak mapRendererView = [OAMapRendererViewController instance].mapRendererView;
                         mapRendererView.forcedRenderingOnEachFrame = cell.switchView.on;
                     }
                     break;

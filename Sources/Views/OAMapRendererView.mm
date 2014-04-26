@@ -85,7 +85,7 @@
     rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
     OAObservable* stateObservable = _stateObservable;
-    _renderer->registerStateChangeObserver(reinterpret_cast<void*>((uintptr_t)stateObservable),
+    _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
         [stateObservable](const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges){
             [stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:(OAMapRendererViewStateEntry)thisChange]];
         });
@@ -101,8 +101,7 @@
     [self releaseContext];
     
     // Unregister observer
-    OAObservable* stateObservable = _stateObservable;
-    _renderer->unregisterStateChangeObserver(reinterpret_cast<void*>((uintptr_t)stateObservable));
+    _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
 }
 
 - (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
@@ -416,7 +415,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     rendererSetup.displayDensityFactor = self.contentScaleFactor;
     rendererSetup.gpuWorkerThreadEnabled = true;
     const auto capturedWorkerContext = _glWorkerContext;
-    rendererSetup.gpuWorkerThreadPrologue = [capturedWorkerContext]()
+    rendererSetup.gpuWorkerThreadPrologue = [capturedWorkerContext](const OsmAnd::IMapRenderer* const renderer)
     {
         // Activate worker context
         if(![EAGLContext setCurrentContext:capturedWorkerContext])
@@ -425,7 +424,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
             return;
         }
     };
-    rendererSetup.gpuWorkerThreadEpilogue = []()
+    rendererSetup.gpuWorkerThreadEpilogue = [](const OsmAnd::IMapRenderer* const renderer)
     {
         // Nothing to do
     };

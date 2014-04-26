@@ -12,7 +12,6 @@
 #import "UIViewController+OARootViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
-#import "OAMapSourcePreset.h"
 
 #include "Localization.h"
 #import "OALog.h"
@@ -25,11 +24,7 @@
 {
     OsmAndAppInstance _app;
     
-    OAAutoObserverProxy* _activeMapSourceIdObserver;
-    OAAutoObserverProxy* _mapSourceNameObserver;
-    OAAutoObserverProxy* _mapSourceActivePresetIdObserver;
-    OAAutoObserverProxy* _mapSourcePresetsObserver;
-    OAAutoObserverProxy* _mapSourceAnyPresetChangeObserver;
+    OAAutoObserverProxy* _lastMapSourceObserver;
 
     NSIndexPath* _lastMenuOriginCellPath;
     UIPopoverController* _lastMenuPopoverController;
@@ -69,26 +64,34 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [self dtor];
+}
+
 - (void)ctor
 {
     _app = [OsmAndApp instance];
     
-    _activeMapSourceIdObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                           withHandler:@selector(onActiveMapSourceIdChanged)
-                                                            andObserve:_app.data.activeMapSourceIdChangeObservable];
-    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    _mapSourceNameObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                       withHandler:@selector(onMapSourceNameChanged)
-                                                        andObserve:activeMapSource.nameChangeObservable];
-    _mapSourceActivePresetIdObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onMapSourceActivePresetIdChanged)
-                                                                  andObserve:activeMapSource.activePresetIdChangeObservable];
-    _mapSourcePresetsObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onMapSourcePresetsCollectionChanged)
-                                                           andObserve:activeMapSource.presets.collectionChangeObservable];
-    _mapSourceAnyPresetChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                  withHandler:@selector(onMapSourcePresetChanged:)
-                                                                   andObserve:activeMapSource.anyPresetChangeObservable];
+    _lastMapSourceObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onLastMapSourceChanged)
+                                                        andObserve:_app.data.lastMapSourceChangeObservable];
+    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                                 [self]
+                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                  const QList< QString >& added,
+                                                                  const QList< QString >& removed,
+                                                                  const QList< QString >& updated)
+                                                                 {
+                                                                     QList< QString > merged;
+                                                                     merged << added << removed << updated;
+                                                                     [self onLocalResourcesChanged:merged];
+                                                                 });
+}
+
+- (void)dtor
+{
+    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 - (void)viewDidLoad
@@ -99,14 +102,14 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+    /*TODO:
     // Perform selection of proper preset
     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
                                                             inSection:kMapSourcesAndPresetsSection]
                                 animated:animated
                           scrollPosition:UITableViewScrollPositionNone];
-
+    */
     // Deselect menu origin cell if reopened (on iPhone/iPod)
     if(_lastMenuOriginCellPath != nil &&
        [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -124,8 +127,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)onActiveMapSourceIdChanged
+- (void)onLastMapSourceChanged
 {
+        /*TODO:
     // Change of map-source requires reloading of entire map section,
     // since not only name of active map source have changed, but also
     // set of presets available
@@ -165,8 +169,9 @@
                                     animated:YES
                               scrollPosition:UITableViewScrollPositionNone];
     });
+         */
 }
-
+/*
 - (void)onMapSourceNameChanged
 {
     // Reload row with name of map source
@@ -298,6 +303,19 @@
                               withRowAnimation:YES];
     });
 }
+*/
+
+- (void)onLocalResourcesChanged:(const QList<QString>&)ids
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
+        [indexSet addIndex:kMapSourcesAndPresetsSection];
+        [indexSet addIndex:kLayersSection];
+
+        [self.tableView reloadSections:indexSet
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    });
+}
 
 - (void)openMenu:(UIViewController*)menuViewController forCellAt:(NSIndexPath*)indexPath
 {
@@ -353,12 +371,13 @@
         case kMapSourcesAndPresetsSection:
             {
                 NSInteger rowsCount = 1 /* '[current map source name]' */;
-
+/*
+TODO:
                 // Append rows to show all available presets for current map source
                 OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
                 if(activeMapSource != nil)
                     rowsCount += [activeMapSource.presets count];
-
+*/
                 return rowsCount;
             }
         case kLayersSection:
@@ -404,13 +423,14 @@
         case kMapSourcesAndPresetsSection:
             if(indexPath.row == 0)
             {
-                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
+                //OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 
                 cellTypeId = submenuCell;
-                caption = activeMapSource.name;
+                caption = @"TODO";//activeMapSource.name;
             }
             else
             {
+                /*
                 OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 
                 NSUUID* presetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
@@ -440,6 +460,7 @@
                     }
                 }
                 caption = preset.name;
+                 */
             }
             break;
         case kLayersSection:
@@ -541,10 +562,12 @@
         }
         else
         {
+            /*
             OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 
             NSUUID* newPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
             activeMapSource.activePresetId = newPresetId;
+             */
         }
     }
     else if(indexPath.section == kLayersSection)

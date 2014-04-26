@@ -109,7 +109,7 @@
 
 - (void)collectState
 {
-    __weak OAMapRendererView* mapRendererView = [[OAMapRendererViewController instance] mapRendererView];
+    OAMapRendererView* __weak mapRendererView = [[OAMapRendererViewController instance] mapRendererView];
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 

@@ -20,6 +20,7 @@
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#define Item OAMapSourcesListViewController__Item
 @interface Item : NSObject
 @property OAMapSource* mapSource;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
@@ -27,12 +28,14 @@
 @implementation Item
 @end
 
+#define Item_MapStyle OAMapSourcesListViewController__Item_MapStyle
 @interface Item_MapStyle : Item
 @property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
 @end
 @implementation Item_MapStyle
 @end
 
+#define Item_MapStylePreset OAMapSourcesListViewController__Item_MapStylePreset
 @interface Item_MapStylePreset : Item
 @property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
 @property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
@@ -40,6 +43,7 @@
 @implementation Item_MapStylePreset
 @end
 
+#define Item_OnlineTileSource OAMapSourcesListViewController__Item_OnlineTileSource
 @interface Item_OnlineTileSource : Item
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
@@ -241,12 +245,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
 
         // Get proper name
-        auto name = mapStyle->name;
-        if(!name.endsWith(QLatin1String(".render.xml")))
-            name.append(QLatin1String(".render.xml"));
+        auto styleName = mapStyle->name;
+        if(!styleName.endsWith(QLatin1String(".render.xml")))
+            styleName.append(QLatin1String(".render.xml"));
 
         // Skip map styles that have already been referenced
-        if(referencedMapStyles.contains(name))
+        if(referencedMapStyles.contains(styleName))
             continue;
 
         NSString* resourceId = resource->id.toNSString();

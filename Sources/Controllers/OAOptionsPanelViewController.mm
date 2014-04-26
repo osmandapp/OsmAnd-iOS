@@ -13,8 +13,39 @@
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/MapStyle.h>
+#include <OsmAndCore/Map/MapStylesPresets.h>
+#include <OsmAndCore/Map/IOnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+
 #include "Localization.h"
 #import "OALog.h"
+
+#define Item_MapStyle OAOptionsPanelViewController__Item_MapStyle
+@interface Item_MapStyle : NSObject
+@property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
+@end
+@implementation Item_MapStyle
+@end
+
+#define Item_MapStylePreset OAOptionsPanelViewController__Item_MapStylePreset
+@interface Item_MapStylePreset : NSObject
+@property OAMapSource* mapSource;
+@property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
+@property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
+@end
+@implementation Item_MapStylePreset
+@end
+
+#define Item_OnlineTileSource OAOptionsPanelViewController__Item_OnlineTileSource
+@interface Item_OnlineTileSource : NSObject
+@property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
+@end
+@implementation Item_OnlineTileSource
+@end
+
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, UIPopoverControllerDelegate>
 
@@ -25,6 +56,8 @@
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _lastMapSourceObserver;
+
+    NSMutableArray* _mapSourceAndVariants;
 
     NSIndexPath* _lastMenuOriginCellPath;
     UIPopoverController* _lastMenuPopoverController;
@@ -72,7 +105,8 @@
 - (void)ctor
 {
     _app = [OsmAndApp instance];
-    
+
+    _mapSourceAndVariants = [[NSMutableArray alloc] init];
     _lastMapSourceObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onLastMapSourceChanged)
                                                         andObserve:_app.data.lastMapSourceChangeObservable];
@@ -98,12 +132,14 @@
 {
     [super viewDidLoad];
 
-    //TODO: Capture map source and variants
+    [self obtainMapSourceAndVariants];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+
+    [self selectMapSource:animated];
     /*TODO:
     // Perform selection of proper preset
     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
@@ -112,6 +148,7 @@
                                 animated:animated
                           scrollPosition:UITableViewScrollPositionNone];
     */
+
     // Deselect menu origin cell if reopened (on iPhone/iPod)
     if(_lastMenuOriginCellPath != nil &&
        [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
@@ -129,8 +166,108 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)obtainMapSourceAndVariants
+{
+    [_mapSourceAndVariants removeAllObjects];
+
+    OAMapSource* mapSource = _app.data.lastMapSource;
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+
+    // Online tile sources are simple to process:
+    if(resource->type == OsmAndResourceType::OnlineTileSources)
+    {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
+
+        Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
+        item.onlineTileSource = onlineTileSources->getSourceByName(QString::fromNSString(mapSource.subresourceId));
+
+        [_mapSourceAndVariants addObject:item];
+        return;
+    }
+
+    // For map styles, first find root map style
+    std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
+    if(resource->type == OsmAndResourceType::MapStyle)
+    {
+        mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+    }
+    else if(resource->type == OsmAndResourceType::MapStylesPresets)
+    {
+        const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
+        const auto& preset = *presets->getCollection().begin();
+
+        // Get proper name
+        auto name = preset->styleName;
+        if(!name.endsWith(QLatin1String(".render.xml")))
+            name.append(QLatin1String(".render.xml"));
+
+        // Get map style
+        const auto citMapStyle = _app.resourcesManager->mapStylesCollection->getCollection().constFind(name);
+        mapStyle = *citMapStyle;
+    }
+
+    Item_MapStyle* mapStyleItem = [[Item_MapStyle alloc] init];
+    mapStyleItem.mapStyle = mapStyle;
+    [_mapSourceAndVariants addObject:mapStyleItem];
+
+    // Then find all presets for it
+    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesPresetsResources;
+    const auto builtinResources = _app.resourcesManager->getBuiltInResources();
+    for(const auto& builtinResource : builtinResources)
+    {
+        if(builtinResource->type != OsmAndResourceType::MapStylesPresets)
+            continue;
+
+        mapStylesPresetsResources.push_back(builtinResource);
+    }
+
+    const auto localResources = _app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+    {
+        if(localResource->type != OsmAndResourceType::MapStylesPresets)
+            continue;
+
+        mapStylesPresetsResources.push_back(localResource);
+    }
+
+    for(const auto& resource : mapStylesPresetsResources)
+    {
+        const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
+        NSString* resourceId = resource->id.toNSString();
+
+        for(const auto& preset : presets->getCollection())
+        {
+            // Get proper name
+            auto styleName = mapStyle->name;
+            if(!styleName.endsWith(QLatin1String(".render.xml")))
+                styleName.append(QLatin1String(".render.xml"));
+
+            // Skip if not for current map style
+            if(styleName != mapStyle->name)
+                continue;
+
+            Item_MapStylePreset* item = [[Item_MapStylePreset alloc] init];
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                    andSubresource:preset->name.toNSString()];
+            item.mapStylePreset = preset;
+            item.mapStyle = mapStyle;
+
+            [_mapSourceAndVariants addObject:item];
+        }
+    }
+}
+
+- (void)selectMapSource:(BOOL)animated
+{
+    if(!self.isViewLoaded)
+        return;
+}
+
 - (void)onLastMapSourceChanged
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self selectMapSource:YES];
+    });
         /*TODO:
     // Change of map-source requires reloading of entire map section,
     // since not only name of active map source have changed, but also
@@ -292,23 +429,11 @@
     });
 }
 
-- (void)onMapSourcePresetChanged:(id)key
-{
-    // Key contains map-source preset that was changed. Since something in it have changed,
-    // ask to reload it's row completely
-    OAMapSourcePreset* preset = key;
-    OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-    NSUInteger indexOfPreset = [activeMapSource.presets indexOfPresetWithId:preset.uniqueId];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:indexOfPreset+1
-                                                                     inSection:kMapSourceAndVariantsSection] ]
-                              withRowAnimation:YES];
-    });
-}
 */
 
 - (void)onLocalResourcesChanged:(const QList<QString>&)ids
 {
+    [self obtainMapSourceAndVariants];
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
         [indexSet addIndex:kMapSourceAndVariantsSection];
@@ -371,19 +496,9 @@
     switch (section)
     {
         case kMapSourceAndVariantsSection:
-            {
-                NSInteger rowsCount = 1 /* '[current map source name]' */;
-/*
-TODO:
-                // Append rows to show all available presets for current map source
-                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-                if(activeMapSource != nil)
-                    rowsCount += [activeMapSource.presets count];
-*/
-                return rowsCount;
-            }
+            return [_mapSourceAndVariants count];
         case kLayersSection:
-            return 4;
+            return 4; //TODO: just a stub
         case kOptionsSection:
             return 3; /* 'Settings', 'Downloads', 'My data' */
             
@@ -425,13 +540,34 @@ TODO:
         case kMapSourceAndVariantsSection:
             if(indexPath.row == 0)
             {
-                //OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-
                 cellTypeId = submenuCell;
-                caption = @"TODO";//activeMapSource.name;
+
+                id item_ = [_mapSourceAndVariants firstObject];
+                if([item_ isKindOfClass:[Item_OnlineTileSource class]])
+                {
+                    Item_OnlineTileSource* item = (Item_OnlineTileSource*)item_;
+
+                    caption = item.onlineTileSource->name.toNSString();
+                }
+                else if([item_ isKindOfClass:[Item_MapStyle class]])
+                {
+                    Item_MapStyle* item = (Item_MapStyle*)item_;
+
+                    caption = item.mapStyle->title.toNSString();
+                }
             }
             else
             {
+                cellTypeId = mapSourcePresetCell;
+
+                id item_ = [_mapSourceAndVariants objectAtIndex:indexPath.row];
+                if([item_ isKindOfClass:[Item_MapStylePreset class]])
+                {
+                    Item_MapStylePreset* item = (Item_MapStylePreset*)item_;
+
+                    caption = item.mapStylePreset->name.toNSString();
+                    //TODO: icon
+                }
                 /*
                 OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 

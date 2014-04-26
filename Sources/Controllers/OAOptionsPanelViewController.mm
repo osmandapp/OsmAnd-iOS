@@ -30,7 +30,7 @@
     UIPopoverController* _lastMenuPopoverController;
 }
 
-#define kMapSourcesAndPresetsSection 0
+#define kMapSourceAndVariantsSection 0
 #define kLayersSection 1
 #define kOptionsSection 2
 #define kOptionsSection_SettingsRow 0
@@ -106,7 +106,7 @@
     // Perform selection of proper preset
     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
-                                                            inSection:kMapSourcesAndPresetsSection]
+                                                            inSection:kMapSourceAndVariantsSection]
                                 animated:animated
                           scrollPosition:UITableViewScrollPositionNone];
     */
@@ -152,11 +152,11 @@
         [_mapSourceAnyPresetChangeObserver observe:activeMapSource.anyPresetChangeObservable];
 
         // Reload entire section
-        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourcesAndPresetsSection]
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourceAndVariantsSection]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
 
         // If current menu origin cell is from this section, maintain selection
-        if(_lastMenuOriginCellPath != nil && _lastMenuOriginCellPath.section == kMapSourcesAndPresetsSection)
+        if(_lastMenuOriginCellPath != nil && _lastMenuOriginCellPath.section == kMapSourceAndVariantsSection)
         {
             [self.tableView selectRowAtIndexPath:_lastMenuOriginCellPath
                                         animated:YES
@@ -165,7 +165,7 @@
 
         // Perform selection of proper preset
         [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
-                                                                inSection:kMapSourcesAndPresetsSection]
+                                                                inSection:kMapSourceAndVariantsSection]
                                     animated:YES
                               scrollPosition:UITableViewScrollPositionNone];
     });
@@ -176,7 +176,7 @@
 {
     // Reload row with name of map source
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:kMapSourcesAndPresetsSection] ]
+        [self.tableView reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:0 inSection:kMapSourceAndVariantsSection] ]
                               withRowAnimation:UITableViewRowAnimationAutomatic];
     });
 }
@@ -192,7 +192,7 @@
         __block NSIndexPath* uiSelectedPresetIndexPath = nil;
         [[self.tableView indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSIndexPath* indexPath = obj;
-            if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
+            if(indexPath.section != kMapSourceAndVariantsSection || indexPath.row == 0)
                 return;
             uiSelectedPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
             uiSelectedPresetIndexPath = indexPath;
@@ -208,7 +208,7 @@
 
             // Select new
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
-                                                                    inSection:kMapSourcesAndPresetsSection]
+                                                                    inSection:kMapSourceAndVariantsSection]
                                         animated:YES
                                   scrollPosition:UITableViewScrollPositionNone];
         }
@@ -224,7 +224,7 @@
         OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
 
         [self.tableView beginUpdates];
-        NSInteger numberOfOldRows = [self.tableView numberOfRowsInSection:kMapSourcesAndPresetsSection] - 1;
+        NSInteger numberOfOldRows = [self.tableView numberOfRowsInSection:kMapSourceAndVariantsSection] - 1;
         NSInteger deltaBetweenNumberOfRows = numberOfOldRows - [activeMapSource.presets count];
         if(deltaBetweenNumberOfRows > 0)
         {
@@ -232,7 +232,7 @@
             for(NSInteger rowIdx = 0; rowIdx < deltaBetweenNumberOfRows; rowIdx++)
             {
                 [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows - rowIdx - 1
-                                                           inSection:kMapSourcesAndPresetsSection]];
+                                                           inSection:kMapSourceAndVariantsSection]];
             }
             [self.tableView deleteRowsAtIndexPaths:affectedRows
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -243,7 +243,7 @@
             for(NSInteger rowIdx = 0; rowIdx < -deltaBetweenNumberOfRows; rowIdx++)
             {
                 [affectedRows addObject:[NSIndexPath indexPathForRow:numberOfOldRows + rowIdx
-                                                           inSection:kMapSourcesAndPresetsSection]];
+                                                           inSection:kMapSourceAndVariantsSection]];
             }
             [self.tableView insertRowsAtIndexPaths:affectedRows
                                   withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -253,7 +253,7 @@
         for(NSInteger rowIdx = 0; rowIdx < [activeMapSource.presets count]; rowIdx++)
         {
             [affectedRows addObject:[NSIndexPath indexPathForRow:rowIdx
-                                                       inSection:kMapSourcesAndPresetsSection]];
+                                                       inSection:kMapSourceAndVariantsSection]];
         }
         [self.tableView reloadRowsAtIndexPaths:affectedRows
                               withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -265,7 +265,7 @@
         __block NSIndexPath* uiSelectedPresetIndexPath = nil;
         [[self.tableView indexPathsForSelectedRows] enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSIndexPath* indexPath = obj;
-            if(indexPath.section != kMapSourcesAndPresetsSection || indexPath.row == 0)
+            if(indexPath.section != kMapSourceAndVariantsSection || indexPath.row == 0)
                 return;
             uiSelectedPresetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
             uiSelectedPresetIndexPath = indexPath;
@@ -283,7 +283,7 @@
 
             // Select new
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:actualizedSelectionIndex + 1
-                                                                    inSection:kMapSourcesAndPresetsSection]
+                                                                    inSection:kMapSourceAndVariantsSection]
                                         animated:YES
                                   scrollPosition:UITableViewScrollPositionNone];
         }
@@ -299,7 +299,7 @@
     NSUInteger indexOfPreset = [activeMapSource.presets indexOfPresetWithId:preset.uniqueId];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[ [NSIndexPath indexPathForRow:indexOfPreset+1
-                                                                     inSection:kMapSourcesAndPresetsSection] ]
+                                                                     inSection:kMapSourceAndVariantsSection] ]
                               withRowAnimation:YES];
     });
 }
@@ -309,7 +309,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
-        [indexSet addIndex:kMapSourcesAndPresetsSection];
+        [indexSet addIndex:kMapSourceAndVariantsSection];
         [indexSet addIndex:kLayersSection];
 
         [self.tableView reloadSections:indexSet
@@ -368,7 +368,7 @@
 {
     switch (section)
     {
-        case kMapSourcesAndPresetsSection:
+        case kMapSourceAndVariantsSection:
             {
                 NSInteger rowsCount = 1 /* '[current map source name]' */;
 /*
@@ -394,8 +394,8 @@ TODO:
 {
     switch (section)
     {
-        case kMapSourcesAndPresetsSection:
-            return OALocalizedString(@"Maps");
+        case kMapSourceAndVariantsSection:
+            return OALocalizedString(@"Map");
         case kLayersSection:
             return OALocalizedString(@"Layers");
         case kOptionsSection:
@@ -420,7 +420,7 @@ TODO:
     NSString* caption = nil;
     switch (indexPath.section)
     {
-        case kMapSourcesAndPresetsSection:
+        case kMapSourceAndVariantsSection:
             if(indexPath.row == 0)
             {
                 //OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
@@ -511,8 +511,8 @@ TODO:
     //  - layers menu
     //  - options menu
     BOOL selectionAllowed = NO;
-    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row == 0);
-    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row == 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection && indexPath.row == 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kOptionsSection);
     if(!selectionAllowed)
@@ -522,13 +522,13 @@ TODO:
     NSArray* currentSelections = [tableView indexPathsForSelectedRows];
     
     // Only one menu is allowed to be selected
-    if(((indexPath.section == kMapSourcesAndPresetsSection ||
+    if(((indexPath.section == kMapSourceAndVariantsSection ||
          indexPath.section == kLayersSection) && indexPath.row == 0) ||
        indexPath.section == kOptionsSection)
     {
         for (NSIndexPath* selection in currentSelections)
         {
-            if(((selection.section == kMapSourcesAndPresetsSection ||
+            if(((selection.section == kMapSourceAndVariantsSection ||
                  selection.section == kLayersSection) && selection.row == 0) ||
                selection.section == kOptionsSection)
             {
@@ -539,11 +539,11 @@ TODO:
     }
     
     // Only one preset is allowed to be selected
-    if(indexPath.section == kMapSourcesAndPresetsSection && indexPath.row > 0)
+    if(indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0)
     {
         for (NSIndexPath* selection in currentSelections)
         {
-            if(selection.section == kMapSourcesAndPresetsSection && selection.row > 0 && selection.row != indexPath.row)
+            if(selection.section == kMapSourceAndVariantsSection && selection.row > 0 && selection.row != indexPath.row)
                 [tableView deselectRowAtIndexPath:selection animated:YES];
         }
     }
@@ -553,7 +553,7 @@ TODO:
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == kMapSourcesAndPresetsSection)
+    if(indexPath.section == kMapSourceAndVariantsSection)
     {
         if(indexPath.row == 0)
         {

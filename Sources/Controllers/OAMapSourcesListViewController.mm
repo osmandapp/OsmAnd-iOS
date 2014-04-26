@@ -388,7 +388,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
 
         caption = item.onlineTileSource->name.toNSString();
-        description = item.resource->id.toNSString();
+        description = nil;
+        //description = item.resource->id.toNSString();
     }
 
     // Obtain reusable cell or create one

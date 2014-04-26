@@ -92,7 +92,7 @@
     defaults.mapLastViewedState.elevationAngle = 90.0f;
 
     // Set offline maps as default map source
-    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.mapStylesPresets.xml"
+    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.map_styles_presets.xml"
                                                     andSubresource:@"General"];
 
     return defaults;

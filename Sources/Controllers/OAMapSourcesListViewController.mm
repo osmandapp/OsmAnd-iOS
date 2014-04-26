@@ -208,17 +208,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         for(const auto& preset : presets->getCollection())
         {
+            // Get proper name
+            auto name = preset->styleName;
+            if(!name.endsWith(QLatin1String(".render.xml")))
+                name.append(QLatin1String(".render.xml"));
+
             // Skip map styles that have already been referenced
-            if(referencedMapStyles.contains(preset->styleName))
+            if(referencedMapStyles.contains(name))
                 continue;
-            referencedMapStyles.insert(preset->styleName);
+            referencedMapStyles.insert(name);
 
             Item_MapStylePreset* item = [[Item_MapStylePreset alloc] init];
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                     andSubresource:preset->name.toNSString()];
             item.resource = resource;
             item.mapStylePreset = preset;
-            item.mapStyle = allMapStyles[preset->styleName];
+            const auto citMapStyle = allMapStyles.constFind(name);
+            if(citMapStyle == allMapStyles.cend())
+                continue;
+            item.mapStyle = *citMapStyle;
 
             [_offlineMapSources addObject:item];
         }
@@ -229,8 +237,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
 
+        // Get proper name
+        auto name = mapStyle->name;
+        if(!name.endsWith(QLatin1String(".render.xml")))
+            name.append(QLatin1String(".render.xml"));
+
         // Skip map styles that have already been referenced
-        if(referencedMapStyles.contains(mapStyle->name))
+        if(referencedMapStyles.contains(name))
             continue;
 
         NSString* resourceId = resource->id.toNSString();

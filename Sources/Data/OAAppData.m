@@ -62,15 +62,18 @@
 
 @synthesize lastMapSourceChangeObservable = _lastMapSourceChangeObservable;
 
-- (OAMapSource*)lastMapSourceByResourceName:(NSString*)resourceName
+- (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId
 {
     @synchronized(self)
     {
-        NSString* subresourceId = [_lastMapSources objectForKey:resourceName];
+        if(_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
+            return _lastMapSource;
+
+        NSString* subresourceId = [_lastMapSources objectForKey:resourceId];
         if(subresourceId == nil)
             return nil;
 
-        return [[OAMapSource alloc] initWithResource:resourceName
+        return [[OAMapSource alloc] initWithResource:resourceId
                                       andSubresource:subresourceId];
     }
 }

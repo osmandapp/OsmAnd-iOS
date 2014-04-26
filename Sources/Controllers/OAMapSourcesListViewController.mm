@@ -58,8 +58,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 
-    QHash< QString, std::shared_ptr< const OsmAnd::ResourcesManager::BuiltinResource > > _builtinResources;
-    QHash< QString, std::shared_ptr< const OsmAnd::ResourcesManager::LocalResource > > _localResources;
     NSMutableArray* _offlineMapSources;
     NSMutableArray* _onlineMapSources;
 }
@@ -139,7 +137,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [super viewWillAppear:animated];
 
     // Perform selection of proper preset
-    [self selectActiveMapSource:animated];
+    [self selectMapSource:animated];
 }
 
 - (void)didReceiveMemoryWarning
@@ -158,8 +156,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
 
-    _builtinResources = _app.resourcesManager->getBuiltInResources();
-    for(const auto& builtinResource : _builtinResources)
+    const auto builtinResources = _app.resourcesManager->getBuiltInResources();
+    for(const auto& builtinResource : builtinResources)
     {
         if(builtinResource->type == OsmAndResourceType::MapStylesPresets)
             mapStylesPresetsResources.push_back(builtinResource);
@@ -169,8 +167,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             onlineTileSourcesResources.push_back(builtinResource);
     }
 
-    _localResources = _app.resourcesManager->getLocalResources();
-    for(const auto& localResource : _localResources)
+    const auto localResources = _app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
     {
         if(localResource->type == OsmAndResourceType::MapStylesPresets)
             mapStylesPresetsResources.push_back(localResource);
@@ -205,6 +203,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
         NSString* resourceId = resource->id.toNSString();
+        OAMapSource* lastMapSource = [_app.data lastMapSourceByResourceId:resourceId];
 
         for(const auto& preset : presets->getCollection())
         {
@@ -219,8 +218,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             referencedMapStyles.insert(name);
 
             Item_MapStylePreset* item = [[Item_MapStylePreset alloc] init];
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andSubresource:preset->name.toNSString()];
+            item.mapSource = lastMapSource;
+            if(item.mapSource == nil)
+            {
+                item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                        andSubresource:preset->name.toNSString()];
+            }
             item.resource = resource;
             item.mapStylePreset = preset;
             const auto citMapStyle = allMapStyles.constFind(name);
@@ -249,12 +252,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString* resourceId = resource->id.toNSString();
 
         Item_MapStyle* item = [[Item_MapStyle alloc] init];
-        item.mapSource = [_app.data lastMapSourceByResourceName:resourceId];
-        if(item.mapSource == nil)
-        {
-            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andSubresource:nil];
-        }
+        item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                andSubresource:nil];
         item.resource = resource;
         item.mapStyle = mapStyle;
 
@@ -262,7 +261,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)selectActiveMapSource:(BOOL)animated
+- (void)selectMapSource:(BOOL)animated
 {
     if(!self.isViewLoaded)
         return;
@@ -271,7 +270,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if(newSelected == nil)
     {
         [_offlineMapSources enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if(![_app.data.lastMapSource isEqual:obj])
+            Item* item = (Item*)obj;
+            if(![_app.data.lastMapSource isEqual:item.mapSource])
                 return;
 
             newSelected = [NSIndexPath indexPathForRow:idx
@@ -282,7 +282,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if(newSelected == nil)
     {
         [_onlineMapSources enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if(![_app.data.lastMapSource isEqual:obj])
+            Item* item = (Item*)obj;
+            if(![_app.data.lastMapSource isEqual:item.mapSource])
                 return;
 
             newSelected = [NSIndexPath indexPathForRow:idx
@@ -310,7 +311,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self selectActiveMapSource:YES];
+        [self selectMapSource:YES];
     });
 }
 
@@ -382,6 +383,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         caption = item.mapStyle->title.toNSString();
         description = nil;
+        description = item.mapStylePreset->name.toNSString();
     }
     else if(someItem.resource->type == OsmAndResourceType::OnlineTileSources)
     {

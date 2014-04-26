@@ -17,7 +17,7 @@
 @property OAMapSource* lastMapSource;
 @property(readonly) OAObservable* lastMapSourceChangeObservable;
 
-- (OAMapSource*)lastMapSourceByResourceName:(NSString*)resourceName;
+- (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;
 
 @property(readonly) OAMapCrossSessionState* mapLastViewedState;
 

@@ -97,6 +97,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    //TODO: Capture map source and variants
 }
 
 - (void)viewWillAppear:(BOOL)animated

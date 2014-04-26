@@ -41,6 +41,17 @@
 @synthesize resourceId = _resourceId;
 @synthesize subresourceId = _subresourceId;
 
+- (BOOL)isEqual:(id)object
+{
+    if(self == object)
+        return YES;
+    if(object == nil || ![object isKindOfClass:[OAMapSource class]])
+        return NO;
+
+    OAMapSource* other = (OAMapSource*)object;
+    return [_resourceId isEqualToString:other.resourceId] && [_subresourceId isEqualToString:other.subresourceId];
+}
+
 #pragma mark - NSCoding
 
 #define kResourceId @"resource"

@@ -5,9 +5,7 @@
   Created by Alexey Pelykh on 3/18/14.
   Copyright (c) 2014 OsmAnd. All rights reserved.
 */
-"OsmAndOfflineMapSource" = "Offline by OsmAnd";
-"OsmAndOnlineMapSource_Mapnik" = "Mapnik at OsmAnd";
-"OAMapSourcePresetTypeGeneral" = "General";
-"OAMapSourcePresetTypeCar" = "Car";
-"OAMapSourcePresetTypeBicycle" = "Bicycle";
-"OAMapSourcePresetTypePedestrian" = "Pedestrian";
+"OsmAnd::MapStylePreset::Type::General" = "General";
+"OsmAnd::MapStylePreset::Type::Pedestrian" = "Pedestrian";
+"OsmAnd::MapStylePreset::Type::Bicycle" = "Bicycle";
+"OsmAnd::MapStylePreset::Type::Car" = "Car";

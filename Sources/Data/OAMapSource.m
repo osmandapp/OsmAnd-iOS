@@ -22,13 +22,25 @@
 }
 
 - (id)initWithResource:(NSString*)resourceId
-        andSubresource:(NSString*)subresourceId
 {
     self = [super init];
     if (self) {
         [self ctor];
         _resourceId = [resourceId copy];
-        _subresourceId = [subresourceId copy];
+        _variant = nil;
+
+    }
+    return self;
+}
+
+- (id)initWithResource:(NSString*)resourceId
+            andVariant:(NSString*)variant
+{
+    self = [super init];
+    if (self) {
+        [self ctor];
+        _resourceId = [resourceId copy];
+        _variant = [variant copy];
 
     }
     return self;
@@ -39,7 +51,7 @@
 }
 
 @synthesize resourceId = _resourceId;
-@synthesize subresourceId = _subresourceId;
+@synthesize variant = _variant;
 
 - (BOOL)isEqual:(id)object
 {
@@ -49,18 +61,18 @@
         return NO;
 
     OAMapSource* other = (OAMapSource*)object;
-    return [_resourceId isEqualToString:other.resourceId] && [_subresourceId isEqualToString:other.subresourceId];
+    return [_resourceId isEqualToString:other.resourceId] && [_variant isEqualToString:other.variant];
 }
 
 #pragma mark - NSCoding
 
 #define kResourceId @"resource"
-#define kSubresourceId @"subresource"
+#define kVariantId @"variant"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_resourceId forKey:kResourceId];
-    [aCoder encodeObject:_subresourceId forKey:kSubresourceId];
+    [aCoder encodeObject:_variant forKey:kVariantId];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -69,7 +81,7 @@
     if (self) {
         [self ctor];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
-        _subresourceId = [aDecoder decodeObjectForKey:kSubresourceId];
+        _variant = [aDecoder decodeObjectForKey:kVariantId];
     }
     return self;
 }
@@ -79,7 +91,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
-                                                             andSubresource:_subresourceId];
+                                                             andVariant:_variant];
 
     return clone;
 }

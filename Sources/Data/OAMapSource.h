@@ -10,10 +10,15 @@
 
 @interface OAMapSource : NSObject <NSCopying, NSCoding>
 
+- (id)initWithResource:(NSString*)resourceId;
 - (id)initWithResource:(NSString*)resourceId
-        andSubresource:(NSString*)subresourceId;
+        andVariant:(NSString*)variant;
 
+// "OnlineTileSources" or "MapStyle" resource
 @property(readonly) NSString* resourceId;
-@property(readonly) NSString* subresourceId;
+
+// For "OnlineTileSources": name of source
+// For "MapStyle": name of preset or nil
+@property(readonly) NSString* variant;
 
 @end

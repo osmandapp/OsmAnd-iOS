@@ -17,8 +17,9 @@
 #include <QStandardPaths>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/MapStylesPresets.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
+#include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
@@ -861,38 +862,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
-        const auto resourceId = QString::fromNSString(_app.data.lastMapSource.resourceId);
-        const auto subresourceId = QString::fromNSString(_app.data.lastMapSource.subresourceId);
+        OAMapSource* lastMapSource = _app.data.lastMapSource;
+        const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
         const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        if(mapSourceResource->type == OsmAndResourceType::MapStylesPresets)
-        {
-            const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(mapSourceResource->metadata)->presets;
-
-            // Get preset
-            const auto preset = presets->getPresetByName(subresourceId);
-            NSAssert(preset, @"Failed to resolve map style preset with name '%s'", qPrintable(subresourceId));
-
-            // Get map style for that preset
-            std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-            const auto styleResolved = _app.resourcesManager->mapStylesCollection->obtainBakedStyle(preset->styleName, mapStyle);
-            NSAssert(styleResolved, @"Failed to resolve style with name '%s'", qPrintable(preset->styleName));
-
-            // Configure offline map data provider with given settings
-            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
-            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.resourcesManager->obfsCollection,
-                                                                             mapStyle,
-                                                                             mapView.contentScaleFactor,
-                                                                             externalResourcesProvider));
-            _offlineMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
-            _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
-                                                                                       256 * mapView.contentScaleFactor,
-                                                                                       mapView.contentScaleFactor));
-            [mapView setProvider:_rasterMapProvider
-                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-            _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
-            [mapView addSymbolProvider:_offlineMapSymbolsProvider];
-        }
-        else if(mapSourceResource->type == OsmAndResourceType::MapStyle)
+        if(mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
 
@@ -902,6 +875,15 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                                              mapStyle,
                                                                              mapView.contentScaleFactor,
                                                                              externalResourcesProvider));
+
+            // Configure with preset if such is set
+            if(lastMapSource.variant != nil)
+            {
+                const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
+                if(preset)
+                    _offlineMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
+            }
+
             _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
                                                                                        256 * mapView.contentScaleFactor,
                                                                                        mapView.contentScaleFactor));
@@ -914,8 +896,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         {
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
 
-            const auto& onlineMapTileProvider = onlineTileSources->createProviderFor(subresourceId);
-            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%s'", qPrintable(subresourceId));
+            const auto& onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
+            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%@'", lastMapSource.variant);
             onlineMapTileProvider->setLocalCachePath(_app.cachePath);
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider

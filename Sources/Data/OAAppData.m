@@ -49,7 +49,7 @@
         // Store previous, if such exists
         if(_lastMapSource != nil)
         {
-            [_lastMapSources setObject:_lastMapSource.subresourceId
+            [_lastMapSources setObject:_lastMapSource.variant
                                 forKey:_lastMapSource.resourceId];
         }
 
@@ -69,12 +69,12 @@
         if(_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
             return _lastMapSource;
 
-        NSString* subresourceId = [_lastMapSources objectForKey:resourceId];
-        if(subresourceId == nil)
+        NSString* variant = [_lastMapSources objectForKey:resourceId];
+        if(variant == nil)
             return nil;
 
         return [[OAMapSource alloc] initWithResource:resourceId
-                                      andSubresource:subresourceId];
+                                          andVariant:variant];
     }
 }
 
@@ -95,8 +95,8 @@
     defaults.mapLastViewedState.elevationAngle = 90.0f;
 
     // Set offline maps as default map source
-    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.map_styles_presets.xml"
-                                                    andSubresource:@"General"];
+    defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.render.xml"
+                                                        andVariant:@"type_general"];
 
     return defaults;
 }

@@ -15,7 +15,8 @@
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/MapStyle.h>
-#include <OsmAndCore/Map/MapStylesPresets.h>
+#include <OsmAndCore/Map/MapStylePreset.h>
+#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -179,76 +180,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
 
         Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
-        item.onlineTileSource = onlineTileSources->getSourceByName(QString::fromNSString(mapSource.subresourceId));
+        item.onlineTileSource = onlineTileSources->getSourceByName(QString::fromNSString(mapSource.variant));
 
         [_mapSourceAndVariants addObject:item];
-        return;
     }
-
-    // For map styles, first find root map style
-    std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-    if(resource->type == OsmAndResourceType::MapStyle)
+    else if(resource->type == OsmAndResourceType::MapStyle)
     {
-        mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-    }
-    else if(resource->type == OsmAndResourceType::MapStylesPresets)
-    {
-        const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
-        const auto& preset = *presets->getCollection().begin();
-
-        // Get proper name
-        auto name = preset->styleName;
-        if(!name.endsWith(QLatin1String(".render.xml")))
-            name.append(QLatin1String(".render.xml"));
-
-        // Get map style
-        const auto citMapStyle = _app.resourcesManager->mapStylesCollection->getCollection().constFind(name);
-        mapStyle = *citMapStyle;
-    }
-
-    Item_MapStyle* mapStyleItem = [[Item_MapStyle alloc] init];
-    mapStyleItem.mapStyle = mapStyle;
-    [_mapSourceAndVariants addObject:mapStyleItem];
-
-    // Then find all presets for it
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesPresetsResources;
-    const auto builtinResources = _app.resourcesManager->getBuiltInResources();
-    for(const auto& builtinResource : builtinResources)
-    {
-        if(builtinResource->type != OsmAndResourceType::MapStylesPresets)
-            continue;
-
-        mapStylesPresetsResources.push_back(builtinResource);
-    }
-
-    const auto localResources = _app.resourcesManager->getLocalResources();
-    for(const auto& localResource : localResources)
-    {
-        if(localResource->type != OsmAndResourceType::MapStylesPresets)
-            continue;
-
-        mapStylesPresetsResources.push_back(localResource);
-    }
-
-    for(const auto& resource : mapStylesPresetsResources)
-    {
-        const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
         NSString* resourceId = resource->id.toNSString();
 
-        for(const auto& preset : presets->getCollection())
+        // Get the style
+        const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+        Item_MapStyle* mapStyleItem = [[Item_MapStyle alloc] init];
+        mapStyleItem.mapStyle = mapStyle;
+        [_mapSourceAndVariants addObject:mapStyleItem];
+
+        const auto& presets = _app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+        for(const auto& preset : presets)
         {
-            // Get proper name
-            auto styleName = mapStyle->name;
-            if(!styleName.endsWith(QLatin1String(".render.xml")))
-                styleName.append(QLatin1String(".render.xml"));
-
-            // Skip if not for current map style
-            if(styleName != mapStyle->name)
-                continue;
-
             Item_MapStylePreset* item = [[Item_MapStylePreset alloc] init];
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andSubresource:preset->name.toNSString()];
+                                                        andVariant:preset->name.toNSString()];
             item.mapStylePreset = preset;
             item.mapStyle = mapStyle;
 

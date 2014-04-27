@@ -16,7 +16,8 @@
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/MapStyle.h>
-#include <OsmAndCore/Map/MapStylesPresets.h>
+#include <OsmAndCore/Map/MapStylePreset.h>
+#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -33,14 +34,6 @@
 @property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
 @end
 @implementation Item_MapStyle
-@end
-
-#define Item_MapStylePreset OAMapSourcesListViewController__Item_MapStylePreset
-@interface Item_MapStylePreset : Item
-@property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
-@property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
-@end
-@implementation Item_MapStylePreset
 @end
 
 #define Item_OnlineTileSource OAMapSourcesListViewController__Item_OnlineTileSource
@@ -156,16 +149,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_onlineMapSources removeAllObjects];
 
     // Collect all needed resources
-    QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesPresetsResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
 
     const auto builtinResources = _app.resourcesManager->getBuiltInResources();
     for(const auto& builtinResource : builtinResources)
     {
-        if(builtinResource->type == OsmAndResourceType::MapStylesPresets)
-            mapStylesPresetsResources.push_back(builtinResource);
-        else if(builtinResource->type == OsmAndResourceType::MapStyle)
+        if(builtinResource->type == OsmAndResourceType::MapStyle)
             mapStylesResources.push_back(builtinResource);
         else if(builtinResource->type == OsmAndResourceType::OnlineTileSources)
             onlineTileSourcesResources.push_back(builtinResource);
@@ -174,9 +164,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     const auto localResources = _app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
     {
-        if(localResource->type == OsmAndResourceType::MapStylesPresets)
-            mapStylesPresetsResources.push_back(localResource);
-        else if(localResource->type == OsmAndResourceType::MapStyle)
+        if(localResource->type == OsmAndResourceType::MapStyle)
             mapStylesResources.push_back(localResource);
         else if(localResource->type == OsmAndResourceType::OnlineTileSources)
             onlineTileSourcesResources.push_back(localResource);
@@ -192,50 +180,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andSubresource:onlineTileSource->name.toNSString()];
+                                                    andVariant:onlineTileSource->name.toNSString()];
             item.resource = resource;
             item.onlineTileSource = onlineTileSource;
 
             [_onlineMapSources addObject:item];
-        }
-    }
-
-    // Process map styles presets
-    QSet< QString > referencedMapStyles;
-    const auto allMapStyles = _app.resourcesManager->mapStylesCollection->getCollection();
-    for(const auto& resource : mapStylesPresetsResources)
-    {
-        const auto& presets = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStylesPresetsMetadata>(resource->metadata)->presets;
-        NSString* resourceId = resource->id.toNSString();
-        OAMapSource* lastMapSource = [_app.data lastMapSourceByResourceId:resourceId];
-
-        for(const auto& preset : presets->getCollection())
-        {
-            // Get proper name
-            auto name = preset->styleName;
-            if(!name.endsWith(QLatin1String(".render.xml")))
-                name.append(QLatin1String(".render.xml"));
-
-            // Skip map styles that have already been referenced
-            if(referencedMapStyles.contains(name))
-                continue;
-            referencedMapStyles.insert(name);
-
-            Item_MapStylePreset* item = [[Item_MapStylePreset alloc] init];
-            item.mapSource = lastMapSource;
-            if(item.mapSource == nil)
-            {
-                item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andSubresource:preset->name.toNSString()];
-            }
-            item.resource = resource;
-            item.mapStylePreset = preset;
-            const auto citMapStyle = allMapStyles.constFind(name);
-            if(citMapStyle == allMapStyles.cend())
-                continue;
-            item.mapStyle = *citMapStyle;
-
-            [_offlineMapSources addObject:item];
         }
     }
 
@@ -244,20 +193,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
 
-        // Get proper name
-        auto styleName = mapStyle->name;
-        if(!styleName.endsWith(QLatin1String(".render.xml")))
-            styleName.append(QLatin1String(".render.xml"));
-
-        // Skip map styles that have already been referenced
-        if(referencedMapStyles.contains(styleName))
-            continue;
-
         NSString* resourceId = resource->id.toNSString();
 
         Item_MapStyle* item = [[Item_MapStyle alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                andSubresource:nil];
+        item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
+        if(item.mapSource == nil)
+        {
+            const auto presetsForMapStyle = _app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+            const auto itFirstFoundPreset = presetsForMapStyle.begin();
+            NSString* variant = (itFirstFoundPreset == presetsForMapStyle.cend()) ? nil : (*itFirstFoundPreset)->name.toNSString();
+            item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                        andVariant:variant];
+        }
         item.resource = resource;
         item.mapStyle = mapStyle;
 
@@ -380,14 +327,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         caption = item.mapStyle->title.toNSString();
         description = nil;
-    }
-    else if(someItem.resource->type == OsmAndResourceType::MapStylesPresets)
-    {
-        Item_MapStylePreset* item = (Item_MapStylePreset*)someItem;
-
-        caption = item.mapStyle->title.toNSString();
-        description = nil;
-        description = item.mapStylePreset->name.toNSString();
+        description = item.mapSource.variant;
     }
     else if(someItem.resource->type == OsmAndResourceType::OnlineTileSources)
     {
@@ -395,7 +335,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         caption = item.onlineTileSource->name.toNSString();
         description = nil;
-        //description = item.resource->id.toNSString();
+        description = item.resource->id.toNSString();
     }
 
     // Obtain reusable cell or create one

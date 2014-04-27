@@ -37,6 +37,11 @@
     return self;
 }
 
+- (void)dealloc
+{
+    [self dtor];
+}
+
 #define kAppData @"app_data"
 
 - (void)ctor
@@ -78,6 +83,10 @@
         [_locationServices start];
 }
 
+- (void)dtor
+{
+}
+
 - (void)initResources
 {
     // Initialize resources manager
@@ -88,8 +97,6 @@
                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
                                                             : QString::null,
                                                          QString::fromNSString(NSTemporaryDirectory())));
-
-    //TODO: Verify previous application data
 }
 
 - (NSDictionary*)inflateInitialUserDefaults

@@ -865,6 +865,12 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         OAMapSource* lastMapSource = _app.data.lastMapSource;
         const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
         const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+        if(!mapSourceResource)
+        {
+            // Missing resource, shift to default
+            _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+            return;
+        }
         if(mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
@@ -896,8 +902,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         {
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
 
-            const auto& onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
-            NSAssert(onlineMapTileProvider, @"Failed to resolve online tile provider with name '%@'", lastMapSource.variant);
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
+            if(!onlineMapTileProvider)
+            {
+                // Missing resource, shift to default
+                _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                return;
+            }
             onlineMapTileProvider->setLocalCachePath(_app.cachePath);
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider

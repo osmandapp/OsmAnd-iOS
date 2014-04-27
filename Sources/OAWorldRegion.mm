@@ -52,13 +52,13 @@
     return self;
 }
 
-- (id)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)worldRegion withLocalizedName:(NSString*)localizedName
+- (id)initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName
 {
     self = [super init];
     if (self) {
         [self ctor];
-        _regionId = worldRegion->id.toNSString();
-        _nativeName = worldRegion->name.toNSString();
+        _regionId = regionId;
+        _nativeName = nil;
         _localizedName = localizedName;
         _superregion = nil;
     }
@@ -116,76 +116,49 @@
     // Create root region
     OAWorldRegion* entireWorld = [[OAWorldRegion alloc] init];
 
-    // Collect main regions
-    const auto& itAfrica = loadedWorldRegions.find(OsmAnd::WorldRegions::AfricaRegionId);
-    if(itAfrica != loadedWorldRegions.end())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAfrica
-                                                 withLocalizedName:OALocalizedString(@"Africa")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itAfrica);
-    }
+    // Create main regions:
 
-    const auto& itAsia = loadedWorldRegions.find(OsmAnd::WorldRegions::AsiaRegionId);
-    if(itAsia != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAsia
-                                                 withLocalizedName:OALocalizedString(@"Asia")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itAsia);
-    }
+    OAWorldRegion* africaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::AfricaRegionId.toNSString()
+                                                   andLocalizedName:OALocalizedString(@"Africa")];
+    [entireWorld addSubregion:africaRegion];
+    [regionsLookupTable setValue:africaRegion forKey:africaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::AfricaRegionId);
 
-    const auto& itAustraliaAndOceania = loadedWorldRegions.find(OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId);
-    if(itAustraliaAndOceania != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAustraliaAndOceania
-                                                 withLocalizedName:OALocalizedString(@"Australia and Oceania")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itAustraliaAndOceania);
-    }
+    OAWorldRegion* asiaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::AsiaRegionId.toNSString()
+                                                 andLocalizedName:OALocalizedString(@"Asia")];
+    [entireWorld addSubregion:asiaRegion];
+    [regionsLookupTable setValue:asiaRegion forKey:asiaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::AsiaRegionId);
 
-    const auto& itCentralAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::CentralAmericaRegionId);
-    if(itCentralAmerica != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itCentralAmerica
-                                                 withLocalizedName:OALocalizedString(@"Central America")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itCentralAmerica);
-    }
+    OAWorldRegion* australiaAndOceaniaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()
+                                                                andLocalizedName:OALocalizedString(@"Australia and Oceania")];
+    [entireWorld addSubregion:australiaAndOceaniaRegion];
+    [regionsLookupTable setValue:australiaAndOceaniaRegion forKey:australiaAndOceaniaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId);
 
-    const auto& itEurope = loadedWorldRegions.find(OsmAnd::WorldRegions::EuropeRegionId);
-    if(itEurope != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itEurope
-                                                 withLocalizedName:OALocalizedString(@"Europe")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itEurope);
-    }
+    OAWorldRegion* centralAmericaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()
+                                                           andLocalizedName:OALocalizedString(@"Central America")];
+    [entireWorld addSubregion:centralAmericaRegion];
+    [regionsLookupTable setValue:centralAmericaRegion forKey:centralAmericaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::CentralAmericaRegionId);
 
-    const auto& itNorthAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::NorthAmericaRegionId);
-    if(itNorthAmerica != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itNorthAmerica
-                                                 withLocalizedName:OALocalizedString(@"North America")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itNorthAmerica);
-    }
+    OAWorldRegion* europeRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::EuropeRegionId.toNSString()
+                                                   andLocalizedName:OALocalizedString(@"Europe")];
+    [entireWorld addSubregion:europeRegion];
+    [regionsLookupTable setValue:europeRegion forKey:europeRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::EuropeRegionId);
 
-    const auto& itSouthAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::SouthAmericaRegionId);
-    if(itSouthAmerica != loadedWorldRegions.cend())
-    {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itSouthAmerica
-                                                 withLocalizedName:OALocalizedString(@"South America")];
-        [entireWorld addSubregion:newRegion];
-        [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
-        loadedWorldRegions.erase(itSouthAmerica);
-    }
+    OAWorldRegion* northAmericaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()
+                                                         andLocalizedName:OALocalizedString(@"North America")];
+    [entireWorld addSubregion:northAmericaRegion];
+    [regionsLookupTable setValue:northAmericaRegion forKey:northAmericaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::NorthAmericaRegionId);
+
+    OAWorldRegion* southAmericaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()
+                                                         andLocalizedName:OALocalizedString(@"South America")];
+    [entireWorld addSubregion:southAmericaRegion];
+    [regionsLookupTable setValue:southAmericaRegion forKey:southAmericaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::SouthAmericaRegionId);
 
     // Process remaining regions
     for(;;)
@@ -205,6 +178,7 @@
 
             OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
+            [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
             
             // Remove
             processedRegions++;

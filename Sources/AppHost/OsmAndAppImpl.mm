@@ -46,6 +46,8 @@
 
 - (void)ctor
 {
+    NSError* versionError = nil;
+
     // Get default paths
     _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
     OALog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
@@ -67,14 +69,24 @@
     NSString* worldMiniBasemapStamp = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap.obf"
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
-    NSError* versionError = nil;
     NSString* worldMiniBasemapStampContents = [NSString stringWithContentsOfFile:worldMiniBasemapStamp
                                                                   encoding:NSASCIIStringEncoding
                                                                      error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
 
-    [self initResources];
+    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
+                                                         _documentsPath.absolutePath(),
+                                                         QList<QString>(),
+                                                         _worldMiniBasemapFilename != nil
+                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                            : QString::null,
+                                                         QString::fromNSString(NSTemporaryDirectory())));
+
+    // Load world regions
+    NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"
+                                                                     ofType:@"ocbf"];
+    _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
 
     _mapModeObservable = [[OAObservable alloc] init];
     
@@ -85,18 +97,6 @@
 
 - (void)dtor
 {
-}
-
-- (void)initResources
-{
-    // Initialize resources manager
-    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
-                                                         _documentsPath.absolutePath(),
-                                                         QList<QString>(),
-                                                         _worldMiniBasemapFilename != nil
-                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                            : QString::null,
-                                                         QString::fromNSString(NSTemporaryDirectory())));
 }
 
 - (NSDictionary*)inflateInitialUserDefaults
@@ -110,6 +110,7 @@
 }
 
 @synthesize data = _data;
+@synthesize worldRegion = _worldRegion;
 
 @synthesize locationServices = _locationServices;
 

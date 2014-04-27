@@ -296,6 +296,10 @@
 		BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A2190D186F00D90F0A /* OsmAndApp.mm */; };
 		BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */; };
 		BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */; };
+		BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
+		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
+		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -501,6 +505,9 @@
 		BBE1D2A4190D186F00D90F0A /* OsmAndAppImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OsmAndAppImpl.h; path = AppHost/OsmAndAppImpl.h; sourceTree = "<group>"; };
 		BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OsmAndAppImpl.mm; path = AppHost/OsmAndAppImpl.mm; sourceTree = "<group>"; };
 		BBE1D2A6190D186F00D90F0A /* OsmAndAppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OsmAndAppProtocol.h; path = AppHost/OsmAndAppProtocol.h; sourceTree = "<group>"; };
+		BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
+		BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWorldRegion.mm; sourceTree = "<group>"; };
+		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -621,6 +628,8 @@
 				BB451EA418E19293005FBE09 /* Data */,
 				BB451EB518E1937C005FBE09 /* Services */,
 				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
+				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
+				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -673,6 +682,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
+				BBE1D2B5190D1C9600D90F0A /* regions.ocbf */,
 				BBBE40B31854DDCB00F1C144 /* HD */,
 			);
 			name = Embedded;
@@ -877,10 +887,10 @@
 				BBE1D2A0190D186F00D90F0A /* OALog.mm */,
 				BBE1D2A1190D186F00D90F0A /* OsmAndApp.h */,
 				BBE1D2A2190D186F00D90F0A /* OsmAndApp.mm */,
+				BBE1D2A6190D186F00D90F0A /* OsmAndAppProtocol.h */,
 				BBE1D2A3190D186F00D90F0A /* OsmAndAppCppProtocol.h */,
 				BBE1D2A4190D186F00D90F0A /* OsmAndAppImpl.h */,
 				BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */,
-				BBE1D2A6190D186F00D90F0A /* OsmAndAppProtocol.h */,
 			);
 			name = AppHost;
 			sourceTree = "<group>";
@@ -1063,6 +1073,7 @@
 				BB451E1218DA4180005FBE09 /* map_source_preset_type_bicycle_icon@2x.png in Resources */,
 				BB451EF318E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */,
 				BBBDAD5A18BBE74400E4A359 /* MapModeHUD~ipad.xib in Resources */,
+				BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */,
 				BB451E1418DA4180005FBE09 /* map_source_preset_type_car_icon@2x.png in Resources */,
 				BB451DCE18D70B5B005FBE09 /* HUD_search_icon.png in Resources */,
 				BB451F2318EB4194005FBE09 /* menu_item_stop_download_icon.png in Resources */,
@@ -1158,6 +1169,7 @@
 				BB451E8F18DCD224005FBE09 /* map_source_preset_type_bicycle_icon@2x.png in Resources */,
 				BB451EF418E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */,
 				BB451E9018DCD224005FBE09 /* MapModeHUD~ipad.xib in Resources */,
+				BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */,
 				BB451E9118DCD224005FBE09 /* map_source_preset_type_car_icon@2x.png in Resources */,
 				BB451E9218DCD224005FBE09 /* HUD_search_icon.png in Resources */,
 				BB451F2418EB4194005FBE09 /* menu_item_stop_download_icon.png in Resources */,
@@ -1231,6 +1243,7 @@
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
+				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -1268,6 +1281,7 @@
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
+				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,

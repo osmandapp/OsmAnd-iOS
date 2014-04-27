@@ -12,10 +12,12 @@
 #import "OAObservable.h"
 #import "OAAppData.h"
 #import "OALocationServices.h"
+#import "OAWorldRegion.h"
 
 @protocol OsmAndAppProtocol <NSObject>
 
 @property(readonly) OAAppData* data;
+@property(readonly) OAWorldRegion* worldRegion;
 
 @property(readonly) OALocationServices* locationServices;
 

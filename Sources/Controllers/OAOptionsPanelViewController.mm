@@ -140,7 +140,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillAppear:animated];
 
-    [self selectMapSource:animated];
+    [self selectLastMapSource:animated];
 
     // Deselect menu origin cell if reopened (on iPhone/iPod)
     if(_lastMenuOriginCellPath != nil &&
@@ -200,33 +200,50 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)selectMapSource:(BOOL)animated
+- (void)selectLastMapSource:(BOOL)animated
 {
     if(!self.isViewLoaded)
         return;
 
-    /*TODO:
-     // Perform selection of proper preset
-     OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
-     inSection:kMapSourceAndVariantsSection]
-     animated:animated
-     scrollPosition:UITableViewScrollPositionNone];
-     
-     // If current menu origin cell is from this section, maintain selection
-     if(_lastMenuOriginCellPath != nil && _lastMenuOriginCellPath.section == kMapSourceAndVariantsSection)
-     {
-     [self.tableView selectRowAtIndexPath:_lastMenuOriginCellPath
-     animated:YES
-     scrollPosition:UITableViewScrollPositionNone];
-     }
+    // Get last map source selection (if such exists)
+    NSIndexPath* lastMapSourceSelectionPath = nil;
+    NSArray* currentSelections = [self.tableView indexPathsForSelectedRows];
+    for (NSIndexPath* selection in currentSelections)
+    {
+        // Skip all selections not from map source and variants section,
+        // or that selects map source itself
+        if(selection.section != kMapSourceAndVariantsSection || selection.row == 0)
+            continue;
 
-     // Perform selection of proper preset
-     [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:[activeMapSource.presets indexOfPresetWithId:activeMapSource.activePresetId] + 1
-     inSection:kMapSourceAndVariantsSection]
-     animated:YES
-     scrollPosition:UITableViewScrollPositionNone];
-     */
+        lastMapSourceSelectionPath = selection;
+        break;
+    }
+
+    // New selection
+    __block NSIndexPath* newMapSourceSelectionPath = nil;
+    [_mapSourceAndVariants enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if([obj isKindOfClass:[Item_MapStylePreset class]])
+        {
+            Item_MapStylePreset* item = (Item_MapStylePreset*)obj;
+            if(![item.mapSource isEqual:_app.data.lastMapSource])
+                return;
+
+            newMapSourceSelectionPath = [NSIndexPath indexPathForRow:idx
+                                                           inSection:kMapSourceAndVariantsSection];
+            *stop = YES;
+        }
+    }];
+
+    // If selection doesn't differ, do nothing
+    if(newMapSourceSelectionPath == nil || [newMapSourceSelectionPath isEqual:lastMapSourceSelectionPath])
+        return;
+
+    // Otherwise, deselect last and select new
+    [self.tableView deselectRowAtIndexPath:lastMapSourceSelectionPath
+                                  animated:animated];
+    [self.tableView selectRowAtIndexPath:newMapSourceSelectionPath
+                                animated:animated
+                          scrollPosition:UITableViewScrollPositionNone];
 }
 
 - (void)onLastMapSourceChanged
@@ -237,7 +254,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourceAndVariantsSection]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
 
-        [self selectMapSource:YES];
+        [self selectLastMapSource:YES];
     });
 }
 

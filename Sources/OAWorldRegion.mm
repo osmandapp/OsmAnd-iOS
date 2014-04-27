@@ -30,18 +30,18 @@
     return self;
 }
 
-- (id)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)worldRegion
+- (id)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)region
 {
     self = [super init];
     if (self) {
         [self ctor];
-        _regionId = worldRegion->id.toNSString();
-        _nativeName = worldRegion->name.toNSString();
+        _regionId = region->id.toNSString();
+        _nativeName = region->name.toNSString();
         _localizedName = nil;
         for(NSString* lang in [NSLocale preferredLanguages])
         {
-            const auto citLocalizedName = worldRegion->localizedNames.constFind(QString::fromNSString(lang));
-            if(citLocalizedName == worldRegion->localizedNames.cend())
+            const auto citLocalizedName = region->localizedNames.constFind(QString::fromNSString(lang));
+            if(citLocalizedName == region->localizedNames.cend())
                 continue;
 
             _localizedName = (*citLocalizedName).toNSString();

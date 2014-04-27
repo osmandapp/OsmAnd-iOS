@@ -5,7 +5,3 @@
   Created by Alexey Pelykh on 3/18/14.
   Copyright (c) 2014 OsmAnd. All rights reserved.
 */
-"OsmAnd::MapStylePreset::Type::General" = "General";
-"OsmAnd::MapStylePreset::Type::Pedestrian" = "Pedestrian";
-"OsmAnd::MapStylePreset::Type::Bicycle" = "Bicycle";
-"OsmAnd::MapStylePreset::Type::Car" = "Car";

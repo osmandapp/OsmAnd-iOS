@@ -327,7 +327,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         caption = item.mapStyle->title.toNSString();
         description = nil;
+#if defined(DEBUG)
         description = item.mapSource.variant;
+#endif
     }
     else if(someItem.resource->type == OsmAndResourceType::OnlineTileSources)
     {
@@ -335,7 +337,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         caption = item.onlineTileSource->name.toNSString();
         description = nil;
+#if defined(DEBUG)
         description = item.resource->id.toNSString();
+#endif
     }
 
     // Obtain reusable cell or create one

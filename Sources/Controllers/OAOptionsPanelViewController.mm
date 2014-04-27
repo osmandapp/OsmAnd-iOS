@@ -516,40 +516,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 {
                     Item_MapStylePreset* item = (Item_MapStylePreset*)item_;
 
-                    caption = item.mapStylePreset->name.toNSString();
-                    //TODO: icon
-                }
-                /*
-                OAMapSource* activeMapSource = [_app.data.mapSources mapSourceWithId:_app.data.activeMapSourceId];
-
-                NSUUID* presetId = [activeMapSource.presets idOfPresetAtIndex:indexPath.row - 1];
-                OAMapSourcePreset* preset = [activeMapSource.presets presetWithId:presetId];
-                
-                cellTypeId = mapSourcePresetCell;
-                if(preset.iconImageName != nil)
-                    icon = [UIImage imageNamed:preset.iconImageName];
-                else
-                {
-                    switch (preset.type)
+                    // Get icon and caption
+                    switch (item.mapStylePreset->type)
                     {
                         default:
-                        case OAMapSourcePresetTypeUndefined:
-                        case OAMapSourcePresetTypeGeneral:
+                        case OsmAnd::MapStylePreset::Type::Custom:
+                            caption = item.mapStylePreset->name.toNSString();
                             icon = [UIImage imageNamed:@"map_source_preset_type_general_icon.png"];
                             break;
-                        case OAMapSourcePresetTypeCar:
+                        case OsmAnd::MapStylePreset::Type::General:
+                            caption = OALocalizedString(@"General");
+                            icon = [UIImage imageNamed:@"map_source_preset_type_general_icon.png"];
+                            break;
+                        case OsmAnd::MapStylePreset::Type::Car:
+                            caption = OALocalizedString(@"Car");
                             icon = [UIImage imageNamed:@"map_source_preset_type_car_icon.png"];
                             break;
-                        case OAMapSourcePresetTypeBicycle:
+                        case OsmAnd::MapStylePreset::Type::Bicycle:
+                            caption = OALocalizedString(@"Bicycle");
                             icon = [UIImage imageNamed:@"map_source_preset_type_bicycle_icon.png"];
                             break;
-                        case OAMapSourcePresetTypePedestrian:
+                        case OsmAnd::MapStylePreset::Type::Pedestrian:
+                            caption = OALocalizedString(@"Pedestrian");
                             icon = [UIImage imageNamed:@"map_source_preset_type_pedestrian_icon.png"];
                             break;
                     }
                 }
-                caption = preset.name;
-                 */
             }
             break;
         case kLayersSection:

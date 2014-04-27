@@ -46,18 +46,26 @@
 
 - (void)ctor
 {
-    NSError* versionError = nil;
-
     // Get default paths
     _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
-    OALog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
     _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
-    OALog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
     _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
-    OALog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
 
     // First of all, initialize user defaults
     [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
+}
+
+- (void)dtor
+{
+}
+
+- (BOOL)initialize
+{
+    NSError* versionError = nil;
+
+    OALog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
+    OALog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
+    OALog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
 
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
@@ -70,8 +78,8 @@
                                                                       ofType:@"stamp"
                                                                  inDirectory:@"Shipped"];
     NSString* worldMiniBasemapStampContents = [NSString stringWithContentsOfFile:worldMiniBasemapStamp
-                                                                  encoding:NSASCIIStringEncoding
-                                                                     error:&versionError];
+                                                                        encoding:NSASCIIStringEncoding
+                                                                           error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
 
@@ -79,8 +87,8 @@
                                                          _documentsPath.absolutePath(),
                                                          QList<QString>(),
                                                          _worldMiniBasemapFilename != nil
-                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                            : QString::null,
+                                                         ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                         : QString::null,
                                                          QString::fromNSString(NSTemporaryDirectory())));
 
     // Load world regions
@@ -89,14 +97,12 @@
     _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
 
     _mapModeObservable = [[OAObservable alloc] init];
-    
+
     _locationServices = [[OALocationServices alloc] initWith:self];
     if(_locationServices.available && _locationServices.allowed)
         [_locationServices start];
-}
 
-- (void)dtor
-{
+    return YES;
 }
 
 - (NSDictionary*)inflateInitialUserDefaults

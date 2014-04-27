@@ -16,6 +16,8 @@
 
 @protocol OsmAndAppProtocol <NSObject>
 
+- (BOOL)initialize;
+
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
 

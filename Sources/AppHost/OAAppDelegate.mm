@@ -43,7 +43,7 @@
     
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
-    
+
 #if defined(DEBUG)
     // If this is a debug build, duplicate all core logs to a file
     std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
@@ -70,6 +70,9 @@
     };
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::FunctorLogSink(testflightLog, nullptr)));
 #endif
+
+    // Initialize application
+    [_app initialize];
 
     // Create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

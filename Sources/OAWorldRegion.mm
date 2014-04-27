@@ -10,6 +10,7 @@
 
 #include <OsmAndCore/WorldRegions.h>
 
+#import "Localization.h"
 #import "OALog.h"
 
 @implementation OAWorldRegion
@@ -36,8 +37,29 @@
         [self ctor];
         _regionId = worldRegion->id.toNSString();
         _nativeName = worldRegion->name.toNSString();
-        //TODO: correct localized name work
         _localizedName = nil;
+        for(NSString* lang in [NSLocale preferredLanguages])
+        {
+            const auto citLocalizedName = worldRegion->localizedNames.constFind(QString::fromNSString(lang));
+            if(citLocalizedName == worldRegion->localizedNames.cend())
+                continue;
+
+            _localizedName = (*citLocalizedName).toNSString();
+            break;
+        }
+        _superregion = nil;
+    }
+    return self;
+}
+
+- (id)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)worldRegion withLocalizedName:(NSString*)localizedName
+{
+    self = [super init];
+    if (self) {
+        [self ctor];
+        _regionId = worldRegion->id.toNSString();
+        _nativeName = worldRegion->name.toNSString();
+        _localizedName = localizedName;
         _superregion = nil;
     }
     return self;
@@ -98,7 +120,8 @@
     const auto& itAfrica = loadedWorldRegions.find(OsmAnd::WorldRegions::AfricaRegionId);
     if(itAfrica != loadedWorldRegions.end())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAfrica];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAfrica
+                                                 withLocalizedName:OALocalizedString(@"Africa")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itAfrica);
@@ -107,7 +130,8 @@
     const auto& itAsia = loadedWorldRegions.find(OsmAnd::WorldRegions::AsiaRegionId);
     if(itAsia != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAsia];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAsia
+                                                 withLocalizedName:OALocalizedString(@"Asia")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itAsia);
@@ -116,7 +140,8 @@
     const auto& itAustraliaAndOceania = loadedWorldRegions.find(OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId);
     if(itAustraliaAndOceania != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAustraliaAndOceania];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itAustraliaAndOceania
+                                                 withLocalizedName:OALocalizedString(@"Australia and Oceania")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itAustraliaAndOceania);
@@ -125,7 +150,8 @@
     const auto& itCentralAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::CentralAmericaRegionId);
     if(itCentralAmerica != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itCentralAmerica];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itCentralAmerica
+                                                 withLocalizedName:OALocalizedString(@"Central America")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itCentralAmerica);
@@ -134,7 +160,8 @@
     const auto& itEurope = loadedWorldRegions.find(OsmAnd::WorldRegions::EuropeRegionId);
     if(itEurope != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itEurope];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itEurope
+                                                 withLocalizedName:OALocalizedString(@"Europe")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itEurope);
@@ -143,7 +170,8 @@
     const auto& itNorthAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::NorthAmericaRegionId);
     if(itNorthAmerica != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itNorthAmerica];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itNorthAmerica
+                                                 withLocalizedName:OALocalizedString(@"North America")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itNorthAmerica);
@@ -152,7 +180,8 @@
     const auto& itSouthAmerica = loadedWorldRegions.find(OsmAnd::WorldRegions::SouthAmericaRegionId);
     if(itSouthAmerica != loadedWorldRegions.cend())
     {
-        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itSouthAmerica];
+        OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:*itSouthAmerica
+                                                 withLocalizedName:OALocalizedString(@"South America")];
         [entireWorld addSubregion:newRegion];
         [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
         loadedWorldRegions.erase(itSouthAmerica);
@@ -166,15 +195,15 @@
         QMutableHashIterator< QString, std::shared_ptr< const OsmAnd::WorldRegions::WorldRegion > > itRegion(loadedWorldRegions);
         while(itRegion.hasNext())
         {
-            const auto& regionEntry = itRegion.next();
-            NSString* regionId = regionEntry.key().toNSString();
+            const auto& region = itRegion.next().value();
+            NSString* parentRegionId = region->parentId.toNSString();
 
             // Try to find parent of this region
-            OAWorldRegion* parentRegion = [regionsLookupTable objectForKey:regionId];
+            OAWorldRegion* parentRegion = [regionsLookupTable objectForKey:parentRegionId];
             if(parentRegion == nil)
                 continue;
 
-            OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:regionEntry.value()];
+            OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
             
             // Remove
@@ -188,7 +217,11 @@
     }
 
     for(const auto& orphanedRegion : loadedWorldRegions)
-        OALog(@"Found orphaned region '%s'", qPrintable(orphanedRegion->id));
+    {
+        OALog(@"Found orphaned region '%s' in '%s'",
+              qPrintable(orphanedRegion->id),
+              qPrintable(orphanedRegion->parentId));
+    }
 
     return [entireWorld makeImmutable];
 }

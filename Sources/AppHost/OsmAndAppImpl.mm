@@ -99,7 +99,7 @@
     _mapModeObservable = [[OAObservable alloc] init];
 
     _locationServices = [[OALocationServices alloc] initWith:self];
-    if(_locationServices.available && _locationServices.allowed)
+    if (_locationServices.available && _locationServices.allowed)
         [_locationServices start];
 
     return YES;
@@ -125,7 +125,7 @@
 
 - (void)setMapMode:(OAMapMode)mapMode
 {
-    if(_mapMode == mapMode)
+    if (_mapMode == mapMode)
         return;
     _mapMode = mapMode;
     [_mapModeObservable notifyEvent];

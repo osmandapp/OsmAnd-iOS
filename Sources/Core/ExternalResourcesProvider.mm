@@ -25,9 +25,9 @@ ExternalResourcesProvider::~ExternalResourcesProvider()
 
 QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok /*= nullptr*/) const
 {
-    if(!useHD)
+    if (!useHD)
     {
-        if(ok)
+        if (ok)
             *ok = false;
         return QByteArray();
     }
@@ -40,23 +40,23 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     const auto resourcePath = [[NSBundle mainBundle] pathForResource:fileNameParts[0].toNSString()
                                                               ofType:fileNameParts[1].toNSString()
                                                          inDirectory:@"drawable-xhdpi"];
-    if(resourcePath == nil)
+    if (resourcePath == nil)
     {
-        if(ok)
+        if (ok)
             *ok = false;
         return QByteArray();
     }
     
     QFile resourceFile(QString::fromNSString(resourcePath));
-    if(!resourceFile.exists())
+    if (!resourceFile.exists())
     {
-        if(ok)
+        if (ok)
             *ok = false;
         return QByteArray();
     }
-    if(!resourceFile.open(QIODevice::ReadOnly))
+    if (!resourceFile.open(QIODevice::ReadOnly))
     {
-        if(ok)
+        if (ok)
             *ok = false;
         return QByteArray();
     }
@@ -64,14 +64,14 @@ QByteArray ExternalResourcesProvider::getResource(const QString& name, bool* ok 
     const auto data = resourceFile.readAll();
     resourceFile.close();
     
-    if(ok)
+    if (ok)
         *ok = true;
     return data;
 }
 
 bool ExternalResourcesProvider::containsResource(const QString& name) const
 {
-    if(!useHD)
+    if (!useHD)
         return false;
     
     auto resourceFileName = name;

@@ -109,25 +109,25 @@
 
 - (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
-    if(_handler != nil)
+    if (_handler != nil)
     {
         NSMethodSignature* handlerSignature = [_owner methodSignatureForSelector:_handler];
         NSAssert(handlerSignature != nil, @"Whoa! Something is messed up with selector %@ in %@", NSStringFromSelector(_handler), _owner);
         NSUInteger handlerArgsCount = [handlerSignature numberOfArguments] - 2; // Subtract "self" and "cmd_"
 
-        if(handlerArgsCount == 3)
+        if (handlerArgsCount == 3)
         {
             objc_msgSend(_owner, _handler, observer, key, value);
             return;
         }
         
-        if(handlerArgsCount == 2)
+        if (handlerArgsCount == 2)
         {
             objc_msgSend(_owner, _handler, observer, key);
             return;
         }
         
-        if(handlerArgsCount == 1)
+        if (handlerArgsCount == 1)
         {
             objc_msgSend(_owner, _handler, observer);
             return;
@@ -137,7 +137,7 @@
         return;
     }
     
-    if([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
+    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
     {
         [_owner handleObservedEventFrom:observer
                                 withKey:key
@@ -145,14 +145,14 @@
         return;
     }
     
-    if([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
+    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
     {
         [_owner handleObservedEventFrom:observer
                                 withKey:key];
         return;
     }
     
-    if([_owner respondsToSelector:@selector(handleObservedEventFrom:)])
+    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:)])
     {
         [_owner handleObservedEventFrom:observer];
         return;
@@ -170,7 +170,7 @@
 {
     @synchronized(self)
     {
-        if(_observable == nil)
+        if (_observable == nil)
             return NO;
 
         [_observable unregisterObserver:self];

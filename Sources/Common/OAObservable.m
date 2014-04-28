@@ -75,7 +75,7 @@
     for(id<OAObserverProtocol> observer in _observers)
     {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            if([observer respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
+            if ([observer respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
             {
                 [observer handleObservedEventFrom:self
                                           withKey:key
@@ -83,14 +83,14 @@
                 return;
             }
             
-            if([observer respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
+            if ([observer respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
             {
                 [observer handleObservedEventFrom:self
                                           withKey:key];
                 return;
             }
             
-            if([observer respondsToSelector:@selector(handleObservedEventFrom:)])
+            if ([observer respondsToSelector:@selector(handleObservedEventFrom:)])
             {
                 [observer handleObservedEventFrom:self];
                 return;

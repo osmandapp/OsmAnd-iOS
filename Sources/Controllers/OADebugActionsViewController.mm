@@ -124,9 +124,9 @@
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-    if(cell == nil)
+    if (cell == nil)
     {
-        if([cellTypeId isEqualToString:switchCell])
+        if ([cellTypeId isEqualToString:switchCell])
             cell = [[OATableViewCellWithSwitch alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
         else
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
@@ -135,7 +135,7 @@
     // Fill cell content
     cell.imageView.image = icon;
     cell.textLabel.text = caption;
-    if([cellTypeId isEqualToString:switchCell])
+    if ([cellTypeId isEqualToString:switchCell])
     {
         OATableViewCellWithSwitch* switchCell = (OATableViewCellWithSwitch*)cell;
         [switchCell.switchView setOn:boolValue];
@@ -171,9 +171,9 @@
 {
     /*// Deselect any currently selected (if not the same)
     NSIndexPath* currentlySelected = [tableView indexPathForSelectedRow];
-    if(currentlySelected != nil)
+    if (currentlySelected != nil)
     {
-        if([currentlySelected isEqual:indexPath])
+        if ([currentlySelected isEqual:indexPath])
             return indexPath;
         [tableView deselectRowAtIndexPath:currentlySelected animated:YES];
     }
@@ -189,7 +189,7 @@
     _app.data.activeMapSourceId = newActiveMapSourceId;
 
     // For iPhone/iPod, since this menu wasn't opened in popover, return
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
         [self.navigationController popViewControllerAnimated:YES];*/
 }
 

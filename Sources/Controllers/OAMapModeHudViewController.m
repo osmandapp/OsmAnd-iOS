@@ -78,7 +78,7 @@
 {
     [super viewDidLoad];
 	
-    if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
         [_driveModeButton showAndEnableInput];
     else
         [_driveModeButton hideAndDisableInput];
@@ -111,7 +111,7 @@
             
         case OAMapModePositionTrack:
             // Perform switch to follow-mode only in case location services have compass
-            if(_app.locationServices.compassPresent)
+            if (_app.locationServices.compassPresent)
                 newMode = OAMapModeFollow;
             break;
             
@@ -122,7 +122,7 @@
     
     // If user have denied location services for the application, show notification about that and
     // don't change the mode
-    if(_app.locationServices.denied && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
+    if (_app.locationServices.denied && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
     {
         [OALocationServices showDeniedAlert];
         return;
@@ -150,7 +150,7 @@
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if(_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+        if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
             [_driveModeButton showAndEnableInput];
         else
             [_driveModeButton hideAndDisableInput];
@@ -203,7 +203,7 @@
 
 - (IBAction)onDebugButtonClicked:(id)sender
 {
-    if(_debugHudViewController == nil)
+    if (_debugHudViewController == nil)
     {
         _debugHudViewController = [[OADebugHudViewController alloc] initWithNibName:@"DebugHUD" bundle:nil];
         [self addChildViewController:_debugHudViewController];

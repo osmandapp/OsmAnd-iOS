@@ -77,12 +77,12 @@
 
 - (void)styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration
 {
-    if([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 7.0)
     {
         // For iOS 7.0+ disable casting shadow. Instead use border for left and right panels
         container.clipsToBounds = NO;
 
-        if(container == self.centerPanelContainer && [[container.layer sublayers] count] == 1)
+        if (container == self.centerPanelContainer && [[container.layer sublayers] count] == 1)
         {
             CALayer* rightBorderLayer = [CALayer layer];
             rightBorderLayer.borderColor = [UIColor darkGrayColor].CGColor;

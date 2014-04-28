@@ -54,7 +54,7 @@
     // Obtain tableview and locate self
     UITableView* tableView = [self getTableView];
     NSIndexPath* ownPath = [tableView indexPathForCell:self];
-    if(tableView == nil || ![tableView.delegate conformsToProtocol:@protocol(OATableViewWithSwitchDelegate) ] || ownPath == nil)
+    if (tableView == nil || ![tableView.delegate conformsToProtocol:@protocol(OATableViewWithSwitchDelegate) ] || ownPath == nil)
     {
         OALog(@"Warning: lost state change");
         return;

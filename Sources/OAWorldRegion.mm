@@ -41,7 +41,7 @@
         for(NSString* lang in [NSLocale preferredLanguages])
         {
             const auto citLocalizedName = region->localizedNames.constFind(QString::fromNSString(lang));
-            if(citLocalizedName == region->localizedNames.cend())
+            if (citLocalizedName == region->localizedNames.cend())
                 continue;
 
             _localizedName = (*citLocalizedName).toNSString();
@@ -93,7 +93,7 @@
 
 - (OAWorldRegion*)makeImmutable
 {
-    if([_subregions isKindOfClass:[NSArray class]])
+    if ([_subregions isKindOfClass:[NSArray class]])
         return self;
     _subregions = [NSArray arrayWithArray:_subregions];
 
@@ -108,7 +108,7 @@
     OsmAnd::WorldRegions worldRegionsRegistry(QString::fromNSString(ocbfFilename));
 
     QHash< QString, std::shared_ptr< const OsmAnd::WorldRegions::WorldRegion > > loadedWorldRegions;
-    if(!worldRegionsRegistry.loadWorldRegions(loadedWorldRegions))
+    if (!worldRegionsRegistry.loadWorldRegions(loadedWorldRegions))
         return nil;
 
     NSMutableDictionary* regionsLookupTable = [[NSMutableDictionary alloc] initWithCapacity:loadedWorldRegions.size()];
@@ -173,7 +173,7 @@
 
             // Try to find parent of this region
             OAWorldRegion* parentRegion = [regionsLookupTable objectForKey:parentRegionId];
-            if(parentRegion == nil)
+            if (parentRegion == nil)
                 continue;
 
             OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:region];
@@ -186,7 +186,7 @@
         }
 
         // If all remaining are orphans, that's all
-        if(processedRegions == 0)
+        if (processedRegions == 0)
             break;
     }
 

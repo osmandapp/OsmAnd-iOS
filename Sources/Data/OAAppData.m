@@ -47,7 +47,7 @@
     @synchronized(self)
     {
         // Store previous, if such exists
-        if(_lastMapSource != nil)
+        if (_lastMapSource != nil)
         {
             [_lastMapSources setObject:_lastMapSource.variant
                                 forKey:_lastMapSource.resourceId];
@@ -66,11 +66,11 @@
 {
     @synchronized(self)
     {
-        if(_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
+        if (_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
             return _lastMapSource;
 
         NSString* variant = [_lastMapSources objectForKey:resourceId];
-        if(variant == nil)
+        if (variant == nil)
             return nil;
 
         return [[OAMapSource alloc] initWithResource:resourceId

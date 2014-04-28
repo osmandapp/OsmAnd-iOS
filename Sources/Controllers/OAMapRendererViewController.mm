@@ -178,7 +178,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 
     // Allow view to tear down OpenGLES context
-    if([self isViewLoaded])
+    if ([self isViewLoaded])
     {
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         [mapView releaseContext];
@@ -243,7 +243,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)viewDidDisappear:(BOOL)animated
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
 
     // Suspend rendering
@@ -253,13 +253,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return NO;
     
-    if(gestureRecognizer == _grElevation)
+    if (gestureRecognizer == _grElevation)
     {
         // Elevation gesture recognizer requires 2 touch points
-        if(gestureRecognizer.numberOfTouches != 2)
+        if (gestureRecognizer.numberOfTouches != 2)
             return NO;
 
         // Calculate vertical distance between touches
@@ -268,7 +268,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         const auto verticalDistance = fabsf(touch1.y - touch2.y);
 
         // Ignore this touch if vertical distance is too large
-        if(verticalDistance >= kElevationGestureMaxThreshold)
+        if (verticalDistance >= kElevationGestureMaxThreshold)
         {
 #if defined(DEBUG)
             OALog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
@@ -283,7 +283,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     // Elevation gesture recognizer should not be mixed with others
-    if(gestureRecognizer == _grElevation || otherGestureRecognizer == _grElevation)
+    if (gestureRecognizer == _grElevation || otherGestureRecognizer == _grElevation)
         return NO;
     
     return YES;
@@ -292,13 +292,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)zoomGestureDetected:(UIPinchGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     // If gesture has just began, just capture current zoom
-    if(recognizer.state == UIGestureRecognizerStateBegan)
+    if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
         _app.mapMode = OAMapModeFree;
@@ -308,7 +308,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     }
     
     // If gesture has been cancelled or failed, restore previous zoom
-    if(recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
+    if (recognizer.state == UIGestureRecognizerStateFailed || recognizer.state == UIGestureRecognizerStateCancelled)
     {
         mapView.zoom = _initialZoomLevelDuringGesture;
         return;
@@ -340,7 +340,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [mapView setTarget31:mapView.target31 - centerLocationDelta];
     
     // If this is the end of gesture, get velocity for animation
-    if(recognizer.state == UIGestureRecognizerStateEnded)
+    if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kZoomVelocityAbsLimit, recognizer.velocity, kZoomVelocityAbsLimit);
         [mapView animateZoomWith:velocity andDeceleration:kZoomDeceleration];
@@ -351,12 +351,12 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)moveGestureDetected:(UIPanGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    if(recognizer.state == UIGestureRecognizerStateBegan)
+    if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
         _app.mapMode = OAMapModeFree;
@@ -385,7 +385,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
     mapView.target31 = target31;
     
-    if(recognizer.state == UIGestureRecognizerStateEnded)
+    if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         // Obtain velocity from recognizer
         CGPoint screenVelocity = [recognizer velocityInView:self.view];
@@ -412,13 +412,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)rotateGestureDetected:(UIRotationGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     // Zeroify accumulated rotation on gesture begin
-    if(recognizer.state == UIGestureRecognizerStateBegan)
+    if (recognizer.state == UIGestureRecognizerStateBegan)
     {
         [mapView cancelAnimation];
         _app.mapMode = OAMapModeFree;
@@ -427,7 +427,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     }
     
     // Check if accumulated rotation is greater than threshold
-    if(fabs(_accumulatedRotationAngle) < kRotationGestureThresholdDegrees)
+    if (fabs(_accumulatedRotationAngle) < kRotationGestureThresholdDegrees)
     {
         _accumulatedRotationAngle += qRadiansToDegrees(recognizer.rotation);
         [recognizer setRotation:0];
@@ -467,7 +467,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Set rotation
     mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
     
-    if(recognizer.state == UIGestureRecognizerStateEnded)
+    if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees(recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
         [mapView animateAzimuthWith:velocity andDeceleration:kRotateDeceleration];
@@ -479,13 +479,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)zoomInGestureDetected:(UITapGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
     // Handle gesture only when it is ended
-    if(recognizer.state != UIGestureRecognizerStateEnded)
+    if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
     
     // Cancel animation (if any)
@@ -514,13 +514,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     // Handle gesture only when it is ended
-    if(recognizer.state != UIGestureRecognizerStateEnded)
+    if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
 
     // Cancel animation (if any)
@@ -558,7 +558,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
@@ -567,7 +567,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
     CGFloat angle = mapView.elevationAngle;
     angle -= angleDelta;
-    if(angle < kElevationMinAngle)
+    if (angle < kElevationMinAngle)
         angle = kElevationMinAngle;
     mapView.elevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
@@ -583,7 +583,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (id<OAMapRendererViewProtocol>)mapRendererView
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return nil;
     return (OAMapRendererView*)self.view;
 }
@@ -595,7 +595,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onMapRendererStateChanged:(id)observer withKey:(id)key
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
@@ -632,7 +632,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)animatedAlignAzimuthToNorth
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     // Since user iteracts with map, set mode to free
@@ -651,7 +651,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (BOOL)canZoomIn
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return NO;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
@@ -660,7 +660,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)animatedZoomIn
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     // Animate zoom-in by +1
@@ -674,7 +674,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (BOOL)canZoomOut
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return NO;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
@@ -683,7 +683,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)animatedZoomOut
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     // Animate zoom-in by -1
@@ -697,7 +697,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onMapModeChanged
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
@@ -708,7 +708,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             return;
             
         case OAMapModePositionTrack:
-            if(_app.locationServices.lastKnownLocation != nil)
+            if (_app.locationServices.lastKnownLocation != nil)
             {
                 // Fly to last-known position without changing anything but target
                 
@@ -729,7 +729,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             break;
             
         case OAMapModeFollow:
-            if(_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
+            if (_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
             {
                 // Fly to last-known position, change heading to last-known heading,
                 // set zoom to kMapModeFollowZoom and elevation angle to kElevationMinAngle
@@ -769,7 +769,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)onLocationServicesUpdate
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
@@ -780,11 +780,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     //TODO: update marker position
     
     // If map mode is position-track or follow, move to that position
-    if(_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+    if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
     {
         [mapView cancelAnimation];
         
-        if(_app.mapMode == OAMapModeFollow)
+        if (_app.mapMode == OAMapModeFollow)
         {
             const CGFloat zoomDelta = kMapModeFollowZoom - mapView.zoom;
             [mapView animateZoomBy:zoomDelta
@@ -807,7 +807,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                  zoomTiming:OAMapAnimationTimingFunctionEaseInOutQuadratic];
         
         // Update azimuth
-        if(_app.mapMode == OAMapModeFollow && !isnan(newHeading))
+        if (_app.mapMode == OAMapModeFollow && !isnan(newHeading))
         {
             const CGFloat azimuthDelta = OsmAnd::Utilities::normalizedAngleDegrees(newHeading - mapView.azimuth);
             [mapView animateAzimuthBy:azimuthDelta
@@ -843,20 +843,20 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
 - (void)updateCurrentMapSource
 {
-    if(![self isViewLoaded])
+    if (![self isViewLoaded])
         return;
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     @synchronized(self)
     {
-        if(!_mapSourceInvalidated)
+        if (!_mapSourceInvalidated)
             return;
         
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
         _offlineMapDataProvider.reset();
-        if(_offlineMapSymbolsProvider)
+        if (_offlineMapSymbolsProvider)
             [mapView removeSymbolProvider:_offlineMapSymbolsProvider];
         _offlineMapSymbolsProvider.reset();
         
@@ -865,13 +865,13 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         OAMapSource* lastMapSource = _app.data.lastMapSource;
         const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
         const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-        if(!mapSourceResource)
+        if (!mapSourceResource)
         {
             // Missing resource, shift to default
             _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
             return;
         }
-        if(mapSourceResource->type == OsmAndResourceType::MapStyle)
+        if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
 
@@ -883,10 +883,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                                              externalResourcesProvider));
 
             // Configure with preset if such is set
-            if(lastMapSource.variant != nil)
+            if (lastMapSource.variant != nil)
             {
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
-                if(preset)
+                if (preset)
                     _offlineMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
             }
 
@@ -898,12 +898,12 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
             [mapView addSymbolProvider:_offlineMapSymbolsProvider];
         }
-        else if(mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
+        else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
 
             const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
-            if(!onlineMapTileProvider)
+            if (!onlineMapTileProvider)
             {
                 // Missing resource, shift to default
                 _app.data.lastMapSource = [OAAppData defaults].lastMapSource;

@@ -143,7 +143,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self selectLastMapSource:animated];
 
     // Deselect menu origin cell if reopened (on iPhone/iPod)
-    if(_lastMenuOriginCellPath != nil &&
+    if (_lastMenuOriginCellPath != nil &&
        [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         [self.tableView deselectRowAtIndexPath:_lastMenuOriginCellPath
@@ -167,7 +167,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
 
     // Online tile sources are simple to process:
-    if(resource->type == OsmAndResourceType::OnlineTileSources)
+    if (resource->type == OsmAndResourceType::OnlineTileSources)
     {
         const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(resource->metadata)->sources;
 
@@ -176,7 +176,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         [_mapSourceAndVariants addObject:item];
     }
-    else if(resource->type == OsmAndResourceType::MapStyle)
+    else if (resource->type == OsmAndResourceType::MapStyle)
     {
         NSString* resourceId = resource->id.toNSString();
 
@@ -202,7 +202,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)selectLastMapSource:(BOOL)animated
 {
-    if(!self.isViewLoaded)
+    if (!self.isViewLoaded)
         return;
 
     // Get last map source selection (if such exists)
@@ -212,7 +212,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         // Skip all selections not from map source and variants section,
         // or that selects map source itself
-        if(selection.section != kMapSourceAndVariantsSection || selection.row == 0)
+        if (selection.section != kMapSourceAndVariantsSection || selection.row == 0)
             continue;
 
         lastMapSourceSelectionPath = selection;
@@ -222,10 +222,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // New selection
     __block NSIndexPath* newMapSourceSelectionPath = nil;
     [_mapSourceAndVariants enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if([obj isKindOfClass:[Item_MapStylePreset class]])
+        if ([obj isKindOfClass:[Item_MapStylePreset class]])
         {
             Item_MapStylePreset* item = (Item_MapStylePreset*)obj;
-            if(![item.mapSource isEqual:_app.data.lastMapSource])
+            if (![item.mapSource isEqual:_app.data.lastMapSource])
                 return;
 
             newMapSourceSelectionPath = [NSIndexPath indexPathForRow:idx
@@ -235,7 +235,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }];
 
     // If selection doesn't differ, do nothing
-    if(newMapSourceSelectionPath == nil || [newMapSourceSelectionPath isEqual:lastMapSourceSelectionPath])
+    if (newMapSourceSelectionPath == nil || [newMapSourceSelectionPath isEqual:lastMapSourceSelectionPath])
         return;
 
     // Otherwise, deselect last and select new
@@ -275,13 +275,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _lastMenuOriginCellPath = indexPath;
 
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         // For iPhone and iPod, push menu to navigation controller
         [self.navigationController pushViewController:menuViewController
                                              animated:YES];
     }
-    else //if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
     {
         // For iPad, open menu in a popover with it's own navigation controller
         UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
@@ -300,7 +300,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
        _lastMenuPopoverController == popoverController)
     {
         // Deselect menu item that was origin for this popover
@@ -365,18 +365,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch (indexPath.section)
     {
         case kMapSourceAndVariantsSection:
-            if(indexPath.row == 0)
+            if (indexPath.row == 0)
             {
                 cellTypeId = submenuCell;
 
                 id item_ = [_mapSourceAndVariants firstObject];
-                if([item_ isKindOfClass:[Item_OnlineTileSource class]])
+                if ([item_ isKindOfClass:[Item_OnlineTileSource class]])
                 {
                     Item_OnlineTileSource* item = (Item_OnlineTileSource*)item_;
 
                     caption = item.onlineTileSource->name.toNSString();
                 }
-                else if([item_ isKindOfClass:[Item_MapStyle class]])
+                else if ([item_ isKindOfClass:[Item_MapStyle class]])
                 {
                     Item_MapStyle* item = (Item_MapStyle*)item_;
 
@@ -388,7 +388,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cellTypeId = mapSourcePresetCell;
 
                 id item_ = [_mapSourceAndVariants objectAtIndex:indexPath.row];
-                if([item_ isKindOfClass:[Item_MapStylePreset class]])
+                if ([item_ isKindOfClass:[Item_MapStylePreset class]])
                 {
                     Item_MapStylePreset* item = (Item_MapStylePreset*)item_;
 
@@ -443,12 +443,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
             break;
     }
-    if(cellTypeId == nil)
+    if (cellTypeId == nil)
         cellTypeId = menuItemCell;
     
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
-    if(cell == nil)
+    if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
     
     // Fill cell content
@@ -472,35 +472,35 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection && indexPath.row == 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kOptionsSection);
-    if(!selectionAllowed)
+    if (!selectionAllowed)
         return nil;
     
     // Obtain current selection
     NSArray* currentSelections = [tableView indexPathsForSelectedRows];
     
     // Only one menu is allowed to be selected
-    if(((indexPath.section == kMapSourceAndVariantsSection ||
+    if (((indexPath.section == kMapSourceAndVariantsSection ||
          indexPath.section == kLayersSection) && indexPath.row == 0) ||
        indexPath.section == kOptionsSection)
     {
         for (NSIndexPath* selection in currentSelections)
         {
-            if(((selection.section == kMapSourceAndVariantsSection ||
+            if (((selection.section == kMapSourceAndVariantsSection ||
                  selection.section == kLayersSection) && selection.row == 0) ||
                selection.section == kOptionsSection)
             {
-                if(![selection isEqual:indexPath])
+                if (![selection isEqual:indexPath])
                     [tableView deselectRowAtIndexPath:selection animated:YES];
             }
         }
     }
     
     // Only one preset is allowed to be selected
-    if(indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0)
+    if (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0)
     {
         for (NSIndexPath* selection in currentSelections)
         {
-            if(selection.section == kMapSourceAndVariantsSection && selection.row > 0 && selection.row != indexPath.row)
+            if (selection.section == kMapSourceAndVariantsSection && selection.row > 0 && selection.row != indexPath.row)
                 [tableView deselectRowAtIndexPath:selection animated:YES];
         }
     }
@@ -510,9 +510,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if(indexPath.section == kMapSourceAndVariantsSection)
+    if (indexPath.section == kMapSourceAndVariantsSection)
     {
-        if(indexPath.row == 0)
+        if (indexPath.row == 0)
         {
             [self openMenu:[[UIStoryboard storyboardWithName:@"MapSources" bundle:nil] instantiateInitialViewController]
                  forCellAt:indexPath];
@@ -520,7 +520,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
         {
             id item_ = [_mapSourceAndVariants objectAtIndex:indexPath.row];
-            if([item_ isKindOfClass:[Item_MapStylePreset class]])
+            if ([item_ isKindOfClass:[Item_MapStylePreset class]])
             {
                 Item_MapStylePreset* item = (Item_MapStylePreset*)item_;
 
@@ -528,9 +528,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
     }
-    else if(indexPath.section == kLayersSection)
+    else if (indexPath.section == kLayersSection)
     {
-        if(indexPath.row == 0)
+        if (indexPath.row == 0)
         {
             //TODO: open menu
             OALog(@"open layers menu");
@@ -540,7 +540,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OALog(@"activate/deactivate layer");
         }
     }
-    else if(indexPath.section == kOptionsSection)
+    else if (indexPath.section == kOptionsSection)
     {
         switch (indexPath.row)
         {

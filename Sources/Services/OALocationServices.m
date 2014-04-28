@@ -101,7 +101,7 @@
 
 - (OALocationServicesStatus)status
 {
-    if(_waitingForAuthorization)
+    if (_waitingForAuthorization)
         return OALocationServicesStatusAuthorizing;
     return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
 }
@@ -111,7 +111,7 @@
 - (void)start
 {
     // Do nothing if waiting for authorization
-    if(self.status == OALocationServicesStatusAuthorizing)
+    if (self.status == OALocationServicesStatusAuthorizing)
         return;
     
     BOOL didChange = NO;
@@ -129,7 +129,7 @@
     // kCLLocationAccuracyBestForNavigation (when plugged in) && kCLLocationAccuracyBest - during navigation
     
     // Set desired accuracy depending on app mode, and query for updates
-    if(!_locationActive)
+    if (!_locationActive)
     {
         _waitingForAuthorization = !self.allowed;
         
@@ -140,14 +140,14 @@
     }
     
     // Also, if compass is available, query it for updates
-    if(!_compassActive && [CLLocationManager headingAvailable])
+    if (!_compassActive && [CLLocationManager headingAvailable])
     {
        [_manager startUpdatingHeading];
         _compassActive = YES;
         didChange = YES;
     }
     
-    if(didChange)
+    if (didChange)
         [_statusObservable notifyEvent];
 }
 
@@ -155,20 +155,20 @@
 {
     BOOL didChange = NO;
     
-    if(_waitingForAuthorization)
+    if (_waitingForAuthorization)
     {
         _waitingForAuthorization = NO;
         didChange = YES;
     }
     
-    if(_locationActive)
+    if (_locationActive)
     {
         [_manager stopUpdatingLocation];
         _locationActive = NO;
         didChange = YES;
     }
     
-    if(_compassActive)
+    if (_compassActive)
     {
         [_manager stopUpdatingHeading];
         _compassActive = NO;
@@ -179,7 +179,7 @@
                                                     name:UIDeviceOrientationDidChangeNotification
                                                   object:nil];
     
-    if(didChange)
+    if (didChange)
        [_statusObservable notifyEvent];
     
     // If location services are stopped, set free mode for map, since to location data available
@@ -189,7 +189,7 @@
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
     // If services were running, but now authorization was revoked, stop them
-    if(status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
+    if (status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
         [self stop];
     
     [_stateObservable notifyEvent];
@@ -197,11 +197,11 @@
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
 {
-    if(error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
+    if (error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
     {
         // User have denied services or revoked authorization, stop the services
         // If services were running, but now authorization was revoked, stop them
-        if(_locationActive || _compassActive)
+        if (_locationActive || _compassActive)
             [self stop];
         return;
     }
@@ -211,14 +211,14 @@
 
 - (CLLocation*)lastKnownLocation
 {
-    if(_lastLocation != nil)
+    if (_lastLocation != nil)
         return _lastLocation;
     return _manager.location;
 }
 
 - (CLLocationDirection)lastKnownHeading
 {
-    if(!isnan(_lastHeading))
+    if (!isnan(_lastHeading))
         return _lastHeading;
     return _manager.heading.trueHeading;
 }
@@ -228,7 +228,7 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
     // If was waiting for authorization, now it's granted
-    if(_waitingForAuthorization)
+    if (_waitingForAuthorization)
     {
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
@@ -241,7 +241,7 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     // If was waiting for authorization, now it's granted
-    if(_waitingForAuthorization)
+    if (_waitingForAuthorization)
     {
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
@@ -253,7 +253,7 @@
 
 - (void)onMapModeChanged
 {
-    if(_app.mapMode == OAMapModeFree)
+    if (_app.mapMode == OAMapModeFree)
     {
         //TODO: if running, reduce accuracy to near-10-meter?
         return;
@@ -262,7 +262,7 @@
     // If mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
     // launch them (except if waiting for user authorization).
     OALocationServicesStatus status = self.status;
-    if(status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
         return;
     [self start];
 }

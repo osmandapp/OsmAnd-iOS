@@ -55,9 +55,9 @@
 
 - (BOOL)isEqual:(id)object
 {
-    if(self == object)
+    if (self == object)
         return YES;
-    if(object == nil || ![object isKindOfClass:[OAMapSource class]])
+    if (object == nil || ![object isKindOfClass:[OAMapSource class]])
         return NO;
 
     OAMapSource* other = (OAMapSource*)object;

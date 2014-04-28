@@ -23,7 +23,7 @@
 {
     for(UIView* view in [self subviews])
     {
-        if(view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event])
+        if (view.userInteractionEnabled && [view pointInside:[self convertPoint:point toView:view] withEvent:event])
             return YES;
     }
     

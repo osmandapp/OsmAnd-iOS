@@ -71,13 +71,13 @@
 
 - (void)openMenu:(UIViewController*)menuViewController fromView:(UIView*)view
 {
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         // For iPhone and iPod, push menu to navigation controller
         [self.navigationController pushViewController:menuViewController
                                              animated:YES];
     }
-    else //if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
     {
         // For iPad, open menu in a popover with it's own navigation controller
         UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
@@ -142,7 +142,7 @@
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    if([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
        _lastMenuPopoverController == popoverController)
     {
         _lastMenuPopoverController = nil;

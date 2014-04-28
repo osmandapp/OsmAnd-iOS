@@ -243,14 +243,14 @@
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
 {
-    if(!location)
+    if (!location)
         return NO;
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location
 {
-    if(!location)
+    if (!location)
         return NO;
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
@@ -373,7 +373,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 
 - (void)createContext
 {
-    if(_glShareGroup != nil)
+    if (_glShareGroup != nil)
         return;
 
 #if defined(DEBUG)
@@ -386,26 +386,26 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     
     // Create OpenGLES 2.0 contexts
     _glRenderContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
-    if(!_glRenderContext)
+    if (!_glRenderContext)
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context"];
         return;
     }
     _glShareGroup = [_glRenderContext sharegroup];
-    if(!_glShareGroup)
+    if (!_glShareGroup)
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context has no sharegroup"];
         return;
     }
     _glWorkerContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_glShareGroup];
-    if(!_glWorkerContext)
+    if (!_glWorkerContext)
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 worker context"];
         return;
     }
     
     // Set created context as current active
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -418,7 +418,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     rendererSetup.gpuWorkerThreadPrologue = [capturedWorkerContext](const OsmAnd::IMapRenderer* const renderer)
     {
         // Activate worker context
-        if(![EAGLContext setCurrentContext:capturedWorkerContext])
+        if (![EAGLContext setCurrentContext:capturedWorkerContext])
         {
             [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context in GPU worker thread"];
             return;
@@ -431,7 +431,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     _renderer->setup(rendererSetup);
 
     // Initialize rendering
-    if(!_renderer->initializeRendering())
+    if (!_renderer->initializeRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2 map renderer"];
         return;
@@ -442,7 +442,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 
 - (void)releaseContext
 {
-    if(_glShareGroup == nil)
+    if (_glShareGroup == nil)
         return;
 
 #if defined(DEBUG)
@@ -453,7 +453,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     [self suspendRendering];
     
     // Release map renderer
-    if(!_renderer->releaseRendering())
+    if (!_renderer->releaseRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to release OpenGLES2 map renderer"];
         return;
@@ -463,7 +463,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     [self releaseRenderAndFrameBuffers];
     
     // Tear down contexts
-    if([EAGLContext currentContext] == _glRenderContext || [EAGLContext currentContext] == _glWorkerContext)
+    if ([EAGLContext currentContext] == _glRenderContext || [EAGLContext currentContext] == _glWorkerContext)
         [EAGLContext setCurrentContext:nil];
     _glWorkerContext = nil;
     _glRenderContext = nil;
@@ -474,7 +474,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 - (GLenum)validateOpenGLES
 {
     GLenum result = glGetError();
-    if(result == GL_NO_ERROR)
+    if (result == GL_NO_ERROR)
         return result;
     
     OALog(@"OpenGLES error 0x%08x", result);
@@ -498,7 +498,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 #if defined(DEBUG)
     OALog(@"[MapRenderView] Allocating render and frame buffers");
 #endif
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -517,7 +517,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     NSAssert(_colorRenderBuffer != 0, @"Failed to allocate render buffer (color component)");
     glBindRenderbuffer(GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
-    if(![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
+    if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
         [NSException raise:NSGenericException format:@"Failed to create render buffer (color component)"];
         return;
@@ -544,7 +544,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     validateGL();
     
     // Check that we've initialized our framebuffer fully
-    if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
         [NSException raise:NSGenericException format:@"Failed to make complete framebuffer (0x%08x)", glCheckFramebufferStatus(GL_FRAMEBUFFER)];
         return;
@@ -557,25 +557,25 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 #if defined(DEBUG)
     OALog(@"[MapRenderView] Releasing render and frame buffers");
 #endif
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
     }
     
-    if(_frameBuffer != 0)
+    if (_frameBuffer != 0)
     {
         glDeleteFramebuffers(1, &_frameBuffer);
         _frameBuffer = 0;
         validateGL();
     }
-    if(_colorRenderBuffer != 0)
+    if (_colorRenderBuffer != 0)
     {
         glDeleteRenderbuffers(1, &_colorRenderBuffer);
         _colorRenderBuffer = 0;
         validateGL();
     }
-    if(_depthRenderBuffer != 0)
+    if (_depthRenderBuffer != 0)
     {
         glDeleteRenderbuffers(1, &_depthRenderBuffer);
         _depthRenderBuffer = 0;
@@ -595,7 +595,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 
 - (void)render:(CADisplayLink*)displayLink
 {
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
@@ -605,7 +605,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     _animator->update(displayLink.duration * displayLink.frameInterval);
     
     // Allocate buffers if they are not yet allocated
-    if(_frameBuffer == 0)
+    if (_frameBuffer == 0)
     {
         // Allocate new buffers
         [self allocateRenderAndFrameBuffers];
@@ -616,14 +616,14 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
     }
     
     // Process rendering
-    if(!_renderer->processRendering())
+    if (!_renderer->processRendering())
     {
         [NSException raise:NSGenericException format:@"Failed to process rendering using OpenGLES2 map renderer"];
         return;
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if(_renderer->prepareFrame() && (_renderer->isFrameInvalidated() || _forcedRenderingOnEachFrame))
+    if (_renderer->prepareFrame() && (_renderer->isFrameInvalidated() || _forcedRenderingOnEachFrame))
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -634,7 +634,7 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
         validateGL();
 
         // Perform rendering
-        if(!_renderer->renderFrame())
+        if (!_renderer->renderFrame())
         {
             [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
             return;
@@ -667,10 +667,10 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 
 - (BOOL)resumeRendering
 {
-    if(_displayLink != nil)
+    if (_displayLink != nil)
         return FALSE;
     
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return FALSE;
@@ -689,10 +689,10 @@ invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
 
 - (BOOL)suspendRendering
 {
-    if(_displayLink == nil)
+    if (_displayLink == nil)
         return FALSE;
     
-    if(![EAGLContext setCurrentContext:_glRenderContext])
+    if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return FALSE;

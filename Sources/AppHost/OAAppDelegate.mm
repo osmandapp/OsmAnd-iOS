@@ -55,11 +55,11 @@
     (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
     {
         NSString* prefix;
-        if(level == OsmAnd::LogSeverityLevel::Error)
+        if (level == OsmAnd::LogSeverityLevel::Error)
             prefix = @"ERROR: ";
-        else if(level == OsmAnd::LogSeverityLevel::Info)
+        else if (level == OsmAnd::LogSeverityLevel::Info)
             prefix = @"INFO: ";
-        else if(level == OsmAnd::LogSeverityLevel::Warning)
+        else if (level == OsmAnd::LogSeverityLevel::Warning)
             prefix = @"WARN: ";
         else
             prefix = @"DEBUG: ";

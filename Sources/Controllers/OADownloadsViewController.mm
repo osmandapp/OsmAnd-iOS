@@ -28,6 +28,8 @@
 {
     OsmAndAppInstance _app;
 
+    BOOL _updatingRepository;
+
     NSMutableArray* _mainWorldRegions;
     NSMutableArray* _worldwideDownloadItems;
 }
@@ -63,6 +65,8 @@
 {
     _app = [OsmAndApp instance];
 
+    _updatingRepository = NO;
+
     _mainWorldRegions = [[NSMutableArray alloc] init];
     _worldwideDownloadItems = [[NSMutableArray alloc] init];
 }
@@ -71,9 +75,8 @@
 {
     [super viewDidLoad];
 
-    [self obtainMainWorldRegions];
-    [self obtainWorldwideDownloads];
-    
+    [self updateRepository:YES];
+
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
     
@@ -130,6 +133,41 @@
 
         [_worldwideDownloadItems addObject:downloadItem];
     }
+    [_worldwideDownloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Item_Download* downloadItem1 = obj1;
+        Item_Download* downloadItem2 = obj2;
+
+        return [downloadItem1.caption localizedCaseInsensitiveCompare:downloadItem2.caption];
+    }];
+}
+
+- (void)updateRepository:(BOOL)animated
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        _updatingRepository = YES;
+        if (animated)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+
+        bool ok = _app.resourcesManager->updateRepository();
+
+        if (ok)
+        {
+            [self obtainMainWorldRegions];
+            [self obtainWorldwideDownloads];
+        }
+
+        _updatingRepository = NO;
+        if (animated)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+    });
 }
 
 #define kMainWorldRegionsSection 0
@@ -139,11 +177,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (_updatingRepository)
+        return 1; /* unnamed section */
+
     return 2 /* 'By regions', 'Worldwide' */;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_updatingRepository)
+        return 1; /* activity indicator row */
+
     switch (section)
     {
         case kMainWorldRegionsSection:
@@ -159,6 +203,9 @@
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (_updatingRepository)
+        return nil; /* unnamed section */
+
     switch (section)
     {
         case kMainWorldRegionsSection:
@@ -176,24 +223,32 @@
 {
     static NSString* const submenuCell = @"submenuCell";
     static NSString* const downloadCell = @"downloadCell";
+    static NSString* const activityIndicatorCell = @"activityIndicatorCell";
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
-    if (indexPath.section == kMainWorldRegionsSection)
+    if (_updatingRepository)
     {
-        OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
-
-        cellTypeId = submenuCell;
-        caption = worldRegion.localizedName;
-        if (caption == nil)
-            caption = worldRegion.nativeName;
+        cellTypeId = activityIndicatorCell;
     }
-    else if (indexPath.section == kWorldwideDownloadItemsSection)
+    else
     {
-        Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
+        if (indexPath.section == kMainWorldRegionsSection)
+        {
+            OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
 
-        cellTypeId = downloadCell;
-        caption = downloadItem.caption;
+            cellTypeId = submenuCell;
+            caption = worldRegion.localizedName;
+            if (caption == nil)
+                caption = worldRegion.nativeName;
+        }
+        else if (indexPath.section == kWorldwideDownloadItemsSection)
+        {
+            Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
+
+            cellTypeId = downloadCell;
+            caption = downloadItem.caption;
+        }
     }
 
     // Obtain reusable cell or create one
@@ -218,8 +273,17 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
     }
 
-    // Fill cell content
-    cell.textLabel.text = caption;
+    // Deal with cell content
+    if([cellTypeId isEqualToString:activityIndicatorCell])
+    {
+        UIActivityIndicatorView* activityIndicatorView = [cell.contentView.subviews firstObject];
+        [activityIndicatorView startAnimating];
+    }
+    else
+    {
+        // Fill cell content
+        cell.textLabel.text = caption;
+    }
 
     return cell;
 }

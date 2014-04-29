@@ -18,7 +18,7 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self ctorWithButtonType:buttonType];
+        [self inflateWithButtonType:buttonType];
     }
     return self;
 }
@@ -27,22 +27,22 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self ctor];
+        [self inflate];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    [self ctor];
+    [self inflate];
 }
 
-- (void)ctor
+- (void)inflate
 {
-    [self ctorWithButtonType:UIButtonTypeRoundedRect];
+    [self inflateWithButtonType:UIButtonTypeRoundedRect];
 }
 
-- (void)ctorWithButtonType:(UIButtonType)buttonType
+- (void)inflateWithButtonType:(UIButtonType)buttonType
 {
     UIButton* button = [UIButton buttonWithType:buttonType];
     button.frame = CGRectZero;

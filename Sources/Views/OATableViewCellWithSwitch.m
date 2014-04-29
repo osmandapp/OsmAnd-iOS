@@ -16,17 +16,17 @@
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self ctor];
+        [self inflate];
     }
     return self;
 }
 
 - (void)awakeFromNib
 {
-    [self ctor];
+    [self inflate];
 }
 
-- (void)ctor
+- (void)inflate
 {
     UISwitch* switchView = [[UISwitch alloc] initWithFrame:CGRectZero];
     [switchView addTarget:self

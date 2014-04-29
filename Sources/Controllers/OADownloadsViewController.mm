@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
+#import "OAActivityIndicatorTableViewCell.h"
 #include "Localization.h"
 
 #define Item_Download OADownloadsViewController__Item_Download
@@ -222,14 +223,15 @@
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const submenuCell = @"submenuCell";
-    static NSString* const downloadCell = @"downloadCell";
-    static NSString* const activityIndicatorCell = @"activityIndicatorCell";
+    static NSString* const installableItemCell = @"installableItemCell";
+    static NSString* const installedItemCell = @"installedItemCell";
+    static NSString* const updatingRepositoryCell = @"updatingRepositoryCell";
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
     if (_updatingRepository)
     {
-        cellTypeId = activityIndicatorCell;
+        cellTypeId = updatingRepositoryCell;
     }
     else
     {
@@ -246,7 +248,7 @@
         {
             Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
 
-            cellTypeId = downloadCell;
+            cellTypeId = installedItemCell;//TODO:depends on state
             caption = downloadItem.caption;
         }
     }
@@ -255,35 +257,32 @@
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:downloadCell])
+        if ([cellTypeId isEqualToString:installableItemCell])
         {
             cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
-                                                      andButtonType:UIButtonTypeCustom
+                                                      andButtonType:UIButtonTypeSystem
                                                     reuseIdentifier:cellTypeId];
             OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
             UIImage* startDownloadIcon = [UIImage imageNamed:@"menu_item_start_download_icon.png"];
             [cellWithButton.buttonView setImage:startDownloadIcon
                                        forState:UIControlStateNormal];
-            UIImage* bg = [UIImage imageNamed:@"HUD_button_bg.png"];
-            [cellWithButton.buttonView setBackgroundImage:bg forState:UIControlStateNormal];
             cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
-                                                         bg.size.width, bg.size.height);
+                                                         startDownloadIcon.size.width, startDownloadIcon.size.height);
+        }
+        else if ([cellTypeId isEqualToString:updatingRepositoryCell])
+        {
+            cell = [[OAActivityIndicatorTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                                           reuseIdentifier:cellTypeId];
         }
         else
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellTypeId];
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:cellTypeId];
+        }
     }
 
-    // Deal with cell content
-    if([cellTypeId isEqualToString:activityIndicatorCell])
-    {
-        UIActivityIndicatorView* activityIndicatorView = [cell.contentView.subviews firstObject];
-        [activityIndicatorView startAnimating];
-    }
-    else
-    {
-        // Fill cell content
-        cell.textLabel.text = caption;
-    }
+    // Fill cell content
+    cell.textLabel.text = caption;
 
     return cell;
 }

@@ -239,6 +239,8 @@
 		BB476B6C18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */; };
 		BB476B7018D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */; };
+		BB4C745D190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C745C190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m */; };
+		BB4C745E190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C745C190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -425,6 +427,8 @@
 		BB476B6B18D4C7F30044D5E1 /* DriveModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveModeHUD~ipad.xib"; path = "Resources/DriveModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationModeHUD.xib; path = Resources/NavigationModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6F18D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "NavigationModeHUD~ipad.xib"; path = "Resources/NavigationModeHUD~ipad.xib"; sourceTree = "<group>"; };
+		BB4C745B190F560B0018E1EE /* OAActivityIndicatorTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAActivityIndicatorTableViewCell.h; path = Views/OAActivityIndicatorTableViewCell.h; sourceTree = "<group>"; };
+		BB4C745C190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAActivityIndicatorTableViewCell.m; path = Views/OAActivityIndicatorTableViewCell.m; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -646,6 +650,8 @@
 				BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */,
 				BB451F1718EB3F0C005FBE09 /* OATableViewCellWithButton.h */,
 				BB451F1818EB3F0C005FBE09 /* OATableViewCellWithButton.m */,
+				BB4C745B190F560B0018E1EE /* OAActivityIndicatorTableViewCell.h */,
+				BB4C745C190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1222,6 +1228,7 @@
 			files = (
 				BBE1D2A7190D186F00D90F0A /* main.m in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
+				BB4C745D190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
@@ -1260,6 +1267,7 @@
 			files = (
 				BBE1D2A8190D186F00D90F0A /* main.m in Sources */,
 				BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */,
+				BB4C745E190F560B0018E1EE /* OAActivityIndicatorTableViewCell.m in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,

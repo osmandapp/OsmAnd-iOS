@@ -12,6 +12,14 @@
 #import "OATableViewCellWithButton.h"
 #include "Localization.h"
 
+#define Item_Download OADownloadsViewController__Item_Download
+@interface Item_Download : NSObject
+@property NSString* caption;
+@property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
+@end
+@implementation Item_Download
+@end
+
 @interface OADownloadsViewController ()
 
 @end
@@ -21,6 +29,7 @@
     OsmAndAppInstance _app;
 
     NSMutableArray* _mainWorldRegions;
+    NSMutableArray* _worldwideDownloadItems;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -55,14 +64,15 @@
     _app = [OsmAndApp instance];
 
     _mainWorldRegions = [[NSMutableArray alloc] init];
+    _worldwideDownloadItems = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    // Obtain main world regions
     [self obtainMainWorldRegions];
+    [self obtainWorldwideDownloads];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -97,29 +107,50 @@
     }];
 }
 
-#define kRegionsSection 0
-#define kWorldwideSection 1
-#define kMiscellaneousSection 2
+- (void)obtainWorldwideDownloads
+{
+    [_worldwideDownloadItems removeAllObjects];
+    const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+    for(const auto& resourceInRepository : resourcesInRepository)
+    {
+        const auto& resourceId = resourceInRepository->id;
+        if (!resourceId.startsWith(QLatin1String("world_")))
+            continue;
+
+        Item_Download* downloadItem = [[Item_Download alloc] init];
+        downloadItem.resourceInRepository = resourceInRepository;
+        if (resourceId == QLatin1String("world_basemap.map.obf"))
+        {
+            downloadItem.caption = OALocalizedString(@"Detailed overview map");
+        }
+        else
+        {
+            downloadItem.caption = resourceId.toNSString();
+        }
+
+        [_worldwideDownloadItems addObject:downloadItem];
+    }
+}
+
+#define kMainWorldRegionsSection 0
+#define kWorldwideDownloadItemsSection 1
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3 /* 'Regions', 'Worldwide', 'Miscellaneous' */;
+    return 2 /* 'By regions', 'Worldwide' */;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section)
     {
-        case kRegionsSection:
+        case kMainWorldRegionsSection:
             return [_mainWorldRegions count];
 
-        case kWorldwideSection:
-            return 1;
-
-        case kMiscellaneousSection:
-            return 1;
+        case kWorldwideDownloadItemsSection:
+            return [_worldwideDownloadItems count];
 
         default:
             return 0;
@@ -130,14 +161,11 @@
 {
     switch (section)
     {
-        case kRegionsSection:
-            return OALocalizedString(@"Regions");
+        case kMainWorldRegionsSection:
+            return OALocalizedString(@"By regions");
 
-        case kWorldwideSection:
+        case kWorldwideDownloadItemsSection:
             return OALocalizedString(@"Worldwide");
-
-        case kMiscellaneousSection:
-            return OALocalizedString(@"Miscellaneous");
 
         default:
             return nil;
@@ -151,7 +179,7 @@
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
-    if (indexPath.section == kRegionsSection)
+    if (indexPath.section == kMainWorldRegionsSection)
     {
         OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
 
@@ -160,10 +188,12 @@
         if (caption == nil)
             caption = worldRegion.nativeName;
     }
-    else if (indexPath.section == kWorldwideSection)
+    else if (indexPath.section == kWorldwideDownloadItemsSection)
     {
+        Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
+
         cellTypeId = downloadCell;
-        caption = OALocalizedString(@"Detailed overview map");
+        caption = downloadItem.caption;
     }
 
     // Obtain reusable cell or create one

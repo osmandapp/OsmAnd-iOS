@@ -8,6 +8,7 @@
 
 #import "OADownloadsViewController.h"
 
+#import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
 #include "Localization.h"
 
@@ -17,8 +18,9 @@
 
 @implementation OADownloadsViewController
 {
-    NSDictionary* _worldRegions;
-    NSArray* _worldRegionsOrder;
+    OsmAndAppInstance _app;
+
+    NSMutableArray* _mainWorldRegions;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -50,19 +52,17 @@
 
 - (void)ctor
 {
-    _worldRegions = @{ @"africa" : OALocalizedString(@"Africa"),
-                       @"asia" : OALocalizedString(@"Asia"),
-                       @"europe" : OALocalizedString(@"Europe"),
-                       @"north_america" : OALocalizedString(@"North America"),
-                       @"central_america" : OALocalizedString(@"Central America"),
-                       @"south_america" : OALocalizedString(@"South America"),
-                       @"australia_and_oceania" : OALocalizedString(@"Australia and Oceania")};
-    _worldRegionsOrder = [[_worldRegions allKeys] sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
+    _app = [OsmAndApp instance];
+
+    _mainWorldRegions = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    // Obtain main world regions
+    [self obtainMainWorldRegions];
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -75,6 +75,26 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)obtainMainWorldRegions
+{
+    [_mainWorldRegions removeAllObjects];
+    [_mainWorldRegions addObjectsFromArray:_app.worldRegion.subregions];
+    [_mainWorldRegions sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        OAWorldRegion* worldRegion1 = obj1;
+        OAWorldRegion* worldRegion2 = obj2;
+
+        NSString* name1 = worldRegion1.localizedName;
+        if (name1 == nil)
+            name1 = worldRegion1.nativeName;
+
+        NSString* name2 = worldRegion2.localizedName;
+        if (name2 == nil)
+            name2 = worldRegion2.nativeName;
+
+        return [name1 localizedCaseInsensitiveCompare:name2];
+    }];
 }
 
 #define kRegionsSection 0
@@ -93,7 +113,7 @@
     switch (section)
     {
         case kRegionsSection:
-            return [_worldRegions count];
+            return [_mainWorldRegions count];
 
         case kWorldwideSection:
             return 1;
@@ -131,17 +151,19 @@
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
-    switch (indexPath.section)
+    if (indexPath.section == kRegionsSection)
     {
-        case kRegionsSection:
-            cellTypeId = submenuCell;
-            caption = [_worldRegions objectForKey:[_worldRegionsOrder objectAtIndex:indexPath.row]];
-            break;
+        OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
 
-        case kWorldwideSection:
-            cellTypeId = downloadCell;
-            caption = OALocalizedString(@"Detailed overview map");
-            break;
+        cellTypeId = submenuCell;
+        caption = worldRegion.localizedName;
+        if (caption == nil)
+            caption = worldRegion.nativeName;
+    }
+    else if (indexPath.section == kWorldwideSection)
+    {
+        cellTypeId = downloadCell;
+        caption = OALocalizedString(@"Detailed overview map");
     }
 
     // Obtain reusable cell or create one

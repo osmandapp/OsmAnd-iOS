@@ -275,16 +275,24 @@
     NSLog(@"i'm clicked");
 }
 
+- (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Allow only selection in world regions
+    if (indexPath.section != kMainWorldRegionsSection)
+        return nil;
+
+    return indexPath;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    /*NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSourcesIds : _onlineMapSourcesIds;
-     NSUUID* newActiveMapSourceId = [collection objectAtIndex:indexPath.row];
+    if (indexPath.section != kMainWorldRegionsSection)
+        return;
 
-     _app.data.activeMapSourceId = newActiveMapSourceId;
+    // Open region
+    OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
 
-     // For iPhone/iPod, since this menu wasn't opened in popover, return
-     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-     [self.navigationController popViewControllerAnimated:YES];*/
+    NSLog(@"need to open %@", worldRegion.regionId);
 }
 
 #pragma mark -

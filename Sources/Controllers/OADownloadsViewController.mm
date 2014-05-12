@@ -10,7 +10,6 @@
 
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
-#import "OAActivityIndicatorTableViewCell.h"
 #include "Localization.h"
 
 #define Item_Download OADownloadsViewController__Item_Download
@@ -21,7 +20,10 @@
 @implementation Item_Download
 @end
 
-@interface OADownloadsViewController ()
+@interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate>
+
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateActivityIndicator;
 
 @end
 
@@ -29,7 +31,7 @@
 {
     OsmAndAppInstance _app;
 
-    BOOL _updatingRepository;
+    BOOL _isUpdatingRepository;
 
     NSMutableArray* _mainWorldRegions;
     NSMutableArray* _worldwideDownloadItems;
@@ -53,20 +55,11 @@
     return self;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        [self ctor];
-    }
-    return self;
-}
-
 - (void)ctor
 {
     _app = [OsmAndApp instance];
 
-    _updatingRepository = NO;
+    _isUpdatingRepository = NO;
 
     _mainWorldRegions = [[NSMutableArray alloc] init];
     _worldwideDownloadItems = [[NSMutableArray alloc] init];
@@ -145,11 +138,12 @@
 - (void)updateRepository:(BOOL)animated
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        _updatingRepository = YES;
+        _isUpdatingRepository = YES;
         if (animated)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
+                [self.updateActivityIndicator startAnimating];
             });
         }
 
@@ -161,10 +155,11 @@
             [self obtainWorldwideDownloads];
         }
 
-        _updatingRepository = NO;
+        _isUpdatingRepository = NO;
         if (animated)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
+                [self.updateActivityIndicator stopAnimating];
                 [self.tableView reloadData];
             });
         }
@@ -178,16 +173,16 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_updatingRepository)
-        return 1; /* unnamed section */
+    if (_isUpdatingRepository)
+        return 0; // No sections at all
 
     return 2 /* 'By regions', 'Worldwide' */;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_updatingRepository)
-        return 1; /* activity indicator row */
+    if (_isUpdatingRepository)
+        return 0; // No rows at all
 
     switch (section)
     {
@@ -204,9 +199,6 @@
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (_updatingRepository)
-        return nil; /* unnamed section */
-
     switch (section)
     {
         case kMainWorldRegionsSection:
@@ -225,32 +217,24 @@
     static NSString* const submenuCell = @"submenuCell";
     static NSString* const installableItemCell = @"installableItemCell";
     static NSString* const installedItemCell = @"installedItemCell";
-    static NSString* const updatingRepositoryCell = @"updatingRepositoryCell";
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
-    if (_updatingRepository)
+    if (indexPath.section == kMainWorldRegionsSection)
     {
-        cellTypeId = updatingRepositoryCell;
+        OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
+
+        cellTypeId = submenuCell;
+        caption = worldRegion.localizedName;
+        if (caption == nil)
+            caption = worldRegion.nativeName;
     }
-    else
+    else if (indexPath.section == kWorldwideDownloadItemsSection)
     {
-        if (indexPath.section == kMainWorldRegionsSection)
-        {
-            OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
+        Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
 
-            cellTypeId = submenuCell;
-            caption = worldRegion.localizedName;
-            if (caption == nil)
-                caption = worldRegion.nativeName;
-        }
-        else if (indexPath.section == kWorldwideDownloadItemsSection)
-        {
-            Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
-
-            cellTypeId = installedItemCell;//TODO:depends on state
-            caption = downloadItem.caption;
-        }
+        cellTypeId = installedItemCell;//TODO:depends on state
+        caption = downloadItem.caption;
     }
 
     // Obtain reusable cell or create one
@@ -269,15 +253,12 @@
             cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
                                                          startDownloadIcon.size.width, startDownloadIcon.size.height);
         }
-        else if ([cellTypeId isEqualToString:updatingRepositoryCell])
-        {
-            cell = [[OAActivityIndicatorTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                                           reuseIdentifier:cellTypeId];
-        }
         else
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                           reuseIdentifier:cellTypeId];
+            [cell setNeedsDisplay];
+            [cell setNeedsLayout];
         }
     }
 

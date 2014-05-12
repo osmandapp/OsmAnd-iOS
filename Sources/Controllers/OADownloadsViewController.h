@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OADownloadsViewController : UITableViewController
+@interface OADownloadsViewController : UIViewController
 
 @end

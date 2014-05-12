@@ -20,6 +20,8 @@
 @implementation Item_Download
 @end
 
+typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+
 @interface OARegionDownloadsViewController ()
 
 @end
@@ -96,6 +98,8 @@
 
 - (void)prepareForRegion:(OAWorldRegion*)region
 {
+    const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+
     _worldRegion = region;
 
     // Set the title
@@ -104,7 +108,29 @@
         self.title = _worldRegion.nativeName;
 
     // Get subregions sorted by alphabet
-    _subregions = [NSMutableArray arrayWithArray:_worldRegion.subregions];
+    [_subregions removeAllObjects];
+    for(OAWorldRegion* subregion in _worldRegion.subregions)
+    {
+        // If subregions has no own subregions, ensure that it has at least something to download
+        if ([subregion.subregions count] == 0)
+        {
+            const QString subregionId = QString::fromNSString(subregion.regionId);
+            BOOL hasAtLeastOneDownload = NO;
+            for(const auto& resourceInRepository : resourcesInRepository)
+            {
+                if (!resourceInRepository->id.startsWith(subregionId))
+                    continue;
+
+                hasAtLeastOneDownload = YES;
+                break;
+            }
+
+            if (!hasAtLeastOneDownload)
+                continue;
+        }
+
+        [_subregions addObject:subregion];
+    }
     [_subregions sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         OAWorldRegion* region1 = obj1;
         NSString* title1 = region1.localizedName != nil ? region1.localizedName : region1.nativeName;
@@ -115,9 +141,42 @@
     }];
     if ([_subregions count] > 0)
         _subregionsSection = 0;
+    else
+        _subregionsSection = -1;
 
     // Get downloads
+    const QString regionId = QString::fromNSString(_worldRegion.regionId);
+    [_downloadItems removeAllObjects];
+    for(const auto& resourceInRepository : resourcesInRepository)
+    {
+        const auto& resourceId = resourceInRepository->id;
+        if (!resourceId.startsWith(regionId))
+            continue;
 
+        Item_Download* downloadItem = [[Item_Download alloc] init];
+        downloadItem.resourceInRepository = resourceInRepository;
+        switch(resourceInRepository->type)
+        {
+            case OsmAndResourceType::MapRegion:
+                downloadItem.caption = OALocalizedString(@"Map of the region");
+                break;
+
+            default:
+                downloadItem.caption = resourceId.toNSString();
+        }
+
+        [_downloadItems addObject:downloadItem];
+    }
+    [_downloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Item_Download* downloadItem1 = obj1;
+        Item_Download* downloadItem2 = obj2;
+
+        return [downloadItem1.caption localizedCaseInsensitiveCompare:downloadItem2.caption];
+    }];
+    if ([_downloadItems count] > 0)
+        _downloadsSection = 1;
+    else
+        _downloadsSection = -1;
 }
 
 #pragma mark - UITableViewDataSource

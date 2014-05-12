@@ -238,6 +238,14 @@
 
 #pragma mark - Navigation
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([identifier isEqualToString:@"openSubregion"] && [sender isKindOfClass:[OAWorldRegion class]])
+        return YES;
+
+    return NO;
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([[segue identifier] isEqualToString:@"openSubregion"] && [sender isKindOfClass:[OAWorldRegion class]])

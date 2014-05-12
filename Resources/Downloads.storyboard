@@ -70,10 +70,10 @@
             </objects>
             <point key="canvasLocation" x="465" y="104"/>
         </scene>
-        <!--Region Downloads View Controller-->
+        <!--Region Downloads View Controller - Region-->
         <scene sceneID="mzR-xl-iIs">
             <objects>
-                <tableViewController id="5RU-ck-OIa" customClass="OARegionDownloadsViewController" sceneMemberID="viewController">
+                <tableViewController title="Region" id="5RU-ck-OIa" customClass="OARegionDownloadsViewController" sceneMemberID="viewController">
                     <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="mm6-ep-WyG">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -87,7 +87,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="5RU-ck-OIa" kind="push" identifier="openSubregion" id="52C-qF-rim"/>
+                                    <segue destination="5RU-ck-OIa" kind="push" identifier="openSubregion" id="VMd-CE-iGM"/>
                                 </connections>
                             </tableViewCell>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedItemCell" id="hpp-Dt-jpU">

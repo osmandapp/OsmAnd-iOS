@@ -39,6 +39,8 @@
     NSMutableArray* _mainWorldRegions;
     NSMutableArray* _worldwideDownloadItems;
 
+    UIBarButtonItem* _refreshBarButton;
+
     UIAlertView* _noInternetAlertView;
 }
 
@@ -73,11 +75,18 @@
                                                       message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
                                                      delegate:self
                                             cancelButtonTitle:OALocalizedString(@"OK") otherButtonTitles: nil];
+
+    _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                      target:self
+                                                                      action:@selector(onUpdateRepositoryAndRefresh)];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    // Add a button to refresh repository
+    self.navigationItem.rightBarButtonItem = _refreshBarButton;
 
     // Update repository if needed or load from cache
     if (!_app.resourcesManager->isRepositoryAvailable())
@@ -92,6 +101,7 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
             _isUpdatingRepository = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
+                _refreshBarButton.enabled = NO;
                 [self.tableView reloadData];
                 [self.updateActivityIndicator startAnimating];
             });
@@ -103,9 +113,18 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.updateActivityIndicator stopAnimating];
                 [self.tableView reloadData];
+                _refreshBarButton.enabled = YES;
             });
         });
     }
+}
+
+- (void)onUpdateRepositoryAndRefresh
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        [self updateRepository:YES];
+    else
+        [_noInternetAlertView show];
 }
 
 - (void)obtainMainWorldRegions
@@ -166,6 +185,7 @@
         if (animated)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
+                _refreshBarButton.enabled = NO;
                 [self.tableView reloadData];
                 [self.updateActivityIndicator startAnimating];
             });
@@ -185,6 +205,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.updateActivityIndicator stopAnimating];
                 [self.tableView reloadData];
+                _refreshBarButton.enabled = YES;
             });
         }
     });

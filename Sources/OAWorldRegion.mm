@@ -91,6 +91,11 @@
     [subregions addObject:subregion];
 }
 
+- (void)setSuperregion:(OAWorldRegion *)superregion
+{
+    _superregion = superregion;
+}
+
 - (OAWorldRegion*)makeImmutable
 {
     if ([_subregions isKindOfClass:[NSArray class]])
@@ -178,6 +183,7 @@
 
             OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
+            [newRegion setSuperregion:parentRegion];
             [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
             
             // Remove

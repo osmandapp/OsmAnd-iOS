@@ -16,7 +16,7 @@
 @property(readonly) NSString* localizedName;
 
 // Hierarchy:
-@property(readonly) OAWorldRegion* superregion;
+@property(readonly, weak) OAWorldRegion* superregion;
 @property(readonly) NSArray* subregions;
 
 + (OAWorldRegion*)loadFrom:(NSString*)ocbfFilename;

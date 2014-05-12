@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
+#import "OARegionDownloadsViewController.h"
 #include "Localization.h"
 
 #define Item_Download OADownloadsViewController__Item_Download
@@ -289,10 +290,20 @@
     if (indexPath.section != kMainWorldRegionsSection)
         return;
 
-    // Open region
+    // Open region that was selected
     OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
+    [self performSegueWithIdentifier:@"openRegion" sender:worldRegion];
+}
 
-    NSLog(@"need to open %@", worldRegion.regionId);
+#pragma mark - Navigation
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"openRegion"] && [sender isKindOfClass:[OAWorldRegion class]])
+    {
+        OARegionDownloadsViewController* regionDownloadsViewController = [segue destinationViewController];
+        [regionDownloadsViewController prepareForRegion:(OAWorldRegion*)sender];
+    }
 }
 
 #pragma mark -

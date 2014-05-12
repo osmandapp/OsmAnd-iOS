@@ -239,6 +239,8 @@
 		BB4C74681920CB720018E1EE /* menu_item_update_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74611920CB720018E1EE /* menu_item_update_icon.png */; };
 		BB4C74691920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
 		BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
+		BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
+		BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -425,6 +427,8 @@
 		BB4C74601920CB720018E1EE /* menu_item_install_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_install_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C74611920CB720018E1EE /* menu_item_update_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_update_icon.png; sourceTree = "<group>"; };
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
+		BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARegionDownloadsViewController.h; path = Controllers/OARegionDownloadsViewController.h; sourceTree = "<group>"; };
+		BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARegionDownloadsViewController.mm; path = Controllers/OARegionDownloadsViewController.mm; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -675,6 +679,8 @@
 				BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */,
 				BB451F1318EB3666005FBE09 /* OADownloadsViewController.h */,
 				BB451F1418EB3666005FBE09 /* OADownloadsViewController.mm */,
+				BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */,
+				BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1234,6 +1240,7 @@
 				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
+				BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
 				BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
@@ -1272,6 +1279,7 @@
 				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.mm in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
+				BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
 				BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,

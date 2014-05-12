@@ -63,11 +63,52 @@
                     <connections>
                         <outlet property="tableView" destination="XqG-Hc-E2S" id="9Vu-tS-6ZT"/>
                         <outlet property="updateActivityIndicator" destination="N3E-eS-aEz" id="Xax-7Z-ie4"/>
+                        <segue destination="5RU-ck-OIa" kind="push" identifier="openRegion" id="jLF-4J-3l0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f8E-Fw-lX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="465" y="104"/>
+        </scene>
+        <!--Region Downloads View Controller-->
+        <scene sceneID="mzR-xl-iIs">
+            <objects>
+                <tableViewController id="5RU-ck-OIa" customClass="OARegionDownloadsViewController" sceneMemberID="viewController">
+                    <tableView key="view" opaque="NO" clipsSubviews="YES" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="mm6-ep-WyG">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="submenuCell" id="rBh-oh-q9W">
+                                <rect key="frame" x="0.0" y="55" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rBh-oh-q9W" id="rcf-tq-qoV">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="5RU-ck-OIa" kind="push" identifier="openSubregion" id="52C-qF-rim"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedItemCell" id="hpp-Dt-jpU">
+                                <rect key="frame" x="0.0" y="99" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="hpp-Dt-jpU" id="rbw-OJ-Z1H">
+                                    <rect key="frame" x="0.0" y="0.0" width="273" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="5RU-ck-OIa" id="GEj-9W-8gY"/>
+                            <outlet property="delegate" destination="5RU-ck-OIa" id="0JJ-xB-PjR"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="6jb-4D-Cv0"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Nrf-u7-sB4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="946" y="104"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
@@ -75,4 +116,7 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
+    <inferredMetricsTieBreakers>
+        <segue reference="jLF-4J-3l0"/>
+    </inferredMetricsTieBreakers>
 </document>

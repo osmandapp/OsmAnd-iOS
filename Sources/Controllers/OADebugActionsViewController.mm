@@ -47,18 +47,11 @@
 
 - (void)ctor
 {
-    
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #define kRenderingSection 0

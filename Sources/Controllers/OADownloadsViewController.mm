@@ -15,12 +15,28 @@
 #import "UIViewController+OARootViewController.h"
 #include "Localization.h"
 
-#define Item_Download OADownloadsViewController__Item_Download
-@interface Item_Download : NSObject
+#define _(name) OADownloadsViewController__##name
+
+#define Item_ResourceInRepository _(Item_ResourceInRepository)
+@interface Item_ResourceInRepository : NSObject
 @property NSString* caption;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
 @end
-@implementation Item_Download
+@implementation Item_ResourceInRepository
+@end
+
+#define Item_OutdatedResource _(Item_OutdatedResource)
+@interface Item_OutdatedResource : Item_ResourceInRepository
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
+@end
+@implementation Item_OutdatedResource
+@end
+
+#define Item_InstalledResource _(Item_InstalledResource)
+@interface Item_InstalledResource : Item_ResourceInRepository
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
+@end
+@implementation Item_InstalledResource
 @end
 
 @interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
@@ -37,7 +53,7 @@
     BOOL _isUpdatingRepository;
 
     NSMutableArray* _mainWorldRegions;
-    NSMutableArray* _worldwideDownloadItems;
+    NSMutableArray* _worldwideResourceItems;
 
     UIBarButtonItem* _refreshBarButton;
 
@@ -69,7 +85,7 @@
     _isUpdatingRepository = NO;
 
     _mainWorldRegions = [[NSMutableArray alloc] init];
-    _worldwideDownloadItems = [[NSMutableArray alloc] init];
+    _worldwideResourceItems = [[NSMutableArray alloc] init];
 
     _noInternetAlertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
                                                       message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
@@ -149,32 +165,55 @@
 
 - (void)obtainWorldwideDownloads
 {
-    [_worldwideDownloadItems removeAllObjects];
+    [_worldwideResourceItems removeAllObjects];
     const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+    const auto& outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+    const auto& localResources = _app.resourcesManager->getLocalResources();
     for(const auto& resourceInRepository : resourcesInRepository)
     {
         const auto& resourceId = resourceInRepository->id;
         if (!resourceId.startsWith(QLatin1String("world_")))
             continue;
 
-        Item_Download* downloadItem = [[Item_Download alloc] init];
-        downloadItem.resourceInRepository = resourceInRepository;
+        Item_ResourceInRepository* item = nil;
+        if (item == nil)
+        {
+            const auto& itOutdatedResource = outdatedResources.constFind(resourceId);
+            if (itOutdatedResource != outdatedResources.cend())
+            {
+                Item_OutdatedResource* outdatedItem = [[Item_OutdatedResource alloc] init];
+                outdatedItem.localResource = (*itOutdatedResource);
+
+                item = outdatedItem;
+            }
+        }
+        if (item == nil)
+        {
+            const auto& itLocalResource = localResources.constFind(resourceId);
+            if (itLocalResource != localResources.cend())
+            {
+                Item_InstalledResource* installedItem = [[Item_InstalledResource alloc] init];
+                installedItem.localResource = (*itLocalResource);
+
+                item = installedItem;
+            }
+        }
+        if (item == nil)
+            item = [[Item_ResourceInRepository alloc] init];
+
+        item.resourceInRepository = resourceInRepository;
         if (resourceId == QLatin1String("world_basemap.map.obf"))
-        {
-            downloadItem.caption = OALocalizedString(@"Detailed overview map");
-        }
+            item.caption = OALocalizedString(@"Detailed overview map");
         else
-        {
-            downloadItem.caption = resourceId.toNSString();
-        }
+            item.caption = resourceId.toNSString();
 
-        [_worldwideDownloadItems addObject:downloadItem];
+        [_worldwideResourceItems addObject:item];
     }
-    [_worldwideDownloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        Item_Download* downloadItem1 = obj1;
-        Item_Download* downloadItem2 = obj2;
+    [_worldwideResourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Item_ResourceInRepository* item1 = obj1;
+        Item_ResourceInRepository* item2 = obj2;
 
-        return [downloadItem1.caption localizedCaseInsensitiveCompare:downloadItem2.caption];
+        return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
     }];
 }
 
@@ -250,7 +289,7 @@
             return [_mainWorldRegions count];
 
         case kWorldwideDownloadItemsSection:
-            return [_worldwideDownloadItems count];
+            return [_worldwideResourceItems count];
 
         default:
             return 0;
@@ -276,6 +315,7 @@
 {
     static NSString* const submenuCell = @"submenuCell";
     static NSString* const installableItemCell = @"installableItemCell";
+    static NSString* const outdatedItemCell = @"outdatedItemCell";
     static NSString* const installedItemCell = @"installedItemCell";
 
     NSString* cellTypeId = nil;
@@ -291,34 +331,48 @@
     }
     else if (indexPath.section == kWorldwideDownloadItemsSection)
     {
-        Item_Download* downloadItem = [_worldwideDownloadItems objectAtIndex:indexPath.row];
-
-        cellTypeId = installedItemCell;//TODO:depends on state
-        caption = downloadItem.caption;
+        Item_ResourceInRepository* item = [_worldwideResourceItems objectAtIndex:indexPath.row];
+        if ([item isKindOfClass:[Item_OutdatedResource class]])
+            cellTypeId = outdatedItemCell;
+        else if ([item isKindOfClass:[Item_InstalledResource class]])
+            cellTypeId = installedItemCell;
+        else
+            cellTypeId = installableItemCell;
+        caption = item.caption;
     }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:installableItemCell])
+        if ([cellTypeId isEqualToString:outdatedItemCell])
         {
             cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
                                                       andButtonType:UIButtonTypeSystem
                                                     reuseIdentifier:cellTypeId];
             OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
-            UIImage* startDownloadIcon = [UIImage imageNamed:@"menu_item_start_download_icon.png"];
-            [cellWithButton.buttonView setImage:startDownloadIcon
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
+            [cellWithButton.buttonView setImage:iconImage
                                        forState:UIControlStateNormal];
             cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
-                                                         startDownloadIcon.size.width, startDownloadIcon.size.height);
+                                                         iconImage.size.width, iconImage.size.height);
+        }
+        else if ([cellTypeId isEqualToString:installableItemCell])
+        {
+            cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
+                                                      andButtonType:UIButtonTypeSystem
+                                                    reuseIdentifier:cellTypeId];
+            OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+            [cellWithButton.buttonView setImage:iconImage
+                                       forState:UIControlStateNormal];
+            cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
+                                                         iconImage.size.width, iconImage.size.height);
         }
         else
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                           reuseIdentifier:cellTypeId];
-            [cell setNeedsDisplay];
-            [cell setNeedsLayout];
         }
     }
 

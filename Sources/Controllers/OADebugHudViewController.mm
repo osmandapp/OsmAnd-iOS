@@ -63,12 +63,6 @@
                                  forState:UIControlStateNormal];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)openMenu:(UIViewController*)menuViewController fromView:(UIView*)view
 {
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)

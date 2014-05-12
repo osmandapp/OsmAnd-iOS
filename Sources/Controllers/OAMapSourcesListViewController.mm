@@ -21,7 +21,9 @@
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
-#define Item OAMapSourcesListViewController__Item
+#define _(name) OAMapSourcesListViewController__##name
+
+#define Item _(Item)
 @interface Item : NSObject
 @property OAMapSource* mapSource;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
@@ -29,14 +31,14 @@
 @implementation Item
 @end
 
-#define Item_MapStyle OAMapSourcesListViewController__Item_MapStyle
+#define Item_MapStyle _(Item_MapStyle)
 @interface Item_MapStyle : Item
 @property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
 @end
 @implementation Item_MapStyle
 @end
 
-#define Item_OnlineTileSource OAMapSourcesListViewController__Item_OnlineTileSource
+#define Item_OnlineTileSource _(Item_OnlineTileSource)
 @interface Item_OnlineTileSource : Item
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
@@ -135,12 +137,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     // Perform selection of proper preset
     [self selectMapSource:animated];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)obtainMapSources

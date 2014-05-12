@@ -24,14 +24,16 @@
 #include "Localization.h"
 #import "OALog.h"
 
-#define Item_MapStyle OAOptionsPanelViewController__Item_MapStyle
+#define _(name) OAOptionsPanelViewController__##name
+
+#define Item_MapStyle _(Item_MapStyle)
 @interface Item_MapStyle : NSObject
 @property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
 @end
 @implementation Item_MapStyle
 @end
 
-#define Item_MapStylePreset OAOptionsPanelViewController__Item_MapStylePreset
+#define Item_MapStylePreset _(Item_MapStylePreset)
 @interface Item_MapStylePreset : NSObject
 @property OAMapSource* mapSource;
 @property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
@@ -40,7 +42,7 @@
 @implementation Item_MapStylePreset
 @end
 
-#define Item_OnlineTileSource OAOptionsPanelViewController__Item_OnlineTileSource
+#define Item_OnlineTileSource _(Item_OnlineTileSource)
 @interface Item_OnlineTileSource : NSObject
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
@@ -152,12 +154,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         _lastMenuOriginCellPath = nil;
     }
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)obtainMapSourceAndVariants

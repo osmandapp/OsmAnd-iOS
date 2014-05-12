@@ -12,12 +12,28 @@
 #import "OATableViewCellWithButton.h"
 #include "Localization.h"
 
-#define Item_Download OARegionDownloadsViewController__Item_Download
-@interface Item_Download : NSObject
+#define _(name) OARegionDownloadsViewController__##name
+
+#define Item_ResourceInRepository _(Item_ResourceInRepository)
+@interface Item_ResourceInRepository : NSObject
 @property NSString* caption;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
 @end
-@implementation Item_Download
+@implementation Item_ResourceInRepository
+@end
+
+#define Item_OutdatedResource _(Item_OutdatedResource)
+@interface Item_OutdatedResource : Item_ResourceInRepository
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
+@end
+@implementation Item_OutdatedResource
+@end
+
+#define Item_InstalledResource _(Item_InstalledResource)
+@interface Item_InstalledResource : Item_ResourceInRepository
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
+@end
+@implementation Item_InstalledResource
 @end
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -36,7 +52,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSInteger _downloadsSection;
 
     NSMutableArray* _subregions;
-    NSMutableArray* _downloadItems;
+    NSMutableArray* _resourcesItems;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -76,29 +92,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _downloadsSection = -1;
 
     _subregions = [[NSMutableArray alloc] init];
-    _downloadItems = [[NSMutableArray alloc] init];
+    _resourcesItems = [[NSMutableArray alloc] init];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)prepareForRegion:(OAWorldRegion*)region
 {
     const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+    const auto& outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+    const auto& localResources = _app.resourcesManager->getLocalResources();
 
     _worldRegion = region;
     NSInteger lastUnallocatedSection = 0;
@@ -147,37 +153,61 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     // Get downloads
     const QString regionId = QString::fromNSString(_worldRegion.regionId);
-    [_downloadItems removeAllObjects];
+    [_resourcesItems removeAllObjects];
     for(const auto& resourceInRepository : resourcesInRepository)
     {
         const auto& resourceId = resourceInRepository->id;
         if (!resourceId.startsWith(regionId))
             continue;
 
-        Item_Download* downloadItem = [[Item_Download alloc] init];
-        downloadItem.resourceInRepository = resourceInRepository;
+        Item_ResourceInRepository* item = nil;
+        if (item == nil)
+        {
+            const auto& itOutdatedResource = outdatedResources.constFind(resourceId);
+            if (itOutdatedResource != outdatedResources.cend())
+            {
+                Item_OutdatedResource* outdatedItem = [[Item_OutdatedResource alloc] init];
+                outdatedItem.localResource = (*itOutdatedResource);
+
+                item = outdatedItem;
+            }
+        }
+        if (item == nil)
+        {
+            const auto& itLocalResource = localResources.constFind(resourceId);
+            if (itLocalResource != localResources.cend())
+            {
+                Item_InstalledResource* installedItem = [[Item_InstalledResource alloc] init];
+                installedItem.localResource = (*itLocalResource);
+
+                item = installedItem;
+            }
+        }
+        if (item == nil)
+            item = [[Item_ResourceInRepository alloc] init];
+
         switch(resourceInRepository->type)
         {
             case OsmAndResourceType::MapRegion:
                 if ([_worldRegion.subregions count] > 0)
-                    downloadItem.caption = OALocalizedString(@"Full map of entire region");
+                    item.caption = OALocalizedString(@"Full map of entire region");
                 else
-                    downloadItem.caption = OALocalizedString(@"Full map of the region");
+                    item.caption = OALocalizedString(@"Full map of the region");
                 break;
 
             default:
-                downloadItem.caption = resourceId.toNSString();
+                item.caption = resourceId.toNSString();
         }
 
-        [_downloadItems addObject:downloadItem];
+        [_resourcesItems addObject:item];
     }
-    [_downloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        Item_Download* downloadItem1 = obj1;
-        Item_Download* downloadItem2 = obj2;
+    [_resourcesItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        Item_ResourceInRepository* item1 = obj1;
+        Item_ResourceInRepository* item2 = obj2;
 
-        return [downloadItem1.caption localizedCaseInsensitiveCompare:downloadItem2.caption];
+        return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
     }];
-    if ([_downloadItems count] > 0)
+    if ([_resourcesItems count] > 0)
         _downloadsSection = lastUnallocatedSection++;
     else
         _downloadsSection = -1;
@@ -202,7 +232,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (section == _subregionsSection)
         return [_subregions count];
     if (section == _downloadsSection)
-        return [_downloadItems count];
+        return [_resourcesItems count];
 
     return 0;
 }
@@ -221,6 +251,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     static NSString* const submenuCell = @"submenuCell";
     static NSString* const installableItemCell = @"installableItemCell";
+    static NSString* const outdatedItemCell = @"outdatedItemCell";
     static NSString* const installedItemCell = @"installedItemCell";
 
     NSString* cellTypeId = nil;
@@ -236,34 +267,48 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if (indexPath.section == _downloadsSection)
     {
-        Item_Download* downloadItem = [_downloadItems objectAtIndex:indexPath.row];
-
-        cellTypeId = installedItemCell;//TODO:depends on state
-        caption = downloadItem.caption;
+        Item_ResourceInRepository* item = [_resourcesItems objectAtIndex:indexPath.row];
+        if ([item isKindOfClass:[Item_OutdatedResource class]])
+            cellTypeId = outdatedItemCell;
+        else if ([item isKindOfClass:[Item_InstalledResource class]])
+            cellTypeId = installedItemCell;
+        else
+            cellTypeId = installableItemCell;
+        caption = item.caption;
     }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:installableItemCell])
+        if ([cellTypeId isEqualToString:outdatedItemCell])
         {
             cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
                                                       andButtonType:UIButtonTypeSystem
                                                     reuseIdentifier:cellTypeId];
             OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
-            UIImage* startDownloadIcon = [UIImage imageNamed:@"menu_item_start_download_icon.png"];
-            [cellWithButton.buttonView setImage:startDownloadIcon
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
+            [cellWithButton.buttonView setImage:iconImage
                                        forState:UIControlStateNormal];
             cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
-                                                         startDownloadIcon.size.width, startDownloadIcon.size.height);
+                                                         iconImage.size.width, iconImage.size.height);
+        }
+        else if ([cellTypeId isEqualToString:installableItemCell])
+        {
+            cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
+                                                      andButtonType:UIButtonTypeSystem
+                                                    reuseIdentifier:cellTypeId];
+            OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+            [cellWithButton.buttonView setImage:iconImage
+                                       forState:UIControlStateNormal];
+            cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
+                                                         iconImage.size.width, iconImage.size.height);
         }
         else
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                           reuseIdentifier:cellTypeId];
-            [cell setNeedsDisplay];
-            [cell setNeedsLayout];
         }
     }
 

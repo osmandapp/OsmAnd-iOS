@@ -101,6 +101,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
 
     _worldRegion = region;
+    NSInteger lastUnallocatedSection = 0;
 
     // Set the title
     self.title = _worldRegion.localizedName;
@@ -140,7 +141,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [title1 localizedCaseInsensitiveCompare:title2];
     }];
     if ([_subregions count] > 0)
-        _subregionsSection = 0;
+        _subregionsSection = lastUnallocatedSection++;
     else
         _subregionsSection = -1;
 
@@ -177,7 +178,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [downloadItem1.caption localizedCaseInsensitiveCompare:downloadItem2.caption];
     }];
     if ([_downloadItems count] > 0)
-        _downloadsSection = 1;
+        _downloadsSection = lastUnallocatedSection++;
     else
         _downloadsSection = -1;
 }

@@ -220,7 +220,7 @@
 - (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Allow only selection in world regions
-    if (indexPath.section != kMainWorldRegionsSection)
+    if (indexPath.section != _subregionsSection)
         return nil;
 
     return indexPath;
@@ -228,7 +228,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section != kMainWorldRegionsSection)
+    if (indexPath.section != _subregionsSection)
         return;
 
     // Open region that was selected

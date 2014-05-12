@@ -160,9 +160,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             case OsmAndResourceType::MapRegion:
                 if ([_worldRegion.subregions count] > 0)
-                    downloadItem.caption = OALocalizedString(@"Map of entire region");
+                    downloadItem.caption = OALocalizedString(@"Full map of entire region");
                 else
-                    downloadItem.caption = OALocalizedString(@"Map of the region");
+                    downloadItem.caption = OALocalizedString(@"Full map of the region");
                 break;
 
             default:

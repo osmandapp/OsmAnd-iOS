@@ -87,8 +87,8 @@
                                                          _documentsPath.absolutePath(),
                                                          QList<QString>(),
                                                          _worldMiniBasemapFilename != nil
-                                                         ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                         : QString::null,
+                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                            : QString::null,
                                                          QString::fromNSString(NSTemporaryDirectory())));
 
     // Load world regions

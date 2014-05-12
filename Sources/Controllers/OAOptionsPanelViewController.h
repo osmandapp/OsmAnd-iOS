@@ -10,4 +10,6 @@
 
 @interface OAOptionsPanelViewController : UITableViewController
 
+- (void)dismissLastOpenedMenuAnimated:(BOOL)animated;
+
 @end

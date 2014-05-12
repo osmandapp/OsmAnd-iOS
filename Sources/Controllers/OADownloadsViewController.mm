@@ -11,6 +11,8 @@
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
 #import "OARegionDownloadsViewController.h"
+#import "Reachability.h"
+#import "UIViewController+OARootViewController.h"
 #include "Localization.h"
 
 #define Item_Download OADownloadsViewController__Item_Download
@@ -21,7 +23,7 @@
 @implementation Item_Download
 @end
 
-@interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateActivityIndicator;
@@ -36,6 +38,8 @@
 
     NSMutableArray* _mainWorldRegions;
     NSMutableArray* _worldwideDownloadItems;
+
+    UIAlertView* _noInternetAlertView;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -64,25 +68,44 @@
 
     _mainWorldRegions = [[NSMutableArray alloc] init];
     _worldwideDownloadItems = [[NSMutableArray alloc] init];
+
+    _noInternetAlertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
+                                                      message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
+                                                     delegate:self
+                                            cancelButtonTitle:OALocalizedString(@"OK") otherButtonTitles: nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
-    [self updateRepository:YES];
+    // Update repository if needed or load from cache
+    if (!_app.resourcesManager->isRepositoryAvailable())
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self updateRepository:YES];
+        else
+            [_noInternetAlertView show];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+            _isUpdatingRepository = YES;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+                [self.updateActivityIndicator startAnimating];
+            });
 
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+            [self obtainMainWorldRegions];
+            [self obtainWorldwideDownloads];
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+            _isUpdatingRepository = NO;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.updateActivityIndicator stopAnimating];
+                [self.tableView reloadData];
+            });
+        });
+    }
 }
 
 - (void)obtainMainWorldRegions
@@ -169,6 +192,21 @@
 
 #define kMainWorldRegionsSection 0
 #define kWorldwideDownloadItemsSection 1
+
+#pragma mark - OAMenuViewControllerProtocol
+
+@synthesize menuHostViewController = _menuHostViewController;
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (alertView == _noInternetAlertView)
+    {
+        OAOptionsPanelViewController* menuHostViewController = (OAOptionsPanelViewController*)self.menuHostViewController;
+        [menuHostViewController dismissLastOpenedMenuAnimated:YES];
+    }
+}
 
 #pragma mark - UITableViewDataSource
 

@@ -241,6 +241,10 @@
 		BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
 		BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
 		BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
+		BB4C7472192111170018E1EE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C7471192111170018E1EE /* Reachability.m */; };
+		BB4C7473192111170018E1EE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C7471192111170018E1EE /* Reachability.m */; };
+		BB4C7475192111730018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
+		BB4C7476192111830018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -429,6 +433,10 @@
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARegionDownloadsViewController.h; path = Controllers/OARegionDownloadsViewController.h; sourceTree = "<group>"; };
 		BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARegionDownloadsViewController.mm; path = Controllers/OARegionDownloadsViewController.mm; sourceTree = "<group>"; };
+		BB4C7470192111170018E1EE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = externals/Reachability/Reachability.h; sourceTree = "<group>"; };
+		BB4C7471192111170018E1EE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = externals/Reachability/Reachability.m; sourceTree = "<group>"; };
+		BB4C7474192111730018E1EE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMenuViewControllerProtocol.h; path = Controllers/OAMenuViewControllerProtocol.h; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -538,6 +546,7 @@
 				BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */,
 				BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */,
 				BBBDADB918BCF53500E4A359 /* CoreLocation.framework in Frameworks */,
+				BB4C7476192111830018E1EE /* SystemConfiguration.framework in Frameworks */,
 				BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */,
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
@@ -559,6 +568,7 @@
 				BB451E4B18DCD224005FBE09 /* Foundation.framework in Frameworks */,
 				BB451E4C18DCD224005FBE09 /* CoreGraphics.framework in Frameworks */,
 				BB451E4D18DCD224005FBE09 /* CoreLocation.framework in Frameworks */,
+				BB4C7475192111730018E1EE /* SystemConfiguration.framework in Frameworks */,
 				BB451E4E18DCD224005FBE09 /* libQt5Core.a in Frameworks */,
 				BB451E4F18DCD224005FBE09 /* libQt5Network.a in Frameworks */,
 				BB451E5018DCD224005FBE09 /* libQt5Sql.a in Frameworks */,
@@ -594,7 +604,6 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BBBDADB818BCF53500E4A359 /* CoreLocation.framework */,
 				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,
 				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
 				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
@@ -610,6 +619,8 @@
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
+				BBBDADB818BCF53500E4A359 /* CoreLocation.framework */,
+				BB4C7474192111730018E1EE /* SystemConfiguration.framework */,
 				BBB3F6AA18A4DEF0001C3175 /* Security.framework */,
 				BB2545BD1798254B00E80B58 /* QuartzCore.framework */,
 				BB2545BB1798253E00E80B58 /* OpenGLES.framework */,
@@ -681,6 +692,7 @@
 				BB451F1418EB3666005FBE09 /* OADownloadsViewController.mm */,
 				BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */,
 				BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */,
+				BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -794,9 +806,19 @@
 			name = Services;
 			sourceTree = "<group>";
 		};
+		BB4C746F192110F70018E1EE /* Reachability */ = {
+			isa = PBXGroup;
+			children = (
+				BB4C7470192111170018E1EE /* Reachability.h */,
+				BB4C7471192111170018E1EE /* Reachability.m */,
+			);
+			name = Reachability;
+			sourceTree = "<group>";
+		};
 		BB63333117C363F400903AB1 /* Externals */ = {
 			isa = PBXGroup;
 			children = (
+				BB4C746F192110F70018E1EE /* Reachability */,
 				BB63333817C3644400903AB1 /* JASidePanels */,
 				BB63333217C3642300903AB1 /* TestFlight */,
 			);
@@ -1251,6 +1273,7 @@
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
+				BB4C7472192111170018E1EE /* Reachability.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -1290,6 +1313,7 @@
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
+				BB4C7473192111170018E1EE /* Reachability.m in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,

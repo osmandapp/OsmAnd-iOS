@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
+#import "OAMenuViewControllerProtocol.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 
@@ -275,6 +276,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _lastMenuOriginCellPath = indexPath;
 
+    // Save reference to host
+    if ([menuViewController conformsToProtocol:@protocol(OAMenuViewControllerProtocol)])
+        ((id<OAMenuViewControllerProtocol>)menuViewController).menuHostViewController = self;
+
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         // For iPhone and iPod, push menu to navigation controller
@@ -293,6 +298,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                          inView:self.tableView
                        permittedArrowDirections:UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight
                                        animated:YES];
+    }
+}
+
+- (void)dismissLastOpenedMenuAnimated:(BOOL)animated
+{
+    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    {
+        [self.navigationController popToViewController:self animated:animated];
+    }
+    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    {
+        if (_lastMenuPopoverController != nil)
+            [_lastMenuPopoverController dismissPopoverAnimated:animated];
+        [self popoverControllerDidDismissPopover:_lastMenuPopoverController];
     }
 }
 

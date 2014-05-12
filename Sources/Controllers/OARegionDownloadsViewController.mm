@@ -158,7 +158,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         switch(resourceInRepository->type)
         {
             case OsmAndResourceType::MapRegion:
-                downloadItem.caption = OALocalizedString(@"Map of the region");
+                if ([_worldRegion.subregions count] > 0)
+                    downloadItem.caption = OALocalizedString(@"Map of entire region");
+                else
+                    downloadItem.caption = OALocalizedString(@"Map of the region");
                 break;
 
             default:

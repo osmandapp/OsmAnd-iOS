@@ -135,6 +135,19 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    // Deselect everything
+    [self.tableView beginUpdates];
+    for(NSIndexPath* selectedIndexPath in [self.tableView indexPathsForSelectedRows])
+    {
+        [self.tableView deselectRowAtIndexPath:selectedIndexPath
+                                      animated:NO];
+    }
+    [self.tableView endUpdates];
+
+}
+
 - (void)onUpdateRepositoryAndRefresh
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)

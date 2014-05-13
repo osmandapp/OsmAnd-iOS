@@ -1,3 +1,11 @@
+## 3.0.2 - April 10, 2014
+
+- Got rid of autorelease warning "Object 0x1c83f0 of class NSMachPort autoreleased with no pool in place - just leaking". There wasn't a leak (the object in question was retained for the lifetime of the app), but there was a bug because of a missing autorelease pool.
+
+## 3.0.1 - April 9, 2014
+
+- Stop using NSFileManager's `enumeratoAtURL:…` method. The NSURLDirectoryEnumerator is returns causes crashes on iOS 4.
+
 ## 3.0.0 - February 18, 2014
 
 - Remove checkpoints, feedback, and logs from production apps.

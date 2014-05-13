@@ -6,7 +6,7 @@
 //  Copyright 2011 TestFlight. All rights reserved.
 
 #import <Foundation/Foundation.h>
-#define TESTFLIGHT_SDK_VERSION @"3.0.0"
+#define TESTFLIGHT_SDK_VERSION @"3.0.2"
 #undef TFLog
 
 #if __cplusplus

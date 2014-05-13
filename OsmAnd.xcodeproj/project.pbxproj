@@ -12,7 +12,6 @@
 			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */;
 			buildPhases = (
 				BB6B848D17C263ED00ACD753 /* Generate appversion */,
-				BB63333F17C364B100903AB1 /* Configure externals */,
 			);
 			dependencies = (
 			);
@@ -22,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		5AEA061EE332485D8FF6F538 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 		BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
@@ -81,10 +81,8 @@
 		BB451E1A18DA4180005FBE09 /* position_track_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */; };
 		BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
 		BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
-		BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
 		BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
-		BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
 		BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.mm */; };
 		BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */; };
 		BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */; };
@@ -94,7 +92,6 @@
 		BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */; };
 		BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
 		BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
-		BB451E3A18DCD224005FBE09 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
 		BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
 		BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
@@ -241,8 +238,6 @@
 		BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
 		BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
 		BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
-		BB4C7472192111170018E1EE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C7471192111170018E1EE /* Reachability.m */; };
-		BB4C7473192111170018E1EE /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C7471192111170018E1EE /* Reachability.m */; };
 		BB4C7475192111730018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB4C7476192111830018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
@@ -254,9 +249,6 @@
 		BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */; };
 		BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D918A662C700EFAD92 /* libskia_static.a */; };
 		BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90DA18A662C700EFAD92 /* libz_static.a */; };
-		BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB63333317C3643B00903AB1 /* libTestFlight.a */; };
-		BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333A17C3648500903AB1 /* JASidePanelController.m */; };
-		BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */; };
 		BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.mm */; };
 		BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */; };
 		BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */; };
@@ -306,6 +298,7 @@
 		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
 		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		FE1BA61F27084969A2196FCE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -326,6 +319,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		87629E7351254391A72029D7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
+		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB08E4F518B960F600BC6638 /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicu4c_static.a; path = "../binaries/ios-iphoneos/Debug/libicu4c_static.a"; sourceTree = "<group>"; };
 		BB098CF11793F7FD00423944 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -433,8 +428,6 @@
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARegionDownloadsViewController.h; path = Controllers/OARegionDownloadsViewController.h; sourceTree = "<group>"; };
 		BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARegionDownloadsViewController.mm; path = Controllers/OARegionDownloadsViewController.mm; sourceTree = "<group>"; };
-		BB4C7470192111170018E1EE /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Reachability.h; path = externals/Reachability/Reachability.h; sourceTree = "<group>"; };
-		BB4C7471192111170018E1EE /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Reachability.m; path = externals/Reachability/Reachability.m; sourceTree = "<group>"; };
 		BB4C7474192111730018E1EE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMenuViewControllerProtocol.h; path = Controllers/OAMenuViewControllerProtocol.h; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
@@ -446,14 +439,6 @@
 		BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_static.a; path = ../binaries/ios/fat/Debug/libprotobuf_static.a; sourceTree = "<group>"; };
 		BB5D90D918A662C700EFAD92 /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libskia_static.a; path = ../binaries/ios/fat/Debug/libskia_static.a; sourceTree = "<group>"; };
 		BB5D90DA18A662C700EFAD92 /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = ../binaries/ios/fat/Debug/libz_static.a; sourceTree = "<group>"; };
-		BB63333317C3643B00903AB1 /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTestFlight.a; path = externals/TestFlight/libTestFlight.a; sourceTree = "<group>"; };
-		BB63333417C3643B00903AB1 /* TestFlight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestFlight.h; path = externals/TestFlight/TestFlight.h; sourceTree = "<group>"; };
-		BB63333517C3643B00903AB1 /* TestFlight+AsyncLogging.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+AsyncLogging.h"; path = "externals/TestFlight/TestFlight+AsyncLogging.h"; sourceTree = "<group>"; };
-		BB63333617C3643B00903AB1 /* TestFlight+ManualSessions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "TestFlight+ManualSessions.h"; path = "externals/TestFlight/TestFlight+ManualSessions.h"; sourceTree = "<group>"; };
-		BB63333917C3648500903AB1 /* JASidePanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JASidePanelController.h; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.h; sourceTree = "<group>"; };
-		BB63333A17C3648500903AB1 /* JASidePanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = JASidePanelController.m; path = externals/JASidePanels/upstream.patched/JASidePanels/Source/JASidePanelController.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
-		BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+JASidePanel.h"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.h"; sourceTree = "<group>"; };
-		BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+JASidePanel.m"; path = "externals/JASidePanels/upstream.patched/JASidePanels/Source/UIViewController+JASidePanel.m"; sourceTree = "<group>"; };
 		BB63334317C3DE6F00903AB1 /* OAOptionsPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOptionsPanelViewController.h; path = Controllers/OAOptionsPanelViewController.h; sourceTree = "<group>"; };
 		BB63334417C3DE6F00903AB1 /* OAOptionsPanelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOptionsPanelViewController.mm; path = Controllers/OAOptionsPanelViewController.mm; sourceTree = "<group>"; };
 		BB63334617C3DF5600903AB1 /* OAContextPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAContextPanelViewController.h; path = Controllers/OAContextPanelViewController.h; sourceTree = "<group>"; };
@@ -527,7 +512,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB63333717C3643B00903AB1 /* libTestFlight.a in Frameworks */,
+				FE1BA61F27084969A2196FCE /* libPods.a in Frameworks */,
 				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
 				BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */,
 				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
@@ -559,7 +544,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BB451E3A18DCD224005FBE09 /* libTestFlight.a in Frameworks */,
+				5AEA061EE332485D8FF6F538 /* libPods.a in Frameworks */,
 				BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */,
 				BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */,
 				BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */,
@@ -587,8 +572,8 @@
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
-				BB63333117C363F400903AB1 /* Externals */,
 				BB098CF21793F7FD00423944 /* Products */,
+				87629E7351254391A72029D7 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -604,6 +589,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				90FA13E852C14245A4ED3E9D /* libPods.a */,
 				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,
 				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
 				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
@@ -806,47 +792,6 @@
 			name = Services;
 			sourceTree = "<group>";
 		};
-		BB4C746F192110F70018E1EE /* Reachability */ = {
-			isa = PBXGroup;
-			children = (
-				BB4C7470192111170018E1EE /* Reachability.h */,
-				BB4C7471192111170018E1EE /* Reachability.m */,
-			);
-			name = Reachability;
-			sourceTree = "<group>";
-		};
-		BB63333117C363F400903AB1 /* Externals */ = {
-			isa = PBXGroup;
-			children = (
-				BB4C746F192110F70018E1EE /* Reachability */,
-				BB63333817C3644400903AB1 /* JASidePanels */,
-				BB63333217C3642300903AB1 /* TestFlight */,
-			);
-			name = Externals;
-			sourceTree = "<group>";
-		};
-		BB63333217C3642300903AB1 /* TestFlight */ = {
-			isa = PBXGroup;
-			children = (
-				BB63333317C3643B00903AB1 /* libTestFlight.a */,
-				BB63333417C3643B00903AB1 /* TestFlight.h */,
-				BB63333517C3643B00903AB1 /* TestFlight+AsyncLogging.h */,
-				BB63333617C3643B00903AB1 /* TestFlight+ManualSessions.h */,
-			);
-			name = TestFlight;
-			sourceTree = "<group>";
-		};
-		BB63333817C3644400903AB1 /* JASidePanels */ = {
-			isa = PBXGroup;
-			children = (
-				BB63333917C3648500903AB1 /* JASidePanelController.h */,
-				BB63333A17C3648500903AB1 /* JASidePanelController.m */,
-				BB63333B17C3648500903AB1 /* UIViewController+JASidePanel.h */,
-				BB63333C17C3648500903AB1 /* UIViewController+JASidePanel.m */,
-			);
-			name = JASidePanels;
-			sourceTree = "<group>";
-		};
 		BBA858FD17C222FC00AADCC7 /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -956,9 +901,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB098D0E1793F7FD00423944 /* Build configuration list for PBXNativeTarget "OsmAnd" */;
 			buildPhases = (
+				7BCADF4054EF4D75B493A18A /* Check Pods Manifest.lock */,
 				BB098CED1793F7FD00423944 /* Sources */,
 				BB098CEE1793F7FD00423944 /* Frameworks */,
 				BB098CEF1793F7FD00423944 /* Resources */,
+				6BCB8D888EDC40C7BFF7DB2C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -974,9 +921,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB451E9718DCD224005FBE09 /* Build configuration list for PBXNativeTarget "OsmAnd (prebuilt Core)" */;
 			buildPhases = (
+				D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */,
 				BB451E2118DCD224005FBE09 /* Sources */,
 				BB451E3918DCD224005FBE09 /* Frameworks */,
 				BB451E5318DCD224005FBE09 /* Resources */,
+				F31050A1E495478BAAE8C96E /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1213,19 +1162,35 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		BB63333F17C364B100903AB1 /* Configure externals */ = {
+		6BCB8D888EDC40C7BFF7DB2C /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Configure externals";
+			name = "Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/externals/configure.sh\"";
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7BCADF4054EF4D75B493A18A /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
 		};
 		BB6B848D17C263ED00ACD753 /* Generate appversion */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1241,6 +1206,36 @@
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appversion.sh\"";
 		};
+		D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		F31050A1E495478BAAE8C96E /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1253,13 +1248,11 @@
 				BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
-				BB63333D17C3648500903AB1 /* JASidePanelController.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
-				BB63333E17C3648500903AB1 /* UIViewController+JASidePanel.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
@@ -1273,7 +1266,6 @@
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
-				BB4C7472192111170018E1EE /* Reachability.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -1293,13 +1285,11 @@
 				BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
-				BB451E2818DCD224005FBE09 /* JASidePanelController.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
 				BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
-				BB451E2C18DCD224005FBE09 /* UIViewController+JASidePanel.m in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.mm in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
@@ -1313,7 +1303,6 @@
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
-				BB4C7473192111170018E1EE /* Reachability.m in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -1401,7 +1390,6 @@
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
-					"$(SRCROOT)/externals/TestFlight",
 				);
 				ONLY_ACTIVE_ARCH = YES;
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
@@ -1458,7 +1446,6 @@
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios/lib",
 					"${PROJECT_DIR}/../binaries/ios${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
-					"$(SRCROOT)/externals/TestFlight",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
@@ -1472,6 +1459,7 @@
 		};
 		BB098D0F1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
@@ -1480,6 +1468,7 @@
 		};
 		BB098D101793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
@@ -1488,6 +1477,7 @@
 		};
 		BB451E9818DCD224005FBE09 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1509,6 +1499,7 @@
 		};
 		BB451E9918DCD224005FBE09 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
 				OTHER_LDFLAGS = (
 					"$(inherited)",

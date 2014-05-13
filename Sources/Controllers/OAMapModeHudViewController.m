@@ -7,7 +7,8 @@
 //
 
 #import "OAMapModeHudViewController.h"
-#import "UIViewController+JASidePanel.h"
+#import <JASidePanelController.h>
+#import <UIViewController+JASidePanel.h>
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"

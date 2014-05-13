@@ -1,6 +1,3 @@
-# Ignore all externals upstream files
-/externals/**/upstream.*
-
 # MacOSX
 .DS_Store
 
@@ -10,3 +7,7 @@ xcuserdata
 
 # AppCode
 /.idea
+
+# Dependencies via CocoaPods
+/Podfile.lock
+/Pods

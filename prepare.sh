@@ -15,6 +15,14 @@ echo "Configuring dependencies..."
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
 
+# Prepare iOS dependencies via CocoaPods
+POD=`which pod`
+if [ -z "$POD" ]; then
+	echo "'pod' tool not found, run 'sudo gem install cocoapods'"
+	exit 1
+fi
+$POD update
+
 # Bake or update core projects for XCode
 OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
 

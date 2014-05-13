@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "JASidePanelController.h"
+#import <JASidePanelController.h>
 
 #import "OAOptionsPanelViewController.h"
 #import "OAMapPanelViewController.h"

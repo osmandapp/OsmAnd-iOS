@@ -21,7 +21,7 @@ if [ -z "$POD" ]; then
 	echo "'pod' tool not found, run 'sudo gem install cocoapods'"
 	exit 1
 fi
-if [ -z "$SRCLOC/Podfile.lock" ]; then
+if [[ ! -f "$SRCLOC/Podfile.lock" ]]; then
 	echo "Installing dependencies via CocoaPod"
 	$POD install
 else

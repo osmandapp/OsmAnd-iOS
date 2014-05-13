@@ -37,16 +37,11 @@
         [self ctor];
         _regionId = region->id.toNSString();
         _nativeName = region->name.toNSString();
-        _localizedName = nil;
-        for(NSString* lang in [NSLocale preferredLanguages])
-        {
-            const auto citLocalizedName = region->localizedNames.constFind(QString::fromNSString(lang));
-            if (citLocalizedName == region->localizedNames.cend())
-                continue;
-
+        const auto citLocalizedName = region->localizedNames.constFind(QString::fromNSString([[NSLocale preferredLanguages] firstObject]));
+        if (citLocalizedName == region->localizedNames.cend())
+            _localizedName = nil;
+        else
             _localizedName = (*citLocalizedName).toNSString();
-            break;
-        }
         _superregion = nil;
     }
     return self;

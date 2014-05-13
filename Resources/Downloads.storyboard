@@ -29,6 +29,9 @@
                                             <rect key="frame" x="0.0" y="0.0" width="287" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="5RU-ck-OIa" kind="push" identifier="openRegion" id="lU0-ZC-5Lw"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedItemCell" id="VJT-1X-oSH">
                                         <rect key="frame" x="0.0" y="99" width="320" height="44"/>
@@ -63,7 +66,6 @@
                     <connections>
                         <outlet property="tableView" destination="XqG-Hc-E2S" id="9Vu-tS-6ZT"/>
                         <outlet property="updateActivityIndicator" destination="N3E-eS-aEz" id="Xax-7Z-ie4"/>
-                        <segue destination="5RU-ck-OIa" kind="push" identifier="openRegion" id="jLF-4J-3l0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f8E-Fw-lX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -117,6 +119,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="jLF-4J-3l0"/>
+        <segue reference="lU0-ZC-5Lw"/>
     </inferredMetricsTieBreakers>
 </document>

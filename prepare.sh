@@ -21,7 +21,13 @@ if [ -z "$POD" ]; then
 	echo "'pod' tool not found, run 'sudo gem install cocoapods'"
 	exit 1
 fi
-$POD update
+if [ -z "$SRCLOC/Podfile.lock" ]; then
+	echo "Installing dependencies via CocoaPod"
+	$POD install
+else
+	echo "Updating dependencies via CocoaPod"
+	$POD update
+fi
 
 # Bake or update core projects for XCode
 OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"

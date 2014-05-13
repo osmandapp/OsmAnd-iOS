@@ -23,10 +23,10 @@ if [ -z "$POD" ]; then
 fi
 if [[ ! -f "$SRCLOC/Podfile.lock" ]]; then
 	echo "Installing dependencies via CocoaPod"
-	$POD install
+	(cd "$SRCLOC" && $POD install)
 else
 	echo "Updating dependencies via CocoaPod"
-	$POD update
+	(cd "$SRCLOC" && $POD update)
 fi
 
 # Bake or update core projects for XCode

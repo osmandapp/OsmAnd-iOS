@@ -6,9 +6,11 @@ workspace 'OsmAnd'
 link_with 'OsmAnd', 'OsmAnd (prebuilt Core)'
 
 pod 'AFNetworking', '~> 2.2.3'
+pod 'AFDownloadRequestOperation', '~> 2.0.1'
 pod 'JASidePanels', '~> 1.3.2'
 pod 'Reachability', '~> 3.1.1'
 pod 'TestFlightSDK', '~> 3.0.0'
+pod 'UIAlertView-Blocks', '~> 1.0'
 
 # Make changes to Pods.xcconfig : 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

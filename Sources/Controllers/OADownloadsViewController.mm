@@ -8,10 +8,12 @@
 
 #import "OADownloadsViewController.h"
 
+#import <Reachability.h>
+#import <UIAlertView+Blocks.h>
+
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
 #import "OARegionDownloadsViewController.h"
-#import "Reachability.h"
 #import "UIViewController+OARootViewController.h"
 #include "Localization.h"
 
@@ -39,7 +41,14 @@
 @implementation Item_InstalledResource
 @end
 
-@interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+#define Item_DownloadingResource _(Item_DownloadingResource)
+@interface Item_DownloadingResource : Item_ResourceInRepository
+@property OADownloadTask* downloadTask;
+@end
+@implementation Item_DownloadingResource
+@end
+
+@interface OADownloadsViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateActivityIndicator;
@@ -50,14 +59,12 @@
 {
     OsmAndAppInstance _app;
 
-    BOOL _isUpdatingRepository;
+    BOOL _isRefreshingList;
 
-    NSMutableArray* _mainWorldRegions;
-    NSMutableArray* _worldwideResourceItems;
+    NSArray* _mainWorldRegions;
+    NSArray* _worldwideResourceItems;
 
     UIBarButtonItem* _refreshBarButton;
-
-    UIAlertView* _noInternetAlertView;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -82,16 +89,17 @@
 {
     _app = [OsmAndApp instance];
 
-    _isUpdatingRepository = NO;
+    _isRefreshingList = NO;
 
     _mainWorldRegions = [[NSMutableArray alloc] init];
     _worldwideResourceItems = [[NSMutableArray alloc] init];
 
-    _noInternetAlertView = nil;
-
     _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                       target:self
                                                                       action:@selector(onUpdateRepositoryAndRefresh)];
+
+    // These don't change unless application is updated
+    [self obtainRootWorldRegions];
 }
 
 - (void)viewDidLoad
@@ -102,33 +110,14 @@
     self.navigationItem.rightBarButtonItem = _refreshBarButton;
 
     // Update repository if needed or load from cache
-    if (!_app.resourcesManager->isRepositoryAvailable())
-    {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [self updateRepository:YES];
-        else
-            [self showNoInternetAlert];
-    }
+    if (_app.resourcesManager->isRepositoryAvailable())
+        [self reloadListFromRepositoryCache];
     else
     {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-            _isUpdatingRepository = YES;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _refreshBarButton.enabled = NO;
-                [self.tableView reloadData];
-                [self.updateActivityIndicator startAnimating];
-            });
-
-            [self obtainMainWorldRegions];
-            [self obtainWorldwideDownloads];
-
-            _isUpdatingRepository = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.updateActivityIndicator stopAnimating];
-                [self.tableView reloadData];
-                _refreshBarButton.enabled = YES;
-            });
-        });
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self updateRepositoryAndReloadListAnimated];
+        else
+            [self showNoInternetAlert];
     }
 }
 
@@ -147,30 +136,27 @@
 
 - (void)showNoInternetAlert
 {
-    if (_noInternetAlertView == nil)
-    {
-        _noInternetAlertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
-                                                          message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
-                                                         delegate:self
-                                                cancelButtonTitle:OALocalizedString(@"OK")
-                                                otherButtonTitles: nil];
-    }
-    [_noInternetAlertView show];
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
+                                message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")
+                                                             action:^{
+                                                                 OAOptionsPanelViewController* menuHostViewController = (OAOptionsPanelViewController*)self.menuHostViewController;
+                                                                 [menuHostViewController dismissLastOpenedMenuAnimated:YES];
+                                                             }]
+                       otherButtonItems:nil] show];
 }
 
 - (void)onUpdateRepositoryAndRefresh
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-        [self updateRepository:YES];
+        [self updateRepositoryAndReloadListAnimated];
     else
         [self showNoInternetAlert];
 }
 
-- (void)obtainMainWorldRegions
+- (void)obtainRootWorldRegions
 {
-    [_mainWorldRegions removeAllObjects];
-    [_mainWorldRegions addObjectsFromArray:_app.worldRegion.subregions];
-    [_mainWorldRegions sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    _mainWorldRegions = [_app.worldRegion.subregions sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         OAWorldRegion* worldRegion1 = obj1;
         OAWorldRegion* worldRegion2 = obj2;
 
@@ -186,9 +172,10 @@
     }];
 }
 
-- (void)obtainWorldwideDownloads
+- (void)obtainAvailableDownloads
 {
-    [_worldwideResourceItems removeAllObjects];
+    NSMutableArray* resourceItems = [[NSMutableArray alloc] init];
+
     const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
     const auto& outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
     const auto& localResources = _app.resourcesManager->getLocalResources();
@@ -230,46 +217,45 @@
         else
             item.caption = resourceId.toNSString();
 
-        [_worldwideResourceItems addObject:item];
+        [resourceItems addObject:item];
     }
-    [_worldwideResourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    [resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         Item_ResourceInRepository* item1 = obj1;
         Item_ResourceInRepository* item2 = obj2;
 
         return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
     }];
+
+    _worldwideResourceItems = resourceItems;
 }
 
-- (void)updateRepository:(BOOL)animated
+- (void)updateRepositoryAndReloadListAnimated
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        _isUpdatingRepository = YES;
-        if (animated)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                _refreshBarButton.enabled = NO;
-                [self.tableView reloadData];
-                [self.updateActivityIndicator startAnimating];
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isRefreshingList = YES;
+            _refreshBarButton.enabled = NO;
+            [self.tableView reloadData];
+            [self.updateActivityIndicator startAnimating];
+        });
 
-        bool ok = _app.resourcesManager->updateRepository();
+        _app.resourcesManager->updateRepository();
 
-        if (ok)
-        {
-            [self obtainMainWorldRegions];
-            [self obtainWorldwideDownloads];
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isRefreshingList = NO;
+            [self obtainAvailableDownloads];
+            [self.updateActivityIndicator stopAnimating];
+            [self.tableView reloadData];
+            _refreshBarButton.enabled = YES;
+        });
+    });
+}
 
-        _isUpdatingRepository = NO;
-        if (animated)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.updateActivityIndicator stopAnimating];
-                [self.tableView reloadData];
-                _refreshBarButton.enabled = YES;
-            });
-        }
+- (void)reloadListFromRepositoryCache
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self obtainAvailableDownloads];
+        [self.tableView reloadData];
     });
 }
 
@@ -280,24 +266,11 @@
 
 @synthesize menuHostViewController = _menuHostViewController;
 
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView == _noInternetAlertView)
-    {
-        OAOptionsPanelViewController* menuHostViewController = (OAOptionsPanelViewController*)self.menuHostViewController;
-        [menuHostViewController dismissLastOpenedMenuAnimated:YES];
-
-        _noInternetAlertView = nil;
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_isUpdatingRepository)
+    if (_isRefreshingList)
         return 0; // No sections at all
 
     return 2 /* 'By regions', 'Worldwide' */;
@@ -305,7 +278,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_isUpdatingRepository)
+    if (_isRefreshingList)
         return 0; // No rows at all
 
     switch (section)
@@ -411,7 +384,46 @@
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"i'm clicked");
+    if (indexPath.section != kWorldwideDownloadItemsSection)
+        return;
+
+    Item_ResourceInRepository* item = [_worldwideResourceItems objectAtIndex:indexPath.row];
+    if ([item isKindOfClass:[Item_InstalledResource class]])
+    {
+        //TODO: open info segue
+    }
+    else
+    {
+        NSString* itemTitle = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+
+        if ([item isKindOfClass:[Item_OutdatedResource class]])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. Proceed?"),
+                                                 itemTitle,
+                                                 [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                                countStyle:NSByteCountFormatterCountStyleFile]]
+                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                               otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
+                                                                     action:^{
+                                                                         //[self downloadAndInstall]?
+                                                                         NSLog(@"will update %@", itemTitle);
+                                                                     }], nil] show];
+        }
+        else
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. Proceed?"),
+                                                 itemTitle,
+                                                 [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                                countStyle:NSByteCountFormatterCountStyleFile]]
+                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                               otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
+                                                                     action:^{
+                                                                         NSLog(@"will install %@", itemTitle);
+                                                                     }], nil] show];
+        }
+    }
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

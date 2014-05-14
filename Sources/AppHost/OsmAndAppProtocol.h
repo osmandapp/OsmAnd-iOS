@@ -13,6 +13,7 @@
 #import "OAAppData.h"
 #import "OALocationServices.h"
 #import "OAWorldRegion.h"
+#import "OADownloadsManager.h"
 
 @protocol OsmAndAppProtocol <NSObject>
 
@@ -22,6 +23,8 @@
 @property(readonly) OAWorldRegion* worldRegion;
 
 @property(readonly) OALocationServices* locationServices;
+
+@property(readonly) OADownloadsManager* downloadsManager;
 
 @property(nonatomic) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;

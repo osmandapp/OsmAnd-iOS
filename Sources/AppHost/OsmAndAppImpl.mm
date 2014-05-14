@@ -102,6 +102,8 @@
     if (_locationServices.available && _locationServices.allowed)
         [_locationServices start];
 
+    _downloadsManager = [[OADownloadsManager alloc] init];
+
     return YES;
 }
 
@@ -119,6 +121,8 @@
 @synthesize worldRegion = _worldRegion;
 
 @synthesize locationServices = _locationServices;
+
+@synthesize downloadsManager = _downloadsManager;
 
 @synthesize mapMode = _mapMode;
 @synthesize mapModeObservable = _mapModeObservable;

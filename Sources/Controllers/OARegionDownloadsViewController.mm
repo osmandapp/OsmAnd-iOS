@@ -38,7 +38,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OARegionDownloadsViewController ()
+@interface OARegionDownloadsViewController () <UIAlertViewDelegate>
 
 @end
 
@@ -53,6 +53,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSMutableArray* _subregions;
     NSMutableArray* _resourcesItems;
+
+    UIAlertView* _installConfirmationAlertView;
+    UIAlertView* _updateConfirmationAlertView;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -186,6 +189,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (item == nil)
             item = [[Item_ResourceInRepository alloc] init];
 
+        item.resourceInRepository = resourceInRepository;
         switch(resourceInRepository->type)
         {
             case OsmAndResourceType::MapRegion:
@@ -211,6 +215,55 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _downloadsSection = lastUnallocatedSection++;
     else
         _downloadsSection = -1;
+}
+
+- (void)showInstallOrUpdateConfirmationFor:(NSIndexPath*)indexPath
+{
+    Item_ResourceInRepository* item = [_resourcesItems objectAtIndex:indexPath.row];
+
+    UITableViewCell* tableCell = [self.tableView cellForRowAtIndexPath:indexPath];
+    NSString* itemTitle = tableCell.textLabel.text;
+
+    if ([item isKindOfClass:[Item_OutdatedResource class]])
+    {
+        _updateConfirmationAlertView = [[UIAlertView alloc] initWithTitle:nil
+                                                                  message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@ (%2$@). %3$@ will be downloaded. Proceed?"),
+                                                                           itemTitle,
+                                                                           self.title,
+                                                                           [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                                                          countStyle:NSByteCountFormatterCountStyleFile]]
+                                                                 delegate:self
+                                                        cancelButtonTitle:OALocalizedString(@"Cancel")
+                                                        otherButtonTitles:OALocalizedString(@"Update"), nil];
+        [_updateConfirmationAlertView show];
+    }
+    else
+    {
+        _installConfirmationAlertView = [[UIAlertView alloc] initWithTitle:nil
+                                                                   message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ (%2$@) requires %3$@ to be downloaded. Proceed?"),
+                                                                            itemTitle,
+                                                                            self.title,
+                                                                            [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                                                           countStyle:NSByteCountFormatterCountStyleFile]]
+                                                                  delegate:self
+                                                         cancelButtonTitle:OALocalizedString(@"Cancel")
+                                                         otherButtonTitles:OALocalizedString(@"Install"), nil];
+        [_installConfirmationAlertView show];
+    }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if(alertView == _installConfirmationAlertView)
+    {
+        _installConfirmationAlertView = nil;
+    }
+    else if(alertView == _updateConfirmationAlertView)
+    {
+        _updateConfirmationAlertView = nil;
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -322,7 +375,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"i'm clicked");
+    if (indexPath.section != _downloadsSection)
+        return;
+
+    Item_ResourceInRepository* item = [_resourcesItems objectAtIndex:indexPath.row];
+    if ([item isKindOfClass:[Item_InstalledResource class]])
+    {
+        //TODO: open info segue
+    }
+    else
+        [self showInstallOrUpdateConfirmationFor:indexPath];
 }
 
 - (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath

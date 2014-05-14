@@ -12,7 +12,7 @@
 {
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -47,7 +47,7 @@
     [aCoder encodeFloat:_elevationAngle forKey:kElevationAngle];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
     if (self) {

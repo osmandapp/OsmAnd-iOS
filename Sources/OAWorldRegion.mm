@@ -17,7 +17,7 @@
 {
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -30,7 +30,7 @@
     return self;
 }
 
-- (id)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)region
+- (instancetype)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)region
 {
     self = [super init];
     if (self) {
@@ -47,7 +47,7 @@
     return self;
 }
 
-- (id)initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName
+- (instancetype)initWithId:(NSString*)regionId andLocalizedName:(NSString*)localizedName
 {
     self = [super init];
     if (self) {

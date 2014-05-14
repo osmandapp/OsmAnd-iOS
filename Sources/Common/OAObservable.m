@@ -18,7 +18,7 @@
     NSLock* _observersLock;
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

@@ -21,7 +21,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 
 @interface OALocationServices : NSObject
 
-- (id)initWith:(OsmAndAppInstance)app;
+- (instancetype)initWith:(OsmAndAppInstance)app;
 
 @property(readonly) BOOL available;
 @property(readonly) BOOL compassPresent;

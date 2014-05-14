@@ -10,8 +10,8 @@
 
 @interface OAMapSource : NSObject <NSCopying, NSCoding>
 
-- (id)initWithResource:(NSString*)resourceId;
-- (id)initWithResource:(NSString*)resourceId
+- (instancetype)initWithResource:(NSString*)resourceId;
+- (instancetype)initWithResource:(NSString*)resourceId
         andVariant:(NSString*)variant;
 
 // "OnlineTileSources" or "MapStyle" resource

@@ -12,7 +12,7 @@
 {
 }
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -21,7 +21,7 @@
     return self;
 }
 
-- (id)initWithResource:(NSString*)resourceId
+- (instancetype)initWithResource:(NSString*)resourceId
 {
     self = [super init];
     if (self) {
@@ -33,7 +33,7 @@
     return self;
 }
 
-- (id)initWithResource:(NSString*)resourceId
+- (instancetype)initWithResource:(NSString*)resourceId
             andVariant:(NSString*)variant
 {
     self = [super init];
@@ -75,7 +75,7 @@
     [aCoder encodeObject:_variant forKey:kVariantId];
 }
 
-- (id)initWithCoder:(NSCoder *)aDecoder
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super init];
     if (self) {

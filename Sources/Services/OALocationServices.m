@@ -34,7 +34,7 @@
     CLLocationDirection _lastHeading;
 }
 
-- (id)initWith:(OsmAndAppInstance)app
+- (instancetype)initWith:(OsmAndAppInstance)app
 {
     self = [super init];
     if (self) {

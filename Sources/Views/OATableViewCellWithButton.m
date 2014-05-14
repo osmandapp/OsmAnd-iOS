@@ -12,7 +12,7 @@
 
 @implementation OATableViewCellWithButton
 
-- (id)initWithStyle:(UITableViewCellStyle)style
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
       andButtonType:(UIButtonType)buttonType
     reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -23,7 +23,7 @@
     return self;
 }
 
-- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {

@@ -10,7 +10,7 @@
 
 @interface OATableViewCellWithButton : UITableViewCell
 
-- (id)initWithStyle:(UITableViewCellStyle)style
+- (instancetype)initWithStyle:(UITableViewCellStyle)style
       andButtonType:(UIButtonType)buttonType
     reuseIdentifier:(NSString *)reuseIdentifier;
 

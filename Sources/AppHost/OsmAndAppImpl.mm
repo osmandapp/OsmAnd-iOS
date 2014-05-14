@@ -28,7 +28,7 @@
 
 @synthesize resourcesManager = _resourcesManager;
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {

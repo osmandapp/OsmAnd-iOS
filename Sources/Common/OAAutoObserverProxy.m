@@ -17,7 +17,7 @@
 @synthesize owner = _owner;
 @synthesize handler = _handler;
 
-- (id)initWith:(id<OAObserverProtocol>)owner
+- (instancetype)initWith:(id<OAObserverProtocol>)owner
 {
     self = [super init];
     if (self) {
@@ -27,7 +27,7 @@
     return self;
 }
 
-- (id)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable
+- (instancetype)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable
 {
     self = [super init];
     if (self) {
@@ -38,7 +38,7 @@
     return self;
 }
 
-- (id)initWith:(id)owner withHandler:(SEL)selector
+- (instancetype)initWith:(id)owner withHandler:(SEL)selector
 {
     self = [super init];
     if (self) {
@@ -48,7 +48,7 @@
     return self;
 }
 
-- (id)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;
+- (instancetype)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;
 {
     self = [super init];
     if (self) {

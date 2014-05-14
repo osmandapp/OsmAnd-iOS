@@ -87,10 +87,7 @@
     _mainWorldRegions = [[NSMutableArray alloc] init];
     _worldwideResourceItems = [[NSMutableArray alloc] init];
 
-    _noInternetAlertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
-                                                      message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
-                                                     delegate:self
-                                            cancelButtonTitle:OALocalizedString(@"OK") otherButtonTitles: nil];
+    _noInternetAlertView = nil;
 
     _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                       target:self
@@ -110,7 +107,7 @@
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
             [self updateRepository:YES];
         else
-            [_noInternetAlertView show];
+            [self showNoInternetAlert];
     }
     else
     {
@@ -148,12 +145,25 @@
 
 }
 
+- (void)showNoInternetAlert
+{
+    if (_noInternetAlertView == nil)
+    {
+        _noInternetAlertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
+                                                          message:OALocalizedString(@"Internet connection is required to download maps and other resources. Please check your Internet connection.")
+                                                         delegate:self
+                                                cancelButtonTitle:OALocalizedString(@"OK")
+                                                otherButtonTitles: nil];
+    }
+    [_noInternetAlertView show];
+}
+
 - (void)onUpdateRepositoryAndRefresh
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
         [self updateRepository:YES];
     else
-        [_noInternetAlertView show];
+        [self showNoInternetAlert];
 }
 
 - (void)obtainMainWorldRegions
@@ -278,6 +288,8 @@
     {
         OAOptionsPanelViewController* menuHostViewController = (OAOptionsPanelViewController*)self.menuHostViewController;
         [menuHostViewController dismissLastOpenedMenuAnimated:YES];
+
+        _noInternetAlertView = nil;
     }
 }
 

@@ -5,6 +5,9 @@ if [ -z "$BASH_VERSION" ]; then
 	exit $?
 fi
 
+# Fail on any error
+set -e
+
 # Get version tag/hash strings
 IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`
 echo "iOS git tag: $IOS_GIT_TAG"

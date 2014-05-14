@@ -7,6 +7,9 @@ fi
 
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Fail on any error
+set -e
+
 # Find rsvg-convert
 if [ -z "$RSVG_CONVERT" ]; then 
 	RSVG_CONVERT=`which rsvg-convert`

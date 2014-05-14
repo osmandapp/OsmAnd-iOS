@@ -9,6 +9,9 @@ fi
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$SRCLOC/.."
 
+# Fail on any error
+set -e
+
 if [[ "$(uname -a)" =~ Linux ]]; then
 	GET_FILE_MODIFICATION="stat -c %Y"
 elif [[ "$(uname -a)" =~ Darwin ]]; then

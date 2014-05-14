@@ -5,6 +5,9 @@ if [ -z "$BASH_VERSION" ]; then
 	exit $?
 fi
 
+# Fail on any error
+set -e
+
 # Get root
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ROOT="$SRCLOC/.."

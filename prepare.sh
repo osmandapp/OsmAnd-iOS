@@ -1,22 +1,28 @@
 #!/bin/bash
 
+echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
+	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"
 	exit $?
 fi
-
-# Fail on any error
-set -e
-
-# Get root
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 ROOT="$SRCLOC/.."
 
 # Prepare core dependencies
 echo "Configuring dependencies..."
 "$ROOT/core/externals/configure.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glm icu4c libarchive
+if [ $? -ne 0 ]; then
+	echo "Failed to configure dependencies, aborting..."
+	exit $?
+fi
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
+if [ $? -ne 0 ]; then
+	echo "Failed to build dependencies, aborting..."
+	exit $?
+fi
 
 # Prepare iOS dependencies via CocoaPods
 POD=`which pod`
@@ -25,11 +31,15 @@ if [ -z "$POD" ]; then
 	exit 1
 fi
 if [[ ! -f "$SRCLOC/Podfile.lock" ]]; then
-	echo "Installing dependencies via CocoaPod"
+	echo "Installing dependencies via CocoaPods"
 	(cd "$SRCLOC" && $POD install)
 else
-	echo "Updating dependencies via CocoaPod"
+	echo "Updating dependencies via CocoaPods"
 	(cd "$SRCLOC" && $POD update)
+fi
+if [ $? -ne 0 ]; then
+	echo "Failed to processing dependencies via CocoaPods, aborting..."
+	exit $?
 fi
 
 # Bake or update core projects for XCode
@@ -37,6 +47,14 @@ OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
 
 # Download all shipped resources
 "$SRCLOC/download-shipped-resources.sh"
+if [ $? -ne 0 ]; then
+	echo "Failed to download shipped resources, aborting..."
+	exit $?
+fi
 
 # Generate resources from SVG
 "$SRCLOC/rasterize-resources.sh"
+if [ $? -ne 0 ]; then
+	echo "Failed to rasterize resources, aborting..."
+	exit $?
+fi

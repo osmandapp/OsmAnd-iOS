@@ -15,6 +15,7 @@
 #import "OATableViewCellWithButton.h"
 #import "OARegionDownloadsViewController.h"
 #import "UIViewController+OARootViewController.h"
+#import "OADownloadsManager.h"
 #include "Localization.h"
 
 #define _(name) OADownloadsViewController__##name
@@ -43,7 +44,7 @@
 
 #define Item_DownloadingResource _(Item_DownloadingResource)
 @interface Item_DownloadingResource : Item_ResourceInRepository
-@property OADownloadTask* downloadTask;
+@property id<OADownloadTask> downloadTask;
 @end
 @implementation Item_DownloadingResource
 @end
@@ -172,7 +173,7 @@
     }];
 }
 
-- (void)obtainAvailableDownloads
+- (void)obtainResourceItems
 {
     NSMutableArray* resourceItems = [[NSMutableArray alloc] init];
 
@@ -186,6 +187,17 @@
             continue;
 
         Item_ResourceInRepository* item = nil;
+        if (item == nil)
+        {
+            id<OADownloadTask> downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId.toNSString()]] firstObject];
+            if (downloadTask != nil)
+            {
+                Item_DownloadingResource* downloadingItem = [[Item_DownloadingResource alloc] init];
+                downloadingItem.downloadTask = downloadTask;
+
+                item = downloadingItem;
+            }
+        }
         if (item == nil)
         {
             const auto& itOutdatedResource = outdatedResources.constFind(resourceId);
@@ -243,7 +255,7 @@
 
         dispatch_async(dispatch_get_main_queue(), ^{
             _isRefreshingList = NO;
-            [self obtainAvailableDownloads];
+            [self obtainResourceItems];
             [self.updateActivityIndicator stopAnimating];
             [self.tableView reloadData];
             _refreshBarButton.enabled = YES;
@@ -254,9 +266,18 @@
 - (void)reloadListFromRepositoryCache
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self obtainAvailableDownloads];
+        [self obtainResourceItems];
         [self.tableView reloadData];
     });
+}
+
+- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resourceInRepository
+{
+    NSURLRequest* request = [NSURLRequest requestWithURL:resourceInRepository->url.toNSURL()];
+
+    id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
+                                                                      andKey:[@"resource:" stringByAppendingString:resourceInRepository->id.toNSString()]];
+    [task resume];
 }
 
 #define kMainWorldRegionsSection 0
@@ -330,7 +351,11 @@
     else if (indexPath.section == kWorldwideDownloadItemsSection)
     {
         Item_ResourceInRepository* item = [_worldwideResourceItems objectAtIndex:indexPath.row];
-        if ([item isKindOfClass:[Item_OutdatedResource class]])
+        if ([item isKindOfClass:[Item_DownloadingResource class]])
+        {
+            cellTypeId = installableItemCell;
+        }
+        else if ([item isKindOfClass:[Item_OutdatedResource class]])
             cellTypeId = outdatedItemCell;
         else if ([item isKindOfClass:[Item_InstalledResource class]])
             cellTypeId = installedItemCell;
@@ -406,8 +431,7 @@
                                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                                      action:^{
-                                                                         //[self downloadAndInstall]?
-                                                                         NSLog(@"will update %@", itemTitle);
+                                                                         [self startDownloadOf:item.resourceInRepository];
                                                                      }], nil] show];
         }
         else
@@ -420,7 +444,7 @@
                                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
                                                                      action:^{
-                                                                         NSLog(@"will install %@", itemTitle);
+                                                                         [self startDownloadOf:item.resourceInRepository];
                                                                      }], nil] show];
         }
     }

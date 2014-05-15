@@ -17,11 +17,12 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 
 @protocol OADownloadTask <NSObject>
 
-@property(readonly) NSString* targetPath;
-
 @property(readonly, copy) NSURLRequest *originalRequest;
 @property(readonly, copy) NSURLRequest *currentRequest;
 @property(readonly, copy) NSURLResponse *response;
+
+@property(readonly) NSString* targetPath;
+@property(readonly) NSString* key;
 
 @property(readonly) OADownloadTaskState state;
 - (void)resume;

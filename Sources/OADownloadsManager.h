@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OADownloadTask;
+#import "OADownloadTask.h"
 
 @interface OADownloadsManager : NSObject
 
@@ -16,10 +16,17 @@
 
 //- (NSData*)serializeState;
 //- (void*)deserializeStateFrom:(NSData*)state;
+//@property(readonly, copy) NSArray* downloadTasks;
 
-@property(readonly, copy) NSArray* downloadTasks;
+- (NSArray*)downloadTasksWithKey:(NSString*)key;
 
-- (OADownloadTask*)downloadTaskWithRequest:(NSURLRequest*)request
-                             andTargetPath:(NSString*)targetPath;
+- (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request;
+- (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
+                                andTargetPath:(NSString*)targetPath;
+- (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
+                                       andKey:(NSString*)key;
+- (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
+                                andTargetPath:(NSString*)targetPath
+                                       andKey:(NSString*)key;
 
 @end

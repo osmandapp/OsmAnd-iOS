@@ -37,8 +37,9 @@ function downloadShippedResource()
 		curl --remote-time --time-cond $name --location --output $name --fail $url && \
 		$GET_FILE_MODIFICATION "$name" > "$name.stamp")
 	if [ $? -ne 0 ]; then
+		local retcode=$?
 		echo "Failed to download '$name' from $url, aborting..."
-		exit $?
+		exit $retcode
 	fi
 	echo "Shipping '$name' with version '"$(cat "$DEST/$name.stamp")"'"
 }

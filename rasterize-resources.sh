@@ -1,14 +1,12 @@
 #!/bin/bash
 
+echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
+	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"
 	exit $?
 fi
-
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-# Fail on any error
-set -e
 
 # Find rsvg-convert
 if [ -z "$RSVG_CONVERT" ]; then 
@@ -25,7 +23,6 @@ export RSVG_CONVERT
 rm -rf "$SRCLOC/Resources/Rasterized"
 
 # Rasterize resources
-export _SRCLOC
 rasterize_resource() {
 	ORIGIN="$(pwd)/.."
 	INPUT_FILENAME="${1##*/}"

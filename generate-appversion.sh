@@ -1,12 +1,12 @@
 #!/bin/bash
 
+echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
+	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"
 	exit $?
 fi
-
-# Fail on any error
-set -e
+SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # Get version tag/hash strings
 IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`

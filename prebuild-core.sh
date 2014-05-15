@@ -1,15 +1,13 @@
 #!/bin/bash
 
+echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
+	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"
 	exit $?
 fi
-
-# Fail on any error
-set -e
-
-# Get root
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 ROOT="$SRCLOC/.."
 
 # Build core for all archs

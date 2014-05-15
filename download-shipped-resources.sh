@@ -1,16 +1,14 @@
 #!/bin/bash
 
+echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
+	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"
 	exit $?
 fi
-
-# Get root
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-ROOT="$SRCLOC/.."
 
-# Fail on any error
-set -e
+ROOT="$SRCLOC/.."
 
 if [[ "$(uname -a)" =~ Linux ]]; then
 	GET_FILE_MODIFICATION="stat -c %Y"
@@ -29,8 +27,21 @@ fi
 DEST="$SRCLOC/Resources/Shipped"
 mkdir -p "$DEST"
 
+# Function downloadShippedResource(name, url)
+function downloadShippedResource()
+{
+	local name=$1
+	local url=$2
+	
+	(cd "$DEST" && \
+		curl --remote-time --time-cond $name --location --output $name --fail $url && \
+		$GET_FILE_MODIFICATION "$name" > "$name.stamp")
+	if [ $? -ne 0 ]; then
+		echo "Failed to download '$name' from $url, aborting..."
+		exit $?
+	fi
+	echo "Shipping '$name' with version '"$(cat "$DEST/$name.stamp")"'"
+}
+
 # Download world mini-basemap
-(cd "$DEST" && \
-	curl -R -z WorldMiniBasemap.obf -L http://builder.osmand.net:81/basemap/World_basemap_mini_2.obf -o WorldMiniBasemap.obf && \
-	$GET_FILE_MODIFICATION "$DEST/WorldMiniBasemap.obf" > "$DEST/WorldMiniBasemap.obf.stamp")
-echo "Shipping 'WorldMiniBasemap.obf' with version '$(cat $DEST/WorldMiniBasemap.obf.stamp)'"
+downloadShippedResource WorldMiniBasemap.obf "http://builder.osmand.net:81/basemap/World_basemap_mini_2.obf"

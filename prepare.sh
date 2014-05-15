@@ -13,15 +13,15 @@ ROOT="$SRCLOC/.."
 # Prepare core dependencies
 echo "Configuring dependencies..."
 "$ROOT/core/externals/configure.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glm icu4c libarchive
-if [ $? -ne 0 ]; then
-	local retcode=$?
+retcode=$?
+if [ $retcode -ne 0 ]; then
 	echo "Failed to configure dependencies, aborting..."
 	exit $retcode
 fi
 echo "Building dependencies..."
 "$ROOT/core/externals/build.sh"
-if [ $? -ne 0 ]; then
-	local retcode=$?
+retcode=$?
+if [ $retcode -ne 0 ]; then
 	echo "Failed to build dependencies, aborting..."
 	exit $retcode
 fi
@@ -39,8 +39,8 @@ else
 	echo "Updating dependencies via CocoaPods"
 	(cd "$SRCLOC" && $POD update)
 fi
-if [ $? -ne 0 ]; then
-	local retcode=$?
+retcode=$?
+if [ $retcode -ne 0 ]; then
 	echo "Failed to processing dependencies via CocoaPods, aborting..."
 	exit $retcode
 fi
@@ -50,16 +50,16 @@ OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
 
 # Download all shipped resources
 "$SRCLOC/download-shipped-resources.sh"
-if [ $? -ne 0 ]; then
-	local retcode=$?
+retcode=$?
+if [ $retcode -ne 0 ]; then
 	echo "Failed to download shipped resources, aborting..."
 	exit $retcode
 fi
 
 # Generate resources from SVG
 "$SRCLOC/rasterize-resources.sh"
-if [ $? -ne 0 ]; then
-	local retcode=$?
+retcode=$?
+if [ $retcode -ne 0 ]; then
 	echo "Failed to rasterize resources, aborting..."
 	exit $retcode
 fi

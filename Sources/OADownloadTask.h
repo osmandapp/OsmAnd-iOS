@@ -11,13 +11,16 @@
 #import "OAObservable.h"
 
 typedef NS_ENUM(NSInteger, OADownloadTaskState) {
+    OADownloadTaskStateUnknown = -1,
     OADownloadTaskStateRunning = 0,
     OADownloadTaskStatePaused = 1,
     OADownloadTaskStateStopping = 2,
-    OADownloadTaskStateCompleted = 3,
+    OADownloadTaskStateFinished = 3,
 };
 
 @protocol OADownloadTask <NSObject>
+
+@required
 
 @property(readonly, copy) NSURLRequest *originalRequest;
 @property(readonly, copy) NSURLRequest *currentRequest;
@@ -34,8 +37,6 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 
 @property(readonly) OAObservable* progressCompletedObservable;
 @property(readonly) float progressCompleted;
-@property(readonly) int64_t bytesReceived;
-@property(readonly) int64_t contentSizeToReceive;
 
 @property(readonly) OAObservable* completedObservable;
 

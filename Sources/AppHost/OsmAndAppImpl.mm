@@ -27,6 +27,7 @@
 @synthesize cachePath = _cachePath;
 
 @synthesize resourcesManager = _resourcesManager;
+@synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
 
 - (instancetype)init
 {
@@ -57,6 +58,7 @@
 
 - (void)dtor
 {
+    _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 - (BOOL)initialize
@@ -83,6 +85,7 @@
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
 
+    _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsPath.absolutePath(),
                                                          QList<QString>(),
@@ -90,6 +93,15 @@
                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
                                                             : QString::null,
                                                          QString::fromNSString(NSTemporaryDirectory())));
+    _resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                             [self]
+                                                             (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                              const QList< QString >& added,
+                                                              const QList< QString >& removed,
+                                                              const QList< QString >& updated)
+                                                             {
+                                                                 [_localResourcesChangedObservable notifyEventWithKey:self];
+                                                             });
 
     // Load world regions
     NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"

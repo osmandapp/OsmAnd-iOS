@@ -37,6 +37,9 @@
 		BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
 		BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
+		BB32C0471926265E007999A0 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C0461926265E007999A0 /* libarchive_static.a */; };
+		BB32C04919262B80007999A0 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
+		BB32C04A19262B90007999A0 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
 		BB451D8B18D70B4B005FBE09 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BB451DB818D70B5B005FBE09 /* HUD_button_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9418D70B5B005FBE09 /* HUD_button_bg.png */; };
 		BB451DB918D70B5B005FBE09 /* HUD_button_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9518D70B5B005FBE09 /* HUD_button_bg@2x.png */; };
@@ -347,6 +350,9 @@
 		BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithClickableAccessoryView.m; path = Views/OATableViewCellWithClickableAccessoryView.m; sourceTree = "<group>"; };
 		BB32C0411925FB43007999A0 /* OATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCell.h; path = Views/OATableViewCell.h; sourceTree = "<group>"; };
 		BB32C0421925FB43007999A0 /* OATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCell.m; path = Views/OATableViewCell.m; sourceTree = "<group>"; };
+		BB32C04519261D94007999A0 /* OADownloadsManager_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadsManager_Private.h; sourceTree = "<group>"; };
+		BB32C0461926265E007999A0 /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../binaries/ios-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
+		BB32C04819262B80007999A0 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		BB451D8A18D70B4B005FBE09 /* Shipped */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shipped; path = Resources/Shipped; sourceTree = "<group>"; };
 		BB451D9418D70B5B005FBE09 /* HUD_button_bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_button_bg.png; sourceTree = "<group>"; };
 		BB451D9518D70B5B005FBE09 /* HUD_button_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_button_bg@2x.png"; sourceTree = "<group>"; };
@@ -531,6 +537,7 @@
 			files = (
 				FE1BA61F27084969A2196FCE /* libPods.a in Frameworks */,
 				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
+				BB32C0471926265E007999A0 /* libarchive_static.a in Frameworks */,
 				BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */,
 				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
 				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
@@ -553,6 +560,7 @@
 				BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */,
 				BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */,
 				BBB34EA9179BBD21004C5567 /* libz.dylib in Frameworks */,
+				BB32C04A19262B90007999A0 /* libbz2.dylib in Frameworks */,
 				BBB34EE7179BF2A7004C5567 /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -575,6 +583,7 @@
 				BB451E4F18DCD224005FBE09 /* libQt5Network.a in Frameworks */,
 				BB451E5018DCD224005FBE09 /* libQt5Sql.a in Frameworks */,
 				BB451E5118DCD224005FBE09 /* libz.dylib in Frameworks */,
+				BB32C04919262B80007999A0 /* libbz2.dylib in Frameworks */,
 				BB451E5218DCD224005FBE09 /* libiconv.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -606,6 +615,8 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB32C04819262B80007999A0 /* libbz2.dylib */,
+				BB32C0461926265E007999A0 /* libarchive_static.a */,
 				90FA13E852C14245A4ED3E9D /* libPods.a */,
 				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,
 				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
@@ -649,6 +660,7 @@
 				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
 				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
 				BB32C030192354BA007999A0 /* OADownloadsManager.h */,
+				BB32C04519261D94007999A0 /* OADownloadsManager_Private.h */,
 				BB32C031192354BA007999A0 /* OADownloadsManager.m */,
 				BB32C0381923785C007999A0 /* OADownloadTask.h */,
 				BB32C039192381FD007999A0 /* OADownloadTask_AFURLSessionManager.h */,
@@ -1495,6 +1507,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios-iphoneos/Debug",
+				);
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1504,6 +1520,10 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios-iphoneos/Debug",
+				);
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1516,6 +1536,7 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static",
+					"-larchive_static",
 					"-licu4c_static",
 					"-lprotobuf_static",
 					"-lgdal_static",
@@ -1538,6 +1559,7 @@
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static",
+					"-larchive_static",
 					"-licu4c_static",
 					"-lprotobuf_static",
 					"-lgdal_static",

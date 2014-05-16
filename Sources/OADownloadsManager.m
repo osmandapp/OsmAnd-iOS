@@ -55,8 +55,6 @@
 
 }
 
-//@synthesize downloadTasks = _downloadTasks;
-
 - (NSArray*)downloadTasksWithKey:(NSString*)key
 {
     @synchronized(_tasksSync)
@@ -121,6 +119,21 @@
     }
 
     return task;
+}
+
+- (void)removeTask:(id<OADownloadTask>)task
+{
+    // Add task to collection
+    @synchronized(_tasksSync)
+    {
+        NSMutableArray* list = [_tasks objectForKey:task.key];
+        if (list == nil)
+            return;
+
+        [list removeObject:task];
+        if ([list count] == 0)
+            [_tasks removeObjectForKey:task.key];
+    }
 }
 
 @end

@@ -8,6 +8,9 @@
 
 #import "OADownloadTask_AFURLSessionManager.h"
 
+#import "OADownloadsManager.h"
+#import "OADownloadsManager_Private.h"
+
 @implementation OADownloadTask_AFURLSessionManager
 {
     OADownloadsManager* __weak _owner;
@@ -38,12 +41,6 @@
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
                       options:NSKeyValueObservingOptionInitial
                       context:nil];
-
-/*
-        - (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
-    progress:(NSProgress * __autoreleasing *)progress
-    destination:(NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
-    completionHandler:(void (^)(NSURLResponse *response, NSURL *filePath, NSError *error))completionHandler;*/
     }
     return self;
 }
@@ -86,7 +83,17 @@
 - (NSURL*)getDestinationFor:(NSURL*)temporaryTargetPath
                 andResponse:(NSURLResponse*)response
 {
-    return _targetPath != nil ? [NSURL fileURLWithPath:_targetPath] : temporaryTargetPath;
+    if (_targetPath != nil)
+        return [NSURL fileURLWithPath:_targetPath];
+
+    NSString* filenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"download.XXXXXXXX"];
+    const char* pcsFilenameTemplate = [filenameTemplate fileSystemRepresentation];
+    char* pcsFilename = mktemp(strdup(pcsFilenameTemplate));
+
+    NSString* filename = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:pcsFilename length:strlen(pcsFilename)];
+    free(pcsFilename);
+
+    return [NSURL fileURLWithPath:filename];
 }
 
 - (void)onCompletedWith:(NSURLResponse*)response
@@ -96,7 +103,11 @@
     _targetPath = targetPath.path;
     _error = error;
 
-    [_completedObservable notifyEventWithKey:self];
+    OADownloadsManager* owner = _owner;
+    if (_task.state == NSURLSessionTaskStateCompleted && owner != nil)
+        [owner removeTask:self];
+
+    [_completedObservable notifyEventWithKey:self andValue:_targetPath];
 }
 
 - (NSURLRequest*)originalRequest
@@ -119,7 +130,20 @@
 
 - (OADownloadTaskState)state
 {
-    return 0;
+    switch (_task.state)
+    {
+        case NSURLSessionTaskStateRunning:
+            return OADownloadTaskStateRunning;
+        case NSURLSessionTaskStateSuspended:
+            return OADownloadTaskStatePaused;
+        case NSURLSessionTaskStateCanceling:
+            return OADownloadTaskStateStopping;
+        case NSURLSessionTaskStateCompleted:
+            return OADownloadTaskStateFinished;
+
+        default:
+            return OADownloadTaskStateUnknown;
+    }
 }
 
 - (void)resume
@@ -129,24 +153,22 @@
 
 - (void)pause
 {
-
+    [_task suspend];
 }
 
 - (void)stop
 {
-
+    //TODO: should produce resume data
+    [_task cancel];
 }
 
 - (void)cancel
 {
-
+    [_task cancel];
 }
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;
 @synthesize progressCompleted = _progressCompleted;
-
-//@property (readonly) int64_t bytesReceived;
-//@property (readonly) int64_t contentSizeToReceive;
 
 @synthesize completedObservable = _completedObservable;
 

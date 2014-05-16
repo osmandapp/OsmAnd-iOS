@@ -26,6 +26,8 @@
 
 @property(readonly) OADownloadsManager* downloadsManager;
 
+@property(readonly) OAObservable* localResourcesChangedObservable;
+
 @property(nonatomic) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;
 

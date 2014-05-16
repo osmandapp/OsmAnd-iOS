@@ -13,6 +13,7 @@ pod 'TestFlightSDK', '~> 3.0.0'
 pod 'UIAlertView-Blocks', '~> 1.0'
 pod 'DACircularProgress', '~> 2.2.0'
 pod 'FFCircularProgressView', '~> 0.4'
+pod 'QuickDialog', '~> 1.0'
 
 # Make changes to Pods.xcconfig : 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

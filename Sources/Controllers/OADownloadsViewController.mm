@@ -80,6 +80,7 @@
 
     UIBarButtonItem* _refreshBarButton;
 
+    OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
 }
@@ -118,8 +119,10 @@
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)];
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                               withHandler:@selector(onDownloadTaskCompleted:withKey:andValue:)];
-
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)];
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                andObserve:_app.localResourcesChangedObservable];
 
     // These don't change unless application is updated
     [self obtainRootWorldRegions];
@@ -212,7 +215,7 @@
         if (item == nil)
         {
             id<OADownloadTask> downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId.toNSString()]] firstObject];
-            if (downloadTask != nil && (downloadTask.state != OADownloadTaskStateCompleted))
+            if (downloadTask != nil && (downloadTask.state != OADownloadTaskStateFinished))
             {
                 Item_DownloadingResource* downloadingItem = [[Item_DownloadingResource alloc] init];
                 downloadingItem.downloadTask = downloadTask;
@@ -356,33 +359,64 @@
     });
 }
 
-- (void)onDownloadTaskCompleted:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
+    NSString* localPath = task.targetPath;
 
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded)
-            return;
+    BOOL needsManualRowReload = YES;
 
-        [self obtainResourceListItems];
+    if (localPath != nil && task.state == OADownloadTaskStateFinished)
+    {
+        const auto& filePath = QString::fromNSString(localPath);
+        bool ok = false;
 
-        NSUInteger downloadItemIndex = [_worldwideResourceItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            if (![obj isKindOfClass:[Item_DownloadingResource class]])
-                return NO;
+        // Try to install only in case of successful download
+        if (task.error == nil)
+        {
+            // Install or update given resource
+            const auto& resourceId = QString::fromNSString([task.key substringFromIndex:[@"resource:" length]]);
+            ok = _app.resourcesManager->updateFromFile(resourceId, filePath);
+            if (!ok)
+                ok = _app.resourcesManager->installFromRepository(resourceId, filePath);
+        }
 
-            Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)obj;
-            if (downloadingItem.downloadTask != task)
-                return NO;
+        [[NSFileManager defaultManager] removeItemAtPath:task.targetPath error:nil];
 
-            *stop = YES;
-            return YES;
-        }];
-        NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:downloadItemIndex
-                                                        inSection:kWorldwideDownloadItemsSection];
+        needsManualRowReload = !ok;
+    }
 
-        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath]
-                              withRowAnimation:UITableViewRowAnimationAutomatic];
-    });
+    if (needsManualRowReload)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (!self.isViewLoaded)
+                return;
+
+            [self obtainResourceListItems];
+
+            NSUInteger downloadItemIndex = [_worldwideResourceItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+                if (![obj isKindOfClass:[Item_DownloadingResource class]])
+                    return NO;
+
+                Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)obj;
+                if (downloadingItem.downloadTask != task)
+                    return NO;
+
+                *stop = YES;
+                return YES;
+            }];
+            NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:downloadItemIndex
+                                                            inSection:kWorldwideDownloadItemsSection];
+
+            [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath]
+                                  withRowAnimation:UITableViewRowAnimationAutomatic];
+        });
+    }
+}
+
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    [self reloadListFromRepositoryCache];
 }
 
 #pragma mark - OAMenuViewControllerProtocol
@@ -523,7 +557,7 @@
             [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
         }
-        else if (downloadingItem.downloadTask.state == OADownloadTaskStateCompleted)
+        else if (downloadingItem.downloadTask.state == OADownloadTaskStateFinished)
         {
             [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = 1.0f;
@@ -573,6 +607,18 @@
                                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
                                                                      action:^{
                                                                          [self startDownloadOf:item.resourceInRepository shownAs:item];
+                                                                     }], nil] show];
+        }
+        else if ([item isKindOfClass:[Item_DownloadingResource class]])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
+                                                 itemTitle]
+                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
+                               otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                                                                     action:^{
+                                                                         Item_DownloadingResource* item_ = (Item_DownloadingResource*)item;
+                                                                         [item_.downloadTask cancel];
                                                                      }], nil] show];
         }
     }

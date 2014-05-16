@@ -37,6 +37,8 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly) int64_t bytesReceived;
 @property(readonly) int64_t contentSizeToReceive;
 
+@property(readonly) OAObservable* completedObservable;
+
 @property(readonly, copy) NSError *error;
 
 @end

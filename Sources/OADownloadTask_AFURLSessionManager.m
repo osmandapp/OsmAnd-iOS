@@ -56,7 +56,9 @@
 - (void)ctor
 {
     _progressCompleted = -1.0f;
+    _error = nil;
     _progressCompletedObservable = [[OAObservable alloc] init];
+    _completedObservable = [[OAObservable alloc] init];
 }
 
 - (void)dtor
@@ -91,7 +93,10 @@
             andStoredAt:(NSURL*)targetPath
               withError:(NSError*)error
 {
+    _targetPath = targetPath.path;
+    _error = error;
 
+    [_completedObservable notifyEventWithKey:self];
 }
 
 - (NSURLRequest*)originalRequest
@@ -143,6 +148,8 @@
 //@property (readonly) int64_t bytesReceived;
 //@property (readonly) int64_t contentSizeToReceive;
 
-//@property (readonly, copy) NSError *error;
+@synthesize completedObservable = _completedObservable;
+
+@synthesize error = _error;
 
 @end

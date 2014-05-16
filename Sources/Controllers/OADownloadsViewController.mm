@@ -80,7 +80,8 @@
 
     UIBarButtonItem* _refreshBarButton;
 
-    OAAutoObserverProxy* _downloadTaskProgressCompletedObserver;
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -114,8 +115,11 @@
                                                                       target:self
                                                                       action:@selector(onUpdateRepositoryAndRefresh)];
 
-    _downloadTaskProgressCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                       withHandler:@selector(onDownloadTaskProgressCompletedChanged:withKey:andValue:)];
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskCompleted:withKey:andValue:)];
+
 
     // These don't change unless application is updated
     [self obtainRootWorldRegions];
@@ -208,11 +212,13 @@
         if (item == nil)
         {
             id<OADownloadTask> downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId.toNSString()]] firstObject];
-            if (downloadTask != nil)
+            if (downloadTask != nil && (downloadTask.state != OADownloadTaskStateCompleted))
             {
                 Item_DownloadingResource* downloadingItem = [[Item_DownloadingResource alloc] init];
                 downloadingItem.downloadTask = downloadTask;
-                [_downloadTaskProgressCompletedObserver observe:downloadTask.progressCompletedObservable];
+
+                [_downloadTaskProgressObserver observe:downloadTask.progressCompletedObservable];
+                [_downloadTaskCompletedObserver observe:downloadTask.completedObservable];
 
                 item = downloadingItem;
             }
@@ -297,18 +303,30 @@
     NSURLRequest* request = [NSURLRequest requestWithURL:resourceInRepository->url.toNSURL()];
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resourceInRepository->id.toNSString()]];
+    [self obtainResourceListItems];
 
     // Reload this item in the table
-    NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:[_worldwideResourceItems indexOfObject:item]
+    NSUInteger downloadItemIndex = [_worldwideResourceItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        if (![obj isKindOfClass:[Item_DownloadingResource class]])
+            return NO;
+
+        Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)obj;
+        if (downloadingItem.downloadTask != task)
+            return NO;
+
+        *stop = YES;
+        return YES;
+    }];
+    NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:downloadItemIndex
                                                     inSection:kWorldwideDownloadItemsSection];
-    [self obtainResourceListItems];
-    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath]
+                          withRowAnimation:UITableViewRowAnimationAutomatic];
 
     // Resume task finally
     [task resume];
 }
 
-- (void)onDownloadTaskProgressCompletedChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
     NSNumber* progressCompleted = (NSNumber*)value;
@@ -335,6 +353,35 @@
 
         [progressView stopSpinProgressBackgroundLayer];
         progressView.progress = [progressCompleted floatValue];
+    });
+}
+
+- (void)onDownloadTaskCompleted:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+
+        [self obtainResourceListItems];
+
+        NSUInteger downloadItemIndex = [_worldwideResourceItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if (![obj isKindOfClass:[Item_DownloadingResource class]])
+                return NO;
+
+            Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)obj;
+            if (downloadingItem.downloadTask != task)
+                return NO;
+
+            *stop = YES;
+            return YES;
+        }];
+        NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:downloadItemIndex
+                                                        inSection:kWorldwideDownloadItemsSection];
+
+        [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath]
+                              withRowAnimation:UITableViewRowAnimationAutomatic];
     });
 }
 
@@ -451,6 +498,7 @@
         {
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
+            [progressView startSpinProgressBackgroundLayer];
             cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
                                                              andCustomAccessoryView:progressView
                                                                     reuseIdentifier:cellTypeId];
@@ -470,12 +518,15 @@
 
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         float progressCompleted = downloadingItem.downloadTask.progressCompleted;
-        if (progressCompleted <= 0.0f)
-            [progressView startSpinProgressBackgroundLayer];
-        else
+        if (progressCompleted > 0.0f && downloadingItem.downloadTask.state == OADownloadTaskStateRunning)
         {
             [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
+        }
+        else if (downloadingItem.downloadTask.state == OADownloadTaskStateCompleted)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = 1.0f;
         }
     }
 

@@ -10,40 +10,52 @@
 
 #import <Reachability.h>
 #import <UIAlertView+Blocks.h>
+#import <DACircularProgressView.h>
+#import <FFCircularProgressView.h>
 
 #import "OsmAndApp.h"
 #import "OATableViewCellWithButton.h"
+#import "OATableViewCellWithClickableAccessoryView.h"
 #import "OARegionDownloadsViewController.h"
 #import "UIViewController+OARootViewController.h"
 #import "OADownloadsManager.h"
 #include "Localization.h"
 
+#define kMainWorldRegionsSection 0
+#define kWorldwideDownloadItemsSection 1
+
 #define _(name) OADownloadsViewController__##name
 
-#define Item_ResourceInRepository _(Item_ResourceInRepository)
-@interface Item_ResourceInRepository : NSObject
+#define Item_BaseResourceInRepository _(Item_BaseResourceInRepository)
+@interface Item_BaseResourceInRepository : NSObject
 @property NSString* caption;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
+@end
+@implementation Item_BaseResourceInRepository
+@end
+
+#define Item_ResourceInRepository _(Item_ResourceInRepository)
+@interface Item_ResourceInRepository : Item_BaseResourceInRepository
 @end
 @implementation Item_ResourceInRepository
 @end
 
 #define Item_OutdatedResource _(Item_OutdatedResource)
-@interface Item_OutdatedResource : Item_ResourceInRepository
+@interface Item_OutdatedResource : Item_BaseResourceInRepository
 @property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
 @end
 @implementation Item_OutdatedResource
 @end
 
 #define Item_InstalledResource _(Item_InstalledResource)
-@interface Item_InstalledResource : Item_ResourceInRepository
+@interface Item_InstalledResource : Item_BaseResourceInRepository
 @property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
 @end
 @implementation Item_InstalledResource
 @end
 
 #define Item_DownloadingResource _(Item_DownloadingResource)
-@interface Item_DownloadingResource : Item_ResourceInRepository
+@interface Item_DownloadingResource : Item_BaseResourceInRepository
 @property id<OADownloadTask> downloadTask;
 @end
 @implementation Item_DownloadingResource
@@ -173,7 +185,7 @@
     }];
 }
 
-- (void)obtainResourceItems
+- (void)obtainResourceListItems
 {
     NSMutableArray* resourceItems = [[NSMutableArray alloc] init];
 
@@ -186,7 +198,7 @@
         if (!resourceId.startsWith(QLatin1String("world_")))
             continue;
 
-        Item_ResourceInRepository* item = nil;
+        Item_BaseResourceInRepository* item = nil;
         if (item == nil)
         {
             id<OADownloadTask> downloadTask = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId.toNSString()]] firstObject];
@@ -255,7 +267,7 @@
 
         dispatch_async(dispatch_get_main_queue(), ^{
             _isRefreshingList = NO;
-            [self obtainResourceItems];
+            [self obtainResourceListItems];
             [self.updateActivityIndicator stopAnimating];
             [self.tableView reloadData];
             _refreshBarButton.enabled = YES;
@@ -266,22 +278,30 @@
 - (void)reloadListFromRepositoryCache
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self obtainResourceItems];
+        [self obtainResourceListItems];
         [self.tableView reloadData];
     });
 }
 
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resourceInRepository
+                shownAs:(Item_ResourceInRepository*)item
 {
+    // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resourceInRepository->url.toNSURL()];
-
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resourceInRepository->id.toNSString()]];
+
+    //todo: add listeners
+
+    // Reload this item in the table
+    NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:[_worldwideResourceItems indexOfObject:item]
+                                                    inSection:kWorldwideDownloadItemsSection];
+    [self obtainResourceListItems];
+    [self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:itemIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+
+    // Resume task finally
     [task resume];
 }
-
-#define kMainWorldRegionsSection 0
-#define kWorldwideDownloadItemsSection 1
 
 #pragma mark - OAMenuViewControllerProtocol
 
@@ -336,9 +356,11 @@
     static NSString* const installableItemCell = @"installableItemCell";
     static NSString* const outdatedItemCell = @"outdatedItemCell";
     static NSString* const installedItemCell = @"installedItemCell";
+    static NSString* const downloadingItemCell = @"downloadingItemCell";
 
     NSString* cellTypeId = nil;
     NSString* caption = nil;
+    Item_ResourceInRepository* item = nil;
     if (indexPath.section == kMainWorldRegionsSection)
     {
         OAWorldRegion* worldRegion = [_mainWorldRegions objectAtIndex:indexPath.row];
@@ -350,16 +372,14 @@
     }
     else if (indexPath.section == kWorldwideDownloadItemsSection)
     {
-        Item_ResourceInRepository* item = [_worldwideResourceItems objectAtIndex:indexPath.row];
+        item = [_worldwideResourceItems objectAtIndex:indexPath.row];
         if ([item isKindOfClass:[Item_DownloadingResource class]])
-        {
-            cellTypeId = installableItemCell;
-        }
+            cellTypeId = downloadingItemCell;
         else if ([item isKindOfClass:[Item_OutdatedResource class]])
             cellTypeId = outdatedItemCell;
         else if ([item isKindOfClass:[Item_InstalledResource class]])
             cellTypeId = installedItemCell;
-        else
+        else //if ([item isKindOfClass:[Item_ResourceInRepository class]])
             cellTypeId = installableItemCell;
         caption = item.caption;
     }
@@ -392,6 +412,14 @@
             cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
                                                          iconImage.size.width, iconImage.size.height);
         }
+        else if ([cellTypeId isEqualToString:downloadingItemCell])
+        {
+            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+            progressView.iconView = [[UIView alloc] init];
+            cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
+                                                             andCustomAccessoryView:progressView
+                                                                    reuseIdentifier:cellTypeId];
+        }
         else
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
@@ -401,6 +429,17 @@
 
     // Fill cell content
     cell.textLabel.text = caption;
+    if ([cellTypeId isEqualToString:downloadingItemCell])
+    {
+        Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)item;
+
+        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        float progressCompleted = downloadingItem.downloadTask.progressCompleted;
+        if (progressCompleted <= 0.0f)
+            [progressView startSpinProgressBackgroundLayer];
+        else
+            progressView.progress = progressCompleted;
+    }
 
     return cell;
 }
@@ -431,10 +470,10 @@
                                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                                      action:^{
-                                                                         [self startDownloadOf:item.resourceInRepository];
+                                                                         [self startDownloadOf:item.resourceInRepository shownAs:item];
                                                                      }], nil] show];
         }
-        else
+        else if ([item isKindOfClass:[Item_ResourceInRepository class]])
         {
             [[[UIAlertView alloc] initWithTitle:nil
                                         message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. Proceed?"),
@@ -444,7 +483,7 @@
                                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
                                                                      action:^{
-                                                                         [self startDownloadOf:item.resourceInRepository];
+                                                                         [self startDownloadOf:item.resourceInRepository shownAs:item];
                                                                      }], nil] show];
         }
     }

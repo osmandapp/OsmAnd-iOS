@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OATableViewCellWithButton : UITableViewCell
+#import "OATableViewCell.h"
+
+@interface OATableViewCellWithButton : OATableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
       andButtonType:(UIButtonType)buttonType

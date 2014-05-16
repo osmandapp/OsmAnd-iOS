@@ -1,24 +1,28 @@
 //
-//  OATableViewCellWithButton.m
+//  OATableViewCellWithClickableAccessoryView.m
 //  OsmAnd
 //
-//  Created by Alexey Pelykh on 4/1/14.
+//  Created by Alexey Pelykh on 5/16/14.
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OATableViewCellWithButton.h"
+#import "OATableViewCellWithClickableAccessoryView.h"
 
-#include "OALog.h"
+#import "OALog.h"
 
-@implementation OATableViewCellWithButton
+@implementation OATableViewCellWithClickableAccessoryView
+{
+    UITapGestureRecognizer* _tapGestureRecognizer;
+}
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style
-      andButtonType:(UIButtonType)buttonType
-    reuseIdentifier:(NSString *)reuseIdentifier
+       andCustomAccessoryView:(UIView *)customAccessoryView
+              reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
-        [self inflateWithButtonType:buttonType];
+        [self inflate];
+        self.accessoryView = customAccessoryView;
     }
     return self;
 }
@@ -39,26 +43,24 @@
 
 - (void)inflate
 {
-    [self inflateWithButtonType:UIButtonTypeRoundedRect];
+    _tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onButtonTapped:)];
 }
 
-- (void)inflateWithButtonType:(UIButtonType)buttonType
+- (void)setAccessoryView:(UIView *)accessoryView
 {
-    UIButton* button = [UIButton buttonWithType:buttonType];
-    button.frame = CGRectZero;
-    [button addTarget:self
-               action:@selector(onButtonTapped:event:)
-     forControlEvents:UIControlEventTouchUpInside];
-    self.accessoryView = button;
+    if (self.accessoryView != nil)
+        [self.accessoryView removeGestureRecognizer:_tapGestureRecognizer];
+    if (accessoryView != nil)
+        [accessoryView addGestureRecognizer:_tapGestureRecognizer];
+
+    [super setAccessoryView:accessoryView];
 }
 
-- (UIButton*)buttonView
+- (void)onButtonTapped:(UITapGestureRecognizer*)recognizer
 {
-   return (UIButton*)self.accessoryView;
-}
+    if (recognizer.state != UIGestureRecognizerStateEnded)
+        return;
 
-- (void)onButtonTapped:(id)sender event:(id)event
-{
     // Obtain tableview and locate self
     UITableView* tableView = [self getTableView];
     NSIndexPath* ownPath = [tableView indexPathForCell:self];

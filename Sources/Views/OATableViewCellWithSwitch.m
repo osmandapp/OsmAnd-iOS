@@ -40,15 +40,6 @@
     return (UISwitch*)self.accessoryView;
 }
 
-- (UITableView*)getTableView
-{
-    id view = [self superview];
-    while(view != nil && ![view isKindOfClass:[UITableView class]])
-        view = [view superview];
-
-    return (UITableView*)view;
-}
-
 - (void)onSwitchStateChanged:(id)sender
 {
     // Obtain tableview and locate self

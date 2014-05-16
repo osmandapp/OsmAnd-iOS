@@ -8,13 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OATableViewCell.h"
+
 @protocol OATableViewWithSwitchDelegate <NSObject>
 
 - (void)tableView:(UITableView *)tableView accessorySwitchChangedStateForRowWithIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
-@interface OATableViewCellWithSwitch : UITableViewCell
+@interface OATableViewCellWithSwitch : OATableViewCell
 
 @property(readonly) UISwitch* switchView;
 

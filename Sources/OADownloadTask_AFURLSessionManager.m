@@ -25,14 +25,21 @@
         _owner = owner;
         _targetPath = [targetPath copy];
         _key = [key copy];
+        _progressCompleted = -1.0f;
+        NSProgress* progress;
         _task = [manager downloadTaskWithRequest:request
-                                        progress:nil
+                                        progress:&progress
                                      destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                                          return [self getDestinationFor:targetPath andResponse:response];
                                      }
                                completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                    [self onCompletedWith:response andStoredAt:filePath withError:error];
                                }];
+        [progress addObserver:self
+                   forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
+                      options:NSKeyValueObservingOptionInitial
+                      context:nil];
+
 /*
         - (NSURLSessionDownloadTask *)downloadTaskWithRequest:(NSURLRequest *)request
     progress:(NSProgress * __autoreleasing *)progress
@@ -56,6 +63,19 @@
 }
 
 @synthesize task = _task;
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(fractionCompleted))] && [object isKindOfClass:[NSProgress class]])
+    {
+        NSProgress* progress = (NSProgress*)object;
+        _progressCompleted = progress.fractionCompleted;
+    }
+    else
+    {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
 
 - (NSURL*)getDestinationFor:(NSURL*)temporaryTargetPath
                 andResponse:(NSURLResponse*)response
@@ -112,6 +132,8 @@
 {
 
 }
+
+@synthesize progressCompleted = _progressCompleted;
 
 //@property (readonly) int64_t bytesReceived;
 //@property (readonly) int64_t contentSizeToReceive;

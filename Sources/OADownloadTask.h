@@ -30,6 +30,7 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 - (void)stop;
 - (void)cancel;
 
+@property(readonly) float progressCompleted;
 @property(readonly) int64_t bytesReceived;
 @property(readonly) int64_t contentSizeToReceive;
 

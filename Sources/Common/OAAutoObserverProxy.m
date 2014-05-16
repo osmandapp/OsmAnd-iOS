@@ -109,56 +109,60 @@
 
 - (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
+    id owner = _owner;
+    if (owner == nil)
+        return;
+
     if (_handler != nil)
     {
-        NSMethodSignature* handlerSignature = [_owner methodSignatureForSelector:_handler];
-        NSAssert(handlerSignature != nil, @"Whoa! Something is messed up with selector %@ in %@", NSStringFromSelector(_handler), _owner);
+        NSMethodSignature* handlerSignature = [owner methodSignatureForSelector:_handler];
+        NSAssert(handlerSignature != nil, @"Whoa! Something is messed up with selector %@ in %@", NSStringFromSelector(_handler), owner);
         NSUInteger handlerArgsCount = [handlerSignature numberOfArguments] - 2; // Subtract "self" and "cmd_"
 
         if (handlerArgsCount == 3)
         {
-            objc_msgSend(_owner, _handler, observer, key, value);
+            objc_msgSend(owner, _handler, observer, key, value);
             return;
         }
         
         if (handlerArgsCount == 2)
         {
-            objc_msgSend(_owner, _handler, observer, key);
+            objc_msgSend(owner, _handler, observer, key);
             return;
         }
         
         if (handlerArgsCount == 1)
         {
-            objc_msgSend(_owner, _handler, observer);
+            objc_msgSend(owner, _handler, observer);
             return;
         }
         
-        objc_msgSend(_owner, _handler);
+        objc_msgSend(owner, _handler);
         return;
     }
     
-    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
+    if ([owner respondsToSelector:@selector(handleObservedEventFrom:withKey:andValue:)])
     {
-        [_owner handleObservedEventFrom:observer
-                                withKey:key
-                               andValue:value];
+        [owner handleObservedEventFrom:observer
+                               withKey:key
+                              andValue:value];
         return;
     }
     
-    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
+    if ([owner respondsToSelector:@selector(handleObservedEventFrom:withKey:)])
     {
-        [_owner handleObservedEventFrom:observer
-                                withKey:key];
+        [owner handleObservedEventFrom:observer
+                               withKey:key];
         return;
     }
     
-    if ([_owner respondsToSelector:@selector(handleObservedEventFrom:)])
+    if ([owner respondsToSelector:@selector(handleObservedEventFrom:)])
     {
-        [_owner handleObservedEventFrom:observer];
+        [owner handleObservedEventFrom:observer];
         return;
     }
     
-    [_owner handleObservedEvent];
+    [owner handleObservedEvent];
 }
 
 - (BOOL)isAttached

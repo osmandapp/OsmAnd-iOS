@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#import "OAObservable.h"
+
 typedef NS_ENUM(NSInteger, OADownloadTaskState) {
     OADownloadTaskStateRunning = 0,
     OADownloadTaskStatePaused = 1,
@@ -30,6 +32,7 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 - (void)stop;
 - (void)cancel;
 
+@property(readonly) OAObservable* progressCompletedObservable;
 @property(readonly) float progressCompleted;
 @property(readonly) int64_t bytesReceived;
 @property(readonly) int64_t contentSizeToReceive;

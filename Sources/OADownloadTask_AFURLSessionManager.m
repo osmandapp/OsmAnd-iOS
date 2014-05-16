@@ -25,7 +25,6 @@
         _owner = owner;
         _targetPath = [targetPath copy];
         _key = [key copy];
-        _progressCompleted = -1.0f;
         NSProgress* progress;
         _task = [manager downloadTaskWithRequest:request
                                         progress:&progress
@@ -56,6 +55,8 @@
 
 - (void)ctor
 {
+    _progressCompleted = -1.0f;
+    _progressCompletedObservable = [[OAObservable alloc] init];
 }
 
 - (void)dtor
@@ -70,6 +71,9 @@
     {
         NSProgress* progress = (NSProgress*)object;
         _progressCompleted = progress.fractionCompleted;
+
+        [_progressCompletedObservable notifyEventWithKey:self
+                                                andValue:[NSNumber numberWithFloat:_progressCompleted]];
     }
     else
     {
@@ -133,6 +137,7 @@
 
 }
 
+@synthesize progressCompletedObservable = _progressCompletedObservable;
 @synthesize progressCompleted = _progressCompleted;
 
 //@property (readonly) int64_t bytesReceived;

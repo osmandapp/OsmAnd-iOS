@@ -19,6 +19,7 @@
 #import "OARegionDownloadsViewController.h"
 #import "UIViewController+OARootViewController.h"
 #import "OADownloadsManager.h"
+#import "OAAutoObserverProxy.h"
 #include "Localization.h"
 
 #define kMainWorldRegionsSection 0
@@ -78,6 +79,8 @@
     NSArray* _worldwideResourceItems;
 
     UIBarButtonItem* _refreshBarButton;
+
+    OAAutoObserverProxy* _downloadTaskProgressCompletedObserver;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -110,6 +113,9 @@
     _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                       target:self
                                                                       action:@selector(onUpdateRepositoryAndRefresh)];
+
+    _downloadTaskProgressCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                       withHandler:@selector(onDownloadTaskProgressCompletedChanged:withKey:andValue:)];
 
     // These don't change unless application is updated
     [self obtainRootWorldRegions];
@@ -206,6 +212,7 @@
             {
                 Item_DownloadingResource* downloadingItem = [[Item_DownloadingResource alloc] init];
                 downloadingItem.downloadTask = downloadTask;
+                [_downloadTaskProgressCompletedObserver observe:downloadTask.progressCompletedObservable];
 
                 item = downloadingItem;
             }
@@ -291,8 +298,6 @@
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resourceInRepository->id.toNSString()]];
 
-    //todo: add listeners
-
     // Reload this item in the table
     NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:[_worldwideResourceItems indexOfObject:item]
                                                     inSection:kWorldwideDownloadItemsSection];
@@ -301,6 +306,36 @@
 
     // Resume task finally
     [task resume];
+}
+
+- (void)onDownloadTaskProgressCompletedChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    NSNumber* progressCompleted = (NSNumber*)value;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+
+        NSUInteger downloadItemIndex = [_worldwideResourceItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+            if (![obj isKindOfClass:[Item_DownloadingResource class]])
+                return NO;
+
+            Item_DownloadingResource* downloadingItem = (Item_DownloadingResource*)obj;
+            if (downloadingItem.downloadTask != task)
+                return NO;
+
+            *stop = YES;
+            return YES;
+        }];
+        NSIndexPath* itemIndexPath = [NSIndexPath indexPathForRow:downloadItemIndex
+                                                        inSection:kWorldwideDownloadItemsSection];
+        UITableViewCell* itemCell = [self.tableView cellForRowAtIndexPath:itemIndexPath];
+        FFCircularProgressView* progressView = (FFCircularProgressView*)itemCell.accessoryView;
+
+        [progressView stopSpinProgressBackgroundLayer];
+        progressView.progress = [progressCompleted floatValue];
+    });
 }
 
 #pragma mark - OAMenuViewControllerProtocol
@@ -438,7 +473,10 @@
         if (progressCompleted <= 0.0f)
             [progressView startSpinProgressBackgroundLayer];
         else
+        {
+            [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
+        }
     }
 
     return cell;

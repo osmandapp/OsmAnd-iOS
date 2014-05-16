@@ -1507,10 +1507,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios-iphoneos/Debug",
-				);
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};
@@ -1520,10 +1516,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
 			buildSettings = {
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"/Users/spry/Work/OpenSource/OsmAnd/OsmAnd/binaries/ios-iphoneos/Debug",
-				);
 				PRODUCT_NAME = OsmAnd;
 				WRAPPER_EXTENSION = app;
 			};

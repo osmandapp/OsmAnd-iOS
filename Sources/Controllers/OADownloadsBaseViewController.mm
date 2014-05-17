@@ -321,7 +321,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if ([resourceId isEqualToString:@"world_basemap.map.obf"])
             return OALocalizedString(@"Detailed overview map");
-        return resourceId;
+        return nil;
     }
 
     switch(type)
@@ -334,7 +334,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             break;
 
         default:
-            return resourceId;
+            return nil;
     }
 }
 
@@ -398,6 +398,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         item.resourceInRepository = resourceInRepository;
         item.caption = [self titleOfResourceId:resourceId ofType:resourceInRepository->type];
+        if (item.caption == nil)
+            continue;
 
         [_downloadItems addObject:item];
     }

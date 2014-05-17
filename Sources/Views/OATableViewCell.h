@@ -10,6 +10,6 @@
 
 @interface OATableViewCell : UITableViewCell
 
-- (UITableView*)getTableView;
+@property(readonly) UITableView* tableView;
 
 @end

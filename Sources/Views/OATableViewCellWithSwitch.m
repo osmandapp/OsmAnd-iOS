@@ -46,16 +46,15 @@
 - (void)onSwitchStateChanged:(id)sender
 {
     // Obtain tableview and locate self
-    UITableView* tableView = [self getTableView];
-    NSIndexPath* ownPath = [tableView indexPathForCell:self];
-    if (tableView == nil || ![tableView.delegate conformsToProtocol:@protocol(OATableViewWithSwitchDelegate) ] || ownPath == nil)
+    NSIndexPath* ownPath = [self.tableView indexPathForCell:self];
+    if (self.tableView == nil || ![self.tableView.delegate conformsToProtocol:@protocol(OATableViewWithSwitchDelegate) ] || ownPath == nil)
     {
         OALog(@"Warning: lost state change");
         return;
     }
 
-    id<OATableViewWithSwitchDelegate> tableViewDelegate = (id<OATableViewWithSwitchDelegate>)tableView.delegate;
-    [tableViewDelegate tableView:tableView accessorySwitchChangedStateForRowWithIndexPath:ownPath];
+    id<OATableViewWithSwitchDelegate> tableViewDelegate = (id<OATableViewWithSwitchDelegate>)self.tableView.delegate;
+    [tableViewDelegate tableView:self.tableView accessorySwitchChangedStateForRowWithIndexPath:ownPath];
 }
 
 @end

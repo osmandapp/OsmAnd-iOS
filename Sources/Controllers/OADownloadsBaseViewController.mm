@@ -17,6 +17,7 @@
 #import "OATableViewCellWithButton.h"
 #import "OATableViewCellWithClickableAccessoryView.h"
 #import "OALocalResourceInformationViewController.h"
+#import "UITableViewCell+getTableView.h"
 #include "Localization.h"
 
 #define _(name) OADownloadsBaseViewController__##name
@@ -621,13 +622,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
-
-    if (selectedItemPath != nil &&
-        selectedItemPath.section == _subregionsSection &&
-        [identifier isEqualToString:_openSubregionSegueId])
+    UITableView* tableView = nil;
+    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
     {
-        return (selectedItemPath.row < [_subregionItems count]);
+        OATableViewCell* cell = (OATableViewCell*)sender;
+        tableView = cell.tableView;
+    }
+    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
+    {
+        UITableViewCell* cell = (UITableViewCell*)sender;
+        tableView = [cell getTableView];
+    }
+
+    if (tableView == _tableView)
+    {
+        NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
+
+        if (selectedItemPath != nil &&
+            selectedItemPath.section == _subregionsSection &&
+            [identifier isEqualToString:_openSubregionSegueId])
+        {
+            return (selectedItemPath.row < [_subregionItems count]);
+        }
     }
 
     return NO;
@@ -635,16 +651,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
-
-    if (selectedItemPath != nil &&
-        selectedItemPath.section == _subregionsSection &&
-        [segue.identifier isEqualToString:_openSubregionSegueId])
+    UITableView* tableView = nil;
+    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
     {
-        OARegionDownloadsViewController* regionDownloadsViewController = [segue destinationViewController];
-        regionDownloadsViewController.worldRegion = [_subregionItems objectAtIndex:selectedItemPath.row];
+        OATableViewCell* cell = (OATableViewCell*)sender;
+        tableView = cell.tableView;
+    }
+    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
+    {
+        UITableViewCell* cell = (UITableViewCell*)sender;
+        tableView = [cell getTableView];
+    }
+
+    if (tableView == _tableView)
+    {
+        NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
+
+        if (selectedItemPath != nil &&
+            selectedItemPath.section == _subregionsSection &&
+            [segue.identifier isEqualToString:_openSubregionSegueId])
+        {
+            OARegionDownloadsViewController* regionDownloadsViewController = [segue destinationViewController];
+            regionDownloadsViewController.worldRegion = [_subregionItems objectAtIndex:selectedItemPath.row];
+        }
     }
 }
 
 #pragma mark -
+
 @end

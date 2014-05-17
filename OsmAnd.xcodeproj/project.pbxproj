@@ -286,6 +286,8 @@
 		BBAD5BA31927460F0043590F /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */; };
 		BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
 		BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
+		BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */; };
+		BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -504,6 +506,8 @@
 		BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
 		BBAD5BA41927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadTask_AFDownloadRequestOperation.h; sourceTree = "<group>"; };
 		BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadTask_AFDownloadRequestOperation.m; sourceTree = "<group>"; };
+		BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+getTableView.h"; path = "Views/UITableViewCell+getTableView.h"; sourceTree = "<group>"; };
+		BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+getTableView.m"; path = "Views/UITableViewCell+getTableView.m"; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -700,6 +704,8 @@
 				BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */,
 				BB32C0411925FB43007999A0 /* OATableViewCell.h */,
 				BB32C0421925FB43007999A0 /* OATableViewCell.m */,
+				BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */,
+				BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -1344,6 +1350,7 @@
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
+				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
@@ -1388,6 +1395,7 @@
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
+				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,

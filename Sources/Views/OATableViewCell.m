@@ -25,8 +25,9 @@
 {
 }
 
-- (UITableView*)getTableView
+- (UITableView*)tableView
 {
+    //TODO: cache value until detached!
     id view = [self superview];
     while(view != nil && ![view isKindOfClass:[UITableView class]])
         view = [view superview];

@@ -13,13 +13,16 @@
 
 #import "OsmAndApp.h"
 #import "OAOptionsPanelViewController.h"
+#import "OARegionDownloadsViewController.h"
+#import "UITableViewCell+getTableView.h"
+#import "OATableViewCell.h"
 #include "Localization.h"
 
 #define _(name) OADownloadsViewController__##name
 #define ctor _(ctor)
 #define dtor _(dtor)
 
-@interface OADownloadsViewController ()
+@interface OADownloadsViewController () <UISearchDisplayDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateActivityIndicator;
@@ -33,6 +36,8 @@
     BOOL _isLoadingRepository;
 
     UIBarButtonItem* _refreshBarButton;
+
+    NSArray* _searchResults;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -62,6 +67,8 @@
     _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                       target:self
                                                                       action:@selector(onUpdateRepositoryAndRefresh)];
+
+    _searchResults = nil;
 
     // Link to root world region
     self.worldRegion = _app.worldRegion;
@@ -125,6 +132,13 @@
     });
 }
 
+- (void)filterContentForSearchText:(NSString*)searchString
+{
+    _searchResults = [_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:
+                      [NSPredicate predicateWithFormat:@"%K contains[c] %@", @"name", searchString]];
+    _searchResults = [_searchResults sortedArrayUsingSelector:@selector(compare:)];
+}
+
 #pragma mark - OAMenuViewControllerProtocol
 
 @synthesize menuHostViewController = _menuHostViewController;
@@ -133,6 +147,9 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return 1;
+
     if (_isLoadingRepository)
         return 0; // No sections at all
 
@@ -141,10 +158,117 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return [_searchResults count];
+
     if (_isLoadingRepository)
         return 0; // No sections at all
 
     return [super tableView:tableView numberOfRowsInSection:section];
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        static NSString* const subregionItemCell = @"subregionItemCell";
+
+        OAWorldRegion* worldRegion = [_searchResults objectAtIndex:indexPath.row];
+
+        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:subregionItemCell];
+        if (cell == nil)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:subregionItemCell];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        cell.textLabel.text = worldRegion.name;
+
+        return cell;
+    }
+
+    return [super tableView:tableView cellForRowAtIndexPath:indexPath];
+}
+#pragma mark - UITableViewDelegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        [self performSegueWithIdentifier:@"openSubregion" sender:[tableView cellForRowAtIndexPath:indexPath]];
+        return;
+    }
+}
+
+#pragma mark - UISearchDisplayDelegate
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    [self filterContentForSearchText:searchString];
+
+    return YES;
+}
+
+#pragma mark - Navigation
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    UITableView* tableView = nil;
+    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
+    {
+        OATableViewCell* cell = (OATableViewCell*)sender;
+        tableView = cell.tableView;
+    }
+    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
+    {
+        UITableViewCell* cell = (UITableViewCell*)sender;
+        tableView = [cell getTableView];
+    }
+
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        NSIndexPath* selectedItemPath = [tableView indexPathForSelectedRow];
+
+        if (selectedItemPath != nil &&
+            [identifier isEqualToString:@"openSubregion"])
+        {
+            return (selectedItemPath.row < [_searchResults count]);
+        }
+
+        return NO;
+    }
+
+    return [super shouldPerformSegueWithIdentifier:identifier sender:sender];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    UITableView* tableView = nil;
+    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
+    {
+        OATableViewCell* cell = (OATableViewCell*)sender;
+        tableView = cell.tableView;
+    }
+    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
+    {
+        UITableViewCell* cell = (UITableViewCell*)sender;
+        tableView = [cell getTableView];
+    }
+
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        NSIndexPath* selectedItemPath = [tableView indexPathForSelectedRow];
+
+        if (selectedItemPath != nil &&
+            [segue.identifier isEqualToString:@"openSubregion"])
+        {
+            OARegionDownloadsViewController* regionDownloadsViewController = [segue destinationViewController];
+            regionDownloadsViewController.worldRegion = [_searchResults objectAtIndex:selectedItemPath.row];
+        }
+        return;
+    }
+
+    [super prepareForSegue:segue sender:sender];
 }
 
 #pragma mark -

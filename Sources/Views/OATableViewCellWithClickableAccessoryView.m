@@ -65,16 +65,15 @@
         return;
 
     // Obtain tableview and locate self
-    UITableView* tableView = [self getTableView];
-    NSIndexPath* ownPath = [tableView indexPathForCell:self];
-    if (tableView == nil || ownPath == nil)
+    NSIndexPath* ownPath = [self.tableView indexPathForCell:self];
+    if (self.tableView == nil || ownPath == nil)
     {
         OALog(@"Warning: lost button tap");
         return;
     }
 
-    if ([tableView.delegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)])
-        [tableView.delegate tableView:tableView accessoryButtonTappedForRowWithIndexPath:ownPath];
+    if ([self.tableView.delegate respondsToSelector:@selector(tableView:accessoryButtonTappedForRowWithIndexPath:)])
+        [self.tableView.delegate tableView:self.tableView accessoryButtonTappedForRowWithIndexPath:ownPath];
 }
 
 @end

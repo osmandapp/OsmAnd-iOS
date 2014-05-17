@@ -8,7 +8,7 @@
 
 #import "OALocalResourceInformationViewController.h"
 
-#import <QRootElement.h>
+#import <QuickDialog.h>
 
 #import "OsmAndApp.h"
 #include "Localization.h"
@@ -82,7 +82,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     QRootElement* rootElement = [[QRootElement alloc] init];
 
     const auto& resource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-    if (!resource)
+    const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(resource);
+    if (!resource || !installedResource)
     {
         rootElement.title = @"NOT FOUND";
         self.root = rootElement;
@@ -90,10 +91,19 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     }
 
     rootElement.title = OALocalizedString(@"Details");
-    rootElement.grouped = NO;
+    rootElement.grouped = YES;
 
-    // TYPE
-    // REGION
+    QSection* mainSection = [[QSection alloc] initWithTitle:OALocalizedString(@"General")];
+    [rootElement addSection:mainSection];
+
+    // Size
+    [mainSection addElement:[[QLabelElement alloc] initWithTitle:OALocalizedString(@"Size")
+                                                           Value:[NSByteCountFormatter stringFromByteCount:resource->size
+                                                                                                countStyle:NSByteCountFormatterCountStyleFile]]];
+
+    // Timestamp
+    [mainSection addElement:[[QDateTimeElement alloc] initWithTitle:OALocalizedString(@"Created on")
+                                                               date:[NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000]]];
 
     self.root = rootElement;
 }

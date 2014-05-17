@@ -12,6 +12,9 @@
 #define inflate _(inflate)
 
 @implementation OATableViewCell
+{
+    UITableView* __weak _tableView;
+}
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {
@@ -25,14 +28,30 @@
 {
 }
 
+- (void)willMoveToSuperview:(UIView *)newSuperview
+{
+    @synchronized(self)
+    {
+        _tableView = nil;
+    }
+
+    [super willMoveToSuperview:newSuperview];
+}
+
 - (UITableView*)tableView
 {
-    //TODO: cache value until detached!
-    id view = [self superview];
-    while(view != nil && ![view isKindOfClass:[UITableView class]])
-        view = [view superview];
+    @synchronized(self)
+    {
+        if (_tableView == nil)
+        {
+            id view = [self superview];
+            while(view != nil && !([view isKindOfClass:[UITableView class]] || [[view class] isSubclassOfClass:[UITableView class]]))
+                view = [view superview];
+            _tableView = (UITableView*)view;
+        }
 
-    return (UITableView*)view;
+        return _tableView;
+    }
 }
 
 @end

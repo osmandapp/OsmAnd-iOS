@@ -13,7 +13,7 @@
 - (UITableView*)getTableView
 {
     id view = [self superview];
-    while(view != nil && ![view isKindOfClass:[UITableView class]])
+    while(view != nil && !([view isKindOfClass:[UITableView class]] || [[view class] isSubclassOfClass:[UITableView class]]))
         view = [view superview];
 
     return (UITableView*)view;

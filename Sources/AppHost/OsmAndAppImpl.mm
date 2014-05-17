@@ -17,6 +17,7 @@
 
 #include <OsmAndCore.h>
 
+#define _(name)
 @implementation OsmAndAppImpl
 {
     NSString* _worldMiniBasemapFilename;
@@ -33,33 +34,23 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        // Get default paths
+        _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
+        _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
+        _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
+
+        // First of all, initialize user defaults
+        [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 #define kAppData @"app_data"
-
-- (void)ctor
-{
-    // Get default paths
-    _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
-    _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
-    _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
-
-    // First of all, initialize user defaults
-    [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
-}
-
-- (void)dtor
-{
-    _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
-}
 
 - (BOOL)initialize
 {

@@ -22,6 +22,8 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define _(name) OAMapSourcesListViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
 
 #define Item _(Item)
 @interface Item : NSObject

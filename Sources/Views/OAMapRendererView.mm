@@ -27,6 +27,10 @@
 #   define validateGL()
 #endif
 
+#define _(name) OAMapRendererView__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @implementation OAMapRendererView
 {
     EAGLSharegroup* _glShareGroup;

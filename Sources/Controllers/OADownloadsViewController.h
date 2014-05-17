@@ -8,9 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OADownloadsBaseViewController.h"
 #import "OAMenuViewControllerProtocol.h"
 
-@interface OADownloadsViewController : UIViewController <OAMenuViewControllerProtocol>
+@interface OADownloadsViewController : OADownloadsBaseViewController <OAMenuViewControllerProtocol>
 
 @property(weak) UIViewController* menuHostViewController;
 

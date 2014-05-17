@@ -15,6 +15,7 @@
 
 @implementation OAWorldRegion
 {
+    std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion> _worldRegion;
 }
 
 - (instancetype)init
@@ -35,14 +36,14 @@
     self = [super init];
     if (self) {
         [self ctor];
-        _regionId = region->id.toNSString();
-        _nativeName = region->name.toNSString();
-        const auto citLocalizedName = region->localizedNames.constFind(QString::fromNSString([[NSLocale preferredLanguages] firstObject]));
-        if (citLocalizedName == region->localizedNames.cend())
+        _worldRegion = region;
+        _regionId = _worldRegion->id.toNSString();
+        _nativeName = _worldRegion->name.toNSString();
+        const auto citLocalizedName = _worldRegion->localizedNames.constFind(QString::fromNSString([[NSLocale preferredLanguages] firstObject]));
+        if (citLocalizedName == _worldRegion->localizedNames.cend())
             _localizedName = nil;
         else
             _localizedName = (*citLocalizedName).toNSString();
-        _superregion = nil;
     }
     return self;
 }
@@ -55,7 +56,6 @@
         _regionId = regionId;
         _nativeName = nil;
         _localizedName = localizedName;
-        _superregion = nil;
     }
     return self;
 }
@@ -67,7 +67,9 @@
 
 - (void)ctor
 {
+    _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
+    _flattenedSubregions = [[NSMutableArray alloc] init];
 }
 
 - (void)dtor
@@ -79,11 +81,35 @@
 @synthesize localizedName = _localizedName;
 @synthesize superregion = _superregion;
 @synthesize subregions = _subregions;
+@synthesize flattenedSubregions = _flattenedSubregions;
+
+- (NSString*)name
+{
+    return _localizedName != nil ? _localizedName : _nativeName;
+}
+
+- (NSComparisonResult)compare:(OAWorldRegion*)other
+{
+    return [self.name localizedCaseInsensitiveCompare:other.name];
+}
 
 - (void)addSubregion:(OAWorldRegion*)subregion
 {
+    [subregion setSuperregion:self];
+
     NSMutableArray* subregions = (NSMutableArray*)_subregions;
     [subregions addObject:subregion];
+
+    [self propagateSubregionToFlattenedHierarchy:subregion];
+}
+
+- (void)propagateSubregionToFlattenedHierarchy:(OAWorldRegion*)subregion
+{
+    NSMutableArray* flattenedSubregions = (NSMutableArray*)_flattenedSubregions;
+    [flattenedSubregions addObject:subregion];
+
+    if (_superregion != nil)
+        [_superregion propagateSubregionToFlattenedHierarchy:subregion];
 }
 
 - (void)setSuperregion:(OAWorldRegion *)superregion
@@ -93,9 +119,11 @@
 
 - (OAWorldRegion*)makeImmutable
 {
-    if ([_subregions isKindOfClass:[NSArray class]])
-        return self;
-    _subregions = [NSArray arrayWithArray:_subregions];
+    if (![_subregions isKindOfClass:[NSArray class]])
+        _subregions = [NSArray arrayWithArray:_subregions];
+
+    if (![_flattenedSubregions isKindOfClass:[NSArray class]])
+        _flattenedSubregions = [NSArray arrayWithArray:_flattenedSubregions];
 
     for(OAWorldRegion* subregion in _subregions)
         [subregion makeImmutable];
@@ -178,7 +206,6 @@
 
             OAWorldRegion* newRegion = [[OAWorldRegion alloc] initFrom:region];
             [parentRegion addSubregion:newRegion];
-            [newRegion setSuperregion:parentRegion];
             [regionsLookupTable setValue:newRegion forKey:newRegion.regionId];
             
             // Remove

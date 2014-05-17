@@ -11,6 +11,10 @@
 #import "OAMapModeHudViewController.h"
 #import "OALog.h"
 
+#define _(name) OAMapPanelViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OAMapPanelViewController ()
 
 @end

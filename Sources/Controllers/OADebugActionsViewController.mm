@@ -12,6 +12,10 @@
 #import "OAMapRendererView.h"
 #import "OAMapRendererViewController.h"
 
+#define _(name) OADebugActionsViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OADebugActionsViewController () <UITableViewDelegate, UITableViewDataSource, OATableViewWithSwitchDelegate>
 
 @end

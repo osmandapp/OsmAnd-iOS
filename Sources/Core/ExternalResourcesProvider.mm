@@ -15,7 +15,7 @@
 #import <Foundation/Foundation.h>
 
 ExternalResourcesProvider::ExternalResourcesProvider(const bool useHD_)
-: useHD(useHD_)
+    : useHD(useHD_)
 {
 }
 

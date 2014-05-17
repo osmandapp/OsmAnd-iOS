@@ -43,6 +43,10 @@
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModeFollowZoom 18.0f
 
+#define _(name) OAMapRendererViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OAMapRendererViewController ()
 
 @end

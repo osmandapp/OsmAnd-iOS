@@ -10,6 +10,9 @@
 
 #import "OALog.h"
 
+#define _(name) OATableViewCellWithClickableAccessoryView__##name
+#define inflate _(inflate)
+
 @implementation OATableViewCellWithClickableAccessoryView
 {
     UITapGestureRecognizer* _tapGestureRecognizer;

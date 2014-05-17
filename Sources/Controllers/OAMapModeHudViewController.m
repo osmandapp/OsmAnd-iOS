@@ -16,6 +16,10 @@
 #import "OADebugHudViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
+#define _(name) OAMapModeHudViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OAMapModeHudViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;

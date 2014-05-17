@@ -10,6 +10,9 @@
 
 #import "OALog.h"
 
+#define _(name) OATableViewCellWithSwitch__##name
+#define inflate _(inflate)
+
 @implementation OATableViewCellWithSwitch
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

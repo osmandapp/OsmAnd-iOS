@@ -10,6 +10,10 @@
 
 #include "OALog.h"
 
+#define _(name) OATableViewCellWithButton__##name
+#define inflate _(inflate)
+#define inflateWithButtonType _(inflateWithButtonType)
+
 @implementation OATableViewCellWithButton
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style

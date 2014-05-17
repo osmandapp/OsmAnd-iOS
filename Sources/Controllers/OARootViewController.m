@@ -11,8 +11,11 @@
 #import "JASidePanelController.h"
 #import <QuartzCore/QuartzCore.h>
 
-@interface OARootViewController ()
+#define _(name) OARootViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
 
+@interface OARootViewController ()
 @end
 
 @implementation OARootViewController

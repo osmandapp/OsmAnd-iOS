@@ -10,6 +10,10 @@
 
 #include <objc/message.h>
 
+#define _(name) OAAutoObserverProxy__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @implementation OAAutoObserverProxy
 {
 }
@@ -27,7 +31,8 @@
     return self;
 }
 
-- (instancetype)initWith:(id<OAObserverProtocol>)owner andObserve:(id<OAObservableProtocol>)observable
+- (instancetype)initWith:(id<OAObserverProtocol>)owner
+              andObserve:(id<OAObservableProtocol>)observable
 {
     self = [super init];
     if (self) {
@@ -38,7 +43,8 @@
     return self;
 }
 
-- (instancetype)initWith:(id)owner withHandler:(SEL)selector
+- (instancetype)initWith:(id)owner
+             withHandler:(SEL)selector
 {
     self = [super init];
     if (self) {
@@ -48,7 +54,9 @@
     return self;
 }
 
-- (instancetype)initWith:(id)owner withHandler:(SEL)selector andObserve:(id<OAObservableProtocol>)observable;
+- (instancetype)initWith:(id)owner
+             withHandler:(SEL)selector
+              andObserve:(id<OAObservableProtocol>)observable;
 {
     self = [super init];
     if (self) {
@@ -64,7 +72,8 @@
     [self dtor];
 }
 
-- (void)ctor:(id)owner handler:(SEL)selector
+- (void)ctor:(id)owner
+     handler:(SEL)selector
 {
     _owner = owner;
     _handler = selector;
@@ -100,14 +109,17 @@
                           withKey:nil];
 }
 
-- (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer
+                        withKey:(id)key
 {
     [self handleObservedEventFrom:observer
                           withKey:key
                          andValue:nil];
 }
 
-- (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+- (void)handleObservedEventFrom:(id<OAObservableProtocol>)observer
+                        withKey:(id)key
+                       andValue:(id)value
 {
     id owner = _owner;
     if (owner == nil)

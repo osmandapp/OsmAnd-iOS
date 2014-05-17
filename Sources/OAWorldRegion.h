@@ -14,10 +14,14 @@
 @property(readonly) NSString* regionId;
 @property(readonly) NSString* nativeName;
 @property(readonly) NSString* localizedName;
+@property(readonly) NSString* name;
 
 // Hierarchy:
 @property(readonly, weak) OAWorldRegion* superregion;
 @property(readonly) NSArray* subregions;
+@property(readonly) NSArray* flattenedSubregions;
+
+- (NSComparisonResult)compare:(OAWorldRegion*)other;
 
 + (OAWorldRegion*)loadFrom:(NSString*)ocbfFilename;
 

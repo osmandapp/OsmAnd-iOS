@@ -25,6 +25,8 @@
 #import "OALog.h"
 
 #define _(name) OAOptionsPanelViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
 
 #define Item_MapStyle _(Item_MapStyle)
 @interface Item_MapStyle : NSObject

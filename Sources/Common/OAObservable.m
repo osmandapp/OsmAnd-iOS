@@ -12,6 +12,10 @@
 
 #import "OAObserverProtocol.h"
 
+#define _(name) OAObservable__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @implementation OAObservable
 {
     NSHashTable* _observers;
@@ -34,7 +38,8 @@
 
 - (void)ctor
 {
-    _observers = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory capacity:0];
+    _observers = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory
+                                             capacity:0];
     _observersLock = [[NSLock alloc] init];
 }
 
@@ -69,7 +74,8 @@
     [self notifyEventWithKey:key andValue:nil];
 }
 
-- (void)notifyEventWithKey:(id)key andValue:(id)value
+- (void)notifyEventWithKey:(id)key
+                  andValue:(id)value
 {
     [_observersLock lock];
     for(id<OAObserverProtocol> observer in _observers)

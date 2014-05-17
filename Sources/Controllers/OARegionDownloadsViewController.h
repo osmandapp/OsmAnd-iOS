@@ -8,10 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OADownloadsBaseViewController.h"
 #import "OAWorldRegion.h"
 
-@interface OARegionDownloadsViewController : UITableViewController
-
-- (void)prepareForRegion:(OAWorldRegion*)region;
+@interface OARegionDownloadsViewController : OADownloadsBaseViewController
 
 @end

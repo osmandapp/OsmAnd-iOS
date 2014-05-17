@@ -247,8 +247,8 @@
 		BB4C74681920CB720018E1EE /* menu_item_update_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74611920CB720018E1EE /* menu_item_update_icon.png */; };
 		BB4C74691920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
 		BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
-		BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
-		BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */; };
+		BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.m */; };
+		BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.m */; };
 		BB4C7475192111730018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB4C7476192111830018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
@@ -280,6 +280,10 @@
 		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
 		BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* MapModeHUD.xib */; };
+		BBAD5B9519272B980043590F /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */; };
+		BBAD5B9619272B980043590F /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */; };
+		BBAD5BA21927460F0043590F /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */; };
+		BBAD5BA31927460F0043590F /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -450,7 +454,7 @@
 		BB4C74611920CB720018E1EE /* menu_item_update_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_update_icon.png; sourceTree = "<group>"; };
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OARegionDownloadsViewController.h; path = Controllers/OARegionDownloadsViewController.h; sourceTree = "<group>"; };
-		BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OARegionDownloadsViewController.mm; path = Controllers/OARegionDownloadsViewController.mm; sourceTree = "<group>"; };
+		BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARegionDownloadsViewController.m; path = Controllers/OARegionDownloadsViewController.m; sourceTree = "<group>"; };
 		BB4C7474192111730018E1EE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMenuViewControllerProtocol.h; path = Controllers/OAMenuViewControllerProtocol.h; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
@@ -492,6 +496,10 @@
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
 		BBACF10917C61D8500EBA761 /* MapModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MapModeHUD.xib; path = Resources/MapModeHUD.xib; sourceTree = "<group>"; };
+		BBAD5B9319272B980043590F /* OALocalResourceInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInformationViewController.h; path = Controllers/OALocalResourceInformationViewController.h; sourceTree = "<group>"; };
+		BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocalResourceInformationViewController.mm; path = Controllers/OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
+		BBAD5BA01927460E0043590F /* OADownloadsBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsBaseViewController.h; path = Controllers/OADownloadsBaseViewController.h; sourceTree = "<group>"; };
+		BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -656,6 +664,7 @@
 				BB2545B31798161500E80B58 /* Views */,
 				BB451EA418E19293005FBE09 /* Data */,
 				BB451EB518E1937C005FBE09 /* Services */,
+				BBAD5B97192733820043590F /* Helpers */,
 				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
 				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
 				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
@@ -713,10 +722,14 @@
 				BB451EEE18E60F5A005FBE09 /* OADebugHudViewController.mm */,
 				BB451F0318E6DA2E005FBE09 /* OADebugActionsViewController.h */,
 				BB451F0418E6DA2E005FBE09 /* OADebugActionsViewController.mm */,
+				BBAD5BA01927460E0043590F /* OADownloadsBaseViewController.h */,
+				BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */,
 				BB451F1318EB3666005FBE09 /* OADownloadsViewController.h */,
 				BB451F1418EB3666005FBE09 /* OADownloadsViewController.mm */,
 				BB4C746B1920FBDC0018E1EE /* OARegionDownloadsViewController.h */,
-				BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.mm */,
+				BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.m */,
+				BBAD5B9319272B980043590F /* OALocalResourceInformationViewController.h */,
+				BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -853,6 +866,13 @@
 				BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */,
 			);
 			name = LaunchImages;
+			sourceTree = "<group>";
+		};
+		BBAD5B97192733820043590F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 		BBBDADA318BC958A00E4A359 /* Common */ = {
@@ -1293,12 +1313,14 @@
 				BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
+				BBAD5BA21927460F0043590F /* OADownloadsBaseViewController.mm in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */,
 				BB32C032192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */,
-				BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
+				BB4C746D1920FBDC0018E1EE /* OARegionDownloadsViewController.m in Sources */,
 				BB63334817C3DF5600903AB1 /* OAContextPanelViewController.m in Sources */,
+				BBAD5B9519272B980043590F /* OALocalResourceInformationViewController.mm in Sources */,
 				BB451F0518E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB63334B17C3DF8200903AB1 /* OAMapPanelViewController.m in Sources */,
 				BBE1D2A9190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
@@ -1334,12 +1356,14 @@
 				BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
+				BBAD5BA31927460F0043590F /* OADownloadsBaseViewController.mm in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.mm in Sources */,
 				BB32C033192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
-				BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.mm in Sources */,
+				BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.m in Sources */,
 				BB451E2E18DCD224005FBE09 /* OAContextPanelViewController.m in Sources */,
+				BBAD5B9619272B980043590F /* OALocalResourceInformationViewController.mm in Sources */,
 				BB451F0618E6DA2E005FBE09 /* OADebugActionsViewController.mm in Sources */,
 				BB451E2F18DCD224005FBE09 /* OAMapPanelViewController.m in Sources */,
 				BBE1D2AA190D186F00D90F0A /* OAAppDelegate.mm in Sources */,

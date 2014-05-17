@@ -12,6 +12,10 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
+#define _(name) OADebugHudViewController__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OADebugHudViewController () <UIPopoverControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *_overlayContainer;

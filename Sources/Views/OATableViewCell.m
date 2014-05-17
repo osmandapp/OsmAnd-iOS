@@ -8,6 +8,9 @@
 
 #import "OATableViewCell.h"
 
+#define _(name) OATableViewCell__##name
+#define inflate _(inflate)
+
 @implementation OATableViewCell
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier

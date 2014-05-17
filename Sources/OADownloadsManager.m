@@ -44,7 +44,16 @@
     const BOOL isSupported_NSURLSession =
     (NSClassFromString(@"NSURLSession") != nil) &&
     ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
-    _sessionManager = isSupported_NSURLSession ? [[AFURLSessionManager alloc] init] : nil;
+    if (!isSupported_NSURLSession)
+        _sessionManager = nil;
+    else
+    {
+        NSURLSessionConfiguration* sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:
+                                                           [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
+        sessionConfiguration.allowsCellularAccess = YES;
+
+        _sessionManager = [[AFURLSessionManager alloc] initWithSessionConfiguration:sessionConfiguration];
+    }
 
     _tasksSync = [[NSObject alloc] init];
     _tasks = [[NSMutableDictionary alloc] init];

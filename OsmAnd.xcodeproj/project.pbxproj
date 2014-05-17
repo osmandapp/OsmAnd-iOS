@@ -1004,6 +1004,15 @@
 				CLASSPREFIX = OA;
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = OsmAnd;
+				TargetAttributes = {
+					BB451E1E18DCD224005FBE09 = {
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+						};
+					};
+				};
 			};
 			buildConfigurationList = BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */;
 			compatibilityVersion = "Xcode 3.2";

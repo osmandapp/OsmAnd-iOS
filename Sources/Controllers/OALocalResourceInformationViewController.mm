@@ -91,9 +91,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     }
 
     rootElement.title = OALocalizedString(@"Details");
-    rootElement.grouped = YES;
-
-    QSection* mainSection = [[QSection alloc] initWithTitle:OALocalizedString(@"General")];
+    rootElement.grouped = NO;
+    QSection* mainSection = [[QSection alloc] init];
     [rootElement addSection:mainSection];
 
     // Size

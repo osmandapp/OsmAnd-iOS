@@ -83,17 +83,7 @@
 - (NSURL*)getDestinationFor:(NSURL*)temporaryTargetPath
                 andResponse:(NSURLResponse*)response
 {
-    if (_targetPath != nil)
-        return [NSURL fileURLWithPath:_targetPath];
-
-    NSString* filenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"download.XXXXXXXX"];
-    const char* pcsFilenameTemplate = [filenameTemplate fileSystemRepresentation];
-    char* pcsFilename = mktemp(strdup(pcsFilenameTemplate));
-
-    NSString* filename = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:pcsFilename length:strlen(pcsFilename)];
-    free(pcsFilename);
-
-    return [NSURL fileURLWithPath:filename];
+    return [NSURL fileURLWithPath:_targetPath];
 }
 
 - (void)onCompletedWith:(NSURLResponse*)response

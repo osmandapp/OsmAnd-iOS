@@ -10,11 +10,15 @@
 #import "OADownloadTask.h"
 
 // For iOS [6.0, 7.0)
-#import <AFDownloadRequestOperation.h>
+#import "OADownloadTask_AFDownloadRequestOperation.h"
 
 // For iOS 7.0+
 #import <AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
+
+#define _(name) OADownloadsManager__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
 
 @implementation OADownloadsManager
 {
@@ -61,7 +65,6 @@
 
 - (void)dtor
 {
-
 }
 
 - (NSArray*)downloadTasksWithKey:(NSString*)key
@@ -100,6 +103,18 @@
 {
     id<OADownloadTask> task = nil;
 
+    // Generate target path if needed
+    if (targetPath == nil)
+    {
+        NSString* filenameTemplate = [NSTemporaryDirectory() stringByAppendingPathComponent:@"download.XXXXXXXX"];
+        const char* pcsFilenameTemplate = [filenameTemplate fileSystemRepresentation];
+        char* pcsFilename = mktemp(strdup(pcsFilenameTemplate));
+
+        targetPath = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:pcsFilename
+                                                                                 length:strlen(pcsFilename)];
+        free(pcsFilename);
+    }
+
     // Create task itself
     if (_sessionManager != nil)
     {
@@ -111,7 +126,10 @@
     }
     else
     {
-        //TODO: code for iOS 6
+        task = [[OADownloadTask_AFDownloadRequestOperation alloc] initWithOwner:self
+                                                                     andRequest:request
+                                                                  andTargetPath:targetPath
+                                                                         andKey:key];
     }
 
     // Add task to collection

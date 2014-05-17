@@ -284,6 +284,8 @@
 		BBAD5B9619272B980043590F /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */; };
 		BBAD5BA21927460F0043590F /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */; };
 		BBAD5BA31927460F0043590F /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */; };
+		BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
+		BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
 		BBB34EA6179BB42A004C5567 /* libQt5Network.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA3179BB42A004C5567 /* libQt5Network.a */; };
 		BBB34EA7179BB42A004C5567 /* libQt5Sql.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA4179BB42A004C5567 /* libQt5Sql.a */; };
@@ -500,6 +502,8 @@
 		BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocalResourceInformationViewController.mm; path = Controllers/OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
 		BBAD5BA01927460E0043590F /* OADownloadsBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsBaseViewController.h; path = Controllers/OADownloadsBaseViewController.h; sourceTree = "<group>"; };
 		BBAD5BA11927460F0043590F /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
+		BBAD5BA41927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadTask_AFDownloadRequestOperation.h; sourceTree = "<group>"; };
+		BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadTask_AFDownloadRequestOperation.m; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
 		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
 		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
@@ -674,6 +678,8 @@
 				BB32C0381923785C007999A0 /* OADownloadTask.h */,
 				BB32C039192381FD007999A0 /* OADownloadTask_AFURLSessionManager.h */,
 				BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */,
+				BBAD5BA41927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.h */,
+				BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1343,6 +1349,7 @@
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
+				BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BB451F1518EB3666005FBE09 /* OADownloadsViewController.mm in Sources */,
@@ -1386,6 +1393,7 @@
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
+				BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BB451F1618EB3666005FBE09 /* OADownloadsViewController.mm in Sources */,

@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="xhn-pS-KQq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="xhn-pS-KQq">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Downloads View Controller - Available downloads-->
+        <!--Downloads View Controller - Downloads-->
         <scene sceneID="qIH-ci-pf1">
             <objects>
-                <viewController title="Available downloads" id="xhn-pS-KQq" customClass="OADownloadsViewController" sceneMemberID="viewController">
+                <viewController title="Downloads" id="xhn-pS-KQq" customClass="OADownloadsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uS1-Sl-k3L"/>
                         <viewControllerLayoutGuide type="bottom" id="yaE-X9-EFB"/>

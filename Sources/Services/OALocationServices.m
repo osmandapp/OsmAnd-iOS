@@ -15,6 +15,10 @@
 #include "Localization.h"
 #import "OALog.h"
 
+#define _(name) OALocationServices__##name
+#define ctor _(ctor)
+#define dtor _(dtor)
+
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
 
@@ -121,7 +125,7 @@
                                              selector:@selector(deviceOrientationDidChange)
                                                  name:UIDeviceOrientationDidChangeNotification
                                                object:nil];
-    
+
     // Set current device orientation
     [self updateDeviceOrientation];
     
@@ -227,6 +231,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
+    OALog(@"OALocationServices: location updated");
+
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
     {
@@ -240,6 +246,8 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
+    OALog(@"OALocationServices: heading updated");
+
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
     {

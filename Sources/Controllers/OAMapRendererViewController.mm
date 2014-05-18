@@ -884,6 +884,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.resourcesManager->obfsCollection,
                                                                              mapStyle,
                                                                              mapView.contentScaleFactor,
+                                                                             QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
                                                                              externalResourcesProvider));
 
             // Configure with preset if such is set

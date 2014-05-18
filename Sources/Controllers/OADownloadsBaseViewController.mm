@@ -67,7 +67,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
 
-    NSInteger _baseDynamicSectionIndex;
     NSInteger _lastUnusedSectionIndex;
 
     NSInteger _subregionsSection;
@@ -134,12 +133,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewDidLoad];
 
-    // This is done only once, since regions doesn't update
-    [self obtainSubregionItems];
-    if ([_subregionItems count] > 0)
-        _subregionsSection = _lastUnusedSectionIndex++;
-    _baseDynamicSectionIndex = _lastUnusedSectionIndex;
-
     // Load dynamic content
     [self reloadDynamicContent];
 }
@@ -164,17 +157,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)reloadDynamicContent
 {
-    _lastUnusedSectionIndex = _baseDynamicSectionIndex;
+    _lastUnusedSectionIndex = 0;
     [self loadDynamicContent];
 }
 
 - (void)loadDynamicContent
 {
-    _downloadsSection = -1;
+    [self obtainSubregionItems];
+    if ([_subregionItems count] > 0)
+        _subregionsSection = [self allocateSection];
+    else
+        _subregionsSection = -1;
 
     [self obtainDownloadItems];
     if ([_downloadItems count] > 0)
         _downloadsSection = [self allocateSection];
+    else
+        _downloadsSection = -1;
 }
 
 - (NSInteger)allocateSection
@@ -340,8 +339,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)obtainSubregionItems
 {
+    const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
     [_subregionItems removeAllObjects];
-    [_subregionItems addObjectsFromArray:[_worldRegion.subregions sortedArrayUsingSelector:@selector(compare:)]];
+    for(OAWorldRegion* subregion in _worldRegion.subregions)
+    {
+        const auto& subregionId = QString::fromNSString(subregion.regionId);
+
+        // Verify that subregion has at least one download for itself or at least one of it's subregions
+        BOOL hasAtLeastOneDownload = NO;
+        for(const auto& resourceInRepository : resourcesInRepository)
+        {
+            if (!resourceInRepository->id.contains(subregionId))
+                continue;
+
+            hasAtLeastOneDownload = YES;
+            break;
+        }
+
+        if (!hasAtLeastOneDownload)
+            continue;
+        [_subregionItems addObject:subregion];
+    }
+    [_subregionItems sortUsingSelector:@selector(compare:)];
 }
 
 - (void)obtainDownloadItems

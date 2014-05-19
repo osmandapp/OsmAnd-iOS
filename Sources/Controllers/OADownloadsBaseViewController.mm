@@ -311,7 +311,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL)isValidResourceForRegion:(NSString*)resourceId
 {
-    return [resourceId hasPrefix:_worldRegion.superregion == nil ? @"world_" : _worldRegion.regionId];
+    return [resourceId hasPrefix:_worldRegion.superregion == nil ? @"world_" : [_worldRegion.regionId stringByAppendingString:@"."]];
 }
 
 - (NSString*)titleOfResourceId:(NSString*)resourceId ofType:(OsmAndResourceType)type
@@ -337,27 +337,45 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+- (BOOL)regionOrAnySubregionOf:(OAWorldRegion*)region
+            isDownloadableFrom:(const QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> >&)resourcesInRepository
+{
+    const auto& regionId = QString::fromNSString(region.regionId);
+    for(const auto& resourceInRepository : resourcesInRepository)
+    {
+        if (!resourceInRepository->id.startsWith(regionId))
+            continue;
+
+        return YES;
+    }
+
+    for (OAWorldRegion* subregion in region.subregions)
+    {
+        if (![self regionOrAnySubregionOf:subregion
+                       isDownloadableFrom:resourcesInRepository])
+        {
+            continue;
+        }
+
+        return YES;
+    }
+
+    return NO;
+}
+
 - (void)obtainSubregionItems
 {
     const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
     [_subregionItems removeAllObjects];
     for(OAWorldRegion* subregion in _worldRegion.subregions)
     {
-        const auto& subregionId = QString::fromNSString(subregion.regionId);
-
         // Verify that subregion has at least one download for itself or at least one of it's subregions
-        BOOL hasAtLeastOneDownload = NO;
-        for(const auto& resourceInRepository : resourcesInRepository)
+        if (![self regionOrAnySubregionOf:subregion
+                       isDownloadableFrom:resourcesInRepository])
         {
-            if (!resourceInRepository->id.contains(subregionId))
-                continue;
-
-            hasAtLeastOneDownload = YES;
-            break;
+            continue;
         }
 
-        if (!hasAtLeastOneDownload)
-            continue;
         [_subregionItems addObject:subregion];
     }
     [_subregionItems sortUsingSelector:@selector(compare:)];

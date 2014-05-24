@@ -24,7 +24,7 @@
 #include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
 #include <OsmAndCore/Map/OfflineMapDataProvider.h>
 #include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
-#include <OsmAndCore/Map/OfflineMapSymbolProvider.h>
+#include <OsmAndCore/Map/OfflineMapStaticSymbolProvider.h>
 #include <OsmAndCore/Map/RasterizerEnvironment.h>
 #include <OsmAndCore/Map/MapStyleValueDefinition.h>
 #include <OsmAndCore/Map/MapStyleValue.h>
@@ -64,7 +64,7 @@
     
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::OfflineMapDataProvider> _offlineMapDataProvider;
-    std::shared_ptr<OsmAnd::IMapSymbolProvider> _offlineMapSymbolsProvider;
+    std::shared_ptr<OsmAnd::IMapSymbolProvider> _offlineMapStaticSymbolsProvider;
     
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -860,9 +860,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
         _offlineMapDataProvider.reset();
-        if (_offlineMapSymbolsProvider)
-            [mapView removeSymbolProvider:_offlineMapSymbolsProvider];
-        _offlineMapSymbolsProvider.reset();
+        if (_offlineMapStaticSymbolsProvider)
+            [mapView removeSymbolProvider:_offlineMapStaticSymbolsProvider];
+        _offlineMapStaticSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -900,8 +900,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                                                        mapView.contentScaleFactor));
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-            _offlineMapSymbolsProvider.reset(new OsmAnd::OfflineMapSymbolProvider(_offlineMapDataProvider));
-            [mapView addSymbolProvider:_offlineMapSymbolsProvider];
+            _offlineMapStaticSymbolsProvider.reset(new OsmAnd::OfflineMapStaticSymbolProvider(_offlineMapDataProvider));
+            [mapView addSymbolProvider:_offlineMapStaticSymbolsProvider];
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {

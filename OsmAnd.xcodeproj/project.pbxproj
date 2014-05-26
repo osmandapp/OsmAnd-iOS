@@ -183,8 +183,8 @@
 		BB451E9418DCD224005FBE09 /* HUD_compass_bg.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9818D70B5B005FBE09 /* HUD_compass_bg.png */; };
 		BB451E9518DCD224005FBE09 /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9618D70B5B005FBE09 /* HUD_compass.png */; };
 		BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451D9E18D70B5B005FBE09 /* HUD_menu_button.png */; };
-		BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */; };
-		BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */; };
+		BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapViewState.m */; };
+		BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapViewState.m */; };
 		BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
 		BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
 		BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBF18E1E590005FBE09 /* OAAppData.m */; };
@@ -413,8 +413,8 @@
 		BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = position_track_map_mode_button.png; sourceTree = "<group>"; };
 		BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "position_track_map_mode_button@2x.png"; sourceTree = "<group>"; };
 		BB451E9A18DCD224005FBE09 /* OsmAnd (prebuilt Core).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd (prebuilt Core).app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB451EA718E19376005FBE09 /* OAMapCrossSessionState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapCrossSessionState.h; path = Data/OAMapCrossSessionState.h; sourceTree = "<group>"; };
-		BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapCrossSessionState.m; path = Data/OAMapCrossSessionState.m; sourceTree = "<group>"; };
+		BB451EA718E19376005FBE09 /* OAMapViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapViewState.h; path = Data/OAMapViewState.h; sourceTree = "<group>"; };
+		BB451EA818E19376005FBE09 /* OAMapViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapViewState.m; path = Data/OAMapViewState.m; sourceTree = "<group>"; };
 		BB451EB618E1938F005FBE09 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationServices.h; path = Services/OALocationServices.h; sourceTree = "<group>"; };
 		BB451EB718E1938F005FBE09 /* OALocationServices.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = OALocationServices.m; path = Services/OALocationServices.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		BB451EBE18E1E590005FBE09 /* OAAppData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAppData.h; path = Data/OAAppData.h; sourceTree = "<group>"; };
@@ -836,8 +836,8 @@
 		BB451EA418E19293005FBE09 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				BB451EA718E19376005FBE09 /* OAMapCrossSessionState.h */,
-				BB451EA818E19376005FBE09 /* OAMapCrossSessionState.m */,
+				BB451EA718E19376005FBE09 /* OAMapViewState.h */,
+				BB451EA818E19376005FBE09 /* OAMapViewState.m */,
 				BB451EBE18E1E590005FBE09 /* OAAppData.h */,
 				BB451EBF18E1E590005FBE09 /* OAAppData.m */,
 				BBB97DE31908D1EC0067F4A0 /* OAMapSource.h */,
@@ -1326,7 +1326,7 @@
 				BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
-				BB451EAF18E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
+				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
@@ -1371,7 +1371,7 @@
 				BB32C03C192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */,
-				BB451EB018E19376005FBE09 /* OAMapCrossSessionState.m in Sources */,
+				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,

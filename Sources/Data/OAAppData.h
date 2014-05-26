@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import "OAObservable.h"
-#import "OAMapCrossSessionState.h"
+#import "OAMapViewState.h"
 #import "OAMapSource.h"
 
 @interface OAAppData : NSObject <NSCoding>
@@ -19,7 +19,7 @@
 
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;
 
-@property(readonly) OAMapCrossSessionState* mapLastViewedState;
+@property(readonly) OAMapViewState* mapLastViewedState;
 
 + (OAAppData*)defaults;
 

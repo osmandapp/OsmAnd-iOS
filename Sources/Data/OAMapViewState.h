@@ -1,5 +1,5 @@
 //
-//  OAMapCrossSessionState.h
+//  OAMapViewState.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 3/24/14.
@@ -10,7 +10,7 @@
 
 #include "CommonTypes.h"
 
-@interface OAMapCrossSessionState : NSObject <NSCoding>
+@interface OAMapViewState : NSObject <NSCoding>
 
 @property Point31 target31;
 @property float zoom;

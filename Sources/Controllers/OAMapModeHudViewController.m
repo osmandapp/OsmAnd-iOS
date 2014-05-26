@@ -132,7 +132,7 @@
         [OALocationServices showDeniedAlert];
         return;
     }
-    
+
     _app.mapMode = newMode;
 }
 

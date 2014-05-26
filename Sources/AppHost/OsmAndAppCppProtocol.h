@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAMapCrossSessionState.h"
+#import "OAMapViewState.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <QDir>

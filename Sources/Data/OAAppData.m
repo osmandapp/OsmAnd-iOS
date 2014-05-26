@@ -22,7 +22,7 @@
         [self ctor];
         _lastMapSource = nil;
         _lastMapSources = [[NSMutableDictionary alloc] init];
-        _mapLastViewedState = [[OAMapCrossSessionState alloc] init];
+        _mapLastViewedState = [[OAMapViewState alloc] init];
     }
     return self;
 }

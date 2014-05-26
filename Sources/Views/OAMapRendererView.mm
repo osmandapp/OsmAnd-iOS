@@ -44,6 +44,7 @@
     OsmAnd::PointI _viewSize;
     
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
+    std::shared_ptr<OsmAnd::MapAnimator> _animator;
 }
 
 + (Class)layerClass
@@ -258,127 +259,9 @@
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
-@synthesize animator = _animator;
-
-- (void)cancelAnimation
+- (const std::shared_ptr<OsmAnd::MapAnimator>&)getAnimator
 {
-    _animator->cancelAnimation();
-}
-
-- (void)pauseAnimation
-{
-    _animator->pauseAnimation();
-}
-
-- (void)resumeAnimation
-{
-    _animator->resumeAnimation();
-}
-
-- (void)animateZoomWith:(float)velocity andDeceleration:(float)deceleration
-{
-    _animator->animateZoomWith(velocity, deceleration);
-}
-
-- (void)animateZoomBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateZoomBy(deltaValue, duration, static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration
-{
-    _animator->animateTargetWith(velocity, deceleration);
-}
-
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateTargetBy(deltaValue, duration, static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)parabolicAnimateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration
-{
-    _animator->parabolicAnimateTargetWith(velocity, deceleration);
-}
-
-- (void)parabolicAnimateTargetBy:(OsmAnd::PointI)deltaValue
-                          during:(float)duration
-                    targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
-                      zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
-{
-    _animator->parabolicAnimateTargetBy(deltaValue,
-                                        duration,
-                                        static_cast<OsmAnd::MapAnimator::TimingFunction>(targetTimingFunction),
-                                        static_cast<OsmAnd::MapAnimator::TimingFunction>(zoomTimingFunction));
-}
-
-- (void)parabolicAnimateTargetBy64:(OsmAnd::PointI64)deltaValue
-                            during:(float)duration
-                      targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
-                        zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction
-{
-    _animator->parabolicAnimateTargetBy(deltaValue,
-                                        duration,
-                                        static_cast<OsmAnd::MapAnimator::TimingFunction>(targetTimingFunction),
-                                        static_cast<OsmAnd::MapAnimator::TimingFunction>(zoomTimingFunction));
-}
-
-- (void)animateAzimuthWith:(float)velocity andDeceleration:(float)deceleration
-{
-    _animator->animateAzimuthWith(velocity, deceleration);
-}
-
-- (void)animateAzimuthBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateAzimuthBy(deltaValue, duration, static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateElevationAngleWith:(float)velocity andDeceleration:(float)deceleration
-{
-    _animator->animateElevationAngleWith(velocity, deceleration);
-}
-
-- (void)animateElevationAngleBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateElevationAngleBy(deltaValue, duration, static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateMoveBy:(OsmAnd::PointI)deltaValue
-               during:(float)duration
-       zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
-               timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateMoveBy(deltaValue,
-                             duration,
-                             static_cast<bool>(zeroizeAzimuth),
-                             static_cast<bool>(invZeroizeElevationAngle),
-                             static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateMoveBy64:(OsmAnd::PointI64)deltaValue
-                 during:(float)duration
-         zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
-                 timing:(OAMapAnimationTimingFunction)function
-{
-    _animator->animateMoveBy(deltaValue,
-                             duration,
-                             static_cast<bool>(zeroizeAzimuth),
-                             static_cast<bool>(invZeroizeElevationAngle),
-                             static_cast<OsmAnd::MapAnimator::TimingFunction>(function));
-}
-
-- (void)animateMoveWith:(OsmAnd::PointD)velocity
-        andDeceleration:(OsmAnd::PointD)deceleration
-         zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
-{
-    _animator->animateMoveWith(velocity, deceleration, zeroizeAzimuth, invZeroizeElevationAngle);
+    return _animator;
 }
 
 - (void)createContext

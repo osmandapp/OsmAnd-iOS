@@ -17,6 +17,7 @@ typedef id<OsmAndAppProtocol, OsmAndAppCppProtocol> OsmAndAppInstance;
 
 typedef NS_ENUM(NSInteger, OAMapMode)
 {
+    OAMapModeUnknown = -1,
     OAMapModeFree,
     OAMapModePositionTrack,
     OAMapModeFollow

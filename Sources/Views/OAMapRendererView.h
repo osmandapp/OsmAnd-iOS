@@ -42,27 +42,6 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 };
 #undef _DECLARE_ENTRY
 
-#define _DECLARE_ENTRY(name)                                                                                                \
-    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimator::TimingFunction::name
-#define _DECLARE_TIMING_FUNCTION(name)                                                                                      \
-    _DECLARE_ENTRY(EaseIn##name),                                                                                           \
-    _DECLARE_ENTRY(EaseOut##name),                                                                                          \
-    _DECLARE_ENTRY(EaseInOut##name),                                                                                        \
-    _DECLARE_ENTRY(EaseOutIn##name)
-typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
-{
-    _DECLARE_ENTRY(Invalid),
-    _DECLARE_ENTRY(Linear),
-    _DECLARE_TIMING_FUNCTION(Quadratic),
-    _DECLARE_TIMING_FUNCTION(Cubic),
-    _DECLARE_TIMING_FUNCTION(Quartic),
-    _DECLARE_TIMING_FUNCTION(Sinusoidal),
-    _DECLARE_TIMING_FUNCTION(Exponential),
-    _DECLARE_TIMING_FUNCTION(Circular)
-};
-#undef _DECLARE_TIMING_FUNCTION
-#undef _DECLARE_ENTRY
-
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
 - (void)createContext;
@@ -111,42 +90,6 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 
-@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapAnimator> animator;
-- (void)cancelAnimation;
-- (void)pauseAnimation;
-- (void)resumeAnimation;
-
-- (void)animateZoomWith:(float)velocity andDeceleration:(float)deceleration;
-- (void)animateZoomBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function;
-- (void)animateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
-- (void)animateTargetBy:(OsmAnd::PointI)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function;
-- (void)animateTargetBy64:(OsmAnd::PointI64)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function;
-- (void)parabolicAnimateTargetWith:(OsmAnd::PointD)velocity andDeceleration:(OsmAnd::PointD)deceleration;
-- (void)parabolicAnimateTargetBy:(OsmAnd::PointI)deltaValue
-                          during:(float)duration
-                    targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
-                      zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction;
-- (void)parabolicAnimateTargetBy64:(OsmAnd::PointI64)deltaValue
-                            during:(float)duration
-                      targetTiming:(OAMapAnimationTimingFunction)targetTimingFunction
-                        zoomTiming:(OAMapAnimationTimingFunction)zoomTimingFunction;
-- (void)animateAzimuthWith:(float)velocity andDeceleration:(float)deceleration;
-- (void)animateAzimuthBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function;
-- (void)animateElevationAngleWith:(float)velocity andDeceleration:(float)deceleration;
-- (void)animateElevationAngleBy:(float)deltaValue during:(float)duration timing:(OAMapAnimationTimingFunction)function;
-- (void)animateMoveBy:(OsmAnd::PointI)deltaValue
-               during:(float)duration
-       zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
-               timing:(OAMapAnimationTimingFunction)function;
-- (void)animateMoveBy64:(OsmAnd::PointI64)deltaValue
-                 during:(float)duration
-         zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle
-                 timing:(OAMapAnimationTimingFunction)function;
-- (void)animateMoveWith:(OsmAnd::PointD)velocity
-        andDeceleration:(OsmAnd::PointD)deceleration
-         zeroizeAzimuth:(BOOL)zeroizeAzimuth
-invZeroizeElevationAngle:(BOOL)invZeroizeElevationAngle;
+@property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
 
 @end

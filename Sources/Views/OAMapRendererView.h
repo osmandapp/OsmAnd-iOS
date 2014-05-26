@@ -11,6 +11,7 @@
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapTypes.h>
+#include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/MapRendererState.h>
 #include <OsmAndCore/Map/IMapBitmapTileProvider.h>
@@ -42,7 +43,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 #undef _DECLARE_ENTRY
 
 #define _DECLARE_ENTRY(name)                                                                                                \
-    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimatorTimingFunction::name
+    OAMapAnimationTimingFunction##name = (NSUInteger)OsmAnd::MapAnimator::TimingFunction::name
 #define _DECLARE_TIMING_FUNCTION(name)                                                                                      \
     _DECLARE_ENTRY(EaseIn##name),                                                                                           \
     _DECLARE_ENTRY(EaseOut##name),                                                                                          \

@@ -67,6 +67,15 @@
 {
 }
 
+- (NSArray*)keysOfDownloadTasks
+{
+    @synchronized(_tasksSync)
+    {
+        return [[NSArray alloc] initWithArray:[_tasks allKeys]
+                                    copyItems:YES];
+    }
+}
+
 - (NSArray*)downloadTasksWithKey:(NSString*)key
 {
     @synchronized(_tasksSync)

@@ -18,6 +18,8 @@
 //- (void*)deserializeStateFrom:(NSData*)state;
 //@property(readonly, copy) NSArray* downloadTasks;
 
+- (NSArray*)keysOfDownloadTasks;
+
 - (NSArray*)downloadTasksWithKey:(NSString*)key;
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request;

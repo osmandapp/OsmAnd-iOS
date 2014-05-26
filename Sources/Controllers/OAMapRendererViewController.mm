@@ -666,11 +666,33 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 {
     if (![self isViewLoaded])
         return;
-    
-    // Animate zoom-in by +1
+
+    // Get base zoom delta
+    float zoomDelta = 0.0f;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView pauseAnimation];
+    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    if (currentZoomAnimation && mapView.animator->getAnimations().size() == 1)
+    {
+        bool ok = true;
+
+        float deltaValue;
+        ok = ok && currentZoomAnimation->obtainDeltaValueAsFloat(deltaValue);
+
+        float initialValue;
+        ok = ok && currentZoomAnimation->obtainInitialValueAsFloat(initialValue);
+
+        float currentValue;
+        ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
+
+        if (ok && deltaValue >= 0.0f)
+            zoomDelta = (initialValue + deltaValue) - currentValue;
+    }
+
+    // Animate zoom-in by +1
+    zoomDelta += 1.0f;
     [mapView cancelAnimation];
-    [mapView animateZoomBy:+1.0f
+    [mapView animateZoomBy:zoomDelta
                     during:1.0f
                     timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];
@@ -690,10 +712,32 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     if (![self isViewLoaded])
         return;
     
-    // Animate zoom-in by -1
+    // Get base zoom delta
+    float zoomDelta = 0.0f;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView pauseAnimation];
+    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    if (currentZoomAnimation && mapView.animator->getAnimations().size() == 1)
+    {
+        bool ok = true;
+
+        float deltaValue;
+        ok = ok && currentZoomAnimation->obtainDeltaValueAsFloat(deltaValue);
+
+        float initialValue;
+        ok = ok && currentZoomAnimation->obtainInitialValueAsFloat(initialValue);
+
+        float currentValue;
+        ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
+
+        if (ok && deltaValue <= 0.0f)
+            zoomDelta = (initialValue + deltaValue) - currentValue;
+    }
+
+    // Animate zoom-in by -1
+    zoomDelta -= 1.0f;
     [mapView cancelAnimation];
-    [mapView animateZoomBy:-1.0f
+    [mapView animateZoomBy:zoomDelta
                     during:1.0f
                     timing:OAMapAnimationTimingFunctionEaseInOutQuadratic];
     [mapView resumeAnimation];

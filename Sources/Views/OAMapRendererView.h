@@ -111,7 +111,9 @@ typedef NS_OPTIONS(NSUInteger, OAMapAnimationTimingFunction)
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::MapAnimator> animator;
 - (void)cancelAnimation;
+- (void)pauseAnimation;
 - (void)resumeAnimation;
 
 - (void)animateZoomWith:(float)velocity andDeceleration:(float)deceleration;

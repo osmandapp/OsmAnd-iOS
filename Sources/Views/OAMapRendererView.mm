@@ -44,7 +44,6 @@
     OsmAnd::PointI _viewSize;
     
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
-    std::shared_ptr<OsmAnd::MapAnimator> _animator;
 }
 
 + (Class)layerClass
@@ -259,9 +258,16 @@
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
+@synthesize animator = _animator;
+
 - (void)cancelAnimation
 {
     _animator->cancelAnimation();
+}
+
+- (void)pauseAnimation
+{
+    _animator->pauseAnimation();
 }
 
 - (void)resumeAnimation

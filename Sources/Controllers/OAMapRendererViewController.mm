@@ -42,6 +42,8 @@
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModeFollowZoom 18.0f
+#define kQuickAnimationTime 0.4f
+#define kOneSecondAnimatonTime 1.0f
 
 #define _(name) OAMapRendererViewController__##name
 #define ctor _(ctor)
@@ -509,7 +511,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
-    
+
+    // Get base zoom delta
+    float zoomDelta = [self currentZoomInDelta];
+
     // Cancel animation (if any)
     mapView.animator->cancelAnimation();
     _app.mapMode = OAMapModeFree;
@@ -520,10 +525,15 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.animator->animateTargetTo(centerLocation, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    mapView.animator->animateTargetTo(centerLocation,
+                                      kQuickAnimationTime,
+                                      OsmAnd::MapAnimator::TimingFunction::Linear);
     
-    // Increate zoom by 1 using animation
-    mapView.animator->animateZoomBy(1.0f, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    // Increate zoom by 1
+    zoomDelta += 1.0f;
+    mapView.animator->animateZoomBy(zoomDelta,
+                                    kQuickAnimationTime,
+                                    OsmAnd::MapAnimator::TimingFunction::Linear);
     
     // Launch animation
     mapView.animator->resumeAnimation();
@@ -540,6 +550,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
+
+    // Get base zoom delta
+    float zoomDelta = [self currentZoomOutDelta];
 
     // Cancel animation (if any)
     mapView.animator->cancelAnimation();
@@ -560,10 +573,15 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.animator->animateTargetTo(centerLocation, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    mapView.animator->animateTargetTo(centerLocation,
+                                      kQuickAnimationTime,
+                                      OsmAnd::MapAnimator::TimingFunction::Linear);
     
     // Decrease zoom by 1
-    mapView.animator->animateZoomBy(-1.0f, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    zoomDelta -= 1.0f;
+    mapView.animator->animateZoomBy(zoomDelta,
+                                    kQuickAnimationTime,
+                                    OsmAnd::MapAnimator::TimingFunction::Linear);
     
     // Launch animation
     mapView.animator->resumeAnimation();
@@ -652,14 +670,44 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Since user iteracts with map, set mode to free
     _app.mapMode = OAMapModeFree;
     
-    // Animate azimuth change to north during 1 second
+    // Animate azimuth change to north
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     mapView.animator->cancelAnimation();
-    mapView.animator->animateAzimuthTo(0.0f, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    mapView.animator->animateAzimuthTo(0.0f, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
     mapView.animator->resumeAnimation();
 }
 
 @synthesize zoomObservable = _zoomObservable;
+
+- (float)currentZoomInDelta
+{
+    if (![self isViewLoaded])
+        return 0.0f;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    mapView.animator->pauseAnimation();
+    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    const auto& currentTargetAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Target);
+    if (currentZoomAnimation &&
+        (mapView.animator->getAnimations().size() == 1 || (currentTargetAnimation && mapView.animator->getAnimations().size() == 2)))
+    {
+        bool ok = true;
+
+        float deltaValue;
+        ok = ok && currentZoomAnimation->obtainDeltaValueAsFloat(deltaValue);
+
+        float initialValue;
+        ok = ok && currentZoomAnimation->obtainInitialValueAsFloat(initialValue);
+
+        float currentValue;
+        ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
+
+        if (ok && deltaValue > 0.0f)
+            return (initialValue + deltaValue) - currentValue;
+    }
+
+    return 0.0f;
+}
 
 - (BOOL)canZoomIn
 {
@@ -675,12 +723,29 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     if (![self isViewLoaded])
         return;
 
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
     // Get base zoom delta
-    float zoomDelta = 0.0f;
+    float zoomDelta = [self currentZoomInDelta];
+
+    // Animate zoom-in by +1
+    zoomDelta += 1.0f;
+    mapView.animator->cancelAnimation();
+    mapView.animator->animateZoomBy(zoomDelta, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::Linear);
+    mapView.animator->resumeAnimation();
+}
+
+- (float)currentZoomOutDelta
+{
+    if (![self isViewLoaded])
+        return 0.0f;
+
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     mapView.animator->pauseAnimation();
     const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
-    if (currentZoomAnimation && mapView.animator->getAnimations().size() == 1)
+    const auto& currentTargetAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Target);
+    if (currentZoomAnimation &&
+        (mapView.animator->getAnimations().size() == 1 || (currentTargetAnimation && mapView.animator->getAnimations().size() == 2)))
     {
         bool ok = true;
 
@@ -693,15 +758,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         float currentValue;
         ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
 
-        if (ok && deltaValue >= 0.0f)
-            zoomDelta = (initialValue + deltaValue) - currentValue;
+        if (ok && deltaValue < 0.0f)
+            return (initialValue + deltaValue) - currentValue;
     }
-
-    // Animate zoom-in by +1
-    zoomDelta += 1.0f;
-    mapView.animator->cancelAnimation();
-    mapView.animator->animateZoomBy(zoomDelta, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-    mapView.animator->resumeAnimation();
+    
+    return 0.0f;
 }
 
 - (BOOL)canZoomOut
@@ -717,33 +778,16 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 {
     if (![self isViewLoaded])
         return;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     // Get base zoom delta
-    float zoomDelta = 0.0f;
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    mapView.animator->pauseAnimation();
-    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
-    if (currentZoomAnimation && mapView.animator->getAnimations().size() == 1)
-    {
-        bool ok = true;
-
-        float deltaValue;
-        ok = ok && currentZoomAnimation->obtainDeltaValueAsFloat(deltaValue);
-
-        float initialValue;
-        ok = ok && currentZoomAnimation->obtainInitialValueAsFloat(initialValue);
-
-        float currentValue;
-        ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
-
-        if (ok && deltaValue <= 0.0f)
-            zoomDelta = (initialValue + deltaValue) - currentValue;
-    }
+    float zoomDelta = [self currentZoomOutDelta];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
     mapView.animator->cancelAnimation();
-    mapView.animator->animateZoomBy(zoomDelta, 1.0f, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    mapView.animator->animateZoomBy(zoomDelta, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::Linear);
     mapView.animator->resumeAnimation();
 }
 
@@ -777,23 +821,23 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                 if (_lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured)
                 {
                     mapView.animator->animateTargetTo(newTarget31,
-                                                      1.0f,
+                                                      kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                     mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
-                                                       1.0f,
+                                                       kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                     mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
-                                                              1.0f,
+                                                              kOneSecondAnimatonTime,
                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                     mapView.animator->animateZoomTo(_lastZoomInPositionTrack,
-                                                    1.0f,
+                                                    kOneSecondAnimatonTime,
                                                     OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                     _lastPositionTrackStateCaptured = false;
                 }
                 else
                 {
                     mapView.animator->parabolicAnimateTargetTo(newTarget31,
-                                                               1.0f,
+                                                               kOneSecondAnimatonTime,
                                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                 }
@@ -819,11 +863,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                 mapView.animator->cancelAnimation();
                 
                 mapView.animator->animateZoomTo(kMapModeFollowZoom,
-                                                1.0f,
+                                                kOneSecondAnimatonTime,
                                                 OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                 
                 mapView.animator->animateElevationAngleTo(kElevationMinAngle,
-                                                          1.0f,
+                                                          kOneSecondAnimatonTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
 
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
@@ -831,12 +875,12 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
                 mapView.animator->animateTargetTo(newTarget31,
-                                                  1.0f,
+                                                  kOneSecondAnimatonTime,
                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
 
                 const CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
                 mapView.animator->animateAzimuthTo(newHeading,
-                                                   1.0f,
+                                                   kOneSecondAnimatonTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
                 
                 mapView.animator->resumeAnimation();
@@ -870,11 +914,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if (_app.mapMode == OAMapModeFollow)
         {
             mapView.animator->animateZoomTo(kMapModeFollowZoom,
-                                            1.0f,
+                                            kOneSecondAnimatonTime,
                                             OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
 
             mapView.animator->animateElevationAngleTo(kElevationMinAngle,
-                                                      1.0f,
+                                                      kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
         }
         
@@ -882,7 +926,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
             OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
         mapView.animator->parabolicAnimateTargetTo(newTarget31,
-                                                   1.0f,
+                                                   kOneSecondAnimatonTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
         
@@ -890,7 +934,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if (_app.mapMode == OAMapModeFollow && !isnan(newHeading))
         {
             mapView.animator->animateAzimuthTo(newHeading,
-                                               1.0f,
+                                               kOneSecondAnimatonTime,
                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
         }
         

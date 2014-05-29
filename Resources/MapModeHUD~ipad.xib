@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5053" systemVersion="13C64" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -90,12 +90,16 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zDY-H9-DjN" userLabel="compassBox">
-                    <rect key="frame" x="21" y="973" width="30" height="30"/>
+                    <rect key="frame" x="16" y="968" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Vz-tj-y6t" userLabel="compassButton">
-                            <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                            <rect key="frame" x="5" y="5" width="30" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="7HM-nR-jmM"/>
+                                <constraint firstAttribute="width" constant="30" id="t9f-q4-9gS"/>
+                            </constraints>
                             <state key="normal" backgroundImage="HUD_compass_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -104,7 +108,7 @@
                             </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="UOO-Qs-Cfs" userLabel="compassImage">
-                            <rect key="frame" x="12" y="6" width="6" height="18"/>
+                            <rect key="frame" x="17" y="11" width="6" height="18"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration">
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
@@ -117,43 +121,55 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="centerX" secondItem="9Vz-tj-y6t" secondAttribute="centerX" id="7Ji-Eh-1gP"/>
-                        <constraint firstAttribute="height" constant="30" id="G3j-7I-7mF"/>
+                        <constraint firstAttribute="height" constant="40" id="G3j-7I-7mF"/>
                         <constraint firstAttribute="centerX" secondItem="UOO-Qs-Cfs" secondAttribute="centerX" id="HrE-ie-Awr"/>
                         <constraint firstAttribute="centerY" secondItem="9Vz-tj-y6t" secondAttribute="centerY" id="Mjs-Lj-YC0"/>
                         <constraint firstAttribute="centerY" secondItem="UOO-Qs-Cfs" secondAttribute="centerY" id="YbP-rn-rGk"/>
-                        <constraint firstAttribute="width" constant="30" id="kjq-X4-9rG"/>
-                        <constraint firstItem="9Vz-tj-y6t" firstAttribute="width" secondItem="zDY-H9-DjN" secondAttribute="width" id="m6o-FO-U7V"/>
-                        <constraint firstItem="9Vz-tj-y6t" firstAttribute="height" secondItem="zDY-H9-DjN" secondAttribute="height" id="mUe-2O-Chh"/>
+                        <constraint firstAttribute="width" constant="40" id="kjq-X4-9rG"/>
                     </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sEk-aI-0VV" userLabel="zoomInButton">
-                    <rect key="frame" x="712" y="464" width="40" height="40"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6yH-s0-HAr" userLabel="zoomButtons">
+                    <rect key="frame" x="704" y="456" width="64" height="112"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sEk-aI-0VV" userLabel="zoomInButton">
+                            <rect key="frame" x="8" y="8" width="40" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="518-fE-ADN"/>
+                                <constraint firstAttribute="width" constant="40" id="F8p-1A-Ffh"/>
+                            </constraints>
+                            <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_bg.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="onZoomInButtonClicked:" destination="-1" eventType="touchUpInside" id="rsV-tw-Ufe"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxb-EL-Pln" userLabel="zoomOutButton">
+                            <rect key="frame" x="8" y="64" width="40" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="40" id="KgG-Pj-u8F"/>
+                                <constraint firstAttribute="height" constant="40" id="sIv-yB-uXz"/>
+                            </constraints>
+                            <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_bg.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="onZoomOutButtonClicked:" destination="-1" eventType="touchUpInside" id="mYa-Ez-b1E"/>
+                            </connections>
+                        </button>
+                    </subviews>
                     <constraints>
-                        <constraint firstAttribute="height" constant="40" id="518-fE-ADN"/>
-                        <constraint firstAttribute="width" constant="40" id="F8p-1A-Ffh"/>
+                        <constraint firstAttribute="centerY" secondItem="Wxb-EL-Pln" secondAttribute="top" constant="-8" id="DEz-dH-thy"/>
+                        <constraint firstAttribute="trailing" secondItem="sEk-aI-0VV" secondAttribute="trailing" constant="16" id="Kmc-gY-4gz"/>
+                        <constraint firstAttribute="width" constant="64" id="UrJ-b4-Tdc"/>
+                        <constraint firstAttribute="height" constant="112" id="dLG-sv-fxf"/>
+                        <constraint firstAttribute="trailing" secondItem="Wxb-EL-Pln" secondAttribute="trailing" constant="16" id="iOy-JO-bm3"/>
+                        <constraint firstAttribute="centerY" secondItem="sEk-aI-0VV" secondAttribute="bottom" constant="8" id="k2x-pF-1B5"/>
                     </constraints>
-                    <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_bg.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onZoomInButtonClicked:" destination="-1" eventType="touchUpInside" id="rsV-tw-Ufe"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxb-EL-Pln" userLabel="zoomOutButton">
-                    <rect key="frame" x="712" y="520" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="40" id="KgG-Pj-u8F"/>
-                        <constraint firstAttribute="height" constant="40" id="sIv-yB-uXz"/>
-                    </constraints>
-                    <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_bg.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onZoomOutButtonClicked:" destination="-1" eventType="touchUpInside" id="mYa-Ez-b1E"/>
-                    </connections>
-                </button>
+                </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYM-Vp-fod" userLabel="debugButton">
                     <rect key="frame" x="16" y="492" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -172,20 +188,18 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="OAx-cr-GZm" secondAttribute="bottom" constant="16" id="0a9-ah-GJP"/>
                 <constraint firstItem="OAx-cr-GZm" firstAttribute="leading" secondItem="Fb1-sd-BAZ" secondAttribute="trailing" constant="16" id="6IR-4J-lbY"/>
-                <constraint firstAttribute="centerY" secondItem="sEk-aI-0VV" secondAttribute="bottom" constant="8" id="AqK-66-lgO"/>
-                <constraint firstAttribute="trailing" secondItem="Wxb-EL-Pln" secondAttribute="trailing" constant="16" id="F65-yM-oGl"/>
                 <constraint firstItem="RN3-8J-1UX" firstAttribute="centerY" secondItem="jLp-qw-2pN" secondAttribute="centerY" id="HqN-5F-ALl"/>
-                <constraint firstAttribute="bottom" secondItem="zDY-H9-DjN" secondAttribute="bottom" constant="21" id="IV3-Qh-cCM"/>
+                <constraint firstAttribute="bottom" secondItem="zDY-H9-DjN" secondAttribute="bottom" constant="16" id="IV3-Qh-cCM"/>
                 <constraint firstAttribute="centerY" secondItem="GYM-Vp-fod" secondAttribute="centerY" id="Q2V-pY-dqg"/>
-                <constraint firstAttribute="trailing" secondItem="sEk-aI-0VV" secondAttribute="trailing" constant="16" id="QJR-qn-tQP"/>
+                <constraint firstAttribute="trailing" secondItem="6yH-s0-HAr" secondAttribute="trailing" id="SGU-yk-2Cd"/>
                 <constraint firstAttribute="trailing" secondItem="eDo-iY-wKm" secondAttribute="trailing" id="TbH-G6-CKD"/>
                 <constraint firstItem="GYM-Vp-fod" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="U3E-NL-1VK"/>
                 <constraint firstItem="RN3-8J-1UX" firstAttribute="leading" secondItem="jLp-qw-2pN" secondAttribute="trailing" constant="16" id="aZM-ab-f9P"/>
-                <constraint firstItem="zDY-H9-DjN" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="21" id="atC-CV-dBR"/>
+                <constraint firstItem="zDY-H9-DjN" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="atC-CV-dBR"/>
                 <constraint firstItem="jLp-qw-2pN" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="dia-8O-Cmh"/>
+                <constraint firstAttribute="centerY" secondItem="6yH-s0-HAr" secondAttribute="centerY" id="ey8-J2-Nm3"/>
                 <constraint firstItem="eDo-iY-wKm" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="gJT-50-F4D"/>
                 <constraint firstAttribute="bottom" secondItem="Fb1-sd-BAZ" secondAttribute="bottom" constant="16" id="iM0-Rt-kvT"/>
-                <constraint firstAttribute="centerY" secondItem="Wxb-EL-Pln" secondAttribute="top" constant="-8" id="kte-Hn-NKh"/>
                 <constraint firstItem="jLp-qw-2pN" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="o8I-Mg-qmS"/>
                 <constraint firstAttribute="trailing" secondItem="OAx-cr-GZm" secondAttribute="trailing" constant="16" id="vCT-g1-z9F"/>
                 <constraint firstAttribute="centerX" secondItem="RN3-8J-1UX" secondAttribute="trailing" constant="24" id="zek-5H-qFN"/>

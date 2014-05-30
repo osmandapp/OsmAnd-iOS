@@ -317,6 +317,8 @@
 		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
 		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		CE9CBEAE193583CA00A6AC92 /* OAShowDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9CBEAD193583CA00A6AC92 /* OAShowDownloadsViewController.mm */; };
+		CE9CBEB1193583ED00A6AC92 /* OAShowUpdatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CE9CBEB0193583ED00A6AC92 /* OAShowUpdatesViewController.mm */; };
 		FE1BA61F27084969A2196FCE /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -544,6 +546,10 @@
 		BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
 		BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWorldRegion.mm; sourceTree = "<group>"; };
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
+		CE9CBEAC193583CA00A6AC92 /* OAShowDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAShowDownloadsViewController.h; path = Controllers/OAShowDownloadsViewController.h; sourceTree = "<group>"; };
+		CE9CBEAD193583CA00A6AC92 /* OAShowDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAShowDownloadsViewController.mm; path = Controllers/OAShowDownloadsViewController.mm; sourceTree = "<group>"; };
+		CE9CBEAF193583ED00A6AC92 /* OAShowUpdatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAShowUpdatesViewController.h; path = Controllers/OAShowUpdatesViewController.h; sourceTree = "<group>"; };
+		CE9CBEB0193583ED00A6AC92 /* OAShowUpdatesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAShowUpdatesViewController.mm; path = Controllers/OAShowUpdatesViewController.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -742,6 +748,10 @@
 				BB4C746C1920FBDC0018E1EE /* OARegionDownloadsViewController.m */,
 				BBAD5B9319272B980043590F /* OALocalResourceInformationViewController.h */,
 				BBAD5B9419272B980043590F /* OALocalResourceInformationViewController.mm */,
+				CE9CBEAC193583CA00A6AC92 /* OAShowDownloadsViewController.h */,
+				CE9CBEAD193583CA00A6AC92 /* OAShowDownloadsViewController.mm */,
+				CE9CBEAF193583ED00A6AC92 /* OAShowUpdatesViewController.h */,
+				CE9CBEB0193583ED00A6AC92 /* OAShowUpdatesViewController.mm */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1323,6 +1333,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBE1D2A7190D186F00D90F0A /* main.m in Sources */,
+				CE9CBEAE193583CA00A6AC92 /* OAShowDownloadsViewController.mm in Sources */,
 				BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
@@ -1333,6 +1344,7 @@
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BB451EE218E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
+				CE9CBEB1193583ED00A6AC92 /* OAShowUpdatesViewController.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BBAD5BA21927460F0043590F /* OADownloadsBaseViewController.mm in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */,

@@ -8,6 +8,7 @@
 
 #import "OADownloadsBaseViewController.h"
 
+#import <Reachability.h>
 #import <UIAlertView+Blocks.h>
 #import <FFCircularProgressView.h>
 
@@ -621,10 +622,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item isKindOfClass:[OutdatedItem class]])
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. Proceed?"),
+                                    message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@ Proceed?"),
                                              itemName,
                                              [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                                                                            countStyle:NSByteCountFormatterCountStyleFile],
+                                            [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
                            cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                            otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                                  action:^{
@@ -633,27 +635,43 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item isKindOfClass:[InstallableItem class]])
     {
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. Proceed?"),
+        [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
+                                    message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@ Proceed?"),
                                              itemName,
                                              [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                                                                            countStyle:NSByteCountFormatterCountStyleFile],
+                                             [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
                            cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                            otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
                                                                  action:^{
                                                                      [self startDownloadOf:item];
-                                                                 }], nil] show];
+                                                                 }], nil]];
     }
     else if ([item isKindOfClass:[DownloadedItem class]])
     {
-        [[[UIAlertView alloc] initWithTitle:nil
+        [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
                                     message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
                                              itemName]
                            cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
                            otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
                                                                  action:^{
                                                                      [self cancelDownloadOf:item];
-                                                                 }], nil] show];
+                                                                 }], nil]];
+    }
+}
+
+- (void)checkInternetConnection:(UIAlertView *)alertView
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")
+                                    message:OALocalizedString(@"Internet connection is required to download maps. Please check your Internet connection.")
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                           otherButtonItems:nil] show];
+    }
+    else
+    {
+        [alertView show];
     }
 }
 

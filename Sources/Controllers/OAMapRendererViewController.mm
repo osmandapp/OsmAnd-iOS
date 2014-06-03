@@ -21,10 +21,10 @@
 #include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-#include <OsmAndCore/Map/OnlineMapRasterTileProvider.h>
-#include <OsmAndCore/Map/OfflineMapDataProvider.h>
-#include <OsmAndCore/Map/OfflineMapRasterTileProvider_Software.h>
-#include <OsmAndCore/Map/OfflineMapStaticSymbolProvider.h>
+#include <OsmAndCore/Map/OnlineRasterMapTileProvider.h>
+#include <OsmAndCore/Map/BinaryMapDataProvider.h>
+#include <OsmAndCore/Map/BinaryMapRasterBitmapTileProvider_Software.h>
+#include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
 #include <OsmAndCore/Map/RasterizerEnvironment.h>
 #include <OsmAndCore/Map/MapStyleValueDefinition.h>
 #include <OsmAndCore/Map/MapStyleValue.h>
@@ -62,11 +62,11 @@
     BOOL _mapSourceInvalidated;
     
     // Current provider of raster map
-    std::shared_ptr<OsmAnd::IMapBitmapTileProvider> _rasterMapProvider;
+    std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider> _rasterMapProvider;
     
     // Offline-specific providers & resources
-    std::shared_ptr<OsmAnd::OfflineMapDataProvider> _offlineMapDataProvider;
-    std::shared_ptr<OsmAnd::IMapSymbolProvider> _offlineMapStaticSymbolsProvider;
+    std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
+    std::shared_ptr<OsmAnd::BinaryMapStaticSymbolsProvider> _binaryMapStaticSymbolsProvider;
     
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -666,14 +666,29 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 {
     if (![self isViewLoaded])
         return;
-    
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    // In case previous mode was Follow, restore last azimuth, elevation angle and zoom
+    // used in PositionTrack mode (except for azimuth)
+    const bool restorePositionTrackState = _lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured;
+
     // Since user iteracts with map, set mode to free
     _app.mapMode = OAMapModeFree;
-    
+
     // Animate azimuth change to north
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     mapView.animator->cancelAnimation();
     mapView.animator->animateAzimuthTo(0.0f, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    if (restorePositionTrackState)
+    {
+        mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
+                                                  kOneSecondAnimatonTime,
+                                                  OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+        mapView.animator->animateZoomTo(_lastZoomInPositionTrack,
+                                        kOneSecondAnimatonTime,
+                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+        _lastPositionTrackStateCaptured = false;
+    }
     mapView.animator->resumeAnimation();
 }
 
@@ -978,10 +993,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
-        _offlineMapDataProvider.reset();
-        if (_offlineMapStaticSymbolsProvider)
-            [mapView removeSymbolProvider:_offlineMapStaticSymbolsProvider];
-        _offlineMapStaticSymbolsProvider.reset();
+        _binaryMapDataProvider.reset();
+        if (_binaryMapStaticSymbolsProvider)
+            [mapView removeSymbolProvider:_binaryMapStaticSymbolsProvider];
+        _binaryMapStaticSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -1000,27 +1015,27 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
             // Configure offline map data provider with given settings
             const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
-            _offlineMapDataProvider.reset(new OsmAnd::OfflineMapDataProvider(_app.resourcesManager->obfsCollection,
-                                                                             mapStyle,
-                                                                             mapView.contentScaleFactor,
-                                                                             QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
-                                                                             externalResourcesProvider));
+            _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection,
+                                                                           mapStyle,
+                                                                           mapView.contentScaleFactor,
+                                                                           QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                           externalResourcesProvider));
 
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
             {
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset)
-                    _offlineMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
+                    _binaryMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
             }
 
-            _rasterMapProvider.reset(new OsmAnd::OfflineMapRasterTileProvider_Software(_offlineMapDataProvider,
-                                                                                       256 * mapView.contentScaleFactor,
-                                                                                       mapView.contentScaleFactor));
+            _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapDataProvider,
+                                                                                            256 * mapView.contentScaleFactor,
+                                                                                            mapView.contentScaleFactor));
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-            _offlineMapStaticSymbolsProvider.reset(new OsmAnd::OfflineMapStaticSymbolProvider(_offlineMapDataProvider));
-            [mapView addSymbolProvider:_offlineMapStaticSymbolsProvider];
+            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapDataProvider));
+            [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {

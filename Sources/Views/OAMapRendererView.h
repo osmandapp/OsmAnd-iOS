@@ -14,9 +14,8 @@
 #include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/MapRendererState.h>
-#include <OsmAndCore/Map/IMapBitmapTileProvider.h>
+#include <OsmAndCore/Map/IMapRasterBitmapTileProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
-#include <OsmAndCore/Map/IMapSymbolProvider.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
@@ -54,8 +53,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 @property(nonatomic) BOOL forcedRenderingOnEachFrame;
 @property(readonly) OAObservable* settingsObservable;
 
-- (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
-- (void)setProvider:(std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;
+- (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
+- (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;
 - (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer;
 - (float)opacityOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer;
@@ -64,8 +63,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (void)removeElevationDataProvider;
 @property(nonatomic) float elevationDataScale;
 
-- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider;
-- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider;
+- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
+- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
 - (void)removeAllSymbolProviders;
 //TODO: return array of symbol providers
 

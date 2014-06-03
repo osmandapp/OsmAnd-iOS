@@ -108,19 +108,19 @@
     _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
 }
 
-- (std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
+- (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
 {
     return _renderer->state.rasterLayerProviders[static_cast<int>(layer)];
 }
 
-- (void)setProvider:(std::shared_ptr<OsmAnd::IMapBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer
+- (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer
 {
     _renderer->setRasterLayerProvider(layer, provider);
 }
 
 - (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer
 {
-    _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapBitmapTileProvider>());
+    _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>());
 }
 
 - (float)opacityOf:(OsmAnd::RasterMapLayerId)layer
@@ -158,12 +158,12 @@
     _renderer->setElevationDataScaleFactor(elevationDataScale);
 }
 
-- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider
+- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider
 {
     _renderer->addSymbolProvider(provider);
 }
 
-- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapSymbolProvider>)provider
+- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider
 {
     _renderer->removeSymbolProvider(provider);
 }

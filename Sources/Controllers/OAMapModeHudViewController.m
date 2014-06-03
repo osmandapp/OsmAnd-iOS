@@ -123,6 +123,9 @@
         case OAMapModeFollow:
             newMode = OAMapModePositionTrack;
             break;
+
+        default:
+            return;
     }
     
     // If user have denied location services for the application, show notification about that and
@@ -151,6 +154,9 @@
             
         case OAMapModeFollow:
             modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
+            break;
+
+        default:
             break;
     }
     

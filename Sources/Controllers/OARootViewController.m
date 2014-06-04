@@ -21,6 +21,8 @@
 @implementation OARootViewController
 {
     UIStoryboard* _optionsPanelStoryboard;
+
+    CALayer* __weak _customCenterBorderLayer;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -34,6 +36,8 @@
 
 - (void)ctor
 {
+    _customCenterBorderLayer = nil;
+
     // Load storyboards
     _optionsPanelStoryboard = [UIStoryboard storyboardWithName:@"OptionsPanel" bundle:nil];
     
@@ -85,16 +89,22 @@
         // For iOS 7.0+ disable casting shadow. Instead use border for left and right panels
         container.clipsToBounds = NO;
 
-        if (container == self.centerPanelContainer && [[container.layer sublayers] count] == 1)
+        if (container == self.centerPanelContainer)
         {
-            CALayer* rightBorderLayer = [CALayer layer];
-            rightBorderLayer.borderColor = [UIColor darkGrayColor].CGColor;
-            rightBorderLayer.borderWidth = 1.0f;
-            rightBorderLayer.frame = CGRectMake(-1.0f,
-                                                -1.0f,
-                                                CGRectGetWidth(container.frame) + 2.0f,
-                                                CGRectGetHeight(container.frame) + 2.0f);
-            [container.layer addSublayer:rightBorderLayer];
+            if (_customCenterBorderLayer == nil)
+            {
+                CALayer* borderLayer = [CALayer layer];
+                borderLayer.borderColor = [UIColor darkGrayColor].CGColor;
+                borderLayer.borderWidth = 1.0f;
+                [container.layer addSublayer:borderLayer];
+                _customCenterBorderLayer = borderLayer;
+            }
+
+            // Update frame
+            _customCenterBorderLayer.frame = CGRectMake(-1.0f,
+                                                        -1.0f,
+                                                        CGRectGetWidth(container.frame) + 2.0f,
+                                                        CGRectGetHeight(container.frame) + 2.0f);
         }
     }
     else

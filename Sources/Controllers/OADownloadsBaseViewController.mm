@@ -134,6 +134,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewDidLoad];
 
+    [self setupTabBar];
+    
     // Load dynamic content
     [self reloadDynamicContent];
 }
@@ -594,70 +596,82 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self tableView:tableView selectedAtIndexPath:indexPath];
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
+    [self tableView:tableView selectedAtIndexPath:indexPath];
+}
+
+- (void)tableView:(UITableView *)tableView selectedAtIndexPath:(NSIndexPath *)indexPath
+{
     if (indexPath.section != _downloadsSection)
-        return;
-
+    return;
+    
     BaseDownloadItem* item = [_downloadItems objectAtIndex:indexPath.row];
-
+    
     NSString* itemName = nil;
     if (_worldRegion.superregion == nil)
-        itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+    itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
     else
     {
         itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
                     [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
                     _worldRegion.name];
     }
-
-    if ([item isKindOfClass:[InstalledItem class]])
-    {
-        InstalledItem* installedItem = (InstalledItem*)item;
-
-        NSString* resourceId = installedItem.localResource->id.toNSString();
-        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
-                                             animated:YES];
-    }
-    else if ([item isKindOfClass:[OutdatedItem class]])
+    
+    if ([item isKindOfClass:[OutdatedItem class]])
     {
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@ Proceed?"),
+                                    message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
                                              itemName,
                                              [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
                                                                             countStyle:NSByteCountFormatterCountStyleFile],
-                                            [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
+                                             [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
                            cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                            otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                                  action:^{
                                                                      [self startDownloadOf:item];
                                                                  }], nil] show];
     }
+    else if ([item isKindOfClass:[InstalledItem class]])
+    {
+        InstalledItem* installedItem = (InstalledItem*)item;
+        
+        NSString* resourceId = installedItem.localResource->id.toNSString();
+        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
+                                             animated:YES];
+    }
     else if ([item isKindOfClass:[InstallableItem class]])
     {
         [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@ Proceed?"),
-                                             itemName,
-                                             [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-                                                                            countStyle:NSByteCountFormatterCountStyleFile],
-                                             [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
-                                                                 action:^{
-                                                                     [self startDownloadOf:item];
-                                                                 }], nil]];
+                                                                 message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@Proceed?"),
+                                                                          itemName,
+                                                                          [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                                                         countStyle:NSByteCountFormatterCountStyleFile],
+                                                                          [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
+                                                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                                                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
+                                                                                              action:^{
+                                                                                                  [self startDownloadOf:item];
+                                                                                              }], nil]];
     }
     else if ([item isKindOfClass:[DownloadedItem class]])
     {
         [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
-                                             itemName]
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
-                                                                 action:^{
-                                                                     [self cancelDownloadOf:item];
-                                                                 }], nil]];
+                                                                 message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
+                                                                          itemName]
+                                                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
+                                                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                                                                                              action:^{
+                                                                                                  [self cancelDownloadOf:item];
+                                                                                              }], nil]];
     }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (void)checkInternetConnection:(UIAlertView *)alertView
@@ -732,6 +746,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             regionDownloadsViewController.worldRegion = [_subregionItems objectAtIndex:selectedItemPath.row];
         }
     }
+}
+
+#pragma mark - Tab bar configurating
+
+- (void)setupTabBar
+{
+    UITabBar *tabBar = [self tabBarController].tabBar;
+    
+    UITabBarItem *tab = [tabBar.items objectAtIndex:0];
+    tab.image = [[UIImage imageNamed:@"tab_regions_icon.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.selectedImage = [[UIImage imageNamed:@"tab_regions_icon_filled.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.title = OALocalizedString(@"Regions");
+    
+    tab = [tabBar.items objectAtIndex:1];
+    tab.image = [[UIImage imageNamed:@"tab_downloads_icon.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.selectedImage = [[UIImage imageNamed:@"tab_downloads_icon_filled.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.title = OALocalizedString(@"Downloads");
+    
+    tab = [tabBar.items objectAtIndex:2];
+    tab.image = [[UIImage imageNamed:@"tab_updates_icon.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.selectedImage = [[UIImage imageNamed:@"tab_updates_icon_filled.png"] imageWithRenderingMode: UIImageRenderingModeAlwaysOriginal];
+    tab.title = OALocalizedString(@"Updates");
 }
 
 #pragma mark -

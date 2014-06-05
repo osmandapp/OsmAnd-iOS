@@ -5,12 +5,12 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller - Downloads-->
+        <!--Navigation Controller - Regions-->
         <scene sceneID="qs5-4M-JA9">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="oxK-UJ-xcB" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Downloads" id="H3E-ZN-oQL"/>
+                    <tabBarItem key="tabBarItem" title="Regions" image="tab_regions_icon.png" id="H3E-ZN-oQL"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="yr1-8Y-jLt">
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -132,6 +132,7 @@
                         <rect key="frame" x="0.0" y="64" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <color key="separatorColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="subregionItemCell" id="bu9-Ak-yen">
                                 <rect key="frame" x="0.0" y="55" width="320" height="44"/>
@@ -189,7 +190,7 @@
             </objects>
             <point key="canvasLocation" x="-658" y="803"/>
         </scene>
-        <!--Show Downloads View Controller - Downloading-->
+        <!--Show Downloads View Controller - Downloads-->
         <scene sceneID="kMx-oJ-KeH">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="Ep2-PN-VoK" customClass="OAShowDownloadsViewController" sceneMemberID="viewController">
@@ -220,7 +221,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Downloading" id="4h5-GG-eut"/>
+                    <tabBarItem key="tabBarItem" title="Downloads" image="tab_downloads_icon.png" id="iYg-jF-7OY"/>
                     <connections>
                         <outlet property="tableView" destination="bei-gn-F9q" id="7Cg-v6-Jin"/>
                     </connections>
@@ -260,7 +261,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Updates" id="nqO-nw-flR"/>
+                    <tabBarItem key="tabBarItem" title="Updates" image="tab_updates_icon.png" id="nqO-nw-flR"/>
                     <connections>
                         <outlet property="tableView" destination="WrR-07-zAB" id="XGb-Om-k98"/>
                     </connections>
@@ -270,6 +271,11 @@
             <point key="canvasLocation" x="45" y="1489"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="tab_downloads_icon.png" width="25" height="25"/>
+        <image name="tab_regions_icon.png" width="25" height="25"/>
+        <image name="tab_updates_icon.png" width="25" height="25"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

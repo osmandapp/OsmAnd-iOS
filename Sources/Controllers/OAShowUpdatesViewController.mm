@@ -267,6 +267,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     UIButton *updateAllButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     [updateAllButton setTitle:OALocalizedString(@"Update all") forState:UIControlStateNormal];
+    [updateAllButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [updateAllButton addTarget: self
                         action: @selector(updateAllButtonClicked:)
               forControlEvents: UIControlEventTouchUpInside];
@@ -304,23 +305,34 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+   [self tableView:tableView selectedAtIndexPath:indexPath];
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    OutdatedItem *item = [_downloadItems objectAtIndex:indexPath.row];
+    [self tableView:tableView selectedAtIndexPath:indexPath];
+}
 
+- (void)tableView:(UITableView *)tableView selectedAtIndexPath:(NSIndexPath *)indexPath
+{
+    OutdatedItem *item = [_downloadItems objectAtIndex:indexPath.row];
+    
     [[[UIAlertView alloc] initWithTitle:nil
-                                message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@ Proceed?"),
+                                message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
                                          [tableView cellForRowAtIndexPath:indexPath].textLabel.text,
                                          [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
                                                                         countStyle:NSByteCountFormatterCountStyleFile],
-                                         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
+                                         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                              action:^{
                                                                  [self startDownloadOf:item];
                                                                  [self reloadList];
                                                              }], nil] show];
-
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (void)checkInternetConnection:(UIAlertView *)alertView
@@ -346,11 +358,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         count+=item.resourceInRepository->packageSize;
     }
     [[[UIAlertView alloc] initWithTitle:nil
-                                message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$d elements. %2$@ will be downloaded. %3$@ Proceed?"),
+                                message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$d elements. %2$@ will be downloaded. %3$@Proceed?"),
                                          [_downloadItems count],
                                          [NSByteCountFormatter stringFromByteCount:count
                                                                         countStyle:NSByteCountFormatterCountStyleFile],
-                                         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!!") : @""]
+                                         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                              action:^{

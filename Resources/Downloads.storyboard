@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
     <scenes>
-        <!--Downloads View Controller - Downloads-->
+        <!--Downloads View Controller - Regions-->
         <scene sceneID="qIH-ci-pf1">
             <objects>
-                <viewController title="Downloads" automaticallyAdjustsScrollViewInsets="NO" id="xhn-pS-KQq" customClass="OADownloadsViewController" sceneMemberID="viewController">
+                <viewController automaticallyAdjustsScrollViewInsets="NO" id="xhn-pS-KQq" customClass="OADownloadsViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="uS1-Sl-k3L"/>
                         <viewControllerLayoutGuide type="bottom" id="yaE-X9-EFB"/>
@@ -25,8 +25,8 @@
                                     <outlet property="delegate" destination="xhn-pS-KQq" id="E0A-w0-PO2"/>
                                 </connections>
                             </searchBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="XqG-Hc-E2S" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="320" height="455"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="XqG-Hc-E2S" userLabel="tableView">
+                                <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <prototypes>
@@ -84,15 +84,7 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f8E-Fw-lX6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="EJ4-Ld-CEk">
-                    <connections>
-                        <outlet property="delegate" destination="xhn-pS-KQq" id="kZc-VN-h98"/>
-                        <outlet property="searchContentsController" destination="xhn-pS-KQq" id="xDZ-dY-u8k"/>
-                        <outlet property="searchResultsDataSource" destination="xhn-pS-KQq" id="qd6-9w-3Kv"/>
-                        <outlet property="searchResultsDelegate" destination="xhn-pS-KQq" id="eb5-ge-eAX"/>
-                    </connections>
-                </searchDisplayController>
-                <searchDisplayController id="eke-JM-cTE">
+                <searchDisplayController searchResultsTitle="" id="eke-JM-cTE">
                     <connections>
                         <outlet property="delegate" destination="xhn-pS-KQq" id="Rnr-Rv-xnO"/>
                         <outlet property="searchBar" destination="IS6-Lo-FGq" id="mjf-ij-tLA"/>

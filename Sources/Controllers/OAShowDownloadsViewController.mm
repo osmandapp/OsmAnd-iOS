@@ -121,7 +121,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     _tableView.dataSource = self;
     
-    
+    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -160,7 +160,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [_downloadTaskProgressObserver observe:downloadTask.progressCompletedObservable];
             [_downloadTaskCompletedObserver observe:downloadTask.completedObservable];
             
-//            downloadedItem.resourceInRepository = resourceId;
             downloadedItem.caption = [self titleOfResourceId:resourceId];
             [_downloadingItems addObject:downloadedItem];
         }
@@ -441,6 +440,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+#pragma mark - OADownloadsRefreshButtonDelegate
+
+- (void)clickedOnRefreshButton:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
+    if (index == 1)
+        [self reloadList];
+}
+
+- (void)onViewDidLoadAction:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
+    
 }
 
 #pragma mark -

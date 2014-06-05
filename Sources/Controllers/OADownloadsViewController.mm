@@ -35,8 +35,6 @@
 
     BOOL _isLoadingRepository;
 
-    UIBarButtonItem* _refreshBarButton;
-
     NSArray* _searchResults;
 }
 
@@ -64,10 +62,6 @@
 
     _isLoadingRepository = NO;
 
-    _refreshBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
-                                                                      target:self
-                                                                      action:@selector(onUpdateRepositoryAndRefresh)];
-
     _searchResults = nil;
 
     // Link to root world region
@@ -77,18 +71,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Add a button to refresh repository
-    self.navigationItem.rightBarButtonItem = _refreshBarButton;
-
-    // Update repository if needed or load from cache
-    if (!_app.resourcesManager->isRepositoryAvailable())
-    {
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-            [self updateRepositoryAndReloadListAnimated];
-        else
-            [self showNoInternetAlert];
-    }
+    
+    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
 }
 
 - (void)showNoInternetAlert
@@ -101,35 +85,6 @@
                                                                  [menuHostViewController dismissLastOpenedMenuAnimated:YES];
                                                              }]
                        otherButtonItems:nil] show];
-}
-
-- (void)onUpdateRepositoryAndRefresh
-{
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-        [self updateRepositoryAndReloadListAnimated];
-    else
-        [self showNoInternetAlert];
-}
-
-- (void)updateRepositoryAndReloadListAnimated
-{
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _isLoadingRepository = YES;
-            _refreshBarButton.enabled = NO;
-            [self.tableView reloadData];
-            [self.updateActivityIndicator startAnimating];
-        });
-
-        _app.resourcesManager->updateRepository();
-
-        dispatch_async(dispatch_get_main_queue(), ^{
-            _isLoadingRepository = NO;
-            [self.updateActivityIndicator stopAnimating];
-            [self reloadList];
-            _refreshBarButton.enabled = YES;
-        });
-    });
 }
 
 - (void)filterContentForSearchText:(NSString*)searchString
@@ -288,6 +243,54 @@
     }
 
     [super prepareForSegue:segue sender:sender];
+}
+
+#pragma mark - OADownloadsRefreshButtonDelegate
+
+- (void)clickedOnRefreshButton:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
+    if (index == 0) {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self updateRepositoryAndReloadListAnimated:refreshButton];
+        else
+            [self showNoInternetAlert];
+
+    }
+}
+
+- (void)updateRepositoryAndReloadListAnimated:(UIBarButtonItem *)refreshButton
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isLoadingRepository = YES;
+            refreshButton.enabled = NO;
+            [self.tableView reloadData];
+            [self.updateActivityIndicator startAnimating];
+        });
+        
+        _app.resourcesManager->updateRepository();
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isLoadingRepository = NO;
+            [self.updateActivityIndicator stopAnimating];
+            [self reloadList];
+            refreshButton.enabled = YES;
+        });
+    });
+}
+
+- (void)onViewDidLoadAction:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
+    if (index == 0) {
+        if (!_app.resourcesManager->isRepositoryAvailable())
+        {
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                [self updateRepositoryAndReloadListAnimated:refreshButton];
+            else
+                [self showNoInternetAlert];
+        }
+
+    }
 }
 
 #pragma mark -

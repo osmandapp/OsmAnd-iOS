@@ -951,6 +951,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _myLocationMarker->setPosition(newTarget31);
     _myLocationMarker->setIsPrecisionCircleEnabled(true);
     _myLocationMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+    _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey, OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
 
     // If map mode is position-track or follow, move to that position
     if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)

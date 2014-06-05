@@ -8,7 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAShowUpdatesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+#import "OADownloadsTabBarViewController.h"
+
+@interface OAShowUpdatesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, OADownloadsRefreshButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

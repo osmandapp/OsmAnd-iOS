@@ -133,8 +133,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    [self setupTabBar];
     
     // Load dynamic content
     [self reloadDynamicContent];
@@ -746,28 +744,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             regionDownloadsViewController.worldRegion = [_subregionItems objectAtIndex:selectedItemPath.row];
         }
     }
-}
-
-#pragma mark - Tab bar configurating
-
-- (void)setupTabBar
-{
-    UITabBar *tabBar = [self tabBarController].tabBar;
-    
-    UITabBarItem *tab = [tabBar.items objectAtIndex:0];
-    tab.image = [UIImage imageNamed:@"tab_regions_icon.png"];
-    tab.selectedImage = [UIImage imageNamed:@"tab_regions_icon_filled.png"];
-    tab.title = OALocalizedString(@"Regions");
-    
-    tab = [tabBar.items objectAtIndex:1];
-    tab.image = [UIImage imageNamed:@"tab_downloads_icon.png"];
-    tab.selectedImage = [UIImage imageNamed:@"tab_downloads_icon_filled.png"];
-    tab.title = OALocalizedString(@"Downloads");
-    
-    tab = [tabBar.items objectAtIndex:2];
-    tab.image = [UIImage imageNamed:@"tab_updates_icon.png"];
-    tab.selectedImage = [UIImage imageNamed:@"tab_updates_icon_filled.png"];
-    tab.title = OALocalizedString(@"Updates");
 }
 
 #pragma mark -

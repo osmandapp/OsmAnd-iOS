@@ -149,10 +149,10 @@
             </objects>
             <point key="canvasLocation" x="502" y="81"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Downloads Tab Bar View Controller-->
         <scene sceneID="xIV-rh-zGE">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="9Lk-Iw-0DQ" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" definesPresentationContext="YES" id="9Lk-Iw-0DQ" customClass="OADownloadsTabBarViewController" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="nE3-fs-F2b">
@@ -201,7 +201,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Downloads" image="tab_downloads_icon.png" id="iYg-jF-7OY"/>
+                    <tabBarItem key="tabBarItem" tag="1" title="Downloads" image="tab_downloads_icon.png" id="iYg-jF-7OY"/>
                     <connections>
                         <outlet property="tableView" destination="bei-gn-F9q" id="7Cg-v6-Jin"/>
                     </connections>
@@ -241,7 +241,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBarItem key="tabBarItem" title="Updates" image="tab_updates_icon.png" id="nqO-nw-flR"/>
+                    <tabBarItem key="tabBarItem" tag="2" title="Updates" image="tab_updates_icon.png" id="nqO-nw-flR"/>
                     <connections>
                         <outlet property="tableView" destination="WrR-07-zAB" id="XGb-Om-k98"/>
                     </connections>

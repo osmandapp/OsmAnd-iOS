@@ -8,9 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OADownloadsTabBarViewController.h"
+
 #import "OAWorldRegion.h"
 
-@interface OAShowDownloadsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface OAShowDownloadsViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, OADownloadsRefreshButtonDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 

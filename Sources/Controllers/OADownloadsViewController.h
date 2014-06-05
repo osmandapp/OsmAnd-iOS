@@ -10,8 +10,9 @@
 
 #import "OADownloadsBaseViewController.h"
 #import "OAMenuViewControllerProtocol.h"
+#import "OADownloadsTabBarViewController.h"
 
-@interface OADownloadsViewController : OADownloadsBaseViewController <OAMenuViewControllerProtocol>
+@interface OADownloadsViewController : OADownloadsBaseViewController <OAMenuViewControllerProtocol, OADownloadsRefreshButtonDelegate>
 
 @property(weak) UIViewController* menuHostViewController;
 

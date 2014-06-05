@@ -107,12 +107,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                 andObserve:_app.localResourcesChangedObservable];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     _tableView.delegate = self;
     
     _tableView.dataSource = self;
+    
+    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -371,10 +374,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                  }
                                                                  [self reloadList];
                                                              }], nil] show];
+}
+
+#pragma mark - OADownloadsRefreshButtonDelegate
+
+- (void)clickedOnRefreshButton:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
+    if (index == 2) {
+        [self reloadList];
+    }
+}
+
+- (void)onViewDidLoadAction:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
+{
     
 }
 
-#pragma mark - 
+#pragma mark -
 
 @end
 

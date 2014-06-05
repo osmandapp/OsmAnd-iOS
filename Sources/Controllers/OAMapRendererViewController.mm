@@ -28,8 +28,12 @@
 #include <OsmAndCore/Map/RasterizerEnvironment.h>
 #include <OsmAndCore/Map/MapStyleValueDefinition.h>
 #include <OsmAndCore/Map/MapStyleValue.h>
+#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
 
 #include "ExternalResourcesProvider.h"
+#import "OANativeUtilities.h"
 #import "OALog.h"
 
 #define kElevationGestureMaxThreshold 50.0f
@@ -67,6 +71,12 @@
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
     std::shared_ptr<OsmAnd::BinaryMapStaticSymbolsProvider> _binaryMapStaticSymbolsProvider;
+
+    // My location marker and collection
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _myLocationMarkerCollection;
+    std::shared_ptr<OsmAnd::MapMarker> _myLocationMarker;
+    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKey;
+    OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKey;
     
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -195,6 +205,20 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
     _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
+
+    // Create "My location" marker
+    _myLocationMarkerCollection.reset(new OsmAnd::MapMarkersCollection());
+    OsmAnd::MapMarkerBuilder myLocationMarkerBuilder;
+    myLocationMarkerBuilder.setPrecisionCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
+    myLocationMarkerBuilder.setIsHidden(true);
+    _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+    myLocationMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
+                                                [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
+    _myLocationHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+    myLocationMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
+                                                [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
+    _myLocationMarker = myLocationMarkerBuilder.buildAndAddToCollection(_myLocationMarkerCollection);
+    _myLocationMarker->setIsPrecisionCircleEnabled(false);
 }
 
 - (void)dtor
@@ -918,9 +942,16 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Obtain fresh location and heading
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
     CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-    
-    //TODO: update marker position
-    
+    const OsmAnd::PointI newTarget31(
+                                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+
+    // Update "My Location" marker
+    _myLocationMarker->setIsHidden(false);
+    _myLocationMarker->setPosition(newTarget31);
+    _myLocationMarker->setIsPrecisionCircleEnabled(true);
+    _myLocationMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+
     // If map mode is position-track or follow, move to that position
     if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
     {
@@ -937,9 +968,6 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
         }
         
-        const OsmAnd::PointI newTarget31(
-            OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
-            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
         mapView.animator->parabolicAnimateTargetTo(newTarget31,
                                                    kOneSecondAnimatonTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
@@ -1053,6 +1081,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
         }
+
+        // Add "My location"
+        [mapView addSymbolProvider:_myLocationMarkerCollection];
 
         _mapSourceInvalidated = YES;
     }

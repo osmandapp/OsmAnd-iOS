@@ -22,10 +22,35 @@
 #define _(name) OAShowDownloadsViewController__##name
 #define ctor _(ctor)
 
-#define DownloadedItem _(DownloadedItem)
-@interface DownloadedItem : NSObject
-@property NSString *caption;
+#define BaseDownloadItem _(BaseDownloadItem)
+@interface BaseDownloadItem : NSObject
+@property NSString* caption;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
+@end
+@implementation BaseDownloadItem
+@end
+
+#define InstallableItem _(InstallableItem)
+@interface InstallableItem : BaseDownloadItem
+@end
+@implementation InstallableItem
+@end
+
+#define InstalledItem _(InstalledItem)
+@interface InstalledItem : BaseDownloadItem
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> localResource;
+@end
+@implementation InstalledItem
+@end
+
+#define OutdatedItem _(OutdatedItem)
+@interface OutdatedItem : InstalledItem
+@end
+@implementation OutdatedItem
+@end
+
+#define DownloadedItem _(DownloadedItem)
+@interface DownloadedItem : BaseDownloadItem
 @property id<OADownloadTask> downloadTask;
 @end
 @implementation DownloadedItem
@@ -43,7 +68,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OsmAndAppInstance _app;
     
-    NSMutableArray* _downloadItems;
+    NSMutableArray* _downloadingItems;
+    NSMutableArray* _installedItems;
     
     OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
@@ -74,7 +100,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     _worldRegion = nil;
     
-    _downloadItems = [[NSMutableArray alloc] init];
+    _downloadingItems = [[NSMutableArray alloc] init];
+    
+    _installedItems = [[NSMutableArray alloc] init];
     
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)];
@@ -92,6 +120,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _tableView.delegate = self;
     
     _tableView.dataSource = self;
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -116,7 +146,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)loadDynamicContent
 {
-    [_downloadItems removeAllObjects];
+    [_downloadingItems removeAllObjects];
     NSArray *keysOfDownloadTasks = [_app.downloadsManager keysOfDownloadTasks];
     
     for (NSString *resourceId : keysOfDownloadTasks)
@@ -132,16 +162,53 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             
 //            downloadedItem.resourceInRepository = resourceId;
             downloadedItem.caption = [self titleOfResourceId:resourceId];
-            [_downloadItems addObject:downloadedItem];
+            [_downloadingItems addObject:downloadedItem];
         }
         
     }
-    [_downloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    [_downloadingItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         DownloadedItem *item1 = obj1;
         DownloadedItem *item2 = obj2;
         
         return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
     }];
+    
+    [_installedItems removeAllObjects];
+    const auto& localResources = _app.resourcesManager->getLocalResources();
+    const auto& resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+    for (const auto& resource : localResources)
+    {
+        NSString *resourceID = resource->id.toNSString();
+        BOOL isDownloading = false;
+        
+        for (NSString *key : keysOfDownloadTasks) {
+            if ([resourceID isEqualToString:[[key componentsSeparatedByString:@":"] objectAtIndex:1]]) {
+                isDownloading = true;
+                break;
+            }
+        }
+        
+        if (isDownloading) {
+            continue;
+        }
+        
+        InstalledItem *installedItem = [[InstalledItem alloc] init];
+        installedItem.localResource = resource;
+        
+        const auto& resourceInRepository = resourcesInRepository.constFind(resource->id);
+        installedItem.resourceInRepository = (*resourceInRepository);
+        
+        installedItem.caption = [self titleOfResourceId:resourceID];
+        
+        [_installedItems addObject:installedItem];
+    }
+    [_installedItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        InstalledItem *item1 = obj1;
+        InstalledItem *item2 = obj2;
+        
+        return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
+    }];
+
 }
 
 - (void)cancelDownloadOf:(DownloadedItem *)item
@@ -161,7 +228,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (!self.isViewLoaded)
             return;
         
-        NSUInteger downloadItemIndex = [_downloadItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        NSUInteger downloadItemIndex = [_downloadingItems indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
             if (![obj isKindOfClass:[DownloadedItem class]])
                 return NO;
             
@@ -233,6 +300,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSArray *regions = [_app.worldRegion flattenedSubregions];
     
     for (OAWorldRegion *region : regions) {
+        if ([region.regionId isEqualToString:[resourceId substringToIndex:[resourceId rangeOfString:@"."].location]]) {
+            return region.name;
+        }
+    }
+    
+    for (OAWorldRegion *region : regions) {
         if ([region.regionId isEqualToString:[[(NSString *)[[resourceId componentsSeparatedByString:@":"] objectAtIndex:1] componentsSeparatedByString:@"."] objectAtIndex:0]]) {
             return region.name;
         }
@@ -245,52 +318,78 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [_downloadItems count];
+    if (section == 0)
+        return [_downloadingItems count];
+    
+    return [_installedItems count];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if ([_downloadItems count] == 0)
-        return OALocalizedString(@"There is no current downloads");
-
-    return OALocalizedString(@"Current downloads");
+    if (section == 0) {
+        if ([_downloadingItems count] == 0)
+            return OALocalizedString(@"There is no current downloads");
+        
+        return OALocalizedString(@"Current downloads:");
+    }
+    
+    if ([_installedItems count] == 0)
+        return OALocalizedString(@"There is no installed items");
+    
+    return OALocalizedString(@"Installed items:");
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Obtain reusable cell or create one
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"downloadedItemCell"];
-    if (cell == nil)
-    {
-        FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-        progressView.iconView = [[UIView alloc] init];
-        [progressView startSpinProgressBackgroundLayer];
-        cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
-                                                         andCustomAccessoryView:progressView
-                                                                reuseIdentifier:@"downloadedItemCell"];
+    UITableViewCell *cell;
+    
+    if (indexPath.section == 0) {
+        // Obtain reusable cell or create one
+        cell = [tableView dequeueReusableCellWithIdentifier:@"downloadedItemCell"];
+        if (cell == nil)
+        {
+            FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+            progressView.iconView = [[UIView alloc] init];
+            [progressView startSpinProgressBackgroundLayer];
+            cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
+                                                             andCustomAccessoryView:progressView
+                                                                    reuseIdentifier:@"downloadedItemCell"];
+        }
+        
+        DownloadedItem *downloadedItem = (DownloadedItem *)[_downloadingItems objectAtIndex:indexPath.row];
+        
+        // Fill cell content
+        cell.textLabel.text = downloadedItem.caption;
+        
+        FFCircularProgressView *progressView = (FFCircularProgressView*)cell.accessoryView;
+        float progressCompleted = downloadedItem.downloadTask.progressCompleted;
+        if (progressCompleted >= 0.0f && downloadedItem.downloadTask.state == OADownloadTaskStateRunning)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = progressCompleted;
+        }
+        else if (downloadedItem.downloadTask.state == OADownloadTaskStateFinished)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = 1.0f;
+        }
     }
-    
-    DownloadedItem *downloadedItem = (DownloadedItem *)[_downloadItems objectAtIndex:indexPath.row];
-    
-    // Fill cell content
-    cell.textLabel.text = downloadedItem.caption;
-    
-    FFCircularProgressView *progressView = (FFCircularProgressView*)cell.accessoryView;
-    float progressCompleted = downloadedItem.downloadTask.progressCompleted;
-    if (progressCompleted >= 0.0f && downloadedItem.downloadTask.state == OADownloadTaskStateRunning)
+    else
     {
-        [progressView stopSpinProgressBackgroundLayer];
-        progressView.progress = progressCompleted;
-    }
-    else if (downloadedItem.downloadTask.state == OADownloadTaskStateFinished)
-    {
-        [progressView stopSpinProgressBackgroundLayer];
-        progressView.progress = 1.0f;
+        cell = [tableView dequeueReusableCellWithIdentifier:@"installedItemCell"];
+        
+        if (cell == nil) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:@"installedItemCell"];
+        }
+        
+        cell.textLabel.text = ((InstalledItem *)[_installedItems objectAtIndex:indexPath.row]).caption;
     }
     
     return cell;
@@ -298,30 +397,50 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self tableView:tableView selectedAtIndexPath:indexPath];
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    DownloadedItem* item = [_downloadItems objectAtIndex:indexPath.row];
-    
-    NSString *itemName = nil;
-    if (_worldRegion.superregion == nil)
+    [self tableView:tableView selectedAtIndexPath:indexPath];
+}
+
+- (void)tableView:(UITableView *)tableView selectedAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        DownloadedItem *item = [_downloadingItems objectAtIndex:indexPath.row];
+        
+        NSString *itemName = nil;
+        if (_worldRegion.superregion == nil)
         itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    else
-    {
-        itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
-                    [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
-                    _worldRegion.name];
+        else
+        {
+            itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
+                        [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
+                        _worldRegion.name];
+        }
+        
+        if ([item isKindOfClass:[DownloadedItem class]])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil
+                                        message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"), itemName]
+                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
+                               otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                                                                     action:^{
+                                                                         [self cancelDownloadOf:item];
+                                                                     }], nil] show];
+        }
+    } else {
+        InstalledItem *installedItem = (InstalledItem *)[_installedItems objectAtIndex:indexPath.row];;
+        
+        NSString *resourceId = installedItem.localResource->id.toNSString();
+        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
+                                             animated:YES];
     }
     
-    if ([item isKindOfClass:[DownloadedItem class]])
-    {
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"), itemName]
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
-                                                                 action:^{
-                                                                     [self cancelDownloadOf:item];
-                                                                 }], nil] show];
-    }
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 #pragma mark -

@@ -276,6 +276,10 @@
 		BBA6ACFE1940BD0A0066AF23 /* my_location_marker_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF61940BD0A0066AF23 /* my_location_marker_icon@2x.png */; };
 		BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */; };
 		BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */; };
+		BBA6AD051940CD010066AF23 /* my_course_marker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */; };
+		BBA6AD061940CD010066AF23 /* my_course_marker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */; };
+		BBA6AD071940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */; };
+		BBA6AD081940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */; };
 		BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
@@ -528,6 +532,8 @@
 		BBA6ACF61940BD0A0066AF23 /* my_location_marker_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACFF1940C0A80066AF23 /* OANativeUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANativeUtilities.h; path = Helpers/OANativeUtilities.h; sourceTree = "<group>"; };
 		BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OANativeUtilities.mm; path = Helpers/OANativeUtilities.mm; sourceTree = "<group>"; };
+		BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_course_marker_icon.png; sourceTree = "<group>"; };
+		BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_course_marker_icon@2x.png"; sourceTree = "<group>"; };
 		BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewController.h; path = Controllers/OAMapRendererViewController.h; sourceTree = "<group>"; };
 		BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererViewController.mm; path = Controllers/OAMapRendererViewController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
@@ -837,6 +843,8 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */,
+				BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */,
 				BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */,
 				BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */,
 				BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */,
@@ -1195,6 +1203,7 @@
 				CE12EE70193FB649006AB6AA /* tab_downloads_icon_filled@2x.png in Resources */,
 				BB451DBD18D70B5B005FBE09 /* HUD_compass_bg@2x.png in Resources */,
 				BB451DC718D70B5B005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
+				BBA6AD051940CD010066AF23 /* my_course_marker_icon.png in Resources */,
 				BBD49BA418A01E80009DB4D5 /* drawable-xhdpi in Resources */,
 				BB476B7018D4C83E0044D5E1 /* NavigationModeHUD~ipad.xib in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
@@ -1220,6 +1229,7 @@
 				BBACF10A17C61D8500EBA761 /* MapModeHUD.xib in Resources */,
 				BB451ED518E36BFB005FBE09 /* menu_item_my_data_icon.png in Resources */,
 				BB451DB818D70B5B005FBE09 /* HUD_button_bg.png in Resources */,
+				BBA6AD071940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */,
 				BB451ED918E36BFB005FBE09 /* menu_item_settings_icon.png in Resources */,
 				BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				BB451E1718DA4180005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,
@@ -1307,6 +1317,7 @@
 				CE12EE7C193FB652006AB6AA /* tab_downloads_icon_filled@2x.png in Resources */,
 				BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */,
 				BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
+				BBA6AD061940CD010066AF23 /* my_course_marker_icon.png in Resources */,
 				BB451E7918DCD224005FBE09 /* drawable-xhdpi in Resources */,
 				BB451E7A18DCD224005FBE09 /* NavigationModeHUD~ipad.xib in Resources */,
 				BB451E7B18DCD224005FBE09 /* Icon-72@2x.png in Resources */,
@@ -1332,6 +1343,7 @@
 				BB451E8818DCD224005FBE09 /* MapModeHUD.xib in Resources */,
 				BB451ED618E36BFB005FBE09 /* menu_item_my_data_icon.png in Resources */,
 				BB451E8918DCD224005FBE09 /* HUD_button_bg.png in Resources */,
+				BBA6AD081940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */,
 				BB451EDA18E36BFB005FBE09 /* menu_item_settings_icon.png in Resources */,
 				BB451E8A18DCD224005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				BB451E8B18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,

@@ -72,12 +72,14 @@
     std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
     std::shared_ptr<OsmAnd::BinaryMapStaticSymbolsProvider> _binaryMapStaticSymbolsProvider;
 
-    // My location marker and collection
-    std::shared_ptr<OsmAnd::MapMarkersCollection> _myLocationMarkerCollection;
+    // "My location" marker, "My course" marker and collection
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _myLocationMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _myLocationMainIconKey;
     OsmAnd::MapMarker::OnSurfaceIconKey _myLocationHeadingIconKey;
-    
+    std::shared_ptr<OsmAnd::MapMarker> _myCourseMarker;
+    OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKey;
+
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
@@ -206,19 +208,23 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
 
-    // Create "My location" marker
-    _myLocationMarkerCollection.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder myLocationMarkerBuilder;
-    myLocationMarkerBuilder.setPrecisionCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
-    myLocationMarkerBuilder.setIsHidden(true);
+    // Create my markers
+    _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+    OsmAnd::MapMarkerBuilder myMarkerBuilder;
+    myMarkerBuilder.setPrecisionCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
+    myMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    myLocationMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
-                                                [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
+    myMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
+                                        [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
     _myLocationHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    myLocationMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
-                                                [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
-    _myLocationMarker = myLocationMarkerBuilder.buildAndAddToCollection(_myLocationMarkerCollection);
-    _myLocationMarker->setIsPrecisionCircleEnabled(false);
+    myMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
+                                        [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
+    _myLocationMarker = myMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
+    myMarkerBuilder.clearOnMapSurfaceIcons();
+    _myCourseMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
+    myMarkerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
+                                        [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
+    _myCourseMarker = myMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
 }
 
 - (void)dtor
@@ -946,12 +952,29 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                      OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                      OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
-    // Update "My Location" marker
-    _myLocationMarker->setIsHidden(false);
-    _myLocationMarker->setPosition(newTarget31);
-    _myLocationMarker->setIsPrecisionCircleEnabled(true);
-    _myLocationMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
-    _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey, OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
+    // Update "My" markers
+    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    {
+        _myLocationMarker->setIsHidden(true);
+
+        _myCourseMarker->setIsHidden(false);
+        _myCourseMarker->setPosition(newTarget31);
+        _myCourseMarker->setIsPrecisionCircleEnabled(true);
+        _myCourseMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+        _myCourseMarker->setOnMapSurfaceIconDirection(_myCourseMainIconKey,
+                                                      OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
+    }
+    else
+    {
+        _myCourseMarker->setIsHidden(true);
+
+        _myLocationMarker->setIsHidden(false);
+        _myLocationMarker->setPosition(newTarget31);
+        _myLocationMarker->setIsPrecisionCircleEnabled(true);
+        _myLocationMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+        _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey,
+                                                        OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
+    }
 
     // If map mode is position-track or follow, move to that position
     if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
@@ -1084,7 +1107,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         }
 
         // Add "My location"
-        [mapView addSymbolProvider:_myLocationMarkerCollection];
+        [mapView addSymbolProvider:_myMarkersCollection];
 
         _mapSourceInvalidated = YES;
     }

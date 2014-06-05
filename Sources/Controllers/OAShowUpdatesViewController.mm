@@ -114,13 +114,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _tableView.delegate = self;
     
     _tableView.dataSource = self;
-    
-    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
     
     // Deselect previously selected rows
     for (NSIndexPath *selectedIndexPath in [_tableView indexPathsForSelectedRows])

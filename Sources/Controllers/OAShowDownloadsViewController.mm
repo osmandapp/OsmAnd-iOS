@@ -313,6 +313,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return @"";
 }
 
+- (void)deleteItem:(InstalledItem *)item
+{
+    _app.resourcesManager->uninstallResource(item.resourceInRepository->id);
+    [self reloadList];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -440,6 +446,39 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        InstalledItem *item = [_installedItems objectAtIndex:indexPath.row];
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:[NSString stringWithFormat:OALocalizedString(@"You are going to delete item named %1$@ with size %2$@. Are you sure?"),
+                                             item.caption,
+                                             [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Delete")
+                                                                 action:^{
+                                                                     [self deleteItem:item];
+                                                                 }], nil] show];
+    }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return OALocalizedString(@"Delete");
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ([[tableView cellForRowAtIndexPath:indexPath].reuseIdentifier isEqualToString:@"installedItemCell"])
+    {
+        return YES;
+    }
+    
+    return NO;
 }
 
 #pragma mark - OADownloadsRefreshButtonDelegate

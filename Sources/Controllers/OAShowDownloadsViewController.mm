@@ -25,6 +25,7 @@
 #define BaseDownloadItem _(BaseDownloadItem)
 @interface BaseDownloadItem : NSObject
 @property NSString* caption;
+@property NSString* subTitle;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
 @end
 @implementation BaseDownloadItem
@@ -160,7 +161,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [_downloadTaskProgressObserver observe:downloadTask.progressCompletedObservable];
             [_downloadTaskCompletedObserver observe:downloadTask.completedObservable];
             
-            downloadedItem.caption = [self titleOfResourceId:resourceId];
+            NSArray *title = [self titleOfResourceId:resourceId];
+            
+            downloadedItem.caption = [title objectAtIndex:0];
+            downloadedItem.subTitle = [title objectAtIndex:1];
+            
             [_downloadingItems addObject:downloadedItem];
         }
         
@@ -197,7 +202,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto& resourceInRepository = resourcesInRepository.constFind(resource->id);
         installedItem.resourceInRepository = (*resourceInRepository);
         
-        installedItem.caption = [self titleOfResourceId:resourceID];
+        NSArray *title = [self titleOfResourceId:resourceID];
+        
+        installedItem.caption = [title objectAtIndex:0];
+        installedItem.subTitle = [title objectAtIndex:1];
         
         [_installedItems addObject:installedItem];
     }
@@ -294,23 +302,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     });
 }
 
-- (NSString *)titleOfResourceId:(NSString *)resourceId
+- (NSArray *)titleOfResourceId:(NSString *)resourceId
 {
     NSArray *regions = [_app.worldRegion flattenedSubregions];
     
     for (OAWorldRegion *region : regions) {
         if ([region.regionId isEqualToString:[resourceId substringToIndex:[resourceId rangeOfString:@"."].location]]) {
-            return region.name;
+            return @[region.name, region.superregion != nil ? region.superregion.name : @""];
         }
     }
     
     for (OAWorldRegion *region : regions) {
         if ([region.regionId isEqualToString:[[(NSString *)[[resourceId componentsSeparatedByString:@":"] objectAtIndex:1] componentsSeparatedByString:@"."] objectAtIndex:0]]) {
-            return region.name;
+            return @[region.name, region.superregion != nil ? region.superregion.name : @""];
         }
     }
     
-    return @"";
+    return @[@"",@""];
 }
 
 - (void)deleteItem:(InstalledItem *)item
@@ -362,7 +370,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
             [progressView startSpinProgressBackgroundLayer];
-            cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                              andCustomAccessoryView:progressView
                                                                     reuseIdentifier:@"downloadedItemCell"];
         }
@@ -371,6 +379,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
         // Fill cell content
         cell.textLabel.text = downloadedItem.caption;
+        cell.detailTextLabel.text = downloadedItem.subTitle;
         
         FFCircularProgressView *progressView = (FFCircularProgressView*)cell.accessoryView;
         float progressCompleted = downloadedItem.downloadTask.progressCompleted;
@@ -390,11 +399,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cell = [tableView dequeueReusableCellWithIdentifier:@"installedItemCell"];
         
         if (cell == nil) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:@"installedItemCell"];
         }
         
         cell.textLabel.text = ((InstalledItem *)[_installedItems objectAtIndex:indexPath.row]).caption;
+        cell.detailTextLabel.text = ((InstalledItem *)[_installedItems objectAtIndex:indexPath.row]).subTitle;
     }
     
     return cell;

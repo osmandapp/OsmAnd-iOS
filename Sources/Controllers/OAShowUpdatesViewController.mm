@@ -26,6 +26,7 @@
 #define BaseDownloadItem _(BaseDownloadItem)
 @interface BaseDownloadItem : NSObject
 @property NSString* caption;
+@property NSString* subTitle;
 @property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resourceInRepository;
 @end
 @implementation BaseDownloadItem
@@ -166,7 +167,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto& resourceInRepository = resourcesInRepository.constFind(resource->id);
         outdatedItem.resourceInRepository = (*resourceInRepository);
         
-        outdatedItem.caption = [self titleOfResourceId:resourceID];
+        NSArray *title = [self titleOfResourceId:resourceID];
+        
+        outdatedItem.caption = [title objectAtIndex:0];
+        outdatedItem.subTitle = [title objectAtIndex:1];
         
         [_downloadItems addObject:outdatedItem];
     }
@@ -201,21 +205,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return [resourceId hasPrefix:_worldRegion.superregion == nil ? @"world_" : [_worldRegion.regionId stringByAppendingString:@"."]];
 }
 
-- (NSString *)titleOfResourceId:(NSString *)resourceId
+- (NSArray *)titleOfResourceId:(NSString *)resourceId
 {
     NSArray *regions = [_app.worldRegion flattenedSubregions];
     NSRange rangeOfPoint = [resourceId rangeOfString:@"."];
     if (rangeOfPoint.location != NSNotFound) {
         for (OAWorldRegion *region : regions) {
             if ([region.regionId isEqualToString:[resourceId substringToIndex:rangeOfPoint.location]]) {
-                return region.name;
+                return @[region.name, region.superregion != nil ? region.superregion.name : @""];
             }
         }
     }
     
-    return @"";
+    return @[@"",@""];
 }
-
 
 - (BOOL)regionOrAnySubregionOf:(OAWorldRegion *)region
             isDownloadableFrom:(const QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> >&)resourcesInRepository
@@ -295,7 +298,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"outdatedItemCell"];
     if (cell == nil)
     {
-        cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
+        cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleSubtitle
                                                   andButtonType:UIButtonTypeSystem
                                                 reuseIdentifier:@"outdatedItemCell"];
         OATableViewCellWithButton *cellWithButton = (OATableViewCellWithButton*)cell;
@@ -308,6 +311,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     // Fill cell content
     cell.textLabel.text = ((OutdatedItem *)[_downloadItems objectAtIndex:indexPath.row]).caption;
+    cell.detailTextLabel.text = ((OutdatedItem *)[_downloadItems objectAtIndex:indexPath.row]).subTitle;
     
     return cell;
 }

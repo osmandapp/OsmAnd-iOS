@@ -157,11 +157,12 @@
         UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:subregionItemCell];
         if (cell == nil)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:subregionItemCell];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
         cell.textLabel.text = worldRegion.name;
+        cell.detailTextLabel.text = worldRegion.superregion != nil ? worldRegion.superregion.name : @"";
 
         return cell;
     }

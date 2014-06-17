@@ -18,12 +18,14 @@ pod 'RDVTabBarController', '~> 1.1.6'
 
 # Make changes to Pods.xcconfig : 
 #  - HEADER_SEARCH_PATHS need to inherit project settings
-# - 'libPods.a' needs $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+#  - 'libPods.a' needs $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+#  - Force architectures to '$(ARCHS_STANDARD_32_BIT)'
 post_install do |installer_representation|
     workDir = Dir.pwd
     xcconfigFilename = "#{workDir}/Pods/Pods.xcconfig"
     xcconfig = File.read(xcconfigFilename)
     xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\" \"")
+    xcconfig = xcconfig + "\nARCHS = \"$(ARCHS_STANDARD_32_BIT)\""
     File.open(xcconfigFilename, "w") { |file| file << xcconfig }
 end

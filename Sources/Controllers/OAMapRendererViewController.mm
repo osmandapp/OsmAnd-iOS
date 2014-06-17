@@ -622,7 +622,14 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
         return;
-    
+
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        // In case we're in "follow-me" mode, switch to "position-tracking"
+        if (_app.mapMode == OAMapModeFollow)
+            _app.mapMode = OAMapModePositionTrack;
+    }
+
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     CGPoint translation = [recognizer translationInView:self.view];
@@ -770,6 +777,10 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
+    // In case we're in "follow-me" mode, switch to "position-tracking"
+    if (_app.mapMode == OAMapModeFollow)
+        _app.mapMode = OAMapModePositionTrack;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
 
@@ -825,7 +836,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         return;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
+
+    // In case we're in "follow-me" mode, switch to "position-tracking"
+    if (_app.mapMode == OAMapModeFollow)
+        _app.mapMode = OAMapModePositionTrack;
+
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
 

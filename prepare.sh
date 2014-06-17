@@ -19,7 +19,7 @@ if [ $retcode -ne 0 ]; then
 	exit $retcode
 fi
 echo "Building dependencies..."
-"$ROOT/core/externals/build.sh"
+"$ROOT/core/externals/build.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glm icu4c libarchive
 retcode=$?
 if [ $retcode -ne 0 ]; then
 	echo "Failed to build dependencies, aborting..."

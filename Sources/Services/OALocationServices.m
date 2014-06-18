@@ -231,8 +231,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    OALog(@"OALocationServices: location updated");
-
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
     {
@@ -246,8 +244,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
-    OALog(@"OALocationServices: heading updated");
-
     // If was waiting for authorization, now it's granted
     if (_waitingForAuthorization)
     {
@@ -315,12 +311,11 @@
 
 + (void)showDeniedAlert
 {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Access denied")
-                                                        message:OALocalizedString(@"Access to location service has been denied")
-                                                       delegate:nil
-                                              cancelButtonTitle:OALocalizedString(@"OK")
-                                              otherButtonTitles:nil];
-    [alertView show];
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Access denied")
+                                message:OALocalizedString(@"Access to location service has been denied")
+                               delegate:nil
+                      cancelButtonTitle:OALocalizedString(@"OK")
+                      otherButtonTitles:nil] show];
 }
 
 @end

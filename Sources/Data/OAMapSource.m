@@ -82,6 +82,8 @@
         [self ctor];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
+        if (_variant == (id)[NSNull null])
+            _variant = nil;
     }
     return self;
 }

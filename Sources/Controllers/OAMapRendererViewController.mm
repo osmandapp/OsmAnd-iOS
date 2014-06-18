@@ -1079,6 +1079,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            OALog(@"Using '%@' style from '%@' resource", mapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
             // Configure offline map data provider with given settings
             const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
@@ -1091,6 +1092,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
             {
+                OALog(@"Using '%@' variant of style", lastMapSource.variant);
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset)
                     _binaryMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
@@ -1107,6 +1109,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+            OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
 
             const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
             if (!onlineMapTileProvider)

@@ -49,7 +49,7 @@
         // Store previous, if such exists
         if (_lastMapSource != nil)
         {
-            [_lastMapSources setObject:_lastMapSource.variant
+            [_lastMapSources setObject:_lastMapSource.variant != nil ? _lastMapSource.variant : [NSNull null]
                                 forKey:_lastMapSource.resourceId];
         }
 
@@ -69,12 +69,12 @@
         if (_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
             return _lastMapSource;
 
-        NSString* variant = [_lastMapSources objectForKey:resourceId];
-        if (variant == nil)
+        NSNull* variant = [_lastMapSources objectForKey:resourceId];
+        if (variant == nil || variant == [NSNull null])
             return nil;
 
         return [[OAMapSource alloc] initWithResource:resourceId
-                                          andVariant:variant];
+                                          andVariant:(NSString*)variant];
     }
 }
 

@@ -166,7 +166,17 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                   withHandler:@selector(onMapRendererSettingsChanged:withKey:)];
-    
+
+    // Subscribe to application notifications to correctly suspend and resume rendering
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidEnterBackground:)
+                                                 name:UIApplicationDidEnterBackgroundNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationWillEnterForeground:)
+                                                 name:UIApplicationWillEnterForegroundNotification
+                                               object:nil];
+
     // Create gesture recognizers:
     
     // - Zoom gesture
@@ -230,6 +240,9 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 - (void)dtor
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+
+    // Unsubscribe from application notifications
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 
     // Allow view to tear down OpenGLES context
     if ([self isViewLoaded])
@@ -303,6 +316,26 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     // Suspend rendering
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView suspendRendering];
+}
+
+- (void)applicationDidEnterBackground:(UIApplication*)application
+{
+    if (![self isViewLoaded])
+        return;
+
+    // Suspend rendering
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView suspendRendering];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication*)application
+{
+    if (![self isViewLoaded])
+        return;
+
+    // Resume rendering
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    [mapView resumeRendering];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer

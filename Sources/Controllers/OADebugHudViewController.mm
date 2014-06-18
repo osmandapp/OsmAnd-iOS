@@ -12,6 +12,8 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
+#include <OsmAndCore/Utilities.h>
+
 #define _(name) OADebugHudViewController__##name
 #define ctor _(ctor)
 #define dtor _(dtor)
@@ -112,7 +114,12 @@
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 
     [stateDump appendFormat:@"forced re-rendering  : %s\n", mapRendererView.forcedRenderingOnEachFrame ? "yes" : "no"];
-    [stateDump appendFormat:@"target               : %d %d\n", mapRendererView.target31.x, mapRendererView.target31.y];
+    [stateDump appendFormat:@"target31             : %d %d\n",
+     mapRendererView.target31.x,
+     mapRendererView.target31.y];
+    [stateDump appendFormat:@"target (lon, lat)    : %f %f\n",
+     OsmAnd::Utilities::get31LongitudeX(mapRendererView.target31.x),
+     OsmAnd::Utilities::get31LatitudeY(mapRendererView.target31.y)];
     [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
     [stateDump appendFormat:@"zoom level           : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
     [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];

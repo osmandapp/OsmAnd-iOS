@@ -570,8 +570,13 @@
     }
     
     // Setup display link
-    _displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(render:)];
-    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
+    _displayLink = [CADisplayLink displayLinkWithTarget:self
+                                               selector:@selector(render:)];
+    [_displayLink addToRunLoop:[NSRunLoop currentRunLoop]
+                       forMode:NSDefaultRunLoopMode];
+
+    // Resume GPU worker thread
+    _renderer->resumeGpuWorkerThread();
     
 #if defined(DEBUG)
     OALog(@"[MapRenderView] Rendering resumed");
@@ -594,6 +599,9 @@
     // Release display link
     [_displayLink invalidate];
     _displayLink = nil;
+
+    // Pause GPU worker thread
+    _renderer->pauseGpuWorkerThread();
     
 #if defined(DEBUG)
     OALog(@"[MapRenderView] Rendering suspended");

@@ -1112,6 +1112,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            if (!mapStyle->isLoaded())
+                mapStyle->load();
             OALog(@"Using '%@' style from '%@' resource", mapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
             // Configure offline map data provider with given settings

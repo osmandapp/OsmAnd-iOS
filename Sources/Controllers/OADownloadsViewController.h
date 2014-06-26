@@ -10,7 +10,7 @@
 
 #import "OADownloadsBaseViewController.h"
 #import "OAMenuViewControllerProtocol.h"
-#import "OADownloadsTabBarViewController.h"
+#import "OADownloadsTabBarController.h"
 
 @interface OADownloadsViewController : OADownloadsBaseViewController <OAMenuViewControllerProtocol, OADownloadsRefreshButtonDelegate>
 

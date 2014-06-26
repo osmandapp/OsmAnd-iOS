@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OADownloadsTabBarViewController.h"
+#import "OADownloadsTabBarController.h"
 
 #import "OAWorldRegion.h"
 

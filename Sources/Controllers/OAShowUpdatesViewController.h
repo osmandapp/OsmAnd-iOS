@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import "OADownloadsTabBarViewController.h"
+#import "OADownloadsTabBarController.h"
 
 @interface OAShowUpdatesViewController : UIViewController <UITableViewDelegate, UITableViewDataSource, OADownloadsRefreshButtonDelegate>
 

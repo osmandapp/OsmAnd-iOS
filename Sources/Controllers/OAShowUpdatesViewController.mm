@@ -121,7 +121,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillAppear:animated];
     
-    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
+//    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
     
     // Deselect previously selected rows
     for (NSIndexPath *selectedIndexPath in [_tableView indexPathsForSelectedRows])
@@ -160,7 +160,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (isDownloading) {
             continue;
         }
-                 
+        
         OutdatedItem *outdatedItem = [[OutdatedItem alloc] init];
         outdatedItem.localResource = resource;
         
@@ -184,10 +184,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOf:(BaseDownloadItem *)item
 {
+    if (![self isEnoughSpace:item])
+        return;
+    
     // Create download tasks
     NSURLRequest *request = [NSURLRequest requestWithURL:item.resourceInRepository->url.toNSURL()];
     id <OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:item.resourceInRepository->id.toNSString()]];
+                                                                       andKey:[@"resource:" stringByAppendingString:item.resourceInRepository->id.toNSString()]];
     
     // Resume task finally
     [task resume];
@@ -227,7 +230,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for(const auto& resourceInRepository : resourcesInRepository)
     {
         if (!resourceInRepository->id.startsWith(regionId))
-            continue;
+        continue;
         
         return YES;
     }
@@ -252,6 +255,38 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self reloadList];
 }
 
+- (BOOL)isEnoughSpace:(BaseDownloadItem *)item
+{
+    uint64_t installedSize = [item isKindOfClass:[InstalledItem class]] ? ((InstalledItem *)item).localResource->size : 0;
+    uint64_t requiredSpace = item.resourceInRepository->size + item.resourceInRepository->packageSize - installedSize;
+    
+    if ([self getFreeSpace] < requiredSpace)
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Not enough space")
+                                    message:[NSString stringWithFormat:OALocalizedString(@"Not enough space on file system. Free %1$@ and try again."),
+                                             [NSByteCountFormatter stringFromByteCount:requiredSpace - [self getFreeSpace]
+                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                           otherButtonItems:nil] show];
+        return false;
+    }
+    
+    return true;
+}
+
+- (uint64_t)getFreeSpace {
+    uint64_t freeSpace = 0;
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+    
+    if (dictionary) {
+        freeSpace = [[dictionary objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+    }
+    
+    return freeSpace;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -267,7 +302,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if ([_downloadItems count] == 0)
-        return OALocalizedString(@"There is no available updates");
+    return OALocalizedString(@"There is no available updates");
     
     return OALocalizedString(@"Available updates");
 }
@@ -320,7 +355,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   [self tableView:tableView selectedAtIndexPath:indexPath];
+    [self tableView:tableView selectedAtIndexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath

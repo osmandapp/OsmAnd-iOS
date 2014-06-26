@@ -127,7 +127,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillAppear:animated];
     
-    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
+//    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
     
     // Deselect previously selected rows
     for (NSIndexPath *selectedIndexPath in [_tableView indexPathsForSelectedRows])

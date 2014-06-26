@@ -77,7 +77,7 @@
 {
     [super viewWillAppear:animated];
     
-    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
+//    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
 }
 
 - (void)showNoInternetAlert

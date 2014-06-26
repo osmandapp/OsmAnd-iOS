@@ -13,6 +13,7 @@
 #import "OAMenuViewControllerProtocol.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
+#import "OADownloadsTabBarController.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/MapStyle.h>
@@ -566,8 +567,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                      forCellAt:indexPath];
                 break;
             case kOptionsSection_DownloadsRow:
-                [self openMenu:[[UIStoryboard storyboardWithName:@"Downloads" bundle:nil] instantiateInitialViewController]
-                     forCellAt:indexPath];
+            [self openMenu:[[OADownloadsTabBarController alloc] init]
+                 forCellAt:indexPath];
                 break;
             case kOptionsSection_MyDataRow:
                 OALog(@"open my-data menu");

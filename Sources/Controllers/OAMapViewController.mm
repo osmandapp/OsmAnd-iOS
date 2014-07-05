@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAMapRendererViewController.h"
+#import "OAMapViewController.h"
 
 #import "OsmAndApp.h"
 #import "OAAppData.h"
@@ -53,11 +53,11 @@
 #define ctor _(ctor)
 #define dtor _(dtor)
 
-@interface OAMapRendererViewController ()
+@interface OAMapViewController ()
 
 @end
 
-@implementation OAMapRendererViewController
+@implementation OAMapViewController
 {
     OsmAndAppInstance _app;
     
@@ -110,9 +110,9 @@
     float _lastZoomInPositionTrack;
 }
 
-static OAMapRendererViewController* __weak s_OAMapRendererViewController_instance = nil;
+static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
 
-+ (OAMapRendererViewController*)instance
++ (OAMapViewController*)instance
 {
     return s_OAMapRendererViewController_instance;
 }

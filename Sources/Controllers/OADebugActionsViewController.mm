@@ -10,7 +10,7 @@
 
 #import "OATableViewCellWithSwitch.h"
 #import "OAMapRendererView.h"
-#import "OAMapRendererViewController.h"
+#import "OAMapViewController.h"
 
 #define _(name) OADebugActionsViewController__##name
 #define ctor _(ctor)
@@ -113,7 +113,7 @@
                 case kRenderingSection_ForcedRendering:
                     caption = @"Forced rendering";
                     cellTypeId = switchCell;
-                    boolValue = [OAMapRendererViewController instance].mapRendererView.forcedRenderingOnEachFrame;;
+                    boolValue = [OAMapViewController instance].mapRendererView.forcedRenderingOnEachFrame;;
                     break;
             }
             break;
@@ -153,7 +153,7 @@
                 case kRenderingSection_ForcedRendering:
                     {
                         OATableViewCellWithSwitch* cell = (OATableViewCellWithSwitch*)[tableView cellForRowAtIndexPath:indexPath];
-                        id<OAMapRendererViewProtocol> __weak mapRendererView = [OAMapRendererViewController instance].mapRendererView;
+                        id<OAMapRendererViewProtocol> __weak mapRendererView = [OAMapViewController instance].mapRendererView;
                         mapRendererView.forcedRenderingOnEachFrame = cell.switchView.on;
                     }
                     break;

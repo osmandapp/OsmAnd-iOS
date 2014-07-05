@@ -90,7 +90,7 @@
 		BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0E18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png */; };
 		BB451E1918DA4180005FBE09 /* position_track_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */; };
 		BB451E1A18DA4180005FBE09 /* position_track_map_mode_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */; };
-		BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
+		BB451E2518DCD224005FBE09 /* OAMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapViewController.mm */; };
 		BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
@@ -280,7 +280,7 @@
 		BBA6AD061940CD010066AF23 /* my_course_marker_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */; };
 		BBA6AD071940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */; };
 		BBA6AD081940CD010066AF23 /* my_course_marker_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */; };
-		BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */; };
+		BBA858E717C222B200AADCC7 /* OAMapViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E617C222B200AADCC7 /* OAMapViewController.mm */; };
 		BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */; };
 		BBA8590E17C24E8C00AADCC7 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590D17C24E8C00AADCC7 /* Default-568h@2x.png */; };
 		BBA8591017C24E9500AADCC7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA8590F17C24E9500AADCC7 /* Default@2x.png */; };
@@ -534,8 +534,8 @@
 		BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OANativeUtilities.mm; path = Helpers/OANativeUtilities.mm; sourceTree = "<group>"; };
 		BBA6AD031940CD010066AF23 /* my_course_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_course_marker_icon.png; sourceTree = "<group>"; };
 		BBA6AD041940CD010066AF23 /* my_course_marker_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_course_marker_icon@2x.png"; sourceTree = "<group>"; };
-		BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewController.h; path = Controllers/OAMapRendererViewController.h; sourceTree = "<group>"; };
-		BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererViewController.mm; path = Controllers/OAMapRendererViewController.mm; sourceTree = "<group>"; };
+		BBA858E517C222B200AADCC7 /* OAMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapViewController.h; path = Controllers/OAMapViewController.h; sourceTree = "<group>"; };
+		BBA858E617C222B200AADCC7 /* OAMapViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapViewController.mm; path = Controllers/OAMapViewController.mm; sourceTree = "<group>"; };
 		BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRendererView.h; path = Views/OAMapRendererView.h; sourceTree = "<group>"; };
 		BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapRendererView.mm; path = Views/OAMapRendererView.mm; sourceTree = "<group>"; };
 		BBA858EB17C222C500AADCC7 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
@@ -792,8 +792,8 @@
 				BB63334717C3DF5600903AB1 /* OAContextPanelViewController.m */,
 				BB63334917C3DF8100903AB1 /* OAMapPanelViewController.h */,
 				BB63334A17C3DF8100903AB1 /* OAMapPanelViewController.m */,
-				BBA858E517C222B200AADCC7 /* OAMapRendererViewController.h */,
-				BBA858E617C222B200AADCC7 /* OAMapRendererViewController.mm */,
+				BBA858E517C222B200AADCC7 /* OAMapViewController.h */,
+				BBA858E617C222B200AADCC7 /* OAMapViewController.mm */,
 				BB63334F17C4CFD600903AB1 /* OAMapModeHudViewController.h */,
 				BB63335017C4CFD600903AB1 /* OAMapModeHudViewController.m */,
 				BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */,
@@ -1458,7 +1458,7 @@
 				CE9CBEAE193583CA00A6AC92 /* OAShowDownloadsViewController.mm in Sources */,
 				BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
-				BBA858E717C222B200AADCC7 /* OAMapRendererViewController.mm in Sources */,
+				BBA858E717C222B200AADCC7 /* OAMapViewController.mm in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
@@ -1506,7 +1506,7 @@
 				BBE1D2A8190D186F00D90F0A /* main.m in Sources */,
 				BB32C03C192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
-				BB451E2518DCD224005FBE09 /* OAMapRendererViewController.mm in Sources */,
+				BB451E2518DCD224005FBE09 /* OAMapViewController.mm in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,

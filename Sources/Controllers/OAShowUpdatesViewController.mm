@@ -69,9 +69,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @implementation OAShowUpdatesViewController
 {
     OsmAndAppInstance _app;
-    
+
     NSMutableArray* _downloadItems;
-    
+
     OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -98,11 +98,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)ctor
 {
     _app = [OsmAndApp instance];
-    
+
     _worldRegion = nil;
-    
+
     _downloadItems = [[NSMutableArray alloc] init];
-    
+
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                 andObserve:_app.localResourcesChangedObservable];
@@ -111,25 +111,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     _tableView.delegate = self;
-    
+
     _tableView.dataSource = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
     ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
-    
+
     // Deselect previously selected rows
     for (NSIndexPath *selectedIndexPath in [_tableView indexPathsForSelectedRows])
     {
         [_tableView deselectRowAtIndexPath:selectedIndexPath
                                   animated:animated];
     }
-    
+
     [self reloadList];
 }
 
@@ -149,35 +149,35 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         NSString *resourceID = resource->id.toNSString();
         BOOL isDownloading = false;
-        
+
         for (NSString *key : keysOfDownloadTasks) {
             if ([resourceID isEqualToString:[[key componentsSeparatedByString:@":"] objectAtIndex:1]]) {
                 isDownloading = true;
                 break;
             }
         }
-        
+
         if (isDownloading) {
             continue;
         }
-                 
+
         OutdatedItem *outdatedItem = [[OutdatedItem alloc] init];
         outdatedItem.localResource = resource;
-        
+
         const auto& resourceInRepository = resourcesInRepository.constFind(resource->id);
         outdatedItem.resourceInRepository = (*resourceInRepository);
-        
+
         NSArray *title = [self titleOfResourceId:resourceID];
-        
+
         outdatedItem.caption = [title objectAtIndex:0];
         outdatedItem.subTitle = [title objectAtIndex:1];
-        
+
         [_downloadItems addObject:outdatedItem];
     }
     [_downloadItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         BaseDownloadItem *item1 = obj1;
         BaseDownloadItem *item2 = obj2;
-        
+
         return [item1.caption localizedCaseInsensitiveCompare:item2.caption];
     }];
 }
@@ -187,8 +187,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Create download tasks
     NSURLRequest *request = [NSURLRequest requestWithURL:item.resourceInRepository->url.toNSURL()];
     id <OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:item.resourceInRepository->id.toNSString()]];
-    
+                                                                       andKey:[@"resource:" stringByAppendingString:item.resourceInRepository->id.toNSString()]];
+
     // Resume task finally
     [task resume];
 }
@@ -216,7 +216,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
         }
     }
-    
+
     return @[@"",@""];
 }
 
@@ -228,10 +228,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (!resourceInRepository->id.startsWith(regionId))
             continue;
-        
+
         return YES;
     }
-    
+
     for (OAWorldRegion *subregion in region.subregions)
     {
         if (![self regionOrAnySubregionOf:subregion
@@ -239,10 +239,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             continue;
         }
-        
+
         return YES;
     }
-    
+
     return NO;
 }
 
@@ -268,7 +268,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     if ([_downloadItems count] == 0)
         return OALocalizedString(@"There is no available updates");
-    
+
     return OALocalizedString(@"Available updates");
 }
 
@@ -276,19 +276,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([_downloadItems count] == 0) {
         return nil;
     }
-    
+
     UIButton *updateAllButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 30)];
     [updateAllButton setTitle:OALocalizedString(@"Update all") forState:UIControlStateNormal];
     [updateAllButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [updateAllButton addTarget: self
                         action: @selector(updateAllButtonClicked:)
               forControlEvents: UIControlEventTouchUpInside];
-    
+
     return updateAllButton;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
-    
+
     return 30;
 }
 
@@ -308,11 +308,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
                                                      iconImage.size.width, iconImage.size.height);
     }
-    
+
     // Fill cell content
     cell.textLabel.text = ((OutdatedItem *)[_downloadItems objectAtIndex:indexPath.row]).caption;
     cell.detailTextLabel.text = ((OutdatedItem *)[_downloadItems objectAtIndex:indexPath.row]).subTitle;
-    
+
     return cell;
 }
 
@@ -320,7 +320,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-   [self tableView:tableView selectedAtIndexPath:indexPath];
+    [self tableView:tableView selectedAtIndexPath:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
@@ -331,7 +331,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)tableView:(UITableView *)tableView selectedAtIndexPath:(NSIndexPath *)indexPath
 {
     OutdatedItem *item = [_downloadItems objectAtIndex:indexPath.row];
-    
+
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
                                          [tableView cellForRowAtIndexPath:indexPath].textLabel.text,
@@ -344,7 +344,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                  [self startDownloadOf:item];
                                                                  [self reloadList];
                                                              }], nil] show];
-    
+
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
@@ -415,7 +415,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         return YES;
     }
-    
+
     return NO;
 }
 
@@ -430,7 +430,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)onViewDidLoadAction:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
 {
-    
+
 }
 
 #pragma mark -

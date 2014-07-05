@@ -11,9 +11,9 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
-@interface OAMapRendererViewController : UIViewController <UIGestureRecognizerDelegate>
+@interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
-+ (OAMapRendererViewController*)instance;
++ (OAMapViewController*)instance;
 
 @property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
 @property(readonly) OAObservable* stateObservable;

@@ -41,7 +41,7 @@
     self.view = rootView;
     
     // Instantiate map renderer
-    _rendererViewController = [[OAMapRendererViewController alloc] init];
+    _rendererViewController = [[OAMapViewController alloc] init];
     [self addChildViewController:_rendererViewController];
     [_rendererViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:_rendererViewController.view];

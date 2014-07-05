@@ -8,7 +8,7 @@
 
 #import "OADebugHudViewController.h"
 
-#import "OAMapRendererViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 
@@ -59,8 +59,8 @@
     [super viewDidLoad];
 
     [self collectState];
-    [_rendererStateObserver observe:[OAMapRendererViewController instance].stateObservable];
-    [_rendererSettingsObserver observe:[OAMapRendererViewController instance].settingsObservable];
+    [_rendererStateObserver observe:[OAMapViewController instance].stateObservable];
+    [_rendererSettingsObserver observe:[OAMapViewController instance].settingsObservable];
 
     [self._debugPinOverlayButton setImage:[UIImage imageNamed:
                                            self._overlayContainer.userInteractionEnabled
@@ -109,7 +109,7 @@
 
 - (void)collectState
 {
-    OAMapRendererView* __weak mapRendererView = (OAMapRendererView*)[[OAMapRendererViewController instance] mapRendererView];
+    OAMapRendererView* __weak mapRendererView = (OAMapRendererView*)[[OAMapViewController instance] mapRendererView];
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 

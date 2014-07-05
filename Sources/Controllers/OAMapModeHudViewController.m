@@ -12,7 +12,7 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
-#import "OAMapRendererViewController.h"
+#import "OAMapViewController.h"
 #import "OADebugHudViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
@@ -69,10 +69,10 @@
                                                   andObserve:_app.mapModeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
-                                                     andObserve:[OAMapRendererViewController instance].azimuthObservable];
+                                                     andObserve:[OAMapViewController instance].azimuthObservable];
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:[OAMapRendererViewController instance].zoomObservable];
+                                                  andObserve:[OAMapViewController instance].zoomObservable];
 }
 
 - (void)dtor
@@ -88,9 +88,9 @@
     else
         [_driveModeButton hideAndDisableInput];
 
-    _compassImage.transform = CGAffineTransformMakeRotation(-[OAMapRendererViewController instance].mapRendererView.azimuth / 180.0f * M_PI);
-    _zoomInButton.enabled = [[OAMapRendererViewController instance] canZoomIn];
-    _zoomOutButton.enabled = [[OAMapRendererViewController instance] canZoomOut];
+    _compassImage.transform = CGAffineTransformMakeRotation(-[OAMapViewController instance].mapRendererView.azimuth / 180.0f * M_PI);
+    _zoomInButton.enabled = [[OAMapViewController instance] canZoomIn];
+    _zoomOutButton.enabled = [[OAMapViewController instance] canZoomOut];
 }
 
 - (void)didReceiveMemoryWarning
@@ -183,24 +183,24 @@
 
 - (IBAction)onCompassButtonClicked:(id)sender
 {
-    [[OAMapRendererViewController instance] animatedAlignAzimuthToNorth];
+    [[OAMapViewController instance] animatedAlignAzimuthToNorth];
 }
 
 - (IBAction)onZoomInButtonClicked:(id)sender
 {
-    [[OAMapRendererViewController instance] animatedZoomIn];
+    [[OAMapViewController instance] animatedZoomIn];
 }
 
 - (IBAction)onZoomOutButtonClicked:(id)sender
 {
-    [[OAMapRendererViewController instance] animatedZoomOut];
+    [[OAMapViewController instance] animatedZoomOut];
 }
 
 - (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _zoomInButton.enabled = [[OAMapRendererViewController instance] canZoomIn];
-        _zoomOutButton.enabled = [[OAMapRendererViewController instance] canZoomOut];
+        _zoomInButton.enabled = [[OAMapViewController instance] canZoomIn];
+        _zoomOutButton.enabled = [[OAMapViewController instance] canZoomOut];
     });
 }
 

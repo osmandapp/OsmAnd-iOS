@@ -100,6 +100,8 @@
     
     UIPanGestureRecognizer* _grElevation;
 
+    UILongPressGestureRecognizer* _grPointContextMenu;
+
     OAMapMode _lastMapMode;
 
     bool _lastPositionTrackStateCaptured;
@@ -215,6 +217,11 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _grElevation.minimumNumberOfTouches = 2;
     _grElevation.maximumNumberOfTouches = 2;
 
+    // - Long-press context menu of a point gesture
+    _grPointContextMenu = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                        action:@selector(pointContextMenuGestureDetected:)];
+    _grPointContextMenu.delegate = self;
+
     _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
 
@@ -223,7 +230,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     OsmAnd::MapMarkerBuilder markerBuilder;
 
     markerBuilder.setIsAccuracyCircleSupported(true);
-    markerBuilder.setAccuracyCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
+    markerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
     markerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     markerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -289,6 +296,7 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     [mapView addGestureRecognizer:_grZoomIn];
     [mapView addGestureRecognizer:_grZoomOut];
     [mapView addGestureRecognizer:_grElevation];
+    [mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
     mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
@@ -676,6 +684,25 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
         angle = kElevationMinAngle;
     mapView.elevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
+}
+
+- (void)pointContextMenuGestureDetected:(UILongPressGestureRecognizer*)recognizer
+{
+    // Ignore gesture if we have no view
+    if (![self isViewLoaded])
+        return;
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    // Capture only last state
+    if (recognizer.state != UIGestureRecognizerStateEnded)
+        return;
+
+    // Get location of the gesture
+    CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    OsmAnd::PointI touchLocation;
+    [mapView convert:touchPoint toLocation:&touchLocation];
+
+    OALog(@"long press %d %d", touchLocation.x, touchLocation.y);
 }
 
 - (void)didReceiveMemoryWarning

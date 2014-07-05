@@ -218,23 +218,26 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
     _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
 
-    // Create my markers
+    // Create markers
     _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder myMarkerBuilder;
-    myMarkerBuilder.setPrecisionCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
-    myMarkerBuilder.setIsHidden(true);
+    OsmAnd::MapMarkerBuilder markerBuilder;
+
+    markerBuilder.setIsAccuracyCircleSupported(true);
+    markerBuilder.setAccuracyCircleBaseColor(OsmAnd::FColorRGB(32.0f/255.0f, 173.0f/255.0f, 229.0f/255.0f)); // #20ade5
+    markerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    myMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
-                                        [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
+    markerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
+                                      [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
     _myLocationHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    myMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
-                                        [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
-    _myLocationMarker = myMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
-    myMarkerBuilder.clearOnMapSurfaceIcons();
+    markerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
+                                      [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
+    _myLocationMarker = markerBuilder.buildAndAddToCollection(_myMarkersCollection);
+
+    markerBuilder.clearOnMapSurfaceIcons();
     _myCourseMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    myMarkerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
+    markerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
                                         [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
-    _myCourseMarker = myMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
+    _myCourseMarker = markerBuilder.buildAndAddToCollection(_myMarkersCollection);
 }
 
 - (void)dtor
@@ -1007,8 +1010,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
         _myCourseMarker->setIsHidden(false);
         _myCourseMarker->setPosition(newTarget31);
-        _myCourseMarker->setIsPrecisionCircleEnabled(true);
-        _myCourseMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+        _myCourseMarker->setIsAccuracyCircleVisible(true);
+        _myCourseMarker->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
         _myCourseMarker->setOnMapSurfaceIconDirection(_myCourseMainIconKey,
                                                       OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
     }
@@ -1018,8 +1021,8 @@ static OAMapRendererViewController* __weak s_OAMapRendererViewController_instanc
 
         _myLocationMarker->setIsHidden(false);
         _myLocationMarker->setPosition(newTarget31);
-        _myLocationMarker->setIsPrecisionCircleEnabled(true);
-        _myLocationMarker->setPrecisionCircleRadius(newLocation.horizontalAccuracy);
+        _myLocationMarker->setIsAccuracyCircleVisible(true);
+        _myLocationMarker->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
         _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey,
                                                         OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
     }

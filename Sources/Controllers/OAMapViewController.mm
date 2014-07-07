@@ -8,6 +8,8 @@
 
 #import "OAMapViewController.h"
 
+#import "UIActionSheet+Blocks.h"
+
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
@@ -35,6 +37,7 @@
 #include "ExternalResourcesProvider.h"
 #import "OANativeUtilities.h"
 #import "OALog.h"
+#include "Localization.h"
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 30.0f
@@ -702,14 +705,41 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     OsmAnd::PointI touchLocation;
     [mapView convert:touchPoint toLocation:&touchLocation];
 
-    OALog(@"long press %d %d", touchLocation.x, touchLocation.y);
+    // Format location
+    NSString* formattedLocation = @"das location";
+
+    // Show corresponding action-sheet
+    NSArray* actionTitles = @[OALocalizedString(@"What's here?"),
+                              OALocalizedString(@"Add to favorites"),
+                              OALocalizedString(@"Share this location")];
+    [UIActionSheet presentOnView:mapView
+                       withTitle:formattedLocation
+                    cancelButton:OALocalizedString(@"Cancel")
+               destructiveButton:nil
+                    otherButtons:actionTitles
+                        onCancel:nil
+                   onDestructive:nil
+                 onClickedButton:^(UIActionSheet *, NSUInteger actionIdx) {
+                     switch (actionIdx)
+                     {
+                         case 0:
+                             OALog(@"whats here");
+                             break;
+                         case 1:
+                             OALog(@"add to favorits");
+                             break;
+                         case 2:
+                             OALog(@"share this location");
+                             break;
+                     }
+                 }];
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-    
+
     OALog(@"MEMWARNING");
 }
 

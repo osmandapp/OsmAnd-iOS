@@ -317,8 +317,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
 {
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad &&
-       _lastMenuPopoverController == popoverController)
+    if (_lastMenuPopoverController == popoverController)
     {
         // Deselect menu item that was origin for this popover
         [self.tableView deselectRowAtIndexPath:_lastMenuOriginCellPath animated:YES];

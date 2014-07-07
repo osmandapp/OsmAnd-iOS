@@ -137,4 +137,13 @@
     return (OAContextPanelViewController*)self.rightPanel;
 }
 
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+
+    // Forward this message to all child view controllers
+    for (UIViewController* childVC in self.childViewControllers)
+        [childVC didReceiveMemoryWarning];
+}
+
 @end

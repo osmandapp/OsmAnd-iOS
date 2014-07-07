@@ -148,4 +148,13 @@
     [userDefaults synchronize];
 }
 
+- (TTTLocationFormatter*)locationFormatter
+{
+    TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
+
+    formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
+
+    return formatter;
+}
+
 @end

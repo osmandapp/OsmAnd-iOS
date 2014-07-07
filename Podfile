@@ -11,10 +11,11 @@ pod 'JASidePanels', '~> 1.3.2'
 pod 'Reachability', '~> 3.1.1'
 pod 'TestFlightSDK', '~> 3.0.2'
 pod 'UIAlertView-Blocks', '~> 1.0'
-pod 'UIActionSheet-Blocks', '~> 1.0'
+pod 'UIActionSheet-Blocks', '~> 1.0.1'
 pod 'DACircularProgress', '~> 2.2.0'
 pod 'FFCircularProgressView', '~> 0.4'
 pod 'QuickDialog', '~> 1.0'
+pod 'FormatterKit', '~> 1.5.1'
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

@@ -9,6 +9,7 @@
 #import "OAMapViewController.h"
 
 #import "UIActionSheet+Blocks.h"
+#import "TTTLocationFormatter.h"
 
 #import "OsmAndApp.h"
 #import "OAAppData.h"
@@ -706,7 +707,9 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     [mapView convert:touchPoint toLocation:&touchLocation];
 
     // Format location
-    NSString* formattedLocation = @"das location";
+    const double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    const double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    NSString* formattedLocation = [[[OsmAndApp instance] locationFormatter] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
 
     // Show corresponding action-sheet
     NSArray* actionTitles = @[OALocalizedString(@"What's here?"),

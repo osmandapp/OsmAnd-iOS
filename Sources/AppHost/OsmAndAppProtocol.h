@@ -15,6 +15,8 @@
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
 
+#import "TTTLocationFormatter.h"
+
 @protocol OsmAndAppProtocol <NSObject>
 
 - (BOOL)initialize;
@@ -32,5 +34,7 @@
 @property(readonly) OAObservable* mapModeObservable;
 
 - (void)saveState;
+
+- (TTTLocationFormatter*)locationFormatter;
 
 @end

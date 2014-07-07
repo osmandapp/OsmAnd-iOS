@@ -342,7 +342,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         case kMapSourceAndVariantsSection:
             return [_mapSourceAndVariants count];
         case kLayersSection:
-            return 4; //TODO: just a stub
+            return 1; //TODO: just a stub
         case kOptionsSection:
             return 3; /* 'Settings', 'Downloads', 'My data' */
             

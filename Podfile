@@ -14,7 +14,6 @@ pod 'UIAlertView-Blocks', '~> 1.0'
 pod 'DACircularProgress', '~> 2.2.0'
 pod 'FFCircularProgressView', '~> 0.4'
 pod 'QuickDialog', '~> 1.0'
-pod 'RDVTabBarController', '~> 1.1.6'
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

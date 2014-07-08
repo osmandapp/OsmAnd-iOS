@@ -13,6 +13,7 @@
 
 #import "OsmAndApp.h"
 #import "OAQColorPickerElement.h"
+#import "OAQStringPickerElement.h"
 #import "OANativeUtilities.h"
 #include "Localization.h"
 
@@ -30,7 +31,7 @@
     CLLocationCoordinate2D _location;
 
     QEntryElement* _titleField;
-    QPickerElement* _groupField;
+    QRadioElement* _groupField;
     QColorPickerElement* _colorField;
 }
 
@@ -58,11 +59,11 @@
     NSArray* groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
     if (groups == nil || [groups count] == 0)
         groups = @[OALocalizedString(@"My places")];
-    QPickerElement* groupField = [[QPickerElement alloc] initWithTitle:OALocalizedString(@"Group")
-                                                                 items:groups
-                                                                 value:[groups objectAtIndex:0]];
-    groupField.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    groupField.controllerAction = NSStringFromSelector(@selector(openGroupSelectionViewController));
+    QRadioElement* groupField = [[OAQStringPickerElement alloc] initWithItems:groups
+                                                                     selected:0
+                                                                        title:OALocalizedString(@"Group")
+                                                                 newItemTitle:OALocalizedString(@"New group")
+                                                           newItemPlaceholder:OALocalizedString(@"Name")];
     [mainSection addElement:groupField];
 
     // Color
@@ -109,6 +110,8 @@
     location.x = OsmAnd::Utilities::get31TileNumberX(_location.longitude);
     location.y = OsmAnd::Utilities::get31TileNumberY(_location.latitude);
 
+    QString group = QString::fromNSString(_groupField.selectedItem);
+
     UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
     OsmAnd::FColorARGB color;
     [color_ getRed:&color.r
@@ -118,16 +121,11 @@
 
     _app.favoritesCollection->createFavoriteLocation(location,
                                                      QString::fromNSString(_titleField.textValue),
-                                                     QString::null,
+                                                     group,
                                                      OsmAnd::FColorRGB(color));
     [_app saveFavoritesToPermamentStorage];
 
     [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)openGroupSelectionViewController
-{
-    
 }
 
 @end

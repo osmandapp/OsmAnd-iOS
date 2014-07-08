@@ -8,7 +8,7 @@
 
 #import "UIViewController+OARootViewController.h"
 
-#import "UIViewController+JASidePanel.h"
+#import <UIViewController+JASidePanel.h>
 
 @implementation UIViewController (OARootVC)
 

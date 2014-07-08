@@ -268,6 +268,8 @@
 		BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */; };
 		BB9EFBBF196AF1E100700BC0 /* Favorites.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB9EFBBE196AF1E100700BC0 /* Favorites.storyboard */; };
 		BB9EFBC0196AF1E100700BC0 /* Favorites.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB9EFBBE196AF1E100700BC0 /* Favorites.storyboard */; };
+		BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9EFBC3196AFBBD00700BC0 /* OAAddFavoriteViewController.mm */; };
+		BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9EFBC3196AFBBD00700BC0 /* OAAddFavoriteViewController.mm */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -529,6 +531,8 @@
 		BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+OARootViewController.h"; path = "Controllers/UIViewController+OARootViewController.h"; sourceTree = "<group>"; };
 		BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+OARootViewController.m"; path = "Controllers/UIViewController+OARootViewController.m"; sourceTree = "<group>"; };
 		BB9EFBBE196AF1E100700BC0 /* Favorites.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Favorites.storyboard; path = Resources/Favorites.storyboard; sourceTree = "<group>"; };
+		BB9EFBC2196AFBBD00700BC0 /* OAAddFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAddFavoriteViewController.h; path = Controllers/Favorites/OAAddFavoriteViewController.h; sourceTree = "<group>"; };
+		BB9EFBC3196AFBBD00700BC0 /* OAAddFavoriteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAAddFavoriteViewController.mm; path = Controllers/Favorites/OAAddFavoriteViewController.mm; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -786,6 +790,7 @@
 		BB2545B71798167600E80B58 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				BB9EFBC1196AFB9200700BC0 /* Favorites */,
 				BB0EA14717C60AF9007B572D /* OARootViewController.h */,
 				BB0EA14817C60AF9007B572D /* OARootViewController.m */,
 				BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */,
@@ -952,6 +957,15 @@
 			name = Services;
 			sourceTree = "<group>";
 		};
+		BB9EFBC1196AFB9200700BC0 /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				BB9EFBC2196AFBBD00700BC0 /* OAAddFavoriteViewController.h */,
+				BB9EFBC3196AFBBD00700BC0 /* OAAddFavoriteViewController.mm */,
+			);
+			name = Favorites;
+			sourceTree = "<group>";
+		};
 		BBA858FD17C222FC00AADCC7 /* AppIcons */ = {
 			isa = PBXGroup;
 			children = (
@@ -1021,7 +1035,6 @@
 		BBE1D29A190D17DB00D90F0A /* AppHost */ = {
 			isa = PBXGroup;
 			children = (
-				BBE1D29B190D186F00D90F0A /* Localization.h */,
 				BBE1D29C190D186F00D90F0A /* main.m */,
 				BBE1D29D190D186F00D90F0A /* OAAppDelegate.h */,
 				BBE1D29E190D186F00D90F0A /* OAAppDelegate.mm */,
@@ -1033,6 +1046,7 @@
 				BBE1D2A3190D186F00D90F0A /* OsmAndAppCppProtocol.h */,
 				BBE1D2A4190D186F00D90F0A /* OsmAndAppImpl.h */,
 				BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */,
+				BBE1D29B190D186F00D90F0A /* Localization.h */,
 			);
 			name = AppHost;
 			sourceTree = "<group>";
@@ -1491,6 +1505,7 @@
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
+				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
@@ -1540,6 +1555,7 @@
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				CE3940A31938E73500E9F40C /* OAShowDownloadsViewController.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,

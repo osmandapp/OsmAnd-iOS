@@ -8,8 +8,9 @@
 
 #import "OARootViewController.h"
 
-#import "JASidePanelController.h"
 #import <QuartzCore/QuartzCore.h>
+
+#import <JASidePanelController.h>
 
 #define _(name) OARootViewController__##name
 #define ctor _(ctor)

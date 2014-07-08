@@ -8,13 +8,13 @@
 
 #import "OAMapViewController.h"
 
-#import "UIActionSheet+Blocks.h"
-#import "TTTLocationFormatter.h"
+#import <UIActionSheet+Blocks.h>
 
 #import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAddFavoriteViewController.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -712,28 +712,51 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     NSString* formattedLocation = [[[OsmAndApp instance] locationFormatter] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
 
     // Show corresponding action-sheet
-    NSArray* actionTitles = @[OALocalizedString(@"What's here?"),
-                              OALocalizedString(@"Add to favorites"),
-                              OALocalizedString(@"Share this location")];
+    NSString* locationDetailsAction = OALocalizedString(@"What's here?");
+    NSString* addToFavoritesAction = OALocalizedString(@"Add to favorites");
+    NSString* shareLocationAction = OALocalizedString(@"Share this location");
+    NSArray* actions = @[//locationDetailsAction,
+                         addToFavoritesAction/*,
+                         shareLocationAction*/];
     [UIActionSheet presentOnView:mapView
                        withTitle:formattedLocation
                     cancelButton:OALocalizedString(@"Cancel")
                destructiveButton:nil
-                    otherButtons:actionTitles
-                        onCancel:nil
+                    otherButtons:actions
+                        onCancel:^(UIActionSheet *) {}
                    onDestructive:nil
                  onClickedButton:^(UIActionSheet *, NSUInteger actionIdx) {
-                     switch (actionIdx)
+                     NSString* action = [actions objectAtIndex:actionIdx];
+                     if (action == locationDetailsAction)
                      {
-                         case 0:
-                             OALog(@"whats here");
-                             break;
-                         case 1:
-                             OALog(@"add to favorits");
-                             break;
-                         case 2:
-                             OALog(@"share this location");
-                             break;
+                         OALog(@"whats here");
+                     }
+                     else if (action == addToFavoritesAction)
+                     {
+                         OAAddFavoriteViewController* addFavoriteVC = [[OAAddFavoriteViewController alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lon)
+                                                                                                                   andTitle:formattedLocation];
+
+                         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+                         {
+                             // For iPhone and iPod, push menu to navigation controller
+                             [self.navigationController pushViewController:addFavoriteVC
+                                                                  animated:YES];
+                         }
+                         else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+                         {
+                             // For iPad, open menu in a popover with it's own navigation controller
+                             UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:addFavoriteVC];
+                             UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
+
+                             [popoverController presentPopoverFromRect:CGRectMake(touchPoint.x, touchPoint.y, 0.0f, 0.0f)
+                                                                inView:mapView
+                                              permittedArrowDirections:UIPopoverArrowDirectionAny
+                                                              animated:YES];
+                         }
+                     }
+                     else if (action == shareLocationAction)
+                     {
+                         OALog(@"share this location");
                      }
                  }];
 }

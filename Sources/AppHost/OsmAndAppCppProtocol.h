@@ -15,6 +15,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/FavoriteLocationsGpxCollection.h>
 
 @protocol OsmAndAppCppProtocol <NSObject>
 
@@ -23,5 +24,6 @@
 @property(nonatomic, readonly) QDir cachePath;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
 
 @end

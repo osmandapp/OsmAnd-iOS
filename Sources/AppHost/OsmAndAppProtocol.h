@@ -8,14 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#import <TTTLocationFormatter.h>
+
 #include "CommonTypes.h"
 #import "OAObservable.h"
 #import "OAAppData.h"
 #import "OALocationServices.h"
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
-
-#import "TTTLocationFormatter.h"
 
 @protocol OsmAndAppProtocol <NSObject>
 
@@ -33,7 +33,8 @@
 @property(nonatomic) OAMapMode mapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
-- (void)saveState;
+- (void)saveDataToPermamentStorage;
+- (void)saveFavoritesToPermamentStorage;
 
 - (TTTLocationFormatter*)locationFormatter;
 

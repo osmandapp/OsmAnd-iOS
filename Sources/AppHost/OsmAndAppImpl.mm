@@ -21,6 +21,7 @@
 @implementation OsmAndAppImpl
 {
     NSString* _worldMiniBasemapFilename;
+    NSString* _favoritesFilename;
 }
 
 @synthesize dataPath = _dataPath;
@@ -29,6 +30,8 @@
 
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
+
+@synthesize favoritesCollection = _favoritesCollection;
 
 - (instancetype)init
 {
@@ -94,6 +97,11 @@
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
                                                              });
 
+    // Load favorites
+    _favoritesFilename = _documentsPath.filePath(QLatin1String("Favorites.gpx")).toNSString();
+    _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
+    _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
+
     // Load world regions
     NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"
                                                                      ofType:@"ocbf"];
@@ -138,14 +146,22 @@
     [_mapModeObservable notifyEvent];
 }
 
-- (void)saveState
+- (void)saveDataToPermamentStorage
 {
     NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
 
-    // Save app data to user-defaults
+    // App data
     [userDefaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
                                               forKey:kAppData];
     [userDefaults synchronize];
+
+    // Favorites
+    [self saveFavoritesToPermamentStorage];
+}
+
+- (void)saveFavoritesToPermamentStorage
+{
+    _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
 
 - (TTTLocationFormatter*)locationFormatter

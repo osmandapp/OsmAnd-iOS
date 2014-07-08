@@ -14,6 +14,4 @@
 
 - (instancetype)initWithLocalResourceId:(NSString*)resourceId;
 
-@property(nonatomic) NSString* resourceId;
-
 @end

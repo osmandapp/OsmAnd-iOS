@@ -11,8 +11,11 @@
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMenuViewControllerProtocol.h"
+#import "OAFavoritesLayerViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
+#include "Localization.h"
+#import "OALog.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/MapStyle.h>
@@ -20,9 +23,6 @@
 #include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-
-#include "Localization.h"
-#import "OALog.h"
 
 #define _(name) OAOptionsPanelViewController__##name
 #define ctor _(ctor)
@@ -71,6 +71,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #define kMapSourceAndVariantsSection 0
 #define kLayersSection 1
+#define kLayersSection_Favorites 0
 #define kOptionsSection 2
 #define kOptionsSection_SettingsRow 0
 #define kOptionsSection_DownloadsRow 1
@@ -145,11 +146,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewWillAppear:animated];
 
-    [self selectLastMapSource:animated];
-
     // Deselect menu origin cell if reopened (on iPhone/iPod)
-    if (_lastMenuOriginCellPath != nil &&
-       [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    if (_lastMenuOriginCellPath != nil)
     {
         [self.tableView deselectRowAtIndexPath:_lastMenuOriginCellPath
                                       animated:animated];
@@ -199,52 +197,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)selectLastMapSource:(BOOL)animated
-{
-    if (!self.isViewLoaded)
-        return;
-
-    // Get last map source selection (if such exists)
-    NSIndexPath* lastMapSourceSelectionPath = nil;
-    NSArray* currentSelections = [self.tableView indexPathsForSelectedRows];
-    for (NSIndexPath* selection in currentSelections)
-    {
-        // Skip all selections not from map source and variants section,
-        // or that selects map source itself
-        if (selection.section != kMapSourceAndVariantsSection || selection.row == 0)
-            continue;
-
-        lastMapSourceSelectionPath = selection;
-        break;
-    }
-
-    // New selection
-    __block NSIndexPath* newMapSourceSelectionPath = nil;
-    [_mapSourceAndVariants enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj isKindOfClass:[Item_MapStylePreset class]])
-        {
-            Item_MapStylePreset* item = (Item_MapStylePreset*)obj;
-            if (![item.mapSource isEqual:_app.data.lastMapSource])
-                return;
-
-            newMapSourceSelectionPath = [NSIndexPath indexPathForRow:idx
-                                                           inSection:kMapSourceAndVariantsSection];
-            *stop = YES;
-        }
-    }];
-
-    // If selection doesn't differ, do nothing
-    if (newMapSourceSelectionPath == nil || [newMapSourceSelectionPath isEqual:lastMapSourceSelectionPath])
-        return;
-
-    // Otherwise, deselect last and select new
-    [self.tableView deselectRowAtIndexPath:lastMapSourceSelectionPath
-                                  animated:animated];
-    [self.tableView selectRowAtIndexPath:newMapSourceSelectionPath
-                                animated:animated
-                          scrollPosition:UITableViewScrollPositionNone];
-}
-
 - (void)onLastMapSourceChanged
 {
     [self obtainMapSourceAndVariants];
@@ -252,8 +204,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         // Reload entire section
         [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kMapSourceAndVariantsSection]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
-
-        [self selectLastMapSource:YES];
     });
 }
 
@@ -263,7 +213,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         NSMutableIndexSet* indexSet = [NSMutableIndexSet indexSet];
         [indexSet addIndex:kMapSourceAndVariantsSection];
-        [indexSet addIndex:kLayersSection];
 
         [self.tableView reloadSections:indexSet
                       withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -341,7 +290,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         case kMapSourceAndVariantsSection:
             return [_mapSourceAndVariants count];
         case kLayersSection:
-            return 1; //TODO: just a stub
+            return 1; /* 'Favorites' */
         case kOptionsSection:
             return 3; /* 'Settings', 'Downloads', 'My data' */
             
@@ -369,10 +318,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const submenuCell = @"submenuCell";
-    static NSString* const layerCell_Checked = @"layerCell_Checked";
-    static NSString* const layerCell_Unchecked = @"layerCell_Unchecked";
     static NSString* const menuItemCell = @"menuItemCell";
-    static NSString* const mapSourcePresetCell = @"mapSourcePresetCell";
+    static NSString* const mapSourceActivePresetCell = @"mapSourceActivePresetCell";
+    static NSString* const mapSourceInactivePresetCell = @"mapSourceInactivePresetCell";
     
     // Get content for cell and it's type id
     NSString* cellTypeId = nil;
@@ -401,7 +349,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
             else
             {
-                cellTypeId = mapSourcePresetCell;
+                Item_MapStylePreset* item = (Item_MapStylePreset*)[_mapSourceAndVariants objectAtIndex:indexPath.row];
+                if ([item.mapSource isEqual:_app.data.lastMapSource])
+                    cellTypeId = mapSourceActivePresetCell;
+                else
+                    cellTypeId = mapSourceInactivePresetCell;
 
                 id item_ = [_mapSourceAndVariants objectAtIndex:indexPath.row];
                 if ([item_ isKindOfClass:[Item_MapStylePreset class]])
@@ -437,6 +389,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             }
             break;
         case kLayersSection:
+            switch(indexPath.row)
+            {
+                case kLayersSection_Favorites:
+                    cellTypeId = submenuCell;
+                    caption = OALocalizedString(@"Favorites");
+                    break;
+            }
             break;
         case kOptionsSection:
             switch(indexPath.row)
@@ -486,40 +445,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     BOOL selectionAllowed = NO;
     selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row == 0);
     selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0);
-    selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection && indexPath.row == 0);
+    selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection);
     selectionAllowed = selectionAllowed || (indexPath.section == kOptionsSection);
     if (!selectionAllowed)
         return nil;
-    
-    // Obtain current selection
-    NSArray* currentSelections = [tableView indexPathsForSelectedRows];
-    
-    // Only one menu is allowed to be selected
-    if (((indexPath.section == kMapSourceAndVariantsSection ||
-         indexPath.section == kLayersSection) && indexPath.row == 0) ||
-       indexPath.section == kOptionsSection)
-    {
-        for (NSIndexPath* selection in currentSelections)
-        {
-            if (((selection.section == kMapSourceAndVariantsSection ||
-                 selection.section == kLayersSection) && selection.row == 0) ||
-               selection.section == kOptionsSection)
-            {
-                if (![selection isEqual:indexPath])
-                    [tableView deselectRowAtIndexPath:selection animated:YES];
-            }
-        }
-    }
-    
-    // Only one preset is allowed to be selected
-    if (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0)
-    {
-        for (NSIndexPath* selection in currentSelections)
-        {
-            if (selection.section == kMapSourceAndVariantsSection && selection.row > 0 && selection.row != indexPath.row)
-                [tableView deselectRowAtIndexPath:selection animated:YES];
-        }
-    }
 
     return indexPath;
 }
@@ -546,14 +475,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if (indexPath.section == kLayersSection)
     {
-        if (indexPath.row == 0)
+        switch (indexPath.row)
         {
-            //TODO: open menu
-            OALog(@"open layers menu");
-        }
-        else
-        {
-            OALog(@"activate/deactivate layer");
+            case kLayersSection_Favorites:
+                [self openMenu:[[OAFavoritesLayerViewController alloc] init]
+                     forCellAt:indexPath];
+                break;
         }
     }
     else if (indexPath.section == kOptionsSection)
@@ -561,8 +488,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         switch (indexPath.row)
         {
             case kOptionsSection_SettingsRow:
-                [self openMenu:[[UIStoryboard storyboardWithName:@"Settings" bundle:nil] instantiateInitialViewController]
-                     forCellAt:indexPath];
+                OALog(@"open settings menu");
                 break;
             case kOptionsSection_DownloadsRow:
                 [self openMenu:[[UIStoryboard storyboardWithName:@"Downloads" bundle:nil] instantiateInitialViewController]

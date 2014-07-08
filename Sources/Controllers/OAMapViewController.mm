@@ -34,6 +34,7 @@
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
+#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
 #include "ExternalResourcesProvider.h"
 #import "OANativeUtilities.h"
@@ -84,11 +85,15 @@
     std::shared_ptr<OsmAnd::MapMarker> _myCourseMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKey;
 
+    std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
+
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
+
+    OAAutoObserverProxy* _layersConfigurationObserver;
     
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -172,6 +177,9 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                   withHandler:@selector(onMapRendererSettingsChanged:withKey:)];
+    _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLayersConfigurationChanged)
+                                                              andObserve:_app.data.mapLayersConfiguration.changeObservable];
 
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -249,6 +257,9 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     markerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
                                         [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
     _myCourseMarker = markerBuilder.buildAndAddToCollection(_myMarkersCollection);
+
+    // Create favorites presenter
+    _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection));
 }
 
 - (void)dtor
@@ -280,6 +291,13 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     view.contentScaleFactor = [[UIScreen mainScreen] scale];
     [_stateObserver observe:view.stateObservable];
     [_settingsObserver observe:view.settingsObservable];
+
+    // Add "My location" markers
+    [view addSymbolProvider:_myMarkersCollection];
+
+    // Update layers
+    [self updateLayers];
+
     self.view = view;
 }
 
@@ -1245,10 +1263,30 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
         }
 
-        // Add "My location"
-        [mapView addSymbolProvider:_myMarkersCollection];
-
         _mapSourceInvalidated = YES;
+    }
+}
+
+- (void)onLayersConfigurationChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateLayers];
+    });
+}
+
+- (void)updateLayers
+{
+    if (![self isViewLoaded])
+        return;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    @synchronized(self)
+    {
+        if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
+            [mapView addSymbolProvider:_favoritesPresenter];
+        else
+            [mapView removeSymbolProvider:_favoritesPresenter];
     }
 }
 

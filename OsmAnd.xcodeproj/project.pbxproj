@@ -272,6 +272,8 @@
 		BBA3AE87196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE85196BCB4B0039D991 /* OAQColorPickerElement.m */; };
 		BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE89196BDF150039D991 /* OAQStringPickerElement.m */; };
 		BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE89196BDF150039D991 /* OAQStringPickerElement.m */; };
+		BBA3AE92196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE91196C3B3B0039D991 /* OAMapLayersConfiguration.m */; };
+		BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE91196C3B3B0039D991 /* OAMapLayersConfiguration.m */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -538,6 +540,8 @@
 		BBA3AE85196BCB4B0039D991 /* OAQColorPickerElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQColorPickerElement.m; path = PodsExtensions/OAQColorPickerElement.m; sourceTree = "<group>"; };
 		BBA3AE88196BDF150039D991 /* OAQStringPickerElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQStringPickerElement.h; path = PodsExtensions/OAQStringPickerElement.h; sourceTree = "<group>"; };
 		BBA3AE89196BDF150039D991 /* OAQStringPickerElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQStringPickerElement.m; path = PodsExtensions/OAQStringPickerElement.m; sourceTree = "<group>"; };
+		BBA3AE90196C3B3B0039D991 /* OAMapLayersConfiguration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapLayersConfiguration.h; path = Data/OAMapLayersConfiguration.h; sourceTree = "<group>"; };
+		BBA3AE91196C3B3B0039D991 /* OAMapLayersConfiguration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapLayersConfiguration.m; path = Data/OAMapLayersConfiguration.m; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -944,12 +948,14 @@
 		BB451EA418E19293005FBE09 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				BB451EA718E19376005FBE09 /* OAMapViewState.h */,
-				BB451EA818E19376005FBE09 /* OAMapViewState.m */,
 				BB451EBE18E1E590005FBE09 /* OAAppData.h */,
 				BB451EBF18E1E590005FBE09 /* OAAppData.m */,
+				BB451EA718E19376005FBE09 /* OAMapViewState.h */,
+				BB451EA818E19376005FBE09 /* OAMapViewState.m */,
 				BBB97DE31908D1EC0067F4A0 /* OAMapSource.h */,
 				BBB97DE41908D1EC0067F4A0 /* OAMapSource.m */,
+				BBA3AE90196C3B3B0039D991 /* OAMapLayersConfiguration.h */,
+				BBA3AE91196C3B3B0039D991 /* OAMapLayersConfiguration.m */,
 			);
 			name = Data;
 			sourceTree = "<group>";
@@ -1505,6 +1511,7 @@
 				CE9CBEB1193583ED00A6AC92 /* OAShowUpdatesViewController.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BBAD5BA21927460F0043590F /* OADownloadsBaseViewController.mm in Sources */,
+				BBA3AE92196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BB63334517C3DE6F00903AB1 /* OAOptionsPanelViewController.mm in Sources */,
 				BB32C032192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BB451EEF18E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
@@ -1557,6 +1564,7 @@
 				BBAD5BA31927460F0043590F /* OADownloadsBaseViewController.mm in Sources */,
 				BB451E2D18DCD224005FBE09 /* OAOptionsPanelViewController.mm in Sources */,
 				BB32C033192354BA007999A0 /* OADownloadsManager.m in Sources */,
+				BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BB451EF018E60F5A005FBE09 /* OADebugHudViewController.mm in Sources */,
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
 				BB4C746E1920FBDD0018E1EE /* OARegionDownloadsViewController.m in Sources */,

@@ -16,6 +16,7 @@
 
 @implementation OAAutoObserverProxy
 {
+    NSObject* _lock;
 }
 
 @synthesize owner = _owner;
@@ -75,6 +76,7 @@
 - (void)ctor:(id)owner
      handler:(SEL)selector
 {
+    _lock = [[NSObject alloc] init];
     _owner = owner;
     _handler = selector;
     _observable = nil;
@@ -89,7 +91,7 @@
 
 - (void)observe:(id<OAObservableProtocol>)observable
 {
-    @synchronized(self)
+    @synchronized(_lock)
     {
         [self detach];
 
@@ -184,7 +186,7 @@
 
 - (BOOL)detach
 {
-    @synchronized(self)
+    @synchronized(_lock)
     {
         if (_observable == nil)
             return NO;

@@ -12,6 +12,7 @@
 
 @implementation OAAppData
 {
+    NSObject* _lock;
     NSMutableDictionary* _lastMapSources;
 }
 
@@ -21,22 +22,32 @@
     if (self) {
         [self ctor];
         _lastMapSource = nil;
-        _lastMapSources = [[NSMutableDictionary alloc] init];
-        _mapLastViewedState = [[OAMapViewState alloc] init];
+        [self safeInit];
     }
     return self;
 }
 
 - (void)ctor
 {
+    _lock = [[NSObject alloc] init];
     _lastMapSourceChangeObservable = [[OAObservable alloc] init];
+}
+
+- (void)safeInit
+{
+    if (_lastMapSources == nil)
+        _lastMapSources = [[NSMutableDictionary alloc] init];
+    if (_mapLastViewedState == nil)
+        _mapLastViewedState = [[OAMapViewState alloc] init];
+    if (_mapLayersConfiguration == nil)
+        _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
 }
 
 @synthesize lastMapSource = _lastMapSource;
 
 - (OAMapSource*)lastMapSource
 {
-    @synchronized(self)
+    @synchronized(_lock)
     {
         return _lastMapSource;
     }
@@ -44,7 +55,7 @@
 
 - (void)setLastMapSource:(OAMapSource*)lastMapSource
 {
-    @synchronized(self)
+    @synchronized(_lock)
     {
         // Store previous, if such exists
         if (_lastMapSource != nil)
@@ -64,7 +75,7 @@
 
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId
 {
-    @synchronized(self)
+    @synchronized(_lock)
     {
         if (_lastMapSource != nil && [_lastMapSource.resourceId isEqualToString:resourceId])
             return _lastMapSource;
@@ -79,6 +90,8 @@
 }
 
 @synthesize mapLastViewedState = _mapLastViewedState;
+
+@synthesize mapLayersConfiguration = _mapLayersConfiguration;
 
 #pragma mark - defaults
 
@@ -106,12 +119,14 @@
 #define kLastMapSource @"last_map_source"
 #define kLastMapSources @"last_map_sources"
 #define kMapLastViewedState @"map_last_viewed_state"
+#define kMapLayersConfiguration @"map_layers_configuration"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
     [aCoder encodeObject:_lastMapSources forKey:kLastMapSources];
     [aCoder encodeObject:_mapLastViewedState forKey:kMapLastViewedState];
+    [aCoder encodeObject:_mapLayersConfiguration forKey:kMapLayersConfiguration];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -122,6 +137,8 @@
         _lastMapSource = [aDecoder decodeObjectForKey:kLastMapSource];
         _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
+        _mapLayersConfiguration = [aDecoder decodeObjectForKey:kMapLayersConfiguration];
+        [self safeInit];
     }
     return self;
 }

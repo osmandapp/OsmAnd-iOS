@@ -11,7 +11,6 @@
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMenuViewControllerProtocol.h"
-#import "OAFavoritesLayerViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #include "Localization.h"
@@ -62,8 +61,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OsmAndAppInstance _app;
     
     OAAutoObserverProxy* _lastMapSourceObserver;
-
     NSMutableArray* _mapSourceAndVariants;
+
+    OAAutoObserverProxy* _layersConfigurationObserver;
 
     NSIndexPath* _lastMenuOriginCellPath;
     UIPopoverController* _lastMenuPopoverController;
@@ -128,6 +128,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                      merged << added << removed << updated;
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
+
+    _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLayersConfigurationChanged)
+                                                              andObserve:_app.data.mapLayersConfiguration.changeObservable];
 }
 
 - (void)dtor
@@ -215,6 +219,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [indexSet addIndex:kMapSourceAndVariantsSection];
 
         [self.tableView reloadSections:indexSet
+                      withRowAnimation:UITableViewRowAnimationAutomatic];
+    });
+}
+
+- (void)onLayersConfigurationChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded)
+            return;
+
+        [self.tableView reloadSections:[[NSIndexSet alloc] initWithIndex:kLayersSection]
                       withRowAnimation:UITableViewRowAnimationAutomatic];
     });
 }
@@ -321,6 +336,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     static NSString* const menuItemCell = @"menuItemCell";
     static NSString* const mapSourceActivePresetCell = @"mapSourceActivePresetCell";
     static NSString* const mapSourceInactivePresetCell = @"mapSourceInactivePresetCell";
+    static NSString* const inactiveLayerCell = @"inactiveLayerCell";
+    static NSString* const activeLayerCell = @"activeLayerCell";
     
     // Get content for cell and it's type id
     NSString* cellTypeId = nil;
@@ -392,7 +409,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             switch(indexPath.row)
             {
                 case kLayersSection_Favorites:
-                    cellTypeId = submenuCell;
+                    cellTypeId = [_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId] ? activeLayerCell : inactiveLayerCell;
                     caption = OALocalizedString(@"Favorites");
                     break;
             }
@@ -478,8 +495,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         switch (indexPath.row)
         {
             case kLayersSection_Favorites:
-                [self openMenu:[[OAFavoritesLayerViewController alloc] init]
-                     forCellAt:indexPath];
+                [_app.data.mapLayersConfiguration toogleLayerVisibility:kFavoritesLayerId];
                 break;
         }
     }

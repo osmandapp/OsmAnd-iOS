@@ -110,7 +110,7 @@
     location.x = OsmAnd::Utilities::get31TileNumberX(_location.longitude);
     location.y = OsmAnd::Utilities::get31TileNumberY(_location.latitude);
 
-    QString group = QString::fromNSString(_groupField.selectedItem);
+    QString group = QString::fromNSString((NSString*)_groupField.selectedValue);
 
     UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
     OsmAnd::FColorARGB color;

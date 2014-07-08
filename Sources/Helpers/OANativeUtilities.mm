@@ -33,4 +33,12 @@
     return outputBitmap;
 }
 
++ (NSMutableArray*)QListOfStringsToNSMutableArray:(const QList<QString>&)list
+{
+    NSMutableArray* array = [[NSMutableArray alloc] initWithCapacity:list.size()];
+    for(const auto& item : list)
+        [array addObject:item.toNSString()];
+    return array;
+}
+
 @end

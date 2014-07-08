@@ -287,6 +287,7 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     
     // Inflate map renderer view
     OAMapRendererView* view = [[OAMapRendererView alloc] init];
+    self.view = view;
     view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     view.contentScaleFactor = [[UIScreen mainScreen] scale];
     [_stateObserver observe:view.stateObservable];
@@ -297,8 +298,6 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
 
     // Update layers
     [self updateLayers];
-
-    self.view = view;
 }
 
 - (void)viewDidLoad

@@ -17,6 +17,7 @@ pod 'FFCircularProgressView', '~> 0.4'
 pod 'QuickDialog/Core', '~> 1.0'
 pod 'QuickDialog/Extras', '~> 1.0'
 pod 'FormatterKit', '~> 1.5.1'
+pod 'SWTableViewCell', '~> 0.3.0'
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

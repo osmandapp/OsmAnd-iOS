@@ -11,6 +11,7 @@
 #import <QuickDialog.h>
 
 #import "OsmAndApp.h"
+#import "OAQColorPickerElement.h"
 #include "Localization.h"
 
 #include <OsmAndCore.h>
@@ -27,6 +28,8 @@
     CLLocationCoordinate2D _location;
 
     QEntryElement* _titleField;
+    QLabelElement* _groupField;
+    QColorPickerElement* _colorField;
 }
 
 - (instancetype)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)title
@@ -47,12 +50,37 @@
     titleField.enablesReturnKeyAutomatically = YES;
     [mainSection addElement:titleField];
 
+    // Group
+    QLabelElement* groupField = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Group")
+                                                               Value:OALocalizedString(@"My places")];
+    groupField.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    groupField.controllerAction = NSStringFromSelector(@selector(openGroupSelectionViewController));
+    [mainSection addElement:groupField];
+
+    // Color
+    QColorPickerElement* colorField = [[OAQColorPickerElement alloc] initWithItems:@[
+                                                                                     @[@"Black", [UIColor blackColor]],
+                                                                                     @[@"White", [UIColor whiteColor]],
+                                                                                     @[@"Gray", [UIColor grayColor]],
+                                                                                     @[@"Blue",  [UIColor blueColor]],
+                                                                                     @[@"Red",  [UIColor redColor]],
+                                                                                     @[@"Green", [UIColor greenColor]],
+                                                                                     @[@"Yellow", [UIColor yellowColor]],
+                                                                                     @[@"Purple", [UIColor purpleColor]],
+                                                                                     @[@"Magenta", [UIColor magentaColor]]
+                                                                                     ]
+                                                                          selected:0
+                                                                             title:OALocalizedString(@"Color")];
+    [mainSection addElement:colorField];
+
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = [OsmAndApp instance];
         _location = location;
 
         _titleField = titleField;
+        _groupField = groupField;
+        _colorField = colorField;
     }
     return self;
 }
@@ -77,6 +105,11 @@
     [_app saveFavoritesToPermamentStorage];
 
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)openGroupSelectionViewController
+{
+    
 }
 
 @end

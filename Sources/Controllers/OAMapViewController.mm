@@ -286,15 +286,15 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
 #endif
     
     // Inflate map renderer view
-    OAMapRendererView* view = [[OAMapRendererView alloc] init];
-    self.view = view;
-    view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    view.contentScaleFactor = [[UIScreen mainScreen] scale];
-    [_stateObserver observe:view.stateObservable];
-    [_settingsObserver observe:view.settingsObservable];
+    OAMapRendererView* mapView = [[OAMapRendererView alloc] init];
+    self.view = mapView;
+    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
+    [_stateObserver observe:mapView.stateObservable];
+    [_settingsObserver observe:mapView.settingsObservable];
 
     // Add "My location" markers
-    [view addSymbolProvider:_myMarkersCollection];
+    [mapView addSymbolProvider:_myMarkersCollection];
 
     // Update layers
     [self updateLayers];
@@ -720,6 +720,8 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
 
     // Get location of the gesture
     CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+    touchPoint.x *= mapView.contentScaleFactor;
+    touchPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
     [mapView convert:touchPoint toLocation:&touchLocation];
 

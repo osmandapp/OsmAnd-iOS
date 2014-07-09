@@ -40,14 +40,14 @@
     favoritesSection.title = OALocalizedString(@"Favorites");
     [rootElement addSection:favoritesSection];
 
-    QLabelElement* manageFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Manage")
+    QLabelElement* manageFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Manage my favorites")
                                                                            Value:nil];
     manageFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     manageFavoritesElement.controllerAction = NSStringFromSelector(@selector(onManageFavorites));
     manageFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:manageFavoritesElement];
 
-    QLabelElement* exportFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Export")
+    QLabelElement* exportFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Export my favorites")
                                                                            Value:nil];
     exportFavoritesElement.controllerAction = NSStringFromSelector(@selector(onExportFavorites));
     exportFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

@@ -334,7 +334,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const submenuCell = @"submenuCell";
-    static NSString* const menuItemCell = @"menuItemCell";
+    static NSString* const submenuWithDetailsCell = @"submenuWithDetailsCell";
     static NSString* const mapSourceActivePresetCell = @"mapSourceActivePresetCell";
     static NSString* const mapSourceInactivePresetCell = @"mapSourceInactivePresetCell";
     static NSString* const inactiveLayerCell = @"inactiveLayerCell";
@@ -344,6 +344,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* cellTypeId = nil;
     UIImage* icon = nil;
     NSString* caption = nil;
+    NSString* details = nil;
     switch (indexPath.section)
     {
         case kMapSourceAndVariantsSection:
@@ -429,15 +430,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                     icon = [UIImage imageNamed:@"menu_item_downloads_icon.png"];
                     break;
                 case kOptionsSection_MyDataRow:
-                    cellTypeId = submenuCell;
+                    cellTypeId = submenuWithDetailsCell;
                     caption = OALocalizedString(@"My data");
+                    details = OALocalizedString(@"Favorites, tracks, etc.");
                     icon = [UIImage imageNamed:@"menu_item_my_data_icon.png"];
                     break;
             }
             break;
     }
-    if (cellTypeId == nil)
-        cellTypeId = menuItemCell;
     
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
@@ -447,6 +447,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Fill cell content
     cell.imageView.image = icon;
     cell.textLabel.text = caption;
+    cell.detailTextLabel.text = details;
     
     return cell;
 }

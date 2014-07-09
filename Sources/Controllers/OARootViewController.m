@@ -147,4 +147,9 @@
         [childVC didReceiveMemoryWarning];
 }
 
+- (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return NO;
+}
+
 @end

@@ -18,4 +18,6 @@
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
 @property (nonatomic, weak, readonly) OAContextPanelViewController* contextPanel;
 
+- (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+
 @end

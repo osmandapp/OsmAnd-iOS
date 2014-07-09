@@ -268,11 +268,12 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
         .setIsHidden(true)
-        .setPinIcon(OsmAnd::FavoriteLocationsPresenter::getDefaultFavoriteLocationPinIconBitmap())
+        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"context_pin_marker_icon"])
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
     // Create favorites presenter
-    _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection));
+    _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
+                                                                     [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
 }
 
 - (void)dtor

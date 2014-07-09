@@ -26,6 +26,8 @@
 @implementation OAAppDelegate
 {
     OsmAndAppInstance _app;
+
+    OARootViewController* _rootViewController;
 }
 
 @synthesize window = _window;
@@ -78,10 +80,30 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     // Create root view controller
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[OARootViewController alloc] init]];
+    _rootViewController = [[OARootViewController alloc] init];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:_rootViewController];
     [self.window makeKeyAndVisible];
 
+    // Check if application was requested to open document/file/URL
+    NSURL* launchUrl = (NSURL*)[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
+    NSString* launchSourceApplication = (NSString*)[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey];
+    id launchAnnotation = [launchOptions valueForKey:UIApplicationLaunchOptionsAnnotationKey];
+    if (launchUrl != nil)
+    {
+        [self application:application
+                  openURL:launchUrl
+        sourceApplication:launchSourceApplication
+               annotation:launchAnnotation];
+    }
+
     return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
+{
+    return [_rootViewController handleIncomingURL:url
+                                sourceApplication:sourceApplication
+                                       annotation:annotation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
-@protocol OAMenuViewControllerProtocol <NSObject>
+@protocol OAMenuViewControllerProtocol
 
-@property(weak) UIViewController* menuHostViewController;
+@property(weak) UIViewController* menuOriginViewController;
 
 @end

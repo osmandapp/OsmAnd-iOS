@@ -36,8 +36,7 @@
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
 
     // Favorites section:
-    QSection* favoritesSection = [[QSection alloc] init];
-    favoritesSection.title = OALocalizedString(@"Favorites");
+    QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
     [rootElement addSection:favoritesSection];
 
     QLabelElement* manageFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Manage my favorites")

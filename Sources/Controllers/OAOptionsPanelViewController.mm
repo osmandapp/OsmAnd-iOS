@@ -10,7 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
-#import "OAMenuViewControllerProtocol.h"
+#import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMyDataViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
@@ -53,8 +53,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, UIPopoverControllerDelegate>
-
+@interface OAOptionsPanelViewController () <UITableViewDelegate, UITableViewDataSource, OAMenuOriginViewControllerProtocol>
 @end
 
 @implementation OAOptionsPanelViewController
@@ -67,7 +66,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAAutoObserverProxy* _layersConfigurationObserver;
 
     NSIndexPath* _lastMenuOriginCellPath;
-    UIPopoverController* _lastMenuPopoverController;
 }
 
 #define kMapSourceAndVariantsSection 0
@@ -239,57 +237,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _lastMenuOriginCellPath = indexPath;
 
-    // Save reference to host
-    if ([menuViewController conformsToProtocol:@protocol(OAMenuViewControllerProtocol)])
-        ((id<OAMenuViewControllerProtocol>)menuViewController).menuHostViewController = self;
-
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-    {
-        // For iPhone and iPod, push menu to navigation controller
-        [self.navigationController pushViewController:menuViewController
-                                             animated:YES];
-    }
-    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        // For iPad, open menu in a popover with it's own navigation controller
-        UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
-        _lastMenuPopoverController = [[UIPopoverController alloc] initWithContentViewController:popoverNavigationController];
-        _lastMenuPopoverController.delegate = self;
-
-        UITableViewCell* originCell = [self.tableView cellForRowAtIndexPath:_lastMenuOriginCellPath];
-        [_lastMenuPopoverController presentPopoverFromRect:originCell.frame
-                                         inView:self.tableView
-                       permittedArrowDirections:UIPopoverArrowDirectionLeft|UIPopoverArrowDirectionRight
-                                       animated:YES];
-    }
+    UITableViewCell* originCell = [self.tableView cellForRowAtIndexPath:_lastMenuOriginCellPath];
+    [self.rootViewController openMenu:menuViewController
+                             fromRect:originCell.frame
+                               inView:self.tableView
+                             ofParent:self
+                             animated:YES];
 }
 
 - (void)dismissLastOpenedMenuAnimated:(BOOL)animated
 {
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-    {
-        [self.navigationController popToViewController:self animated:animated];
-    }
-    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        if (_lastMenuPopoverController != nil)
-            [_lastMenuPopoverController dismissPopoverAnimated:animated];
-        [self popoverControllerDidDismissPopover:_lastMenuPopoverController];
-    }
+    [self.rootViewController closeMenuAnimated:animated];
 }
 
-#pragma mark - UIPopoverControllerDelegate
+#pragma marg - OAMenuViewOriginControllerProtocol
 
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
+- (void)notifyMenuClosed
 {
-    if (_lastMenuPopoverController == popoverController)
-    {
-        // Deselect menu item that was origin for this popover
-        [self.tableView deselectRowAtIndexPath:_lastMenuOriginCellPath animated:YES];
-
-        _lastMenuOriginCellPath = nil;
-        _lastMenuPopoverController = nil;
-    }
+    // Deselect menu item that was origin for this popover
+    [self.tableView deselectRowAtIndexPath:_lastMenuOriginCellPath animated:YES];
+    _lastMenuOriginCellPath = nil;
 }
 
 #pragma mark - UITableViewDataSource

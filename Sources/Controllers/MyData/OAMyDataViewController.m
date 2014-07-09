@@ -54,15 +54,6 @@
     exportFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:exportFavoritesElement];
 
-/*
-    QLabelElement* importFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Import")
-                                                                           Value:nil];
-    importFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    importFavoritesElement.controllerAction = NSStringFromSelector(@selector(onImportFavorites));
-    importFavoritesElement.controllerAction = NO;
-    [favoritesSection addElement:importFavoritesElement];
-*/
-
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
@@ -85,11 +76,6 @@
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];
-}
-
-- (void)onImportFavorites
-{
-    OALog(@"onImportFavorites");
 }
 
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller

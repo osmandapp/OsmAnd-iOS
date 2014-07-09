@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "UIViewController+OARootViewController.h"
 #import "OAMenuViewControllerProtocol.h"
+#import "OAMyDataViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #include "Localization.h"
@@ -511,7 +512,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                      forCellAt:indexPath];
                 break;
             case kOptionsSection_MyDataRow:
-                OALog(@"open my-data menu");
+                [self openMenu:[[OAMyDataViewController alloc] init]
+                     forCellAt:indexPath];
                 break;
         }
     }

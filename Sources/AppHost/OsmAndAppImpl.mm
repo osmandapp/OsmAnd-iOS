@@ -21,7 +21,6 @@
 @implementation OsmAndAppImpl
 {
     NSString* _worldMiniBasemapFilename;
-    NSString* _favoritesFilename;
 }
 
 @synthesize dataPath = _dataPath;
@@ -145,6 +144,8 @@
     _mapMode = mapMode;
     [_mapModeObservable notifyEvent];
 }
+
+@synthesize favoritesStorageFilename = _favoritesFilename;
 
 - (void)saveDataToPermamentStorage
 {

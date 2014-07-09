@@ -34,6 +34,7 @@
 @property(readonly) OAObservable* mapModeObservable;
 
 - (void)saveDataToPermamentStorage;
+@property(readonly) NSString* favoritesStorageFilename;
 - (void)saveFavoritesToPermamentStorage;
 
 - (TTTLocationFormatter*)locationFormatter;

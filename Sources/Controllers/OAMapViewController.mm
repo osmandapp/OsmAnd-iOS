@@ -85,6 +85,11 @@
     std::shared_ptr<OsmAnd::MapMarker> _myCourseMarker;
     OsmAnd::MapMarker::OnSurfaceIconKey _myCourseMainIconKey;
 
+    // Context pin marker
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
+    std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
+
+    // Favorites presenter
     std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
 
     OAAutoObserverProxy* _mapModeObserver;
@@ -237,27 +242,35 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
 
-    // Create markers
+    // Create location and course markers
     _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-    OsmAnd::MapMarkerBuilder markerBuilder;
+    OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;
 
-    markerBuilder.setIsAccuracyCircleSupported(true);
-    markerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    markerBuilder.setIsHidden(true);
+    locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
+    locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
+    locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    markerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
-                                      [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
+    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
+                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_icon"]);
     _myLocationHeadingIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-    markerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
-                                      [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
-    _myLocationMarker = markerBuilder.buildAndAddToCollection(_myMarkersCollection);
+    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationHeadingIconKey,
+                                                       [OANativeUtilities skBitmapFromPngResource:@"my_location_marker_heading_icon"]);
+    _myLocationMarker = locationAndCourseMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
 
-    markerBuilder.clearOnMapSurfaceIcons();
+    locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
     _myCourseMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
-    markerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
-                                        [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
-    _myCourseMarker = markerBuilder.buildAndAddToCollection(_myMarkersCollection);
+    locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myCourseMainIconKey,
+                                                       [OANativeUtilities skBitmapFromPngResource:@"my_course_marker_icon"]);
+    _myCourseMarker = locationAndCourseMarkerBuilder.buildAndAddToCollection(_myMarkersCollection);
 
+    // Create context pin marker
+    _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+    _contextPinMarker = OsmAnd::MapMarkerBuilder()
+        .setIsAccuracyCircleSupported(false)
+        .setIsHidden(true)
+        .setPinIcon(OsmAnd::FavoriteLocationsPresenter::getDefaultFavoriteLocationPinIconBitmap())
+        .buildAndAddToCollection(_contextPinMarkersCollection);
+    
     // Create favorites presenter
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection));
 }
@@ -293,8 +306,11 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     [_stateObserver observe:mapView.stateObservable];
     [_settingsObserver observe:mapView.settingsObservable];
 
-    // Add "My location" markers
+    // Add "My location" and "My course" markers
     [mapView addSymbolProvider:_myMarkersCollection];
+
+    // Add context pin markers
+    [mapView addSymbolProvider:_contextPinMarkersCollection];
 
     // Update layers
     [self updateLayers];
@@ -730,6 +746,10 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     const double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     NSString* formattedLocation = [[[OsmAndApp instance] locationFormatter] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
 
+    // Show context pin marker
+    _contextPinMarker->setPosition(touchLocation);
+    _contextPinMarker->setIsHidden(false);
+
     // Show corresponding action-sheet
     NSString* locationDetailsAction = OALocalizedString(@"What's here?");
     NSString* addToFavoritesAction = OALocalizedString(@"Add to favorites");
@@ -742,7 +762,9 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
                     cancelButton:OALocalizedString(@"Cancel")
                destructiveButton:nil
                     otherButtons:actions
-                        onCancel:^(UIActionSheet *) {}
+                        onCancel:^(UIActionSheet *) {
+                            _contextPinMarker->setIsHidden(true);
+                        }
                    onDestructive:nil
                  onClickedButton:^(UIActionSheet *, NSUInteger actionIdx) {
                      NSString* action = [actions objectAtIndex:actionIdx];
@@ -777,6 +799,8 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
                      {
                          OALog(@"share this location");
                      }
+
+                     _contextPinMarker->setIsHidden(true);
                  }];
 }
 

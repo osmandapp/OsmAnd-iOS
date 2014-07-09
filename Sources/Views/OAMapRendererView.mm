@@ -508,10 +508,10 @@
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(), _viewSize));
     }
     
-    // Process rendering
-    if (!_renderer->processRendering())
+    // Process update
+    if (!_renderer->update())
     {
-        [NSException raise:NSGenericException format:@"Failed to process rendering using OpenGLES2 map renderer"];
+        [NSException raise:NSGenericException format:@"Failed to update OpenGLES2 map renderer"];
         return;
     }
     
@@ -608,6 +608,11 @@
 #endif
     
     return TRUE;
+}
+
+- (void)invalidateFrame
+{
+    _renderer->forcedFrameInvalidate();
 }
 
 @end

@@ -50,6 +50,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)suspendRendering;
 - (BOOL)resumeRendering;
 
+- (void)invalidateFrame;
+
 @property(nonatomic) BOOL forcedRenderingOnEachFrame;
 @property(readonly) OAObservable* settingsObservable;
 

@@ -11,6 +11,7 @@
 #import <QuickDialog.h>
 
 #import "OsmAndApp.h"
+#import "OAManageFavoritesViewController.h"
 #import "OALog.h"
 #include "Localization.h"
 
@@ -42,13 +43,13 @@
     QLabelElement* manageFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Manage my favorites")
                                                                            Value:nil];
     manageFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    manageFavoritesElement.controllerAction = NSStringFromSelector(@selector(onManageFavorites));
+    manageFavoritesElement.controllerAction = NSStringFromSelector(@selector(onManageFavorites:));
     manageFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:manageFavoritesElement];
 
     QLabelElement* exportFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Export my favorites")
                                                                            Value:nil];
-    exportFavoritesElement.controllerAction = NSStringFromSelector(@selector(onExportFavorites));
+    exportFavoritesElement.controllerAction = NSStringFromSelector(@selector(onExportFavorites:));
     exportFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     exportFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:exportFavoritesElement];
@@ -60,12 +61,13 @@
     return self;
 }
 
-- (void)onManageFavorites
+- (void)onManageFavorites:(QElement*)sender
 {
-    OALog(@"onManageFavorites");
+    [self.navigationController pushViewController:[[OAManageFavoritesViewController alloc] init]
+                                         animated:YES];
 }
 
-- (void)onExportFavorites
+- (void)onExportFavorites:(QElement*)sender
 {
     NSURL* favoritesUrl = [NSURL fileURLWithPath:_app.favoritesStorageFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];

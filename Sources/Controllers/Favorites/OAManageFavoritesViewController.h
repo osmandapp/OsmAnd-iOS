@@ -1,8 +1,8 @@
 //
-//  OAMyDataViewController.h
+//  OAManageFavoritesViewController.h
 //  OsmAnd
 //
-//  Created by Alexey Pelykh on 7/9/14.
+//  Created by Alexey Pelykh on 7/10/14.
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
@@ -10,7 +10,7 @@
 
 #import <QuickDialogController.h>
 
-@interface OAMyDataViewController : QuickDialogController
+@interface OAManageFavoritesViewController : QuickDialogController
 
 - (instancetype)init;
 

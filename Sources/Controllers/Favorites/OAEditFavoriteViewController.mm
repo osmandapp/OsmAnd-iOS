@@ -1,12 +1,12 @@
 //
-//  OAAddFavoriteViewController.mm
+//  OAEditFavoriteViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Pelykh on 7/7/14.
+//  Created by Alexey Pelykh on 7/10/14.
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OAAddFavoriteViewController.h"
+#import "OAEditFavoriteViewController.h"
 
 #import <QuickDialog.h>
 #import <QPickerElement.h>
@@ -20,27 +20,25 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OAAddFavoriteViewController ()
+@interface OAEditFavoriteViewController ()
 @end
 
-@implementation OAAddFavoriteViewController
+@implementation OAEditFavoriteViewController
 {
     OsmAndAppInstance _app;
-
-    CLLocationCoordinate2D _location;
 
     QEntryElement* _titleField;
     QRadioElement* _groupField;
     QColorPickerElement* _colorField;
 }
 
-- (instancetype)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)title
+- (instancetype)initWithFavorite:(const std::shared_ptr< OsmAnd::IFavoriteLocation >&)favorite
 {
     OsmAndAppInstance app = [OsmAndApp instance];
 
     QRootElement* rootElement = [[QRootElement alloc] init];
 
-    rootElement.title = OALocalizedString(@"Add favorite");
+    rootElement.title = OALocalizedString(@"Edit favorite");
     rootElement.grouped = YES;
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
 
@@ -49,7 +47,7 @@
 
     // Title
     QEntryElement* titleField = [[QEntryElement alloc] initWithTitle:OALocalizedString(@"Title")
-                                                               Value:title
+                                                               Value:favorite->getTitle().toNSString()
                                                          Placeholder:nil];
     titleField.enablesReturnKeyAutomatically = YES;
     [mainSection addElement:titleField];
@@ -61,7 +59,7 @@
     else
         groups = [groups sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     QRadioElement* groupField = [[OAQStringPickerElement alloc] initWithItems:groups
-                                                                     selected:0
+                                                                     selected:[groups indexOfObject:favorite->getGroup().toNSString()]
                                                                         title:OALocalizedString(@"Group")
                                                                  newItemTitle:OALocalizedString(@"New group")
                                                            newItemPlaceholder:OALocalizedString(@"Name")];
@@ -79,14 +77,13 @@
                                                                                      @[@"Purple", [UIColor purpleColor]],
                                                                                      @[@"Magenta", [UIColor magentaColor]]
                                                                                      ]
-                                                                          selected:0
+                                                                          selected:0 //TODO:!!!!!
                                                                              title:OALocalizedString(@"Color")];
     [mainSection addElement:colorField];
 
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
-        _location = location;
 
         _titleField = titleField;
         _groupField = groupField;
@@ -95,38 +92,6 @@
     return self;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Save")
-                                                                              style:UIBarButtonItemStyleDone
-                                                                             target:self
-                                                                             action:@selector(saveFavoriteAndClose)];
-}
-
-- (void)saveFavoriteAndClose
-{
-    OsmAnd::PointI location;
-    location.x = OsmAnd::Utilities::get31TileNumberX(_location.longitude);
-    location.y = OsmAnd::Utilities::get31TileNumberY(_location.latitude);
-
-    QString group = QString::fromNSString((NSString*)_groupField.selectedValue);
-
-    UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
-    OsmAnd::FColorARGB color;
-    [color_ getRed:&color.r
-             green:&color.g
-              blue:&color.b
-             alpha:&color.a];
-
-    _app.favoritesCollection->createFavoriteLocation(location,
-                                                     QString::fromNSString(_titleField.textValue),
-                                                     group,
-                                                     OsmAnd::FColorRGB(color));
-    [_app saveFavoritesToPermamentStorage];
-
-    [self.navigationController popViewControllerAnimated:YES];
-}
+//TODO: save during backward navigation!
 
 @end

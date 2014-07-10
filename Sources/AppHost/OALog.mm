@@ -8,6 +8,8 @@
 
 #import "OALog.h"
 
+#import <Foundation/Foundation.h>
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Logging.h>
 

@@ -56,14 +56,14 @@
             // Import all and replace
             QLabelElement* importAllAndReplace = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"All and replace mine")
                                                                                 Value:nil];
-            importAllAndReplace.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndReplace));
+            importAllAndReplace.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndReplace:));
             importAllAndReplace.accessoryType = UITableViewCellAccessoryNone;
             [favoritesSection addElement:importAllAndReplace];
 
             // Import all and merge
             QLabelElement* importAllAndMerge = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"All and merge with mine")
                                                                               Value:nil];
-            importAllAndMerge.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndMerge));
+            importAllAndMerge.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndMerge:));
             importAllAndMerge.accessoryType = UITableViewCellAccessoryNone;
             [favoritesSection addElement:importAllAndMerge];
 
@@ -71,14 +71,14 @@
             // Import selected and replace
             QLabelElement* importSelectedAndReplace = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Selected and replace mine")
                                                                                      Value:nil];
-            importSelectedAndReplace.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndReplace));
+            importSelectedAndReplace.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndReplace:));
             importSelectedAndReplace.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             [favoritesSection addElement:importSelectedAndReplace];
 
             // Import selected and merge
             QLabelElement* importSelectedAndMerge = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Selected and merge with mine")
                                                                                    Value:nil];
-            importSelectedAndMerge.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndMerge));
+            importSelectedAndMerge.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndMerge:));
             importSelectedAndMerge.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             [favoritesSection addElement:importSelectedAndMerge];
  */
@@ -105,7 +105,7 @@
     self.navigationItem.leftBarButtonItem.title = OALocalizedString(@"Cancel");
 }
 
-- (void)onImportAllAsFavoritesAndReplace
+- (void)onImportAllAsFavoritesAndReplace:(QElement*)sender
 {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
                                 message:OALocalizedString(@"Do you want to lose your previous favorites and replace them with imported ones?")
@@ -121,7 +121,7 @@
                                                              }], nil] show];
 }
 
-- (void)onImportAllAsFavoritesAndMerge
+- (void)onImportAllAsFavoritesAndMerge:(QElement*)sender
 {
     _app.favoritesCollection->mergeFrom(_favoritesCollection);
     [_app saveFavoritesToPermamentStorage];
@@ -130,12 +130,12 @@
 }
 
 /*
-- (void)onImportSelectedAsFavoritesAndReplace
+- (void)onImportSelectedAsFavoritesAndReplace:(QElement*)sender
 {
 
 }
 
-- (void)onImportSelectedAsFavoritesAndMerge
+- (void)onImportSelectedAsFavoritesAndMerge:(QElement*)sender
 {
 
 }

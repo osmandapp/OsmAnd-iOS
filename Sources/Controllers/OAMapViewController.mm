@@ -267,6 +267,7 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
+        .setBaseOrder(std::numeric_limits<int>::max() - 1)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"context_pin_marker_icon"])
         .buildAndAddToCollection(_contextPinMarkersCollection);

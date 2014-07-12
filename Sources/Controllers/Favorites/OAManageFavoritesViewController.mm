@@ -302,15 +302,16 @@
     if (exportCollection->getFavoriteLocationsCount() == 0)
         return;
 
-    NSString* tempFilename = [NSTemporaryDirectory() stringByAppendingString:@"exported_favorites.gpx"];
-    if (!exportCollection->saveTo(QString::fromNSString(tempFilename)))
+    NSString* filename = [OALocalizedString(@"Exported favorites") stringByAppendingString:@".gpx"];
+    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
+    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;
 
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:tempFilename];
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
-    _exportController.name = OALocalizedString(@"Exported favorites.gpx");
+    _exportController.name = filename;
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];

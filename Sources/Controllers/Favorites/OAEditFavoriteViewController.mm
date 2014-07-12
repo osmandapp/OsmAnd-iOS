@@ -10,6 +10,8 @@
 
 #import <QuickDialog.h>
 #import <QPickerElement.h>
+#import <UIAlertView+Blocks.h>
+#import <RegexKitLite.h>
 
 #import "OsmAndApp.h"
 #import "OAQColorPickerElement.h"
@@ -19,20 +21,23 @@
 #include "Localization.h"
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OAEditFavoriteViewController ()
+@interface OAEditFavoriteViewController () <UIDocumentInteractionControllerDelegate>
 @end
 
 @implementation OAEditFavoriteViewController
 {
     OsmAndAppInstance _app;
 
-    std::shared_ptr< OsmAnd::IFavoriteLocation > _favorite;
+    std::shared_ptr<OsmAnd::IFavoriteLocation> _favorite;
 
     QEntryElement* _titleField;
     QRadioElement* _groupField;
     QColorPickerElement* _colorField;
+
+    UIDocumentInteractionController* _exportController;
 }
 
 - (instancetype)initWithFavorite:(const std::shared_ptr< OsmAnd::IFavoriteLocation >&)favorite
@@ -146,7 +151,7 @@
                                        animated:animated];
 }
 
-- (void)onSaveFavoriteAndClose
+- (void)collectData
 {
     QString title = QString::fromNSString(_titleField.textValue);
 
@@ -163,7 +168,11 @@
     _favorite->setGroup(group);
     _favorite->setColor(OsmAnd::FColorRGB(color));
     [_app saveFavoritesToPermamentStorage];
+}
 
+- (void)onSaveFavoriteAndClose
+{
+    [self collectData];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -174,86 +183,58 @@
 
 - (void)onShare
 {
-/*    NSArray* selectedCells = [self.quickDialogTableView indexPathsForSelectedRows];
-    if ([selectedCells count] == 0)
-        return;
-
-    NSArray* selectedElements = [self.quickDialogTableView elementsForIndexPaths:selectedCells];
-    if ([selectedElements count] == 0)
-        return;
+    [self collectData];
 
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> exportCollection(new OsmAnd::FavoriteLocationsGpxCollection());
-    for (QElement* element in selectedElements)
-    {
-        if ([element.object isKindOfClass:[FavoriteItemData class]])
-        {
-            FavoriteItemData* favoriteItemData = (FavoriteItemData*)element.object;
+    exportCollection->copyFavoriteLocation(_favorite);
 
-            exportCollection->copyFavoriteLocation(favoriteItemData.favorite);
-        }
-        else if ([element.object isKindOfClass:[GroupItemData class]])
-        {
-            GroupItemData* groupItemData = (GroupItemData*)element.object;
-
-            exportCollection->mergeFrom(groupItemData.favorites);
-        }
-    }
-    if (exportCollection->getFavoriteLocationsCount() == 0)
+    NSString* name = _favorite->getTitle().toNSString();
+    name = [name stringByReplacingOccurrencesOfRegex:@"([^\\w-\\.]+)" withString:@"_"];
+    NSString* filename = [name stringByAppendingString:@".gpx"];
+    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
+    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;
 
-    NSString* tempFilename = [NSTemporaryDirectory() stringByAppendingString:@"exported_favorites.gpx"];
-    if (!exportCollection->saveTo(QString::fromNSString(tempFilename)))
-        return;
-
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:tempFilename];
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
-    _exportController.name = OALocalizedString(@"Exported favorites.gpx");
+    _exportController.name = filename;
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
-                                         animated:YES];*/
+                                         animated:YES];
 }
 
 - (void)onDelete
 {
-/*    NSArray* selectedCells = [self.quickDialogTableView indexPathsForSelectedRows];
-    if ([selectedCells count] == 0)
-        return;
-
-    NSArray* selectedElements = [self.quickDialogTableView elementsForIndexPaths:selectedCells];
-    if ([selectedElements count] == 0)
-        return;
-
-    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toBeRemoved;
-    for (QElement* element in selectedElements)
-    {
-        if ([element.object isKindOfClass:[FavoriteItemData class]])
-        {
-            FavoriteItemData* favoriteItemData = (FavoriteItemData*)element.object;
-
-            toBeRemoved.push_back(favoriteItemData.favorite);
-        }
-        else if ([element.object isKindOfClass:[GroupItemData class]])
-        {
-            GroupItemData* groupItemData = (GroupItemData*)element.object;
-
-            toBeRemoved.append(groupItemData.favorites);
-        }
-    }
-    if (toBeRemoved.isEmpty())
-        return;
-
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
-                                message:OALocalizedString(@"Do you want to delete selected favorites?")
+                                message:OALocalizedString(@"Do you want to delete this favorites?")
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")
                                                              action:^{
                                                              }]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
                                                              action:^{
-                                                                 _app.favoritesCollection->removeFavoriteLocations(toBeRemoved);
+                                                                 _app.favoritesCollection->removeFavoriteLocation(_favorite);
                                                                  [_app saveFavoritesToPermamentStorage];
-                                                             }], nil] show];*/
+
+                                                                 [self.navigationController popViewControllerAnimated:YES];
+                                                             }], nil] show];
 }
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    if (controller == _exportController)
+        _exportController = nil;
+}
+
+- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
+{
+    if (controller == _exportController)
+        _exportController = nil;
+}
+
+#pragma mark -
 
 @end

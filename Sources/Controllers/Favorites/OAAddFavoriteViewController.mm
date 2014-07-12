@@ -93,10 +93,10 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Save")
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
-                                                                             action:@selector(saveFavoriteAndClose)];
+                                                                             action:@selector(onSaveFavoriteAndClose)];
 }
 
-- (void)saveFavoriteAndClose
+- (void)onSaveFavoriteAndClose
 {
     OsmAnd::PointI location;
     location.x = OsmAnd::Utilities::get31TileNumberX(_location.longitude);

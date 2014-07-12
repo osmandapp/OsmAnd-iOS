@@ -292,6 +292,10 @@
 		BBA3AEB1196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */; };
 		BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */; };
 		BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */; };
+		BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */; };
+		BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */; };
+		BBA3AEC0197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */; };
+		BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -575,6 +579,10 @@
 		BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAEditFavoriteViewController.mm; path = Controllers/Favorites/OAEditFavoriteViewController.mm; sourceTree = "<group>"; };
 		BBA3AEB619710E1E0039D991 /* OADefaultFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADefaultFavorite.h; path = Helpers/OADefaultFavorite.h; sourceTree = "<group>"; };
 		BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADefaultFavorite.m; path = Helpers/OADefaultFavorite.m; sourceTree = "<group>"; };
+		BBA3AEBA197122FD0039D991 /* OAQuickDialogTableDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickDialogTableDelegate.h; path = PodsExtensions/OAQuickDialogTableDelegate.h; sourceTree = "<group>"; };
+		BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQuickDialogTableDelegate.m; path = PodsExtensions/OAQuickDialogTableDelegate.m; sourceTree = "<group>"; };
+		BBA3AEBE197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "QuickDialogTableView+ElementByIndexAccessor.h"; path = "PodsExtensions/QuickDialogTableView+ElementByIndexAccessor.h"; sourceTree = "<group>"; };
+		BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "QuickDialogTableView+ElementByIndexAccessor.m"; path = "PodsExtensions/QuickDialogTableView+ElementByIndexAccessor.m"; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -1030,6 +1038,10 @@
 				BBA3AE85196BCB4B0039D991 /* OAQColorPickerElement.m */,
 				BBA3AE88196BDF150039D991 /* OAQStringPickerElement.h */,
 				BBA3AE89196BDF150039D991 /* OAQStringPickerElement.m */,
+				BBA3AEBA197122FD0039D991 /* OAQuickDialogTableDelegate.h */,
+				BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */,
+				BBA3AEBE197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.h */,
+				BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */,
 			);
 			name = PodsExtensions;
 			sourceTree = "<group>";
@@ -1593,6 +1605,7 @@
 				BBA3AEAC196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBE1D2A9190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
 				BBB97DE51908D1EC0067F4A0 /* OAMapSource.m in Sources */,
+				BBA3AEC0197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				BB63335117C4CFD600903AB1 /* OAMapModeHudViewController.m in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
@@ -1605,6 +1618,7 @@
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
 				BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
+				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AE86196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
@@ -1651,6 +1665,7 @@
 				BBA3AEAD196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBE1D2AC190D186F00D90F0A /* OALog.mm in Sources */,
 				BB451E3018DCD224005FBE09 /* OAMapModeHudViewController.m in Sources */,
+				BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
@@ -1663,6 +1678,7 @@
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
 				BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
+				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				CE3940A21938E71F00E9F40C /* OAShowUpdatesViewController.mm in Sources */,
 				BBA3AE87196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,

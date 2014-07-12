@@ -79,6 +79,8 @@
                                          animated:YES];
 }
 
+#pragma mark - UIDocumentInteractionControllerDelegate
+
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
 {
     if (controller == _exportController)
@@ -90,5 +92,7 @@
     if (controller == _exportController)
         _exportController = nil;
 }
+
+#pragma mark -
 
 @end

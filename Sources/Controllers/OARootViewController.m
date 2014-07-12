@@ -76,16 +76,18 @@
     self.shouldDelegateAutorotateToVisiblePanel = NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:YES animated:animated];
+    [self.navigationController setNavigationBarHidden:YES
+                                             animated:animated];
     [super viewWillAppear:animated];
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [self.navigationController setNavigationBarHidden:NO animated:animated];
-    [super viewDidDisappear:animated];
+    [self.navigationController setNavigationBarHidden:NO
+                                             animated:animated];
+    [super viewWillDisappear:animated];
 }
 
 - (void)styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration

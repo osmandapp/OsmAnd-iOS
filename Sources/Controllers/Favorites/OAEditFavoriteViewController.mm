@@ -109,10 +109,44 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Save")
                                                                               style:UIBarButtonItemStyleDone
                                                                              target:self
-                                                                             action:@selector(saveFavoriteAndClose)];
+                                                                             action:@selector(onSaveFavoriteAndClose)];
+
+    self.toolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                        target:nil
+                                                                        action:nil],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemSearch
+                                                                        target:self
+                                                                        action:@selector(onGoTo)],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                        target:nil
+                                                                        action:nil],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                        target:self
+                                                                        action:@selector(onShare)],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                        target:nil
+                                                                        action:nil],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                        target:self
+                                                                        action:@selector(onDelete)],
+                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                        target:nil
+                                                                        action:nil]];
 }
 
-- (void)saveFavoriteAndClose
+- (void)viewWillAppear:(BOOL)animated
+{
+    [self.navigationController setToolbarHidden:NO
+                                       animated:animated];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [self.navigationController setToolbarHidden:YES
+                                       animated:animated];
+}
+
+- (void)onSaveFavoriteAndClose
 {
     QString title = QString::fromNSString(_titleField.textValue);
 
@@ -131,6 +165,95 @@
     [_app saveFavoritesToPermamentStorage];
 
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)onGoTo
+{
+
+}
+
+- (void)onShare
+{
+/*    NSArray* selectedCells = [self.quickDialogTableView indexPathsForSelectedRows];
+    if ([selectedCells count] == 0)
+        return;
+
+    NSArray* selectedElements = [self.quickDialogTableView elementsForIndexPaths:selectedCells];
+    if ([selectedElements count] == 0)
+        return;
+
+    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> exportCollection(new OsmAnd::FavoriteLocationsGpxCollection());
+    for (QElement* element in selectedElements)
+    {
+        if ([element.object isKindOfClass:[FavoriteItemData class]])
+        {
+            FavoriteItemData* favoriteItemData = (FavoriteItemData*)element.object;
+
+            exportCollection->copyFavoriteLocation(favoriteItemData.favorite);
+        }
+        else if ([element.object isKindOfClass:[GroupItemData class]])
+        {
+            GroupItemData* groupItemData = (GroupItemData*)element.object;
+
+            exportCollection->mergeFrom(groupItemData.favorites);
+        }
+    }
+    if (exportCollection->getFavoriteLocationsCount() == 0)
+        return;
+
+    NSString* tempFilename = [NSTemporaryDirectory() stringByAppendingString:@"exported_favorites.gpx"];
+    if (!exportCollection->saveTo(QString::fromNSString(tempFilename)))
+        return;
+
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:tempFilename];
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
+    _exportController.UTI = @"net.osmand.gpx";
+    _exportController.delegate = self;
+    _exportController.name = OALocalizedString(@"Exported favorites.gpx");
+    [_exportController presentOptionsMenuFromRect:CGRectZero
+                                           inView:self.view
+                                         animated:YES];*/
+}
+
+- (void)onDelete
+{
+/*    NSArray* selectedCells = [self.quickDialogTableView indexPathsForSelectedRows];
+    if ([selectedCells count] == 0)
+        return;
+
+    NSArray* selectedElements = [self.quickDialogTableView elementsForIndexPaths:selectedCells];
+    if ([selectedElements count] == 0)
+        return;
+
+    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > toBeRemoved;
+    for (QElement* element in selectedElements)
+    {
+        if ([element.object isKindOfClass:[FavoriteItemData class]])
+        {
+            FavoriteItemData* favoriteItemData = (FavoriteItemData*)element.object;
+
+            toBeRemoved.push_back(favoriteItemData.favorite);
+        }
+        else if ([element.object isKindOfClass:[GroupItemData class]])
+        {
+            GroupItemData* groupItemData = (GroupItemData*)element.object;
+
+            toBeRemoved.append(groupItemData.favorites);
+        }
+    }
+    if (toBeRemoved.isEmpty())
+        return;
+
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
+                                message:OALocalizedString(@"Do you want to delete selected favorites?")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")
+                                                             action:^{
+                                                             }]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
+                                                             action:^{
+                                                                 _app.favoritesCollection->removeFavoriteLocations(toBeRemoved);
+                                                                 [_app saveFavoritesToPermamentStorage];
+                                                             }], nil] show];*/
 }
 
 @end

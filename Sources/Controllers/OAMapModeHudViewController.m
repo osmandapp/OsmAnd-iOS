@@ -15,6 +15,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
 #import "OADebugHudViewController.h"
+#import "OARootViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
 #define _(name) OAMapModeHudViewController__##name
@@ -44,6 +45,7 @@
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
 
+    OAMapViewController* _mapViewController;
     OADebugHudViewController* _debugHudViewController;
 }
 
@@ -64,16 +66,18 @@
 - (void)ctor
 {
     _app = [OsmAndApp instance];
+
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
-                                                     andObserve:[OAMapViewController instance].azimuthObservable];
+                                                     andObserve:_mapViewController.azimuthObservable];
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:[OAMapViewController instance].zoomObservable];
+                                                  andObserve:_mapViewController.zoomObservable];
 }
 
 - (void)dtor
@@ -89,9 +93,9 @@
     else
         [_driveModeButton hideAndDisableInput];
 
-    _compassImage.transform = CGAffineTransformMakeRotation(-[OAMapViewController instance].mapRendererView.azimuth / 180.0f * M_PI);
-    _zoomInButton.enabled = [[OAMapViewController instance] canZoomIn];
-    _zoomOutButton.enabled = [[OAMapViewController instance] canZoomOut];
+    _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
+    _zoomInButton.enabled = [_mapViewController canZoomIn];
+    _zoomOutButton.enabled = [_mapViewController canZoomOut];
 }
 
 - (void)didReceiveMemoryWarning
@@ -184,24 +188,24 @@
 
 - (IBAction)onCompassButtonClicked:(id)sender
 {
-    [[OAMapViewController instance] animatedAlignAzimuthToNorth];
+    [_mapViewController animatedAlignAzimuthToNorth];
 }
 
 - (IBAction)onZoomInButtonClicked:(id)sender
 {
-    [[OAMapViewController instance] animatedZoomIn];
+    [_mapViewController animatedZoomIn];
 }
 
 - (IBAction)onZoomOutButtonClicked:(id)sender
 {
-    [[OAMapViewController instance] animatedZoomOut];
+    [_mapViewController animatedZoomOut];
 }
 
 - (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _zoomInButton.enabled = [[OAMapViewController instance] canZoomIn];
-        _zoomOutButton.enabled = [[OAMapViewController instance] canZoomOut];
+        _zoomInButton.enabled = [_mapViewController canZoomIn];
+        _zoomOutButton.enabled = [_mapViewController canZoomOut];
     });
 }
 

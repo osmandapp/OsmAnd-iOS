@@ -11,6 +11,7 @@
 #import "OATableViewCellWithSwitch.h"
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
+#import "OARootViewController.h"
 
 #define _(name) OADebugActionsViewController__##name
 #define ctor _(ctor)
@@ -21,6 +22,9 @@
 @end
 
 @implementation OADebugActionsViewController
+{
+    OAMapRendererView* __weak _mapRendererView;
+}
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -56,6 +60,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    if ([mapVC isViewLoaded])
+        _mapRendererView= (OAMapRendererView*)mapVC.view;
 }
 
 #define kRenderingSection 0
@@ -113,7 +121,7 @@
                 case kRenderingSection_ForcedRendering:
                     caption = @"Forced rendering";
                     cellTypeId = switchCell;
-                    boolValue = [OAMapViewController instance].mapRendererView.forcedRenderingOnEachFrame;;
+                    boolValue = _mapRendererView.forcedRenderingOnEachFrame;
                     break;
             }
             break;
@@ -153,8 +161,7 @@
                 case kRenderingSection_ForcedRendering:
                     {
                         OATableViewCellWithSwitch* cell = (OATableViewCellWithSwitch*)[tableView cellForRowAtIndexPath:indexPath];
-                        id<OAMapRendererViewProtocol> __weak mapRendererView = [OAMapViewController instance].mapRendererView;
-                        mapRendererView.forcedRenderingOnEachFrame = cell.switchView.on;
+                        _mapRendererView.forcedRenderingOnEachFrame = cell.switchView.on;
                     }
                     break;
             }

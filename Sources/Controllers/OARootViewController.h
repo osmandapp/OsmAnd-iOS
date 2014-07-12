@@ -28,6 +28,10 @@
 - (void)closeMenuAnimated:(BOOL)animated;
 @property(readonly) BOOL isMenuOpened;
 
+- (void)closeMenuAndPanelsAnimated:(BOOL)animated;
+
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
+
++ (OARootViewController*)instance;
 
 @end

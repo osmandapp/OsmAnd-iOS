@@ -21,7 +21,7 @@
 
 @implementation OAMapPanelViewController
 
-@synthesize rendererViewController = _rendererViewController;
+@synthesize mapViewController = _mapViewController;
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -41,18 +41,18 @@
     self.view = rootView;
     
     // Instantiate map renderer
-    _rendererViewController = [[OAMapViewController alloc] init];
-    [self addChildViewController:_rendererViewController];
-    [_rendererViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:_rendererViewController.view];
+    _mapViewController = [[OAMapViewController alloc] init];
+    [self addChildViewController:_mapViewController];
+    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:_mapViewController.view];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
                                                                       options:0
                                                                       metrics:nil
-                                                                        views:@{@"view":_rendererViewController.view}]];
+                                                                        views:@{@"view":_mapViewController.view}]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
                                                                       options:0
                                                                       metrics:nil
-                                                                        views:@{@"view":_rendererViewController.view}]];
+                                                                        views:@{@"view":_mapViewController.view}]];
     
     // Instantiate map HUD
     UIViewController* mapHudVC = [[OAMapModeHudViewController alloc] initWithNibName:@"MapModeHUD"

@@ -241,18 +241,23 @@
     return YES;
 }
 
+- (void)closeMenuAndPanelsAnimated:(BOOL)animated
+{
+    // Close all menus and panels
+    [self closeMenuAnimated:animated];
+    if (self.state == JASidePanelLeftVisible)
+        [self toggleLeftPanel:self];
+    else if (self.state == JASidePanelRightVisible)
+        [self toggleRightPanel:self];
+}
+
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     UIViewController* incomingURLViewController = [[OAIncomingURLViewController alloc] initFor:url];
     if (incomingURLViewController == nil)
         return NO;
 
-    // Close all menus and panels
-    [self closeMenuAnimated:NO];
-    if (self.state == JASidePanelLeftVisible)
-        [self toggleLeftPanel:self];
-    else if (self.state == JASidePanelRightVisible)
-        [self toggleRightPanel:self];
+    [self closeMenuAndPanelsAnimated:NO];
 
     // Open incoming-URL view controller as menu
     [self openMenu:incomingURLViewController
@@ -282,5 +287,11 @@
 }
 
 #pragma mark -
+
++ (OARootViewController*)instance
+{
+    UINavigationController* navigationController = (UINavigationController*)[[UIApplication sharedApplication] keyWindow].rootViewController;
+    return (OARootViewController*)[navigationController.viewControllers objectAtIndex:0];
+}
 
 @end

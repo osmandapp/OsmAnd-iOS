@@ -124,13 +124,6 @@
     float _lastZoomInPositionTrack;
 }
 
-static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
-
-+ (OAMapViewController*)instance
-{
-    return s_OAMapRendererViewController_instance;
-}
-
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -147,8 +140,6 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
 
 - (void)ctor
 {
-    s_OAMapRendererViewController_instance = self;
-    
     _app = [OsmAndApp instance];
     
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -290,8 +281,6 @@ static OAMapViewController* __weak s_OAMapRendererViewController_instance = nil;
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         [mapView releaseContext];
     }
-    
-    s_OAMapRendererViewController_instance = nil;
 }
 
 - (void)loadView

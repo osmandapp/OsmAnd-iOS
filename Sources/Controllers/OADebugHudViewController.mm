@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -59,8 +60,9 @@
     [super viewDidLoad];
 
     [self collectState];
-    [_rendererStateObserver observe:[OAMapViewController instance].stateObservable];
-    [_rendererSettingsObserver observe:[OAMapViewController instance].settingsObservable];
+    OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    [_rendererStateObserver observe:mapViewController.stateObservable];
+    [_rendererSettingsObserver observe:mapViewController.settingsObservable];
 
     [self._debugPinOverlayButton setImage:[UIImage imageNamed:
                                            self._overlayContainer.userInteractionEnabled
@@ -109,7 +111,11 @@
 
 - (void)collectState
 {
-    OAMapRendererView* __weak mapRendererView = (OAMapRendererView*)[[OAMapViewController instance] mapRendererView];
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    if (![mapVC isViewLoaded])
+        return;
+
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 

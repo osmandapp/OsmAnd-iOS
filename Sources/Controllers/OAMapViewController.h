@@ -13,8 +13,6 @@
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
-+ (OAMapViewController*)instance;
-
 @property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
 @property(readonly) OAObservable* stateObservable;
 @property(readonly) OAObservable* settingsObservable;

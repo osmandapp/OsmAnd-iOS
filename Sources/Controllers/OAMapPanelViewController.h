@@ -12,6 +12,6 @@
 
 @interface OAMapPanelViewController : UIViewController
 
-@property (nonatomic, strong, readonly) OAMapViewController* rendererViewController;
+@property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
 
 @end

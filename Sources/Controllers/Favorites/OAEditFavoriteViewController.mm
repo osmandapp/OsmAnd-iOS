@@ -18,6 +18,7 @@
 #import "OAQStringPickerElement.h"
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
+#import "OARootViewController.h"
 #include "Localization.h"
 
 #include <OsmAndCore.h>
@@ -182,7 +183,11 @@
 
 - (void)onGoTo
 {
+    OARootViewController* rootViewController = [OARootViewController instance];
 
+    // Close everything
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+//TODO:    [rootViewController.mapPanel.mapViewController gotobloabloalboa
 }
 
 - (void)onShare

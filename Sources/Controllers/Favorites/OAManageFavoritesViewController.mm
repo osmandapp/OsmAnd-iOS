@@ -46,6 +46,8 @@
 {
     OsmAndAppInstance _app;
 
+    NSString* _groupName;
+
     NSArray* _editToolbarItems;
     UIDocumentInteractionController* _exportController;
 }
@@ -146,6 +148,8 @@
     if (self) {
         _app = app;
 
+        _groupName = nil;
+        
         [self inflateEditToolbarItems];
     }
     return self;
@@ -188,6 +192,8 @@
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
+
+        _groupName = groupTitle;
 
         [self inflateEditToolbarItems];
     }

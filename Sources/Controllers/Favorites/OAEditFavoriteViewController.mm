@@ -15,6 +15,7 @@
 #import "OAQColorPickerElement.h"
 #import "OAQStringPickerElement.h"
 #import "OANativeUtilities.h"
+#import "OADefaultFavorite.h"
 #include "Localization.h"
 
 #include <OsmAndCore.h>
@@ -26,6 +27,8 @@
 @implementation OAEditFavoriteViewController
 {
     OsmAndAppInstance _app;
+
+    std::shared_ptr< OsmAnd::IFavoriteLocation > _favorite;
 
     QEntryElement* _titleField;
     QRadioElement* _groupField;
@@ -55,7 +58,7 @@
     // Group
     NSArray* groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
     if (groups == nil || [groups count] == 0)
-        groups = @[OALocalizedString(@"My places")];
+        groups = [OADefaultFavorite builtinGroupNames];
     else
         groups = [groups sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     QRadioElement* groupField = [[OAQStringPickerElement alloc] initWithItems:groups
@@ -66,24 +69,31 @@
     [mainSection addElement:groupField];
 
     // Color
-    QColorPickerElement* colorField = [[OAQColorPickerElement alloc] initWithItems:@[
-                                                                                     @[@"Black", [UIColor blackColor]],
-                                                                                     @[@"White", [UIColor whiteColor]],
-                                                                                     @[@"Gray", [UIColor grayColor]],
-                                                                                     @[@"Blue",  [UIColor blueColor]],
-                                                                                     @[@"Red",  [UIColor redColor]],
-                                                                                     @[@"Green", [UIColor greenColor]],
-                                                                                     @[@"Yellow", [UIColor yellowColor]],
-                                                                                     @[@"Purple", [UIColor purpleColor]],
-                                                                                     @[@"Magenta", [UIColor magentaColor]]
-                                                                                     ]
-                                                                          selected:0 //TODO:!!!!!
+    NSArray* availableColors = [OADefaultFavorite builtinColors];
+    NSUInteger selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
+        OsmAnd::FColorARGB fcolor;
+        [uiColor getRed:&fcolor.r
+                  green:&fcolor.g
+                   blue:&fcolor.b
+                  alpha:&fcolor.a];
+        OsmAnd::ColorRGB color = OsmAnd::FColorRGB(fcolor);
+
+        if (color == favorite->getColor())
+            return YES;
+
+        return NO;
+    }];
+    QColorPickerElement* colorField = [[OAQColorPickerElement alloc] initWithItems:availableColors
+                                                                          selected:selectedColor
                                                                              title:OALocalizedString(@"Color")];
     [mainSection addElement:colorField];
 
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
+
+        _favorite = favorite;
 
         _titleField = titleField;
         _groupField = groupField;
@@ -92,6 +102,35 @@
     return self;
 }
 
-//TODO: save during backward navigation!
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Save")
+                                                                              style:UIBarButtonItemStyleDone
+                                                                             target:self
+                                                                             action:@selector(saveFavoriteAndClose)];
+}
+
+- (void)saveFavoriteAndClose
+{
+    QString title = QString::fromNSString(_titleField.textValue);
+
+    QString group = QString::fromNSString((NSString*)_groupField.selectedValue);
+
+    UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
+    OsmAnd::FColorARGB color;
+    [color_ getRed:&color.r
+             green:&color.g
+              blue:&color.b
+             alpha:&color.a];
+
+    _favorite->setTitle(title);
+    _favorite->setGroup(group);
+    _favorite->setColor(OsmAnd::FColorRGB(color));
+    [_app saveFavoritesToPermamentStorage];
+
+    [self.navigationController popViewControllerAnimated:YES];
+}
 
 @end

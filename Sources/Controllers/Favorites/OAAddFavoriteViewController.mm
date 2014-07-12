@@ -15,6 +15,7 @@
 #import "OAQColorPickerElement.h"
 #import "OAQStringPickerElement.h"
 #import "OANativeUtilities.h"
+#import "OADefaultFavorite.h"
 #include "Localization.h"
 
 #include <OsmAndCore.h>
@@ -57,7 +58,7 @@
     // Group
     NSArray* groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
     if (groups == nil || [groups count] == 0)
-        groups = @[OALocalizedString(@"My places")];
+        groups = [OADefaultFavorite builtinGroupNames];
     else
         groups = [groups sortedArrayUsingSelector:@selector(localizedCaseInsensitiveCompare:)];
     QRadioElement* groupField = [[OAQStringPickerElement alloc] initWithItems:groups
@@ -68,17 +69,7 @@
     [mainSection addElement:groupField];
 
     // Color
-    QColorPickerElement* colorField = [[OAQColorPickerElement alloc] initWithItems:@[
-                                                                                     @[@"Black", [UIColor blackColor]],
-                                                                                     @[@"White", [UIColor whiteColor]],
-                                                                                     @[@"Gray", [UIColor grayColor]],
-                                                                                     @[@"Blue",  [UIColor blueColor]],
-                                                                                     @[@"Red",  [UIColor redColor]],
-                                                                                     @[@"Green", [UIColor greenColor]],
-                                                                                     @[@"Yellow", [UIColor yellowColor]],
-                                                                                     @[@"Purple", [UIColor purpleColor]],
-                                                                                     @[@"Magenta", [UIColor magentaColor]]
-                                                                                     ]
+    QColorPickerElement* colorField = [[OAQColorPickerElement alloc] initWithItems:[OADefaultFavorite builtinColors]
                                                                           selected:0
                                                                              title:OALocalizedString(@"Color")];
     [mainSection addElement:colorField];
@@ -111,6 +102,8 @@
     location.x = OsmAnd::Utilities::get31TileNumberX(_location.longitude);
     location.y = OsmAnd::Utilities::get31TileNumberY(_location.latitude);
 
+    QString title = QString::fromNSString(_titleField.textValue);
+
     QString group = QString::fromNSString((NSString*)_groupField.selectedValue);
 
     UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
@@ -121,7 +114,7 @@
              alpha:&color.a];
 
     _app.favoritesCollection->createFavoriteLocation(location,
-                                                     QString::fromNSString(_titleField.textValue),
+                                                     title,
                                                      group,
                                                      OsmAnd::FColorRGB(color));
     [_app saveFavoritesToPermamentStorage];

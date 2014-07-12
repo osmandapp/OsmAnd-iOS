@@ -290,6 +290,8 @@
 		BBA3AEAD196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAB196EFD1C0039D991 /* OAManageFavoritesViewController.mm */; };
 		BBA3AEB0196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */; };
 		BBA3AEB1196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */; };
+		BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */; };
+		BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -571,6 +573,8 @@
 		BBA3AEAB196EFD1C0039D991 /* OAManageFavoritesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAManageFavoritesViewController.mm; path = Controllers/Favorites/OAManageFavoritesViewController.mm; sourceTree = "<group>"; };
 		BBA3AEAE196EFD430039D991 /* OAEditFavoriteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditFavoriteViewController.h; path = Controllers/Favorites/OAEditFavoriteViewController.h; sourceTree = "<group>"; };
 		BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAEditFavoriteViewController.mm; path = Controllers/Favorites/OAEditFavoriteViewController.mm; sourceTree = "<group>"; };
+		BBA3AEB619710E1E0039D991 /* OADefaultFavorite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADefaultFavorite.h; path = Helpers/OADefaultFavorite.h; sourceTree = "<group>"; };
+		BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADefaultFavorite.m; path = Helpers/OADefaultFavorite.m; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -1069,6 +1073,8 @@
 			children = (
 				BBA6ACFF1940C0A80066AF23 /* OANativeUtilities.h */,
 				BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */,
+				BBA3AEB619710E1E0039D991 /* OADefaultFavorite.h */,
+				BBA3AEB719710E1E0039D991 /* OADefaultFavorite.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -1561,6 +1567,7 @@
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
+				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
@@ -1618,6 +1625,7 @@
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
+				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
 				BB451EE318E58712005FBE09 /* OAMapSourcesListViewController.mm in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,

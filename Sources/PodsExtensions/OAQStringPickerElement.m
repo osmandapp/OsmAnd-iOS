@@ -88,6 +88,8 @@
     return value;
 }
 
+#pragma mark - QuickDialogEntryElementDelegate
+
 - (void)QEntryDidEndEditingElement:(QEntryElement *)element andCell:(QEntryTableViewCell *)cell
 {
     if (![element.key isEqualToString:kNewItemEntryElementKey])
@@ -98,8 +100,16 @@
     if (value == nil || [value length] == 0)
         return;
     self.selected = -1;
+
+    // Close the root element
     QuickDialogController* rootController = (QuickDialogController*)self.controller;
-    [rootController popToPreviousRootElement];
+    [NSTimer scheduledTimerWithTimeInterval:0.3
+                                     target:rootController
+                                   selector:@selector(popToPreviousRootElement)
+                                   userInfo:nil
+                                    repeats:NO];
 }
+
+#pragma mark -
 
 @end

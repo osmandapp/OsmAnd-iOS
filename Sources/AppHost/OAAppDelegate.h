@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OARootViewController.h"
+
 @interface OAAppDelegate : UIResponder <UIApplicationDelegate>
 
-@property (strong, nonatomic) UIWindow* window;
+@property(strong, readonly, nonatomic) OARootViewController* rootViewController;
 
 @end

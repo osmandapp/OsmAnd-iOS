@@ -12,6 +12,7 @@
 
 #import <JASidePanelController.h>
 
+#import "OAAppDelegate.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
 #import "OAIncomingURLViewController.h"
@@ -290,8 +291,8 @@
 
 + (OARootViewController*)instance
 {
-    UINavigationController* navigationController = (UINavigationController*)[[UIApplication sharedApplication] keyWindow].rootViewController;
-    return (OARootViewController*)[navigationController.viewControllers objectAtIndex:0];
+    OAAppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    return appDelegate.rootViewController;
 }
 
 @end

@@ -26,11 +26,10 @@
 @implementation OAAppDelegate
 {
     OsmAndAppInstance _app;
-
-    OARootViewController* _rootViewController;
 }
 
 @synthesize window = _window;
+@synthesize rootViewController = _rootViewController;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

@@ -256,6 +256,10 @@
     // Close everything
     [rootViewController closeMenuAndPanelsAnimated:YES];
 
+    // Ensure favorites layer is shown
+    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                    Visibility:YES];
+
     // Go to favorite location
     [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition()]
                                                         andZoom:kDefaultFavoriteZoom

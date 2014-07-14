@@ -188,7 +188,7 @@
     // Close everything
     [rootViewController closeMenuAndPanelsAnimated:YES];
 
-    // Show favorites
+    // Ensure favorites layer is shown
     [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
                                     Visibility:YES];
 

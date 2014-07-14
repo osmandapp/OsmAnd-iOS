@@ -12,6 +12,7 @@
 #import "UIViewController+OARootViewController.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMyDataViewController.h"
+#import "OAFavoritesLayerViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAppData.h"
 #include "Localization.h"
@@ -306,6 +307,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     static NSString* const mapSourceInactivePresetCell = @"mapSourceInactivePresetCell";
     static NSString* const inactiveLayerCell = @"inactiveLayerCell";
     static NSString* const activeLayerCell = @"activeLayerCell";
+    static NSString* const submenuLayerCell = @"submenuLayerCell";
     
     // Get content for cell and it's type id
     NSString* cellTypeId = nil;
@@ -378,7 +380,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             switch(indexPath.row)
             {
                 case kLayersSection_Favorites:
-                    cellTypeId = [_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId] ? activeLayerCell : inactiveLayerCell;
+                    cellTypeId = submenuLayerCell;
                     caption = OALocalizedString(@"Favorites");
                     break;
             }
@@ -421,24 +423,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
-- (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Allow selection only of:
-    //  - map-sources menu
-    //  - map-source preset set
-    //  - layers menu
-    //  - options menu
-    BOOL selectionAllowed = NO;
-    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row == 0);
-    selectionAllowed = selectionAllowed || (indexPath.section == kMapSourceAndVariantsSection && indexPath.row > 0);
-    selectionAllowed = selectionAllowed || (indexPath.section == kLayersSection);
-    selectionAllowed = selectionAllowed || (indexPath.section == kOptionsSection);
-    if (!selectionAllowed)
-        return nil;
-
-    return indexPath;
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == kMapSourceAndVariantsSection)
@@ -464,7 +448,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         switch (indexPath.row)
         {
             case kLayersSection_Favorites:
-                [_app.data.mapLayersConfiguration toogleLayerVisibility:kFavoritesLayerId];
+                [self openMenu:[[OAFavoritesLayerViewController alloc] init]
+                     forCellAt:indexPath];
                 break;
         }
     }

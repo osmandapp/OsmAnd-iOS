@@ -187,6 +187,12 @@
 
     // Close everything
     [rootViewController closeMenuAndPanelsAnimated:YES];
+
+    // Show favorites
+    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                    Visibility:YES];
+
+    // Go to favorite location
     [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:_favorite->getPosition()]
                                                         andZoom:kDefaultFavoriteZoom
                                                        animated:YES];

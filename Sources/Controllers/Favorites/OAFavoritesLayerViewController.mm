@@ -46,12 +46,186 @@
 {
     OsmAndAppInstance _app;
 
+    OAAutoObserverProxy* _favoritesCollectionChangeObserver;
+    OAAutoObserverProxy* _favoriteChangeObserver;
     OAAutoObserverProxy* _layersConfigurationObserver;
+
+    BOOL _contentIsInvalidated;
+
     UISwitch* _layerVisibilitySwitch;
+
     NSString* _groupName;
 }
 
 - (instancetype)init
+{
+    self = [super initWithRoot:[OAFavoritesLayerViewController inflateRoot]];
+    if (self) {
+        _app = [OsmAndApp instance];
+
+        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                       withHandler:@selector(onFavoritesCollectionChanged)
+                                                                        andObserve:_app.favoritesCollectionChangedObservable];
+        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onFavoriteChanged)
+                                                             andObserve:_app.favoriteChangedObservable];
+        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onLayersConfigurationChanged)
+                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
+        _contentIsInvalidated = NO;
+        _groupName = nil;
+    }
+    return self;
+}
+
+- (instancetype)initWithGroupTitle:(NSString*)groupTitle andFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
+{
+    self = [super initWithRoot:[OAFavoritesLayerViewController inflateGroup:groupTitle withFavorites:favorites]];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                       withHandler:@selector(onFavoritesCollectionChanged)
+                                                                        andObserve:_app.favoritesCollectionChangedObservable];
+        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onFavoriteChanged)
+                                                             andObserve:_app.favoriteChangedObservable];
+        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                 withHandler:@selector(onLayersConfigurationChanged)
+                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
+        _contentIsInvalidated = NO;
+        _groupName = groupTitle;
+    }
+    return self;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    // Create switch
+    _layerVisibilitySwitch = [[UISwitch alloc] init];
+    [_layerVisibilitySwitch addTarget:self
+                               action:@selector(onToggleLayerVisibility:)
+                     forControlEvents:UIControlEventValueChanged];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_layerVisibilitySwitch];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    [self updateLayerVisibilitySwitch];
+
+    // If content was invalidated while view was in background, update it's content right now
+    if (_contentIsInvalidated)
+    {
+        [self updateContent];
+
+        _contentIsInvalidated = NO;
+    }
+}
+
+- (void)updateContent
+{
+    if (_groupName == nil)
+        [self setRoot:[OAFavoritesLayerViewController inflateRoot]];
+    else
+    {
+        const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
+        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > favorites;
+        for(const auto& favorite : allFavorites)
+        {
+            const auto& groupName = favorite->getGroup();
+            if (![_groupName isEqualToString:groupName.toNSString()])
+                continue;
+
+            favorites.push_back(favorite);
+        }
+
+        // In case this group no longer exist, go back
+        if (favorites.isEmpty())
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+
+        [self setRoot:[OAFavoritesLayerViewController inflateGroup:_groupName
+                                                     withFavorites:favorites]];
+    }
+}
+
+- (void)onFavoritesCollectionChanged
+{
+    if (!self.isViewLoaded || self.view.window == nil)
+    {
+        _contentIsInvalidated = YES;
+        return;
+    }
+
+    [self updateContent];
+}
+
+- (void)onFavoriteChanged
+{
+    if (!self.isViewLoaded || self.view.window == nil)
+    {
+        _contentIsInvalidated = YES;
+        return;
+    }
+
+    [self updateContent];
+}
+
+- (void)onLayersConfigurationChanged
+{
+    [self updateLayerVisibilitySwitch];
+}
+
+- (void)updateLayerVisibilitySwitch
+{
+    [_layerVisibilitySwitch setOn:[_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]
+                         animated:NO];
+}
+
+- (void)onToggleLayerVisibility:(id)sender
+{
+    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                    Visibility:_layerVisibilitySwitch.on];
+}
+
+- (void)onViewGroup:(QElement*)sender
+{
+    if (self.quickDialogTableView.isEditing)
+        return;
+
+    GroupItemData* itemData = (GroupItemData*)sender.object;
+
+    UIViewController* viewGroupVC = [[OAFavoritesLayerViewController alloc] initWithGroupTitle:itemData.groupName
+                                                                                  andFavorites:itemData.favorites];
+    [self.navigationController pushViewController:viewGroupVC
+                                         animated:YES];
+}
+
+- (void)onGoToFavorite:(QElement*)sender
+{
+    OARootViewController* rootViewController = [OARootViewController instance];
+    
+    FavoriteItemData* itemData = (FavoriteItemData*)sender.object;
+
+    // Close everything
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+
+    // Ensure favorites layer is shown
+    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                    Visibility:YES];
+
+    // Go to favorite location
+    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition()]
+                                                        andZoom:kDefaultFavoriteZoom
+                                                       animated:YES];
+}
+
++ (QRootElement*)inflateRoot
 {
     OsmAndAppInstance app = [OsmAndApp instance];
 
@@ -143,23 +317,11 @@
         [fakeSection addElement:emptyListElement];
     }
 
-    self = [super initWithRoot:rootElement];
-    if (self) {
-        _app = app;
-
-        _groupName = nil;
-
-        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onLayersConfigurationChanged)
-                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
-    }
-    return self;
+    return rootElement;
 }
 
-- (instancetype)initWithGroupTitle:(NSString*)groupTitle andFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
++ (QRootElement*)inflateGroup:(NSString*)groupTitle withFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-
     QRootElement* rootElement = [[QRootElement alloc] init];
     rootElement.title = groupTitle;
     rootElement.grouped = YES;
@@ -186,84 +348,11 @@
     [favoritesSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
         QLabelElement* element1 = (QLabelElement*)obj1;
         QLabelElement* element2 = (QLabelElement*)obj2;
-
+        
         return [element1.title localizedCaseInsensitiveCompare:element2.title];
     }];
-
-    self = [super initWithRoot:rootElement];
-    if (self) {
-        _app = app;
-
-        _groupName = groupTitle;
-
-        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onLayersConfigurationChanged)
-                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
-    }
-    return self;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    // Create switch
-    _layerVisibilitySwitch = [[UISwitch alloc] init];
-    [_layerVisibilitySwitch addTarget:self
-                               action:@selector(onToggleLayerVisibility:)
-                     forControlEvents:UIControlEventValueChanged];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:_layerVisibilitySwitch];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self onLayersConfigurationChanged];
-}
-
-- (void)onLayersConfigurationChanged
-{
-    [_layerVisibilitySwitch setOn:[_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]
-                         animated:NO];
-}
-
-- (void)onToggleLayerVisibility:(id)sender
-{
-    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                    Visibility:_layerVisibilitySwitch.on];
-}
-
-- (void)onViewGroup:(QElement*)sender
-{
-    if (self.quickDialogTableView.isEditing)
-        return;
-
-    GroupItemData* itemData = (GroupItemData*)sender.object;
-
-    UIViewController* viewGroupVC = [[OAFavoritesLayerViewController alloc] initWithGroupTitle:itemData.groupName
-                                                                                  andFavorites:itemData.favorites];
-    [self.navigationController pushViewController:viewGroupVC
-                                         animated:YES];
-}
-
-- (void)onGoToFavorite:(QElement*)sender
-{
-    OARootViewController* rootViewController = [OARootViewController instance];
     
-    FavoriteItemData* itemData = (FavoriteItemData*)sender.object;
-
-    // Close everything
-    [rootViewController closeMenuAndPanelsAnimated:YES];
-
-    // Ensure favorites layer is shown
-    [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                    Visibility:YES];
-
-    // Go to favorite location
-    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition()]
-                                                        andZoom:kDefaultFavoriteZoom
-                                                       animated:YES];
+    return rootElement;
 }
 
 @end

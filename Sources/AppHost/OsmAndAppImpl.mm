@@ -16,6 +16,7 @@
 #include <QList>
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -50,6 +51,9 @@
 - (void)dealloc
 {
     _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+
+    _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
+    _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 }
 
 #define kAppData @"app_data"
@@ -97,9 +101,25 @@
                                                              });
 
     // Load favorites
+    _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
+    _favoriteChangedObservable = [[OAObservable alloc] init];
     _favoritesFilename = _documentsPath.filePath(QLatin1String("Favorites.gpx")).toNSString();
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
+    _favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+                                                            [self]
+                                                            (const OsmAnd::IFavoriteLocationsCollection* const collection)
+                                                            {
+                                                                [_favoritesCollectionChangedObservable notifyEventWithKey:self];
+                                                            });
+    _favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+                                                                  [self]
+                                                                  (const OsmAnd::IFavoriteLocationsCollection* const collection,
+                                                                   const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)
+                                                                  {
+                                                                      [_favoriteChangedObservable notifyEventWithKey:self
+                                                                                                            andValue:favoriteLocation->getTitle().toNSString()];
+                                                                  });
 
     // Load world regions
     NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"
@@ -144,6 +164,9 @@
     _mapMode = mapMode;
     [_mapModeObservable notifyEvent];
 }
+
+@synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
+@synthesize favoriteChangedObservable = _favoriteChangedObservable;
 
 @synthesize favoritesStorageFilename = _favoritesFilename;
 

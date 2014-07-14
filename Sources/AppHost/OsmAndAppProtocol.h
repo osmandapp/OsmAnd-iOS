@@ -34,6 +34,9 @@
 @property(readonly) OAObservable* mapModeObservable;
 
 - (void)saveDataToPermamentStorage;
+
+@property(readonly) OAObservable* favoritesCollectionChangedObservable;
+@property(readonly) OAObservable* favoriteChangedObservable;
 @property(readonly) NSString* favoritesStorageFilename;
 - (void)saveFavoritesToPermamentStorage;
 

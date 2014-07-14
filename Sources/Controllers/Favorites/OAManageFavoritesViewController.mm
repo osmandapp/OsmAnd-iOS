@@ -16,6 +16,7 @@
 #import "OAEditFavoriteViewController.h"
 #import "OAQuickDialogTableDelegate.h"
 #import "QuickDialogTableView+ElementByIndexAccessor.h"
+#import "OAAutoObserverProxy.h"
 #include "Localization.h"
 
 #include <OsmAndCore.h>
@@ -46,6 +47,11 @@
 {
     OsmAndAppInstance _app;
 
+    OAAutoObserverProxy* _favoritesCollectionChangeObserver;
+    OAAutoObserverProxy* _favoriteChangeObserver;
+
+    BOOL _contentIsInvalidated;
+
     NSString* _groupName;
 
     NSArray* _editToolbarItems;
@@ -54,100 +60,17 @@
 
 - (instancetype)init
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-
-    const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
-    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
-    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > ungroupedFavorites;
-    QSet<QString> groupNames;
-    for(const auto& favorite : allFavorites)
-    {
-        const auto& groupName = favorite->getGroup();
-        if (groupName.isEmpty())
-            ungroupedFavorites.push_back(favorite);
-        else
-        {
-            groupNames.insert(groupName);
-            groupedFavorites[groupName].push_back(favorite);
-        }
-    }
-
-    QRootElement* rootElement = [[QRootElement alloc] init];
-    rootElement.title = OALocalizedString(@"My favorites");
-    rootElement.grouped = YES;
-    rootElement.appearance.entryAlignment = NSTextAlignmentRight;
-
-    if (!groupNames.isEmpty())
-    {
-        QSection* groupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Groups")];
-        [rootElement addSection:groupsSection];
-
-        for (const auto& groupName : groupNames)
-        {
-            GroupItemData* itemData = [[GroupItemData alloc] init];
-            itemData.groupName = groupName.toNSString();
-            itemData.favorites = groupedFavorites[groupName];
-
-            QLabelElement* groupElement = [[QLabelElement alloc] initWithTitle:itemData.groupName
-                                                                         Value:nil];
-            groupElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            groupElement.keepSelected = NO;
-            groupElement.controllerAction = NSStringFromSelector(@selector(onManageGroup:));
-            groupElement.object = itemData;
-            [groupsSection addElement:groupElement];
-        }
-
-        // Sort by title
-        [groupsSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            QLabelElement* element1 = (QLabelElement*)obj1;
-            QLabelElement* element2 = (QLabelElement*)obj2;
-
-            return [element1.title localizedCaseInsensitiveCompare:element2.title];
-        }];
-    }
-
-    if (!ungroupedFavorites.isEmpty())
-    {
-        QSection* ungroupedFavoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
-        ungroupedFavoritesSection.canDeleteRows = YES;
-        [rootElement addSection:ungroupedFavoritesSection];
-
-        for (const auto& favorite : ungroupedFavorites)
-        {
-            FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
-            itemData.favorite = favorite;
-
-            QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
-                                                                            Value:nil];
-            favoriteElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            favoriteElement.controllerAction = NSStringFromSelector(@selector(onEditFavorite:));
-            favoriteElement.object = itemData;
-            [ungroupedFavoritesSection addElement:favoriteElement];
-        }
-
-        // Sort by title
-        [ungroupedFavoritesSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            QLabelElement* element1 = (QLabelElement*)obj1;
-            QLabelElement* element2 = (QLabelElement*)obj2;
-
-            return [element1.title localizedCaseInsensitiveCompare:element2.title];
-        }];
-    }
-
-    if ([rootElement.sections count] == 0)
-    {
-        QSection* fakeSection = [[QSection alloc] init];
-        [rootElement addSection:fakeSection];
-
-        QEmptyListElement* emptyListElement = [[QEmptyListElement alloc] initWithTitle:OALocalizedString(@"You haven't saved any favorites yet")
-                                                                                 Value:nil];
-        [fakeSection addElement:emptyListElement];
-    }
-
-    self = [super initWithRoot:rootElement];
+    self = [super initWithRoot:[OAManageFavoritesViewController inflateRoot]];
     if (self) {
-        _app = app;
+        _app = [OsmAndApp instance];
 
+        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                       withHandler:@selector(onFavoritesCollectionChanged)
+                                                                        andObserve:_app.favoritesCollectionChangedObservable];
+        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onFavoriteChanged)
+                                                             andObserve:_app.favoriteChangedObservable];
+        _contentIsInvalidated = NO;
         _groupName = nil;
         
         [self inflateEditToolbarItems];
@@ -157,42 +80,16 @@
 
 - (instancetype)initWithGroupTitle:(NSString*)groupTitle andFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-
-    QRootElement* rootElement = [[QRootElement alloc] init];
-    rootElement.title = groupTitle;
-    rootElement.grouped = YES;
-    rootElement.appearance.entryAlignment = NSTextAlignmentRight;
-
-    QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
-    favoritesSection.canDeleteRows = YES;
-    [rootElement addSection:favoritesSection];
-
-    for (const auto& favorite : favorites)
-    {
-        FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
-        itemData.favorite = favorite;
-
-        QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
-                                                                        Value:nil];
-        favoriteElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        favoriteElement.controllerAction = NSStringFromSelector(@selector(onEditFavorite:));
-        favoriteElement.object = itemData;
-        [favoritesSection addElement:favoriteElement];
-    }
-
-    // Sort by title
-    [favoritesSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        QLabelElement* element1 = (QLabelElement*)obj1;
-        QLabelElement* element2 = (QLabelElement*)obj2;
-
-        return [element1.title localizedCaseInsensitiveCompare:element2.title];
-    }];
-
-    self = [super initWithRoot:rootElement];
+    self = [super initWithRoot:[OAManageFavoritesViewController inflateGroup:groupTitle withFavorites:favorites]];
     if (self) {
-        _app = app;
-
+        _app = [OsmAndApp instance];
+        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                       withHandler:@selector(onFavoritesCollectionChanged)
+                                                                        andObserve:_app.favoritesCollectionChangedObservable];
+        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onFavoriteChanged)
+                                                             andObserve:_app.favoriteChangedObservable];
+        _contentIsInvalidated = NO;
         _groupName = groupTitle;
 
         [self inflateEditToolbarItems];
@@ -214,6 +111,48 @@
     // Initially disable edit mode
     [self setEditing:NO
             animated:NO];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    // If content was invalidated while view was in background, update it's content right now
+    if (_contentIsInvalidated)
+    {
+        [self updateContent];
+
+        _contentIsInvalidated = NO;
+    }
+}
+
+- (void)updateContent
+{
+    if (_groupName == nil)
+        [self setRoot:[OAManageFavoritesViewController inflateRoot]];
+    else
+    {
+        const auto allFavorites = _app.favoritesCollection->getFavoriteLocations();
+        QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > favorites;
+        for(const auto& favorite : allFavorites)
+        {
+            const auto& groupName = favorite->getGroup();
+            if (![_groupName isEqualToString:groupName.toNSString()])
+                continue;
+
+            favorites.push_back(favorite);
+        }
+
+        // In case this group no longer exist, go back
+        if (favorites.isEmpty())
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+
+        [self setRoot:[OAManageFavoritesViewController inflateGroup:_groupName
+                                                      withFavorites:favorites]];
+    }
 }
 
 - (void)inflateEditToolbarItems
@@ -388,6 +327,28 @@
                                          animated:YES];
 }
 
+- (void)onFavoritesCollectionChanged
+{
+    if (!self.isViewLoaded || self.view.window == nil)
+    {
+        _contentIsInvalidated = YES;
+        return;
+    }
+
+    [self updateContent];
+}
+
+- (void)onFavoriteChanged
+{
+    if (!self.isViewLoaded || self.view.window == nil)
+    {
+        _contentIsInvalidated = YES;
+        return;
+    }
+
+    [self updateContent];
+}
+
 #pragma mark - UIDocumentInteractionControllerDelegate
 
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
@@ -403,5 +364,135 @@
 }
 
 #pragma mark -
+
++ (QRootElement*)inflateRoot
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+
+    const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
+    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
+    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > ungroupedFavorites;
+    QSet<QString> groupNames;
+    for(const auto& favorite : allFavorites)
+    {
+        const auto& groupName = favorite->getGroup();
+        if (groupName.isEmpty())
+            ungroupedFavorites.push_back(favorite);
+        else
+        {
+            groupNames.insert(groupName);
+            groupedFavorites[groupName].push_back(favorite);
+        }
+    }
+
+    QRootElement* rootElement = [[QRootElement alloc] init];
+    rootElement.title = OALocalizedString(@"My favorites");
+    rootElement.grouped = YES;
+    rootElement.appearance.entryAlignment = NSTextAlignmentRight;
+
+    if (!groupNames.isEmpty())
+    {
+        QSection* groupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Groups")];
+        [rootElement addSection:groupsSection];
+
+        for (const auto& groupName : groupNames)
+        {
+            GroupItemData* itemData = [[GroupItemData alloc] init];
+            itemData.groupName = groupName.toNSString();
+            itemData.favorites = groupedFavorites[groupName];
+
+            QLabelElement* groupElement = [[QLabelElement alloc] initWithTitle:itemData.groupName
+                                                                         Value:nil];
+            groupElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            groupElement.keepSelected = NO;
+            groupElement.controllerAction = NSStringFromSelector(@selector(onManageGroup:));
+            groupElement.object = itemData;
+            [groupsSection addElement:groupElement];
+        }
+
+        // Sort by title
+        [groupsSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            QLabelElement* element1 = (QLabelElement*)obj1;
+            QLabelElement* element2 = (QLabelElement*)obj2;
+
+            return [element1.title localizedCaseInsensitiveCompare:element2.title];
+        }];
+    }
+
+    if (!ungroupedFavorites.isEmpty())
+    {
+        QSection* ungroupedFavoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
+        ungroupedFavoritesSection.canDeleteRows = YES;
+        [rootElement addSection:ungroupedFavoritesSection];
+
+        for (const auto& favorite : ungroupedFavorites)
+        {
+            FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
+            itemData.favorite = favorite;
+
+            QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
+                                                                            Value:nil];
+            favoriteElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            favoriteElement.controllerAction = NSStringFromSelector(@selector(onEditFavorite:));
+            favoriteElement.object = itemData;
+            [ungroupedFavoritesSection addElement:favoriteElement];
+        }
+
+        // Sort by title
+        [ungroupedFavoritesSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            QLabelElement* element1 = (QLabelElement*)obj1;
+            QLabelElement* element2 = (QLabelElement*)obj2;
+
+            return [element1.title localizedCaseInsensitiveCompare:element2.title];
+        }];
+    }
+
+    if ([rootElement.sections count] == 0)
+    {
+        QSection* fakeSection = [[QSection alloc] init];
+        [rootElement addSection:fakeSection];
+
+        QEmptyListElement* emptyListElement = [[QEmptyListElement alloc] initWithTitle:OALocalizedString(@"You haven't saved any favorites yet")
+                                                                                 Value:nil];
+        [fakeSection addElement:emptyListElement];
+    }
+
+    return rootElement;
+}
+
++ (QRootElement*)inflateGroup:(NSString*)groupTitle withFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
+{
+    QRootElement* rootElement = [[QRootElement alloc] init];
+    rootElement.title = groupTitle;
+    rootElement.grouped = YES;
+    rootElement.appearance.entryAlignment = NSTextAlignmentRight;
+
+    QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
+    favoritesSection.canDeleteRows = YES;
+    [rootElement addSection:favoritesSection];
+
+    for (const auto& favorite : favorites)
+    {
+        FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
+        itemData.favorite = favorite;
+
+        QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
+                                                                        Value:nil];
+        favoriteElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        favoriteElement.controllerAction = NSStringFromSelector(@selector(onEditFavorite:));
+        favoriteElement.object = itemData;
+        [favoritesSection addElement:favoriteElement];
+    }
+
+    // Sort by title
+    [favoritesSection.elements sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        QLabelElement* element1 = (QLabelElement*)obj1;
+        QLabelElement* element2 = (QLabelElement*)obj2;
+
+        return [element1.title localizedCaseInsensitiveCompare:element2.title];
+    }];
+
+    return rootElement;
+}
 
 @end

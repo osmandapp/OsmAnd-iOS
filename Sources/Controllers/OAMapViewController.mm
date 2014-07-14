@@ -1306,4 +1306,62 @@
     }
 }
 
+- (void)goToPosition:(Point31)position31
+            animated:(BOOL)animated
+{
+    if (![self isViewLoaded])
+        return;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    // In case we're in "follow-me" mode, switch to "position-tracking"
+    if (_app.mapMode == OAMapModeFollow)
+        _app.mapMode = OAMapModePositionTrack;
+
+    if (animated)
+    {
+        mapView.animator->cancelAnimation();
+        mapView.animator->parabolicAnimateTargetTo([OANativeUtilities convertFromPoint31:position31],
+                                                   kQuickAnimationTime,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+        mapView.animator->resumeAnimation();
+    }
+    else
+    {
+        [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+    }
+}
+
+- (void)goToPosition:(Point31)position31
+             andZoom:(CGFloat)zoom
+            animated:(BOOL)animated
+{
+    if (![self isViewLoaded])
+        return;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    // In case we're in "follow-me" mode, switch to "position-tracking"
+    if (_app.mapMode == OAMapModeFollow)
+        _app.mapMode = OAMapModePositionTrack;
+
+    if (animated)
+    {
+        mapView.animator->cancelAnimation();
+        mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+                                          kQuickAnimationTime,
+                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+        mapView.animator->animateZoomTo(zoom,
+                                        kQuickAnimationTime,
+                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+        mapView.animator->resumeAnimation();
+    }
+    else
+    {
+        [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+        [mapView setZoom:zoom];
+    }
+}
+
 @end

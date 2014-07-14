@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define kDefaultFavoriteZoom 15.0f
+
 @interface OADefaultFavorite : NSObject
 
 + (NSArray*)builtinColors;

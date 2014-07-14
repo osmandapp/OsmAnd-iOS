@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+#import "OACommonTypes.h"
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
@@ -25,5 +26,11 @@
 - (void)animatedZoomIn;
 - (BOOL)canZoomOut;
 - (void)animatedZoomOut;
+
+- (void)goToPosition:(Point31)position31
+            animated:(BOOL)animated;
+- (void)goToPosition:(Point31)position31
+             andZoom:(CGFloat)zoom
+            animated:(BOOL)animated;
 
 @end

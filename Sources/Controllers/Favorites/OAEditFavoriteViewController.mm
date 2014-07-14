@@ -187,7 +187,9 @@
 
     // Close everything
     [rootViewController closeMenuAndPanelsAnimated:YES];
-//TODO:    [rootViewController.mapPanel.mapViewController gotobloabloalboa
+    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:_favorite->getPosition()]
+                                                        andZoom:kDefaultFavoriteZoom
+                                                       animated:YES];
 }
 
 - (void)onShare

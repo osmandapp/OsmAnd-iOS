@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#include "CommonTypes.h"
+#import "OACommonTypes.h"
 
 @interface OAMapViewState : NSObject <NSCoding>
 

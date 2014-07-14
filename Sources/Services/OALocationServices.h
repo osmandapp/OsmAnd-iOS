@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#import "CommonTypes.h"
+#import "OACommonTypes.h"
 #import "OAObservable.h"
 
 typedef NS_ENUM(NSUInteger, OALocationServicesStatus)

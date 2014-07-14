@@ -633,7 +633,7 @@
 		BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = OAAutoObserverProxy.m; path = Common/OAAutoObserverProxy.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		BBBDADA918BC965100E4A359 /* OAObservable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAObservable.h; path = Common/OAObservable.h; sourceTree = "<group>"; };
 		BBBDADAA18BC965100E4A359 /* OAObservable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAObservable.m; path = Common/OAObservable.m; sourceTree = "<group>"; };
-		BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonTypes.h; sourceTree = "<group>"; };
+		BBBDADB418BCC3FA00E4A359 /* OACommonTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACommonTypes.h; sourceTree = "<group>"; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		BBBE454D1856544000F1C144 /* ExternalResourcesProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ExternalResourcesProvider.h; path = Core/ExternalResourcesProvider.h; sourceTree = "<group>"; };
 		BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ExternalResourcesProvider.mm; path = Core/ExternalResourcesProvider.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -801,7 +801,7 @@
 				BB451EA418E19293005FBE09 /* Data */,
 				BB451EB518E1937C005FBE09 /* Services */,
 				BBAD5B97192733820043590F /* Helpers */,
-				BBBDADB418BCC3FA00E4A359 /* CommonTypes.h */,
+				BBBDADB418BCC3FA00E4A359 /* OACommonTypes.h */,
 				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
 				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
 				BB32C030192354BA007999A0 /* OADownloadsManager.h */,

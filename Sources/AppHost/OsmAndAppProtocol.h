@@ -10,7 +10,7 @@
 
 #import <TTTLocationFormatter.h>
 
-#include "CommonTypes.h"
+#import "OACommonTypes.h"
 #import "OAObservable.h"
 #import "OAAppData.h"
 #import "OALocationServices.h"

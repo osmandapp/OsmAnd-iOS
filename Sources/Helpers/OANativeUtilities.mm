@@ -41,4 +41,20 @@
     return array;
 }
 
++ (Point31)convertFromPointI:(OsmAnd::PointI)input
+{
+    Point31 output;
+    output.x = input.x;
+    output.y = input.y;
+    return output;
+}
+
++ (OsmAnd::PointI)convertFromPoint31:(Point31)input
+{
+    OsmAnd::PointI output;
+    output.x = input.x;
+    output.y = input.y;
+    return output;
+}
+
 @end

@@ -182,6 +182,12 @@
     [regionsLookupTable setValue:northAmericaRegion forKey:northAmericaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::NorthAmericaRegionId);
 
+    OAWorldRegion* russiaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::RussiaRegionId.toNSString()
+                                                   andLocalizedName:OALocalizedString(@"Russia")];
+    [entireWorld addSubregion:russiaRegion];
+    [regionsLookupTable setValue:russiaRegion forKey:russiaRegion.regionId];
+    loadedWorldRegions.remove(OsmAnd::WorldRegions::RussiaRegionId);
+
     OAWorldRegion* southAmericaRegion = [[OAWorldRegion alloc] initWithId:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()
                                                          andLocalizedName:OALocalizedString(@"South America")];
     [entireWorld addSubregion:southAmericaRegion];

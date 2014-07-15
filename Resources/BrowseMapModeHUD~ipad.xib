@@ -6,7 +6,7 @@
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapModeHudViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABrowseMapModeHudViewController">
             <connections>
                 <outlet property="actionsMenuButton" destination="eDo-iY-wKm" id="8qk-98-E1H"/>
                 <outlet property="compassBox" destination="zDY-H9-DjN" id="g2g-jI-ch2"/>

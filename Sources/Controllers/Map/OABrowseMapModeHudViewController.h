@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAMapModeHudViewController : UIViewController
+@interface OABrowseMapModeHudViewController : UIViewController
 
 @end

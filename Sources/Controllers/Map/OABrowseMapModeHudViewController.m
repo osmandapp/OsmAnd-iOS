@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAMapModeHudViewController.h"
+#import "OABrowseMapModeHudViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -22,7 +22,7 @@
 #define ctor _(ctor)
 #define dtor _(dtor)
 
-@interface OAMapModeHudViewController ()
+@interface OABrowseMapModeHudViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
@@ -38,7 +38,7 @@
 
 @end
 
-@implementation OAMapModeHudViewController
+@implementation OABrowseMapModeHudViewController
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy* _mapModeObserver;

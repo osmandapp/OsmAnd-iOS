@@ -8,7 +8,7 @@
 
 #import "OAMapPanelViewController.h"
 
-#import "OAMapModeHudViewController.h"
+#import "OABrowseMapModeHudViewController.h"
 #import "OALog.h"
 
 #define _(name) OAMapPanelViewController__##name
@@ -55,7 +55,7 @@
                                                                         views:@{@"view":_mapViewController.view}]];
     
     // Instantiate map HUD
-    UIViewController* mapHudVC = [[OAMapModeHudViewController alloc] initWithNibName:@"MapModeHUD"
+    UIViewController* mapHudVC = [[OABrowseMapModeHudViewController alloc] initWithNibName:@"BrowseMapModeHUD"
                                                                               bundle:nil];
     [self addChildViewController:mapHudVC];
     [mapHudVC.view setTranslatesAutoresizingMaskIntoConstraints:NO];

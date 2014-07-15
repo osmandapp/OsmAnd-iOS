@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAWorldRegion.h"
+#import "OALog.h"
 #include "Localization.h"
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -162,7 +163,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     [_searchableSubregionItems removeAllObjects];
     [_subregionItems removeAllObjects];
-    for(OAWorldRegion* subregion in _region.subregions)
+    for(OAWorldRegion* subregion in _region.flattenedSubregions)
     {
         BOOL isEmpty = YES;
 
@@ -173,21 +174,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
                                                                               thatContainsResource:resource->id];
+                if (!match)
+                    continue;
 
-                if (match)
+                OAWorldRegion* intermediateRegion = match;
+                while (intermediateRegion != subregion && intermediateRegion != nil)
                 {
-                    OAWorldRegion* intermediateRegion = match;
-                    while (intermediateRegion != subregion && intermediateRegion != nil)
-                    {
-                        if (![_searchableSubregionItems containsObject:intermediateRegion])
-                            [_searchableSubregionItems addObject:intermediateRegion];
-
-                        intermediateRegion = intermediateRegion.superregion;
-                    }
+                    if (![_searchableSubregionItems containsObject:intermediateRegion])
+                        [_searchableSubregionItems addObject:intermediateRegion];
                     
-                    isEmpty = NO;
-                    break;
+                    intermediateRegion = intermediateRegion.superregion;
                 }
+                
+                isEmpty = NO;
+                break;
             }
         }
 
@@ -198,31 +198,34 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
                                                                               thatContainsResource:resource->id];
+                if (!match)
+                    continue;
 
-                if (match)
+                OAWorldRegion* intermediateRegion = match;
+                while (intermediateRegion != subregion && intermediateRegion != nil)
                 {
-                    OAWorldRegion* intermediateRegion = match;
-                    while (intermediateRegion != subregion && intermediateRegion != nil)
-                    {
-                        if (![_searchableSubregionItems containsObject:intermediateRegion])
-                            [_searchableSubregionItems addObject:intermediateRegion];
-
-                        intermediateRegion = intermediateRegion.superregion;
-                    }
-
-                    isEmpty = NO;
-                    break;
+                    if (![_searchableSubregionItems containsObject:intermediateRegion])
+                        [_searchableSubregionItems addObject:intermediateRegion];
+                    
+                    intermediateRegion = intermediateRegion.superregion;
                 }
+                
+                isEmpty = NO;
+                break;
             }
         }
 
         // If subregion has nothing to offer, skip it
         if (isEmpty)
+        {
+            OALog(@"Region %@ (%@) was skipped since it has no downloads", subregion.name, subregion.regionId);
             continue;
+        }
 
         if (![_searchableSubregionItems containsObject:subregion])
             [_searchableSubregionItems addObject:subregion];
-        [_subregionItems addObject:subregion];
+        if (subregion.superregion == _region)
+            [_subregionItems addObject:subregion];
     }
     [_searchableSubregionItems sortUsingSelector:@selector(compare:)];
     [_subregionItems sortUsingSelector:@selector(compare:)];

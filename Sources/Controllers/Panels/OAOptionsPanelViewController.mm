@@ -74,7 +74,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kLayersSection_Favorites 0
 #define kOptionsSection 2
 #define kOptionsSection_SettingsRow 0
-#define kOptionsSection_DownloadsRow 1
+#define kOptionsSection_MapsAndResourcesRow 1
 #define kOptionsSection_MyDataRow 2
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -393,10 +393,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                     caption = OALocalizedString(@"Settings");
                     icon = [UIImage imageNamed:@"menu_item_settings_icon.png"];
                     break;
-                case kOptionsSection_DownloadsRow:
+                case kOptionsSection_MapsAndResourcesRow:
                     cellTypeId = submenuCell;
-                    caption = OALocalizedString(@"Downloads");
-                    icon = [UIImage imageNamed:@"menu_item_downloads_icon.png"];
+                    caption = OALocalizedString(@"Maps & resources");
+                    icon = [UIImage imageNamed:@"menu_item_maps_and_resources_icon.png"];
                     break;
                 case kOptionsSection_MyDataRow:
                     cellTypeId = submenuWithDetailsCell;
@@ -460,7 +460,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             case kOptionsSection_SettingsRow:
                 OALog(@"open settings menu");
                 break;
-            case kOptionsSection_DownloadsRow:
+            case kOptionsSection_MapsAndResourcesRow:
                 [self openMenu:[[UIStoryboard storyboardWithName:@"Downloads" bundle:nil] instantiateInitialViewController]
                      forCellAt:indexPath];
                 break;

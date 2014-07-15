@@ -1,5 +1,5 @@
 //
-//  OAMapHudViewController.h
+//  OABrowseMapAppModeHudViewController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OABrowseMapModeHudViewController : UIViewController
+@interface OABrowseMapAppModeHudViewController : UIViewController
 
 @end

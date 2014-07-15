@@ -10,7 +10,7 @@
 
 #import "OAWorldRegion.h"
 
-@interface OADownloadsBaseViewController : UIViewController <UITableViewDelegate, UITableViewDataSource>
+@interface OADownloadsBaseViewController : UIViewController 
 
 @property(weak, nonatomic) IBOutlet UITableView *tableView;
 

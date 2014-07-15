@@ -1,5 +1,5 @@
 //
-//  OAMapSourcesListViewController.m
+//  OAMapSourcesListViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 3/28/14.

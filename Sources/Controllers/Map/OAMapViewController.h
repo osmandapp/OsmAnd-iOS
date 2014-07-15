@@ -1,5 +1,5 @@
 //
-//  OAMapRendererController.h
+//  OAMapViewController.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/18/13.

@@ -68,18 +68,6 @@
     self.worldRegion = _app.worldRegion;
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    ((OADownloadsTabBarViewController *)self.tabBarController).refreshBtnDelegate = self;
-}
-
 - (void)showNoInternetAlert
 {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"No Internet connection")

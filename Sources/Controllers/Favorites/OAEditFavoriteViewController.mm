@@ -1,5 +1,5 @@
 //
-//  OAEditFavoriteViewController.m
+//  OAEditFavoriteViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/10/14.

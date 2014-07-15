@@ -1,5 +1,5 @@
 //
-//  OADebugHudViewController.m
+//  OADebugHudViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 3/28/14.

@@ -1,5 +1,5 @@
 //
-//  OAFavoritesLayerViewController.m
+//  OAFavoritesLayerViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/14/14.

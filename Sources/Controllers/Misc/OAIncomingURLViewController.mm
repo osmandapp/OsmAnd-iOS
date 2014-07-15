@@ -1,5 +1,5 @@
 //
-//  OAIncomingURLViewController.m
+//  OAIncomingURLViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/9/14.

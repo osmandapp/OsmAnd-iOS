@@ -214,8 +214,8 @@
 		BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
 		BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
-		BB451F1118EB34A5005FBE09 /* Downloads.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Downloads.storyboard */; };
-		BB451F1218EB34A5005FBE09 /* Downloads.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Downloads.storyboard */; };
+		BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		BB451F1218EB34A5005FBE09 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F1818EB3F0C005FBE09 /* OATableViewCellWithButton.m */; };
 		BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F1818EB3F0C005FBE09 /* OATableViewCellWithButton.m */; };
 		BB476B6A18D4C7D90044D5E1 /* DriveAppModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6918D4C7D90044D5E1 /* DriveAppModeHUD.xib */; };
@@ -285,20 +285,8 @@
 		BBA3AEDC197500EF0039D991 /* OAMapSourcesListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDA197500EF0039D991 /* OAMapSourcesListViewController.mm */; };
 		BBA3AEE0197501090039D991 /* OAIncomingURLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */; };
 		BBA3AEE1197501090039D991 /* OAIncomingURLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */; };
-		BBA3AEF1197501330039D991 /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */; };
-		BBA3AEF2197501330039D991 /* OADownloadsBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */; };
-		BBA3AEF3197501330039D991 /* OADownloadsTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE6197501330039D991 /* OADownloadsTabBarViewController.m */; };
-		BBA3AEF4197501330039D991 /* OADownloadsTabBarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE6197501330039D991 /* OADownloadsTabBarViewController.m */; };
-		BBA3AEF5197501330039D991 /* OADownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */; };
-		BBA3AEF6197501330039D991 /* OADownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */; };
 		BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */; };
 		BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */; };
-		BBA3AEF9197501330039D991 /* OARegionDownloadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEC197501330039D991 /* OARegionDownloadsViewController.m */; };
-		BBA3AEFA197501330039D991 /* OARegionDownloadsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEC197501330039D991 /* OARegionDownloadsViewController.m */; };
-		BBA3AEFB197501330039D991 /* OAShowDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEE197501330039D991 /* OAShowDownloadsViewController.mm */; };
-		BBA3AEFC197501330039D991 /* OAShowDownloadsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEE197501330039D991 /* OAShowDownloadsViewController.mm */; };
-		BBA3AEFD197501330039D991 /* OAShowUpdatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEF0197501330039D991 /* OAShowUpdatesViewController.mm */; };
-		BBA3AEFE197501330039D991 /* OAShowUpdatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEF0197501330039D991 /* OAShowUpdatesViewController.mm */; };
 		BBA3AF061975016F0039D991 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */; };
 		BBA3AF071975016F0039D991 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */; };
 		BBA3AF081975016F0039D991 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF031975016F0039D991 /* OAMapPanelViewController.m */; };
@@ -309,6 +297,8 @@
 		BBA3AF15197507010039D991 /* menu_item_maps_and_resources_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA3AF12197507010039D991 /* menu_item_maps_and_resources_icon.png */; };
 		BBA3AF16197507010039D991 /* menu_item_maps_and_resources_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA3AF13197507010039D991 /* menu_item_maps_and_resources_icon@2x.png */; };
 		BBA3AF17197507010039D991 /* menu_item_maps_and_resources_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA3AF13197507010039D991 /* menu_item_maps_and_resources_icon@2x.png */; };
+		BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */; };
+		BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -488,7 +478,7 @@
 		BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithSwitch.h; path = Views/OATableViewCellWithSwitch.h; sourceTree = "<group>"; };
 		BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithSwitch.m; path = Views/OATableViewCellWithSwitch.m; sourceTree = "<group>"; };
 		BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewProtocol.h; path = Views/OAMapRendererViewProtocol.h; sourceTree = "<group>"; };
-		BB451F1018EB34A5005FBE09 /* Downloads.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Downloads.storyboard; path = Resources/Downloads.storyboard; sourceTree = "<group>"; };
+		BB451F1018EB34A5005FBE09 /* Resources.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Resources.storyboard; path = Resources/Resources.storyboard; sourceTree = "<group>"; };
 		BB451F1718EB3F0C005FBE09 /* OATableViewCellWithButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithButton.h; path = Views/OATableViewCellWithButton.h; sourceTree = "<group>"; };
 		BB451F1818EB3F0C005FBE09 /* OATableViewCellWithButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithButton.m; path = Views/OATableViewCellWithButton.m; sourceTree = "<group>"; };
 		BB476B6918D4C7D90044D5E1 /* DriveAppModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = DriveAppModeHUD.xib; path = Resources/DriveAppModeHUD.xib; sourceTree = "<group>"; };
@@ -555,8 +545,6 @@
 		BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIncomingURLViewController.mm; path = Controllers/Misc/OAIncomingURLViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE3197501330039D991 /* OADownloadsBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsBaseViewController.h; path = Controllers/Resources/OADownloadsBaseViewController.h; sourceTree = "<group>"; };
 		BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/Resources/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
-		BBA3AEE5197501330039D991 /* OADownloadsTabBarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsTabBarViewController.h; path = Controllers/Resources/OADownloadsTabBarViewController.h; sourceTree = "<group>"; };
-		BBA3AEE6197501330039D991 /* OADownloadsTabBarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadsTabBarViewController.m; path = Controllers/Resources/OADownloadsTabBarViewController.m; sourceTree = "<group>"; };
 		BBA3AEE7197501330039D991 /* OADownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsViewController.h; path = Controllers/Resources/OADownloadsViewController.h; sourceTree = "<group>"; };
 		BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsViewController.mm; path = Controllers/Resources/OADownloadsViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInformationViewController.h; path = Controllers/Resources/OALocalResourceInformationViewController.h; sourceTree = "<group>"; };
@@ -575,6 +563,8 @@
 		BBA3AF051975016F0039D991 /* OAOptionsPanelViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOptionsPanelViewController.mm; path = Controllers/Panels/OAOptionsPanelViewController.mm; sourceTree = "<group>"; };
 		BBA3AF12197507010039D991 /* menu_item_maps_and_resources_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_maps_and_resources_icon.png; sourceTree = "<group>"; };
 		BBA3AF13197507010039D991 /* menu_item_maps_and_resources_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_maps_and_resources_icon@2x.png"; sourceTree = "<group>"; };
+		BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAManageResourcesViewController.h; path = Controllers/Resources/OAManageResourcesViewController.h; sourceTree = "<group>"; };
+		BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAManageResourcesViewController.mm; path = Controllers/Resources/OAManageResourcesViewController.mm; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -1030,14 +1020,14 @@
 		BBA3AEE2197501260039D991 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				BBA3AEE3197501330039D991 /* OADownloadsBaseViewController.h */,
-				BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */,
-				BBA3AEE5197501330039D991 /* OADownloadsTabBarViewController.h */,
-				BBA3AEE6197501330039D991 /* OADownloadsTabBarViewController.m */,
-				BBA3AEE7197501330039D991 /* OADownloadsViewController.h */,
-				BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */,
 				BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */,
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
+				BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */,
+				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
+				BBA3AEE3197501330039D991 /* OADownloadsBaseViewController.h */,
+				BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */,
+				BBA3AEE7197501330039D991 /* OADownloadsViewController.h */,
+				BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */,
 				BBA3AEEB197501330039D991 /* OARegionDownloadsViewController.h */,
 				BBA3AEEC197501330039D991 /* OARegionDownloadsViewController.m */,
 				BBA3AEED197501330039D991 /* OAShowDownloadsViewController.h */,
@@ -1165,7 +1155,7 @@
 				BB476B6F18D4C83E0044D5E1 /* NavigationAppModeHUD~ipad.xib */,
 				BB451DDD18D8DB48005FBE09 /* OptionsPanel.storyboard */,
 				BB451EDD18E37417005FBE09 /* MapSources.storyboard */,
-				BB451F1018EB34A5005FBE09 /* Downloads.storyboard */,
+				BB451F1018EB34A5005FBE09 /* Resources.storyboard */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */,
 				BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */,
@@ -1322,7 +1312,7 @@
 				BB451DCD18D70B5B005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
-				BB451F1118EB34A5005FBE09 /* Downloads.storyboard in Resources */,
+				BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				BBA3AEA3196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
 				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
@@ -1428,7 +1418,7 @@
 				BB451E7E18DCD224005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				BB451E7F18DCD224005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BB451EDC18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
-				BB451F1218EB34A5005FBE09 /* Downloads.storyboard in Resources */,
+				BB451F1218EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				BBA3AEA4196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
 				BB451E8018DCD224005FBE09 /* Icon@2x.png in Resources */,
 				BB451E8118DCD224005FBE09 /* Icon.png in Resources */,
@@ -1556,8 +1546,8 @@
 				BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
+				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
-				BBA3AEF5197501330039D991 /* OADownloadsViewController.mm in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -1566,20 +1556,17 @@
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AF061975016F0039D991 /* OAContextPanelViewController.m in Sources */,
-				BBA3AEF9197501330039D991 /* OARegionDownloadsViewController.m in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BBA3AEDB197500EF0039D991 /* OAMapSourcesListViewController.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BBA3AE92196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BBA3AEB0196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */,
-				BBA3AEF1197501330039D991 /* OADownloadsBaseViewController.mm in Sources */,
 				BBA3AEE0197501090039D991 /* OAIncomingURLViewController.mm in Sources */,
 				BBA3AE97196D57BA0039D991 /* OAMyDataViewController.m in Sources */,
 				BB32C032192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BBA3AECD197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */,
 				BBA3AED4197500DE0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
-				BBA3AEFD197501330039D991 /* OAShowUpdatesViewController.mm in Sources */,
 				BBA3AEAC196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBE1D2A9190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
 				BBB97DE51908D1EC0067F4A0 /* OAMapSource.m in Sources */,
@@ -1595,11 +1582,9 @@
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BBA3AED6197500DE0039D991 /* OAMapViewController.mm in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
-				BBA3AEF3197501330039D991 /* OADownloadsTabBarViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
 				BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
-				BBA3AEFB197501330039D991 /* OAShowDownloadsViewController.mm in Sources */,
 				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
@@ -1617,9 +1602,9 @@
 				BB32C03C192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
+				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
-				BBA3AEF6197501330039D991 /* OADownloadsViewController.mm in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -1628,20 +1613,17 @@
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AF071975016F0039D991 /* OAContextPanelViewController.m in Sources */,
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
-				BBA3AEFA197501330039D991 /* OARegionDownloadsViewController.m in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BBA3AEDC197500EF0039D991 /* OAMapSourcesListViewController.mm in Sources */,
 				BB32C033192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BBA3AEB1196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */,
-				BBA3AEF2197501330039D991 /* OADownloadsBaseViewController.mm in Sources */,
 				BBA3AEE1197501090039D991 /* OAIncomingURLViewController.mm in Sources */,
 				BBA3AE98196D57BA0039D991 /* OAMyDataViewController.m in Sources */,
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
 				BBA3AECE197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				BBA3AED5197500DE0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
 				BBE1D2AA190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
-				BBA3AEFE197501330039D991 /* OAShowUpdatesViewController.mm in Sources */,
 				BBB97DE61908D1EC0067F4A0 /* OAMapSource.m in Sources */,
 				BBA3AEAD196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBA3AF091975016F0039D991 /* OAMapPanelViewController.m in Sources */,
@@ -1657,11 +1639,9 @@
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				BBA3AED7197500DE0039D991 /* OAMapViewController.mm in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
-				BBA3AEF4197501330039D991 /* OADownloadsTabBarViewController.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
 				BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
-				BBA3AEFC197501330039D991 /* OAShowDownloadsViewController.mm in Sources */,
 				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,

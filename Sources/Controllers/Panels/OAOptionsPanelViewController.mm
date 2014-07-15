@@ -1,5 +1,5 @@
 //
-//  OAOptionsPanelViewController.m
+//  OAOptionsPanelViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/20/13.
@@ -395,7 +395,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                     break;
                 case kOptionsSection_MapsAndResourcesRow:
                     cellTypeId = submenuCell;
-                    caption = OALocalizedString(@"Maps & resources");
+                    caption = OALocalizedString(@"Maps & Resources");
                     icon = [UIImage imageNamed:@"menu_item_maps_and_resources_icon.png"];
                     break;
                 case kOptionsSection_MyDataRow:
@@ -461,7 +461,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 OALog(@"open settings menu");
                 break;
             case kOptionsSection_MapsAndResourcesRow:
-                [self openMenu:[[UIStoryboard storyboardWithName:@"Downloads" bundle:nil] instantiateInitialViewController]
+                [self openMenu:[[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController]
                      forCellAt:indexPath];
                 break;
             case kOptionsSection_MyDataRow:

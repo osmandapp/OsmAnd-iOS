@@ -1,5 +1,5 @@
 //
-//  OAManageFavoritesViewController.m
+//  OAManageFavoritesViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/10/14.

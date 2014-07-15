@@ -40,7 +40,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @implementation OutdatedResourceItem
 @end
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
 @property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *filterControl;
@@ -454,6 +454,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     [tableView deselectRowAtIndexPath:indexPath animated:true];
      */
+}
+
+#pragma mark - UISearchDisplayDelegate
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
+{
+    return YES;
+}
+
+- (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
+{
+    return YES;
 }
 
 #pragma mark - Navigation

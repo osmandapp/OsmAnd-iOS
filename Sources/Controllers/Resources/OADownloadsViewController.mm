@@ -35,7 +35,7 @@
 
     BOOL _isLoadingRepository;
 
-    NSArray* _searchResults;
+    
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -80,48 +80,12 @@
                        otherButtonItems:nil] show];
 }
 
-- (void)filterContentForSearchText:(NSString*)searchString
-{
-    NSMutableArray *beginsWith = [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:
-                           [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", @"name", searchString]] mutableCopy];
-    [beginsWith sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        OAWorldRegion *item1 = obj1;
-        OAWorldRegion *item2 = obj2;
-        
-        return [item1.name localizedCaseInsensitiveCompare:item2.name];
-    }];
-    
-    NSMutableArray *contains = [[_app.worldRegion.flattenedSubregions filteredArrayUsingPredicate:
-                          [NSPredicate predicateWithFormat:@"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)", searchString]] mutableCopy];
-
-    [contains sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        OAWorldRegion *item1 = obj1;
-        OAWorldRegion *item2 = obj2;
-        
-        return [item1.name localizedCaseInsensitiveCompare:item2.name];
-    }];
-    
-    [beginsWith addObjectsFromArray:contains];
-
-    _searchResults = [beginsWith copy];
-}
 
 #pragma mark - OAMenuViewControllerProtocol
 
 @synthesize menuHostViewController = _menuHostViewController;
 
 #pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        return 1;
-
-    if (_isLoadingRepository)
-        return 0; // No sections at all
-
-    return [super numberOfSectionsInTableView:tableView];
-}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

@@ -42,8 +42,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
-@property (weak, nonatomic) IBOutlet UISearchBar *searchBar;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *filterControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateIndicator;
 
@@ -70,6 +68,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSInteger _resourcesSection;
     NSMutableArray* _resourceItems;
+
+    NSString* _lastSearchString;
+    NSInteger _lastSearchScope;
+    NSArray* _searchResults;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -85,6 +87,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _searchableSubregionItems = [NSMutableArray array];
         _subregionItems = [NSMutableArray array];
         _resourceItems = [NSMutableArray array];
+
+        _lastSearchString = @"";
+        _lastSearchScope = 0;
+        _searchResults = nil;
     }
     return self;
 }
@@ -246,10 +252,45 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 */
+
+- (void)performSearchForSearchString:(NSString*)searchString
+                      andSearchScope:(NSInteger)searchScope
+{
+    // Search through subregions:
+
+    // 1. Regions that start with given name have higher priority
+    NSMutableArray *regions_beginWith = [[_searchableSubregionItems filteredArrayUsingPredicate:
+                                          [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", @"name", searchString]] mutableCopy];
+    [regions_beginWith sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        OAWorldRegion *item1 = obj1;
+        OAWorldRegion *item2 = obj2;
+
+        return [item1.name localizedCaseInsensitiveCompare:item2.name];
+    }];
+
+    // - Regions that only contain given string have less priority
+    NSMutableArray *regions_contain = [[_searchableSubregionItems filteredArrayUsingPredicate:
+                                        [NSPredicate predicateWithFormat:@"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)", searchString]] mutableCopy];
+    [regions_contain sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        OAWorldRegion *item1 = obj1;
+        OAWorldRegion *item2 = obj2;
+
+        return [item1.name localizedCaseInsensitiveCompare:item2.name];
+    }];
+
+    NSArray* regions = [regions_beginWith arrayByAddingObjectsFromArray:regions_contain];
+
+    _searchResults = regions;
+}
+
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return 1;
+
     NSInteger sectionsCount = 0;
 
     if (_subregionsSection >= 0)
@@ -262,6 +303,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return [_searchResults count];
+
     if (section == _subregionsSection)
         return [_subregionItems count];
     if (section == _resourcesSection)
@@ -272,6 +316,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return nil;
+
     if (_region.superregion == nil)
     {
         if (section == _subregionsSection)
@@ -294,31 +341,52 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     static NSString* const subregionCell = @"subregionCell";
 
     NSString* cellTypeId = nil;
-    NSString* caption = nil;
-    if (indexPath.section == _subregionsSection)
+    NSString* title = nil;
+    NSString* subtitle = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
     {
-        OAWorldRegion* worldRegion = [_subregionItems objectAtIndex:indexPath.row];
+        id item_ = [_searchResults objectAtIndex:indexPath.row];
 
-        cellTypeId = subregionCell;
-        caption = worldRegion.name;
+        if ([item_ isKindOfClass:[OAWorldRegion class]])
+        {
+            OAWorldRegion* item = (OAWorldRegion*)item_;
+
+            cellTypeId = subregionCell;
+            title = item.name;
+            if (item.superregion != nil)
+                subtitle = item.superregion.name;
+        }
     }
-    /*else if (indexPath.section == _downloadsSection)
+    else
     {
-        downloadItem = [_downloadItems objectAtIndex:indexPath.row];
+        if (indexPath.section == _subregionsSection)
+        {
+            OAWorldRegion* worldRegion = [_subregionItems objectAtIndex:indexPath.row];
 
-        if ([downloadItem isKindOfClass:[DownloadedItem class]])
-            cellTypeId = downloadedItemCell;
-        else if ([downloadItem isKindOfClass:[OutdatedItem class]])
-            cellTypeId = outdatedItemCell;
-        else if ([downloadItem isKindOfClass:[InstalledItem class]])
-            cellTypeId = installedItemCell;
-        else //if ([downloadItem isKindOfClass:[InstallableItem class]])
-            cellTypeId = installableItemCell;
-        caption = downloadItem.caption;
+            cellTypeId = subregionCell;
+            title = worldRegion.name;
+            subtitle = nil;
+        }
+        /*else if (indexPath.section == _downloadsSection)
+         {
+         downloadItem = [_downloadItems objectAtIndex:indexPath.row];
+
+         if ([downloadItem isKindOfClass:[DownloadedItem class]])
+         cellTypeId = downloadedItemCell;
+         else if ([downloadItem isKindOfClass:[OutdatedItem class]])
+         cellTypeId = outdatedItemCell;
+         else if ([downloadItem isKindOfClass:[InstalledItem class]])
+         cellTypeId = installedItemCell;
+         else //if ([downloadItem isKindOfClass:[InstallableItem class]])
+         cellTypeId = installableItemCell;
+         caption = downloadItem.caption;
+         }
+         */
+
     }
-*/
+
     // Obtain reusable cell or create one
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
+    UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
   /*  if (cell == nil)
     {
         if ([cellTypeId isEqualToString:outdatedItemCell])
@@ -362,7 +430,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 */
     // Fill cell content
-    cell.textLabel.text = caption;
+    cell.textLabel.text = title;
+    if (cell.detailTextLabel != nil)
+        cell.detailTextLabel.text = subtitle;
     /*if ([cellTypeId isEqualToString:downloadedItemCell])
     {
         DownloadedItem* downloadedItem = (DownloadedItem*)downloadItem;
@@ -460,11 +530,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchScope:(NSInteger)searchOption
 {
+    _lastSearchScope = searchOption;
+    [self performSearchForSearchString:_lastSearchString
+                        andSearchScope:_lastSearchScope];
+
     return YES;
 }
 
 - (BOOL)searchDisplayController:(UISearchDisplayController *)controller shouldReloadTableForSearchString:(NSString *)searchString
 {
+    _lastSearchString = searchString;
+    [self performSearchForSearchString:_lastSearchString
+                        andSearchScope:_lastSearchScope];
+
     return YES;
 }
 

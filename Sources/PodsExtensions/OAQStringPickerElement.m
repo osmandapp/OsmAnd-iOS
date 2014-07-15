@@ -88,6 +88,18 @@
     return value;
 }
 
+-(id)selectedItem
+{
+    id item = [super selectedItem];
+    if (item == nil)
+    {
+        QEntryElement* entryElement = (QEntryElement*)[self.parentSection.rootElement elementWithKey:kNewItemEntryElementKey];
+        return [entryElement.textValue copy];
+    }
+
+    return item;
+}
+
 #pragma mark - QuickDialogEntryElementDelegate
 
 - (void)QEntryDidEndEditingElement:(QEntryElement *)element andCell:(QEntryTableViewCell *)cell

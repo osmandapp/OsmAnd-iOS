@@ -46,8 +46,8 @@
 {
     // Check what backend should be used
     const BOOL isSupported_NSURLSession =
-    (NSClassFromString(@"NSURLSession") != nil) &&
-    ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
+        (NSClassFromString(@"NSURLSession") != nil) &&
+        ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
     if (!isSupported_NSURLSession)
         _sessionManager = nil;
     else

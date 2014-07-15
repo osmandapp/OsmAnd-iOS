@@ -43,6 +43,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
+@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateIndicator;
 
@@ -218,7 +219,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         // If subregion has nothing to offer, skip it
         if (isEmpty)
         {
-            OALog(@"Region %@ (%@) was skipped since it has no downloads", subregion.name, subregion.regionId);
+            OALog(@"Region %@ (%@) was skipped since it has no resources", subregion.name, subregion.regionId);
             continue;
         }
 

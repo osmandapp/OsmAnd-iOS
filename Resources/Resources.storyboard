@@ -17,15 +17,28 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N4c-2E-aDC" userLabel="scopeControl">
-                                <rect key="frame" x="16" y="28" width="288" height="29"/>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iZK-JW-bB4" userLabel="scopeControlContainer">
+                                <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="All"/>
-                                    <segment title="Available"/>
-                                    <segment title="Installed"/>
-                                </segments>
-                            </segmentedControl>
+                                <subviews>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X93-h7-s0r" userLabel="scopeControl">
+                                        <rect key="frame" x="16" y="8" width="288" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <segments>
+                                            <segment title="All"/>
+                                            <segment title="Catalog"/>
+                                            <segment title="Installed"/>
+                                        </segments>
+                                    </segmentedControl>
+                                </subviews>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="X93-h7-s0r" secondAttribute="trailing" constant="16" id="5nr-53-fx6"/>
+                                    <constraint firstAttribute="height" constant="44" id="ILq-wb-Okg"/>
+                                    <constraint firstItem="X93-h7-s0r" firstAttribute="leading" secondItem="iZK-JW-bB4" secondAttribute="leading" constant="16" id="USN-dS-RxK"/>
+                                    <constraint firstItem="X93-h7-s0r" firstAttribute="top" secondItem="iZK-JW-bB4" secondAttribute="top" constant="8" id="hEE-bO-S60"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="1LP-5L-xCP" userLabel="tableView">
                                 <rect key="frame" x="0.0" y="64" width="320" height="504"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -98,17 +111,18 @@
                             <constraint firstItem="FH1-1I-lZ1" firstAttribute="top" secondItem="1LP-5L-xCP" secondAttribute="bottom" id="3c6-VQ-sGs"/>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="9hb-xX-BW3"/>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="centerY" secondItem="N3E-eS-aEz" secondAttribute="centerY" id="D6x-cf-nBD"/>
-                            <constraint firstAttribute="trailing" secondItem="N4c-2E-aDC" secondAttribute="trailing" constant="16" id="TNv-DJ-pCb"/>
-                            <constraint firstItem="N4c-2E-aDC" firstAttribute="top" secondItem="qhu-fS-4PN" secondAttribute="bottom" constant="8" id="Ta5-8k-4D0"/>
+                            <constraint firstAttribute="trailing" secondItem="iZK-JW-bB4" secondAttribute="trailing" id="QSZ-xF-O0z"/>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="centerX" secondItem="N3E-eS-aEz" secondAttribute="centerX" id="Z46-Ee-Ebe"/>
-                            <constraint firstItem="1LP-5L-xCP" firstAttribute="top" secondItem="N4c-2E-aDC" secondAttribute="bottom" constant="8" id="buG-4f-SLW"/>
-                            <constraint firstItem="N4c-2E-aDC" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" constant="16" id="ia2-aY-gRJ"/>
+                            <constraint firstItem="iZK-JW-bB4" firstAttribute="top" secondItem="qhu-fS-4PN" secondAttribute="bottom" id="jyQ-ls-uxr"/>
+                            <constraint firstItem="iZK-JW-bB4" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="lrg-a6-9g9"/>
                             <constraint firstAttribute="trailing" secondItem="1LP-5L-xCP" secondAttribute="trailing" id="usK-lp-A9R"/>
+                            <constraint firstItem="1LP-5L-xCP" firstAttribute="top" secondItem="iZK-JW-bB4" secondAttribute="bottom" id="x2a-cU-jl0"/>
                         </constraints>
                     </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <connections>
-                        <outlet property="scopeControl" destination="N4c-2E-aDC" id="GLT-ii-HWN"/>
+                        <outlet property="scopeControl" destination="X93-h7-s0r" id="IG4-gF-wXV"/>
+                        <outlet property="scopeControlContainer" destination="iZK-JW-bB4" id="Vwu-aY-xaY"/>
+                        <outlet property="scopeControlContainerHeightConstraint" destination="ILq-wb-Okg" id="GYT-lP-r4L"/>
                         <outlet property="searchDisplayController" destination="mBR-OL-CGm" id="uqv-Jo-ffv"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>
                         <outlet property="updateIndicator" destination="N3E-eS-aEz" id="NO6-Vt-H0i"/>

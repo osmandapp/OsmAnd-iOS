@@ -40,7 +40,7 @@
     UIView* rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
     self.view = rootView;
     
-    // Instantiate map renderer
+    // Instantiate map view controller
     _mapViewController = [[OAMapViewController alloc] init];
     [self addChildViewController:_mapViewController];
     [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
@@ -54,7 +54,7 @@
                                                                       metrics:nil
                                                                         views:@{@"view":_mapViewController.view}]];
     
-    // Instantiate map HUD
+    // Instantiate map HUD controller
     UIViewController* mapHudVC = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapModeHUD"
                                                                               bundle:nil];
     [self addChildViewController:mapHudVC];

@@ -43,7 +43,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *scopeControlContainer;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *scopeControlContainerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *updateIndicator;
 
@@ -74,6 +76,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
     NSArray* _searchResults;
+
+    CGFloat _originalScopeControlContainerHeight;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -100,6 +104,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
+    self.scopeControlContainerHeightConstraint.constant = 0;
 
     [self obtainDataAndItems];
 }
@@ -548,6 +555,43 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                         andSearchScope:_lastSearchScope];
 
     return YES;
+}
+
+- (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
+{
+    self.scopeControl.hidden = YES;
+
+    /*[UIView animateWithDuration:0.1
+                     delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.scopeControlContainerHeightConstraint.constant = 0.0f;
+                         //self.scopeControlContainer.transform = CGAffineTransformMakeScale(1.0f, 0.5f);
+                         //self.scopeControlContainer.alpha = 0.0f;
+                     } completion:^(BOOL finished) {
+                         //self.scopeControlContainer.userInteractionEnabled = NO;
+                     }];*/
+}
+
+- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
+{
+    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
+}
+
+- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
+{
+    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+
+    /*[UIView animateWithDuration:0.1
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveEaseInOut
+                     animations:^{
+                         self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
+                         //self.scopeControlContainer.transform = CGAffineTransformIdentity;
+                         //self.scopeControlContainer.alpha = 1.0f;
+                     } completion:^(BOOL finished) {
+                         //self.scopeControlContainer.userInteractionEnabled = YES;
+                     }];*/
 }
 
 #pragma mark - Navigation

@@ -71,6 +71,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OsmAndAppInstance _app;
 
     NSMutableArray* _downloadItems;
+    
+    BOOL _isLoadingRepository;
 
     OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
@@ -102,6 +104,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _worldRegion = nil;
 
     _downloadItems = [[NSMutableArray alloc] init];
+    
+    _isLoadingRepository = NO;
 
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onLocalResourcesChanged:withKey:)
@@ -184,6 +188,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOf:(BaseDownloadItem *)item
 {
+    if (![self isEnoughSpace:item])
+        return;
+    
     // Create download tasks
     NSURLRequest *request = [NSURLRequest requestWithURL:item.resourceInRepository->url.toNSURL()];
     id <OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
@@ -252,15 +259,53 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self reloadList];
 }
 
+- (BOOL)isEnoughSpace:(BaseDownloadItem *)item
+{
+    uint64_t installedSize = [item isKindOfClass:[InstalledItem class]] ? ((InstalledItem *)item).localResource->size : 0;
+    uint64_t requiredSpace = item.resourceInRepository->size + item.resourceInRepository->packageSize - installedSize;
+    
+    if ([self getFreeSpace] < requiredSpace)
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Not enough space")
+                                    message:[NSString stringWithFormat:OALocalizedString(@"Not enough space on file system. Free %1$@ and try again."),
+                                             [NSByteCountFormatter stringFromByteCount:requiredSpace - [self getFreeSpace]
+                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                           otherButtonItems:nil] show];
+        return false;
+    }
+    
+    return true;
+}
+
+- (uint64_t)getFreeSpace {
+    uint64_t freeSpace = 0;
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+    
+    if (dictionary) {
+        freeSpace = [[dictionary objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+    }
+    
+    return freeSpace;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (_isLoadingRepository) {
+        return 0;
+    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (_isLoadingRepository) {
+        return 0;
+    }
     return [_downloadItems count];
 }
 
@@ -332,7 +377,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     OutdatedItem *item = [_downloadItems objectAtIndex:indexPath.row];
 
-    [[[UIAlertView alloc] initWithTitle:nil
+    [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
                                 message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
                                          [tableView cellForRowAtIndexPath:indexPath].textLabel.text,
                                          [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
@@ -343,7 +388,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                              action:^{
                                                                  [self startDownloadOf:item];
                                                                  [self reloadList];
-                                                             }], nil] show];
+                                                             }], nil]];
 
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
@@ -370,7 +415,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     for (OutdatedItem *item in _downloadItems) {
         count+=item.resourceInRepository->packageSize;
     }
-    [[[UIAlertView alloc] initWithTitle:nil
+    [self checkInternetConnection: [[UIAlertView alloc] initWithTitle:nil
                                 message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$d elements. %2$@ will be downloaded. %3$@Proceed?"),
                                          [_downloadItems count],
                                          [NSByteCountFormatter stringFromByteCount:count
@@ -383,7 +428,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                      [self startDownloadOf:item];
                                                                  }
                                                                  [self reloadList];
-                                                             }], nil] show];
+                                                             }], nil]];
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
@@ -424,13 +469,46 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)clickedOnRefreshButton:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
 {
     if (index == 2) {
-        [self reloadList];
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self updateRepositoryAndReloadListAnimated:refreshButton];
+        else
+            [self checkInternetConnection:nil];
     }
 }
 
 - (void)onViewDidLoadAction:(UIBarButtonItem *)refreshButton forTabBar:(NSUInteger)index
 {
+    if (index == 2) {
+        if (!_app.resourcesManager->isRepositoryAvailable())
+        {
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+                [self updateRepositoryAndReloadListAnimated:refreshButton];
+            else
+                [self checkInternetConnection:nil];
+        }
+        
+    }
+}
 
+- (void)updateRepositoryAndReloadListAnimated:(UIBarButtonItem *)refreshButton
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isLoadingRepository = YES;
+            refreshButton.enabled = NO;
+            [self.tableView reloadData];
+            [self.updateActivityIndicator startAnimating];
+        });
+        
+        _app.resourcesManager->updateRepository();
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _isLoadingRepository = NO;
+            [self.updateActivityIndicator stopAnimating];
+            [self reloadList];
+            refreshButton.enabled = YES;
+        });
+    });
 }
 
 #pragma mark -

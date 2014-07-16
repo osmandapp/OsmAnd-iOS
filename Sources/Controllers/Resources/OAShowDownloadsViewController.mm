@@ -305,7 +305,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (NSArray *)titleOfResourceId:(NSString *)resourceId
 {
     NSArray *regions = [_app.worldRegion flattenedSubregions];
-    
+    if ([resourceId isEqualToString:@"resource:world_basemap.map.obf"]) {
+        return @[OALocalizedString(@"Detailed world overview"),@""];
+    }
     for (OAWorldRegion *region : regions) {
         if ([region.regionId isEqualToString:[resourceId substringToIndex:[resourceId rangeOfString:@"."].location]]) {
             return @[region.name, region.superregion != nil ? region.superregion.name : @""];

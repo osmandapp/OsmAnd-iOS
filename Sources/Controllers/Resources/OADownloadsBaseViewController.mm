@@ -184,6 +184,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOf:(BaseDownloadItem*)item
 {
+    if (![self isEnoughSpace:item])
+        return;
+    
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:item.resourceInRepository->url.toNSURL()];
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
@@ -208,7 +211,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                       withRowAnimation:UITableViewRowAnimationAutomatic];
 
     // Resume task finally
-    [task resume];
+    if (_app.downloadsManager.currentTasks.count == 1)
+        [task resume];
 }
 
 - (void)cancelDownloadOf:(BaseDownloadItem*)item
@@ -271,6 +275,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
 
         [[NSFileManager defaultManager] removeItemAtPath:task.targetPath error:nil];
+        
+        if (_app.downloadsManager.currentTasks.count == 1) {
+            [task resume];
+        }
 
         needsManualRowReload = !ok;
     }
@@ -596,6 +604,39 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _app.resourcesManager->uninstallResource(item.resourceInRepository->id);
     [self reloadList];
+}
+
+- (BOOL)isEnoughSpace:(BaseDownloadItem *)item
+{
+    uint64_t installedSize = [item isKindOfClass:[InstalledItem class]] ? ((InstalledItem *)item).localResource->size : 0;
+    uint64_t requiredSpace = item.resourceInRepository->size + item.resourceInRepository->packageSize - installedSize;
+    
+    if ([self getFreeSpace] < requiredSpace)
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Not enough space")
+                                    message:[NSString stringWithFormat:OALocalizedString(@"Not enough space on file system. Free %1$@ and try again."),
+                                             [NSByteCountFormatter stringFromByteCount:requiredSpace
+                                                                            countStyle:NSByteCountFormatterCountStyleFile]]
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                           otherButtonItems:nil] show];
+        return false;
+    }
+    
+    return true;
+}
+
+- (uint64_t)getFreeSpace
+{
+    uint64_t freeSpace = 0;
+    NSError *error = nil;
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSDictionary *dictionary = [[NSFileManager defaultManager] attributesOfFileSystemForPath:[paths lastObject] error: &error];
+    
+    if (dictionary) {
+        freeSpace = [[dictionary objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+    }
+    
+    return freeSpace;
 }
 
 #pragma mark - UITableViewDelegate

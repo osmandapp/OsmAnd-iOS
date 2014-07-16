@@ -261,6 +261,11 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Ynh-N4-Nu2" userLabel="updateActivityIndicator">
+                                <rect key="frame" x="141" y="241" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -268,6 +273,7 @@
                     <tabBarItem key="tabBarItem" tag="2" title="Updates" image="tab_updates_icon.png" id="nqO-nw-flR"/>
                     <connections>
                         <outlet property="tableView" destination="WrR-07-zAB" id="XGb-Om-k98"/>
+                        <outlet property="updateActivityIndicator" destination="Ynh-N4-Nu2" id="0JD-d2-zvR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="5WI-ab-dCW" userLabel="First Responder" sceneMemberID="firstResponder"/>

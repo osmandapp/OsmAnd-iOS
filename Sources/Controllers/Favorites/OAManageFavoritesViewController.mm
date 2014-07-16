@@ -369,7 +369,10 @@
 - (void)onManageGroup:(QElement*)sender
 {
     if (self.quickDialogTableView.isEditing)
+    {
+        [self updateMode];
         return;
+    }
 
     GroupItemData* itemData = (GroupItemData*)sender.object;
 
@@ -382,7 +385,10 @@
 - (void)onEditFavorite:(QElement*)sender
 {
     if (self.quickDialogTableView.isEditing)
+    {
+        [self updateMode];
         return;
+    }
 
     FavoriteItemData* itemData = (FavoriteItemData*)sender.object;
 

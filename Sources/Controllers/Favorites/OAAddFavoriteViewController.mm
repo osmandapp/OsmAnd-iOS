@@ -104,7 +104,7 @@
 
     QString title = QString::fromNSString(_titleField.textValue);
 
-    QString group = QString::fromNSString((NSString*)_groupField.selectedValue);
+    QString group = QString::fromNSString((NSString*)_groupField.selectedItem);
 
     UIColor* color_ = (UIColor*)[_colorField.selectedItem objectAtIndex:1];
     OsmAnd::FColorARGB color;

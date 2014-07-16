@@ -105,6 +105,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewDidLoad];
 
+#if DEBUG
+    //HACK: This stuff is needed to avoid exceptions during Debug. In Release they're harmless
+    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
+#endif // DEBUG
+
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
 
     [self obtainDataAndItems];
@@ -558,30 +563,47 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
-    [UIView animateWithDuration:0.01f
-                          delay:0.0f
+    [UIView animateWithDuration:0.3
+                          delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.scopeControlContainerHeightConstraint.constant = 0.0f;
-                         //self.scopeControlContainer.transform = CGAffineTransformMakeScale(1.0f, 0.5f);
+                         [self.scopeControlContainer.superview layoutIfNeeded];
+
                          self.scopeControlContainer.alpha = 0.0f;
                      } completion:^(BOOL finished) {
                          self.scopeControlContainer.userInteractionEnabled = NO;
-                         self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleProminent;
                      }];
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
-    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
+    //NOTE: This doesn't work as expected
+    /*dispatch_async(dispatch_get_main_queue(), ^{
+        [UIView animateWithDuration:0.3
+                              delay:0.0
+                            options:UIViewAnimationOptionCurveLinear
+                         animations:^{
+                             self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
+                             [self.scopeControlContainer.superview layoutIfNeeded];
 
-    [UIView animateWithDuration:0.05f
-                          delay:0.0f
+                             self.scopeControlContainer.alpha = 1.0f;
+                         } completion:^(BOOL finished) {
+                             self.scopeControlContainer.userInteractionEnabled = YES;
+                         }];
+    });*/
+}
+
+- (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
+{
+    [UIView animateWithDuration:0.1
+                          delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
-                         //self.scopeControlContainer.transform = CGAffineTransformIdentity;
-                         //self.scopeControlContainer.alpha = 1.0f;
+                         [self.scopeControlContainer.superview layoutIfNeeded];
+
+                         self.scopeControlContainer.alpha = 1.0f;
                      } completion:^(BOOL finished) {
                          self.scopeControlContainer.userInteractionEnabled = YES;
                      }];

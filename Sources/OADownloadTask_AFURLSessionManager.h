@@ -22,6 +22,12 @@
                    andTargetPath:(NSString*)targetPath
                           andKey:(NSString*)key;
 
+- (instancetype)initUsingManager:(AFURLSessionManager*)manager
+                       withOwner:(OADownloadsManager*)owner
+                   andResumeData:(NSData *)resumeData
+                   andTargetPath:(NSString*)targetPath
+                          andKey:(NSString*)key;
+
 @property(readonly) NSURLSessionDownloadTask* task;
 
 @end

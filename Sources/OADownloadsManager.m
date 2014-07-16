@@ -16,6 +16,8 @@
 #import <AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
 
+#define RESUME_DATA_DIRECTORY @"Resume Data"
+
 #define _(name) OADownloadsManager__##name
 #define ctor _(ctor)
 #define dtor _(dtor)
@@ -127,11 +129,21 @@
     // Create task itself
     if (_sessionManager != nil)
     {
-        task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
-                                                                  withOwner:self
-                                                                 andRequest:request
-                                                              andTargetPath:targetPath
-                                                                     andKey:key];
+        NSData *resumeData = [self getResumeData:key];
+        if (resumeData != nil) {
+            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                      withOwner:self
+                                                                  andResumeData:resumeData
+                                                                  andTargetPath:targetPath
+                                                                         andKey:key];
+
+        } else {
+            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                      withOwner:self
+                                                                     andRequest:request
+                                                                  andTargetPath:targetPath
+                                                                         andKey:key];
+        }
     }
     else
     {
@@ -179,6 +191,42 @@
         if (_currentTasks.count > 0)
             [(id<OADownloadTask>)[_currentTasks objectAtIndex:0] resume];
     }
+}
+
+- (NSData *)getResumeData:(NSString *)fileName
+{
+    return [NSData dataWithContentsOfFile:[[self cacheDirectoryPath] stringByAppendingPathComponent:fileName]];
+}
+
+- (BOOL)saveData:(NSData *)resumeData withFileName:(NSString *)fileName
+{
+    NSError *error = nil;
+    [resumeData writeToFile:[[self cacheDirectoryPath] stringByAppendingPathComponent:fileName] options:NSDataWritingAtomic error:&error];
+    
+    if (error != nil) {
+        NSLog(@"Unable to write data to file. Error: %@", error);
+        return false;
+    }
+    return true;
+}
+
+- (NSString *)cacheDirectoryPath
+{
+    NSString *result;
+    NSArray *paths;
+    
+    result = nil;
+    paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    if ( (paths != nil) && ([paths count] != 0) ) {
+        assert([[paths objectAtIndex:0] isKindOfClass:[NSString class]]);
+        result = [paths objectAtIndex:0];
+    }
+    result = [result stringByAppendingPathComponent:RESUME_DATA_DIRECTORY];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:result]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:result withIntermediateDirectories:YES attributes:nil error:NULL];
+    }
+    
+    return result;
 }
 
 @end

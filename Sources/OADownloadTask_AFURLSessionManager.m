@@ -45,6 +45,35 @@
     return self;
 }
 
+- (instancetype)initUsingManager:(AFURLSessionManager*)manager
+                       withOwner:(OADownloadsManager*)owner
+                   andResumeData:(NSData *)resumeData
+                   andTargetPath:(NSString*)targetPath
+                          andKey:(NSString*)key;
+{
+    self = [super init];
+    if (self) {
+        [self ctor];
+        _owner = owner;
+        _targetPath = [targetPath copy];
+        _key = [key copy];
+        NSProgress* progress;
+        _task = [manager downloadTaskWithResumeData:resumeData
+                                           progress:&progress
+                                        destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                                            return [self getDestinationFor:targetPath andResponse:response];
+                                        }
+                                  completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                                      [self onCompletedWith:response andStoredAt:filePath withError:error];
+                                  }];
+        [progress addObserver:self
+                   forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
+                      options:NSKeyValueObservingOptionInitial
+                      context:nil];
+    }
+    return self;
+}
+
 - (void)dealloc
 {
     [self dtor];
@@ -148,13 +177,16 @@
 
 - (void)stop
 {
-    //TODO: should produce resume data
-    [_task cancel];
+    [_task cancelByProducingResumeData:^(NSData *resumeData){
+        [_owner saveData:resumeData withFileName:_key];
+    }];
 }
 
 - (void)cancel
 {
-    [_task cancel];
+    [_task cancelByProducingResumeData:^(NSData *resumeData){
+        [_owner saveData:resumeData withFileName:_key];
+    }];
 }
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;

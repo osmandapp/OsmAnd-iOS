@@ -153,6 +153,11 @@
 
         [list addObject:task];
     }
+    
+    if (_currentTasks)
+        [_currentTasks addObject:task];
+    else
+        _currentTasks = [[NSMutableArray alloc] initWithObjects:task, nil];
 
     return task;
 }
@@ -169,6 +174,10 @@
         [list removeObject:task];
         if ([list count] == 0)
             [_tasks removeObjectForKey:task.key];
+        
+        [_currentTasks removeObjectAtIndex:0];
+        if (_currentTasks.count > 0)
+            [(id<OADownloadTask>)[_currentTasks objectAtIndex:0] resume];
     }
 }
 

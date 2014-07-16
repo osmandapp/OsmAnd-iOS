@@ -197,7 +197,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                        andKey:[@"resource:" stringByAppendingString:item.resourceInRepository->id.toNSString()]];
 
     // Resume task finally
-    [task resume];
+    if (_app.downloadsManager.currentTasks.count == 1)
+        [task resume];
 }
 
 - (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key

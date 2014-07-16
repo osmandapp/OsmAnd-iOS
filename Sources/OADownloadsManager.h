@@ -12,6 +12,8 @@
 
 @interface OADownloadsManager : NSObject
 
+@property (nonatomic) NSMutableArray *currentTasks;
+
 - (instancetype)init;
 
 //- (NSData*)serializeState;

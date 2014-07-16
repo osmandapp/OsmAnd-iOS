@@ -211,7 +211,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                       withRowAnimation:UITableViewRowAnimationAutomatic];
 
     // Resume task finally
-    [task resume];
+    if (_app.downloadsManager.currentTasks.count == 1)
+        [task resume];
 }
 
 - (void)cancelDownloadOf:(BaseDownloadItem*)item
@@ -274,6 +275,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
 
         [[NSFileManager defaultManager] removeItemAtPath:task.targetPath error:nil];
+        
+        if (_app.downloadsManager.currentTasks.count == 1) {
+            [task resume];
+        }
 
         needsManualRowReload = !ok;
     }

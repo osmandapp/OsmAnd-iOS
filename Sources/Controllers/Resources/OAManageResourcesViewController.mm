@@ -106,7 +106,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [super viewDidLoad];
 
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
-    self.scopeControlContainerHeightConstraint.constant = 0;
 
     [self obtainDataAndItems];
 }
@@ -559,39 +558,33 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
-    self.scopeControl.hidden = YES;
-
-    /*[UIView animateWithDuration:0.1
-                     delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:0.01f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.scopeControlContainerHeightConstraint.constant = 0.0f;
                          //self.scopeControlContainer.transform = CGAffineTransformMakeScale(1.0f, 0.5f);
-                         //self.scopeControlContainer.alpha = 0.0f;
+                         self.scopeControlContainer.alpha = 0.0f;
                      } completion:^(BOOL finished) {
-                         //self.scopeControlContainer.userInteractionEnabled = NO;
-                     }];*/
-}
-
-- (void)searchDisplayControllerDidBeginSearch:(UISearchDisplayController *)controller
-{
-    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
+                         self.scopeControlContainer.userInteractionEnabled = NO;
+                         self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleProminent;
+                     }];
 }
 
 - (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
 {
     self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleMinimal;
 
-    /*[UIView animateWithDuration:0.1
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveEaseInOut
+    [UIView animateWithDuration:0.05f
+                          delay:0.0f
+                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
                          //self.scopeControlContainer.transform = CGAffineTransformIdentity;
                          //self.scopeControlContainer.alpha = 1.0f;
                      } completion:^(BOOL finished) {
-                         //self.scopeControlContainer.userInteractionEnabled = YES;
-                     }];*/
+                         self.scopeControlContainer.userInteractionEnabled = YES;
+                     }];
 }
 
 #pragma mark - Navigation

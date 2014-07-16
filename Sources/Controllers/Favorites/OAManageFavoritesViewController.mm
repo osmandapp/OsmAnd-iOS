@@ -56,6 +56,11 @@
 
     NSArray* _editToolbarItems;
     UIDocumentInteractionController* _exportController;
+
+    UIBarButtonItem* _selectBarButton;
+    UIBarButtonItem* _selectAllBarButton;
+    UIBarButtonItem* _deselectAllBarButton;
+    UIBarButtonItem* _cancelEditBarButton;
 }
 
 - (instancetype)init
@@ -72,7 +77,8 @@
                                                              andObserve:_app.favoriteChangedObservable];
         _contentIsInvalidated = NO;
         _groupName = nil;
-        
+
+        [self inflateNavBarItems];
         [self inflateEditToolbarItems];
     }
     return self;
@@ -92,6 +98,7 @@
         _contentIsInvalidated = NO;
         _groupName = groupTitle;
 
+        [self inflateNavBarItems];
         [self inflateEditToolbarItems];
     }
     return self;
@@ -157,6 +164,28 @@
     [self.quickDialogTableView reloadData];
 }
 
+- (void)inflateNavBarItems
+{
+    _selectBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Select")
+                                                        style:UIBarButtonItemStylePlain
+                                                       target:self
+                                                       action:@selector(onEnterMultipleSelectionMode)];
+
+    _selectAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Select all")
+                                                           style:UIBarButtonItemStylePlain
+                                                          target:self
+                                                          action:@selector(onSelectAll)];
+
+    _deselectAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Deselect all")
+                                                             style:UIBarButtonItemStylePlain
+                                                            target:self
+                                                            action:@selector(onDeselectAll)];
+
+    _cancelEditBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
+                                                                         target:self
+                                                                         action:@selector(onExitMultipleSelectionMode)];
+}
+
 - (void)inflateEditToolbarItems
 {
     _editToolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
@@ -180,19 +209,22 @@
 {
     if (!self.quickDialogTableView.isEditing)
     {
-        // Add navbar item to select multiple elements
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Select")
-                                                                                  style:UIBarButtonItemStylePlain
-                                                                                 target:self
-                                                                                 action:@selector(onEnterMultipleSelectionMode)];
+        [self.navigationItem setRightBarButtonItem:_selectBarButton
+                                          animated:YES];
+        [self.navigationItem setLeftBarButtonItem:nil
+                                         animated:YES];
     }
     else
     {
-        // Add navbar item to cancel selectino mode
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel
-                                                                                 target:self
-                                                                                 action:@selector(onExitMultipleSelectionMode)];
+        UIBarButtonItem* leftButton =
+            [self.quickDialogTableView indexPathsForSelectedRows] == nil
+            ? _selectAllBarButton
+            : _deselectAllBarButton;
 
+        [self.navigationItem setRightBarButtonItem:_cancelEditBarButton
+                                          animated:YES];
+        [self.navigationItem setLeftBarButtonItem:leftButton
+                                         animated:YES];
     }
 }
 
@@ -200,6 +232,9 @@
 {
     [super setEditing:editing
              animated:animated];
+
+    [self.navigationItem setHidesBackButton:editing
+                                   animated:animated];
 
     self.toolbarItems = editing ? _editToolbarItems : nil;
     [self.navigationController setToolbarHidden:!editing
@@ -218,6 +253,32 @@
 {
     [self setEditing:NO
             animated:YES];
+}
+
+- (void)onSelectAll
+{
+    for(NSInteger sectionIdx = 0; sectionIdx < [self.quickDialogTableView numberOfSections]; sectionIdx++)
+    {
+        for(NSInteger rowIdx = 0; rowIdx < [self.quickDialogTableView numberOfRowsInSection:sectionIdx]; rowIdx++)
+        {
+            [self.quickDialogTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:rowIdx inSection:sectionIdx]
+                                                   animated:NO
+                                             scrollPosition:UITableViewScrollPositionNone];
+        }
+    }
+
+    [self updateMode];
+}
+
+- (void)onDeselectAll
+{
+    for(NSIndexPath* selectedCellPath in [self.quickDialogTableView indexPathsForSelectedRows])
+    {
+        [self.quickDialogTableView deselectRowAtIndexPath:selectedCellPath
+                                                 animated:NO];
+    }
+
+    [self updateMode];
 }
 
 - (void)onShareSelected

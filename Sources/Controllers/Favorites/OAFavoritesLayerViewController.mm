@@ -39,7 +39,7 @@
 @implementation FavoriteItemData
 @end
 
-@interface OAFavoritesLayerViewController ()
+@interface OAFavoritesLayerViewController () <QuickDialogDelegate>
 @end
 
 @implementation OAFavoritesLayerViewController
@@ -55,6 +55,8 @@
     UISwitch* _layerVisibilitySwitch;
 
     NSString* _groupName;
+
+    UIImage* _menuPinIcon;
 }
 
 - (instancetype)init
@@ -74,6 +76,8 @@
                                                                   andObserve:_app.data.mapLayersConfiguration.changeObservable];
         _contentIsInvalidated = NO;
         _groupName = nil;
+
+        _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return self;
 }
@@ -94,6 +98,8 @@
                                                                   andObserve:_app.data.mapLayersConfiguration.changeObservable];
         _contentIsInvalidated = NO;
         _groupName = groupTitle;
+
+        _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return self;
 }
@@ -101,6 +107,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    self.quickDialogTableView.quickDialogDelegate = self;
 
     // Create switch
     _layerVisibilitySwitch = [[UISwitch alloc] init];
@@ -230,6 +238,16 @@
                                                         andZoom:kDefaultFavoriteZoom
                                                        animated:YES];
 }
+
+#pragma mark - QuickDialogDelegate
+
+- (void)cell:(UITableViewCell *)cell willAppearForElement:(QElement *)element atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([element.object isKindOfClass:[FavoriteItemData class]])
+        cell.accessoryView = [[UIImageView alloc] initWithImage:_menuPinIcon];
+}
+
+#pragma mark -
 
 + (QRootElement*)inflateRoot
 {

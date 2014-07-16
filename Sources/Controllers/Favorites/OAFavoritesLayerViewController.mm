@@ -152,28 +152,34 @@
         [self setRoot:[OAFavoritesLayerViewController inflateGroup:_groupName
                                                      withFavorites:favorites]];
     }
+
+    [self.quickDialogTableView reloadData];
 }
 
 - (void)onFavoritesCollectionChanged
 {
-    if (!self.isViewLoaded || self.view.window == nil)
-    {
-        _contentIsInvalidated = YES;
-        return;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _contentIsInvalidated = YES;
+            return;
+        }
 
-    [self updateContent];
+        [self updateContent];
+    });
 }
 
 - (void)onFavoriteChanged
 {
-    if (!self.isViewLoaded || self.view.window == nil)
-    {
-        _contentIsInvalidated = YES;
-        return;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _contentIsInvalidated = YES;
+            return;
+        }
 
-    [self updateContent];
+        [self updateContent];
+    });
 }
 
 - (void)onLayersConfigurationChanged

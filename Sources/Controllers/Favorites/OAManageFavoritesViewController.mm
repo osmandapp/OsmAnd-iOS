@@ -153,6 +153,8 @@
         [self setRoot:[OAManageFavoritesViewController inflateGroup:_groupName
                                                       withFavorites:favorites]];
     }
+
+    [self.quickDialogTableView reloadData];
 }
 
 - (void)inflateEditToolbarItems
@@ -329,24 +331,28 @@
 
 - (void)onFavoritesCollectionChanged
 {
-    if (!self.isViewLoaded || self.view.window == nil)
-    {
-        _contentIsInvalidated = YES;
-        return;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _contentIsInvalidated = YES;
+            return;
+        }
 
-    [self updateContent];
+        [self updateContent];
+    });
 }
 
 - (void)onFavoriteChanged
 {
-    if (!self.isViewLoaded || self.view.window == nil)
-    {
-        _contentIsInvalidated = YES;
-        return;
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _contentIsInvalidated = YES;
+            return;
+        }
 
-    [self updateContent];
+        [self updateContent];
+    });
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
@@ -393,6 +399,7 @@
     if (!groupNames.isEmpty())
     {
         QSection* groupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Groups")];
+        groupsSection.canDeleteRows = YES;
         [rootElement addSection:groupsSection];
 
         for (const auto& groupName : groupNames)
@@ -404,7 +411,6 @@
             QLabelElement* groupElement = [[QLabelElement alloc] initWithTitle:itemData.groupName
                                                                          Value:nil];
             groupElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            groupElement.keepSelected = NO;
             groupElement.controllerAction = NSStringFromSelector(@selector(onManageGroup:));
             groupElement.object = itemData;
             [groupsSection addElement:groupElement];

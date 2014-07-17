@@ -350,25 +350,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     };
 
     // Regions that start with given name have higher priority
-    NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchString];
+    NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
     NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
     if ([regions_startsWith count] == 0)
     {
-        NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[c] %@", searchString];
+        NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
         [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
     }
     [regions_startsWith sortUsingComparator:regionComparator];
 
     // Regions that only contain given string have less priority
     NSPredicate* onlyContains = [NSPredicate predicateWithFormat:
-                                 @"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)",
+                                 @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
                                  searchString,
                                  searchString];
     NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
     if ([regions_onlyContains count] == 0)
     {
         NSPredicate* anyOnlyContains = [NSPredicate predicateWithFormat:
-                                        @"(ANY allNames CONTAINS[c] %@) AND NOT (ANY allNames BEGINSWITH[c] %@)",
+                                        @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
                                         searchString,
                                         searchString];
         [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
@@ -462,6 +462,90 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _searchResults = results;
 }
 
+- (void)onItemClicked:(id)item_
+{
+    if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+    {
+        /*
+         [[[UIAlertView alloc] initWithTitle:nil
+         message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
+         itemName,
+         [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+         countStyle:NSByteCountFormatterCountStyleFile],
+         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
+         cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+         otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
+         action:^{
+         [self startDownloadOf:item];
+         }], nil] show];
+         */
+    }
+    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    {
+        LocalResourceItem* item = (LocalResourceItem*)item_;
+
+        NSString* resourceId = item.resourceId.toNSString();
+        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
+                                             animated:YES];
+    }
+    else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    {
+        /*
+         [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
+         message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@Proceed?"),
+         itemName,
+         [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
+         countStyle:NSByteCountFormatterCountStyleFile],
+         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
+         cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+         otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
+         action:^{
+         [self startDownloadOf:item];
+         }], nil]];
+         */
+    }
+
+    /*
+     if (indexPath.section != _downloadsSection)
+     return;
+
+     BaseDownloadItem* item = [_downloadItems objectAtIndex:indexPath.row];
+
+     NSString* itemName = nil;
+     if (_worldRegion.superregion == nil)
+     itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+     else
+     {
+     itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
+     [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
+     _worldRegion.name];
+     }
+
+     if ([item isKindOfClass:[OutdatedItem class]])
+     {
+
+     }
+     else if ([item isKindOfClass:[InstalledItem class]])
+     {
+
+     }
+     else if ([item isKindOfClass:[InstallableItem class]])
+     {
+
+     }
+     else if ([item isKindOfClass:[DownloadedItem class]])
+     {
+     [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
+     message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
+     itemName]
+     cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
+     otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+     action:^{
+     [self cancelDownloadOf:item];
+     }], nil]];
+     }
+     */
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -518,7 +602,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const subregionCell = @"subregionCell";
+    static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const localResourceCell = @"localResourceCell";
+    static NSString* const repositoryResourceCell = @"repositoryResourceCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
@@ -540,7 +626,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
 
-            cellTypeId = localResourceCell;
+            cellTypeId = outdatedResourceCell;
             title = item.title;
         }
         else if ([item_ isKindOfClass:[LocalResourceItem class]])
@@ -554,7 +640,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
 
-            cellTypeId = localResourceCell;
+            cellTypeId = repositoryResourceCell;
             title = item.title;
         }
     }
@@ -583,38 +669,27 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
          caption = downloadItem.caption;
          }
          */
-
     }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
-  /*  if (cell == nil)
+    if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:outdatedItemCell])
+        if ([cellTypeId isEqualToString:outdatedResourceCell])
         {
-            cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
-                                                      andButtonType:UIButtonTypeSystem
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                                     reuseIdentifier:cellTypeId];
-            OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
-            [cellWithButton.buttonView setImage:iconImage
-                                       forState:UIControlStateNormal];
-            cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
-                                                         iconImage.size.width, iconImage.size.height);
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
-        else if ([cellTypeId isEqualToString:installableItemCell])
+        else if ([cellTypeId isEqualToString:repositoryResourceCell])
         {
-            cell = [[OATableViewCellWithButton alloc] initWithStyle:UITableViewCellStyleDefault
-                                                      andButtonType:UIButtonTypeSystem
-                                                    reuseIdentifier:cellTypeId];
-            OATableViewCellWithButton* cellWithButton = (OATableViewCellWithButton*)cell;
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+                                          reuseIdentifier:cellTypeId];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
-            [cellWithButton.buttonView setImage:iconImage
-                                       forState:UIControlStateNormal];
-            cellWithButton.buttonView.frame = CGRectMake(0.0f, 0.0f,
-                                                         iconImage.size.width, iconImage.size.height);
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
-        else if ([cellTypeId isEqualToString:downloadedItemCell])
+        /*else if ([cellTypeId isEqualToString:downloadedItemCell])
         {
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
@@ -627,9 +702,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                           reuseIdentifier:cellTypeId];
-        }
+        }*/
     }
-*/
+
     // Fill cell content
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
@@ -657,74 +732,41 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    /*
-    if (indexPath.section != _downloadsSection)
+    id item = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        item = [_searchResults objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
+    {
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
+            item = [_subregionItems objectAtIndex:indexPath.row];
+        //else
+    }
+
+    if (item == nil)
         return;
 
-    BaseDownloadItem* item = [_downloadItems objectAtIndex:indexPath.row];
+    [self onItemClicked:item];
+}
 
-    NSString* itemName = nil;
-    if (_worldRegion.superregion == nil)
-        itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    else
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id item = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        item = [_searchResults objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
     {
-        itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
-                    [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
-                    _worldRegion.name];
-    }
-
-    if ([item isKindOfClass:[OutdatedItem class]])
-    {
-        [[[UIAlertView alloc] initWithTitle:nil
-                                    message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
-                                             itemName,
-                                             [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-                                                                            countStyle:NSByteCountFormatterCountStyleFile],
-                                             [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
-                                                                 action:^{
-                                                                     [self startDownloadOf:item];
-                                                                 }], nil] show];
-    }
-    else if ([item isKindOfClass:[InstalledItem class]])
-    {
-        InstalledItem* installedItem = (InstalledItem*)item;
-
-        NSString* resourceId = installedItem.localResource->id.toNSString();
-        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
-                                             animated:YES];
-    }
-    else if ([item isKindOfClass:[InstallableItem class]])
-    {
-        [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-                                                                 message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@Proceed?"),
-                                                                          itemName,
-                                                                          [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-                                                                                                         countStyle:NSByteCountFormatterCountStyleFile],
-                                                                          [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
-                                                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                                                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
-                                                                                              action:^{
-                                                                                                  [self startDownloadOf:item];
-                                                                                              }], nil]];
-    }
-    else if ([item isKindOfClass:[DownloadedItem class]])
-    {
-        [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-                                                                 message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
-                                                                          itemName]
-                                                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
-                                                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
-                                                                                              action:^{
-                                                                                                  [self cancelDownloadOf:item];
-                                                                                              }], nil]];
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
+            item = [_subregionItems objectAtIndex:indexPath.row];
+        //else
     }
 
+    if (item != nil)
+        [self onItemClicked:item];
+
+    // Deselect this row
     [tableView deselectRowAtIndexPath:indexPath animated:true];
-     */
 }
 
 #pragma mark - UISearchDisplayDelegate

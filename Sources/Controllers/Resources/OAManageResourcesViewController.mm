@@ -30,17 +30,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #define _(name) OAManageResourcesViewController__##name
 
-#define Item _(Item)
-@interface Item : NSObject
+#define ResourceItem _(ResourceItem)
+@interface ResourceItem : NSObject
 @property NSString* title;
-@property NSString* resourceId;
+@property QString resourceId;
 @end
-@implementation Item
+@implementation ResourceItem
+@end
+
+#define RepositoryResourceItem _(RepositoryResourceItem)
+@interface RepositoryResourceItem : ResourceItem
+@property std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> resource;
+@end
+@implementation RepositoryResourceItem
+@end
+
+#define LocalResourceItem _(LocalResourceItem)
+@interface LocalResourceItem : ResourceItem
+@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> resource;
+@end
+@implementation LocalResourceItem
 @end
 
 #define OutdatedResourceItem _(OutdatedResourceItem)
-@interface OutdatedResourceItem : Item
-@property std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> resource;
+@interface OutdatedResourceItem : LocalResourceItem
 @end
 @implementation OutdatedResourceItem
 @end
@@ -265,30 +278,43 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_subregionItems sortUsingSelector:@selector(compare:)];
 }
 
-/*
-- (NSString*)titleOfResource:
+- (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
 {
-    if (_worldRegion.superregion == nil)
+    return [self titleOfResource:resource withRegionName:nil];
+}
+
+- (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
+              withRegionName:(NSString*)regionName
+{
+    if (_region == _app.worldRegion)
     {
-        if ([resourceId isEqualToString:@"world_basemap.map.obf"])
+        if (resource->id == QLatin1String("world_basemap.map.obf"))
             return OALocalizedString(@"Detailed overview map");
-        return nil;
     }
 
-    switch(type)
+    switch(resource->type)
     {
         case OsmAndResourceType::MapRegion:
-            if ([_worldRegion.subregions count] > 0)
-                return OALocalizedString(@"Full map of entire region");
+            if ([_region.subregions count] > 0)
+            {
+                if (regionName == nil)
+                    return OALocalizedString(@"Full map of entire region");
+                else
+                    return OALocalizedString(@"Full map of entire %@", regionName);
+            }
             else
-                return OALocalizedString(@"Full map of the region");
+            {
+                if (regionName == nil)
+                    return OALocalizedString(@"Full map of the region");
+                else
+                    return OALocalizedString(@"Full map of %@", regionName);
+            }
             break;
 
         default:
             return nil;
     }
 }
-*/
 
 - (void)performSearchForSearchString:(NSString*)searchString
                       andSearchScope:(NSInteger)searchScope
@@ -323,7 +349,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [item1.name localizedCaseInsensitiveCompare:item2.name];
     };
 
-    // 1. Regions that start with given name have higher priority
+    // Regions that start with given name have higher priority
     NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchString];
     NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
     if ([regions_startsWith count] == 0)
@@ -333,7 +359,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     [regions_startsWith sortUsingComparator:regionComparator];
 
-    // - Regions that only contain given string have less priority
+    // Regions that only contain given string have less priority
     NSPredicate* onlyContains = [NSPredicate predicateWithFormat:
                                  @"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)",
                                  searchString,
@@ -349,9 +375,91 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     [regions_onlyContains sortUsingComparator:regionComparator];
 
+    // Assemble all regions all togather
     NSArray* regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
+    NSMutableArray* results = [NSMutableArray array];
+    for (OAWorldRegion* region in regions)
+    {
+        [results addObject:region];
 
-    _searchResults = regions;
+        // Find all resources that are direct children of current region
+        //TODO: this can be optimized, use cached data
+        const auto regionId = QString::fromNSString(region.regionId);
+        QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > resources;
+        for (const auto& resource : _outdatedResources)
+        {
+            if (!resource->id.startsWith(regionId))
+                continue;
+
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+        for (const auto& resource : _localResources)
+        {
+            if (!resource->id.startsWith(regionId))
+                continue;
+
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+        for (const auto& resource : _resourcesInRepository)
+        {
+            if (!resource->id.startsWith(regionId))
+                continue;
+
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+
+        // Create items for each resource found
+        NSMutableArray* resourceItems = [NSMutableArray array];
+        for (const auto& resource_ : resources)
+        {
+            if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+            {
+                if (_outdatedResources.contains(resource->id))
+                {
+                    OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                    item.resourceId = resource->id;
+                    item.title = [self titleOfResource:resource_
+                                        withRegionName:region.name];
+                    item.resource = resource;
+
+                    [resourceItems addObject:item];
+                }
+                else
+                {
+                    LocalResourceItem* item = [[LocalResourceItem alloc] init];
+                    item.resourceId = resource->id;
+                    item.title = [self titleOfResource:resource_
+                                        withRegionName:region.name];
+                    item.resource = resource;
+
+                    [resourceItems addObject:item];
+                }
+            }
+            else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
+            {
+                RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+                item.resourceId = resource->id;
+                item.title = [self titleOfResource:resource_
+                                    withRegionName:region.name];
+                item.resource = resource;
+
+                [resourceItems addObject:item];
+            }
+        }
+        [resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+            ResourceItem *item1 = obj1;
+            ResourceItem *item2 = obj2;
+
+            return [item1.title localizedCaseInsensitiveCompare:item2.title];
+        }];
+
+        [results addObjectsFromArray:resourceItems];
+    }
+
+    _searchResults = results;
 }
 
 
@@ -410,6 +518,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const subregionCell = @"subregionCell";
+    static NSString* const localResourceCell = @"localResourceCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
@@ -426,6 +535,27 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             title = item.name;
             if (item.superregion != nil)
                 subtitle = item.superregion.name;
+        }
+        else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+        {
+            OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
+
+            cellTypeId = localResourceCell;
+            title = item.title;
+        }
+        else if ([item_ isKindOfClass:[LocalResourceItem class]])
+        {
+            LocalResourceItem* item = (LocalResourceItem*)item_;
+
+            cellTypeId = localResourceCell;
+            title = item.title;
+        }
+        else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+        {
+            RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+
+            cellTypeId = localResourceCell;
+            title = item.title;
         }
     }
     else

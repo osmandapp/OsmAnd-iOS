@@ -11,8 +11,8 @@
 
 #import <Foundation/Foundation.h>
 
-#define OALocalizedString(defaultValue) \
-    defaultValue
+#define OALocalizedString(defaultValue, ...) \
+    [NSString stringWithFormat:(defaultValue), ##__VA_ARGS__]
 /*
 #define OALocalizedString(defaultValue) \
     _OALocalizedString(defaultValue, __FILE__, __LINE__, __PRETTY_FUNCTION__)

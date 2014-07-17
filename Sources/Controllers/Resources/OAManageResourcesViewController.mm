@@ -14,6 +14,8 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OATableViewCell.h"
+#import "UITableViewCell+getTableView.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAWorldRegion.h"
 #import "OALog.h"
@@ -23,6 +25,8 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+
+#define kOpenSubregionSegue @"openSubregionSegue"
 
 #define _(name) OAManageResourcesViewController__##name
 
@@ -66,6 +70,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSInteger _lastUnusedSectionIndex;
 
+    NSMutableArray* _searchableWorldwideRegionItems;
+
     NSInteger _subregionsSection;
     NSMutableArray* _searchableSubregionItems;
     NSMutableArray* _subregionItems;
@@ -90,6 +96,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _dataInvalidated = NO;
         _dataLock = [[NSObject alloc] init];
 
+        _searchableWorldwideRegionItems = [NSMutableArray array];
+
         _searchableSubregionItems = [NSMutableArray array];
         _subregionItems = [NSMutableArray array];
         _resourceItems = [NSMutableArray array];
@@ -101,6 +109,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return self;
 }
 
+- (void)setupWithRegion:(OAWorldRegion*)region andWorldRegionItems:(NSArray*)worldRegionItems
+{
+    _region = region;
+    _searchableWorldwideRegionItems = [worldRegionItems copy];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -110,6 +124,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
 #endif // DEBUG
 
+    if (_region != _app.worldRegion)
+        self.title = _region.name;
+
+    // Configure search scope
+    if (_region == _app.worldRegion)
+        self.searchDisplayController.searchBar.scopeButtonTitles = nil;
+    else
+        self.searchDisplayController.searchBar.scopeButtonTitles = @[_region.name, OALocalizedString(@"Worldwide")];
+    
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
 
     [self obtainDataAndItems];
@@ -285,6 +308,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return;
     }
 
+    // Select where to look
+    NSArray* searchableContent = nil;
+    if (_region == _app.worldRegion || searchScope == 0)
+        searchableContent = _searchableSubregionItems;
+    else
+        searchableContent = _searchableWorldwideRegionItems;
+
     // Search through subregions:
 
     NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
@@ -296,11 +326,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     // 1. Regions that start with given name have higher priority
     NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchString];
-    NSMutableArray *regions_startsWith = [[_searchableSubregionItems filteredArrayUsingPredicate:startsWith] mutableCopy];
+    NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
     if ([regions_startsWith count] == 0)
     {
         NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[c] %@", searchString];
-        [regions_startsWith addObjectsFromArray:[_searchableSubregionItems filteredArrayUsingPredicate:anyStartsWith]];
+        [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
     }
     [regions_startsWith sortUsingComparator:regionComparator];
 
@@ -309,14 +339,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                  @"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)",
                                  searchString,
                                  searchString];
-    NSMutableArray *regions_onlyContains = [[_searchableSubregionItems filteredArrayUsingPredicate:onlyContains] mutableCopy];
+    NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
     if ([regions_onlyContains count] == 0)
     {
         NSPredicate* anyOnlyContains = [NSPredicate predicateWithFormat:
                                         @"(ANY allNames CONTAINS[c] %@) AND NOT (ANY allNames BEGINSWITH[c] %@)",
                                         searchString,
                                         searchString];
-        [regions_onlyContains addObjectsFromArray:[_searchableSubregionItems filteredArrayUsingPredicate:anyOnlyContains]];
+        [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
     }
     [regions_onlyContains sortUsingComparator:regionComparator];
 
@@ -637,30 +667,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 #pragma mark - Navigation
-/*
+
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
-    UITableView* tableView = nil;
-    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
-    {
-        OATableViewCell* cell = (OATableViewCell*)sender;
-        tableView = cell.tableView;
-    }
-    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
+    if ([sender isKindOfClass:[UITableViewCell class]])
     {
         UITableViewCell* cell = (UITableViewCell*)sender;
-        tableView = [cell getTableView];
-    }
+        UITableView* tableView = [cell getTableView];
+        NSIndexPath* cellPath = [tableView indexPathForCell:cell];
 
-    if (tableView == _tableView)
-    {
-        NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
-
-        if (selectedItemPath != nil &&
-            selectedItemPath.section == _subregionsSection &&
-            [identifier isEqualToString:_openSubregionSegueId])
+        if ([identifier isEqualToString:kOpenSubregionSegue])
         {
-            return (selectedItemPath.row < [_subregionItems count]);
+            OAWorldRegion* subregion = nil;
+            if (tableView == _tableView && _subregionsSection >= 0)
+                subregion = [_subregionItems objectAtIndex:cellPath.row];
+            else if (tableView == self.searchDisplayController.searchResultsTableView)
+                subregion = [_searchResults objectAtIndex:cellPath.row];
+
+            return (subregion != nil);
         }
     }
 
@@ -669,32 +693,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    UITableView* tableView = nil;
-    if ([sender isKindOfClass:[OATableViewCell class]] || [[sender class] isSubclassOfClass:[OATableViewCell class]])
-    {
-        OATableViewCell* cell = (OATableViewCell*)sender;
-        tableView = cell.tableView;
-    }
-    else if ([sender isKindOfClass:[UITableViewCell class]] || [[sender class] isSubclassOfClass:[UITableViewCell class]])
-    {
-        UITableViewCell* cell = (UITableViewCell*)sender;
-        tableView = [cell getTableView];
-    }
+    if (![sender isKindOfClass:[UITableViewCell class]])
+        return;
 
-    if (tableView == _tableView)
-    {
-        NSIndexPath* selectedItemPath = [_tableView indexPathForSelectedRow];
+    UITableViewCell* cell = (UITableViewCell*)sender;
+    UITableView* tableView = [cell getTableView];
+    NSIndexPath* cellPath = [tableView indexPathForCell:cell];
 
-        if (selectedItemPath != nil &&
-            selectedItemPath.section == _subregionsSection &&
-            [segue.identifier isEqualToString:_openSubregionSegueId])
-        {
-            OARegionDownloadsViewController* regionDownloadsViewController = [segue destinationViewController];
-            regionDownloadsViewController.worldRegion = [_subregionItems objectAtIndex:selectedItemPath.row];
-        }
+    if ([segue.identifier isEqualToString:kOpenSubregionSegue])
+    {
+        OAManageResourcesViewController* subregionViewController = [segue destinationViewController];
+
+        OAWorldRegion* subregion = nil;
+        if (tableView == _tableView && _subregionsSection >= 0)
+            subregion = [_subregionItems objectAtIndex:cellPath.row];
+        else if (tableView == self.searchDisplayController.searchResultsTableView)
+            subregion = [_searchResults objectAtIndex:cellPath.row];
+
+        [subregionViewController setupWithRegion:subregion
+                             andWorldRegionItems:(_region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems];
     }
 }
-*/
+
 #pragma mark -
 
 + (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region

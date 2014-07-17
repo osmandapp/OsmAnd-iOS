@@ -18,12 +18,13 @@
     std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion> _worldRegion;
 }
 
-- (instancetype)init
+- (instancetype)initWorld
 {
     self = [super init];
     if (self) {
         [self ctor];
         _regionId = nil;
+        _downloadsIdPrefix = @"world_";
         _nativeName = nil;
         _localizedName = nil;
         _allNames = nil;
@@ -39,6 +40,7 @@
         [self ctor];
         _worldRegion = region;
         _regionId = _worldRegion->id.toNSString();
+        _downloadsIdPrefix = [_worldRegion->downloadId.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->name.toNSString();
         const auto citLocalizedName = _worldRegion->localizedNames.constFind(QString::fromNSString([[NSLocale preferredLanguages] firstObject]));
         if (citLocalizedName == _worldRegion->localizedNames.cend())
@@ -64,6 +66,7 @@
     if (self) {
         [self ctor];
         _regionId = regionId;
+        _downloadsIdPrefix = regionId;
         _nativeName = nil;
         _localizedName = localizedName;
         _allNames = @[_localizedName];
@@ -88,6 +91,7 @@
 }
 
 @synthesize regionId = _regionId;
+@synthesize downloadsIdPrefix = _downloadsIdPrefix;
 @synthesize nativeName = _nativeName;
 @synthesize localizedName = _localizedName;
 @synthesize allNames = _allNames;
@@ -155,7 +159,7 @@
     NSMutableDictionary* regionsLookupTable = [[NSMutableDictionary alloc] initWithCapacity:loadedWorldRegions.size()];
 
     // Create root region
-    OAWorldRegion* entireWorld = [[OAWorldRegion alloc] init];
+    OAWorldRegion* entireWorld = [[OAWorldRegion alloc] initWorld];
 
     // Create main regions:
 

@@ -79,6 +79,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _localResources;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
+    QHash< OAWorldRegion* __weak, QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > > _resourcesByRegions;
 
     NSInteger _lastUnusedSectionIndex;
 
@@ -173,10 +174,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         _lastUnusedSectionIndex = 0;
 
-        // Obtain all resources separately
-        _resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
-        _localResources = _app.resourcesManager->getLocalResources();
-        _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+        [self prepareData];
 
         [self collectSubregionsDataAndItems];
         if ([_subregionItems count] > 0)
@@ -184,22 +182,56 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else
             _subregionsSection = -1;
 
-        _resourcesSection = -1;
+        [self collectResourcesDataAndItems];
+        if ([_resourceItems count] > 0)
+            _resourcesSection = _lastUnusedSectionIndex++;
+        else
+            _resourcesSection = -1;
+    }
+}
 
-        /*[_items removeAllObjects];
+- (void)prepareData
+{
+    // Obtain all resources separately
+    _resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
+    _localResources = _app.resourcesManager->getLocalResources();
+    _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
 
+    // Collect resources for each region (worldwide)
+    _resourcesByRegions.clear();
+    NSArray* mergedRegions = [_app.worldRegion.flattenedSubregions arrayByAddingObject:_app.worldRegion];
+    for(OAWorldRegion* region in mergedRegions)
+    {
+        const auto regionId = QString::fromNSString(region.regionId);
+        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
 
-        // Process outdated installed resources first
-        for(const auto& itOutdatedResource : OsmAnd::rangeOf(_outdatedResources))
+        QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > resources;
+        for (const auto& resource : _outdatedResources)
         {
-            OutdatedResourceItem* newItem = [[OutdatedResourceItem alloc] init];
+            if (!resource->id.startsWith(downloadsIdPrefix))
+                continue;
 
-            newItem.resourceId = itOutdatedResource.key().toNSString();
-            newItem.resource = itOutdatedResource.value();
-            newItem.title = nil;
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+        for (const auto& resource : _localResources)
+        {
+            if (!resource->id.startsWith(downloadsIdPrefix))
+                continue;
 
-            [_items setObject:newItem forKey:newItem.resourceId];
-        }*/
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+        for (const auto& resource : _resourcesInRepository)
+        {
+            if (!resource->id.startsWith(downloadsIdPrefix))
+                continue;
+
+            if (!resources.contains(resource->id))
+                resources.insert(resource->id, resource);
+        }
+
+        _resourcesByRegions.insert(region, resources);
     }
 }
 
@@ -278,6 +310,65 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [_subregionItems sortUsingSelector:@selector(compare:)];
 }
 
+- (void)collectResourcesDataAndItems
+{
+    [_resourceItems removeAllObjects];
+
+    const auto citResources = _resourcesByRegions.constFind(_region);
+    if (citResources == _resourcesByRegions.cend())
+        return;
+    const auto& resources = *citResources;
+
+    for (const auto& resource_ : resources)
+    {
+        if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+        {
+            if (_outdatedResources.contains(resource->id))
+            {
+                OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                item.resourceId = resource->id;
+                item.title = [self titleOfResource:resource_];
+                item.resource = resource;
+
+                if (item.title == nil)
+                    continue;
+
+                [_resourceItems addObject:item];
+            }
+            else
+            {
+                LocalResourceItem* item = [[LocalResourceItem alloc] init];
+                item.resourceId = resource->id;
+                item.title = [self titleOfResource:resource_];
+                item.resource = resource;
+
+                if (item.title == nil)
+                    continue;
+
+                [_resourceItems addObject:item];
+            }
+        }
+        else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
+        {
+            RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+            item.resourceId = resource->id;
+            item.title = [self titleOfResource:resource_];
+            item.resource = resource;
+
+            if (item.title == nil)
+                continue;
+
+            [_resourceItems addObject:item];
+        }
+    }
+    [_resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        ResourceItem *item1 = obj1;
+        ResourceItem *item2 = obj2;
+
+        return [item1.title localizedCaseInsensitiveCompare:item2.title];
+    }];
+}
+
 - (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
 {
     return [self titleOfResource:resource withRegionName:nil];
@@ -290,6 +381,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (resource->id == QLatin1String("world_basemap.map.obf"))
             return OALocalizedString(@"Detailed overview map");
+        return nil;
     }
 
     switch(resource->type)
@@ -319,147 +411,136 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)performSearchForSearchString:(NSString*)searchString
                       andSearchScope:(NSInteger)searchScope
 {
-    // If case searchString is empty, there are no results
-    if (searchString == nil || [searchString length] == 0)
+    @synchronized(_dataLock)
     {
-        _searchResults = @[];
-        return;
-    }
-
-    // In case searchString has only spaces, also nothing to do here
-    if ([[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
-    {
-        _searchResults = @[];
-        return;
-    }
-
-    // Select where to look
-    NSArray* searchableContent = nil;
-    if (_region == _app.worldRegion || searchScope == 0)
-        searchableContent = _searchableSubregionItems;
-    else
-        searchableContent = _searchableWorldwideRegionItems;
-
-    // Search through subregions:
-
-    NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
-        OAWorldRegion *item1 = obj1;
-        OAWorldRegion *item2 = obj2;
-
-        return [item1.name localizedCaseInsensitiveCompare:item2.name];
-    };
-
-    // Regions that start with given name have higher priority
-    NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
-    NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
-    if ([regions_startsWith count] == 0)
-    {
-        NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
-        [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
-    }
-    [regions_startsWith sortUsingComparator:regionComparator];
-
-    // Regions that only contain given string have less priority
-    NSPredicate* onlyContains = [NSPredicate predicateWithFormat:
-                                 @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
-                                 searchString,
-                                 searchString];
-    NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
-    if ([regions_onlyContains count] == 0)
-    {
-        NSPredicate* anyOnlyContains = [NSPredicate predicateWithFormat:
-                                        @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
-                                        searchString,
-                                        searchString];
-        [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
-    }
-    [regions_onlyContains sortUsingComparator:regionComparator];
-
-    // Assemble all regions all togather
-    NSArray* regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
-    NSMutableArray* results = [NSMutableArray array];
-    for (OAWorldRegion* region in regions)
-    {
-        [results addObject:region];
-
-        // Find all resources that are direct children of current region
-        //TODO: this can be optimized, use cached data
-        const auto regionId = QString::fromNSString(region.regionId);
-        QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > resources;
-        for (const auto& resource : _outdatedResources)
+        // If case searchString is empty, there are no results
+        if (searchString == nil || [searchString length] == 0)
         {
-            if (!resource->id.startsWith(regionId))
-                continue;
-
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
-        }
-        for (const auto& resource : _localResources)
-        {
-            if (!resource->id.startsWith(regionId))
-                continue;
-
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
-        }
-        for (const auto& resource : _resourcesInRepository)
-        {
-            if (!resource->id.startsWith(regionId))
-                continue;
-
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
+            _searchResults = @[];
+            return;
         }
 
-        // Create items for each resource found
-        NSMutableArray* resourceItems = [NSMutableArray array];
-        for (const auto& resource_ : resources)
+        // In case searchString has only spaces, also nothing to do here
+        if ([[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
         {
-            if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
+            _searchResults = @[];
+            return;
+        }
+
+        // Select where to look
+        NSArray* searchableContent = nil;
+        if (_region == _app.worldRegion || searchScope == 0)
+            searchableContent = _searchableSubregionItems;
+        else
+            searchableContent = _searchableWorldwideRegionItems;
+
+        // Search through subregions:
+
+        NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
+            OAWorldRegion *item1 = obj1;
+            OAWorldRegion *item2 = obj2;
+
+            return [item1.name localizedCaseInsensitiveCompare:item2.name];
+        };
+
+        // Regions that start with given name have higher priority
+        NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[cd] %@", searchString];
+        NSMutableArray *regions_startsWith = [[searchableContent filteredArrayUsingPredicate:startsWith] mutableCopy];
+        if ([regions_startsWith count] == 0)
+        {
+            NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[cd] %@", searchString];
+            [regions_startsWith addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyStartsWith]];
+        }
+        [regions_startsWith sortUsingComparator:regionComparator];
+
+        // Regions that only contain given string have less priority
+        NSPredicate* onlyContains = [NSPredicate predicateWithFormat:
+                                     @"(name CONTAINS[cd] %@) AND NOT (name BEGINSWITH[cd] %@)",
+                                     searchString,
+                                     searchString];
+        NSMutableArray *regions_onlyContains = [[searchableContent filteredArrayUsingPredicate:onlyContains] mutableCopy];
+        if ([regions_onlyContains count] == 0)
+        {
+            NSPredicate* anyOnlyContains = [NSPredicate predicateWithFormat:
+                                            @"(ANY allNames CONTAINS[cd] %@) AND NOT (ANY allNames BEGINSWITH[cd] %@)",
+                                            searchString,
+                                            searchString];
+            [regions_onlyContains addObjectsFromArray:[searchableContent filteredArrayUsingPredicate:anyOnlyContains]];
+        }
+        [regions_onlyContains sortUsingComparator:regionComparator];
+
+        // Assemble all regions all togather
+        NSArray* regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
+        NSMutableArray* results = [NSMutableArray array];
+        for (OAWorldRegion* region in regions)
+        {
+            [results addObject:region];
+
+            // Get all resources that are direct children of current region
+            const auto citResources = _resourcesByRegions.constFind(region);
+            if (citResources == _resourcesByRegions.cend())
+                continue;
+            const auto& resources = *citResources;
+
+            // Create items for each resource found
+            NSMutableArray* resourceItems = [NSMutableArray array];
+            for (const auto& resource_ : resources)
             {
-                if (_outdatedResources.contains(resource->id))
+                if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
                 {
-                    OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                    if (_outdatedResources.contains(resource->id))
+                    {
+                        OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.title = [self titleOfResource:resource_
+                                            withRegionName:region.name];
+                        item.resource = resource;
+
+                        if (item.title == nil)
+                            continue;
+
+                        [resourceItems addObject:item];
+                    }
+                    else
+                    {
+                        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.title = [self titleOfResource:resource_
+                                            withRegionName:region.name];
+                        item.resource = resource;
+
+                        if (item.title == nil)
+                            continue;
+
+                        [resourceItems addObject:item];
+                    }
+                }
+                else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
+                {
+                    RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.title = [self titleOfResource:resource_
                                         withRegionName:region.name];
                     item.resource = resource;
 
-                    [resourceItems addObject:item];
-                }
-                else
-                {
-                    LocalResourceItem* item = [[LocalResourceItem alloc] init];
-                    item.resourceId = resource->id;
-                    item.title = [self titleOfResource:resource_
-                                        withRegionName:region.name];
-                    item.resource = resource;
+                    if (item.title == nil)
+                        continue;
 
                     [resourceItems addObject:item];
                 }
             }
-            else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
-            {
-                RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
-                item.resourceId = resource->id;
-                item.title = [self titleOfResource:resource_
-                                    withRegionName:region.name];
-                item.resource = resource;
-
-                [resourceItems addObject:item];
-            }
+            [resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                ResourceItem *item1 = obj1;
+                ResourceItem *item2 = obj2;
+                
+                return [item1.title localizedCaseInsensitiveCompare:item2.title];
+            }];
+            
+            [results addObjectsFromArray:resourceItems];
         }
-        [resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-            ResourceItem *item1 = obj1;
-            ResourceItem *item2 = obj2;
-
-            return [item1.title localizedCaseInsensitiveCompare:item2.title];
-        }];
-
-        [results addObjectsFromArray:resourceItems];
+        
+        _searchResults = results;
     }
-
-    _searchResults = results;
 }
 
 - (void)onItemClicked:(id)item_
@@ -646,7 +727,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else
     {
-        if (indexPath.section == _subregionsSection)
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
         {
             OAWorldRegion* worldRegion = [_subregionItems objectAtIndex:indexPath.row];
 
@@ -654,21 +735,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             title = worldRegion.name;
             subtitle = nil;
         }
-        /*else if (indexPath.section == _downloadsSection)
-         {
-         downloadItem = [_downloadItems objectAtIndex:indexPath.row];
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        {
+            id item_ = [_resourceItems objectAtIndex:indexPath.row];
 
-         if ([downloadItem isKindOfClass:[DownloadedItem class]])
-         cellTypeId = downloadedItemCell;
-         else if ([downloadItem isKindOfClass:[OutdatedItem class]])
-         cellTypeId = outdatedItemCell;
-         else if ([downloadItem isKindOfClass:[InstalledItem class]])
-         cellTypeId = installedItemCell;
-         else //if ([downloadItem isKindOfClass:[InstallableItem class]])
-         cellTypeId = installableItemCell;
-         caption = downloadItem.caption;
-         }
-         */
+            if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+            {
+                OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
+
+                cellTypeId = outdatedResourceCell;
+                title = item.title;
+            }
+            else if ([item_ isKindOfClass:[LocalResourceItem class]])
+            {
+                LocalResourceItem* item = (LocalResourceItem*)item_;
+
+                cellTypeId = localResourceCell;
+                title = item.title;
+            }
+            else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+            {
+                RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+                
+                cellTypeId = repositoryResourceCell;
+                title = item.title;
+            }
+        }
     }
 
     // Obtain reusable cell or create one
@@ -741,7 +833,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
             item = [_subregionItems objectAtIndex:indexPath.row];
-        //else
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+            item = [_resourceItems objectAtIndex:indexPath.row];
     }
 
     if (item == nil)
@@ -759,13 +852,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
             item = [_subregionItems objectAtIndex:indexPath.row];
-        //else
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+            item = [_resourceItems objectAtIndex:indexPath.row];
     }
 
     if (item != nil)
         [self onItemClicked:item];
 
-    // Deselect this row
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
@@ -891,9 +984,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region
                         thatContainsResource:(const QString&)resourceId
 {
-    const auto& regionId = QString::fromNSString(region.regionId);
+    const auto& downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
 
-    if (resourceId.startsWith(regionId))
+    if (resourceId.startsWith(downloadsIdPrefix))
         return region;
 
     for (OAWorldRegion* subregion in region.subregions)

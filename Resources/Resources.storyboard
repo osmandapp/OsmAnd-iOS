@@ -75,6 +75,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="Lhe-yk-sVD" kind="push" identifier="openSubregionSegue" id="f3E-yf-8Vo"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" accessoryType="detailDisclosureButton" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="installedResourceCell" textLabel="aFw-z6-EH8" style="IBUITableViewCellStyleDefault" id="8fx-0s-lN4">
                                         <rect key="frame" x="0.0" y="143" width="320" height="44"/>
@@ -99,20 +102,13 @@
                                     <outlet property="delegate" destination="Lhe-yk-sVD" id="CVK-wc-517"/>
                                 </connections>
                             </tableView>
-                            <activityIndicatorView hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="N3E-eS-aEz" userLabel="updateIndicator">
-                                <rect key="frame" x="142" y="298" width="37" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="color" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="FH1-1I-lZ1" firstAttribute="top" secondItem="1LP-5L-xCP" secondAttribute="bottom" id="2aF-TW-0BR"/>
                             <constraint firstItem="FH1-1I-lZ1" firstAttribute="top" secondItem="1LP-5L-xCP" secondAttribute="bottom" id="3c6-VQ-sGs"/>
                             <constraint firstItem="1LP-5L-xCP" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="9hb-xX-BW3"/>
-                            <constraint firstItem="1LP-5L-xCP" firstAttribute="centerY" secondItem="N3E-eS-aEz" secondAttribute="centerY" id="D6x-cf-nBD"/>
                             <constraint firstAttribute="trailing" secondItem="iZK-JW-bB4" secondAttribute="trailing" id="QSZ-xF-O0z"/>
-                            <constraint firstItem="1LP-5L-xCP" firstAttribute="centerX" secondItem="N3E-eS-aEz" secondAttribute="centerX" id="Z46-Ee-Ebe"/>
                             <constraint firstItem="iZK-JW-bB4" firstAttribute="top" secondItem="qhu-fS-4PN" secondAttribute="bottom" id="jyQ-ls-uxr"/>
                             <constraint firstItem="iZK-JW-bB4" firstAttribute="leading" secondItem="v5b-3L-kLb" secondAttribute="leading" id="lrg-a6-9g9"/>
                             <constraint firstAttribute="trailing" secondItem="1LP-5L-xCP" secondAttribute="trailing" id="usK-lp-A9R"/>
@@ -125,7 +121,6 @@
                         <outlet property="scopeControlContainerHeightConstraint" destination="ILq-wb-Okg" id="GYT-lP-r4L"/>
                         <outlet property="searchDisplayController" destination="mBR-OL-CGm" id="uqv-Jo-ffv"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>
-                        <outlet property="updateIndicator" destination="N3E-eS-aEz" id="NO6-Vt-H0i"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wb8-1N-k7N" userLabel="First Responder" sceneMemberID="firstResponder"/>

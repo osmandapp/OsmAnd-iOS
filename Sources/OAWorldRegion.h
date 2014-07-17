@@ -15,6 +15,7 @@
 @property(readonly) NSString* nativeName;
 @property(readonly) NSString* localizedName;
 @property(readonly) NSString* name;
+@property(readonly) NSArray* allNames;
 
 // Hierarchy:
 @property(readonly, weak) OAWorldRegion* superregion;

@@ -271,29 +271,56 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)performSearchForSearchString:(NSString*)searchString
                       andSearchScope:(NSInteger)searchScope
 {
+    // If case searchString is empty, there are no results
+    if (searchString == nil || [searchString length] == 0)
+    {
+        _searchResults = @[];
+        return;
+    }
+
+    // In case searchString has only spaces, also nothing to do here
+    if ([[searchString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0)
+    {
+        _searchResults = @[];
+        return;
+    }
+
     // Search through subregions:
 
-    // 1. Regions that start with given name have higher priority
-    NSMutableArray *regions_beginWith = [[_searchableSubregionItems filteredArrayUsingPredicate:
-                                          [NSPredicate predicateWithFormat:@"%K BEGINSWITH[c] %@", @"name", searchString]] mutableCopy];
-    [regions_beginWith sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+    NSComparator regionComparator = ^NSComparisonResult(id obj1, id obj2) {
         OAWorldRegion *item1 = obj1;
         OAWorldRegion *item2 = obj2;
 
         return [item1.name localizedCaseInsensitiveCompare:item2.name];
-    }];
+    };
+
+    // 1. Regions that start with given name have higher priority
+    NSPredicate* startsWith = [NSPredicate predicateWithFormat:@"name BEGINSWITH[c] %@", searchString];
+    NSMutableArray *regions_startsWith = [[_searchableSubregionItems filteredArrayUsingPredicate:startsWith] mutableCopy];
+    if ([regions_startsWith count] == 0)
+    {
+        NSPredicate* anyStartsWith = [NSPredicate predicateWithFormat:@"ANY allNames BEGINSWITH[c] %@", searchString];
+        [regions_startsWith addObjectsFromArray:[_searchableSubregionItems filteredArrayUsingPredicate:anyStartsWith]];
+    }
+    [regions_startsWith sortUsingComparator:regionComparator];
 
     // - Regions that only contain given string have less priority
-    NSMutableArray *regions_contain = [[_searchableSubregionItems filteredArrayUsingPredicate:
-                                        [NSPredicate predicateWithFormat:@"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)", searchString]] mutableCopy];
-    [regions_contain sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        OAWorldRegion *item1 = obj1;
-        OAWorldRegion *item2 = obj2;
+    NSPredicate* onlyContains = [NSPredicate predicateWithFormat:
+                                 @"(name CONTAINS[c] %@) AND NOT (name BEGINSWITH[c] %@)",
+                                 searchString,
+                                 searchString];
+    NSMutableArray *regions_onlyContains = [[_searchableSubregionItems filteredArrayUsingPredicate:onlyContains] mutableCopy];
+    if ([regions_onlyContains count] == 0)
+    {
+        NSPredicate* anyOnlyContains = [NSPredicate predicateWithFormat:
+                                        @"(ANY allNames CONTAINS[c] %@) AND NOT (ANY allNames BEGINSWITH[c] %@)",
+                                        searchString,
+                                        searchString];
+        [regions_onlyContains addObjectsFromArray:[_searchableSubregionItems filteredArrayUsingPredicate:anyOnlyContains]];
+    }
+    [regions_onlyContains sortUsingComparator:regionComparator];
 
-        return [item1.name localizedCaseInsensitiveCompare:item2.name];
-    }];
-
-    NSArray* regions = [regions_beginWith arrayByAddingObjectsFromArray:regions_contain];
+    NSArray* regions = [regions_startsWith arrayByAddingObjectsFromArray:regions_onlyContains];
 
     _searchResults = regions;
 }

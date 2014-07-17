@@ -26,6 +26,7 @@
         _regionId = nil;
         _nativeName = nil;
         _localizedName = nil;
+        _allNames = nil;
         _superregion = nil;
     }
     return self;
@@ -44,6 +45,15 @@
             _localizedName = nil;
         else
             _localizedName = (*citLocalizedName).toNSString();
+        NSMutableArray* allNames = [NSMutableArray arrayWithObject:_nativeName];
+        for (const auto& name_ : _worldRegion->localizedNames)
+        {
+            NSString* name = name_.toNSString();
+
+            if (![allNames containsObject:name])
+                [allNames addObject:name];
+        }
+        _allNames = [allNames copy];
     }
     return self;
 }
@@ -56,6 +66,7 @@
         _regionId = regionId;
         _nativeName = nil;
         _localizedName = localizedName;
+        _allNames = @[_localizedName];
     }
     return self;
 }
@@ -79,6 +90,8 @@
 @synthesize regionId = _regionId;
 @synthesize nativeName = _nativeName;
 @synthesize localizedName = _localizedName;
+@synthesize allNames = _allNames;
+
 @synthesize superregion = _superregion;
 @synthesize subregions = _subregions;
 @synthesize flattenedSubregions = _flattenedSubregions;
@@ -232,6 +245,11 @@
     }
 
     return [entireWorld makeImmutable];
+}
+
+- (NSString*)description
+{
+    return [NSString stringWithFormat:@"%@ (%@)", self.name, _regionId];
 }
 
 @end

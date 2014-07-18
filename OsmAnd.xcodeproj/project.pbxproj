@@ -551,7 +551,6 @@
 		BBA3AEDA197500EF0039D991 /* OAMapSourcesListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSourcesListViewController.mm; path = Controllers/MapSources/OAMapSourcesListViewController.mm; sourceTree = "<group>"; };
 		BBA3AEDE197501090039D991 /* OAIncomingURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIncomingURLViewController.h; path = Controllers/Misc/OAIncomingURLViewController.h; sourceTree = "<group>"; };
 		BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIncomingURLViewController.mm; path = Controllers/Misc/OAIncomingURLViewController.mm; sourceTree = "<group>"; };
-		BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/Resources/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE7197501330039D991 /* OADownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsViewController.h; path = Controllers/Resources/OADownloadsViewController.h; sourceTree = "<group>"; };
 		BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsViewController.mm; path = Controllers/Resources/OADownloadsViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInformationViewController.h; path = Controllers/Resources/OALocalResourceInformationViewController.h; sourceTree = "<group>"; };
@@ -574,6 +573,7 @@
 		BBA3AF21197652140039D991 /* bar_goto_favorite_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "bar_goto_favorite_icon@2x.png"; sourceTree = "<group>"; };
 		BBA3AF26197659270039D991 /* menu_goto_favorite_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_goto_favorite_icon.png; sourceTree = "<group>"; };
 		BBA3AF27197659270039D991 /* menu_goto_favorite_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_goto_favorite_icon@2x.png"; sourceTree = "<group>"; };
+		BBA3AF2C197953250039D991 /* FFCircularProgressView+isSpinning.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "FFCircularProgressView+isSpinning.h"; path = "PodsExtensions/FFCircularProgressView+isSpinning.h"; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -977,6 +977,7 @@
 				BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */,
 				BBA3AEBE197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.h */,
 				BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */,
+				BBA3AF2C197953250039D991 /* FFCircularProgressView+isSpinning.h */,
 			);
 			name = PodsExtensions;
 			sourceTree = "<group>";
@@ -1037,7 +1038,6 @@
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
 				BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */,
 				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
-				BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */,
 				BBA3AEE7197501330039D991 /* OADownloadsViewController.h */,
 				BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */,
 				BBA3AEED197501330039D991 /* OAShowDownloadsViewController.h */,

@@ -19,6 +19,7 @@
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
+#import "FFCircularProgressView+isSpinning.h"
 #import "OAWorldRegion.h"
 #import "OALog.h"
 #include "Localization.h"
@@ -36,6 +37,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @interface ResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
+@property id<OADownloadTask> __weak downloadTask;
 @end
 @implementation ResourceItem
 @end
@@ -83,8 +85,8 @@ struct RegionResources
 
     OAAutoObserverProxy* _localResourcesChangedObserver;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
-    //OAAutoObserverProxy* _downloadTaskProgressObserver;
-    //OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
 
     OAWorldRegion* _region;
 
@@ -130,10 +132,10 @@ struct RegionResources
     if (self) {
         _app = [OsmAndApp instance];
 
-        /*_downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+        _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                   withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)];
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)];*/
+                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)];
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                     andObserve:_app.localResourcesChangedObservable];
@@ -383,47 +385,59 @@ struct RegionResources
 
     for (const auto& resource_ : regionResources.allResources)
     {
+        ResourceItem* item_ = nil;
+
         if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
         {
             if (regionResources.outdatedResources.contains(resource->id))
             {
                 OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+                item_ = item;
                 item.resourceId = resource->id;
                 item.title = [self titleOfResource:resource_];
                 item.resource = resource;
+                item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
                 if (item.title == nil)
                     continue;
 
                 [_localResourceItems addObject:item];
-                [_allResourceItems addObject:item];
             }
             else
             {
                 LocalResourceItem* item = [[LocalResourceItem alloc] init];
+                item_ = item;
                 item.resourceId = resource->id;
                 item.title = [self titleOfResource:resource_];
                 item.resource = resource;
+                item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
                 if (item.title == nil)
                     continue;
 
                 [_localResourceItems addObject:item];
-                [_allResourceItems addObject:item];
             }
         }
         else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
         {
             RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
+            item_ = item;
             item.resourceId = resource->id;
             item.title = [self titleOfResource:resource_];
             item.resource = resource;
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
             if (item.title == nil)
                 continue;
 
             [_repositoryResourceItems addObject:item];
-            [_allResourceItems addObject:item];
+        }
+
+        [_allResourceItems addObject:item_];
+        if (item_.downloadTask != nil)
+        {
+            [_downloadTaskProgressObserver observe:item_.downloadTask.progressCompletedObservable];
+            [_downloadTaskCompletedObserver observe:item_.downloadTask.completedObservable];
         }
     }
     [_allResourceItems sortUsingComparator:_resourceItemsComparator];
@@ -468,6 +482,11 @@ struct RegionResources
         [self prepareContent];
         [self.tableView reloadData];
     }
+}
+
+- (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
 - (NSMutableArray*)getSubregionItems
@@ -630,6 +649,7 @@ struct RegionResources
                         item.title = [self titleOfResource:resource_
                                             withRegionName:region.name];
                         item.resource = resource;
+                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
                         if (item.title == nil)
                             continue;
@@ -643,6 +663,7 @@ struct RegionResources
                         item.title = [self titleOfResource:resource_
                                             withRegionName:region.name];
                         item.resource = resource;
+                        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
                         if (item.title == nil)
                             continue;
@@ -657,11 +678,19 @@ struct RegionResources
                     item.title = [self titleOfResource:resource_
                                         withRegionName:region.name];
                     item.resource = resource;
+                    item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
                     if (item.title == nil)
                         continue;
 
                     [resourceItems addObject:item];
+                }
+
+                ResourceItem* item = (ResourceItem*)[resourceItems lastObject];
+                if (item.downloadTask != nil)
+                {
+                    [_downloadTaskProgressObserver observe:item.downloadTask.progressCompletedObservable];
+                    [_downloadTaskCompletedObserver observe:item.downloadTask.completedObservable];
                 }
             }
             [resourceItems sortUsingComparator:_resourceItemsComparator];
@@ -686,89 +715,162 @@ struct RegionResources
                                              }];
 }
 
-- (void)onItemClicked:(id)item_
+- (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item
 {
-    if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+    const auto citRepositoryResource = _resourcesInRepository.constFind(item.resourceId);
+    if (citRepositoryResource == _resourcesInRepository.cend())
+        return;
+    const auto& resourceInRepository = *citRepositoryResource;
+
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+
+    NSString* message = nil;
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        /*
-         [[[UIAlertView alloc] initWithTitle:nil
-         message:[NSString stringWithFormat:OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded. %3$@Proceed?"),
-         itemName,
-         [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-         countStyle:NSByteCountFormatterCountStyleFile],
-         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
-         cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-         otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
-         action:^{
-         [self startDownloadOf:item];
-         }], nil] show];
-         */
+        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    stringifiedSize);
     }
-    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    else
+    {
+        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    stringifiedSize);
+    }
+
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
+                                                             action:^{
+                                                                 [self startDownloadOf:resourceInRepository];
+                                                             }], nil] show];
+}
+
+- (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item
+{
+    const auto citRepositoryResource = _resourcesInRepository.constFind(item.resourceId);
+    if (citRepositoryResource == _resourcesInRepository.cend())
+        return;
+    const auto& resourceInRepository = *citRepositoryResource;
+
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+
+    NSString* message = nil;
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    {
+        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    stringifiedSize);
+    }
+    else
+    {
+        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    stringifiedSize);
+    }
+
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
+                                                             action:^{
+                                                                 [self startDownloadOf:resourceInRepository];
+                                                             }], nil] show];
+}
+
+- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+{
+    // Create download tasks
+    NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
+    id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
+                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]];
+
+    [self updateContent];
+
+    // Resume task finally
+    [task resume];
+}
+
+- (void)offerCancelDownloadOf:(ResourceItem*)item_
+{
+    BOOL isUpdate = NO;
+    std::shared_ptr<const OsmAnd::ResourcesManager::Resource> resource;
+    if ([item_ isKindOfClass:[LocalResourceItem class]])
     {
         LocalResourceItem* item = (LocalResourceItem*)item_;
 
-        NSString* resourceId = item.resourceId.toNSString();
-        [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
-                                             animated:YES];
+        resource = item.resource;
+        isUpdate = [item isKindOfClass:[OutdatedResourceItem class]];
     }
     else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
     {
-        /*
-         [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-         message:[NSString stringWithFormat:OALocalizedString(@"Installation of %1$@ requires %2$@ to be downloaded. %3$@Proceed?"),
-         itemName,
-         [NSByteCountFormatter stringFromByteCount:item.resourceInRepository->packageSize
-         countStyle:NSByteCountFormatterCountStyleFile],
-         [Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN ? OALocalizedString(@"HEY YOU'RE ON 3G!!! ") : @""]
-         cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-         otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
-         action:^{
-         [self startDownloadOf:item];
-         }], nil]];
-         */
+        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+
+        resource = item.resource;
+    }
+    if (!resource)
+        return;
+
+    NSString* message = nil;
+    if (isUpdate)
+    {
+        message = OALocalizedString(@"You're going to cancel %@ update. All downloaded data will be lost. Proceed?",
+                                    [self titleOfResource:resource withRegionName:_region.name]);
+    }
+    else
+    {
+        message = OALocalizedString(@"You're going to cancel %@ installation. All downloaded data will be lost. Proceed?",
+                                    [self titleOfResource:resource withRegionName:_region.name]);
     }
 
-    /*
-     if (indexPath.section != _downloadsSection)
-     return;
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                                                             action:^{
+                                                                 [self cancelDownloadOf:item_];
+                                                             }], nil] show];
+}
 
-     BaseDownloadItem* item = [_downloadItems objectAtIndex:indexPath.row];
+- (void)cancelDownloadOf:(ResourceItem*)item
+{
+    [item.downloadTask cancel];
+}
 
-     NSString* itemName = nil;
-     if (_worldRegion.superregion == nil)
-     itemName = [_tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-     else
-     {
-     itemName = [NSString stringWithFormat:OALocalizedString(@"%1$@ (%2$@)"),
-     [_tableView cellForRowAtIndexPath:indexPath].textLabel.text,
-     _worldRegion.name];
-     }
+- (void)onItemClicked:(id)senderItem
+{
+    if ([senderItem isKindOfClass:[ResourceItem class]])
+    {
+        ResourceItem* item_ = (ResourceItem*)senderItem;
 
-     if ([item isKindOfClass:[OutdatedItem class]])
-     {
+        if (item_.downloadTask != nil)
+        {
+            [self offerCancelDownloadOf:item_];
+        }
+        else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+        {
+            OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
 
-     }
-     else if ([item isKindOfClass:[InstalledItem class]])
-     {
+            [self offerDownloadAndUpdateOf:item];
+        }
+        else if ([item_ isKindOfClass:[LocalResourceItem class]])
+        {
+            LocalResourceItem* item = (LocalResourceItem*)item_;
 
-     }
-     else if ([item isKindOfClass:[InstallableItem class]])
-     {
+            NSString* resourceId = item.resourceId.toNSString();
+            [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
+                                                 animated:YES];
+        }
+        else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+        {
+            RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
 
-     }
-     else if ([item isKindOfClass:[DownloadedItem class]])
-     {
-     [self checkInternetConnection:[[UIAlertView alloc] initWithTitle:nil
-     message:[NSString stringWithFormat:OALocalizedString(@"You're going to cancel download of %1$@. Are you sure?"),
-     itemName]
-     cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Continue")]
-     otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
-     action:^{
-     [self cancelDownloadOf:item];
-     }], nil]];
-     }
-     */
+            [self offerDownloadAndInstallOf:item];
+        }
+    }
 }
 
 - (IBAction)onScopeChanged:(id)sender
@@ -809,6 +911,73 @@ struct RegionResources
         }
 
         [self updateContent];
+    });
+}
+
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    NSNumber* progressCompleted = (NSNumber*)value;
+
+    OALog(@"Download task %@ (in %@): %@ done", task.key, self, progressCompleted);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+
+        if (self.searchDisplayController.isActive)
+            [self.searchDisplayController.searchResultsTableView reloadData];
+        [self.tableView reloadData];
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    NSString* localPath = task.targetPath;
+
+    OALog(@"Download task %@ (in %@): completed", task.key, self);
+
+    BOOL wasInstalled = NO;
+    const auto& resourceId = QString::fromNSString([task.key substringFromIndex:[@"resource:" length]]);
+
+    if (localPath != nil && task.state == OADownloadTaskStateFinished)
+    {
+        const auto& filePath = QString::fromNSString(localPath);
+        bool ok = false;
+
+        // Try to install only in case of successful download
+        if (task.error == nil)
+        {
+            // Install or update given resource
+            ok = _app.resourcesManager->updateFromFile(resourceId, filePath);
+            if (!ok)
+                ok = _app.resourcesManager->installFromRepository(resourceId, filePath);
+        }
+
+        [[NSFileManager defaultManager] removeItemAtPath:task.targetPath error:nil];
+
+        wasInstalled = ok;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (wasInstalled)
+        {
+            if (!self.isViewLoaded || self.view.window == nil)
+            {
+                _dataInvalidated = YES;
+                return;
+            }
+
+            [self updateContent];
+        }
+        else
+        {
+            if (!self.isViewLoaded || self.view.window == nil)
+                return;
+
+            OALog(@"Failed to install/update %@ (in %@)", resourceId.toNSString(), self);
+        }
     });
 }
 
@@ -870,13 +1039,15 @@ struct RegionResources
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const localResourceCell = @"localResourceCell";
     static NSString* const repositoryResourceCell = @"repositoryResourceCell";
+    static NSString* const downloadingResourceCell = @"downloadingResourceCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
     NSString* subtitle = nil;
+    id item_ = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
-        id item_ = [_searchResults objectAtIndex:indexPath.row];
+        item_ = [_searchResults objectAtIndex:indexPath.row];
 
         if ([item_ isKindOfClass:[OAWorldRegion class]])
         {
@@ -887,25 +1058,19 @@ struct RegionResources
             if (item.superregion != nil)
                 subtitle = item.superregion.name;
         }
-        else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
+        else if ([item_ isKindOfClass:[ResourceItem class]])
         {
-            OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
+            ResourceItem* item = (ResourceItem*)item_;
 
-            cellTypeId = outdatedResourceCell;
-            title = item.title;
-        }
-        else if ([item_ isKindOfClass:[LocalResourceItem class]])
-        {
-            LocalResourceItem* item = (LocalResourceItem*)item_;
+            if (item.downloadTask != nil)
+                cellTypeId = downloadingResourceCell;
+            else if ([item isKindOfClass:[OutdatedResourceItem class]])
+                cellTypeId = outdatedResourceCell;
+            else if ([item isKindOfClass:[LocalResourceItem class]])
+                cellTypeId = localResourceCell;
+            else if ([item isKindOfClass:[RepositoryResourceItem class]])
+                cellTypeId = repositoryResourceCell;
 
-            cellTypeId = localResourceCell;
-            title = item.title;
-        }
-        else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
-        {
-            RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
-
-            cellTypeId = repositoryResourceCell;
             title = item.title;
         }
     }
@@ -913,7 +1078,8 @@ struct RegionResources
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
         {
-            OAWorldRegion* worldRegion = [[self getSubregionItems] objectAtIndex:indexPath.row];
+            item_ = [[self getSubregionItems] objectAtIndex:indexPath.row];
+            OAWorldRegion* worldRegion = (OAWorldRegion*)item_;
 
             cellTypeId = subregionCell;
             title = worldRegion.name;
@@ -921,29 +1087,19 @@ struct RegionResources
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
-            id item_ = [[self getResourceItems] objectAtIndex:indexPath.row];
+            item_ = [[self getResourceItems] objectAtIndex:indexPath.row];
+            ResourceItem* item = (ResourceItem*)item_;
 
-            if ([item_ isKindOfClass:[OutdatedResourceItem class]])
-            {
-                OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
-
+            if (item.downloadTask != nil)
+                cellTypeId = downloadingResourceCell;
+            else if ([item isKindOfClass:[OutdatedResourceItem class]])
                 cellTypeId = outdatedResourceCell;
-                title = item.title;
-            }
-            else if ([item_ isKindOfClass:[LocalResourceItem class]])
-            {
-                LocalResourceItem* item = (LocalResourceItem*)item_;
-
+            else if ([item isKindOfClass:[LocalResourceItem class]])
                 cellTypeId = localResourceCell;
-                title = item.title;
-            }
-            else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
-            {
-                RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
-                
+            else if ([item isKindOfClass:[RepositoryResourceItem class]])
                 cellTypeId = repositoryResourceCell;
-                title = item.title;
-            }
+
+            title = item.title;
         }
     }
 
@@ -965,20 +1121,16 @@ struct RegionResources
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
-        /*else if ([cellTypeId isEqualToString:downloadedItemCell])
-        {
-            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
-            [progressView startSpinProgressBackgroundLayer];
-            cell = [[OATableViewCellWithClickableAccessoryView alloc] initWithStyle:UITableViewCellStyleDefault
-                                                             andCustomAccessoryView:progressView
-                                                                    reuseIdentifier:cellTypeId];
-        }
-        else
+        else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
                                           reuseIdentifier:cellTypeId];
-        }*/
+
+            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+            progressView.iconView = [[UIView alloc] init];
+
+            cell.accessoryView = progressView;
+        }
     }
 
     // Try to allocate cell from own table, since it may be configured there
@@ -989,23 +1141,28 @@ struct RegionResources
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
-    /*if ([cellTypeId isEqualToString:downloadedItemCell])
+    if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
-        DownloadedItem* downloadedItem = (DownloadedItem*)downloadItem;
-
+        ResourceItem* item = (ResourceItem*)item_;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-        float progressCompleted = downloadedItem.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.0f && downloadedItem.downloadTask.state == OADownloadTaskStateRunning)
+
+        float progressCompleted = item.downloadTask.progressCompleted;
+        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
         {
             [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
         }
-        else if (downloadedItem.downloadTask.state == OADownloadTaskStateFinished)
+        else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
             [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = 1.0f;
         }
-    }*/
+        else
+        {
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
+    }
 
     return cell;
 }

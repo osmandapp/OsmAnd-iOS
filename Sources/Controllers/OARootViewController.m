@@ -274,7 +274,7 @@
 
 - (void)showNoInternetAlert
 {
-    [self showNoInternetAlertFor:OALocalizedString(@"No Internet connection")];
+    [self showNoInternetAlertFor:nil];
 }
 
 - (void)showNoInternetAlertFor:(NSString*)actionTitle

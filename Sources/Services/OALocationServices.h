@@ -16,7 +16,8 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 {
     OALocationServicesStatusInactive,
     OALocationServicesStatusActive,
-    OALocationServicesStatusAuthorizing
+    OALocationServicesStatusAuthorizing,
+    OALocationServicesStatusSuspended
 };
 
 @interface OALocationServices : NSObject

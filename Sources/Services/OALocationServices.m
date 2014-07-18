@@ -26,6 +26,8 @@
 {
     OsmAndAppInstance _app;
 
+    NSObject* _lock;
+
     CLLocationManager* _manager;
     BOOL _locationActive;
     BOOL _compassActive;
@@ -37,7 +39,7 @@
     CLLocation* _lastLocation;
     CLLocationDirection _lastHeading;
 
-    BOOL _shouldStartAfterStop;
+    BOOL _isSuspended;
 }
 
 - (instancetype)initWith:(OsmAndAppInstance)app
@@ -57,6 +59,8 @@
 - (void)ctor:(OsmAndAppInstance)app
 {
     _app = app;
+
+    _lock = [[NSObject alloc] init];
 
     _locationActive = NO;
     _compassActive = NO;
@@ -78,7 +82,7 @@
     _lastHeading = NAN;
     _updateObserver = [[OAObservable alloc] init];
 
-    _shouldStartAfterStop = NO;
+    _isSuspended = NO;
 }
 
 - (void)dtor
@@ -109,107 +113,165 @@
 
 - (OALocationServicesStatus)status
 {
-    if (_waitingForAuthorization)
-        return OALocationServicesStatusAuthorizing;
-    return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
+    @synchronized(_lock)
+    {
+        if (_waitingForAuthorization)
+            return OALocationServicesStatusAuthorizing;
+        if (_isSuspended)
+            return OALocationServicesStatusSuspended;
+        return (_locationActive || _compassActive) ? OALocationServicesStatusActive : OALocationServicesStatusInactive;
+    }
 }
 
 @synthesize statusObservable = _statusObservable;
 
-- (void)start
+- (BOOL)doStart
 {
-    // Do nothing if waiting for authorization
-    if (self.status == OALocationServicesStatusAuthorizing)
-        return;
-
-    BOOL didChange = NO;
-
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter addObserver:self
-                           selector:@selector(onDeviceOrientationDidChange)
-                               name:UIDeviceOrientationDidChangeNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(onDeviceBatteryStateDidChange)
-                               name:UIDeviceBatteryLevelDidChangeNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(onApplicationWillEnterForeground)
-                               name:UIApplicationWillEnterForegroundNotification
-                             object:nil];
-    [notificationCenter addObserver:self
-                           selector:@selector(onApplicationWillResignActive)
-                               name:UIApplicationWillResignActiveNotification
-                             object:nil];
-
-    [self updateDeviceOrientation];
-
-    // Set desired accuracy depending on app mode, and query for updates
-    if (!_locationActive)
+    @synchronized(_lock)
     {
-        _waitingForAuthorization = !self.allowed;
+        // Do nothing if waiting for authorization
+        if (self.status == OALocationServicesStatusAuthorizing)
+            return NO;
 
-        _manager.desiredAccuracy = [self desiredAccuracy];
-        [_manager startUpdatingLocation];
-        _locationActive = YES;
-        didChange = YES;
+        BOOL didChange = NO;
 
-        OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
-    }
+        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter addObserver:self
+                               selector:@selector(onDeviceOrientationDidChange)
+                                   name:UIDeviceOrientationDidChangeNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(onDeviceBatteryStateDidChange)
+                                   name:UIDeviceBatteryLevelDidChangeNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(onApplicationWillEnterForeground)
+                                   name:UIApplicationWillEnterForegroundNotification
+                                 object:nil];
+        [notificationCenter addObserver:self
+                               selector:@selector(onApplicationWillResignActive)
+                                   name:UIApplicationWillResignActiveNotification
+                                 object:nil];
 
-    // Also, if compass is available, query it for updates
-    if (!_compassActive && [CLLocationManager headingAvailable])
-    {
-        [_manager startUpdatingHeading];
-        _compassActive = YES;
-        didChange = YES;
-    }
+        [self updateDeviceOrientation];
 
-    if (didChange)
-    {
-        OALog(@"Started location services");
+        // Set desired accuracy depending on app mode, and query for updates
+        if (!_locationActive)
+        {
+            _waitingForAuthorization = !self.allowed;
 
-        [_statusObservable notifyEvent];
+            _manager.desiredAccuracy = [self desiredAccuracy];
+            [_manager startUpdatingLocation];
+            _locationActive = YES;
+            didChange = YES;
+
+            OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
+        }
+
+        // Also, if compass is available, query it for updates
+        if (!_compassActive && [CLLocationManager headingAvailable])
+        {
+            [_manager startUpdatingHeading];
+            _compassActive = YES;
+            didChange = YES;
+        }
+
+        return didChange;
     }
 }
 
+- (void)start
+{
+    @synchronized(_lock)
+    {
+        if ([self doStart])
+        {
+            OALog(@"Started location services");
+            
+            [_statusObservable notifyEvent];
+        }
+    }
+}
+
+- (BOOL)doStop
+{
+    @synchronized(_lock)
+    {
+        BOOL didChange = NO;
+
+        if (_waitingForAuthorization)
+        {
+            _waitingForAuthorization = NO;
+            didChange = YES;
+        }
+
+        if (_locationActive)
+        {
+            [_manager stopUpdatingLocation];
+            _locationActive = NO;
+            didChange = YES;
+        }
+
+        if (_compassActive)
+        {
+            [_manager stopUpdatingHeading];
+            _compassActive = NO;
+            didChange = YES;
+        }
+
+        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+        [notificationCenter removeObserver:self
+                                      name:UIDeviceOrientationDidChangeNotification
+                                    object:nil];
+        [notificationCenter removeObserver:self
+                                      name:UIDeviceBatteryLevelDidChangeNotification
+                                    object:nil];
+
+        return didChange;
+    }
+}
+
+
 - (void)stop
 {
-    BOOL didChange = NO;
-
-    if (_waitingForAuthorization)
+    @synchronized(_lock)
     {
-        _waitingForAuthorization = NO;
-        didChange = YES;
+        if ([self doStop])
+        {
+            OALog(@"Stopped location services");
+            
+            [_statusObservable notifyEvent];
+        }
     }
+}
 
-    if (_locationActive)
+- (void)resume
+{
+    @synchronized(_lock)
     {
-        [_manager stopUpdatingLocation];
-        _locationActive = NO;
-        didChange = YES;
+        if ([self doStart])
+        {
+            OALog(@"Resumed location services");
+
+            _isSuspended = NO;
+
+            [_statusObservable notifyEvent];
+        }
     }
+}
 
-    if (_compassActive)
+- (void)suspend
+{
+    @synchronized(_lock)
     {
-        [_manager stopUpdatingHeading];
-        _compassActive = NO;
-        didChange = YES;
-    }
+        if ([self doStop])
+        {
+            OALog(@"Suspended location services");
 
-    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-    [notificationCenter removeObserver:self
-                                  name:UIDeviceOrientationDidChangeNotification
-                                object:nil];
-    [notificationCenter removeObserver:self
-                                  name:UIDeviceBatteryLevelDidChangeNotification
-                                object:nil];
+            _isSuspended = YES;
 
-    if (didChange)
-    {
-        OALog(@"Stopped location services");
-
-        [_statusObservable notifyEvent];
+            [_statusObservable notifyEvent];
+        }
     }
 }
 
@@ -282,10 +344,17 @@
 - (void)updateRequestedAccuracy
 {
     CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
+    if (_manager.desiredAccuracy == newDesiredAccuracy || self.status != OALocationServicesStatusActive)
+        return;
 
     OALog(@"Changing desired location accuracy from %f to %f", _manager.desiredAccuracy, newDesiredAccuracy);
 
-    _manager.desiredAccuracy = newDesiredAccuracy;
+    @synchronized(_lock)
+    {
+        _manager.desiredAccuracy = newDesiredAccuracy;
+        if ([self doStop])
+            [self doStart];
+    }
 }
 
 - (BOOL)shouldBeRunningInBackground
@@ -324,19 +393,6 @@
     [self updateRequestedAccuracy];
 }
 
-- (void)onApplicationWillEnterForeground
-{
-    OALocationServicesStatus status = self.status;
-    BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
-    if (!isRunning && _shouldStartAfterStop)
-    {
-        OALog(@"Starting location services when application going to foreground");
-
-        _shouldStartAfterStop = NO;
-        [self start];
-    }
-}
-
 - (void)onApplicationWillResignActive
 {
     OALocationServicesStatus status = self.status;
@@ -345,8 +401,20 @@
     {
         OALog(@"Stopping location services when application going to background");
 
-        _shouldStartAfterStop = YES;
-        [self stop];
+        [self suspend];
+    }
+}
+
+
+- (void)onApplicationWillEnterForeground
+{
+    OALocationServicesStatus status = self.status;
+    BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
+    if (!isRunning && _isSuspended)
+    {
+        OALog(@"Starting location services when application going to foreground");
+
+        [self resume];
     }
 }
 

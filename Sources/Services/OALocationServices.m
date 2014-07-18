@@ -65,7 +65,8 @@
     _manager = [[CLLocationManager alloc] init];
     _manager.delegate = self;
     _manager.distanceFilter = kCLDistanceFilterNone;
-    _manager.pausesLocationUpdatesAutomatically = NO;
+    //_manager.pausesLocationUpdatesAutomatically = NO; // TO BE FIXED by Alexey
+    _manager.pausesLocationUpdatesAutomatically = YES;
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];

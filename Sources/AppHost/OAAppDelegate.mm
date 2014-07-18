@@ -37,7 +37,9 @@
     [TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
 
     // Configure device
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    UIDevice* device = [UIDevice currentDevice];
+    [device beginGeneratingDeviceOrientationNotifications];
+    device.batteryMonitoringEnabled = YES;
     
     // Create instance of OsmAnd application
     _app = [OsmAndApp instance];
@@ -132,12 +134,15 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    [_app shutdown];
     
     // Release OsmAnd core
     OsmAnd::ReleaseCore();
     
     // Deconfigure device
-    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+    UIDevice* device = [UIDevice currentDevice];
+    device.batteryMonitoringEnabled = NO;
+    [device endGeneratingDeviceOrientationNotifications];
 }
 
 @end

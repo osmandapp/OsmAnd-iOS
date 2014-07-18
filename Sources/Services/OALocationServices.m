@@ -25,17 +25,19 @@
 @implementation OALocationServices
 {
     OsmAndAppInstance _app;
-    
+
     CLLocationManager* _manager;
     BOOL _locationActive;
     BOOL _compassActive;
-    
+
     OAAutoObserverProxy* _mapModeObserver;
-    
+
     BOOL _waitingForAuthorization;
-    
+
     CLLocation* _lastLocation;
     CLLocationDirection _lastHeading;
+
+    BOOL _shouldStartAfterStop;
 }
 
 - (instancetype)initWith:(OsmAndAppInstance)app
@@ -55,27 +57,28 @@
 - (void)ctor:(OsmAndAppInstance)app
 {
     _app = app;
-    
+
     _locationActive = NO;
     _compassActive = NO;
     _statusObservable = [[OAObservable alloc] init];
-    
+
     _stateObservable = [[OAObservable alloc] init];
-    
+
     _manager = [[CLLocationManager alloc] init];
     _manager.delegate = self;
     _manager.distanceFilter = kCLDistanceFilterNone;
-    //_manager.pausesLocationUpdatesAutomatically = NO; // TO BE FIXED by Alexey
-    _manager.pausesLocationUpdatesAutomatically = YES;
-    
+    _manager.pausesLocationUpdatesAutomatically = NO;
+
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
     [_mapModeObserver observe:_app.mapModeObservable];
-    
+
     _waitingForAuthorization = NO;
-    
+
     _lastLocation = nil;
     _lastHeading = NAN;
     _updateObserver = [[OAObservable alloc] init];
+
+    _shouldStartAfterStop = NO;
 }
 
 - (void)dtor
@@ -118,100 +121,96 @@
     // Do nothing if waiting for authorization
     if (self.status == OALocationServicesStatusAuthorizing)
         return;
-    
+
     BOOL didChange = NO;
 
-    // Listen to device orientation change
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(deviceOrientationDidChange)
-                                                 name:UIDeviceOrientationDidChangeNotification
-                                               object:nil];
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(onDeviceOrientationDidChange)
+                               name:UIDeviceOrientationDidChangeNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onDeviceBatteryStateDidChange)
+                               name:UIDeviceBatteryLevelDidChangeNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onApplicationWillEnterForeground)
+                               name:UIApplicationWillEnterForegroundNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onApplicationWillResignActive)
+                               name:UIApplicationWillResignActiveNotification
+                             object:nil];
 
-    // Set current device orientation
     [self updateDeviceOrientation];
-    
-    //TODO: use different accuracy modes
-    // kCLLocationAccuracyBestForNavigation (when plugged in) && kCLLocationAccuracyBest - during navigation
-    
+
     // Set desired accuracy depending on app mode, and query for updates
     if (!_locationActive)
     {
         _waitingForAuthorization = !self.allowed;
-        
-        _manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters;
+
+        _manager.desiredAccuracy = [self desiredAccuracy];
         [_manager startUpdatingLocation];
         _locationActive = YES;
         didChange = YES;
+
+        OALog(@"Setting desired location accuracy to %f", _manager.desiredAccuracy);
     }
-    
+
     // Also, if compass is available, query it for updates
     if (!_compassActive && [CLLocationManager headingAvailable])
     {
-       [_manager startUpdatingHeading];
+        [_manager startUpdatingHeading];
         _compassActive = YES;
         didChange = YES;
     }
-    
+
     if (didChange)
+    {
+        OALog(@"Started location services");
+
         [_statusObservable notifyEvent];
+    }
 }
 
 - (void)stop
 {
     BOOL didChange = NO;
-    
+
     if (_waitingForAuthorization)
     {
         _waitingForAuthorization = NO;
         didChange = YES;
     }
-    
+
     if (_locationActive)
     {
         [_manager stopUpdatingLocation];
         _locationActive = NO;
         didChange = YES;
     }
-    
+
     if (_compassActive)
     {
         [_manager stopUpdatingHeading];
         _compassActive = NO;
         didChange = YES;
     }
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self
-                                                    name:UIDeviceOrientationDidChangeNotification
-                                                  object:nil];
-    
+
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self
+                                  name:UIDeviceOrientationDidChangeNotification
+                                object:nil];
+    [notificationCenter removeObserver:self
+                                  name:UIDeviceBatteryLevelDidChangeNotification
+                                object:nil];
+
     if (didChange)
-       [_statusObservable notifyEvent];
-    
-    // If location services are stopped, set free mode for map, since to location data available
-    _app.mapMode = OAMapModeFree;
-}
-
-- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
-{
-    // If services were running, but now authorization was revoked, stop them
-    if (status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
-        [self stop];
-    
-    [_stateObservable notifyEvent];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
-{
-    if (error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
     {
-        // User have denied services or revoked authorization, stop the services
-        // If services were running, but now authorization was revoked, stop them
-        if (_locationActive || _compassActive)
-            [self stop];
-        return;
+        OALog(@"Stopped location services");
+
+        [_statusObservable notifyEvent];
     }
-    
-    OALog(@"CLLocationManager didFailWithError %@", error);
 }
 
 - (CLLocation*)lastKnownLocation
@@ -229,53 +228,6 @@
 }
 
 @synthesize updateObserver = _updateObserver;
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
-{
-    // If was waiting for authorization, now it's granted
-    if (_waitingForAuthorization)
-    {
-        [_statusObservable notifyEvent];
-        _waitingForAuthorization = NO;
-    }
-    
-    _lastLocation = [locations lastObject];
-    [_updateObserver notifyEvent];
-}
-
-- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
-{
-    // If was waiting for authorization, now it's granted
-    if (_waitingForAuthorization)
-    {
-        [_statusObservable notifyEvent];
-        _waitingForAuthorization = NO;
-    }
-    
-    _lastHeading = newHeading.trueHeading;
-    [_updateObserver notifyEvent];
-}
-
-- (void)onMapModeChanged
-{
-    if (_app.mapMode == OAMapModeFree)
-    {
-        //TODO: if running, reduce accuracy to near-10-meter?
-        return;
-    }
-    
-    // If mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
-    // launch them (except if waiting for user authorization).
-    OALocationServicesStatus status = self.status;
-    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
-        return;
-    [self start];
-}
-
-- (void)deviceOrientationDidChange
-{
-    [self updateDeviceOrientation];
-}
 
 - (void)updateDeviceOrientation
 {
@@ -309,6 +261,147 @@
     }
     _manager.headingOrientation = clDeviceOrientation;
 }
+
+- (CLLocationAccuracy)desiredAccuracy
+{
+    UIDeviceBatteryState batteryState = [UIDevice currentDevice].batteryState;
+
+    if (batteryState == UIDeviceBatteryStateFull || batteryState == UIDeviceBatteryStateCharging)
+        return kCLLocationAccuracyBestForNavigation;
+    if (_app.mapMode == OAMapModeFollow)
+        return kCLLocationAccuracyBest;
+    if (_app.mapMode == OAMapModePositionTrack)
+        return kCLLocationAccuracyNearestTenMeters;
+    if (_app.mapMode == OAMapModeFree)
+        return kCLLocationAccuracyHundredMeters;
+
+    // By default set minimal accuracy
+    return kCLLocationAccuracyThreeKilometers;
+}
+
+- (void)updateRequestedAccuracy
+{
+    CLLocationAccuracy newDesiredAccuracy = [self desiredAccuracy];
+
+    OALog(@"Changing desired location accuracy from %f to %f", _manager.desiredAccuracy, newDesiredAccuracy);
+
+    _manager.desiredAccuracy = newDesiredAccuracy;
+}
+
+- (BOOL)shouldBeRunningInBackground
+{
+    //TODO: YES only when not in drive or navigation mode
+    return NO;
+}
+
+- (void)onMapModeChanged
+{
+    // If mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
+    // launch them (except if waiting for user authorization).
+    OALocationServicesStatus status = self.status;
+    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+    {
+        if (_app.mapMode == OAMapModeFree)
+        {
+            [self updateRequestedAccuracy];
+            return;
+        }
+
+        return;
+    }
+
+    // Otherwise start service
+    [self start];
+}
+
+- (void)onDeviceOrientationDidChange
+{
+    [self updateDeviceOrientation];
+}
+
+- (void)onDeviceBatteryStateDidChange
+{
+    [self updateRequestedAccuracy];
+}
+
+- (void)onApplicationWillEnterForeground
+{
+    OALocationServicesStatus status = self.status;
+    BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
+    if (!isRunning && _shouldStartAfterStop)
+    {
+        OALog(@"Starting location services when application going to foreground");
+
+        _shouldStartAfterStop = NO;
+        [self start];
+    }
+}
+
+- (void)onApplicationWillResignActive
+{
+    OALocationServicesStatus status = self.status;
+    BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
+    if (isRunning && ![self shouldBeRunningInBackground])
+    {
+        OALog(@"Stopping location services when application going to background");
+
+        _shouldStartAfterStop = YES;
+        [self stop];
+    }
+}
+
+#pragma mark - CLLocationManagerDelegate
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    // If services were running, but now authorization was revoked, stop them
+    if (status != kCLAuthorizationStatusAuthorized && status != kCLAuthorizationStatusNotDetermined && (_locationActive || _compassActive))
+        [self stop];
+
+    [_stateObservable notifyEvent];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if (error.domain == kCLErrorDomain && error.code == kCLErrorDenied)
+    {
+        // User have denied services or revoked authorization, stop the services
+        // If services were running, but now authorization was revoked, stop them
+        if (_locationActive || _compassActive)
+            [self stop];
+        return;
+    }
+
+    OALog(@"CLLocationManager didFailWithError %@", error);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    // If was waiting for authorization, now it's granted
+    if (_waitingForAuthorization)
+    {
+        [_statusObservable notifyEvent];
+        _waitingForAuthorization = NO;
+    }
+
+    _lastLocation = [locations lastObject];
+    [_updateObserver notifyEvent];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
+{
+    // If was waiting for authorization, now it's granted
+    if (_waitingForAuthorization)
+    {
+        [_statusObservable notifyEvent];
+        _waitingForAuthorization = NO;
+    }
+
+    _lastHeading = newHeading.trueHeading;
+    [_updateObserver notifyEvent];
+}
+
+#pragma mark -
 
 + (void)showDeniedAlert
 {

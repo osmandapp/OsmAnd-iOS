@@ -146,6 +146,14 @@
     return YES;
 }
 
+- (void)shutdown
+{
+    [_locationServices stop];
+    _locationServices = nil;
+
+    _downloadsManager = nil;
+}
+
 - (NSDictionary*)inflateInitialUserDefaults
 {
     NSMutableDictionary* initialUserDefaults = [[NSMutableDictionary alloc] init];

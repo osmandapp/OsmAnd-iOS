@@ -41,6 +41,7 @@
 @implementation OABrowseMapAppModeHudViewController
 {
     OsmAndAppInstance _app;
+    OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
@@ -78,6 +79,9 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
+    _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesStatusChanged)
+                                                                 andObserve:_app.locationServices.statusObservable];
 }
 
 - (void)dtor
@@ -142,6 +146,15 @@
     }
 
     _app.mapMode = newMode;
+}
+
+- (void)onLocationServicesStatusChanged
+{
+    if (_app.locationServices.status == OALocationServicesStatusInactive)
+    {
+        // If location services are stopped, set free mode for map, since location data no available
+        _app.mapMode = OAMapModeFree;
+    }
 }
 
 - (void)onMapModeChanged

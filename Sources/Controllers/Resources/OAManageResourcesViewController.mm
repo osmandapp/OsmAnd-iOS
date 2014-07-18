@@ -11,11 +11,13 @@
 #import <Reachability.h>
 #import <UIAlertView+Blocks.h>
 #import <FFCircularProgressView.h>
+#import <MBProgressHUD.h>
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OATableViewCell.h"
 #import "UITableViewCell+getTableView.h"
+#import "OARootViewController.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAWorldRegion.h"
 #import "OALog.h"
@@ -79,6 +81,11 @@ struct RegionResources
 {
     OsmAndAppInstance _app;
 
+    OAAutoObserverProxy* _localResourcesChangedObserver;
+    OAAutoObserverProxy* _repositoryUpdatedObserver;
+    //OAAutoObserverProxy* _downloadTaskProgressObserver;
+    //OAAutoObserverProxy* _downloadTaskCompletedObserver;
+
     OAWorldRegion* _region;
 
     BOOL _dataInvalidated;
@@ -113,6 +120,8 @@ struct RegionResources
     CGFloat _originalScopeControlContainerHeight;
 
     NSComparator _resourceItemsComparator;
+
+    UIBarButtonItem* _refreshRepositoryBarButton;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -120,6 +129,17 @@ struct RegionResources
     self = [super initWithCoder:aDecoder];
     if (self) {
         _app = [OsmAndApp instance];
+
+        /*_downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                  withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)];
+        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)];*/
+        _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onLocalResourcesChanged:withKey:)
+                                                                    andObserve:_app.localResourcesChangedObservable];
+        _repositoryUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onRepositoryUpdated:withKey:)
+                                                                    andObserve:_app.resourcesRepositoryUpdatedObservable];
 
         _region = _app.worldRegion;
         _dataInvalidated = NO;
@@ -170,6 +190,11 @@ struct RegionResources
     if (_region != _app.worldRegion)
         self.title = _region.name;
 
+    _refreshRepositoryBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
+                                                                                target:self
+                                                                                action:@selector(onRefreshRepositoryButtonClicked)];
+    self.navigationItem.rightBarButtonItem = _refreshRepositoryBarButton;
+
     _scopeControl.selectedSegmentIndex = _currentScope;
 
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
@@ -186,6 +211,18 @@ struct RegionResources
     {
         [self updateContent];
         _dataInvalidated = NO;
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    // If there's no repository available and there's internet connection, just update it
+    if (!_app.resourcesManager->isRepositoryAvailable() &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [self updateRepository];
     }
 }
 
@@ -636,6 +673,19 @@ struct RegionResources
     }
 }
 
+- (void)showNoInternetAlertForCatalogUpdate
+{
+    [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"Catalog update")];
+}
+
+- (void)updateRepository
+{
+    [[[MBProgressHUD alloc] initWithView:self.view] showAnimated:YES
+                                             whileExecutingBlock:^{
+                                                 _app.resourcesManager->updateRepository();
+                                             }];
+}
+
 - (void)onItemClicked:(id)item_
 {
     if ([item_ isKindOfClass:[OutdatedResourceItem class]])
@@ -726,6 +776,40 @@ struct RegionResources
     _currentScope = _scopeControl.selectedSegmentIndex;
 
     [self refreshContent];
+}
+
+- (void)onRefreshRepositoryButtonClicked
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        [self updateRepository];
+    else
+        [self showNoInternetAlertForCatalogUpdate];
+}
+
+- (void)onRepositoryUpdated:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _dataInvalidated = YES;
+            return;
+        }
+
+        [self updateContent];
+    });
+}
+
+- (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _dataInvalidated = YES;
+            return;
+        }
+
+        [self updateContent];
+    });
 }
 
 #pragma mark - UITableViewDataSource

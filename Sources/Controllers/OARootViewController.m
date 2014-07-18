@@ -11,11 +11,13 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import <JASidePanelController.h>
+#import <UIAlertView+Blocks.h>
 
 #import "OAAppDelegate.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
 #import "OAIncomingURLViewController.h"
+#include "Localization.h"
 
 #define _(name) OARootViewController__##name
 #define ctor _(ctor)
@@ -268,6 +270,19 @@
           animated:YES];
 
     return YES;
+}
+
+- (void)showNoInternetAlert
+{
+    [self showNoInternetAlertFor:OALocalizedString(@"No Internet connection")];
+}
+
+- (void)showNoInternetAlertFor:(NSString*)actionTitle
+{
+    [[[UIAlertView alloc] initWithTitle:actionTitle
+                                message:OALocalizedString(@"Internet connection required to perform this action. Please check your Internet connection.")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Oh, OK then")]
+                       otherButtonItems:nil] show];
 }
 
 #pragma mark - UIPopoverControllerDelegate

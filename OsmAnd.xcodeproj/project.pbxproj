@@ -551,7 +551,6 @@
 		BBA3AEDA197500EF0039D991 /* OAMapSourcesListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSourcesListViewController.mm; path = Controllers/MapSources/OAMapSourcesListViewController.mm; sourceTree = "<group>"; };
 		BBA3AEDE197501090039D991 /* OAIncomingURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIncomingURLViewController.h; path = Controllers/Misc/OAIncomingURLViewController.h; sourceTree = "<group>"; };
 		BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIncomingURLViewController.mm; path = Controllers/Misc/OAIncomingURLViewController.mm; sourceTree = "<group>"; };
-		BBA3AEE3197501330039D991 /* OADownloadsBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsBaseViewController.h; path = Controllers/Resources/OADownloadsBaseViewController.h; sourceTree = "<group>"; };
 		BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsBaseViewController.mm; path = Controllers/Resources/OADownloadsBaseViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE7197501330039D991 /* OADownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsViewController.h; path = Controllers/Resources/OADownloadsViewController.h; sourceTree = "<group>"; };
 		BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsViewController.mm; path = Controllers/Resources/OADownloadsViewController.mm; sourceTree = "<group>"; };
@@ -1038,7 +1037,6 @@
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
 				BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */,
 				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
-				BBA3AEE3197501330039D991 /* OADownloadsBaseViewController.h */,
 				BBA3AEE4197501330039D991 /* OADownloadsBaseViewController.mm */,
 				BBA3AEE7197501330039D991 /* OADownloadsViewController.h */,
 				BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */,

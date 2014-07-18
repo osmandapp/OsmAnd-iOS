@@ -32,6 +32,9 @@
 
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
 
+- (void)showNoInternetAlert;
+- (void)showNoInternetAlertFor:(NSString*)actionTitle;
+
 + (OARootViewController*)instance;
 
 @end

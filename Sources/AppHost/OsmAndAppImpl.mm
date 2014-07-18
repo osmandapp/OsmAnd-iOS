@@ -30,6 +30,7 @@
 
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
+@synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 
 @synthesize favoritesCollection = _favoritesCollection;
 
@@ -51,6 +52,7 @@
 - (void)dealloc
 {
     _resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    _resourcesManager->repositoryUpdateObservable.detach((__bridge const void*)self);
 
     _favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
     _favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
@@ -83,6 +85,7 @@
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
 
     _localResourcesChangedObservable = [[OAObservable alloc] init];
+    _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsPath.absolutePath(),
                                                          QList<QString>(),
@@ -99,6 +102,12 @@
                                                              {
                                                                  [_localResourcesChangedObservable notifyEventWithKey:self];
                                                              });
+    _resourcesManager->repositoryUpdateObservable.attach((__bridge const void*)self,
+                                                         [self]
+                                                         (const OsmAnd::ResourcesManager* const resourcesManager)
+                                                         {
+                                                             [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
+                                                         });
 
     // Load favorites
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];

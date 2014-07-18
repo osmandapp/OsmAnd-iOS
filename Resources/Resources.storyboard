@@ -29,6 +29,9 @@
                                             <segment title="Catalog"/>
                                             <segment title="Installed"/>
                                         </segments>
+                                        <connections>
+                                            <action selector="onScopeChanged:" destination="Lhe-yk-sVD" eventType="valueChanged" id="3iX-5h-XZV"/>
+                                        </connections>
                                     </segmentedControl>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>

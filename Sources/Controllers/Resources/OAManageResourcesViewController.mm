@@ -67,6 +67,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @end
 
+struct RegionResources
+{
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > allResources;
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > repositoryResources;
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > localResources;
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > outdatedResources;
+};
+
 @implementation OAManageResourcesViewController
 {
     OsmAndAppInstance _app;
@@ -79,7 +87,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _localResources;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
-    QHash< OAWorldRegion* __weak, QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > > _resourcesByRegions;
+    QHash< OAWorldRegion* __weak, RegionResources > _resourcesByRegions;
+
+    NSInteger _currentScope;
 
     NSInteger _lastUnusedSectionIndex;
 
@@ -87,16 +97,22 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSInteger _subregionsSection;
     NSMutableArray* _searchableSubregionItems;
-    NSMutableArray* _subregionItems;
+    NSMutableArray* _allSubregionItems;
+    NSMutableArray* _repositorySubregionItems;
+    NSMutableArray* _localSubregionItems;
 
     NSInteger _resourcesSection;
-    NSMutableArray* _resourceItems;
+    NSMutableArray* _allResourceItems;
+    NSMutableArray* _repositoryResourceItems;
+    NSMutableArray* _localResourceItems;
 
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
     NSArray* _searchResults;
 
     CGFloat _originalScopeControlContainerHeight;
+
+    NSComparator _resourceItemsComparator;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -109,23 +125,37 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _dataInvalidated = NO;
         _dataLock = [[NSObject alloc] init];
 
+        _currentScope = 0;
+
         _searchableWorldwideRegionItems = [NSMutableArray array];
 
         _searchableSubregionItems = [NSMutableArray array];
-        _subregionItems = [NSMutableArray array];
-        _resourceItems = [NSMutableArray array];
+        _allSubregionItems = [NSMutableArray array];
+        _repositorySubregionItems = [NSMutableArray array];
+        _localSubregionItems = [NSMutableArray array];
+        _allResourceItems = [NSMutableArray array];
+        _repositoryResourceItems = [NSMutableArray array];
+        _localResourceItems = [NSMutableArray array];
 
         _lastSearchString = @"";
         _lastSearchScope = 0;
         _searchResults = nil;
+
+        _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
+            ResourceItem *item1 = obj1;
+            ResourceItem *item2 = obj2;
+
+            return [item1.title localizedCaseInsensitiveCompare:item2.title];
+        };
     }
     return self;
 }
 
-- (void)setupWithRegion:(OAWorldRegion*)region andWorldRegionItems:(NSArray*)worldRegionItems
+- (void)setupWithRegion:(OAWorldRegion*)region andWorldRegionItems:(NSArray*)worldRegionItems andScope:(NSInteger)scope
 {
     _region = region;
     _searchableWorldwideRegionItems = [worldRegionItems copy];
+    _currentScope = scope;
 }
 
 - (void)viewDidLoad
@@ -145,7 +175,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         self.searchDisplayController.searchBar.scopeButtonTitles = nil;
     else
         self.searchDisplayController.searchBar.scopeButtonTitles = @[_region.name, OALocalizedString(@"Worldwide")];
-    
+
+    _scopeControl.selectedSegmentIndex = _currentScope;
+
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
 
     [self obtainDataAndItems];
@@ -172,21 +204,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     @synchronized(_dataLock)
     {
-        _lastUnusedSectionIndex = 0;
-
         [self prepareData];
-
         [self collectSubregionsDataAndItems];
-        if ([_subregionItems count] > 0)
-            _subregionsSection = _lastUnusedSectionIndex++;
-        else
-            _subregionsSection = -1;
-
         [self collectResourcesDataAndItems];
-        if ([_resourceItems count] > 0)
-            _resourcesSection = _lastUnusedSectionIndex++;
-        else
-            _resourcesSection = -1;
+
+        [self refreshContent];
     }
 }
 
@@ -205,33 +227,37 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto regionId = QString::fromNSString(region.regionId);
         const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
 
-        QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > resources;
+        RegionResources regionResources;
         for (const auto& resource : _outdatedResources)
         {
             if (!resource->id.startsWith(downloadsIdPrefix))
                 continue;
 
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
+            regionResources.allResources.insert(resource->id, resource);
+            regionResources.outdatedResources.insert(resource->id, resource);
+            regionResources.localResources.insert(resource->id, resource);
         }
         for (const auto& resource : _localResources)
         {
             if (!resource->id.startsWith(downloadsIdPrefix))
                 continue;
 
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
+            if (!regionResources.allResources.contains(resource->id))
+                regionResources.allResources.insert(resource->id, resource);
+            if (!regionResources.localResources.contains(resource->id))
+                regionResources.localResources.insert(resource->id, resource);
         }
         for (const auto& resource : _resourcesInRepository)
         {
             if (!resource->id.startsWith(downloadsIdPrefix))
                 continue;
 
-            if (!resources.contains(resource->id))
-                resources.insert(resource->id, resource);
+            if (!regionResources.allResources.contains(resource->id))
+                regionResources.allResources.insert(resource->id, resource);
+            regionResources.repositoryResources.insert(resource->id, resource);
         }
 
-        _resourcesByRegions.insert(region, resources);
+        _resourcesByRegions.insert(region, regionResources);
     }
 }
 
@@ -241,61 +267,57 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // resource available in repository or locally.
 
     [_searchableSubregionItems removeAllObjects];
-    [_subregionItems removeAllObjects];
+    [_allSubregionItems removeAllObjects];
+    [_repositorySubregionItems removeAllObjects];
+    [_localSubregionItems removeAllObjects];
     for(OAWorldRegion* subregion in _region.flattenedSubregions)
     {
-        BOOL isEmpty = YES;
-
         // Look in repository
-        if (isEmpty)
+        BOOL foundRepositoryResource = NO;
+        for(const auto& resource : _resourcesInRepository)
         {
-            for(const auto& resource : _resourcesInRepository)
-            {
-                OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
-                                                                              thatContainsResource:resource->id];
-                if (!match)
-                    continue;
+            OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
+                                                                          thatContainsResource:resource->id];
+            if (!match)
+                continue;
 
-                OAWorldRegion* intermediateRegion = match;
-                while (intermediateRegion != subregion && intermediateRegion != nil)
-                {
-                    if (![_searchableSubregionItems containsObject:intermediateRegion])
-                        [_searchableSubregionItems addObject:intermediateRegion];
-                    
-                    intermediateRegion = intermediateRegion.superregion;
-                }
-                
-                isEmpty = NO;
-                break;
+            OAWorldRegion* intermediateRegion = match;
+            while (intermediateRegion != subregion && intermediateRegion != nil)
+            {
+                if (![_searchableSubregionItems containsObject:intermediateRegion])
+                    [_searchableSubregionItems addObject:intermediateRegion];
+
+                intermediateRegion = intermediateRegion.superregion;
             }
+
+            foundRepositoryResource = YES;
+            break;
         }
 
         // Look in local resources
-        if (isEmpty)
+        BOOL foundLocalResource = NO;
+        for(const auto& resource : _localResources)
         {
-            for(const auto& resource : _localResources)
-            {
-                OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
-                                                                              thatContainsResource:resource->id];
-                if (!match)
-                    continue;
+            OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
+                                                                          thatContainsResource:resource->id];
+            if (!match)
+                continue;
 
-                OAWorldRegion* intermediateRegion = match;
-                while (intermediateRegion != subregion && intermediateRegion != nil)
-                {
-                    if (![_searchableSubregionItems containsObject:intermediateRegion])
-                        [_searchableSubregionItems addObject:intermediateRegion];
-                    
-                    intermediateRegion = intermediateRegion.superregion;
-                }
-                
-                isEmpty = NO;
-                break;
+            OAWorldRegion* intermediateRegion = match;
+            while (intermediateRegion != subregion && intermediateRegion != nil)
+            {
+                if (![_searchableSubregionItems containsObject:intermediateRegion])
+                    [_searchableSubregionItems addObject:intermediateRegion];
+
+                intermediateRegion = intermediateRegion.superregion;
             }
+
+            foundLocalResource = YES;
+            break;
         }
 
         // If subregion has nothing to offer, skip it
-        if (isEmpty)
+        if (!foundRepositoryResource && !foundLocalResource)
         {
             OALog(@"Region %@ (%@) was skipped since it has no resources", subregion.name, subregion.regionId);
             continue;
@@ -304,26 +326,36 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (![_searchableSubregionItems containsObject:subregion])
             [_searchableSubregionItems addObject:subregion];
         if (subregion.superregion == _region)
-            [_subregionItems addObject:subregion];
+        {
+            [_allSubregionItems addObject:subregion];
+            if (foundRepositoryResource)
+                [_repositorySubregionItems addObject:subregion];
+            if (foundLocalResource)
+                [_localSubregionItems addObject:subregion];
+        }
     }
     [_searchableSubregionItems sortUsingSelector:@selector(compare:)];
-    [_subregionItems sortUsingSelector:@selector(compare:)];
+    [_allSubregionItems sortUsingSelector:@selector(compare:)];
+    [_repositorySubregionItems sortUsingSelector:@selector(compare:)];
+    [_localSubregionItems sortUsingSelector:@selector(compare:)];
 }
 
 - (void)collectResourcesDataAndItems
 {
-    [_resourceItems removeAllObjects];
+    [_allResourceItems removeAllObjects];
+    [_repositoryResourceItems removeAllObjects];
+    [_localResourceItems removeAllObjects];
 
-    const auto citResources = _resourcesByRegions.constFind(_region);
-    if (citResources == _resourcesByRegions.cend())
+    const auto citRegionResources = _resourcesByRegions.constFind(_region);
+    if (citRegionResources == _resourcesByRegions.cend())
         return;
-    const auto& resources = *citResources;
+    const auto& regionResources = *citRegionResources;
 
-    for (const auto& resource_ : resources)
+    for (const auto& resource_ : regionResources.allResources)
     {
         if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
         {
-            if (_outdatedResources.contains(resource->id))
+            if (regionResources.outdatedResources.contains(resource->id))
             {
                 OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                 item.resourceId = resource->id;
@@ -333,7 +365,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 if (item.title == nil)
                     continue;
 
-                [_resourceItems addObject:item];
+                [_localResourceItems addObject:item];
+                [_allResourceItems addObject:item];
             }
             else
             {
@@ -345,7 +378,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 if (item.title == nil)
                     continue;
 
-                [_resourceItems addObject:item];
+                [_localResourceItems addObject:item];
+                [_allResourceItems addObject:item];
             }
         }
         else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
@@ -358,15 +392,68 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if (item.title == nil)
                 continue;
 
-            [_resourceItems addObject:item];
+            [_repositoryResourceItems addObject:item];
+            [_allResourceItems addObject:item];
         }
     }
-    [_resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-        ResourceItem *item1 = obj1;
-        ResourceItem *item2 = obj2;
+    [_allResourceItems sortUsingComparator:_resourceItemsComparator];
+    [_repositoryResourceItems sortUsingComparator:_resourceItemsComparator];
+    [_localResourceItems sortUsingComparator:_resourceItemsComparator];
+}
 
-        return [item1.title localizedCaseInsensitiveCompare:item2.title];
-    }];
+- (void)refreshContent
+{
+    @synchronized(_dataLock)
+    {
+        _lastUnusedSectionIndex = 0;
+
+
+        if ([[self getSubregionItems] count] > 0)
+            _subregionsSection = _lastUnusedSectionIndex++;
+        else
+            _subregionsSection = -1;
+
+        if ([[self getResourceItems] count] > 0)
+            _resourcesSection = _lastUnusedSectionIndex++;
+        else
+            _resourcesSection = -1;
+
+        [self.tableView reloadData];
+    }
+}
+
+- (NSMutableArray*)getSubregionItems
+{
+    switch (_currentScope)
+    {
+        case 0:
+            return _allSubregionItems;
+
+        case 1:
+            return _repositorySubregionItems;
+
+        case 2:
+            return _localSubregionItems;
+    }
+
+    return nil;
+}
+
+- (NSMutableArray*)getResourceItems
+{
+    switch (_currentScope)
+    {
+        case 0:
+            return _allResourceItems;
+
+        case 1:
+            return _repositoryResourceItems;
+
+        case 2:
+            return _localResourceItems;
+    }
+    
+    return nil;
 }
 
 - (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
@@ -477,18 +564,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [results addObject:region];
 
             // Get all resources that are direct children of current region
-            const auto citResources = _resourcesByRegions.constFind(region);
-            if (citResources == _resourcesByRegions.cend())
+            const auto citRegionResources = _resourcesByRegions.constFind(region);
+            if (citRegionResources == _resourcesByRegions.cend())
                 continue;
-            const auto& resources = *citResources;
+            const auto& regionResources = *citRegionResources;
 
             // Create items for each resource found
             NSMutableArray* resourceItems = [NSMutableArray array];
-            for (const auto& resource_ : resources)
+            for (const auto& resource_ : regionResources.allResources)
             {
                 if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
                 {
-                    if (_outdatedResources.contains(resource->id))
+                    if (regionResources.outdatedResources.contains(resource->id))
                     {
                         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
@@ -529,12 +616,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                     [resourceItems addObject:item];
                 }
             }
-            [resourceItems sortUsingComparator:^NSComparisonResult(id obj1, id obj2) {
-                ResourceItem *item1 = obj1;
-                ResourceItem *item2 = obj2;
-                
-                return [item1.title localizedCaseInsensitiveCompare:item2.title];
-            }];
+            [resourceItems sortUsingComparator:_resourceItemsComparator];
             
             [results addObjectsFromArray:resourceItems];
         }
@@ -628,6 +710,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
      */
 }
 
+- (IBAction)onScopeChanged:(id)sender
+{
+    _currentScope = _scopeControl.selectedSegmentIndex;
+
+    [self refreshContent];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -651,9 +740,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [_searchResults count];
 
     if (section == _subregionsSection)
-        return [_subregionItems count];
+        return [[self getSubregionItems] count];
     if (section == _resourcesSection)
-        return [_resourceItems count];
+        return [[self getResourceItems] count];
 
     return 0;
 }
@@ -729,7 +818,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
         {
-            OAWorldRegion* worldRegion = [_subregionItems objectAtIndex:indexPath.row];
+            OAWorldRegion* worldRegion = [[self getSubregionItems] objectAtIndex:indexPath.row];
 
             cellTypeId = subregionCell;
             title = worldRegion.name;
@@ -737,7 +826,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
-            id item_ = [_resourceItems objectAtIndex:indexPath.row];
+            id item_ = [[self getResourceItems] objectAtIndex:indexPath.row];
 
             if ([item_ isKindOfClass:[OutdatedResourceItem class]])
             {
@@ -836,9 +925,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if (tableView == self.tableView)
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [_subregionItems objectAtIndex:indexPath.row];
+            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [_resourceItems objectAtIndex:indexPath.row];
+            item = [[self getResourceItems] objectAtIndex:indexPath.row];
     }
 
     if (item == nil)
@@ -855,9 +944,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if (tableView == self.tableView)
     {
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [_subregionItems objectAtIndex:indexPath.row];
+            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [_resourceItems objectAtIndex:indexPath.row];
+            item = [[self getResourceItems] objectAtIndex:indexPath.row];
     }
 
     if (item != nil)
@@ -948,7 +1037,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             OAWorldRegion* subregion = nil;
             if (tableView == _tableView && _subregionsSection >= 0)
-                subregion = [_subregionItems objectAtIndex:cellPath.row];
+                subregion = [[self getSubregionItems] objectAtIndex:cellPath.row];
             else if (tableView == self.searchDisplayController.searchResultsTableView)
                 subregion = [_searchResults objectAtIndex:cellPath.row];
 
@@ -974,12 +1063,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
         OAWorldRegion* subregion = nil;
         if (tableView == _tableView && _subregionsSection >= 0)
-            subregion = [_subregionItems objectAtIndex:cellPath.row];
+            subregion = [[self getSubregionItems] objectAtIndex:cellPath.row];
         else if (tableView == self.searchDisplayController.searchResultsTableView)
             subregion = [_searchResults objectAtIndex:cellPath.row];
 
         [subregionViewController setupWithRegion:subregion
-                             andWorldRegionItems:(_region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems];
+                             andWorldRegionItems:(_region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems
+                                        andScope:_currentScope];
     }
 }
 

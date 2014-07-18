@@ -170,17 +170,12 @@ struct RegionResources
     if (_region != _app.worldRegion)
         self.title = _region.name;
 
-    // Configure search scope
-    if (_region == _app.worldRegion)
-        self.searchDisplayController.searchBar.scopeButtonTitles = nil;
-    else
-        self.searchDisplayController.searchBar.scopeButtonTitles = @[_region.name, OALocalizedString(@"Worldwide")];
-
     _scopeControl.selectedSegmentIndex = _currentScope;
 
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
 
     [self obtainDataAndItems];
+    [self prepareContent];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -197,7 +192,7 @@ struct RegionResources
 - (void)updateContent
 {
     [self obtainDataAndItems];
-    [self.tableView reloadData];
+    [self refreshContent];
 }
 
 - (void)obtainDataAndItems
@@ -207,8 +202,6 @@ struct RegionResources
         [self prepareData];
         [self collectSubregionsDataAndItems];
         [self collectResourcesDataAndItems];
-
-        [self refreshContent];
     }
 }
 
@@ -401,12 +394,11 @@ struct RegionResources
     [_localResourceItems sortUsingComparator:_resourceItemsComparator];
 }
 
-- (void)refreshContent
+- (void)prepareContent
 {
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
-
 
         if ([[self getSubregionItems] count] > 0)
             _subregionsSection = _lastUnusedSectionIndex++;
@@ -418,6 +410,25 @@ struct RegionResources
         else
             _resourcesSection = -1;
 
+        // Configure search scope
+        if (_region == _app.worldRegion || [_searchableSubregionItems count] == 0)
+        {
+            self.searchDisplayController.searchBar.scopeButtonTitles = nil;
+            self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search worldwide");
+        }
+        else
+        {
+            self.searchDisplayController.searchBar.scopeButtonTitles = @[_region.name, OALocalizedString(@"Worldwide")];
+            self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search in %@ or worldwide", _region.name);
+        }
+    }
+}
+
+- (void)refreshContent
+{
+    @synchronized(_dataLock)
+    {
+        [self prepareContent];
         [self.tableView reloadData];
     }
 }
@@ -516,7 +527,7 @@ struct RegionResources
 
         // Select where to look
         NSArray* searchableContent = nil;
-        if (_region == _app.worldRegion || searchScope == 0)
+        if (_region == _app.worldRegion || (searchScope == 0 && [_searchableSubregionItems count] > 0))
             searchableContent = _searchableSubregionItems;
         else
             searchableContent = _searchableWorldwideRegionItems;

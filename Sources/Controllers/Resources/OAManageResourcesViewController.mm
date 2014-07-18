@@ -132,10 +132,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     [super viewDidLoad];
 
-#if DEBUG
+#if defined(DEBUG)
     //HACK: This stuff is needed to avoid exceptions during Debug. In Release they're harmless
     self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-#endif // DEBUG
+#endif // defined(DEBUG)
 
     if (_region != _app.worldRegion)
         self.title = _region.name;
@@ -764,13 +764,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 
     // Obtain reusable cell or create one
-    UITableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
+    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
         if ([cellTypeId isEqualToString:outdatedResourceCell])
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
-                                                    reuseIdentifier:cellTypeId];
+                                          reuseIdentifier:cellTypeId];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
@@ -796,6 +796,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                           reuseIdentifier:cellTypeId];
         }*/
     }
+
+    // Try to allocate cell from own table, since it may be configured there
+    if (cell == nil)
+        cell = [self.tableView dequeueReusableCellWithIdentifier:cellTypeId];
 
     // Fill cell content
     cell.textLabel.text = title;

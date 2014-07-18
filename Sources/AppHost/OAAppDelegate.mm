@@ -50,7 +50,7 @@
     std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
     logFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
-#else
+#else // defined(DEBUG)
     const auto testflightLog =
     []
     (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)

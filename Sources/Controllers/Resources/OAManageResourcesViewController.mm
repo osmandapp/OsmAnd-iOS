@@ -480,6 +480,8 @@ struct RegionResources
     @synchronized(_dataLock)
     {
         [self prepareContent];
+        if (self.searchDisplayController.isActive)
+            [self.searchDisplayController.searchResultsTableView reloadData];
         [self.tableView reloadData];
 
         if ([self isContentEmpty])
@@ -988,7 +990,8 @@ struct RegionResources
     OALog(@"Download task %@ (in %@): completed", task.key, self);
 
     BOOL wasInstalled = NO;
-    const auto& resourceId = QString::fromNSString([task.key substringFromIndex:[@"resource:" length]]);
+    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
+    const auto& resourceId = QString::fromNSString(nsResourceId);
 
     if (localPath != nil && task.state == OADownloadTaskStateFinished)
     {
@@ -1025,7 +1028,7 @@ struct RegionResources
             if (!self.isViewLoaded || self.view.window == nil)
                 return;
 
-            OALog(@"Failed to install/update %@ (in %@)", resourceId.toNSString(), self);
+            OALog(@"Failed to install/update %@ (in %@)", nsResourceId, self);
         }
     });
 }

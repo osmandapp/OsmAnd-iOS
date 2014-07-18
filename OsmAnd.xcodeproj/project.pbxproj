@@ -551,14 +551,8 @@
 		BBA3AEDA197500EF0039D991 /* OAMapSourcesListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSourcesListViewController.mm; path = Controllers/MapSources/OAMapSourcesListViewController.mm; sourceTree = "<group>"; };
 		BBA3AEDE197501090039D991 /* OAIncomingURLViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIncomingURLViewController.h; path = Controllers/Misc/OAIncomingURLViewController.h; sourceTree = "<group>"; };
 		BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIncomingURLViewController.mm; path = Controllers/Misc/OAIncomingURLViewController.mm; sourceTree = "<group>"; };
-		BBA3AEE7197501330039D991 /* OADownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsViewController.h; path = Controllers/Resources/OADownloadsViewController.h; sourceTree = "<group>"; };
-		BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADownloadsViewController.mm; path = Controllers/Resources/OADownloadsViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInformationViewController.h; path = Controllers/Resources/OALocalResourceInformationViewController.h; sourceTree = "<group>"; };
 		BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocalResourceInformationViewController.mm; path = Controllers/Resources/OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
-		BBA3AEED197501330039D991 /* OAShowDownloadsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAShowDownloadsViewController.h; path = Controllers/Resources/OAShowDownloadsViewController.h; sourceTree = "<group>"; };
-		BBA3AEEE197501330039D991 /* OAShowDownloadsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAShowDownloadsViewController.mm; path = Controllers/Resources/OAShowDownloadsViewController.mm; sourceTree = "<group>"; };
-		BBA3AEEF197501330039D991 /* OAShowUpdatesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAShowUpdatesViewController.h; path = Controllers/Resources/OAShowUpdatesViewController.h; sourceTree = "<group>"; };
-		BBA3AEF0197501330039D991 /* OAShowUpdatesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAShowUpdatesViewController.mm; path = Controllers/Resources/OAShowUpdatesViewController.mm; sourceTree = "<group>"; };
 		BBA3AF001975016F0039D991 /* OAContextPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAContextPanelViewController.h; path = Controllers/Panels/OAContextPanelViewController.h; sourceTree = "<group>"; };
 		BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAContextPanelViewController.m; path = Controllers/Panels/OAContextPanelViewController.m; sourceTree = "<group>"; };
 		BBA3AF021975016F0039D991 /* OAMapPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapPanelViewController.h; path = Controllers/Panels/OAMapPanelViewController.h; sourceTree = "<group>"; };
@@ -1038,12 +1032,6 @@
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
 				BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */,
 				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
-				BBA3AEE7197501330039D991 /* OADownloadsViewController.h */,
-				BBA3AEE8197501330039D991 /* OADownloadsViewController.mm */,
-				BBA3AEED197501330039D991 /* OAShowDownloadsViewController.h */,
-				BBA3AEEE197501330039D991 /* OAShowDownloadsViewController.mm */,
-				BBA3AEEF197501330039D991 /* OAShowUpdatesViewController.h */,
-				BBA3AEF0197501330039D991 /* OAShowUpdatesViewController.mm */,
 			);
 			name = Resources;
 			sourceTree = "<group>";

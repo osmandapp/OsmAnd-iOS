@@ -481,6 +481,25 @@ struct RegionResources
     {
         [self prepareContent];
         [self.tableView reloadData];
+
+        if ([self isContentEmpty])
+        {
+            [self.navigationController popViewControllerAnimated:YES];
+            return;
+        }
+    }
+}
+
+- (BOOL)isContentEmpty
+{
+    @synchronized(_dataLock)
+    {
+        NSUInteger count = 0;
+
+        count += [[self getSubregionItems] count];
+        count += [[self getResourceItems] count];
+
+        return (count == 0);
     }
 }
 
@@ -838,6 +857,36 @@ struct RegionResources
 - (void)cancelDownloadOf:(ResourceItem*)item
 {
     [item.downloadTask cancel];
+}
+
+- (void)offerDeleteResourceOf:(LocalResourceItem*)item
+{
+    BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
+
+    NSString* message = nil;
+    if (isInstalled)
+    {
+        message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name]);
+    }
+    else
+    {
+        message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
+                                    [self titleOfResource:item.resource withRegionName:_region.name]);
+    }
+
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"Uninstall") : OALocalizedString(@"Delete")
+                                                             action:^{
+                                                                 [self deleteResourceOf:item];
+                                                             }], nil] show];
+}
+
+- (void)deleteResourceOf:(LocalResourceItem*)item
+{
+    _app.resourcesManager->uninstallResource(item.resourceId);
 }
 
 - (void)onItemClicked:(id)senderItem
@@ -1205,6 +1254,70 @@ struct RegionResources
         [self onItemClicked:item];
 
     [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id item = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        item = [_searchResults objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
+    {
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
+            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+            item = [[self getResourceItems] objectAtIndex:indexPath.row];
+    }
+
+    if (item == nil)
+        return NO;
+
+    if (![item isKindOfClass:[LocalResourceItem class]])
+        return NO;
+
+    return YES;
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id item = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        item = [_searchResults objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
+    {
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
+            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+            item = [[self getResourceItems] objectAtIndex:indexPath.row];
+    }
+
+    if (item == nil)
+        return UITableViewCellEditingStyleNone;
+
+    if (![item isKindOfClass:[LocalResourceItem class]])
+        return UITableViewCellEditingStyleNone;
+
+    return UITableViewCellEditingStyleDelete;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    id item = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        item = [_searchResults objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
+    {
+        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
+            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
+        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+            item = [[self getResourceItems] objectAtIndex:indexPath.row];
+    }
+
+    if (item == nil)
+        return;
+
+    if ([item isKindOfClass:[LocalResourceItem class]])
+        [self offerDeleteResourceOf:item];
 }
 
 #pragma mark - UISearchDisplayDelegate

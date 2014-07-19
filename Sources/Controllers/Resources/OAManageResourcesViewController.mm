@@ -486,25 +486,6 @@ struct RegionResources
         if (self.searchDisplayController.isActive)
             [self.searchDisplayController.searchResultsTableView reloadData];
         [self.tableView reloadData];
-
-        if ([self isContentEmpty])
-        {
-            [self.navigationController popViewControllerAnimated:YES];
-            return;
-        }
-    }
-}
-
-- (BOOL)isContentEmpty
-{
-    @synchronized(_dataLock)
-    {
-        NSUInteger count = 0;
-
-        count += [[self getSubregionItems] count];
-        count += [[self getResourceItems] count];
-
-        return (count == 0);
     }
 }
 

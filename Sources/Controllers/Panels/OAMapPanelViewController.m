@@ -55,7 +55,7 @@
                                                                         views:@{@"view":_mapViewController.view}]];
     
     // Instantiate map HUD controller
-    UIViewController* mapHudVC = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapModeHUD"
+    UIViewController* mapHudVC = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                               bundle:nil];
     [self addChildViewController:mapHudVC];
     [mapHudVC.view setTranslatesAutoresizingMaskIntoConstraints:NO];

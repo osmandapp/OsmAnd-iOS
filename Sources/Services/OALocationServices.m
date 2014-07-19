@@ -83,10 +83,41 @@
     _updateObserver = [[OAObservable alloc] init];
 
     _isSuspended = NO;
+
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter addObserver:self
+                           selector:@selector(onDeviceOrientationDidChange)
+                               name:UIDeviceOrientationDidChangeNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onDeviceBatteryStateDidChange)
+                               name:UIDeviceBatteryLevelDidChangeNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onApplicationWillEnterForeground)
+                               name:UIApplicationWillEnterForegroundNotification
+                             object:nil];
+    [notificationCenter addObserver:self
+                           selector:@selector(onApplicationWillResignActive)
+                               name:UIApplicationWillResignActiveNotification
+                             object:nil];
 }
 
 - (void)dtor
 {
+    NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
+    [notificationCenter removeObserver:self
+                                  name:UIDeviceOrientationDidChangeNotification
+                                object:nil];
+    [notificationCenter removeObserver:self
+                                  name:UIDeviceBatteryLevelDidChangeNotification
+                                object:nil];
+    [notificationCenter removeObserver:self
+                                  name:UIApplicationWillEnterForegroundNotification
+                                object:nil];
+    [notificationCenter removeObserver:self
+                                  name:UIApplicationWillResignActiveNotification
+                                object:nil];
 }
 
 - (BOOL)available
@@ -134,24 +165,6 @@
             return NO;
 
         BOOL didChange = NO;
-
-        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter addObserver:self
-                               selector:@selector(onDeviceOrientationDidChange)
-                                   name:UIDeviceOrientationDidChangeNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(onDeviceBatteryStateDidChange)
-                                   name:UIDeviceBatteryLevelDidChangeNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(onApplicationWillEnterForeground)
-                                   name:UIApplicationWillEnterForegroundNotification
-                                 object:nil];
-        [notificationCenter addObserver:self
-                               selector:@selector(onApplicationWillResignActive)
-                                   name:UIApplicationWillResignActiveNotification
-                                 object:nil];
 
         [self updateDeviceOrientation];
 
@@ -219,18 +232,9 @@
             didChange = YES;
         }
 
-        NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
-        [notificationCenter removeObserver:self
-                                      name:UIDeviceOrientationDidChangeNotification
-                                    object:nil];
-        [notificationCenter removeObserver:self
-                                      name:UIDeviceBatteryLevelDidChangeNotification
-                                    object:nil];
-
         return didChange;
     }
 }
-
 
 - (void)stop
 {

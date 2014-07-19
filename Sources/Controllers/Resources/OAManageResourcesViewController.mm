@@ -123,6 +123,7 @@ struct RegionResources
 
     NSComparator _resourceItemsComparator;
 
+    MBProgressHUD* _refreshRepositoryProgressHUD;
     UIBarButtonItem* _refreshRepositoryBarButton;
 }
 
@@ -192,6 +193,8 @@ struct RegionResources
     if (_region != _app.worldRegion)
         self.title = _region.name;
 
+    _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:_refreshRepositoryProgressHUD];
     _refreshRepositoryBarButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRefresh
                                                                                 target:self
                                                                                 action:@selector(onRefreshRepositoryButtonClicked)];
@@ -730,10 +733,14 @@ struct RegionResources
 
 - (void)updateRepository
 {
-    [[[MBProgressHUD alloc] initWithView:self.view] showAnimated:YES
-                                             whileExecutingBlock:^{
-                                                 _app.resourcesManager->updateRepository();
-                                             }];
+    _refreshRepositoryBarButton.enabled = NO;
+    [_refreshRepositoryProgressHUD showAnimated:YES
+                            whileExecutingBlock:^{
+                                _app.resourcesManager->updateRepository();
+                            }
+                                completionBlock:^{
+                                    _refreshRepositoryBarButton.enabled = YES;
+                                }];
 }
 
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item

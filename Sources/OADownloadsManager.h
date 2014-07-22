@@ -33,5 +33,6 @@
                                 andTargetPath:(NSString*)targetPath
                                        andKey:(NSString*)key;
 
-- (BOOL)saveData:(NSData *)resumeData withFileName:(NSString *)fileName;
+- (BOOL)saveResumeData:(NSData *)resumeData withFileName:(NSString *)fileName;
+- (BOOL)deleteResumeData:(NSString *)fileName;
 @end

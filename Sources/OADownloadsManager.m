@@ -198,13 +198,24 @@
     return [NSData dataWithContentsOfFile:[[self cacheDirectoryPath] stringByAppendingPathComponent:fileName]];
 }
 
-- (BOOL)saveData:(NSData *)resumeData withFileName:(NSString *)fileName
+- (BOOL)saveResumeData:(NSData *)resumeData withFileName:(NSString *)fileName
 {
     NSError *error = nil;
     [resumeData writeToFile:[[self cacheDirectoryPath] stringByAppendingPathComponent:fileName] options:NSDataWritingAtomic error:&error];
     
     if (error != nil) {
         NSLog(@"Unable to write data to file. Error: %@", error);
+        return false;
+    }
+    return true;
+}
+
+- (BOOL)deleteResumeData:(NSString *)fileName
+{
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:[[self cacheDirectoryPath] stringByAppendingPathComponent:fileName] error:&error];
+    if (error != nil) {
+        NSLog(@"Unable to delete file. Error: %@", error);
         return false;
     }
     return true;

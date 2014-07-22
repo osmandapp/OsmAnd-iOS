@@ -123,9 +123,10 @@
     _error = error;
 
     OADownloadsManager* owner = _owner;
-    if (_task.state == NSURLSessionTaskStateCompleted && owner != nil)
+    if (_task.state == NSURLSessionTaskStateCompleted && owner != nil) {
+        [owner deleteResumeData:_key];
         [owner removeTask:self];
-
+    }
     [_completedObservable notifyEventWithKey:self andValue:_targetPath];
 }
 
@@ -178,14 +179,14 @@
 - (void)stop
 {
     [_task cancelByProducingResumeData:^(NSData *resumeData){
-        [_owner saveData:resumeData withFileName:_key];
+        [_owner saveResumeData:resumeData withFileName:_key];
     }];
 }
 
 - (void)cancel
 {
     [_task cancelByProducingResumeData:^(NSData *resumeData){
-        [_owner saveData:resumeData withFileName:_key];
+        [_owner saveResumeData:resumeData withFileName:_key];
     }];
 }
 

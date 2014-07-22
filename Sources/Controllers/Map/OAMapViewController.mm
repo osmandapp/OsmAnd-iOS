@@ -53,6 +53,8 @@
 #define kMapModeFollowZoom 18.0f
 #define kQuickAnimationTime 0.4f
 #define kOneSecondAnimatonTime 1.0f
+#define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
+#define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
 #define _(name) OAMapRendererViewController__##name
 #define ctor _(ctor)
@@ -426,7 +428,9 @@
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
-        mapView.animator->cancelAnimation();
+        // When user gesture has began, stop all animations
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
         
         _initialZoomLevelDuringGesture = mapView.zoom;
@@ -469,8 +473,10 @@
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kZoomVelocityAbsLimit, recognizer.velocity, kZoomVelocityAbsLimit);
-        mapView.animator->animateZoomWith(velocity, kZoomDeceleration);
-        mapView.animator->resumeAnimation();
+        mapView.animator->animateZoomWith(velocity,
+                                          kZoomDeceleration,
+                                          kUserInteractionAnimationKey);
+        mapView.animator->resume();
     }
 }
 
@@ -484,7 +490,9 @@
     
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
-        mapView.animator->cancelAnimation();
+        // When user gesture has began, stop all animations
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
     }
     
@@ -529,8 +537,9 @@
         velocity.y = -velocityInMapSpace.y * scale31;
         
         mapView.animator->animateTargetWith(velocity,
-                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31));
-        mapView.animator->resumeAnimation();
+                                            OsmAnd::PointD(kTargetMoveDeceleration * scale31, kTargetMoveDeceleration * scale31),
+                                            kUserInteractionAnimationKey);
+        mapView.animator->resume();
     }
     [recognizer setTranslation:CGPointZero inView:self.view];
 }
@@ -546,9 +555,11 @@
     // Zeroify accumulated rotation on gesture begin
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
-        mapView.animator->cancelAnimation();
+        // When user gesture has began, stop all animations
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
-        
+
         _accumulatedRotationAngle = 0.0f;
     }
     
@@ -596,8 +607,10 @@
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees(recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
-        mapView.animator->animateAzimuthWith(velocity, kRotateDeceleration);
-        mapView.animator->resumeAnimation();
+        mapView.animator->animateAzimuthWith(velocity,
+                                             kRotateDeceleration,
+                                             kUserInteractionAnimationKey);
+        mapView.animator->resume();
     }
     [recognizer setRotation:0];
 }
@@ -617,10 +630,11 @@
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
 
-    // Cancel animation (if any)
-    mapView.animator->cancelAnimation();
+    // When user gesture has began, stop all animations
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
     _app.mapMode = OAMapModeFree;
-    
+
     // Put tap location to center of screen
     CGPoint centerPoint = [recognizer locationOfTouch:0 inView:self.view];
     centerPoint.x *= mapView.contentScaleFactor;
@@ -629,16 +643,18 @@
     [mapView convert:centerPoint toLocation:&centerLocation];
     mapView.animator->animateTargetTo(centerLocation,
                                       kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Linear);
+                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                      kUserInteractionAnimationKey);
     
     // Increate zoom by 1
     zoomDelta += 1.0f;
     mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
-                                    OsmAnd::MapAnimator::TimingFunction::Linear);
+                                    OsmAnd::MapAnimator::TimingFunction::Linear,
+                                    kUserInteractionAnimationKey);
     
     // Launch animation
-    mapView.animator->resumeAnimation();
+    mapView.animator->resume();
 }
 
 - (void)zoomOutGestureDetected:(UITapGestureRecognizer*)recognizer
@@ -656,8 +672,9 @@
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
 
-    // Cancel animation (if any)
-    mapView.animator->cancelAnimation();
+    // When user gesture has began, stop all animations
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
     _app.mapMode = OAMapModeFree;
     
     // Put tap location to center of screen
@@ -677,16 +694,18 @@
     [mapView convert:centerPoint toLocation:&centerLocation];
     mapView.animator->animateTargetTo(centerLocation,
                                       kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Linear);
+                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                      kUserInteractionAnimationKey);
     
     // Decrease zoom by 1
     zoomDelta -= 1.0f;
     mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
-                                    OsmAnd::MapAnimator::TimingFunction::Linear);
+                                    OsmAnd::MapAnimator::TimingFunction::Linear,
+                                    kUserInteractionAnimationKey);
     
     // Launch animation
-    mapView.animator->resumeAnimation();
+    mapView.animator->resume();
 }
 
 - (void)elevationGestureDetected:(UIPanGestureRecognizer*)recognizer
@@ -863,12 +882,16 @@
     // used in PositionTrack mode (except for azimuth)
     const bool restorePositionTrackState = _lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured;
 
-    // Since user iteracts with map, set mode to free
+    // When user gesture has began, stop all animations
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
     _app.mapMode = OAMapModeFree;
 
     // Animate azimuth change to north
-    mapView.animator->cancelAnimation();
-    mapView.animator->animateAzimuthTo(0.0f, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+    mapView.animator->animateAzimuthTo(0.0f,
+                                       kQuickAnimationTime,
+                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                       kUserInteractionAnimationKey);
     if (restorePositionTrackState)
     {
         mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
@@ -879,7 +902,7 @@
                                         OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
         _lastPositionTrackStateCaptured = false;
     }
-    mapView.animator->resumeAnimation();
+    mapView.animator->resume();
 }
 
 @synthesize zoomObservable = _zoomObservable;
@@ -890,12 +913,13 @@
         return 0.0f;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    mapView.animator->pauseAnimation();
-    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
-    const auto& currentTargetAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Target);
-    if (currentZoomAnimation &&
-        (mapView.animator->getAnimations().size() == 1 || (currentTargetAnimation && mapView.animator->getAnimations().size() == 2)))
+
+    const auto currentZoomAnimation = mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+                                                                            OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    if (currentZoomAnimation)
     {
+        currentZoomAnimation->pause();
+
         bool ok = true;
 
         float deltaValue;
@@ -906,6 +930,8 @@
 
         float currentValue;
         ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
+
+        currentZoomAnimation->resume();
 
         if (ok && deltaValue > 0.0f)
             return (initialValue + deltaValue) - currentValue;
@@ -930,18 +956,18 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    // In case we're in "follow-me" mode, switch to "position-tracking"
-    if (_app.mapMode == OAMapModeFollow)
-        _app.mapMode = OAMapModePositionTrack;
-
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
 
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
-    mapView.animator->cancelAnimation();
-    mapView.animator->animateZoomBy(zoomDelta, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::Linear);
-    mapView.animator->resumeAnimation();
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
+    mapView.animator->animateZoomBy(zoomDelta,
+                                    kQuickAnimationTime,
+                                    OsmAnd::MapAnimator::TimingFunction::Linear,
+                                    kUserInteractionAnimationKey);
+    mapView.animator->resume();
 }
 
 - (float)currentZoomOutDelta
@@ -950,12 +976,12 @@
         return 0.0f;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    mapView.animator->pauseAnimation();
-    const auto& currentZoomAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Zoom);
-    const auto& currentTargetAnimation = mapView.animator->getCurrentAnimationOf(OsmAnd::MapAnimator::AnimatedValue::Target);
-    if (currentZoomAnimation &&
-        (mapView.animator->getAnimations().size() == 1 || (currentTargetAnimation && mapView.animator->getAnimations().size() == 2)))
+    const auto currentZoomAnimation = mapView.animator->getCurrentAnimation(kUserInteractionAnimationKey,
+                                                                            OsmAnd::MapAnimator::AnimatedValue::Zoom);
+    if (currentZoomAnimation)
     {
+        currentZoomAnimation->pause();
+
         bool ok = true;
 
         float deltaValue;
@@ -966,6 +992,8 @@
 
         float currentValue;
         ok = ok && currentZoomAnimation->obtainCurrentValueAsFloat(currentValue);
+
+        currentZoomAnimation->resume();
 
         if (ok && deltaValue < 0.0f)
             return (initialValue + deltaValue) - currentValue;
@@ -990,18 +1018,18 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    // In case we're in "follow-me" mode, switch to "position-tracking"
-    if (_app.mapMode == OAMapModeFollow)
-        _app.mapMode = OAMapModePositionTrack;
-
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;
-    mapView.animator->cancelAnimation();
-    mapView.animator->animateZoomBy(zoomDelta, kQuickAnimationTime, OsmAnd::MapAnimator::TimingFunction::Linear);
-    mapView.animator->resumeAnimation();
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
+    mapView.animator->animateZoomBy(zoomDelta,
+                                    kQuickAnimationTime,
+                                    OsmAnd::MapAnimator::TimingFunction::Linear,
+                                    kUserInteractionAnimationKey);
+    mapView.animator->resume();
 }
 
 - (void)onMapModeChanged
@@ -1021,13 +1049,13 @@
             {
                 // Fly to last-known position without changing anything but target
                 
-                mapView.animator->cancelAnimation();
-                
+                mapView.animator->pause();
+                mapView.animator->cancelAllAnimations();
+
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-
 
                 // In case previous mode was Follow, restore last azimuth, elevation angle and zoom
                 // used in PositionTrack mode
@@ -1035,16 +1063,20 @@
                 {
                     mapView.animator->animateTargetTo(newTarget31,
                                                       kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                      kLocationServicesAnimationKey);
                     mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
                                                        kOneSecondAnimatonTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                       kUserInteractionAnimationKey);
                     mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
                                                               kOneSecondAnimatonTime,
-                                                              OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                              OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                              kUserInteractionAnimationKey);
                     mapView.animator->animateZoomTo(_lastZoomInPositionTrack,
                                                     kOneSecondAnimatonTime,
-                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                    kUserInteractionAnimationKey);
                     _lastPositionTrackStateCaptured = false;
                 }
                 else
@@ -1052,15 +1084,16 @@
                     mapView.animator->parabolicAnimateTargetTo(newTarget31,
                                                                kOneSecondAnimatonTime,
                                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
-                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                               kLocationServicesAnimationKey);
                 }
 
-                mapView.animator->resumeAnimation();
+                mapView.animator->resume();
             }
             break;
             
         case OAMapModeFollow:
-            // In case previous mode was PositionTrack, rememver azimuth, elevation angle and zoom
+            // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
             if (_lastMapMode == OAMapModePositionTrack)
             {
                 _lastAzimuthInPositionTrack = mapView.azimuth;
@@ -1068,20 +1101,23 @@
                 _lastZoomInPositionTrack = mapView.zoom;
                 _lastPositionTrackStateCaptured = true;
             }
-            if (_app.locationServices.lastKnownLocation != nil && !isnan(_app.locationServices.lastKnownHeading))
+            if (_app.locationServices.lastKnownLocation != nil)
             {
                 // Fly to last-known position, change heading to last-known heading,
                 // set zoom to kMapModeFollowZoom and elevation angle to kElevationMinAngle
 
-                mapView.animator->cancelAnimation();
-                
+                mapView.animator->pause();
+                mapView.animator->cancelAllAnimations();
+
                 mapView.animator->animateZoomTo(kMapModeFollowZoom,
                                                 kOneSecondAnimatonTime,
-                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                kLocationServicesAnimationKey);
                 
                 mapView.animator->animateElevationAngleTo(kElevationMinAngle,
                                                           kOneSecondAnimatonTime,
-                                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                          kLocationServicesAnimationKey);
 
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
@@ -1089,14 +1125,19 @@
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
                 mapView.animator->animateTargetTo(newTarget31,
                                                   kOneSecondAnimatonTime,
-                                                  OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                                  OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                  kLocationServicesAnimationKey);
 
-                const CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-                mapView.animator->animateAzimuthTo(newHeading,
-                                                   kOneSecondAnimatonTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-                
-                mapView.animator->resumeAnimation();
+                if (!isnan(_app.locationServices.lastKnownHeading))
+                {
+                    const CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+                    mapView.animator->animateAzimuthTo(newHeading,
+                                                       kOneSecondAnimatonTime,
+                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                       kLocationServicesAnimationKey);
+                }
+
+                mapView.animator->resume();
             }
             break;
 
@@ -1112,7 +1153,7 @@
     if (![self isViewLoaded])
         return;
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
+
     // Obtain fresh location and heading
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
     CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
@@ -1147,33 +1188,113 @@
     // If map mode is position-track or follow, move to that position
     if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
     {
-        mapView.animator->cancelAnimation();
-        
+        mapView.animator->pause();
+        const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                            OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+        const auto zoomAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                         OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        const auto elevationAngleAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                                   OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
+        const auto targetAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                           OsmAnd::MapAnimator::AnimatedValue::Target);
+        mapView.animator->cancelAnimations(kLocationServicesAnimationKey);
+        if (_app.mapMode == OAMapModeFollow)
+            mapView.animator->cancelAnimations(kUserInteractionAnimationKey);
+        else
+        {
+            mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                                                     OsmAnd::MapAnimator::AnimatedValue::Target);
+        }
+
+        // For "follow-me" mode azimuth, zoom and elevation is also controlled
         if (_app.mapMode == OAMapModeFollow)
         {
-            mapView.animator->animateZoomTo(kMapModeFollowZoom,
-                                            kOneSecondAnimatonTime,
-                                            OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+            // Update azimuth if there's one
+            if (!isnan(newHeading))
+            {
+                if (azimuthAnimation)
+                {
+                    mapView.animator->animateAzimuthTo(newHeading,
+                                                       azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
+                                                       azimuthAnimation->getTimingFunction(),
+                                                       kLocationServicesAnimationKey);
+                }
+                else
+                {
+                    mapView.animator->animateAzimuthTo(newHeading,
+                                                       kOneSecondAnimatonTime,
+                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                       kLocationServicesAnimationKey);
+                }
+            }
 
-            mapView.animator->animateElevationAngleTo(kElevationMinAngle,
-                                                      kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+            // Update zoom
+            if (zoomAnimation)
+            {
+                mapView.animator->cancelAnimation(zoomAnimation);
+
+                mapView.animator->animateZoomTo(kMapModeFollowZoom,
+                                                zoomAnimation->getDuration() - zoomAnimation->getTimePassed(),
+                                                zoomAnimation->getTimingFunction(),
+                                                kLocationServicesAnimationKey);
+            }
+            else
+            {
+                mapView.animator->animateZoomTo(kMapModeFollowZoom,
+                                                kOneSecondAnimatonTime,
+                                                OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                kLocationServicesAnimationKey);
+            }
+
+            // Update elevation angle
+            if (elevationAngleAnimation)
+            {
+                mapView.animator->cancelAnimation(elevationAngleAnimation);
+
+                mapView.animator->animateElevationAngleTo(kElevationMinAngle,
+                                                          elevationAngleAnimation->getDuration() - elevationAngleAnimation->getTimePassed(),
+                                                          elevationAngleAnimation->getTimingFunction(),
+                                                          kLocationServicesAnimationKey);
+            }
+            else
+            {
+                mapView.animator->animateElevationAngleTo(kElevationMinAngle,
+                                                          kOneSecondAnimatonTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                          kLocationServicesAnimationKey);
+            }
         }
-        
-        mapView.animator->parabolicAnimateTargetTo(newTarget31,
-                                                   kOneSecondAnimatonTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-        
-        // Update azimuth
-        if (_app.mapMode == OAMapModeFollow && !isnan(newHeading))
+
+        // And also update target
+        if (targetAnimation)
         {
-            mapView.animator->animateAzimuthTo(newHeading,
-                                               kOneSecondAnimatonTime,
-                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+            mapView.animator->cancelAnimation(targetAnimation);
+
+            mapView.animator->animateTargetTo(newTarget31,
+                                              targetAnimation->getDuration() - targetAnimation->getTimePassed(),
+                                              targetAnimation->getTimingFunction(),
+                                              kLocationServicesAnimationKey);
         }
-        
-        mapView.animator->resumeAnimation();
+        else
+        {
+            if (_app.mapMode == OAMapModeFollow)
+            {
+                mapView.animator->animateTargetTo(newTarget31,
+                                                  kOneSecondAnimatonTime,
+                                                  OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                  kLocationServicesAnimationKey);
+            }
+            else
+            {
+                mapView.animator->parabolicAnimateTargetTo(newTarget31,
+                                                           kOneSecondAnimatonTime,
+                                                           OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                           OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                           kLocationServicesAnimationKey);
+            }
+        }
+
+        mapView.animator->resume();
     }
 }
 
@@ -1314,18 +1435,18 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    // In case we're in "follow-me" mode, switch to "position-tracking"
-    if (_app.mapMode == OAMapModeFollow)
-        _app.mapMode = OAMapModePositionTrack;
+    _app.mapMode = OAMapModeFree;
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
 
     if (animated)
     {
-        mapView.animator->cancelAnimation();
         mapView.animator->parabolicAnimateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                                    kQuickAnimationTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-        mapView.animator->resumeAnimation();
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                   kUserInteractionAnimationKey);
+        mapView.animator->resume();
     }
     else
     {
@@ -1342,20 +1463,21 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    // In case we're in "follow-me" mode, switch to "position-tracking"
-    if (_app.mapMode == OAMapModeFollow)
-        _app.mapMode = OAMapModePositionTrack;
+    _app.mapMode = OAMapModeFree;
+    mapView.animator->pause();
+    mapView.animator->cancelAllAnimations();
 
     if (animated)
     {
-        mapView.animator->cancelAnimation();
         mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                           kQuickAnimationTime,
-                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
+                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                          kUserInteractionAnimationKey);
         mapView.animator->animateZoomTo(zoom,
                                         kQuickAnimationTime,
-                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-        mapView.animator->resumeAnimation();
+                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                        kUserInteractionAnimationKey);
+        mapView.animator->resume();
     }
     else
     {

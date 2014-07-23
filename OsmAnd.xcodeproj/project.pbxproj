@@ -21,10 +21,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		3B1E199E9BE24EBDACC66B67 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
-		40F90C756ABD4169BE426416 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
-		6AE99989C04547E3BF5097A6 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
-		8395F6CEA17D43068F627C0F /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
+		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
+		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 		BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
@@ -357,7 +355,6 @@
 		BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE85196BCB4B0039D991 /* OAQColorPickerElement.m */; };
 		BBA3AF65197FC4BB0039D991 /* OAFavoritesLayerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEC31974067D0039D991 /* OAFavoritesLayerViewController.mm */; };
-		BBA3AF67197FC4BB0039D991 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 		BBA3AF68197FC4BB0039D991 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */; };
 		BBA3AF69197FC4BB0039D991 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C0461926265E007999A0 /* libarchive_static.a */; };
 		BBA3AF6A197FC4BB0039D991 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
@@ -544,6 +541,7 @@
 		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
 		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -825,8 +823,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B1E199E9BE24EBDACC66B67 /* libPods.a in Frameworks */,
-				40F90C756ABD4169BE426416 /* libPods-dev.a in Frameworks */,
+				F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */,
 				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
 				BB32C0471926265E007999A0 /* libarchive_static.a in Frameworks */,
 				BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */,
@@ -860,8 +857,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6AE99989C04547E3BF5097A6 /* libPods.a in Frameworks */,
-				8395F6CEA17D43068F627C0F /* libPods-dev.a in Frameworks */,
+				006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */,
 				BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */,
 				BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */,
 				BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */,
@@ -884,7 +880,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BBA3AF67197FC4BB0039D991 /* libPods.a in Frameworks */,
+				7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */,
 				BBA3AF68197FC4BB0039D991 /* libOsmAndCore_static.a in Frameworks */,
 				BBA3AF69197FC4BB0039D991 /* libarchive_static.a in Frameworks */,
 				BBA3AF6A197FC4BB0039D991 /* libicu4c_static.a in Frameworks */,
@@ -1481,9 +1477,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				BBA3AF30197FC4BB0039D991 /* OsmAnd */,
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
-				BBA3AF30197FC4BB0039D991 /* OsmAnd */,
 				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};
@@ -1832,7 +1828,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-dev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7BCADF4054EF4D75B493A18A /* Check Pods Manifest.lock */ = {
@@ -1921,7 +1917,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Pods-dev-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2246,7 +2242,7 @@
 		};
 		BB098D0F1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
+			baseConfigurationReference = E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -2259,7 +2255,7 @@
 		};
 		BB098D101793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
+			baseConfigurationReference = E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -2272,7 +2268,7 @@
 		};
 		BB451E9818DCD224005FBE09 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
+			baseConfigurationReference = E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -2299,7 +2295,7 @@
 		};
 		BB451E9918DCD224005FBE09 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 87629E7351254391A72029D7 /* Pods.xcconfig */;
+			baseConfigurationReference = E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */;
 			buildSettings = {
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",

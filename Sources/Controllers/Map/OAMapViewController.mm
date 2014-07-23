@@ -287,10 +287,8 @@
 
 - (void)loadView
 {
-#if defined(DEBUG)
     OALog(@"Creating Map Renderer view...");
-#endif
-    
+
     // Inflate map renderer view
     OAMapRendererView* mapView = [[OAMapRendererView alloc] init];
     self.view = mapView;
@@ -398,9 +396,7 @@
         // Ignore this touch if vertical distance is too large
         if (verticalDistance >= kElevationGestureMaxThreshold)
         {
-#if defined(DEBUG)
             OALog(@"Elevation gesture ignored due to vertical distance %f", verticalDistance);
-#endif
             return NO;
         }
     }

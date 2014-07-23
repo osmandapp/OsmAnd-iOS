@@ -47,12 +47,13 @@
     // Initialize OsmAnd core
     OsmAnd::InitializeCore();
 
-#if defined(DEBUG)
+#if defined(OSMAND_IOS_DEV)
+#   if defined(DEBUG)
     // If this is a debug build, duplicate all core logs to a file
     std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
     logFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
-#else // defined(DEBUG)
+#   else // defined(DEBUG)
     const auto testflightLog =
     []
     (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
@@ -72,7 +73,8 @@
         TFLogPreFormatted([prefix stringByAppendingString:line]);
     };
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::FunctorLogSink(testflightLog, nullptr)));
-#endif
+#   endif
+#endif // defined(OSMAND_IOS_DEV)
 
     // Initialize application
     [_app initialize];

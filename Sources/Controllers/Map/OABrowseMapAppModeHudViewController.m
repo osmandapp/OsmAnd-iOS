@@ -14,7 +14,9 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
-#import "OADebugHudViewController.h"
+#if defined(OSMAND_IOS_DEV)
+#   import "OADebugHudViewController.h"
+#endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
@@ -47,7 +49,10 @@
     OAAutoObserverProxy* _mapZoomObserver;
 
     OAMapViewController* _mapViewController;
+
+#if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
+#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -100,6 +105,10 @@
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
+
+#if !defined(OSMAND_IOS_DEV)
+    [_debugButton hideAndDisableInput];
+#endif // !defined(OSMAND_IOS_DEV)
 }
 
 - (void)didReceiveMemoryWarning
@@ -232,6 +241,7 @@
 
 - (IBAction)onDebugButtonClicked:(id)sender
 {
+#if defined(OSMAND_IOS_DEV)
     if (_debugHudViewController == nil)
     {
         _debugHudViewController = [[OADebugHudViewController alloc] initWithNibName:@"DebugHUD" bundle:nil];
@@ -246,6 +256,7 @@
         [_debugHudViewController removeFromParentViewController];
         _debugHudViewController = nil;
     }
+#endif // defined(OSMAND_IOS_DEV)
 }
 
 @end

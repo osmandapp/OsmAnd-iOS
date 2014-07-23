@@ -21,16 +21,16 @@ pod 'RegexKitLite', '~> 4.0'
 pod 'MBProgressHUD', '~> 0.8'
 
 # Development-only dependencies
-target :dev do
+target :dev, :exclusive => true do
     link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
 
     pod 'TestFlightSDK', '~> 3.0.2'
 end
 
 # AppStore-only dependencies
-target :appstore do
-    link_with 'OsmAnd'
-end
+#target :appstore, :exclusive => true do
+#    link_with 'OsmAnd'
+#end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings
@@ -39,11 +39,8 @@ end
 #  - Build all architectures for Pods
 post_install do |installer_representation|
     workDir = Dir.pwd
-    xcconfigFilename = "#{workDir}/Pods/Pods.xcconfig"
-    xcconfig = File.read(xcconfigFilename)
-    xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\" \"")
-    File.open(xcconfigFilename, "w") { |file| file << xcconfig }
+    adjustConfigFile("#{workDir}/Pods/Pods.xcconfig")
+    adjustConfigFile("#{workDir}/Pods/Pods-dev.xcconfig")
 
     installer_representation.project.targets.each do |target|
         target.build_configurations.each do |configuration|
@@ -51,4 +48,10 @@ post_install do |installer_representation|
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
         end
     end
+end
+def adjustConfigFile(xcconfigFilename)
+    xcconfig = File.read(xcconfigFilename)
+    xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
+    xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\" \"")
+    File.open(xcconfigFilename, "w") { |file| file << xcconfig }
 end

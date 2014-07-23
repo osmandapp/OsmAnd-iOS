@@ -269,10 +269,8 @@
     if (_glShareGroup != nil)
         return;
 
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Creating context");
-#endif
-    
+
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
@@ -338,10 +336,8 @@
     if (_glShareGroup == nil)
         return;
 
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Releasing context");
-#endif
-    
+
     // Stop rendering (if it was running)
     [self suspendRendering];
     
@@ -378,9 +374,7 @@
 
 - (void)layoutSubviews
 {
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
-#endif
 
     // Kill buffers, since window was resized
     [self releaseRenderAndFrameBuffers];
@@ -388,9 +382,8 @@
 
 - (void)allocateRenderAndFrameBuffers
 {
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Allocating render and frame buffers");
-#endif
+
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
@@ -419,9 +412,8 @@
     validateGL();
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
-#if defined(DEBUG)
     OALog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
-#endif
+
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
 
@@ -447,9 +439,8 @@
 
 - (void)releaseRenderAndFrameBuffers
 {
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Releasing render and frame buffers");
-#endif
+
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
@@ -578,10 +569,8 @@
     // Resume GPU worker thread
     _renderer->resumeGpuWorkerThread();
     
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Rendering resumed");
-#endif
-    
+
     return TRUE;
 }
 
@@ -603,10 +592,8 @@
     // Pause GPU worker thread
     _renderer->pauseGpuWorkerThread();
     
-#if defined(DEBUG)
     OALog(@"[MapRenderView] Rendering suspended");
-#endif
-    
+
     return TRUE;
 }
 

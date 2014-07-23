@@ -15,8 +15,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-               BuildableName = "OsmAnd (prebuilt Core).app"
-               BlueprintName = "OsmAnd (prebuilt Core)"
+               BuildableName = "OsmAnd DEV (prebuilt Core).app"
+               BlueprintName = "OsmAnd DEV (prebuilt Core)"
                ReferencedContainer = "container:OsmAnd.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd (prebuilt Core).app"
-            BlueprintName = "OsmAnd (prebuilt Core)"
+            BuildableName = "OsmAnd DEV (prebuilt Core).app"
+            BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -52,8 +52,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd (prebuilt Core).app"
-            BlueprintName = "OsmAnd (prebuilt Core)"
+            BuildableName = "OsmAnd DEV (prebuilt Core).app"
+            BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -70,8 +70,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd (prebuilt Core).app"
-            BlueprintName = "OsmAnd (prebuilt Core)"
+            BuildableName = "OsmAnd DEV (prebuilt Core).app"
+            BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

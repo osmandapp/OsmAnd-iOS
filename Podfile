@@ -3,13 +3,12 @@ platform :ios, '6.0'
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
 
-link_with 'OsmAnd', 'OsmAnd (prebuilt Core)'
+link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)', 'OsmAnd'
 
 pod 'AFNetworking', '~> 2.3.1'
 pod 'AFDownloadRequestOperation', '~> 2.0.1'
 pod 'JASidePanels', '~> 1.3.2'
 pod 'Reachability', '~> 3.1.1'
-pod 'TestFlightSDK', '~> 3.0.2'
 pod 'UIAlertView-Blocks', '~> 1.0'
 pod 'UIActionSheet-Blocks', '~> 1.0.1'
 pod 'DACircularProgress', '~> 2.2.0'
@@ -20,6 +19,18 @@ pod 'FormatterKit', '~> 1.5.1'
 pod 'SWTableViewCell', '~> 0.3.0'
 pod 'RegexKitLite', '~> 4.0'
 pod 'MBProgressHUD', '~> 0.8'
+
+# Development-only dependencies
+target :dev do
+    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
+
+    pod 'TestFlightSDK', '~> 3.0.2'
+end
+
+# AppStore-only dependencies
+target :appstore do
+    link_with 'OsmAnd'
+end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

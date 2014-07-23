@@ -1477,9 +1477,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BBA3AF30197FC4BB0039D991 /* OsmAnd */,
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
+				BBA3AF30197FC4BB0039D991 /* OsmAnd */,
 				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};

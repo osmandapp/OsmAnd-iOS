@@ -50,7 +50,10 @@
 #define kTargetMoveDeceleration 4800.0f
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
+#define kMapModePositionTrackingDefaultZoom 15.0f
+#define kMapModePositionTrackingElevationAngle 90.0f
 #define kMapModeFollowDefaultZoom 18.0f
+#define kMapModeFollowElevationAngle kElevationMinAngle
 #define kQuickAnimationTime 0.4f
 #define kOneSecondAnimatonTime 1.0f
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
@@ -122,8 +125,6 @@
 
     bool _lastPositionTrackStateCaptured;
     float _lastAzimuthInPositionTrack;
-    float _lastElevationAngleInPositionTrack;
-    float _lastZoomInPositionTrack;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -874,30 +875,17 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    // In case previous mode was Follow, restore last azimuth, elevation angle and zoom
-    // used in PositionTrack mode (except for azimuth)
-    const bool restorePositionTrackState = _lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured;
-
     // When user gesture has began, stop all animations
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
-    _app.mapMode = OAMapModeFree;
+    if (_lastMapMode == OAMapModeFollow)
+        _app.mapMode = OAMapModePositionTrack;
 
     // Animate azimuth change to north
     mapView.animator->animateAzimuthTo(0.0f,
                                        kQuickAnimationTime,
                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                        kUserInteractionAnimationKey);
-    if (restorePositionTrackState)
-    {
-        mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
-                                                  kOneSecondAnimatonTime,
-                                                  OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-        mapView.animator->animateZoomTo(_lastZoomInPositionTrack,
-                                        kOneSecondAnimatonTime,
-                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic);
-        _lastPositionTrackStateCaptured = false;
-    }
     mapView.animator->resume();
 }
 
@@ -1065,11 +1053,11 @@
                                                        kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                        kUserInteractionAnimationKey);
-                    mapView.animator->animateElevationAngleTo(_lastElevationAngleInPositionTrack,
+                    mapView.animator->animateElevationAngleTo(kMapModePositionTrackingElevationAngle,
                                                               kOneSecondAnimatonTime,
                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                               kUserInteractionAnimationKey);
-                    mapView.animator->animateZoomTo(_lastZoomInPositionTrack,
+                    mapView.animator->animateZoomTo(kMapModePositionTrackingDefaultZoom,
                                                     kOneSecondAnimatonTime,
                                                     OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                     kUserInteractionAnimationKey);
@@ -1093,8 +1081,6 @@
             if (_lastMapMode == OAMapModePositionTrack)
             {
                 _lastAzimuthInPositionTrack = mapView.azimuth;
-                _lastElevationAngleInPositionTrack = mapView.elevationAngle;
-                _lastZoomInPositionTrack = mapView.zoom;
                 _lastPositionTrackStateCaptured = true;
             }
 
@@ -1106,16 +1092,13 @@
                                             OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                             kLocationServicesAnimationKey);
 
-            mapView.animator->animateElevationAngleTo(kElevationMinAngle,
+            mapView.animator->animateElevationAngleTo(kMapModeFollowElevationAngle,
                                                       kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                       kLocationServicesAnimationKey);
 
             if (_app.locationServices.lastKnownLocation != nil)
             {
-                // Fly to last-known position, change heading to last-known heading,
-                // set zoom to kMapModeFollowZoom and elevation angle to kElevationMinAngle
-
                 CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
@@ -1230,14 +1213,14 @@
             {
                 mapView.animator->cancelAnimation(elevationAngleAnimation);
 
-                mapView.animator->animateElevationAngleTo(kElevationMinAngle,
+                mapView.animator->animateElevationAngleTo(kMapModeFollowElevationAngle,
                                                           elevationAngleAnimation->getDuration() - elevationAngleAnimation->getTimePassed(),
                                                           elevationAngleAnimation->getTimingFunction(),
                                                           kLocationServicesAnimationKey);
             }
             else
             {
-                mapView.animator->animateElevationAngleTo(kElevationMinAngle,
+                mapView.animator->animateElevationAngleTo(kMapModeFollowElevationAngle,
                                                           kOneSecondAnimatonTime,
                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
                                                           kLocationServicesAnimationKey);

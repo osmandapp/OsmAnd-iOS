@@ -397,7 +397,7 @@ struct RegionResources
                 OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
-                item.title = [self titleOfResource:resource_];
+                item.title = [self titleOfResource:resource_ withRegionName:NO];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -411,7 +411,7 @@ struct RegionResources
                 LocalResourceItem* item = [[LocalResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
-                item.title = [self titleOfResource:resource_];
+                item.title = [self titleOfResource:resource_ withRegionName:NO];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -426,7 +426,7 @@ struct RegionResources
             RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
             item_ = item;
             item.resourceId = resource->id;
-            item.title = [self titleOfResource:resource_];
+            item.title = [self titleOfResource:resource_ withRegionName:NO];
             item.resource = resource;
             item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -529,17 +529,28 @@ struct RegionResources
 }
 
 - (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
+              withRegionName:(BOOL)includeRegionName
 {
-    return [self titleOfResource:resource withRegionName:nil];
+    return [self titleOfResource:resource
+                        inRegion:_region
+            withRegionName:includeRegionName];
 }
 
 - (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
-              withRegionName:(NSString*)regionName
+                    inRegion:(OAWorldRegion*)region
+              withRegionName:(BOOL)includeRegionName
 {
-    if (_region == _app.worldRegion)
+    if (region == _app.worldRegion)
     {
         if (resource->id == QLatin1String("world_basemap.map.obf"))
-            return OALocalizedString(@"Detailed overview map");
+        {
+            if (includeRegionName)
+                return OALocalizedString(@"Detailed worldwide overview map");
+            else
+                return OALocalizedString(@"Detailed overview map");
+        }
+
+        // By default, world region has only predefined set of resources
         return nil;
     }
 
@@ -548,17 +559,17 @@ struct RegionResources
         case OsmAndResourceType::MapRegion:
             if ([_region.subregions count] > 0)
             {
-                if (regionName == nil)
+                if (!includeRegionName)
                     return OALocalizedString(@"Full map of entire region");
                 else
-                    return OALocalizedString(@"Full map of entire %@", regionName);
+                    return OALocalizedString(@"Full map of entire %@", region.name);
             }
             else
             {
-                if (regionName == nil)
+                if (!includeRegionName)
                     return OALocalizedString(@"Full map of the region");
                 else
-                    return OALocalizedString(@"Full map of %@", regionName);
+                    return OALocalizedString(@"Full map of %@", region.name);
             }
             break;
 
@@ -652,7 +663,8 @@ struct RegionResources
                         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.title = [self titleOfResource:resource_
-                                            withRegionName:region.name];
+                                                  inRegion:region
+                                            withRegionName:YES];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -666,7 +678,8 @@ struct RegionResources
                         LocalResourceItem* item = [[LocalResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.title = [self titleOfResource:resource_
-                                            withRegionName:region.name];
+                                                  inRegion:region
+                                            withRegionName:YES];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -681,7 +694,8 @@ struct RegionResources
                     RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
                     item.title = [self titleOfResource:resource_
-                                        withRegionName:region.name];
+                                              inRegion:region
+                                        withRegionName:YES];
                     item.resource = resource;
                     item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
 
@@ -738,13 +752,13 @@ struct RegionResources
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }
     else
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }
 
@@ -771,13 +785,13 @@ struct RegionResources
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }
     else
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name],
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }
 
@@ -827,12 +841,12 @@ struct RegionResources
     if (isUpdate)
     {
         message = OALocalizedString(@"You're going to cancel %@ update. All downloaded data will be lost. Proceed?",
-                                    [self titleOfResource:resource withRegionName:_region.name]);
+                                    [self titleOfResource:resource inRegion:_region withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to cancel %@ installation. All downloaded data will be lost. Proceed?",
-                                    [self titleOfResource:resource withRegionName:_region.name]);
+                                    [self titleOfResource:resource inRegion:_region withRegionName:YES]);
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
@@ -857,12 +871,12 @@ struct RegionResources
     if (isInstalled)
     {
         message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name]);
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
-                                    [self titleOfResource:item.resource withRegionName:_region.name]);
+                                    [self titleOfResource:item.resource inRegion:_region withRegionName:YES]);
     }
 
     [[[UIAlertView alloc] initWithTitle:nil

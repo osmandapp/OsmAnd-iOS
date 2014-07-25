@@ -26,9 +26,11 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapTileProvider.h>
 #include <OsmAndCore/Map/BinaryMapDataProvider.h>
+#include <OsmAndCore/Map/BinaryMapPrimitivesProvider.h>
 #include <OsmAndCore/Map/BinaryMapRasterBitmapTileProvider_Software.h>
 #include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
-#include <OsmAndCore/Map/RasterizerEnvironment.h>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/Primitiviser.h>
 #include <OsmAndCore/Map/MapStyleValueDefinition.h>
 #include <OsmAndCore/Map/MapStyleValue.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -80,6 +82,9 @@
     
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
+    std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
+    std::shared_ptr<OsmAnd::Primitiviser> _primitiviser;
+    std::shared_ptr<OsmAnd::BinaryMapPrimitivesProvider> _binaryMapPrimitivesProvider;
     std::shared_ptr<OsmAnd::BinaryMapStaticSymbolsProvider> _binaryMapStaticSymbolsProvider;
 
     // "My location" marker, "My course" marker and collection
@@ -333,7 +338,7 @@
     mapView.zoom = _app.data.mapLastViewedState.zoom;
     mapView.azimuth = _app.data.mapLastViewedState.azimuth;
     mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
-    
+
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
 }
@@ -1297,6 +1302,9 @@
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
         _binaryMapDataProvider.reset();
+        _binaryMapPrimitivesProvider.reset();
+        _mapPresentationEnvironment.reset();
+        _primitiviser.reset();
         if (_binaryMapStaticSymbolsProvider)
             [mapView removeSymbolProvider:_binaryMapStaticSymbolsProvider];
         _binaryMapStaticSymbolsProvider.reset();
@@ -1319,13 +1327,17 @@
                 mapStyle->load();
             OALog(@"Using '%@' style from '%@' resource", mapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
-            // Configure offline map data provider with given settings
+            _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection));
+
             const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
-            _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection,
-                                                                           mapStyle,
-                                                                           mapView.contentScaleFactor,
-                                                                           QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
-                                                                           externalResourcesProvider));
+            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(mapStyle,
+                                                                                     mapView.contentScaleFactor,
+                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     externalResourcesProvider));
+            _primitiviser.reset(new OsmAnd::Primitiviser(_mapPresentationEnvironment));
+            _binaryMapPrimitivesProvider.reset(new OsmAnd::BinaryMapPrimitivesProvider(_binaryMapDataProvider,
+                                                                                       _primitiviser,
+                                                                                       256 * mapView.contentScaleFactor));
 
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
@@ -1333,15 +1345,13 @@
                 OALog(@"Using '%@' variant of style", lastMapSource.variant);
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset)
-                    _binaryMapDataProvider->rasterizerEnvironment->setSettings(preset->attributes);
+                    _mapPresentationEnvironment->setSettings(preset->attributes);
             }
 
-            _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapDataProvider,
-                                                                                            256 * mapView.contentScaleFactor,
-                                                                                            mapView.contentScaleFactor));
+            _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
-            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapDataProvider));
+            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
             [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)

@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OADebugActionsViewController : UITableViewController
+#import <QuickDialogController.h>
+
+@interface OADebugActionsViewController : QuickDialogController
+
+- (instancetype)init;
 
 @end

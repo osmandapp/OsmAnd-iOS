@@ -37,6 +37,10 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
+#if defined(OSMAND_IOS_DEV)
+#   include <OsmAndCore/Map/BinaryMapDataMetricsBitmapTileProvider.h>
+#   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsBitmapTileProvider.h>
+#endif // defined(OSMAND_IOS_DEV)
 
 #include "ExternalResourcesProvider.h"
 #import "OANativeUtilities.h"
@@ -274,6 +278,10 @@
     // Create favorites presenter
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
                                                                      [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
+
+#if defined(OSMAND_IOS_DEV)
+    _visualMetricsMode = OAVisualMetricsModeOff;
+#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void)dtor
@@ -1267,10 +1275,8 @@
 
 - (void)onLastMapSourceChanged
 {
-    // Invalidate current map-source
     _mapSourceInvalidated = YES;
 
-    // Force reload of list content
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateCurrentMapSource];
     });
@@ -1278,10 +1284,8 @@
 
 - (void)onLocalResourcesChanged:(const QList< QString >&)ids
 {
-    // Invalidate current map-source
     _mapSourceInvalidated = YES;
 
-    // Force reload of list content
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateCurrentMapSource];
     });
@@ -1348,7 +1352,29 @@
                     _mapPresentationEnvironment->setSettings(preset->attributes);
             }
 
-            _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+#if defined(OSMAND_IOS_DEV)
+            switch (_visualMetricsMode)
+            {
+                case OAVisualMetricsModeBinaryMapData:
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapDataMetricsBitmapTileProvider(_binaryMapDataProvider,
+                                                                                                 256 * mapView.contentScaleFactor,
+                                                                                                mapView.contentScaleFactor));
+                    break;
+
+                case OAVisualMetricsModeBinaryMapPrimitives:
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapPrimitivesMetricsBitmapTileProvider(_binaryMapPrimitivesProvider,
+                                                                                                      256 * mapView.contentScaleFactor,
+                                                                                                      mapView.contentScaleFactor));
+                    break;
+
+                case OAVisualMetricsModeOff:
+                default:
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+                    break;
+            }
+#else
+          _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+#endif // defined(OSMAND_IOS_DEV)
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
             _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
@@ -1457,5 +1483,23 @@
         [mapView setZoom:zoom];
     }
 }
+
+#if defined(OSMAND_IOS_DEV)
+@synthesize visualMetricsMode = _visualMetricsMode;
+
+- (void)setVisualMetricsMode:(OAVisualMetricsMode)visualMetricsMode
+{
+    if (_visualMetricsMode == visualMetricsMode)
+        return;
+
+    _visualMetricsMode = visualMetricsMode;
+
+    _mapSourceInvalidated = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateCurrentMapSource];
+    });
+}
+
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

@@ -211,8 +211,6 @@
 		BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */; };
 		BB451EFE18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
 		BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */; };
-		BB451F0118E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
-		BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */; };
 		BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
@@ -664,7 +662,6 @@
 		BB451EF718E68E7A005FBE09 /* HUD_debug_pin_filled_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_pin_filled_button.png; sourceTree = "<group>"; };
 		BB451EF818E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_pin_filled_button@2x.png"; sourceTree = "<group>"; };
 		BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DebugHUD~ipad.xib"; path = "Resources/DebugHUD~ipad.xib"; sourceTree = "<group>"; };
-		BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = DebugActions.storyboard; path = Resources/DebugActions.storyboard; sourceTree = "<group>"; };
 		BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithSwitch.h; path = Views/OATableViewCellWithSwitch.h; sourceTree = "<group>"; };
 		BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithSwitch.m; path = Views/OATableViewCellWithSwitch.m; sourceTree = "<group>"; };
 		BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMapRendererViewProtocol.h; path = Views/OAMapRendererViewProtocol.h; sourceTree = "<group>"; };
@@ -1377,7 +1374,6 @@
 				BB451F1018EB34A5005FBE09 /* Resources.storyboard */,
 				BB451EEA18E60F12005FBE09 /* DebugHUD.xib */,
 				BB451EFD18E68F9D005FBE09 /* DebugHUD~ipad.xib */,
-				BB451F0018E6D8C1005FBE09 /* DebugActions.storyboard */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
 			name = Resources;
@@ -1498,7 +1494,6 @@
 				BBA8591417C24EB500AADCC7 /* Default-Portrait~ipad.png in Resources */,
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451DC818D70B5B005FBE09 /* HUD_more_halfbutton.png in Resources */,
-				BB451F0118E6D8C1005FBE09 /* DebugActions.storyboard in Resources */,
 				BB451DD018D70B5B005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE618E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -1608,7 +1603,6 @@
 				BB451E5918DCD224005FBE09 /* Default-Portrait~ipad.png in Resources */,
 				BB451E5A18DCD224005FBE09 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451E5B18DCD224005FBE09 /* HUD_more_halfbutton.png in Resources */,
-				BB451F0218E6D8C1005FBE09 /* DebugActions.storyboard in Resources */,
 				BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,

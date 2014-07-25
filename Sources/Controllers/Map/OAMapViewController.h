@@ -12,6 +12,15 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
+#if defined(OSMAND_IOS_DEV)
+typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
+{
+    OAVisualMetricsModeOff = 0,
+    OAVisualMetricsModeBinaryMapData,
+    OAVisualMetricsModeBinaryMapPrimitives
+};
+#endif // defined(OSMAND_IOS_DEV)
+
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
@@ -32,5 +41,9 @@
 - (void)goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
+
+#if defined(OSMAND_IOS_DEV)
+@property(nonatomic) OAVisualMetricsMode visualMetricsMode;
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

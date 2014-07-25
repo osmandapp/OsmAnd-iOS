@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OADebugActionsViewController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -35,7 +36,7 @@
 {
     OAAutoObserverProxy* _rendererStateObserver;
     OAAutoObserverProxy* _rendererSettingsObserver;
-    UIStoryboard* _debugActionsStoryboard;
+
     UIPopoverController* _lastMenuPopoverController;
 }
 
@@ -52,7 +53,6 @@
 {
     _rendererStateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererStateChanged)];
     _rendererSettingsObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererSettingsChanged)];
-    _debugActionsStoryboard = [UIStoryboard storyboardWithName:@"DebugActions" bundle:nil];
 }
 
 - (void)viewDidLoad
@@ -95,7 +95,7 @@
 
 - (IBAction)onDebugActionsButtonClicked:(id)sender
 {
-    [self openMenu:[_debugActionsStoryboard instantiateInitialViewController]
+    [self openMenu:[[OADebugActionsViewController alloc] init]
           fromView:self._debugActionsButton];
 }
 

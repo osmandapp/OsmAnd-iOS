@@ -9,6 +9,7 @@
 #import "OAMapPanelViewController.h"
 
 #import "OABrowseMapAppModeHudViewController.h"
+#import "OAMapViewController.h"
 #import "OALog.h"
 
 #define _(name) OAMapPanelViewController__##name

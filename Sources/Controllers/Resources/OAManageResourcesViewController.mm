@@ -769,13 +769,13 @@ struct RegionResources
     NSString* message = nil;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be downloaded over cellular network. This may incur high charges. Proceed?",
                                     [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }
     else
     {
-        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
+        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be be downloaded over WiFi network. Proceed?",
                                     [self titleOfResource:item.resource inRegion:_region withRegionName:YES],
                                     stringifiedSize);
     }

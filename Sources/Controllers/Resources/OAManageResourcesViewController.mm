@@ -481,7 +481,10 @@ struct RegionResources
     {
         [self prepareContent];
         if (self.searchDisplayController.isActive)
+        {
+            [self updateSearchResults];
             [self.searchDisplayController.searchResultsTableView reloadData];
+        }
         [self.tableView reloadData];
     }
 }
@@ -567,6 +570,12 @@ struct RegionResources
         default:
             return nil;
     }
+}
+
+- (void)updateSearchResults
+{
+    [self performSearchForSearchString:_lastSearchString
+                        andSearchScope:_lastSearchScope];
 }
 
 - (void)performSearchForSearchString:(NSString*)searchString

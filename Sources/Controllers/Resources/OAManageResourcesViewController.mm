@@ -62,6 +62,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @implementation OutdatedResourceItem
 @end
 
+#define kAllResourcesScope 0
+#define kLocalResourcesScope 1
+
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *scopeControlContainer;
@@ -107,12 +110,10 @@ struct RegionResources
     NSInteger _subregionsSection;
     NSMutableArray* _searchableSubregionItems;
     NSMutableArray* _allSubregionItems;
-    NSMutableArray* _repositorySubregionItems;
     NSMutableArray* _localSubregionItems;
 
     NSInteger _resourcesSection;
     NSMutableArray* _allResourceItems;
-    NSMutableArray* _repositoryResourceItems;
     NSMutableArray* _localResourceItems;
 
     NSString* _lastSearchString;
@@ -154,10 +155,8 @@ struct RegionResources
 
         _searchableSubregionItems = [NSMutableArray array];
         _allSubregionItems = [NSMutableArray array];
-        _repositorySubregionItems = [NSMutableArray array];
         _localSubregionItems = [NSMutableArray array];
         _allResourceItems = [NSMutableArray array];
-        _repositoryResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
 
         _lastSearchString = @"";
@@ -303,7 +302,6 @@ struct RegionResources
 
     [_searchableSubregionItems removeAllObjects];
     [_allSubregionItems removeAllObjects];
-    [_repositorySubregionItems removeAllObjects];
     [_localSubregionItems removeAllObjects];
     for(OAWorldRegion* subregion in _region.flattenedSubregions)
     {
@@ -363,22 +361,18 @@ struct RegionResources
         if (subregion.superregion == _region)
         {
             [_allSubregionItems addObject:subregion];
-            if (foundRepositoryResource)
-                [_repositorySubregionItems addObject:subregion];
             if (foundLocalResource)
                 [_localSubregionItems addObject:subregion];
         }
     }
     [_searchableSubregionItems sortUsingSelector:@selector(compare:)];
     [_allSubregionItems sortUsingSelector:@selector(compare:)];
-    [_repositorySubregionItems sortUsingSelector:@selector(compare:)];
     [_localSubregionItems sortUsingSelector:@selector(compare:)];
 }
 
 - (void)collectResourcesDataAndItems
 {
     [_allResourceItems removeAllObjects];
-    [_repositoryResourceItems removeAllObjects];
     [_localResourceItems removeAllObjects];
 
     const auto citRegionResources = _resourcesByRegions.constFind(_region);
@@ -432,8 +426,6 @@ struct RegionResources
 
             if (item.title == nil)
                 continue;
-
-            [_repositoryResourceItems addObject:item];
         }
 
         [_allResourceItems addObject:item_];
@@ -444,7 +436,6 @@ struct RegionResources
         }
     }
     [_allResourceItems sortUsingComparator:_resourceItemsComparator];
-    [_repositoryResourceItems sortUsingComparator:_resourceItemsComparator];
     [_localResourceItems sortUsingComparator:_resourceItemsComparator];
 }
 
@@ -498,13 +489,10 @@ struct RegionResources
 {
     switch (_currentScope)
     {
-        case 0:
+        case kAllResourcesScope:
             return _allSubregionItems;
 
-        case 1:
-            return _repositorySubregionItems;
-
-        case 2:
+        case kLocalResourcesScope:
             return _localSubregionItems;
     }
 
@@ -515,13 +503,10 @@ struct RegionResources
 {
     switch (_currentScope)
     {
-        case 0:
+        case kAllResourcesScope:
             return _allResourceItems;
 
-        case 1:
-            return _repositoryResourceItems;
-
-        case 2:
+        case kLocalResourcesScope:
             return _localResourceItems;
     }
     

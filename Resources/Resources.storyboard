@@ -25,7 +25,6 @@
                                         <rect key="frame" x="16" y="8" width="288" height="29"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <segments>
-                                            <segment title="All"/>
                                             <segment title="Catalog"/>
                                             <segment title="Installed"/>
                                         </segments>

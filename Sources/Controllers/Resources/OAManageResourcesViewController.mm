@@ -38,6 +38,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property NSString* title;
 @property QString resourceId;
 @property id<OADownloadTask> __weak downloadTask;
+@property OAWorldRegion* worldRegion;
 @end
 @implementation ResourceItem
 @end
@@ -128,6 +129,8 @@ struct RegionResources
     UIBarButtonItem* _refreshRepositoryBarButton;
 
     MBProgressHUD* _deleteResourceProgressHUD;
+
+    UIBarButtonItem* _searchBackButton;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -148,6 +151,7 @@ struct RegionResources
                                                                     andObserve:_app.resourcesRepositoryUpdatedObservable];
 
         _region = _app.worldRegion;
+
         _dataInvalidated = NO;
         _dataLock = [[NSObject alloc] init];
 
@@ -175,9 +179,12 @@ struct RegionResources
     return self;
 }
 
-- (void)setupWithRegion:(OAWorldRegion*)region andWorldRegionItems:(NSArray*)worldRegionItems andScope:(NSInteger)scope
+- (void)setupWithRegion:(OAWorldRegion*)region
+    andWorldRegionItems:(NSArray*)worldRegionItems
+               andScope:(NSInteger)scope
 {
     _region = region;
+
     _searchableWorldwideRegionItems = [worldRegionItems copy];
     _currentScope = scope;
 }
@@ -208,6 +215,11 @@ struct RegionResources
     _scopeControl.selectedSegmentIndex = _currentScope;
 
     _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
+
+    _searchBackButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Search")
+                                                         style:UIBarButtonItemStylePlain
+                                                        target:self
+                                                        action:@selector(onCustomBackButtonClicked)];
 
     [self obtainDataAndItems];
     [self prepareContent];
@@ -667,6 +679,7 @@ struct RegionResources
                                             withRegionName:YES];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+                        item.worldRegion = region;
 
                         if (item.title == nil)
                             continue;
@@ -682,6 +695,7 @@ struct RegionResources
                                             withRegionName:YES];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+                        item.worldRegion = region;
 
                         if (item.title == nil)
                             continue;
@@ -698,6 +712,7 @@ struct RegionResources
                                         withRegionName:YES];
                     item.resource = resource;
                     item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+                    item.worldRegion = region;
 
                     if (item.title == nil)
                         continue;
@@ -923,7 +938,21 @@ struct RegionResources
             LocalResourceItem* item = (LocalResourceItem*)item_;
 
             NSString* resourceId = item.resourceId.toNSString();
-            [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
+            UIViewController* detailsViewController = nil;
+            if (self.searchDisplayController.isActive)
+            {
+                //NOTE: What a freaky way to do this...
+                self.navigationItem.backBarButtonItem = _searchBackButton;
+                detailsViewController = [[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId
+                                                                                                        forRegion:item.worldRegion];
+            }
+            else
+            {
+                self.navigationItem.backBarButtonItem = nil;
+                detailsViewController = [[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId];
+            }
+
+            [self.navigationController pushViewController:detailsViewController
                                                  animated:YES];
         }
         else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
@@ -933,6 +962,11 @@ struct RegionResources
             [self offerDownloadAndInstallOf:item];
         }
     }
+}
+
+- (void)onCustomBackButtonClicked
+{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)onScopeChanged:(id)sender
@@ -1092,6 +1126,7 @@ struct RegionResources
                 cellTypeId = repositoryResourceCell;
 
             title = item.title;
+            subtitle = item.worldRegion.name;
         }
     }
     else
@@ -1129,21 +1164,21 @@ struct RegionResources
     {
         if ([cellTypeId isEqualToString:outdatedResourceCell])
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
         else if ([cellTypeId isEqualToString:repositoryResourceCell])
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -1399,9 +1434,18 @@ struct RegionResources
 
         OAWorldRegion* subregion = nil;
         if (tableView == _tableView && _subregionsSection >= 0)
+        {
             subregion = [[self getSubregionItems] objectAtIndex:cellPath.row];
+
+            self.navigationItem.backBarButtonItem = nil;
+        }
         else if (tableView == self.searchDisplayController.searchResultsTableView)
+        {
             subregion = [_searchResults objectAtIndex:cellPath.row];
+
+            //NOTE: What a freaky way to do this...
+            self.navigationItem.backBarButtonItem = _searchBackButton;
+        }
 
         [subregionViewController setupWithRegion:subregion
                              andWorldRegionItems:(_region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems

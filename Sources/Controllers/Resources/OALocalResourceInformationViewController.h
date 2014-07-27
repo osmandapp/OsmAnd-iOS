@@ -10,8 +10,12 @@
 
 #import <QuickDialogController.h>
 
+#import "OAWorldRegion.h"
+
 @interface OALocalResourceInformationViewController : QuickDialogController
 
 - (instancetype)initWithLocalResourceId:(NSString*)resourceId;
+- (instancetype)initWithLocalResourceId:(NSString*)resourceId
+                              forRegion:(OAWorldRegion*)region;
 
 @end

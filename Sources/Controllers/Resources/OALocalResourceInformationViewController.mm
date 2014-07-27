@@ -24,39 +24,72 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (instancetype)initWithLocalResourceId:(NSString*)resourceId
 {
+    QRootElement* rootElement = [OALocalResourceInformationViewController inflateRootWithLocalResourceId:resourceId
+                                                                                               forRegion:nil];
+    self = [super initWithRoot:rootElement];
+    if (self) {
+    }
+    return self;
+}
+
+- (instancetype)initWithLocalResourceId:(NSString*)resourceId
+                              forRegion:(OAWorldRegion*)region
+{
+    QRootElement* rootElement = [OALocalResourceInformationViewController inflateRootWithLocalResourceId:resourceId
+                                                                                               forRegion:region];
+    self = [super initWithRoot:rootElement];
+    if (self) {
+    }
+    return self;
+}
+
++ (QRootElement*)inflateRootWithLocalResourceId:(NSString*)resourceId
+                                      forRegion:(OAWorldRegion*)region
+{
+    const auto& resource = [OsmAndApp instance].resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+    const auto localResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource);
+    if (!resource || !localResource)
+        return nil;
+    const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
+
     QRootElement* rootElement = [[QRootElement alloc] init];
 
-    rootElement.title = OALocalizedString(@"Details");
+    rootElement.title = region ? region.name : OALocalizedString(@"Details");
     rootElement.grouped = YES;
 
     QSection* mainSection = [[QSection alloc] init];
     [rootElement addSection:mainSection];
 
+    // Type
+    QLabelElement* typeField = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Type")
+                                                              Value:nil];
+    [mainSection addElement:typeField];
+    switch (localResource->type)
+    {
+        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
+            typeField.value = OALocalizedString(@"Map");
+            break;
+
+        default:
+            typeField.value = OALocalizedString(@"Unknown");
+            break;
+    }
+
     // Size
     QLabelElement* sizeField = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Size")
-                                                              Value:nil];
+                                                              Value:[NSByteCountFormatter stringFromByteCount:localResource->size
+                                                                                                   countStyle:NSByteCountFormatterCountStyleFile]];
     [mainSection addElement:sizeField];
 
-    // Timestamp
-    QDateTimeElement* timestampField = [[QDateTimeElement alloc] initWithTitle:OALocalizedString(@"Created on")
-                                                                          date:[NSDate date]];
-    [mainSection addElement:timestampField];
-
-    self = [super initWithRoot:rootElement];
-    if (self) {
-        const auto& resource = [OsmAndApp instance].resourcesManager->getLocalResource(QString::fromNSString(resourceId));
-        const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(resource);
-        if (!resource || !installedResource)
-            return self;
-
-        // Size
-        sizeField.value = [NSByteCountFormatter stringFromByteCount:resource->size
-                                                         countStyle:NSByteCountFormatterCountStyleFile];
-
+    if (installedResource)
+    {
         // Timestamp
-        timestampField.dateValue = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
+        QDateTimeElement* timestampField = [[QDateTimeElement alloc] initWithTitle:OALocalizedString(@"Created on")
+                                                                              date:[NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000]];
+        [mainSection addElement:timestampField];
     }
-    return self;
+
+    return rootElement;
 }
 
 @end

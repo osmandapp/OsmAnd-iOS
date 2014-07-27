@@ -81,8 +81,9 @@
     if (![task.key hasPrefix:@"resource:"])
         return;
 
+    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
     NSNumber* progressCompleted = (NSNumber*)value;
-    OALog(@"Resource download task %@: %@ done", task.key, progressCompleted);
+    OALog(@"Resource download task %@: %@ done", nsResourceId, progressCompleted);
 }
 
 @end

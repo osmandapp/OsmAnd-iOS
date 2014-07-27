@@ -126,6 +126,8 @@ struct RegionResources
 
     MBProgressHUD* _refreshRepositoryProgressHUD;
     UIBarButtonItem* _refreshRepositoryBarButton;
+
+    MBProgressHUD* _deleteResourceProgressHUD;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -198,6 +200,10 @@ struct RegionResources
                                                                                 target:self
                                                                                 action:@selector(onRefreshRepositoryButtonClicked)];
     self.navigationItem.rightBarButtonItem = _refreshRepositoryBarButton;
+
+    _deleteResourceProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
+    _deleteResourceProgressHUD.labelText = OALocalizedString(@"Deleting...");
+    [self.view addSubview:_deleteResourceProgressHUD];
 
     _scopeControl.selectedSegmentIndex = _currentScope;
 
@@ -875,7 +881,16 @@ struct RegionResources
 
 - (void)deleteResourceOf:(LocalResourceItem*)item
 {
-    _app.resourcesManager->uninstallResource(item.resourceId);
+    [_deleteResourceProgressHUD showAnimated:YES
+                         whileExecutingBlock:^{
+                             const auto success = _app.resourcesManager->uninstallResource(item.resourceId);
+                             if (!success)
+                             {
+                                 OALog(@"Failed to uninstall resource %@ from %@",
+                                       item.resourceId.toNSString(),
+                                       item.resource->localPath.toNSString());
+                             }
+                         }];
 }
 
 - (void)onItemClicked:(id)senderItem

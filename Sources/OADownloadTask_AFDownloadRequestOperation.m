@@ -74,7 +74,10 @@
 
     OADownloadsManager* owner = _owner;
     if (owner != nil)
+    {
+        [owner.completedObservable notifyEventWithKey:self andValue:_targetPath];
         [owner removeTask:self];
+    }
 
     [_completedObservable notifyEventWithKey:self andValue:_targetPath];
 }
@@ -82,6 +85,13 @@
 - (void)onDownloadProgress:(double)fractionCompleted
 {
     _progressCompleted = fractionCompleted;
+
+    OADownloadsManager* owner = _owner;
+    if (owner != nil)
+    {
+        [owner.progressCompletedObservable notifyEventWithKey:self
+                                                     andValue:[NSNumber numberWithFloat:_progressCompleted]];
+    }
 
     [_progressCompletedObservable notifyEventWithKey:self
                                             andValue:[NSNumber numberWithFloat:_progressCompleted]];

@@ -31,4 +31,8 @@
                                 andTargetPath:(NSString*)targetPath
                                        andKey:(NSString*)key;
 
+@property(readonly) OAObservable* progressCompletedObservable;
+@property(readonly) OAObservable* completedObservable;
+
+
 @end

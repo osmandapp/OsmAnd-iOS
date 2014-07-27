@@ -71,6 +71,13 @@
         NSProgress* progress = (NSProgress*)object;
         _progressCompleted = progress.fractionCompleted;
 
+        OADownloadsManager* owner = _owner;
+        if (owner != nil)
+        {
+            [owner.progressCompletedObservable notifyEventWithKey:self
+                                                         andValue:[NSNumber numberWithFloat:_progressCompleted]];
+        }
+
         [_progressCompletedObservable notifyEventWithKey:self
                                                 andValue:[NSNumber numberWithFloat:_progressCompleted]];
     }
@@ -95,7 +102,10 @@
 
     OADownloadsManager* owner = _owner;
     if (_task.state == NSURLSessionTaskStateCompleted && owner != nil)
+    {
+        [owner.completedObservable notifyEventWithKey:self andValue:_targetPath];
         [owner removeTask:self];
+    }
 
     [_completedObservable notifyEventWithKey:self andValue:_targetPath];
 }

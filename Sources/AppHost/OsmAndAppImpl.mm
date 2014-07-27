@@ -9,6 +9,7 @@
 #import "OsmAndAppImpl.h"
 
 #import "OsmAndApp.h"
+#import "OAResourcesInstaller.h"
 #import "OALog.h"
 
 #include <algorithm>
@@ -22,6 +23,8 @@
 @implementation OsmAndAppImpl
 {
     NSString* _worldMiniBasemapFilename;
+
+    OAResourcesInstaller* _resourcesInstaller;
 }
 
 @synthesize dataPath = _dataPath;
@@ -142,6 +145,7 @@
         [_locationServices start];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
+    _resourcesInstaller = [[OAResourcesInstaller alloc] init];
 
     return YES;
 }

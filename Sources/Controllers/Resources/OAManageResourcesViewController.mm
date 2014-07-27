@@ -954,11 +954,6 @@ struct RegionResources
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
-    id<OADownloadTask> task = key;
-    NSNumber* progressCompleted = (NSNumber*)value;
-
-    OALog(@"Download task %@ (in %@): %@ done", task.key, self, progressCompleted);
-
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
             return;
@@ -971,52 +966,14 @@ struct RegionResources
 
 - (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
-    id<OADownloadTask> task = key;
-    NSString* localPath = task.targetPath;
-
-    OALog(@"Download task %@ (in %@): completed", task.key, self);
-
-    BOOL wasInstalled = NO;
-    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-    const auto& resourceId = QString::fromNSString(nsResourceId);
-
-    if (localPath != nil && task.state == OADownloadTaskStateFinished)
-    {
-        const auto& filePath = QString::fromNSString(localPath);
-        bool ok = false;
-
-        // Try to install only in case of successful download
-        if (task.error == nil)
-        {
-            // Install or update given resource
-            ok = _app.resourcesManager->updateFromFile(resourceId, filePath);
-            if (!ok)
-                ok = _app.resourcesManager->installFromRepository(resourceId, filePath);
-        }
-
-        [[NSFileManager defaultManager] removeItemAtPath:task.targetPath error:nil];
-
-        wasInstalled = ok;
-    }
-
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (wasInstalled)
+        if (!self.isViewLoaded || self.view.window == nil)
         {
-            if (!self.isViewLoaded || self.view.window == nil)
-            {
-                _dataInvalidated = YES;
-                return;
-            }
-
-            [self updateContent];
+            _dataInvalidated = YES;
+            return;
         }
-        else
-        {
-            if (!self.isViewLoaded || self.view.window == nil)
-                return;
 
-            OALog(@"Failed to install/update %@ (in %@)", nsResourceId, self);
-        }
+        [self updateContent];
     });
 }
 

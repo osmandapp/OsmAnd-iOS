@@ -61,6 +61,9 @@
 
     _tasksSync = [[NSObject alloc] init];
     _tasks = [[NSMutableDictionary alloc] init];
+
+    _progressCompletedObservable = [[OAObservable alloc] init];
+    _completedObservable = [[OAObservable alloc] init];
 }
 
 - (void)dtor
@@ -171,5 +174,8 @@
             [_tasks removeObjectForKey:task.key];
     }
 }
+
+@synthesize progressCompletedObservable = _progressCompletedObservable;
+@synthesize completedObservable = _completedObservable;
 
 @end

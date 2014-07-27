@@ -17,7 +17,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 {
     OAVisualMetricsModeOff = 0,
     OAVisualMetricsModeBinaryMapData,
-    OAVisualMetricsModeBinaryMapPrimitives
+    OAVisualMetricsModeBinaryMapPrimitives,
+    OAVisualMetricsModeBinaryMapRasterize
 };
 #endif // defined(OSMAND_IOS_DEV)
 
@@ -43,6 +44,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
             animated:(BOOL)animated;
 
 #if defined(OSMAND_IOS_DEV)
+@property BOOL hideStaticSymbols;
 @property(nonatomic) OAVisualMetricsMode visualMetricsMode;
 #endif // defined(OSMAND_IOS_DEV)
 

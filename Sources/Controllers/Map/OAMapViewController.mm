@@ -40,6 +40,7 @@
 #if defined(OSMAND_IOS_DEV)
 #   include <OsmAndCore/Map/BinaryMapDataMetricsBitmapTileProvider.h>
 #   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsBitmapTileProvider.h>
+#   include <OsmAndCore/Map/BinaryMapRasterMetricsBitmapTileProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
 #include "ExternalResourcesProvider.h"
@@ -280,6 +281,7 @@
                                                                      [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
 
 #if defined(OSMAND_IOS_DEV)
+    _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
 #endif // defined(OSMAND_IOS_DEV)
 }
@@ -1367,6 +1369,16 @@
                                                                                                       mapView.contentScaleFactor));
                     break;
 
+                case OAVisualMetricsModeBinaryMapRasterize:
+                {
+                    std::shared_ptr<OsmAnd::BinaryMapRasterBitmapTileProvider> backendProvider(
+                        new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterMetricsBitmapTileProvider(backendProvider,
+                                                                                                  256 * mapView.contentScaleFactor,
+                                                                                                  mapView.contentScaleFactor));
+                    break;
+                }
+
                 case OAVisualMetricsModeOff:
                 default:
                     _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
@@ -1377,8 +1389,17 @@
 #endif // defined(OSMAND_IOS_DEV)
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+
+#if defined(OSMAND_IOS_DEV)
+            if (!_hideStaticSymbols)
+            {
+                _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
+                [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
+            }
+#else
             _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
             [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
+#endif
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {
@@ -1485,8 +1506,9 @@
 }
 
 #if defined(OSMAND_IOS_DEV)
-@synthesize visualMetricsMode = _visualMetricsMode;
+@synthesize hideStaticSymbols = _hideStaticSymbols;
 
+@synthesize visualMetricsMode = _visualMetricsMode;
 - (void)setVisualMetricsMode:(OAVisualMetricsMode)visualMetricsMode
 {
     if (_visualMetricsMode == visualMetricsMode)

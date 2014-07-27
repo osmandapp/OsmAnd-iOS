@@ -26,6 +26,7 @@
     OsmAndAppInstance _app;
 
     QBooleanElement* _forcedRenderingElement;
+    QBooleanElement* _hideStaticSymbolsElement;
     QRadioSection* _visualMetricsSection;
 
     OAMapViewController* __weak _mapViewController;
@@ -51,10 +52,16 @@
     forcedRenderingElement.controllerAction = NSStringFromSelector(@selector(onForcedRenderingSettingChanged));
     [rendererSection addElement:forcedRenderingElement];
 
+    QBooleanElement* hideStaticSymbolsElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Hide static symbols")
+                                                                           BoolValue:NO];
+    hideStaticSymbolsElement.controllerAction = NSStringFromSelector(@selector(onHideStaticSymbolsSettingChanged));
+    [rendererSection addElement:hideStaticSymbolsElement];
+
     // Visual metrics section
     QRadioSection* visualMetricsSection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"Off"),
                                                                                  OALocalizedString(@"Binary Map Data"),
-                                                                                 OALocalizedString(@"Binary Map Primitives")]
+                                                                                 OALocalizedString(@"Binary Map Primitives"),
+                                                                                 OALocalizedString(@"Binary Map Rasterize")]
                                                                       selected:0
                                                                          title:OALocalizedString(@"Visual metrics")];
     visualMetricsSection.onSelected = ^(){
@@ -67,6 +74,7 @@
         _app = app;
 
         _forcedRenderingElement = forcedRenderingElement;
+        _hideStaticSymbolsElement = hideStaticSymbolsElement;
         _visualMetricsSection = visualMetricsSection;
     }
     return self;
@@ -93,6 +101,11 @@
 - (void)onForcedRenderingSettingChanged
 {
     _mapRendererView.forcedRenderingOnEachFrame = _forcedRenderingElement.boolValue;
+}
+
+- (void)onHideStaticSymbolsSettingChanged
+{
+    _mapViewController.hideStaticSymbols = _hideStaticSymbolsElement.boolValue;
 }
 
 - (void)onVisualMetricsSettingChanged

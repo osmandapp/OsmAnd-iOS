@@ -12,6 +12,7 @@
 #import <UIAlertView+Blocks.h>
 #import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
+#import <FormatterKit/TTTArrayFormatter.h>
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
@@ -113,6 +114,10 @@ struct RegionResources
     NSMutableArray* _allSubregionItems;
     NSMutableArray* _localSubregionItems;
 
+    NSInteger _outdatedResourcesSection;
+    NSMutableArray* _outdatedResourceItems;
+    NSArray* _regionsWithOutdatedResources;
+
     NSInteger _resourcesSection;
     NSMutableArray* _allResourceItems;
     NSMutableArray* _localResourceItems;
@@ -162,6 +167,9 @@ struct RegionResources
         _searchableSubregionItems = [NSMutableArray array];
         _allSubregionItems = [NSMutableArray array];
         _localSubregionItems = [NSMutableArray array];
+
+        _outdatedResourceItems = [NSMutableArray array];
+
         _allResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
 
@@ -455,6 +463,34 @@ struct RegionResources
     }
     [_allResourceItems sortUsingComparator:_resourceItemsComparator];
     [_localResourceItems sortUsingComparator:_resourceItemsComparator];
+
+    [_outdatedResourceItems removeAllObjects];
+    for (const auto& resource : _outdatedResources)
+    {
+        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:_region
+                                                                      thatContainsResource:resource->id];
+        if (!match)
+            continue;
+
+        OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.title = [self titleOfResource:resource
+                                  inRegion:match
+                            withRegionName:YES];
+        item.resource = resource;
+        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.worldRegion = match;
+
+        if (item.title == nil)
+            continue;
+
+        [_outdatedResourceItems addObject:item];
+    }
+    [_outdatedResourceItems sortUsingComparator:_resourceItemsComparator];
+    NSMutableSet* regionsSet = [NSMutableSet set];
+    for (OutdatedResourceItem* item in _outdatedResourceItems)
+        [regionsSet addObject:item.worldRegion];
+    _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
 - (void)prepareContent
@@ -462,6 +498,12 @@ struct RegionResources
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
+
+        // Updates always go first
+        if (_currentScope == kLocalResourcesScope && [_outdatedResourceItems count] > 0)
+            _outdatedResourcesSection = _lastUnusedSectionIndex++;
+        else
+            _outdatedResourcesSection = -1;
 
         if ([[self getSubregionItems] count] > 0)
             _subregionsSection = _lastUnusedSectionIndex++;
@@ -1046,6 +1088,8 @@ struct RegionResources
 
     if (_subregionsSection >= 0)
         sectionsCount++;
+    if (_outdatedResourcesSection >= 0)
+        sectionsCount++;
     if (_resourcesSection >= 0)
         sectionsCount++;
 
@@ -1059,6 +1103,8 @@ struct RegionResources
 
     if (section == _subregionsSection)
         return [[self getSubregionItems] count];
+    if (section == _outdatedResourcesSection)
+        return 1;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
 
@@ -1074,6 +1120,8 @@ struct RegionResources
     {
         if (section == _subregionsSection)
             return OALocalizedString(@"By regions");
+        if (section == _outdatedResourcesSection)
+            return nil;
         if (section == _resourcesSection)
             return OALocalizedString(@"Worldwide");
         return nil;
@@ -1081,6 +1129,8 @@ struct RegionResources
 
     if (section == _subregionsSection)
         return OALocalizedString(@"Regions");
+    if (section == _outdatedResourcesSection)
+        return nil;
     if (section == _resourcesSection)
         return OALocalizedString(@"Maps & resources");
 
@@ -1094,6 +1144,7 @@ struct RegionResources
     static NSString* const localResourceCell = @"localResourceCell";
     static NSString* const repositoryResourceCell = @"repositoryResourceCell";
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
+    static NSString* const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
@@ -1139,6 +1190,15 @@ struct RegionResources
             cellTypeId = subregionCell;
             title = worldRegion.name;
             subtitle = nil;
+        }
+        else if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
+        {
+            cellTypeId = outdatedResourcesSubmenuCell;
+            title = OALocalizedString(@"Updates available");
+
+            NSArray* regionsNames = [_regionsWithOutdatedResources valueForKey:NSStringFromSelector(@selector(name))];
+            subtitle = [TTTArrayFormatter localizedStringFromArray:regionsNames
+                                                        arrayStyle:TTTArrayFormatterSentenceStyle];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {

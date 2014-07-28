@@ -16,6 +16,7 @@
 
 #import "OsmAndApp.h"
 #import "FFCircularProgressView+isSpinning.h"
+#include "Localization.h"
 
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -52,6 +53,15 @@
 {
     _region = region;
     _resourcesItems = [NSMutableArray arrayWithArray:items];
+}
+
+- (void)viewDidLoad
+{
+    UIBarButtonItem* refreshAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Update all")
+                                                                            style:UIBarButtonItemStylePlain
+                                                                           target:self
+                                                                           action:@selector(onUpdateAllBarButtonClicked)];
+    self.navigationItem.rightBarButtonItem = refreshAllBarButton;
 }
 
 - (void)updateContent
@@ -108,6 +118,69 @@
         [_resourcesItems addObject:item];
     }
     [_resourcesItems sortUsingComparator:self.resourceItemsComparator];
+}
+
+- (void)offerDownloadAndUpdateMultiple:(NSArray*)items
+{
+    uint64_t totalSize = 0;
+    for (OutdatedResourceItem* item in items)
+    {
+        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+
+        totalSize += resourceInRepository->packageSize;
+    }
+
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+
+    NSString* message = nil;
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    {
+        message = OALocalizedString(@"%1$d updates are available. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+                                    [items count],
+                                    stringifiedSize);
+    }
+    else
+    {
+        message = OALocalizedString(@"%1$d updates are available. %2$@ will be downloaded over WiFi network. Proceed?",
+                                    [items count],
+                                    stringifiedSize);
+    }
+
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update all")
+                                                             action:^{
+                                                                 for (OutdatedResourceItem* item in items)
+                                                                 {
+                                                                     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+                                                                     
+                                                                     [self startDownloadOf:resourceInRepository];
+                                                                 }
+                                                             }], nil] show];
+}
+
+- (void)onUpdateAllBarButtonClicked
+{
+    NSMutableArray* resourcesToUpdate = [NSMutableArray array];
+    @synchronized(_dataLock)
+    {
+        for (OutdatedResourceItem* item in _resourcesItems)
+        {
+            if (item.downloadTask != nil)
+                continue;
+
+            [resourcesToUpdate addObject:item];
+        }
+    }
+    if ([resourcesToUpdate count] == 0)
+        return;
+
+    if ([resourcesToUpdate count] == 1)
+        [self offerDownloadAndUpdateOf:[resourcesToUpdate firstObject]];
+    else
+        [self offerDownloadAndUpdateMultiple:resourcesToUpdate];
 }
 
 #pragma mark - UITableViewDataSource

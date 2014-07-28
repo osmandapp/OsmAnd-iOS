@@ -49,10 +49,17 @@
               withRegionName:(BOOL)includeRegionName;
 
 - (void)onItemClicked:(id)senderItem;
+
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item;
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item;
+- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
+
 - (void)offerCancelDownloadOf:(ResourceItem*)item;
+- (void)cancelDownloadOf:(ResourceItem*)item;
+
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item;
+- (void)deleteResourceOf:(LocalResourceItem*)item;
+
 - (void)showDetailsOf:(LocalResourceItem*)item;
 
 - (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId;

@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAResourcesBaseViewController.h"
 
-@interface OAManageResourcesViewController : UIViewController
+@interface OAManageResourcesViewController : OAResourcesBaseViewController
 
 @end

@@ -128,6 +128,9 @@
                                                 </label>
                                             </subviews>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <segue destination="w8S-Nb-zGN" kind="push" identifier="openOutdatedResourcesSegue" id="uGo-KX-98T"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
@@ -168,6 +171,45 @@
                 </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="-908" y="518"/>
+        </scene>
+        <!--Outdated Resources View Controller - Updates-->
+        <scene sceneID="bH0-Wi-w2f">
+            <objects>
+                <viewController title="Updates" id="w8S-Nb-zGN" customClass="OAOutdatedResourcesViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="1QF-ol-Nv8"/>
+                        <viewControllerLayoutGuide type="bottom" id="jJ4-xB-8lb"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="CML-Vt-67j" userLabel="root">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="vN3-1c-cfU" userLabel="tableView">
+                                <rect key="frame" x="0.0" y="20" width="320" height="548"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="w8S-Nb-zGN" id="SkU-An-bRG"/>
+                                    <outlet property="delegate" destination="w8S-Nb-zGN" id="8pt-ys-4kw"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="vN3-1c-cfU" secondAttribute="trailing" id="7tW-wi-Rfi"/>
+                            <constraint firstItem="jJ4-xB-8lb" firstAttribute="top" secondItem="vN3-1c-cfU" secondAttribute="bottom" id="F0f-CQ-BM1"/>
+                            <constraint firstItem="vN3-1c-cfU" firstAttribute="leading" secondItem="CML-Vt-67j" secondAttribute="leading" id="ZEl-u8-xZe"/>
+                            <constraint firstItem="vN3-1c-cfU" firstAttribute="top" secondItem="1QF-ol-Nv8" secondAttribute="bottom" id="dn8-tD-tZb"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <connections>
+                        <outlet property="tableView" destination="vN3-1c-cfU" id="sSL-OD-y2i"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cmf-Ht-NON" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-281" y="518"/>
         </scene>
     </scenes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

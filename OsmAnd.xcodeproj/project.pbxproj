@@ -482,6 +482,12 @@
 		BBA3AFF619854D8F0039D991 /* OAResourcesInstaller.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */; };
 		BBA3AFF719854D8F0039D991 /* OAResourcesInstaller.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */; };
 		BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */; };
+		BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */; };
+		BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */; };
+		BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */; };
+		BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
+		BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
+		BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -753,6 +759,10 @@
 		BBA3AFEE197FC4BB0039D991 /* OsmAnd.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OsmAnd.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BBA3AFF419854D8F0039D991 /* OAResourcesInstaller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAResourcesInstaller.h; path = Helpers/OAResourcesInstaller.h; sourceTree = "<group>"; };
 		BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAResourcesInstaller.mm; path = Helpers/OAResourcesInstaller.mm; sourceTree = "<group>"; };
+		BBA3AFFE1986446F0039D991 /* OAResourcesBaseViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAResourcesBaseViewController.h; path = Controllers/Resources/OAResourcesBaseViewController.h; sourceTree = "<group>"; };
+		BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAResourcesBaseViewController.mm; path = Controllers/Resources/OAResourcesBaseViewController.mm; sourceTree = "<group>"; };
+		BBA3B00319864A730039D991 /* OAOutdatedResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOutdatedResourcesViewController.h; path = Controllers/Resources/OAOutdatedResourcesViewController.h; sourceTree = "<group>"; };
+		BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOutdatedResourcesViewController.mm; path = Controllers/Resources/OAOutdatedResourcesViewController.mm; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -1253,8 +1263,12 @@
 			children = (
 				BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */,
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
+				BBA3AFFE1986446F0039D991 /* OAResourcesBaseViewController.h */,
+				BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */,
 				BBA3AF18197509B60039D991 /* OAManageResourcesViewController.h */,
 				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
+				BBA3B00319864A730039D991 /* OAOutdatedResourcesViewController.h */,
+				BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1935,6 +1949,7 @@
 				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
+				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
@@ -1965,6 +1980,7 @@
 				BBA3AF0A1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BBA3AED6197500DE0039D991 /* OAMapViewController.mm in Sources */,
@@ -1992,6 +2008,7 @@
 				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
+				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -2022,6 +2039,7 @@
 				BBA3AF0B1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
+				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
@@ -2075,6 +2093,8 @@
 				BBA3AF54197FC4BB0039D991 /* UIView+VisibilityAndInput.m in Sources */,
 				BBA3AF55197FC4BB0039D991 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3AF56197FC4BB0039D991 /* OAOptionsPanelViewController.mm in Sources */,
+				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
+				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAHudRootView.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				BBA3AF59197FC4BB0039D991 /* OAWorldRegion.mm in Sources */,

@@ -98,8 +98,8 @@
                                name:UIApplicationWillEnterForegroundNotification
                              object:nil];
     [notificationCenter addObserver:self
-                           selector:@selector(onApplicationWillResignActive)
-                               name:UIApplicationWillResignActiveNotification
+                           selector:@selector(onApplicationDidEnterBackground)
+                               name:UIApplicationDidEnterBackgroundNotification
                              object:nil];
 }
 
@@ -116,7 +116,7 @@
                                   name:UIApplicationWillEnterForegroundNotification
                                 object:nil];
     [notificationCenter removeObserver:self
-                                  name:UIApplicationWillResignActiveNotification
+                                  name:UIApplicationDidEnterBackgroundNotification
                                 object:nil];
 }
 
@@ -397,13 +397,13 @@
     [self updateRequestedAccuracy];
 }
 
-- (void)onApplicationWillResignActive
+- (void)onApplicationDidEnterBackground
 {
     OALocationServicesStatus status = self.status;
     BOOL isRunning = (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing);
     if (isRunning && ![self shouldBeRunningInBackground])
     {
-        OALog(@"Stopping location services when application going to background");
+        OALog(@"Stopping location services when application went to background");
 
         [self suspend];
     }

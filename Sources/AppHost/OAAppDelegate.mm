@@ -33,8 +33,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#if defined(OSMAND_IOS_DEV)
     // Initialize TestFlight SDK
     [TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
+#endif // defined(OSMAND_IOS_DEV)
 
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
@@ -50,7 +52,7 @@
 #if defined(OSMAND_IOS_DEV)
 #   if defined(DEBUG)
     // If this is a debug build, duplicate all core logs to a file
-    std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsPath.absoluteFilePath(QLatin1String("core.log"))));
+    std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsDir.absoluteFilePath(QLatin1String("core.log"))));
     logFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
 #   else // defined(DEBUG)

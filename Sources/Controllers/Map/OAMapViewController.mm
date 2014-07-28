@@ -1413,7 +1413,7 @@
                 _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
                 return;
             }
-            onlineMapTileProvider->setLocalCachePath(_app.cachePath);
+            onlineMapTileProvider->setLocalCachePath(_app.cacheDir);
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider
                          ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];

@@ -28,8 +28,11 @@
 }
 
 @synthesize dataPath = _dataPath;
+@synthesize dataDir = _dataDir;
 @synthesize documentsPath = _documentsPath;
+@synthesize documentsDir = _documentsDir;
 @synthesize cachePath = _cachePath;
+@synthesize cacheDir = _cacheDir;
 
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
@@ -42,9 +45,12 @@
     self = [super init];
     if (self) {
         // Get default paths
-        _dataPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject]));
-        _documentsPath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]));
-        _cachePath = QDir(QString::fromNSString([NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]));
+        _dataPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
+        _dataDir = QDir(QString::fromNSString(_dataPath));
+        _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+        _documentsDir = QDir(QString::fromNSString(_documentsPath));
+        _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
+        _cacheDir = QDir(QString::fromNSString(_cachePath));
 
         // First of all, initialize user defaults
         [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
@@ -67,9 +73,9 @@
 {
     NSError* versionError = nil;
 
-    OALog(@"Data path: %s", qPrintable(_dataPath.absolutePath()));
-    OALog(@"Documents path: %s", qPrintable(_documentsPath.absolutePath()));
-    OALog(@"Cache path: %s", qPrintable(_cachePath.absolutePath()));
+    OALog(@"Data path: %@", _dataPath);
+    OALog(@"Documents path: %@", _documentsPath);
+    OALog(@"Cache path: %@", _cachePath);
 
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
@@ -89,8 +95,8 @@
 
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
-    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataPath.absoluteFilePath(QLatin1String("Resources")),
-                                                         _documentsPath.absolutePath(),
+    _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
+                                                         _documentsDir.absolutePath(),
                                                          QList<QString>(),
                                                          _worldMiniBasemapFilename != nil
                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
@@ -115,7 +121,7 @@
     // Load favorites
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
     _favoriteChangedObservable = [[OAObservable alloc] init];
-    _favoritesFilename = _documentsPath.filePath(QLatin1String("Favorites.gpx")).toNSString();
+    _favoritesFilename = _documentsDir.filePath(QLatin1String("Favorites.gpx")).toNSString();
     _favoritesCollection.reset(new OsmAnd::FavoriteLocationsGpxCollection());
     _favoritesCollection->loadFrom(QString::fromNSString(_favoritesFilename));
     _favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
@@ -216,6 +222,21 @@
     formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
 
     return formatter;
+}
+
+- (unsigned long long)freeSpaceAvailableOnDevice
+{
+    NSError* error = nil;
+
+    NSDictionary* attributes = [[NSFileManager defaultManager] attributesOfFileSystemForPath:_dataPath
+                                                                                       error:&error];
+    if (error)
+    {
+        OALog(@"Failed to get free space: %@", error);
+        return 0;
+    }
+
+    return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
 @end

@@ -50,6 +50,17 @@
 
 - (void)onItemClicked:(id)senderItem;
 
+- (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item;
+- (BOOL)isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
+- (BOOL)verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item
+                                         asUpdate:(BOOL)isUpdate;
+- (BOOL)verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+                                     withResourceName:(NSString*)resourceName
+                                             asUpdate:(BOOL)isUpdate;
+- (void)showNotEnoughSpaceAlertFor:(NSString*)resourceName
+                          withSize:(unsigned long long)size
+                          asUpdate:(BOOL)isUpdate;
+
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item;
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item;
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;

@@ -22,6 +22,10 @@
 - (BOOL)initialize;
 - (void)shutdown;
 
+@property(nonatomic, readonly) NSString* dataPath;
+@property(nonatomic, readonly) NSString* documentsPath;
+@property(nonatomic, readonly) NSString* cachePath;
+
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
 
@@ -43,5 +47,7 @@
 - (void)saveFavoritesToPermamentStorage;
 
 - (TTTLocationFormatter*)locationFormatter;
+
+@property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 
 @end

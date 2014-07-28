@@ -154,9 +154,117 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+- (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_
+{
+    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    {
+        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+
+        return [self isSpaceEnoughToDownloadAndUnpackResource:item.resource];
+    }
+    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    {
+        const auto resource = _app.resourcesManager->getResourceInRepository(item_.resourceId);
+
+        return [self isSpaceEnoughToDownloadAndUnpackResource:resource];
+    }
+
+    return NO;
+}
+
+- (BOOL)isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+{
+    uint64_t spaceNeeded = resource->packageSize + resource->size;
+    return (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
+}
+
+- (BOOL)verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
+                                         asUpdate:(BOOL)isUpdate
+{
+    if ([item_ isKindOfClass:[RepositoryResourceItem class]])
+    {
+        RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
+
+        return [self verifySpaceAvailableDownloadAndUnpackResource:item.resource
+                                                  withResourceName:[self titleOfResource:item.resource
+                                                                                inRegion:item.worldRegion
+                                                                          withRegionName:YES]
+                                                          asUpdate:isUpdate];
+    }
+    else if ([item_ isKindOfClass:[LocalResourceItem class]])
+    {
+        LocalResourceItem* item = (LocalResourceItem*)item_;
+
+        const auto resource = _app.resourcesManager->getResourceInRepository(item.resourceId);
+
+        return [self verifySpaceAvailableDownloadAndUnpackResource:resource
+                                                  withResourceName:[self titleOfResource:item.resource
+                                                                                inRegion:item.worldRegion
+                                                                          withRegionName:YES]
+                                                          asUpdate:isUpdate];
+    }
+    
+    return NO;
+}
+
+- (BOOL)verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+                                     withResourceName:(NSString*)resourceName
+                                             asUpdate:(BOOL)isUpdate
+{
+    uint64_t spaceNeeded = resource->packageSize + resource->size;
+    BOOL isEnoughSpace = (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
+
+    if (!isEnoughSpace)
+    {
+        [self showNotEnoughSpaceAlertFor:resourceName
+                                withSize:spaceNeeded
+                                asUpdate:isUpdate];
+    }
+    
+    return isEnoughSpace;
+}
+
+- (void)showNotEnoughSpaceAlertFor:(NSString*)resourceName
+                          withSize:(unsigned long long)size
+                          asUpdate:(BOOL)isUpdate
+{
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+
+    NSString* message = nil;
+    if (isUpdate)
+    {
+        message = OALocalizedString(@"Not enough space to update %1$@. %2$@ is needed. Please free up some space.",
+                                    resourceName,
+                                    stringifiedSize);
+    }
+    else
+    {
+        message = OALocalizedString(@"Not enough space to install %1$@. %2$@ is needed. Please free up some space.",
+                                    resourceName,
+                                    stringifiedSize);
+    }
+
+    [[[UIAlertView alloc] initWithTitle:nil
+                                message:message
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                       otherButtonItems:nil] show];
+}
+
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item
 {
     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+
+    NSString* resourceName = [self titleOfResource:item.resource
+                                          inRegion:item.worldRegion
+                                    withRegionName:YES];
+
+    if (![self verifySpaceAvailableDownloadAndUnpackResource:resourceInRepository
+                                            withResourceName:resourceName
+                                                    asUpdate:YES])
+    {
+        return;
+    }
 
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
@@ -165,17 +273,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
-                                    [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
-                                           withRegionName:YES],
+                                    resourceName,
                                     stringifiedSize);
     }
     else
     {
         message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
-                                    [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
-                                           withRegionName:YES],
+                                    resourceName,
                                     stringifiedSize);
     }
 
@@ -193,21 +297,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
+    NSString* resourceName = [self titleOfResource:item.resource
+                                          inRegion:item.worldRegion
+                                    withRegionName:YES];
+
+    if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
+                                            withResourceName:resourceName
+                                                    asUpdate:YES])
+    {
+        return;
+    }
+
     NSString* message = nil;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
         message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be downloaded over cellular network. This may incur high charges. Proceed?",
-                                    [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
-                                           withRegionName:YES],
+                                    resourceName,
                                     stringifiedSize);
     }
     else
     {
         message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be be downloaded over WiFi network. Proceed?",
-                                    [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
-                                           withRegionName:YES],
+                                    resourceName,
                                     stringifiedSize);
     }
 

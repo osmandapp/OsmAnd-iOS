@@ -122,15 +122,31 @@
 
 - (void)offerDownloadAndUpdateMultiple:(NSArray*)items
 {
-    uint64_t totalSize = 0;
+    uint64_t totalDownloadSize = 0;
+    uint64_t totalSpaceNeeded = 0;
     for (OutdatedResourceItem* item in items)
     {
         const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
-        totalSize += resourceInRepository->packageSize;
+        totalDownloadSize += resourceInRepository->packageSize;
+        totalSpaceNeeded += resourceInRepository->packageSize + resourceInRepository->size;
     }
 
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalSize
+    if (_app.freeSpaceAvailableOnDevice < totalSpaceNeeded)
+    {
+        NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalSpaceNeeded
+                                                                   countStyle:NSByteCountFormatterCountStyleFile];
+
+        [[[UIAlertView alloc] initWithTitle:nil
+                                    message:OALocalizedString(@"Not enough space to install %1$d updates. %2$@ is needed. Please free up some space.",
+                                                              [items count],
+                                                              stringifiedSize)
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                           otherButtonItems:nil] show];
+        return;
+    }
+
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalDownloadSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
     NSString* message = nil;

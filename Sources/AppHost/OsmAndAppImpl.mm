@@ -287,7 +287,7 @@
 
 - (void)updateScreenTurnOffSetting
 {
-    [UIApplication sharedApplication].idleTimerDisabled = ![self allowScreenTurnOff];
+    [UIApplication sharedApplication].idleTimerDisabled = !self.allowScreenTurnOff;
 }
 
 - (void)onDownloadManagerActiveTasksCollectionChanged
@@ -313,7 +313,7 @@
 
 - (void)onApplicationWillEnterForeground
 {
-    [UIApplication sharedApplication].idleTimerDisabled = self.allowScreenTurnOff;
+    [UIApplication sharedApplication].idleTimerDisabled = !self.allowScreenTurnOff;
 }
 
 - (void)onApplicationDidBecomeActive

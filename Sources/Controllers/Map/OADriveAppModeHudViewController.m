@@ -1,12 +1,12 @@
 //
-//  OABrowseMapAppModeHudViewController.m
+//  OADriveAppModeHudViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Pelykh on 8/21/13.
-//  Copyright (c) 2013 OsmAnd. All rights reserved.
+//  Created by Alexey Pelykh on 7/29/14.
+//  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OABrowseMapAppModeHudViewController.h"
+#import "OADriveAppModeHudViewController.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -20,32 +20,26 @@
 #import "OARootViewController.h"
 #import "UIView+VisibilityAndInput.h"
 
-#define _(name) OAMapModeHudViewController__##name
-#define commonInit _(commonInit)
-#define deinit _(deinit)
-
-@interface OABrowseMapAppModeHudViewController ()
+@interface OADriveAppModeHudViewController ()
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
-@property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
-@property (weak, nonatomic) IBOutlet UIButton *driveModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *debugButton;
-@property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
+@property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
+@property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
 
 @end
 
-@implementation OABrowseMapAppModeHudViewController
+@implementation OADriveAppModeHudViewController
 {
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _locationServicesStatusObserver;
-    OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
 
@@ -75,10 +69,7 @@
     _app = [OsmAndApp instance];
 
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
-    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapModeChanged)
-                                                  andObserve:_app.mapModeObservable];
+
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
                                                      andObserve:_mapViewController.azimuthObservable];
@@ -97,11 +88,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
-    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-        [_driveModeButton showAndEnableInput];
-    else
-        [_driveModeButton hideAndDisableInput];
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _zoomInButton.enabled = [_mapViewController canZoomIn];
@@ -112,77 +98,8 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
-- (IBAction)onMapModeButtonClicked:(id)sender
-{
-    OAMapMode newMode = _app.mapMode;
-    switch (_app.mapMode)
-    {
-        case OAMapModeFree:
-            newMode = OAMapModePositionTrack;
-            break;
-            
-        case OAMapModePositionTrack:
-            // Perform switch to follow-mode only in case location services have compass
-            if (_app.locationServices.compassPresent)
-                newMode = OAMapModeFollow;
-            break;
-            
-        case OAMapModeFollow:
-            newMode = OAMapModePositionTrack;
-            break;
-
-        default:
-            return;
-    }
-    
-    // If user have denied location services for the application, show notification about that and
-    // don't change the mode
-    if (_app.locationServices.denied && (newMode == OAMapModePositionTrack || newMode == OAMapModeFollow))
-    {
-        [OALocationServices showDeniedAlert];
-        return;
-    }
-
-    _app.mapMode = newMode;
-}
-
 - (void)onLocationServicesStatusChanged
 {
-    if (_app.locationServices.status == OALocationServicesStatusInactive)
-    {
-        // If location services are stopped, set free mode for map, since location data no available
-        _app.mapMode = OAMapModeFree;
-    }
-}
-
-- (void)onMapModeChanged
-{
-    UIImage* modeImage = nil;
-    switch (_app.mapMode)
-    {
-        case OAMapModeFree:
-            modeImage = [UIImage imageNamed:@"free_map_mode_button.png"];
-            break;
-            
-        case OAMapModePositionTrack:
-            modeImage = [UIImage imageNamed:@"position_track_map_mode_button.png"];
-            break;
-            
-        case OAMapModeFollow:
-            modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
-            break;
-
-        default:
-            break;
-    }
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-            [_driveModeButton showAndEnableInput];
-        else
-            [_driveModeButton hideAndDisableInput];
-        [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
-    });
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
@@ -195,11 +112,6 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
     });
-}
-
-- (IBAction)onCompassButtonClicked:(id)sender
-{
-    [_mapViewController animatedAlignAzimuthToNorth];
 }
 
 - (IBAction)onZoomInButtonClicked:(id)sender
@@ -218,11 +130,6 @@
         _zoomInButton.enabled = [_mapViewController canZoomIn];
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
     });
-}
-
-- (IBAction)onDriveModeButtonClicked:(id)sender
-{
-    _app.appMode = OAAppModeDrive;
 }
 
 - (IBAction)onActionsMenuButtonClicked:(id)sender

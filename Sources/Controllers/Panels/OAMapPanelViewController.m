@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "OABrowseMapAppModeHudViewController.h"
+#import "OADriveAppModeHudViewController.h"
 #import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
@@ -104,6 +105,11 @@
     {
         _hudViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
+    }
+    else if (_app.appMode == OAAppModeDrive)
+    {
+        _hudViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
+                                                                               bundle:nil];
     }
     else
         return;

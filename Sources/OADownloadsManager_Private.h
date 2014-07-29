@@ -12,4 +12,7 @@
 
 - (void)removeTask:(id<OADownloadTask>)task;
 
+- (void)saveResumeData:(NSData*)resumeData forTask:(id<OADownloadTask>)task;
+- (void)deleteResumeDataForTask:(id<OADownloadTask>)task;
+
 @end

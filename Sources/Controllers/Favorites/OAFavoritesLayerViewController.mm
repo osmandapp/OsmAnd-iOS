@@ -24,6 +24,8 @@
 
 #define _(name) OAFavoritesLayerViewController__##name
 
+#define commonInit _(commonInit)
+
 #define GroupItemData _(GroupItemData)
 @interface GroupItemData : NSObject
 @property NSString* groupName;
@@ -35,12 +37,16 @@
 #define FavoriteItemData _(FavoriteItemData)
 @interface FavoriteItemData : NSObject
 @property std::shared_ptr<OsmAnd::IFavoriteLocation> favorite;
+@property float direction;
 @end
 @implementation FavoriteItemData
 @end
 
 @interface OAFavoritesLayerViewController () <QuickDialogDelegate>
 @end
+
+#define kGroupsSection @"groupsSection"
+#define kFavoritesSection @"favoritesSection"
 
 @implementation OAFavoritesLayerViewController
 {
@@ -49,6 +55,8 @@
     OAAutoObserverProxy* _favoritesCollectionChangeObserver;
     OAAutoObserverProxy* _favoriteChangeObserver;
     OAAutoObserverProxy* _layersConfigurationObserver;
+
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
 
     BOOL _contentIsInvalidated;
 
@@ -63,21 +71,7 @@
 {
     self = [super initWithRoot:[OAFavoritesLayerViewController inflateRoot]];
     if (self) {
-        _app = [OsmAndApp instance];
-
-        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                       withHandler:@selector(onFavoritesCollectionChanged)
-                                                                        andObserve:_app.favoritesCollectionChangedObservable];
-        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onFavoriteChanged)
-                                                             andObserve:_app.favoriteChangedObservable];
-        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onLayersConfigurationChanged)
-                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
-        _contentIsInvalidated = NO;
-        _groupName = nil;
-
-        _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        [self commonInit];
     }
     return self;
 }
@@ -86,22 +80,32 @@
 {
     self = [super initWithRoot:[OAFavoritesLayerViewController inflateGroup:groupTitle withFavorites:favorites]];
     if (self) {
-        _app = [OsmAndApp instance];
-        _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                       withHandler:@selector(onFavoritesCollectionChanged)
-                                                                        andObserve:_app.favoritesCollectionChangedObservable];
-        _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                            withHandler:@selector(onFavoriteChanged)
-                                                             andObserve:_app.favoriteChangedObservable];
-        _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                 withHandler:@selector(onLayersConfigurationChanged)
-                                                                  andObserve:_app.data.mapLayersConfiguration.changeObservable];
-        _contentIsInvalidated = NO;
+        [self commonInit];
         _groupName = groupTitle;
-
-        _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _app = [OsmAndApp instance];
+
+    _favoritesCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onFavoritesCollectionChanged)
+                                                                    andObserve:_app.favoritesCollectionChangedObservable];
+    _favoriteChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onFavoriteChanged)
+                                                         andObserve:_app.favoriteChangedObservable];
+    _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLayersConfigurationChanged)
+                                                              andObserve:_app.data.mapLayersConfiguration.changeObservable];
+    _contentIsInvalidated = NO;
+
+    _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:_app.locationServices.updateObserver];
 }
 
 - (void)viewDidLoad
@@ -123,6 +127,10 @@
     [super viewWillAppear:animated];
 
     [self updateLayerVisibilitySwitch];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self updateDistanceAndDirection];
+    });
 
     // If content was invalidated while view was in background, update it's content right now
     if (_contentIsInvalidated)
@@ -239,12 +247,71 @@
                                                        animated:YES];
 }
 
+- (void)onLocationServicesUpdate
+{
+    [self updateDistanceAndDirection];
+}
+
+- (void)updateDistanceAndDirection
+{
+    // Obtain fresh location and heading
+    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+
+    QSection* favoritesSection = [self.root sectionWithKey:kFavoritesSection];
+    if (!favoritesSection)
+        return;
+
+    for (QLabelElement* favoriteElement in favoritesSection.elements)
+    {
+        FavoriteItemData* itemData = (FavoriteItemData*)favoriteElement.object;
+
+        if (newLocation == nil)
+            favoriteElement.value = nil;
+        else
+        {
+            const auto& favoritePosition31 = itemData.favorite->getPosition();
+            const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+            const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              favoriteLon, favoriteLat);
+
+            favoriteElement.value = [_app.locationFormatter stringFromDistance:distance];
+        }
+
+        itemData.direction = newDirection;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.quickDialogTableView reloadData];
+    });
+}
+
 #pragma mark - QuickDialogDelegate
 
 - (void)cell:(UITableViewCell *)cell willAppearForElement:(QElement *)element atIndexPath:(NSIndexPath *)indexPath
 {
     if ([element.object isKindOfClass:[FavoriteItemData class]])
-        cell.accessoryView = [[UIImageView alloc] initWithImage:_menuPinIcon];
+    {
+        if (cell.accessoryView == nil || ![cell.accessoryView isKindOfClass:[UIImageView class]])
+        {
+            cell.accessoryView = [[UIImageView alloc] initWithImage:_menuPinIcon];
+            return;
+        }
+
+        UIImageView* imageView = (UIImageView*)cell.accessoryView;
+        if (imageView.image != _menuPinIcon)
+        {
+            imageView.image = _menuPinIcon;
+            return;
+        }
+    }
 }
 
 #pragma mark -
@@ -277,6 +344,7 @@
     if (!groupNames.isEmpty())
     {
         QSection* groupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Groups")];
+        groupsSection.key = kGroupsSection;
         [rootElement addSection:groupsSection];
 
         for (const auto& groupName : groupNames)
@@ -307,12 +375,14 @@
     {
         QSection* ungroupedFavoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
         ungroupedFavoritesSection.canDeleteRows = YES;
+        ungroupedFavoritesSection.key = kFavoritesSection;
         [rootElement addSection:ungroupedFavoritesSection];
 
         for (const auto& favorite : ungroupedFavorites)
         {
             FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
             itemData.favorite = favorite;
+            itemData.direction = NAN;
 
             QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
                                                                             Value:nil];
@@ -352,6 +422,7 @@
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
 
     QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Favorites")];
+    favoritesSection.key = kFavoritesSection;
     favoritesSection.canDeleteRows = YES;
     [rootElement addSection:favoritesSection];
 
@@ -359,6 +430,7 @@
     {
         FavoriteItemData* itemData = [[FavoriteItemData alloc] init];
         itemData.favorite = favorite;
+        itemData.direction = NAN;
 
         QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
                                                                         Value:nil];

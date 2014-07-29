@@ -7,7 +7,8 @@
 //
 
 #import "OADownloadsManager.h"
-#import "OADownloadTask.h"
+
+#import <CocoaSecurity.h>
 
 // For iOS [6.0, 7.0)
 #import "OADownloadTask_AFDownloadRequestOperation.h"
@@ -15,6 +16,9 @@
 // For iOS 7.0+
 #import <AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
+
+#import "OADownloadTask.h"
+#import "OALog.h"
 
 #define _(name) OADownloadsManager__##name
 #define ctor _(ctor)
@@ -130,11 +134,25 @@
     // Create task itself
     if (_sessionManager != nil)
     {
-        task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
-                                                                  withOwner:self
-                                                                 andRequest:request
-                                                              andTargetPath:targetPath
-                                                                     andKey:key];
+        NSData* resumeData = [self findResumeDataForRequest:request];
+
+        if (resumeData != nil)
+        {
+            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                      withOwner:self
+                                                                     andRequest:request
+                                                                  andResumeData:resumeData
+                                                                  andTargetPath:targetPath
+                                                                         andKey:key];
+        }
+        else
+        {
+            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                      withOwner:self
+                                                                     andRequest:request
+                                                                  andTargetPath:targetPath
+                                                                         andKey:key];
+        }
     }
     else
     {
@@ -173,6 +191,70 @@
         if ([list count] == 0)
             [_tasks removeObjectForKey:task.key];
     }
+}
+
++ (NSString*)resumeDataFileNameForRequest:(NSURLRequest*)request
+{
+    return [@"resumeData_" stringByAppendingString:[CocoaSecurity md5:request.URL.absoluteString].hexLower];
+}
+
+- (NSData*)findResumeDataForRequest:(NSURLRequest*)request
+{
+    NSString* resumeDataFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:[OADownloadsManager resumeDataFileNameForRequest:request]];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+        return nil;
+
+    NSError* error = nil;
+    NSData* resumeData = [NSData dataWithContentsOfFile:resumeDataFileName options:NSDataReadingMappedIfSafe
+                                    error:&error];
+    if (error)
+        OALog(@"Failed to read resume data from '%@': %@", resumeDataFileName, error);
+
+    return resumeData;
+}
+
+- (void)saveResumeData:(NSData*)resumeData forTask:(id<OADownloadTask>)task_
+{
+    if ([task_ isKindOfClass:[OADownloadTask_AFURLSessionManager class]])
+    {
+        OADownloadTask_AFURLSessionManager* task = (OADownloadTask_AFURLSessionManager*)task_;
+        [self saveResumeData:resumeData forRequest:task.task.originalRequest];
+    }
+}
+
+- (void)saveResumeData:(NSData*)resumeData forRequest:(NSURLRequest*)request
+{
+    NSString* resumeDataFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:[OADownloadsManager resumeDataFileNameForRequest:request]];
+
+    NSError* error = nil;
+    [resumeData writeToFile:resumeDataFileName
+                 options:NSDataWritingAtomic
+                      error:&error];
+
+    if (error)
+        OALog(@"Failed to save resume data to '%@': %@", resumeDataFileName, error);
+}
+
+- (void)deleteResumeDataForTask:(id<OADownloadTask>)task_
+{
+    if ([task_ isKindOfClass:[OADownloadTask_AFURLSessionManager class]])
+    {
+        OADownloadTask_AFURLSessionManager* task = (OADownloadTask_AFURLSessionManager*)task_;
+        [self deleteResumeDataForRequest:task.task.originalRequest];
+    }
+}
+
+- (void)deleteResumeDataForRequest:(NSURLRequest*)request
+{
+    NSString* resumeDataFileName = [NSTemporaryDirectory() stringByAppendingPathComponent:[OADownloadsManager resumeDataFileNameForRequest:request]];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:resumeDataFileName])
+        return;
+
+    NSError* error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:resumeDataFileName
+                                               error:&error];
+    if (error)
+        OALog(@"Failed to delete resume data in '%@': %@", resumeDataFileName, error);
 }
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;

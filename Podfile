@@ -14,10 +14,11 @@ pod 'DACircularProgress', '~> 2.2.0'
 pod 'FFCircularProgressView', '~> 0.4'
 pod 'QuickDialog/Core', '~> 1.0'
 pod 'QuickDialog/Extras', '~> 1.0'
-pod 'FormatterKit', '~> 1.5.1'
+pod 'FormatterKit', '~> 1.5.3'
 pod 'SWTableViewCell', '~> 0.3.0'
 pod 'RegexKitLite', '~> 4.0'
 pod 'MBProgressHUD', '~> 0.8'
+pod 'CocoaSecurity', '~> 1.2.4'
 
 # Development-only dependencies
 target :dev do

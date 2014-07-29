@@ -10,6 +10,7 @@
 
 #import "OADownloadsManager.h"
 #import "OADownloadsManager_Private.h"
+#import "OALog.h"
 
 @implementation OADownloadTask_AFURLSessionManager
 {
@@ -20,7 +21,7 @@
                        withOwner:(OADownloadsManager*)owner
                       andRequest:(NSURLRequest*)request
                    andTargetPath:(NSString*)targetPath
-                          andKey:(NSString*)key;
+                          andKey:(NSString*)key
 {
     self = [super init];
     if (self) {
@@ -37,6 +38,58 @@
                                completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                    [self onCompletedWith:response andStoredAt:filePath withError:error];
                                }];
+        [progress addObserver:self
+                   forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
+                      options:NSKeyValueObservingOptionInitial
+                      context:nil];
+    }
+    return self;
+}
+
+- (instancetype)initUsingManager:(AFURLSessionManager*)manager
+                       withOwner:(OADownloadsManager*)owner
+                      andRequest:(NSURLRequest*)request
+                   andResumeData:(NSData*)resumeData
+                   andTargetPath:(NSString*)targetPath
+                          andKey:(NSString*)key
+{
+    self = [super init];
+    if (self) {
+        [self ctor];
+        _owner = owner;
+        _targetPath = [targetPath copy];
+        _key = [key copy];
+        NSProgress* progress;
+        NSURLSessionDownloadTask* task = [manager downloadTaskWithResumeData:resumeData
+                                                                    progress:&progress
+                                                                 destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                                                                     return [self getDestinationFor:targetPath andResponse:response];
+                                                                 }
+                                                           completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                                                               if (!_task)
+                                                                   return;
+                                                               [self onCompletedWith:response andStoredAt:filePath withError:error];
+                                                           }];
+
+        // Verify URL request
+        if (![request.URL isEqual:task.originalRequest.URL])
+        {
+            [task cancel];
+
+            OALog(@"Ignored incompatible resume data");
+
+            _task = [manager downloadTaskWithRequest:request
+                                            progress:&progress
+                                         destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                                             return [self getDestinationFor:targetPath andResponse:response];
+                                         }
+                                   completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                                       [self onCompletedWith:response andStoredAt:filePath withError:error];
+                                   }];
+        }
+        else
+            _task = task;
+
         [progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
                       options:NSKeyValueObservingOptionInitial
@@ -103,6 +156,9 @@
     OADownloadsManager* owner = _owner;
     if (_task.state == NSURLSessionTaskStateCompleted && owner != nil)
     {
+        if (error == nil)
+            [owner deleteResumeDataForTask:self];
+
         [owner.completedObservable notifyEventWithKey:self andValue:_targetPath];
         [owner removeTask:self];
     }
@@ -158,12 +214,14 @@
 
 - (void)stop
 {
-    //TODO: should produce resume data
-    [_task cancel];
+    [_task cancelByProducingResumeData:^(NSData *resumeData) {
+        [_owner saveResumeData:resumeData forTask:self];
+    }];
 }
 
 - (void)cancel
 {
+    [_owner deleteResumeDataForTask:self];
     [_task cancel];
 }
 

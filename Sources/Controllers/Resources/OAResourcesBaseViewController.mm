@@ -391,7 +391,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)cancelDownloadOf:(ResourceItem*)item
 {
-    [item.downloadTask cancel];
+    [item.downloadTask stop];
 }
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item

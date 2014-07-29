@@ -142,7 +142,6 @@
 
 - (void)stop
 {
-    //TODO: should produce resume data
     [_operation cancel];
 }
 

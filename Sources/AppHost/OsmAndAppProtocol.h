@@ -18,6 +18,7 @@
 #import "OADownloadsManager.h"
 
 @protocol OsmAndAppProtocol <NSObject>
+@required
 
 - (BOOL)initialize;
 - (void)shutdown;
@@ -52,5 +53,7 @@
 - (TTTLocationFormatter*)locationFormatter;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
+
+@property(readonly) BOOL allowScreenTurnOff;
 
 @end

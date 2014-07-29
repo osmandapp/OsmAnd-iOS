@@ -18,6 +18,7 @@
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
 
 @protocol OsmAndAppCppProtocol <NSObject>
+@required
 
 @property(nonatomic, readonly) QDir dataDir;
 @property(nonatomic, readonly) QDir documentsDir;

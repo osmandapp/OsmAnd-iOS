@@ -10,8 +10,9 @@
 
 #import "OsmAndAppProtocol.h"
 #import "OsmAndAppCppProtocol.h"
+#import "OsmAndAppPrivateProtocol.h"
 
-@interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol>
+@interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>
 
 @property(readonly) OAAppData* data;
 

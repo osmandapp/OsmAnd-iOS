@@ -275,19 +275,49 @@
     return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
 }
 
-- (void)updateScreenTurnOffSetting
+- (BOOL)allowScreenTurnOff
 {
     BOOL allowScreenTurnOff = YES;
 
     allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
     allowScreenTurnOff = allowScreenTurnOff && (_appMode == OAAppModeBrowseMap);
 
-    [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+    return allowScreenTurnOff;
+}
+
+- (void)updateScreenTurnOffSetting
+{
+    [UIApplication sharedApplication].idleTimerDisabled = ![self allowScreenTurnOff];
 }
 
 - (void)onDownloadManagerActiveTasksCollectionChanged
 {
+    // In background, don't change screen turn-off setting
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        return;
+
     [self updateScreenTurnOffSetting];
+}
+
+- (void)onApplicationWillResignActive
+{
+}
+
+- (void)onApplicationDidEnterBackground
+{
+    [self saveDataToPermamentStorage];
+
+    // In background allow to turn off screen
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
+}
+
+- (void)onApplicationWillEnterForeground
+{
+    [UIApplication sharedApplication].idleTimerDisabled = self.allowScreenTurnOff;
+}
+
+- (void)onApplicationDidBecomeActive
+{
 }
 
 @end

@@ -1,23 +1,14 @@
 //
-//  OAHudRootView.m
+//  OAUserInteractionPassThroughView.m
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
 //  Copyright (c) 2013 OsmAnd. All rights reserved.
 //
 
-#import "OAHudRootView.h"
+#import "OAUserInteractionPassThroughView.h"
 
-@implementation OAHudRootView
-
-- (instancetype)initWithFrame:(CGRect)frame
-{
-    self = [super initWithFrame:frame];
-    if (self) {
-        // Initialization code
-    }
-    return self;
-}
+@implementation OAUserInteractionPassThroughView
 
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event
 {

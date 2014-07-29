@@ -287,7 +287,14 @@
 
 - (void)updateScreenTurnOffSetting
 {
-    [UIApplication sharedApplication].idleTimerDisabled = !self.allowScreenTurnOff;
+    BOOL allowScreenTurnOff = self.allowScreenTurnOff;
+
+    if (allowScreenTurnOff)
+        OALog(@"Going to enable screen turn-off");
+    else
+        OALog(@"Going to disable screen turn-off");
+
+    [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
 }
 
 - (void)onDownloadManagerActiveTasksCollectionChanged
@@ -308,12 +315,13 @@
     [self saveDataToPermamentStorage];
 
     // In background allow to turn off screen
+    OALog(@"Going to disable screen turn-off");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 - (void)onApplicationWillEnterForeground
 {
-    [UIApplication sharedApplication].idleTimerDisabled = !self.allowScreenTurnOff;
+    [self updateScreenTurnOffSetting];
 }
 
 - (void)onApplicationDidBecomeActive

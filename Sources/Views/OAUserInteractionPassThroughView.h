@@ -1,5 +1,5 @@
 //
-//  OAHudRootView.h
+//  OAUserInteractionPassThroughView.h
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 8/21/13.
@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OAHudRootView : UIView
+@interface OAUserInteractionPassThroughView : UIView
 
 @end

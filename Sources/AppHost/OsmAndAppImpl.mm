@@ -8,8 +8,11 @@
 
 #import "OsmAndAppImpl.h"
 
+#import <UIKit/UIKit.h>
+
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
+#import "OAAutoObserverProxy.h"
 #import "OALog.h"
 
 #include <algorithm>
@@ -25,6 +28,8 @@
     NSString* _worldMiniBasemapFilename;
 
     OAResourcesInstaller* _resourcesInstaller;
+
+    OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
 }
 
 @synthesize dataPath = _dataPath;
@@ -151,7 +156,12 @@
         [_locationServices start];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
+    _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                                     withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
+                                                                                      andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
+
+    [self updateScreenTurnOffSetting];
 
     return YES;
 }
@@ -237,6 +247,20 @@
     }
 
     return [[attributes objectForKey:NSFileSystemFreeSize] unsignedLongLongValue];
+}
+
+- (void)updateScreenTurnOffSetting
+{
+    BOOL allowScreenTurnOff = YES;
+
+    allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
+
+    [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+}
+
+- (void)onDownloadManagerActiveTasksCollectionChanged
+{
+    [self updateScreenTurnOffSetting];
 }
 
 @end

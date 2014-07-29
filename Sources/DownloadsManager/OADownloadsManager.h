@@ -17,6 +17,9 @@
 - (NSArray*)keysOfDownloadTasks;
 - (NSArray*)keysOfActiveDownloadTasks;
 
+- (BOOL)hasDownloadTasks;
+- (BOOL)hasActiveDownloadTasks;
+
 - (id<OADownloadTask>)firstDownloadTasksWithKey:(NSString*)key;
 - (id<OADownloadTask>)firstDownloadTasksWithKeyPrefix:(NSString*)prefix;
 - (id<OADownloadTask>)firstActiveDownloadTasksWithKey:(NSString*)key;
@@ -41,8 +44,11 @@
                                 andTargetPath:(NSString*)targetPath
                                        andKey:(NSString*)key;
 
+@property(readonly) OAObservable* tasksCollectionChangedObservable;
+@property(readonly) OAObservable* activeTasksCollectionChangedObservable;
 @property(readonly) OAObservable* progressCompletedObservable;
 @property(readonly) OAObservable* completedObservable;
 
+@property(readonly) BOOL allowScreenTurnOff;
 
 @end

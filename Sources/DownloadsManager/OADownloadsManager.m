@@ -72,6 +72,8 @@
     _activeTasksSync = [[NSObject alloc] init];
     _activeTasks = [[NSMutableDictionary alloc] init];
 
+    _tasksCollectionChangedObservable = [[OAObservable alloc] init];
+    _activeTasksCollectionChangedObservable = [[OAObservable alloc] init];
     _progressCompletedObservable = [[OAObservable alloc] init];
     _completedObservable = [[OAObservable alloc] init];
 }
@@ -95,6 +97,22 @@
     {
         return [[NSArray alloc] initWithArray:[_activeTasks allKeys]
                                     copyItems:YES];
+    }
+}
+
+- (BOOL)hasDownloadTasks
+{
+    @synchronized(_tasksSync)
+    {
+        return ([_tasks count] > 0);
+    }
+}
+
+- (BOOL)hasActiveDownloadTasks
+{
+    @synchronized(_activeTasksSync)
+    {
+        return ([_activeTasks count] > 0);
     }
 }
 
@@ -358,6 +376,8 @@
         }
 
         [list addObject:task];
+
+        [_tasksCollectionChangedObservable notifyEventWithKey:self];
     }
 
     return task;
@@ -375,6 +395,8 @@
         }
 
         [list addObject:task];
+
+        [_activeTasksCollectionChangedObservable notifyEventWithKey:self];
     }
 }
 
@@ -389,6 +411,8 @@
         [list removeObject:task];
         if ([list count] == 0)
             [_activeTasks removeObjectForKey:task.key];
+
+        [_activeTasksCollectionChangedObservable notifyEventWithKey:self];
     }
 }
 
@@ -403,6 +427,8 @@
         [list removeObject:task];
         if ([list count] == 0)
             [_tasks removeObjectForKey:task.key];
+
+        [_tasksCollectionChangedObservable notifyEventWithKey:self];
     }
 }
 
@@ -470,7 +496,18 @@
         OALog(@"Failed to delete resume data in '%@': %@", resumeDataFileName, error);
 }
 
+@synthesize tasksCollectionChangedObservable = _tasksCollectionChangedObservable;
+@synthesize activeTasksCollectionChangedObservable = _activeTasksCollectionChangedObservable;
 @synthesize progressCompletedObservable = _progressCompletedObservable;
 @synthesize completedObservable = _completedObservable;
+
+- (BOOL)allowScreenTurnOff
+{
+    if (_sessionManager != nil)
+        return YES; // For iOS 7.0+ there's no sense of keeping screen on
+
+    // For iOS pre-7.0 don't turn off screen while downloading something
+    return [self hasActiveDownloadTasks];
+}
 
 @end

@@ -9,6 +9,7 @@
 #import "OAMapPanelViewController.h"
 
 #import "OsmAndApp.h"
+#import "UIViewController+OARootViewController.h"
 #import "OABrowseMapAppModeHudViewController.h"
 #import "OADriveAppModeHudViewController.h"
 #import "OAMapViewController.h"
@@ -126,6 +127,13 @@
                                                                       options:0
                                                                       metrics:nil
                                                                         views:@{@"view":_hudViewController.view}]];
+
+    [self.rootViewController setNeedsStatusBarAppearanceUpdate];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return _hudViewController.preferredStatusBarStyle;
 }
 
 - (void)onAppModeChanged

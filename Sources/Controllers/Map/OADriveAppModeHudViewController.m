@@ -19,12 +19,15 @@
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "UIView+VisibilityAndInput.h"
+#import "OAUserInteractionInterceptorView.h"
+#import "OALog.h"
 
-@interface OADriveAppModeHudViewController ()
+@interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
+@property (weak, nonatomic) IBOutlet UIView *zoomButtons;
 @property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
 @property (weak, nonatomic) IBOutlet UIButton *debugButton;
@@ -38,6 +41,8 @@
 @implementation OADriveAppModeHudViewController
 {
     OsmAndAppInstance _app;
+
+    BOOL _iOS70plus;
 
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
@@ -68,6 +73,8 @@
 {
     _app = [OsmAndApp instance];
 
+    _iOS70plus = ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
+
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -93,9 +100,80 @@
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
 
+    OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
+    interceptorView.delegate = self;
+
 #if !defined(OSMAND_IOS_DEV)
     [_debugButton hideAndDisableInput];
 #endif // !defined(OSMAND_IOS_DEV)
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+
+    if (!_iOS70plus)
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
+
+    [self optionalControlsFadeInAnimation];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (!_iOS70plus)
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (void)optionalControlsFadeInAnimation
+{
+    [UIView animateWithDuration:0.3
+                          delay:3.0
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         self.zoomButtons.alpha = 0.0f;
+                     } completion:^(BOOL finished) {
+                         self.zoomButtons.userInteractionEnabled = NO;
+                     }];
+}
+
+- (void)hideOptionalControls
+{
+    [self.zoomButtons hideAndDisableInput];
+}
+
+- (void)optionalControlsFadeOutAnimation
+{
+    [UIView animateWithDuration:0.3
+                          delay:0.0
+                        options:UIViewAnimationOptionCurveLinear
+                     animations:^{
+                         self.zoomButtons.alpha = 1.0f;
+                     } completion:^(BOOL finished) {
+                         self.zoomButtons.userInteractionEnabled = YES;
+
+                         [self optionalControlsFadeInAnimation];
+                     }];
+}
+
+- (void)showOptionalControls
+{
+    [self.zoomButtons showAndEnableInput];
+}
+
+- (BOOL)shouldInterceptInteration:(CGPoint)point withEvent:(UIEvent *)event inView:(UIView*)view
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self optionalControlsFadeOutAnimation];
+    });
+
+    return NO;
 }
 
 - (void)onLocationServicesStatusChanged

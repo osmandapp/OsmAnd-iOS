@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
+#import "OANavigationController.h"
 
 #include <QDir>
 #include <QFile>
@@ -87,7 +88,7 @@
 
     // Create root view controller
     _rootViewController = [[OARootViewController alloc] init];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:_rootViewController];
+    self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [self.window makeKeyAndVisible];
 
     // Check if application was requested to open document/file/URL

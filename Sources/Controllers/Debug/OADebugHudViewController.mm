@@ -13,6 +13,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
 #import "OADebugActionsViewController.h"
+#import "OANavigationController.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -82,7 +83,7 @@
     else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
     {
         // For iPad, open menu in a popover with it's own navigation controller
-        UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+        UINavigationController* popoverNavigationController = [[OANavigationController alloc] initWithRootViewController:menuViewController];
         _lastMenuPopoverController = [[UIPopoverController alloc] initWithContentViewController:popoverNavigationController];
         _lastMenuPopoverController.delegate = self;
 

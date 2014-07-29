@@ -17,6 +17,7 @@
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
 #import "OAIncomingURLViewController.h"
+#import "OANavigationController.h"
 #include "Localization.h"
 
 #define _(name) OARootViewController__##name
@@ -81,16 +82,31 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+
     [self.navigationController setNavigationBarHidden:YES
                                              animated:animated];
-    [super viewWillAppear:animated];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
+    [super viewWillDisappear:animated];
+
     [self.navigationController setNavigationBarHidden:NO
                                              animated:animated];
-    [super viewWillDisappear:animated];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if (self.isMenuOpened)
+        return _lastMenuViewController.preferredStatusBarStyle;
+
+    if (self.state == JASidePanelLeftVisible)
+        return self.leftPanel.preferredStatusBarStyle;
+    else if (self.state == JASidePanelRightVisible)
+        return self.rightPanel.preferredStatusBarStyle;
+
+    return self.centerPanel.preferredStatusBarStyle;
 }
 
 - (void)styleContainer:(UIView *)container animate:(BOOL)animate duration:(NSTimeInterval)duration
@@ -123,6 +139,8 @@
         // For previous version keep default behavior
         [super styleContainer:container animate:animate duration:duration];
     }
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)stylePanel:(UIView *)panel
@@ -148,15 +166,6 @@
     return (OAContextPanelViewController*)self.rightPanel;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
-    // Forward this message to all child view controllers
-    for (UIViewController* childVC in self.childViewControllers)
-        [childVC didReceiveMemoryWarning];
-}
-
 - (void)openMenu:(UIViewController*)menuViewController
         fromRect:(CGRect)originRect
           inView:(UIView*)originView
@@ -179,7 +188,7 @@
     else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
     {
         // For iPad, open menu in a popover with it's own navigation controller
-        UINavigationController* popoverNavigationController = [[UINavigationController alloc] initWithRootViewController:menuViewController];
+        UINavigationController* popoverNavigationController = [[OANavigationController alloc] initWithRootViewController:menuViewController];
         _lastMenuPopoverController = [[UIPopoverController alloc] initWithContentViewController:popoverNavigationController];
         _lastMenuPopoverController.delegate = self;
 
@@ -188,6 +197,8 @@
                                   permittedArrowDirections:UIPopoverArrowDirectionAny
                                                   animated:animated];
     }
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (void)closeMenuAnimated:(BOOL)animated
@@ -230,6 +241,8 @@
 
     _lastMenuOriginViewController = nil;
     _lastMenuViewController = nil;
+
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 - (BOOL)isMenuOpened

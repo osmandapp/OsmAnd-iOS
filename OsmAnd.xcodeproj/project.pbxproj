@@ -493,6 +493,12 @@
 		BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B01C1987CB1A0039D991 /* OADriveAppModeHudViewController.m */; };
 		BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B01C1987CB1A0039D991 /* OADriveAppModeHudViewController.m */; };
 		BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B01C1987CB1A0039D991 /* OADriveAppModeHudViewController.m */; };
+		BBA3B0221988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
+		BBA3B0231988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
+		BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
+		BBA3B02819880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
+		BBA3B02919880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
+		BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -771,6 +777,11 @@
 		BBA3B01A1987BF8A0039D991 /* OsmAndAppPrivateProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OsmAndAppPrivateProtocol.h; path = AppHost/OsmAndAppPrivateProtocol.h; sourceTree = "<group>"; };
 		BBA3B01B1987CB1A0039D991 /* OADriveAppModeHudViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADriveAppModeHudViewController.h; path = Controllers/Map/OADriveAppModeHudViewController.h; sourceTree = "<group>"; };
 		BBA3B01C1987CB1A0039D991 /* OADriveAppModeHudViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADriveAppModeHudViewController.m; path = Controllers/Map/OADriveAppModeHudViewController.m; sourceTree = "<group>"; };
+		BBA3B0201988053C0039D991 /* OAUserInteractionInterceptorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAUserInteractionInterceptorView.h; path = Views/OAUserInteractionInterceptorView.h; sourceTree = "<group>"; };
+		BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAUserInteractionInterceptorView.m; path = Views/OAUserInteractionInterceptorView.m; sourceTree = "<group>"; };
+		BBA3B025198805C30039D991 /* OAUserInteractionInterceptorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAUserInteractionInterceptorProtocol.h; path = Views/OAUserInteractionInterceptorProtocol.h; sourceTree = "<group>"; };
+		BBA3B02619880DEC0039D991 /* OANavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANavigationController.h; path = Controllers/OANavigationController.h; sourceTree = "<group>"; };
+		BBA3B02719880DEC0039D991 /* OANavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OANavigationController.m; path = Controllers/OANavigationController.m; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -1015,6 +1026,9 @@
 				BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */,
 				BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */,
 				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
+				BBA3B025198805C30039D991 /* OAUserInteractionInterceptorProtocol.h */,
+				BBA3B0201988053C0039D991 /* OAUserInteractionInterceptorView.h */,
+				BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */,
 				BB63335517C4E3DE00903AB1 /* OAUserInteractionPassThroughView.h */,
 				BB63335617C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m */,
 				BB451F0718E6DDF1005FBE09 /* OATableViewCellWithSwitch.h */,
@@ -1048,6 +1062,8 @@
 				BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */,
 				BB63335917C5388A00903AB1 /* UIViewController+OARootViewController.h */,
 				BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */,
+				BBA3B02619880DEC0039D991 /* OANavigationController.h */,
+				BBA3B02719880DEC0039D991 /* OANavigationController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1985,6 +2001,7 @@
 				BBA3AE97196D57BA0039D991 /* OAMyDataViewController.m in Sources */,
 				BBA3AECD197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */,
+				BBA3B0221988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
 				BBA3AED4197500DE0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
 				BBA3AEAC196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBE1D2A9190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
@@ -1993,6 +2010,7 @@
 				BBA3AEC0197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				BB451DDC18D71883005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
+				BBA3B02819880DEC0039D991 /* OANavigationController.m in Sources */,
 				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3AF0A1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
@@ -2045,6 +2063,7 @@
 				BBA3AE98196D57BA0039D991 /* OAMyDataViewController.m in Sources */,
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
 				BBA3AECE197500B60039D991 /* OADebugHudViewController.mm in Sources */,
+				BBA3B0231988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
 				BBA3AED5197500DE0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
 				BBE1D2AA190D186F00D90F0A /* OAAppDelegate.mm in Sources */,
 				BBB97DE61908D1EC0067F4A0 /* OAMapSource.m in Sources */,
@@ -2053,6 +2072,7 @@
 				BBE1D2AC190D186F00D90F0A /* OALog.mm in Sources */,
 				BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BB451E3118DCD224005FBE09 /* UIView+VisibilityAndInput.m in Sources */,
+				BBA3B02919880DEC0039D991 /* OANavigationController.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAUserInteractionPassThroughView.m in Sources */,
 				BBA3AF0B1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
@@ -2101,6 +2121,8 @@
 				BBA3AF48197FC4BB0039D991 /* OAIncomingURLViewController.mm in Sources */,
 				BBA3AF49197FC4BB0039D991 /* OAMyDataViewController.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
+				BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
+				BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */,
 				BBA3AF4D197FC4BB0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
 				BBA3AF4E197FC4BB0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBA3AF4F197FC4BB0039D991 /* OAAppDelegate.mm in Sources */,

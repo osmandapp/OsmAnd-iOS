@@ -315,7 +315,7 @@
     [self saveDataToPermamentStorage];
 
     // In background allow to turn off screen
-    OALog(@"Going to disable screen turn-off");
+    OALog(@"Going to enable screen turn-off");
     [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 

@@ -17,12 +17,13 @@
                 <outlet property="positionLocalizedTitleLabel" destination="Tx4-5h-e6S" id="38e-lm-ccz"/>
                 <outlet property="positionNativeTitleLabel" destination="0cx-9e-Pab" id="FRz-In-yny"/>
                 <outlet property="view" destination="iN0-l3-epB" id="242-9O-6qL"/>
+                <outlet property="zoomButtons" destination="wvk-dT-zLx" id="Qy6-ya-P7o"/>
                 <outlet property="zoomInButton" destination="AeI-lt-M5T" id="HFB-fU-v44"/>
                 <outlet property="zoomOutButton" destination="85T-ha-cVt" id="UeK-Cz-IML"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="root">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" userLabel="root" customClass="OAUserInteractionInterceptorView">
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>

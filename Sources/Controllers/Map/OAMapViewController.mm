@@ -15,6 +15,7 @@
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OAAddFavoriteViewController.h"
+#import "OANavigationController.h"
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -808,7 +809,7 @@
                          else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
                          {
                              // For iPad, open menu in a popover with it's own navigation controller
-                             UINavigationController* navigationController = [[UINavigationController alloc] initWithRootViewController:addFavoriteVC];
+                             UINavigationController* navigationController = [[OANavigationController alloc] initWithRootViewController:addFavoriteVC];
                              UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
 
                              [popoverController presentPopoverFromRect:CGRectMake(touchPoint.x, touchPoint.y, 0.0f, 0.0f)

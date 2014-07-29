@@ -16,8 +16,8 @@
 #import "OALog.h"
 
 #define _(name) OALocationServices__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OALocationServices () <CLLocationManagerDelegate>
 @end
@@ -32,6 +32,7 @@
     BOOL _locationActive;
     BOOL _compassActive;
 
+    OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _mapModeObserver;
 
     BOOL _waitingForAuthorization;
@@ -46,17 +47,17 @@
 {
     self = [super init];
     if (self) {
-        [self ctor:app];
+        [self commonInit:app];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor:(OsmAndAppInstance)app
+- (void)commonInit:(OsmAndAppInstance)app
 {
     _app = app;
 
@@ -73,8 +74,12 @@
     _manager.distanceFilter = kCLDistanceFilterNone;
     _manager.pausesLocationUpdatesAutomatically = NO;
 
-    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onMapModeChanged)];
-    [_mapModeObserver observe:_app.mapModeObservable];
+    _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onAppModeChanged)
+                                                  andObserve:_app.appModeObservable];
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
 
     _waitingForAuthorization = NO;
 
@@ -103,7 +108,7 @@
                              object:nil];
 }
 
-- (void)dtor
+- (void)deinit
 {
     NSNotificationCenter* notificationCenter = [NSNotificationCenter defaultCenter];
     [notificationCenter removeObserver:self
@@ -332,13 +337,28 @@
 {
     UIDeviceBatteryState batteryState = [UIDevice currentDevice].batteryState;
 
+    // In case device is plugged-in, there's no reason to save battery
     if (batteryState == UIDeviceBatteryStateFull || batteryState == UIDeviceBatteryStateCharging)
         return kCLLocationAccuracyBestForNavigation;
-    if (_app.mapMode == OAMapModeFollow)
+
+    // In case app is in navigation mode, also best possible is needed
+    if (_app.appMode == OAAppModeNavigation)
+        return kCLLocationAccuracyBestForNavigation;
+
+    // In case app is in driving mode, a bit less than best accuracy is needed
+    if (_app.appMode == OAAppModeDrive)
         return kCLLocationAccuracyBest;
-    if (_app.mapMode == OAMapModePositionTrack)
+
+    // In case app is in browsing mode and user is following map, a bit less than best accuracy is needed
+    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModeFollow)
+        return kCLLocationAccuracyBest;
+
+    // If just tracking position while browsing, it's safe to use medium accuracy
+    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModePositionTrack)
         return kCLLocationAccuracyNearestTenMeters;
-    if (_app.mapMode == OAMapModeFree)
+
+    // If user is just browsing map, 100 meter accuracy should be ok
+    if (_app.appMode == OAAppModeBrowseMap && _app.mapMode == OAMapModeFree)
         return kCLLocationAccuracyHundredMeters;
 
     // By default set minimal accuracy
@@ -363,28 +383,42 @@
 
 - (BOOL)shouldBeRunningInBackground
 {
-    //TODO: YES only when not in drive or navigation mode
+    //TODO: Or if recording GPX track
+    if (_app.appMode == OAAppModeNavigation)
+        return YES;
+
     return NO;
+}
+
+- (void)onAppModeChanged
+{
+    // If services are running, simply update accuracy
+    OALocationServicesStatus status = self.status;
+    if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
+    {
+        [self updateRequestedAccuracy];
+        return;
+    }
+
+    // For OAAppModeDrive and OAAppModeNavigation, services must be running
+    if (_app.appMode == OAAppModeDrive || _app.appMode == OAAppModeNavigation)
+        [self start];
 }
 
 - (void)onMapModeChanged
 {
-    // If mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
-    // launch them (except if waiting for user authorization).
+    // If services are running, simply update accuracy
     OALocationServicesStatus status = self.status;
     if (status == OALocationServicesStatusActive || status == OALocationServicesStatusAuthorizing)
     {
-        if (_app.mapMode == OAMapModeFree)
-        {
-            [self updateRequestedAccuracy];
-            return;
-        }
-
+        [self updateRequestedAccuracy];
         return;
     }
 
-    // Otherwise start service
-    [self start];
+    // If map mode is OAMapModePositionTrack or OAMapModeFollow, and services are not running,
+    // launch them (except if waiting for user authorization).
+    if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
+        [self start];
 }
 
 - (void)onDeviceOrientationDidChange

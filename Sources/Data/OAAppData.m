@@ -20,14 +20,14 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _lastMapSource = nil;
         [self safeInit];
     }
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _lock = [[NSObject alloc] init];
     _lastMapSourceChangeObservable = [[OAObservable alloc] init];
@@ -133,7 +133,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _lastMapSource = [aDecoder decodeObjectForKey:kLastMapSource];
         _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];

@@ -15,8 +15,8 @@
 
 @property(readonly) OAAppData* data;
 
-@property(nonatomic, setter = setMapMode:) OAMapMode mapMode;
-@property(readonly) OAObservable* mapModeObservable;
+@property(nonatomic) OAAppMode appMode;
+@property(nonatomic) OAMapMode mapMode;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;

@@ -67,8 +67,8 @@
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
 #define _(name) OAMapRendererViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OAMapViewController ()
 
@@ -141,17 +141,17 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _app = [OsmAndApp instance];
     
@@ -286,7 +286,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-- (void)dtor
+- (void)deinit
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 
@@ -824,14 +824,6 @@
 
                      _contextPinMarker->setIsHidden(true);
                  }];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-
-    OALog(@"MEMWARNING");
 }
 
 - (id<OAMapRendererViewProtocol>)mapRendererView

@@ -17,8 +17,8 @@
 #include <OsmAndCore/Utilities.h>
 
 #define _(name) OADebugHudViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OADebugHudViewController () <UIPopoverControllerDelegate>
 
@@ -44,12 +44,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _rendererStateObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererStateChanged)];
     _rendererSettingsObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onRendererSettingsChanged)];

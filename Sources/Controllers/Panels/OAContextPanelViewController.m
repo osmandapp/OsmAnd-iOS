@@ -9,8 +9,8 @@
 #import "OAContextPanelViewController.h"
 
 #define _(name) OAContextPanelViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OAContextPanelViewController ()
 

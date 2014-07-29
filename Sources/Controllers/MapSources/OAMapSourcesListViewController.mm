@@ -22,8 +22,8 @@
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
 #define _(name) OAMapSourcesListViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 #define Item _(Item)
 @interface Item : NSObject
@@ -70,7 +70,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
@@ -79,7 +79,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
@@ -88,17 +88,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     self = [super initWithStyle:style];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _app = [OsmAndApp instance];
 
@@ -120,7 +120,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _onlineMapSources = [[NSMutableArray alloc] init];
 }
 
-- (void)dtor
+- (void)deinit
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }

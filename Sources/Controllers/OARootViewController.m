@@ -20,8 +20,8 @@
 #include "Localization.h"
 
 #define _(name) OARootViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OARootViewController () <UIPopoverControllerDelegate>
 @end
@@ -39,12 +39,12 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {  
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
     // Create panels:
 

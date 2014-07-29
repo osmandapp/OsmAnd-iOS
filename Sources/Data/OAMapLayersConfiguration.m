@@ -18,13 +18,13 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _hiddenLayers = [NSMutableSet set];
     }
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _lock = [[NSObject alloc] init];
     _changeObservable = [[OAObservable alloc] init];
@@ -88,7 +88,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _hiddenLayers = [aDecoder decodeObjectForKey:kHiddenLayers];
     }
     return self;

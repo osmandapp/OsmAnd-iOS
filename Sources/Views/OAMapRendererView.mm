@@ -28,8 +28,8 @@
 #endif
 
 #define _(name) OAMapRendererView__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @implementation OAMapRendererView
 {
@@ -56,17 +56,17 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
@@ -99,7 +99,7 @@
     _animator->setMapRenderer(_renderer);
 }
 
-- (void)dtor
+- (void)deinit
 {
     // Just to be sure, try to release context
     [self releaseContext];

@@ -23,7 +23,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _owner = owner;
         _targetPath = [targetPath copy];
         _key = [key copy];
@@ -51,10 +51,10 @@
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _progressCompleted = -1.0f;
     _error = nil;
@@ -62,7 +62,7 @@
     _completedObservable = [[OAObservable alloc] init];
 }
 
-- (void)dtor
+- (void)deinit
 {
 }
 

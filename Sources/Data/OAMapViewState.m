@@ -16,12 +16,12 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
 }
 
@@ -51,7 +51,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _target31.x = [aDecoder decodeInt32ForKey:kTarget31x];
         _target31.y = [aDecoder decodeInt32ForKey:kTarget31y];
         _zoom = [aDecoder decodeFloatForKey:kZoom];

@@ -12,6 +12,9 @@
 
 @interface OAMapPanelViewController : UIViewController
 
+- (instancetype)init;
+
 @property (nonatomic, strong, readonly) OAMapViewController* mapViewController;
+@property (nonatomic, strong, readonly) UIViewController* hudViewController;
 
 @end

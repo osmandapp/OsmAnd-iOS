@@ -21,8 +21,8 @@
 #import "UIView+VisibilityAndInput.h"
 
 #define _(name) OAMapModeHudViewController__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @interface OABrowseMapAppModeHudViewController ()
 
@@ -59,17 +59,17 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _app = [OsmAndApp instance];
 
@@ -89,7 +89,7 @@
                                                                  andObserve:_app.locationServices.statusObservable];
 }
 
-- (void)dtor
+- (void)deinit
 {
 }
 
@@ -109,12 +109,6 @@
 #if !defined(OSMAND_IOS_DEV)
     [_debugButton hideAndDisableInput];
 #endif // !defined(OSMAND_IOS_DEV)
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @synthesize compassBox = _compassBox;
@@ -233,10 +227,12 @@
 
 - (IBAction)onDriveModeButtonClicked:(id)sender
 {
+    _app.appMode = OAAppModeDrive;
 }
 
 - (IBAction)onActionsMenuButtonClicked:(id)sender
 {
+    [self.sidePanelController showRightPanelAnimated:YES];
 }
 
 - (IBAction)onDebugButtonClicked:(id)sender

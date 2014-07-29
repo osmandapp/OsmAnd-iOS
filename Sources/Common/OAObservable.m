@@ -13,8 +13,8 @@
 #import "OAObserverProtocol.h"
 
 #define _(name) OAObservable__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @implementation OAObservable
 {
@@ -26,24 +26,24 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _observers = [[NSHashTable alloc] initWithOptions:NSHashTableWeakMemory
                                              capacity:0];
     _observersLock = [[NSLock alloc] init];
 }
 
-- (void)dtor
+- (void)deinit
 {
     [_observersLock lock];
     _observers = nil;

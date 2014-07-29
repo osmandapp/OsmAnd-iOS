@@ -22,7 +22,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _regionId = nil;
         _downloadsIdPrefix = @"world_";
         _nativeName = nil;
@@ -37,7 +37,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _worldRegion = region;
         _regionId = _worldRegion->id.toNSString();
         _downloadsIdPrefix = [_worldRegion->downloadId.toNSString() stringByAppendingString:@"."];
@@ -52,7 +52,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _regionId = regionId;
         _downloadsIdPrefix = [regionId stringByAppendingString:@"."];
         _nativeName = nil;
@@ -69,7 +69,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _regionId = regionId;
         _downloadsIdPrefix = downloadIdPrefix;
         _nativeName = nil;
@@ -82,17 +82,17 @@
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     _superregion = nil;
     _subregions = [[NSMutableArray alloc] init];
     _flattenedSubregions = [[NSMutableArray alloc] init];
 }
 
-- (void)dtor
+- (void)deinit
 {
 }
 

@@ -21,8 +21,8 @@
 #import "OALog.h"
 
 #define _(name) OADownloadsManager__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @implementation OADownloadsManager
 {
@@ -39,17 +39,17 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor
+- (void)commonInit
 {
     // Check what backend should be used
     const BOOL isSupported_NSURLSession =
@@ -78,7 +78,7 @@
     _completedObservable = [[OAObservable alloc] init];
 }
 
-- (void)dtor
+- (void)deinit
 {
 }
 

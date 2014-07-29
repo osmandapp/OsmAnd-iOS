@@ -11,8 +11,8 @@
 #include <objc/message.h>
 
 #define _(name) OAAutoObserverProxy__##name
-#define ctor _(ctor)
-#define dtor _(dtor)
+#define commonInit _(commonInit)
+#define deinit _(deinit)
 
 @implementation OAAutoObserverProxy
 {
@@ -26,7 +26,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor:owner
+        [self commonInit:owner
            handler:nil];
     }
     return self;
@@ -37,7 +37,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor:owner
+        [self commonInit:owner
            handler:nil];
         [self observe:observable];
     }
@@ -49,7 +49,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor:owner
+        [self commonInit:owner
            handler:selector];
     }
     return self;
@@ -61,7 +61,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor:owner
+        [self commonInit:owner
            handler:selector];
         [self observe:observable];
     }
@@ -70,10 +70,10 @@
 
 - (void)dealloc
 {
-    [self dtor];
+    [self deinit];
 }
 
-- (void)ctor:(id)owner
+- (void)commonInit:(id)owner
      handler:(SEL)selector
 {
     _lock = [[NSObject alloc] init];
@@ -82,7 +82,7 @@
     _observable = nil;
 }
 
-- (void)dtor
+- (void)deinit
 {
     [self detach];
 }

@@ -16,7 +16,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
     }
     return self;
 }
@@ -25,7 +25,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _resourceId = [resourceId copy];
         _variant = nil;
 
@@ -38,7 +38,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _resourceId = [resourceId copy];
         _variant = [variant copy];
 
@@ -46,7 +46,7 @@
     return self;
 }
 
-- (void)ctor
+- (void)commonInit
 {
 }
 
@@ -79,7 +79,7 @@
 {
     self = [super init];
     if (self) {
-        [self ctor];
+        [self commonInit];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
         if (_variant == (id)[NSNull null])

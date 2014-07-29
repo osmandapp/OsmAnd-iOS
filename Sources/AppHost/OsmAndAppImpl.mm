@@ -27,6 +27,9 @@
 {
     NSString* _worldMiniBasemapFilename;
 
+    OAAppMode _appMode;
+    OAMapMode _mapMode;
+
     OAResourcesInstaller* _resourcesInstaller;
 
     OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
@@ -149,6 +152,10 @@
                                                                      ofType:@"ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
 
+    _appMode = OAAppModeBrowseMap;
+    _appModeObservable = [[OAObservable alloc] init];
+
+    _mapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
 
     _locationServices = [[OALocationServices alloc] initWith:self];
@@ -191,8 +198,25 @@
 
 @synthesize downloadsManager = _downloadsManager;
 
-@synthesize mapMode = _mapMode;
-@synthesize mapModeObservable = _mapModeObservable;
+- (OAAppMode)appMode
+{
+    return _appMode;
+}
+
+- (void)setAppMode:(OAAppMode)appMode
+{
+    if (_appMode == appMode)
+        return;
+    _appMode = appMode;
+    [_appModeObservable notifyEvent];
+}
+
+@synthesize appModeObservable = _appModeObservable;
+
+- (OAMapMode)mapMode
+{
+    return _mapMode;
+}
 
 - (void)setMapMode:(OAMapMode)mapMode
 {
@@ -201,6 +225,8 @@
     _mapMode = mapMode;
     [_mapModeObservable notifyEvent];
 }
+
+@synthesize mapModeObservable = _mapModeObservable;
 
 @synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
 @synthesize favoriteChangedObservable = _favoriteChangedObservable;
@@ -254,6 +280,7 @@
     BOOL allowScreenTurnOff = YES;
 
     allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
+    allowScreenTurnOff = allowScreenTurnOff && (_appMode == OAAppModeBrowseMap);
 
     [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
 }

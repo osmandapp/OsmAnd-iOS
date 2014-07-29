@@ -74,11 +74,9 @@
         // Verify URL request
         if (![request.URL isEqual:task.originalRequest.URL])
         {
-            [task cancel];
-
             OALog(@"Ignored incompatible resume data");
 
-            _task = [manager downloadTaskWithRequest:request
+            task = [manager downloadTaskWithRequest:request
                                             progress:&progress
                                          destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
                                              return [self getDestinationFor:targetPath andResponse:response];
@@ -87,8 +85,8 @@
                                        [self onCompletedWith:response andStoredAt:filePath withError:error];
                                    }];
         }
-        else
-            _task = task;
+
+        _task = task;
 
         [progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))

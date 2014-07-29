@@ -1211,7 +1211,7 @@
                 {
                     mapView.animator->animateAzimuthTo(newHeading,
                                                        azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
-                                                       azimuthAnimation->getTimingFunction(),
+                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
                                                        kLocationServicesAnimationKey);
                 }
                 else
@@ -1230,7 +1230,7 @@
 
                 mapView.animator->animateElevationAngleTo(kMapModeFollowElevationAngle,
                                                           elevationAngleAnimation->getDuration() - elevationAngleAnimation->getTimePassed(),
-                                                          elevationAngleAnimation->getTimingFunction(),
+                                                          OsmAnd::MapAnimator::TimingFunction::Linear,
                                                           kLocationServicesAnimationKey);
             }
             else
@@ -1249,7 +1249,7 @@
 
             mapView.animator->animateTargetTo(newTarget31,
                                               targetAnimation->getDuration() - targetAnimation->getTimePassed(),
-                                              targetAnimation->getTimingFunction(),
+                                              OsmAnd::MapAnimator::TimingFunction::Linear,
                                               kLocationServicesAnimationKey);
         }
         else

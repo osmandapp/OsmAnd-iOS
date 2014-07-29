@@ -30,10 +30,6 @@
 		BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
 		BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BB1798253E00E80B58 /* OpenGLES.framework */; };
 		BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
-		BB32C032192354BA007999A0 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C031192354BA007999A0 /* OADownloadsManager.m */; };
-		BB32C033192354BA007999A0 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C031192354BA007999A0 /* OADownloadsManager.m */; };
-		BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */; };
-		BB32C03C192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */; };
 		BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
@@ -307,7 +303,6 @@
 		BBA3AF2A197659270039D991 /* menu_goto_favorite_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA3AF27197659270039D991 /* menu_goto_favorite_icon@2x.png */; };
 		BBA3AF2B197659270039D991 /* menu_goto_favorite_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA3AF27197659270039D991 /* menu_goto_favorite_icon@2x.png */; };
 		BBA3AF35197FC4BB0039D991 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D29C190D186F00D90F0A /* main.m */; };
-		BBA3AF36197FC4BB0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */; };
 		BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EA818E19376005FBE09 /* OAMapViewState.m */; };
 		BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */; };
@@ -326,7 +321,6 @@
 		BBA3AF47197FC4BB0039D991 /* OAEditFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAF196EFD430039D991 /* OAEditFavoriteViewController.mm */; };
 		BBA3AF48197FC4BB0039D991 /* OAIncomingURLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */; };
 		BBA3AF49197FC4BB0039D991 /* OAMyDataViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE96196D57BA0039D991 /* OAMyDataViewController.m */; };
-		BBA3AF4A197FC4BB0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C031192354BA007999A0 /* OADownloadsManager.m */; };
 		BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
 		BBA3AF4D197FC4BB0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AED1197500DE0039D991 /* OABrowseMapAppModeHudViewController.m */; };
 		BBA3AF4E197FC4BB0039D991 /* OAManageFavoritesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEAB196EFD1C0039D991 /* OAManageFavoritesViewController.mm */; };
@@ -346,7 +340,6 @@
 		BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0EA14817C60AF9007B572D /* OARootViewController.m */; };
 		BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EBF18E1E590005FBE09 /* OAAppData.m */; };
 		BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */; };
-		BBA3AF5F197FC4BB0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
 		BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEBB197122FD0039D991 /* OAQuickDialogTableDelegate.m */; };
 		BBA3AF61197FC4BB0039D991 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A5190D186F00D90F0A /* OsmAndAppImpl.mm */; };
 		BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */; };
@@ -488,6 +481,15 @@
 		BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
 		BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
 		BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */; };
+		BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
+		BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
+		BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
+		BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
+		BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
+		BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
+		BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
+		BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
+		BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
 		BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */; };
 		BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */; };
@@ -515,8 +517,6 @@
 		BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895B17C252CD003CD1A4 /* Icon@2x.png */; };
 		BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BBAC895D17C25A67003CD1A4 /* Icon.png */; };
 		BBACF10A17C61D8500EBA761 /* BrowseMapAppModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BBACF10917C61D8500EBA761 /* BrowseMapAppModeHUD.xib */; };
-		BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
-		BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */; };
 		BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */; };
 		BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */; };
 		BBB34EA5179BB42A004C5567 /* libQt5Core.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA2179BB42A004C5567 /* libQt5Core.a */; };
@@ -588,16 +588,10 @@
 		BB0EA14817C60AF9007B572D /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		BB32C030192354BA007999A0 /* OADownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadsManager.h; sourceTree = "<group>"; };
-		BB32C031192354BA007999A0 /* OADownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadsManager.m; sourceTree = "<group>"; };
-		BB32C0381923785C007999A0 /* OADownloadTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadTask.h; sourceTree = "<group>"; };
-		BB32C039192381FD007999A0 /* OADownloadTask_AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadTask_AFURLSessionManager.h; sourceTree = "<group>"; };
-		BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadTask_AFURLSessionManager.m; sourceTree = "<group>"; };
 		BB32C03D1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCellWithClickableAccessoryView.h; path = Views/OATableViewCellWithClickableAccessoryView.h; sourceTree = "<group>"; };
 		BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCellWithClickableAccessoryView.m; path = Views/OATableViewCellWithClickableAccessoryView.m; sourceTree = "<group>"; };
 		BB32C0411925FB43007999A0 /* OATableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATableViewCell.h; path = Views/OATableViewCell.h; sourceTree = "<group>"; };
 		BB32C0421925FB43007999A0 /* OATableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATableViewCell.m; path = Views/OATableViewCell.m; sourceTree = "<group>"; };
-		BB32C04519261D94007999A0 /* OADownloadsManager_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadsManager_Private.h; sourceTree = "<group>"; };
 		BB32C0461926265E007999A0 /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../binaries/ios-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
 		BB32C04819262B80007999A0 /* libbz2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libbz2.dylib; path = usr/lib/libbz2.dylib; sourceTree = SDKROOT; };
 		BB451D8A18D70B4B005FBE09 /* Shipped */ = {isa = PBXFileReference; lastKnownFileType = folder; name = Shipped; path = Resources/Shipped; sourceTree = "<group>"; };
@@ -763,6 +757,14 @@
 		BBA3AFFF1986446F0039D991 /* OAResourcesBaseViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAResourcesBaseViewController.mm; path = Controllers/Resources/OAResourcesBaseViewController.mm; sourceTree = "<group>"; };
 		BBA3B00319864A730039D991 /* OAOutdatedResourcesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOutdatedResourcesViewController.h; path = Controllers/Resources/OAOutdatedResourcesViewController.h; sourceTree = "<group>"; };
 		BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAOutdatedResourcesViewController.mm; path = Controllers/Resources/OAOutdatedResourcesViewController.mm; sourceTree = "<group>"; };
+		BBA3B00919878ADD0039D991 /* OADownloadsManager_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsManager_Private.h; path = DownloadsManager/OADownloadsManager_Private.h; sourceTree = "<group>"; };
+		BBA3B00A19878ADD0039D991 /* OADownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsManager.h; path = DownloadsManager/OADownloadsManager.h; sourceTree = "<group>"; };
+		BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadsManager.m; path = DownloadsManager/OADownloadsManager.m; sourceTree = "<group>"; };
+		BBA3B00C19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask_AFDownloadRequestOperation.h; path = DownloadsManager/OADownloadTask_AFDownloadRequestOperation.h; sourceTree = "<group>"; };
+		BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadTask_AFDownloadRequestOperation.m; path = DownloadsManager/OADownloadTask_AFDownloadRequestOperation.m; sourceTree = "<group>"; };
+		BBA3B00E19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask_AFURLSessionManager.h; path = DownloadsManager/OADownloadTask_AFURLSessionManager.h; sourceTree = "<group>"; };
+		BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadTask_AFURLSessionManager.m; path = DownloadsManager/OADownloadTask_AFURLSessionManager.m; sourceTree = "<group>"; };
+		BBA3B01019878ADD0039D991 /* OADownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask.h; path = DownloadsManager/OADownloadTask.h; sourceTree = "<group>"; };
 		BBA6ACF31940BD0A0066AF23 /* my_location_marker_heading_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_heading_icon.png; sourceTree = "<group>"; };
 		BBA6ACF41940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@2x.png"; sourceTree = "<group>"; };
 		BBA6ACF51940BD0A0066AF23 /* my_location_marker_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = my_location_marker_icon.png; sourceTree = "<group>"; };
@@ -787,8 +789,6 @@
 		BBAC895B17C252CD003CD1A4 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "Resources/AppIcons/Icon@2x.png"; sourceTree = "<group>"; };
 		BBAC895D17C25A67003CD1A4 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = Resources/AppIcons/Icon.png; sourceTree = "<group>"; };
 		BBACF10917C61D8500EBA761 /* BrowseMapAppModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BrowseMapAppModeHUD.xib; path = Resources/BrowseMapAppModeHUD.xib; sourceTree = "<group>"; };
-		BBAD5BA41927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADownloadTask_AFDownloadRequestOperation.h; sourceTree = "<group>"; };
-		BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OADownloadTask_AFDownloadRequestOperation.m; sourceTree = "<group>"; };
 		BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+getTableView.h"; path = "Views/UITableViewCell+getTableView.h"; sourceTree = "<group>"; };
 		BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+getTableView.m"; path = "Views/UITableViewCell+getTableView.m"; sourceTree = "<group>"; };
 		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
@@ -986,6 +986,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				BBA3B00819878AC30039D991 /* DownloadsManager */,
 				BBA3AE83196BCB120039D991 /* PodsExtensions */,
 				BBE1D29A190D17DB00D90F0A /* AppHost */,
 				BBBDADA318BC958A00E4A359 /* Common */,
@@ -998,14 +999,6 @@
 				BBBDADB418BCC3FA00E4A359 /* OACommonTypes.h */,
 				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
 				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
-				BB32C030192354BA007999A0 /* OADownloadsManager.h */,
-				BB32C04519261D94007999A0 /* OADownloadsManager_Private.h */,
-				BB32C031192354BA007999A0 /* OADownloadsManager.m */,
-				BB32C0381923785C007999A0 /* OADownloadTask.h */,
-				BB32C039192381FD007999A0 /* OADownloadTask_AFURLSessionManager.h */,
-				BB32C03A192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m */,
-				BBAD5BA41927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.h */,
-				BBAD5BA51927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -1284,6 +1277,21 @@
 				BBA3AF051975016F0039D991 /* OAOptionsPanelViewController.mm */,
 			);
 			name = Panels;
+			sourceTree = "<group>";
+		};
+		BBA3B00819878AC30039D991 /* DownloadsManager */ = {
+			isa = PBXGroup;
+			children = (
+				BBA3B00919878ADD0039D991 /* OADownloadsManager_Private.h */,
+				BBA3B00A19878ADD0039D991 /* OADownloadsManager.h */,
+				BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */,
+				BBA3B00C19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.h */,
+				BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */,
+				BBA3B00E19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.h */,
+				BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */,
+				BBA3B01019878ADD0039D991 /* OADownloadTask.h */,
+			);
+			name = DownloadsManager;
 			sourceTree = "<group>";
 		};
 		BBA858FD17C222FC00AADCC7 /* AppIcons */ = {
@@ -1943,11 +1951,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBE1D2A7190D186F00D90F0A /* main.m in Sources */,
-				BB32C03B192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
+				BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
@@ -1965,7 +1973,6 @@
 				BBA3AEB0196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */,
 				BBA3AEE0197501090039D991 /* OAIncomingURLViewController.mm in Sources */,
 				BBA3AE97196D57BA0039D991 /* OAMyDataViewController.m in Sources */,
-				BB32C032192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BBA3AECD197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */,
 				BBA3AED4197500DE0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
@@ -1979,7 +1986,9 @@
 				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3AF0A1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAHudRootView.m in Sources */,
+				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
@@ -1987,7 +1996,6 @@
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
-				BBAD5BA61927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
@@ -2002,11 +2010,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBE1D2A8190D186F00D90F0A /* main.m in Sources */,
-				BB32C03C192381FD007999A0 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
+				BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
@@ -2020,7 +2028,6 @@
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				BBA3AEDC197500EF0039D991 /* OAMapSourcesListViewController.mm in Sources */,
-				BB32C033192354BA007999A0 /* OADownloadsManager.m in Sources */,
 				BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BBA3AEB1196EFD430039D991 /* OAEditFavoriteViewController.mm in Sources */,
 				BBA3AEE1197501090039D991 /* OAIncomingURLViewController.mm in Sources */,
@@ -2038,7 +2045,9 @@
 				BB451E3218DCD224005FBE09 /* OAHudRootView.m in Sources */,
 				BBA3AF0B1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
+				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
@@ -2046,7 +2055,6 @@
 				BBA3AED7197500DE0039D991 /* OAMapViewController.mm in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
-				BBAD5BA71927C48A0043590F /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
@@ -2061,11 +2069,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				BBA3AF35197FC4BB0039D991 /* main.m in Sources */,
-				BBA3AF36197FC4BB0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
+				BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */,
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
 				BBA3AF3A197FC4BB0039D991 /* OAMapRendererView.mm in Sources */,
+				BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
@@ -2080,7 +2089,6 @@
 				BBA3AF47197FC4BB0039D991 /* OAEditFavoriteViewController.mm in Sources */,
 				BBA3AF48197FC4BB0039D991 /* OAIncomingURLViewController.mm in Sources */,
 				BBA3AF49197FC4BB0039D991 /* OAMyDataViewController.m in Sources */,
-				BBA3AF4A197FC4BB0039D991 /* OADownloadsManager.m in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
 				BBA3AF4D197FC4BB0039D991 /* OABrowseMapAppModeHudViewController.m in Sources */,
 				BBA3AF4E197FC4BB0039D991 /* OAManageFavoritesViewController.mm in Sources */,
@@ -2102,8 +2110,8 @@
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
+				BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
-				BBA3AF5F197FC4BB0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BBA3AF61197FC4BB0039D991 /* OsmAndAppImpl.mm in Sources */,
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,

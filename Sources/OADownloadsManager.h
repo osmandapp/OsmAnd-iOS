@@ -14,13 +14,23 @@
 
 - (instancetype)init;
 
-//- (NSData*)serializeState;
-//- (void*)deserializeStateFrom:(NSData*)state;
-//@property(readonly, copy) NSArray* downloadTasks;
-
 - (NSArray*)keysOfDownloadTasks;
+- (NSArray*)keysOfActiveDownloadTasks;
+
+- (id<OADownloadTask>)firstDownloadTasksWithKey:(NSString*)key;
+- (id<OADownloadTask>)firstDownloadTasksWithKeyPrefix:(NSString*)prefix;
+- (id<OADownloadTask>)firstActiveDownloadTasksWithKey:(NSString*)key;
+- (id<OADownloadTask>)firstActiveDownloadTasksWithKeyPrefix:(NSString*)prefix;
 
 - (NSArray*)downloadTasksWithKey:(NSString*)key;
+- (NSArray*)downloadTasksWithKeyPrefix:(NSString*)prefix;
+- (NSArray*)activeDownloadTasksWithKey:(NSString*)key;
+- (NSArray*)activeDownloadTasksWithKeyPrefix:(NSString*)prefix;
+
+- (NSUInteger)numberOfDownloadTasksWithKey:(NSString*)key;
+- (NSUInteger)numberOfDownloadTasksWithKeyPrefix:(NSString*)prefix;
+- (NSUInteger)numberOfActiveDownloadTasksWithKey:(NSString*)key;
+- (NSUInteger)numberOfActiveDownloadTasksWithKeyPrefix:(NSString*)prefix;
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request;
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request

@@ -148,6 +148,8 @@
             andStoredAt:(NSURL*)targetPath
               withError:(NSError*)error
 {
+    [_owner notifyTaskDeactivated:self];
+
     _targetPath = targetPath.path;
     _error = error;
 
@@ -202,12 +204,14 @@
 
 - (void)resume
 {
+    [_owner notifyTaskActivated:self];
     [_task resume];
 }
 
 - (void)pause
 {
     [_task suspend];
+    [_owner notifyTaskDeactivated:self];
 }
 
 - (void)stop
@@ -215,12 +219,14 @@
     [_task cancelByProducingResumeData:^(NSData *resumeData) {
         [_owner saveResumeData:resumeData forTask:self];
     }];
+    [_owner notifyTaskDeactivated:self];
 }
 
 - (void)cancel
 {
     [_owner deleteResumeDataForTask:self];
     [_task cancel];
+    [_owner notifyTaskDeactivated:self];
 }
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;

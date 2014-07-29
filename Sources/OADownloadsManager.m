@@ -30,6 +30,9 @@
 
     NSObject* _tasksSync;
     NSMutableDictionary* _tasks;
+
+    NSObject* _activeTasksSync;
+    NSMutableDictionary* _activeTasks;
 }
 
 - (instancetype)init
@@ -66,6 +69,9 @@
     _tasksSync = [[NSObject alloc] init];
     _tasks = [[NSMutableDictionary alloc] init];
 
+    _activeTasksSync = [[NSObject alloc] init];
+    _activeTasks = [[NSMutableDictionary alloc] init];
+
     _progressCompletedObservable = [[OAObservable alloc] init];
     _completedObservable = [[OAObservable alloc] init];
 }
@@ -83,11 +89,190 @@
     }
 }
 
+- (NSArray*)keysOfActiveDownloadTasks
+{
+    @synchronized(_activeTasksSync)
+    {
+        return [[NSArray alloc] initWithArray:[_activeTasks allKeys]
+                                    copyItems:YES];
+    }
+}
+
+- (id<OADownloadTask>)firstDownloadTasksWithKey:(NSString*)key
+{
+    @synchronized(_tasksSync)
+    {
+        return [[_tasks objectForKey:key] firstObject];
+    }
+}
+
+- (id<OADownloadTask>)firstDownloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_tasksSync)
+    {
+        __block id<OADownloadTask> result = nil;
+
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix])
+                return;
+
+            result = [tasks firstObject];
+            *stop = (result != nil);
+        }];
+        
+        return result;
+    }
+}
+
+- (id<OADownloadTask>)firstActiveDownloadTasksWithKey:(NSString*)key
+{
+    @synchronized(_activeTasksSync)
+    {
+        return [[_activeTasks objectForKey:key] firstObject];
+    }
+}
+
+- (id<OADownloadTask>)firstActiveDownloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_activeTasksSync)
+    {
+        __block id<OADownloadTask> result = nil;
+
+        [_activeTasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix])
+                return;
+
+            result = [tasks firstObject];
+            *stop = (result != nil);
+        }];
+
+        return result;
+    }
+}
+
 - (NSArray*)downloadTasksWithKey:(NSString*)key
 {
     @synchronized(_tasksSync)
     {
         return [NSArray arrayWithArray:[_tasks objectForKey:key]];
+    }
+}
+
+- (NSArray*)downloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_tasksSync)
+    {
+        NSMutableArray* result = [NSMutableArray array];
+
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix])
+                return;
+
+            [result addObjectsFromArray:tasks];
+        }];
+
+        return result;
+    }
+}
+
+- (NSArray*)activeDownloadTasksWithKey:(NSString*)key
+{
+    @synchronized(_activeTasksSync)
+    {
+        return [NSArray arrayWithArray:[_activeTasks objectForKey:key]];
+    }
+}
+
+- (NSArray*)activeDownloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_activeTasksSync)
+    {
+        NSMutableArray* result = [NSMutableArray array];
+
+        [_activeTasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix])
+                return;
+
+            [result addObjectsFromArray:tasks];
+        }];
+        
+        return result;
+    }
+}
+
+- (NSUInteger)numberOfDownloadTasksWithKey:(NSString*)key
+{
+    @synchronized(_tasksSync)
+    {
+        NSArray* tasks = [_tasks objectForKey:key];
+        if (!tasks)
+            return 0;
+
+        return [tasks count];
+    }
+}
+
+- (NSUInteger)numberOfDownloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_tasksSync)
+    {
+        __block NSUInteger result = 0;
+
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix] || tasks == nil)
+                return;
+
+            result += [tasks count];
+        }];
+        
+        return result;
+    }
+}
+
+- (NSUInteger)numberOfActiveDownloadTasksWithKey:(NSString*)key
+{
+    @synchronized(_activeTasksSync)
+    {
+        NSArray* tasks = [_activeTasks objectForKey:key];
+        if (!tasks)
+            return 0;
+
+        return [tasks count];
+    }
+}
+
+- (NSUInteger)numberOfActiveDownloadTasksWithKeyPrefix:(NSString*)prefix
+{
+    @synchronized(_activeTasksSync)
+    {
+        __block NSUInteger result = 0;
+
+        [_activeTasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasPrefix:prefix] || tasks == nil)
+                return;
+
+            result += [tasks count];
+        }];
+
+        return result;
     }
 }
 
@@ -178,9 +363,37 @@
     return task;
 }
 
+- (void)notifyTaskActivated:(id<OADownloadTask>)task
+{
+    @synchronized(_activeTasksSync)
+    {
+        NSMutableArray* list = [_activeTasks objectForKey:task.key];
+        if (list == nil)
+        {
+            list = [[NSMutableArray alloc] initWithCapacity:1];
+            [_activeTasks setObject:list forKey:task.key];
+        }
+
+        [list addObject:task];
+    }
+}
+
+- (void)notifyTaskDeactivated:(id<OADownloadTask>)task
+{
+    @synchronized(_activeTasksSync)
+    {
+        NSMutableArray* list = [_activeTasks objectForKey:task.key];
+        if (list == nil)
+            return;
+
+        [list removeObject:task];
+        if ([list count] == 0)
+            [_activeTasks removeObjectForKey:task.key];
+    }
+}
+
 - (void)removeTask:(id<OADownloadTask>)task
 {
-    // Add task to collection
     @synchronized(_tasksSync)
     {
         NSMutableArray* list = [_tasks objectForKey:task.key];

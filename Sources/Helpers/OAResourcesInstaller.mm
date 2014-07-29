@@ -71,6 +71,11 @@
                                                error:nil];
 
     OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
+
+    // Start next resource download task if such exists
+    id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKeyPrefix:@"resource:"];
+    if (nextTask)
+        [nextTask resume];
 }
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

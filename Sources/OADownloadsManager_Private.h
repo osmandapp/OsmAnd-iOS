@@ -10,6 +10,9 @@
 
 @interface OADownloadsManager (Private)
 
+- (void)notifyTaskActivated:(id<OADownloadTask>)task;
+- (void)notifyTaskDeactivated:(id<OADownloadTask>)task;
+
 - (void)removeTask:(id<OADownloadTask>)task;
 
 - (void)saveResumeData:(NSData*)resumeData forTask:(id<OADownloadTask>)task;

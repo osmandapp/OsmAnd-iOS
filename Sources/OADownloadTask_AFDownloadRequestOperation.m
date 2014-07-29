@@ -84,6 +84,8 @@
 
 - (void)onDownloadProgress:(double)fractionCompleted
 {
+    [_owner notifyTaskDeactivated:self];
+
     _progressCompleted = fractionCompleted;
 
     OADownloadsManager* owner = _owner;
@@ -129,6 +131,7 @@
 
 - (void)resume
 {
+    [_owner notifyTaskActivated:self];
     if (_operation.isPaused)
         [_operation resume];
     else
@@ -138,16 +141,19 @@
 - (void)pause
 {
     [_operation pause];
+    [_owner notifyTaskDeactivated:self];
 }
 
 - (void)stop
 {
     [_operation cancel];
+    [_owner notifyTaskDeactivated:self];
 }
 
 - (void)cancel
 {
     [_operation cancel];
+    [_owner notifyTaskDeactivated:self];
 }
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;

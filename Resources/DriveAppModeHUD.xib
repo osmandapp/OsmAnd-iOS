@@ -16,6 +16,7 @@
                 <outlet property="optionsMenuButton" destination="j9F-8j-9bu" id="gfw-T5-Rnt"/>
                 <outlet property="positionLocalizedTitleLabel" destination="5xQ-km-akD" id="fYX-qN-SRz"/>
                 <outlet property="positionNativeTitleLabel" destination="89U-86-mWp" id="zuW-ZL-9Zk"/>
+                <outlet property="resumeFollowingButton" destination="TDo-FW-7Xk" id="pAy-fW-wbo"/>
                 <outlet property="view" destination="iN0-l3-epB" id="j8F-LS-Kpo"/>
                 <outlet property="zoomButtons" destination="ZTA-aX-jQn" id="glA-Be-f9T"/>
                 <outlet property="zoomInButton" destination="rKG-Qo-wm0" id="ZLi-KF-kvX"/>
@@ -184,6 +185,19 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="Mxq-8x-pp9"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDo-FW-7Xk" userLabel="resumeFollowingButton" customClass="OAHUDButton">
+                    <rect key="frame" x="39" y="520" width="242" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="3pc-K0-VCE"/>
+                    </constraints>
+                    <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                    <state key="normal" title="Resume" image="follow_map_mode_button.png"/>
+                    <connections>
+                        <action selector="onResumeFollowingButtonClicked:" destination="-1" eventType="touchUpInside" id="GRH-eG-glC"/>
+                    </connections>
+                </button>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="D2C-DA-iEq" secondAttribute="bottom" constant="8" id="0G2-84-eZ8"/>
@@ -193,10 +207,13 @@
                 <constraint firstAttribute="trailing" secondItem="b09-3W-vxD" secondAttribute="trailing" id="8mu-ck-LIK"/>
                 <constraint firstItem="BiQ-TS-B8N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Buv-bk-Myp"/>
                 <constraint firstAttribute="trailing" secondItem="D2C-DA-iEq" secondAttribute="trailing" id="Cee-Ey-frx"/>
+                <constraint firstItem="D2C-DA-iEq" firstAttribute="leading" secondItem="TDo-FW-7Xk" secondAttribute="trailing" constant="24" id="Gre-50-UHJ"/>
+                <constraint firstAttribute="bottom" secondItem="TDo-FW-7Xk" secondAttribute="bottom" constant="8" id="HVm-fH-eJQ"/>
                 <constraint firstAttribute="centerY" secondItem="ZTA-aX-jQn" secondAttribute="centerY" constant="-50" id="K2T-5B-7mU"/>
                 <constraint firstItem="Mqu-Kg-TG4" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" constant="8" id="PyK-Rl-It5"/>
                 <constraint firstAttribute="centerY" secondItem="BiQ-TS-B8N" secondAttribute="centerY" id="XTm-K8-Ukb"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aeR-PM-vkT"/>
+                <constraint firstItem="TDo-FW-7Xk" firstAttribute="leading" secondItem="j9F-8j-9bu" secondAttribute="trailing" constant="24" id="aiY-Mj-cbR"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="srH-59-0fX"/>
                 <constraint firstAttribute="trailing" secondItem="Mqu-Kg-TG4" secondAttribute="trailing" constant="8" id="vDT-YM-C7O"/>
             </constraints>
@@ -215,5 +232,6 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
+        <image name="follow_map_mode_button.png" width="25" height="25"/>
     </resources>
 </document>

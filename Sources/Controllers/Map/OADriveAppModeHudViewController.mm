@@ -38,6 +38,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 @property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *resumeFollowingButton;
 
 @end
 
@@ -137,6 +138,8 @@
 
     [self updateCurrentLocation];
     [self restartLocationUpdateTimer];
+
+    [self showOrHideResumeFollowingButtonAnimated:animated];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -255,6 +258,20 @@
                                                            repeats:YES];
 }
 
+- (void)showOrHideResumeFollowingButtonAnimated:(BOOL)animated
+{
+    BOOL shouldShowButton = (_app.mapMode != OAMapModeFollow);
+
+    if (!animated)
+        self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
+    else
+    {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
+        }];
+    }
+}
+
 - (BOOL)shouldInterceptInteration:(CGPoint)point withEvent:(UIEvent *)event inView:(UIView*)view
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -275,8 +292,10 @@
 {
     if (![self isViewLoaded])
         return;
-    
-    //TODO show resume button!
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self showOrHideResumeFollowingButtonAnimated:YES];
+    });
 }
 
 - (void)onLocationServicesUpdate
@@ -326,6 +345,11 @@
 - (IBAction)onActionsMenuButtonClicked:(id)sender
 {
     [self.sidePanelController showRightPanelAnimated:YES];
+}
+
+- (IBAction)onResumeFollowingButtonClicked:(id)sender
+{
+    _app.mapMode = OAMapModeFollow;
 }
 
 - (IBAction)onDebugButtonClicked:(id)sender

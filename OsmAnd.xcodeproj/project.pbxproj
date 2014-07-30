@@ -225,6 +225,9 @@
 		BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */; };
 		BB4C7475192111730018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
 		BB4C7476192111830018E1EE /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB4C7474192111730018E1EE /* SystemConfiguration.framework */; };
+		BB54F70219890A4100AB40D1 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
+		BB54F70319890A4100AB40D1 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
+		BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F70119890A4100AB40D1 /* OAHUDButton.m */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -685,6 +688,8 @@
 		BB4C74621920CB720018E1EE /* menu_item_update_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C7474192111730018E1EE /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		BB4C74771921175D0018E1EE /* OAMenuViewControllerProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = OAMenuViewControllerProtocol.h; path = Controllers/OAMenuViewControllerProtocol.h; sourceTree = "<group>"; };
+		BB54F70019890A4100AB40D1 /* OAHUDButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHUDButton.h; path = Views/OAHUDButton.h; sourceTree = "<group>"; };
+		BB54F70119890A4100AB40D1 /* OAHUDButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAHUDButton.m; path = Views/OAHUDButton.m; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -1036,6 +1041,8 @@
 				BB32C0421925FB43007999A0 /* OATableViewCell.m */,
 				BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */,
 				BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */,
+				BB54F70019890A4100AB40D1 /* OAHUDButton.h */,
+				BB54F70119890A4100AB40D1 /* OAHUDButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2018,6 +2025,7 @@
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
 				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
+				BB54F70219890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AE86196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
@@ -2079,6 +2087,7 @@
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
+				BB54F70319890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BBA3AE87196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
@@ -2127,6 +2136,7 @@
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
+				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				BBA3AF59197FC4BB0039D991 /* OAWorldRegion.mm in Sources */,
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,

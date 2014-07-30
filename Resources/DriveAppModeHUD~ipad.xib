@@ -16,6 +16,7 @@
                 <outlet property="optionsMenuButton" destination="4oD-jz-w9b" id="6MP-fM-99b"/>
                 <outlet property="positionLocalizedTitleLabel" destination="Tx4-5h-e6S" id="38e-lm-ccz"/>
                 <outlet property="positionNativeTitleLabel" destination="0cx-9e-Pab" id="FRz-In-yny"/>
+                <outlet property="resumeFollowingButton" destination="tYp-k9-qb9" id="jC4-f9-kUM"/>
                 <outlet property="view" destination="iN0-l3-epB" id="242-9O-6qL"/>
                 <outlet property="zoomButtons" destination="wvk-dT-zLx" id="Qy6-ya-P7o"/>
                 <outlet property="zoomInButton" destination="AeI-lt-M5T" id="HFB-fU-v44"/>
@@ -184,6 +185,20 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="Meh-25-djK"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYp-k9-qb9" userLabel="resumeFollowingButton" customClass="OAHUDButton">
+                    <rect key="frame" x="263" y="968" width="242" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="40" id="EvT-zx-N5r"/>
+                        <constraint firstAttribute="width" constant="242" id="gYq-5H-rTb"/>
+                    </constraints>
+                    <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
+                    <state key="normal" title="Resume" image="follow_map_mode_button.png"/>
+                    <connections>
+                        <action selector="onResumeFollowingButtonClicked:" destination="-1" eventType="touchUpInside" id="gft-SZ-J3B"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -193,7 +208,9 @@
                 <constraint firstItem="xFR-E2-crG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="D2H-iD-6QM"/>
                 <constraint firstItem="obc-yH-Ohs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="E61-ud-Ex8"/>
                 <constraint firstAttribute="bottom" secondItem="4oD-jz-w9b" secondAttribute="bottom" constant="16" id="Iqh-yK-k44"/>
+                <constraint firstAttribute="centerX" secondItem="tYp-k9-qb9" secondAttribute="centerX" id="RWh-pV-Vna"/>
                 <constraint firstAttribute="trailing" secondItem="XnH-iO-5HR" secondAttribute="trailing" constant="16" id="S8O-N5-QHD"/>
+                <constraint firstAttribute="bottom" secondItem="tYp-k9-qb9" secondAttribute="bottom" constant="16" id="TJs-qQ-Aev"/>
                 <constraint firstAttribute="trailing" secondItem="bHT-nX-lvs" secondAttribute="trailing" id="VSz-i6-5M1"/>
                 <constraint firstItem="4oD-jz-w9b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="XNS-rP-wOG"/>
                 <constraint firstAttribute="trailing" secondItem="xFR-E2-crG" secondAttribute="trailing" id="bRC-ZO-Fkg"/>
@@ -214,5 +231,6 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
+        <image name="follow_map_mode_button.png" width="25" height="25"/>
     </resources>
 </document>

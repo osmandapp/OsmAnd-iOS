@@ -55,6 +55,8 @@
 
     CLLocation* _lastCapturedLocation;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
+
+    CLLocation* _lastQueriedLocation;
     std::shared_ptr<const OsmAnd::Model::Road> _road;
 
     NSTimer* _fadeInTimer;
@@ -212,15 +214,22 @@
 
 - (void)updateCurrentPosition
 {
-    //TODO: launch road search process and if it finds nothing, show coordinates
-    [self updatePositionLabels];
+    // If road is unknown, or no query has been performed, or distance between query points is more than 15 meters,
+    // repeat query
+    if (!_road || _lastQueriedLocation == nil || [_lastQueriedLocation distanceFromLocation:_lastCapturedLocation] >= 15)
+    {
+        [self restartLocationUpdateTimer];
+
+        //TODO: perform query and run:
+        [self updatePositionLabels];
+    }
 }
 
 - (void)updatePositionLabels
 {
     if (_road)
     {
-
+        //TODO: fill road details
     }
     else
     {
@@ -277,7 +286,6 @@
 
     _lastCapturedLocation = _app.locationServices.lastKnownLocation;
     [self updateCurrentLocation];
-    [self restartLocationUpdateTimer];
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender

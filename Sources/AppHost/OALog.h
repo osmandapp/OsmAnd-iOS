@@ -18,5 +18,4 @@ extern "C"
 #endif
 
 @interface OALogger : NSObject
-
 @end

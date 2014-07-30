@@ -1,5 +1,5 @@
 //
-//  OADriveAppModeHudViewController.m
+//  OADriveAppModeHudViewController.mm
 //  OsmAnd
 //
 //  Created by Alexey Pelykh on 7/29/14.
@@ -20,6 +20,10 @@
 #import "OARootViewController.h"
 #import "OAUserInteractionInterceptorView.h"
 #import "OALog.h"
+#include "Localization.h"
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Data/Model/Road.h>
 
 @interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
 
@@ -43,13 +47,19 @@
 
     BOOL _iOS70plus;
 
+    OAMapViewController* _mapViewController;
+
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
 
-    OAMapViewController* _mapViewController;
+    CLLocation* _lastCapturedLocation;
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
+    std::shared_ptr<const OsmAnd::Model::Road> _road;
 
     NSTimer* _fadeInTimer;
+
+    NSTimer* _locationUpdateTimer;
 
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -87,6 +97,10 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
+
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:_app.locationServices.updateObserver];
 }
 
 - (void)deinit
@@ -107,6 +121,20 @@
 #if !defined(OSMAND_IOS_DEV)
     [_debugButton hideAndDisableInput];
 #endif // !defined(OSMAND_IOS_DEV)
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    _lastCapturedLocation = _app.locationServices.lastKnownLocation;
+
+    // Initially, show coordinates while road is not yet determined
+    _road.reset();
+    [self updatePositionLabels];
+
+    [self updateCurrentLocation];
+    [self restartLocationUpdateTimer];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -134,7 +162,7 @@
 
 - (void)fadeInOptionalControlsWithDelay
 {
-    if (_fadeInTimer)
+    if (_fadeInTimer != nil)
         [_fadeInTimer invalidate];
     _fadeInTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
                                                     target:self
@@ -169,6 +197,55 @@
     self.zoomButtons.hidden = NO;
 }
 
+- (void)updateCurrentLocation
+{
+    [self updateCurrentSpeedAndAltitude];
+    [self updateCurrentPosition];
+}
+
+- (void)updateCurrentSpeedAndAltitude
+{
+    OALog(@"Speed %@, altitude %f meters",
+          [_app.locationFormatter stringFromSpeed:_lastCapturedLocation.speed],
+          _lastCapturedLocation.altitude);
+}
+
+- (void)updateCurrentPosition
+{
+    //TODO: launch road search process and if it finds nothing, show coordinates
+    [self updatePositionLabels];
+}
+
+- (void)updatePositionLabels
+{
+    if (_road)
+    {
+
+    }
+    else
+    {
+        self.positionLocalizedTitleLabel.text = [_app.locationFormatter stringFromCoordinate:_lastCapturedLocation.coordinate];
+        if (_lastCapturedLocation.course >= 0)
+        {
+            NSString* course = [_app.locationFormatter stringFromBearing:_lastCapturedLocation.course];
+            self.positionNativeTitleLabel.text = OALocalizedString(@"Heading %@", course);
+        }
+        else
+            self.positionNativeTitleLabel.text = nil;
+    }
+}
+
+- (void)restartLocationUpdateTimer
+{
+    if (_locationUpdateTimer != nil)
+        [_locationUpdateTimer invalidate];
+    _locationUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
+                                                            target:self
+                                                          selector:@selector(updateCurrentLocation)
+                                                          userInfo:nil
+                                                           repeats:YES];
+}
+
 - (BOOL)shouldInterceptInteration:(CGPoint)point withEvent:(UIEvent *)event inView:(UIView*)view
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -187,7 +264,20 @@
 
 - (void)onMapModeChanged
 {
+    if (![self isViewLoaded])
+        return;
+    
     //TODO show resume button!
+}
+
+- (void)onLocationServicesUpdate
+{
+    if (![self isViewLoaded])
+        return;
+
+    _lastCapturedLocation = _app.locationServices.lastKnownLocation;
+    [self updateCurrentLocation];
+    [self restartLocationUpdateTimer];
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender

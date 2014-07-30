@@ -1156,10 +1156,12 @@
                                                   OsmAnd::MapAnimator::TimingFunction::Linear,
                                                   kLocationServicesAnimationKey);
 
-                if (!isnan(_app.locationServices.lastKnownHeading))
+                const auto direction = (_lastAppMode == OAAppModeBrowseMap)
+                    ? _app.locationServices.lastKnownHeading
+                    : newLocation.course;
+                if (!isnan(direction) && direction >= 0)
                 {
-                    const CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-                    mapView.animator->animateAzimuthTo(newHeading,
+                    mapView.animator->animateAzimuthTo(direction,
                                                        kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::Linear,
                                                        kLocationServicesAnimationKey);
@@ -1200,7 +1202,7 @@
                                      OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
     // Update "My" markers
-    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
     {
         _myLocationMarker->setIsHidden(true);
 
@@ -1242,20 +1244,23 @@
         if (_app.mapMode == OAMapModeFollow)
         {
             // Update azimuth if there's one
-            if (!isnan(newHeading))
+            const auto direction = (_lastAppMode == OAAppModeBrowseMap)
+                ? _app.locationServices.lastKnownHeading
+                : newLocation.course;
+            if (!isnan(direction) && direction >= 0)
             {
                 if (azimuthAnimation)
                 {
                     mapView.animator->cancelAnimation(azimuthAnimation);
 
-                    mapView.animator->animateAzimuthTo(newHeading,
+                    mapView.animator->animateAzimuthTo(direction,
                                                        azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
                                                        OsmAnd::MapAnimator::TimingFunction::Linear,
                                                        kLocationServicesAnimationKey);
                 }
                 else
                 {
-                    mapView.animator->animateAzimuthTo(newHeading,
+                    mapView.animator->animateAzimuthTo(direction,
                                                        kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::Linear,
                                                        kLocationServicesAnimationKey);

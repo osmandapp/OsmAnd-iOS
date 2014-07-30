@@ -24,10 +24,13 @@ extern "C"
         NSString* formattedString = [[NSString alloc] initWithFormat:format
                                                        arguments:args];
         va_end(args);
+        NSCAssert((formattedString != nil), @"Log formatting failed");
 
-        OsmAnd::Logger::get()->log(OsmAnd::LogSeverityLevel::Info,
-                                   "%s",
-                                   [formattedString cStringUsingEncoding:NSASCIIStringEncoding]);
+        const char* pcsFormattedString = [formattedString cStringUsingEncoding:NSASCIIStringEncoding];
+        if (pcsFormattedString != nullptr)
+            OsmAnd::Logger::get()->log(OsmAnd::LogSeverityLevel::Info, "%s", pcsFormattedString);
+        else
+            OsmAnd::Logger::get()->log(OsmAnd::LogSeverityLevel::Info, "%s", qPrintable(QString::fromNSString(formattedString)));
     }
 #if __cplusplus
 }

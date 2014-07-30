@@ -108,7 +108,12 @@
     // Favorites presenter
     std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
 
+    OAAutoObserverProxy* _appModeObserver;
+    OAAppMode _lastAppMode;
+
     OAAutoObserverProxy* _mapModeObserver;
+    OAMapMode _lastMapMode;
+
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
     OAAutoObserverProxy* _stateObserver;
@@ -131,8 +136,6 @@
     UIPanGestureRecognizer* _grElevation;
 
     UILongPressGestureRecognizer* _grPointContextMenu;
-
-    OAMapMode _lastMapMode;
 
     bool _lastPositionTrackStateCaptured;
     float _lastAzimuthInPositionTrack;
@@ -171,9 +174,15 @@
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
 
+    _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onAppModeChanged)
+                                                  andObserve:_app.appModeObservable];
+    _lastAppMode = _app.appMode;
+
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
+    _lastMapMode = _app.mapMode;
 
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
@@ -244,7 +253,6 @@
                                                                         action:@selector(pointContextMenuGestureDetected:)];
     _grPointContextMenu.delegate = self;
 
-    _lastMapMode = _app.mapMode;
     _lastPositionTrackStateCaptured = false;
 
     // Create location and course markers
@@ -360,8 +368,13 @@
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView resumeRendering];
     
-    // Update map source
-    [self updateCurrentMapSource];
+    // Update map source (if needed)
+    if (_mapSourceInvalidated)
+    {
+        [self updateCurrentMapSource];
+
+        _mapSourceInvalidated = NO;
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -726,13 +739,6 @@
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
         return;
-
-    if (recognizer.state == UIGestureRecognizerStateBegan)
-    {
-        // In case we're in "follow-me" mode, switch to "position-tracking"
-        if (_app.mapMode == OAMapModeFollow)
-            _app.mapMode = OAMapModePositionTrack;
-    }
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     

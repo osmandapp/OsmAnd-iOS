@@ -370,6 +370,7 @@
         _debugHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _debugHudViewController.view.frame = self.view.frame;
         [self.view addSubview:_debugHudViewController.view];
+        [self.view bringSubviewToFront:_debugHudViewController.view];
     }
     else
     {

@@ -8,48 +8,73 @@
 
 #import "OAHUDButton.h"
 
+#import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
+
 #define _(name) OAHUDButton__##name
+#define commonInit _(commonInit)
 
 @implementation OAHUDButton
-
-- (void)setHighlighted:(BOOL)highlighted
 {
-    [super setHighlighted:highlighted];
+    OsmAndAppInstance _app;
 
-    [self updateAppearance];
+    OAAutoObserverProxy* _appearanceChangeObserver;
 }
 
-- (void)setTintColor:(UIColor *)tintColor
+- (instancetype)init
 {
-    [super setTintColor:tintColor];
-
-    [self updateAppearance];
+    self = [super init];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
 }
 
-- (void)layoutSubviews
+- (instancetype)initWithFrame:(CGRect)frame
 {
-    [super layoutSubviews];
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    if (self) {
+        [self commonInit];
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    _app = [OsmAndApp instance];
+
+    _appearanceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onAppearanceChanged)
+                                                           andObserve:_app.appearanceChangeObservable];
 
     [self updateAppearance];
 }
 
 - (void)updateAppearance
 {
-    self.layer.cornerRadius = 3.0f;
-    self.layer.borderWidth = 0.5f;
-    self.layer.borderColor = [OAHUDButton borderColor].CGColor;
-    self.layer.backgroundColor = [OAHUDButton backgroundColor].CGColor;
-    self.clipsToBounds = YES;
+    [self setBackgroundImage:[self backgroundImage]
+                    forState:UIControlStateNormal];
 }
 
-+ (UIColor*)backgroundColor
+- (UIImage*)backgroundImage
 {
-    return [UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.9f];
+    return nil;
 }
 
-+ (UIColor*)borderColor
+- (void)onAppearanceChanged
 {
-    return [UIColor colorWithRed:0.6f green:0.6f blue:0.6f alpha:0.9f];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateAppearance];
+    });
 }
 
 @end

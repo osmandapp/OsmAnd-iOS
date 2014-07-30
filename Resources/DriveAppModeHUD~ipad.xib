@@ -185,7 +185,7 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="Meh-25-djK"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYp-k9-qb9" userLabel="resumeFollowingButton" customClass="OAHUDButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYp-k9-qb9" userLabel="resumeFollowingButton" customClass="OAHUDRegularButton">
                     <rect key="frame" x="263" y="968" width="242" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>

@@ -16,6 +16,7 @@
 #import "OALocationServices.h"
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
+#import "OAAppearanceProtocol.h"
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -55,5 +56,8 @@
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
 
 @property(readonly) BOOL allowScreenTurnOff;
+
+@property(readonly) id<OAAppearanceProtocol> appearance;
+@property(readonly) OAObservable* appearanceChangeObservable;
 
 @end

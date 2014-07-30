@@ -15,6 +15,9 @@
 - (UIImage*)hudRoundButtonBackgroundForButton:(UIButton*)button;
 - (UIImage*)hudButtonBackgroundForStyle:(OAButtonStyle)style;
 
+- (UIColor*)hudButtonBackgroundColor;
+- (UIColor*)hudButtonBorderColor;
+
 + (UIImage*)drawRoundBackgroundForHudButtonWithRadius:(CGFloat)radius
                                          andFillColor:(UIColor*)fillColor
                                        andBorderColor:(UIColor*)borderColor;

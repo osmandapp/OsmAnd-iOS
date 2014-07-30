@@ -237,6 +237,9 @@
 		BB54F7131989144400AB40D1 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */; };
 		BB54F7141989144400AB40D1 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */; };
 		BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */; };
+		BB54F71819893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
+		BB54F71919893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
+		BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
 		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
 		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
 		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
@@ -706,6 +709,8 @@
 		BB54F70D1989143000AB40D1 /* OADaytimeAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADaytimeAppearance.m; path = Appearance/OADaytimeAppearance.m; sourceTree = "<group>"; };
 		BB54F7111989144400AB40D1 /* OANighttimeAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OANighttimeAppearance.h; path = Appearance/OANighttimeAppearance.h; sourceTree = "<group>"; };
 		BB54F7121989144400AB40D1 /* OANighttimeAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OANighttimeAppearance.m; path = Appearance/OANighttimeAppearance.m; sourceTree = "<group>"; };
+		BB54F71619893B8200AB40D1 /* OAHUDRegularButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHUDRegularButton.h; path = Views/OAHUDRegularButton.h; sourceTree = "<group>"; };
+		BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAHUDRegularButton.m; path = Views/OAHUDRegularButton.m; sourceTree = "<group>"; };
 		BB5D90D118A662C700EFAD92 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = ../binaries/ios/fat/Debug/libexpat_static.a; sourceTree = "<group>"; };
 		BB5D90D218A662C700EFAD92 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = ../binaries/ios/fat/Debug/libgdal_static.a; sourceTree = "<group>"; };
 		BB5D90D318A662C700EFAD92 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = ../binaries/ios/fat/Debug/libgif_static.a; sourceTree = "<group>"; };
@@ -1060,6 +1065,8 @@
 				BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */,
 				BB54F70019890A4100AB40D1 /* OAHUDButton.h */,
 				BB54F70119890A4100AB40D1 /* OAHUDButton.m */,
+				BB54F71619893B8200AB40D1 /* OAHUDRegularButton.h */,
+				BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -2063,6 +2070,7 @@
 				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AE86196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
 				BBA3AEC41974067D0039D991 /* OAFavoritesLayerViewController.mm in Sources */,
+				BB54F71819893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BB54F7131989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2128,6 +2136,7 @@
 				BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BBA3AE87196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
 				BBA3AEC51974067D0039D991 /* OAFavoritesLayerViewController.mm in Sources */,
+				BB54F71919893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BB54F7141989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2176,6 +2185,7 @@
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
+				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				BBA3AF59197FC4BB0039D991 /* OAWorldRegion.mm in Sources */,
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,

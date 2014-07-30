@@ -12,6 +12,8 @@
 
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
+#import "OADaytimeAppearance.h"
+#import "OANighttimeAppearance.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 
@@ -170,6 +172,9 @@
 
     [self updateScreenTurnOffSetting];
 
+    _appearance = [[OADaytimeAppearance alloc] init];
+    _appearanceChangeObservable = [[OAObservable alloc] init];
+
     return YES;
 }
 
@@ -296,6 +301,9 @@
 
     [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
 }
+
+@synthesize appearance = _appearance;
+@synthesize appearanceChangeObservable = _appearanceChangeObservable;
 
 - (void)onDownloadManagerActiveTasksCollectionChanged
 {

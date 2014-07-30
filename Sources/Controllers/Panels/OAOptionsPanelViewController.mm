@@ -246,11 +246,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                              animated:YES];
 }
 
-- (void)dismissLastOpenedMenuAnimated:(BOOL)animated
-{
-    [self.rootViewController closeMenuAnimated:animated];
-}
-
 #pragma marg - OAMenuViewOriginControllerProtocol
 
 - (void)notifyMenuClosed

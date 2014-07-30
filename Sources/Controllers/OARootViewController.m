@@ -54,7 +54,7 @@
 
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
 
-    //[self setRightPanel:...];
+    [self setRightPanel:[[OAActionsPanelViewController alloc] init]];
 }
 
 - (void)loadView
@@ -161,9 +161,9 @@
     return (OAMapPanelViewController*)self.centerPanel;
 }
 
-- (OAContextPanelViewController*)contextPanel
+- (OAActionsPanelViewController*)actionsPanel
 {
-    return (OAContextPanelViewController*)self.rightPanel;
+    return (OAActionsPanelViewController*)self.rightPanel;
 }
 
 - (void)openMenu:(UIViewController*)menuViewController

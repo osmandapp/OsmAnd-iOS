@@ -295,8 +295,8 @@
 		BBA3AEE1197501090039D991 /* OAIncomingURLViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */; };
 		BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */; };
 		BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */; };
-		BBA3AF061975016F0039D991 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */; };
-		BBA3AF071975016F0039D991 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */; };
+		BBA3AF061975016F0039D991 /* OAActionsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAActionsPanelViewController.m */; };
+		BBA3AF071975016F0039D991 /* OAActionsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAActionsPanelViewController.m */; };
 		BBA3AF081975016F0039D991 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF031975016F0039D991 /* OAMapPanelViewController.m */; };
 		BBA3AF091975016F0039D991 /* OAMapPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF031975016F0039D991 /* OAMapPanelViewController.m */; };
 		BBA3AF0A1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF051975016F0039D991 /* OAOptionsPanelViewController.mm */; };
@@ -326,7 +326,7 @@
 		BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */ = {isa = PBXBuildFile; fileRef = BBBDADAA18BC965100E4A359 /* OAObservable.m */; };
 		BBA3AF40197FC4BB0039D991 /* ExternalResourcesProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBE454E1856544000F1C144 /* ExternalResourcesProvider.mm */; };
 		BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA6AD001940C0A80066AF23 /* OANativeUtilities.mm */; };
-		BBA3AF42197FC4BB0039D991 /* OAContextPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */; };
+		BBA3AF42197FC4BB0039D991 /* OAActionsPanelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AF011975016F0039D991 /* OAActionsPanelViewController.m */; };
 		BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2A2190D186F00D90F0A /* OsmAndApp.mm */; };
 		BBA3AF44197FC4BB0039D991 /* OAMapSourcesListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEDA197500EF0039D991 /* OAMapSourcesListViewController.mm */; };
 		BBA3AF45197FC4BB0039D991 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
@@ -765,8 +765,8 @@
 		BBA3AEDF197501090039D991 /* OAIncomingURLViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIncomingURLViewController.mm; path = Controllers/Misc/OAIncomingURLViewController.mm; sourceTree = "<group>"; };
 		BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInformationViewController.h; path = Controllers/Resources/OALocalResourceInformationViewController.h; sourceTree = "<group>"; };
 		BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OALocalResourceInformationViewController.mm; path = Controllers/Resources/OALocalResourceInformationViewController.mm; sourceTree = "<group>"; };
-		BBA3AF001975016F0039D991 /* OAContextPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAContextPanelViewController.h; path = Controllers/Panels/OAContextPanelViewController.h; sourceTree = "<group>"; };
-		BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAContextPanelViewController.m; path = Controllers/Panels/OAContextPanelViewController.m; sourceTree = "<group>"; };
+		BBA3AF001975016F0039D991 /* OAActionsPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAActionsPanelViewController.h; path = Controllers/Panels/OAActionsPanelViewController.h; sourceTree = "<group>"; };
+		BBA3AF011975016F0039D991 /* OAActionsPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAActionsPanelViewController.m; path = Controllers/Panels/OAActionsPanelViewController.m; sourceTree = "<group>"; };
 		BBA3AF021975016F0039D991 /* OAMapPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapPanelViewController.h; path = Controllers/Panels/OAMapPanelViewController.h; sourceTree = "<group>"; };
 		BBA3AF031975016F0039D991 /* OAMapPanelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapPanelViewController.m; path = Controllers/Panels/OAMapPanelViewController.m; sourceTree = "<group>"; };
 		BBA3AF041975016F0039D991 /* OAOptionsPanelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOptionsPanelViewController.h; path = Controllers/Panels/OAOptionsPanelViewController.h; sourceTree = "<group>"; };
@@ -1333,8 +1333,8 @@
 		BBA3AEFF197501620039D991 /* Panels */ = {
 			isa = PBXGroup;
 			children = (
-				BBA3AF001975016F0039D991 /* OAContextPanelViewController.h */,
-				BBA3AF011975016F0039D991 /* OAContextPanelViewController.m */,
+				BBA3AF001975016F0039D991 /* OAActionsPanelViewController.h */,
+				BBA3AF011975016F0039D991 /* OAActionsPanelViewController.m */,
 				BBA3AF021975016F0039D991 /* OAMapPanelViewController.h */,
 				BBA3AF031975016F0039D991 /* OAMapPanelViewController.m */,
 				BBA3AF041975016F0039D991 /* OAOptionsPanelViewController.h */,
@@ -2029,7 +2029,7 @@
 				BB54F70E1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
-				BBA3AF061975016F0039D991 /* OAContextPanelViewController.m in Sources */,
+				BBA3AF061975016F0039D991 /* OAActionsPanelViewController.m in Sources */,
 				BBA3AFF619854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BBA3AEDB197500EF0039D991 /* OAMapSourcesListViewController.mm in Sources */,
@@ -2095,7 +2095,7 @@
 				BB54F70F1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				BBA3AECC197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
-				BBA3AF071975016F0039D991 /* OAContextPanelViewController.m in Sources */,
+				BBA3AF071975016F0039D991 /* OAActionsPanelViewController.m in Sources */,
 				BBA3AFF719854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
@@ -2158,7 +2158,7 @@
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* ExternalResourcesProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
-				BBA3AF42197FC4BB0039D991 /* OAContextPanelViewController.m in Sources */,
+				BBA3AF42197FC4BB0039D991 /* OAActionsPanelViewController.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				BBA3AF44197FC4BB0039D991 /* OAMapSourcesListViewController.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.m in Sources */,

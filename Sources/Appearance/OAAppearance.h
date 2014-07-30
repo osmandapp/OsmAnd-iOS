@@ -12,18 +12,18 @@
 
 @interface OAAppearance : NSObject
 
-- (UIImage*)hudRoundButtonBackgroundForButton:(UIButton*)button;
-- (UIImage*)hudButtonBackgroundForStyle:(OAButtonStyle)style;
+- (UIImage*)hudViewRoundBackgroundWithRadius:(CGFloat)radius;
+- (UIImage*)hudViewBackgroundForStyle:(OAHudViewStyle)style;
 
-- (UIColor*)hudButtonBackgroundColor;
-- (UIColor*)hudButtonBorderColor;
+- (UIColor*)hudViewBackgroundColor;
+- (UIColor*)hudViewBorderColor;
 
-+ (UIImage*)drawRoundBackgroundForHudButtonWithRadius:(CGFloat)radius
-                                         andFillColor:(UIColor*)fillColor
-                                       andBorderColor:(UIColor*)borderColor;
++ (UIImage*)drawRoundBackgroundForHudViewWithRadius:(CGFloat)radius
+                                       andFillColor:(UIColor*)fillColor
+                                     andBorderColor:(UIColor*)borderColor;
 
-+ (UIImage*)drawHudButtonBackgroundForStyle:(OAButtonStyle)style
-                              withFillColor:(UIColor*)fillColor
-                             andBorderColor:(UIColor*)borderColor;
++ (UIImage*)drawHudViewBackgroundForStyle:(OAHudViewStyle)style
+                            withFillColor:(UIColor*)fillColor
+                           andBorderColor:(UIColor*)borderColor;
 
 @end

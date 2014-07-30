@@ -41,6 +41,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *resumeFollowingButton;
+@property (weak, nonatomic) IBOutlet UIImageView *leftWidgetsContainerBackground;
+@property (weak, nonatomic) IBOutlet UILabel *currentSpeedLabel;
+@property (weak, nonatomic) IBOutlet UILabel *currentAltitudeLabel;
 
 @end
 
@@ -123,6 +126,8 @@
     OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
     interceptorView.delegate = self;
 
+    self.leftWidgetsContainerBackground.image = [_app.appearance hudViewBackgroundForStyle:OAHudViewStyleTopLeadingSideDock];
+
 #if !defined(OSMAND_IOS_DEV)
     [_debugButton hideAndDisableInput];
 #endif // !defined(OSMAND_IOS_DEV)
@@ -137,6 +142,7 @@
     // Initially, show coordinates while road is not yet determined
     _road.reset();
     [self updatePositionLabels];
+    [self updateCurrentSpeedAndAltitude];
 
     [self updateCurrentLocation];
     [self restartLocationUpdateTimer];
@@ -212,9 +218,9 @@
 
 - (void)updateCurrentSpeedAndAltitude
 {
-    OALog(@"Speed %@, altitude %f meters",
-          [_app.locationFormatter stringFromSpeed:_lastCapturedLocation.speed],
-          _lastCapturedLocation.altitude);
+    const auto speed = MAX(_lastCapturedLocation.speed, 0);
+    self.currentSpeedLabel.text = [_app.locationFormatter stringFromSpeed:speed];
+    self.currentAltitudeLabel.text = [_app.locationFormatter stringFromDistance:_lastCapturedLocation.altitude];
 }
 
 - (void)updateCurrentPosition
@@ -245,7 +251,7 @@
             self.positionNativeTitleLabel.text = OALocalizedString(@"Heading %@", course);
         }
         else
-            self.positionNativeTitleLabel.text = nil;
+            self.positionNativeTitleLabel.text = OALocalizedString(@"No movement");
     }
 }
 

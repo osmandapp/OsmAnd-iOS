@@ -17,8 +17,8 @@
 {
     NSObject* _lock;
 
-    UIImage* _hudRoundButtonBackgroundForButton;
-    UIImage* _hudButtonBackgroundsByStyle[4];
+    UIImage* _hudViewRoundBackground;
+    UIImage* _hudViewBackgroundsByStyle[9];
 }
 
 - (instancetype)init
@@ -30,52 +30,52 @@
     return self;
 }
 
-- (UIImage*)hudRoundButtonBackgroundForButton:(UIButton*)button
+- (UIImage*)hudViewRoundBackgroundWithRadius:(CGFloat)radius
 {
     @synchronized(_lock)
     {
-        if (!_hudRoundButtonBackgroundForButton)
+        if (!_hudViewRoundBackground)
         {
-            _hudRoundButtonBackgroundForButton = [OAAppearance drawRoundBackgroundForHudButtonWithRadius:(button.frame.size.width / 2.0f)
-                                                                                            andFillColor:[self hudButtonBackgroundColor]
-                                                                                          andBorderColor:[self hudButtonBorderColor]];
+            _hudViewRoundBackground = [OAAppearance drawRoundBackgroundForHudViewWithRadius:radius
+                                                                               andFillColor:[self hudViewBackgroundColor]
+                                                                             andBorderColor:[self hudViewBorderColor]];
         }
 
-        return _hudRoundButtonBackgroundForButton;
+        return _hudViewRoundBackground;
     }
 }
 
-- (UIImage*)hudButtonBackgroundForStyle:(OAButtonStyle)style
+- (UIImage*)hudViewBackgroundForStyle:(OAHudViewStyle)style
 {
     @synchronized(_lock)
     {
-        UIImage* image = _hudButtonBackgroundsByStyle[style];
+        UIImage* image = _hudViewBackgroundsByStyle[style];
         if (!image)
         {
-            image = [OAAppearance drawHudButtonBackgroundForStyle:style
-                                                    withFillColor:[self hudButtonBackgroundColor]
-                                                   andBorderColor:[self hudButtonBorderColor]];
+            image = [OAAppearance drawHudViewBackgroundForStyle:style
+                                                  withFillColor:[self hudViewBackgroundColor]
+                                                 andBorderColor:[self hudViewBorderColor]];
 
-            _hudButtonBackgroundsByStyle[style] = image;
+            _hudViewBackgroundsByStyle[style] = image;
         }
 
         return image;
     }
 }
 
-- (UIColor*)hudButtonBackgroundColor
+- (UIColor*)hudViewBackgroundColor
 {
     return[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.9f];
 }
 
-- (UIColor*)hudButtonBorderColor
+- (UIColor*)hudViewBorderColor
 {
     return [UIColor colorWithRed:0.6f green:0.6f blue:0.6f alpha:0.9f];
 }
 
-+ (UIImage*)drawRoundBackgroundForHudButtonWithRadius:(CGFloat)radius
-                                         andFillColor:(UIColor*)fillColor
-                                       andBorderColor:(UIColor*)borderColor
++ (UIImage*)drawRoundBackgroundForHudViewWithRadius:(CGFloat)radius
+                                       andFillColor:(UIColor*)fillColor
+                                     andBorderColor:(UIColor*)borderColor
 {
     CGRect rect = CGRectMake(0, 0, 2.0f * radius, 2.0f * radius);
     UIGraphicsBeginImageContext(CGSizeMake(rect.size.width, rect.size.height));
@@ -96,9 +96,9 @@
     return result;
 }
 
-+ (UIImage*)drawHudButtonBackgroundForStyle:(OAButtonStyle)style
-                              withFillColor:(UIColor*)fillColor
-                             andBorderColor:(UIColor*)borderColor
++ (UIImage*)drawHudViewBackgroundForStyle:(OAHudViewStyle)style
+                            withFillColor:(UIColor*)fillColor
+                           andBorderColor:(UIColor*)borderColor
 {
     CGFloat screenScale = [UIScreen mainScreen].scale;
     CGFloat cornerRadius = kDefaultHudRectangleCornerRadius * screenScale;
@@ -124,7 +124,7 @@
     switch (style)
     {
         default:
-        case OAButtonStyleRegular:
+        case OAHudViewStyleRegular:
         {
             CGRect fillRect = CGRectInset(fullRect,
                                           kDefaultHudBorderWidthInPixels / screenScale, kDefaultHudBorderWidthInPixels / screenScale);
@@ -136,11 +136,11 @@
             break;
         }
 
-        case OAButtonStyleLeadingSideDock:
-        case OAButtonStyleTrailingSideDock:
+        case OAHudViewStyleLeadingSideDock:
+        case OAHudViewStyleTrailingSideDock:
         {
             BOOL isLeft =
-                (style == OAButtonStyleLeadingSideDock) &&
+                (style == OAHudViewStyleLeadingSideDock) &&
                 ([NSLocale lineDirectionForLanguage:[[NSLocale currentLocale] objectForKey:NSLocaleLanguageCode]] == NSLocaleLanguageDirectionLeftToRight);
             UIRectCorner corners = isLeft ? (UIRectCornerTopRight|UIRectCornerBottomRight) : (UIRectCornerTopLeft|UIRectCornerBottomLeft);
 
@@ -165,10 +165,10 @@
             break;
         }
 
-        case OAButtonStyleTopSideDock:
-        case OAButtonStyleBottomSideDock:
+        case OAHudViewStyleTopSideDock:
+        case OAHudViewStyleBottomSideDock:
         {
-            BOOL isTop = (style == OAButtonStyleTopSideDock);
+            BOOL isTop = (style == OAHudViewStyleTopSideDock);
             UIRectCorner corners = isTop ? (UIRectCornerBottomLeft|UIRectCornerBottomRight) : (UIRectCornerTopLeft|UIRectCornerTopRight);
 
             CGRect fillRect = CGRectInset(fullRect,

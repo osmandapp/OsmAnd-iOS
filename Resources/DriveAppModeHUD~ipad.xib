@@ -12,7 +12,10 @@
                 <outlet property="compassBox" destination="XnH-iO-5HR" id="zhz-88-gHz"/>
                 <outlet property="compassButton" destination="GmI-jy-Aad" id="P2W-Am-bv0"/>
                 <outlet property="compassImage" destination="5yK-dE-d2w" id="7lX-0H-FRT"/>
+                <outlet property="currentAltitudeLabel" destination="iXz-JO-g2g" id="Xuv-of-aEt"/>
+                <outlet property="currentSpeedLabel" destination="F1r-tC-Xx3" id="ez4-q0-Q96"/>
                 <outlet property="debugButton" destination="obc-yH-Ohs" id="1eo-36-t9v"/>
+                <outlet property="leftWidgetsContainerBackground" destination="X12-uO-FJZ" id="Nuh-hP-WNK"/>
                 <outlet property="optionsMenuButton" destination="4oD-jz-w9b" id="6MP-fM-99b"/>
                 <outlet property="positionLocalizedTitleLabel" destination="Tx4-5h-e6S" id="38e-lm-ccz"/>
                 <outlet property="positionNativeTitleLabel" destination="0cx-9e-Pab" id="FRz-In-yny"/>
@@ -199,6 +202,53 @@
                         <action selector="onResumeFollowingButtonClicked:" destination="-1" eventType="touchUpInside" id="gft-SZ-J3B"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2SW-mo-Lls" userLabel="leftWidgetsContainer">
+                    <rect key="frame" x="0.0" y="100" width="110" height="80"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="X12-uO-FJZ" userLabel="leftWidgetsContainerBackground">
+                            <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 km/h" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="F1r-tC-Xx3" userLabel="currentSpeedLabel">
+                            <rect key="frame" x="0.0" y="0.0" width="110" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="cqb-rh-WLv"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                            <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00000 m" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="iXz-JO-g2g" userLabel="currentAltitudeLabel">
+                            <rect key="frame" x="0.0" y="40" width="110" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="Yhk-VL-q5a"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                            <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstAttribute="centerX" secondItem="F1r-tC-Xx3" secondAttribute="centerX" id="9WZ-5k-hlx"/>
+                        <constraint firstItem="X12-uO-FJZ" firstAttribute="top" secondItem="2SW-mo-Lls" secondAttribute="top" id="Cx3-Li-hKw"/>
+                        <constraint firstAttribute="trailing" secondItem="X12-uO-FJZ" secondAttribute="trailing" id="FMa-y7-0S6"/>
+                        <constraint firstAttribute="bottom" secondItem="X12-uO-FJZ" secondAttribute="bottom" id="Fgx-m1-T7Z"/>
+                        <constraint firstItem="F1r-tC-Xx3" firstAttribute="width" secondItem="2SW-mo-Lls" secondAttribute="width" id="HBU-PP-ckH"/>
+                        <constraint firstItem="X12-uO-FJZ" firstAttribute="leading" secondItem="2SW-mo-Lls" secondAttribute="leading" id="LC8-KT-evw"/>
+                        <constraint firstAttribute="width" constant="110" id="NrV-Ze-t2c"/>
+                        <constraint firstAttribute="trailing" secondItem="iXz-JO-g2g" secondAttribute="trailing" id="Uwc-eJ-gaZ"/>
+                        <constraint firstItem="F1r-tC-Xx3" firstAttribute="top" secondItem="2SW-mo-Lls" secondAttribute="top" id="Zsq-DG-Jkf"/>
+                        <constraint firstItem="iXz-JO-g2g" firstAttribute="leading" secondItem="2SW-mo-Lls" secondAttribute="leading" id="d6n-Y1-FIj"/>
+                        <constraint firstAttribute="height" constant="80" id="dhM-xA-0uL"/>
+                        <constraint firstItem="F1r-tC-Xx3" firstAttribute="bottom" secondItem="iXz-JO-g2g" secondAttribute="top" id="rL2-qK-Sd6"/>
+                    </constraints>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -208,11 +258,13 @@
                 <constraint firstItem="xFR-E2-crG" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="D2H-iD-6QM"/>
                 <constraint firstItem="obc-yH-Ohs" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="E61-ud-Ex8"/>
                 <constraint firstAttribute="bottom" secondItem="4oD-jz-w9b" secondAttribute="bottom" constant="16" id="Iqh-yK-k44"/>
+                <constraint firstItem="2SW-mo-Lls" firstAttribute="top" secondItem="xFR-E2-crG" secondAttribute="bottom" id="OD7-Ai-zPf"/>
                 <constraint firstAttribute="centerX" secondItem="tYp-k9-qb9" secondAttribute="centerX" id="RWh-pV-Vna"/>
                 <constraint firstAttribute="trailing" secondItem="XnH-iO-5HR" secondAttribute="trailing" constant="16" id="S8O-N5-QHD"/>
                 <constraint firstAttribute="bottom" secondItem="tYp-k9-qb9" secondAttribute="bottom" constant="16" id="TJs-qQ-Aev"/>
                 <constraint firstAttribute="trailing" secondItem="bHT-nX-lvs" secondAttribute="trailing" id="VSz-i6-5M1"/>
                 <constraint firstItem="4oD-jz-w9b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="XNS-rP-wOG"/>
+                <constraint firstItem="2SW-mo-Lls" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="a5E-WH-9CR"/>
                 <constraint firstAttribute="trailing" secondItem="xFR-E2-crG" secondAttribute="trailing" id="bRC-ZO-Fkg"/>
                 <constraint firstAttribute="centerY" secondItem="obc-yH-Ohs" secondAttribute="centerY" id="etk-eU-1py"/>
                 <constraint firstAttribute="trailing" secondItem="wvk-dT-zLx" secondAttribute="trailing" id="meT-OV-K6g"/>

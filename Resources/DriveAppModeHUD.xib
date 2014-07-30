@@ -12,7 +12,10 @@
                 <outlet property="compassBox" destination="Mqu-Kg-TG4" id="Q3v-8y-uZ6"/>
                 <outlet property="compassButton" destination="GGf-zp-Dy1" id="pDc-eC-67L"/>
                 <outlet property="compassImage" destination="Ykf-s1-V3b" id="Sft-4a-W0l"/>
+                <outlet property="currentAltitudeLabel" destination="p2X-uL-p4S" id="wAi-1r-bB3"/>
+                <outlet property="currentSpeedLabel" destination="7zY-7m-aJk" id="gOI-Mb-T6x"/>
                 <outlet property="debugButton" destination="BiQ-TS-B8N" id="9pk-35-oiy"/>
+                <outlet property="leftWidgetsContainerBackground" destination="qkc-ad-eNc" id="mKJ-CR-9tm"/>
                 <outlet property="optionsMenuButton" destination="j9F-8j-9bu" id="gfw-T5-Rnt"/>
                 <outlet property="positionLocalizedTitleLabel" destination="5xQ-km-akD" id="fYX-qN-SRz"/>
                 <outlet property="positionNativeTitleLabel" destination="89U-86-mWp" id="zuW-ZL-9Zk"/>
@@ -198,6 +201,53 @@
                         <action selector="onResumeFollowingButtonClicked:" destination="-1" eventType="touchUpInside" id="GRH-eG-glC"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n7M-8R-EZ9" userLabel="leftWidgetsContainer">
+                    <rect key="frame" x="0.0" y="100" width="110" height="80"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="qkc-ad-eNc" userLabel="leftWidgetsContainerBackground">
+                            <rect key="frame" x="0.0" y="0.0" width="110" height="80"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 km/h" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="7zY-7m-aJk" userLabel="currentSpeedLabel">
+                            <rect key="frame" x="0.0" y="0.0" width="110" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="Aj5-d2-wqT"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                            <color key="textColor" red="0.396078431372549" green="0.396078431372549" blue="0.396078431372549" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00000 m" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" translatesAutoresizingMaskIntoConstraints="NO" id="p2X-uL-p4S" userLabel="currentAltitudeLabel">
+                            <rect key="frame" x="0.0" y="40" width="110" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="40" id="BPy-4k-cXl"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" pointSize="23"/>
+                            <color key="textColor" red="0.39607843139999999" green="0.39607843139999999" blue="0.39607843139999999" alpha="1" colorSpace="calibratedRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <accessibility key="accessibilityConfiguration">
+                        <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
+                    </accessibility>
+                    <constraints>
+                        <constraint firstItem="p2X-uL-p4S" firstAttribute="leading" secondItem="n7M-8R-EZ9" secondAttribute="leading" id="6jJ-4Z-neW"/>
+                        <constraint firstItem="7zY-7m-aJk" firstAttribute="top" secondItem="n7M-8R-EZ9" secondAttribute="top" id="GVX-CB-LSj"/>
+                        <constraint firstItem="7zY-7m-aJk" firstAttribute="width" secondItem="n7M-8R-EZ9" secondAttribute="width" id="Itd-s8-WyQ"/>
+                        <constraint firstItem="qkc-ad-eNc" firstAttribute="leading" secondItem="n7M-8R-EZ9" secondAttribute="leading" id="Jqu-s9-KLb"/>
+                        <constraint firstAttribute="centerX" secondItem="7zY-7m-aJk" secondAttribute="centerX" id="PQN-Zu-6nT"/>
+                        <constraint firstAttribute="bottom" secondItem="qkc-ad-eNc" secondAttribute="bottom" id="XBH-BN-tP2"/>
+                        <constraint firstAttribute="height" constant="80" id="e6r-0H-fQK"/>
+                        <constraint firstItem="qkc-ad-eNc" firstAttribute="top" secondItem="n7M-8R-EZ9" secondAttribute="top" id="fft-Dj-Efb"/>
+                        <constraint firstAttribute="width" constant="110" id="goS-ig-0dn"/>
+                        <constraint firstAttribute="trailing" secondItem="qkc-ad-eNc" secondAttribute="trailing" id="hjO-iI-htS"/>
+                        <constraint firstItem="7zY-7m-aJk" firstAttribute="bottom" secondItem="p2X-uL-p4S" secondAttribute="top" id="mN3-yI-GV0"/>
+                        <constraint firstAttribute="trailing" secondItem="p2X-uL-p4S" secondAttribute="trailing" id="xf0-gT-sxm"/>
+                    </constraints>
+                </view>
             </subviews>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="D2C-DA-iEq" secondAttribute="bottom" constant="8" id="0G2-84-eZ8"/>
@@ -211,9 +261,11 @@
                 <constraint firstAttribute="bottom" secondItem="TDo-FW-7Xk" secondAttribute="bottom" constant="8" id="HVm-fH-eJQ"/>
                 <constraint firstAttribute="centerY" secondItem="ZTA-aX-jQn" secondAttribute="centerY" constant="-50" id="K2T-5B-7mU"/>
                 <constraint firstItem="Mqu-Kg-TG4" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" constant="8" id="PyK-Rl-It5"/>
+                <constraint firstItem="n7M-8R-EZ9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WGf-Ad-CZU"/>
                 <constraint firstAttribute="centerY" secondItem="BiQ-TS-B8N" secondAttribute="centerY" id="XTm-K8-Ukb"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aeR-PM-vkT"/>
                 <constraint firstItem="TDo-FW-7Xk" firstAttribute="leading" secondItem="j9F-8j-9bu" secondAttribute="trailing" constant="24" id="aiY-Mj-cbR"/>
+                <constraint firstItem="n7M-8R-EZ9" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" id="fPM-Ji-BrH"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="srH-59-0fX"/>
                 <constraint firstAttribute="trailing" secondItem="Mqu-Kg-TG4" secondAttribute="trailing" constant="8" id="vDT-YM-C7O"/>
             </constraints>

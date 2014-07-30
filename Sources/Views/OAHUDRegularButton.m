@@ -14,7 +14,7 @@
 
 - (UIImage*)backgroundImage
 {
-    return [[OsmAndApp instance].appearance hudButtonBackgroundForStyle:OAButtonStyleRegular];
+    return [[OsmAndApp instance].appearance hudViewBackgroundForStyle:OAHudViewStyleRegular];
 }
 
 @end

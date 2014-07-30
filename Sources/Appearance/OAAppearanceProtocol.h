@@ -8,19 +8,25 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSInteger, OAButtonStyle)
+typedef NS_ENUM(NSUInteger, OAHudViewStyle)
 {
-    OAButtonStyleRegular = 0,
-    OAButtonStyleLeadingSideDock,
-    OAButtonStyleTrailingSideDock,
-    OAButtonStyleTopSideDock,
-    OAButtonStyleBottomSideDock,
+    OAHudViewStyleRegular = 0,
+
+    OAHudViewStyleLeadingSideDock,
+    OAHudViewStyleTrailingSideDock,
+    OAHudViewStyleTopSideDock,
+    OAHudViewStyleBottomSideDock,
+
+    OAHudViewStyleTopLeadingSideDock,
+    OAHudViewStyleBottomLeadingSideDock,
+    OAHudViewStyleTopTrailingSideDock,
+    OAHudViewStyleBottomTrailingSideDock
 };
 
 @protocol OAAppearanceProtocol <NSObject>
 @required
 
-- (UIImage*)hudRoundButtonBackgroundForButton:(UIButton*)button;
-- (UIImage*)hudButtonBackgroundForStyle:(OAButtonStyle)style;
+- (UIImage*)hudViewRoundBackgroundWithRadius:(CGFloat)radius;
+- (UIImage*)hudViewBackgroundForStyle:(OAHudViewStyle)style;
 
 @end

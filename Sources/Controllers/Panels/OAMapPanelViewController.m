@@ -133,6 +133,9 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    if (_hudViewController == nil)
+        return UIStatusBarStyleDefault;
+
     return _hudViewController.preferredStatusBarStyle;
 }
 

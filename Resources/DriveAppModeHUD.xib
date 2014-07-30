@@ -103,6 +103,9 @@
                             <state key="normal" backgroundImage="HUD_compass_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="0eE-TZ-mFK"/>
+                            </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ykf-s1-V3b" userLabel="compassImage">
                             <rect key="frame" x="17" y="11" width="6" height="18"/>
@@ -168,7 +171,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BiQ-TS-B8N" userLabel="debugButton">
-                    <rect key="frame" x="8" y="314" width="40" height="40"/>
+                    <rect key="frame" x="8" y="264" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="PL0-aQ-1cW"/>
@@ -192,7 +195,7 @@
                 <constraint firstAttribute="trailing" secondItem="D2C-DA-iEq" secondAttribute="trailing" id="Cee-Ey-frx"/>
                 <constraint firstAttribute="centerY" secondItem="ZTA-aX-jQn" secondAttribute="centerY" constant="-50" id="K2T-5B-7mU"/>
                 <constraint firstItem="Mqu-Kg-TG4" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" constant="8" id="PyK-Rl-It5"/>
-                <constraint firstAttribute="centerY" secondItem="BiQ-TS-B8N" secondAttribute="centerY" constant="-50" id="XTm-K8-Ukb"/>
+                <constraint firstAttribute="centerY" secondItem="BiQ-TS-B8N" secondAttribute="centerY" id="XTm-K8-Ukb"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aeR-PM-vkT"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="srH-59-0fX"/>
                 <constraint firstAttribute="trailing" secondItem="Mqu-Kg-TG4" secondAttribute="trailing" constant="8" id="vDT-YM-C7O"/>

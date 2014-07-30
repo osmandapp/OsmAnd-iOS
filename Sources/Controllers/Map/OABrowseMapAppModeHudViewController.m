@@ -18,7 +18,6 @@
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
-#import "UIView+VisibilityAndInput.h"
 
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
@@ -44,7 +43,6 @@
 {
     OsmAndAppInstance _app;
 
-    OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
@@ -85,9 +83,6 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
-    _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesStatusChanged)
-                                                                 andObserve:_app.locationServices.statusObservable];
 }
 
 - (void)deinit
@@ -99,9 +94,9 @@
     [super viewDidLoad];
 	
     if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-        [_driveModeButton showAndEnableInput];
+        _driveModeButton.hidden = NO;
     else
-        [_driveModeButton hideAndDisableInput];
+        _driveModeButton.hidden = YES;
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _zoomInButton.enabled = [_mapViewController canZoomIn];
@@ -146,15 +141,6 @@
     _app.mapMode = newMode;
 }
 
-- (void)onLocationServicesStatusChanged
-{
-    if (_app.locationServices.status == OALocationServicesStatusInactive)
-    {
-        // If location services are stopped, set free mode for map, since location data no available
-        _app.mapMode = OAMapModeFree;
-    }
-}
-
 - (void)onMapModeChanged
 {
     UIImage* modeImage = nil;
@@ -178,9 +164,10 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-            [_driveModeButton showAndEnableInput];
+            _driveModeButton.hidden = NO;
         else
-            [_driveModeButton hideAndDisableInput];
+            _driveModeButton.hidden = YES;
+        
         [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
     });
 }

@@ -18,7 +18,6 @@
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
-#import "UIView+VisibilityAndInput.h"
 #import "OAUserInteractionInterceptorView.h"
 #import "OALog.h"
 
@@ -44,11 +43,13 @@
 
     BOOL _iOS70plus;
 
-    OAAutoObserverProxy* _locationServicesStatusObserver;
+    OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
 
     OAMapViewController* _mapViewController;
+
+    NSTimer* _fadeInTimer;
 
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -77,15 +78,15 @@
 
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
                                                      andObserve:_mapViewController.azimuthObservable];
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
-    _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesStatusChanged)
-                                                                 andObserve:_app.locationServices.statusObservable];
 }
 
 - (void)deinit
@@ -115,7 +116,7 @@
     if (!_iOS70plus)
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
 
-    [self optionalControlsFadeInAnimation];
+    [self fadeInOptionalControlsWithDelay];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -131,53 +132,62 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (void)fadeInOptionalControlsWithDelay
+{
+    if (_fadeInTimer)
+        [_fadeInTimer invalidate];
+    _fadeInTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
+                                                    target:self
+                                                  selector:@selector(optionalControlsFadeInAnimation)
+                                                  userInfo:nil
+                                                   repeats:NO];
+}
+
 - (void)optionalControlsFadeInAnimation
 {
     [UIView animateWithDuration:0.3
-                          delay:3.0
-                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.zoomButtons.alpha = 0.0f;
-                     } completion:^(BOOL finished) {
-                         self.zoomButtons.userInteractionEnabled = NO;
                      }];
 }
 
 - (void)hideOptionalControls
 {
-    [self.zoomButtons hideAndDisableInput];
+    self.zoomButtons.hidden = YES;
 }
 
 - (void)optionalControlsFadeOutAnimation
 {
     [UIView animateWithDuration:0.3
-                          delay:0.0
-                        options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.zoomButtons.alpha = 1.0f;
-                     } completion:^(BOOL finished) {
-                         self.zoomButtons.userInteractionEnabled = YES;
-
-                         [self optionalControlsFadeInAnimation];
                      }];
 }
 
 - (void)showOptionalControls
 {
-    [self.zoomButtons showAndEnableInput];
+    self.zoomButtons.hidden = NO;
 }
 
 - (BOOL)shouldInterceptInteration:(CGPoint)point withEvent:(UIEvent *)event inView:(UIView*)view
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (_fadeInTimer)
+        {
+            [_fadeInTimer invalidate];
+            _fadeInTimer = nil;
+        }
+
         [self optionalControlsFadeOutAnimation];
+        [self fadeInOptionalControlsWithDelay];
     });
 
     return NO;
 }
 
-- (void)onLocationServicesStatusChanged
+- (void)onMapModeChanged
 {
+    //TODO show resume button!
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
@@ -190,6 +200,11 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
     });
+}
+
+- (IBAction)onCompassButtonClicked:(id)sender
+{
+    [_mapViewController animatedAlignAzimuthToNorth];
 }
 
 - (IBAction)onZoomInButtonClicked:(id)sender

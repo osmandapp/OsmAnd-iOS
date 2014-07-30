@@ -89,6 +89,9 @@
                             <state key="normal" backgroundImage="HUD_compass_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="mNN-dD-Lxe"/>
+                            </connections>
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="5yK-dE-d2w" userLabel="compassImage">
                             <rect key="frame" x="17" y="11" width="6" height="18"/>
@@ -168,7 +171,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="obc-yH-Ohs" userLabel="debugButton">
-                    <rect key="frame" x="16" y="542" width="40" height="40"/>
+                    <rect key="frame" x="16" y="492" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="hor-KL-Zp9"/>
@@ -194,7 +197,7 @@
                 <constraint firstAttribute="trailing" secondItem="bHT-nX-lvs" secondAttribute="trailing" id="VSz-i6-5M1"/>
                 <constraint firstItem="4oD-jz-w9b" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="XNS-rP-wOG"/>
                 <constraint firstAttribute="trailing" secondItem="xFR-E2-crG" secondAttribute="trailing" id="bRC-ZO-Fkg"/>
-                <constraint firstAttribute="centerY" secondItem="obc-yH-Ohs" secondAttribute="centerY" constant="-50" id="etk-eU-1py"/>
+                <constraint firstAttribute="centerY" secondItem="obc-yH-Ohs" secondAttribute="centerY" id="etk-eU-1py"/>
                 <constraint firstAttribute="trailing" secondItem="wvk-dT-zLx" secondAttribute="trailing" id="meT-OV-K6g"/>
                 <constraint firstAttribute="bottom" secondItem="bHT-nX-lvs" secondAttribute="bottom" constant="16" id="pJy-wU-2gH"/>
             </constraints>

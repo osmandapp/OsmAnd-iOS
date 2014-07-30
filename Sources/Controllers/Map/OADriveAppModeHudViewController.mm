@@ -22,6 +22,8 @@
 #import "OALog.h"
 #include "Localization.h"
 
+#import "OAAppearance.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Model/Road.h>
 
@@ -124,6 +126,13 @@
 #if !defined(OSMAND_IOS_DEV)
     [_debugButton hideAndDisableInput];
 #endif // !defined(OSMAND_IOS_DEV)
+
+    ///
+    UIImage* image = [OAAppearance drawHudButtonBackgroundForStyle:OAButtonStyleRegular
+                                                     withFillColor:[UIColor colorWithRed:1.0f green:1.0f blue:1.0f alpha:0.9f]
+                                                    andBorderColor:[UIColor colorWithRed:0.6f green:0.6f blue:0.6f alpha:0.9f]];
+    [self.resumeFollowingButton setBackgroundImage:image forState:UIControlStateNormal];
+    ///
 }
 
 - (void)viewWillAppear:(BOOL)animated

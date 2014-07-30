@@ -185,7 +185,7 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="Mxq-8x-pp9"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDo-FW-7Xk" userLabel="resumeFollowingButton" customClass="OAHUDButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TDo-FW-7Xk" userLabel="resumeFollowingButton">
                     <rect key="frame" x="39" y="520" width="242" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>

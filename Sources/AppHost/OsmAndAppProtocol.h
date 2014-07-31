@@ -17,6 +17,9 @@
 #import "OAWorldRegion.h"
 #import "OADownloadsManager.h"
 #import "OAAppearanceProtocol.h"
+#if defined(OSMAND_IOS_DEV)
+#   import "OADebugSettings.h"
+#endif // defined(OSMAND_IOS_DEV)
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -59,5 +62,9 @@
 
 @property(readonly) id<OAAppearanceProtocol> appearance;
 @property(readonly) OAObservable* appearanceChangeObservable;
+
+#if defined(OSMAND_IOS_DEV)
+@property(readonly) OADebugSettings* debugSettings;
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

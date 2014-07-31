@@ -32,6 +32,8 @@
 
     QRadioSection* _visualMetricsSection;
 
+    QBooleanElement* _useRawSpeedAndAltitudeOnHUDElement;
+
     OAMapViewController* __weak _mapViewController;
     OAMapRendererView* __weak _mapRendererView;
 }
@@ -83,6 +85,15 @@
     };
     [rootElement addSection: visualMetricsSection];
 
+    // HUD section
+    QSection* hudSection = [[QSection alloc] initWithTitle:OALocalizedString(@"HUD")];
+    [rootElement addSection:hudSection];
+
+    QBooleanElement* useRawSpeedAndAltitudeOnHUDElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Show raw speed/altritude")
+                                                                                       BoolValue:NO];
+    useRawSpeedAndAltitudeOnHUDElement.controllerAction = NSStringFromSelector(@selector(onUseRawSpeedAndAltitudeOnHUDSettingChanged));
+    [hudSection addElement:useRawSpeedAndAltitudeOnHUDElement];
+
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
@@ -93,6 +104,8 @@
         _forcedGpsAccuracySection = forcedGpsAccuracySection;
 
         _visualMetricsSection = visualMetricsSection;
+
+        _useRawSpeedAndAltitudeOnHUDElement = useRawSpeedAndAltitudeOnHUDElement;
     }
     return self;
 }
@@ -117,6 +130,8 @@
     _forcedGpsAccuracySection.selected = _app.locationServices.forceAccuracy;
 
     _visualMetricsSection.selected = _mapViewController.visualMetricsMode;
+
+    _useRawSpeedAndAltitudeOnHUDElement.boolValue = _app.debugSettings.useRawSpeedAndAltitudeOnHUD;
 }
 
 - (void)onForcedRenderingSettingChanged
@@ -137,6 +152,11 @@
 - (void)onVisualMetricsSettingChanged
 {
     _mapViewController.visualMetricsMode = (OAVisualMetricsMode)_visualMetricsSection.selected;
+}
+
+- (void)onUseRawSpeedAndAltitudeOnHUDSettingChanged
+{
+    _app.debugSettings.useRawSpeedAndAltitudeOnHUD = _useRawSpeedAndAltitudeOnHUDElement.boolValue;
 }
 
 @end

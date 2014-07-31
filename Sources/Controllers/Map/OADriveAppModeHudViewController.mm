@@ -210,6 +210,13 @@
     self.zoomButtons.hidden = NO;
 }
 
+- (void)safeUpdateCurrentLocation
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateCurrentLocation];
+    });
+}
+
 - (void)updateCurrentLocation
 {
     [self updateCurrentSpeedAndAltitude];
@@ -219,11 +226,13 @@
 - (void)updateCurrentSpeedAndAltitude
 {
 #if defined(OSMAND_IOS_DEV)
-    OALog(@"Speed %@ (%f), Altitude %@ (%f)",
-          [_app.locationFormatter stringFromSpeed:_lastCapturedLocation.speed],
-          _lastCapturedLocation.speed,
-          [_app.locationFormatter stringFromDistance:_lastCapturedLocation.altitude],
-          _lastCapturedLocation.altitude);
+    if (_app.debugSettings.useRawSpeedAndAltitudeOnHUD)
+    {
+        self.currentSpeedLabel.text = [NSString stringWithFormat:@"%.1f km/h", _lastCapturedLocation.speed * 3.6];
+        self.currentAltitudeLabel.text = [NSString stringWithFormat:@"%d m", (int)_lastCapturedLocation.altitude];
+
+        return;
+    }
 #endif // defined(OSMAND_IOS_DEV)
 
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
@@ -269,7 +278,7 @@
         [_locationUpdateTimer invalidate];
     _locationUpdateTimer = [NSTimer scheduledTimerWithTimeInterval:1.0
                                                             target:self
-                                                          selector:@selector(updateCurrentLocation)
+                                                          selector:@selector(safeUpdateCurrentLocation)
                                                           userInfo:nil
                                                            repeats:YES];
 }
@@ -320,7 +329,7 @@
         return;
 
     _lastCapturedLocation = _app.locationServices.lastKnownLocation;
-    [self updateCurrentLocation];
+    [self safeUpdateCurrentLocation];
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender

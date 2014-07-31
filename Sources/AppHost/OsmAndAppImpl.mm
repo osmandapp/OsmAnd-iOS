@@ -50,6 +50,10 @@
 
 @synthesize favoritesCollection = _favoritesCollection;
 
+#if defined(OSMAND_IOS_DEV)
+@synthesize debugSettings = _debugSettings;
+#endif // defined(OSMAND_IOS_DEV)
+
 - (instancetype)init
 {
     self = [super init];
@@ -64,6 +68,10 @@
 
         // First of all, initialize user defaults
         [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
+
+#if defined(OSMAND_IOS_DEV)
+        _debugSettings = [[OADebugSettings alloc] init];
+#endif // defined(OSMAND_IOS_DEV)
     }
     return self;
 }

@@ -73,7 +73,7 @@
                                                                       metrics:nil
                                                                         views:@{@"view":_mapViewController.view}]];
 
-    [self inflateHUD];
+    [self updateHUD:NO];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -82,7 +82,7 @@
 
     if (_hudInvalidated)
     {
-        [self inflateHUD];
+        [self updateHUD:animated];
         _hudInvalidated = NO;
     }
 }
@@ -90,43 +90,51 @@
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
 
-- (void)inflateHUD
+- (void)updateHUD:(BOOL)animated
 {
-    // Remove previous HUD
-    if (_hudViewController != nil)
-    {
-        [_hudViewController removeFromParentViewController];
-        if (_hudViewController.isViewLoaded)
-            [_hudViewController.view removeFromSuperview];
-    }
-    _hudViewController = nil;
-
-    // Create correct HUD
+    // Inflate new HUD controller and add it
+    UIViewController* newHudController = nil;
     if (_app.appMode == OAAppModeBrowseMap)
     {
-        _hudViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
+        newHudController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
     }
     else if (_app.appMode == OAAppModeDrive)
     {
-        _hudViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
+        newHudController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
                                                                                bundle:nil];
     }
-    else
-        return;
+    [self addChildViewController:newHudController];
 
-    // Present new HUD
-    [self addChildViewController:_hudViewController];
-    [_hudViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addSubview:_hudViewController.view];
+    // Switch views
+    [newHudController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addSubview:newHudController.view];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
                                                                       options:0
                                                                       metrics:nil
-                                                                        views:@{@"view":_hudViewController.view}]];
+                                                                        views:@{@"view":newHudController.view}]];
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
                                                                       options:0
                                                                       metrics:nil
-                                                                        views:@{@"view":_hudViewController.view}]];
+                                                                        views:@{@"view":newHudController.view}]];
+    if (animated && _hudViewController != nil)
+    {
+        [UIView transitionFromView:_hudViewController.view
+                            toView:newHudController.view
+                          duration:0.6
+                           options:UIViewAnimationOptionTransitionFlipFromTop
+                        completion:nil];
+    }
+    else
+    {
+        if (_hudViewController != nil)
+            [_hudViewController.view removeFromSuperview];
+    }
+
+    // Remove previous view controller if such exists
+    if (_hudViewController != nil)
+        [_hudViewController removeFromParentViewController];
+    _hudViewController = newHudController;
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
@@ -148,7 +156,7 @@
             return;
         }
 
-        [self inflateHUD];
+        [self updateHUD:YES];
     });
 }
 

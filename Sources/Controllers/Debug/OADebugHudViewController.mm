@@ -163,4 +163,24 @@
 
 #pragma mark -
 
++ (OADebugHudViewController*)attachTo:(UIViewController*)hostController
+{
+    OADebugHudViewController* instance = [[OADebugHudViewController alloc] initWithNibName:@"DebugHUD"
+                                                                                    bundle:nil];
+    [hostController addChildViewController:instance];
+    [instance.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [hostController.view addSubview:instance.view];
+    [hostController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:@{@"view":instance.view}]];
+    [hostController.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                                options:0
+                                                                                metrics:nil
+                                                                                  views:@{@"view":instance.view}]];
+    [hostController.view bringSubviewToFront:instance.view];
+    
+    return instance;
+}
+
 @end

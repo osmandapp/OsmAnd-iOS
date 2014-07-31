@@ -10,4 +10,6 @@
 
 @interface OADebugHudViewController : UIViewController
 
++ (OADebugHudViewController*)attachTo:(UIViewController*)hostController;
+
 @end

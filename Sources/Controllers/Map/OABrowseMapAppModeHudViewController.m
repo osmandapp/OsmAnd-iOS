@@ -222,12 +222,7 @@
 #if defined(OSMAND_IOS_DEV)
     if (_debugHudViewController == nil)
     {
-        _debugHudViewController = [[OADebugHudViewController alloc] initWithNibName:@"DebugHUD" bundle:nil];
-        [self addChildViewController:_debugHudViewController];
-        _debugHudViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _debugHudViewController.view.frame = self.view.frame;
-        [self.view addSubview:_debugHudViewController.view];
-        [self.view bringSubviewToFront:_debugHudViewController.view];
+        _debugHudViewController = [OADebugHudViewController attachTo:self];
     }
     else
     {

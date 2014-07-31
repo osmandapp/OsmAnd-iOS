@@ -20,6 +20,15 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
     OALocationServicesStatusSuspended
 };
 
+#if defined(OSMAND_IOS_DEV)
+typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
+{
+    OALocationServicesForcedAccuracyNone = 0,
+    OALocationServicesForcedAccuracyBest,
+    OALocationServicesForcedAccuracyBestForNavigation
+};
+#endif // defined(OSMAND_IOS_DEV)
+
 @interface OALocationServices : NSObject
 
 - (instancetype)initWith:(OsmAndAppInstance)app;
@@ -40,5 +49,9 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property(readonly) OAObservable* updateObserver;
 
 + (void)showDeniedAlert;
+
+#if defined(OSMAND_IOS_DEV)
+@property(nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

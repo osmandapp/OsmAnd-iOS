@@ -27,6 +27,9 @@
 
     QBooleanElement* _forcedRenderingElement;
     QBooleanElement* _hideStaticSymbolsElement;
+
+    QRadioSection* _forcedGpsAccuracySection;
+
     QRadioSection* _visualMetricsSection;
 
     OAMapViewController* __weak _mapViewController;
@@ -57,6 +60,17 @@
     hideStaticSymbolsElement.controllerAction = NSStringFromSelector(@selector(onHideStaticSymbolsSettingChanged));
     [rendererSection addElement:hideStaticSymbolsElement];
 
+    // Forced GPS accuracy section
+    QRadioSection* forcedGpsAccuracySection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"None"),
+                                                                                     OALocalizedString(@"Best"),
+                                                                                     OALocalizedString(@"Best for Navigation")]
+                                                                          selected:0
+                                                                             title:OALocalizedString(@"Forced GPS accuracy")];
+    forcedGpsAccuracySection.onSelected = ^(){
+        [self onForcedGpsAccuracyChanged];
+    };
+    [rootElement addSection: forcedGpsAccuracySection];
+
     // Visual metrics section
     QRadioSection* visualMetricsSection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"Off"),
                                                                                  OALocalizedString(@"Binary Map Data"),
@@ -75,6 +89,9 @@
 
         _forcedRenderingElement = forcedRenderingElement;
         _hideStaticSymbolsElement = hideStaticSymbolsElement;
+
+        _forcedGpsAccuracySection = forcedGpsAccuracySection;
+
         _visualMetricsSection = visualMetricsSection;
     }
     return self;
@@ -94,8 +111,12 @@
     if ([mapVC isViewLoaded])
         _mapRendererView = (OAMapRendererView*)mapVC.view;
 
-    [_forcedRenderingElement setBoolValue:_mapRendererView.forcedRenderingOnEachFrame];
-    [_visualMetricsSection setSelected:_mapViewController.visualMetricsMode];
+    _forcedRenderingElement.boolValue = _mapRendererView.forcedRenderingOnEachFrame;
+    _hideStaticSymbolsElement.boolValue = _mapViewController.hideStaticSymbols;
+
+    _forcedGpsAccuracySection.selected = _app.locationServices.forceAccuracy;
+
+    _visualMetricsSection.selected = _mapViewController.visualMetricsMode;
 }
 
 - (void)onForcedRenderingSettingChanged
@@ -106,6 +127,11 @@
 - (void)onHideStaticSymbolsSettingChanged
 {
     _mapViewController.hideStaticSymbols = _hideStaticSymbolsElement.boolValue;
+}
+
+- (void)onForcedGpsAccuracyChanged
+{
+    _app.locationServices.forceAccuracy = (OALocationServicesForcedAccuracy)_forcedGpsAccuracySection.selected;
 }
 
 - (void)onVisualMetricsSettingChanged

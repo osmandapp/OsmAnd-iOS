@@ -218,6 +218,14 @@
 
 - (void)updateCurrentSpeedAndAltitude
 {
+#if defined(OSMAND_IOS_DEV)
+    OALog(@"Speed %@ (%f), Altitude %@ (%f)",
+          [_app.locationFormatter stringFromSpeed:_lastCapturedLocation.speed],
+          _lastCapturedLocation.speed,
+          [_app.locationFormatter stringFromDistance:_lastCapturedLocation.altitude],
+          _lastCapturedLocation.altitude);
+#endif // defined(OSMAND_IOS_DEV)
+
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
     self.currentSpeedLabel.text = [_app.locationFormatter stringFromSpeed:speed];
     self.currentAltitudeLabel.text = [_app.locationFormatter stringFromDistance:_lastCapturedLocation.altitude];

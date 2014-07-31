@@ -228,8 +228,8 @@
 #if defined(OSMAND_IOS_DEV)
     if (_app.debugSettings.useRawSpeedAndAltitudeOnHUD)
     {
-        self.currentSpeedLabel.text = [NSString stringWithFormat:@"%.1f km/h", _lastCapturedLocation.speed * 3.6];
-        self.currentAltitudeLabel.text = [NSString stringWithFormat:@"%d m", (int)_lastCapturedLocation.altitude];
+        self.currentSpeedLabel.text = [NSString stringWithFormat:@"(R) %.1f km/h", _lastCapturedLocation.speed * 3.6];
+        self.currentAltitudeLabel.text = [NSString stringWithFormat:@"(R) %d m", (int)_lastCapturedLocation.altitude];
 
         return;
     }

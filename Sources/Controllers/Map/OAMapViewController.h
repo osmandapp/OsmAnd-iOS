@@ -43,6 +43,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
 
+@property(readonly) OAObservable* framePreparedObservable;
+
 #if defined(OSMAND_IOS_DEV)
 @property BOOL hideStaticSymbols;
 @property(nonatomic) OAVisualMetricsMode visualMetricsMode;

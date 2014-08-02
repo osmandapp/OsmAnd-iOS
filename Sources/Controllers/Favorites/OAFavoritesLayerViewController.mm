@@ -242,7 +242,7 @@
                                     Visibility:YES];
 
     // Go to favorite location
-    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition()]
+    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition31()]
                                                         andZoom:kDefaultFavoriteZoom
                                                        animated:YES];
 }
@@ -274,7 +274,7 @@
             favoriteElement.value = nil;
         else
         {
-            const auto& favoritePosition31 = itemData.favorite->getPosition();
+            const auto& favoritePosition31 = itemData.favorite->getPosition31();
             const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
             const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
 

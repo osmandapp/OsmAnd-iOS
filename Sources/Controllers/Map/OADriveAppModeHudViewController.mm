@@ -14,6 +14,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 #if defined(OSMAND_IOS_DEV)
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
@@ -25,6 +26,7 @@
 #import "OAAppearance.h"
 
 #include <OsmAndCore.h>
+#include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Model/Road.h>
 
 @interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
@@ -58,12 +60,15 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
+    OAAutoObserverProxy* _mapFramePreparedObserver;
 
     CLLocation* _lastCapturedLocation;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 
     CLLocation* _lastQueriedLocation;
     std::shared_ptr<const OsmAnd::Model::Road> _road;
+    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+    NSObject* _roadLocatorSync;
 
     NSTimer* _fadeInTimer;
 
@@ -105,14 +110,31 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
+    _mapFramePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onMapFramePrepared)
+                                                           andObserve:_mapViewController.framePreparedObservable];
 
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
+
+    _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+    _roadLocatorSync = [[NSObject alloc] init];
+
+    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                                 [self]
+                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                  const QList< QString >& added,
+                                                                  const QList< QString >& removed,
+                                                                  const QList< QString >& updated)
+                                                                 {
+                                                                     [self onLocalResourcesChanged];
+                                                                 });
 }
 
 - (void)deinit
 {
+    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 - (void)viewDidLoad
@@ -248,28 +270,79 @@
     {
         [self restartLocationUpdateTimer];
 
-        //TODO: perform query and run:
-        [self updatePositionLabels];
+        const OsmAnd::PointI position31(
+                                        OsmAnd::Utilities::get31TileNumberX(_lastQueriedLocation.coordinate.longitude),
+                                        OsmAnd::Utilities::get31TileNumberY(_lastQueriedLocation.coordinate.latitude));
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            @synchronized(_roadLocatorSync)
+            {
+                // Try to find road in basemap, then in detaled map
+                _road = _roadLocator->findNearestRoad(position31,
+                                                      15.0 /* meters */,
+                                                      OsmAnd::RoutingDataLevel::Basemap);
+                if (!_road)
+                {
+                    _road = _roadLocator->findNearestRoad(position31,
+                                                          15.0 /* meters */,
+                                                          OsmAnd::RoutingDataLevel::Detailed);
+                }
+            }
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updatePositionLabels];
+            });
+        });
     }
 }
 
 - (void)updatePositionLabels
 {
-    if (_road)
+    NSString* localizedTitle = nil;
+    NSString* nativeTitle = nil;
+
+    std::shared_ptr<const OsmAnd::Model::Road> road;
+    @synchronized(_roadLocatorSync)
     {
-        //TODO: fill road details
+        road = _road;
     }
-    else
+
+    if (road)
     {
-        self.positionLocalizedTitleLabel.text = [_app.locationFormatter stringFromCoordinate:_lastCapturedLocation.coordinate];
+        const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
+        const auto localizedName = road->getNameInLanguage(mainLanguage);
+        const auto nativeName = road->getNameInNativeLanguage();
+
+        if (!localizedName.isNull())
+            localizedTitle = localizedName.toNSString();
+        if (!nativeName.isNull())
+            nativeTitle = nativeName.toNSString();
+    }
+
+    if (localizedTitle == nil && nativeTitle != nil)
+    {
+        localizedTitle = nativeTitle;
+        nativeTitle = nil;
+    }
+
+    if (localizedTitle == nil)
+    {
+        localizedTitle = [_app.locationFormatter stringFromCoordinate:_lastCapturedLocation.coordinate];;
+    }
+
+    if (nativeTitle == nil)
+    {
         if (_lastCapturedLocation.course >= 0)
         {
             NSString* course = [_app.locationFormatter stringFromBearing:_lastCapturedLocation.course];
-            self.positionNativeTitleLabel.text = OALocalizedString(@"Heading %@", course);
+            nativeTitle = OALocalizedString(@"Heading %@", course);
         }
         else
-            self.positionNativeTitleLabel.text = OALocalizedString(@"No movement");
+            nativeTitle = OALocalizedString(@"No movement");
     }
+
+    self.positionLocalizedTitleLabel.text = localizedTitle;
+    self.positionNativeTitleLabel.text = nativeTitle;
 }
 
 - (void)restartLocationUpdateTimer
@@ -330,6 +403,28 @@
 
     _lastCapturedLocation = _app.locationServices.lastKnownLocation;
     [self safeUpdateCurrentLocation];
+}
+
+- (void)onLocalResourcesChanged
+{
+    if (![self isViewLoaded])
+        return;
+
+    @synchronized(_roadLocatorSync)
+    {
+        _road.reset();
+        _roadLocator->clearCache();
+    }
+    [self safeUpdateCurrentLocation];
+}
+
+- (void)onMapFramePrepared
+{
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)_mapViewController.mapRendererView;
+
+    _roadLocator->clearCacheNotInTiles(mapRendererView.visibleTiles.toSet(),
+                                       mapRendererView.zoomLevel,
+                                       true);
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender

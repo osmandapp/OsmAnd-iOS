@@ -120,6 +120,7 @@
     
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
+    OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
@@ -199,6 +200,7 @@
     _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
+    _framePreparedObservable = [[OAObservable alloc] init];
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -206,6 +208,8 @@
     _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLayersConfigurationChanged)
                                                               andObserve:_app.data.mapLayersConfiguration.changeObservable];
+    _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onMapRendererFramePrepared)];
 
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -328,6 +332,7 @@
     mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
     [_stateObserver observe:mapView.stateObservable];
     [_settingsObserver observe:mapView.settingsObservable];
+    [_framePreparedObserver observe:mapView.framePreparedObservable];
 
     // Add "My location" and "My course" markers
     [mapView addSymbolProvider:_myMarkersCollection];
@@ -887,6 +892,11 @@
 - (void)onMapRendererSettingsChanged:(id)observer withKey:(id)key
 {
     [_stateObservable notifyEventWithKey:key];
+}
+
+- (void)onMapRendererFramePrepared
+{
+    [_framePreparedObservable notifyEvent];
 }
 
 - (void)animatedAlignAzimuthToNorth
@@ -1533,6 +1543,8 @@
         [mapView setZoom:zoom];
     }
 }
+
+@synthesize framePreparedObservable = _framePreparedObservable;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize hideStaticSymbols = _hideStaticSymbols;

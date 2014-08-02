@@ -85,11 +85,15 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 @property(nonatomic, readonly) float scaledTileSizeOnScreen;
 @property(readonly) OAObservable* stateObservable;
 
+@property(nonatomic, readonly) QList<OsmAnd::TileId> visibleTiles;
+
 @property(nonatomic, readonly) float minZoom;
 @property(nonatomic, readonly) float maxZoom;
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
+
+@property(readonly) OAObservable* framePreparedObservable;
 
 @property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;
 

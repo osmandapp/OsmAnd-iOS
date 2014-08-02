@@ -32,4 +32,6 @@
 @property(nonatomic, readonly) float minZoom;
 @property(nonatomic, readonly) float maxZoom;
 
+@property(readonly) OAObservable* framePreparedObservable;
+
 @end

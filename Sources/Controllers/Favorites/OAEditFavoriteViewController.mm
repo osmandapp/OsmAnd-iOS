@@ -195,7 +195,7 @@
                                     Visibility:YES];
 
     // Go to favorite location
-    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:_favorite->getPosition()]
+    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:_favorite->getPosition31()]
                                                         andZoom:kDefaultFavoriteZoom
                                                        animated:YES];
 }

@@ -70,6 +70,7 @@
 {
     _stateObservable = [[OAObservable alloc] init];
     _settingsObservable = [[OAObservable alloc] init];
+    _framePreparedObservable = [[OAObservable alloc] init];
 
     _forcedRenderingOnEachFrame = NO;
     
@@ -90,10 +91,20 @@
     _renderer->setConfiguration(rendererConfig);
     OAObservable* stateObservable = _stateObservable;
     _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
-        [stateObservable](const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges){
+        [stateObservable]
+        (const OsmAnd::IMapRenderer* renderer, const OsmAnd::MapRendererStateChange thisChange, const uint32_t allChanges)
+        {
             [stateObservable notifyEventWithKey:[NSNumber numberWithUnsignedInteger:(OAMapRendererViewStateEntry)thisChange]];
         });
-    
+
+    OAObservable* framePreparedObservable = _framePreparedObservable;
+    _renderer->framePreparedObservable.attach((__bridge const void*)_framePreparedObservable,
+        [framePreparedObservable]
+        (const OsmAnd::IMapRenderer* renderer)
+        {
+            [framePreparedObservable notifyEvent];
+        });
+
     // Create animator for that map
     _animator.reset(new OsmAnd::MapAnimator());
     _animator->setMapRenderer(_renderer);
@@ -106,6 +117,7 @@
     
     // Unregister observer
     _renderer->stateChangeObservable.detach((__bridge const void*)_stateObservable);
+    _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
 }
 
 - (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
@@ -245,6 +257,11 @@
 
 @synthesize stateObservable = _stateObservable;
 
+- (QList<OsmAnd::TileId>)visibleTiles
+{
+    return _renderer->getVisibleTiles();
+}
+
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
 {
     if (!location)
@@ -258,6 +275,8 @@
         return NO;
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
+
+@synthesize framePreparedObservable = _framePreparedObservable;
 
 - (const std::shared_ptr<OsmAnd::MapAnimator>&)getAnimator
 {

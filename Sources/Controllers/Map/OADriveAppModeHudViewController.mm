@@ -20,14 +20,15 @@
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "OAUserInteractionInterceptorView.h"
+#import "OAAppearance.h"
 #import "OALog.h"
 #include "Localization.h"
-
-#import "OAAppearance.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Model/Road.h>
+
+#define kMaxRoadDistanceInMeters 15.0
 
 @interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
 
@@ -264,27 +265,30 @@
 
 - (void)updateCurrentPosition
 {
-    // If road is unknown, or no query has been performed, or distance between query points is more than 15 meters,
+    // If road is unknown, or no query has been performed, or distance between query points is more than X meters,
     // repeat query
-    if (!_road || _lastQueriedLocation == nil || [_lastQueriedLocation distanceFromLocation:_lastCapturedLocation] >= 15)
+    if (!_road ||
+        _lastQueriedLocation == nil ||
+        [_lastQueriedLocation distanceFromLocation:_lastCapturedLocation] >= kMaxRoadDistanceInMeters)
     {
         [self restartLocationUpdateTimer];
 
         const OsmAnd::PointI position31(
-                                        OsmAnd::Utilities::get31TileNumberX(_lastQueriedLocation.coordinate.longitude),
-                                        OsmAnd::Utilities::get31TileNumberY(_lastQueriedLocation.coordinate.latitude));
+                                        OsmAnd::Utilities::get31TileNumberX(_lastCapturedLocation.coordinate.longitude),
+                                        OsmAnd::Utilities::get31TileNumberY(_lastCapturedLocation.coordinate.latitude));
+        _lastQueriedLocation = [_lastCapturedLocation copy];
 
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @synchronized(_roadLocatorSync)
             {
                 // Try to find road in basemap, then in detaled map
                 _road = _roadLocator->findNearestRoad(position31,
-                                                      15.0 /* meters */,
+                                                      kMaxRoadDistanceInMeters,
                                                       OsmAnd::RoutingDataLevel::Basemap);
                 if (!_road)
                 {
                     _road = _roadLocator->findNearestRoad(position31,
-                                                          15.0 /* meters */,
+                                                          kMaxRoadDistanceInMeters,
                                                           OsmAnd::RoutingDataLevel::Detailed);
                 }
             }

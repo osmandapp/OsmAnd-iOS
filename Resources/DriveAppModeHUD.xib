@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="5056" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
@@ -193,6 +193,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="3pc-K0-VCE"/>
+                        <constraint firstAttribute="width" constant="242" id="HHQ-t2-d7z"/>
                     </constraints>
                     <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="8" maxY="0.0"/>
@@ -257,15 +258,14 @@
                 <constraint firstAttribute="trailing" secondItem="b09-3W-vxD" secondAttribute="trailing" id="8mu-ck-LIK"/>
                 <constraint firstItem="BiQ-TS-B8N" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="Buv-bk-Myp"/>
                 <constraint firstAttribute="trailing" secondItem="D2C-DA-iEq" secondAttribute="trailing" id="Cee-Ey-frx"/>
-                <constraint firstItem="D2C-DA-iEq" firstAttribute="leading" secondItem="TDo-FW-7Xk" secondAttribute="trailing" constant="24" id="Gre-50-UHJ"/>
                 <constraint firstAttribute="bottom" secondItem="TDo-FW-7Xk" secondAttribute="bottom" constant="8" id="HVm-fH-eJQ"/>
                 <constraint firstAttribute="centerY" secondItem="ZTA-aX-jQn" secondAttribute="centerY" constant="-50" id="K2T-5B-7mU"/>
                 <constraint firstItem="Mqu-Kg-TG4" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" constant="8" id="PyK-Rl-It5"/>
                 <constraint firstItem="n7M-8R-EZ9" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WGf-Ad-CZU"/>
                 <constraint firstAttribute="centerY" secondItem="BiQ-TS-B8N" secondAttribute="centerY" id="XTm-K8-Ukb"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="aeR-PM-vkT"/>
-                <constraint firstItem="TDo-FW-7Xk" firstAttribute="leading" secondItem="j9F-8j-9bu" secondAttribute="trailing" constant="24" id="aiY-Mj-cbR"/>
                 <constraint firstItem="n7M-8R-EZ9" firstAttribute="top" secondItem="b09-3W-vxD" secondAttribute="bottom" id="fPM-Ji-BrH"/>
+                <constraint firstAttribute="centerX" secondItem="TDo-FW-7Xk" secondAttribute="centerX" id="mIV-Tl-wkX"/>
                 <constraint firstItem="b09-3W-vxD" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="srH-59-0fX"/>
                 <constraint firstAttribute="trailing" secondItem="Mqu-Kg-TG4" secondAttribute="trailing" constant="8" id="vDT-YM-C7O"/>
             </constraints>

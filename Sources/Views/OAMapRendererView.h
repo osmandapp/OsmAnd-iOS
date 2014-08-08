@@ -43,53 +43,25 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
-- (void)createContext;
-- (void)releaseContext;
-
-@property(readonly) BOOL isRenderingSuspended;
-- (BOOL)suspendRendering;
-- (BOOL)resumeRendering;
-
-- (void)invalidateFrame;
-
-@property(nonatomic) BOOL forcedRenderingOnEachFrame;
-@property(readonly) OAObservable* settingsObservable;
-
+// State-related:
 - (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;
 - (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer;
 - (float)opacityOf:(OsmAnd::RasterMapLayerId)layer;
 - (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer;
-
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 - (void)removeElevationDataProvider;
 @property(nonatomic) float elevationDataScale;
-
 - (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
 - (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
 - (void)removeAllSymbolProviders;
-//TODO: return array of symbol providers
-
-@property(nonatomic) float fieldOfView;
-//virtual void setDistanceToFog(const float& fogDistance, bool forcedUpdate = false) = 0;
-//virtual void setFogOriginFactor(const float& factor, bool forcedUpdate = false) = 0;
-//virtual void setFogHeightOriginFactor(const float& factor, bool forcedUpdate = false) = 0;
-//virtual void setFogDensity(const float& fogDensity, bool forcedUpdate = false) = 0;
-//virtual void setFogColor(const FColorRGB& color, bool forcedUpdate = false) = 0;
-//virtual void setSkyColor(const FColorRGB& color, bool forcedUpdate = false) = 0;
-@property(nonatomic) float azimuth;
-@property(nonatomic) float elevationAngle;
 @property(nonatomic) OsmAnd::PointI target31;
-@property(nonatomic) float zoom;
-@property(nonatomic, readonly) OsmAnd::ZoomLevel zoomLevel;
-@property(nonatomic, readonly) float scaledTileSizeOnScreen;
-@property(readonly) OAObservable* stateObservable;
+@property(nonatomic) OsmAnd::ZoomLevel zoomLevel;
 
+// Misc properties:
 @property(nonatomic, readonly) QList<OsmAnd::TileId> visibleTiles;
 
-@property(nonatomic, readonly) float minZoom;
-@property(nonatomic, readonly) float maxZoom;
-
+// Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 

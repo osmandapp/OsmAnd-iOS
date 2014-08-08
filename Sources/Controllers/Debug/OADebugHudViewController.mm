@@ -120,7 +120,6 @@
 
     NSMutableString* stateDump = [[NSMutableString alloc] init];
 
-    [stateDump appendFormat:@"forced re-rendering  : %s\n", mapRendererView.forcedRenderingOnEachFrame ? "yes" : "no"];
     [stateDump appendFormat:@"target31             : %d %d\n",
      mapRendererView.target31.x,
      mapRendererView.target31.y];

@@ -27,6 +27,9 @@
 
     QBooleanElement* _forcedRenderingElement;
     QBooleanElement* _hideStaticSymbolsElement;
+    QBooleanElement* _forceDisplayDensityFactorElement;
+    QFloatElement* _forcedDisplayDensityFactorElement;
+    QDecimalElement* _forcedDisplayDensityFactorValueElement;
 
     QRadioSection* _forcedGpsAccuracySection;
 
@@ -61,6 +64,29 @@
                                                                            BoolValue:NO];
     hideStaticSymbolsElement.controllerAction = NSStringFromSelector(@selector(onHideStaticSymbolsSettingChanged));
     [rendererSection addElement:hideStaticSymbolsElement];
+
+    QBooleanElement* forceDisplayDensityFactorElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Force display density factor")
+                                                                                     BoolValue:NO];
+    forceDisplayDensityFactorElement.controllerAction = NSStringFromSelector(@selector(onForceDisplayDensityFactorSettingChanged));
+    [rendererSection addElement:forceDisplayDensityFactorElement];
+
+    QFloatElement* forcedDisplayDensityFactorElement = [[QFloatElement alloc] initWithTitle:OALocalizedString(@"Display Density")
+                                                                                      value:0.0f];
+    forcedDisplayDensityFactorElement.minimumValue = 1.0f;
+    forcedDisplayDensityFactorElement.maximumValue = 5.0f;
+    forcedDisplayDensityFactorElement.onValueChanged = ^(QRootElement *){
+        [self onForcedDisplayDensityFactorSettingChanged];
+    };
+    [rendererSection addElement:forcedDisplayDensityFactorElement];
+
+    QDecimalElement* forcedDisplayDensityFactorValueElement = [[QDecimalElement alloc] initWithTitle:OALocalizedString(@"Display Density")
+                                                                                               value:[NSNumber numberWithFloat:0.0f]];
+    forcedDisplayDensityFactorValueElement.fractionDigits = 6;
+    forcedDisplayDensityFactorValueElement.onValueChanged = ^(QRootElement *){
+        [self onForcedDisplayDensityFactorValueSettingChanged];
+    };
+    [rendererSection addElement:forcedDisplayDensityFactorValueElement];
+
 
     // Forced GPS accuracy section
     QRadioSection* forcedGpsAccuracySection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"None"),
@@ -100,6 +126,9 @@
 
         _forcedRenderingElement = forcedRenderingElement;
         _hideStaticSymbolsElement = hideStaticSymbolsElement;
+        _forceDisplayDensityFactorElement = forceDisplayDensityFactorElement;
+        _forcedDisplayDensityFactorElement = forcedDisplayDensityFactorElement;
+        _forcedDisplayDensityFactorValueElement = forcedDisplayDensityFactorValueElement;
 
         _forcedGpsAccuracySection = forcedGpsAccuracySection;
 
@@ -124,8 +153,11 @@
     if ([mapVC isViewLoaded])
         _mapRendererView = (OAMapRendererView*)mapVC.view;
 
-    _forcedRenderingElement.boolValue = _mapRendererView.forcedRenderingOnEachFrame;
+    _forcedRenderingElement.boolValue = _mapRendererView.forceRenderingOnEachFrame;
     _hideStaticSymbolsElement.boolValue = _mapViewController.hideStaticSymbols;
+    _forceDisplayDensityFactorElement.boolValue = _mapViewController.forceDisplayDensityFactor;
+    _forcedDisplayDensityFactorElement.floatValue = _mapViewController.forcedDisplayDensityFactor;
+    _forcedDisplayDensityFactorValueElement.numberValue = [NSNumber numberWithFloat:_mapViewController.forcedDisplayDensityFactor];
 
     _forcedGpsAccuracySection.selected = _app.locationServices.forceAccuracy;
 
@@ -136,12 +168,31 @@
 
 - (void)onForcedRenderingSettingChanged
 {
-    _mapRendererView.forcedRenderingOnEachFrame = _forcedRenderingElement.boolValue;
+    _mapRendererView.forceRenderingOnEachFrame = _forcedRenderingElement.boolValue;
 }
 
 - (void)onHideStaticSymbolsSettingChanged
 {
     _mapViewController.hideStaticSymbols = _hideStaticSymbolsElement.boolValue;
+}
+
+- (void)onForceDisplayDensityFactorSettingChanged
+{
+    _mapViewController.forceDisplayDensityFactor = _forceDisplayDensityFactorElement.boolValue;
+}
+
+- (void)onForcedDisplayDensityFactorSettingChanged
+{
+    _mapViewController.forcedDisplayDensityFactor = _forcedDisplayDensityFactorElement.floatValue;
+    _forcedDisplayDensityFactorValueElement.numberValue = [NSNumber numberWithFloat:_mapViewController.forcedDisplayDensityFactor];
+    [self.quickDialogTableView reloadCellForElements:_forcedDisplayDensityFactorValueElement, nil];
+}
+
+- (void)onForcedDisplayDensityFactorValueSettingChanged
+{
+    _mapViewController.forcedDisplayDensityFactor = [_forcedDisplayDensityFactorValueElement.numberValue floatValue];
+    _forcedDisplayDensityFactorElement.floatValue = _mapViewController.forcedDisplayDensityFactor;
+    [self.quickDialogTableView reloadCellForElements:_forcedDisplayDensityFactorElement, nil];
 }
 
 - (void)onForcedGpsAccuracyChanged

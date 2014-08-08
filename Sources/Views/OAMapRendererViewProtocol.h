@@ -12,26 +12,35 @@
 
 @protocol OAMapRendererViewProtocol <NSObject>
 
+// Context-related:
 - (void)createContext;
 - (void)releaseContext;
 
+// Rendering process:
 @property(readonly) BOOL isRenderingSuspended;
 - (BOOL)suspendRendering;
 - (BOOL)resumeRendering;
 
-@property(nonatomic) BOOL forcedRenderingOnEachFrame;
+// Settings-related:
 @property(readonly) OAObservable* settingsObservable;
 
+// State-related:
 @property(nonatomic) float fieldOfView;
 @property(nonatomic) float azimuth;
 @property(nonatomic) float elevationAngle;
 @property(nonatomic) float zoom;
-@property(nonatomic, readonly) float scaledTileSizeOnScreen;
+@property(nonatomic, readonly) float currentTileSizeOnScreenInPixels;
 @property(readonly) OAObservable* stateObservable;
 
+// Misc properties:
 @property(nonatomic, readonly) float minZoom;
 @property(nonatomic, readonly) float maxZoom;
+@property CGFloat referenceTileSizeOnScreenInPixels;
 
 @property(readonly) OAObservable* framePreparedObservable;
+
+#if defined(OSMAND_IOS_DEV)
+@property(nonatomic) BOOL forceRenderingOnEachFrame;
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

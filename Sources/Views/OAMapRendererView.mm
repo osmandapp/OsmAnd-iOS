@@ -17,6 +17,8 @@
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
+#include <OsmAndCore/Map/IAtlasMapRenderer.h>
+#include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 
 #import "OALog.h"
@@ -72,8 +74,6 @@
     _settingsObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
 
-    _forcedRenderingOnEachFrame = NO;
-    
     // Set default values
     _glShareGroup = nil;
     _glRenderContext = nil;
@@ -85,10 +85,10 @@
     
     // Create map renderer instance
     _renderer = OsmAnd::createMapRenderer(OsmAnd::MapRendererClass::AtlasMapRenderer_OpenGLES2);
-    
-    OsmAnd::MapRendererConfiguration rendererConfig;
-    rendererConfig.texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
+    const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
+    rendererConfig->texturesFilteringQuality = OsmAnd::TextureFilteringQuality::Good;
     _renderer->setConfiguration(rendererConfig);
+    
     OAObservable* stateObservable = _stateObservable;
     _renderer->stateChangeObservable.attach((__bridge const void*)_stateObservable,
         [stateObservable]
@@ -108,6 +108,10 @@
     // Create animator for that map
     _animator.reset(new OsmAnd::MapAnimator());
     _animator->setMapRenderer(_renderer);
+
+#if defined(OSMAND_IOS_DEV)
+    _forceRenderingOnEachFrame = NO;
+#endif // defined(OSMAND_IOS_DEV)
 }
 
 - (void)deinit
@@ -122,7 +126,7 @@
 
 - (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
 {
-    return _renderer->state.rasterLayerProviders[static_cast<int>(layer)];
+    return _renderer->getState().rasterLayerProviders[static_cast<int>(layer)];
 }
 
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer
@@ -137,7 +141,7 @@
 
 - (float)opacityOf:(OsmAnd::RasterMapLayerId)layer
 {
-    return _renderer->state.rasterLayerOpacity[static_cast<int>(layer)];
+    return _renderer->getState().rasterLayerOpacity[static_cast<int>(layer)];
 }
 
 - (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
@@ -147,7 +151,7 @@
 
 - (std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
 {
-    return _renderer->state.elevationDataProvider;
+    return _renderer->getState().elevationDataProvider;
 }
 
 - (void)setElevationDataProvider:(std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
@@ -157,7 +161,7 @@
 
 - (float)elevationDataScale
 {
-    return _renderer->state.elevationDataScaleFactor;
+    return _renderer->getState().elevationDataScaleFactor;
 }
 
 - (void)removeElevationDataProvider
@@ -187,7 +191,7 @@
 
 - (float)fieldOfView
 {
-    return _renderer->state.fieldOfView;
+    return _renderer->getState().fieldOfView;
 }
 
 - (void)setFieldOfView:(float)fieldOfView
@@ -197,7 +201,7 @@
 
 - (float)azimuth
 {
-    return _renderer->state.azimuth;
+    return _renderer->getState().azimuth;
 }
 
 - (void)setAzimuth:(float)azimuth
@@ -207,7 +211,7 @@
 
 - (float)elevationAngle
 {
-    return _renderer->state.elevationAngle;
+    return _renderer->getState().elevationAngle;
 }
 
 - (void)setElevationAngle:(float)elevationAngle
@@ -217,7 +221,7 @@
 
 - (OsmAnd::PointI)target31
 {
-    return _renderer->state.target31;
+    return _renderer->getState().target31;
 }
 
 - (void)setTarget31:(OsmAnd::PointI)target31
@@ -227,7 +231,7 @@
 
 - (float)zoom
 {
-    return _renderer->state.requestedZoom;
+    return _renderer->getState().requestedZoom;
 }
 
 - (void)setZoom:(float)zoom
@@ -237,12 +241,12 @@
 
 - (OsmAnd::ZoomLevel)zoomLevel
 {
-    return _renderer->state.zoomBase;
+    return _renderer->getState().zoomBase;
 }
 
-- (float)scaledTileSizeOnScreen
+- (float)currentTileSizeOnScreenInPixels
 {
-    return _renderer->getScaledTileSizeOnScreen();
+    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getCurrentTileSizeOnScreenInPixels();
 }
 
 - (float)minZoom
@@ -259,7 +263,7 @@
 
 - (QList<OsmAnd::TileId>)visibleTiles
 {
-    return _renderer->getVisibleTiles();
+    return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();
 }
 
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
@@ -320,24 +324,28 @@
         [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
         return;
     }
-    
+
+    // Setup renderer
     OsmAnd::MapRendererSetupOptions rendererSetup;
-    rendererSetup.displayDensityFactor = self.contentScaleFactor;
     rendererSetup.gpuWorkerThreadEnabled = true;
     const auto capturedWorkerContext = _glWorkerContext;
-    rendererSetup.gpuWorkerThreadPrologue = [capturedWorkerContext](const OsmAnd::IMapRenderer* const renderer)
-    {
-        // Activate worker context
-        if (![EAGLContext setCurrentContext:capturedWorkerContext])
+    rendererSetup.gpuWorkerThreadPrologue =
+        [capturedWorkerContext]
+        (const OsmAnd::IMapRenderer* const renderer)
         {
-            [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context in GPU worker thread"];
-            return;
-        }
-    };
-    rendererSetup.gpuWorkerThreadEpilogue = [](const OsmAnd::IMapRenderer* const renderer)
-    {
-        // Nothing to do
-    };
+            // Activate worker context
+            if (![EAGLContext setCurrentContext:capturedWorkerContext])
+            {
+                [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context in GPU worker thread"];
+                return;
+            }
+        };
+    rendererSetup.gpuWorkerThreadEpilogue =
+        []
+        (const OsmAnd::IMapRenderer* const renderer)
+        {
+            // Nothing to do
+        };
     _renderer->setup(rendererSetup);
 
     // Initialize rendering
@@ -488,14 +496,6 @@
 
 @synthesize settingsObservable = _settingsObservable;
 
-@synthesize forcedRenderingOnEachFrame = _forcedRenderingOnEachFrame;
-- (void)setForcedRenderingOnEachFrame:(BOOL)forcedRenderingOnEachFrame
-{
-    _forcedRenderingOnEachFrame = forcedRenderingOnEachFrame;
-
-    [_settingsObservable notifyEvent];
-}
-
 - (void)render:(CADisplayLink*)displayLink
 {
     if (![EAGLContext setCurrentContext:_glRenderContext])
@@ -526,7 +526,12 @@
     }
     
     // Perform rendering only if frame is marked as invalidated
-    if (_renderer->prepareFrame() && (_renderer->isFrameInvalidated() || _forcedRenderingOnEachFrame))
+    bool shouldRenderFrame = false;
+    shouldRenderFrame = shouldRenderFrame || _renderer->isFrameInvalidated();
+#if defined(OSMAND_IOS_DEV)
+    shouldRenderFrame = shouldRenderFrame || _forceRenderingOnEachFrame;
+#endif // defined(OSMAND_IOS_DEV)
+    if (_renderer->prepareFrame() && shouldRenderFrame)
     {
         // Activate framebuffer
         glBindFramebuffer(GL_FRAMEBUFFER, _frameBuffer);
@@ -620,5 +625,28 @@
 {
     _renderer->forcedFrameInvalidate();
 }
+
+- (CGFloat)referenceTileSizeOnScreenInPixels
+{
+    const auto configuration = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
+    return configuration->referenceTileSizeOnScreenInPixels;
+}
+
+- (void)setReferenceTileSizeOnScreenInPixels:(CGFloat)referenceTileSizeOnScreenInPixels
+{
+    const auto configuration = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
+    configuration->referenceTileSizeOnScreenInPixels = referenceTileSizeOnScreenInPixels;
+    _renderer->setConfiguration(configuration);
+}
+
+#if defined(OSMAND_IOS_DEV)
+@synthesize forceRenderingOnEachFrame = _forceRenderingOnEachFrame;
+- (void)setForceRenderingOnEachFrame:(BOOL)forceRenderingOnEachFrame
+{
+    _forceRenderingOnEachFrame = forceRenderingOnEachFrame;
+
+    [_settingsObservable notifyEvent];
+}
+#endif // defined(OSMAND_IOS_DEV)
 
 @end

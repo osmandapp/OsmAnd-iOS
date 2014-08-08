@@ -303,6 +303,8 @@
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
+    _forceDisplayDensityFactor = NO;
+    _forcedDisplayDensityFactor = self.displayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 }
 
@@ -549,7 +551,7 @@
 
     // Taking into account current zoom, get how many 31-coordinates there are in 1 point
     const uint32_t tileSize31 = (1u << (31 - mapView.zoomLevel));
-    const double scale31 = static_cast<double>(tileSize31) / mapView.scaledTileSizeOnScreen;
+    const double scale31 = static_cast<double>(tileSize31) / mapView.currentTileSizeOnScreenInPixels;
 
     // Rescale movement to 31 coordinates
     OsmAnd::PointI target31 = mapView.target31;
@@ -1346,6 +1348,13 @@
 
     @synchronized(_rendererSync)
     {
+        const auto screenTileSize = 256 * self.displayDensityFactor;
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+        OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
+
+        // Set reference tile size on the screen
+        mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
+
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
         _binaryMapDataProvider.reset();
@@ -1376,15 +1385,15 @@
 
             _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection));
 
-            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(mapView.contentScaleFactor > 1.0f));
+            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(self.displayDensityFactor > 1.0f));
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(mapStyle,
-                                                                                     mapView.contentScaleFactor,
+                                                                                     self.displayDensityFactor,
                                                                                      QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
                                                                                      externalResourcesProvider));
             _primitiviser.reset(new OsmAnd::Primitiviser(_mapPresentationEnvironment));
             _binaryMapPrimitivesProvider.reset(new OsmAnd::BinaryMapPrimitivesProvider(_binaryMapDataProvider,
                                                                                        _primitiviser,
-                                                                                       256 * mapView.contentScaleFactor));
+                                                                                       rasterTileSize));
 
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
@@ -1400,7 +1409,7 @@
             {
                 case OAVisualMetricsModeBinaryMapData:
                     _rasterMapProvider.reset(new OsmAnd::BinaryMapDataMetricsBitmapTileProvider(_binaryMapDataProvider,
-                                                                                                 256 * mapView.contentScaleFactor,
+                                                                                                256 * mapView.contentScaleFactor,
                                                                                                 mapView.contentScaleFactor));
                     break;
 
@@ -1485,6 +1494,18 @@
     }
 }
 
+- (CGFloat)displayDensityFactor
+{
+#if defined(OSMAND_IOS_DEV)
+    if (_forceDisplayDensityFactor)
+        return _forcedDisplayDensityFactor;
+#endif // defined(OSMAND_IOS_DEV)
+
+    if (![self isViewLoaded])
+        return [UIScreen mainScreen].scale;
+    return self.view.contentScaleFactor;
+}
+
 - (void)goToPosition:(Point31)position31
             animated:(BOOL)animated
 {
@@ -1548,6 +1569,23 @@
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize hideStaticSymbols = _hideStaticSymbols;
+- (void)setHideStaticSymbols:(BOOL)hideStaticSymbols
+{
+    if (_hideStaticSymbols == hideStaticSymbols)
+        return;
+
+    _hideStaticSymbols = hideStaticSymbols;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+
+        [self updateCurrentMapSource];
+    });
+}
 
 @synthesize visualMetricsMode = _visualMetricsMode;
 - (void)setVisualMetricsMode:(OAVisualMetricsMode)visualMetricsMode
@@ -1556,6 +1594,41 @@
         return;
 
     _visualMetricsMode = visualMetricsMode;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+
+        [self updateCurrentMapSource];
+    });
+}
+
+@synthesize forceDisplayDensityFactor = _forceDisplayDensityFactor;
+- (void)setForceDisplayDensityFactor:(BOOL)forceDisplayDensityFactor
+{
+    if (_forceDisplayDensityFactor == forceDisplayDensityFactor)
+        return;
+
+    _forceDisplayDensityFactor = forceDisplayDensityFactor;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+
+        [self updateCurrentMapSource];
+    });
+}
+
+@synthesize forcedDisplayDensityFactor = _forcedDisplayDensityFactor;
+- (void)setForcedDisplayDensityFactor:(CGFloat)forcedDisplayDensityFactor
+{
+    _forcedDisplayDensityFactor = forcedDisplayDensityFactor;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)

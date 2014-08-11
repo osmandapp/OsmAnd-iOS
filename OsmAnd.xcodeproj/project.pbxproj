@@ -548,6 +548,8 @@
 		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
 		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		CEEF2ACB1988422F00AF25DE /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF2ACA1988422F00AF25DE /* OAQLabelElement.m */; };
+		CEEF2ACC1988422F00AF25DE /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CEEF2ACA1988422F00AF25DE /* OAQLabelElement.m */; };
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
 
@@ -827,6 +829,8 @@
 		BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
 		BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWorldRegion.mm; sourceTree = "<group>"; };
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
+		CEEF2AC91988422F00AF25DE /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQLabelElement.h; sourceTree = "<group>"; };
+		CEEF2ACA1988422F00AF25DE /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQLabelElement.m; sourceTree = "<group>"; };
 		E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.xcconfig"; path = "Pods/Pods-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1335,6 +1339,8 @@
 				BBBDADAA18BC965100E4A359 /* OAObservable.m */,
 				BB451DDA18D71883005FBE09 /* UIView+VisibilityAndInput.h */,
 				BB451DDB18D71883005FBE09 /* UIView+VisibilityAndInput.m */,
+				CEEF2AC91988422F00AF25DE /* OAQLabelElement.h */,
+				CEEF2ACA1988422F00AF25DE /* OAQLabelElement.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -1953,6 +1959,7 @@
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
+				CEEF2ACB1988422F00AF25DE /* OAQLabelElement.m in Sources */,
 				BBA3AECB197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BBBE454F1856544000F1C144 /* ExternalResourcesProvider.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
@@ -2012,6 +2019,7 @@
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
+				CEEF2ACC1988422F00AF25DE /* OAQLabelElement.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* ExternalResourcesProvider.mm in Sources */,
 				BBA3AECC197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,

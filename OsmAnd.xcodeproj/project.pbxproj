@@ -571,6 +571,8 @@
 		BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */; };
 		BBE1D2B6190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
+		CE3A0DDF19A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
+		CE3A0DE019A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
 
@@ -869,6 +871,8 @@
 		BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
 		BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWorldRegion.mm; sourceTree = "<group>"; };
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
+		CE3A0DDD19A103740035B296 /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQLabelElement.h; path = Common/OAQLabelElement.h; sourceTree = "<group>"; };
+		CE3A0DDE19A103740035B296 /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQLabelElement.m; path = Common/OAQLabelElement.m; sourceTree = "<group>"; };
 		E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.xcconfig"; path = "Pods/Pods-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1411,6 +1415,8 @@
 				BBBDADA718BC963800E4A359 /* OAAutoObserverProxy.m */,
 				BBBDADA918BC965100E4A359 /* OAObservable.h */,
 				BBBDADAA18BC965100E4A359 /* OAObservable.m */,
+				CE3A0DDD19A103740035B296 /* OAQLabelElement.h */,
+				CE3A0DDE19A103740035B296 /* OAQLabelElement.m */,
 			);
 			name = Common;
 			sourceTree = "<group>";
@@ -2054,6 +2060,7 @@
 				BBB97DE51908D1EC0067F4A0 /* OAMapSource.m in Sources */,
 				BBA3AF081975016F0039D991 /* OAMapPanelViewController.m in Sources */,
 				BBA3AEC0197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
+				CE3A0DDF19A103740035B296 /* OAQLabelElement.m in Sources */,
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				BBA3B02819880DEC0039D991 /* OANavigationController.m in Sources */,
 				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
@@ -2121,6 +2128,7 @@
 				BBA3AEAD196EFD1C0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBA3AF091975016F0039D991 /* OAMapPanelViewController.m in Sources */,
 				BBE1D2AC190D186F00D90F0A /* OALog.mm in Sources */,
+				CE3A0DE019A103740035B296 /* OAQLabelElement.m in Sources */,
 				BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3B02919880DEC0039D991 /* OANavigationController.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAUserInteractionPassThroughView.m in Sources */,

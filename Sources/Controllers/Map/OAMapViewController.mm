@@ -1443,7 +1443,8 @@
 #if defined(OSMAND_IOS_DEV)
             if (!_hideStaticSymbols)
             {
-                _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
+                _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
+                                                                                                 rasterTileSize));
                 [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
             }
 #else

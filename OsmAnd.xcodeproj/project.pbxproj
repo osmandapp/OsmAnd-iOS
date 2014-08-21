@@ -833,9 +833,9 @@
 		BBACF10917C61D8500EBA761 /* BrowseMapAppModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = BrowseMapAppModeHUD.xib; path = Resources/BrowseMapAppModeHUD.xib; sourceTree = "<group>"; };
 		BBAD5BA81927D7F90043590F /* UITableViewCell+getTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UITableViewCell+getTableView.h"; path = "Views/UITableViewCell+getTableView.h"; sourceTree = "<group>"; };
 		BBAD5BA91927D7F90043590F /* UITableViewCell+getTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UITableViewCell+getTableView.m"; path = "Views/UITableViewCell+getTableView.m"; sourceTree = "<group>"; };
-		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang-universal/lib/libQt5Core.a"; sourceTree = "<group>"; };
-		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang-universal/lib/libQt5Network.a"; sourceTree = "<group>"; };
-		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang-universal/lib/libQt5Sql.a"; sourceTree = "<group>"; };
+		BBB34EA2179BB42A004C5567 /* libQt5Core.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Core.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Core.a"; sourceTree = "<group>"; };
+		BBB34EA3179BB42A004C5567 /* libQt5Network.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Network.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Network.a"; sourceTree = "<group>"; };
+		BBB34EA4179BB42A004C5567 /* libQt5Sql.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libQt5Sql.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libQt5Sql.a"; sourceTree = "<group>"; };
 		BBB34EA8179BBD21004C5567 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		BBB34ED6179BC516004C5567 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = System/Library/Frameworks/CoreText.framework; sourceTree = SDKROOT; };
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
@@ -997,10 +997,10 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				BB32C04819262B80007999A0 /* libbz2.dylib */,
-				BB32C0461926265E007999A0 /* libarchive_static.a */,
+				46E6A59CC7494826B3DC682B /* libPods-dev.a */,
 				90FA13E852C14245A4ED3E9D /* libPods.a */,
 				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,
+				BB32C0461926265E007999A0 /* libarchive_static.a */,
 				BB08E4F518B960F600BC6638 /* libicu4c_static.a */,
 				BB5D90D118A662C700EFAD92 /* libexpat_static.a */,
 				BB5D90D218A662C700EFAD92 /* libgdal_static.a */,
@@ -1015,6 +1015,7 @@
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
+				BB32C04819262B80007999A0 /* libbz2.dylib */,
 				BBBDADB818BCF53500E4A359 /* CoreLocation.framework */,
 				BB4C7474192111730018E1EE /* SystemConfiguration.framework */,
 				BBB3F6AA18A4DEF0001C3175 /* Security.framework */,
@@ -1024,7 +1025,6 @@
 				BB098CF61793F7FD00423944 /* Foundation.framework */,
 				BBB34ED6179BC516004C5567 /* CoreText.framework */,
 				BB098CF81793F7FD00423944 /* CoreGraphics.framework */,
-				46E6A59CC7494826B3DC682B /* libPods-dev.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

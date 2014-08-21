@@ -1,6 +1,5 @@
 #!/bin/bash
 
-echo "Checking for bash..."
 if [ -z "$BASH_VERSION" ]; then
 	echo "Invalid shell, re-running using bash..."
 	exec bash "$0" "$@"

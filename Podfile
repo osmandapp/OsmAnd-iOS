@@ -17,7 +17,7 @@ pod 'QuickDialog/Extras', '~> 1.0'
 pod 'FormatterKit', '~> 1.5.3'
 pod 'SWTableViewCell', '~> 0.3.0'
 pod 'RegexKitLite', '~> 4.0'
-pod 'MBProgressHUD', '~> 0.8'
+pod 'MBProgressHUD', '~> 0.9'
 pod 'CocoaSecurity', '~> 1.2.4'
 
 # Development-only dependencies

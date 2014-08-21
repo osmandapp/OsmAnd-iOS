@@ -2292,9 +2292,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 				);
@@ -2305,7 +2305,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
-					"${PROJECT_DIR}/../binaries/ios.clang-${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
 				);
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";
 				PRODUCT_NAME = "";
@@ -2349,9 +2349,9 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
-					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang-${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtCore",
+					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 				);
@@ -2362,7 +2362,7 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
-					"${PROJECT_DIR}/../binaries/ios.clang-${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
+					"${PROJECT_DIR}/../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)",
 				);
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				PLATFORM_DEFINITIONS = "NDEBUG RELEASE OSMAND_TARGET_OS_ios OSMAND_TARGET_CPU_ARCH_fat OSMAND_TARGET_CPU_ARCH_FAMILY_fat OSMAND_COMPILER_FAMILY_clang NOMINMAX OSMAND_CORE_STATIC GLM_SWIZZLE OSMAND_OPENGLES2_RENDERER_SUPPORTED SK_BUILD_FOR_IOS SK_USE_CORETEXT XML_STATIC Z_PREFIX GOOGLE_PROTOBUF_NO_RTTI";

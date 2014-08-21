@@ -9,22 +9,6 @@ SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ROOT="$SRCLOC/.."
 
-# Prepare core dependencies
-echo "Configuring dependencies..."
-"$ROOT/core/externals/configure.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glm icu4c libarchive
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to configure dependencies, aborting..."
-	exit $retcode
-fi
-echo "Building dependencies..."
-"$ROOT/core/externals/build.sh" qtbase-ios expat giflib jpeg zlib libpng protobuf skia gdal glm icu4c libarchive
-retcode=$?
-if [ $retcode -ne 0 ]; then
-	echo "Failed to build dependencies, aborting..."
-	exit $retcode
-fi
-
 # Prepare iOS dependencies via CocoaPods
 POD=`which pod`
 if [ -z "$POD" ]; then
@@ -46,6 +30,11 @@ fi
 
 # Bake or update core projects for XCode
 OSMAND_BUILD_TOOL=xcode "$ROOT/build/fat-ios.sh"
+retcode=$?
+if [ $retcode -ne 0 ]; then
+	echo "Failed to generate project for XCode, aborting..."
+	exit $retcode
+fi
 
 # Download all shipped resources
 "$SRCLOC/download-shipped-resources.sh"

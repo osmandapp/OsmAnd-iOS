@@ -23,7 +23,6 @@
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
-		BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
@@ -34,7 +33,6 @@
 		BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C03E1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m */; };
 		BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
 		BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BB32C0421925FB43007999A0 /* OATableViewCell.m */; };
-		BB32C0471926265E007999A0 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C0461926265E007999A0 /* libarchive_static.a */; };
 		BB32C04919262B80007999A0 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
 		BB32C04A19262B90007999A0 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
 		BB451D8B18D70B4B005FBE09 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
@@ -215,6 +213,28 @@
 		BB476B6C18D4C7F30044D5E1 /* DriveAppModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6B18D4C7F30044D5E1 /* DriveAppModeHUD~ipad.xib */; };
 		BB476B6E18D4C8200044D5E1 /* NavigationAppModeHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6D18D4C8200044D5E1 /* NavigationAppModeHUD.xib */; };
 		BB476B7018D4C83E0044D5E1 /* NavigationAppModeHUD~ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB476B6F18D4C83E0044D5E1 /* NavigationAppModeHUD~ipad.xib */; };
+		BB48B5B619A8870C008FCCA0 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5AC19A8870C008FCCA0 /* libarchive_static.a */; };
+		BB48B5B719A8870C008FCCA0 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5AD19A8870C008FCCA0 /* libexpat_static.a */; };
+		BB48B5B819A8870C008FCCA0 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5AE19A8870C008FCCA0 /* libgdal_static.a */; };
+		BB48B5B919A8870C008FCCA0 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5AF19A8870C008FCCA0 /* libgif_static.a */; };
+		BB48B5BA19A8870C008FCCA0 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */; };
+		BB48B5BB19A8870C008FCCA0 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */; };
+		BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */; };
+		BB48B5BD19A8870C008FCCA0 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B319A8870C008FCCA0 /* libpng_static.a */; };
+		BB48B5BE19A8870C008FCCA0 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */; };
+		BB48B5BF19A8870C008FCCA0 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B519A8870C008FCCA0 /* libskia_static.a */; };
+		BB48B5C119A88727008FCCA0 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C019A88727008FCCA0 /* libz_static.a */; };
+		BB48B5CD19A88741008FCCA0 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C219A88741008FCCA0 /* libarchive_static.a */; };
+		BB48B5CE19A88741008FCCA0 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C319A88741008FCCA0 /* libexpat_static.a */; };
+		BB48B5CF19A88741008FCCA0 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C419A88741008FCCA0 /* libgdal_static.a */; };
+		BB48B5D019A88741008FCCA0 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C519A88741008FCCA0 /* libgif_static.a */; };
+		BB48B5D119A88741008FCCA0 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C619A88741008FCCA0 /* libicu4c_static.a */; };
+		BB48B5D219A88741008FCCA0 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C719A88741008FCCA0 /* libjpeg_static.a */; };
+		BB48B5D319A88741008FCCA0 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C819A88741008FCCA0 /* libOsmAndCore_static.a */; };
+		BB48B5D419A88741008FCCA0 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C919A88741008FCCA0 /* libpng_static.a */; };
+		BB48B5D519A88741008FCCA0 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5CA19A88741008FCCA0 /* libprotobuf_static.a */; };
+		BB48B5D619A88741008FCCA0 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5CB19A88741008FCCA0 /* libskia_static.a */; };
+		BB48B5D719A88741008FCCA0 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5CC19A88741008FCCA0 /* libz_static.a */; };
 		BB4C74631920CB720018E1EE /* menu_item_install_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C745F1920CB720018E1EE /* menu_item_install_icon.png */; };
 		BB4C74641920CB720018E1EE /* menu_item_install_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C745F1920CB720018E1EE /* menu_item_install_icon.png */; };
 		BB4C74651920CB720018E1EE /* menu_item_install_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BB4C74601920CB720018E1EE /* menu_item_install_icon@2x.png */; };
@@ -240,15 +260,6 @@
 		BB54F71819893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
 		BB54F71919893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
 		BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */ = {isa = PBXBuildFile; fileRef = BB54F71719893B8200AB40D1 /* OAHUDRegularButton.m */; };
-		BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
-		BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
-		BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
-		BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D518A662C700EFAD92 /* libjpeg_static.a */; };
-		BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */; };
-		BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D718A662C700EFAD92 /* libpng_static.a */; };
-		BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */; };
-		BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D918A662C700EFAD92 /* libskia_static.a */; };
-		BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90DA18A662C700EFAD92 /* libz_static.a */; };
 		BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335617C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m */; };
 		BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BB63335A17C5388A00903AB1 /* UIViewController+OARootViewController.m */; };
 		BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BB9EFBC3196AFBBD00700BC0 /* OAAddFavoriteViewController.mm */; };
@@ -358,17 +369,6 @@
 		BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451F0818E6DDF1005FBE09 /* OATableViewCellWithSwitch.m */; };
 		BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE85196BCB4B0039D991 /* OAQColorPickerElement.m */; };
 		BBA3AF65197FC4BB0039D991 /* OAFavoritesLayerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AEC31974067D0039D991 /* OAFavoritesLayerViewController.mm */; };
-		BBA3AF68197FC4BB0039D991 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */; };
-		BBA3AF69197FC4BB0039D991 /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C0461926265E007999A0 /* libarchive_static.a */; };
-		BBA3AF6A197FC4BB0039D991 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB08E4F518B960F600BC6638 /* libicu4c_static.a */; };
-		BBA3AF6B197FC4BB0039D991 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D818A662C700EFAD92 /* libprotobuf_static.a */; };
-		BBA3AF6C197FC4BB0039D991 /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D218A662C700EFAD92 /* libgdal_static.a */; };
-		BBA3AF6D197FC4BB0039D991 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D918A662C700EFAD92 /* libskia_static.a */; };
-		BBA3AF6E197FC4BB0039D991 /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D118A662C700EFAD92 /* libexpat_static.a */; };
-		BBA3AF6F197FC4BB0039D991 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D318A662C700EFAD92 /* libgif_static.a */; };
-		BBA3AF70197FC4BB0039D991 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D518A662C700EFAD92 /* libjpeg_static.a */; };
-		BBA3AF71197FC4BB0039D991 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90D718A662C700EFAD92 /* libpng_static.a */; };
-		BBA3AF72197FC4BB0039D991 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB5D90DA18A662C700EFAD92 /* libz_static.a */; };
 		BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB3F6AA18A4DEF0001C3175 /* Security.framework */; };
 		BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34ED6179BC516004C5567 /* CoreText.framework */; };
 		BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB2545BD1798254B00E80B58 /* QuartzCore.framework */; };
@@ -698,6 +698,28 @@
 		BB476B6B18D4C7F30044D5E1 /* DriveAppModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "DriveAppModeHUD~ipad.xib"; path = "Resources/DriveAppModeHUD~ipad.xib"; sourceTree = "<group>"; };
 		BB476B6D18D4C8200044D5E1 /* NavigationAppModeHUD.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = NavigationAppModeHUD.xib; path = Resources/NavigationAppModeHUD.xib; sourceTree = "<group>"; };
 		BB476B6F18D4C83E0044D5E1 /* NavigationAppModeHUD~ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "NavigationAppModeHUD~ipad.xib"; path = "Resources/NavigationAppModeHUD~ipad.xib"; sourceTree = "<group>"; };
+		BB48B5AC19A8870C008FCCA0 /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
+		BB48B5AD19A8870C008FCCA0 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libexpat_static.a"; sourceTree = "<group>"; };
+		BB48B5AE19A8870C008FCCA0 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libgdal_static.a"; sourceTree = "<group>"; };
+		BB48B5AF19A8870C008FCCA0 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libgif_static.a"; sourceTree = "<group>"; };
+		BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicu4c_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libicu4c_static.a"; sourceTree = "<group>"; };
+		BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libjpeg_static.a"; sourceTree = "<group>"; };
+		BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libOsmAndCore_static.a"; sourceTree = "<group>"; };
+		BB48B5B319A8870C008FCCA0 /* libpng_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libpng_static.a"; sourceTree = "<group>"; };
+		BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libprotobuf_static.a"; sourceTree = "<group>"; };
+		BB48B5B519A8870C008FCCA0 /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libskia_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libskia_static.a"; sourceTree = "<group>"; };
+		BB48B5C019A88727008FCCA0 /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libz_static.a"; sourceTree = "<group>"; };
+		BB48B5C219A88741008FCCA0 /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
+		BB48B5C319A88741008FCCA0 /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libexpat_static.a"; sourceTree = "<group>"; };
+		BB48B5C419A88741008FCCA0 /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libgdal_static.a"; sourceTree = "<group>"; };
+		BB48B5C519A88741008FCCA0 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libgif_static.a"; sourceTree = "<group>"; };
+		BB48B5C619A88741008FCCA0 /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicu4c_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libicu4c_static.a"; sourceTree = "<group>"; };
+		BB48B5C719A88741008FCCA0 /* libjpeg_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libjpeg_static.a"; sourceTree = "<group>"; };
+		BB48B5C819A88741008FCCA0 /* libOsmAndCore_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libOsmAndCore_static.a"; sourceTree = "<group>"; };
+		BB48B5C919A88741008FCCA0 /* libpng_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libpng_static.a"; sourceTree = "<group>"; };
+		BB48B5CA19A88741008FCCA0 /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libprotobuf_static.a"; sourceTree = "<group>"; };
+		BB48B5CB19A88741008FCCA0 /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libskia_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libskia_static.a"; sourceTree = "<group>"; };
+		BB48B5CC19A88741008FCCA0 /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = "../binaries/ios.clang-iphoneos/Debug/libz_static.a"; sourceTree = "<group>"; };
 		BB4C745F1920CB720018E1EE /* menu_item_install_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_install_icon.png; sourceTree = "<group>"; };
 		BB4C74601920CB720018E1EE /* menu_item_install_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_install_icon@2x.png"; sourceTree = "<group>"; };
 		BB4C74611920CB720018E1EE /* menu_item_update_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu_item_update_icon.png; sourceTree = "<group>"; };
@@ -882,17 +904,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */,
-				BB5D90E018A662C800EFAD92 /* libOsmAndCore_static.a in Frameworks */,
-				BB32C0471926265E007999A0 /* libarchive_static.a in Frameworks */,
-				BB08E4F618B960F600BC6638 /* libicu4c_static.a in Frameworks */,
-				BB5D90E218A662C800EFAD92 /* libprotobuf_static.a in Frameworks */,
-				BB5D90DC18A662C800EFAD92 /* libgdal_static.a in Frameworks */,
-				BB5D90E318A662C800EFAD92 /* libskia_static.a in Frameworks */,
-				BB5D90DB18A662C700EFAD92 /* libexpat_static.a in Frameworks */,
-				BB5D90DD18A662C800EFAD92 /* libgif_static.a in Frameworks */,
-				BB5D90DF18A662C800EFAD92 /* libjpeg_static.a in Frameworks */,
-				BB5D90E118A662C800EFAD92 /* libpng_static.a in Frameworks */,
-				BB5D90E418A662C800EFAD92 /* libz_static.a in Frameworks */,
+				BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static.a in Frameworks */,
+				BB48B5B619A8870C008FCCA0 /* libarchive_static.a in Frameworks */,
+				BB48B5B719A8870C008FCCA0 /* libexpat_static.a in Frameworks */,
+				BB48B5B819A8870C008FCCA0 /* libgdal_static.a in Frameworks */,
+				BB48B5B919A8870C008FCCA0 /* libgif_static.a in Frameworks */,
+				BB48B5BA19A8870C008FCCA0 /* libicu4c_static.a in Frameworks */,
+				BB48B5BB19A8870C008FCCA0 /* libjpeg_static.a in Frameworks */,
+				BB48B5BD19A8870C008FCCA0 /* libpng_static.a in Frameworks */,
+				BB48B5BE19A8870C008FCCA0 /* libprotobuf_static.a in Frameworks */,
+				BB48B5BF19A8870C008FCCA0 /* libskia_static.a in Frameworks */,
+				BB48B5C119A88727008FCCA0 /* libz_static.a in Frameworks */,
 				BBB3F6AB18A4DEF0001C3175 /* Security.framework in Frameworks */,
 				BBB34ED7179BC516004C5567 /* CoreText.framework in Frameworks */,
 				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
@@ -939,17 +961,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */,
-				BBA3AF68197FC4BB0039D991 /* libOsmAndCore_static.a in Frameworks */,
-				BBA3AF69197FC4BB0039D991 /* libarchive_static.a in Frameworks */,
-				BBA3AF6A197FC4BB0039D991 /* libicu4c_static.a in Frameworks */,
-				BBA3AF6B197FC4BB0039D991 /* libprotobuf_static.a in Frameworks */,
-				BBA3AF6C197FC4BB0039D991 /* libgdal_static.a in Frameworks */,
-				BBA3AF6D197FC4BB0039D991 /* libskia_static.a in Frameworks */,
-				BBA3AF6E197FC4BB0039D991 /* libexpat_static.a in Frameworks */,
-				BBA3AF6F197FC4BB0039D991 /* libgif_static.a in Frameworks */,
-				BBA3AF70197FC4BB0039D991 /* libjpeg_static.a in Frameworks */,
-				BBA3AF71197FC4BB0039D991 /* libpng_static.a in Frameworks */,
-				BBA3AF72197FC4BB0039D991 /* libz_static.a in Frameworks */,
+				BB48B5CD19A88741008FCCA0 /* libarchive_static.a in Frameworks */,
+				BB48B5CE19A88741008FCCA0 /* libexpat_static.a in Frameworks */,
+				BB48B5CF19A88741008FCCA0 /* libgdal_static.a in Frameworks */,
+				BB48B5D019A88741008FCCA0 /* libgif_static.a in Frameworks */,
+				BB48B5D119A88741008FCCA0 /* libicu4c_static.a in Frameworks */,
+				BB48B5D219A88741008FCCA0 /* libjpeg_static.a in Frameworks */,
+				BB48B5D319A88741008FCCA0 /* libOsmAndCore_static.a in Frameworks */,
+				BB48B5D419A88741008FCCA0 /* libpng_static.a in Frameworks */,
+				BB48B5D519A88741008FCCA0 /* libprotobuf_static.a in Frameworks */,
+				BB48B5D619A88741008FCCA0 /* libskia_static.a in Frameworks */,
+				BB48B5D719A88741008FCCA0 /* libz_static.a in Frameworks */,
 				BBA3AF73197FC4BB0039D991 /* Security.framework in Frameworks */,
 				BBA3AF74197FC4BB0039D991 /* CoreText.framework in Frameworks */,
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
@@ -997,6 +1019,28 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				BB48B5C219A88741008FCCA0 /* libarchive_static.a */,
+				BB48B5C319A88741008FCCA0 /* libexpat_static.a */,
+				BB48B5C419A88741008FCCA0 /* libgdal_static.a */,
+				BB48B5C519A88741008FCCA0 /* libgif_static.a */,
+				BB48B5C619A88741008FCCA0 /* libicu4c_static.a */,
+				BB48B5C719A88741008FCCA0 /* libjpeg_static.a */,
+				BB48B5C819A88741008FCCA0 /* libOsmAndCore_static.a */,
+				BB48B5C919A88741008FCCA0 /* libpng_static.a */,
+				BB48B5CA19A88741008FCCA0 /* libprotobuf_static.a */,
+				BB48B5CB19A88741008FCCA0 /* libskia_static.a */,
+				BB48B5CC19A88741008FCCA0 /* libz_static.a */,
+				BB48B5C019A88727008FCCA0 /* libz_static.a */,
+				BB48B5AC19A8870C008FCCA0 /* libarchive_static.a */,
+				BB48B5AD19A8870C008FCCA0 /* libexpat_static.a */,
+				BB48B5AE19A8870C008FCCA0 /* libgdal_static.a */,
+				BB48B5AF19A8870C008FCCA0 /* libgif_static.a */,
+				BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */,
+				BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */,
+				BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */,
+				BB48B5B319A8870C008FCCA0 /* libpng_static.a */,
+				BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */,
+				BB48B5B519A8870C008FCCA0 /* libskia_static.a */,
 				46E6A59CC7494826B3DC682B /* libPods-dev.a */,
 				90FA13E852C14245A4ED3E9D /* libPods.a */,
 				BB5D90D618A662C700EFAD92 /* libOsmAndCore_static.a */,

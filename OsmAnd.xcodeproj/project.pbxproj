@@ -219,7 +219,7 @@
 		BB48B5B919A8870C008FCCA0 /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5AF19A8870C008FCCA0 /* libgif_static.a */; };
 		BB48B5BA19A8870C008FCCA0 /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */; };
 		BB48B5BB19A8870C008FCCA0 /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */; };
-		BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */; };
+		BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static_standalone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static_standalone.a */; };
 		BB48B5BD19A8870C008FCCA0 /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B319A8870C008FCCA0 /* libpng_static.a */; };
 		BB48B5BE19A8870C008FCCA0 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */; };
 		BB48B5BF19A8870C008FCCA0 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B519A8870C008FCCA0 /* libskia_static.a */; };
@@ -691,7 +691,7 @@
 		BB48B5AF19A8870C008FCCA0 /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libgif_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libicu4c_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libjpeg_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libOsmAndCore_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static_standalone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libOsmAndCore_static_standalone.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB48B5B319A8870C008FCCA0 /* libpng_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libpng_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libprotobuf_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB48B5B519A8870C008FCCA0 /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = "libskia_static.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -871,7 +871,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */,
-				BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static.a in Frameworks */,
+				BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static_standalone.a in Frameworks */,
 				BB48B5B619A8870C008FCCA0 /* libarchive_static.a in Frameworks */,
 				BB48B5B719A8870C008FCCA0 /* libexpat_static.a in Frameworks */,
 				BB48B5B819A8870C008FCCA0 /* libgdal_static.a in Frameworks */,
@@ -928,7 +928,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */,
-				BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static.a in Frameworks */,
+				BB48B5BC19A8870C008FCCA0 /* libOsmAndCore_static_standalone.a in Frameworks */,
 				BB48B5B619A8870C008FCCA0 /* libarchive_static.a in Frameworks */,
 				BB48B5B719A8870C008FCCA0 /* libexpat_static.a in Frameworks */,
 				BB48B5B819A8870C008FCCA0 /* libgdal_static.a in Frameworks */,
@@ -993,7 +993,7 @@
 				BB48B5AF19A8870C008FCCA0 /* libgif_static.a */,
 				BB48B5B019A8870C008FCCA0 /* libicu4c_static.a */,
 				BB48B5B119A8870C008FCCA0 /* libjpeg_static.a */,
-				BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static.a */,
+				BB48B5B219A8870C008FCCA0 /* libOsmAndCore_static_standalone.a */,
 				BB48B5B319A8870C008FCCA0 /* libpng_static.a */,
 				BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */,
 				BB48B5B519A8870C008FCCA0 /* libskia_static.a */,
@@ -2399,7 +2399,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lOsmAndCore_static",
+					"-lOsmAndCore_static_standalone",
 					"-larchive_static",
 					"-licu4c_static",
 					"-lprotobuf_static",
@@ -2426,7 +2426,7 @@
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-lOsmAndCore_static",
+					"-lOsmAndCore_static_standalone",
 					"-larchive_static",
 					"-licu4c_static",
 					"-lprotobuf_static",

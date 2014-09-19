@@ -10,7 +10,7 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/CommonTypes.h>
-#include <OsmAndCore/Map/MapTypes.h>
+#include <OsmAndCore/Map/MapCommonTypes.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/MapRendererState.h>

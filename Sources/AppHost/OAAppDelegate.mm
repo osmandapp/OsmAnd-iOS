@@ -16,6 +16,7 @@
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
 #import "OANavigationController.h"
+#include "CoreResourcesFromBundleProvider.h"
 
 #include <QDir>
 #include <QFile>
@@ -49,7 +50,8 @@
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
     
     // Initialize OsmAnd core
-    OsmAnd::InitializeCore();
+    const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
+    OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
 
 #if defined(OSMAND_IOS_DEV)
 #   if defined(DEBUG)
@@ -59,23 +61,23 @@
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::QIODeviceLogSink(logFile, true)));
 #   else // defined(DEBUG)
     const auto testflightLog =
-    []
-    (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
-    {
-        NSString* prefix;
-        if (level == OsmAnd::LogSeverityLevel::Error)
-            prefix = @"ERROR: ";
-        else if (level == OsmAnd::LogSeverityLevel::Info)
-            prefix = @"INFO: ";
-        else if (level == OsmAnd::LogSeverityLevel::Warning)
-            prefix = @"WARN: ";
-        else
-            prefix = @"DEBUG: ";
-        NSString* line = [[NSString alloc] initWithFormat:[[NSString alloc] initWithCString:format
-                                                                                   encoding:NSASCIIStringEncoding]
-                                                arguments:args];
-        TFLogPreFormatted([prefix stringByAppendingString:line]);
-    };
+        []
+        (OsmAnd::FunctorLogSink* const sink, const OsmAnd::LogSeverityLevel level, const char* format, va_list args)
+        {
+            NSString* prefix;
+            if (level == OsmAnd::LogSeverityLevel::Error)
+                prefix = @"ERROR: ";
+            else if (level == OsmAnd::LogSeverityLevel::Info)
+                prefix = @"INFO: ";
+            else if (level == OsmAnd::LogSeverityLevel::Warning)
+                prefix = @"WARN: ";
+            else
+                prefix = @"DEBUG: ";
+            NSString* line = [[NSString alloc] initWithFormat:[[NSString alloc] initWithCString:format
+                                                                                       encoding:NSASCIIStringEncoding]
+                                                    arguments:args];
+            TFLogPreFormatted([prefix stringByAppendingString:line]);
+        };
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::FunctorLogSink(testflightLog, nullptr)));
 #   endif
 #endif // defined(OSMAND_IOS_DEV)

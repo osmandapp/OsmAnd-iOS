@@ -15,7 +15,7 @@
 #include <QSet>
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/MapStyle.h>
+#include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
@@ -35,7 +35,7 @@
 
 #define Item_MapStyle _(Item_MapStyle)
 @interface Item_MapStyle : Item
-@property std::shared_ptr<const OsmAnd::MapStyle> mapStyle;
+@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
 @end
 @implementation Item_MapStyle
 @end

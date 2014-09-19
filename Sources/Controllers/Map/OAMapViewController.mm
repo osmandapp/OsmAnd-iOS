@@ -44,7 +44,6 @@
 #   include <OsmAndCore/Map/BinaryMapRasterMetricsBitmapTileProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
-#include "ExternalResourcesProvider.h"
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
@@ -1378,18 +1377,15 @@
         }
         if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
-            const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
-            if (!mapStyle->isLoaded())
-                mapStyle->load();
-            OALog(@"Using '%@' style from '%@' resource", mapStyle->name.toNSString(), mapSourceResource->id.toNSString());
+            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+            OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
             _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection));
 
-            const std::shared_ptr<OsmAnd::IExternalResourcesProvider> externalResourcesProvider(new ExternalResourcesProvider(self.displayDensityFactor > 1.0f));
-            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(mapStyle,
+            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
-                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
-                                                                                     externalResourcesProvider));
+                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject])));
             _primitiviser.reset(new OsmAnd::Primitiviser(_mapPresentationEnvironment));
             _binaryMapPrimitivesProvider.reset(new OsmAnd::BinaryMapPrimitivesProvider(_binaryMapDataProvider,
                                                                                        _primitiviser,
@@ -1399,7 +1395,7 @@
             if (lastMapSource.variant != nil)
             {
                 OALog(@"Using '%@' variant of style", lastMapSource.variant);
-                const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(mapStyle->name, QString::fromNSString(lastMapSource.variant));
+                const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset)
                     _mapPresentationEnvironment->setSettings(preset->attributes);
             }

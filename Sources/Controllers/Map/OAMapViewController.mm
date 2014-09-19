@@ -1444,7 +1444,8 @@
                 [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
             }
 #else
-            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider));
+            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
+                                                                                             rasterTileSize));
             [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
 #endif
         }

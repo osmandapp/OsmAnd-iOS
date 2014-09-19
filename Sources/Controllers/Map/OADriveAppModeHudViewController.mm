@@ -152,7 +152,7 @@
     self.leftWidgetsContainerBackground.image = [_app.appearance hudViewBackgroundForStyle:OAHudViewStyleTopLeadingSideDock];
 
 #if !defined(OSMAND_IOS_DEV)
-    [_debugButton hideAndDisableInput];
+    _debugButton.hidden = YES;
 #endif // !defined(OSMAND_IOS_DEV)
 }
 

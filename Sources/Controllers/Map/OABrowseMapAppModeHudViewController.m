@@ -103,7 +103,7 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
 
 #if !defined(OSMAND_IOS_DEV)
-    [_debugButton hideAndDisableInput];
+    _debugButton.hidden = YES;
 #endif // !defined(OSMAND_IOS_DEV)
 }
 

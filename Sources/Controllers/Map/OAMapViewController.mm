@@ -32,8 +32,6 @@
 #include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/Primitiviser.h>
-#include <OsmAndCore/Map/MapStyleValueDefinition.h>
-#include <OsmAndCore/Map/MapStyleValue.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>

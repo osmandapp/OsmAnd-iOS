@@ -142,11 +142,6 @@ struct RegionResources
 {
     [super viewDidLoad];
 
-#if defined(DEBUG)
-    //HACK: This stuff is needed to avoid exceptions during Debug. In Release they're harmless
-    self.searchDisplayController.searchBar.searchBarStyle = UISearchBarStyleDefault;
-#endif // defined(DEBUG)
-
     if (_region != _app.worldRegion)
         self.title = _region.name;
 

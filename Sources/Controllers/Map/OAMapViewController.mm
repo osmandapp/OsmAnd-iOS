@@ -1086,14 +1086,15 @@
             break;
             
         case OAMapModePositionTrack:
-            if (_app.locationServices.lastKnownLocation != nil)
+        {
+            CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+            if (newLocation != nil)
             {
                 // Fly to last-known position without changing anything but target
                 
                 mapView.animator->pause();
                 mapView.animator->cancelAllAnimations();
 
-                CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
@@ -1132,8 +1133,10 @@
                 mapView.animator->resume();
             }
             break;
+        }
             
         case OAMapModeFollow:
+        {
             // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
             if (_lastMapMode == OAMapModePositionTrack)
             {
@@ -1154,9 +1157,9 @@
                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                       kLocationServicesAnimationKey);
 
-            if (_app.locationServices.lastKnownLocation != nil)
+            CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+            if (newLocation != nil)
             {
-                CLLocation* newLocation = _app.locationServices.lastKnownLocation;
                 OsmAnd::PointI newTarget31(
                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
@@ -1179,6 +1182,7 @@
 
             mapView.animator->resume();
             break;
+        }
 
         default:
             return;
@@ -1206,6 +1210,15 @@
     // Obtain fresh location and heading
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
     CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+
+    // In case there's no known location, do nothing and hide all markers
+    if (newLocation == nil)
+    {
+        _myLocationMarker->setIsHidden(true);
+        _myCourseMarker->setIsHidden(true);
+        return;
+    }
+
     const OsmAnd::PointI newTarget31(
                                      OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                                      OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
@@ -1254,7 +1267,7 @@
         {
             // Update azimuth if there's one
             const auto direction = (_lastAppMode == OAAppModeBrowseMap)
-                ? _app.locationServices.lastKnownHeading
+                ? newHeading
                 : newLocation.course;
             if (!isnan(direction) && direction >= 0)
             {

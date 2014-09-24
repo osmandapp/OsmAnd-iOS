@@ -182,6 +182,13 @@
         {
             _waitingForAuthorization = !self.allowed;
 
+            // For iOS 8.0+ explicit authorization request is needed
+            if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending &&
+                [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
+            {
+                [_manager requestAlwaysAuthorization];
+            }
+
             _manager.desiredAccuracy = [self desiredAccuracy];
             [_manager startUpdatingLocation];
             _locationActive = YES;

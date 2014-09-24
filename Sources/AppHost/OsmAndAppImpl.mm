@@ -9,12 +9,17 @@
 #import "OsmAndAppImpl.h"
 
 #import <UIKit/UIKit.h>
+#import <QuickDialog.h>
+#import <QElement.h>
+#import <QElement+Appearance.h>
 
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
 #import "OANighttimeAppearance.h"
+#import "OAQFlatAppearance.h"
 #import "OAAutoObserverProxy.h"
+#import "OAUtilities.h"
 #import "OALog.h"
 
 #include <algorithm>
@@ -182,6 +187,8 @@
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
+    if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
+        QElement.appearance = [[OAQFlatAppearance alloc] init];
 
     return YES;
 }

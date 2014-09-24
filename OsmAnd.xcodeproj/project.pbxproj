@@ -23,6 +23,12 @@
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
+		BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
+		BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
+		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
+		BB0275D919D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
+		BB0275DA19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
+		BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
 		BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF41793F7FD00423944 /* UIKit.framework */; };
 		BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF61793F7FD00423944 /* Foundation.framework */; };
 		BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB098CF81793F7FD00423944 /* CoreGraphics.framework */; };
@@ -622,6 +628,11 @@
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		87629E7351254391A72029D7 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = "<group>"; };
 		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQFlatAppearance.h; path = PodsExtensions/OAQFlatAppearance.h; sourceTree = "<group>"; };
+		BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQFlatAppearance.m; path = PodsExtensions/OAQFlatAppearance.m; sourceTree = "<group>"; };
+		BB0275D619D2EEC5009AFBA8 /* OACommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACommon.h; sourceTree = "<group>"; };
+		BB0275D719D2EF41009AFBA8 /* OAUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAUtilities.h; path = Helpers/OAUtilities.h; sourceTree = "<group>"; };
+		BB0275D819D2EF41009AFBA8 /* OAUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAUtilities.m; path = Helpers/OAUtilities.m; sourceTree = "<group>"; };
 		BB098CF11793F7FD00423944 /* OsmAnd DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB098CF41793F7FD00423944 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		BB098CF61793F7FD00423944 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -1067,6 +1078,7 @@
 				BB451EA418E19293005FBE09 /* Data */,
 				BB451EB518E1937C005FBE09 /* Services */,
 				BBAD5B97192733820043590F /* Helpers */,
+				BB0275D619D2EEC5009AFBA8 /* OACommon.h */,
 				BBBDADB418BCC3FA00E4A359 /* OACommonTypes.h */,
 				BBE1D2B1190D18B000D90F0A /* OAWorldRegion.h */,
 				BBE1D2B2190D18B000D90F0A /* OAWorldRegion.mm */,
@@ -1338,6 +1350,8 @@
 				BBA3AEBE197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.h */,
 				BBA3AEBF197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m */,
 				BBA3AF2C197953250039D991 /* FFCircularProgressView+isSpinning.h */,
+				BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */,
+				BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */,
 			);
 			name = PodsExtensions;
 			sourceTree = "<group>";
@@ -1472,6 +1486,8 @@
 				BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */,
 				BBBAFE15198A32E000573FFA /* OADebugSettings.h */,
 				BBBAFE16198A32E000573FFA /* OADebugSettings.m */,
+				BB0275D719D2EF41009AFBA8 /* OAUtilities.h */,
+				BB0275D819D2EF41009AFBA8 /* OAUtilities.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2112,6 +2128,7 @@
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
+				BB0275D919D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
@@ -2119,6 +2136,7 @@
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBA3AECB197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BB54F70E1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
+				BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBBE454F1856544000F1C144 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AF061975016F0039D991 /* OAActionsPanelViewController.m in Sources */,
@@ -2180,6 +2198,7 @@
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
+				BB0275DA19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
@@ -2187,6 +2206,7 @@
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BB54F70F1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
+				BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AECC197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AF071975016F0039D991 /* OAActionsPanelViewController.m in Sources */,
@@ -2255,9 +2275,11 @@
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
 				BBA3AF42197FC4BB0039D991 /* OAActionsPanelViewController.m in Sources */,
+				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				BBA3AF44197FC4BB0039D991 /* OAMapSourcesListViewController.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.m in Sources */,
+				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				BBA3AF46197FC4BB0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BBA3AF47197FC4BB0039D991 /* OAEditFavoriteViewController.mm in Sources */,
 				BBA3AF48197FC4BB0039D991 /* OAIncomingURLViewController.mm in Sources */,

@@ -21,6 +21,7 @@
 #import "OARootViewController.h"
 #import "OAUserInteractionInterceptorView.h"
 #import "OAAppearance.h"
+#import "OAUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
 
@@ -98,7 +99,7 @@
 {
     _app = [OsmAndApp instance];
 
-    _iOS70plus = ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
+    _iOS70plus = [OAUtilities iosVersionIsAtLeast:@"7.0"];
 
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 

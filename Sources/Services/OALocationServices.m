@@ -12,8 +12,9 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
-#include "Localization.h"
+#import "OAUtilities.h"
 #import "OALog.h"
+#include "Localization.h"
 
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
@@ -183,7 +184,8 @@
             _waitingForAuthorization = !self.allowed;
 
             // For iOS 8.0+ explicit authorization request is needed
-            if ([[[UIDevice currentDevice] systemVersion] compare:@"8.0" options:NSNumericSearch] != NSOrderedAscending &&
+            if (!self.allowed &&
+                [OAUtilities iosVersionIsAtLeast:@"8.0"] &&
                 [_manager respondsToSelector:@selector(requestAlwaysAuthorization)])
             {
                 [_manager requestAlwaysAuthorization];

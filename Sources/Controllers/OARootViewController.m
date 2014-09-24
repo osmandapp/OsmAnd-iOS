@@ -259,6 +259,9 @@
 
 - (void)closeMenuAndPanelsAnimated:(BOOL)animated
 {
+    // This fixes issue with stuck toolbar
+    self.navigationController.toolbarHidden = YES;
+
     // Close all menus and panels
     [self closeMenuAnimated:animated];
     if (self.state == JASidePanelLeftVisible)

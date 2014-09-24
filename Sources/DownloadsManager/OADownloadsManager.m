@@ -18,6 +18,7 @@
 #import "OADownloadTask_AFURLSessionManager.h"
 
 #import "OADownloadTask.h"
+#import "OAUtilities.h"
 #import "OALog.h"
 
 #define _(name) OADownloadsManager__##name
@@ -54,7 +55,7 @@
     // Check what backend should be used
     const BOOL isSupported_NSURLSession =
         (NSClassFromString(@"NSURLSession") != nil) &&
-        ([[[UIDevice currentDevice] systemVersion] compare:@"7.0" options:NSNumericSearch] != NSOrderedAscending);
+        [OAUtilities iosVersionIsAtLeast:@"7.0"];
     if (!isSupported_NSURLSession)
         _sessionManager = nil;
     else

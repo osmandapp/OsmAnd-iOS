@@ -74,6 +74,15 @@
     if (selectedValue == nil)
         selectedValue = self.selectedValue;
     [super updateCell:cell selectedValue:selectedValue];
+
+    if (self.title == nil)
+    {
+        cell.textField.textColor = self.enabled ? self.appearance.valueColorEnabled : self.appearance.valueColorDisabled;
+    }
+    else
+    {
+        cell.textField.textColor = self.enabled ? self.appearance.entryTextColorEnabled : self.appearance.entryTextColorDisabled;
+    }
 }
 
 - (NSObject*)selectedValue

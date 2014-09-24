@@ -591,6 +591,10 @@
 		BBE1D2B7190D1C9600D90F0A /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = BBE1D2B5190D1C9600D90F0A /* regions.ocbf */; };
 		CE3A0DDF19A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
 		CE3A0DE019A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
+		CE3A0E3319A140F30035B296 /* OAShareLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0E3219A140F30035B296 /* OAShareLocation.m */; };
+		CE3A0E3419A140F60035B296 /* OAShareLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0E3219A140F30035B296 /* OAShareLocation.m */; };
+		CE3A0E3719A141670035B296 /* OAActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0E3619A141670035B296 /* OAActivityItemProvider.m */; };
+		CE3A0E3819A141670035B296 /* OAActivityItemProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0E3619A141670035B296 /* OAActivityItemProvider.m */; };
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
 
@@ -897,6 +901,10 @@
 		BBE1D2B5190D1C9600D90F0A /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = "../resources/countries-info/regions.ocbf"; sourceTree = "<group>"; };
 		CE3A0DDD19A103740035B296 /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQLabelElement.h; path = Common/OAQLabelElement.h; sourceTree = "<group>"; };
 		CE3A0DDE19A103740035B296 /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQLabelElement.m; path = Common/OAQLabelElement.m; sourceTree = "<group>"; };
+		CE3A0E3119A140F30035B296 /* OAShareLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAShareLocation.h; path = Helpers/OAShareLocation.h; sourceTree = "<group>"; };
+		CE3A0E3219A140F30035B296 /* OAShareLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAShareLocation.m; path = Helpers/OAShareLocation.m; sourceTree = "<group>"; };
+		CE3A0E3519A141670035B296 /* OAActivityItemProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAActivityItemProvider.h; path = Helpers/OAActivityItemProvider.h; sourceTree = "<group>"; };
+		CE3A0E3619A141670035B296 /* OAActivityItemProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAActivityItemProvider.m; path = Helpers/OAActivityItemProvider.m; sourceTree = "<group>"; };
 		E68D22CEA8A54EDF865C8FB4 /* Pods-dev.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.xcconfig"; path = "Pods/Pods-dev.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1472,6 +1480,10 @@
 				BBA3AFF519854D8F0039D991 /* OAResourcesInstaller.mm */,
 				BBBAFE15198A32E000573FFA /* OADebugSettings.h */,
 				BBBAFE16198A32E000573FFA /* OADebugSettings.m */,
+				CE3A0E3119A140F30035B296 /* OAShareLocation.h */,
+				CE3A0E3219A140F30035B296 /* OAShareLocation.m */,
+				CE3A0E3519A141670035B296 /* OAActivityItemProvider.h */,
+				CE3A0E3619A141670035B296 /* OAActivityItemProvider.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -2148,6 +2160,7 @@
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				CE3A0E3719A141670035B296 /* OAActivityItemProvider.m in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
@@ -2163,6 +2176,7 @@
 				BB451F0918E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				BBA3AE86196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
 				BBBAFE17198A32E000573FFA /* OADebugSettings.m in Sources */,
+				CE3A0E3319A140F30035B296 /* OAShareLocation.m in Sources */,
 				BBA3AEC41974067D0039D991 /* OAFavoritesLayerViewController.mm in Sources */,
 				BB54F71819893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BB54F7131989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
@@ -2216,6 +2230,7 @@
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
+				CE3A0E3819A141670035B296 /* OAActivityItemProvider.m in Sources */,
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
@@ -2231,6 +2246,7 @@
 				BBA3AEF8197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BBA3AE87196BCB4B0039D991 /* OAQColorPickerElement.m in Sources */,
 				BBBAFE18198A32E000573FFA /* OADebugSettings.m in Sources */,
+				CE3A0E3419A140F60035B296 /* OAShareLocation.m in Sources */,
 				BBA3AEC51974067D0039D991 /* OAFavoritesLayerViewController.mm in Sources */,
 				BB54F71919893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BB54F7141989144400AB40D1 /* OANighttimeAppearance.m in Sources */,

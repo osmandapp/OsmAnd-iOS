@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="5056" systemVersion="13D65" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -16,7 +16,6 @@
                 <outlet property="driveModeButton" destination="Fb1-sd-BAZ" id="WJH-KP-reU"/>
                 <outlet property="mapModeButton" destination="OAx-cr-GZm" id="D6t-2c-aKX"/>
                 <outlet property="optionsMenuButton" destination="jLp-qw-2pN" id="IQE-Bc-5XZ"/>
-                <outlet property="searchQueryTextfield" destination="RN3-8J-1UX" id="B37-Oy-6mJ"/>
                 <outlet property="view" destination="1" id="h9T-rl-WfS"/>
                 <outlet property="zoomInButton" destination="sEk-aI-0VV" id="Pg9-gN-uXJ"/>
                 <outlet property="zoomOutButton" destination="Wxb-EL-Pln" id="BS4-Ei-5fT"/>
@@ -27,15 +26,8 @@
             <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Search..." minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="RN3-8J-1UX" userLabel="searchQueryTextfield">
-                    <rect key="frame" x="72" y="26" width="288" height="30"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits" returnKeyType="search"/>
-                </textField>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jLp-qw-2pN" userLabel="optionsMenuButton">
                     <rect key="frame" x="16" y="21" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="B37-BR-aoc"/>
                         <constraint firstAttribute="height" constant="40" id="Ijp-tM-cgm"/>
@@ -49,7 +41,6 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eDo-iY-wKm" userLabel="actionsMenuButton">
                     <rect key="frame" x="753" y="21" width="15" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="gvg-eN-DTa"/>
                         <constraint firstAttribute="width" constant="15" id="rpJ-F2-zjA"/>
@@ -63,7 +54,6 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OAx-cr-GZm" userLabel="mapModeButton">
                     <rect key="frame" x="712" y="968" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="40" id="8DK-RZ-MHF"/>
                         <constraint firstAttribute="width" constant="40" id="xRK-u8-wpa"/>
@@ -77,7 +67,6 @@
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Fb1-sd-BAZ" userLabel="driveModeButton">
                     <rect key="frame" x="656" y="968" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="ab9-KT-4KH"/>
                         <constraint firstAttribute="height" constant="40" id="hGG-5c-SbS"/>
@@ -91,11 +80,9 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zDY-H9-DjN" userLabel="compassBox">
                     <rect key="frame" x="16" y="968" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Vz-tj-y6t" userLabel="compassButton">
                             <rect key="frame" x="5" y="5" width="30" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="30" id="7HM-nR-jmM"/>
                                 <constraint firstAttribute="width" constant="30" id="t9f-q4-9gS"/>
@@ -109,7 +96,6 @@
                         </button>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="UOO-Qs-Cfs" userLabel="compassImage">
                             <rect key="frame" x="17" y="11" width="6" height="18"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration">
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
                             </accessibility>
@@ -130,11 +116,9 @@
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6yH-s0-HAr" userLabel="zoomButtons">
                     <rect key="frame" x="704" y="456" width="64" height="112"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sEk-aI-0VV" userLabel="zoomInButton">
                             <rect key="frame" x="8" y="8" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="518-fE-ADN"/>
                                 <constraint firstAttribute="width" constant="40" id="F8p-1A-Ffh"/>
@@ -148,7 +132,6 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wxb-EL-Pln" userLabel="zoomOutButton">
                             <rect key="frame" x="8" y="64" width="40" height="40"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="40" id="KgG-Pj-u8F"/>
                                 <constraint firstAttribute="height" constant="40" id="sIv-yB-uXz"/>
@@ -172,7 +155,6 @@
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GYM-Vp-fod" userLabel="debugButton">
                     <rect key="frame" x="16" y="492" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="6yY-0l-lhr"/>
                         <constraint firstAttribute="height" constant="40" id="mjN-rd-7bt"/>
@@ -188,13 +170,11 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="OAx-cr-GZm" secondAttribute="bottom" constant="16" id="0a9-ah-GJP"/>
                 <constraint firstItem="OAx-cr-GZm" firstAttribute="leading" secondItem="Fb1-sd-BAZ" secondAttribute="trailing" constant="16" id="6IR-4J-lbY"/>
-                <constraint firstItem="RN3-8J-1UX" firstAttribute="centerY" secondItem="jLp-qw-2pN" secondAttribute="centerY" id="HqN-5F-ALl"/>
                 <constraint firstAttribute="bottom" secondItem="zDY-H9-DjN" secondAttribute="bottom" constant="16" id="IV3-Qh-cCM"/>
                 <constraint firstAttribute="centerY" secondItem="GYM-Vp-fod" secondAttribute="centerY" id="Q2V-pY-dqg"/>
                 <constraint firstAttribute="trailing" secondItem="6yH-s0-HAr" secondAttribute="trailing" id="SGU-yk-2Cd"/>
                 <constraint firstAttribute="trailing" secondItem="eDo-iY-wKm" secondAttribute="trailing" id="TbH-G6-CKD"/>
                 <constraint firstItem="GYM-Vp-fod" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="U3E-NL-1VK"/>
-                <constraint firstItem="RN3-8J-1UX" firstAttribute="leading" secondItem="jLp-qw-2pN" secondAttribute="trailing" constant="16" id="aZM-ab-f9P"/>
                 <constraint firstItem="zDY-H9-DjN" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="atC-CV-dBR"/>
                 <constraint firstItem="jLp-qw-2pN" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="16" id="dia-8O-Cmh"/>
                 <constraint firstAttribute="centerY" secondItem="6yH-s0-HAr" secondAttribute="centerY" id="ey8-J2-Nm3"/>
@@ -202,10 +182,7 @@
                 <constraint firstAttribute="bottom" secondItem="Fb1-sd-BAZ" secondAttribute="bottom" constant="16" id="iM0-Rt-kvT"/>
                 <constraint firstItem="jLp-qw-2pN" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="o8I-Mg-qmS"/>
                 <constraint firstAttribute="trailing" secondItem="OAx-cr-GZm" secondAttribute="trailing" constant="16" id="vCT-g1-z9F"/>
-                <constraint firstAttribute="centerX" secondItem="RN3-8J-1UX" secondAttribute="trailing" constant="24" id="zek-5H-qFN"/>
             </constraints>
-            <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-            <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
         </view>
     </objects>
     <resources>
@@ -221,4 +198,9 @@
         <image name="drive_mode_button.png" width="25" height="25"/>
         <image name="free_map_mode_button.png" width="25" height="25"/>
     </resources>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination"/>
+    </simulatedMetricsContainer>
 </document>

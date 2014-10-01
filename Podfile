@@ -1,3 +1,5 @@
+source "https://github.com/CocoaPods/Specs.git"
+
 platform :ios, '6.0'
 
 xcodeproj 'OsmAnd'
@@ -34,8 +36,24 @@ end
 #  - Build all architectures for Pods
 post_install do |installer_representation|
     workDir = Dir.pwd
-    adjustConfigFile("#{workDir}/Pods/Pods.xcconfig")
-    adjustConfigFile("#{workDir}/Pods/Pods-dev.xcconfig")
+
+    # CocoaPods pre-0.34
+    if File.exist?("#{workDir}/Pods/Pods.xcconfig")
+        adjustConfigFile("#{workDir}/Pods/Pods.xcconfig")
+    end
+    if File.exist?("#{workDir}/Pods/Pods-dev.xcconfig")
+        adjustConfigFile("#{workDir}/Pods/Pods-dev.xcconfig")
+    end
+
+    # CocoaPods pre-0.34+
+    if File.exist?("#{workDir}/Pods/Target Support Files/Pods")
+        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods/Pods.debug.xcconfig")
+        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods/Pods.release.xcconfig")
+    end
+    if File.exist?("#{workDir}/Pods/Target Support Files/Pods-dev")
+        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods-dev/Pods-dev.debug.xcconfig")
+        adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods-dev/Pods-dev.release.xcconfig")
+    end
 
     installer_representation.project.targets.each do |target|
         target.build_configurations.each do |configuration|
@@ -48,5 +66,7 @@ def adjustConfigFile(xcconfigFilename)
     xcconfig = File.read(xcconfigFilename)
     xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\" \"")
+    xcconfig = xcconfig.gsub(/OTHER_CFLAGS = "/, "OTHER_CFLAGS = $(inherited) \"")
+    xcconfig = xcconfig.gsub(/OTHER_LDFLAGS = "/, "OTHER_LDFLAGS = $(inherited) \"")
     File.open(xcconfigFilename, "w") { |file| file << xcconfig }
 end

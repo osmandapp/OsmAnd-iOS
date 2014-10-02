@@ -10,6 +10,7 @@
 
 #import "OsmAndApp.h"
 #import "OAWorldRegion.h"
+#import "OADownloadProgressView.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 
@@ -37,7 +38,7 @@
 @interface OutdatedResourceItem : LocalResourceItem
 @end
 
-@interface OAResourcesBaseViewController : UIViewController
+@interface OAResourcesBaseViewController : UIViewController<OADownloadProgressViewDelegate>
 
 @property BOOL dataInvalidated;
 

@@ -22,6 +22,18 @@
 
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
+		3AC40AC119DDC43F002FBC40 /* OADownloadProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */; };
+		3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */; };
+		3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */; };
+		3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */; };
+		3AC40AC719DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */; };
+		3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */; };
+		3AC40ACB19DDC663002FBC40 /* Btn-Pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */; };
+		3AC40ACC19DDC663002FBC40 /* Btn-Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */; };
+		3AC40ACD19DDC669002FBC40 /* Btn-Pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */; };
+		3AC40ACE19DDC669002FBC40 /* Btn-Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */; };
+		3AC40ACF19DDC66A002FBC40 /* Btn-Pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */; };
+		3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 		BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
@@ -625,6 +637,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3AC40ABE19DDC409002FBC40 /* OA-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OA-Prefix.pch"; sourceTree = SOURCE_ROOT; };
+		3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADownloadProgressView.xib; path = Resources/Views/OADownloadProgressView.xib; sourceTree = "<group>"; };
+		3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadProgressView.h; path = Views/OADownloadProgressView.h; sourceTree = "<group>"; };
+		3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadProgressView.m; path = Views/OADownloadProgressView.m; sourceTree = "<group>"; };
+		3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Btn-Pause@2x.png"; sourceTree = "<group>"; };
+		3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Btn-Play@2x.png"; sourceTree = "<group>"; };
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA1702B63C7592558F9675 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1008,6 +1026,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3AC40ABD19DDC3EE002FBC40 /* Supported filed */ = {
+			isa = PBXGroup;
+			children = (
+				3AC40ABE19DDC409002FBC40 /* OA-Prefix.pch */,
+			);
+			name = "Supported filed";
+			sourceTree = "<group>";
+		};
+		3AC40ABF19DDC430002FBC40 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
 		54241F3590BD4223CD756474 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1079,6 +1113,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				3AC40ABD19DDC3EE002FBC40 /* Supported filed */,
 				BB54F7051989137700AB40D1 /* Appearance */,
 				BBA3B00819878AC30039D991 /* DownloadsManager */,
 				BBA3AE83196BCB120039D991 /* PodsExtensions */,
@@ -1101,6 +1136,8 @@
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */,
+				3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */,
 				BB451F0B18E6F521005FBE09 /* OAMapRendererViewProtocol.h */,
 				BBA858E817C222BD00AADCC7 /* OAMapRendererView.h */,
 				BBA858E917C222BD00AADCC7 /* OAMapRendererView.mm */,
@@ -1217,6 +1254,8 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */,
+				3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */,
 				BBA3AF26197659270039D991 /* menu_goto_favorite_icon.png */,
 				BBA3AF27197659270039D991 /* menu_goto_favorite_icon@2x.png */,
 				BBA3AF20197652140039D991 /* bar_goto_favorite_icon.png */,
@@ -1551,6 +1590,7 @@
 		BBE57D4F17C2208600C349CC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3AC40ABF19DDC430002FBC40 /* Views */,
 				BB451D8C18D70B5B005FBE09 /* Rasterized */,
 				BB451D8A18D70B4B005FBE09 /* Shipped */,
 				BB451D8918D70AE4005FBE09 /* Embedded */,
@@ -1699,6 +1739,7 @@
 				BB451E1918DA4180005FBE09 /* position_track_map_mode_button.png in Resources */,
 				BB2726FF19CB38D7007C5613 /* fonts in Resources */,
 				BBA3AF14197507010039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
+				3AC40AC119DDC43F002FBC40 /* OADownloadProgressView.xib in Resources */,
 				BB451DB918D70B5B005FBE09 /* HUD_button_bg@2x.png in Resources */,
 				BB476B6C18D4C7F30044D5E1 /* DriveAppModeHUD~ipad.xib in Resources */,
 				BB451DF118D8F7D7005FBE09 /* Localizable.strings in Resources */,
@@ -1721,6 +1762,7 @@
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
 				BB2726E619CB3825007C5613 /* default.render.xml in Resources */,
 				BBA3AE9F196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
+				3AC40ACC19DDC663002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB451DCF18D70B5B005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451EE818E60EBB005FBE09 /* HUD_debug_actions_button@2x.png in Resources */,
 				BB451DCB18D70B5B005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
@@ -1743,6 +1785,7 @@
 				BBA3AF22197652140039D991 /* bar_goto_favorite_icon.png in Resources */,
 				BB476B7018D4C83E0044D5E1 /* NavigationAppModeHUD~ipad.xib in Resources */,
 				BBAC895A17C252B8003CD1A4 /* Icon-72@2x.png in Resources */,
+				3AC40ACB19DDC663002FBC40 /* Btn-Pause@2x.png in Resources */,
 				BB4C74691920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */,
 				BB451E0618DA4176005FBE09 /* free_map_mode_button@2x.png in Resources */,
 				BB451DBB18D70B5B005FBE09 /* HUD_compass@2x.png in Resources */,
@@ -1814,6 +1857,7 @@
 				BB451E6118DCD224005FBE09 /* position_track_map_mode_button.png in Resources */,
 				BB27270019CB38D7007C5613 /* fonts in Resources */,
 				BBA3AF15197507010039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
+				3AC40AC719DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
 				BB451E6218DCD224005FBE09 /* HUD_button_bg@2x.png in Resources */,
 				BB451E6318DCD224005FBE09 /* DriveAppModeHUD~ipad.xib in Resources */,
 				BB451E6418DCD224005FBE09 /* Localizable.strings in Resources */,
@@ -1836,6 +1880,7 @@
 				BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */,
 				BB2726E719CB3825007C5613 /* default.render.xml in Resources */,
 				BBA3AEA0196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
+				3AC40ACE19DDC669002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451EE918E60EBB005FBE09 /* HUD_debug_actions_button@2x.png in Resources */,
 				BB451E6E18DCD224005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
@@ -1858,6 +1903,7 @@
 				BBA3AF23197652140039D991 /* bar_goto_favorite_icon.png in Resources */,
 				BB451E7A18DCD224005FBE09 /* NavigationAppModeHUD~ipad.xib in Resources */,
 				BB451E7B18DCD224005FBE09 /* Icon-72@2x.png in Resources */,
+				3AC40ACD19DDC669002FBC40 /* Btn-Pause@2x.png in Resources */,
 				BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */,
 				BB451E7C18DCD224005FBE09 /* free_map_mode_button@2x.png in Resources */,
 				BB451E7D18DCD224005FBE09 /* HUD_compass@2x.png in Resources */,
@@ -1937,7 +1983,9 @@
 				BBA3AF9C197FC4BB0039D991 /* Default-Landscape~ipad.png in Resources */,
 				BBA3AF9D197FC4BB0039D991 /* drive_mode_button.png in Resources */,
 				BBA3AF9E197FC4BB0039D991 /* map_source_preset_type_general_icon@2x.png in Resources */,
+				3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB2726E519CB3825007C5613 /* default.map_styles_presets.xml in Resources */,
+				3AC40ACF19DDC66A002FBC40 /* Btn-Pause@2x.png in Resources */,
 				BBA3AF9F197FC4BB0039D991 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				BBA3AFA0197FC4BB0039D991 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BBA3AFA1197FC4BB0039D991 /* menu_item_install_icon@2x.png in Resources */,
@@ -1959,6 +2007,7 @@
 				BBA3AFB2197FC4BB0039D991 /* Icon-72.png in Resources */,
 				BBA3AFB3197FC4BB0039D991 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
+				3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
 				BBA3AFB5197FC4BB0039D991 /* HUD_zoom_out_button@2x.png in Resources */,
 				BBA3AFB6197FC4BB0039D991 /* HUD_compass_bg@2x.png in Resources */,
 				BBA3AFB7197FC4BB0039D991 /* HUD_menu_narrowbutton@2x.png in Resources */,
@@ -2176,6 +2225,7 @@
 				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3AF0A1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
+				3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */,
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
@@ -2246,6 +2296,7 @@
 				BB451E3218DCD224005FBE09 /* OAUserInteractionPassThroughView.m in Sources */,
 				BBA3AF0B1975016F0039D991 /* OAOptionsPanelViewController.mm in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */,
 				BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
@@ -2324,6 +2375,7 @@
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
 				BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
+				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
@@ -2518,6 +2570,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A0C4E6DAE9E8E9A08C3F24CF /* Pods-dev.debug.xcconfig */;
 			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					OSMAND_IOS_DEV,
@@ -2545,6 +2599,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 95D2AA6389A47C65DCBA754B /* Pods-dev.release.xcconfig */;
 			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
 					OSMAND_IOS_DEV,

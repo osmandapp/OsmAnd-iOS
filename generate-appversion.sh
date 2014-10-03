@@ -25,11 +25,14 @@ echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
 
 # Generate appversion.prefix
 APPVERSION_FILE="$BUILD_ROOT/appversion.prefix"
+echo "AppVersion prefix file: '$APPVERSION_FILE'"
 rm -f "$APPVERSION_FILE"
 echo "" > "$APPVERSION_FILE"
 echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
 echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
 
 # Touch plist file
+PLIST_FILE="$PROJECT_DIR/$INFOPLIST_FILE"
+echo "plist file: '$PLIST_FILE'"
 #touch -m "$PROJECT_DIR/$INFOPLIST_FILE"
 #touch -A -05 -m "$PROJECT_DIR/$INFOPLIST_FILE"

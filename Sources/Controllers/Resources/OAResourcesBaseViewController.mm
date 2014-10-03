@@ -98,9 +98,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     // IOS-178 Add download view
     
-    if (_app.downloadsManager.hasActiveDownloadTasks) {
-        [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfActiveDownloadTasks firstObject]]];
-    } else if (_app.downloadsManager.hasDownloadTasks) {
+    if (_app.downloadsManager.hasDownloadTasks) {
+
+        
+        [_app.downloadsManager.keysOfDownloadTasks enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
+            NSLog (@"object->%@",object);
+        }];
+        
         [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
     }
 }

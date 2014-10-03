@@ -98,15 +98,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     // IOS-178 Add download view
     
-    if (_app.downloadsManager.hasDownloadTasks) {
-
-        
-        [_app.downloadsManager.keysOfDownloadTasks enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
-            NSLog (@"object->%@",object);
-        }];
-        
+    if (_app.downloadsManager.hasDownloadTasks)
         [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
-    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -659,7 +652,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 -(void) pauseDownloadButtonClicked:(OADownloadProgressView *)view {
     if (_app.downloadsManager.hasActiveDownloadTasks) {
-        id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfActiveDownloadTasks firstObject]];
+        id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]];
         if (task)
             [task pause];
     }

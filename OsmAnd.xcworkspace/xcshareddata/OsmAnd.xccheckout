@@ -10,33 +10,49 @@
 	<string>OsmAnd</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>24F937EB-E750-4893-A996-B9E007E0785A</key>
+		<key>131E0627125A5DCAF31D73072C9682A65A476895</key>
+		<string>git://github.com/osmandapp/OsmAnd-resources.git</string>
+		<key>28C2E85B3C218730F3F17651BCDDA40723C85A7B</key>
 		<string>ssh://github.com/osmandapp/OsmAnd-core.git</string>
-		<key>B14B0E82-FD80-49F8-BBA8-6601C2C7E1E9</key>
+		<key>4908873254679538BE5BFFAD5839D86CA05DF689</key>
+		<string>git://github.com/osmandapp/OsmAnd-build.git</string>
+		<key>6BE6D5F307F1EBF6F8111ADEE9DED614C19F3DFB</key>
 		<string>ssh://github.com/osmandapp/OsmAnd-ios.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>OsmAnd.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>24F937EB-E750-4893-A996-B9E007E0785A</key>
+		<key>131E0627125A5DCAF31D73072C9682A65A476895</key>
+		<string>../../resources</string>
+		<key>28C2E85B3C218730F3F17651BCDDA40723C85A7B</key>
 		<string>../../core</string>
-		<key>B14B0E82-FD80-49F8-BBA8-6601C2C7E1E9</key>
+		<key>4908873254679538BE5BFFAD5839D86CA05DF689</key>
+		<string>../../build</string>
+		<key>6BE6D5F307F1EBF6F8111ADEE9DED614C19F3DFB</key>
 		<string>..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>ssh://github.com/osmandapp/OsmAnd-ios.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>B14B0E82-FD80-49F8-BBA8-6601C2C7E1E9</string>
+	<string>6BE6D5F307F1EBF6F8111ADEE9DED614C19F3DFB</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>24F937EB-E750-4893-A996-B9E007E0785A</string>
+			<string>4908873254679538BE5BFFAD5839D86CA05DF689</string>
+			<key>IDESourceControlWCCName</key>
+			<string>build</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>28C2E85B3C218730F3F17651BCDDA40723C85A7B</string>
 			<key>IDESourceControlWCCName</key>
 			<string>core</string>
 		</dict>
@@ -44,9 +60,17 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>B14B0E82-FD80-49F8-BBA8-6601C2C7E1E9</string>
+			<string>6BE6D5F307F1EBF6F8111ADEE9DED614C19F3DFB</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>131E0627125A5DCAF31D73072C9682A65A476895</string>
+			<key>IDESourceControlWCCName</key>
+			<string>resources</string>
 		</dict>
 	</array>
 </dict>

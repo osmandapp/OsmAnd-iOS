@@ -18,6 +18,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OALog.h"
+
 #include "Localization.h"
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -35,6 +36,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @end
 
 @interface OAResourcesBaseViewController ()
+
+@property OADownloadProgressView* downloadView;
+
+
 @end
 
 @implementation OAResourcesBaseViewController
@@ -47,6 +52,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
 
     MBProgressHUD* _deleteResourceProgressHUD;
+    
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -89,6 +95,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _deleteResourceProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     _deleteResourceProgressHUD.labelText = OALocalizedString(@"Deleting...");
     [self.view addSubview:_deleteResourceProgressHUD];
+    
+    // IOS-178 Add download view
+    
+    if (_app.downloadsManager.hasDownloadTasks) {
+
+        
+        [_app.downloadsManager.keysOfDownloadTasks enumerateObjectsUsingBlock:^(id object, NSUInteger index, BOOL *stop) {
+            NSLog (@"object->%@",object);
+        }];
+        
+        [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -100,6 +118,49 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self updateContent];
         _dataInvalidated = NO;
     }
+    
+    if (self.downloadView)
+        if (_app.downloadsManager.hasDownloadTasks)
+            [self validateDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
+        else
+            [self.downloadView removeFromSuperview];
+    else {
+        if (_app.downloadsManager.hasDownloadTasks)
+            [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
+    }
+}
+
+#pragma mark - IOS-178 Add download view
+-(void)showDownloadViewForTask:(id<OADownloadTask>)task {
+    self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - 40, DeviceScreenWidth, 40)];
+    [self.downloadView setTaskName: [[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0] stringByReplacingOccurrencesOfString:@"resource:" withString:@""] ];
+    self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.downloadView.delegate = self;
+    [self validateDownloadViewForTask:task];
+    
+    [self.view addSubview:self.downloadView];
+    
+    // Constraints
+    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:40.0f];
+    [self.view addConstraint:constraint];
+    
+}
+
+-(void) validateDownloadViewForTask:(id<OADownloadTask>)task {
+    [self.downloadView setProgress:task.progressCompleted];
+    if (task.state == OADownloadTaskStatePaused)
+        [self.downloadView setButtonStateResume];
+    else
+        [self.downloadView setButtonStatePause];
 }
 
 @synthesize dataInvalidated = _dataInvalidated;
@@ -341,8 +402,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self updateContent];
 
     // Resume task only if it's other resource download tasks are not running
-    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil) {
         [task resume];
+        [self showDownloadViewForTask:task];
+    }
 }
 
 - (void)offerCancelDownloadOf:(ResourceItem*)item_
@@ -392,7 +455,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)cancelDownloadOf:(ResourceItem*)item
 {
+    if ([[item.resourceId.toNSString() stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
+        [self.downloadView removeFromSuperview];
+    
     [item.downloadTask stop];
+    
 }
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item
@@ -518,7 +585,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
             return;
-
+        [self.downloadView setProgress:[value floatValue]];
         [self refreshContent];
     });
 }
@@ -537,6 +604,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             _dataInvalidated = YES;
             return;
         }
+
+        if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
+            [self.downloadView removeFromSuperview];
+        
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
+            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            [nextTask resume];
+            
+            self.downloadView = nil;
+            
+            //update balance
+            double delayInSeconds = 0.5;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [self showDownloadViewForTask:nextTask];
+            });
+        }
+        
 
         [self updateContent];
     });
@@ -560,5 +645,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     return nil;
 }
+
+
+
+#pragma mark - OADownloadProgressViewDelegate
+-(void) resumeDownloadButtonClicked:(OADownloadProgressView *)view {
+    if (_app.downloadsManager.hasDownloadTasks) {
+        id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]];
+        if (task)
+            [task resume];
+    }
+}
+
+-(void) pauseDownloadButtonClicked:(OADownloadProgressView *)view {
+    if (_app.downloadsManager.hasActiveDownloadTasks) {
+        id<OADownloadTask> task = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfActiveDownloadTasks firstObject]];
+        if (task)
+            [task pause];
+    }
+}
+
+
 
 @end

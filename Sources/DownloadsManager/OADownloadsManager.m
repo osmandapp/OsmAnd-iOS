@@ -31,6 +31,7 @@
 
     NSObject* _tasksSync;
     NSMutableDictionary* _tasks;
+    NSMutableArray* _tasksKeysArray;
 
     NSObject* _activeTasksSync;
     NSMutableDictionary* _activeTasks;
@@ -69,6 +70,7 @@
 
     _tasksSync = [[NSObject alloc] init];
     _tasks = [[NSMutableDictionary alloc] init];
+    _tasksKeysArray = [[NSMutableArray alloc] init];
 
     _activeTasksSync = [[NSObject alloc] init];
     _activeTasks = [[NSMutableDictionary alloc] init];
@@ -87,8 +89,7 @@
 {
     @synchronized(_tasksSync)
     {
-        return [[NSArray alloc] initWithArray:[_tasks allKeys]
-                                    copyItems:YES];
+        return [[NSArray alloc] initWithArray:_tasksKeysArray];
     }
 }
 
@@ -96,8 +97,7 @@
 {
     @synchronized(_activeTasksSync)
     {
-        return [[NSArray alloc] initWithArray:[_activeTasks allKeys]
-                                    copyItems:YES];
+        return [[NSArray alloc] initWithArray:[_activeTasks allKeys]];
     }
 }
 
@@ -374,6 +374,7 @@
         {
             list = [[NSMutableArray alloc] initWithCapacity:1];
             [_tasks setObject:list forKey:key];
+            [_tasksKeysArray addObject:key];
         }
 
         [list addObject:task];
@@ -426,8 +427,10 @@
             return;
 
         [list removeObject:task];
-        if ([list count] == 0)
+        if ([list count] == 0) {
             [_tasks removeObjectForKey:task.key];
+            [_tasksKeysArray removeObject:task.key];
+        }
 
         [_tasksCollectionChangedObservable notifyEventWithKey:self];
     }

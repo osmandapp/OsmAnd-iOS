@@ -30,8 +30,9 @@ rm -f "$APPVERSION_FILE"
 echo "" > "$APPVERSION_FILE"
 echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
 echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
+touch -m "$APPVERSION_FILE"
 
 # Touch plist file
 echo "plist file: '$INFOPLIST_FILE'"
 touch -m "$INFOPLIST_FILE"
-touch -A -05 -m "$INFOPLIST_FILE"
+#touch -A -05 -m "$INFOPLIST_FILE"

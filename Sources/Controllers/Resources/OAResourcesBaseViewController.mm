@@ -97,7 +97,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self.view addSubview:_deleteResourceProgressHUD];
     
     // IOS-178 Add download view
-    
     if (_app.downloadsManager.hasDownloadTasks)
         [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
 }

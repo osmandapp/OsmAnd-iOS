@@ -11,5 +11,6 @@
 @interface OADebugSettings : NSObject
 
 @property BOOL useRawSpeedAndAltitudeOnHUD;
+@property BOOL setAllResourcesAsOutdated;
 
 @end

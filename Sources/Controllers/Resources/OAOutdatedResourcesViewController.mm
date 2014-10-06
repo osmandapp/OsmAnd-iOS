@@ -90,7 +90,12 @@
 - (void)prepareData
 {
     // Obtain all resources separately
-    _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+
+    // IOS-199
+    if (_app.debugSettings.setAllResourcesAsOutdated)
+        _outdatedResources = _app.resourcesManager->getLocalResources();
+    else
+        _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
 }
 
 - (void)collectResourcesDataAndItems

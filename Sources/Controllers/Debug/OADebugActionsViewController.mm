@@ -36,6 +36,8 @@
     QRadioSection* _visualMetricsSection;
 
     QBooleanElement* _useRawSpeedAndAltitudeOnHUDElement;
+    QBooleanElement* _setAllResourcesAsOutdatedElement;
+    
 
     OAMapViewController* __weak _mapViewController;
     OAMapRendererView* __weak _mapRendererView;
@@ -120,6 +122,17 @@
     useRawSpeedAndAltitudeOnHUDElement.controllerAction = NSStringFromSelector(@selector(onUseRawSpeedAndAltitudeOnHUDSettingChanged));
     [hudSection addElement:useRawSpeedAndAltitudeOnHUDElement];
 
+    
+    
+    // HUD section
+    QSection* resourcesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Resources")];
+    [rootElement addSection:resourcesSection];
+    
+    QBooleanElement* setAllResourcesAsOutdatedElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Set all resources as outdated")
+                                                                                       BoolValue:NO];
+    setAllResourcesAsOutdatedElement.controllerAction = NSStringFromSelector(@selector(onSetAllResourcesAsOutdated));
+    [resourcesSection addElement:setAllResourcesAsOutdatedElement];
+    
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
@@ -135,6 +148,8 @@
         _visualMetricsSection = visualMetricsSection;
 
         _useRawSpeedAndAltitudeOnHUDElement = useRawSpeedAndAltitudeOnHUDElement;
+        _setAllResourcesAsOutdatedElement = setAllResourcesAsOutdatedElement;
+        
     }
     return self;
 }
@@ -164,6 +179,7 @@
     _visualMetricsSection.selected = _mapViewController.visualMetricsMode;
 
     _useRawSpeedAndAltitudeOnHUDElement.boolValue = _app.debugSettings.useRawSpeedAndAltitudeOnHUD;
+    _setAllResourcesAsOutdatedElement.boolValue = _app.debugSettings.setAllResourcesAsOutdated;
 }
 
 - (void)onForcedRenderingSettingChanged
@@ -209,5 +225,12 @@
 {
     _app.debugSettings.useRawSpeedAndAltitudeOnHUD = _useRawSpeedAndAltitudeOnHUDElement.boolValue;
 }
+
+- (void)onSetAllResourcesAsOutdated
+{
+    _app.debugSettings.setAllResourcesAsOutdated = _setAllResourcesAsOutdatedElement.boolValue;
+}
+
+
 
 @end

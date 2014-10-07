@@ -15,10 +15,12 @@
     self = [super init];
     if (self) {
         _useRawSpeedAndAltitudeOnHUD = NO;
+        _setAllResourcesAsOutdated = NO;
     }
     return self;
 }
 
 @synthesize useRawSpeedAndAltitudeOnHUD = _useRawSpeedAndAltitudeOnHUD;
+@synthesize setAllResourcesAsOutdated = _setAllResourcesAsOutdated;
 
 @end

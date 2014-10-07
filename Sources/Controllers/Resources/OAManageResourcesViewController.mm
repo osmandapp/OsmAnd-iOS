@@ -160,7 +160,6 @@ struct RegionResources
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
                                                         action:@selector(onCustomBackButtonClicked)];
-
     [self obtainDataAndItems];
     [self prepareContent];
 }
@@ -199,7 +198,12 @@ struct RegionResources
     // Obtain all resources separately
     _resourcesInRepository = _app.resourcesManager->getResourcesInRepository();
     _localResources = _app.resourcesManager->getLocalResources();
-    _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+
+    // IOS-199
+    if (_app.debugSettings.setAllResourcesAsOutdated)
+        _outdatedResources = _app.resourcesManager->getLocalResources();
+    else
+        _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
 
     // Collect resources for each region (worldwide)
     _resourcesByRegions.clear();

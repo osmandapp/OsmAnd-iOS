@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OADownloadProgressView">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="40"/>
+            <rect key="frame" x="0.0" y="0.0" width="320" height="45"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="cNW-n0-B0c">
-                    <rect key="frame" x="8" y="19" width="276" height="2"/>
+                    <rect key="frame" x="8" y="31" width="276" height="2"/>
                 </progressView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fill map of Australia" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0nc-Qd-ju0">
+                    <rect key="frame" x="8" y="8" width="276" height="15"/>
+                    <fontDescription key="fontDescription" name="Helvetica" family="Helvetica" pointSize="12"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g46-VT-bgA">
-                    <rect key="frame" x="284" y="2" width="36" height="36"/>
+                    <rect key="frame" x="284" y="5" width="36" height="36"/>
                     <constraints>
-                        <constraint firstAttribute="width" constant="36" id="rh7-Q3-kT9"/>
+                        <constraint firstAttribute="height" constant="36" id="K1U-EN-91M"/>
+                        <constraint firstAttribute="width" constant="36" id="Lhw-a0-HGZ"/>
                     </constraints>
                     <state key="normal" image="Btn-Pause.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -28,23 +36,27 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="g46-VT-bgA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="2" id="Ja1-1O-B4n"/>
-                <constraint firstItem="cNW-n0-B0c" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="19" id="LCJ-Zk-ahC"/>
-                <constraint firstItem="cNW-n0-B0c" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="duB-Wl-Gla"/>
-                <constraint firstAttribute="trailing" secondItem="cNW-n0-B0c" secondAttribute="trailing" constant="36" id="gDx-be-gsC"/>
-                <constraint firstAttribute="trailing" secondItem="g46-VT-bgA" secondAttribute="trailing" id="hUT-iN-EAH"/>
-                <constraint firstAttribute="bottom" secondItem="cNW-n0-B0c" secondAttribute="bottom" constant="19" id="rAw-6V-F1z"/>
-                <constraint firstAttribute="bottom" secondItem="g46-VT-bgA" secondAttribute="bottom" constant="2" id="uQv-JV-RPe"/>
+                <constraint firstItem="0nc-Qd-ju0" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="29x-sr-aS2"/>
+                <constraint firstAttribute="trailing" secondItem="cNW-n0-B0c" secondAttribute="trailing" constant="36" id="4Nn-pK-EcG"/>
+                <constraint firstItem="cNW-n0-B0c" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="8Mp-Zh-MgE"/>
+                <constraint firstAttribute="trailing" secondItem="g46-VT-bgA" secondAttribute="trailing" id="HsG-js-9OE"/>
+                <constraint firstItem="g46-VT-bgA" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="5" id="XuT-87-4WI"/>
+                <constraint firstItem="cNW-n0-B0c" firstAttribute="top" secondItem="0nc-Qd-ju0" secondAttribute="bottom" constant="8" id="axM-zL-PRg"/>
+                <constraint firstAttribute="bottom" secondItem="g46-VT-bgA" secondAttribute="bottom" constant="4" id="h1n-KD-RsI"/>
+                <constraint firstAttribute="bottom" secondItem="cNW-n0-B0c" secondAttribute="bottom" constant="12" id="mkT-8v-Ro9"/>
+                <constraint firstItem="0nc-Qd-ju0" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="w6A-gY-94t"/>
+                <constraint firstItem="g46-VT-bgA" firstAttribute="leading" secondItem="0nc-Qd-ju0" secondAttribute="trailing" id="yEv-rm-z20"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="progressBarView" destination="cNW-n0-B0c" id="NI2-az-IyK"/>
                 <outlet property="startStopButtonView" destination="g46-VT-bgA" id="BOk-vF-4Gn"/>
+                <outlet property="titleView" destination="0nc-Qd-ju0" id="oC0-gO-kSr"/>
             </connections>
-            <point key="canvasLocation" x="608" y="503"/>
+            <point key="canvasLocation" x="606" y="529.5"/>
         </view>
     </objects>
     <resources>
-        <image name="Btn-Pause.png" width="20" height="20"/>
+        <image name="Btn-Pause.png" width="25" height="25"/>
     </resources>
 </document>

@@ -17,6 +17,7 @@
 #define public(name) OAResourcesBaseViewController__##name
 
 #define ResourceItem public(ResourceItem)
+
 @interface ResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
@@ -77,6 +78,7 @@
 - (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId;
 
 @property(readonly) NSComparator resourceItemsComparator;
+@property (strong, nonatomic) OAWorldRegion* region;
 
 + (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region
                         thatContainsResource:(const QString&)resourceId;

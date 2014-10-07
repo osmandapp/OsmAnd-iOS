@@ -60,8 +60,6 @@ struct RegionResources
 
     NSObject* _dataLock;
 
-    OAWorldRegion* _region;
-
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _localResources;
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
@@ -106,7 +104,7 @@ struct RegionResources
 
         _dataLock = [[NSObject alloc] init];
 
-        _region = _app.worldRegion;
+        self.region = _app.worldRegion;
 
         _currentScope = 0;
 
@@ -132,7 +130,7 @@ struct RegionResources
     andWorldRegionItems:(NSArray*)worldRegionItems
                andScope:(NSInteger)scope
 {
-    _region = region;
+    self.region = region;
 
     _searchableWorldwideRegionItems = [worldRegionItems copy];
     _currentScope = scope;
@@ -142,8 +140,8 @@ struct RegionResources
 {
     [super viewDidLoad];
 
-    if (_region != _app.worldRegion)
-        self.title = _region.name;
+    if (self.region != _app.worldRegion)
+        self.title = self.region.name;
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
@@ -200,10 +198,15 @@ struct RegionResources
     _localResources = _app.resourcesManager->getLocalResources();
 
     // IOS-199
+#if defined(OSMAND_IOS_DEV)
     if (_app.debugSettings.setAllResourcesAsOutdated)
         _outdatedResources = _app.resourcesManager->getLocalResources();
     else
         _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+#else
+    _outdatedResources = _app.resourcesManager->getOutdatedInstalledResources();
+#endif // defined(OSMAND_IOS_DEV)
+
 
     // Collect resources for each region (worldwide)
     _resourcesByRegions.clear();
@@ -255,7 +258,7 @@ struct RegionResources
     [_searchableSubregionItems removeAllObjects];
     [_allSubregionItems removeAllObjects];
     [_localSubregionItems removeAllObjects];
-    for(OAWorldRegion* subregion in _region.flattenedSubregions)
+    for(OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
         // Look in repository
         BOOL foundRepositoryResource = NO;
@@ -310,7 +313,7 @@ struct RegionResources
 
         if (![_searchableSubregionItems containsObject:subregion])
             [_searchableSubregionItems addObject:subregion];
-        if (subregion.superregion == _region)
+        if (subregion.superregion == self.region)
         {
             [_allSubregionItems addObject:subregion];
             if (foundLocalResource)
@@ -327,7 +330,7 @@ struct RegionResources
     [_allResourceItems removeAllObjects];
     [_localResourceItems removeAllObjects];
 
-    const auto citRegionResources = _resourcesByRegions.constFind(_region);
+    const auto citRegionResources = _resourcesByRegions.constFind(self.region);
     if (citRegionResources == _resourcesByRegions.cend())
         return;
     const auto& regionResources = *citRegionResources;
@@ -388,7 +391,7 @@ struct RegionResources
     [_outdatedResourceItems removeAllObjects];
     for (const auto& resource : _outdatedResources)
     {
-        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:_region
+        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
         if (!match)
             continue;
@@ -437,15 +440,15 @@ struct RegionResources
             _resourcesSection = -1;
 
         // Configure search scope
-        if (_region == _app.worldRegion || [_searchableSubregionItems count] == 0)
+        if (self.region == _app.worldRegion || [_searchableSubregionItems count] == 0)
         {
             self.searchDisplayController.searchBar.scopeButtonTitles = nil;
             self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search worldwide");
         }
         else
         {
-            self.searchDisplayController.searchBar.scopeButtonTitles = @[_region.name, OALocalizedString(@"Worldwide")];
-            self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search in %@ or worldwide", _region.name);
+            self.searchDisplayController.searchBar.scopeButtonTitles = @[self.region.name, OALocalizedString(@"Worldwide")];
+            self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search in %@ or worldwide", self.region.name);
         }
     }
 }
@@ -495,7 +498,7 @@ struct RegionResources
               withRegionName:(BOOL)includeRegionName
 {
     return [self titleOfResource:resource
-                        inRegion:_region
+                        inRegion:self.region
                   withRegionName:includeRegionName];
 }
 
@@ -526,7 +529,7 @@ struct RegionResources
 
         // Select where to look
         NSArray* searchableContent = nil;
-        if (_region == _app.worldRegion || (searchScope == 0 && [_searchableSubregionItems count] > 0))
+        if (self.region == _app.worldRegion || (searchScope == 0 && [_searchableSubregionItems count] > 0))
             searchableContent = _searchableSubregionItems;
         else
             searchableContent = _searchableWorldwideRegionItems;
@@ -742,7 +745,7 @@ struct RegionResources
     if (tableView == self.searchDisplayController.searchResultsTableView)
         return nil;
 
-    if (_region.superregion == nil)
+    if (self.region.superregion == nil)
     {
         if (section == _subregionsSection)
             return OALocalizedString(@"By regions");
@@ -1134,14 +1137,14 @@ struct RegionResources
         }
 
         [subregionViewController setupWithRegion:subregion
-                             andWorldRegionItems:(_region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems
+                             andWorldRegionItems:(self.region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems
                                         andScope:_currentScope];
     }
     else if ([segue.identifier isEqualToString:kOpenOutdatedResourcesSegue])
     {
         OAOutdatedResourcesViewController* outdatedResourcesViewController = [segue destinationViewController];
 
-        [outdatedResourcesViewController setupWithRegion:_region
+        [outdatedResourcesViewController setupWithRegion:self.region
                                         andOutdatedItems:_outdatedResourceItems];
     }
 }

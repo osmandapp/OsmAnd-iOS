@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#define kOADownloadProgressViewHeight 45
 
 @protocol OADownloadProgressViewDelegate;
 
@@ -14,10 +15,13 @@
 
 @property (weak, nonatomic) IBOutlet UIProgressView *progressBarView;
 @property (weak, nonatomic) IBOutlet UIButton *startStopButtonView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+
 @property (strong, nonatomic) id<OADownloadProgressViewDelegate> delegate;
 @property (strong, nonatomic) NSString* taskName;
 
 -(void)setProgress:(float)progress;
+-(void)setTitle:(NSString*)title;
 -(void)setButtonStatePause;
 -(void)setButtonStateResume;
 

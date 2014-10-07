@@ -37,12 +37,15 @@
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request;
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
-                                andTargetPath:(NSString*)targetPath;
+                                andTargetPath:(NSString*)targetPath
+                                      andName:(NSString*)name;
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
-                                       andKey:(NSString*)key;
+                                       andKey:(NSString*)key
+                                      andName:(NSString*)name;
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                 andTargetPath:(NSString*)targetPath
-                                       andKey:(NSString*)key;
+                                       andKey:(NSString*)key
+                                      andName:(NSString*)name;
 
 @property(readonly) OAObservable* tasksCollectionChangedObservable;
 @property(readonly) OAObservable* activeTasksCollectionChangedObservable;

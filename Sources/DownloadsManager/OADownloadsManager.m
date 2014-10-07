@@ -298,28 +298,34 @@
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
 {
     return [self downloadTaskWithRequest:request
-                           andTargetPath:nil];
+                           andTargetPath:nil
+                                 andName:@""];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                 andTargetPath:(NSString*)targetPath
+                                      andName:(NSString*)name
 {
     return [self downloadTaskWithRequest:request
                            andTargetPath:targetPath
-                                  andKey:nil];
+                                  andKey:nil
+                                 andName:name];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                        andKey:(NSString*)key
+                                      andName:(NSString*)name
 {
     return [self downloadTaskWithRequest:request
                            andTargetPath:nil
-                                  andKey:key];
+                                  andKey:key
+                                 andName:name];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                 andTargetPath:(NSString*)targetPath
                                        andKey:(NSString*)key
+                                      andName:(NSString*)name
 {
     id<OADownloadTask> task = nil;
 
@@ -347,7 +353,8 @@
                                                                      andRequest:request
                                                                   andResumeData:resumeData
                                                                   andTargetPath:targetPath
-                                                                         andKey:key];
+                                                                         andKey:key
+                                                                        andName:name];
         }
         else
         {
@@ -355,7 +362,8 @@
                                                                       withOwner:self
                                                                      andRequest:request
                                                                   andTargetPath:targetPath
-                                                                         andKey:key];
+                                                                         andKey:key
+                                                                        andName:name];
         }
     }
     else
@@ -363,7 +371,8 @@
         task = [[OADownloadTask_AFDownloadRequestOperation alloc] initWithOwner:self
                                                                      andRequest:request
                                                                   andTargetPath:targetPath
-                                                                         andKey:key];
+                                                                         andKey:key
+                                                                        andName:name];
     }
 
     // Add task to collection

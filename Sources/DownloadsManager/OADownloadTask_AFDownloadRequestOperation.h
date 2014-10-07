@@ -19,7 +19,8 @@
 - (instancetype)initWithOwner:(OADownloadsManager*)owner
                    andRequest:(NSURLRequest*)request
                 andTargetPath:(NSString*)targetPath
-                       andKey:(NSString*)key;
+                       andKey:(NSString*)key
+                      andName:(NSString*)name;
 
 @property(readonly) AFDownloadRequestOperation* operation;
 

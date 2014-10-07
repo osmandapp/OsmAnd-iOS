@@ -18,6 +18,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OALog.h"
+#import "OAManageResourcesViewController.h"
 
 #include "Localization.h"
 
@@ -124,7 +125,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #pragma mark - IOS-178 Add download view
 -(void)showDownloadViewForTask:(id<OADownloadTask>)task {
-    self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - 40, DeviceScreenWidth, 40)];
+    
+    self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - kOADownloadProgressViewHeight, DeviceScreenWidth, kOADownloadProgressViewHeight)];
     [self.downloadView setTaskName: [[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0] stringByReplacingOccurrencesOfString:@"resource:" withString:@""] ];
     self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
     self.downloadView.delegate = self;
@@ -142,13 +144,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
     [self.view addConstraint:constraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:40.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOADownloadProgressViewHeight];
     [self.view addConstraint:constraint];
     
 }
 
 -(void) validateDownloadViewForTask:(id<OADownloadTask>)task {
     [self.downloadView setProgress:task.progressCompleted];
+    [self.downloadView setTitle:task.name];
     if (task.state == OADownloadTaskStatePaused)
         [self.downloadView setButtonStateResume];
     else
@@ -351,7 +354,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
     NSString* resourceName = [self titleOfResource:item.resource
-                                          inRegion:item.worldRegion
+                                          inRegion:self.region
                                     withRegionName:YES];
 
     if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
@@ -388,8 +391,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
+    
+    NSString* name = [self titleOfResource:resource
+                                  inRegion:self.region
+                            withRegionName:YES];
+    
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
-                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]];
+                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
+                               andName:name];
 
     [self updateContent];
 
@@ -463,14 +472,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
                                     [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
+                                                 inRegion:self.region
                                            withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
                                     [self titleOfResource:item.resource
-                                                 inRegion:item.worldRegion
+                                                 inRegion:self.region
                                            withRegionName:YES]);
     }
 
@@ -506,6 +515,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)onItemClicked:(id)senderItem
 {
+    OAWorldRegion* reg = self.region;
     if ([senderItem isKindOfClass:[ResourceItem class]])
     {
         ResourceItem* item_ = (ResourceItem*)senderItem;

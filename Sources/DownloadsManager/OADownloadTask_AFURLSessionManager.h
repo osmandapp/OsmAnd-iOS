@@ -20,14 +20,16 @@
                        withOwner:(OADownloadsManager*)owner
                       andRequest:(NSURLRequest*)request
                    andTargetPath:(NSString*)targetPath
-                          andKey:(NSString*)key;
+                          andKey:(NSString*)key
+                         andName:(NSString*)name;
 
 - (instancetype)initUsingManager:(AFURLSessionManager*)manager
                        withOwner:(OADownloadsManager*)owner
                       andRequest:(NSURLRequest*)request
                    andResumeData:(NSData*)resumeData
                    andTargetPath:(NSString*)targetPath
-                          andKey:(NSString*)key;
+                          andKey:(NSString*)key
+                         andName:(NSString*)name;
 
 @property(readonly) NSURLSessionDownloadTask* task;
 

@@ -30,8 +30,6 @@
 
     NSObject* _dataLock;
 
-    OAWorldRegion* _region;
-
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
 
     NSMutableArray* _resourcesItems;
@@ -51,7 +49,7 @@
 - (void)setupWithRegion:(OAWorldRegion*)region
        andOutdatedItems:(NSArray*)items
 {
-    _region = region;
+    self.region = region;
     _resourcesItems = [NSMutableArray arrayWithArray:items];
 }
 
@@ -103,7 +101,7 @@
     [_resourcesItems removeAllObjects];
     for (const auto& resource : _outdatedResources)
     {
-        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_region
+        OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:self.region
                                                                     thatContainsResource:resource->id];
         if (!match)
             continue;

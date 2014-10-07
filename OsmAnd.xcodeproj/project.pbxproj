@@ -2471,6 +2471,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
@@ -2528,6 +2529,7 @@
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang${EFFECTIVE_PLATFORM_NAME}/include/QtNetwork",
 					"${PROJECT_DIR}/../core/externals/skia/upstream.patched/include/**",
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
+					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";

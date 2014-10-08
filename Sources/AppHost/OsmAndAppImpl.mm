@@ -21,6 +21,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
+#import <Reachability.h>
 
 #include <algorithm>
 
@@ -162,6 +163,15 @@
                                                                                                             andValue:favoriteLocation->getTitle().toNSString()];
                                                                   });
 
+    // Load resources list
+    
+    // If there's no repository available and there's internet connection, just update it
+    if (!self.resourcesManager->isRepositoryAvailable() && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            self.resourcesManager->updateRepository();
+        });
+    }
+    
     // Load world regions
     NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"
                                                                      ofType:@"ocbf"];

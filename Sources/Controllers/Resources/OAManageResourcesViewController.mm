@@ -169,9 +169,7 @@ struct RegionResources
     // If there's no repository available and there's internet connection, just update it
     if (!_app.resourcesManager->isRepositoryAvailable() &&
         [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
-    {
         [self updateRepository];
-    }
 }
 
 - (void)updateContent

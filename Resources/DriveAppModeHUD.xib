@@ -128,12 +128,12 @@
                     <rect key="frame" x="264" y="282" width="56" height="104"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rKG-Qo-wm0" userLabel="zoomInButton">
-                            <rect key="frame" x="8" y="8" width="40" height="40"/>
+                            <rect key="frame" x="0.0" y="8" width="56" height="40"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="40" id="Hyw-Lq-WjM"/>
-                                <constraint firstAttribute="width" constant="40" id="sJr-zf-jfG"/>
+                                <constraint firstAttribute="width" constant="56" id="sJr-zf-jfG"/>
                             </constraints>
-                            <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_bg.png">
+                            <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_plus_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -141,12 +141,12 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vfK-Md-Vd2" userLabel="zoomOutButton">
-                            <rect key="frame" x="8" y="56" width="40" height="40"/>
+                            <rect key="frame" x="0.0" y="56" width="56" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="Q2C-Pj-kSM"/>
+                                <constraint firstAttribute="width" constant="56" id="Q2C-Pj-kSM"/>
                                 <constraint firstAttribute="height" constant="40" id="RGV-E0-0gU"/>
                             </constraints>
-                            <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_bg.png">
+                            <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_plus_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -156,11 +156,11 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="centerY" secondItem="vfK-Md-Vd2" secondAttribute="top" constant="-4" id="BNr-9p-WMR"/>
-                        <constraint firstAttribute="trailing" secondItem="rKG-Qo-wm0" secondAttribute="trailing" constant="8" id="StT-ai-kWi"/>
+                        <constraint firstAttribute="trailing" secondItem="rKG-Qo-wm0" secondAttribute="trailing" id="StT-ai-kWi"/>
                         <constraint firstAttribute="centerY" secondItem="rKG-Qo-wm0" secondAttribute="bottom" constant="4" id="j7x-sd-2LC"/>
                         <constraint firstAttribute="height" constant="104" id="lh7-o5-ozy"/>
                         <constraint firstAttribute="width" constant="56" id="lj0-J5-Rde"/>
-                        <constraint firstAttribute="trailing" secondItem="vfK-Md-Vd2" secondAttribute="trailing" constant="8" id="q1L-5a-WeR"/>
+                        <constraint firstAttribute="trailing" secondItem="vfK-Md-Vd2" secondAttribute="trailing" id="q1L-5a-WeR"/>
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BiQ-TS-B8N" userLabel="debugButton">
@@ -257,6 +257,7 @@
     </objects>
     <resources>
         <image name="HUD_button_bg.png" width="40" height="40"/>
+        <image name="HUD_button_plus_bg.png" width="56" height="40"/>
         <image name="HUD_compass.png" width="6" height="18"/>
         <image name="HUD_compass_bg.png" width="30" height="30"/>
         <image name="HUD_debug_button.png" width="25" height="25"/>

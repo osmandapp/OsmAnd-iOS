@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAAddFavoriteViewController.h"
 #import "OANavigationController.h"
+#include <OpenGLES/ES2/gl.h>
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -795,8 +796,8 @@
     static NSString* const addToFavoritesAction = OALocalizedString(@"Add to favorites");
     static NSString* const shareLocationAction = OALocalizedString(@"Share this location");
     static NSArray* const actions = @[/*locationDetailsAction,*/
-                                      addToFavoritesAction/*,
-                                      shareLocationAction*/];
+                                      addToFavoritesAction,
+                                      shareLocationAction];
     [UIActionSheet presentOnView:mapView
                        withTitle:formattedLocation
                     cancelButton:OALocalizedString(@"Cancel")
@@ -837,7 +838,17 @@
                      }
                      else if (action == shareLocationAction)
                      {
-                         OALog(@"share this location");
+
+                         UIImage *image = [mapView getGLScreenshot];
+                         NSString *string = [NSString stringWithFormat:@"Look at this location: %@", formattedLocation];
+                          
+                         UIActivityViewController *activityViewController =
+                         [[UIActivityViewController alloc] initWithActivityItems:@[string, image]
+                                                           applicationActivities:nil];
+                         [self.navigationController presentViewController:activityViewController
+                                                            animated:YES
+                                                          completion:^{
+                                                          }];
                      }
 
                      _contextPinMarker->setIsHidden(true);

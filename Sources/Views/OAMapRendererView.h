@@ -55,6 +55,9 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
 - (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
 - (void)removeAllSymbolProviders;
+
+- (UIImage*) getGLScreenshot;
+
 @property(nonatomic) OsmAnd::PointI target31;
 @property(nonatomic) OsmAnd::ZoomLevel zoomLevel;
 

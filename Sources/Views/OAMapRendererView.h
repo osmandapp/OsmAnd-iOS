@@ -12,7 +12,6 @@
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Map/MapCommonTypes.h>
 #include <OsmAndCore/Map/MapAnimator.h>
-#include <OsmAndCore/Map/MapRendererTypes.h>
 #include <OsmAndCore/Map/MapRendererState.h>
 #include <OsmAndCore/Map/IMapRasterBitmapTileProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>

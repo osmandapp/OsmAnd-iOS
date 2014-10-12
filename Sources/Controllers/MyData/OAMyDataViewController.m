@@ -46,7 +46,14 @@
     manageFavoritesElement.controllerAction = NSStringFromSelector(@selector(onManageFavorites:));
     manageFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:manageFavoritesElement];
-
+    
+    QLabelElement* importFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Import Favorites")
+                                                                           Value:nil];
+    importFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    importFavoritesElement.controllerAction = NSStringFromSelector(@selector(onImportFavorites:));
+    importFavoritesElement.keepSelected = NO;
+    [favoritesSection addElement:importFavoritesElement];
+    
     QLabelElement* exportFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Export my favorites")
                                                                            Value:nil];
     exportFavoritesElement.controllerAction = NSStringFromSelector(@selector(onExportFavorites:));
@@ -65,6 +72,15 @@
 {
     [self.navigationController pushViewController:[[OAManageFavoritesViewController alloc] init]
                                          animated:YES];
+}
+
+- (void)onImportFavorites:(QElement*)sender
+{
+    
+    NSString* favoritesImportText = OALocalizedString(@"You can import your favorites as waypoints in GPX file (standard format for storing map information supported by PC, iOS, Android)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.");
+    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [importHelpAlert show];
+
 }
 
 - (void)onExportFavorites:(QElement*)sender

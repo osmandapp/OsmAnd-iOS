@@ -191,6 +191,7 @@
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                                      withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
                                                                                       andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
+    
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
 
     [self updateScreenTurnOffSetting];
@@ -225,7 +226,6 @@
 @synthesize worldRegion = _worldRegion;
 
 @synthesize locationServices = _locationServices;
-
 @synthesize downloadsManager = _downloadsManager;
 
 - (OAAppMode)appMode

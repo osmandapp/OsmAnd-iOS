@@ -396,7 +396,7 @@ struct RegionResources
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
-        item.title = [self titleOfResource:resource
+        item.title = [self.class titleOfResource:resource
                                   inRegion:match
                             withRegionName:YES];
         item.resource = resource;
@@ -495,7 +495,7 @@ struct RegionResources
 - (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
               withRegionName:(BOOL)includeRegionName
 {
-    return [self titleOfResource:resource
+    return [self.class titleOfResource:resource
                         inRegion:self.region
                   withRegionName:includeRegionName];
 }
@@ -590,7 +590,7 @@ struct RegionResources
                     {
                         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
-                        item.title = [self titleOfResource:resource_
+                        item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
                                             withRegionName:YES];
                         item.resource = resource;
@@ -606,7 +606,7 @@ struct RegionResources
                     {
                         LocalResourceItem* item = [[LocalResourceItem alloc] init];
                         item.resourceId = resource->id;
-                        item.title = [self titleOfResource:resource_
+                        item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
                                             withRegionName:YES];
                         item.resource = resource;
@@ -623,7 +623,7 @@ struct RegionResources
                 {
                     RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
-                    item.title = [self titleOfResource:resource_
+                    item.title = [self.class titleOfResource:resource_
                                               inRegion:region
                                         withRegionName:YES];
                     item.resource = resource;

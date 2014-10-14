@@ -147,6 +147,16 @@
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
 
+    UIImageView *backgroundViewIn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
+    [backgroundViewIn setFrame:CGRectMake(_zoomInButton.frame.origin.x + 8, _zoomInButton.frame.origin.y, _zoomInButton.frame.size.width - 16, _zoomInButton.frame.size.height)];
+    [_zoomInButton.superview insertSubview:backgroundViewIn belowSubview:_zoomInButton];
+    
+    
+    UIImageView *backgroundViewOut = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
+    [backgroundViewOut setFrame:CGRectMake(_zoomOutButton.frame.origin.x + 8, _zoomOutButton.frame.origin.y, _zoomOutButton.frame.size.width - 16, _zoomOutButton.frame.size.height)];
+    [_zoomOutButton.superview insertSubview:backgroundViewOut belowSubview:_zoomOutButton];
+    
+    
     OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
     interceptorView.delegate = self;
 

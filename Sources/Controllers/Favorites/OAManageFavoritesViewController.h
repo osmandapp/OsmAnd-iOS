@@ -10,8 +10,18 @@
 
 #import <QuickDialogController.h>
 
+typedef enum
+{
+    kManageFavoriteActionTypeManage = 0,
+    kManageFavoriteActionTypeShare
+}
+kManageFavoriteActionType;
+
 @interface OAManageFavoritesViewController : QuickDialogController
 
-- (instancetype)init;
+- (instancetype)initWithAction:(kManageFavoriteActionType)action;
+
+@property kManageFavoriteActionType manageFavoriteActionType;
+
 
 @end

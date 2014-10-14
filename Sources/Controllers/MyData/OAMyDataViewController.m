@@ -70,8 +70,8 @@
 
 - (void)onManageFavorites:(QElement*)sender
 {
-    [self.navigationController pushViewController:[[OAManageFavoritesViewController alloc] init]
-                                         animated:YES];
+    OAManageFavoritesViewController* favoriteManageViewController = [[OAManageFavoritesViewController alloc] initWithAction:kManageFavoriteActionTypeManage];
+    [self.navigationController pushViewController:favoriteManageViewController animated:YES];
 }
 
 - (void)onImportFavorites:(QElement*)sender
@@ -85,6 +85,12 @@
 
 - (void)onExportFavorites:(QElement*)sender
 {
+    OAManageFavoritesViewController* favoriteManageViewController = [[OAManageFavoritesViewController alloc] initWithAction:kManageFavoriteActionTypeShare];
+    [self.navigationController pushViewController:favoriteManageViewController animated:YES];
+
+     return;
+    
+    // Share all favorites
     NSURL* favoritesUrl = [NSURL fileURLWithPath:_app.favoritesStorageFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";

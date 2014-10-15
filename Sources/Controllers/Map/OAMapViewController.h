@@ -11,6 +11,7 @@
 #import "OACommonTypes.h"
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
+#import <Reachability.h>
 
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)

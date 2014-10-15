@@ -112,7 +112,7 @@
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
-        item.title = [self titleOfResource:resource
+        item.title = [self.class titleOfResource:resource
                                   inRegion:match
                             withRegionName:YES];
         item.resource = resource;

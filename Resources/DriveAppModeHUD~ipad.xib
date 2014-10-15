@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.iPad.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
     </dependencies>
@@ -128,12 +127,12 @@
                     <rect key="frame" x="704" y="506" width="64" height="112"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AeI-lt-M5T" userLabel="zoomInButton">
-                            <rect key="frame" x="8" y="8" width="40" height="40"/>
+                            <rect key="frame" x="8" y="8" width="56" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="Ucc-p7-PT3"/>
+                                <constraint firstAttribute="width" constant="56" id="Ucc-p7-PT3"/>
                                 <constraint firstAttribute="height" constant="40" id="lE1-5A-vU0"/>
                             </constraints>
-                            <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="HUD_button_bg.png">
+                            <state key="normal" image="HUD_zoom_in_button.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -141,12 +140,12 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="85T-ha-cVt" userLabel="zoomOutButton">
-                            <rect key="frame" x="8" y="64" width="40" height="40"/>
+                            <rect key="frame" x="8" y="64" width="56" height="40"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="40" id="b0O-sz-Fgg"/>
+                                <constraint firstAttribute="width" constant="56" id="b0O-sz-Fgg"/>
                                 <constraint firstAttribute="height" constant="40" id="zhe-AQ-8c3"/>
                             </constraints>
-                            <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="HUD_button_bg.png">
+                            <state key="normal" image="HUD_zoom_out_button.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -155,11 +154,11 @@
                         </button>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="trailing" secondItem="AeI-lt-M5T" secondAttribute="trailing" constant="16" id="1gJ-rI-GKm"/>
+                        <constraint firstAttribute="trailing" secondItem="AeI-lt-M5T" secondAttribute="trailing" id="1gJ-rI-GKm"/>
                         <constraint firstAttribute="height" constant="112" id="1ue-Zf-1iI"/>
                         <constraint firstAttribute="centerY" secondItem="85T-ha-cVt" secondAttribute="top" constant="-8" id="BoO-VQ-0cE"/>
                         <constraint firstAttribute="width" constant="64" id="WCF-XL-RbX"/>
-                        <constraint firstAttribute="trailing" secondItem="85T-ha-cVt" secondAttribute="trailing" constant="16" id="aUG-HB-AWg"/>
+                        <constraint firstAttribute="trailing" secondItem="85T-ha-cVt" secondAttribute="trailing" id="aUG-HB-AWg"/>
                         <constraint firstAttribute="centerY" secondItem="AeI-lt-M5T" secondAttribute="bottom" constant="8" id="dXN-Sy-RDb"/>
                     </constraints>
                 </view>

@@ -551,4 +551,65 @@
                       otherButtonTitles:nil] show];
 }
 
+- (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation
+{
+    return [_app.locationFormatter stringFromBearingFromLocation:self.lastKnownLocation toLocation:destinationLocation];
+}
+
+- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation
+{
+    return [self radiusFromBearing:[self locationDegreesBearingBetweenCoordinates:self.lastKnownLocation.coordinate andCoordinates:destinationLocation.coordinate]];
+}
+
+static inline double DEG2RAD(double degrees) {
+    return degrees * M_PI / 180;
+}
+
+static inline double RAD2DEG(double radians) {
+    return radians * 180 / M_PI;
+}
+
+- (CLLocationDegrees) locationDegreesBearingBetweenCoordinates:(CLLocationCoordinate2D)originCoordinate andCoordinates:(CLLocationCoordinate2D) destinationCoordinate {
+    double lat1 = DEG2RAD(originCoordinate.latitude);
+    double lon1 = DEG2RAD(originCoordinate.longitude);
+    double lat2 = DEG2RAD(destinationCoordinate.latitude);
+    double lon2 = DEG2RAD(destinationCoordinate.longitude);
+    
+    double dLon = lon2 - lon1;
+    double y = sin(dLon) * cos(lat2);
+    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
+    double bearing = atan2(y, x) + (2 * M_PI);
+    
+    // `atan2` works on a range of -π to 0 to π, so add on 2π and perform a modulo check
+    if (bearing > (2 * M_PI)) {
+        bearing = bearing - (2 * M_PI);
+    }
+    
+    return RAD2DEG(bearing);
+}
+
+- (CGFloat) radiusFromBearing:(CLLocationDegrees)bearing {
+    TTTLocationCardinalDirection direction = TTTLocationCardinalDirectionFromBearing(bearing);
+    switch (direction) {
+        case TTTNorthDirection:
+            return 0;
+        case TTTNortheastDirection:
+            return 45;
+        case TTTEastDirection:
+            return 90;
+        case TTTSoutheastDirection:
+            return 135;
+        case TTTSouthDirection:
+            return 180;
+        case TTTSouthwestDirection:
+            return 225;
+        case TTTWestDirection:
+            return 270;
+        case TTTNorthwestDirection:
+            return 315;
+        default:
+            return 0;
+    }
+}
+
 @end

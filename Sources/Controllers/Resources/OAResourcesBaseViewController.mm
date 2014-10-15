@@ -168,11 +168,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
 }
 
-- (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
++ (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
               withRegionName:(BOOL)includeRegionName
 {
-    if (region == _app.worldRegion)
+    if (region == [OsmAndApp instance].worldRegion)
     {
         if (resource->id == QLatin1String("world_basemap.map.obf"))
         {
@@ -242,7 +242,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
 
         return [self verifySpaceAvailableDownloadAndUnpackResource:item.resource
-                                                  withResourceName:[self titleOfResource:item.resource
+                                                  withResourceName:[self.class titleOfResource:item.resource
                                                                                 inRegion:item.worldRegion
                                                                           withRegionName:YES]
                                                           asUpdate:isUpdate];
@@ -254,7 +254,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         const auto resource = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
         return [self verifySpaceAvailableDownloadAndUnpackResource:resource
-                                                  withResourceName:[self titleOfResource:item.resource
+                                                  withResourceName:[self.class titleOfResource:item.resource
                                                                                 inRegion:item.worldRegion
                                                                           withRegionName:YES]
                                                           asUpdate:isUpdate];
@@ -311,7 +311,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
-    NSString* resourceName = [self titleOfResource:item.resource
+    NSString* resourceName = [self.class titleOfResource:item.resource
                                           inRegion:item.worldRegion
                                     withRegionName:YES];
 
@@ -353,7 +353,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSString* resourceName = [self titleOfResource:item.resource
+    NSString* resourceName = [self.class titleOfResource:item.resource
                                           inRegion:self.region
                                     withRegionName:YES];
 
@@ -373,7 +373,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else
     {
-        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be be downloaded over WiFi network. Proceed?",
+        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be downloaded over WiFi network. Proceed?",
                                     resourceName,
                                     stringifiedSize);
     }
@@ -392,7 +392,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
     
-    NSString* name = [self titleOfResource:resource
+    NSString* name = [self.class titleOfResource:resource
                                   inRegion:self.region
                             withRegionName:YES];
     
@@ -408,6 +408,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self showDownloadViewForTask:task];
     }
 }
+
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+{
+    // Create download tasks
+    NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
+    
+    NSString* name = [self.class titleOfResource:resource
+                                        inRegion:nil
+                                  withRegionName:YES];
+    
+    id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
+                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
+                                                                     andName:name];
+    
+    if ([[OsmAndApp instance].downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+        [task resume];
+}
+
+
 
 - (void)offerCancelDownloadOf:(ResourceItem*)item_
 {
@@ -433,14 +452,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (isUpdate)
     {
         message = OALocalizedString(@"You're going to cancel %@ update. All downloaded data will be lost. Proceed?",
-                                    [self titleOfResource:resource
+                                    [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
                                            withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to cancel %@ installation. All downloaded data will be lost. Proceed?",
-                                    [self titleOfResource:resource
+                                    [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
                                            withRegionName:YES]);
     }
@@ -471,14 +490,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (isInstalled)
     {
         message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
-                                    [self titleOfResource:item.resource
+                                    [self.class titleOfResource:item.resource
                                                  inRegion:self.region
                                            withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
-                                    [self titleOfResource:item.resource
+                                    [self.class titleOfResource:item.resource
                                                  inRegion:self.region
                                            withRegionName:YES]);
     }
@@ -666,7 +685,5 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [task pause];
     }
 }
-
-
 
 @end

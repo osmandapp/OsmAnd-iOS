@@ -22,6 +22,16 @@
 
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
+		3A3FB72519ED450C007F9EAE /* arrow_up_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72319ED450C007F9EAE /* arrow_up_icon.png */; };
+		3A3FB72619ED450C007F9EAE /* arrow_up_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72419ED450C007F9EAE /* arrow_up_icon@2x.png */; };
+		3A3FB72719ED45D2007F9EAE /* arrow_up_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72319ED450C007F9EAE /* arrow_up_icon.png */; };
+		3A3FB72819ED45D2007F9EAE /* arrow_up_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72419ED450C007F9EAE /* arrow_up_icon@2x.png */; };
+		3A3FB72919ED45D2007F9EAE /* arrow_up_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72319ED450C007F9EAE /* arrow_up_icon.png */; };
+		3A3FB72A19ED45D2007F9EAE /* arrow_up_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A3FB72419ED450C007F9EAE /* arrow_up_icon@2x.png */; };
+		3A8AC24819E57A200062DDE9 /* Btn-Play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AD219DEB80F002FBC40 /* Btn-Play.png */; };
+		3A8AC24919E57A200062DDE9 /* Btn-Play.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AD219DEB80F002FBC40 /* Btn-Play.png */; };
+		3A8AC24A19E57A220062DDE9 /* Btn-Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AD119DEB80F002FBC40 /* Btn-Pause.png */; };
+		3A8AC24B19E57A220062DDE9 /* Btn-Pause.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AD119DEB80F002FBC40 /* Btn-Pause.png */; };
 		3AC40AC119DDC43F002FBC40 /* OADownloadProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */; };
 		3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */; };
 		3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC40AC319DDC476002FBC40 /* OADownloadProgressView.m */; };
@@ -639,6 +649,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3A3FB72319ED450C007F9EAE /* arrow_up_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_up_icon.png; sourceTree = "<group>"; };
+		3A3FB72419ED450C007F9EAE /* arrow_up_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "arrow_up_icon@2x.png"; sourceTree = "<group>"; };
 		3AC40ABE19DDC409002FBC40 /* OA-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OA-Prefix.pch"; sourceTree = SOURCE_ROOT; };
 		3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADownloadProgressView.xib; path = Resources/Views/OADownloadProgressView.xib; sourceTree = "<group>"; };
 		3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadProgressView.h; path = Views/OADownloadProgressView.h; sourceTree = "<group>"; };
@@ -1258,6 +1270,8 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				3A3FB72319ED450C007F9EAE /* arrow_up_icon.png */,
+				3A3FB72419ED450C007F9EAE /* arrow_up_icon@2x.png */,
 				3AC40AD119DEB80F002FBC40 /* Btn-Pause.png */,
 				3AC40AD219DEB80F002FBC40 /* Btn-Play.png */,
 				3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */,
@@ -1785,6 +1799,7 @@
 				BB27270219CB38D7007C5613 /* stubs in Resources */,
 				BB451DBF18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451E0218DA4176005FBE09 /* drive_mode_button@2x.png in Resources */,
+				3A3FB72619ED450C007F9EAE /* arrow_up_icon@2x.png in Resources */,
 				BB451DD318D70B5B005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
 				BB451DBD18D70B5B005FBE09 /* HUD_compass_bg@2x.png in Resources */,
 				BB451DC718D70B5B005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
@@ -1811,6 +1826,7 @@
 				BB451EF918E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
 				BB451DDE18D8DB48005FBE09 /* OptionsPanel.storyboard in Resources */,
 				BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */,
+				3A3FB72519ED450C007F9EAE /* arrow_up_icon.png in Resources */,
 				BB451DD118D70B5B005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
 				BBACF10A17C61D8500EBA761 /* BrowseMapAppModeHUD.xib in Resources */,
 				BB451ED518E36BFB005FBE09 /* menu_item_my_data_icon.png in Resources */,
@@ -1868,6 +1884,7 @@
 				3AC40AC719DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
 				BB451E6218DCD224005FBE09 /* HUD_button_bg@2x.png in Resources */,
 				BB451E6318DCD224005FBE09 /* DriveAppModeHUD~ipad.xib in Resources */,
+				3A8AC24819E57A200062DDE9 /* Btn-Play.png in Resources */,
 				BB451E6418DCD224005FBE09 /* Localizable.strings in Resources */,
 				BBA3AF2B197659270039D991 /* menu_goto_favorite_icon@2x.png in Resources */,
 				BB451E6518DCD224005FBE09 /* map_source_preset_type_bicycle_icon.png in Resources */,
@@ -1898,11 +1915,13 @@
 				BB451E7118DCD224005FBE09 /* follow_map_mode_button@2x.png in Resources */,
 				BB451E7218DCD224005FBE09 /* free_map_mode_button.png in Resources */,
 				BBA6ACFA1940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */,
+				3A8AC24A19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */,
 				BB451E7318DCD224005FBE09 /* Icon-72.png in Resources */,
 				BB27270319CB38D7007C5613 /* stubs in Resources */,
 				BB451E7418DCD224005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451E7518DCD224005FBE09 /* drive_mode_button@2x.png in Resources */,
+				3A3FB72819ED45D2007F9EAE /* arrow_up_icon@2x.png in Resources */,
 				BB451E7618DCD224005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
 				BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */,
 				BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
@@ -1929,6 +1948,7 @@
 				BB451EFA18E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
 				BB451E8618DCD224005FBE09 /* OptionsPanel.storyboard in Resources */,
 				BBA6ACF81940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */,
+				3A3FB72719ED45D2007F9EAE /* arrow_up_icon.png in Resources */,
 				BB451E8718DCD224005FBE09 /* HUD_zoom_in_button@2x.png in Resources */,
 				BB451E8818DCD224005FBE09 /* BrowseMapAppModeHUD.xib in Resources */,
 				BB451ED618E36BFB005FBE09 /* menu_item_my_data_icon.png in Resources */,
@@ -1991,6 +2011,7 @@
 				BBA3AF9C197FC4BB0039D991 /* Default-Landscape~ipad.png in Resources */,
 				BBA3AF9D197FC4BB0039D991 /* drive_mode_button.png in Resources */,
 				BBA3AF9E197FC4BB0039D991 /* map_source_preset_type_general_icon@2x.png in Resources */,
+				3A3FB72919ED45D2007F9EAE /* arrow_up_icon.png in Resources */,
 				3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB2726E519CB3825007C5613 /* default.map_styles_presets.xml in Resources */,
 				3AC40ACF19DDC66A002FBC40 /* Btn-Pause@2x.png in Resources */,
@@ -2011,7 +2032,9 @@
 				BBA3AFAD197FC4BB0039D991 /* Default-Landscape@2x~ipad.png in Resources */,
 				BBA3AFAE197FC4BB0039D991 /* follow_map_mode_button@2x.png in Resources */,
 				BBA3AFAF197FC4BB0039D991 /* free_map_mode_button.png in Resources */,
+				3A3FB72A19ED45D2007F9EAE /* arrow_up_icon@2x.png in Resources */,
 				BBA3AFB0197FC4BB0039D991 /* my_location_marker_heading_icon@2x.png in Resources */,
+				3A8AC24919E57A200062DDE9 /* Btn-Play.png in Resources */,
 				BBA3AFB2197FC4BB0039D991 /* Icon-72.png in Resources */,
 				BBA3AFB3197FC4BB0039D991 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
@@ -2027,6 +2050,7 @@
 				BBA3AFBD197FC4BB0039D991 /* Icon-72@2x.png in Resources */,
 				BB27270719CB38D7007C5613 /* style-icons in Resources */,
 				BBA3AFBE197FC4BB0039D991 /* menu_item_update_icon@2x.png in Resources */,
+				3A8AC24B19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				BBA3AFBF197FC4BB0039D991 /* free_map_mode_button@2x.png in Resources */,
 				BBA3AFC0197FC4BB0039D991 /* HUD_compass@2x.png in Resources */,
 				BBA3AFC1197FC4BB0039D991 /* HUD_right_narrowbutton_bg@2x.png in Resources */,

@@ -16,6 +16,9 @@
 #import "OAAutoObserverProxy.h"
 #import "OAAddFavoriteViewController.h"
 #import "OANavigationController.h"
+#import "OAResourcesBaseViewController.h"
+
+#include <OpenGLES/ES2/gl.h>
 
 #include <QtMath>
 #include <QStandardPaths>
@@ -176,6 +179,7 @@
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
 
+    
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
                                                   andObserve:_app.appModeObservable];
@@ -385,6 +389,35 @@
         [self updateCurrentMapSource];
 
         _mapSourceInvalidated = NO;
+    }
+    
+    
+    // IOS-208
+    
+    int showMapIterator = [[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
+    [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
+    const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
+    if (!mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) ) {
+        
+        const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
+        NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                   countStyle:NSByteCountFormatterCountStyleFile];
+        
+        NSString* message = nil;
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+            message = OALocalizedString(@"Install detailed map overview to get more information about your locations.\n\nDowloading requires %1$@ over cellular network. This may incur high charges. Proceed?",
+                                        stringifiedSize);
+        else
+            message = OALocalizedString(@"Install detailed map overview to get more information about your locations.\n\nDowloading requires %1$@ over WiFi network. Proceed?",
+                                        stringifiedSize);
+        
+        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"No, thanks") otherButtonTitles:OALocalizedString(@"Download map now"), OALocalizedString(@"Remind me later"), nil];
+        mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
+        [mapDownloadAlert show];
+        
     }
 }
 
@@ -795,8 +828,8 @@
     static NSString* const addToFavoritesAction = OALocalizedString(@"Add to favorites");
     static NSString* const shareLocationAction = OALocalizedString(@"Share this location");
     static NSArray* const actions = @[/*locationDetailsAction,*/
-                                      addToFavoritesAction/*,
-                                      shareLocationAction*/];
+                                      addToFavoritesAction,
+                                      shareLocationAction];
     [UIActionSheet presentOnView:mapView
                        withTitle:formattedLocation
                     cancelButton:OALocalizedString(@"Cancel")
@@ -837,7 +870,18 @@
                      }
                      else if (action == shareLocationAction)
                      {
-                         OALog(@"share this location");
+
+                         UIImage *image = [mapView getGLScreenshot];
+                         NSString *string = [NSString stringWithFormat:@"Look at this location: %@", formattedLocation];
+                          
+                         UIActivityViewController *activityViewController =
+                         [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
+                                                           applicationActivities:nil];
+                         
+                         [self.navigationController presentViewController:activityViewController
+                                                            animated:YES
+                                                          completion:^{
+                                                          }];
                      }
 
                      _contextPinMarker->setIsHidden(true);
@@ -1349,6 +1393,26 @@
     });
 }
 
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    if (alertView.tag == kUIAlertViewMapDownloadTag) {
+        if (buttonIndex == 1) {
+            // Download map
+            const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
+            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap];
+            
+        } else if (buttonIndex == alertView.cancelButtonIndex) {
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+    }
+    
+}
+
+
 - (void)updateCurrentMapSource
 {
     if (![self isViewLoaded])
@@ -1410,7 +1474,7 @@
                 if (preset)
                     _mapPresentationEnvironment->setSettings(preset->attributes);
             }
-
+            
 #if defined(OSMAND_IOS_DEV)
             switch (_visualMetricsMode)
             {

@@ -84,7 +84,11 @@
 
     // Initialize application
     [_app initialize];
-
+    
+    // Update app execute counter
+    int execCount = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
+    [[NSUserDefaults standardUserDefaults] setInteger:++execCount forKey:kAppExecCounter];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     // Create window
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 

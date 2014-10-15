@@ -39,14 +39,14 @@
 @interface OutdatedResourceItem : LocalResourceItem
 @end
 
-@interface OAResourcesBaseViewController : UIViewController<OADownloadProgressViewDelegate>
+@interface OAResourcesBaseViewController : UIViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
 @property BOOL dataInvalidated;
 
 - (void)updateContent;
 - (void)refreshContent;
 
-- (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
++ (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
               withRegionName:(BOOL)includeRegionName;
 
@@ -66,6 +66,7 @@
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item;
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item;
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
 
 - (void)offerCancelDownloadOf:(ResourceItem*)item;
 - (void)cancelDownloadOf:(ResourceItem*)item;

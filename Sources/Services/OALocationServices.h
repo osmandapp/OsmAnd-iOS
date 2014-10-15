@@ -50,6 +50,9 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 + (void)showDeniedAlert;
 
+- (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation;
+- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation;
+
 #if defined(OSMAND_IOS_DEV)
 @property(nonatomic) OALocationServicesForcedAccuracy forceAccuracy;
 #endif // defined(OSMAND_IOS_DEV)

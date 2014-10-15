@@ -101,7 +101,7 @@
                                                               andObserve:_app.data.mapLayersConfiguration.changeObservable];
     _contentIsInvalidated = NO;
 
-    _menuPinIcon = [[UIImage imageNamed:@"menu_goto_favorite_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _menuPinIcon = [[UIImage imageNamed:@"arrow_up_icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 
     _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesUpdate)
@@ -268,7 +268,10 @@
 
     for (QLabelElement* favoriteElement in favoritesSection.elements)
     {
+        
         FavoriteItemData* itemData = (FavoriteItemData*)favoriteElement.object;
+        
+        
 
         if (newLocation == nil)
             favoriteElement.value = nil;
@@ -281,11 +284,11 @@
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                               newLocation.coordinate.latitude,
                                                               favoriteLon, favoriteLat);
-
+            
             favoriteElement.value = [_app.locationFormatter stringFromDistance:distance];
+            itemData.direction = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
         }
 
-        itemData.direction = newDirection;
     }
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -301,7 +304,6 @@
     {
         if (cell.accessoryView == nil || ![cell.accessoryView isKindOfClass:[UIImageView class]])
         {
-            cell.accessoryView = [[UIImageView alloc] initWithImage:_menuPinIcon];
             return;
         }
 
@@ -434,9 +436,16 @@
 
         QLabelElement* favoriteElement = [[QLabelElement alloc] initWithTitle:favorite->getTitle().toNSString()
                                                                         Value:nil];
+        
         favoriteElement.accessoryType = UITableViewCellAccessoryNone;
         favoriteElement.controllerAction = NSStringFromSelector(@selector(onGoToFavorite:));
         favoriteElement.object = itemData;
+        
+        const auto& favoritePosition31 = itemData.favorite->getPosition31();
+        const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+        const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+        UIImage* arrow = [UIImage imageNamed:@"arrow_up_icon"];
+        [favoriteElement setImage:[OAFavoritesLayerViewController rotateImage:arrow ByDegrees:RadiansToDegrees([[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]])]];
         [favoritesSection addElement:favoriteElement];
     }
 
@@ -450,5 +459,34 @@
     
     return rootElement;
 }
+
++ (UIImage *)rotateImage:(UIImage*)image ByDegrees:(CGFloat)degrees
+{
+    // calculate the size of the rotated view's containing box for our drawing space
+    UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,image.size.width, image.size.height)];
+    CGAffineTransform t = CGAffineTransformMakeRotation(DegreesToRadians(degrees));
+    rotatedViewBox.transform = t;
+    CGSize rotatedSize = rotatedViewBox.frame.size;
+    
+    // Create the bitmap context
+    UIGraphicsBeginImageContext(rotatedSize);
+    CGContextRef bitmap = UIGraphicsGetCurrentContext();
+    
+    // Move the origin to the middle of the image so we will rotate and scale around the center.
+    CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+    
+    //   // Rotate the image context
+    CGContextRotateCTM(bitmap, DegreesToRadians(degrees));
+    
+    // Now, draw the rotated/scaled image into the context
+    CGContextScaleCTM(bitmap, 1.0, -1.0);
+    CGContextDrawImage(bitmap, CGRectMake(-image.size.width / 2, -image.size.height / 2, image.size.width, image.size.height), [image CGImage]);
+    
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+    
+}
+
 
 @end

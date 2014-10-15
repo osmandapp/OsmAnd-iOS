@@ -46,7 +46,14 @@
     manageFavoritesElement.controllerAction = NSStringFromSelector(@selector(onManageFavorites:));
     manageFavoritesElement.keepSelected = NO;
     [favoritesSection addElement:manageFavoritesElement];
-
+    
+    QLabelElement* importFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Import Favorites")
+                                                                           Value:nil];
+    importFavoritesElement.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    importFavoritesElement.controllerAction = NSStringFromSelector(@selector(onImportFavorites:));
+    importFavoritesElement.keepSelected = NO;
+    [favoritesSection addElement:importFavoritesElement];
+    
     QLabelElement* exportFavoritesElement = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Export my favorites")
                                                                            Value:nil];
     exportFavoritesElement.controllerAction = NSStringFromSelector(@selector(onExportFavorites:));
@@ -63,12 +70,27 @@
 
 - (void)onManageFavorites:(QElement*)sender
 {
-    [self.navigationController pushViewController:[[OAManageFavoritesViewController alloc] init]
-                                         animated:YES];
+    OAManageFavoritesViewController* favoriteManageViewController = [[OAManageFavoritesViewController alloc] initWithAction:kManageFavoriteActionTypeManage];
+    [self.navigationController pushViewController:favoriteManageViewController animated:YES];
+}
+
+- (void)onImportFavorites:(QElement*)sender
+{
+    
+    NSString* favoritesImportText = OALocalizedString(@"You can import your favorites as waypoints in GPX file (standard format for storing map information supported by PC, iOS, Android)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.");
+    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [importHelpAlert show];
+
 }
 
 - (void)onExportFavorites:(QElement*)sender
 {
+    OAManageFavoritesViewController* favoriteManageViewController = [[OAManageFavoritesViewController alloc] initWithAction:kManageFavoriteActionTypeShare];
+    [self.navigationController pushViewController:favoriteManageViewController animated:YES];
+
+     return;
+    
+    // Share all favorites
     NSURL* favoritesUrl = [NSURL fileURLWithPath:_app.favoritesStorageFilename];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";

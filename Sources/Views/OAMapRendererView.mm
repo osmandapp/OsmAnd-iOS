@@ -639,6 +639,46 @@
     _renderer->setConfiguration(configuration);
 }
 
+- (UIImage*) getGLScreenshot {
+    int scaleIndex = 1;
+    if ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] == YES && [[UIScreen mainScreen] scale] == 2.00)
+        scaleIndex = 2;
+    
+    int imageWidth = DeviceScreenWidth * scaleIndex;
+    int imageHeight = DeviceScreenHeight * scaleIndex;
+    
+    NSInteger myDataLength = imageWidth * imageHeight * 4;
+    
+    // allocate array and read pixels into it.
+    GLubyte *buffer = (GLubyte *) malloc(myDataLength);
+    glReadPixels(0, 0, imageWidth, imageHeight, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+    
+    // gl renders "upside down" so swap top to bottom into new array.
+    GLubyte *buffer2 = (GLubyte *) malloc(myDataLength);
+    for(int y = 0; y <imageHeight; y++)
+        for(int x = 0; x <imageWidth * 4; x++)
+            buffer2[(imageHeight - 1 - y) * imageWidth * 4 + x] = buffer[y * 4 * imageWidth + x];
+    
+    // make data provider with data.
+    CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, buffer2, myDataLength, NULL);
+    
+    // prep the ingredients
+    int bitsPerComponent = 8;
+    int bitsPerPixel = 32;
+    int bytesPerRow = 4 * imageWidth;
+    CGColorSpaceRef colorSpaceRef = CGColorSpaceCreateDeviceRGB();
+    CGBitmapInfo bitmapInfo = kCGBitmapByteOrderDefault;
+    CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
+    
+    // make the cgimage
+    CGImageRef imageRef = CGImageCreate(imageWidth, imageHeight, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
+    
+    // then make the uiimage from that
+    UIImage *myImage = [UIImage imageWithCGImage:imageRef];
+    return myImage;
+}
+
+
 #if defined(OSMAND_IOS_DEV)
 @synthesize forceRenderingOnEachFrame = _forceRenderingOnEachFrame;
 - (void)setForceRenderingOnEachFrame:(BOOL)forceRenderingOnEachFrame

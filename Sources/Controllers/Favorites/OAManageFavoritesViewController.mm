@@ -63,7 +63,7 @@
     UIBarButtonItem* _cancelEditBarButton;
 }
 
-- (instancetype)init
+- (instancetype)initWithAction:(kManageFavoriteActionType)action
 {
     self = [super initWithRoot:[OAManageFavoritesViewController inflateRoot]];
     if (self) {
@@ -77,6 +77,8 @@
                                                              andObserve:_app.favoriteChangedObservable];
         _contentIsInvalidated = NO;
         _groupName = nil;
+        
+        self.manageFavoriteActionType = action;
 
         [self inflateNavBarItems];
         [self inflateEditToolbarItems];
@@ -188,21 +190,27 @@
 
 - (void)inflateEditToolbarItems
 {
-    _editToolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                        target:nil
-                                                                        action:nil],
-                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
-                                                                        target:self
-                                                                        action:@selector(onShareSelected)],
-                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                        target:nil
-                                                                        action:nil],
-                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
-                                                                        target:self
-                                                                        action:@selector(onDeleteSelected)],
-                          [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                                                        target:nil
-                                                                        action:nil]];
+    if (self.manageFavoriteActionType == kManageFavoriteActionTypeManage) {
+        _editToolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                            target:nil
+                                                                            action:nil],
+                              [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash
+                                                                            target:self
+                                                                            action:@selector(onDeleteSelected)],
+                              [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                            target:nil
+                                                                            action:nil]];
+    } else if (self.manageFavoriteActionType == kManageFavoriteActionTypeShare) {
+        _editToolbarItems = @[[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                            target:nil
+                                                                            action:nil],
+                              [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction
+                                                                            target:self
+                                                                            action:@selector(onShareSelected)],
+                              [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                                                            target:nil
+                                                                            action:nil]];
+    }
 }
 
 - (void)updateMode
@@ -283,6 +291,7 @@
 
 - (void)onShareSelected
 {
+    // Share selected favorites
     NSArray* selectedCells = [self.quickDialogTableView indexPathsForSelectedRows];
     if ([selectedCells count] == 0)
         return;

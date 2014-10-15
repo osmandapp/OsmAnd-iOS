@@ -9,7 +9,20 @@
 #ifndef OsmAnd_OA_Prefix_pch
 #define OsmAnd_OA_Prefix_pch
 
+#import <MBProgressHUD.h>
+
+
+
 #define DeviceScreenHeight UIScreen.mainScreen.bounds.size.height
 #define DeviceScreenWidth UIScreen.mainScreen.bounds.size.width
+
+
+#define kWorldBasemapKey "world_basemap.map.obf"
+#define kAppExecCounter @"kAppExecCounter"
+#define kShowMapIterator @"kShowMapIterator"
+#define kMapDownloadStopReminding @"kMapDownloadStopReminding"
+
+#define kUIAlertViewMapDownloadTag 99
+
 
 #endif

@@ -43,6 +43,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
+-(void)calculateMapRuler;
 
 @property(readonly) CGFloat displayDensityFactor;
 

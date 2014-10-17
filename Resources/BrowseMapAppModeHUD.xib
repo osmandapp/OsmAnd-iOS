@@ -15,6 +15,7 @@
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
+                <outlet property="rulerLabel" destination="Oud-dM-Hkn" id="fyN-2H-f4v"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
                 <outlet property="zoomOutButton" destination="l4t-EI-ihD" id="3j2-Rn-C1L"/>
@@ -165,6 +166,12 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="udt-Zy-sVw"/>
                     </connections>
                 </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Oud-dM-Hkn">
+                    <rect key="frame" x="49" y="529" width="61" height="21"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
             </subviews>
             <constraints>
                 <constraint firstItem="4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="2HW-w7-jcD"/>

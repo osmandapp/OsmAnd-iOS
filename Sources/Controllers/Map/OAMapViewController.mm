@@ -827,8 +827,10 @@
     static NSString* const locationDetailsAction = OALocalizedString(@"What's here?");
     static NSString* const addToFavoritesAction = OALocalizedString(@"Add to favorites");
     static NSString* const shareLocationAction = OALocalizedString(@"Share this location");
+    static NSString* const targetpointLocationAction = OALocalizedString(@"Set as target point");
     static NSArray* const actions = @[/*locationDetailsAction,*/
                                       addToFavoritesAction,
+                                      targetpointLocationAction,
                                       shareLocationAction];
     [UIActionSheet presentOnView:mapView
                        withTitle:formattedLocation
@@ -844,6 +846,10 @@
                      if (action == locationDetailsAction)
                      {
                          OALog(@"whats here");
+                     }
+                     else if (action == targetpointLocationAction)
+                     {
+                         OALog(@"set as target point");
                      }
                      else if (action == addToFavoritesAction)
                      {
@@ -1016,7 +1022,7 @@
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
-
+    
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
     mapView.animator->pause();
@@ -1026,6 +1032,17 @@
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     mapView.animator->resume();
+}
+
+-(void)calculateMapRuler {
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    const auto& tileId = mapView.visibleTiles.at(0);
+    auto tileIdN = OsmAnd::Utilities::normalizeTileId(tileId, mapView.zoomLevel);
+    
+    double meterPerUnit = OsmAnd::Utilities::getMetersPerTileUnit(mapView.zoomLevel, tileIdN.y, 100u /*AtlasMapRenderer::TileSize3D*/);
+    float tileSizeInPixels = mapView.currentTileSizeOnScreenInPixels;
+    OALog(@"TileSize = %fpx; %fm", tileSizeInPixels, meterPerUnit);
 }
 
 - (float)currentZoomOutDelta

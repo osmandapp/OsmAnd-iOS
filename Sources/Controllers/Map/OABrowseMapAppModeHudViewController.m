@@ -7,6 +7,7 @@
 //
 
 #import "OABrowseMapAppModeHudViewController.h"
+#import "OAAppSettings.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -36,6 +37,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
+
+@property (weak, nonatomic) IBOutlet UILabel *rulerLabel;
+
 
 @end
 
@@ -105,8 +109,6 @@
     [backgroundViewIn setFrame:CGRectMake(_zoomInButton.frame.origin.x + 8, _zoomInButton.frame.origin.y, _zoomInButton.frame.size.width - 16, _zoomInButton.frame.size.height)];
     [_zoomInButton.superview insertSubview:backgroundViewIn belowSubview:_zoomInButton];
     
-    
-    
     UIImageView *backgroundViewOut = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
     [backgroundViewOut setFrame:CGRectMake(_zoomOutButton.frame.origin.x + 8, _zoomOutButton.frame.origin.y, _zoomOutButton.frame.size.width - 16, _zoomOutButton.frame.size.height)];
     [_zoomOutButton.superview insertSubview:backgroundViewOut belowSubview:_zoomOutButton];
@@ -116,6 +118,11 @@
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
 #endif // !defined(OSMAND_IOS_DEV)
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
+    
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -200,14 +207,18 @@
     [_mapViewController animatedAlignAzimuthToNorth];
 }
 
+
+
 - (IBAction)onZoomInButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomIn];
+    [_mapViewController calculateMapRuler];
 }
 
 - (IBAction)onZoomOutButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomOut];
+    [_mapViewController calculateMapRuler];
 }
 
 - (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value

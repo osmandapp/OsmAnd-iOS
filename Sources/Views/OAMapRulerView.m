@@ -64,6 +64,7 @@
 }
 
 -(void)setRulerData:(struct RulerData)data {
+    
     float coof = kMapRulerMinWidth / data.tileSizeInPixels;
     float metersPerMinSize = data.tileSizeInMeters * coof;
     
@@ -80,18 +81,22 @@
     
     NSLog(@"--\nRuler:\norMeters: %f\nminScale: %d\nxCoof: %f\nwidth: %d\n--", metersPerMinSize, minScaleSize, xCoof, rulerWidth);
 
-    CGRect frame = self.frame;
-    frame.size.width = rulerWidth;
-    self.frame = frame;
-    [self invalidateLayout];
+    if (metersPerMinSize < 1) {
+        [self.textLabel setText:@"< 1 m"];
+        rulerWidth = kMapRulerMaxWidth;
+    } else {
+        CGRect frame = self.frame;
+        frame.size.width = rulerWidth;
+        self.frame = frame;
+        [self invalidateLayout];
     
-    NSString * metricValue = @"m";
-    if (minScaleSize >= 1000) {
-        minScaleSize /= 1000;
-        metricValue = @"km";
+        NSString * metricValue = @"m";
+        if (minScaleSize >= 1000) {
+            minScaleSize /= 1000;
+            metricValue = @"km";
+        }
+        [self.textLabel setText:[NSString stringWithFormat:@"%0.d %@", minScaleSize, metricValue]];
     }
-    
-    [self.textLabel setText:[NSString stringWithFormat:@"%0.d %@", minScaleSize, metricValue]];
 
 }
 

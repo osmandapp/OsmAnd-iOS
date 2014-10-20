@@ -7,6 +7,8 @@
 //
 
 #import "OABrowseMapAppModeHudViewController.h"
+#import "OAAppSettings.h"
+#import "OAMapRulerView.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -36,6 +38,9 @@
 @property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
+
+@property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
+
 
 @end
 
@@ -105,17 +110,40 @@
     [backgroundViewIn setFrame:CGRectMake(_zoomInButton.frame.origin.x + 8, _zoomInButton.frame.origin.y, _zoomInButton.frame.size.width - 16, _zoomInButton.frame.size.height)];
     [_zoomInButton.superview insertSubview:backgroundViewIn belowSubview:_zoomInButton];
     
-    
-    
     UIImageView *backgroundViewOut = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
     [backgroundViewOut setFrame:CGRectMake(_zoomOutButton.frame.origin.x + 8, _zoomOutButton.frame.origin.y, _zoomOutButton.frame.size.width - 16, _zoomOutButton.frame.size.height)];
     [_zoomOutButton.superview insertSubview:backgroundViewOut belowSubview:_zoomOutButton];
     
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
+    
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(50, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
+    self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.rulerLabel];
+    
+    
+    // Constraints
+    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-15.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:50.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
+    [self.view addConstraint:constraint];
+    
+
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
 #endif // !defined(OSMAND_IOS_DEV)
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -208,6 +236,7 @@
 - (IBAction)onZoomOutButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomOut];
+    [_mapViewController calculateMapRuler];
 }
 
 - (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
@@ -215,6 +244,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _zoomInButton.enabled = [_mapViewController canZoomIn];
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
+        
+        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
 }
 

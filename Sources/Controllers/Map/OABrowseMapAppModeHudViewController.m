@@ -8,6 +8,7 @@
 
 #import "OABrowseMapAppModeHudViewController.h"
 #import "OAAppSettings.h"
+#import "OAMapRulerView.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -38,7 +39,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *optionsMenuButton;
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 
-@property (weak, nonatomic) IBOutlet UILabel *rulerLabel;
+@property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
 
 
 @end
@@ -114,6 +115,23 @@
     [_zoomOutButton.superview insertSubview:backgroundViewOut belowSubview:_zoomOutButton];
     
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
+    
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(50, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
+    self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:self.rulerLabel];
+    
+    
+    // Constraints
+    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-15.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:50.0f];
+    [self.view addConstraint:constraint];
+    
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
+    [self.view addConstraint:constraint];
+    
+
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -122,7 +140,10 @@
 
 -(void)viewWillAppear:(BOOL)animated {
     [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
-    
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -207,12 +228,9 @@
     [_mapViewController animatedAlignAzimuthToNorth];
 }
 
-
-
 - (IBAction)onZoomInButtonClicked:(id)sender
 {
     [_mapViewController animatedZoomIn];
-    [_mapViewController calculateMapRuler];
 }
 
 - (IBAction)onZoomOutButtonClicked:(id)sender
@@ -226,6 +244,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         _zoomInButton.enabled = [_mapViewController canZoomIn];
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
+        
+        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
 }
 

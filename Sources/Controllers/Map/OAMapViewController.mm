@@ -1031,18 +1031,26 @@
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
+
     mapView.animator->resume();
+
 }
 
--(void)calculateMapRuler {
+-(RulerData)calculateMapRuler {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
+    RulerData ruler;
+    if (mapView.visibleTiles.isEmpty())
+        return ruler;
     const auto& tileId = mapView.visibleTiles.at(0);
     auto tileIdN = OsmAnd::Utilities::normalizeTileId(tileId, mapView.zoomLevel);
     
-    double meterPerUnit = OsmAnd::Utilities::getMetersPerTileUnit(mapView.zoomLevel, tileIdN.y, 100u /*AtlasMapRenderer::TileSize3D*/);
+    double metersPerUnit = OsmAnd::Utilities::getMetersPerTileUnit(mapView.zoomLevel, tileIdN.y, 100u /*AtlasMapRenderer::TileSize3D*/);
+    double metersPerTile = metersPerUnit * 100u;
     float tileSizeInPixels = mapView.currentTileSizeOnScreenInPixels;
-    OALog(@"TileSize = %fpx; %fm", tileSizeInPixels, meterPerUnit);
+    
+    ruler.tileSizeInMeters = metersPerTile;
+    ruler.tileSizeInPixels = tileSizeInPixels;
+    return ruler;
 }
 
 - (float)currentZoomOutDelta
@@ -1105,6 +1113,7 @@
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
                                     kUserInteractionAnimationKey);
     mapView.animator->resume();
+    
 }
 
 - (void)onAppModeChanged

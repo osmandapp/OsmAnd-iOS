@@ -137,6 +137,11 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    // IOS-222
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack]) {
+        int mapMode = [[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
+        [_app setMapMode:mapMode];
+    }
     [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
 }
 

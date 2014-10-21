@@ -253,6 +253,8 @@
     if (_mapMode == mapMode)
         return;
     _mapMode = mapMode;
+    [[NSUserDefaults standardUserDefaults] setInteger:_mapMode forKey:kUDLastMapModePositionTrack];
+    [[NSUserDefaults standardUserDefaults] synchronize];
     [_mapModeObservable notifyEvent];
 }
 

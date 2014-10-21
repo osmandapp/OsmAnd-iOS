@@ -43,6 +43,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *scopeControlContainerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *updateCouneView;
+
 
 @end
 
@@ -160,6 +162,17 @@ struct RegionResources
                                                         action:@selector(onCustomBackButtonClicked)];
     [self obtainDataAndItems];
     [self prepareContent];
+    
+    
+    
+    // IOS-172
+    _updateCouneView.layer.cornerRadius = 12.5;
+    _updateCouneView.layer.masksToBounds = YES;
+    if (_outdatedResources.isEmpty())
+        [_updateCouneView setHidden:YES];
+    else
+        [_updateCouneView setText:[NSString stringWithFormat:@"%d", _outdatedResources.count()]];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated

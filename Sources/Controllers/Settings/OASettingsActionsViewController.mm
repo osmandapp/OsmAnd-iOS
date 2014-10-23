@@ -19,38 +19,49 @@
 #define _(name) OASettingsActionsViewController__##name
 
 @interface OASettingsActionsViewController ()
+
+@property OsmAndAppInstance app;
+@property QBooleanElement* showRuletElement;
+@property QRadioSection* mapLanguageSection;
+
 @end
 
 @implementation OASettingsActionsViewController
 {
-    OsmAndAppInstance _app;
-    QBooleanElement* _showRuletElement;
 }
 
 - (instancetype)init
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-
     QRootElement* rootElement = [[QRootElement alloc] init];
-
     rootElement.title = OALocalizedString(@"Settings");
     rootElement.grouped = YES;
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
 
-    // Map section
-    QSection* mapSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Map")];
-    [rootElement addSection:mapSection];
-
-    QBooleanElement* showRuletElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Show map ruler")
-                                                                           BoolValue:NO];
-    showRuletElement.controllerAction = NSStringFromSelector(@selector(onShowRuletSettingChanged));
-    [mapSection addElement:showRuletElement];
-
     self = [super initWithRoot:rootElement];
     if (self) {
-        _app = app;
 
-        _showRuletElement = showRuletElement;
+        self.app = [OsmAndApp instance];
+        
+        // Map section
+        QSection* mapSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Map")];
+        [rootElement addSection:mapSection];
+        
+        self.showRuletElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"Show map ruler")
+                                                         BoolValue:NO];
+        self.showRuletElement.controllerAction = NSStringFromSelector(@selector(onShowRuletSettingChanged));
+        [mapSection addElement:self.showRuletElement];
+        
+        // Language section
+        self.mapLanguageSection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"Local Only"),
+                                                                         OALocalizedString(@"Local And System"),
+                                                                         OALocalizedString(@"System And Local"),
+                                                                         ]
+                                                              selected:0
+                                                                 title:OALocalizedString(@"Map language")];
+        self.mapLanguageSection.onSelected = ^(){
+            [self onMapLanguageChanged];
+        };
+        [rootElement addSection: self.mapLanguageSection];
         
     }
     return self;
@@ -64,13 +75,18 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-
-    _showRuletElement.boolValue = [[OAAppSettings sharedManager] settingShowMapRulet];
+    self.showRuletElement.boolValue = [[OAAppSettings sharedManager] settingShowMapRulet];
+    self.mapLanguageSection.selected = [[OAAppSettings sharedManager] settingMapLanguage];
 }
 
 - (void)onShowRuletSettingChanged
 {
-    [[OAAppSettings sharedManager] setSettingShowMapRulet:_showRuletElement.boolValue];
+    [[OAAppSettings sharedManager] setSettingShowMapRulet:self.showRuletElement.boolValue];
+}
+
+-(void)onMapLanguageChanged {
+    [[OAAppSettings sharedManager] setSettingMapLanguage:self.mapLanguageSection.selected];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSettingsLanguageChange object:nil];
 }
 
 @end

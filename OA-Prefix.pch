@@ -24,6 +24,7 @@
 #define kUIAlertViewMapDownloadTag 99
 
 #define kUDLastMapModePositionTrack @"kUDLastMapModePositionTrack"
+#define kNotificationSettingsLanguageChange @"kNotificationSettingsLanguageChange"
 
 
 struct RulerData

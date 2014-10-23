@@ -221,6 +221,13 @@
                                              selector:@selector(applicationWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    
+    // Subscribe to settings change notifications
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onLanguageSettingsChange)
+                                                 name:kNotificationSettingsLanguageChange
+                                               object:nil];
+
 
     // Create gesture recognizers:
     
@@ -1406,6 +1413,18 @@
     });
 }
 
+-(void)onLanguageSettingsChange {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        [self updateCurrentMapSource];
+    });
+}
+
 - (void)onLocalResourcesChanged:(const QList< QString >&)ids
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1484,9 +1503,32 @@
 
             _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection));
 
+            NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
+            
+            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+            
+            switch ([[OAAppSettings sharedManager] settingMapLanguage]) {
+                case 0:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+                case 1:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    break;
+                case 2:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+                    break;
+                default:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+            }
+            
+            
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
-                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject])));
+                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     langPreferences));
+            
+            
             _primitiviser.reset(new OsmAnd::Primitiviser(_mapPresentationEnvironment));
             _binaryMapPrimitivesProvider.reset(new OsmAnd::BinaryMapPrimitivesProvider(_binaryMapDataProvider,
                                                                                        _primitiviser,

@@ -9,9 +9,10 @@
 #import "OAAppSettings.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
+#define settingMapLanguageKey @"settingMapLanguageKey"
 
 @implementation OAAppSettings
-@synthesize settingShowMapRulet=_settingShowMapRulet;
+@synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage;
 
 + (OAAppSettings*)sharedManager
 {
@@ -28,14 +29,19 @@
     self = [super init];
     if (self) {
         self.settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
+        self.settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
     }
     return self;
 }
 
-
 -(void)setSettingShowMapRulet:(BOOL)settingShowMapRulet {
     _settingShowMapRulet = settingShowMapRulet;
     [[NSUserDefaults standardUserDefaults] setBool:_settingShowMapRulet forKey:settingShowMapRuletKey];
+}
+
+-(void)setSettingMapLanguage:(int)settingMapLanguage {
+    _settingMapLanguage = settingMapLanguage;
+    [[NSUserDefaults standardUserDefaults] setInteger:_settingMapLanguage forKey:settingMapLanguageKey];
 }
 
 @end

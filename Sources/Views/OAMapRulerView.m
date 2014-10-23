@@ -78,8 +78,6 @@
 
     float xCoof = minScaleSize / metersPerMinSize;
     int rulerWidth = kMapRulerMinWidth * xCoof;
-    
-    NSLog(@"--\nRuler:\norMeters: %f\nminScale: %d\nxCoof: %f\nwidth: %d\n--", metersPerMinSize, minScaleSize, xCoof, rulerWidth);
 
     if (metersPerMinSize < 1) {
         [self.textLabel setText:@"< 1 m"];

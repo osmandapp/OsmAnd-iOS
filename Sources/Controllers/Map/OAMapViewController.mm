@@ -1532,7 +1532,7 @@
                     break;
             }
 #else
-          _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+          _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
 #endif // defined(OSMAND_IOS_DEV)
             [mapView setProvider:_rasterMapProvider
                         forLayer:0];

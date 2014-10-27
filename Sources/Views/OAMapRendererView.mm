@@ -124,29 +124,19 @@
     _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
 }
 
-- (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer
+- (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer
 {
-    return _renderer->getState().rasterLayerProviders[static_cast<int>(layer)];
+    return _renderer->getState().mapLayersProviders[layer];
 }
 
-- (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer
+- (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer
 {
-    _renderer->setRasterLayerProvider(layer, provider);
+    _renderer->setMapLayerProvider(layer, provider);
 }
 
-- (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer
+- (void)resetProviderFor:(unsigned int)layer
 {
-    _renderer->setRasterLayerProvider(layer, std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>());
-}
-
-- (float)opacityOf:(OsmAnd::RasterMapLayerId)layer
-{
-    return _renderer->getState().rasterLayerOpacity[static_cast<int>(layer)];
-}
-
-- (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer
-{
-    _renderer->setRasterLayerOpacity(layer, opacity);
+    _renderer->resetMapLayerProvider(layer);
 }
 
 - (std::shared_ptr<OsmAnd::IMapElevationDataProvider>)elevationDataProvider
@@ -159,34 +149,29 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
-- (float)elevationDataScale
+- (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
-    return _renderer->getState().elevationDataScaleFactor;
+    _renderer->addSymbolsProvider(provider);
 }
 
-- (void)removeElevationDataProvider
+- (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
 {
-    _renderer->setElevationDataProvider(std::shared_ptr<OsmAnd::IMapElevationDataProvider>());
+    _renderer->addSymbolsProvider(provider);
 }
 
-- (void)setElevationDataScale:(float)elevationDataScale
+- (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
-    _renderer->setElevationDataScaleFactor(elevationDataScale);
+    _renderer->removeSymbolsProvider(provider);
 }
 
-- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider
+- (void)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider
 {
-    _renderer->addSymbolProvider(provider);
+    _renderer->removeSymbolsProvider(provider);
 }
 
-- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider
+- (void)removeAllSymbolsProviders
 {
-    _renderer->removeSymbolProvider(provider);
-}
-
-- (void)removeAllSymbolProviders
-{
-    _renderer->removeAllSymbolProviders();
+    _renderer->removeAllSymbolsProviders();
 }
 
 - (float)fieldOfView

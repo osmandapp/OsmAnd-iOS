@@ -13,8 +13,10 @@
 #include <OsmAndCore/Map/MapCommonTypes.h>
 #include <OsmAndCore/Map/MapAnimator.h>
 #include <OsmAndCore/Map/MapRendererState.h>
-#include <OsmAndCore/Map/IMapRasterBitmapTileProvider.h>
+#include <OsmAndCore/Map/IMapLayerProvider.h>
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
+#include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
+#include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
@@ -23,16 +25,16 @@
     OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name
 typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 {
-    _DECLARE_ENTRY(RasterLayers_Providers),
-    _DECLARE_ENTRY(RasterLayers_Opacity),
+    _DECLARE_ENTRY(MapLayers_Providers),
+    _DECLARE_ENTRY(MapLayers_Configuration),
     _DECLARE_ENTRY(ElevationData_Provider),
-    _DECLARE_ENTRY(ElevationData_ScaleFactor),
+    _DECLARE_ENTRY(ElevationData_Configuration),
     _DECLARE_ENTRY(Symbols_Providers),
     _DECLARE_ENTRY(WindowSize),
     _DECLARE_ENTRY(Viewport),
     _DECLARE_ENTRY(FieldOfView),
     _DECLARE_ENTRY(SkyColor),
-    _DECLARE_ENTRY(FogParameters),
+    _DECLARE_ENTRY(FogConfiguration),
     _DECLARE_ENTRY(Azimuth),
     _DECLARE_ENTRY(ElevationAngle),
     _DECLARE_ENTRY(Target),
@@ -42,18 +44,18 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @interface OAMapRendererView : UIView <OAMapRendererViewProtocol>
 
-// State-related:
-- (std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)providerOf:(OsmAnd::RasterMapLayerId)layer;
-- (void)setProvider:(std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider>)provider ofLayer:(OsmAnd::RasterMapLayerId)layer;
-- (void)removeProviderOf:(OsmAnd::RasterMapLayerId)layer;
-- (float)opacityOf:(OsmAnd::RasterMapLayerId)layer;
-- (void)setOpacity:(float)opacity ofLayer:(OsmAnd::RasterMapLayerId)layer;
+- (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer;
+- (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
+- (void)resetProviderFor:(unsigned int)layer;
+
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 - (void)removeElevationDataProvider;
-@property(nonatomic) float elevationDataScale;
-- (void)addSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
-- (void)removeSymbolProvider:(std::shared_ptr<OsmAnd::IMapDataProvider>)provider;
-- (void)removeAllSymbolProviders;
+
+- (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
+- (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
+- (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
+- (void)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
+- (void)removeAllSymbolsProviders;
 
 - (UIImage*) getGLScreenshot;
 

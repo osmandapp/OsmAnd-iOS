@@ -1042,12 +1042,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3AC40ABD19DDC3EE002FBC40 /* Supported filed */ = {
+		3AC40ABD19DDC3EE002FBC40 /* Support files */ = {
 			isa = PBXGroup;
 			children = (
 				3AC40ABE19DDC409002FBC40 /* OA-Prefix.pch */,
 			);
-			name = "Supported filed";
+			name = "Support files";
 			sourceTree = "<group>";
 		};
 		3AC40ABF19DDC430002FBC40 /* Views */ = {
@@ -1129,7 +1129,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				3AC40ABD19DDC3EE002FBC40 /* Supported filed */,
+				3AC40ABD19DDC3EE002FBC40 /* Support files */,
 				BB54F7051989137700AB40D1 /* Appearance */,
 				BBA3B00819878AC30039D991 /* DownloadsManager */,
 				BBA3AE83196BCB120039D991 /* PodsExtensions */,

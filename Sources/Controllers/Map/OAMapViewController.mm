@@ -28,10 +28,10 @@
 #include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
-#include <OsmAndCore/Map/OnlineRasterMapTileProvider.h>
+#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/BinaryMapDataProvider.h>
 #include <OsmAndCore/Map/BinaryMapPrimitivesProvider.h>
-#include <OsmAndCore/Map/BinaryMapRasterBitmapTileProvider_Software.h>
+#include <OsmAndCore/Map/BinaryMapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/Primitiviser.h>
@@ -40,9 +40,9 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/BinaryMapDataMetricsBitmapTileProvider.h>
-#   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsBitmapTileProvider.h>
-#   include <OsmAndCore/Map/BinaryMapRasterMetricsBitmapTileProvider.h>
+#   include <OsmAndCore/Map/BinaryMapDataMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/BinaryMapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
 #import "OANativeUtilities.h"
@@ -85,8 +85,8 @@
     BOOL _mapSourceInvalidated;
     
     // Current provider of raster map
-    std::shared_ptr<OsmAnd::IMapRasterBitmapTileProvider> _rasterMapProvider;
-    
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
+
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
     std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
@@ -338,10 +338,10 @@
     [_framePreparedObserver observe:mapView.framePreparedObservable];
 
     // Add "My location" and "My course" markers
-    [mapView addSymbolProvider:_myMarkersCollection];
+    [mapView addKeyedSymbolsProvider:_myMarkersCollection];
 
     // Add context pin markers
-    [mapView addSymbolProvider:_contextPinMarkersCollection];
+    [mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
 
     // Update layers
     [self updateLayers];
@@ -1436,7 +1436,7 @@
         _mapPresentationEnvironment.reset();
         _primitiviser.reset();
         if (_binaryMapStaticSymbolsProvider)
-            [mapView removeSymbolProvider:_binaryMapStaticSymbolsProvider];
+            [mapView removeTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
         _binaryMapStaticSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
@@ -1479,22 +1479,22 @@
             switch (_visualMetricsMode)
             {
                 case OAVisualMetricsModeBinaryMapData:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapDataMetricsBitmapTileProvider(_binaryMapDataProvider,
-                                                                                                256 * mapView.contentScaleFactor,
-                                                                                                mapView.contentScaleFactor));
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapDataMetricsLayerProvider(_binaryMapDataProvider,
+                                                                                           256 * mapView.contentScaleFactor,
+                                                                                           mapView.contentScaleFactor));
                     break;
 
                 case OAVisualMetricsModeBinaryMapPrimitives:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapPrimitivesMetricsBitmapTileProvider(_binaryMapPrimitivesProvider,
-                                                                                                      256 * mapView.contentScaleFactor,
-                                                                                                      mapView.contentScaleFactor));
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapPrimitivesMetricsLayerProvider(_binaryMapPrimitivesProvider,
+                                                                                                 256 * mapView.contentScaleFactor,
+                                                                                                 mapView.contentScaleFactor));
                     break;
 
                 case OAVisualMetricsModeBinaryMapRasterize:
                 {
-                    std::shared_ptr<OsmAnd::BinaryMapRasterBitmapTileProvider> backendProvider(
-                        new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterMetricsBitmapTileProvider(backendProvider,
+                    std::shared_ptr<OsmAnd::BinaryMapRasterLayerProvider> backendProvider(
+                        new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterMetricsLayerProvider(backendProvider,
                                                                                                   256 * mapView.contentScaleFactor,
                                                                                                   mapView.contentScaleFactor));
                     break;
@@ -1502,26 +1502,26 @@
 
                 case OAVisualMetricsModeOff:
                 default:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
                     break;
             }
 #else
           _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterBitmapTileProvider_Software(_binaryMapPrimitivesProvider));
 #endif // defined(OSMAND_IOS_DEV)
             [mapView setProvider:_rasterMapProvider
-                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+                        forLayer:0];
 
 #if defined(OSMAND_IOS_DEV)
             if (!_hideStaticSymbols)
             {
                 _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
                                                                                                  rasterTileSize));
-                [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
+                [mapView addTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
             }
 #else
             _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
                                                                                              rasterTileSize));
-            [mapView addSymbolProvider:_binaryMapStaticSymbolsProvider];
+            [mapView addTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
 #endif
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
@@ -1539,7 +1539,7 @@
             onlineMapTileProvider->setLocalCachePath(_app.cacheDir);
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider
-                         ofLayer:OsmAnd::RasterMapLayerId::BaseLayer];
+                        forLayer:0];
         }
     }
 }
@@ -1561,9 +1561,9 @@
     @synchronized(_rendererSync)
     {
         if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
-            [mapView addSymbolProvider:_favoritesPresenter];
+            [mapView addKeyedSymbolsProvider:_favoritesPresenter];
         else
-            [mapView removeSymbolProvider:_favoritesPresenter];
+            [mapView removeKeyedSymbolsProvider:_favoritesPresenter];
     }
 }
 

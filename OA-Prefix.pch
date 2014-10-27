@@ -25,4 +25,11 @@
 #define kUIAlertViewMapDownloadTag 99
 
 
+struct RulerData
+{
+    float tileSizeInPixels;
+    double tileSizeInMeters;
+};
+
+
 #endif

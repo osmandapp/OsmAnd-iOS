@@ -17,6 +17,7 @@
 #import "OAAppData.h"
 #include "Localization.h"
 #import "OALog.h"
+#import "OASettingsActionsViewController.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
@@ -452,8 +453,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         switch (indexPath.row)
         {
-            case kOptionsSection_SettingsRow:
-                OALog(@"open settings menu");
+            case kOptionsSection_SettingsRow: {
+
+                OASettingsActionsViewController* settingsViewController = [[OASettingsActionsViewController alloc] init];
+                [self.navigationController pushViewController:settingsViewController animated:YES];
+            }
                 break;
             case kOptionsSection_MapsAndResourcesRow:
                 [self openMenu:[[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController]

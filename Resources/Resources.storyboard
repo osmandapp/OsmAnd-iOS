@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Lhe-yk-sVD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Lhe-yk-sVD">
     <dependencies>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -29,11 +30,24 @@
                                             <action selector="onScopeChanged:" destination="Lhe-yk-sVD" eventType="valueChanged" id="3iX-5h-XZV"/>
                                         </connections>
                                     </segmentedControl>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hl2-idK-MOq">
+                                        <rect key="frame" x="287" y="4" width="25" height="25"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.058823529409999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="25" id="mRh-uQ-8pa"/>
+                                            <constraint firstAttribute="width" constant="25" id="sma-aD-Jlv"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Helvetica-Light" family="Helvetica" pointSize="13"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="hl2-idK-MOq" secondAttribute="trailing" constant="8" id="0vr-jP-pX9"/>
                                     <constraint firstAttribute="trailing" secondItem="X93-h7-s0r" secondAttribute="trailing" constant="16" id="5nr-53-fx6"/>
                                     <constraint firstAttribute="height" constant="44" id="ILq-wb-Okg"/>
+                                    <constraint firstItem="hl2-idK-MOq" firstAttribute="top" secondItem="iZK-JW-bB4" secondAttribute="top" constant="4" id="Q8w-aY-mcf"/>
                                     <constraint firstItem="X93-h7-s0r" firstAttribute="leading" secondItem="iZK-JW-bB4" secondAttribute="leading" constant="16" id="USN-dS-RxK"/>
                                     <constraint firstItem="X93-h7-s0r" firstAttribute="top" secondItem="iZK-JW-bB4" secondAttribute="top" constant="8" id="hEE-bO-S60"/>
                                 </constraints>
@@ -153,6 +167,7 @@
                         <outlet property="scopeControlContainerHeightConstraint" destination="ILq-wb-Okg" id="GYT-lP-r4L"/>
                         <outlet property="searchDisplayController" destination="mBR-OL-CGm" id="uqv-Jo-ffv"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>
+                        <outlet property="updateCouneView" destination="hl2-idK-MOq" id="Q4J-aO-p7R"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wb8-1N-k7N" userLabel="First Responder" sceneMemberID="firstResponder"/>

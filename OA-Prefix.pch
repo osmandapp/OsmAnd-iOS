@@ -21,8 +21,10 @@
 #define kAppExecCounter @"kAppExecCounter"
 #define kShowMapIterator @"kShowMapIterator"
 #define kMapDownloadStopReminding @"kMapDownloadStopReminding"
-
 #define kUIAlertViewMapDownloadTag 99
+
+#define kUDLastMapModePositionTrack @"kUDLastMapModePositionTrack"
+#define kNotificationSettingsLanguageChange @"kNotificationSettingsLanguageChange"
 
 
 struct RulerData

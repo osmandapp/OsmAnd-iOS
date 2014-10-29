@@ -12,5 +12,6 @@
 
 + (OAAppSettings *)sharedManager;
 @property (assign, nonatomic) BOOL settingShowMapRulet;
+@property (assign, nonatomic) int settingMapLanguage;
 
 @end

@@ -10,7 +10,10 @@
 
 #import <QuickDialogController.h>
 
-@interface OAIncomingURLViewController : QuickDialogController
+@interface OAIncomingURLViewController : QuickDialogController<UIAlertViewDelegate>
+
+@property NSMutableArray* ignoredNames;
+@property NSString* conflictedName;
 
 - (instancetype)initFor:(NSURL*)url;
 

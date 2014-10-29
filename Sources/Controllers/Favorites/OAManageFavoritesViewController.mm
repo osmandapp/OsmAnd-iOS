@@ -86,7 +86,7 @@
     return self;
 }
 
-- (instancetype)initWithGroupTitle:(NSString*)groupTitle andFavorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites
+- (instancetype)initWithGroupTitle:(NSString*)groupTitle Favorites:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> >&)favorites andAction:(kManageFavoriteActionType)action
 {
     self = [super initWithRoot:[OAManageFavoritesViewController inflateGroup:groupTitle withFavorites:favorites]];
     if (self) {
@@ -99,6 +99,7 @@
                                                              andObserve:_app.favoriteChangedObservable];
         _contentIsInvalidated = NO;
         _groupName = groupTitle;
+        self.manageFavoriteActionType = action;
 
         [self inflateNavBarItems];
         [self inflateEditToolbarItems];
@@ -385,10 +386,9 @@
 
     GroupItemData* itemData = (GroupItemData*)sender.object;
 
-    UIViewController* manageGroupVC = [[OAManageFavoritesViewController alloc] initWithGroupTitle:itemData.groupName
-                                                                                     andFavorites:itemData.favorites];
-    [self.navigationController pushViewController:manageGroupVC
-                                         animated:YES];
+    OAManageFavoritesViewController* manageGroupVC = [[OAManageFavoritesViewController alloc] initWithGroupTitle:itemData.groupName
+                                                                                     Favorites:itemData.favorites andAction:self.manageFavoriteActionType];
+    [self.navigationController pushViewController:manageGroupVC animated:YES];
 }
 
 - (void)onEditFavorite:(QElement*)sender

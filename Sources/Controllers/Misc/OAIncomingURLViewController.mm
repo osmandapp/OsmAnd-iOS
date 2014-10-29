@@ -14,9 +14,13 @@
 
 #import "OsmAndApp.h"
 #include "Localization.h"
+#include <OsmAndCore/IFavoriteLocation.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
+
+#define kAlertConflictWarning -2
+#define kAlertConflictRename -4
 
 @interface OAIncomingURLViewController ()
 
@@ -103,6 +107,8 @@
     [super viewDidLoad];
 
     self.navigationItem.leftBarButtonItem.title = OALocalizedString(@"Cancel");
+    self.ignoredNames = [[NSMutableArray alloc] init];
+    
 }
 
 - (void)onImportAllAsFavoritesAndReplace:(QElement*)sender
@@ -121,13 +127,79 @@
                                                              }], nil] show];
 }
 
+-(BOOL)isFavoritesValid {
+    for(const auto& favorite : _favoritesCollection->getFavoriteLocations())
+    {
+        NSString* favoriteTitle = favorite->getTitle().toNSString();
+        for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
+        {
+            if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"Favorite with name \"%@\" already exists.", favoriteTitle] delegate:self cancelButtonTitle:@"Ignore" otherButtonTitles:@"Rename", @"Replace", nil];
+                alert.tag = kAlertConflictWarning;
+                [alert show];
+                self.conflictedName = favoriteTitle;
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
+
 - (void)onImportAllAsFavoritesAndMerge:(QElement*)sender
 {
+    // IOS-214
+    if (![self isFavoritesValid])
+        return;
+    
     _app.favoritesCollection->mergeFrom(_favoritesCollection);
     [_app saveFavoritesToPermamentStorage];
+    [self.ignoredNames removeAllObjects];
+    self.conflictedName = @"";
 
     [self.navigationController popViewControllerAnimated:YES];
 }
+
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (alertView.tag == kAlertConflictWarning) {
+        if (buttonIndex == alertView.cancelButtonIndex) {
+            [self.ignoredNames addObject:self.conflictedName];
+            [self onImportAllAsFavoritesAndMerge:nil];
+        } else if (buttonIndex == 1) {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remane favorite" message:[NSString stringWithFormat:@"Please enter new name for favorite \"%@\"", self.conflictedName] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            alert.tag = kAlertConflictRename;
+            [alert show];
+
+        } else if (buttonIndex == 2) {
+            for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
+                NSString* favoriteTitle = localFavorite->getTitle().toNSString();
+                if ([favoriteTitle isEqualToString:self.conflictedName]) {
+                    _app.favoritesCollection->removeFavoriteLocation(localFavorite);
+                    break;
+                }
+            }
+            [self onImportAllAsFavoritesAndMerge:nil];
+        }
+    } else if (alertView.tag == kAlertConflictRename) {
+        NSString* newFavoriteName = [alertView textFieldAtIndex:0].text;
+        
+        for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
+            NSString* favoriteTitle = favorite->getTitle().toNSString();
+            if ([favoriteTitle isEqualToString:self.conflictedName]) {
+                favorite->setTitle(QString::fromNSString(newFavoriteName));
+                break;
+            }
+        }
+        [self onImportAllAsFavoritesAndMerge:nil];
+    }
+
+}
+
+
+
+
 
 /*
 - (void)onImportSelectedAsFavoritesAndReplace:(QElement*)sender

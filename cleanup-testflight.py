@@ -1,3 +1,6 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*
+
 import sys
 import os
 import getpass
@@ -119,13 +122,13 @@ class TestflightJanitor(object):
     def cleanup(self, username, password, appId, buildsToKeep):
     	ok = self.login(username, password)
     	if ok == False:
-    		return -1
+    		return False
     	builds = self.getBuilds(appId)
     	buildsToDelete = builds[buildsToKeep:]
     	print("Going to delete oldest %d builds from %d..." % (len(buildsToDelete), len(builds)))
     	for buildId in buildsToDelete:
     		self.deleteBuild(buildId)
-    	return 0
+    	return True
 
 # =============================================================================================================================================================
 # =============================================================================================================================================================
@@ -138,4 +141,4 @@ if __name__=='__main__':
 	buildsToKeep = int(input("Number of builds to keep: "))
 
 	janitor = TestflightJanitor()
-	sys.exit(janitor.cleanup(username, password, appId, buildsToKeep))
+	sys.exit(0 if janitor.cleanup(username, password, appId, buildsToKeep) else -1)

@@ -78,6 +78,8 @@
     
     // Allow rotation, without respect to current active panel
     self.shouldDelegateAutorotateToVisiblePanel = NO;
+    
+    self.navigationController.navigationBarHidden = YES;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -91,8 +93,7 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    [self.navigationController setNavigationBarHidden:NO
+    [self.navigationController setNavigationBarHidden:YES
                                              animated:animated];
 }
 

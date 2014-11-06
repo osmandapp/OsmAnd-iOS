@@ -40,7 +40,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 
 @property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
-
+@property (strong, nonatomic) OATargetPointView* targetMenuView;
+@property (strong, nonatomic) UIButton* shadowButton;
 
 @end
 
@@ -88,12 +89,20 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
+    
+    
+     
+                             //    postNotificationName:kSetTargetPointNotification object:@[[NSNumber numberWithDouble:lat], [NSNumber numberWithDouble:lon]]];
+
+    
 }
 
 - (void)deinit
 {
 }
-
+NSLayoutConstraint* targetBottomConstraint;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -130,6 +139,28 @@
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
     [self.view addConstraint:constraint];
+    
+    
+    // Setup target point menu
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight + 10, DeviceScreenWidth, kOATargetPointViewHeight)];
+    self.targetMenuView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.targetMenuView.delegate = self;
+    [self.view addSubview:self.targetMenuView];
+    
+    // Constraints
+    targetBottomConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant: self.targetMenuView.frame.size.height + 10];
+    [self.view addConstraint:targetBottomConstraint];
+    
+    NSLayoutConstraint* targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:targetConstraint];
+    
+    targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
+    [self.view addConstraint:targetConstraint];
+    
+    targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOATargetPointViewHeight];
+    [self.view addConstraint:targetConstraint];
+    
+    
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -252,6 +283,28 @@
     });
 }
 
+
+-(void)onTargetPointSet:(NSNotification *)notification {
+    NSDictionary *params = [notification userInfo];
+    double lat = [[params objectForKey:@"lat"] floatValue];
+    double lon = [[params objectForKey:@"lon"] floatValue];
+    CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
+
+    [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
+    [self.targetMenuView setNavigationController:self.navigationController];
+    [self.targetMenuView setMapViewInstance:_mapViewController.view];
+
+    [targetBottomConstraint setConstant:0];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight - kOATargetPointViewHeight)];
+        [self.shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0.3]];
+        [self.shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.shadowButton];
+    }];
+}
+
 - (IBAction)onDriveModeButtonClicked:(id)sender
 {
     _app.appMode = OAAppModeDrive;
@@ -262,9 +315,38 @@
     [self.sidePanelController showRightPanelAnimated:YES];
 }
 
+
+#pragma mark - OATargetPointViewDelegate
+
+-(void)targetPointAddFavorite {
+    [self hideTargetPointMenu];
+}
+
+
+-(void)targetPointShare {
+
+}
+
+
+-(void)targetPointDirection {
+
+}
+
+-(void)hideTargetPointMenu {
+    [self.shadowButton removeFromSuperview];
+    [targetBottomConstraint setConstant:kOATargetPointViewHeight + 10];
+    [UIView animateWithDuration:0.5 animations:^{
+        [self.view layoutIfNeeded];
+    }];
+}
+
+#pragma mark - debug
+
+
 - (IBAction)onDebugButtonClicked:(id)sender
 {
 #if defined(OSMAND_IOS_DEV)
+    
     if (_debugHudViewController == nil)
     {
         _debugHudViewController = [OADebugHudViewController attachTo:self];

@@ -14,6 +14,8 @@
 #import <Reachability.h>
 #import "OAAppSettings.h"
 
+#define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
+
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 {

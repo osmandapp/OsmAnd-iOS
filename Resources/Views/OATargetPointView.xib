@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OATargetPointView">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="125"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ул. Академика Крымского" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEN-oc-cuE">
+                    <rect key="frame" x="16" y="12" width="288" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="KgO-km-VG0"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="15"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50.46548, 30.37344" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YCG-gf-JuU">
+                    <rect key="frame" x="16" y="39" width="288" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="1kS-PK-2qS"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
+                    <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.58823529411764708" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGt-3L-A3v">
+                    <rect key="frame" x="0.0" y="74" width="106" height="52"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="52" id="iRE-uT-CeZ"/>
+                    </constraints>
+                    <state key="normal" image="menu_star_icon.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonFavoriteClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="c6c-vO-VjT"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1L-y5-El0">
+                    <rect key="frame" x="214" y="74" width="106" height="52"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="52" id="jxI-DC-nH0"/>
+                    </constraints>
+                    <state key="normal" image="menu_direction_icon.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonDirectionClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="snw-2L-ye9"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MS8-UJ-8Y2">
+                    <rect key="frame" x="105" y="74" width="110" height="52"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="52" id="35X-dt-LYx"/>
+                    </constraints>
+                    <state key="normal" image="menu_share_icon.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonShareClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="0Sy-n7-VEK"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="В избранное" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3EL-Cb-Uii">
+                    <rect key="frame" x="0.0" y="111" width="106" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="zFm-cC-9Lv"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                    <color key="textColor" red="0.27843137254901962" green="0.38431372549019605" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Направление" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FoP-l4-BP1">
+                    <rect key="frame" x="214" y="111" width="106" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="1gk-hc-Yje"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                    <color key="textColor" red="0.2784313725" green="0.38431372549999998" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Поделиться" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jU2-uR-XNv">
+                    <rect key="frame" x="105" y="111" width="110" height="16"/>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                    <color key="textColor" red="0.2784313725" green="0.38431372549999998" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="gGt-3L-A3v" firstAttribute="width" secondItem="3EL-Cb-Uii" secondAttribute="width" id="0hP-sM-7FU"/>
+                <constraint firstItem="3EL-Cb-Uii" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="24c-9z-zcq"/>
+                <constraint firstItem="FoP-l4-BP1" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="51" id="3m2-u3-5e4"/>
+                <constraint firstItem="gGt-3L-A3v" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="4UN-FS-Zj7"/>
+                <constraint firstItem="MS8-UJ-8Y2" firstAttribute="leading" secondItem="gGt-3L-A3v" secondAttribute="trailing" constant="-1" id="95a-6f-FAf"/>
+                <constraint firstItem="C1L-y5-El0" firstAttribute="width" secondItem="FoP-l4-BP1" secondAttribute="width" id="9up-2i-QvJ"/>
+                <constraint firstItem="DEN-oc-cuE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="EIs-zp-La7"/>
+                <constraint firstItem="YCG-gf-JuU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="16" id="EYq-Qg-6wi"/>
+                <constraint firstAttribute="trailing" secondItem="C1L-y5-El0" secondAttribute="trailing" id="FEk-UN-8wQ"/>
+                <constraint firstItem="C1L-y5-El0" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="14" id="FLZ-B6-xx9"/>
+                <constraint firstItem="jU2-uR-XNv" firstAttribute="width" secondItem="MS8-UJ-8Y2" secondAttribute="width" id="FWT-R3-ikd"/>
+                <constraint firstItem="C1L-y5-El0" firstAttribute="width" secondItem="MS8-UJ-8Y2" secondAttribute="width" id="GpS-XG-IHE"/>
+                <constraint firstItem="MS8-UJ-8Y2" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="14" id="MVz-vH-hA2"/>
+                <constraint firstItem="C1L-y5-El0" firstAttribute="leading" secondItem="MS8-UJ-8Y2" secondAttribute="trailing" constant="-1" id="OFg-eO-Jqa"/>
+                <constraint firstAttribute="trailing" secondItem="YCG-gf-JuU" secondAttribute="trailing" constant="16" id="XGw-75-yZk"/>
+                <constraint firstItem="gGt-3L-A3v" firstAttribute="width" secondItem="MS8-UJ-8Y2" secondAttribute="width" id="Xhp-Va-zhr"/>
+                <constraint firstItem="jU2-uR-XNv" firstAttribute="leading" secondItem="3EL-Cb-Uii" secondAttribute="trailing" constant="-1" id="Zuc-eQ-NPs"/>
+                <constraint firstAttribute="trailing" secondItem="FoP-l4-BP1" secondAttribute="trailing" id="eGP-Ny-8i2"/>
+                <constraint firstItem="jU2-uR-XNv" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="51" id="fh9-kL-0Zh"/>
+                <constraint firstItem="gGt-3L-A3v" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="14" id="gCd-p0-L1d"/>
+                <constraint firstItem="YCG-gf-JuU" firstAttribute="top" secondItem="DEN-oc-cuE" secondAttribute="bottom" constant="6" id="gRD-k4-hOH"/>
+                <constraint firstItem="DEN-oc-cuE" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="12" id="gee-ep-Nzk"/>
+                <constraint firstAttribute="trailing" secondItem="DEN-oc-cuE" secondAttribute="trailing" constant="16" id="toW-x7-iJD"/>
+                <constraint firstItem="FoP-l4-BP1" firstAttribute="leading" secondItem="jU2-uR-XNv" secondAttribute="trailing" constant="-1" id="ty3-Sv-joT"/>
+                <constraint firstItem="3EL-Cb-Uii" firstAttribute="top" secondItem="YCG-gf-JuU" secondAttribute="bottom" constant="51" id="wnB-HO-9ho"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="addressLabel" destination="DEN-oc-cuE" id="GuH-OI-VN1"/>
+                <outlet property="buttonDirection" destination="C1L-y5-El0" id="N28-5Z-AAb"/>
+                <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="IP8-fj-2X0"/>
+                <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="G6e-gV-DVq"/>
+                <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
+            </connections>
+            <point key="canvasLocation" x="606" y="529.5"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="menu_direction_icon.png" width="23" height="23"/>
+        <image name="menu_share_icon.png" width="25" height="25"/>
+        <image name="menu_star_icon.png" width="24" height="23"/>
+    </resources>
+</document>

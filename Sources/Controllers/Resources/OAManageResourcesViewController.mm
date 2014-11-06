@@ -39,11 +39,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *scopeControlContainer;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *scopeControlContainerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *updateCouneView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIView *titlePanelView;
+
 
 
 @end
@@ -143,7 +145,7 @@ struct RegionResources
     [super viewDidLoad];
 
     if (self.region != _app.worldRegion)
-        self.title = self.region.name;
+        [self.titleView setText:self.region.name];
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
@@ -1052,12 +1054,12 @@ struct RegionResources
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         self.scopeControlContainerHeightConstraint.constant = 0.0f;
-                         [self.scopeControlContainer.superview layoutIfNeeded];
+                         self.scopeControlContainerHeightConstraint.constant = 65.0f;
+                         [self.titlePanelView.superview layoutIfNeeded];
 
-                         self.scopeControlContainer.alpha = 0.0f;
+                         self.titlePanelView.alpha = 0.0f;
                      } completion:^(BOOL finished) {
-                         self.scopeControlContainer.userInteractionEnabled = NO;
+                         self.titlePanelView.userInteractionEnabled = NO;
                      }];
 }
 
@@ -1086,11 +1088,11 @@ struct RegionResources
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
                          self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
-                         [self.scopeControlContainer.superview layoutIfNeeded];
+                         [self.titlePanelView.superview layoutIfNeeded];
 
-                         self.scopeControlContainer.alpha = 1.0f;
+                         self.titlePanelView.alpha = 1.0f;
                      } completion:^(BOOL finished) {
-                         self.scopeControlContainer.userInteractionEnabled = YES;
+                         self.titlePanelView.userInteractionEnabled = YES;
                      }];
 }
 

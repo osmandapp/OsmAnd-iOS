@@ -14,4 +14,11 @@
 @property (assign, nonatomic) BOOL settingShowMapRulet;
 @property (assign, nonatomic) int settingMapLanguage;
 
+@property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
+@property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English
+@property (assign, nonatomic) BOOL settingShowZoomButton;
+@property (assign, nonatomic) int settingGeoFormat; // 0 -
+
+
+
 @end

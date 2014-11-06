@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OATargetPointView.h"
 
-@interface OABrowseMapAppModeHudViewController : UIViewController
+@interface OABrowseMapAppModeHudViewController : UIViewController<OATargetPointViewDelegate>
 
 @end

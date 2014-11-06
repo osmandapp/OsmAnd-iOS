@@ -128,8 +128,10 @@
 		</dict>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-    <string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<true/>
+	<false/>
 </dict>
 </plist>

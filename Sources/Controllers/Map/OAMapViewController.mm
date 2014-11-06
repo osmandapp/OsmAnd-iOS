@@ -72,7 +72,6 @@
 #define deinit _(deinit)
 
 @interface OAMapViewController ()
-
 @end
 
 @implementation OAMapViewController
@@ -382,6 +381,7 @@
 
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -829,7 +829,17 @@
     // Show context pin marker
     _contextPinMarker->setPosition(touchLocation);
     _contextPinMarker->setIsHidden(false);
-
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                        object: self
+                                                      userInfo:@{@"lat": [NSNumber numberWithDouble:lat],
+                                                                 @"lon": [NSNumber numberWithDouble:lon],
+                                                                 @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
+                                                                 @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
+    return;
+    
     // Show corresponding action-sheet
     static NSString* const locationDetailsAction = OALocalizedString(@"What's here?");
     static NSString* const addToFavoritesAction = OALocalizedString(@"Add to favorites");

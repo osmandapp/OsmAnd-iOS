@@ -53,7 +53,7 @@
 
 -(void)setupView {
     
-    [self.favoriteTableView setDataSource:self];
+//    [self.favoriteTableView setDataSource:self];
     
 }
 
@@ -72,20 +72,20 @@
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-
+    return @"";
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-
+    return nil;
 }
 
 

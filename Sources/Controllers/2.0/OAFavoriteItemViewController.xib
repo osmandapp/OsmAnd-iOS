@@ -5,12 +5,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAFavoriteListViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAFavoriteItemViewController">
             <connections>
-                <outlet property="favoriteTableView" destination="I6b-fV-hKw" id="fkq-Tf-Ao4"/>
                 <outlet property="favoritesButtonView" destination="97S-Ol-wNi" id="Ljk-KJ-di8"/>
                 <outlet property="gpxButtonView" destination="EbN-uw-w8D" id="WQa-s9-tt8"/>
-                <outlet property="titleView" destination="n16-cj-6Iy" id="ZRs-e3-8fy"/>
+                <outlet property="titleView" destination="n16-cj-6Iy" id="NQb-fI-bbe"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -104,23 +103,48 @@
                         <constraint firstItem="EbN-uw-w8D" firstAttribute="top" secondItem="ApO-Ke-9Ih" secondAttribute="top" id="xg3-h7-PsY"/>
                     </constraints>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="50" sectionHeaderHeight="50" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="I6b-fV-hKw">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qiy-IO-fbT">
                     <rect key="frame" x="0.0" y="75" width="320" height="432"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                </tableView>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MS9-53-GFj">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="150"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="150" id="bgF-BI-0cP"/>
+                            </constraints>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="P3K-an-HWo">
+                            <rect key="frame" x="0.0" y="185" width="320" height="150"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="150" id="vtU-XB-9cr"/>
+                            </constraints>
+                        </view>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="MS9-53-GFj" firstAttribute="top" secondItem="Qiy-IO-fbT" secondAttribute="top" id="2nk-8l-LEM"/>
+                        <constraint firstItem="MS9-53-GFj" firstAttribute="leading" secondItem="Qiy-IO-fbT" secondAttribute="leading" id="RAe-cc-ChT"/>
+                        <constraint firstAttribute="trailing" secondItem="P3K-an-HWo" secondAttribute="trailing" id="SUJ-u5-a86"/>
+                        <constraint firstItem="P3K-an-HWo" firstAttribute="centerX" secondItem="Qiy-IO-fbT" secondAttribute="centerX" id="SVm-VU-qxZ"/>
+                        <constraint firstItem="P3K-an-HWo" firstAttribute="top" secondItem="MS9-53-GFj" secondAttribute="bottom" constant="35" id="XoE-sl-iyf"/>
+                        <constraint firstAttribute="trailing" secondItem="MS9-53-GFj" secondAttribute="trailing" id="bGf-uI-pTb"/>
+                        <constraint firstAttribute="bottom" secondItem="P3K-an-HWo" secondAttribute="bottom" constant="97" id="dw4-5j-xF0"/>
+                        <constraint firstItem="P3K-an-HWo" firstAttribute="leading" secondItem="Qiy-IO-fbT" secondAttribute="leading" id="pWO-df-2dh"/>
+                    </constraints>
+                </scrollView>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
                 <constraint firstItem="b9I-9C-Bgy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="0XJ-k4-Hrt"/>
                 <constraint firstAttribute="bottom" secondItem="ApO-Ke-9Ih" secondAttribute="bottom" id="78U-yd-UuU"/>
-                <constraint firstItem="I6b-fV-hKw" firstAttribute="top" secondItem="b9I-9C-Bgy" secondAttribute="bottom" id="DYQ-de-KFw"/>
+                <constraint firstItem="Qiy-IO-fbT" firstAttribute="top" secondItem="b9I-9C-Bgy" secondAttribute="bottom" id="7nG-GT-zbv"/>
+                <constraint firstItem="Qiy-IO-fbT" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Aol-AJ-fdU"/>
                 <constraint firstItem="ApO-Ke-9Ih" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="FFA-Jv-fce"/>
+                <constraint firstItem="ApO-Ke-9Ih" firstAttribute="top" secondItem="Qiy-IO-fbT" secondAttribute="bottom" id="Ni3-Hg-ZUp"/>
                 <constraint firstAttribute="trailing" secondItem="b9I-9C-Bgy" secondAttribute="trailing" id="RTZ-5K-e5t"/>
                 <constraint firstAttribute="trailing" secondItem="ApO-Ke-9Ih" secondAttribute="trailing" id="Ruf-3T-eyq"/>
-                <constraint firstItem="ApO-Ke-9Ih" firstAttribute="top" secondItem="I6b-fV-hKw" secondAttribute="bottom" id="TVD-Dy-CQM"/>
-                <constraint firstItem="I6b-fV-hKw" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="eAP-dn-Hiz"/>
                 <constraint firstItem="b9I-9C-Bgy" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="h0L-9x-MWa"/>
-                <constraint firstAttribute="trailing" secondItem="I6b-fV-hKw" secondAttribute="trailing" id="zCW-1i-YaU"/>
+                <constraint firstAttribute="trailing" secondItem="Qiy-IO-fbT" secondAttribute="trailing" id="zhD-G0-g8Y"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina4"/>
         </view>

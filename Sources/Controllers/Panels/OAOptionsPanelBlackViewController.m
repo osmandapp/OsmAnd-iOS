@@ -8,6 +8,7 @@
 
 #import "OAOptionsPanelBlackViewController.h"
 #import "OASettingsViewController.h"
+#import "OAFavoriteListViewController.h"
 
 @interface OAOptionsPanelBlackViewController ()
 
@@ -53,7 +54,8 @@
 }
 
 - (IBAction)myDataButtonClicked:(id)sender {
-
+    OAFavoriteListViewController* settingsViewController = [[OAFavoriteListViewController alloc] init];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (IBAction)settingsButtonClicked:(id)sender {

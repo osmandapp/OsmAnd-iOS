@@ -71,7 +71,7 @@
                         <constraint firstAttribute="height" constant="16" id="zFm-cC-9Lv"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
-                    <color key="textColor" red="0.27843137254901962" green="0.38431372549019605" blue="0.92549019607843142" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.31372549020000001" green="0.31372549020000001" blue="0.32549019610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Направление" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FoP-l4-BP1">
@@ -80,13 +80,13 @@
                         <constraint firstAttribute="height" constant="16" id="1gk-hc-Yje"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
-                    <color key="textColor" red="0.2784313725" green="0.38431372549999998" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.31372549020000001" green="0.31372549020000001" blue="0.32549019610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Поделиться" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jU2-uR-XNv">
                     <rect key="frame" x="105" y="111" width="110" height="16"/>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
-                    <color key="textColor" red="0.2784313725" green="0.38431372549999998" blue="0.92549019610000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="textColor" red="0.31372549020000001" green="0.31372549020000001" blue="0.32549019610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
             </subviews>

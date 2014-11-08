@@ -109,6 +109,21 @@
 		3ACE8D4019F43004003F1D42 /* OAMapRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACE8D3F19F43004003F1D42 /* OAMapRulerView.m */; };
 		3ACE8D4119F4F53D003F1D42 /* OAMapRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACE8D3F19F43004003F1D42 /* OAMapRulerView.m */; };
 		3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ACE8D3F19F43004003F1D42 /* OAMapRulerView.m */; };
+		3AFEEE0F1A0CE01A00900A47 /* menu_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE0E1A0CE01A00900A47 /* menu_button@2x.png */; };
+		3AFEEE101A0CE0D700900A47 /* menu_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE0E1A0CE01A00900A47 /* menu_button@2x.png */; };
+		3AFEEE111A0CE0D700900A47 /* menu_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE0E1A0CE01A00900A47 /* menu_button@2x.png */; };
+		3AFEEE151A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE131A0CF07400900A47 /* OAFavoriteListViewController.mm */; };
+		3AFEEE161A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE131A0CF07400900A47 /* OAFavoriteListViewController.mm */; };
+		3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE131A0CF07400900A47 /* OAFavoriteListViewController.mm */; };
+		3AFEEE181A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE141A0CF07400900A47 /* OAFavoriteListViewController.xib */; };
+		3AFEEE191A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE141A0CF07400900A47 /* OAFavoriteListViewController.xib */; };
+		3AFEEE1A1A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE141A0CF07400900A47 /* OAFavoriteListViewController.xib */; };
+		3AFEEE1C1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1B1A0CF89C00900A47 /* icon_star_fill@2x.png */; };
+		3AFEEE1D1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1B1A0CF89C00900A47 /* icon_star_fill@2x.png */; };
+		3AFEEE1E1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1B1A0CF89C00900A47 /* icon_star_fill@2x.png */; };
+		3AFEEE201A0CF90D00900A47 /* icon_gpx@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1F1A0CF90D00900A47 /* icon_gpx@2x.png */; };
+		3AFEEE211A0CF90D00900A47 /* icon_gpx@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1F1A0CF90D00900A47 /* icon_gpx@2x.png */; };
+		3AFEEE221A0CF90D00900A47 /* icon_gpx@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE1F1A0CF90D00900A47 /* icon_gpx@2x.png */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
 		BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
@@ -751,6 +766,12 @@
 		3ACA4ACE1A0BBD9E00ECC792 /* left_menu_icon_star@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "left_menu_icon_star@2x.png"; sourceTree = "<group>"; };
 		3ACE8D3E19F43004003F1D42 /* OAMapRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapRulerView.h; path = Views/OAMapRulerView.h; sourceTree = "<group>"; };
 		3ACE8D3F19F43004003F1D42 /* OAMapRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapRulerView.m; path = Views/OAMapRulerView.m; sourceTree = "<group>"; };
+		3AFEEE0E1A0CE01A00900A47 /* menu_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_button@2x.png"; sourceTree = "<group>"; };
+		3AFEEE121A0CF07400900A47 /* OAFavoriteListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteListViewController.h; path = Sources/Controllers/2.0/OAFavoriteListViewController.h; sourceTree = "<group>"; };
+		3AFEEE131A0CF07400900A47 /* OAFavoriteListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteListViewController.mm; path = Sources/Controllers/2.0/OAFavoriteListViewController.mm; sourceTree = "<group>"; };
+		3AFEEE141A0CF07400900A47 /* OAFavoriteListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFavoriteListViewController.xib; path = Sources/Controllers/2.0/OAFavoriteListViewController.xib; sourceTree = "<group>"; };
+		3AFEEE1B1A0CF89C00900A47 /* icon_star_fill@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_star_fill@2x.png"; sourceTree = "<group>"; };
+		3AFEEE1F1A0CF90D00900A47 /* icon_gpx@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_gpx@2x.png"; sourceTree = "<group>"; };
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA1702B63C7592558F9675 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1166,6 +1187,9 @@
 				3ACA4AA01A0B881300ECC792 /* OASettingsViewController.h */,
 				3ACA4AA11A0B881300ECC792 /* OASettingsViewController.m */,
 				3ACA4AA21A0B881300ECC792 /* OASettingsViewController.xib */,
+				3AFEEE121A0CF07400900A47 /* OAFavoriteListViewController.h */,
+				3AFEEE131A0CF07400900A47 /* OAFavoriteListViewController.mm */,
+				3AFEEE141A0CF07400900A47 /* OAFavoriteListViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -1207,6 +1231,7 @@
 		3ACA4ACA1A0BBD8300ECC792 /* LeftMenu */ = {
 			isa = PBXGroup;
 			children = (
+				3AFEEE0E1A0CE01A00900A47 /* menu_button@2x.png */,
 				3ACA4ACB1A0BBD9E00ECC792 /* left_menu_icon_map@2x.png */,
 				3ACA4ACC1A0BBD9E00ECC792 /* left_menu_icon_quiz@2x.png */,
 				3ACA4ACD1A0BBD9E00ECC792 /* left_menu_icon_settings@2x.png */,
@@ -1434,6 +1459,8 @@
 		BB451D8D18D70B5B005FBE09 /* Drawables */ = {
 			isa = PBXGroup;
 			children = (
+				3AFEEE1F1A0CF90D00900A47 /* icon_gpx@2x.png */,
+				3AFEEE1B1A0CF89C00900A47 /* icon_star_fill@2x.png */,
 				3ACA4ACA1A0BBD8300ECC792 /* LeftMenu */,
 				3ACA4AC61A0BB26200ECC792 /* menu_cell_selected@2x.png */,
 				3ACA4AAD1A0B929200ECC792 /* menu_cell_pointer@2x.png */,
@@ -1929,6 +1956,7 @@
 				BB451DD018D70B5B005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE618E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
+				3AFEEE1C1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */,
 				BB4C74631920CB720018E1EE /* menu_item_install_icon.png in Resources */,
 				BB451DC518D70B5B005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
 				BB451DCA18D70B5B005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
@@ -1963,6 +1991,7 @@
 				3ACA4AD01A0BBD9E00ECC792 /* left_menu_icon_quiz@2x.png in Resources */,
 				3A8314831A07EA8500473C38 /* menu_direction_icon@2x.png in Resources */,
 				BBA3AE9F196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
+				3AFEEE201A0CF90D00900A47 /* icon_gpx@2x.png in Resources */,
 				3ACA4AAC1A0B904B00ECC792 /* menu_icon_back@2x.png in Resources */,
 				3ACA4AA41A0B881300ECC792 /* OASettingsViewController.xib in Resources */,
 				3AC40ACC19DDC663002FBC40 /* Btn-Play@2x.png in Resources */,
@@ -1999,6 +2028,7 @@
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
 				BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */,
+				3AFEEE181A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				BBA3AEA3196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
 				3A8314811A07E9B800473C38 /* menu_share_icon@2x.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
@@ -2022,6 +2052,7 @@
 				BB27270B19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				BBA3AE9D196D92C50039D991 /* context_pin_marker_icon.png in Resources */,
+				3AFEEE0F1A0CE01A00900A47 /* menu_button@2x.png in Resources */,
 				BB451E1718DA4180005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,
 				BB451DC018D70B5B005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
 				BB476B6E18D4C8200044D5E1 /* NavigationAppModeHUD.xib in Resources */,
@@ -2064,6 +2095,7 @@
 				BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
+				3AFEEE1D1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */,
 				BB4C74641920CB720018E1EE /* menu_item_install_icon.png in Resources */,
 				BB451E5E18DCD224005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
 				BB451E5F18DCD224005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
@@ -2098,6 +2130,7 @@
 				3ACA4AD41A0BBDA100ECC792 /* left_menu_icon_quiz@2x.png in Resources */,
 				BB2726E719CB3825007C5613 /* default.render.xml in Resources */,
 				BBA3AEA0196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
+				3AFEEE211A0CF90D00900A47 /* icon_gpx@2x.png in Resources */,
 				3ACA4AA81A0B8B9F00ECC792 /* OASettingsViewController.xib in Resources */,
 				3AC40ACE19DDC669002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */,
@@ -2134,6 +2167,7 @@
 				BB451EDC18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
 				BB451F1218EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				BBA3AEA4196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
+				3AFEEE191A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				BB451E8018DCD224005FBE09 /* Icon@2x.png in Resources */,
 				BB451E8118DCD224005FBE09 /* Icon.png in Resources */,
 				BB451E8218DCD224005FBE09 /* HUD_menu_button@2x.png in Resources */,
@@ -2157,6 +2191,7 @@
 				BB27270C19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BB451E8A18DCD224005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				BBA3AE9E196D92C50039D991 /* context_pin_marker_icon.png in Resources */,
+				3AFEEE101A0CE0D700900A47 /* menu_button@2x.png in Resources */,
 				BB451E8B18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,
 				BB451E8C18DCD224005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
 				BB451E8D18DCD224005FBE09 /* NavigationAppModeHUD.xib in Resources */,
@@ -2230,6 +2265,7 @@
 				BBA3AFA5197FC4BB0039D991 /* menu_item_update_icon.png in Resources */,
 				BBA3AFA6197FC4BB0039D991 /* HUD_debug_button.png in Resources */,
 				3A83148A1A07ECDF00473C38 /* OATargetPointView.xib in Resources */,
+				3AFEEE111A0CE0D700900A47 /* menu_button@2x.png in Resources */,
 				BBA3AFA7197FC4BB0039D991 /* context_pin_marker_icon@2x.png in Resources */,
 				BB27270419CB38D7007C5613 /* stubs in Resources */,
 				BBA3AFA8197FC4BB0039D991 /* HUD_search_icon@2x.png in Resources */,
@@ -2281,6 +2317,7 @@
 				BBA3AFCD197FC4BB0039D991 /* OptionsPanel.storyboard in Resources */,
 				BBA3AFCE197FC4BB0039D991 /* my_location_marker_heading_icon.png in Resources */,
 				BBA3AFCF197FC4BB0039D991 /* HUD_zoom_in_button@2x.png in Resources */,
+				3AFEEE1E1A0CF89C00900A47 /* icon_star_fill@2x.png in Resources */,
 				BBA3AFD0197FC4BB0039D991 /* BrowseMapAppModeHUD.xib in Resources */,
 				BBA3AFD1197FC4BB0039D991 /* menu_item_my_data_icon.png in Resources */,
 				BBA3AFD2197FC4BB0039D991 /* bar_goto_favorite_icon@2x.png in Resources */,
@@ -2302,10 +2339,12 @@
 				BB27270D19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BBA3AFDE197FC4BB0039D991 /* BrowseMapAppModeHUD~ipad.xib in Resources */,
 				BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */,
+				3AFEEE221A0CF90D00900A47 /* icon_gpx@2x.png in Resources */,
 				BBA3AFE0197FC4BB0039D991 /* map_source_preset_type_car_icon@2x.png in Resources */,
 				BBA3AFE1197FC4BB0039D991 /* HUD_search_icon.png in Resources */,
 				3ACA4AB91A0B955800ECC792 /* menu_icon_back@2x.png in Resources */,
 				BBA3AFE2197FC4BB0039D991 /* favorite_location_pin_marker_icon.png in Resources */,
+				3AFEEE1A1A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				BBA3AFE3197FC4BB0039D991 /* HUD_menu_narrowbutton.png in Resources */,
 				BBA3AFE4197FC4BB0039D991 /* HUD_compass_bg.png in Resources */,
 				BBA3AFE5197FC4BB0039D991 /* HUD_debug_pin_button@2x.png in Resources */,
@@ -2482,6 +2521,7 @@
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
 				3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */,
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
+				3AFEEE151A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
@@ -2561,6 +2601,7 @@
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */,
 				BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */,
+				3AFEEE161A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BB9EFBC5196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
@@ -2606,6 +2647,7 @@
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
 				BBA3AF42197FC4BB0039D991 /* OAActionsPanelViewController.m in Sources */,
+				3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,
 				BBA3AF44197FC4BB0039D991 /* OAMapSourcesListViewController.mm in Sources */,

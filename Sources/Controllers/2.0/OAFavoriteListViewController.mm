@@ -58,7 +58,9 @@ kFavoriteCellType;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+}
+
+-(void)viewWillAppear:(BOOL)animated {
     [self generateData];
     [self setupView];
 }
@@ -168,7 +170,7 @@ kFavoriteCellType;
     [self.favoriteTableView setDataSource:self];
     [self.favoriteTableView setDelegate:self];
     self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+    [self.favoriteTableView reloadData];
     
 }
 

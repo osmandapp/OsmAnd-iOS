@@ -8,6 +8,7 @@
 
 #import "OATargetPointView.h"
 #import "OsmAndApp.h"
+#import "OAFavoriteItemViewController.h"
 
 @interface OATargetPointView()
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
@@ -99,8 +100,9 @@
 #pragma mark - Actions
 - (IBAction)buttonFavoriteClicked:(id)sender {
     
-    OAAddFavoriteViewController* addFavoriteVC = [[OAAddFavoriteViewController alloc] initWithLocation:CLLocationCoordinate2DMake(self.lat, self.lon)
-                                                                                              andTitle:self.formattedLocation];
+    
+    OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(self.lat, self.lon)
+                                                                                                andTitle:self.formattedLocation];
     
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {

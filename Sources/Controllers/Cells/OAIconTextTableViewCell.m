@@ -16,8 +16,15 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
+}
+
+-(void)showImage:(BOOL)show {
+    if (show) {
+        self.imageWidthConstraint.constant = 50;
+    } else {
+        self.imageWidthConstraint.constant = 10;
+    }
 }
 
 @end

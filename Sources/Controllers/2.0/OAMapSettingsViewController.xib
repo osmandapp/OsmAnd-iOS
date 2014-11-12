@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapSettingsViewController">
+            <connections>
+                <outlet property="mapTypeButtonBike" destination="ihc-Sa-IrL" id="KQx-Sr-PpP"/>
+                <outlet property="mapTypeButtonCar" destination="jgE-7f-J6h" id="DAW-44-hmH"/>
+                <outlet property="mapTypeButtonView" destination="TjK-8j-afh" id="hc3-Y3-evv"/>
+                <outlet property="mapTypeButtonWalk" destination="r7y-vG-6mN" id="oT0-d0-FJx"/>
+                <outlet property="mapTypeScrollView" destination="XrM-9V-Tyy" id="NLY-1b-nZt"/>
+                <outlet property="mapView" destination="s5V-gy-zMG" id="x3p-NU-1OE"/>
+                <outlet property="tableView" destination="NX0-1L-pkh" id="p5r-YH-bYJ"/>
+                <outlet property="titleView" destination="ouI-Rn-ohE" id="mHM-Da-4K1"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s5V-gy-zMG">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
+                    <color key="backgroundColor" red="0.12941176469999999" green="0.70588235290000001" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="200" id="Ims-1h-5IX"/>
+                    </constraints>
+                </view>
+                <view alpha="0.80000000000000004" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ykD-3k-wDP">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0cK-pa-YrF">
+                            <rect key="frame" x="4" y="20" width="70" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="70" id="KkN-ZU-TGw"/>
+                                <constraint firstAttribute="height" constant="44" id="SEE-Un-yeg"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
+                            <state key="normal" title="   Back" image="menu_icon_back.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Or0-Yi-4cA"/>
+                            </connections>
+                        </button>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Map" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ouI-Rn-ohE">
+                            <rect key="frame" x="82" y="30" width="157" height="24"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="24" id="2x3-2c-KI3"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="64" id="3hv-vW-Op7"/>
+                        <constraint firstItem="0cK-pa-YrF" firstAttribute="leading" secondItem="ykD-3k-wDP" secondAttribute="leading" constant="4" id="ViO-EK-Kt4"/>
+                        <constraint firstItem="0cK-pa-YrF" firstAttribute="top" secondItem="ykD-3k-wDP" secondAttribute="top" constant="20" id="dCf-uz-gZb"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="75" id="egN-zi-NE3"/>
+                        <constraint firstItem="ouI-Rn-ohE" firstAttribute="centerY" secondItem="0cK-pa-YrF" secondAttribute="centerY" id="mg9-KZ-b6r"/>
+                        <constraint firstAttribute="trailing" secondItem="ouI-Rn-ohE" secondAttribute="trailing" constant="81" id="p55-fp-jrt"/>
+                        <constraint firstItem="ouI-Rn-ohE" firstAttribute="leading" secondItem="0cK-pa-YrF" secondAttribute="trailing" constant="8" id="vJR-RR-BSN"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="egN-zi-NE3"/>
+                        </mask>
+                    </variation>
+                </view>
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XrM-9V-Tyy">
+                    <rect key="frame" x="0.0" y="200" width="320" height="70"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TjK-8j-afh">
+                            <rect key="frame" x="10" y="10" width="90" height="50"/>
+                            <color key="backgroundColor" red="0.32549019607843138" green="0.42745098039215684" blue="0.99607843137254903" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                            <inset key="titleEdgeInsets" minX="-24" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="31" minY="0.0" maxX="0.0" maxY="12"/>
+                            <state key="normal" title="Overview" image="btn_map_type_icon_view_selected.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeMapTypeButtonClicked:" destination="-1" eventType="touchUpInside" id="aOU-xi-FYw"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jgE-7f-J6h">
+                            <rect key="frame" x="108" y="10" width="90" height="50"/>
+                            <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                            <inset key="titleEdgeInsets" minX="-23" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="19" minY="0.0" maxX="0.0" maxY="12"/>
+                            <state key="normal" title="Car" image="btn_map_type_icon_car_selected.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeMapTypeButtonClicked:" destination="-1" eventType="touchUpInside" id="1gz-5l-HBG"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="2" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r7y-vG-6mN">
+                            <rect key="frame" x="206" y="10" width="90" height="50"/>
+                            <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                            <inset key="titleEdgeInsets" minX="-18" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="36" minY="0.0" maxX="0.0" maxY="12"/>
+                            <state key="normal" title="Walking" image="btn_map_type_icon_walk_selected.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeMapTypeButtonClicked:" destination="-1" eventType="touchUpInside" id="3M6-3T-8WF"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" tag="3" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ihc-Sa-IrL">
+                            <rect key="frame" x="304" y="10" width="90" height="50"/>
+                            <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                            <inset key="titleEdgeInsets" minX="-24" minY="30" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="31" minY="0.0" maxX="0.0" maxY="12"/>
+                            <state key="normal" title="Bicikle" image="btn_map_type_icon_bike_selected.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="changeMapTypeButtonClicked:" destination="-1" eventType="touchUpInside" id="RaK-Eu-5Hd"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="vBS-Ly-et7"/>
+                    </constraints>
+                </scrollView>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="50" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="NX0-1L-pkh">
+                    <rect key="frame" x="0.0" y="270" width="320" height="330"/>
+                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
+                </tableView>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="ykD-3k-wDP" secondAttribute="trailing" id="BCm-TH-Nkj"/>
+                <constraint firstAttribute="trailing" secondItem="s5V-gy-zMG" secondAttribute="trailing" id="Dqg-PV-Ptz"/>
+                <constraint firstAttribute="trailing" secondItem="XrM-9V-Tyy" secondAttribute="trailing" id="Oog-sn-r9D"/>
+                <constraint firstItem="s5V-gy-zMG" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="UFY-vt-dmq"/>
+                <constraint firstItem="s5V-gy-zMG" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="V8F-Vo-wfI"/>
+                <constraint firstItem="ykD-3k-wDP" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="bUI-0r-1ic"/>
+                <constraint firstItem="NX0-1L-pkh" firstAttribute="top" secondItem="XrM-9V-Tyy" secondAttribute="bottom" id="jdu-Dy-DhT"/>
+                <constraint firstItem="XrM-9V-Tyy" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="oMJ-oJ-Mpj"/>
+                <constraint firstAttribute="trailing" secondItem="NX0-1L-pkh" secondAttribute="trailing" id="oa8-qm-PTt"/>
+                <constraint firstItem="NX0-1L-pkh" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="vww-Yb-woq"/>
+                <constraint firstItem="ykD-3k-wDP" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="xYy-g0-w9g"/>
+                <constraint firstItem="XrM-9V-Tyy" firstAttribute="top" secondItem="s5V-gy-zMG" secondAttribute="bottom" id="y05-1D-aXn"/>
+                <constraint firstAttribute="bottom" secondItem="NX0-1L-pkh" secondAttribute="bottom" id="zdR-Tl-ztW"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="526" y="536"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="btn_map_type_icon_bike_selected.png" width="25" height="16"/>
+        <image name="btn_map_type_icon_car_selected.png" width="24" height="17"/>
+        <image name="btn_map_type_icon_view_selected.png" width="25" height="25"/>
+        <image name="btn_map_type_icon_walk_selected.png" width="16" height="25"/>
+        <image name="menu_icon_back.png" width="10" height="20"/>
+    </resources>
+</document>

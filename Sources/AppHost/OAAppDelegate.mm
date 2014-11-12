@@ -108,6 +108,8 @@
         sourceApplication:launchSourceApplication
                annotation:launchAnnotation];
     }
+    
+    [application setStatusBarStyle:UIStatusBarStyleLightContent];
 
     return YES;
 }

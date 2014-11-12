@@ -7,6 +7,7 @@
 //
 
 #import "OAOptionsPanelBlackViewController.h"
+#import "OAMapSettingsViewController.h"
 #import "OASettingsViewController.h"
 #import "OAFavoriteListViewController.h"
 
@@ -51,6 +52,8 @@
 }
 
 - (IBAction)mapsButtonClicked:(id)sender {
+    OAMapSettingsViewController* settingsViewController = [[OAMapSettingsViewController alloc] init];
+    [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (IBAction)myDataButtonClicked:(id)sender {

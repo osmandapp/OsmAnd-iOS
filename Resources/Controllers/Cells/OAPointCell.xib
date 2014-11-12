@@ -74,7 +74,7 @@
                 <outlet property="distanceView" destination="oIU-iw-wqg" id="3Yo-ha-g09"/>
                 <outlet property="titleView" destination="HTD-Mx-11T" id="Iwn-bF-MSY"/>
             </connections>
-            <point key="canvasLocation" x="732" y="598"/>
+            <point key="canvasLocation" x="384" y="369"/>
         </view>
     </objects>
     <resources>

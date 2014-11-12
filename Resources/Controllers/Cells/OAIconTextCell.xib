@@ -49,6 +49,7 @@
             <connections>
                 <outlet property="arrowIconView" destination="QeJ-fX-wgf" id="MEM-f9-Ych"/>
                 <outlet property="iconView" destination="LIr-6M-0LG" id="sfu-Ak-hWh"/>
+                <outlet property="imageWidthConstraint" destination="RfQ-bJ-ZBN" id="r15-jq-jIx"/>
                 <outlet property="textView" destination="ixW-IH-Jmp" id="YTM-ar-6y2"/>
             </connections>
             <point key="canvasLocation" x="763" y="430"/>

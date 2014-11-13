@@ -8,7 +8,7 @@
 
 #import "OASuperViewController.h"
 
-@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource>
+@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;

@@ -27,8 +27,8 @@
                                             <constraint firstAttribute="height" constant="47" id="m1X-TG-KQD"/>
                                             <constraint firstAttribute="width" constant="70" id="opz-3n-4TA"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="10"/>
-                                        <state key="normal" title="   BACK" image="menu_icon_back.png">
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
+                                        <state key="normal" title="   Back" image="menu_icon_back.png">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -36,15 +36,6 @@
                                             <action selector="backButtonClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="osB-35-XUs"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maps &amp; Resources" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C5O-TM-N7e">
-                                        <rect key="frame" x="82" y="33" width="157" height="24"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="24" id="ik2-5H-PxO"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="X93-h7-s0r" userLabel="scopeControl">
                                         <rect key="frame" x="16" y="69" width="288" height="29"/>
                                         <constraints>
@@ -70,6 +61,15 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maps &amp; Resources" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C5O-TM-N7e">
+                                        <rect key="frame" x="82" y="32" width="157" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="24" id="ik2-5H-PxO"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -77,7 +77,7 @@
                                     <constraint firstItem="ReZ-N4-l3v" firstAttribute="leading" secondItem="jf8-2d-2JK" secondAttribute="leading" constant="4" id="247-EP-Vck"/>
                                     <constraint firstItem="X93-h7-s0r" firstAttribute="leading" secondItem="jf8-2d-2JK" secondAttribute="leading" constant="16" id="25W-cQ-s55"/>
                                     <constraint firstItem="ReZ-N4-l3v" firstAttribute="top" secondItem="jf8-2d-2JK" secondAttribute="top" constant="20" id="61Z-Ih-fPL"/>
-                                    <constraint firstItem="C5O-TM-N7e" firstAttribute="top" secondItem="jf8-2d-2JK" secondAttribute="top" constant="33" id="EQg-mF-3hs"/>
+                                    <constraint firstItem="ReZ-N4-l3v" firstAttribute="centerY" secondItem="C5O-TM-N7e" secondAttribute="centerY" constant="-0.5" id="8Nm-0f-USu"/>
                                     <constraint firstAttribute="trailing" secondItem="X93-h7-s0r" secondAttribute="trailing" constant="16" id="JfN-gp-xJa"/>
                                     <constraint firstAttribute="trailing" secondItem="C5O-TM-N7e" secondAttribute="trailing" constant="81" id="d1W-hO-skh"/>
                                     <constraint firstItem="X93-h7-s0r" firstAttribute="top" secondItem="ReZ-N4-l3v" secondAttribute="bottom" constant="2" id="jZP-j3-Yhb"/>

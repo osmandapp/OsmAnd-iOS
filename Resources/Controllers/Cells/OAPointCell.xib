@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OAPointTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sWO-q7-bhq">
+                    <rect key="frame" x="12" y="8" width="20" height="20"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="20" id="24p-hs-Wpb"/>
+                        <constraint firstAttribute="width" constant="20" id="pPR-RC-yFU"/>
+                    </constraints>
+                </view>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Place name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HTD-Mx-11T">
+                    <rect key="frame" x="45" y="7" width="231" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="21" id="JyD-Ce-w1Q"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="14"/>
+                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="menu_cell_pointer.png" translatesAutoresizingMaskIntoConstraints="NO" id="iF3-SB-ERu">
+                    <rect key="frame" x="291" y="14" width="21" height="21"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="21" id="4d1-Mh-Q6B"/>
+                        <constraint firstAttribute="height" constant="21" id="g02-yn-2Rr"/>
+                    </constraints>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7tj-4f-qjk">
+                    <rect key="frame" x="45" y="32" width="10" height="10"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="10" id="3SI-MW-s8U"/>
+                        <constraint firstAttribute="height" constant="10" id="tGs-we-Jl4"/>
+                    </constraints>
+                </imageView>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oIU-iw-wqg">
+                    <rect key="frame" x="63" y="29" width="213" height="16"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="16" id="Nk1-UW-IUI"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="13"/>
+                    <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="sWO-q7-bhq" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="1je-LW-cio"/>
+                <constraint firstAttribute="trailing" secondItem="iF3-SB-ERu" secondAttribute="trailing" constant="8" id="8VG-eN-rZy"/>
+                <constraint firstItem="iF3-SB-ERu" firstAttribute="leading" secondItem="HTD-Mx-11T" secondAttribute="trailing" constant="15" id="Dav-BL-p4h"/>
+                <constraint firstItem="iF3-SB-ERu" firstAttribute="leading" secondItem="oIU-iw-wqg" secondAttribute="trailing" constant="15" id="NyW-Ja-bX4"/>
+                <constraint firstItem="sWO-q7-bhq" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="12" id="VZd-WE-Q02"/>
+                <constraint firstItem="oIU-iw-wqg" firstAttribute="top" secondItem="HTD-Mx-11T" secondAttribute="bottom" constant="1" id="gp4-BQ-toH"/>
+                <constraint firstItem="7tj-4f-qjk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="45" id="qGn-RN-gKK"/>
+                <constraint firstAttribute="centerY" secondItem="iF3-SB-ERu" secondAttribute="centerY" constant="0.5" id="qXQ-56-9sU"/>
+                <constraint firstItem="7tj-4f-qjk" firstAttribute="top" secondItem="HTD-Mx-11T" secondAttribute="bottom" constant="4" id="qu2-8r-Kzc"/>
+                <constraint firstItem="HTD-Mx-11T" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="7" id="rzO-Ia-LE5"/>
+                <constraint firstItem="HTD-Mx-11T" firstAttribute="leading" secondItem="sWO-q7-bhq" secondAttribute="trailing" constant="13" id="w0E-fb-8Tg"/>
+                <constraint firstItem="oIU-iw-wqg" firstAttribute="leading" secondItem="7tj-4f-qjk" secondAttribute="trailing" constant="8" id="xbF-rF-eNh"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="colorView" destination="sWO-q7-bhq" id="gIq-nL-8B5"/>
+                <outlet property="directionImageView" destination="7tj-4f-qjk" id="29w-nS-bb8"/>
+                <outlet property="distanceView" destination="oIU-iw-wqg" id="3Yo-ha-g09"/>
+                <outlet property="titleView" destination="HTD-Mx-11T" id="Iwn-bF-MSY"/>
+            </connections>
+            <point key="canvasLocation" x="384" y="369"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="menu_cell_pointer.png" width="6" height="10"/>
+    </resources>
+</document>

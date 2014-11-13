@@ -17,6 +17,7 @@
 #import "OAAddFavoriteViewController.h"
 #import "OANavigationController.h"
 #import "OAResourcesBaseViewController.h"
+#import "OAFavoriteItemViewController.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -870,8 +871,9 @@
                      }
                      else if (action == addToFavoritesAction)
                      {
-                         OAAddFavoriteViewController* addFavoriteVC = [[OAAddFavoriteViewController alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lon)
-                                                                                                                   andTitle:formattedLocation];
+                         
+                         OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lon)
+                                                                                                                     andTitle:formattedLocation];
 
                          if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
                          {

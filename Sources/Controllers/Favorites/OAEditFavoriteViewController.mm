@@ -61,7 +61,10 @@
     titleField.enablesReturnKeyAutomatically = YES;
     [mainSection addElement:titleField];
 
-    // Group
+    //
+    
+    
+    
     NSArray* groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
     if (groups == nil || [groups count] == 0)
         groups = [OADefaultFavorite builtinGroupNames];

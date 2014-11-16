@@ -7,6 +7,10 @@
 //
 
 #import "OASuperViewController.h"
+#import "OACommonTypes.h"
+#import "OsmAndApp.h"
+
+#import "OAMapRendererViewProtocol.h"
 
 @interface OAMapSettingsViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 

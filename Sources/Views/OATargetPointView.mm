@@ -9,6 +9,7 @@
 #import "OATargetPointView.h"
 #import "OsmAndApp.h"
 #import "OAFavoriteItemViewController.h"
+#import "OAMapRendererView.h"
 
 @interface OATargetPointView()
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
@@ -22,7 +23,7 @@
 @property double lon;
 @property CGPoint touchPoint;
 @property NSString* formattedLocation;
-@property UIView* mapView;
+@property OAMapRendererView* mapView;
 @property UINavigationController* navController;
 
 @end
@@ -103,7 +104,6 @@
     
     OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(self.lat, self.lon)
                                                                                                 andTitle:self.formattedLocation];
-    
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         // For iPhone and iPod, push menu to navigation controller
@@ -125,6 +125,18 @@
 }
 
 - (IBAction)buttonShareClicked:(id)sender {
+
+    UIImage *image = [self.mapView getGLScreenshot];
+    NSString *string = [NSString stringWithFormat:@"Look at this location: %@", self.formattedLocation];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
+                                      applicationActivities:nil];
+    
+    [self.navController presentViewController:activityViewController
+                                     animated:YES
+                                   completion:^{ }];
+
     [self.delegate targetPointShare];
 }
 

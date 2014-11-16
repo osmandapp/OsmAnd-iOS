@@ -27,7 +27,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CachingRoadLocator.h>
-#include <OsmAndCore/Data/Model/Road.h>
+#include <OsmAndCore/Data/Road.h>
 
 #define kMaxRoadDistanceInMeters 15.0
 
@@ -68,7 +68,7 @@
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 
     CLLocation* _lastQueriedLocation;
-    std::shared_ptr<const OsmAnd::Model::Road> _road;
+    std::shared_ptr<const OsmAnd::Road> _road;
     std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
     NSObject* _roadLocatorSync;
 
@@ -316,7 +316,7 @@
     NSString* localizedTitle = nil;
     NSString* nativeTitle = nil;
 
-    std::shared_ptr<const OsmAnd::Model::Road> road;
+    std::shared_ptr<const OsmAnd::Road> road;
     @synchronized(_roadLocatorSync)
     {
         road = _road;
@@ -325,8 +325,8 @@
     if (road)
     {
         const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
-        const auto localizedName = road->getNameInLanguage(mainLanguage);
-        const auto nativeName = road->getNameInNativeLanguage();
+        const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+        const auto nativeName = road->getCaptionInNativeLanguage();
 
         if (!localizedName.isNull())
             localizedTitle = localizedName.toNSString();

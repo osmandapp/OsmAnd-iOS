@@ -28,20 +28,20 @@
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/BinaryMapDataProvider.h>
-#include <OsmAndCore/Map/BinaryMapPrimitivesProvider.h>
-#include <OsmAndCore/Map/BinaryMapRasterLayerProvider_Software.h>
-#include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
+#include <OsmAndCore/Map/BinaryMapObjectsProvider.h>
+#include <OsmAndCore/Map/MapPrimitivesProvider.h>
+#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
-#include <OsmAndCore/Map/Primitiviser.h>
+#include <OsmAndCore/Map/MapPrimitiviser.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/BinaryMapDataMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/BinaryMapRasterMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/BinaryMapObjectsMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
 

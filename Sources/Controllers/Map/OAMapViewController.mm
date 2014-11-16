@@ -30,20 +30,20 @@
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/BinaryMapDataProvider.h>
-#include <OsmAndCore/Map/BinaryMapPrimitivesProvider.h>
-#include <OsmAndCore/Map/BinaryMapRasterLayerProvider_Software.h>
-#include <OsmAndCore/Map/BinaryMapStaticSymbolsProvider.h>
+#include <OsmAndCore/Map/BinaryMapObjectsProvider.h>
+#include <OsmAndCore/Map/MapPrimitivesProvider.h>
+#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
-#include <OsmAndCore/Map/Primitiviser.h>
+#include <OsmAndCore/Map/MapPrimitiviser.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/BinaryMapDataMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/BinaryMapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/BinaryMapRasterMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/BinaryMapObjectsMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
 #import "OANativeUtilities.h"
@@ -88,11 +88,11 @@
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
 
     // Offline-specific providers & resources
-    std::shared_ptr<OsmAnd::BinaryMapDataProvider> _binaryMapDataProvider;
+    std::shared_ptr<OsmAnd::BinaryMapObjectsProvider> _binaryMapObjectsProvider;
     std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
-    std::shared_ptr<OsmAnd::Primitiviser> _primitiviser;
-    std::shared_ptr<OsmAnd::BinaryMapPrimitivesProvider> _binaryMapPrimitivesProvider;
-    std::shared_ptr<OsmAnd::BinaryMapStaticSymbolsProvider> _binaryMapStaticSymbolsProvider;
+    std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
     // "My location" marker, "My course" marker and collection
     std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollection;
@@ -1488,13 +1488,13 @@
 
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
-        _binaryMapDataProvider.reset();
-        _binaryMapPrimitivesProvider.reset();
+        _binaryMapObjectsProvider.reset();
+        _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
-        _primitiviser.reset();
-        if (_binaryMapStaticSymbolsProvider)
-            [mapView removeTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
-        _binaryMapStaticSymbolsProvider.reset();
+        _mapPrimitiviser.reset();
+        if (_mapObjectsSymbolsProvider)
+            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+        _mapObjectsSymbolsProvider.reset();
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -1513,7 +1513,7 @@
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
-            _binaryMapDataProvider.reset(new OsmAnd::BinaryMapDataProvider(_app.resourcesManager->obfsCollection));
+            _binaryMapObjectsProvider.reset(new OsmAnd::BinaryMapObjectsProvider(_app.resourcesManager->obfsCollection));
 
             NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
             
@@ -1541,10 +1541,10 @@
                                                                                      langPreferences));
             
             
-            _primitiviser.reset(new OsmAnd::Primitiviser(_mapPresentationEnvironment));
-            _binaryMapPrimitivesProvider.reset(new OsmAnd::BinaryMapPrimitivesProvider(_binaryMapDataProvider,
-                                                                                       _primitiviser,
-                                                                                       rasterTileSize));
+            _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
+            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_binaryMapObjectsProvider,
+                                                                           _mapPrimitiviser,
+                                                                           rasterTileSize));
 
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
@@ -1559,34 +1559,34 @@
             switch (_visualMetricsMode)
             {
                 case OAVisualMetricsModeBinaryMapData:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapDataMetricsLayerProvider(_binaryMapDataProvider,
+                    _rasterMapProvider.reset(new OsmAnd::BinaryMapObjectsMetricsLayerProvider(_binaryMapObjectsProvider,
+                                                                                              256 * mapView.contentScaleFactor,
+                                                                                              mapView.contentScaleFactor));
+                    break;
+
+                case OAVisualMetricsModeBinaryMapPrimitives:
+                    _rasterMapProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider,
                                                                                            256 * mapView.contentScaleFactor,
                                                                                            mapView.contentScaleFactor));
                     break;
 
-                case OAVisualMetricsModeBinaryMapPrimitives:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapPrimitivesMetricsLayerProvider(_binaryMapPrimitivesProvider,
-                                                                                                 256 * mapView.contentScaleFactor,
-                                                                                                 mapView.contentScaleFactor));
-                    break;
-
                 case OAVisualMetricsModeBinaryMapRasterize:
                 {
-                    std::shared_ptr<OsmAnd::BinaryMapRasterLayerProvider> backendProvider(
-                        new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterMetricsLayerProvider(backendProvider,
-                                                                                                  256 * mapView.contentScaleFactor,
-                                                                                                  mapView.contentScaleFactor));
+                    std::shared_ptr<OsmAnd::MapRasterLayerProvider> backendProvider(
+                        new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::MapRasterMetricsLayerProvider(backendProvider,
+                                                                                       256 * mapView.contentScaleFactor,
+                                                                                       mapView.contentScaleFactor));
                     break;
                 }
 
                 case OAVisualMetricsModeOff:
                 default:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
                     break;
             }
 #else
-          _rasterMapProvider.reset(new OsmAnd::BinaryMapRasterLayerProvider_Software(_binaryMapPrimitivesProvider));
+          _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
 #endif // defined(OSMAND_IOS_DEV)
             [mapView setProvider:_rasterMapProvider
                         forLayer:0];
@@ -1594,14 +1594,14 @@
 #if defined(OSMAND_IOS_DEV)
             if (!_hideStaticSymbols)
             {
-                _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
-                                                                                                 rasterTileSize));
-                [mapView addTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
+                _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
+                                                                                       rasterTileSize));
+                [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
             }
 #else
-            _binaryMapStaticSymbolsProvider.reset(new OsmAnd::BinaryMapStaticSymbolsProvider(_binaryMapPrimitivesProvider,
-                                                                                             rasterTileSize));
-            [mapView addTiledSymbolsProvider:_binaryMapStaticSymbolsProvider];
+            _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
+                                                                                   rasterTileSize));
+            [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 #endif
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)

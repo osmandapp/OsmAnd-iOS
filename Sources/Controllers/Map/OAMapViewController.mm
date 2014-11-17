@@ -30,7 +30,7 @@
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/BinaryMapObjectsProvider.h>
+#include <OsmAndCore/Map/ObfMapObjectsProvider.h>
 #include <OsmAndCore/Map/MapPrimitivesProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
@@ -41,7 +41,7 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/BinaryMapObjectsMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
@@ -88,7 +88,7 @@
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
 
     // Offline-specific providers & resources
-    std::shared_ptr<OsmAnd::BinaryMapObjectsProvider> _binaryMapObjectsProvider;
+    std::shared_ptr<OsmAnd::ObfMapObjectsProvider> _obfMapObjectsProvider;
     std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
     std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
@@ -1488,7 +1488,7 @@
 
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
-        _binaryMapObjectsProvider.reset();
+        _obfMapObjectsProvider.reset();
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
@@ -1513,7 +1513,7 @@
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
-            _binaryMapObjectsProvider.reset(new OsmAnd::BinaryMapObjectsProvider(_app.resourcesManager->obfsCollection));
+            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
 
             NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
             
@@ -1542,7 +1542,7 @@
             
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
-            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_binaryMapObjectsProvider,
+            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
                                                                            _mapPrimitiviser,
                                                                            rasterTileSize));
 
@@ -1559,9 +1559,9 @@
             switch (_visualMetricsMode)
             {
                 case OAVisualMetricsModeBinaryMapData:
-                    _rasterMapProvider.reset(new OsmAnd::BinaryMapObjectsMetricsLayerProvider(_binaryMapObjectsProvider,
-                                                                                              256 * mapView.contentScaleFactor,
-                                                                                              mapView.contentScaleFactor));
+                    _rasterMapProvider.reset(new OsmAnd::ObfMapObjectsMetricsLayerProvider(_obfMapObjectsProvider,
+                                                                                           256 * mapView.contentScaleFactor,
+                                                                                           mapView.contentScaleFactor));
                     break;
 
                 case OAVisualMetricsModeBinaryMapPrimitives:

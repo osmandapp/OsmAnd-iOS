@@ -28,7 +28,7 @@
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/BinaryMapObjectsProvider.h>
+#include <OsmAndCore/Map/ObfMapObjectsProvider.h>
 #include <OsmAndCore/Map/MapPrimitivesProvider.h>
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
@@ -39,7 +39,7 @@
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 #if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/BinaryMapObjectsMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)

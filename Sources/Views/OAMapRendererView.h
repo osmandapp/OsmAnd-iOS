@@ -49,7 +49,6 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (void)resetProviderFor:(unsigned int)layer;
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
-- (void)removeElevationDataProvider;
 
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;

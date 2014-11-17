@@ -277,7 +277,7 @@
     if (_glShareGroup != nil)
         return;
 
-    OALog(@"[MapRenderView] Creating context");
+    OALog(@"[OAMapRendererView %p] Creating context", self);
 
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
@@ -287,26 +287,30 @@
     _glRenderContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
     if (!_glRenderContext)
     {
-        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to initialize OpenGLES 2.0 render context 0x%08x", glGetError()];
         return;
     }
     _glShareGroup = [_glRenderContext sharegroup];
     if (!_glShareGroup)
     {
-        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 render context has no sharegroup"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to initialize OpenGLES 2.0 render context has no sharegroup 0x%08x", glGetError()];
         return;
     }
     _glWorkerContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2 sharegroup:_glShareGroup];
     if (!_glWorkerContext)
     {
-        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES 2.0 worker context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to initialize OpenGLES 2.0 worker context 0x%08x", glGetError()];
         return;
     }
     
     // Set created context as current active
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return;
     }
 
@@ -321,7 +325,8 @@
             // Activate worker context
             if (![EAGLContext setCurrentContext:capturedWorkerContext])
             {
-                [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context in GPU worker thread"];
+                [NSException raise:NSGenericException
+                            format:@"Failed to set current OpenGLES2 context in GPU worker thread 0x%08x", glGetError()];
                 return;
             }
         };
@@ -336,7 +341,8 @@
     // Initialize rendering
     if (!_renderer->initializeRendering())
     {
-        [NSException raise:NSGenericException format:@"Failed to initialize OpenGLES2 map renderer"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to initialize OpenGLES2 map renderer 0x%08x", glGetError()];
         return;
     }
     
@@ -348,7 +354,7 @@
     if (_glShareGroup == nil)
         return;
 
-    OALog(@"[MapRenderView] Releasing context");
+    OALog(@"[OAMapRendererView %p] Releasing context", self);
 
     // Stop rendering (if it was running)
     [self suspendRendering];
@@ -356,7 +362,8 @@
     // Release map renderer
     if (!_renderer->releaseRendering())
     {
-        [NSException raise:NSGenericException format:@"Failed to release OpenGLES2 map renderer"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to release OpenGLES2 map renderer 0x%08x", glGetError()];
         return;
     }
     
@@ -386,7 +393,7 @@
 
 - (void)layoutSubviews
 {
-    OALog(@"[MapRenderView] Recreating OpenGLES2 frame and render buffers due to resize");
+    OALog(@"[OAMapRendererView %p] Recreating OpenGLES2 frame and render buffers due to resize", self);
 
     // Kill buffers, since window was resized
     [self releaseRenderAndFrameBuffers];
@@ -394,11 +401,12 @@
 
 - (void)allocateRenderAndFrameBuffers
 {
-    OALog(@"[MapRenderView] Allocating render and frame buffers");
+    OALog(@"[OAMapRendererView %p] Allocating render and frame buffers", self);
 
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return;
     }
     
@@ -417,14 +425,15 @@
     validateGL();
     if (![_glRenderContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:(CAEAGLLayer*)self.layer])
     {
-        [NSException raise:NSGenericException format:@"Failed to create render buffer (color component)"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to create render buffer (color component) 0x%08x", glGetError()];
         return;
     }
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_viewSize.x);
     validateGL();
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_viewSize.y);
     validateGL();
-    OALog(@"[MapRenderView] View size %dx%d", _viewSize.x, _viewSize.y);
+    OALog(@"[OAMapRendererView %p] View size %dx%d", self, _viewSize.x, _viewSize.y);
 
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_RENDERBUFFER, _colorRenderBuffer);
     validateGL();
@@ -443,7 +452,8 @@
     // Check that we've initialized our framebuffer fully
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
     {
-        [NSException raise:NSGenericException format:@"Failed to make complete framebuffer (0x%08x)", glCheckFramebufferStatus(GL_FRAMEBUFFER)];
+        [NSException raise:NSGenericException
+                    format:@"Failed to make complete framebuffer (status 0x%08x) 0x%08x", glCheckFramebufferStatus(GL_FRAMEBUFFER), glGetError()];
         return;
     }
     validateGL();
@@ -451,11 +461,12 @@
 
 - (void)releaseRenderAndFrameBuffers
 {
-    OALog(@"[MapRenderView] Releasing render and frame buffers");
+    OALog(@"[OAMapRendererView %p] Releasing render and frame buffers", self);
 
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return;
     }
     
@@ -485,7 +496,8 @@
 {
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return;
     }
     
@@ -495,6 +507,15 @@
     // Allocate buffers if they are not yet allocated
     if (_frameBuffer == 0)
     {
+        if (self.bounds.size.width <= 0 || self.bounds.size.height <= 0)
+        {
+            OALog(@"[OAMapRendererView %p] Can not create render&frame buffers with view size of %dx%d",
+                  self,
+                  (int)self.bounds.size.width,
+                  (int)self.bounds.size.height);
+            return;
+        }
+
         // Allocate new buffers
         [self allocateRenderAndFrameBuffers];
         
@@ -506,7 +527,8 @@
     // Process update
     if (!_renderer->update())
     {
-        [NSException raise:NSGenericException format:@"Failed to update OpenGLES2 map renderer"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to update OpenGLES2 map renderer 0x%08x", glGetError()];
         return;
     }
     
@@ -529,7 +551,8 @@
         // Perform rendering
         if (!_renderer->renderFrame())
         {
-            [NSException raise:NSGenericException format:@"Failed to render frame using OpenGLES2 map renderer"];
+            [NSException raise:NSGenericException
+                        format:@"Failed to render frame using OpenGLES2 map renderer 0x%08x", glGetError()];
             return;
         }
         validateGL();
@@ -565,7 +588,8 @@
     
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return FALSE;
     }
     
@@ -578,7 +602,7 @@
     // Resume GPU worker thread
     _renderer->resumeGpuWorkerThread();
     
-    OALog(@"[MapRenderView] Rendering resumed");
+    OALog(@"[OAMapRendererView %p] Rendering resumed", self);
 
     return TRUE;
 }
@@ -590,7 +614,8 @@
     
     if (![EAGLContext setCurrentContext:_glRenderContext])
     {
-        [NSException raise:NSGenericException format:@"Failed to set current OpenGLES2 context"];
+        [NSException raise:NSGenericException
+                    format:@"Failed to set current OpenGLES2 context 0x%08x", glGetError()];
         return FALSE;
     }
     
@@ -601,7 +626,7 @@
     // Pause GPU worker thread
     _renderer->pauseGpuWorkerThread();
     
-    OALog(@"[MapRenderView] Rendering suspended");
+    OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 
     return TRUE;
 }

@@ -61,6 +61,11 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 @property(nonatomic) OsmAnd::PointI target31;
 @property(nonatomic) OsmAnd::ZoomLevel zoomLevel;
 
+@property(nonatomic, readonly) unsigned int symbolsCount;
+@property(nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
+- (BOOL)suspendSymbolsUpdate;
+- (BOOL)resumeSymbolsUpdate;
+
 // Misc properties:
 @property(nonatomic, readonly) QList<OsmAnd::TileId> visibleTiles;
 

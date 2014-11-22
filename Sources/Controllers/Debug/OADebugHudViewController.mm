@@ -130,7 +130,8 @@
     [stateDump appendFormat:@"zoom level           : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
     [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];
     [stateDump appendFormat:@"elevation angle      : %f\n", mapRendererView.elevationAngle];
-//    [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
+    [stateDump appendFormat:@"symbols              : %d\n", mapRendererView.symbolsCount];
+    [stateDump appendFormat:@"symbols suspended    : %s\n", mapRendererView.isSymbolsUpdateSuspended ? "yes" : "no"];
 
     [self._stateTextview setText:stateDump];
 }

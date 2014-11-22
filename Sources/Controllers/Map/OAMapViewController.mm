@@ -510,7 +510,10 @@
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
-        
+
+        // Suspend symbols update
+        [mapView suspendSymbolsUpdate];
+
         _initialZoomLevelDuringGesture = mapView.zoom;
         return;
     }
@@ -546,7 +549,14 @@
     [mapView convert:centerPoint toLocation:&centerLocationAfter];
     const auto centerLocationDelta = centerLocationAfter - centerLocationBefore;
     [mapView setTarget31:mapView.target31 - centerLocationDelta];
-    
+
+    if (recognizer.state == UIGestureRecognizerStateEnded ||
+        recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        // Resume symbols update
+        [mapView resumeSymbolsUpdate];
+    }
+
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
@@ -572,6 +582,9 @@
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
+
+        // Suspend symbols update
+        [mapView suspendSymbolsUpdate];
     }
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
@@ -597,6 +610,13 @@
     target31.y -= static_cast<int32_t>(round(translationInMapSpace.y * scale31));
     mapView.target31 = target31;
     
+    if (recognizer.state == UIGestureRecognizerStateEnded ||
+        recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        // Resume symbols update
+        [mapView resumeSymbolsUpdate];
+    }
+
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         // Obtain velocity from recognizer
@@ -637,6 +657,9 @@
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
         _app.mapMode = OAMapModeFree;
+
+        // Suspend symbols update
+        [mapView resumeSymbolsUpdate];
 
         _accumulatedRotationAngle = 0.0f;
     }
@@ -681,7 +704,14 @@
     
     // Set rotation
     mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
-    
+
+    if (recognizer.state == UIGestureRecognizerStateEnded ||
+        recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        // Resume symbols update
+        [mapView resumeSymbolsUpdate];
+    }
+
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
         float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees(recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
@@ -793,6 +823,16 @@
         return;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        // When user gesture has began, stop all animations
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
+
+        // Suspend symbols update
+        [mapView resumeSymbolsUpdate];
+    }
     
     CGPoint translation = [recognizer translationInView:self.view];
     CGFloat angleDelta = translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
@@ -802,6 +842,13 @@
         angle = kElevationMinAngle;
     mapView.elevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
+
+    if (recognizer.state == UIGestureRecognizerStateEnded ||
+        recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        // Resume symbols update
+        [mapView resumeSymbolsUpdate];
+    }
 }
 
 - (void)pointContextMenuGestureDetected:(UILongPressGestureRecognizer*)recognizer

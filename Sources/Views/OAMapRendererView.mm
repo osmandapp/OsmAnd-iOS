@@ -246,6 +246,26 @@
 
 @synthesize stateObservable = _stateObservable;
 
+- (unsigned int)symbolsCount
+{
+    return _renderer->getSymbolsCount();
+}
+
+- (BOOL)isSymbolsUpdateSuspended
+{
+    return _renderer->isSymbolsUpdateSuspended();
+}
+
+- (BOOL)suspendSymbolsUpdate
+{
+    return _renderer->suspendSymbolsUpdate();
+}
+
+- (BOOL)resumeSymbolsUpdate
+{
+    return _renderer->resumeSymbolsUpdate();
+}
+
 - (QList<OsmAnd::TileId>)visibleTiles
 {
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();

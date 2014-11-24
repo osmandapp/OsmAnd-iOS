@@ -69,12 +69,13 @@
     // 80% of smallest device width in portait mode (320 points)
     self.leftFixedWidth = 256;
     self.rightFixedWidth = 256;
-    self.shouldResizeLeftPanel = YES;
+    self.shouldResizeLeftPanel = NO;
     self.shouldResizeRightPanel = YES;
     
     // Initially disallow pan gesture to exclude interference with map
     // (it should be enabled after side panel is shown until it's not hidden)
     self.recognizesPanGesture = NO;
+    self.panningLimitedToTopViewController = NO;
     
     // Allow rotation, without respect to current active panel
     self.shouldDelegateAutorotateToVisiblePanel = NO;

@@ -21,6 +21,7 @@ pod 'SWTableViewCell', '~> 0.3.0'
 pod 'RegexKitLite', '~> 4.0'
 pod 'MBProgressHUD', '~> 0.9'
 pod 'CocoaSecurity', '~> 1.2.4'
+pod 'MYBlurIntroductionView', '~> 1.0.3'
 
 # Development-only dependencies
 target :dev do

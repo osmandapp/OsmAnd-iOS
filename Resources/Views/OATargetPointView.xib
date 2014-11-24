@@ -29,22 +29,6 @@
                     <color key="textColor" red="0.58823529411764708" green="0.58823529411764708" blue="0.58823529411764708" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGt-3L-A3v">
-                    <rect key="frame" x="0.0" y="74" width="106" height="52"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="52" id="iRE-uT-CeZ"/>
-                    </constraints>
-                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="10"/>
-                    <inset key="titleEdgeInsets" minX="-23" minY="30" maxX="0.0" maxY="0.0"/>
-                    <inset key="imageEdgeInsets" minX="41" minY="-10" maxX="0.0" maxY="0.0"/>
-                    <state key="normal" title="Add favorite" image="menu_star_icon.png">
-                        <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="buttonFavoriteClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="c6c-vO-VjT"/>
-                    </connections>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1L-y5-El0">
                     <rect key="frame" x="214" y="74" width="106" height="52"/>
                     <constraints>
@@ -75,6 +59,22 @@
                     </state>
                     <connections>
                         <action selector="buttonShareClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="0Sy-n7-VEK"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGt-3L-A3v">
+                    <rect key="frame" x="0.0" y="74" width="106" height="52"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="52" id="iRE-uT-CeZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="10"/>
+                    <inset key="titleEdgeInsets" minX="-23" minY="30" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="41" minY="-10" maxX="0.0" maxY="0.0"/>
+                    <state key="normal" title="Add favorite" image="menu_star_icon.png">
+                        <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonFavoriteClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="c6c-vO-VjT"/>
                     </connections>
                 </button>
             </subviews>

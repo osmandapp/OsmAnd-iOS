@@ -20,7 +20,9 @@
 @property (assign, nonatomic) CLLocationCoordinate2D location;
 @property (assign, nonatomic) BOOL newFavorite;
 
-@property (weak, nonatomic) IBOutlet UIButton *saveButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveRemoveButton;
+@property (weak, nonatomic) IBOutlet UILabel *favoriteDistance;
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteDirection;
 
 @property (weak, nonatomic) IBOutlet UIButton *favoriteNameButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteColorButton;
@@ -32,6 +34,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 
 @property (weak, nonatomic) IBOutlet UIView *favoriteColorView;
+@property (weak, nonatomic) IBOutlet UILabel *favoriteColorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteGroupView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 

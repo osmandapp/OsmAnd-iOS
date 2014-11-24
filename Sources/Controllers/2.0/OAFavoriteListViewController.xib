@@ -7,6 +7,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAFavoriteListViewController">
             <connections>
+                <outlet property="directionButton" destination="RRQ-z5-Lsy" id="UNB-UY-And"/>
                 <outlet property="favoriteTableView" destination="I6b-fV-hKw" id="fkq-Tf-Ao4"/>
                 <outlet property="favoritesButtonView" destination="97S-Ol-wNi" id="Ljk-KJ-di8"/>
                 <outlet property="gpxButtonView" destination="EbN-uw-w8D" id="WQa-s9-tt8"/>
@@ -46,13 +47,30 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RRQ-z5-Lsy">
+                            <rect key="frame" x="247" y="20" width="70" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="width" constant="70" id="HVq-AV-yyh"/>
+                                <constraint firstAttribute="height" constant="44" id="oQX-Rv-4Ee"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="13"/>
+                            <state key="normal" image="icon_direction.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="sortByDistance:" destination="-1" eventType="touchUpInside" id="Wwt-8D-CiE"/>
+                            </connections>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="hAT-mJ-LT6" firstAttribute="centerY" secondItem="n16-cj-6Iy" secondAttribute="centerY" id="0El-DT-W7g"/>
                         <constraint firstItem="hAT-mJ-LT6" firstAttribute="leading" secondItem="b9I-9C-Bgy" secondAttribute="leading" id="8cM-Gy-NUH"/>
                         <constraint firstItem="hAT-mJ-LT6" firstAttribute="top" secondItem="b9I-9C-Bgy" secondAttribute="top" constant="20" id="DHU-ro-bav"/>
+                        <constraint firstAttribute="trailing" secondItem="RRQ-z5-Lsy" secondAttribute="trailing" constant="3" id="GO2-nu-Igd"/>
                         <constraint firstItem="n16-cj-6Iy" firstAttribute="leading" secondItem="hAT-mJ-LT6" secondAttribute="trailing" constant="8" id="XKP-IJ-TT9"/>
+                        <constraint firstItem="RRQ-z5-Lsy" firstAttribute="top" secondItem="b9I-9C-Bgy" secondAttribute="top" constant="20" id="ajp-kd-WOP"/>
                         <constraint firstAttribute="trailing" secondItem="n16-cj-6Iy" secondAttribute="trailing" constant="81" id="p97-Dg-qoF"/>
                         <constraint firstAttribute="height" constant="64" id="reC-iI-6FT"/>
                     </constraints>
@@ -126,6 +144,7 @@
         </view>
     </objects>
     <resources>
+        <image name="icon_direction.png" width="25" height="24"/>
         <image name="icon_gpx.png" width="25" height="25"/>
         <image name="icon_star_fill.png" width="25" height="24"/>
         <image name="menu_icon_back.png" width="10" height="20"/>

@@ -12,7 +12,7 @@
 @interface OAFavoriteItem : NSObject
 
 @property std::shared_ptr<OsmAnd::IFavoriteLocation> favorite;
-@property float direction;
+@property CGFloat direction;
 @property NSString* distance;
 
 

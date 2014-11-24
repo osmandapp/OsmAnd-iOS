@@ -12,7 +12,7 @@
                 <outlet property="mapTypeButtonView" destination="TjK-8j-afh" id="hc3-Y3-evv"/>
                 <outlet property="mapTypeButtonWalk" destination="r7y-vG-6mN" id="oT0-d0-FJx"/>
                 <outlet property="mapTypeScrollView" destination="XrM-9V-Tyy" id="NLY-1b-nZt"/>
-                <outlet property="mapView" destination="s5V-gy-zMG" id="x3p-NU-1OE"/>
+                <outlet property="mapView" destination="s5V-gy-zMG" id="IGx-G2-eLR"/>
                 <outlet property="tableView" destination="NX0-1L-pkh" id="p5r-YH-bYJ"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="mHM-Da-4K1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -23,7 +23,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s5V-gy-zMG">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s5V-gy-zMG" customClass="OAMapRendererView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
@@ -157,7 +157,7 @@
                 <constraint firstAttribute="bottom" secondItem="NX0-1L-pkh" secondAttribute="bottom" id="zdR-Tl-ztW"/>
             </constraints>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="526" y="536"/>
+            <point key="canvasLocation" x="263" y="449"/>
         </view>
     </objects>
     <resources>

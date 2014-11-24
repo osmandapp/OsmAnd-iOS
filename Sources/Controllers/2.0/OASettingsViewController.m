@@ -44,35 +44,35 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
         case kSettingsScreenGeneral: {
-            NSString* appModeValue = settings.settingAppMode == 0 ? @"День" : (settings.settingAppMode == 1 ? @"Ночь" : @"Автовыбор");
-            NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Километры" : @"Милли";
-            NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Показывать" : @"Не показывать";
+            NSString* appModeValue = settings.settingAppMode == 0 ? @"Day" : (settings.settingAppMode == 1 ? @"Night" : @"Autoselect");
+            NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Kilometers" : @"Miles";
+            NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"DDD.DD" : @"DD.DDD";
             
-            self.data = @[@{@"name": @"Карты и ресурсы", @"value": @"", @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Режим приложения", @"value": appModeValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Единицы измерения", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Кнопка зума", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Формат гео координат", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"}
+            self.data = @[@{@"name": @"Maps & Resources", @"value": @"", @"img": @"menu_cell_pointer.png"},
+                          @{@"name": @"Application mode", @"value": appModeValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": @"Units", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": @"Zoom button", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": @"Location format", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"}
                           ];
         }
             break;
         case kSettingsScreenMapsAndResources:
             break;
         case kSettingsScreenAppMode:
-            self.data = @[@{@"name": @"День", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Ночь", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Автовыбор", @"value": @"", @"img": settings.settingAppMode == 2 ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Autoselect", @"value": @"", @"img": settings.settingAppMode == 2 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenMetricSystem:
-            self.data = @[@{@"name": @"Километры", @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Милли", @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": @"Kilometers", @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Miles", @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenZoomButton:
-            self.data = @[@{@"name": @"Показывать", @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Не показывать", @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": @"Show", @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Don't show", @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenGeoCoords:

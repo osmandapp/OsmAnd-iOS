@@ -10,14 +10,45 @@
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
-#import "OAMapRendererView.h"
-
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
+#import "OAMapRendererView.h"
 
+#import "OsmAndApp.h"
 
-
+#include <QtMath>
+#include <QStandardPaths>
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
+#include <OsmAndCore/Map/MapStylePreset.h>
+#include <OsmAndCore/Map/OnlineTileSources.h>
+#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
+#include <OsmAndCore/Map/ObfMapObjectsProvider.h>
+#include <OsmAndCore/Map/MapPrimitivesProvider.h>
+#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
+#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
+#include <OsmAndCore/Map/MapPresentationEnvironment.h>
+#include <OsmAndCore/Map/MapPrimitiviser.h>
+#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/MapMarkerBuilder.h>
+#include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
+#if defined(OSMAND_IOS_DEV)
+#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
+#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
+#endif // defined(OSMAND_IOS_DEV)
+
+
+#define kElevationMinAngle 30.0f
+#define kMapModePositionTrackingDefaultZoom 15.0f
+#define kMapModePositionTrackingDefaultElevationAngle 90.0f
+#define kMapModeFollowDefaultZoom 18.0f
+#define kMapModeFollowDefaultElevationAngle kElevationMinAngle
+#define kOneSecondAnimatonTime 1.0f
+#define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
@@ -34,6 +65,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property NSArray* tableData;
 @property OsmAndAppInstance app;
 
+@property (weak, nonatomic) IBOutlet OAMapRendererView *mapView;
 
 @property(readonly) OAObservable* stateObservable;
 @property(readonly) OAObservable* settingsObservable;
@@ -69,11 +101,25 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
+    OAAppMode _lastAppMode;
 
+    OAAutoObserverProxy* _mapModeObserver;
+    OAMapMode _lastMapMode;
 
     // Favorites presenter
     std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
+    // Current provider of raster map
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
+    std::shared_ptr<OsmAnd::MapPresentationEnvironment> _mapPresentationEnvironment;
+    std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
 
+    // Offline-specific providers & resources
+    std::shared_ptr<OsmAnd::ObfMapObjectsProvider> _obfMapObjectsProvider;
+
+    bool _lastPositionTrackStateCaptured;
+float _lastAzimuthInPositionTrack;
 
 -(id)init {
     self = [super init];
@@ -93,43 +139,34 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     NSLog(@"Creating Map Renderer view...");
 
     // Inflate map renderer view
-    OAMapRendererView* mapView = [[OAMapRendererView alloc] init];
-    self.mapView = mapView;
-    mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
-    [_stateObserver observe:mapView.stateObservable];
-    [_settingsObserver observe:mapView.settingsObservable];
-    [_framePreparedObserver observe:mapView.framePreparedObservable];
+    self.mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
+    [_stateObserver observe:self.mapView.stateObservable];
+    [_settingsObserver observe:self.mapView.settingsObservable];
+    [_framePreparedObserver observe:self.mapView.framePreparedObservable];
     
     // Update layers
     [self updateLayers];
     //
     
     
-
-    
-    
     
     
     
     // Tell view to create context
-    mapView.userInteractionEnabled = YES;
-    mapView.multipleTouchEnabled = YES;
-    [mapView createContext];
+    self.mapView.userInteractionEnabled = YES;
+    self.mapView.multipleTouchEnabled = YES;
+    [self.mapView createContext];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
-    mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
+    self.mapView.target31 = OsmAnd::PointI(_app.data.mapLastViewedState.target31.x,
                                       _app.data.mapLastViewedState.target31.y);
-    mapView.zoom = _app.data.mapLastViewedState.zoom;
-    mapView.azimuth = _app.data.mapLastViewedState.azimuth;
-    mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+    self.mapView.zoom = _app.data.mapLastViewedState.zoom;
+    self.mapView.azimuth = _app.data.mapLastViewedState.azimuth;
+    self.mapView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     
     // Mark that map source is no longer valid
     _mapSourceInvalidated = YES;
-    
-    
-    
-    
     
 }
 
@@ -187,6 +224,12 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
                                                        withHandler:@selector(onMapRendererFramePrepared)];
     
     
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
+
+    
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidEnterBackground:)
@@ -197,6 +240,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
 
+    _lastPositionTrackStateCaptured = false;
     
 //    // Create favorites presenter
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
@@ -209,6 +253,125 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     _forcedDisplayDensityFactor = self.displayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
     
+}
+
+
+- (void)onMapModeChanged
+{
+    if (![self isViewLoaded])
+        return;
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    switch (_app.mapMode)
+    {
+        case OAMapModeFree:
+            // Do nothing
+            break;
+            
+        case OAMapModePositionTrack:
+        {
+            CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+            if (newLocation != nil)
+            {
+                // Fly to last-known position without changing anything but target
+                
+                mapView.animator->pause();
+                mapView.animator->cancelAllAnimations();
+                
+                OsmAnd::PointI newTarget31(
+                                           OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                           OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+                
+                // In case previous mode was Follow, restore last azimuth, elevation angle and zoom
+                // used in PositionTrack mode
+                if (_lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured)
+                {
+                    mapView.animator->animateTargetTo(newTarget31,
+                                                      kOneSecondAnimatonTime,
+                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                      kLocationServicesAnimationKey);
+                    mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
+                                                       kOneSecondAnimatonTime,
+                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                       kLocationServicesAnimationKey);
+                    mapView.animator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
+                                                              kOneSecondAnimatonTime,
+                                                              OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                              kLocationServicesAnimationKey);
+                    mapView.animator->animateZoomTo(kMapModePositionTrackingDefaultZoom,
+                                                    kOneSecondAnimatonTime,
+                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                    kLocationServicesAnimationKey);
+                    _lastPositionTrackStateCaptured = false;
+                }
+                else
+                {
+                    mapView.animator->parabolicAnimateTargetTo(newTarget31,
+                                                               kOneSecondAnimatonTime,
+                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                               kLocationServicesAnimationKey);
+                }
+                
+                mapView.animator->resume();
+            }
+            break;
+        }
+            
+        case OAMapModeFollow:
+        {
+            // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
+            if (_lastMapMode == OAMapModePositionTrack)
+            {
+                _lastAzimuthInPositionTrack = mapView.azimuth;
+                _lastPositionTrackStateCaptured = true;
+            }
+            
+            mapView.animator->pause();
+            mapView.animator->cancelAllAnimations();
+            
+            mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
+                                            kOneSecondAnimatonTime,
+                                            OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                            kLocationServicesAnimationKey);
+            
+            mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
+                                                      kOneSecondAnimatonTime,
+                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                      kLocationServicesAnimationKey);
+            
+            CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+            if (newLocation != nil)
+            {
+                OsmAnd::PointI newTarget31(
+                                           OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                           OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+                mapView.animator->animateTargetTo(newTarget31,
+                                                  kOneSecondAnimatonTime,
+                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                  kLocationServicesAnimationKey);
+                
+                const auto direction = (_lastAppMode == OAAppModeBrowseMap)
+                ? _app.locationServices.lastKnownHeading
+                : newLocation.course;
+                if (!isnan(direction) && direction >= 0)
+                {
+                    mapView.animator->animateAzimuthTo(direction,
+                                                       kOneSecondAnimatonTime,
+                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                       kLocationServicesAnimationKey);
+                }
+            }
+            
+            mapView.animator->resume();
+            break;
+        }
+            
+        default:
+            return;
+    }
+    
+    _lastMapMode = _app.mapMode;
 }
 
 
@@ -268,7 +431,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     NSLog(@"onLayersConfigurationChanged_Event");
 }
 - (void)onMapRendererFramePrepared {
-    NSLog(@"onMapRendererFramePrepared_Event");
+    [_framePreparedObservable notifyEvent];
 }
 - (void)applicationDidEnterBackground:(UIApplication*)application {
     NSLog(@"applicationDidEnterBackground_Event");
@@ -283,14 +446,12 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     if (![self isViewLoaded])
         return;
     
-    OAMapRendererView* mapView = (OAMapRendererView*)self.mapView;
-    
     @synchronized(_rendererSync)
     {
         if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
-            [mapView addKeyedSymbolsProvider:_favoritesPresenter];
+            [self.mapView addKeyedSymbolsProvider:_favoritesPresenter];
         else
-            [mapView removeKeyedSymbolsProvider:_favoritesPresenter];
+            [self.mapView removeKeyedSymbolsProvider:_favoritesPresenter];
     }
 }
 
@@ -302,18 +463,174 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)viewWillAppear:(BOOL)animated
 {
     // Resume rendering
-    OAMapRendererView* mapView = (OAMapRendererView*)self.mapView;
-//    [mapView resumeRendering];
+    [self.mapView resumeRendering];
     
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
-//        [self updateCurrentMapSource];
-        
+        [self updateCurrentMapSource];
         _mapSourceInvalidated = NO;
     }
 
 }
+
+
+
+
+- (void)updateCurrentMapSource
+{
+    if (![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = self.mapView;
+    
+    @synchronized(_rendererSync)
+    {
+        const auto screenTileSize = 256 * self.displayDensityFactor;
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+        NSLog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
+        
+        // Set reference tile size on the screen
+        mapView.referenceTileSizeOnScreenInPixels = screenTileSize;
+        
+        // Release previously-used resources (if any)
+        _rasterMapProvider.reset();
+        _obfMapObjectsProvider.reset();
+        _mapPrimitivesProvider.reset();
+        _mapPresentationEnvironment.reset();
+        _mapPrimitiviser.reset();
+        if (_mapObjectsSymbolsProvider)
+            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+        _mapObjectsSymbolsProvider.reset();
+        
+        // Determine what type of map-source is being activated
+        typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
+        OAMapSource* lastMapSource = _app.data.lastMapSource;
+        const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
+        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+        if (!mapSourceResource)
+        {
+            // Missing resource, shift to default
+            _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+            return;
+        }
+        if (mapSourceResource->type == OsmAndResourceType::MapStyle)
+        {
+            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+            NSLog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
+            
+            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
+            
+            NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
+            
+            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+            
+            switch ([[OAAppSettings sharedManager] settingMapLanguage]) {
+                case 0:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+                case 1:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    break;
+                case 2:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+                    break;
+                default:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+            }
+            
+            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
+                                                                                     self.displayDensityFactor,
+                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     langPreferences));
+            
+            
+            _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
+            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
+                                                                           _mapPrimitiviser,
+                                                                           rasterTileSize));
+            
+            // Configure with preset if such is set
+            if (lastMapSource.variant != nil)
+            {
+                NSLog(@"Using '%@' variant of style", lastMapSource.variant);
+                const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
+                if (preset)
+                    _mapPresentationEnvironment->setSettings(preset->attributes);
+            }
+            
+#if defined(OSMAND_IOS_DEV)
+            switch (_visualMetricsMode)
+            {
+                case OAVisualMetricsModeBinaryMapData:
+                    _rasterMapProvider.reset(new OsmAnd::ObfMapObjectsMetricsLayerProvider(_obfMapObjectsProvider,
+                                                                                           256 * mapView.contentScaleFactor,
+                                                                                           mapView.contentScaleFactor));
+                    break;
+                    
+                case OAVisualMetricsModeBinaryMapPrimitives:
+                    _rasterMapProvider.reset(new OsmAnd::MapPrimitivesMetricsLayerProvider(_mapPrimitivesProvider,
+                                                                                           256 * mapView.contentScaleFactor,
+                                                                                           mapView.contentScaleFactor));
+                    break;
+                    
+                case OAVisualMetricsModeBinaryMapRasterize:
+                {
+                    std::shared_ptr<OsmAnd::MapRasterLayerProvider> backendProvider(
+                                                                                    new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+                    _rasterMapProvider.reset(new OsmAnd::MapRasterMetricsLayerProvider(backendProvider,
+                                                                                       256 * mapView.contentScaleFactor,
+                                                                                       mapView.contentScaleFactor));
+                    break;
+                }
+                    
+                case OAVisualMetricsModeOff:
+                default:
+                    _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+                    break;
+            }
+#else
+            _rasterMapProvider.reset(new OsmAnd::MapRasterLayerProvider_Software(_mapPrimitivesProvider));
+#endif // defined(OSMAND_IOS_DEV)
+            [mapView setProvider:_rasterMapProvider
+                        forLayer:0];
+            
+#if defined(OSMAND_IOS_DEV)
+            if (!_hideStaticSymbols)
+            {
+                _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
+                                                                                       rasterTileSize));
+                [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+            }
+#else
+            _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
+                                                                                   rasterTileSize));
+            [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+#endif
+        }
+        else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+            NSLog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
+            
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
+            if (!onlineMapTileProvider)
+            {
+                // Missing resource, shift to default
+                _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
+                return;
+            }
+            onlineMapTileProvider->setLocalCachePath(_app.cacheDir);
+            _rasterMapProvider = onlineMapTileProvider;
+            [mapView setProvider:_rasterMapProvider
+                        forLayer:0];
+        }
+    }
+}
+
+
 
 
 
@@ -496,7 +813,19 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 }
 
 
+#pragma mark - Orientation
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (NSUInteger) supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+    
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
+}
 
 
 @end

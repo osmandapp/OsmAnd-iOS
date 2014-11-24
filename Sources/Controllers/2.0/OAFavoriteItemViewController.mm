@@ -162,6 +162,8 @@
         [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
         
         [self.distanceHolderView setHidden:YES];
+        [self.favoriteDirection setHidden:YES];
+        [self.favoriteDistance setHidden:YES];
     }
     
 }

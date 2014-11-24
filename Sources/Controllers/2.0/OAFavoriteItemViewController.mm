@@ -13,13 +13,13 @@
 #import "OAMapRendererView.h"
 #import "OALog.h"
 #import "OAFavoriteGroupViewController.h"
+#import "OAFavoriteColorViewController.h"
+#import "OADefaultFavorite.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
-
-
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -71,8 +71,7 @@
         self.location = location;
         self.newFavorite = YES;
         [self.favoriteNameButton setTitle:formattedLocation forState:UIControlStateNormal];
-        
-        
+
         // Create favorite
         OsmAnd::PointI locationPoint;
         locationPoint.x = OsmAnd::Utilities::get31TileNumberX(location.longitude);
@@ -108,7 +107,6 @@
     [self setupView];
 }
 
-
 -(void)setupView {
  
     self.favoriteNameButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
@@ -123,7 +121,33 @@
     self.favoriteColorView.layer.cornerRadius = 10;
     self.favoriteColorView.layer.masksToBounds = YES;
     [self.favoriteColorView setBackgroundColor:[UIColor colorWithRed:self.favorite.favorite->getColor().r green:self.favorite.favorite->getColor().g blue:self.favorite.favorite->getColor().b alpha:1]];
+    if (self.favorite.favorite->getColor().r > 0.95 && self.favorite.favorite->getColor().g > 0.95 && self.favorite.favorite->getColor().b > 0.95) {
+        self.favoriteColorView.layer.borderColor = [[UIColor blackColor] CGColor];
+        self.favoriteColorView.layer.borderWidth = 0.8;
+    }
     
+    // Color
+    NSArray* availableColors = [OADefaultFavorite builtinColors];
+    NSUInteger selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
+        OsmAnd::FColorARGB fcolor;
+        [uiColor getRed:&fcolor.r
+                  green:&fcolor.g
+                   blue:&fcolor.b
+                  alpha:&fcolor.a];
+        OsmAnd::ColorRGB color = OsmAnd::FColorRGB(fcolor);
+        
+        if (color == self.favorite.favorite->getColor())
+            return YES;
+        return NO;
+    }];
+    
+    NSString* colorName = [((NSArray*)[availableColors objectAtIndex:selectedColor]) objectAtIndex:0];
+    [self.favoriteColorLabel setText:colorName];
+    
+    
+    [self.favoriteDistance setText:self.favorite.distance];
+    self.favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
     
     if (self.favorite.favorite->getGroup().isEmpty())
         [self.favoriteGroupView setText: @"No group"];
@@ -133,12 +157,17 @@
     [self.favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
     [self.favoriteDistanceView setText:self.favorite.distance];
     
-    if (self.newFavorite)
-        [self.saveButton setHidden:NO];
+    if (self.newFavorite) {
+        [self.saveRemoveButton setTitle:@"Save" forState:UIControlStateNormal];
+        [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
+        
+        [self.distanceHolderView setHidden:YES];
+        [self.favoriteDirection setHidden:YES];
+        [self.favoriteDistance setHidden:YES];
+    }
+    
 }
-        
-        
-        
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -174,19 +203,27 @@
 }
 
 - (IBAction)saveButtonClicked:(id)sender {
+    if (!self.newFavorite) {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
+        [app saveFavoritesToPermamentStorage];
+    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)backButtonClicked:(id)sender {
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (self.newFavorite)
+    if (self.newFavorite) {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
+        [app saveFavoritesToPermamentStorage];
+    }
     
     [super backButtonClicked:sender];
 }
 
 - (IBAction)favoriteChangeColorClicked:(id)sender {
-    
+    OAFavoriteColorViewController* controller = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (IBAction)favoriteChangeGroupClicked:(id)sender {

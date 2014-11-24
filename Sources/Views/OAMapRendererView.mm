@@ -68,6 +68,10 @@
     [self deinit];
 }
 
+- (void)awakeFromNib {
+    [self commonInit];
+}
+
 - (void)commonInit
 {
     _stateObservable = [[OAObservable alloc] init];

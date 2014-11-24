@@ -29,21 +29,20 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    self.menuButtonMaps.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] CGColor];
+    self.menuButtonMaps.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonMaps.layer.borderWidth = 1.0;
     
-    self.menuButtonMyData.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] CGColor];
+    self.menuButtonMyData.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonMyData.layer.borderWidth = 1.0;
 
-    self.menuButtonSettings.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] CGColor];
+    self.menuButtonSettings.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonSettings.layer.borderWidth = 1.0;
     
-    self.menuButtonQuiz.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] CGColor];
+    self.menuButtonQuiz.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonQuiz.layer.borderWidth = 1.0;
     
-    self.menuButtonHelp.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:70.0/255.0 alpha:1] CGColor];
+    self.menuButtonHelp.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonHelp.layer.borderWidth = 1.0;
-    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,6 +67,8 @@
 
 
 - (IBAction)helpButtonClicked:(id)sender {
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2014" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    [alert show];
 }
 
 - (IBAction)quizButtonClicked:(id)sender {

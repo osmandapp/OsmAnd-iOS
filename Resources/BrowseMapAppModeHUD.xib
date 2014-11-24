@@ -16,6 +16,7 @@
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
                 <outlet property="view" destination="1" id="3"/>
+                <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
                 <outlet property="zoomOutButton" destination="l4t-EI-ihD" id="3j2-Rn-C1L"/>
             </connections>
@@ -38,19 +39,6 @@
                         <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="8sR-Ef-2iJ"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">
-                    <rect key="frame" x="272" y="515" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="40" id="56V-yt-BAw"/>
-                        <constraint firstAttribute="height" constant="40" id="KS0-6c-FjX"/>
-                    </constraints>
-                    <state key="normal" image="free_map_mode_button.png" backgroundImage="HUD_button_bg.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
-                    </connections>
-                </button>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="8" y="21" width="40" height="40"/>
                 </view>
@@ -60,7 +48,7 @@
                         <constraint firstAttribute="height" constant="40" id="irx-VT-YMC"/>
                         <constraint firstAttribute="width" constant="40" id="zxa-0E-dKh"/>
                     </constraints>
-                    <state key="normal" image="drive_mode_button.png" backgroundImage="HUD_button_bg.png">
+                    <state key="normal" image="icon_drive_mode.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -133,6 +121,20 @@
                     </state>
                     <connections>
                         <action selector="onOptionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="Zy3-bJ-yDH"/>
+                        <action selector="onOptionsMenuButtonDown:" destination="-1" eventType="touchDragInside" id="BcB-jK-AfK"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">
+                    <rect key="frame" x="272" y="515" width="40" height="40"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="56V-yt-BAw"/>
+                        <constraint firstAttribute="height" constant="40" id="KS0-6c-FjX"/>
+                    </constraints>
+                    <state key="normal" image="free_map_mode_button.png" backgroundImage="menu_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
                     </connections>
                 </button>
             </subviews>
@@ -161,9 +163,10 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
-        <image name="drive_mode_button.png" width="25" height="25"/>
         <image name="free_map_mode_button.png" width="25" height="25"/>
+        <image name="icon_drive_mode.png" width="40" height="40"/>
         <image name="menu_button.png" width="45" height="51"/>
+        <image name="menu_button_bg.png" width="40" height="40"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -21,9 +21,14 @@
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 
+#include <OsmAndCore/Data/Road.h>
+#include <OsmAndCore/CachingRoadLocator.h>
+
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+#define kMaxRoadDistanceInMeters 1000
 
 @interface OABrowseMapAppModeHudViewController ()
 
@@ -33,6 +38,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
+@property (weak, nonatomic) IBOutlet UIView *zoomButtonsView;
+
 @property (weak, nonatomic) IBOutlet UIButton *driveModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *debugButton;
 @property (weak, nonatomic) IBOutlet UITextField *searchQueryTextfield;
@@ -54,6 +61,7 @@
     OAAutoObserverProxy* _mapZoomObserver;
 
     OAMapViewController* _mapViewController;
+    UIPanGestureRecognizer* _grMove;
 
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -90,18 +98,29 @@
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
     
+    // Menu guest recognizer
+    _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                      action:@selector(moveGestureDetected:)];
+    _grMove.delegate = self;
+    
+    [_mapViewController.view addGestureRecognizer:_grMove];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     
-    
-     
                              //    postNotificationName:kSetTargetPointNotification object:@[[NSNumber numberWithDouble:lat], [NSNumber numberWithDouble:lon]]];
-
     
 }
 
 - (void)deinit
 {
+
 }
+
+- (void)moveGestureDetected:(UIPanGestureRecognizer*)recognizer
+{
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
 NSLayoutConstraint* targetBottomConstraint;
 - (void)viewDidLoad
 {
@@ -159,8 +178,6 @@ NSLayoutConstraint* targetBottomConstraint;
     
     targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOATargetPointViewHeight];
     [self.view addConstraint:targetConstraint];
-    
-    
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -170,7 +187,7 @@ NSLayoutConstraint* targetBottomConstraint;
 -(void)viewWillAppear:(BOOL)animated {
     // IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack]) {
-        int mapMode = [[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
+        OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
     [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
@@ -178,6 +195,7 @@ NSLayoutConstraint* targetBottomConstraint;
 
 -(void)viewDidAppear:(BOOL)animated {
     [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
+    [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -245,8 +263,14 @@ NSLayoutConstraint* targetBottomConstraint;
     });
 }
 
+- (IBAction)onOptionsMenuButtonDown:(id)sender {
+    self.sidePanelController.recognizesPanGesture = YES;
+}
+
+
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
 {
+    self.sidePanelController.recognizesPanGesture = NO;
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
 
@@ -290,7 +314,46 @@ NSLayoutConstraint* targetBottomConstraint;
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
 
+    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+    _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+
+    std::shared_ptr<const OsmAnd::Road> road;
+
+    const OsmAnd::PointI position31(
+                                    OsmAnd::Utilities::get31TileNumberX(lon),
+                                    OsmAnd::Utilities::get31TileNumberY(lat));
+    
+    // Try to find road in basemap, then in detaled map
+    road = _roadLocator->findNearestRoad(position31,
+                                          kMaxRoadDistanceInMeters,
+                                          OsmAnd::RoutingDataLevel::Basemap);
+    if (!road) {
+        road = _roadLocator->findNearestRoad(position31,
+                                              kMaxRoadDistanceInMeters,
+                                              OsmAnd::RoutingDataLevel::Detailed);
+    }
+
+    NSString* localizedTitle;
+    NSString* nativeTitle;
+    if (road) {
+        const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
+        const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+        const auto nativeName = road->getCaptionInNativeLanguage();
+        if (!localizedName.isNull())
+            localizedTitle = localizedName.toNSString();
+        if (!nativeName.isNull())
+            nativeTitle = nativeName.toNSString();
+    }
+    
+    
+    NSString* addressString = nativeTitle;
+    if (!addressString || [addressString isEqualToString:@""])
+        addressString = @"Address is not known yet";
+    
     [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
+    [self.targetMenuView setAddress:addressString];
+    
+    
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
 
@@ -299,7 +362,7 @@ NSLayoutConstraint* targetBottomConstraint;
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
         self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight - kOATargetPointViewHeight)];
-        [self.shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0.3]];
+        [self.shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
         [self.shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.shadowButton];
     }];

@@ -26,6 +26,8 @@
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
 
+#import "OAIntroViewController.h"
+
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
@@ -45,10 +47,10 @@
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];
     device.batteryMonitoringEnabled = YES;
-    
+
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
-    
+
     // Initialize OsmAnd core
     const std::shared_ptr<CoreResourcesFromBundleProvider> coreResourcesFromBundleProvider(new CoreResourcesFromBundleProvider());
     OsmAnd::InitializeCore(coreResourcesFromBundleProvider);
@@ -97,6 +99,14 @@
     self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [self.window makeKeyAndVisible];
 
+    // Show intro screen
+    if (execCount == 1) {
+        OAIntroViewController* cont = [[OAIntroViewController alloc] init];
+        [self.rootViewController.navigationController pushViewController:cont animated:NO];
+    }
+        
+    
+    
     // Check if application was requested to open document/file/URL
     NSURL* launchUrl = (NSURL*)[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
     NSString* launchSourceApplication = (NSString*)[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey];

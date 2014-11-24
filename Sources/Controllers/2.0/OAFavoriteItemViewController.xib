@@ -10,6 +10,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAFavoriteItemViewController">
             <connections>
+                <outlet property="distanceHolderView" destination="ifd-dB-kpY" id="j83-q3-zRQ"/>
                 <outlet property="favoriteColorButton" destination="Dku-ak-CnA" id="Z82-hz-yxD"/>
                 <outlet property="favoriteColorLabel" destination="zo1-Qv-agh" id="kUD-QG-MAp"/>
                 <outlet property="favoriteColorView" destination="du0-ey-orw" id="9wo-fA-8ag"/>

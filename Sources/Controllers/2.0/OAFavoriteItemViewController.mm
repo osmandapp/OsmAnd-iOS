@@ -160,6 +160,8 @@
     if (self.newFavorite) {
         [self.saveRemoveButton setTitle:@"Save" forState:UIControlStateNormal];
         [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
+        
+        [self.distanceHolderView setHidden:YES];
     }
     
 }

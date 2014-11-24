@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteColorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteGroupView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
+@property (weak, nonatomic) IBOutlet UIImageView *distanceHolderView;
 
 
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;

@@ -128,7 +128,9 @@
     
     // Color
     NSArray* availableColors = [OADefaultFavorite builtinColors];
-    NSUInteger selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+    
+    NSUInteger selectedColor = 0;
+    selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
         OsmAnd::FColorARGB fcolor;
         [uiColor getRed:&fcolor.r
@@ -142,7 +144,12 @@
         return NO;
     }];
     
-    NSString* colorName = [((NSArray*)[availableColors objectAtIndex:selectedColor]) objectAtIndex:0];
+    if (!selectedColor)
+        selectedColor = 0;
+    
+    NSString* colorName = @"Black";
+
+    colorName = [((NSArray*)[availableColors objectAtIndex:selectedColor]) objectAtIndex:0];
     [self.favoriteColorLabel setText:colorName];
     
     

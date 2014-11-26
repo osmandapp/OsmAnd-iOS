@@ -15,11 +15,14 @@
 #import "OAFavoriteGroupViewController.h"
 #import "OAFavoriteColorViewController.h"
 #import "OADefaultFavorite.h"
+#import "OARootViewController.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
+
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -98,6 +101,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 200 - 64)];
+    [mapButton setTitle:@"" forState:UIControlStateNormal];
+    [mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:mapButton];
+    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -231,6 +240,25 @@
 }
 
 - (IBAction)menuGPXClicked:(id)sender {
+}
+
+
+-(void)goToFavorite {
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    OARootViewController* rootViewController = [OARootViewController instance];
+    OAFavoriteItem* itemData = self.favorite;
+    // Close everything
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+    // Ensure favorites layer is shown
+    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                   Visibility:YES];
+
+    // Go to favorite location
+    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition31()]
+                                                    andZoom:kDefaultFavoriteZoom
+                                                   animated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 #pragma mark - UIAlertViewDelegate

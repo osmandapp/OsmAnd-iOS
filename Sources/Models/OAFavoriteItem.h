@@ -14,6 +14,7 @@
 @property std::shared_ptr<OsmAnd::IFavoriteLocation> favorite;
 @property CGFloat direction;
 @property NSString* distance;
+@property double distanceMeters;
 
 
 @end

@@ -28,7 +28,7 @@
 - (NSUInteger) supportedInterfaceOrientations {
     if ([[self visibleViewController] isKindOfClass:[OASuperViewController class]])
         return UIInterfaceOrientationMaskPortrait;
-    return UIInterfaceOrientationMaskPortrait | UIInterfaceOrientationMaskLandscapeLeft;
+    return UIInterfaceOrientationMaskAll;
     
 }
 

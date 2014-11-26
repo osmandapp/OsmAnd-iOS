@@ -14,7 +14,7 @@
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 
-@interface OAFavoriteItemViewController : OASuperViewController<UITextFieldDelegate>
+@interface OAFavoriteItemViewController : OASuperViewController<UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;
 @property (assign, nonatomic) CLLocationCoordinate2D location;

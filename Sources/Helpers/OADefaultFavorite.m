@@ -19,7 +19,6 @@
     return @[
              @[@"Black", [UIColor blackColor]],
              @[@"White", [UIColor whiteColor]],
-             @[@"Gray", [UIColor grayColor]],
              @[@"Blue",  [UIColor blueColor]],
              @[@"Red",  [UIColor redColor]],
              @[@"Green", [UIColor greenColor]],

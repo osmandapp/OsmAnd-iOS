@@ -48,10 +48,16 @@
 }
 
 
-
 -(void)generateData {
     OsmAndAppInstance app = [OsmAndApp instance];
+
     self.groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
+    if ([self.groups count] > 0) {
+        NSArray *sortedArrayGroups = [self.groups sortedArrayUsingComparator:^NSComparisonResult(NSString* obj1, NSString* obj2) {
+            return [[obj1 lowercaseString] compare:[obj2 lowercaseString]];
+        }];
+        self.groups = [[NSMutableArray alloc] initWithArray:sortedArrayGroups];
+    }
 }
 
 
@@ -62,10 +68,6 @@
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
 }
-
-
-
-
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -84,6 +86,7 @@
         return 1;
 }
 
+OATextViewTableViewCell* textCell;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
@@ -101,12 +104,13 @@
         return cell;
     } else {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-        OATextViewTableViewCell* cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-        if (cell) {
-            [cell.textView setPlaceholder:@"Введите название группы"];
-            [cell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
-            [cell.textView setDelegate:self];
-            return cell;
+        textCell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+        if (textCell) {
+            [textCell.textView setPlaceholder:@"Введите название группы"];
+            [textCell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
+            [textCell.textView setDelegate:self];
+            
+            return textCell;
         }
     
     }
@@ -116,16 +120,15 @@
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
     if (indexPath.section == 0) {
         self.groupName = [self.groups objectAtIndex:indexPath.row];
         [self.tableView reloadData];
     } else {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-        OATextViewTableViewCell* cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+        OATextViewTableViewCell* cell = textCell;
         if (cell) {
             self.groupName = [cell.textView text];
             [self.tableView reloadData];
+            [textCell.textView becomeFirstResponder];
         }
     }
 }

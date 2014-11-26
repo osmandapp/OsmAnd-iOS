@@ -46,9 +46,7 @@
 
 
 @interface OAFavoriteItemViewController ()
-
     @property UITextField* nameTextField;
-
 @end
 
 @implementation OAFavoriteItemViewController
@@ -108,15 +106,6 @@
 }
 
 -(void)setupView {
- 
-//    self.favoriteNameButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-//    self.favoriteNameButton.layer.borderWidth = 1.0;
-//    
-//    self.favoriteColorButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-//    self.favoriteColorButton.layer.borderWidth = 1.0;
-//    
-//    self.favoriteGroupButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-//    self.favoriteGroupButton.layer.borderWidth = 1.0;
     
     self.favoriteColorView.layer.cornerRadius = 10;
     self.favoriteColorView.layer.masksToBounds = YES;
@@ -124,7 +113,8 @@
     if (self.favorite.favorite->getColor().r > 0.95 && self.favorite.favorite->getColor().g > 0.95 && self.favorite.favorite->getColor().b > 0.95) {
         self.favoriteColorView.layer.borderColor = [[UIColor blackColor] CGColor];
         self.favoriteColorView.layer.borderWidth = 0.8;
-    }
+    } else
+        self.favoriteColorView.layer.borderWidth = 0;
     
     [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
     
@@ -146,7 +136,7 @@
         return NO;
     }];
     
-    if (!selectedColor)
+    if (!selectedColor || selectedColor > [availableColors count] )
         selectedColor = 0;
     
     NSString* colorName = @"Black";
@@ -213,11 +203,10 @@
 
 - (IBAction)saveButtonClicked:(id)sender {
     if (!self.newFavorite) {
-        OsmAndAppInstance app = [OsmAndApp instance];
-        app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
-        [app saveFavoritesToPermamentStorage];
-    }
-    [self.navigationController popViewControllerAnimated:YES];
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove favorite item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        [removeAlert show];
+    } else
+        [self.navigationController popViewControllerAnimated:YES];
 }
 
 -(IBAction)backButtonClicked:(id)sender {
@@ -244,6 +233,17 @@
 }
 
 - (IBAction)menuGPXClicked:(id)sender {
+}
+
+#pragma mark - UIAlertViewDelegate
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+
+    if (buttonIndex != alertView.cancelButtonIndex) {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
+        [app saveFavoritesToPermamentStorage];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

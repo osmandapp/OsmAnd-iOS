@@ -52,6 +52,7 @@ kFavoriteCellType;
     @property (strong, nonatomic) NSMutableArray* groupsAndFavorites;
     @property (strong, nonatomic) NSArray*  menuItems;
     @property (strong, nonatomic) UIDocumentInteractionController* exportController;
+    @property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
     @property NSUInteger sortingType;
 
 @end
@@ -72,6 +73,7 @@ kFavoriteCellType;
     OsmAndAppInstance app = [OsmAndApp instance];
     self.groupsAndFavorites = [[NSMutableArray alloc] init];
     self.menuItems = [[NSArray alloc] init];
+    self.sortedFavoriteItems = [[NSMutableArray alloc] init];
     
     const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
     QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
@@ -104,16 +106,12 @@ kFavoriteCellType;
                 favData.favorite = favorite;
                 [self updateDistanceAndDirectionFor:favData];
                 [itemData.groupItems addObject:favData];
+                [self.sortedFavoriteItems addObject:favData];
             }
             
             if (self.sortingType == 0) { // Alphabetic
                 NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
                     return [[obj1.favorite->getTitle().toNSString() lowercaseString] compare:[obj2.favorite->getTitle().toNSString() lowercaseString]];
-                }];
-                [itemData.groupItems setArray:sortedArrayItems];
-            } else { // Distance
-                NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-                    return [obj1.distance compare:obj2.distance];
                 }];
                 [itemData.groupItems setArray:sortedArrayItems];
             }
@@ -124,7 +122,7 @@ kFavoriteCellType;
     
     // Sort items
     NSArray *sortedArrayGroups = [self.groupsAndFavorites sortedArrayUsingComparator:^NSComparisonResult(FavoriteTableGroup* obj1, FavoriteTableGroup* obj2) {
-        return [obj1.groupName compare:obj2.groupName];
+        return [[obj1.groupName lowercaseString] compare:[obj2.groupName lowercaseString]];
     }];
     [self.groupsAndFavorites setArray:sortedArrayGroups];
     
@@ -141,6 +139,7 @@ kFavoriteCellType;
             favData.favorite = favorite;
             [self updateDistanceAndDirectionFor:favData];
             [itemData.groupItems addObject:favData];
+            [self.sortedFavoriteItems addObject:favData];
         }
         
         if (self.sortingType == 0) { // Alphabetic
@@ -148,16 +147,16 @@ kFavoriteCellType;
                 return [[obj1.favorite->getTitle().toNSString() lowercaseString] compare:[obj2.favorite->getTitle().toNSString() lowercaseString]];
             }];
             [itemData.groupItems setArray:sortedArrayItems];
-        } else { // Distznce
-            NSArray *sortedArrayItems = [itemData.groupItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-                return [obj1.distance compare:obj2.distance];
-            }];
-            [itemData.groupItems setArray:sortedArrayItems];
         }
-
         
         [self.groupsAndFavorites insertObject:itemData atIndex:0];
     }
+    
+    NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+    }];
+    [self.sortedFavoriteItems setArray:sortedArray];
+
     
     // Generate menu items
     FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
@@ -196,6 +195,7 @@ kFavoriteCellType;
                                                       favoriteLon, favoriteLat);
             
     favoriteItem.distance = [app.locationFormatter stringFromDistance:distance];
+    favoriteItem.distanceMeters = distance;
     favoriteItem.direction = DegreesToRadians([[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]]);
 
 }
@@ -257,17 +257,102 @@ kFavoriteCellType;
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    if (self.directionButton.tag == 1)
+        return [self getSortedNumberOfSectionsInTableView];
+    return [self getUnsortedNumberOfSectionsInTableView];
+}
+
+-(NSInteger)getSortedNumberOfSectionsInTableView {
+    return 2;
+}
+
+-(NSInteger)getUnsortedNumberOfSectionsInTableView {
     return [self.groupsAndFavorites count];
 }
 
+
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;}
+    if (self.directionButton.tag == 1)
+        return [self getSortedTitleForHeaderInSection:section];
+    return [self getUnsortedTitleForHeaderInSection:section];
+}
+
+-(NSString*)getSortedTitleForHeaderInSection:(NSInteger)section {
+    if (section == 0)
+        return @"Favorites";
+    return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;
+}
+
+-(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {
+    return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.directionButton.tag == 1)
+        return [self getSortedNumberOfRowsInSection:section];
+    return [self getUnsortedNumberOfRowsInSection:section];
+}
+
+-(NSInteger)getSortedNumberOfRowsInSection:(NSInteger)section {
+    if (section == 0)
+        return [self.sortedFavoriteItems count];
+    return [self.menuItems count];
+}
+
+-(NSInteger)getUnsortedNumberOfRowsInSection:(NSInteger)section {
     return [((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupItems count];
 }
 
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.directionButton.tag == 1)
+        return [self getSortedcellForRowAtIndexPath:indexPath];
+    return [self getUnsortedcellForRowAtIndexPath:indexPath];
+}
+
+-(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+        OAPointTableViewCell* cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        if (cell) {
+            OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            [cell.titleView setText:item.favorite->getTitle().toNSString()];
+            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
+            [cell.colorView setBackgroundColor:color];
+            
+            CGFloat red;
+            CGFloat green;
+            CGFloat blue;
+            CGFloat alpha;
+            [color getRed:&red green:&green blue:&blue alpha:&alpha];
+            
+            if (red > 0.95 && green > 0.95 && blue > 0.95) {
+                cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
+                cell.colorView.layer.borderWidth = 0.8;
+            }
+            
+            [cell.distanceView setText:item.distance];
+            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+        }
+        return cell;
+    } else {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        OAIconTextTableViewCell* cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        if (cell) {
+            NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
+            [cell.textView setText:[item objectForKey:@"text"]];
+            [cell.iconView setImage: [UIImage imageNamed:[item objectForKey:@"icon"]]];
+        }
+        return cell;
+    }
+}
+
+
+- (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
@@ -289,7 +374,6 @@ kFavoriteCellType;
                 cell.colorView.layer.borderWidth = 0.8;
             }
             
-            
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             
@@ -310,6 +394,27 @@ kFavoriteCellType;
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (self.directionButton.tag == 1)
+        [self didSelectRowAtIndexPathSorter:indexPath];
+    else
+        [self didSelectRowAtIndexPathUnsorter:indexPath];
+}
+
+-(void)didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0) {
+        OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+
+        OAFavoriteItemViewController* controller = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
+        [self.navigationController pushViewController:controller animated:YES];
+
+    } else {
+        NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
+        SEL action = NSSelectorFromString([item objectForKey:@"action"]);
+        [self performSelector:action];
+    }
+}
+
+-(void)didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath {
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];

@@ -109,14 +109,14 @@
 
 -(void)setupView {
  
-    self.favoriteNameButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-    self.favoriteNameButton.layer.borderWidth = 1.0;
-    
-    self.favoriteColorButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-    self.favoriteColorButton.layer.borderWidth = 1.0;
-    
-    self.favoriteGroupButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
-    self.favoriteGroupButton.layer.borderWidth = 1.0;
+//    self.favoriteNameButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
+//    self.favoriteNameButton.layer.borderWidth = 1.0;
+//    
+//    self.favoriteColorButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
+//    self.favoriteColorButton.layer.borderWidth = 1.0;
+//    
+//    self.favoriteGroupButton.layer.borderColor = [[UIColor colorWithRed:200.0/255.0 green:200.0/255.0 blue:200.0/255.0 alpha:1.0] CGColor];
+//    self.favoriteGroupButton.layer.borderWidth = 1.0;
     
     self.favoriteColorView.layer.cornerRadius = 10;
     self.favoriteColorView.layer.masksToBounds = YES;
@@ -125,6 +125,8 @@
         self.favoriteColorView.layer.borderColor = [[UIColor blackColor] CGColor];
         self.favoriteColorView.layer.borderWidth = 0.8;
     }
+    
+    [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
     
     // Color
     NSArray* availableColors = [OADefaultFavorite builtinColors];
@@ -162,13 +164,13 @@
         [self.favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
     
     [self.favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
-    [self.favoriteDistanceView setText:self.favorite.distance];
+    [self.favoriteDistance setText:self.favorite.distance];
     
     if (self.newFavorite) {
         [self.saveRemoveButton setTitle:@"Save" forState:UIControlStateNormal];
         [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
         
-        [self.distanceHolderView setHidden:YES];
+        [self.distanceDirectionHolderView setHidden:YES];
         [self.favoriteDirection setHidden:YES];
         [self.favoriteDistance setHidden:YES];
     }

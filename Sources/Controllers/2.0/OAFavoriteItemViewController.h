@@ -28,7 +28,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoriteColorButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteGroupButton;
 
-@property (weak, nonatomic) IBOutlet UILabel *favoriteDistanceView;
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -37,8 +36,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteColorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteGroupView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
-@property (weak, nonatomic) IBOutlet UIImageView *distanceHolderView;
-
+@property (weak, nonatomic) IBOutlet UIView *distanceDirectionHolderView;
 
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation;

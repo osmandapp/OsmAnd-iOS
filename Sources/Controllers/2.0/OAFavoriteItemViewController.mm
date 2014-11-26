@@ -46,7 +46,6 @@
 
 
 @interface OAFavoriteItemViewController ()
-    @property UITextField* nameTextField;
 @end
 
 @implementation OAFavoriteItemViewController
@@ -176,28 +175,27 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)sender{
     OsmAndAppInstance app = [OsmAndApp instance];
     	
-    [self.favoriteNameButton setTitle:self.nameTextField.text forState:UIControlStateNormal];
-    self.favorite.favorite->setTitle(QString::fromNSString(self.nameTextField.text));
+    [self.favoriteNameButton setTitle:self.favoriteNameTextView.text forState:UIControlStateNormal];
+    self.favorite.favorite->setTitle(QString::fromNSString(self.favoriteNameTextView.text));
     [app saveFavoritesToPermamentStorage];
-    [self.nameTextField resignFirstResponder];
-    [self.nameTextField removeFromSuperview];
+    [self.favoriteNameTextView resignFirstResponder];
+    [self.favoriteNameTextView setHidden:YES];
+    
+    [self.favoriteNameButton setTitle:self.favoriteNameTextView.text forState:UIControlStateNormal];
+    
     return YES;
 }
-
--(void)changeName:(id)sender {
-    [self.favoriteNameButton setTitle:self.nameTextField.text forState:UIControlStateNormal];
-}
-
 
 #pragma mark - Actions
 
 - (IBAction)favoriteNameClicked:(id)sender {
-    self.nameTextField = [[UITextField alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    [self.nameTextField addTarget:self action:@selector(changeName:) forControlEvents:UIControlEventEditingChanged];
-    [self.nameTextField setText:self.favorite.favorite->getTitle().toNSString()];
-    [self.nameTextField setDelegate:self];
-    [self.favoriteNameButton addSubview:self.nameTextField];
-    [self.nameTextField becomeFirstResponder];
+    NSString* name = self.favorite.favorite->getTitle().toNSString();
+
+    [self.favoriteNameButton setTitle:@"" forState:UIControlStateNormal];
+    [self.favoriteNameTextView setText:name];
+    [self.favoriteNameTextView setDelegate:self];
+    [self.favoriteNameTextView becomeFirstResponder];
+    [self.favoriteNameTextView setHidden:NO];
     
 }
 

@@ -37,6 +37,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *favoriteGroupView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 @property (weak, nonatomic) IBOutlet UIView *distanceDirectionHolderView;
+@property (weak, nonatomic) IBOutlet UITextField *favoriteNameTextView;
 
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation;

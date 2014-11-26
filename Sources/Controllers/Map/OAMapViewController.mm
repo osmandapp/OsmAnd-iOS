@@ -228,7 +228,6 @@
                                                  name:kNotificationSettingsLanguageChange
                                                object:nil];
 
-
     // Create gesture recognizers:
     
     // - Zoom gesture

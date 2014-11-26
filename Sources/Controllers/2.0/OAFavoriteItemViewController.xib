@@ -17,6 +17,7 @@
                 <outlet property="favoriteGroupButton" destination="8vJ-iV-2xv" id="Y7p-DF-fTa"/>
                 <outlet property="favoriteGroupView" destination="T1q-Tw-WZ4" id="uq0-5z-BI1"/>
                 <outlet property="favoriteNameButton" destination="GTV-SD-sRZ" id="kh2-sp-7Gp"/>
+                <outlet property="favoriteNameTextView" destination="jcp-qm-KsC" id="h07-r4-OD0"/>
                 <outlet property="favoritesButtonView" destination="97S-Ol-wNi" id="Ljk-KJ-di8"/>
                 <outlet property="gpxButtonView" destination="EbN-uw-w8D" id="WQa-s9-tt8"/>
                 <outlet property="mapView" destination="cmp-eQ-cbF" id="9ca-eL-qwO"/>
@@ -88,7 +89,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="52" id="oKZ-DD-suk"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                             <inset key="titleEdgeInsets" minX="14" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="300" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Цвет">
@@ -116,7 +117,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="Ef6-3O-Hsd"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                             <inset key="titleEdgeInsets" minX="14" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="300" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Группа">
@@ -140,7 +141,7 @@
                             <constraints>
                                 <constraint firstAttribute="height" constant="50" id="FYx-Iy-mV6"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Avenir-Light" family="Avenir" pointSize="18"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
                             <inset key="titleEdgeInsets" minX="14" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="300" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <state key="normal" title="Название">
@@ -157,7 +158,7 @@
                                 <constraint firstAttribute="height" constant="16" id="8wm-OE-PSA"/>
                                 <constraint firstAttribute="width" constant="136" id="jhz-0a-ZhJ"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="13"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="13"/>
                             <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
@@ -172,12 +173,17 @@
                                 <constraint firstAttribute="height" constant="20" id="NBp-4Y-A1W"/>
                             </constraints>
                         </view>
+                        <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="jcp-qm-KsC">
+                            <rect key="frame" x="14" y="76" width="292" height="30"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="18"/>
+                            <textInputTraits key="textInputTraits"/>
+                        </textField>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iGf-8G-aVn">
                             <rect key="frame" x="119" y="134" width="136" height="16"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="136" id="2hw-OW-Gp8"/>
                             </constraints>
-                            <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="13"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="13"/>
                             <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>

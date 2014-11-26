@@ -86,7 +86,7 @@
         return 1;
 }
 
-OATextViewTableViewCell* textCell;
+UITextField* textView;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
@@ -104,13 +104,17 @@ OATextViewTableViewCell* textCell;
         return cell;
     } else {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-        textCell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
-        if (textCell) {
-            [textCell.textView setPlaceholder:@"Введите название группы"];
-            [textCell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
-            [textCell.textView setDelegate:self];
+        OATextViewTableViewCell* cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+        if (cell) {
             
-            return textCell;
+            textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];
+            [textView setPlaceholder:@"Введите название группы"];
+            [textView setFont:[UIFont fontWithName:@"AvenirNextCondensed-Regular" size:14]];
+            [textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
+            [textView setDelegate:self];
+            [cell addSubview:textView];
+            
+            return cell;
         }
     
     }
@@ -124,12 +128,8 @@ OATextViewTableViewCell* textCell;
         self.groupName = [self.groups objectAtIndex:indexPath.row];
         [self.tableView reloadData];
     } else {
-        OATextViewTableViewCell* cell = textCell;
-        if (cell) {
-            self.groupName = [cell.textView text];
-            [self.tableView reloadData];
-            [textCell.textView becomeFirstResponder];
-        }
+        self.groupName = [textView text];
+        [self.tableView reloadData];
     }
 }
 

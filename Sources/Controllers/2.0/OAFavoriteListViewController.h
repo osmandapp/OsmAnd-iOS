@@ -26,5 +26,7 @@
 @property CGFloat azimuthDirection;
 
 
+@property NSTimeInterval lastUpdate;
+
 
 @end

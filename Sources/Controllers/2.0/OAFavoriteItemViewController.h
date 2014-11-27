@@ -9,12 +9,15 @@
 #import "OASuperViewController.h"
 #import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
+#import "OAAutoObserverProxy.h"
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 
-@interface OAFavoriteItemViewController : OASuperViewController<UITextFieldDelegate, UIAlertViewDelegate>
+@interface OAFavoriteItemViewController : OASuperViewController<UITextFieldDelegate, UIAlertViewDelegate> {
+NSTimeInterval lastUpdate;
+}
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;
 @property (assign, nonatomic) CLLocationCoordinate2D location;
@@ -45,7 +48,7 @@
 - (IBAction)menuGPXClicked:(id)sender;
 
 
-
+@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 
 @property(readonly) CGFloat displayDensityFactor;
 

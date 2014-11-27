@@ -11,6 +11,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAFavoriteItem.h"
+#import "OAMapViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -60,8 +61,51 @@ kFavoriteCellType;
 @implementation OAFavoriteListViewController
 
 - (void)viewDidLoad {
-    self.sortingType = 0;
     [super viewDidLoad];
+
+    self.sortingType = 0;
+    OsmAndAppInstance app = [OsmAndApp instance];
+
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(updateDistanceAndDirection)
+                                                                     andObserve:app.locationServices.updateObserver];
+
+}
+
+- (void)updateDistanceAndDirection
+{
+    
+    if ([[NSDate date] timeIntervalSince1970] - lastUpdate < 0.5)
+        return;
+        
+    lastUpdate = [[NSDate date] timeIntervalSince1970];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Obtain fresh location and heading
+    CLLocation* newLocation = app.locationServices.lastKnownLocation;
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    ? newLocation.course
+    : newHeading;
+    
+    [self.sortedFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+        const auto& favoritePosition31 = itemData.favorite->getPosition31();
+        const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+        const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+            
+        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                            newLocation.coordinate.latitude,
+                                                            favoriteLon, favoriteLat);
+            
+        itemData.distance = [app.locationFormatter stringFromDistance:distance];
+        itemData.distanceMeters = distance;
+        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+        itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.favoriteTableView reloadData];
+        });
+     }];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -104,7 +148,6 @@ kFavoriteCellType;
             for(const auto& favorite : groupedFavorites[groupName]) {
                 OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
                 favData.favorite = favorite;
-                [self updateDistanceAndDirectionFor:favData];
                 [itemData.groupItems addObject:favData];
                 [self.sortedFavoriteItems addObject:favData];
             }
@@ -137,7 +180,6 @@ kFavoriteCellType;
         {
             OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
             favData.favorite = favorite;
-            [self updateDistanceAndDirectionFor:favData];
             [itemData.groupItems addObject:favData];
             [self.sortedFavoriteItems addObject:favData];
         }
@@ -172,31 +214,6 @@ kFavoriteCellType;
     [self.groupsAndFavorites addObject:itemData];
     
     [self.favoriteTableView reloadData];
-
-}
-
-- (void)updateDistanceAndDirectionFor:(OAFavoriteItem*)favoriteItem
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
- 
-    const auto& favoritePosition31 = favoriteItem.favorite->getPosition31();
-    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-            
-    const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                      newLocation.coordinate.latitude,
-                                                      favoriteLon, favoriteLat);
-            
-    favoriteItem.distance = [app.locationFormatter stringFromDistance:distance];
-    favoriteItem.distanceMeters = distance;
-    favoriteItem.direction = DegreesToRadians([[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]]);
 
 }
 

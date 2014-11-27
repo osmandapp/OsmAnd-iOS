@@ -7,11 +7,12 @@
 //
 
 #import "OASuperViewController.h"
+#import "OAObservable.h"
+#import "OAAutoObserverProxy.h"
 
-/** Degrees to Radian **/
-#define DegreesToRadians( degrees ) ( ( degrees ) / 180.0 * M_PI )
-
-@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate>
+@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate> {
+NSTimeInterval lastUpdate;
+}
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;
@@ -22,6 +23,9 @@
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
 
+
+@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
+@property CGFloat azimuthDirection;
 
 
 

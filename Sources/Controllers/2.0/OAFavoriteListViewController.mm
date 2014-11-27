@@ -69,15 +69,10 @@ kFavoriteCellType;
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-
 }
 
 - (void)updateDistanceAndDirection
 {
-    
-    if ([[NSDate date] timeIntervalSince1970] - lastUpdate < 0.5)
-        return;
-        
     lastUpdate = [[NSDate date] timeIntervalSince1970];
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
@@ -102,10 +97,17 @@ kFavoriteCellType;
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
         itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.favoriteTableView reloadData];
-        });
      }];
+    
+    NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+    }];
+    [self.sortedFavoriteItems setArray:sortedArray];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.favoriteTableView reloadData];
+    });
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -193,6 +195,7 @@ kFavoriteCellType;
         
         [self.groupsAndFavorites insertObject:itemData atIndex:0];
     }
+    [self updateDistanceAndDirection];
     
     NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;

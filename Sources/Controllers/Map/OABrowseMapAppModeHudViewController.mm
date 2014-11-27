@@ -270,7 +270,7 @@ NSLayoutConstraint* targetBottomConstraint;
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
 {
-    self.sidePanelController.recognizesPanGesture = NO;
+    self.sidePanelController.recognizesPanGesture = YES;
     [self.sidePanelController showLeftPanelAnimated:YES];
 }
 

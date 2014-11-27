@@ -10,9 +10,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate> {
-NSTimeInterval lastUpdate;
-}
+@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;

@@ -223,10 +223,6 @@
 
 - (void)updateDistanceAndDirection
 {
-    
-    if ([[NSDate date] timeIntervalSince1970] - lastUpdate < 0.5)
-        return;
-    
     lastUpdate = [[NSDate date] timeIntervalSince1970];
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading

@@ -223,7 +223,6 @@
 
 - (void)updateDistanceAndDirection
 {
-    lastUpdate = [[NSDate date] timeIntervalSince1970];
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;

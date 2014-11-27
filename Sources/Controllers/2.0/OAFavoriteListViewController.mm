@@ -73,7 +73,6 @@ kFavoriteCellType;
 
 - (void)updateDistanceAndDirection
 {
-    lastUpdate = [[NSDate date] timeIntervalSince1970];
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;
@@ -99,10 +98,12 @@ kFavoriteCellType;
         
      }];
     
-    NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-        return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
-    }];
-    [self.sortedFavoriteItems setArray:sortedArray];
+    if (self.sortingType == 1) {
+        NSArray *sortedArray = [self.sortedFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+            return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+        }];
+        [self.sortedFavoriteItems setArray:sortedArray];
+    }
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.favoriteTableView reloadData];

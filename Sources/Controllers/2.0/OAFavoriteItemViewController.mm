@@ -101,11 +101,16 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    OsmAndAppInstance app = [OsmAndApp instance];
     
     UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 200 - 64)];
     [mapButton setTitle:@"" forState:UIControlStateNormal];
     [mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:mapButton];
+    
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(updateDistanceAndDirection)
+                                                                     andObserve:app.locationServices.updateObserver];
     
 }
 
@@ -216,13 +221,47 @@
         [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void)updateDistanceAndDirection
+{
+    
+    if ([[NSDate date] timeIntervalSince1970] - lastUpdate < 0.5)
+        return;
+    
+    lastUpdate = [[NSDate date] timeIntervalSince1970];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Obtain fresh location and heading
+    CLLocation* newLocation = app.locationServices.lastKnownLocation;
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection =
+    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+    ? newLocation.course
+    : newHeading;
+    
+    const auto& favoritePosition31 = self.favorite.favorite->getPosition31();
+    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+        
+    const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                        newLocation.coordinate.latitude,
+                                                        favoriteLon, favoriteLat);
+        
+    self.favorite.distance = [app.locationFormatter stringFromDistance:distance];
+    self.favorite.distanceMeters = distance;
+    CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+    self.favorite.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+        
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.favoriteDistance setText:self.favorite.distance];
+        self.favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
+    });
+}
+
 -(IBAction)backButtonClicked:(id)sender {
     OsmAndAppInstance app = [OsmAndApp instance];
     if (self.newFavorite) {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
     }
-    
     [super backButtonClicked:sender];
 }
 

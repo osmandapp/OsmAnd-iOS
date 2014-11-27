@@ -556,9 +556,10 @@
     return [_app.locationFormatter stringFromBearingFromLocation:self.lastKnownLocation toLocation:destinationLocation];
 }
 
+// Relative to north
 - (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation
 {
-    return [self radiusFromBearing:[self locationDegreesBearingBetweenCoordinates:self.lastKnownLocation.coordinate andCoordinates:destinationLocation.coordinate]];
+    return [self locationDegreesBearingBetweenCoordinates:self.lastKnownLocation.coordinate andCoordinates:destinationLocation.coordinate];
 }
 
 static inline double DEG2RAD(double degrees) {

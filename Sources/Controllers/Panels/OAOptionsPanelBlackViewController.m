@@ -10,6 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "OASettingsViewController.h"
 #import "OAFavoriteListViewController.h"
+#import "OAWebViewController.h"
 
 @interface OAOptionsPanelBlackViewController ()
 
@@ -72,6 +73,8 @@
 }
 
 - (IBAction)quizButtonClicked:(id)sender {
+    OAWebViewController* quizViewController = [[OAWebViewController alloc] initWithUrl:@"http://kwiksurveys.com/app/showpoll.asp?qid=457757&sid=iis3saqkqrn2pos457757&new=True"];
+    [self.navigationController pushViewController:quizViewController animated:YES];
 }
 
 

@@ -47,6 +47,12 @@
 		3A91739A1A09203D000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9173991A09203D000B22C5 /* OAOptionsPanelBlackViewController.m */; };
 		3A91739B1A09277E000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9173991A09203D000B22C5 /* OAOptionsPanelBlackViewController.m */; };
 		3A91739C1A09277F000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9173991A09203D000B22C5 /* OAOptionsPanelBlackViewController.m */; };
+		3AC09BCB1A2783ED002698FE /* OAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC09BC91A2783ED002698FE /* OAWebViewController.m */; };
+		3AC09BCC1A2783ED002698FE /* OAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC09BC91A2783ED002698FE /* OAWebViewController.m */; };
+		3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC09BC91A2783ED002698FE /* OAWebViewController.m */; };
+		3AC09BCE1A2783ED002698FE /* OAWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */; };
+		3AC09BCF1A2783ED002698FE /* OAWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */; };
+		3AC09BD01A2783ED002698FE /* OAWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */; };
 		3AC2D50719F0056300DC8556 /* OAAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC2D50619F0056300DC8556 /* OAAppSettings.m */; };
 		3AC2D50819F007DD00DC8556 /* OAAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC2D50619F0056300DC8556 /* OAAppSettings.m */; };
 		3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC2D50619F0056300DC8556 /* OAAppSettings.m */; };
@@ -881,6 +887,9 @@
 		3A8314851A07EB4C00473C38 /* OATargetPointView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetPointView.mm; path = Views/OATargetPointView.mm; sourceTree = "<group>"; };
 		3A9173981A09203D000B22C5 /* OAOptionsPanelBlackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOptionsPanelBlackViewController.h; path = Controllers/Panels/OAOptionsPanelBlackViewController.h; sourceTree = "<group>"; };
 		3A9173991A09203D000B22C5 /* OAOptionsPanelBlackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOptionsPanelBlackViewController.m; path = Controllers/Panels/OAOptionsPanelBlackViewController.m; sourceTree = "<group>"; };
+		3AC09BC81A2783ED002698FE /* OAWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebViewController.h; path = Sources/Controllers/2.0/OAWebViewController.h; sourceTree = "<group>"; };
+		3AC09BC91A2783ED002698FE /* OAWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWebViewController.m; path = Sources/Controllers/2.0/OAWebViewController.m; sourceTree = "<group>"; };
+		3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWebViewController.xib; path = Sources/Controllers/2.0/OAWebViewController.xib; sourceTree = "<group>"; };
 		3AC2D50519F0056300DC8556 /* OAAppSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAAppSettings.h; path = Helpers/OAAppSettings.h; sourceTree = "<group>"; };
 		3AC2D50619F0056300DC8556 /* OAAppSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAAppSettings.m; path = Helpers/OAAppSettings.m; sourceTree = "<group>"; };
 		3AC2D50B19F0111C00DC8556 /* OASettingsActionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASettingsActionsViewController.h; path = Controllers/Settings/OASettingsActionsViewController.h; sourceTree = "<group>"; };
@@ -1439,6 +1448,9 @@
 				3AC639991A1CE1FC001D5E57 /* OAIntroViewController.h */,
 				3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.m */,
 				3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */,
+				3AC09BC81A2783ED002698FE /* OAWebViewController.h */,
+				3AC09BC91A2783ED002698FE /* OAWebViewController.m */,
+				3AC09BCA1A2783ED002698FE /* OAWebViewController.xib */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -2303,6 +2315,7 @@
 				3AFEEE431A0E34FD00900A47 /* menu_button@2x.png in Resources */,
 				3AC40AD319DEB80F002FBC40 /* Btn-Pause.png in Resources */,
 				3AFEEE3D1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
+				3AC09BCE1A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				3AFEEE4C1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				3AFEEE821A0FBF6E00900A47 /* onmap_placeholder@2x.png in Resources */,
 				BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
@@ -2477,6 +2490,7 @@
 				3AFEEE441A0E34FD00900A47 /* menu_button@2x.png in Resources */,
 				BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				3AFEEE3E1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
+				3AC09BCF1A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				3AFEEE4D1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				3AFEEE831A0FBF6E00900A47 /* onmap_placeholder@2x.png in Resources */,
 				BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
@@ -2695,6 +2709,7 @@
 				BBA3AFBF197FC4BB0039D991 /* free_map_mode_button@2x.png in Resources */,
 				3AC639AF1A1D0115001D5E57 /* IntroView_1.xib in Resources */,
 				BBA3AFC0197FC4BB0039D991 /* HUD_compass@2x.png in Resources */,
+				3AC09BD01A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				BBA3AFC1197FC4BB0039D991 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				3AFEEEC91A13A87B00900A47 /* btn_map_type_icon_view@2x.png in Resources */,
 				BBA3AFC2197FC4BB0039D991 /* HUD_more_halfbutton@2x.png in Resources */,
@@ -2885,6 +2900,7 @@
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
+				3AC09BCB1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				3A91739A1A09203D000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
@@ -2978,6 +2994,7 @@
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
+				3AC09BCC1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				3A91739C1A09277F000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
@@ -3145,6 +3162,7 @@
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */,
 				3AC639B41A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */,
+				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
 				BBA3AF65197FC4BB0039D991 /* OAFavoritesLayerViewController.mm in Sources */,

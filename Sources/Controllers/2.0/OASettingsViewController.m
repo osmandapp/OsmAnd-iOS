@@ -44,10 +44,10 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
         case kSettingsScreenGeneral: {
-            NSString* appModeValue = settings.settingAppMode == 0 ? @"Day" : (settings.settingAppMode == 1 ? @"Night" : @"Autoselect");
+            NSString* appModeValue = settings.settingAppMode == 0 ? @"Day" : @"Night";
             NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Kilometers" : @"Miles";
             NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
-            NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"DDD.DD" : @"DD.DDD";
+            NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"Degrees" : @"Degrees and Minutes";
             
             self.data = @[@{@"name": @"Maps & Resources", @"value": @"", @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Application mode", @"value": appModeValue, @"img": @"menu_cell_pointer.png"},
@@ -61,8 +61,7 @@
             break;
         case kSettingsScreenAppMode:
             self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Autoselect", @"value": @"", @"img": settings.settingAppMode == 2 ? @"menu_cell_selected.png" : @""}
+                          @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenMetricSystem:
@@ -76,8 +75,8 @@
                           ];
             break;
         case kSettingsScreenGeoCoords:
-            self.data = @[@{@"name": @"DDD.DD", @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"DD.DDD", @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": @"Degrees", @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Degrees and Minutes", @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         default:

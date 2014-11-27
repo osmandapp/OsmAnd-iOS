@@ -22,6 +22,7 @@ pod 'RegexKitLite', '~> 4.0'
 pod 'MBProgressHUD', '~> 0.9'
 pod 'CocoaSecurity', '~> 1.2.4'
 pod 'MYBlurIntroductionView', '~> 1.0.3'
+pod 'TPKeyboardAvoiding', '~> 1.2.3'
 
 # Development-only dependencies
 target :dev do

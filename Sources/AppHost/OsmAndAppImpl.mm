@@ -283,14 +283,48 @@
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
 
-- (TTTLocationFormatter*)locationFormatter
+- (TTTLocationFormatter*)locationFormatterDigits
 {
     TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
 
-    formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+
+    if (settings.settingGeoFormat == 0) // Degree
+        formatter.coordinateStyle = TTTDegreesFormat;
+    else
+        formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
+
+    [formatter.numberFormatter setMaximumSignificantDigits:7];
+    
+    if (settings.settingMetricSystem)
+        formatter.unitSystem = TTTImperialSystem;
+    else
+        formatter.unitSystem = TTTMetricSystem;
 
     return formatter;
 }
+
+
+- (TTTLocationFormatter*)locationFormatter
+{
+    TTTLocationFormatter* formatter = [[TTTLocationFormatter alloc] init];
+    
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    
+    if (settings.settingGeoFormat == 0) // Degree
+        formatter.coordinateStyle = TTTDegreesFormat;
+    else
+        formatter.coordinateStyle = TTTDegreesMinutesSecondsFormat;
+    
+    if (settings.settingMetricSystem)
+        formatter.unitSystem = TTTImperialSystem;
+    else
+        formatter.unitSystem = TTTMetricSystem;
+    
+    return formatter;
+}
+
+
 
 - (unsigned long long)freeSpaceAvailableOnDevice
 {

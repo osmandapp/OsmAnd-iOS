@@ -98,7 +98,9 @@ kFavoriteCellType;
         const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                             newLocation.coordinate.latitude,
                                                             favoriteLon, favoriteLat);
-            
+        
+
+        
         itemData.distance = [app.locationFormatter stringFromDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];

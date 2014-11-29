@@ -56,6 +56,7 @@
 @property(readonly) NSString* favoritesStorageFilename;
 - (void)saveFavoritesToPermamentStorage;
 
+- (TTTLocationFormatter*)locationFormatterDigits;
 - (TTTLocationFormatter*)locationFormatter;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;

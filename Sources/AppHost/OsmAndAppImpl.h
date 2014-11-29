@@ -11,6 +11,7 @@
 #import "OsmAndAppProtocol.h"
 #import "OsmAndAppCppProtocol.h"
 #import "OsmAndAppPrivateProtocol.h"
+#import "OAAppSettings.h"
 
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>
 

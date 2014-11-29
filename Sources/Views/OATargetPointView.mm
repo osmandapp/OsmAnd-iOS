@@ -84,7 +84,8 @@
     self.lat = lat;
     self.lon = lon;
     self.touchPoint = touchPoint;
-    self.formattedLocation = [[[OsmAndApp instance] locationFormatter] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+
+    self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
     [self.coordinateLabel setText:self.formattedLocation];
 }
 

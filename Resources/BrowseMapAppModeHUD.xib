@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -39,8 +39,39 @@
                         <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="8sR-Ef-2iJ"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="8" y="21" width="40" height="40"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duk-mu-8Hu" userLabel="compassButton">
+                            <rect key="frame" x="5" y="5" width="30" height="30"/>
+                            <state key="normal" backgroundImage="HUD_compass_bg.png">
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="tcA-jH-xge"/>
+                            </connections>
+                        </button>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
+                            <rect key="frame" x="17" y="11" width="6" height="18"/>
+                            <accessibility key="accessibilityConfiguration">
+                                <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
+                            </accessibility>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="18" id="9pA-ey-0aR"/>
+                                <constraint firstAttribute="width" constant="6" id="koj-YJ-iSF"/>
+                            </constraints>
+                        </imageView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstAttribute="bottom" secondItem="duk-mu-8Hu" secondAttribute="bottom" constant="5" id="AsG-GZ-wLJ"/>
+                        <constraint firstItem="qfF-4i-ios" firstAttribute="centerX" secondItem="duk-mu-8Hu" secondAttribute="centerX" id="CTE-sI-cl0"/>
+                        <constraint firstItem="duk-mu-8Hu" firstAttribute="top" secondItem="zKf-ZI-4L4" secondAttribute="top" constant="5" id="E8T-YM-82B"/>
+                        <constraint firstItem="qfF-4i-ios" firstAttribute="centerY" secondItem="duk-mu-8Hu" secondAttribute="centerY" id="Epi-2B-FSV"/>
+                        <constraint firstItem="duk-mu-8Hu" firstAttribute="leading" secondItem="zKf-ZI-4L4" secondAttribute="leading" constant="5" id="IZL-u4-aea"/>
+                        <constraint firstAttribute="width" constant="40" id="Liw-Ns-n88"/>
+                        <constraint firstAttribute="height" constant="40" id="YdJ-lK-Dr9"/>
+                        <constraint firstAttribute="trailing" secondItem="duk-mu-8Hu" secondAttribute="trailing" constant="5" id="hdu-9C-Qkm"/>
+                    </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
                     <rect key="frame" x="224" y="515" width="40" height="40"/>
@@ -95,21 +126,6 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="udt-Zy-sVw"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duk-mu-8Hu" userLabel="compassButton">
-                    <rect key="frame" x="13" y="26" width="30" height="30"/>
-                    <state key="normal" backgroundImage="HUD_compass_bg.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="tcA-jH-xge"/>
-                    </connections>
-                </button>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
-                    <rect key="frame" x="25" y="32" width="6" height="18"/>
-                    <accessibility key="accessibilityConfiguration">
-                        <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
-                    </accessibility>
-                </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton">
                     <rect key="frame" x="0.0" y="509" width="45" height="51"/>
                     <constraints>
@@ -147,9 +163,11 @@
                 <constraint firstAttribute="centerY" secondItem="o72-6U-6Av" secondAttribute="centerY" id="WY4-Qk-vnm"/>
                 <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Wql-rL-VXF"/>
                 <constraint firstAttribute="trailing" secondItem="Tol-6L-Amr" secondAttribute="trailing" constant="8" id="be4-qD-Mmh"/>
+                <constraint firstItem="zKf-ZI-4L4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="biP-He-Q3z"/>
                 <constraint firstAttribute="trailing" secondItem="iT3-1A-Wkq" secondAttribute="trailing" id="d3L-AV-1n6"/>
                 <constraint firstItem="Tol-6L-Amr" firstAttribute="leading" secondItem="QPn-ok-Vxm" secondAttribute="trailing" constant="8" id="fYf-S2-WDq"/>
                 <constraint firstAttribute="bottom" secondItem="Tol-6L-Amr" secondAttribute="bottom" constant="13" id="hCo-YU-PuE"/>
+                <constraint firstItem="zKf-ZI-4L4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="hka-rL-j1F"/>
                 <constraint firstAttribute="bottom" secondItem="4" secondAttribute="bottom" constant="8" id="iDp-Mi-eNa"/>
             </constraints>
         </view>

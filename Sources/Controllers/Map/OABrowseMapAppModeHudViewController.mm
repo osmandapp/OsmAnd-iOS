@@ -107,8 +107,6 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     
-                             //    postNotificationName:kSetTargetPointNotification object:@[[NSNumber numberWithDouble:lat], [NSNumber numberWithDouble:lon]]];
-    
 }
 
 - (void)deinit

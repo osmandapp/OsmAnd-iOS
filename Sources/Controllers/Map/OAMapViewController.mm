@@ -209,6 +209,8 @@
     _layersConfigurationObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLayersConfigurationChanged)
                                                               andObserve:_app.data.mapLayersConfiguration.changeObservable];
+    
+    
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
 

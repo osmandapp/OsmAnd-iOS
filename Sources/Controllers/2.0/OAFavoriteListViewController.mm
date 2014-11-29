@@ -313,8 +313,42 @@ kFavoriteCellType;
 }
 
 - (IBAction)shareButtonClicked:(id)sender {
-}
+    // Share selected favorites
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0) {
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select favorites to export" delegate:nil cancelButtonTitle:@"No" otherButtonTitles:nil];
+        [removeAlert show];
+        return;
+    }
 
+    NSArray* selectedItems = [self getItemsForRows:selectedRows];
+    std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> exportCollection(new OsmAnd::FavoriteLocationsGpxCollection());
+    [selectedItems enumerateObjectsUsingBlock:^(OAFavoriteItem* obj, NSUInteger idx, BOOL *stop) {
+        exportCollection->copyFavoriteLocation(obj.favorite);
+    }];
+
+    if (exportCollection->getFavoriteLocationsCount() == 0)
+        return;
+        
+    NSString* filename = [OALocalizedString(@"Exported favorites") stringByAppendingString:@".gpx"];
+    NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
+    if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
+        return;
+        
+    NSURL* favoritesUrl = [NSURL fileURLWithPath:fullFilename];
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
+    _exportController.UTI = @"net.osmand.gpx";
+    _exportController.delegate = self;
+    _exportController.name = filename;
+    [_exportController presentOptionsMenuFromRect:CGRectZero
+                                           inView:self.view
+                                         animated:YES];
+    
+    [self editButtonClicked:nil];
+    [self generateData];
+
+    
+}
 
 - (IBAction)menuFavoriteClicked:(id)sender {
 }

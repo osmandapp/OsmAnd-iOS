@@ -111,7 +111,6 @@
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -217,8 +216,9 @@
     if (!self.newFavorite) {
         UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove favorite item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
         [removeAlert show];
-    } else
+    } else {
         [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 - (void)updateDistanceAndDirection
@@ -292,6 +292,7 @@
     [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition31()]
                                                     andZoom:kDefaultFavoriteZoom
                                                    animated:YES];
+    
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

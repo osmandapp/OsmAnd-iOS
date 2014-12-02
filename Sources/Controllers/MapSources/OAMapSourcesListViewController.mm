@@ -178,7 +178,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andVariant:onlineTileSource->name.toNSString()];
+                                                        andVariant:onlineTileSource->name.toNSString()];
             item.resource = resource;
             item.onlineTileSource = onlineTileSource;
 

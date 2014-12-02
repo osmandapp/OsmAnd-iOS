@@ -7,9 +7,10 @@
 //
 
 #import "OASuperViewController.h"
+#import "HTAutocompleteTextField.h"
 
 #import "MYBlurIntroductionView.h"
 
-@interface OAIntroViewController : OASuperViewController<MYIntroductionDelegate, UITextFieldDelegate>
+@interface OAIntroViewController : OASuperViewController<MYIntroductionDelegate, UITextFieldDelegate, HTAutocompleteTextFieldDelegate>
 
 @end

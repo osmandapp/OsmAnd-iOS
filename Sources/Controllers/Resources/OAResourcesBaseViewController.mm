@@ -391,7 +391,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
-    
+
+    NSLog(resource->id.toNSString());
+
     NSString* name = [self.class titleOfResource:resource
                                   inRegion:self.region
                             withRegionName:YES];

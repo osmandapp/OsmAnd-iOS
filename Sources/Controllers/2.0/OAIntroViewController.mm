@@ -9,6 +9,12 @@
 #import "OAIntroViewController.h"
 #import "Localization.h"
 #import "OAInitViewPanel.h"
+#import "OsmAndApp.h"
+#import "OAResourcesBaseViewController.h"
+#import "OAAutocompleteManager.h"
+
+
+#import "Localization.h"
 
 
 @interface OAIntroViewController ()
@@ -53,6 +59,8 @@
     [panel3.countryName setLeftViewMode:UITextFieldViewModeAlways];
     panel3.countryName.layer.cornerRadius = 5;
     panel3.countryName.delegate = self;
+    [panel3.countryName setKeyboardType:UIKeyboardTypeAlphabet];
+    
     
     NSArray *panels = @[panel1, panel2, panel3];
     //Create the introduction view and set its delegate
@@ -78,6 +86,62 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)sender{
     [sender resignFirstResponder];
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
+    
+    __block OAWorldRegion* region;
+    NSString* lcString = [sender.text lowercaseString];
+    [[OAAutocompleteManager sharedManager].regionList enumerateObjectsUsingBlock:^(OAWorldRegion* obj, NSUInteger idx, BOOL *stop) {
+        
+        if ( (obj.name && [[obj.name lowercaseString] isEqualToString:lcString]) ||
+            (obj.localizedName && [[obj.localizedName lowercaseString] isEqualToString:lcString]) ) {
+            region = obj;
+            *stop = YES;
+        }
+    }];
+    
+    if (!region) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region named %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return YES;
+    }
+    
+    const auto regionId = QString::fromNSString(region.regionId);
+    const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+    
+    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > resourcesInRepository = app.resourcesManager->getResourcesInRepository();
+    QString resourceId;
+    for (const auto& resource : resourcesInRepository)
+    {
+        if (!resource->id.startsWith(downloadsIdPrefix))
+            continue;
+
+        resourceId = resource->id;
+        break;
+    }
+    
+    if (resourceId.isNull() || resourceId.isEmpty()) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region named %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return YES;
+    }
+    
+    const auto resourceInRepository = app.resourcesManager->getResourceInRepository(resourceId);
+    [OAResourcesBaseViewController startBackgroundDownloadOf:resourceInRepository];
+    
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeCustomView;
+    hud.detailsLabelText = OALocalizedString(@"Downloading map of %@ is started", sender.text);
+    [hud hide:YES afterDelay:2.0];
+    
+    double delayInSeconds = 2.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    });
+    
     return YES;
 }
 

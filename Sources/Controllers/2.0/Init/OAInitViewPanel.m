@@ -37,7 +37,17 @@
     NSLog(@"Panel Did Appear");
     //You can use a MYIntroductionPanel subclass to create custom events and transitions for your introduction view
     [self.parentIntroductionView setEnabled:NO];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [self addGestureRecognizer:tap];
+
 }
+
+- (void)tap:(id)sender
+{
+    [self endEditing:YES];
+}
+
 
 -(void)panelDidDisappear{
     NSLog(@"Panel Did Disappear");

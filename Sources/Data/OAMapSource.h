@@ -12,7 +12,7 @@
 
 - (instancetype)initWithResource:(NSString*)resourceId;
 - (instancetype)initWithResource:(NSString*)resourceId
-        andVariant:(NSString*)variant;
+                      andVariant:(NSString*)variant;
 
 // "OnlineTileSources" or "MapStyle" resource
 @property(readonly) NSString* resourceId;
@@ -20,5 +20,7 @@
 // For "OnlineTileSources": name of source
 // For "MapStyle": name of preset or nil
 @property(readonly) NSString* variant;
+
+@property int type;
 
 @end

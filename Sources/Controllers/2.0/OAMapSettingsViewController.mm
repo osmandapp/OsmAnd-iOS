@@ -60,6 +60,28 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 };
 #endif // defined(OSMAND_IOS_DEV)
 
+
+
+@interface OAMapStyle : NSObject
+    @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
+@end
+@implementation OAMapStyle
+@end
+
+@interface OAMapStylePreset : NSObject
+    @property OAMapSource* mapSource;
+    @property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
+    @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
+@end
+@implementation OAMapStylePreset
+@end
+
+
+
+
+
+
+
 @interface OAMapSettingsViewController ()
 
 @property NSArray* tableData;
@@ -133,8 +155,6 @@ float _lastAzimuthInPositionTrack;
     [super viewDidLoad];
     [self setupView];
     
-    
-    
     // LoadView
     NSLog(@"Creating Map Renderer view...");
 
@@ -148,10 +168,6 @@ float _lastAzimuthInPositionTrack;
     // Update layers
     [self updateLayers];
     //
-    
-    
-    
-    
     
     // Tell view to create context
     self.mapView.userInteractionEnabled = YES;
@@ -242,7 +258,7 @@ float _lastAzimuthInPositionTrack;
 
     _lastPositionTrackStateCaptured = false;
     
-//    // Create favorites presenter
+    // Create favorites presenter
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
                                                                      [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
     
@@ -468,7 +484,7 @@ float _lastAzimuthInPositionTrack;
     // Update map source (if needed)
     if (_mapSourceInvalidated)
     {
-        [self updateCurrentMapSource];
+        //[self updateCurrentMapSource];
         _mapSourceInvalidated = NO;
     }
 
@@ -545,7 +561,6 @@ float _lastAzimuthInPositionTrack;
                                                                                      self.displayDensityFactor,
                                                                                      QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
                                                                                      langPreferences));
-            
             
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
@@ -637,23 +652,10 @@ float _lastAzimuthInPositionTrack;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 -(void)setupView {
     [self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
-    [self setupMapTypeButtons:0];
+    
+    [self setupMapTypeButtons:self.app.data.lastMapSource.type];
     
     [self.tableView setDelegate:self];
     [self.tableView setDataSource:self];
@@ -765,6 +767,33 @@ float _lastAzimuthInPositionTrack;
 - (IBAction)changeMapTypeButtonClicked:(id)sender {
     int type = ((UIButton*)sender).tag;
     [self setupMapTypeButtons:type];
+    
+    
+    OAMapSource* mapSource = _app.data.lastMapSource;
+    const auto resource = self.app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+    NSString* resourceId = resource->id.toNSString();
+    
+    // Get the style
+    const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+    OAMapStyle* mapStyleItem = [[OAMapStyle alloc] init];
+    mapStyleItem.mapStyle = mapStyle;
+    const auto& presets = self.app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+    
+    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsViewController typeToMapStyle:type];
+
+    for(const auto& preset : presets)
+    {
+        if (preset->type != selectedType)
+            continue;
+        OAMapStylePreset* item = [[OAMapStylePreset alloc] init];
+        item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
+                                                    andVariant:preset->name.toNSString()];
+        item.mapStylePreset = preset;
+        item.mapStyle = mapStyle;
+        
+        _app.data.lastMapSource = item.mapSource;
+    }
+    
 }
 
 
@@ -827,5 +856,42 @@ float _lastAzimuthInPositionTrack;
     return UIInterfaceOrientationPortrait;
 }
 
++(OsmAnd::MapStylePreset::Type)typeToMapStyle:(int)type {
+    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
+    if (type == 1) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Car;
+    } else if (type == 2) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
+    } else if (type == 3) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
+    }
+    return mapStyle;
+}
 
++(OsmAnd::MapStylePreset::Type)variantToMapStyle:(NSString*)variant {
+    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
+    if ([variant isEqualToString:@""]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Car;
+    } else if ([variant isEqualToString:@""]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
+    } else if ([variant isEqualToString:@""]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
+    }
+    return mapStyle;
+}
+
++(int)mapStyleToType:(OsmAnd::MapStylePreset::Type)mapStyle {
+    int type = 0;
+    if (mapStyle == OsmAnd::MapStylePreset::Type::Car) {
+        type = 1;
+    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Pedestrian) {
+        type = 2;
+    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Bicycle) {
+        type = 3;
+    }
+    return type;
+}
+
+
+        
 @end

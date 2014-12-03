@@ -8,6 +8,7 @@
 
 #import "OAInitViewPanel.h"
 #import "MYBlurIntroductionView.h"
+#import "OAAutocompleteManager.h"
 
 @implementation OAInitViewPanel
 
@@ -22,6 +23,9 @@
 - (id)initWithFrame:(CGRect)frame nibNamed:(NSString *)nibName {
     self = [super initWithFrame:frame nibNamed:nibName];
     [self.parentIntroductionView setEnabled:NO];
+    
+    [HTAutocompleteTextField setDefaultAutocompleteDataSource:[OAAutocompleteManager sharedManager]];
+    
     return self;
 }
 
@@ -32,8 +36,7 @@
 -(void)panelDidAppear{
     NSLog(@"Panel Did Appear");
     //You can use a MYIntroductionPanel subclass to create custom events and transitions for your introduction view
-    if (self.parentIntroductionView.CurrentPanelIndex == 2)
-        [self.parentIntroductionView setEnabled:NO];
+    [self.parentIntroductionView setEnabled:NO];
 }
 
 -(void)panelDidDisappear{

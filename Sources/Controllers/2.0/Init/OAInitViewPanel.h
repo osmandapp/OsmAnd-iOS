@@ -7,6 +7,7 @@
 //
 
 #import "MYIntroductionPanel.h"
+#import "HTAutocompleteTextField.h"
 
 @interface OAInitViewPanel : MYIntroductionPanel <UITextViewDelegate> {
     
@@ -15,7 +16,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
 @property (weak, nonatomic) IBOutlet UILabel *labelView;
 @property (weak, nonatomic) IBOutlet UILabel *descriptionView;
-@property (weak, nonatomic) IBOutlet UITextField *countryName;
+@property (weak, nonatomic) IBOutlet HTAutocompleteTextField *countryName;
 
 - (IBAction)nextButtonClicked:(id)sender;
 - (id)initWithFrame:(CGRect)frame nibNamed:(NSString *)nibName;

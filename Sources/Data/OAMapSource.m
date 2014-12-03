@@ -34,7 +34,7 @@
 }
 
 - (instancetype)initWithResource:(NSString*)resourceId
-            andVariant:(NSString*)variant
+                      andVariant:(NSString*)variant
 {
     self = [super init];
     if (self) {
@@ -82,6 +82,7 @@
         [self commonInit];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
+
         if (_variant == (id)[NSNull null])
             _variant = nil;
     }
@@ -93,7 +94,7 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
-                                                             andVariant:_variant];
+                                                                 andVariant:_variant];
 
     return clone;
 }

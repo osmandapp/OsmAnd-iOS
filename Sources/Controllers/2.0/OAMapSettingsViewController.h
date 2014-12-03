@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 
+
 @interface OAMapSettingsViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

@@ -350,9 +350,6 @@
 
     // Add context pin markers
     [mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
-
-    // Update layers
-    [self updateLayers];
 }
 
 - (void)viewDidLoad
@@ -428,6 +425,7 @@
         [mapDownloadAlert show];
         
     }
+
 }
 
 - (void)viewDidDisappear:(BOOL)animated

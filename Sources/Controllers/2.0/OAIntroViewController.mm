@@ -59,8 +59,6 @@
     [panel3.countryName setLeftViewMode:UITextFieldViewModeAlways];
     panel3.countryName.layer.cornerRadius = 5;
     panel3.countryName.delegate = self;
-    [panel3.countryName setKeyboardType:UIKeyboardTypeAlphabet];
-    
     
     NSArray *panels = @[panel1, panel2, panel3];
     //Create the introduction view and set its delegate
@@ -87,7 +85,6 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)sender{
     [sender resignFirstResponder];
     OsmAndAppInstance app = [OsmAndApp instance];
-    
     
     __block OAWorldRegion* region;
     NSString* lcString = [sender.text lowercaseString];

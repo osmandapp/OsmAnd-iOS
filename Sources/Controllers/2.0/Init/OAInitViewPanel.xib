@@ -45,7 +45,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                    <textInputTraits key="textInputTraits"/>
+                    <textInputTraits key="textInputTraits" autocapitalizationType="words"/>
                     <connections>
                         <action selector="countryNameChanged:" destination="Lb2-RB-d1C" eventType="editingChanged" id="jqm-Xe-fSQ"/>
                     </connections>

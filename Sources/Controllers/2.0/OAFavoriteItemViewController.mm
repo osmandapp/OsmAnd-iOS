@@ -17,6 +17,7 @@
 #import "OADefaultFavorite.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
+#import "OAGPXListViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -274,6 +275,8 @@
 }
 
 - (IBAction)menuGPXClicked:(id)sender {
+    OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
+    [self.navigationController pushViewController:favController animated:NO];
 }
 
 

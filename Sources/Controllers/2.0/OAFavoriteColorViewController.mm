@@ -10,6 +10,7 @@
 #import "OAViewTextTableViewCell.h"
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
+#import "OAGPXListViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -138,6 +139,8 @@
 }
 
 - (IBAction)gpxClicked:(id)sender {
+    OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
+    [self.navigationController pushViewController:favController animated:NO];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "OAFavoriteItemViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAMapViewController.h"
+#import "OAGPXListViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -356,6 +357,12 @@ kFavoriteCellType;
 }
 
 - (IBAction)menuGPXClicked:(id)sender {
+    OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
+    [self.navigationController pushViewController:favController animated:NO];
+}
+
+- (IBAction)goRootScreen:(id)sender {
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 -(void)onImportClicked {

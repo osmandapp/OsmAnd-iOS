@@ -55,6 +55,7 @@
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 
 @synthesize favoritesCollection = _favoritesCollection;
+@synthesize gpxCollection = _gpxCollection;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -162,6 +163,34 @@
                                                                       [_favoriteChangedObservable notifyEventWithKey:self
                                                                                                             andValue:favoriteLocation->getTitle().toNSString()];
                                                                   });
+    
+    
+    // Load GPX
+//    _gpxCollectionChangedObservable = [[OAObservable alloc] init];
+//    _gpxChangedObservable = [[OAObservable alloc] init];
+    _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
+    _gpxCollection.reset(new OsmAnd::GpxDocument());
+    _gpxCollection->loadFrom(QString::fromNSString(_gpxFilename));
+
+    
+//    _gpxCollection->collectionChangeObservable.attach((__bridge const void*)self,
+//                                                            [self]
+//                                                            (const OsmAnd::IFavoriteLocationsCollection* const collection)
+//                                                            {
+//                                                                [_gpxCollectionChangedObservable notifyEventWithKey:self];
+//                                                            });
+//    _gpxCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+//                                                                  [self]
+//                                                                  (const OsmAnd::IFavoriteLocationsCollection* const collection,
+//                                                                   const std::shared_ptr<const OsmAnd::IFavoriteLocation>& favoriteLocation)
+//                                                                  {
+//                                                                      [_gpxChangedObservable notifyEventWithKey:self
+//                                                                                                            andValue:favoriteLocation->getTitle().toNSString()];
+//                                                                  });
+    
+    
+    
+    
 
     // Load resources list
     
@@ -263,7 +292,11 @@
 @synthesize favoritesCollectionChangedObservable = _favoritesCollectionChangedObservable;
 @synthesize favoriteChangedObservable = _favoriteChangedObservable;
 
+@synthesize gpxCollectionChangedObservable = _gpxCollectionChangedObservable;
+@synthesize gpxChangedObservable = _gpxChangedObservable;
+
 @synthesize favoritesStorageFilename = _favoritesFilename;
+@synthesize gpxStorageFilename = _gpxFilename;
 
 - (void)saveDataToPermamentStorage
 {

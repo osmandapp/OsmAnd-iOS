@@ -54,6 +54,11 @@
 @property(readonly) OAObservable* favoritesCollectionChangedObservable;
 @property(readonly) OAObservable* favoriteChangedObservable;
 @property(readonly) NSString* favoritesStorageFilename;
+
+@property(readonly) OAObservable* gpxCollectionChangedObservable;
+@property(readonly) OAObservable* gpxChangedObservable;
+@property(readonly) NSString* gpxStorageFilename;
+
 - (void)saveFavoritesToPermamentStorage;
 
 - (TTTLocationFormatter*)locationFormatterDigits;

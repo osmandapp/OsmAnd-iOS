@@ -12,6 +12,7 @@
 #import "OsmAndAppCppProtocol.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OAAppSettings.h"
+#import "OsmAndCore/GpxDocument.h"
 
 @interface OsmAndAppImpl : NSObject <OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>
 
@@ -22,5 +23,6 @@
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
+@property(nonatomic, readonly) std::shared_ptr<OsmAnd::GpxDocument> gpxCollection;
 
 @end

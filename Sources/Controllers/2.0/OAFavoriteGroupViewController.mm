@@ -10,6 +10,7 @@
 #import "OAIconTextTableViewCell.h"
 #import "OATextViewTableViewCell.h"
 #import "OANativeUtilities.h"
+#import "OAGPXListViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -159,6 +160,8 @@ UITextField* textView;
 }
 
 - (IBAction)gpxClicked:(id)sender {
+    OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
+    [self.navigationController pushViewController:favController animated:NO];
 }
 
 @end

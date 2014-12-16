@@ -309,11 +309,19 @@
 
     // Favorites
     [self saveFavoritesToPermamentStorage];
+
+    // GPX
+    [self saveGPXToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage
 {
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
+}
+
+- (void)saveGPXToPermamentStorage
+{
+    _gpxCollection->saveTo(QString::fromNSString(_gpxFilename));
 }
 
 - (TTTLocationFormatter*)locationFormatterDigits

@@ -18,6 +18,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/FavoriteLocationsGpxCollection.h>
+#include <OsmAndCore/GpxDocument.h>
 
 #define kAlertConflictWarning -2
 #define kAlertConflictRename -4
@@ -31,6 +32,7 @@
     OsmAndAppInstance _app;
 
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
+    std::shared_ptr<OsmAnd::GpxDocument> _gpxCollection;
 }
 
 - (instancetype)initFor:(NSURL*)url
@@ -47,8 +49,10 @@
 
     // Try to process as favorites
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
+    std::shared_ptr<OsmAnd::GpxDocument> gpxCollection;
     if ([url isFileURL])
     {
+        // Try to import favorites
         favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
         if (favoritesCollection)
         {
@@ -71,33 +75,41 @@
             importAllAndMerge.accessoryType = UITableViewCellAccessoryNone;
             [favoritesSection addElement:importAllAndMerge];
 
-/*
-            // Import selected and replace
-            QLabelElement* importSelectedAndReplace = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Selected and replace mine")
-                                                                                     Value:nil];
-            importSelectedAndReplace.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndReplace:));
-            importSelectedAndReplace.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [favoritesSection addElement:importSelectedAndReplace];
 
-            // Import selected and merge
-            QLabelElement* importSelectedAndMerge = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Selected and merge with mine")
-                                                                                   Value:nil];
-            importSelectedAndMerge.controllerAction = NSStringFromSelector(@selector(onImportSelectedAsFavoritesAndMerge:));
-            importSelectedAndMerge.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [favoritesSection addElement:importSelectedAndMerge];
- */
+        } else {
+            // Try to import GPX
+            std::shared_ptr<OsmAnd::GpxDocument> gpxDocument(new OsmAnd::GpxDocument());
+            gpxCollection = gpxDocument;
+            if (gpxCollection->loadFrom(QString::fromNSString(url.path))) {
+                handled = YES;
+                
+                QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Import as GPX")];
+                [rootElement addSection:favoritesSection];
+                
+                // Import all and replace
+                QLabelElement* importAllAndReplace = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"All and replace mine")
+                                                                                    Value:nil];
+                importAllAndReplace.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndReplace:));
+                importAllAndReplace.accessoryType = UITableViewCellAccessoryNone;
+                [favoritesSection addElement:importAllAndReplace];
+                
+                // Import all and merge
+                QLabelElement* importAllAndMerge = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"All and merge with mine")
+                                                                                  Value:nil];
+                importAllAndMerge.controllerAction = NSStringFromSelector(@selector(onImportAllAsFavoritesAndMerge:));
+                importAllAndMerge.accessoryType = UITableViewCellAccessoryNone;
+                [favoritesSection addElement:importAllAndMerge];
+            } else
+                gpxCollection = nullptr;
         }
-    }
-
-    // Seems that this URL can not be handled
-    if (!handled)
-        return nil;
-
-    self = [super initWithRoot:rootElement];
-    if (self) {
-        _app = app;
-
-        _favoritesCollection = favoritesCollection;
+        
+        self = [super initWithRoot:rootElement];
+        if (self) {
+            _app = app;
+            _favoritesCollection = favoritesCollection;
+            _gpxCollection = gpxCollection;
+        }
+        
     }
     return self;
 }
@@ -113,6 +125,7 @@
 
 - (void)onImportAllAsFavoritesAndReplace:(QElement*)sender
 {
+    if (_favoritesCollection) {
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
                                 message:OALocalizedString(@"Do you want to lose your previous favorites and replace them with imported ones?")
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")
@@ -125,6 +138,20 @@
                                                                  
                                                                  [self.navigationController popViewControllerAnimated:YES];
                                                              }], nil] show];
+    } else if (_gpxCollection) {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
+                                    message:OALocalizedString(@"Do you want to lose your previous GPX and replace them with imported ones?")
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")
+                                                                 action:^{
+                                                                 }]
+                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
+                                                                 action:^{
+                                                                     _app.gpxCollection = _gpxCollection;
+                                                                     [_app saveGPXToPermamentStorage];
+                                                                     
+                                                                     [self.navigationController popViewControllerAnimated:YES];
+                                                                 }], nil] show];
+    }
 }
 
 -(BOOL)isFavoritesValid {

@@ -230,7 +230,6 @@ kFavoriteCellType;
 }
 
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
         return [self.groupsAndGPX count];

@@ -105,7 +105,6 @@
         OAIntroViewController* cont = [[OAIntroViewController alloc] init];
         [self.rootViewController.navigationController pushViewController:cont animated:NO];
     }
-        
     
     
     // Check if application was requested to open document/file/URL

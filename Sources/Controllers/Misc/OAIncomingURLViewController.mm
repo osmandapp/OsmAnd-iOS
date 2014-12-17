@@ -174,16 +174,22 @@
 
 - (void)onImportAllAsFavoritesAndMerge:(QElement*)sender
 {
-    // IOS-214
-    if (![self isFavoritesValid])
-        return;
+    if (_favoritesCollection) {
+        // IOS-214
+        if (![self isFavoritesValid])
+            return;
     
-    _app.favoritesCollection->mergeFrom(_favoritesCollection);
-    [_app saveFavoritesToPermamentStorage];
-    [self.ignoredNames removeAllObjects];
-    self.conflictedName = @"";
+        _app.favoritesCollection->mergeFrom(_favoritesCollection);
+        [_app saveFavoritesToPermamentStorage];
+        [self.ignoredNames removeAllObjects];
+        self.conflictedName = @"";
 
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        //TODO: Change
+        [_app saveGPXToPermamentStorage];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

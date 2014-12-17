@@ -79,6 +79,16 @@ kFavoriteCellType;
     self.groupsAndGPX = [[NSMutableArray alloc] init];
     self.menuItems = [[NSArray alloc] init];
     
+    std::shared_ptr<OsmAnd::GpxDocument> gpxCollection = app.gpxCollection;
+    
+//    NSString* name = gpxCollection->metadata->name.toNSString();
+    int tra = gpxCollection->tracks.count();
+    int loc = gpxCollection->locationMarks.count();
+//    NSString* desc = gpxCollection->metadata->description.toNSString();
+
+    
+    NSString* ver = gpxCollection->version.toNSString();
+    
 //    const auto allGPX = app.favoritesCollection->getFavoriteLocations();
 //    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
 //    QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > ungroupedFavorites;

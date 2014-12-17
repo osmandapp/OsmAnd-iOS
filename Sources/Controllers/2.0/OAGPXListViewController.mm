@@ -83,11 +83,14 @@ kFavoriteCellType;
     
 //    NSString* name = gpxCollection->metadata->name.toNSString();
     int tra = gpxCollection->tracks.count();
+    int rou = gpxCollection->routes.count();
     int loc = gpxCollection->locationMarks.count();
+//    NSString* name = gpxCollection->metadata->name.toNSString();
+//    NSString* descr = gpxCollection->metadata->description.toNSString();
+
+
 //    NSString* desc = gpxCollection->metadata->description.toNSString();
 
-    
-    NSString* ver = gpxCollection->version.toNSString();
     
 //    const auto allGPX = app.favoritesCollection->getFavoriteLocations();
 //    QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;

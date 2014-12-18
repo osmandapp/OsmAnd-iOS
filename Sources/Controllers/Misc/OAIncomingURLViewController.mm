@@ -32,7 +32,7 @@
     OsmAndAppInstance _app;
 
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
-    std::shared_ptr<OsmAnd::GpxDocument> _gpxCollection;
+    std::shared_ptr<OsmAnd::GpxDocument> gpxCollection;
 }
 
 - (instancetype)initFor:(NSURL*)url
@@ -49,7 +49,6 @@
 
     // Try to process as favorites
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
-    std::shared_ptr<OsmAnd::GpxDocument> gpxCollection;
     if ([url isFileURL])
     {
         // Try to import favorites
@@ -78,9 +77,8 @@
 
         } else {
             // Try to import GPX
-            std::shared_ptr<OsmAnd::GpxDocument> gpxDocument(new OsmAnd::GpxDocument());
-            gpxCollection = gpxDocument;
-            if (gpxCollection->loadFrom(QString::fromNSString(url.path))) {
+            gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(url.path));
+            if (gpxCollection) {
                 handled = YES;
                 
                 QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Import as GPX")];
@@ -107,7 +105,6 @@
         if (self) {
             _app = app;
             _favoritesCollection = favoritesCollection;
-            _gpxCollection = gpxCollection;
         }
         
     }
@@ -138,7 +135,7 @@
                                                                  
                                                                  [self.navigationController popViewControllerAnimated:YES];
                                                              }], nil] show];
-    } else if (_gpxCollection) {
+    } else if (gpxCollection) {
         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Confirmation")
                                     message:OALocalizedString(@"Do you want to lose your previous GPX and replace them with imported ones?")
                            cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")
@@ -146,7 +143,8 @@
                                                                  }]
                            otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
                                                                  action:^{
-                                                                     _app.gpxCollection = _gpxCollection;
+                                                                     
+                                                                     _app.gpxCollection = gpxCollection;
                                                                      [_app saveGPXToPermamentStorage];
                                                                      
                                                                      [self.navigationController popViewControllerAnimated:YES];
@@ -174,16 +172,23 @@
 
 - (void)onImportAllAsFavoritesAndMerge:(QElement*)sender
 {
-    // IOS-214
-    if (![self isFavoritesValid])
-        return;
+    if (_favoritesCollection) {
+        // IOS-214
+        if (![self isFavoritesValid])
+            return;
     
-    _app.favoritesCollection->mergeFrom(_favoritesCollection);
-    [_app saveFavoritesToPermamentStorage];
-    [self.ignoredNames removeAllObjects];
-    self.conflictedName = @"";
+        _app.favoritesCollection->mergeFrom(_favoritesCollection);
+        [_app saveFavoritesToPermamentStorage];
+        [self.ignoredNames removeAllObjects];
+        self.conflictedName = @"";
 
-    [self.navigationController popViewControllerAnimated:YES];
+        [self.navigationController popViewControllerAnimated:YES];
+    } else {
+        //TODO: Change
+        _app.gpxCollection = gpxCollection;
+        [_app saveGPXToPermamentStorage];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 

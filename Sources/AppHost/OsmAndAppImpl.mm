@@ -170,8 +170,7 @@
 //    _gpxChangedObservable = [[OAObservable alloc] init];
     _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
     _gpxCollection.reset(new OsmAnd::GpxDocument());
-    _gpxCollection->loadFrom(QString::fromNSString(_gpxFilename));
-
+    _gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(_gpxFilename));
     
 //    _gpxCollection->collectionChangeObservable.attach((__bridge const void*)self,
 //                                                            [self]

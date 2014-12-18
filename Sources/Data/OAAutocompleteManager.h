@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "HTAutocompleteTextField.h"
+#import "OsmAndApp.h"
 
 typedef enum {
     OAAutocompleteTypeCountry, // Default
@@ -18,5 +19,7 @@ typedef enum {
 + (OAAutocompleteManager *)sharedManager;
 
 @property NSMutableArray *regionList;
+@property NSMutableArray *bigCountryList;
+@property OAWorldRegion* selectedRegion;
 
 @end

@@ -19,6 +19,7 @@ static OAAutocompleteManager *sharedManager;
 	dispatch_once(&done, ^{
         sharedManager = [[OAAutocompleteManager alloc] init];
         sharedManager.regionList = [[NSMutableArray alloc] init];
+        sharedManager.bigCountryList = [[NSMutableArray alloc] init];
 
         OsmAndAppInstance app = [OsmAndApp instance];
         [sharedManager findRegionsInRegion:app.worldRegion];
@@ -45,23 +46,27 @@ static OAAutocompleteManager *sharedManager;
         
         
         for (OAWorldRegion* region in self.regionList) {
-            NSString *stringToCompare;
-            NSString *localStringToCompare;
-            if (ignoreCase) {
-                stringToCompare = [region.name lowercaseString];
-                localStringToCompare = [region.localizedName lowercaseString];
+            for(NSString* regName in region.allNames) {
+                if (regName && [[regName lowercaseString] hasPrefix:stringToLookFor]) {
+                    NSString *lcRegName = [regName lowercaseString];
+                    self.selectedRegion = region;
+                    return [regName stringByReplacingCharactersInRange:[lcRegName rangeOfString:stringToLookFor] withString:@""];
+                }
             }
-            else {
-                stringToCompare = region.name;
-                localStringToCompare = region.localizedName;
+            if(region.superregion.downloadsIdPrefix && region.superregion.downloadsIdPrefix.length > 0) {
+                for(NSString* regName in region.superregion.allNames) {
+                    if (regName && [[regName lowercaseString] hasPrefix:stringToLookFor]) {
+                        NSString *lcRegName = [regName lowercaseString];
+                        self.selectedRegion = region;
+                        NSString *subName = [regName stringByReplacingCharactersInRange:[lcRegName rangeOfString:stringToLookFor] withString:@""];
+                        // TODO concat subname + " " + region.localizedName
+                        return  subName;
+                    }
+                }
             }
-            
-            if (region.name && [[region.name lowercaseString] hasPrefix:stringToLookFor])
-                return [region.name stringByReplacingCharactersInRange:[stringToCompare rangeOfString:stringToLookFor] withString:@""];
-            if (region.localizedName && [[region.localizedName lowercaseString] hasPrefix:stringToLookFor])
-                return [region.localizedName stringByReplacingCharactersInRange:[localStringToCompare rangeOfString:stringToLookFor] withString:@""];
         }
     }
+    self.selectedRegion = nil;
     
     return @"";
 }
@@ -73,6 +78,9 @@ static OAAutocompleteManager *sharedManager;
         if (subregion.subregions.count == 0) {
             [self.regionList addObject:subregion];
         } else {
+            if(subregion.downloadsIdPrefix && subregion.downloadsIdPrefix.length > 0) {
+                [self.bigCountryList addObject:subregion];
+            }
             [self findRegionsInRegion:subregion];
         }
     }];

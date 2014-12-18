@@ -44,7 +44,7 @@ OsmAnd</string>
                     <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="enter the name of the region" minimumFontSize="17" id="sQM-fP-ud6" customClass="HTAutocompleteTextField">
+                <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="enter the name of your region" minimumFontSize="17" id="sQM-fP-ud6" customClass="HTAutocompleteTextField">
                     <rect key="frame" x="29" y="192" width="261" height="35"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -14,7 +14,6 @@
 #import "OAAutocompleteManager.h"
 
 
-#import "Localization.h"
 
 
 @interface OAIntroViewController ()
@@ -41,7 +40,7 @@
     [panel2.nextButton setTitle:@"Skip" forState:UIControlStateNormal];
     CGRect frame = panel2.labelView.frame;
     [panel2.labelView setFrame:frame];
-    [panel2.labelView setText:@"Download map\n of your region"];
+    [panel2.labelView setText:@"Download Map"];
     [panel2.descriptionView setText:@""];
     [panel2.countryName setHidden:NO];
     UIImageView* searchImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
@@ -78,16 +77,7 @@
     [sender resignFirstResponder];
     OsmAndAppInstance app = [OsmAndApp instance];
     
-    __block OAWorldRegion* region;
-    NSString* lcString = [sender.text lowercaseString];
-    [[OAAutocompleteManager sharedManager].regionList enumerateObjectsUsingBlock:^(OAWorldRegion* obj, NSUInteger idx, BOOL *stop) {
-        
-        if ( (obj.name && [[obj.name lowercaseString] isEqualToString:lcString]) ||
-            (obj.localizedName && [[obj.localizedName lowercaseString] isEqualToString:lcString]) ) {
-            region = obj;
-            *stop = YES;
-        }
-    }];
+    __block OAWorldRegion* region = [OAAutocompleteManager sharedManager].selectedRegion;
     
     if (!region) {
         UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region named %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];

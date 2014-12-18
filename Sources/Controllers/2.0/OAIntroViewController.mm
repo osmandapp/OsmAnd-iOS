@@ -34,33 +34,25 @@
     OAInitViewPanel *panel1 = [[OAInitViewPanel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) nibNamed:@"OAInitViewPanel"];
     panel1.nextButton.layer.cornerRadius = 5;
     [panel1.nextButton setAlpha:1];
-    [panel1.descriptionView setText:@""];
     
     OAInitViewPanel *panel2 = [[OAInitViewPanel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) nibNamed:@"OAInitViewPanel"];
     panel2.nextButton.layer.cornerRadius = 5;
     [panel2.nextButton setAlpha:1];
-    [panel2.labelView setText:@"Wherever you are"];
-    [panel2.descriptionView setText:@"Maps & navigation without Internet connection!"];
-    
-    OAInitViewPanel *panel3 = [[OAInitViewPanel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) nibNamed:@"OAInitViewPanel"];
-    panel3.nextButton.layer.cornerRadius = 5;
-    [panel3.nextButton setAlpha:1];
-    [panel3.nextButton setTitle:@"Skip" forState:UIControlStateNormal];
-    CGRect frame = panel3.labelView.frame;
-    frame.size.height = 240;
-    [panel3.labelView setFrame:frame];
-    [panel3.labelView setText:@"To continue, select your preferred region for loading maps"];
-    [panel3.descriptionView setText:@""];
-    [panel3.countryName setHidden:NO];
+    [panel2.nextButton setTitle:@"Skip" forState:UIControlStateNormal];
+    CGRect frame = panel2.labelView.frame;
+    [panel2.labelView setFrame:frame];
+    [panel2.labelView setText:@"Download map\n of your region"];
+    [panel2.descriptionView setText:@""];
+    [panel2.countryName setHidden:NO];
     UIImageView* searchImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];
     [searchImage setContentMode:UIViewContentModeCenter];
     [searchImage setImage:[UIImage imageNamed:@"search_icon"]];
-    [panel3.countryName setLeftView: searchImage];
-    [panel3.countryName setLeftViewMode:UITextFieldViewModeAlways];
-    panel3.countryName.layer.cornerRadius = 5;
-    panel3.countryName.delegate = self;
+    [panel2.countryName setLeftView: searchImage];
+    [panel2.countryName setLeftViewMode:UITextFieldViewModeAlways];
+    panel2.countryName.layer.cornerRadius = 5;
+    panel2.countryName.delegate = self;
     
-    NSArray *panels = @[panel1, panel2, panel3];
+    NSArray *panels = @[panel1, panel2];
     //Create the introduction view and set its delegate
     MYBlurIntroductionView *introductionView = [[MYBlurIntroductionView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
     [introductionView buildIntroductionWithPanels:panels];
@@ -118,7 +110,7 @@
     }
     
     if (resourceId.isNull() || resourceId.isEmpty()) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region named %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
         [alert show];
         return YES;
     }
@@ -128,7 +120,7 @@
     
     MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     hud.mode = MBProgressHUDModeCustomView;
-    hud.detailsLabelText = OALocalizedString(@"Downloading map of %@ is started", sender.text);
+    hud.detailsLabelText = OALocalizedString(@"Downloading map %@", sender.text);
     [hud hide:YES afterDelay:2.0];
     
     double delayInSeconds = 2.0;

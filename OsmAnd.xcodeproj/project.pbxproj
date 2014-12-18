@@ -106,12 +106,6 @@
 		3AC639A81A1CF568001D5E57 /* Intro_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639A71A1CF568001D5E57 /* Intro_bg@2x.png */; };
 		3AC639A91A1CF5F8001D5E57 /* Intro_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639A71A1CF568001D5E57 /* Intro_bg@2x.png */; };
 		3AC639AA1A1CF5F9001D5E57 /* Intro_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639A71A1CF568001D5E57 /* Intro_bg@2x.png */; };
-		3AC639AD1A1D0115001D5E57 /* IntroView_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639AC1A1D0115001D5E57 /* IntroView_1.xib */; };
-		3AC639AE1A1D0115001D5E57 /* IntroView_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639AC1A1D0115001D5E57 /* IntroView_1.xib */; };
-		3AC639AF1A1D0115001D5E57 /* IntroView_1.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639AC1A1D0115001D5E57 /* IntroView_1.xib */; };
-		3AC639B21A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B11A1E1B17001D5E57 /* OAIntroScreenViewController.m */; };
-		3AC639B31A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B11A1E1B17001D5E57 /* OAIntroScreenViewController.m */; };
-		3AC639B41A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B11A1E1B17001D5E57 /* OAIntroScreenViewController.m */; };
 		3AC639B91A1E344E001D5E57 /* OAInitViewPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */; };
 		3AC639BA1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */; };
 		3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */; };
@@ -938,9 +932,6 @@
 		3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIntroViewController.xib; path = Sources/Controllers/2.0/OAIntroViewController.xib; sourceTree = "<group>"; };
 		3AC6399E1A1CE2FF001D5E57 /* Default_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default_bg@2x.png"; path = "Resources/LaunchImages/Default_bg@2x.png"; sourceTree = "<group>"; };
 		3AC639A71A1CF568001D5E57 /* Intro_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Intro_bg@2x.png"; path = "Resources/IntroImages/Intro_bg@2x.png"; sourceTree = "<group>"; };
-		3AC639AC1A1D0115001D5E57 /* IntroView_1.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = IntroView_1.xib; path = Resources/Views/IntroView_1.xib; sourceTree = "<group>"; };
-		3AC639B01A1E1B17001D5E57 /* OAIntroScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIntroScreenViewController.h; path = Sources/Controllers/2.0/OAIntroScreenViewController.h; sourceTree = "<group>"; };
-		3AC639B11A1E1B17001D5E57 /* OAIntroScreenViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAIntroScreenViewController.m; path = Sources/Controllers/2.0/OAIntroScreenViewController.m; sourceTree = "<group>"; };
 		3AC639B61A1E344E001D5E57 /* OAInitViewPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAInitViewPanel.h; path = Controllers/2.0/Init/OAInitViewPanel.h; sourceTree = "<group>"; };
 		3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAInitViewPanel.m; path = Controllers/2.0/Init/OAInitViewPanel.m; sourceTree = "<group>"; };
 		3AC639B81A1E344E001D5E57 /* OAInitViewPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAInitViewPanel.xib; path = Controllers/2.0/Init/OAInitViewPanel.xib; sourceTree = "<group>"; };
@@ -1468,9 +1459,6 @@
 		3AC639AB1A1D00C3001D5E57 /* Intro */ = {
 			isa = PBXGroup;
 			children = (
-				3AC639AC1A1D0115001D5E57 /* IntroView_1.xib */,
-				3AC639B01A1E1B17001D5E57 /* OAIntroScreenViewController.h */,
-				3AC639B11A1E1B17001D5E57 /* OAIntroScreenViewController.m */,
 			);
 			name = Intro;
 			sourceTree = "<group>";
@@ -2340,7 +2328,6 @@
 				3AC639C41A1E6220001D5E57 /* icon_drive_mode@2x.png in Resources */,
 				BBA8591617C24EC700AADCC7 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451DC818D70B5B005FBE09 /* HUD_more_halfbutton.png in Resources */,
-				3AC639AD1A1D0115001D5E57 /* IntroView_1.xib in Resources */,
 				BB451DD018D70B5B005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE618E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -2521,7 +2508,6 @@
 				3AC639C51A1E6220001D5E57 /* icon_drive_mode@2x.png in Resources */,
 				BB451E5A18DCD224005FBE09 /* Default-Portrait@2x~ipad.png in Resources */,
 				BB451E5B18DCD224005FBE09 /* HUD_more_halfbutton.png in Resources */,
-				3AC639AE1A1D0115001D5E57 /* IntroView_1.xib in Resources */,
 				BB451E5C18DCD224005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -2781,7 +2767,6 @@
 				BBA3AFBE197FC4BB0039D991 /* menu_item_update_icon@2x.png in Resources */,
 				3A8AC24B19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				BBA3AFBF197FC4BB0039D991 /* free_map_mode_button@2x.png in Resources */,
-				3AC639AF1A1D0115001D5E57 /* IntroView_1.xib in Resources */,
 				BBA3AFC0197FC4BB0039D991 /* HUD_compass@2x.png in Resources */,
 				3AC09BD01A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				BBA3AFC1197FC4BB0039D991 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
@@ -3010,7 +2995,6 @@
 				BBA3AECD197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				3AFEEE5E1A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				3ACA4AB31A0B93CE00ECC792 /* OASettingsTableViewCell.m in Sources */,
-				3AC639B21A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */,
 				3A8314861A07EB4C00473C38 /* OATargetPointView.mm in Sources */,
 				BB54F709198913E000AB40D1 /* OAAppearance.m in Sources */,
 				3AFEEE9C1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
@@ -3105,7 +3089,6 @@
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
 				3AFEEE5F1A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				3ACA4AB41A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
-				3AC639B31A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */,
 				3A8314871A07ECCE00473C38 /* OATargetPointView.mm in Sources */,
 				BB54F70A198913E000AB40D1 /* OAAppearance.m in Sources */,
 				3AFEEE9D1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
@@ -3241,7 +3224,6 @@
 				BBA3AF61197FC4BB0039D991 /* OsmAndAppImpl.mm in Sources */,
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */,
-				3AC639B41A1E1B17001D5E57 /* OAIntroScreenViewController.m in Sources */,
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,

@@ -59,7 +59,7 @@ static OAAutocompleteManager *sharedManager;
                         NSString *lcRegName = [regName lowercaseString];
                         self.selectedRegion = region;
                         NSString *subName = [regName stringByReplacingCharactersInRange:[lcRegName rangeOfString:stringToLookFor] withString:@""];
-                        return  [NSString stringWithFormat:@"%@ %@", subName, region.localizedName];
+                        return  [NSString stringWithFormat:@"%@ %@", subName, region.name];
                     }
                 }
             }

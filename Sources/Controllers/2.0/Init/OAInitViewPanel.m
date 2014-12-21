@@ -57,7 +57,7 @@
 #pragma mark Outlets
 
 - (IBAction)nextButtonClicked:(id)sender {
-    if (self.parentIntroductionView.CurrentPanelIndex == 2)
+    if (self.parentIntroductionView.CurrentPanelIndex == 1)
         [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSwipeOut];
     else
         [self.parentIntroductionView changeToPanelAtIndex:self.parentIntroductionView.CurrentPanelIndex+1];

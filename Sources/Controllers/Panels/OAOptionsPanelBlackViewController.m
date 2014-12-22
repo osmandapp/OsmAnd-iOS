@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonQuiz;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonHelp;
 
@@ -35,7 +36,11 @@
     
     self.menuButtonMyData.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonMyData.layer.borderWidth = 1.0;
-
+    
+    self.menuButtonMapsAndResources.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
+    self.menuButtonMapsAndResources.layer.borderWidth = 1.0;
+    
+    
     self.menuButtonSettings.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
     self.menuButtonSettings.layer.borderWidth = 1.0;
     
@@ -66,6 +71,11 @@
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
+
+- (IBAction)mapsAndResourcesButtonClicked:(id)sender {
+    OASettingsViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+    [self.navigationController pushViewController:resourcesViewController animated:YES];
+}
 
 - (IBAction)helpButtonClicked:(id)sender {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2014" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];

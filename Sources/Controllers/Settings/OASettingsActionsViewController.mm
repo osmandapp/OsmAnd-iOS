@@ -21,7 +21,6 @@
 @interface OASettingsActionsViewController ()
 
 @property OsmAndAppInstance app;
-@property QLabelElement* elementMapsAndResources;
 @property QLabelElement* elementAppMode;
 @property QLabelElement* elementMetricSystem;
 @property QLabelElement* elementZoomButton;
@@ -50,20 +49,17 @@
         // Map section
         QSection* mainSection = [[QSection alloc] initWithTitle:@""];
         [rootElement addSection:mainSection];
-        
-        self.elementMapsAndResources = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Maps & Resources") Value:nil ];
+        ;
         self.elementAppMode = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Application mode") Value:nil ];
         self.elementMetricSystem = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Metric system") Value:nil ];
         self.elementZoomButton = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Zoom button") Value:nil ];
         self.elementGeoFormat = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Geo format") Value:nil ];
         
-        self.elementMapsAndResources.controllerAction = NSStringFromSelector(@selector(onMapsAndResourcesClicked));
         self.elementAppMode.controllerAction = NSStringFromSelector(@selector(onAppMode));
         self.elementMetricSystem.controllerAction = NSStringFromSelector(@selector(onMetricSystem));
         self.elementZoomButton.controllerAction = NSStringFromSelector(@selector(onZoomButton));
         self.elementGeoFormat.controllerAction = NSStringFromSelector(@selector(onGeoFormat));
         
-        [mainSection addElement:self.elementMapsAndResources];
         [mainSection addElement:self.elementAppMode];
         [mainSection addElement:self.elementMetricSystem];
         [mainSection addElement:self.elementZoomButton];

@@ -28,6 +28,7 @@
 #include <QList>
 
 #include <OsmAndCore.h>
+#import "OAAppSettings.h"
 #include <OsmAndCore/IFavoriteLocation.h>
 
 #define _(name)
@@ -336,13 +337,79 @@
 
     [formatter.numberFormatter setMaximumSignificantDigits:7];
     
-    if (settings.settingMetricSystem)
-        formatter.unitSystem = TTTImperialSystem;
-    else
+    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS)
         formatter.unitSystem = TTTMetricSystem;
+    else
+        formatter.unitSystem = TTTImperialSystem;
+        
 
     return formatter;
 }
+-(NSString*) getFormattedDistance:(float) meters {
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    NSString* mainUnitStr = @"km";
+    float mainUnitInMeters;
+    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+        mainUnitInMeters = METERS_IN_KILOMETER;
+    } else {
+        mainUnitStr = @"mi";
+        mainUnitInMeters = METERS_IN_ONE_MILE;
+    }
+    if (meters >= 100 * mainUnitInMeters) {
+        return [NSString stringWithFormat:@"%0.d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
+    } else if (meters > 9.99f * mainUnitInMeters) {
+        return [NSString stringWithFormat:@"%0.0f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+    } else if (meters > 0.999f * mainUnitInMeters) {
+        return [NSString stringWithFormat:@"%0.00f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+    } else {
+        if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+            return [NSString stringWithFormat:@"%0.d %@",   ((int) (meters + 0.5)), @"m"];
+        } else if (settings.settingMetricSystem == METRIC_SYSTEM_FEET) {
+            int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
+            return [NSString stringWithFormat:@"%0.d %@", foots, @"ft"];
+        } else if (settings.settingMetricSystem == METRIC_SYSTEM_YARDS) {
+            int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            return [NSString stringWithFormat:@"%0.d %@", yards, @"yd"];
+        }
+        return [NSString stringWithFormat:@"%0.d %@",   ((int) (meters + 0.5)), @"m"];
+    }
+}
+
+- (double) calculateRoundedDist:(double) distInMeters {
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    double mainUnitInMeter = 1;
+    double metersInSecondUnit = METERS_IN_KILOMETER;
+    if (settings.settingMetricSystem == METRIC_SYSTEM_FEET)
+    {
+        mainUnitInMeter = FOOTS_IN_ONE_METER;
+        metersInSecondUnit = METERS_IN_ONE_MILE;
+    }
+    else if (settings.settingMetricSystem == METRIC_SYSTEM_YARDS)
+    {
+        mainUnitInMeter = YARDS_IN_ONE_METER;
+        metersInSecondUnit = METERS_IN_ONE_MILE;
+    }
+    // 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000 ...
+    
+    int generator = 1;
+    int pointer = 1;
+    double point = mainUnitInMeter;
+    while (distInMeters * point > generator) {
+        if (pointer++ % 3 == 2) {
+            generator = generator * 5 / 2;
+        } else {
+            generator *= 2;
+        }
+        if (point == mainUnitInMeter && metersInSecondUnit * mainUnitInMeter * 0.9f <= generator) {
+            point = 1 / metersInSecondUnit;
+            generator = 1;
+            pointer = 1;
+        }
+    }
+    
+    return (generator / point);
+}
+
 
 
 - (TTTLocationFormatter*)locationFormatter

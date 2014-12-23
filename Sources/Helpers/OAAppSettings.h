@@ -14,8 +14,12 @@
 @property (assign, nonatomic) BOOL settingShowMapRulet;
 @property (assign, nonatomic) int settingMapLanguage;
 
+#define METRIC_SYSTEM_METERS 0
+#define METRIC_SYSTEM_FEET 1
+#define METRIC_SYSTEM_YARDS 2
+
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
-@property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English
+@property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English, 2 - 
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (assign, nonatomic) int settingGeoFormat; // 0 -
 

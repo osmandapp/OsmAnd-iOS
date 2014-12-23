@@ -8,11 +8,11 @@
 
 #import "OAMapRulerView.h"
 #import <QuartzCore/QuartzCore.h>
+#import "OsmAndApp.h"
 
 @interface OAMapRulerView()
 
 @property (strong, nonatomic) UILabel* textLabel;
-@property NSArray* markerList;
 
 @property CALayer *bottomBorder;
 @property CALayer *leftBorder;
@@ -26,7 +26,6 @@
 -(instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        self.markerList = @[@1, @2, @5, @10, @20, @50, @100, @200, @500, @1000, @2000, @5000, @10000, @20000, @50000, @100000, @200000, @500000, @1000000, @2000000, @5000000, @10000000];
         
         // Add a bottomBorder.
         self.bottomBorder = [CALayer layer];
@@ -66,34 +65,22 @@
 
 -(void)setRulerData:(float) metersPerPixel {
 
-    float metersPerMinSize = metersPerPixel * kMapRulerMinWidth ;
+    float metersPerMinSize = metersPerPixel * kMapRulerMinWidth * [[UIScreen mainScreen] scale];
     int rulerWidth = 0;
     NSString * vl = @"";
     if(metersPerPixel > 0)
     {
-        __block int minScaleSize = 0;
-        [self.markerList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            if ([obj integerValue] > metersPerMinSize) {
-                minScaleSize = [obj integerValue];
-                *stop = YES;
-            }
-        }];
-        
-        rulerWidth =  minScaleSize / metersPerPixel;
+        double roundedDist = [[OsmAndApp instance] calculateRoundedDist: metersPerMinSize];
+        rulerWidth =  (roundedDist / metersPerPixel) / [[UIScreen mainScreen] scale];
         if(rulerWidth > kMapRulerMaxWidth || rulerWidth < kMapRulerMinWidth) {
             rulerWidth = 0;
         } else {
-            NSString * metricValue = @"m";
-            if (minScaleSize >= 1000) {
-                minScaleSize /= 1000;
-                metricValue = @"km";
-            }
-            vl = [NSString stringWithFormat:@"%0.d %@", minScaleSize, metricValue];
+            vl = [[OsmAndApp instance] getFormattedDistance: roundedDist];
         }
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0? true : false;
-    frame.size.width = rulerWidth / [[UIScreen mainScreen] scale];
+    frame.size.width = rulerWidth;
     self.frame = frame;
     [self invalidateLayout];
     [self.textLabel setText:vl];

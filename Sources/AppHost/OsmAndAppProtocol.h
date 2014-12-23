@@ -51,6 +51,9 @@
 
 - (void)saveDataToPermamentStorage;
 
+- (double)calculateRoundedDist:(double) baseMetersDist;
+- (NSString*) getFormattedDistance:(float) meters;
+
 @property(readonly) OAObservable* favoritesCollectionChangedObservable;
 @property(readonly) OAObservable* favoriteChangedObservable;
 @property(readonly) NSString* favoritesStorageFilename;

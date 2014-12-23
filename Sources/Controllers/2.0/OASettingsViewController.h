@@ -11,7 +11,6 @@
 typedef enum
 {
     kSettingsScreenGeneral = 0,
-    kSettingsScreenMapsAndResources,
     kSettingsScreenAppMode,
     kSettingsScreenMetricSystem,
     kSettingsScreenZoomButton,

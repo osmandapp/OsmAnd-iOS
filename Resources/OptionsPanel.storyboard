@@ -97,7 +97,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cLp-BX-R5R">
-                                <rect key="frame" x="-2" y="470" width="322" height="50"/>
+                                <rect key="frame" x="-2" y="520" width="322" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="DTG-ET-ry0"/>
                                 </constraints>
@@ -112,7 +112,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCj-ku-ZSZ">
-                                <rect key="frame" x="-2" y="520" width="322" height="50"/>
+                                <rect key="frame" x="-2" y="470" width="322" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="50" id="Sc1-zv-YJZ"/>
                                 </constraints>

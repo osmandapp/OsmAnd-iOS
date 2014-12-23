@@ -57,8 +57,6 @@
                           ];
         }
             break;
-        case kSettingsScreenMapsAndResources:
-            break;
         case kSettingsScreenAppMode:
             self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
                           @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
@@ -130,9 +128,6 @@
         case kSettingsScreenGeneral:
             [self selectSettingGeneral:indexPath.row];
             break;
-        case kSettingsScreenMapsAndResources:
-            [self selectSettingMaps:indexPath.row];
-            break;
         case kSettingsScreenAppMode:
             [self selectSettingAppMode:indexPath.row];
             break;
@@ -155,27 +150,21 @@
 
     switch (index) {
         case 0: {
-            OASettingsViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
-            [self.navigationController pushViewController:resourcesViewController animated:YES];
-
-        }
-            break;
-        case 1: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAppMode];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
-        case 2: {
+        case 1: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
-        case 3: {
+        case 2: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenZoomButton];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
-        case 4: {
+        case 3: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
@@ -186,10 +175,6 @@
     }
 }
 
--(void)selectSettingMaps:(NSInteger)index {
-    
-    [self backButtonClicked:nil];
-}
 
 -(void)selectSettingAppMode:(NSInteger)index {
     [[OAAppSettings sharedManager] setSettingAppMode:index];

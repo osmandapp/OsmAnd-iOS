@@ -1101,21 +1101,9 @@
 
 }
 
--(RulerData)calculateMapRuler {
+-(float)calculateMapRuler {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    RulerData ruler;
-    if (mapView.visibleTiles.isEmpty())
-        return ruler;
-    const auto& tileId = mapView.visibleTiles.at(0);
-    auto tileIdN = OsmAnd::Utilities::normalizeTileId(tileId, mapView.zoomLevel);
-    
-    double metersPerUnit = OsmAnd::Utilities::getMetersPerTileUnit(mapView.zoomLevel, tileIdN.y, 100u /*AtlasMapRenderer::TileSize3D*/);
-    double metersPerTile = metersPerUnit * 100u;
-    float tileSizeInPixels = mapView.currentTileSizeOnScreenInPixels;
-    
-    ruler.tileSizeInMeters = metersPerTile;
-    ruler.tileSizeInPixels = tileSizeInPixels;
-    return ruler;
+    return mapView.currentPixelsToMetersScaleFactor ;
 }
 
 - (float)currentZoomOutDelta

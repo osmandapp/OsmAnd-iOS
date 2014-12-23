@@ -63,38 +63,39 @@
     self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
 }
 
--(void)setRulerData:(struct RulerData)data {
-    
+-(void)setRulerData:(float) metersPerPixel {
 
-    float metersPerMinSize = data.tileSizeInMeters / data.tileSizeInPixels * kMapRulerMinWidth ;
-    
-    __block int minScaleSize = 0;
-    [self.markerList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-        if ([obj integerValue] > metersPerMinSize) {
-            minScaleSize = [obj integerValue];
-            *stop = YES;
+    float metersPerMinSize = metersPerPixel * kMapRulerMinWidth ;
+    int rulerWidth = 0;
+    NSString * vl = @"";
+    if(metersPerPixel > 0)
+    {
+        __block int minScaleSize = 0;
+        [self.markerList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            if ([obj integerValue] > metersPerMinSize) {
+                minScaleSize = [obj integerValue];
+                *stop = YES;
+            }
+        }];
+        
+        rulerWidth =  minScaleSize / metersPerPixel;
+        if(rulerWidth > kMapRulerMaxWidth || rulerWidth < kMapRulerMinWidth) {
+            rulerWidth = 0;
+        } else {
+            NSString * metricValue = @"m";
+            if (minScaleSize >= 1000) {
+                minScaleSize /= 1000;
+                metricValue = @"km";
+            }
+            vl = [NSString stringWithFormat:@"%0.d %@", minScaleSize, metricValue];
         }
-    }];
-
-    float xCoof = minScaleSize / metersPerMinSize;
-    int rulerWidth = kMapRulerMinWidth * xCoof;
-
-    if (metersPerMinSize < 1) {
-        [self.textLabel setText:@"< 1 m"];
-        rulerWidth = kMapRulerMaxWidth;
-    } else {
-        CGRect frame = self.frame;
-        frame.size.width = rulerWidth;
-        self.frame = frame;
-        [self invalidateLayout];
-    
-        NSString * metricValue = @"m";
-        if (minScaleSize >= 1000) {
-            minScaleSize /= 1000;
-            metricValue = @"km";
-        }
-        [self.textLabel setText:[NSString stringWithFormat:@"%0.d %@", minScaleSize, metricValue]];
     }
+    CGRect frame = self.frame;
+    self.hidden = rulerWidth == 0? true : false;
+    frame.size.width = rulerWidth;
+    self.frame = frame;
+    [self invalidateLayout];
+    [self.textLabel setText:vl];
 
 }
 

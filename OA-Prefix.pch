@@ -28,11 +28,5 @@
 
 
 
-struct RulerData
-{
-    float tileSizeInPixels;
-    double tileSizeInMeters;
-};
-
 
 #endif

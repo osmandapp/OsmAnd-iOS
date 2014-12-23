@@ -69,6 +69,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 // Misc properties:
 @property(nonatomic, readonly) QList<OsmAnd::TileId> visibleTiles;
 
+@property(nonatomic, readonly) float currentPixelsToMetersScaleFactor;
+
 // Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;

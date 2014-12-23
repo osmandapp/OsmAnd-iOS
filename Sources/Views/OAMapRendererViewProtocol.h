@@ -30,6 +30,7 @@
 @property(nonatomic) float elevationAngle;
 @property(nonatomic) float zoom;
 @property(nonatomic, readonly) float currentTileSizeOnScreenInPixels;
+@property(nonatomic, readonly) float currentTileSizeOnScreenMeters;
 @property(readonly) OAObservable* stateObservable;
 
 // Misc properties:

@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #define kMapRulerMinWidth 70
-#define kMapRulerMaxWidth 150
+#define kMapRulerMaxWidth 180
 
 @interface OAMapRulerView : UIView
 
 
--(void)setRulerData:(struct RulerData)data;
+-(void)setRulerData:(float) metersPerPixel;
 
 @end

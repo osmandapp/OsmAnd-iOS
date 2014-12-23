@@ -203,6 +203,11 @@
     return _renderer->getState().elevationAngle;
 }
 
+- (float)currentPixelsToMetersScaleFactor
+{
+    return _renderer->getCurrentPixelsToMetersScaleFactor();
+}
+
 - (void)setElevationAngle:(float)elevationAngle
 {
     _renderer->setElevationAngle(elevationAngle);
@@ -236,6 +241,13 @@
 - (float)currentTileSizeOnScreenInPixels
 {
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getCurrentTileSizeOnScreenInPixels();
+}
+
+
+- (float)currentTileSizeOnScreenInMeters
+{
+    return _renderer->getCurrentTileSizeInMeters();
+    
 }
 
 - (float)minZoom

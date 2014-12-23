@@ -49,7 +49,7 @@
             NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"Degrees" : @"Degrees and Minutes";
             
-            self.data = @[@{@"name": @"Maps & Resources", @"value": @"", @"img": @"menu_cell_pointer.png"},
+            self.data = @[
                           @{@"name": @"Application mode", @"value": appModeValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Units", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Zoom button", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},

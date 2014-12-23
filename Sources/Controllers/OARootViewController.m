@@ -153,10 +153,6 @@
     panel.layer.cornerRadius = 0.0f;
 }
 
-- (OAOptionsPanelViewController*)optionsPanel
-{
-    return (OAOptionsPanelViewController*)self.leftPanel;
-}
 
 - (OAMapPanelViewController*)mapPanel
 {

@@ -65,8 +65,8 @@
 
 -(void)setRulerData:(struct RulerData)data {
     
-    float coof = kMapRulerMinWidth / data.tileSizeInPixels;
-    float metersPerMinSize = data.tileSizeInMeters * coof;
+
+    float metersPerMinSize = data.tileSizeInMeters / data.tileSizeInPixels * kMapRulerMinWidth ;
     
     __block int minScaleSize = 0;
     [self.markerList enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

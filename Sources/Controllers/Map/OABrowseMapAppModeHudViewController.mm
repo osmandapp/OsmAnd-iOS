@@ -320,16 +320,10 @@ NSLayoutConstraint* targetBottomConstraint;
     const OsmAnd::PointI position31(
                                     OsmAnd::Utilities::get31TileNumberX(lon),
                                     OsmAnd::Utilities::get31TileNumberY(lat));
-    
-    // Try to find road in basemap, then in detaled map
+
     road = _roadLocator->findNearestRoad(position31,
-                                          kMaxRoadDistanceInMeters,
-                                          OsmAnd::RoutingDataLevel::Basemap);
-    if (!road) {
-        road = _roadLocator->findNearestRoad(position31,
-                                              kMaxRoadDistanceInMeters,
-                                              OsmAnd::RoutingDataLevel::Detailed);
-    }
+                                         kMaxRoadDistanceInMeters,
+                                         OsmAnd::RoutingDataLevel::Detailed);
 
     NSString* localizedTitle;
     NSString* nativeTitle;

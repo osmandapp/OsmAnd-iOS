@@ -292,16 +292,10 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @synchronized(_roadLocatorSync)
             {
-                // Try to find road in basemap, then in detaled map
+
                 _road = _roadLocator->findNearestRoad(position31,
-                                                      kMaxRoadDistanceInMeters,
-                                                      OsmAnd::RoutingDataLevel::Basemap);
-                if (!_road)
-                {
-                    _road = _roadLocator->findNearestRoad(position31,
                                                           kMaxRoadDistanceInMeters,
                                                           OsmAnd::RoutingDataLevel::Detailed);
-                }
             }
 
             dispatch_async(dispatch_get_main_queue(), ^{

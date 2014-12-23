@@ -311,7 +311,7 @@
     [self saveFavoritesToPermamentStorage];
 
     // GPX
-    [self saveGPXToPermamentStorage];
+    // [self saveGPXToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage

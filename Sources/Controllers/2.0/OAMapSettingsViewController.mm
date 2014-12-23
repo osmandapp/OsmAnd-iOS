@@ -93,6 +93,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 @property(readonly) OAObservable* settingsObservable;
 @property(readonly) OAObservable* azimuthObservable;
 @property(readonly) OAObservable* zoomObservable;
+@property(readonly) OAObservable* mapObservable;
 @property(readonly) OAObservable* framePreparedObservable;
 
 
@@ -227,6 +228,7 @@ float _lastAzimuthInPositionTrack;
     _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
+    _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
 
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -433,6 +435,7 @@ float _lastAzimuthInPositionTrack;
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
+            [_mapObservable notifyEventWithKey:nil value1:[NSNumber numberWithInt:newTarget31.x] value2:[NSNumber numberWithInt:newTarget31.y]];
             break;
     }
     

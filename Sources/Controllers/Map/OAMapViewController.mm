@@ -201,6 +201,7 @@
     _settingsObservable = [[OAObservable alloc] init];
     _azimuthObservable = [[OAObservable alloc] init];
     _zoomObservable = [[OAObservable alloc] init];
+    _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
@@ -971,6 +972,7 @@
 
 @synthesize azimuthObservable = _azimuthObservable;
 
+
 - (void)onMapRendererStateChanged:(id)observer withKey:(id)key
 {
     if (![self isViewLoaded])
@@ -997,6 +999,7 @@
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
+            [_mapObservable notifyEventWithKey:nil ];
             break;
     }
 
@@ -1035,6 +1038,8 @@
 }
 
 @synthesize zoomObservable = _zoomObservable;
+
+@synthesize mapObservable = _mapObservable;
 
 - (float)currentZoomInDelta
 {
@@ -1103,6 +1108,9 @@
 
 -(float)calculateMapRuler {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    if(self.currentZoomOutDelta != 0 || self.currentZoomInDelta != 0){
+        return 0;
+    }
     return mapView.currentPixelsToMetersScaleFactor ;
 }
 

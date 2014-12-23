@@ -17,6 +17,5 @@
 
 - (void)notifyEvent;
 - (void)notifyEventWithKey:(id)key;
-- (void)notifyEventWithKey:(id)key andValue:(id)value;
 
 @end

@@ -47,8 +47,10 @@
         
         self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.frame.size.height - 20, self.frame.size.width - 10, 15)];
         [self.textLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:12]];
-        [self.textLabel setText:@"0 m"];
         [self addSubview:self.textLabel];
+        CGRect frame = self.frame;
+        frame.size.width = 0;
+        self.frame = frame;
         self.hidden = true;
     }
 
@@ -79,7 +81,7 @@
         }
     }
     CGRect frame = self.frame;
-    self.hidden = rulerWidth == 0? true : false;
+    self.hidden = rulerWidth == 0 ? true : false;
     frame.size.width = rulerWidth;
     self.frame = frame;
     [self invalidateLayout];

@@ -20,5 +20,6 @@
 - (void)notifyEvent;
 - (void)notifyEventWithKey:(id)key;
 - (void)notifyEventWithKey:(id)key andValue:(id)value;
+- (void)notifyEventWithKey:(id)key value1:(id)value1 value2:(id)value2;
 
 @end

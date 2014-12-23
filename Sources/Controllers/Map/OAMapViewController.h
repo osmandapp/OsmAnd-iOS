@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)animatedAlignAzimuthToNorth;
 
 @property(readonly) OAObservable* zoomObservable;
+@property(readonly) OAObservable* mapObservable;
 - (BOOL)canZoomIn;
 - (void)animatedZoomIn;
 - (BOOL)canZoomOut;

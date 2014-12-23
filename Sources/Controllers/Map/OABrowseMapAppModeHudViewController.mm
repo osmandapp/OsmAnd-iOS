@@ -59,6 +59,7 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
+    OAAutoObserverProxy* _mapLocationObserver;
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
@@ -91,6 +92,9 @@
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
+    _mapLocationObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onMapChanged:withKey:)
+                                                      andObserve:_mapViewController.mapObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
                                                      andObserve:_mapViewController.azimuthObservable];
@@ -156,6 +160,7 @@ NSLayoutConstraint* targetBottomConstraint;
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
     [self.view addConstraint:constraint];
+    self.rulerLabel.hidden = true;
     
     
     // Setup target point menu
@@ -305,6 +310,12 @@ NSLayoutConstraint* targetBottomConstraint;
     });
 }
 
+- (void)onMapChanged:(id)observable withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+    });
+}
 
 -(void)onTargetPointSet:(NSNotification *)notification {
     NSDictionary *params = [notification userInfo];

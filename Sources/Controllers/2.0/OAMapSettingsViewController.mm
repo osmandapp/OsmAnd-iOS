@@ -7,6 +7,8 @@
 //
 
 #import "OAMapSettingsViewController.h"
+#import "OAAppSettings.h"
+
 #import "OASettingsTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 
@@ -575,8 +577,14 @@ float _lastAzimuthInPositionTrack;
             {
                 NSLog(@"Using '%@' variant of style", lastMapSource.variant);
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
-                if (preset)
-                    _mapPresentationEnvironment->setSettings(preset->attributes);
+                if (preset) {
+                    QHash< QString, QString > newSettings(preset->attributes);
+                    if([[OAAppSettings sharedManager] settingAppMode] == APPEARANCE_MODE_NIGHT) {
+                        newSettings[QString::fromLatin1("nightMode")] = "true";
+                    }
+                    
+                    _mapPresentationEnvironment->setSettings(newSettings);
+                }
             }
             
 #if defined(OSMAND_IOS_DEV)

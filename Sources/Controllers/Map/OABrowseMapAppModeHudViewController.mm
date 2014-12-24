@@ -60,6 +60,7 @@
     OAAutoObserverProxy* _mapAzimuthObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapLocationObserver;
+    OAAutoObserverProxy* _appearanceObserver;
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
@@ -95,6 +96,9 @@
     _mapLocationObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapChanged:withKey:)
                                                       andObserve:_mapViewController.mapObservable];
+    _appearanceObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                     withHandler:@selector(onMapAppearanceChanged:withKey:)
+                                                      andObserve:_app.appearanceChangeObservable];
     _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                     withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
                                                      andObserve:_mapViewController.azimuthObservable];
@@ -193,11 +197,10 @@ NSLayoutConstraint* targetBottomConstraint;
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
-    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
+    // [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
     [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
 }
 
@@ -308,6 +311,11 @@ NSLayoutConstraint* targetBottomConstraint;
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
+}
+
+- (void)onMapAppearanceChanged:(id)observable withKey:(id)key
+{
+    [self viewDidAppear:false];
 }
 
 - (void)onMapChanged:(id)observable withKey:(id)key

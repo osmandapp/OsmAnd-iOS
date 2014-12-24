@@ -8,11 +8,14 @@
 
 #import "OAMapViewController.h"
 
+#import "OsmAndApp.h"
+#import "OAAppSettings.h"
+
 #import <UIActionSheet+Blocks.h>
 
-#import "OsmAndApp.h"
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
+
 #import "OAAutoObserverProxy.h"
 #import "OAAddFavoriteViewController.h"
 #import "OANavigationController.h"
@@ -1593,8 +1596,14 @@
             {
                 OALog(@"Using '%@' variant of style", lastMapSource.variant);
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
-                if (preset)
-                    _mapPresentationEnvironment->setSettings(preset->attributes);
+                if (preset) {
+                    QHash< QString, QString > newSettings(preset->attributes);
+                    if([[OAAppSettings sharedManager] settingAppMode] == APPEARANCE_MODE_NIGHT) {
+                        newSettings[QString::fromLatin1("nightMode")] = "true";
+                    }
+                    
+                    _mapPresentationEnvironment->setSettings(newSettings);
+                }
             }
             
 #if defined(OSMAND_IOS_DEV)

@@ -1422,7 +1422,6 @@
 		3AC40ABF19DDC430002FBC40 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				3AC639AB1A1D00C3001D5E57 /* Intro */,
 				3A83147C1A07DC2500473C38 /* OATargetPointView.xib */,
 				3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */,
 			);
@@ -1435,13 +1434,6 @@
 				3AC639A71A1CF568001D5E57 /* Intro_bg@2x.png */,
 			);
 			name = IntroImages;
-			sourceTree = "<group>";
-		};
-		3AC639AB1A1D00C3001D5E57 /* Intro */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Intro;
 			sourceTree = "<group>";
 		};
 		3AC639B51A1E343F001D5E57 /* Init */ = {
@@ -1479,7 +1471,6 @@
 			isa = PBXGroup;
 			children = (
 				3AC639B51A1E343F001D5E57 /* Init */,
-				3ACA4ABA1A0B97A300ECC792 /* Settings */,
 				3ACA4A9D1A0B87C100ECC792 /* OASuperViewController.h */,
 				3ACA4A9E1A0B87C100ECC792 /* OASuperViewController.m */,
 			);
@@ -1517,13 +1508,6 @@
 				3AC639DD1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m */,
 			);
 			name = Cells;
-			sourceTree = "<group>";
-		};
-		3ACA4ABA1A0B97A300ECC792 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Settings;
 			sourceTree = "<group>";
 		};
 		3AFEEE231A0E343600900A47 /* Icons */ = {

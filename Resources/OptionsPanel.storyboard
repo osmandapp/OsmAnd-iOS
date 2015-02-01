@@ -1,38 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="3Og-QO-kJ6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="3Og-QO-kJ6">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--Options Panel Black View Controller-->
         <scene sceneID="9m2-r7-GZ2">
             <objects>
                 <viewController id="3Og-QO-kJ6" customClass="OAOptionsPanelBlackViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="rHw-xC-mo3"/>
-                        <viewControllerLayoutGuide type="bottom" id="cIH-rs-Pvl"/>
-                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="DJT-Nm-Z4p">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OsmAnd" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eb8-cb-aRi">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OsmAnd" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eb8-cb-aRi">
                                 <rect key="frame" x="16" y="30" width="288" height="42"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="42" id="foZ-uh-GH6"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="26"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="deh-uw-7WW">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="deh-uw-7WW">
                                 <rect key="frame" x="-2" y="72" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="322" id="Wzb-8x-NFP"/>
-                                    <constraint firstAttribute="height" constant="50" id="bDa-1q-lLd"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   Map" image="left_menu_icon_map.png">
@@ -43,11 +33,9 @@
                                     <action selector="mapsButtonClicked:" destination="3Og-QO-kJ6" eventType="touchUpInside" id="0yk-fh-5OJ"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LSi-zi-lFT">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="LSi-zi-lFT">
                                 <rect key="frame" x="-2" y="121" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="gIA-8g-3g8"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   My Places" image="left_menu_icon_star.png">
@@ -58,11 +46,9 @@
                                     <action selector="myDataButtonClicked:" destination="3Og-QO-kJ6" eventType="touchUpInside" id="va3-eM-ANR"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YUk-NW-CjD">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="YUk-NW-CjD">
                                 <rect key="frame" x="-2" y="170" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="JDl-kP-IyT"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   Maps &amp; Resources" image="left_menu_icon_settings.png">
@@ -73,11 +59,9 @@
                                     <action selector="mapsAndResourcesButtonClicked:" destination="3Og-QO-kJ6" eventType="touchUpInside" id="Vve-cb-8sK"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kgm-3V-6yW">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="kgm-3V-6yW">
                                 <rect key="frame" x="-2" y="420" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="yps-HL-3wG"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   Settings" image="left_menu_icon_settings.png">
@@ -88,11 +72,9 @@
                                     <action selector="settingsButtonClicked:" destination="3Og-QO-kJ6" eventType="touchUpInside" id="YEB-Ok-v17"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cLp-BX-R5R">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="cLp-BX-R5R">
                                 <rect key="frame" x="-2" y="470" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="DTG-ET-ry0"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   Feedback" image="left_menu_icon_quiz.png">
@@ -103,11 +85,9 @@
                                     <action selector="quizButtonClicked:" destination="3Og-QO-kJ6" eventType="touchUpInside" id="DGW-RQ-8BG"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JCj-ku-ZSZ">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="JCj-ku-ZSZ">
                                 <rect key="frame" x="-2" y="520" width="322" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="50" id="Sc1-zv-YJZ"/>
-                                </constraints>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="18"/>
                                 <inset key="contentEdgeInsets" minX="9" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="   About" image="left_menu_icon_star.png">
@@ -120,20 +100,6 @@
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.30196078431372547" green="0.30196078431372547" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="LSi-zi-lFT" firstAttribute="top" secondItem="eb8-cb-aRi" secondAttribute="bottom" constant="49" id="2T1-sz-K22"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="top" secondItem="rHw-xC-mo3" secondAttribute="bottom" constant="10" id="61Z-BO-wO4"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="leading" secondItem="DJT-Nm-Z4p" secondAttribute="leadingMargin" id="CfP-GC-0fe"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="top" secondItem="rHw-xC-mo3" secondAttribute="bottom" constant="10" id="GmS-gg-Tol"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="leading" secondItem="DJT-Nm-Z4p" secondAttribute="leadingMargin" id="Qsv-ga-ibx"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="trailing" secondItem="DJT-Nm-Z4p" secondAttribute="trailingMargin" id="RDV-Ai-im9"/>
-                            <constraint firstItem="cLp-BX-R5R" firstAttribute="top" secondItem="JCj-ku-ZSZ" secondAttribute="bottom" constant="-1" id="XsW-OQ-kI9"/>
-                            <constraint firstItem="YUk-NW-CjD" firstAttribute="top" secondItem="deh-uw-7WW" secondAttribute="bottom" constant="48" id="YGk-Ko-gtg"/>
-                            <constraint firstItem="JCj-ku-ZSZ" firstAttribute="leading" secondItem="kgm-3V-6yW" secondAttribute="leading" id="Z7T-Mk-K0F"/>
-                            <constraint firstItem="eb8-cb-aRi" firstAttribute="trailing" secondItem="DJT-Nm-Z4p" secondAttribute="trailingMargin" id="oGe-AC-ehC"/>
-                            <constraint firstItem="cIH-rs-Pvl" firstAttribute="top" secondItem="cLp-BX-R5R" secondAttribute="bottom" id="qVp-O0-CP8"/>
-                            <constraint firstItem="deh-uw-7WW" firstAttribute="top" secondItem="eb8-cb-aRi" secondAttribute="bottom" id="s1K-fq-tta"/>
-                        </constraints>
                     </view>
                     <connections>
                         <outlet property="menuButtonHelp" destination="JCj-ku-ZSZ" id="0cD-6K-URO"/>

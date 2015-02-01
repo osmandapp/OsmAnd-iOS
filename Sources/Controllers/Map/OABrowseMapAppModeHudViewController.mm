@@ -192,6 +192,9 @@ NSLayoutConstraint* targetBottomConstraint;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
     // IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack]) {
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
@@ -200,8 +203,18 @@ NSLayoutConstraint* targetBottomConstraint;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
+    
+    [super viewDidAppear:animated];
+    
     // [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
     [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
+    
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        if (self.rulerLabel.hidden)
+            [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+    });
+
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender

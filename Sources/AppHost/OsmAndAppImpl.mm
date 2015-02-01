@@ -58,6 +58,8 @@
 @synthesize favoritesCollection = _favoritesCollection;
 @synthesize gpxCollection = _gpxCollection;
 
+@synthesize dayNightModeObservable = _dayNightModeObservable;
+
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
 #endif // defined(OSMAND_IOS_DEV)
@@ -208,6 +210,8 @@
 
     _appMode = OAAppModeBrowseMap;
     _appModeObservable = [[OAObservable alloc] init];
+
+    _dayNightModeObservable = [[OAObservable alloc] init];
 
     _mapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];

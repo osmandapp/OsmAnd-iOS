@@ -90,14 +90,13 @@
 }
 
 -(void)setMapViewInstance:(UIView*)mapView {
-    self.mapView = mapView;
+    self.mapView = (OAMapRendererView *)mapView;
 }
 
 
 -(void)setNavigationController:(UINavigationController*)controller {
     self.navController = controller;
 }
-
 
 #pragma mark - Actions
 - (IBAction)buttonFavoriteClicked:(id)sender {

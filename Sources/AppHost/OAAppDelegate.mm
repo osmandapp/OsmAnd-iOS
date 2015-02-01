@@ -101,8 +101,8 @@
 
     // Show intro screen
     if (execCount == 1 or true) {
-        OAIntroViewController* cont = [[OAIntroViewController alloc] init];
-        [self.rootViewController.navigationController pushViewController:cont animated:NO];
+        //OAIntroViewController* cont = [[OAIntroViewController alloc] init];
+        //[self.rootViewController.navigationController pushViewController:cont animated:NO];
     }
     
     

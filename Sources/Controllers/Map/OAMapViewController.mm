@@ -117,6 +117,7 @@
 
     OAAutoObserverProxy* _mapModeObserver;
     OAMapMode _lastMapMode;
+    OAAutoObserverProxy* _dayNightModeObserver;
 
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -192,6 +193,10 @@
                                                  withHandler:@selector(onMapModeChanged)
                                                   andObserve:_app.mapModeObservable];
     _lastMapMode = _app.mapMode;
+
+    _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onDayNightModeChanged)
+                                                  andObserve:_app.dayNightModeObservable];
 
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesStatusChanged)
@@ -389,6 +394,8 @@
 
 - (void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     // Resume rendering
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView resumeRendering];
@@ -434,6 +441,8 @@
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+    
     if (![self isViewLoaded])
         return;
 
@@ -1323,6 +1332,14 @@
     }
 
     _lastMapMode = _app.mapMode;
+}
+
+- (void)onDayNightModeChanged
+{
+    if (![self isViewLoaded])
+        return;
+
+    _mapSourceInvalidated = YES;
 }
 
 - (void)onLocationServicesStatusChanged

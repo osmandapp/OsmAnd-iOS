@@ -437,7 +437,8 @@ float _lastAzimuthInPositionTrack;
             newTarget31_converted.x = newTarget31.x;
             newTarget31_converted.y = newTarget31.y;
             _app.data.mapLastViewedState.target31 = newTarget31_converted;
-            [_mapObservable notifyEventWithKey:nil value1:[NSNumber numberWithInt:newTarget31.x] value2:[NSNumber numberWithInt:newTarget31.y]];
+            [_mapObservable notifyEventWithKey:nil ];
+            //[_mapObservable notifyEventWithKey:nil value1:[NSNumber numberWithInt:newTarget31.x] value2:[NSNumber numberWithInt:newTarget31.y]];
             break;
     }
     

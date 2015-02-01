@@ -48,8 +48,20 @@
 #   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
+typedef enum
+{
+    kFavoriteActionNone = 0,
+    kFavoriteActionChangeColor = 1,
+    kFavoriteActionChangeGroup = 2,
+} EFavoriteAction;
 
-@interface OAFavoriteItemViewController ()
+@interface OAFavoriteItemViewController () {
+    OAMapViewController *_mapViewController;
+    OsmAnd::PointI _mainMapTarget31;
+    float _mainMapZoom;
+    BOOL _goAnimated;
+    EFavoriteAction _favAction;
+}
 @end
 
 @implementation OAFavoriteItemViewController
@@ -59,6 +71,7 @@
     if (self) {
         self.favorite = favorite;
         self.newFavorite = NO;
+        _favAction = kFavoriteActionNone;
     }
     return self;
 }
@@ -115,7 +128,102 @@
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
     [self setupView];
+
+    if (_favAction != kFavoriteActionNone) {
+        _favAction = kFavoriteActionNone;
+        return;
+    }
+    
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    _mainMapTarget31 = renderView.target31;
+    _mainMapZoom = renderView.zoom;
+    _goAnimated = NO;
+    
+    [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
+                             andZoom:kDefaultFavoriteZoom
+                            animated:NO];
+
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_favAction != kFavoriteActionNone)
+        return;
+
+    _mapViewController.view.frame = CGRectMake(0, 0, self.mapView.bounds.size.width, self.mapView.bounds.size.height);
+    
+    [_mapViewController willMoveToParentViewController:nil];
+    
+    [self addChildViewController:_mapViewController];
+    [self.mapView addSubview:_mapViewController.view];
+    [_mapViewController didMoveToParentViewController:self];
+    [self.mapView bringSubviewToFront:_mapViewController.view];
+    
+    UIView * parent = self.mapView;
+    UIView * child = _mapViewController.view;
+    [child setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[child]|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:NSDictionaryOfVariableBindings(child)]];
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[child]|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:NSDictionaryOfVariableBindings(child)]];
+    [parent layoutIfNeeded];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (_favAction != kFavoriteActionNone)
+        return;
+
+    [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31]
+                             andZoom:_mainMapZoom
+                            animated:_goAnimated];
+
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if (_favAction != kFavoriteActionNone)
+        return;
+
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    _mapViewController = mapPanel.mapViewController;
+    
+    _mapViewController.view.frame = CGRectMake(0, 0, mapPanel.view.bounds.size.width, mapPanel.view.bounds.size.height);
+    
+    [_mapViewController willMoveToParentViewController:nil];
+    
+    [mapPanel addChildViewController:_mapViewController];
+    [mapPanel.view addSubview:_mapViewController.view];
+    [_mapViewController didMoveToParentViewController:self];
+    [mapPanel.view sendSubviewToBack:_mapViewController.view];
+    
+    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_mapViewController.view}]];
+    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_mapViewController.view}]];
+    
+    
+    [super viewDidDisappear:animated];
 }
 
 -(void)setupView {
@@ -262,11 +370,13 @@
 }
 
 - (IBAction)favoriteChangeColorClicked:(id)sender {
+    _favAction = kFavoriteActionChangeColor;
     OAFavoriteColorViewController* controller = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (IBAction)favoriteChangeGroupClicked:(id)sender {
+    _favAction = kFavoriteActionChangeGroup;
     OAFavoriteGroupViewController* controller = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -292,9 +402,9 @@
                                    Visibility:YES];
 
     // Go to favorite location
-    [rootViewController.mapPanel.mapViewController goToPosition:[OANativeUtilities convertFromPointI:itemData.favorite->getPosition31()]
-                                                    andZoom:kDefaultFavoriteZoom
-                                                   animated:YES];
+    _mainMapTarget31 = itemData.favorite->getPosition31();
+    _mainMapZoom = kDefaultFavoriteZoom;
+    _goAnimated = YES;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

@@ -118,6 +118,12 @@
                                                      group,
                                                      OsmAnd::FColorRGB(color));
     [_app saveFavoritesToPermamentStorage];
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    // Ensure favorites layer is shown
+    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                   Visibility:YES];
+
 
     [self.navigationController popViewControllerAnimated:YES];
 }

@@ -75,6 +75,8 @@
 @property(readonly) id<OAAppearanceProtocol> appearance;
 @property(readonly) OAObservable* appearanceChangeObservable;
 
+@property(readonly) OAObservable* dayNightModeObservable;
+
 #if defined(OSMAND_IOS_DEV)
 @property(readonly) OADebugSettings* debugSettings;
 #endif // defined(OSMAND_IOS_DEV)

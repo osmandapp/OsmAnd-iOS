@@ -15,7 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *directionImageView;
 @property (weak, nonatomic) IBOutlet UILabel *distanceView;
 @property (weak, nonatomic) IBOutlet UIView *cellView;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cellViewContant;
 
 
 @end

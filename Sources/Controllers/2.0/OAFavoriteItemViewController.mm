@@ -111,13 +111,18 @@ typedef enum
     return self;
 }
 
-
+- (void)viewWillLayoutSubviews
+{
+    self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 250.0);
+}
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
+    
     OsmAndAppInstance app = [OsmAndApp instance];
     
-    UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 200 - 64)];
+    UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 230 - 64)];
     [mapButton setTitle:@"" forState:UIControlStateNormal];
     [mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:mapButton];
@@ -125,6 +130,7 @@ typedef enum
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {

@@ -14,8 +14,6 @@
     @property (weak, nonatomic) IBOutlet UILabel *textView;
     @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
-    @property (weak, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
-
 
 -(void)showImage:(BOOL)show;
 

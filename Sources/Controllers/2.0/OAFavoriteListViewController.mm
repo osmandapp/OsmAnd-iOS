@@ -117,7 +117,8 @@ kFavoriteCellType;
     }
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.favoriteTableView reloadData];
+        
+        //[self.favoriteTableView relo];
     });
 
 }
@@ -458,9 +459,19 @@ kFavoriteCellType;
 
 -(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
-        OAPointTableViewCell* cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        
+        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
+
+        OAPointTableViewCell* cell;
+        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        }
+        
         if (cell) {
+            
             OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
             UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
@@ -479,17 +490,26 @@ kFavoriteCellType;
             
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            
+            /*
             if ([self.favoriteTableView isEditing])
                 [cell.cellViewContant setConstant:40];
             else
                 [cell.cellViewContant setConstant:0];
+             */
         }
 
         return cell;
+        
     } else {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-        OAIconTextTableViewCell* cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        }
+        
         if (cell) {
             NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
             [cell.textView setText:[item objectForKey:@"text"]];
@@ -503,9 +523,19 @@ kFavoriteCellType;
 - (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
-        OAPointTableViewCell* cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+
+        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
+        
+        OAPointTableViewCell* cell;
+        cell = (OAPointTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        }
+
         if (cell) {
             OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
@@ -526,18 +556,29 @@ kFavoriteCellType;
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 
-            
+            /*
             if ([self.favoriteTableView isEditing])
                 [cell.cellViewContant setConstant:40];
             else
                 [cell.cellViewContant setConstant:0];
+             */
             
         }
         
         return cell;
+        
     } else {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-        OAIconTextTableViewCell* cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
+        
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        }
+        
         if (cell) {
             NSDictionary* item = [groupData.groupItems objectAtIndex:indexPath.row];
             [cell.textView setText:[item objectForKey:@"text"]];

@@ -40,6 +40,8 @@
 @property (weak, nonatomic) IBOutlet UIView *distanceDirectionHolderView;
 @property (weak, nonatomic) IBOutlet UITextField *favoriteNameTextView;
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation;
 - (IBAction)menuFavoriteClicked:(id)sender;

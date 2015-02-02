@@ -20,10 +20,16 @@
 }
 
 -(void)showImage:(BOOL)show {
+    
     if (show) {
-        self.imageWidthConstraint.constant = 50;
+        
+        CGRect frame = CGRectMake(51.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        self.textView.frame = frame;
+        
     } else {
-        self.imageWidthConstraint.constant = 10;
+        
+        CGRect frame = CGRectMake(11.0, self.textView.frame.origin.y, self.textView.frame.size.width, self.textView.frame.size.height);
+        self.textView.frame = frame;
     }
 }
 

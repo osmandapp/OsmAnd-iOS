@@ -55,6 +55,7 @@
         favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
         if (favoritesCollection)
         {
+            // handled
             handled = YES;
 
             QSection* favoritesSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Import as favorites")];

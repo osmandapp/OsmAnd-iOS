@@ -50,7 +50,10 @@ kFavoriteCellType;
 
 @end
 
-@interface OAFavoriteListViewController ()
+@interface OAFavoriteListViewController () {
+    
+    BOOL isDecelerating;
+}
 
     @property (strong, nonatomic) NSMutableArray* groupsAndFavorites;
     @property (strong, nonatomic) NSArray*  menuItems;
@@ -61,8 +64,11 @@ kFavoriteCellType;
 
 @implementation OAFavoriteListViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    isDecelerating = NO;
 
     self.sortingType = 0;
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -115,12 +121,26 @@ kFavoriteCellType;
         }];
         [self.sortedFavoriteItems setArray:sortedArray];
     }
+
+    if (isDecelerating)
+        return;
+    
+    [self refreshVisibleRows];
+}
+
+- (void)refreshVisibleRows
+{
+    if ([self.favoriteTableView isEditing])
+        return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        //[self.favoriteTableView relo];
+        NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+        [self.favoriteTableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+        
+        //[self.favoriteTableView reloadData];
+        
     });
-
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -313,7 +333,7 @@ kFavoriteCellType;
     
     }
     
-    [self.favoriteTableView reloadData];
+    //[self.favoriteTableView reloadData];
 }
 
 - (IBAction)shareButtonClicked:(id)sender {
@@ -537,6 +557,7 @@ kFavoriteCellType;
         }
 
         if (cell) {
+            
             OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
             UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
@@ -551,6 +572,8 @@ kFavoriteCellType;
             if (red > 0.95 && green > 0.95 && blue > 0.95) {
                 cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
                 cell.colorView.layer.borderWidth = 0.8;
+            } else {
+                cell.colorView.layer.borderWidth = 0;
             }
             
             [cell.distanceView setText:item.distance];
@@ -610,8 +633,30 @@ kFavoriteCellType;
         return NO;
 }
 
-#pragma mark - UITableViewDelegate
+#pragma mark -
+#pragma mark Deferred image loading (UIScrollViewDelegate)
 
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    isDecelerating = YES;
+}
+
+// Load images for all onscreen rows when scrolling is finished
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate) {
+        isDecelerating = NO;
+        [self refreshVisibleRows];
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    isDecelerating = NO;
+    [self refreshVisibleRows];
+}
+
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.directionButton.tag == 1)
@@ -622,10 +667,12 @@ kFavoriteCellType;
 
 -(void)didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath {
     if ([self.favoriteTableView isEditing]) {
+        /*
         OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
         OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.favoriteTableView cellForRowAtIndexPath:indexPath];
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
         [cell.colorView setBackgroundColor:color];
+         */
         return;
     }
     
@@ -644,11 +691,13 @@ kFavoriteCellType;
 
 -(void)didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath {
     if ([self.favoriteTableView isEditing]) {
+        /*
         FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
         OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.favoriteTableView cellForRowAtIndexPath:indexPath];
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
         [cell.colorView setBackgroundColor:color];
+         */
         return;
     }
     

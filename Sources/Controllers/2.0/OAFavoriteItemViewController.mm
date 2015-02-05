@@ -56,11 +56,18 @@ typedef enum
 } EFavoriteAction;
 
 @interface OAFavoriteItemViewController () {
+    
     OAMapViewController *_mapViewController;
     OsmAnd::PointI _mainMapTarget31;
     float _mainMapZoom;
     BOOL _goAnimated;
+    
     EFavoriteAction _favAction;
+    
+    CGFloat contentOriginY;
+    CGFloat dy;
+    
+    BOOL isAdjustingVews;
 }
 @end
 
@@ -113,12 +120,73 @@ typedef enum
 
 - (void)viewWillLayoutSubviews
 {
-    self.scrollView.contentSize = CGSizeMake(self.view.bounds.size.width, 250.0);
+    if (!isAdjustingVews)
+        [self updateLayout:self.interfaceOrientation];
 }
+
+- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
+{
+    
+    CGFloat big;
+    CGFloat small;
+    
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    if (rect.size.width > rect.size.height) {
+        big = rect.size.width;
+        small = rect.size.height;
+    } else {
+        big = rect.size.height;
+        small = rect.size.width;
+    }
+    
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            
+        } else {
+            
+            CGFloat topY = 64.0;
+            CGFloat mapWidth = small;
+            CGFloat mapHeight = 166.0;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
+            self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
+            self.scrollView.contentSize = CGSizeMake(small, 250.0);
+
+        }
+        
+    } else {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            
+        } else {
+            
+            CGFloat topY = 64.0;
+            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height - 40.0;
+            CGFloat mapWidth = 220.0;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
+            self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
+            self.scrollView.contentSize = CGSizeMake(big - mapWidth, 250.0);
+
+        }
+        
+    }
+    
+}
+
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+    
+    contentOriginY = self.favoriteNameButton.frame.origin.y;
     
     OsmAndAppInstance app = [OsmAndApp instance];
     
@@ -154,6 +222,8 @@ typedef enum
     [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
                              andZoom:kDefaultFavoriteZoom
                             animated:NO];
+    
+    [self registerForKeyboardNotifications];
 
 }
 
@@ -198,6 +268,8 @@ typedef enum
     [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31]
                              andZoom:_mainMapZoom
                             animated:_goAnimated];
+
+    [self unregisterKeyboardNotifications];
 
 }
 
@@ -297,6 +369,84 @@ typedef enum
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+// keyboard notifications register+process
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+- (void)unregisterKeyboardNotifications
+{
+    //unregister the keyboard notifications while not visible
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+    
+}
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification*)aNotification
+{
+    CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+    CGRect convertedFrame = [self.view convertRect:keyboardFrame fromView:self.view.window];
+    
+    CGRect frameMap = self.mapView.frame;
+    CGRect frameScrollView = self.scrollView.frame;
+    CGRect frameDistView = self.distanceDirectionHolderView.frame;
+    CGRect frameNameBtn = self.favoriteNameButton.frame;
+    
+    CGFloat minBottom = frameScrollView.origin.y + contentOriginY + frameNameBtn.size.height;
+    CGFloat keyboardTop = self.view.frame.size.height - convertedFrame.size.height;
+    
+    BOOL needOffsetViews = minBottom > keyboardTop;
+    
+    if (needOffsetViews) {
+        
+        dy = keyboardTop - minBottom;
+        isAdjustingVews = YES;
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.mapView.frame = CGRectOffset(frameMap, 0.0, dy);
+            self.scrollView.frame = CGRectOffset(frameScrollView, 0.0, dy);
+            self.distanceDirectionHolderView.frame = CGRectOffset(frameDistView, 0.0, dy);
+        } completion:^(BOOL finished) {
+            isAdjustingVews = NO;
+        }];
+        
+    } else {
+        dy = 0.0;
+    }
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    if (dy < 0.0) {
+        
+        CGRect frameMap = self.mapView.frame;
+        CGRect frameScrollView = self.scrollView.frame;
+        CGRect frameDistView = self.distanceDirectionHolderView.frame;
+
+        isAdjustingVews = YES;
+        [UIView animateWithDuration:.3 animations:^{
+            self.mapView.frame = CGRectOffset(frameMap, 0.0, -dy);
+            self.scrollView.frame = CGRectOffset(frameScrollView, 0.0, -dy);
+            self.distanceDirectionHolderView.frame = CGRectOffset(frameDistView, 0.0, -dy);
+        } completion:^(BOOL finished) {
+            isAdjustingVews = NO;
+        }];
+    }
 }
 
 #pragma mark - UITextFieldDelegate

@@ -16,7 +16,7 @@
                 <subviews>
                     <view contentMode="scaleToFill" id="v7M-wb-9kc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" id="e8C-jI-h86">
                                 <rect key="frame" x="10" y="15" width="20" height="20"/>

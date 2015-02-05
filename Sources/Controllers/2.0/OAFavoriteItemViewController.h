@@ -41,6 +41,7 @@
 @property (weak, nonatomic) IBOutlet UITextField *favoriteNameTextView;
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
 
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation;

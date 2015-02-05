@@ -10,7 +10,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, UIAlertViewDelegate>
+@interface OAFavoriteListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, UIAlertViewDelegate, UIScrollViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *favoriteTableView;

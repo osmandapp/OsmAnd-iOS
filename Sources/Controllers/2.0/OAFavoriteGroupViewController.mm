@@ -91,8 +91,17 @@ UITextField* textView;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-        OAIconTextTableViewCell* cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
+        
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        }
+        
         if (cell) {
             NSString* item = [self.groups objectAtIndex:indexPath.row];
             [cell showImage:NO];
@@ -104,8 +113,17 @@ UITextField* textView;
         }
         return cell;
     } else {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
-        OATextViewTableViewCell* cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+
+        static NSString* const reusableIdentifierPoint = @"OATextViewTableViewCell";
+        
+        OATextViewTableViewCell* cell;
+        cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextViewCell" owner:self options:nil];
+            cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
+        }
+        
         if (cell) {
             
             textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];

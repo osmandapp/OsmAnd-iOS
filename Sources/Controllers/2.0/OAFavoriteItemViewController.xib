@@ -23,6 +23,7 @@
                 <outlet property="saveRemoveButton" destination="U3f-WS-Eox" id="xkg-mD-RdR"/>
                 <outlet property="scrollView" destination="Qiy-IO-fbT" id="HPk-eo-Ma2"/>
                 <outlet property="titleView" destination="n16-cj-6Iy" id="NQb-fI-bbe"/>
+                <outlet property="toolbarView" destination="ApO-Ke-9Ih" id="bVd-ay-sE8"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -160,6 +161,24 @@
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" red="0.12941176469999999" green="0.70588235290000001" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
+                <view contentMode="scaleToFill" id="qeG-XX-C0X">
+                    <rect key="frame" x="105" y="211" width="110" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_favorite_item_direction.png" id="ShA-2o-ojR">
+                            <rect key="frame" x="9" y="6" width="28" height="28"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0,1 км" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999998807907104" id="jxo-3i-cdR">
+                            <rect key="frame" x="40" y="11" width="62" height="21"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="13"/>
+                            <color key="textColor" red="0.2901960784" green="0.53725490200000003" blue="0.94509803920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
                 <view contentMode="scaleToFill" id="b9I-9C-Bgy">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -197,24 +216,6 @@
                         </label>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
-                <view contentMode="scaleToFill" id="qeG-XX-C0X">
-                    <rect key="frame" x="105" y="211" width="110" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_favorite_item_direction.png" id="ShA-2o-ojR">
-                            <rect key="frame" x="9" y="6" width="28" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0,1 км" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.69999998807907104" id="jxo-3i-cdR">
-                            <rect key="frame" x="40" y="11" width="62" height="21"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="13"/>
-                            <color key="textColor" red="0.2901960784" green="0.53725490200000003" blue="0.94509803920000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.93725490196078431" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

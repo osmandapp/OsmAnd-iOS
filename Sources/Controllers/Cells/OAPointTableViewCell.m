@@ -17,10 +17,15 @@
 
 }
 
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+    
+    UIColor *prevColor = self.colorView.backgroundColor;
+    
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
+    self.colorView.backgroundColor = prevColor;
 }
 
 

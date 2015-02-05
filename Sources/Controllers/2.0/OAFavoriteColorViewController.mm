@@ -96,8 +96,16 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAViewTextCell" owner:self options:nil];
-    OAViewTextTableViewCell* cell = (OAViewTextTableViewCell *)[nib objectAtIndex:0];
+    static NSString* const reusableIdentifierPoint = @"OAViewTextTableViewCell";
+    
+    OAViewTextTableViewCell* cell;
+    cell = (OAViewTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAViewTextCell" owner:self options:nil];
+        cell = (OAViewTextTableViewCell *)[nib objectAtIndex:0];
+    }
+    
     if (cell) {
         NSString* colorName = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:0];
         UIColor* currColor = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:1];
@@ -113,6 +121,7 @@
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
     self.colorIndex = indexPath.row;
     [self.tableView reloadData];
 }

@@ -144,8 +144,11 @@ kFavoriteCellType;
 }
 
 -(void)viewWillAppear:(BOOL)animated {
+    
     [self generateData];
     [self setupView];
+    
+    [super viewWillAppear:animated];
 }
 
 -(void)generateData {

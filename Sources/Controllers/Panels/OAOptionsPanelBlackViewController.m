@@ -14,6 +14,7 @@
 
 @interface OAOptionsPanelBlackViewController ()
 
+@property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
@@ -25,30 +26,121 @@
 
 @implementation OAOptionsPanelBlackViewController
 
+- (void)viewWillLayoutSubviews
+{
+    [self updateLayout:self.interfaceOrientation];
+}
+
+- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
+{
+    
+    CGFloat big;
+    CGFloat small;
+    
+    CGRect rect = [[UIScreen mainScreen] bounds];
+    if (rect.size.width > rect.size.height) {
+        big = rect.size.width;
+        small = rect.size.height;
+    } else {
+        big = rect.size.height;
+        small = rect.size.width;
+    }
+    
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            
+        } else {
+            
+            CGFloat topY = 70.0;
+            CGFloat buttonHeight = 50.0;
+            CGFloat scrollHeight = big - topY;
+            
+            self.scrollView.frame = CGRectMake(0.0, topY, small, scrollHeight);
+            self.scrollView.contentSize = CGSizeMake(small, scrollHeight);
+            
+            self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, small + 2.0, buttonHeight);
+            self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, small + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
+
+            self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
+            self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
+            self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, small + 2.0, buttonHeight);
+        }
+        
+    } else {
+        
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            
+            
+        } else {
+            
+            CGFloat topY = 70.0;
+            CGFloat buttonHeight = 50.0;
+            CGFloat viewWidth = self.view.bounds.size.width;
+            CGFloat scrollHeight = small - topY;
+
+            self.scrollView.frame = CGRectMake(0.0, topY, viewWidth, scrollHeight);
+            
+            if (6 * buttonHeight < self.scrollView.frame.size.height) {
+                
+                self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
+                
+                self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, viewWidth + 2.0, buttonHeight);
+                
+                self.scrollView.contentSize = CGSizeMake(viewWidth, scrollHeight);
+
+            } else {
+                
+                self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
+                
+                self.menuButtonSettings.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonQuiz.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonHelp.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
+
+                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 5.0 - 5.0 + buttonHeight);
+            }
+            
+        }
+        
+    }
+    
+}
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
 }
 
 -(void)viewWillAppear:(BOOL)animated {
-    self.menuButtonMaps.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonMaps.layer.borderWidth = 1.0;
     
-    self.menuButtonMyData.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonMyData.layer.borderWidth = 1.0;
+    UIColor *borderColor = [UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1];
     
-    self.menuButtonMapsAndResources.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonMapsAndResources.layer.borderWidth = 1.0;
+    self.menuButtonMaps.layer.borderColor = [borderColor CGColor];
+    self.menuButtonMaps.layer.borderWidth = 0.5;
     
+    self.menuButtonMyData.layer.borderColor = [borderColor CGColor];
+    self.menuButtonMyData.layer.borderWidth = 0.5;
     
-    self.menuButtonSettings.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonSettings.layer.borderWidth = 1.0;
+    self.menuButtonMapsAndResources.layer.borderColor = [borderColor CGColor];
+    self.menuButtonMapsAndResources.layer.borderWidth = 0.5;
+        
+    self.menuButtonSettings.layer.borderColor = [borderColor CGColor];
+    self.menuButtonSettings.layer.borderWidth = 0.5;
     
-    self.menuButtonQuiz.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonQuiz.layer.borderWidth = 1.0;
+    self.menuButtonQuiz.layer.borderColor = [borderColor CGColor];
+    self.menuButtonQuiz.layer.borderWidth = 0.5;
     
-    self.menuButtonHelp.layer.borderColor = [[UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1] CGColor];
-    self.menuButtonHelp.layer.borderWidth = 1.0;
+    self.menuButtonHelp.layer.borderColor = [borderColor CGColor];
+    self.menuButtonHelp.layer.borderWidth = 0.5;
 }
 
 - (void)didReceiveMemoryWarning {

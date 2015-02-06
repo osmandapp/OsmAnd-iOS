@@ -18,6 +18,8 @@
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
 #import "OANavigationController.h"
+#import "OAOptionsPanelBlackViewController.h"
+
 #include "Localization.h"
 
 #define _(name) OARootViewController__##name
@@ -48,9 +50,8 @@
 - (void)commonInit
 {
     // Create panels:
-
-    UIStoryboard* optionsPanelStoryboard = [UIStoryboard storyboardWithName:@"OptionsPanel" bundle:nil];
-    [self setLeftPanel:[optionsPanelStoryboard instantiateInitialViewController]];
+    
+    [self setLeftPanel:[[OAOptionsPanelBlackViewController alloc] initWithNibName:@"OptionsPanel" bundle:nil]];
 
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
 

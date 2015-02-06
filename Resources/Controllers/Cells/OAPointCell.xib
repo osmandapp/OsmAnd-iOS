@@ -55,6 +55,7 @@
                 <outlet property="colorView" destination="e8C-jI-h86" id="16x-Qr-mVu"/>
                 <outlet property="directionImageView" destination="VrJ-ig-6T6" id="eZF-Fc-HFb"/>
                 <outlet property="distanceView" destination="AEu-zA-LLm" id="XcB-c8-dMi"/>
+                <outlet property="rightArrow" destination="mV8-mC-p7n" id="2f0-5j-RW0"/>
                 <outlet property="titleView" destination="o8c-dn-1dR" id="E5l-Pm-tMN"/>
             </connections>
             <point key="canvasLocation" x="223" y="283"/>

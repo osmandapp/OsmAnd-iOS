@@ -16,7 +16,7 @@
 #import "OAAppDelegate.h"
 #import "OAMenuOriginViewControllerProtocol.h"
 #import "OAMenuViewControllerProtocol.h"
-#import "OAIncomingURLViewController.h"
+#import "OAFavoriteImportViewController.h"
 #import "OANavigationController.h"
 #include "Localization.h"
 
@@ -270,7 +270,7 @@
 
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    UIViewController* incomingURLViewController = [[OAIncomingURLViewController alloc] initFor:url];
+    UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
     if (incomingURLViewController == nil)
         return NO;
 

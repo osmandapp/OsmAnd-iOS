@@ -43,6 +43,8 @@
 #   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
+// https://github.com/osmandapp/OsmAnd-resources/blob/master/rendering_styles/default.render.xml
+
 
 #define kElevationMinAngle 30.0f
 #define kMapModePositionTrackingDefaultZoom 15.0f

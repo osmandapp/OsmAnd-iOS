@@ -58,9 +58,12 @@ typedef enum
 @interface OAFavoriteItemViewController () {
     
     OAMapViewController *_mapViewController;
+    OAMapMode _mainMapMode;
     OsmAnd::PointI _mainMapTarget31;
     float _mainMapZoom;
-    BOOL _goAnimated;
+    float _mainMapAzimuth;
+    float _mainMapEvelationAngle;
+    BOOL _showFavorite;
     
     EFavoriteAction _favAction;
     
@@ -214,15 +217,24 @@ typedef enum
     
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
+    _mainMapMode = [OsmAndApp instance].mapMode;
+    
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
     _mainMapTarget31 = renderView.target31;
     _mainMapZoom = renderView.zoom;
-    _goAnimated = NO;
+    _mainMapAzimuth = renderView.azimuth;
+    _mainMapEvelationAngle = renderView.elevationAngle;
+    
+    _showFavorite = NO;
     
     [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
                              andZoom:kDefaultFavoriteZoom
                             animated:NO];
-    
+
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+
     [self registerForKeyboardNotifications];
 
 }
@@ -264,10 +276,21 @@ typedef enum
     
     if (_favAction != kFavoriteActionNone)
         return;
+    
+    if (_showFavorite) {
+        
+        [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31] andZoom:_mainMapZoom animated:YES];
+        
+    } else {
+        
+        [OsmAndApp instance].mapMode = _mainMapMode;
 
-    [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31]
-                             andZoom:_mainMapZoom
-                            animated:_goAnimated];
+        OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+        mapView.target31 = _mainMapTarget31;
+        mapView.zoom = _mainMapZoom;
+        mapView.azimuth = _mainMapAzimuth;
+        mapView.elevationAngle = _mainMapEvelationAngle;
+    }
 
     [self unregisterKeyboardNotifications];
 
@@ -560,7 +583,8 @@ typedef enum
     // Go to favorite location
     _mainMapTarget31 = itemData.favorite->getPosition31();
     _mainMapZoom = kDefaultFavoriteZoom;
-    _goAnimated = YES;
+    
+    _showFavorite = YES;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

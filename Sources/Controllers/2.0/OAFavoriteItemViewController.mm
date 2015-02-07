@@ -578,7 +578,7 @@ typedef enum
     [self.navigationController pushViewController:favController animated:NO];
 }
 
-
+// open map with favorite item
 -(void)goToFavorite {
     OsmAndAppInstance app = [OsmAndApp instance];
     

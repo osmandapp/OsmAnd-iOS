@@ -54,6 +54,8 @@ kFavoriteCellType;
     OsmAndAppInstance _app;
 
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> _favoritesCollection;
+    
+    NSURL *_url;
 
 }
 
@@ -82,6 +84,7 @@ kFavoriteCellType;
         
         self = [super init];
         if (self) {
+            _url = [url copy];
             _app = app;
             _favoritesCollection = favoritesCollection;
         }
@@ -97,7 +100,7 @@ kFavoriteCellType;
         for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
         {
             if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"Favorite with name \"%@\" already exists.", favoriteTitle] delegate:self cancelButtonTitle:@"Ignore" otherButtonTitles:@"Rename", @"Replace", nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"Favorite with name \"%@\" already exists.", favoriteTitle] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ignore", @"Rename", @"Replace", @"Replace All", nil];
                 alert.tag = kAlertConflictWarning;
                 [alert show];
                 self.conflictedName = favoriteTitle;
@@ -110,17 +113,33 @@ kFavoriteCellType;
 
 #pragma mark - UIAlertViewDelegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
     if (alertView.tag == kAlertConflictWarning) {
+        
+        // Cancel
         if (buttonIndex == alertView.cancelButtonIndex) {
+            
+            [self.ignoredNames removeAllObjects];
+            self.conflictedName = @"";
+            _favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(_url.path));
+            
+        // Ignore
+        } else if (buttonIndex == 1) {
+            
             [self.ignoredNames addObject:self.conflictedName];
             [self importClicked:nil];
-        } else if (buttonIndex == 1) {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remane favorite" message:[NSString stringWithFormat:@"Please enter new name for favorite \"%@\"", self.conflictedName] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            
+        // Rename - ask name
+        } else if (buttonIndex == 2) {
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remane favorite" message:[NSString stringWithFormat:@"Please enter new name for favorite \"%@\"", self.conflictedName] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: @"OK", nil];
             alert.alertViewStyle = UIAlertViewStylePlainTextInput;
             alert.tag = kAlertConflictRename;
             [alert show];
             
-        } else if (buttonIndex == 2) {
+        // Replace current
+        } else if (buttonIndex == 3) {
+            
             for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
                 NSString* favoriteTitle = localFavorite->getTitle().toNSString();
                 if ([favoriteTitle isEqualToString:self.conflictedName]) {
@@ -129,15 +148,33 @@ kFavoriteCellType;
                 }
             }
             [self importClicked:nil];
+            
+        // Replace All
+        } else if (buttonIndex == 4) {
+            
+            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
+                for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations()) {
+                    NSString* favoriteTitle = favorite->getTitle().toNSString();
+                    NSString* localFavoriteTitle = localFavorite->getTitle().toNSString();
+                    if ([localFavoriteTitle isEqualToString:favoriteTitle]) {
+                        _app.favoritesCollection->removeFavoriteLocation(localFavorite);
+                    }
+                }
+            }
+            [self importClicked:nil];
         }
-    } else if (alertView.tag == kAlertConflictRename) {
-        NSString* newFavoriteName = [alertView textFieldAtIndex:0].text;
         
-        for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
-            NSString* favoriteTitle = favorite->getTitle().toNSString();
-            if ([favoriteTitle isEqualToString:self.conflictedName]) {
-                favorite->setTitle(QString::fromNSString(newFavoriteName));
-                break;
+    } else if (alertView.tag == kAlertConflictRename) {
+        
+        if (buttonIndex != alertView.cancelButtonIndex) {
+            NSString* newFavoriteName = [alertView textFieldAtIndex:0].text;
+            
+            for(const auto& favorite : _favoritesCollection->getFavoriteLocations()) {
+                NSString* favoriteTitle = favorite->getTitle().toNSString();
+                if ([favoriteTitle isEqualToString:self.conflictedName]) {
+                    favorite->setTitle(QString::fromNSString(newFavoriteName));
+                    break;
+                }
             }
         }
         [self importClicked:nil];
@@ -345,6 +382,10 @@ kFavoriteCellType;
     
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
+}
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
 

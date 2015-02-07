@@ -27,4 +27,4 @@ kSettingsScreen;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property kSettingsScreen settingsType;
 
-@end\
+@end

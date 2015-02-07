@@ -215,9 +215,11 @@ typedef enum
         return;
     }
     
+    OsmAndAppInstance app = [OsmAndApp instance];
+    
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
-    _mainMapMode = [OsmAndApp instance].mapMode;
+    _mainMapMode = app.mapMode;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -228,6 +230,9 @@ typedef enum
     
     _showFavorite = NO;
     
+    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                   Visibility:YES];
+
     [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
                              andZoom:kDefaultFavoriteZoom
                             animated:NO];
@@ -300,6 +305,11 @@ typedef enum
 {
     if (_favAction != kFavoriteActionNone)
         return;
+
+    OsmAndAppInstance app = [OsmAndApp instance];
+
+    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                   Visibility:NO];
 
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     _mapViewController = mapPanel.mapViewController;
@@ -578,7 +588,7 @@ typedef enum
     [rootViewController closeMenuAndPanelsAnimated:YES];
     // Ensure favorites layer is shown
     [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:YES];
+                                   Visibility:NO];
 
     // Go to favorite location
     _mainMapTarget31 = itemData.favorite->getPosition31();

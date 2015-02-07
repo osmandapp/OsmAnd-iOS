@@ -165,12 +165,12 @@
 
 
 - (IBAction)mapsAndResourcesButtonClicked:(id)sender {
-    OASettingsViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+    OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 
 - (IBAction)helpButtonClicked:(id)sender {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2014" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2015" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
 

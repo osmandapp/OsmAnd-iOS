@@ -40,11 +40,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *scopeControlContainerHeightConstraint;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *updateCouneView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *titlePanelView;
+@property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
 
 
@@ -92,12 +92,13 @@ struct RegionResources
     NSInteger _lastSearchScope;
     NSArray* _searchResults;
 
-    CGFloat _originalScopeControlContainerHeight;
-
     MBProgressHUD* _refreshRepositoryProgressHUD;
     UIBarButtonItem* _refreshRepositoryBarButton;
 
     UIBarButtonItem* _searchBackButton;
+    
+    BOOL _isSearching;
+    BOOL _doNotSearch;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -156,8 +157,6 @@ struct RegionResources
 
     _scopeControl.selectedSegmentIndex = _currentScope;
 
-    _originalScopeControlContainerHeight = self.scopeControlContainerHeightConstraint.constant;
-
     _searchBackButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Search")
                                                          style:UIBarButtonItemStylePlain
                                                         target:self
@@ -175,6 +174,29 @@ struct RegionResources
     else
         [_updateCouneView setText:[NSString stringWithFormat:@"%d", _outdatedResources.count()]];
     
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (_doNotSearch) {
+        
+        CGRect f = self.searchDisplayController.searchBar.frame;
+        f.size.height = 0;
+        self.searchDisplayController.searchBar.frame = f;
+        self.searchDisplayController.searchBar.hidden = YES;
+        
+        self.searchButton.hidden = YES;
+        
+    } else {
+        // Hide the search bar until user scrolls up
+        CGRect newBounds = self.tableView.bounds;
+        newBounds.origin.y = newBounds.origin.y + self.searchDisplayController.searchBar.bounds.size.height;
+        self.tableView.bounds = newBounds;
+    }
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:_isSearching];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -711,6 +733,11 @@ struct RegionResources
     [self refreshContent];
 }
 
+- (IBAction)onSearchBtnClicked:(id)sender
+{
+    [self.searchDisplayController.searchBar becomeFirstResponder];
+}
+
 - (void)onRefreshRepositoryButtonClicked
 {
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
@@ -1050,47 +1077,38 @@ struct RegionResources
 
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
+    _isSearching = YES;
+    
+    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         self.scopeControlContainerHeightConstraint.constant = 65.0f;
-                         [self.titlePanelView.superview layoutIfNeeded];
 
-                         self.titlePanelView.alpha = 0.0f;
+                         CGRect newBounds = self.tableView.bounds;
+                         newBounds.origin.y = 0.0;
+                         self.tableView.bounds = newBounds;
+                         self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, -105.0);
+                         self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
+                         
                      } completion:^(BOOL finished) {
                          self.titlePanelView.userInteractionEnabled = NO;
                      }];
 }
 
-- (void)searchDisplayControllerWillEndSearch:(UISearchDisplayController *)controller
-{
-    //NOTE: This doesn't work as expected
-    /*dispatch_async(dispatch_get_main_queue(), ^{
-        [UIView animateWithDuration:0.3
-                              delay:0.0
-                            options:UIViewAnimationOptionCurveLinear
-                         animations:^{
-                             self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
-                             [self.scopeControlContainer.superview layoutIfNeeded];
-
-                             self.scopeControlContainer.alpha = 1.0f;
-                         } completion:^(BOOL finished) {
-                             self.scopeControlContainer.userInteractionEnabled = YES;
-                         }];
-    });*/
-}
-
 - (void)searchDisplayControllerDidEndSearch:(UISearchDisplayController *)controller
 {
+    _isSearching = NO;
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
     [UIView animateWithDuration:0.1
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
-                         self.scopeControlContainerHeightConstraint.constant = _originalScopeControlContainerHeight;
-                         [self.titlePanelView.superview layoutIfNeeded];
 
-                         self.titlePanelView.alpha = 1.0f;
+                         self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, 105.0);
+                         self.tableView.frame = CGRectMake(0.0, 105.0, self.view.bounds.size.width, self.view.bounds.size.height - 105.0);
+
                      } completion:^(BOOL finished) {
                          self.titlePanelView.userInteractionEnabled = YES;
                      }];
@@ -1134,6 +1152,8 @@ struct RegionResources
     {
         OAManageResourcesViewController* subregionViewController = [segue destinationViewController];
 
+        subregionViewController->_doNotSearch = _isSearching || _doNotSearch;
+        
         OAWorldRegion* subregion = nil;
         if (tableView == _tableView && _subregionsSection >= 0)
         {

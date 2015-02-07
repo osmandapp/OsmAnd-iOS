@@ -614,6 +614,16 @@ kFavoriteCellType;
     }
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
+        return indexPath;
+    } else {
+        return nil;
+    }
+    
+}
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     if (self.directionButton.tag == 1)

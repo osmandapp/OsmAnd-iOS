@@ -204,6 +204,22 @@ kFavoriteCellType;
         }
     }
     
+    // Generate ungrouped array
+    if (!ungroupedFavorites.isEmpty())
+    {
+        FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
+        itemData.groupName = @"Favorites";
+        itemData.type = kFavoriteCellTypeUngrouped;
+        
+        for (const auto& favorite : ungroupedFavorites)
+        {
+            OAFavoriteItem* favData = [[OAFavoriteItem alloc] init];
+            favData.favorite = favorite;
+            [itemData.groupItems addObject:favData];
+        }
+        
+        [self.groupsAndFavorites insertObject:itemData atIndex:0];
+    }
     
     [self.favoriteTableView reloadData];
     
@@ -301,12 +317,10 @@ kFavoriteCellType;
         [cell.colorView setBackgroundColor:color];
         
         cell.rightArrow.image = nil;
-        cell.colorView.hidden = YES;
         cell.directionImageView.image = nil;
         cell.distanceView.hidden = YES;
         
-        CGRect titleFrame = CGRectMake(18.0, 15.0, cell.titleView.frame.size.width + 20.0, cell.titleView.frame.size.height);
-        
+        CGRect titleFrame = CGRectMake(cell.titleView.frame.origin.x, 15.0, cell.titleView.frame.size.width + 20.0, cell.titleView.frame.size.height);
         cell.titleView.frame = titleFrame;
 
         CGFloat red;

@@ -529,9 +529,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)showDetailsOf:(LocalResourceItem*)item
 {
+    /*
     NSString* resourceId = item.resourceId.toNSString();
     [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
                                          animated:YES];
+    */
 }
 
 - (void)onItemClicked:(id)senderItem
@@ -553,9 +555,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         else if ([item_ isKindOfClass:[LocalResourceItem class]])
         {
-            LocalResourceItem* item = (LocalResourceItem*)item_;
+            //LocalResourceItem* item = (LocalResourceItem*)item_;
 
-            [self showDetailsOf:item];
+            //[self showDetailsOf:item];
         }
         else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
         {

@@ -291,6 +291,9 @@
 		8A70772A1A84F0F9005E019B /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077261A84F0F9005E019B /* OptionsPanel.xib */; };
 		8A70772B1A84F0F9005E019B /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077261A84F0F9005E019B /* OptionsPanel.xib */; };
 		8A70772C1A84F0F9005E019B /* OptionsPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077261A84F0F9005E019B /* OptionsPanel.xib */; };
+		8A70772F1A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
+		8A7077301A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
+		8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */; };
 		8AF2197F1A7FAE400091071B /* OAPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2197D1A7FAE400091071B /* OAPointCell.xib */; };
 		8AF219801A7FC1860091071B /* OAPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2197D1A7FAE400091071B /* OAPointCell.xib */; };
 		8AF219811A7FC1860091071B /* OAPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF2197D1A7FAE400091071B /* OAPointCell.xib */; };
@@ -1011,6 +1014,8 @@
 		8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteImportViewController.mm; path = Sources/Controllers/2.0/OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
 		8A70771D1A84A7BF005E019B /* OAFavoriteImportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAFavoriteImportViewController.xib; path = Sources/Controllers/2.0/OAFavoriteImportViewController.xib; sourceTree = "<group>"; };
 		8A7077261A84F0F9005E019B /* OptionsPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OptionsPanel.xib; path = Resources/OptionsPanel.xib; sourceTree = "<group>"; };
+		8A70772D1A86C0A3005E019B /* OALocalResourceInfoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocalResourceInfoCell.h; path = Controllers/Resources/OALocalResourceInfoCell.h; sourceTree = "<group>"; };
+		8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OALocalResourceInfoCell.m; path = Controllers/Resources/OALocalResourceInfoCell.m; sourceTree = "<group>"; };
 		8AF2197D1A7FAE400091071B /* OAPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointCell.xib; path = Resources/Controllers/Cells/OAPointCell.xib; sourceTree = "<group>"; };
 		8AF219841A7FCD380091071B /* OAIconTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextCell.xib; path = Resources/Controllers/Cells/OAIconTextCell.xib; sourceTree = "<group>"; };
 		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2024,6 +2029,8 @@
 				BBA3AF19197509B60039D991 /* OAManageResourcesViewController.mm */,
 				BBA3B00319864A730039D991 /* OAOutdatedResourcesViewController.h */,
 				BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */,
+				8A70772D1A86C0A3005E019B /* OALocalResourceInfoCell.h */,
+				8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2942,6 +2949,7 @@
 				3A91739A1A09203D000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
+				8A70772F1A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				BB0275D919D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				3A426F441A18E22500DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
@@ -3036,6 +3044,7 @@
 				3A91739C1A09277F000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
+				8A7077301A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				BB0275DA19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				3A426F471A18F2F600DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
@@ -3162,6 +3171,7 @@
 				BBA3AF4D197FC4BB0039D991 /* OABrowseMapAppModeHudViewController.mm in Sources */,
 				BBA3AF4E197FC4BB0039D991 /* OAManageFavoritesViewController.mm in Sources */,
 				BBA3AF4F197FC4BB0039D991 /* OAAppDelegate.mm in Sources */,
+				8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,

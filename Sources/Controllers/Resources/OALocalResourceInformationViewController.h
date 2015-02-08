@@ -8,14 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-#import <QuickDialogController.h>
-
+#import "OASuperViewController.h"
 #import "OAWorldRegion.h"
 
-@interface OALocalResourceInformationViewController : QuickDialogController
+@interface OALocalResourceInformationViewController : OASuperViewController
 
-- (instancetype)initWithLocalResourceId:(NSString*)resourceId;
-- (instancetype)initWithLocalResourceId:(NSString*)resourceId
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (strong, nonatomic) NSString *regionTitle;
+
+- (void)initWithLocalResourceId:(NSString*)resourceId;
+- (void)initWithLocalResourceId:(NSString*)resourceId
                               forRegion:(OAWorldRegion*)region;
 
 @end

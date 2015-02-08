@@ -8,88 +8,147 @@
 
 #import "OALocalResourceInformationViewController.h"
 
-#import <QuickDialog.h>
-
 #import "OsmAndApp.h"
 #include "Localization.h"
+#import "OALocalResourceInfoCell.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
-@interface OALocalResourceInformationViewController ()
+@interface OALocalResourceInformationViewController ()<UITableViewDelegate, UITableViewDataSource> {
+    
+    NSArray *tableKeys;
+    NSArray *tableValues;
+    
+    NSDateFormatter *formatter;
+}
+
 @end
 
 @implementation OALocalResourceInformationViewController
 {
 }
 
-- (instancetype)initWithLocalResourceId:(NSString*)resourceId
+
+- (void)viewWillAppear:(BOOL)animated
 {
-    QRootElement* rootElement = [OALocalResourceInformationViewController inflateRootWithLocalResourceId:resourceId
-                                                                                               forRegion:nil];
-    self = [super initWithRoot:rootElement];
-    if (self) {
-    }
-    return self;
+    [super viewWillAppear:animated];
+    
+    if (self.regionTitle)
+        self.titleView.text = self.regionTitle;
+
+    [[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
-- (instancetype)initWithLocalResourceId:(NSString*)resourceId
+-(IBAction)backButtonClicked:(id)sender;
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)initWithLocalResourceId:(NSString*)resourceId
+{
+    [self inflateRootWithLocalResourceId:resourceId forRegion:nil];
+}
+
+- (void)initWithLocalResourceId:(NSString*)resourceId
                               forRegion:(OAWorldRegion*)region
 {
-    QRootElement* rootElement = [OALocalResourceInformationViewController inflateRootWithLocalResourceId:resourceId
-                                                                                               forRegion:region];
-    self = [super initWithRoot:rootElement];
-    if (self) {
-    }
-    return self;
+    [self inflateRootWithLocalResourceId:resourceId forRegion:region];
 }
 
-+ (QRootElement*)inflateRootWithLocalResourceId:(NSString*)resourceId
+
+- (void)inflateRootWithLocalResourceId:(NSString*)resourceId
                                       forRegion:(OAWorldRegion*)region
 {
+    
+    NSMutableArray *tKeys = [NSMutableArray array];
+    NSMutableArray *tValues = [NSMutableArray array];
+    
     const auto& resource = [OsmAndApp instance].resourcesManager->getLocalResource(QString::fromNSString(resourceId));
     const auto localResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource);
     if (!resource || !localResource)
-        return nil;
+        return;
+    
     const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
 
-    QRootElement* rootElement = [[QRootElement alloc] init];
-
-    rootElement.title = region ? region.name : OALocalizedString(@"Details");
-    rootElement.grouped = YES;
-
-    QSection* mainSection = [[QSection alloc] init];
-    [rootElement addSection:mainSection];
-
     // Type
-    QLabelElement* typeField = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Type")
-                                                              Value:nil];
-    [mainSection addElement:typeField];
+    [tKeys addObject:OALocalizedString(@"Type")];
     switch (localResource->type)
     {
         case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            typeField.value = OALocalizedString(@"Map");
+            [tValues addObject:OALocalizedString(@"Map")];
             break;
 
         default:
-            typeField.value = OALocalizedString(@"Unknown");
+            [tValues addObject:OALocalizedString(@"Unknown")];
             break;
     }
 
     // Size
-    QLabelElement* sizeField = [[QLabelElement alloc] initWithTitle:OALocalizedString(@"Size")
-                                                              Value:[NSByteCountFormatter stringFromByteCount:localResource->size
-                                                                                                   countStyle:NSByteCountFormatterCountStyleFile]];
-    [mainSection addElement:sizeField];
+    [tKeys addObject:OALocalizedString(@"Size")];
+    [tValues addObject:[NSByteCountFormatter stringFromByteCount:localResource->size countStyle:NSByteCountFormatterCountStyleFile]];
 
     if (installedResource)
     {
         // Timestamp
-        QDateTimeElement* timestampField = [[QDateTimeElement alloc] initWithTitle:OALocalizedString(@"Created on")
-                                                                              date:[NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000]];
-        [mainSection addElement:timestampField];
+        [tKeys addObject:OALocalizedString(@"Created on")];
+        NSDate *d = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
+        
+        if (!formatter) {
+            formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterShortStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+        }
+        
+        [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
     }
+    
+    tableKeys = tKeys;
+    tableValues = tValues;
+}
 
-    return rootElement;
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return tableKeys.count;
+}
+
+- (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @"DETAILS";
+}
+
+- (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString* const detailsCell = @"detailsCell";
+    
+    NSString* title = [tableKeys objectAtIndex:indexPath.row];
+    NSString* subtitle = [tableValues objectAtIndex:indexPath.row];
+    
+    // Obtain reusable cell or create one
+    OALocalResourceInfoCell* cell = [tableView dequeueReusableCellWithIdentifier:detailsCell];
+    if (cell == nil)
+    {
+        cell = [[OALocalResourceInfoCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:detailsCell];
+    }
+        
+    // Fill cell content
+    cell.leftLabelView.text = title;
+    cell.rightLabelView.text = subtitle;
+    
+    return cell;
+}
+
+#pragma mark - UITableViewDelegate
+
+- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
 }
 
 @end

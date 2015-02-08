@@ -33,6 +33,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 #define kOpenSubregionSegue @"openSubregionSegue"
 #define kOpenOutdatedResourcesSegue @"openOutdatedResourcesSegue"
+#define kOpenDetailsSegue @"openDetailsSegue"
+
 
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
@@ -190,10 +192,13 @@ struct RegionResources
         self.searchButton.hidden = YES;
         
     } else {
-        // Hide the search bar until user scrolls up
-        CGRect newBounds = self.tableView.bounds;
-        newBounds.origin.y = newBounds.origin.y + self.searchDisplayController.searchBar.bounds.size.height;
-        self.tableView.bounds = newBounds;
+        
+        if (self.tableView.bounds.origin.y == 0) {
+            // Hide the search bar until user scrolls up
+            CGRect newBounds = self.tableView.bounds;
+            newBounds.origin.y = newBounds.origin.y + self.searchDisplayController.searchBar.bounds.size.height;
+            self.tableView.bounds = newBounds;
+        }
     }
     
     [[UIApplication sharedApplication] setStatusBarHidden:_isSearching];
@@ -701,6 +706,7 @@ struct RegionResources
 
 - (void)showDetailsOf:(LocalResourceItem*)item
 {
+    /*
     NSString* resourceId = item.resourceId.toNSString();
     UIViewController* detailsViewController = nil;
     if (self.searchDisplayController.isActive)
@@ -718,6 +724,7 @@ struct RegionResources
 
     [self.navigationController pushViewController:detailsViewController
                                          animated:YES];
+     */
 }
 
 - (void)onCustomBackButtonClicked
@@ -735,6 +742,7 @@ struct RegionResources
 
 - (IBAction)onSearchBtnClicked:(id)sender
 {
+    //[self onRefreshRepositoryButtonClicked];
     [self.searchDisplayController.searchBar becomeFirstResponder];
 }
 
@@ -975,10 +983,13 @@ struct RegionResources
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id item = nil;
-    if (tableView == self.searchDisplayController.searchResultsTableView)
-        item = [_searchResults objectAtIndex:indexPath.row];
-    else if (tableView == self.tableView)
-    {
+    if (tableView == self.searchDisplayController.searchResultsTableView) {
+        if (_searchResults.count > 0) {
+            item = [_searchResults objectAtIndex:indexPath.row];
+        }
+    }
+    else if (tableView == self.tableView) {
+        
         if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
             item = [[self getSubregionItems] objectAtIndex:indexPath.row];
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
@@ -1179,6 +1190,36 @@ struct RegionResources
 
         [outdatedResourcesViewController setupWithRegion:self.region
                                         andOutdatedItems:_outdatedResourceItems];
+    }
+    else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
+    {
+        OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];
+
+        LocalResourceItem* item = nil;
+        if (tableView == self.searchDisplayController.searchResultsTableView)
+            item = [_searchResults objectAtIndex:cellPath.row];
+        else if (tableView == self.tableView)
+        {
+            if (cellPath.section == _subregionsSection && _subregionsSection >= 0)
+                item = [[self getSubregionItems] objectAtIndex:cellPath.row];
+            else if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
+                item = [[self getResourceItems] objectAtIndex:cellPath.row];
+        }
+
+        if (item) {
+            
+            if (item.worldRegion) {
+                resourceInfoViewController.regionTitle = item.worldRegion.name;
+            } else if (self.region.name) {
+                resourceInfoViewController.regionTitle = self.region.name;
+            } else {
+                resourceInfoViewController.regionTitle = item.title;
+            }
+            
+            NSString* resourceId = item.resourceId.toNSString();
+            [resourceInfoViewController initWithLocalResourceId:resourceId];
+        }
+
     }
 }
 

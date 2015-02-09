@@ -11,4 +11,6 @@
 
 @interface OAManageResourcesViewController : OAResourcesBaseViewController
 
++ (void)prepareData;
+
 @end

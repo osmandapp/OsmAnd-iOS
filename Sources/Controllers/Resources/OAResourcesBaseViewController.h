@@ -45,7 +45,7 @@
 @property BOOL dataInvalidated;
 
 - (void)updateContent;
-- (void)refreshContent;
+- (void)refreshContent:(BOOL)update;
 
 + (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
@@ -66,6 +66,7 @@
 
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item;
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item;
+- (void)startDownloadOfItem:(RepositoryResourceItem*)item;
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
 

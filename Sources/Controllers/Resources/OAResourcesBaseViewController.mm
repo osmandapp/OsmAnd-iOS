@@ -164,7 +164,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
 }
 
-- (void)refreshContent
+- (void)refreshContent:(BOOL)update
 {
 }
 
@@ -192,16 +192,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"Full map of entire region");
+                    return OALocalizedString(@"Map of entire region");
                 else
-                    return OALocalizedString(@"Full map of entire %@", region.name);
+                    return OALocalizedString(@"Map of entire %@", region.name);
             }
             else
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"Full map of the region");
+                    return OALocalizedString(@"Map of the region");
                 else
-                    return OALocalizedString(@"Full map of %@", region.name);
+                    return OALocalizedString(@"Map of %@", region.name);
             }
             break;
 
@@ -353,8 +353,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
+    OAWorldRegion *r;
+    if (self.searchDisplayController.isActive)
+        r = item.worldRegion;
+    else
+        r = self.region;
+    
     NSString* resourceName = [self.class titleOfResource:item.resource
-                                          inRegion:self.region
+                                          inRegion:r
                                     withRegionName:YES];
 
     if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
@@ -383,8 +389,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
                                                              action:^{
-                                                                 [self startDownloadOf:item.resource];
+                                                                 [self startDownloadOfItem:item];
                                                              }], nil] show];
+}
+
+- (void)startDownloadOfItem:(RepositoryResourceItem*)item
+{
+    // Create download tasks
+    NSURLRequest* request = [NSURLRequest requestWithURL:item.resource->url.toNSURL()];
+    
+    NSLog(@"%@", item.resource->id.toNSString());
+    
+    NSString* name = [self.class titleOfResource:item.resource
+                                        inRegion:item.worldRegion
+                                  withRegionName:YES];
+    
+    id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
+                                                                      andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()]
+                                                                     andName:name];
+    
+    [self updateContent];
+    
+    // Resume task only if it's other resource download tasks are not running
+    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil) {
+        [task resume];
+        [self showDownloadViewForTask:task];
+    }
 }
 
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
@@ -392,7 +422,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
 
-    NSLog(resource->id.toNSString());
+    NSLog(@"%@", resource->id.toNSString());
 
     NSString* name = [self.class titleOfResource:resource
                                   inRegion:self.region
@@ -538,7 +568,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)onItemClicked:(id)senderItem
 {
-    OAWorldRegion* reg = self.region;
+    //OAWorldRegion* reg = self.region;
     if ([senderItem isKindOfClass:[ResourceItem class]])
     {
         ResourceItem* item_ = (ResourceItem*)senderItem;
@@ -611,7 +641,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (!self.isViewLoaded || self.view.window == nil)
             return;
         [self.downloadView setProgress:[value floatValue]];
-        [self refreshContent];
+        [self refreshContent:NO];
     });
 }
 

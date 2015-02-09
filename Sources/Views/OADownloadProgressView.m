@@ -30,6 +30,8 @@ typedef enum {
         if (self) {
             [self.progressBarView setProgress:0];
             self.buttonState = kDownloadProgressButtonStatePause;
+            [self setButtonStatePause];
+            
             self.layer.borderWidth=1.0f;
             self.layer.borderColor=[[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3] CGColor];
         }
@@ -47,6 +49,8 @@ typedef enum {
             [self.progressBarView setProgress:0];
             self.frame = frame;
             self.buttonState = kDownloadProgressButtonStatePause;
+            [self setButtonStatePause];
+
             self.layer.borderWidth=1.0f;
             self.layer.borderColor=[[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3] CGColor];
         }

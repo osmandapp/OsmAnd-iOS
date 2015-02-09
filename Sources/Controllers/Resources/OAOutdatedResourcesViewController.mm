@@ -21,6 +21,8 @@
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @end
 
@@ -62,13 +64,18 @@
     self.navigationItem.rightBarButtonItem = refreshAllBarButton;
 }
 
+-(IBAction)backButtonClicked:(id)sender;
+{
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)updateContent
 {
     [self obtainDataAndItems];
-    [self refreshContent];
+    [self refreshContent:YES];
 }
 
-- (void)refreshContent
+- (void)refreshContent:(BOOL)update;
 {
     @synchronized(_dataLock)
     {

@@ -22,6 +22,7 @@
 #import "OAUtilities.h"
 #import "OALog.h"
 #import <Reachability.h>
+#import "OAManageResourcesViewController.h"
 
 #include <algorithm>
 
@@ -234,6 +235,8 @@
     if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
         QElement.appearance = [[OAQFlatAppearance alloc] init];
 
+    [OAManageResourcesViewController prepareData];
+    
     return YES;
 }
 

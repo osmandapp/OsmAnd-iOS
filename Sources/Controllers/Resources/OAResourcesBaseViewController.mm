@@ -400,8 +400,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSLog(@"%@", item.resource->id.toNSString());
     
+    OAWorldRegion *r;
+    
+    if (item.worldRegion)
+        r = item.worldRegion;
+    else
+        r = self.region;
+    
     NSString* name = [self.class titleOfResource:item.resource
-                                        inRegion:item.worldRegion
+                                        inRegion:r
                                   withRegionName:YES];
     
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request

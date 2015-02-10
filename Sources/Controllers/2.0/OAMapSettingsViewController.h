@@ -15,6 +15,7 @@
 @interface OAMapSettingsViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIView *mapView;
 @property (weak, nonatomic) IBOutlet UIScrollView *mapTypeScrollView;
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonCar;

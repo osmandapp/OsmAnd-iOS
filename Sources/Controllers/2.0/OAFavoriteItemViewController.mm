@@ -25,29 +25,6 @@
 #include "Localization.h"
 
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
-#include <OsmAndCore/Map/MapStylePreset.h>
-#include <OsmAndCore/Map/OnlineTileSources.h>
-#include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
-#include <OsmAndCore/Map/ObfMapObjectsProvider.h>
-#include <OsmAndCore/Map/MapPrimitivesProvider.h>
-#include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
-#include <OsmAndCore/Map/MapObjectsSymbolsProvider.h>
-#include <OsmAndCore/Map/MapPresentationEnvironment.h>
-#include <OsmAndCore/Map/MapPrimitiviser.h>
-#include <OsmAndCore/Map/MapMarker.h>
-#include <OsmAndCore/Map/MapMarkerBuilder.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-#include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
-#if defined(OSMAND_IOS_DEV)
-#   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
-#   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
-#endif // defined(OSMAND_IOS_DEV)
-
 typedef enum
 {
     kFavoriteActionNone = 0,
@@ -63,13 +40,13 @@ typedef enum
     float _mainMapZoom;
     float _mainMapAzimuth;
     float _mainMapEvelationAngle;
-    BOOL _showFavorite;
     
     EFavoriteAction _favAction;
     
     CGFloat contentOriginY;
     CGFloat dy;
     
+    BOOL _showFavoriteOnExit;
     BOOL isAdjustingVews;
 }
 @end
@@ -228,7 +205,7 @@ typedef enum
     _mainMapAzimuth = renderView.azimuth;
     _mainMapEvelationAngle = renderView.elevationAngle;
     
-    _showFavorite = NO;
+    _showFavoriteOnExit = NO;
     
     [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
                                    Visibility:YES];
@@ -282,7 +259,7 @@ typedef enum
     if (_favAction != kFavoriteActionNone)
         return;
     
-    if (_showFavorite) {
+    if (_showFavoriteOnExit) {
         
         [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31] andZoom:_mainMapZoom animated:YES];
         
@@ -303,6 +280,8 @@ typedef enum
 
 - (void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+
     if (_favAction != kFavoriteActionNone)
         return;
 
@@ -333,8 +312,6 @@ typedef enum
                                                                       metrics:nil
                                                                         views:@{@"view":_mapViewController.view}]];
     
-    
-    [super viewDidDisappear:animated];
 }
 
 -(void)setupView {
@@ -594,7 +571,7 @@ typedef enum
     _mainMapTarget31 = itemData.favorite->getPosition31();
     _mainMapZoom = kDefaultFavoriteZoom;
     
-    _showFavorite = YES;
+    _showFavoriteOnExit = YES;
     
     [self.navigationController popToRootViewControllerAnimated:YES];
 }

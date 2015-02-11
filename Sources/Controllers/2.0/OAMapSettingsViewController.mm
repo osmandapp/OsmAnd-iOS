@@ -149,7 +149,7 @@
             CGFloat topY = 0.0;
             CGFloat mapHeight = small - topY;
             CGFloat mapWidth = 220.0;
-            //CGFloat mapBottom = topY + mapHeight; test
+            //CGFloat mapBottom = topY + mapHeight; test test 2
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             //self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);

@@ -283,7 +283,7 @@
 
 -(void)setupView {
     
-    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
+    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)]; test
     
     [self setupMapTypeButtons:self.app.data.lastMapSource.type];
     

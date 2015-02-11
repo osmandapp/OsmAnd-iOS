@@ -149,7 +149,7 @@
             CGFloat topY = 0.0;
             CGFloat mapHeight = small - topY;
             CGFloat mapWidth = 220.0;
-            //CGFloat mapBottom = topY + mapHeight; test test 2
+            //CGFloat mapBottom = topY + mapHeight; 
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             //self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
@@ -283,7 +283,7 @@
 
 -(void)setupView {
     
-    [self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
+    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
     
     [self setupMapTypeButtons:self.app.data.lastMapSource.type];
     
@@ -360,9 +360,6 @@
                                    @"value": @"",
                                    @"type": @"OASwitchCell"},
                                  @{@"name": @"GPX",
-                                   @"value": @"",
-                                   @"type": @"OASettingsCell"},
-                                 @{@"name": @"Transport",
                                    @"value": @"",
                                    @"type": @"OASettingsCell"}
                                  ]
@@ -467,11 +464,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
-}
-
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return nil;
 }
 
 

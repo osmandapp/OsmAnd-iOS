@@ -660,7 +660,7 @@
     _displayLink = nil;
 
     // Pause GPU worker thread
-    _renderer->pauseGpuWorker();
+    _renderer->suspendGpuWorker();
     
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 

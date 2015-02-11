@@ -636,7 +636,7 @@
                        forMode:NSDefaultRunLoopMode];
 
     // Resume GPU worker thread
-    _renderer->resumeGpuWorkerThread();
+    _renderer->resumeGpuWorker();
     
     OALog(@"[OAMapRendererView %p] Rendering resumed", self);
 
@@ -660,7 +660,7 @@
     _displayLink = nil;
 
     // Pause GPU worker thread
-    _renderer->pauseGpuWorkerThread();
+    _renderer->suspendGpuWorker();
     
     OALog(@"[OAMapRendererView %p] Rendering suspended", self);
 

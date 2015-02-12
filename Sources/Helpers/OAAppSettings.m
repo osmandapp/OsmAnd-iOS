@@ -88,13 +88,13 @@
         
         // --- Details
         self.mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
-        _mapSettingMoreDetails = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingMoreDetailsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingMoreDetailsKey] : YES;
-        _mapSettingRoadSurface = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadSurfaceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadSurfaceKey] : YES;
-        _mapSettingRoadQuality = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadQualityKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadQualityKey] : YES;
+        _mapSettingMoreDetails = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingMoreDetailsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingMoreDetailsKey] : NO;
+        _mapSettingRoadSurface = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadSurfaceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadSurfaceKey] : NO;
+        _mapSettingRoadQuality = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadQualityKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadQualityKey] : NO;
         _mapSettingAccessRestrictions = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingAccessRestrictionsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingAccessRestrictionsKey] : NO;
         _mapSettingContourLines = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingContourLinesKey] ? [[NSUserDefaults standardUserDefaults] stringForKey:mapSettingContourLinesKey] : @"--";
-        _mapSettingColoredBuildings = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingColoredBuildingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingColoredBuildingsKey] : YES;
-        _mapSettingStreetLighting = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingStreetLightingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingStreetLightingKey] : YES;
+        _mapSettingColoredBuildings = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingColoredBuildingsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingColoredBuildingsKey] : NO;
+        _mapSettingStreetLighting = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingStreetLightingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingStreetLightingKey] : NO;
         
         // --- Hide
         _mapSettingNoAdminboundaries = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingNoAdminboundariesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingNoAdminboundariesKey] : NO;

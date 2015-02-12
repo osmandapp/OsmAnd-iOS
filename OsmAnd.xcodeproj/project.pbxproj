@@ -276,6 +276,9 @@
 		3AFEEECE1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */; };
 		3AFEEECF1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
+		84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
+		84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
+		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84892EF41A8BA73000D1E05D /* OAMapSettingsSubviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84892EF21A8BA73000D1E05D /* OAMapSettingsSubviewController.m */; };
 		84892EF51A8BA73000D1E05D /* OAMapSettingsSubviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84892EF21A8BA73000D1E05D /* OAMapSettingsSubviewController.m */; };
 		84892EF61A8BA73000D1E05D /* OAMapSettingsSubviewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84892EF21A8BA73000D1E05D /* OAMapSettingsSubviewController.m */; };
@@ -1014,6 +1017,8 @@
 		3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_type_icon_walk@2x.png"; path = "Resources/Icons/MapTypes/btn_map_type_icon_walk@2x.png"; sourceTree = "<group>"; };
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA1702B63C7592558F9675 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
+		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		84892EF11A8BA73000D1E05D /* OAMapSettingsSubviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsSubviewController.h; path = Sources/Controllers/2.0/OAMapSettingsSubviewController.h; sourceTree = "<group>"; };
 		84892EF21A8BA73000D1E05D /* OAMapSettingsSubviewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapSettingsSubviewController.m; path = Sources/Controllers/2.0/OAMapSettingsSubviewController.m; sourceTree = "<group>"; };
 		84892EF31A8BA73000D1E05D /* OAMapSettingsSubviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapSettingsSubviewController.xib; path = Sources/Controllers/2.0/OAMapSettingsSubviewController.xib; sourceTree = "<group>"; };
@@ -1612,6 +1617,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		84770A011A8CF2B200585175 /* GPX */ = {
+			isa = PBXGroup;
+			children = (
+				84770A021A8CF91D00585175 /* OAGPXDocument.h */,
+				84770A031A8CF91D00585175 /* OAGPXDocument.mm */,
+			);
+			path = GPX;
+			sourceTree = "<group>";
+		};
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
@@ -1672,6 +1686,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				84770A011A8CF2B200585175 /* GPX */,
 				3AFEEE7B1A0E64BE00900A47 /* Models */,
 				3AC40ABD19DDC3EE002FBC40 /* Support files */,
 				BB54F7051989137700AB40D1 /* Appearance */,
@@ -3012,6 +3027,7 @@
 				3ACA4A9F1A0B87C100ECC792 /* OASuperViewController.m in Sources */,
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				BBA3B02819880DEC0039D991 /* OANavigationController.m in Sources */,
+				84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BB9EFBC4196AFBBD00700BC0 /* OAAddFavoriteViewController.mm in Sources */,
 				3AFEEE961A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
@@ -3108,6 +3124,7 @@
 				BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3B02919880DEC0039D991 /* OANavigationController.m in Sources */,
 				BB451E3218DCD224005FBE09 /* OAUserInteractionPassThroughView.m in Sources */,
+				84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				3AFEEE971A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */,
@@ -3160,6 +3177,7 @@
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				3AFEEE8C1A10FAB200900A47 /* OAFavoriteGroupViewController.mm in Sources */,
 				3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
+				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,

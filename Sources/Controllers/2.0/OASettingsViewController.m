@@ -98,10 +98,15 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    static NSString* const identifierCell = @"OASettingsTableViewCell";
     OASettingsTableViewCell* cell = nil;
     
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-    cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+    }
     
     if (cell) {
         [cell.textView setText: [[self.data objectAtIndex:indexPath.row] objectForKey:@"name"]];

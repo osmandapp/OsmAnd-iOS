@@ -76,6 +76,7 @@
 @property(readonly) OAObservable* appearanceChangeObservable;
 
 @property(readonly) OAObservable* dayNightModeObservable;
+@property(readonly) OAObservable* mapSettingsChangeObservable;
 
 #if defined(OSMAND_IOS_DEV)
 @property(readonly) OADebugSettings* debugSettings;

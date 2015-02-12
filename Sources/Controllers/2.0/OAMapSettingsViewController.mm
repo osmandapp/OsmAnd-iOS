@@ -17,6 +17,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAMapSettingsSubviewController.h"
+#import "OAMapSourcesViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -192,8 +194,10 @@
 {
     [super viewDidAppear:animated];
     
-    if (_inAction)
+    if (_inAction) {
+        _inAction = NO;
         return;
+    }
     
     _mapViewController.view.frame = CGRectMake(0, 0, self.mapView.bounds.size.width, self.mapView.bounds.size.height);
     
@@ -283,7 +287,7 @@
 
 -(void)setupView {
     
-    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)]; test
+    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
     
     [self setupMapTypeButtons:self.app.data.lastMapSource.type];
     
@@ -354,7 +358,7 @@
 }
 
 -(void)setupTableData {
-    self.tableData = @[@{@"groupName": @"Show on map",
+    self.tableData = @[@{@"groupName": @"Show on Map",
                          @"cells": @[
                                  @{@"name": @"Favorite",
                                    @"value": @"",
@@ -364,14 +368,14 @@
                                    @"type": @"OASettingsCell"}
                                  ]
                          },
-                       @{@"groupName": @"Map type",
+                       @{@"groupName": @"Map Type",
                          @"cells": @[
-                                 @{@"name": @"Map type",
-                                   @"value": @"UniRS",
+                                 @{@"name": @"Map Type",
+                                   @"value": _app.data.lastMapSourceName,
                                    @"type": @"OASettingsCell"}
                                  ],
                          },
-                       @{@"groupName": @"Map style",
+                       @{@"groupName": @"Map Style",
                          @"cells": @[
                                  @{@"name": @"Details",
                                    @"value": @"",
@@ -379,7 +383,7 @@
                                  @{@"name": @"Routes",
                                    @"value": @"",
                                    @"type": @"OASettingsCell"},
-                                 @{@"name": @"Other",
+                                 @{@"name": @"Hide",
                                    @"value": @"",
                                    @"type": @"OASettingsCell"}
 
@@ -441,18 +445,41 @@
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)[self.tableData objectAtIndex:indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
 
     UITableViewCell* outCell = nil;
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[data objectForKey:@"type"]  owner:self options:nil];
     if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
-        OASettingsTableViewCell* cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        
+        static NSString* const identifierCell = @"OASettingsTableViewCell";
+        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
+            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        }
+
         if (cell) {
             [cell.textView setText: [data objectForKey:@"name"]];
             [cell.descriptionView setText: [data objectForKey:@"value"]];
         }
         outCell = cell;
+        
     } else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"]) {
-        OASwitchTableViewCell* cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+        
+        static NSString* const identifierCell = @"OASwitchTableViewCell";
+        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
+            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
+        }
+
         if (cell) {
             [cell.textView setText: [data objectForKey:@"name"]];
+            
+            if (indexPath.section == 0 && indexPath.row == 0) {
+                OAAppSettings* settings = [OAAppSettings sharedManager];
+                [cell.switchView setOn:settings.mapSettingShowFavorites];
+                [cell.switchView addTarget:self action:@selector(showFavoriteChanged) forControlEvents:UIControlEventValueChanged];
+            }
+
         }
         outCell = cell;
     }
@@ -460,11 +487,63 @@
     return outCell;
 }
 
+- (void)showFavoriteChanged
+{
+    OASwitchTableViewCell *cell = (OASwitchTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
+    if (cell) {
+        OAAppSettings* settings = [OAAppSettings sharedManager];
+        [settings setMapSettingShowFavorites:cell.switchView.isOn];
+    }
+}
+
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    switch (indexPath.section) {
+            
+        case 1: // Map Type
+        {
+            _inAction = YES;
+
+            OAMapSourcesViewController* resourcesViewController = [[OAMapSourcesViewController alloc] initWithNibName:@"OAMapSourcesViewController" bundle:nil];
+            [self.navigationController pushViewController:resourcesViewController animated:YES];
+
+            break;
+        }
+            
+        case 2: // Map Style
+        {
+            OAMapSettingsSubviewController* settingsSubviewController;
+            
+            switch (indexPath.row) {
+                case 0:
+                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenDetails];
+                    break;
+                case 1:
+                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenRoutes];
+                    break;
+                case 2:
+                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenHide];
+                    break;
+                default:
+                    break;
+            }
+            
+            if (settingsSubviewController) {
+                _inAction = YES;
+                [self.navigationController pushViewController:settingsSubviewController animated:YES];
+            }
+            
+            break;
+        }
+            
+        default:
+            break;
+    }
     
-    
+    [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
+
 
 
 #pragma mark - Orientation

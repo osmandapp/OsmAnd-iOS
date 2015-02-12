@@ -46,8 +46,11 @@ typedef enum
     CGFloat contentOriginY;
     CGFloat dy;
     
-    BOOL _showFavoriteOnExit;
     BOOL isAdjustingVews;
+
+    BOOL _showFavoriteOnExit;
+    BOOL _wasShowingFavorites;
+    BOOL _deleteFavorite;
 }
 @end
 
@@ -192,6 +195,10 @@ typedef enum
         return;
     }
     
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    _wasShowingFavorites = settings.mapSettingShowFavorites;
+    [settings setMapSettingShowFavorites:YES];
+    
     OsmAndAppInstance app = [OsmAndApp instance];
     
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -206,9 +213,6 @@ typedef enum
     _mainMapEvelationAngle = renderView.elevationAngle;
     
     _showFavoriteOnExit = NO;
-    
-    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:YES];
 
     [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
                              andZoom:kDefaultFavoriteZoom
@@ -284,12 +288,7 @@ typedef enum
 
     if (_favAction != kFavoriteActionNone)
         return;
-
-    OsmAndAppInstance app = [OsmAndApp instance];
-
-    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:NO];
-
+    
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     _mapViewController = mapPanel.mapViewController;
     
@@ -312,6 +311,10 @@ typedef enum
                                                                       metrics:nil
                                                                         views:@{@"view":_mapViewController.view}]];
     
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    [settings setMapSettingShowFavorites:NO];
+    if (_showFavoriteOnExit || _wasShowingFavorites)
+        [settings setMapSettingShowFavorites:YES];
 }
 
 -(void)setupView {
@@ -492,6 +495,7 @@ typedef enum
         UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove favorite item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
         [removeAlert show];
     } else {
+        _showFavoriteOnExit = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -583,6 +587,7 @@ typedef enum
         OsmAndAppInstance app = [OsmAndApp instance];
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
+        _deleteFavorite = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }
 }

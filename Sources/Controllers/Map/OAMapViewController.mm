@@ -118,6 +118,7 @@
     OAAutoObserverProxy* _mapModeObserver;
     OAMapMode _lastMapMode;
     OAAutoObserverProxy* _dayNightModeObserver;
+    OAAutoObserverProxy* _mapSettingsChangeObserver;
 
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -197,6 +198,10 @@
     _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onDayNightModeChanged)
                                                   andObserve:_app.dayNightModeObservable];
+
+    _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onMapSettingsChanged)
+                                                       andObserve:_app.mapSettingsChangeObservable];
 
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesStatusChanged)
@@ -1474,6 +1479,19 @@
     }
 }
 
+- (void)onMapSettingsChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        [self updateCurrentMapSource];
+    });
+}
+
 - (void)onLastMapSourceChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1614,11 +1632,45 @@
                 OALog(@"Using '%@' variant of style", lastMapSource.variant);
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset) {
+                    OAAppSettings *settings = [OAAppSettings sharedManager];
                     QHash< QString, QString > newSettings(preset->attributes);
-                    if([[OAAppSettings sharedManager] settingAppMode] == APPEARANCE_MODE_NIGHT) {
+                    if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)
                         newSettings[QString::fromLatin1("nightMode")] = "true";
-                    }
                     
+                    // --- Details
+                    if (settings.mapSettingMoreDetails)
+                        newSettings[QString::fromLatin1("moreDetailed")] = "true";
+                    if (settings.mapSettingRoadSurface)
+                        newSettings[QString::fromLatin1("showSurfaces")] = "true";
+                    if (settings.mapSettingRoadQuality)
+                        newSettings[QString::fromLatin1("showSurfaceGrade")] = "true";
+                    if (settings.mapSettingAccessRestrictions)
+                        newSettings[QString::fromLatin1("showAccess")] = "true";
+                    if (settings.mapSettingContourLines)
+                        newSettings[QString::fromLatin1("contourLines")] = [settings.mapSettingContourLines UTF8String];
+                    if (settings.mapSettingColoredBuildings)
+                        newSettings[QString::fromLatin1("coloredBuildings")] = "true";
+                    if (settings.mapSettingStreetLighting)
+                        newSettings[QString::fromLatin1("streetLighting")] = "true";
+
+                    // --- Routes
+                    if (settings.mapSettingShowCycleRoutes)
+                        newSettings[QString::fromLatin1("showCycleRoutes")] = "true";
+                    if (settings.mapSettingOsmcTraces)
+                        newSettings[QString::fromLatin1("osmcTraces")] = "true";
+                    if (settings.mapSettingAlpineHiking)
+                        newSettings[QString::fromLatin1("alpineHiking")] = "true";
+                    if (settings.mapSettingRoadStyle)
+                        newSettings[QString::fromLatin1("roadStyle")] = [settings.mapSettingRoadStyle UTF8String];
+                    
+                    // --- Hide
+                    if (settings.mapSettingNoAdminboundaries)
+                        newSettings[QString::fromLatin1("noAdminboundaries")] = "true";
+                    if (settings.mapSettingNoPolygons)
+                        newSettings[QString::fromLatin1("noPolygons")] = "true";
+                    if (settings.mapSettingHideBuildings)
+                        newSettings[QString::fromLatin1("hideBuildings")] = "true";
+                                        
                     _mapPresentationEnvironment->setSettings(newSettings);
                 }
             }

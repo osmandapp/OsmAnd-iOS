@@ -60,6 +60,7 @@
 @synthesize gpxCollection = _gpxCollection;
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
+@synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -213,6 +214,7 @@
     _appModeObservable = [[OAObservable alloc] init];
 
     _dayNightModeObservable = [[OAObservable alloc] init];
+    _mapSettingsChangeObservable = [[OAObservable alloc] init];
 
     _mapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];

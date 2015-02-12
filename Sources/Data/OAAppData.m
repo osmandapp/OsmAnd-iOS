@@ -31,6 +31,7 @@
 {
     _lock = [[NSObject alloc] init];
     _lastMapSourceChangeObservable = [[OAObservable alloc] init];
+    _lastMapSourceName = @"default";
 }
 
 - (void)safeInit

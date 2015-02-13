@@ -256,7 +256,7 @@ public static class GPXTrackAnalysis {
 private static class SplitSegment {
 
     
-    
+ 
     public int getNumberOfPoints() {
         return endPointInd - startPointInd + 2;
     }

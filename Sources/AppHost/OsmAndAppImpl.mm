@@ -122,15 +122,12 @@
                                                                            error:&versionError];
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
-
-    NSLog(@"--- %@", [[[NSBundle mainBundle] pathForResource:@"default.render" ofType:@"xml"] stringByDeletingLastPathComponent]);
-    NSLog(@"--- %@", [[NSBundle mainBundle] resourcePath]);
     
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsDir.absolutePath(),
-                                                         QList<QString>() << QString::fromNSString([[[NSBundle mainBundle] pathForResource:@"default.render" ofType:@"xml"] stringByDeletingLastPathComponent]),
+                                                         QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                          _worldMiniBasemapFilename != nil
                                                             ? QString::fromNSString(_worldMiniBasemapFilename)
                                                             : QString::null,

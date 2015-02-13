@@ -276,6 +276,36 @@
 		3AFEEECE1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */; };
 		3AFEEECF1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
+		84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
+		84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
+		84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
+		84630FD61A8E197E005B39F2 /* Cycle-map.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */; };
+		84630FD71A8E197E005B39F2 /* Cycle-map.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */; };
+		84630FD81A8E197E005B39F2 /* Cycle-map.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */; };
+		84630FE51A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */; };
+		84630FE61A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */; };
+		84630FE71A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */; };
+		84630FE81A8E197E005B39F2 /* LightRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCF1A8E197E005B39F2 /* LightRS.render.xml */; };
+		84630FE91A8E197E005B39F2 /* LightRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCF1A8E197E005B39F2 /* LightRS.render.xml */; };
+		84630FEA1A8E197E005B39F2 /* LightRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FCF1A8E197E005B39F2 /* LightRS.render.xml */; };
+		84630FEB1A8E197E005B39F2 /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD01A8E197E005B39F2 /* nautical.render.xml */; };
+		84630FEC1A8E197E005B39F2 /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD01A8E197E005B39F2 /* nautical.render.xml */; };
+		84630FED1A8E197E005B39F2 /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD01A8E197E005B39F2 /* nautical.render.xml */; };
+		84630FEE1A8E197E005B39F2 /* regions.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD11A8E197E005B39F2 /* regions.render.xml */; };
+		84630FEF1A8E197E005B39F2 /* regions.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD11A8E197E005B39F2 /* regions.render.xml */; };
+		84630FF01A8E197E005B39F2 /* regions.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD11A8E197E005B39F2 /* regions.render.xml */; };
+		84630FF11A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD21A8E197E005B39F2 /* Topo-map-assimilation.render.xml */; };
+		84630FF21A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD21A8E197E005B39F2 /* Topo-map-assimilation.render.xml */; };
+		84630FF31A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD21A8E197E005B39F2 /* Topo-map-assimilation.render.xml */; };
+		84630FF41A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */; };
+		84630FF51A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */; };
+		84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */; };
+		84630FF71A8E197E005B39F2 /* UniRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD41A8E197E005B39F2 /* UniRS.render.xml */; };
+		84630FF81A8E197E005B39F2 /* UniRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD41A8E197E005B39F2 /* UniRS.render.xml */; };
+		84630FF91A8E197E005B39F2 /* UniRS.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD41A8E197E005B39F2 /* UniRS.render.xml */; };
+		84630FFA1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
+		84630FFB1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
+		84630FFC1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
 		84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
@@ -338,12 +368,6 @@
 		BB2726DC19CABB7A007C5613 /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B419A8870C008FCCA0 /* libprotobuf_static.a */; };
 		BB2726DD19CABB7A007C5613 /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5B519A8870C008FCCA0 /* libskia_static.a */; };
 		BB2726DE19CABB7A007C5613 /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BB48B5C019A88727008FCCA0 /* libz_static.a */; };
-		BB2726E319CB3825007C5613 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E119CB3825007C5613 /* default.map_styles_presets.xml */; };
-		BB2726E419CB3825007C5613 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E119CB3825007C5613 /* default.map_styles_presets.xml */; };
-		BB2726E519CB3825007C5613 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E119CB3825007C5613 /* default.map_styles_presets.xml */; };
-		BB2726E619CB3825007C5613 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E219CB3825007C5613 /* default.render.xml */; };
-		BB2726E719CB3825007C5613 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E219CB3825007C5613 /* default.render.xml */; };
-		BB2726E819CB3825007C5613 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726E219CB3825007C5613 /* default.render.xml */; };
 		BB2726F819CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB2726F919CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
 		BB2726FA19CB3878007C5613 /* routing.xml in Resources */ = {isa = PBXBuildFile; fileRef = BB2726F719CB3878007C5613 /* routing.xml */; };
@@ -1017,6 +1041,17 @@
 		3AFEEEB71A13A87B00900A47 /* btn_map_type_icon_walk@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_type_icon_walk@2x.png"; path = "Resources/Icons/MapTypes/btn_map_type_icon_walk@2x.png"; sourceTree = "<group>"; };
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA1702B63C7592558F9675 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		84630FBE1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXTrackAnalysis.h; sourceTree = "<group>"; };
+		84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXTrackAnalysis.mm; sourceTree = "<group>"; };
+		84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Cycle-map.render.xml"; path = "../resources/rendering_styles/Cycle-map.render.xml"; sourceTree = "<group>"; };
+		84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "High-contrast-roads.render.xml"; path = "../resources/rendering_styles/High-contrast-roads.render.xml"; sourceTree = "<group>"; };
+		84630FCF1A8E197E005B39F2 /* LightRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = LightRS.render.xml; path = ../resources/rendering_styles/LightRS.render.xml; sourceTree = "<group>"; };
+		84630FD01A8E197E005B39F2 /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
+		84630FD11A8E197E005B39F2 /* regions.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = regions.render.xml; path = ../resources/rendering_styles/regions.render.xml; sourceTree = "<group>"; };
+		84630FD21A8E197E005B39F2 /* Topo-map-assimilation.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Topo-map-assimilation.render.xml"; path = "../resources/rendering_styles/Topo-map-assimilation.render.xml"; sourceTree = "<group>"; };
+		84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Touring-view_(more-contrast-and-details).render.xml"; path = "../resources/rendering_styles/Touring-view_(more-contrast-and-details).render.xml"; sourceTree = "<group>"; };
+		84630FD41A8E197E005B39F2 /* UniRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = UniRS.render.xml; path = ../resources/rendering_styles/UniRS.render.xml; sourceTree = "<group>"; };
+		84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Winter-and-ski.render.xml"; path = "../resources/rendering_styles/Winter-and-ski.render.xml"; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		84892EF11A8BA73000D1E05D /* OAMapSettingsSubviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsSubviewController.h; path = Sources/Controllers/2.0/OAMapSettingsSubviewController.h; sourceTree = "<group>"; };
@@ -1051,8 +1086,6 @@
 		BB0EA14817C60AF9007B572D /* OARootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OARootViewController.m; path = Controllers/OARootViewController.m; sourceTree = "<group>"; };
 		BB2545BB1798253E00E80B58 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BB2545BD1798254B00E80B58 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		BB2726E119CB3825007C5613 /* default.map_styles_presets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.map_styles_presets.xml; path = ../resources/rendering_styles/default.map_styles_presets.xml; sourceTree = "<group>"; };
-		BB2726E219CB3825007C5613 /* default.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.render.xml; path = ../resources/rendering_styles/default.render.xml; sourceTree = "<group>"; };
 		BB2726F719CB3878007C5613 /* routing.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = routing.xml; path = ../resources/routing/routing.xml; sourceTree = "<group>"; };
 		BB2726FC19CB38D7007C5613 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = ../resources/rendering_styles/fonts; sourceTree = "<group>"; };
 		BB2726FD19CB38D7007C5613 /* stubs */ = {isa = PBXFileReference; lastKnownFileType = folder; name = stubs; path = ../resources/rendering_styles/stubs; sourceTree = "<group>"; };
@@ -1617,11 +1650,29 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		84630FC81A8E1947005B39F2 /* styles */ = {
+			isa = PBXGroup;
+			children = (
+				84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */,
+				84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */,
+				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
+				84630FD01A8E197E005B39F2 /* nautical.render.xml */,
+				84630FD11A8E197E005B39F2 /* regions.render.xml */,
+				84630FD21A8E197E005B39F2 /* Topo-map-assimilation.render.xml */,
+				84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */,
+				84630FD41A8E197E005B39F2 /* UniRS.render.xml */,
+				84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */,
+			);
+			name = styles;
+			sourceTree = "<group>";
+		};
 		84770A011A8CF2B200585175 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
 				84770A021A8CF91D00585175 /* OAGPXDocument.h */,
 				84770A031A8CF91D00585175 /* OAGPXDocument.mm */,
+				84630FBE1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.h */,
+				84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -1771,21 +1822,12 @@
 		BB2726DF19CB37F0007C5613 /* map */ = {
 			isa = PBXGroup;
 			children = (
+				84630FC81A8E1947005B39F2 /* styles */,
 				BB2726FC19CB38D7007C5613 /* fonts */,
 				BB2726FD19CB38D7007C5613 /* stubs */,
 				BB2726FE19CB38D7007C5613 /* style-icons */,
-				BB2726E019CB37F8007C5613 /* styles */,
 			);
 			name = map;
-			sourceTree = "<group>";
-		};
-		BB2726E019CB37F8007C5613 /* styles */ = {
-			isa = PBXGroup;
-			children = (
-				BB2726E119CB3825007C5613 /* default.map_styles_presets.xml */,
-				BB2726E219CB3825007C5613 /* default.render.xml */,
-			);
-			name = styles;
 			sourceTree = "<group>";
 		};
 		BB2726F619CB3869007C5613 /* routing */ = {
@@ -2351,6 +2393,7 @@
 				3AFEEE341A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				BB451E1A18DA4180005FBE09 /* position_track_map_mode_button@2x.png in Resources */,
 				BB451E1918DA4180005FBE09 /* position_track_map_mode_button.png in Resources */,
+				84630FEB1A8E197E005B39F2 /* nautical.render.xml in Resources */,
 				BB2726FF19CB38D7007C5613 /* fonts in Resources */,
 				BBA3AF14197507010039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				3AC40AC119DDC43F002FBC40 /* OADownloadProgressView.xib in Resources */,
@@ -2379,15 +2422,14 @@
 				BB451E1818DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB4C74651920CB720018E1EE /* menu_item_install_icon@2x.png in Resources */,
 				3AC40AD419DEB80F002FBC40 /* Btn-Play.png in Resources */,
+				84630FD61A8E197E005B39F2 /* Cycle-map.render.xml in Resources */,
 				BB451E0318DA4176005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451EEB18E60F12005FBE09 /* DebugHUD.xib in Resources */,
-				BB2726E319CB3825007C5613 /* default.map_styles_presets.xml in Resources */,
 				3AFEEECD1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */,
 				BB4C74671920CB720018E1EE /* menu_item_update_icon.png in Resources */,
 				BB27270519CB38D7007C5613 /* style-icons in Resources */,
 				3AC6399D1A1CE1FC001D5E57 /* OAIntroViewController.xib in Resources */,
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
-				BB2726E619CB3825007C5613 /* default.render.xml in Resources */,
 				BBA3AE9F196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
 				3ACA4AA41A0B881300ECC792 /* OASettingsViewController.xib in Resources */,
 				3AC40ACC19DDC663002FBC40 /* Btn-Play@2x.png in Resources */,
@@ -2407,8 +2449,10 @@
 				3AFEEE6C1A0E5B9F00900A47 /* favorite_export_icon@2x.png in Resources */,
 				BB451E0518DA4176005FBE09 /* free_map_mode_button.png in Resources */,
 				BBA6ACF91940BD0A0066AF23 /* my_location_marker_heading_icon@2x.png in Resources */,
+				84630FEE1A8E197E005B39F2 /* regions.render.xml in Resources */,
 				BB451EFE18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */,
 				BBAC895817C252B2003CD1A4 /* Icon-72.png in Resources */,
+				84630FFA1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */,
 				3A02BFB81A31F2FA0019377F /* OAGPXListViewController.xib in Resources */,
 				BB27270219CB38D7007C5613 /* stubs in Resources */,
 				BB451DBF18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
@@ -2430,6 +2474,7 @@
 				3AC40ACB19DDC663002FBC40 /* Btn-Pause@2x.png in Resources */,
 				BB4C74691920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */,
 				BB451E0618DA4176005FBE09 /* free_map_mode_button@2x.png in Resources */,
+				84630FF71A8E197E005B39F2 /* UniRS.render.xml in Resources */,
 				BB451DBB18D70B5B005FBE09 /* HUD_compass@2x.png in Resources */,
 				BB451DCD18D70B5B005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
@@ -2437,6 +2482,7 @@
 				BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				3AFEEE181A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				3AFEEE491A0E34FD00900A47 /* menu_cell_selected@2x.png in Resources */,
+				84630FF11A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */,
 				BBA3AEA3196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
 				BBAC895C17C252CD003CD1A4 /* Icon@2x.png in Resources */,
 				BBAC895E17C25A67003CD1A4 /* Icon.png in Resources */,
@@ -2448,6 +2494,7 @@
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
 				84892F001A8CA6B200D1E05D /* OAMapSourcesViewController.xib in Resources */,
 				3AFEEEC11A13A87B00900A47 /* btn_map_type_icon_car@2x.png in Resources */,
+				84630FE51A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */,
 				BB451EF918E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
 				3AC639C81A1E62B9001D5E57 /* icon_map_mode@2x.png in Resources */,
 				BBA6ACF71940BD0A0066AF23 /* my_location_marker_heading_icon.png in Resources */,
@@ -2464,7 +2511,9 @@
 				BB27270B19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BB451DD918D71121005FBE09 /* HUD_debug_button@2x.png in Resources */,
 				8A7077181A83C25A005E019B /* OATextViewCell.xib in Resources */,
+				84630FE81A8E197E005B39F2 /* LightRS.render.xml in Resources */,
 				BBA3AE9D196D92C50039D991 /* context_pin_marker_icon.png in Resources */,
+				84630FF41A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				BB451E1718DA4180005FBE09 /* map_source_preset_type_pedestrian_icon.png in Resources */,
 				BB451DC018D70B5B005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
 				BB476B6E18D4C8200044D5E1 /* NavigationAppModeHUD.xib in Resources */,
@@ -2546,6 +2595,7 @@
 				3AFEEE531A0E34FD00900A47 /* menu_share_icon@2x.png in Resources */,
 				BBA3AF2B197659270039D991 /* menu_goto_favorite_icon@2x.png in Resources */,
 				BB451E6518DCD224005FBE09 /* map_source_preset_type_bicycle_icon.png in Resources */,
+				84630FE91A8E197E005B39F2 /* LightRS.render.xml in Resources */,
 				BB451E6618DCD224005FBE09 /* HUD_menu_halfbutton.png in Resources */,
 				BB451ED818E36BFB005FBE09 /* menu_item_my_data_icon@2x.png in Resources */,
 				3AC639A91A1CF5F8001D5E57 /* Intro_bg@2x.png in Resources */,
@@ -2553,29 +2603,33 @@
 				BB451E6818DCD224005FBE09 /* drive_mode_button.png in Resources */,
 				BB451E6918DCD224005FBE09 /* map_source_preset_type_general_icon@2x.png in Resources */,
 				3AFEEE441A0E34FD00900A47 /* menu_button@2x.png in Resources */,
+				84630FE61A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */,
 				BB451EFC18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				3AFEEE3E1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
+				84630FFB1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */,
 				3AC09BCF1A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				3AFEEE4D1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				3AFEEE831A0FBF6E00900A47 /* onmap_placeholder@2x.png in Resources */,
+				84630FF51A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				BB451E6A18DCD224005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png in Resources */,
 				BB4C74661920CB720018E1EE /* menu_item_install_icon@2x.png in Resources */,
 				BB451E6B18DCD224005FBE09 /* follow_map_mode_button.png in Resources */,
 				BB451EEC18E60F12005FBE09 /* DebugHUD.xib in Resources */,
-				BB2726E419CB3825007C5613 /* default.map_styles_presets.xml in Resources */,
 				BB4C74681920CB720018E1EE /* menu_item_update_icon.png in Resources */,
 				3AFEEECE1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */,
 				BB27270619CB38D7007C5613 /* style-icons in Resources */,
 				BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */,
+				84630FF81A8E197E005B39F2 /* UniRS.render.xml in Resources */,
 				3AC639A11A1CEB1D001D5E57 /* OAIntroViewController.xib in Resources */,
-				BB2726E719CB3825007C5613 /* default.render.xml in Resources */,
 				BBA3AEA0196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
 				3ACA4AA81A0B8B9F00ECC792 /* OASettingsViewController.xib in Resources */,
 				3AC40ACE19DDC669002FBC40 /* Btn-Play@2x.png in Resources */,
 				BB451E6D18DCD224005FBE09 /* HUD_search_icon@2x.png in Resources */,
 				BB451EE918E60EBB005FBE09 /* HUD_debug_actions_button@2x.png in Resources */,
 				BB451E6E18DCD224005FBE09 /* HUD_right_halfbutton_bg@2x.png in Resources */,
+				84630FF21A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */,
 				84892F011A8CA6B200D1E05D /* OAMapSourcesViewController.xib in Resources */,
+				84630FEC1A8E197E005B39F2 /* nautical.render.xml in Resources */,
 				BB451E6F18DCD224005FBE09 /* HUD_left_narrowbutton_bg@2x.png in Resources */,
 				3A2D892D1A28DD1600511A5C /* favorite_share_icon@2x.png in Resources */,
 				3AC639C11A1E4E71001D5E57 /* search_icon@2x.png in Resources */,
@@ -2606,6 +2660,7 @@
 				BB451E7B18DCD224005FBE09 /* Icon-72@2x.png in Resources */,
 				3AC639F11A220A96001D5E57 /* icon_direction@2x.png in Resources */,
 				3AC40ACD19DDC669002FBC40 /* Btn-Pause@2x.png in Resources */,
+				84630FD71A8E197E005B39F2 /* Cycle-map.render.xml in Resources */,
 				BB4C746A1920CB720018E1EE /* menu_item_update_icon@2x.png in Resources */,
 				BB451E7C18DCD224005FBE09 /* free_map_mode_button@2x.png in Resources */,
 				BB451E7D18DCD224005FBE09 /* HUD_compass@2x.png in Resources */,
@@ -2662,6 +2717,7 @@
 				BB451E9218DCD224005FBE09 /* HUD_search_icon.png in Resources */,
 				BBA3AEA2196D92C50039D991 /* favorite_location_pin_marker_icon.png in Resources */,
 				BB451E9318DCD224005FBE09 /* HUD_menu_narrowbutton.png in Resources */,
+				84630FEF1A8E197E005B39F2 /* regions.render.xml in Resources */,
 				3ACA4AC41A0BA79D00ECC792 /* OASettingsCell.xib in Resources */,
 				BB451E9418DCD224005FBE09 /* HUD_compass_bg.png in Resources */,
 				3AFEEE561A0E34FD00900A47 /* menu_star_icon@2x.png in Resources */,
@@ -2702,6 +2758,7 @@
 				BBA3AF8D197FC4BB0039D991 /* HUD_left_halfbutton_bg.png in Resources */,
 				BBA3AF8E197FC4BB0039D991 /* HUD_debug_actions_button.png in Resources */,
 				3AC639BE1A1E344E001D5E57 /* OAInitViewPanel.xib in Resources */,
+				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				BBA3AF8F197FC4BB0039D991 /* menu_item_install_icon.png in Resources */,
 				BBA3AF90197FC4BB0039D991 /* HUD_menu_halfbutton@2x.png in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
@@ -2712,6 +2769,7 @@
 				BBA3AF95197FC4BB0039D991 /* HUD_button_bg@2x.png in Resources */,
 				BBA3AF96197FC4BB0039D991 /* DriveAppModeHUD~ipad.xib in Resources */,
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
+				84630FF31A8E197E005B39F2 /* Topo-map-assimilation.render.xml in Resources */,
 				BBA3AF98197FC4BB0039D991 /* menu_goto_favorite_icon@2x.png in Resources */,
 				3AFEEE541A0E34FD00900A47 /* menu_share_icon@2x.png in Resources */,
 				BBA3AF99197FC4BB0039D991 /* map_source_preset_type_bicycle_icon.png in Resources */,
@@ -2722,13 +2780,14 @@
 				3ACA4AAA1A0B8BA000ECC792 /* OASettingsViewController.xib in Resources */,
 				3AFEEEC31A13A87B00900A47 /* btn_map_type_icon_car@2x.png in Resources */,
 				BBA3AF9C197FC4BB0039D991 /* Default-Landscape~ipad.png in Resources */,
+				84630FF91A8E197E005B39F2 /* UniRS.render.xml in Resources */,
 				3AFEEE511A0E34FD00900A47 /* menu_icon_back@2x.png in Resources */,
 				BBA3AF9D197FC4BB0039D991 /* drive_mode_button.png in Resources */,
 				BBA3AF9E197FC4BB0039D991 /* map_source_preset_type_general_icon@2x.png in Resources */,
 				3A3FB72919ED45D2007F9EAE /* arrow_up_icon.png in Resources */,
 				3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */,
+				84630FD81A8E197E005B39F2 /* Cycle-map.render.xml in Resources */,
 				84892F021A8CA6B200D1E05D /* OAMapSourcesViewController.xib in Resources */,
-				BB2726E519CB3825007C5613 /* default.map_styles_presets.xml in Resources */,
 				3AFEEE4E1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
 				3AFEEEBD1A13A87B00900A47 /* btn_map_type_icon_bike@2x.png in Resources */,
 				3AC639E81A2200E6001D5E57 /* icon_favorite_item_direction@2x.png in Resources */,
@@ -2772,12 +2831,13 @@
 				BBA3AFB3197FC4BB0039D991 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
 				3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */,
+				84630FE71A8E197E005B39F2 /* High-contrast-roads.render.xml in Resources */,
 				3AC639C61A1E6220001D5E57 /* icon_drive_mode@2x.png in Resources */,
 				BBA3AFB5197FC4BB0039D991 /* HUD_zoom_out_button@2x.png in Resources */,
+				84630FF01A8E197E005B39F2 /* regions.render.xml in Resources */,
 				BBA3AFB6197FC4BB0039D991 /* HUD_compass_bg@2x.png in Resources */,
 				BBA3AFB7197FC4BB0039D991 /* HUD_menu_narrowbutton@2x.png in Resources */,
 				BBA3AFB8197FC4BB0039D991 /* menu_goto_favorite_icon.png in Resources */,
-				BB2726E819CB3825007C5613 /* default.render.xml in Resources */,
 				8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */,
 				BBA3AFB9197FC4BB0039D991 /* my_course_marker_icon.png in Resources */,
 				BBA3AFBA197FC4BB0039D991 /* bar_goto_favorite_icon.png in Resources */,
@@ -2842,12 +2902,15 @@
 				3AFEEE1A1A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				3AFEEE571A0E34FD00900A47 /* menu_star_icon@2x.png in Resources */,
 				BBA3AFE3197FC4BB0039D991 /* HUD_menu_narrowbutton.png in Resources */,
+				84630FED1A8E197E005B39F2 /* nautical.render.xml in Resources */,
 				3AC639A51A1CF2D1001D5E57 /* Default_bg@2x.png in Resources */,
 				BBA3AFE4197FC4BB0039D991 /* HUD_compass_bg.png in Resources */,
 				BBA3AFE5197FC4BB0039D991 /* HUD_debug_pin_button@2x.png in Resources */,
 				3AFEEE421A0E34FD00900A47 /* left_menu_icon_star@2x.png in Resources */,
 				BBA3AFE6197FC4BB0039D991 /* my_location_marker_icon.png in Resources */,
 				BBA3AFE7197FC4BB0039D991 /* my_location_marker_icon@2x.png in Resources */,
+				84630FFC1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */,
+				84630FEA1A8E197E005B39F2 /* LightRS.render.xml in Resources */,
 				3AFEEE7A1A0E63B600900A47 /* OAFavoriteItemViewController.xib in Resources */,
 				BBA3AFE8197FC4BB0039D991 /* HUD_compass.png in Resources */,
 				3AFEEEC01A13A87B00900A47 /* btn_map_type_icon_car_selected@2x.png in Resources */,
@@ -2987,6 +3050,7 @@
 				3A426F441A18E22500DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA31A0B881300ECC792 /* OASettingsViewController.m in Sources */,
+				84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -3084,6 +3148,7 @@
 				3A426F471A18F2F600DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA71A0B8B9F00ECC792 /* OASettingsViewController.m in Sources */,
+				84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
@@ -3250,6 +3315,7 @@
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
+				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				BBA3AF65197FC4BB0039D991 /* OAFavoritesLayerViewController.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

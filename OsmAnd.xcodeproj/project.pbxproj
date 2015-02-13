@@ -306,6 +306,12 @@
 		84630FFA1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
 		84630FFB1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
 		84630FFC1A8E197E005B39F2 /* Winter-and-ski.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */; };
+		84630FFF1A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFD1A8E2CC9005B39F2 /* default.map_styles_presets.xml */; };
+		846310001A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFD1A8E2CC9005B39F2 /* default.map_styles_presets.xml */; };
+		846310011A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFD1A8E2CC9005B39F2 /* default.map_styles_presets.xml */; };
+		846310021A8E2CC9005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFE1A8E2CC9005B39F2 /* default.render.xml */; };
+		846310031A8E2CC9005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFE1A8E2CC9005B39F2 /* default.render.xml */; };
+		846310041A8E2CC9005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FFE1A8E2CC9005B39F2 /* default.render.xml */; };
 		84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
@@ -1052,6 +1058,8 @@
 		84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Touring-view_(more-contrast-and-details).render.xml"; path = "../resources/rendering_styles/Touring-view_(more-contrast-and-details).render.xml"; sourceTree = "<group>"; };
 		84630FD41A8E197E005B39F2 /* UniRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = UniRS.render.xml; path = ../resources/rendering_styles/UniRS.render.xml; sourceTree = "<group>"; };
 		84630FD51A8E197E005B39F2 /* Winter-and-ski.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Winter-and-ski.render.xml"; path = "../resources/rendering_styles/Winter-and-ski.render.xml"; sourceTree = "<group>"; };
+		84630FFD1A8E2CC9005B39F2 /* default.map_styles_presets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.map_styles_presets.xml; path = ../resources/rendering_styles/default.map_styles_presets.xml; sourceTree = "<group>"; };
+		84630FFE1A8E2CC9005B39F2 /* default.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.render.xml; path = ../resources/rendering_styles/default.render.xml; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		84892EF11A8BA73000D1E05D /* OAMapSettingsSubviewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsSubviewController.h; path = Sources/Controllers/2.0/OAMapSettingsSubviewController.h; sourceTree = "<group>"; };
@@ -1653,6 +1661,8 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				84630FFD1A8E2CC9005B39F2 /* default.map_styles_presets.xml */,
+				84630FFE1A8E2CC9005B39F2 /* default.render.xml */,
 				84630FC91A8E197E005B39F2 /* Cycle-map.render.xml */,
 				84630FCE1A8E197E005B39F2 /* High-contrast-roads.render.xml */,
 				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
@@ -2428,6 +2438,7 @@
 				3AFEEECD1A13A87B00900A47 /* btn_map_type_icon_walk@2x.png in Resources */,
 				BB4C74671920CB720018E1EE /* menu_item_update_icon.png in Resources */,
 				BB27270519CB38D7007C5613 /* style-icons in Resources */,
+				84630FFF1A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */,
 				3AC6399D1A1CE1FC001D5E57 /* OAIntroViewController.xib in Resources */,
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
 				BBA3AE9F196D92C50039D991 /* context_pin_marker_icon@2x.png in Resources */,
@@ -2476,6 +2487,7 @@
 				BB451E0618DA4176005FBE09 /* free_map_mode_button@2x.png in Resources */,
 				84630FF71A8E197E005B39F2 /* UniRS.render.xml in Resources */,
 				BB451DBB18D70B5B005FBE09 /* HUD_compass@2x.png in Resources */,
+				846310021A8E2CC9005B39F2 /* default.render.xml in Resources */,
 				BB451DCD18D70B5B005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
@@ -2644,10 +2656,12 @@
 				3A8AC24A19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				BB451EFF18E68F9D005FBE09 /* DebugHUD~ipad.xib in Resources */,
 				BB451E7318DCD224005FBE09 /* Icon-72.png in Resources */,
+				846310031A8E2CC9005B39F2 /* default.render.xml in Resources */,
 				BB27270319CB38D7007C5613 /* stubs in Resources */,
 				3A02BFB91A31F2FA0019377F /* OAGPXListViewController.xib in Resources */,
 				BB451E7418DCD224005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				BB451E7518DCD224005FBE09 /* drive_mode_button@2x.png in Resources */,
+				846310001A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */,
 				3A3FB72819ED45D2007F9EAE /* arrow_up_icon@2x.png in Resources */,
 				BB451E7618DCD224005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
 				BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */,
@@ -2758,6 +2772,7 @@
 				BBA3AF8D197FC4BB0039D991 /* HUD_left_halfbutton_bg.png in Resources */,
 				BBA3AF8E197FC4BB0039D991 /* HUD_debug_actions_button.png in Resources */,
 				3AC639BE1A1E344E001D5E57 /* OAInitViewPanel.xib in Resources */,
+				846310041A8E2CC9005B39F2 /* default.render.xml in Resources */,
 				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				BBA3AF8F197FC4BB0039D991 /* menu_item_install_icon.png in Resources */,
 				BBA3AF90197FC4BB0039D991 /* HUD_menu_halfbutton@2x.png in Resources */,
@@ -2892,6 +2907,7 @@
 				BBA3AFDC197FC4BB0039D991 /* map_source_preset_type_bicycle_icon@2x.png in Resources */,
 				3AC639F51A220A96001D5E57 /* icon_edit@2x.png in Resources */,
 				BBA3AFDD197FC4BB0039D991 /* HUD_debug_pin_button.png in Resources */,
+				846310011A8E2CC9005B39F2 /* default.map_styles_presets.xml in Resources */,
 				BB27270D19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BBA3AFDE197FC4BB0039D991 /* BrowseMapAppModeHUD~ipad.xib in Resources */,
 				BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */,

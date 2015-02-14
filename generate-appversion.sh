@@ -20,8 +20,18 @@ echo "Resources git hash: $RESOURCES_GIT_HASH"
 VERSION="${BASH_REMATCH[1]}"
 RELEASE="${BASH_REMATCH[2]}"
 REVISION="${BASH_REMATCH[3]}"
+
+echo "plist file: '$INFOPLIST_FILE'"
+
+BUILD_NUMBER=`(/usr/libexec/PlistBuddy -c "Print CFBundleVersion" "$INFOPLIST_FILE")`
+BUILD_NUMBER=$((BUILD_NUMBER + 1))
+echo "Build number: $BUILD_NUMBER"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$INFOPLIST_FILE"
+
 BUILD="${BASH_REMATCH[4]}_${CORE_GIT_HASH}_${RESOURCES_GIT_HASH}"
-echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
+/usr/libexec/PlistBuddy -c "Set :GIT_COMMIT_HASH $BUILD" "$INFOPLIST_FILE"
+
+echo "Version: $VERSION.$REVISION$RELEASE ($BUILD_NUMBER)"
 
 # Generate appversion.prefix
 APPVERSION_FILE="$BUILD_ROOT/appversion.prefix"
@@ -29,7 +39,7 @@ echo "AppVersion prefix file: '$APPVERSION_FILE'"
 rm -f "$APPVERSION_FILE"
 echo "" > "$APPVERSION_FILE"
 echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
-echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
+#echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
 touch -m "$APPVERSION_FILE"
 
 # Touch plist file

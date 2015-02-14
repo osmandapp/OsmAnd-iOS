@@ -23,21 +23,6 @@
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
-	<key>CFBundleIcons</key>
-	<dict>
-		<key>CFBundlePrimaryIcon</key>
-		<dict>
-			<key>CFBundleIconFiles</key>
-			<array>
-				<string>Icon.png</string>
-				<string>Icon@2x.png</string>
-				<string>Icon-72.png</string>
-				<string>Icon-72@2x.png</string>
-			</array>
-			<key>UIPrerenderedIcon</key>
-			<true/>
-		</dict>
-	</dict>
 	<key>CFBundleIdentifier</key>
 	<string>net.osmand</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -51,9 +36,15 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>OSMAND_BUILD</string>
+	<string>20</string>
+	<key>GIT_COMMIT_HASH</key>
+	<string>3b59ae8_da04681_9fb5073</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>
@@ -81,6 +72,8 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>UIViewControllerBasedStatusBarAppearance</key>
+	<false/>
 	<key>UTExportedTypeDeclarations</key>
 	<array>
 		<dict>
@@ -127,11 +120,5 @@
 			</dict>
 		</dict>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
-	<key>LSApplicationCategoryType</key>
-	<string></string>
-	<key>UIViewControllerBasedStatusBarAppearance</key>
-	<false/>
 </dict>
 </plist>

@@ -2,16 +2,51 @@
 //  OAGPXTrackAnalysis.m
 //  OsmAnd
 //
-//  Created by Admin on 13/02/15.
+//  Created by Alexey Kulish on 13/02/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
 #import "OAGPXTrackAnalysis.h"
+#import "OAGPXDocument.h"
+
+
+@implementation OASplitMetric
+
+-(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2 { return 0; };
+
+@end
+
+
+@implementation OADistanceMetric
+
+-(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2
+{
+    CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:p1.position.latitude longitude:p1.position.longitude];
+    CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:p2.position.latitude longitude:p2.position.longitude];
+    return [loc1 distanceFromLocation:loc2];
+}
+
+@end
+
+
+@implementation OATimeSplit
+
+-(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2
+{
+    if(p1.time != 0 && p2.time != 0) {
+        return abs((p2.time - p1.time) / 1000l);
+    }
+    return 0;
+}
+
+@end
+
+
 
 
 @implementation OASplitSegment
 
-- (instancetype)initWithTrackSegment:(OATrackSegment *)s
+- (instancetype)initWithTrackSegment:(OAGpxTrkSeg *)s
 {
     self = [super init];
     if (self) {
@@ -24,7 +59,7 @@
     return self;
 }
 
-- (instancetype)initWithSplitSegment:(OATrackSegment *)s pointInd:(int)pointInd cf:(double)cf
+- (instancetype)initWithSplitSegment:(OAGpxTrkSeg *)s pointInd:(int)pointInd cf:(double)cf
 {
     self = [super init];
     if (self) {
@@ -41,36 +76,76 @@
 {
     return _endPointInd - _startPointInd + 2;
 }
-/*
-public WptPt get(int j) {
-    final int ind = j + startPointInd;
+
+-(OAGpxWpt*) get:(int)j
+{
+    int ind = j + _startPointInd;
     if(j == 0) {
-        if(startCoeff == 0) {
-            return segment.points.get(ind);
+        if(_startCoeff == 0) {
+            return [self.segment.points objectAtIndex:ind];
         }
-        return approx(segment.points.get(ind), segment.points.get(ind + 1), startCoeff);
+         return [self approx:[self.segment.points objectAtIndex:ind] w2:[self.segment.points objectAtIndex:ind + 1] cf:_startCoeff];
     }
-    if(j == getNumberOfPoints() - 1) {
-        if(endCoeff == 1) {
-            return segment.points.get(ind);
+    if(j == [self getNumberOfPoints] - 1) {
+        if(_endCoeff == 1) {
+            return [self.segment.points objectAtIndex:ind];
         }
-        return approx(segment.points.get(ind - 1), segment.points.get(ind), endCoeff);
+        return [self approx:[self.segment.points objectAtIndex:ind - 1] w2:[self.segment.points objectAtIndex:ind] cf:_endCoeff];
     }
-    return segment.points.get(ind);
+    return [self.segment.points objectAtIndex:ind];
 }
 
 
-private WptPt approx(WptPt w1, WptPt w2, double cf) {
-    long time = value(w1.time, w2.time, 0, cf);
-    double speed = value(w1.speed, w2.speed, 0, cf);
-    double ele = value(w1.ele, w2.ele, 0, cf);
-    double hdop = value(w1.hdop, w2.hdop, 0, cf);
-    double lat = value(w1.lat, w2.lat, -360, cf);
-    double lon = value(w1.lon, w2.lon, -360, cf);
-    return new WptPt(lat, lon, time, ele, speed, hdop);
+-(OAGpxWpt*) approx:(OAGpxWpt*)w1 w2:(OAGpxWpt*)w2 cf:(double)cf
+{
+    long time = [self valueLong:w1.time vl2:w2.time none:0 cf:cf];
+    double speed = [self valueDbl:w1.speed vl2:w2.speed none:0 cf:cf];
+    double ele = [self valueDbl:w1.elevation vl2:w2.elevation none:0 cf:cf];
+    double hdop = [self valueDbl:w1.horizontalDilutionOfPrecision vl2:w2.horizontalDilutionOfPrecision none:0 cf:cf];
+    double lat = [self valueDbl:w1.position.latitude vl2:w2.position.latitude none:-360 cf:cf];
+    double lon = [self valueDbl:w1.position.longitude vl2:w2.position.longitude none:-360 cf:cf];
+    
+    OAGpxWpt *wpt = [[OAGpxWpt alloc] init];
+    wpt.position = CLLocationCoordinate2DMake(lat, lon);
+    wpt.time = time;
+    wpt.elevation = ele;
+    wpt.speed = speed;
+    wpt.horizontalDilutionOfPrecision = hdop;
+    
+    return wpt;
 }
-*/
+
+-(double) valueDbl:(double)vl vl2:(double)vl2 none:(double)none cf:(double)cf
+{
+    if (vl == none || isnan(vl)) {
+        return vl2;
+    } else if (vl2 == none || isnan(vl2)) {
+        return vl;
+    }
+    return vl + cf * (vl2 - vl);
+}
+
+-(long) valueLong:(long)vl vl2:(long)vl2 none:(long)none cf:(double)cf
+{
+    if(vl == none) {
+        return vl2;
+    } else if(vl2 == none) {
+        return vl;
+    }
+    return vl + ((long) (cf * (vl2 - vl)));
+}
+
+-(double) setLastPoint:(int)pointInd endCf:(double)endCf
+{
+    _endCoeff = endCf;
+    _endPointInd = pointInd;
+    return _endCoeff;
+}
+
 @end
+
+
+
 
 
 @implementation OAGPXTrackAnalysis
@@ -138,258 +213,159 @@ private WptPt approx(WptPt w1, WptPt w2, double cf) {
     return _avgSpeed > 0.0;
 }
 
-+(OAGPXTrackAnalysis *) segment:(long)fileTimestamp seg:(OATrackSegment *)seg
++(OAGPXTrackAnalysis *) segment:(long)fileTimestamp seg:(OAGpxTrkSeg *)seg
 {
-    return [[[OAGPXTrackAnalysis alloc] init] prepareInformation:fileTimestamp splitSegments:@[[[OASplitSegment alloc] initWithTrackSegment:seg]]];
+    OAGPXTrackAnalysis *obj = [[OAGPXTrackAnalysis alloc] init];
+    [obj prepareInformation:fileTimestamp splitSegments:@[[[OASplitSegment alloc] initWithTrackSegment:seg]]];
+    return obj;
 }
 
--(OAGPXTrackAnalysis *) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments
+-(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments
 {
-    return nil;
-}
-
-/*
-public static class GPXTrackAnalysis {
-
+    float totalElevation = 0;
+    int elevationPoints = 0;
+    int speedCount = 0;
+    double totalSpeedSum = 0;
+    _points = 0;
     
-    public GPXTrackAnalysis prepareInformation(long filestamp, SplitSegment... splitSegments) {
-        float[] calculations = new float[1];
-        
-        float totalElevation = 0;
-        int elevationPoints = 0;
-        int speedCount = 0;
-        double totalSpeedSum = 0;
-        points = 0;
-        
-        for (SplitSegment s : splitSegments) {
-            final int numberOfPoints = s.getNumberOfPoints();
-            metricEnd += s.metricEnd;
-            points += numberOfPoints;
-            for (int j = 0; j < numberOfPoints; j++) {
-                WptPt point = s.get(j);
-                if(j == 0 && locationStart == null) {
-                    locationStart = point;
-                }
-                if(j == numberOfPoints - 1) {
-                    locationEnd = point;
-                }
-                long time = point.time;
-                if (time != 0) {
-                    startTime = Math.min(startTime, time);
-                    endTime = Math.max(endTime, time);
-                }
+    for (OASplitSegment *s : splitSegments) {
+        int numberOfPoints = [s getNumberOfPoints];
+        _metricEnd += s.metricEnd;
+        _points += numberOfPoints;
+        for (int j = 0; j < numberOfPoints; j++) {
+            OAGpxWpt *point = [s get:j];
+            if(j == 0 && self.locationStart == nil) {
+                self.locationStart = point;
+            }
+            if(j == numberOfPoints - 1) {
+                self.locationEnd = point;
+            }
+            long time = point.time;
+            if (time != 0) {
+                _startTime = MIN(_startTime, time);
+                _endTime = MAX(_endTime, time);
+            }
+            
+            double elevation = point.elevation;
+            if (!isnan(elevation)) {
+                totalElevation += elevation;
+                elevationPoints++;
+                _minElevation = MIN(elevation, _minElevation);
+                _maxElevation = MAX(elevation, _maxElevation);
+            }
+            
+            float speed = (float) point.speed;
+            if (speed > 0) {
+                totalSpeedSum += speed;
+                _maxSpeed = MAX(speed, _maxSpeed);
+                speedCount++;
+            }
+            
+            if (j > 0) {
+                OAGpxWpt *prev = [s get:j - 1];
                 
-                double elevation = point.ele;
-                if (!Double.isNaN(elevation)) {
-                    totalElevation += elevation;
-                    elevationPoints++;
-                    minElevation = Math.min(elevation, minElevation);
-                    maxElevation = Math.max(elevation, maxElevation);
-                }
-                
-                float speed = (float) point.speed;
-                if (speed > 0) {
-                    totalSpeedSum += speed;
-                    maxSpeed = Math.max(speed, maxSpeed);
-                    speedCount++;
-                }
-                
-                if (j > 0) {
-                    WptPt prev = s.get(j - 1);
-                    
-                    if (!Double.isNaN(point.ele) && !Double.isNaN(prev.ele)) {
-                        double diff = point.ele - prev.ele;
-                        if (diff > 0) {
-                            diffElevationUp += diff;
-                        } else {
-                            diffElevationDown -= diff;
-                        }
+                if (!isnan(point.elevation) && !isnan(prev.elevation)) {
+                    double diff = point.elevation - prev.elevation;
+                    if (diff > 0) {
+                        _diffElevationUp += diff;
+                    } else {
+                        _diffElevationDown -= diff;
                     }
-                    
-                    // totalDistance += MapUtils.getDistance(prev.lat, prev.lon, point.lat, point.lon);
-                    // using ellipsoidal 'distanceBetween' instead of spherical haversine (MapUtils.getDistance) is
-                    // a little more exact, also seems slightly faster:
-                    net.osmand.Location.distanceBetween(prev.lat, prev.lon, point.lat, point.lon, calculations);
-                    totalDistance += calculations[0];
-                    
-                    // Averaging speed values is less exact than totalDistance/timeMoving
-                    if (speed > 0 && point.time != 0 && prev.time != 0) {
-                        timeMoving = timeMoving + (point.time - prev.time);
-                        totalDistanceMoving += calculations[0];
-                    }
+                }
+                
+                // totalDistance += MapUtils.getDistance(prev.lat, prev.lon, point.lat, point.lon);
+                // using ellipsoidal 'distanceBetween' instead of spherical haversine (MapUtils.getDistance) is
+                // a little more exact, also seems slightly faster:
+                CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:prev.position.latitude longitude:prev.position.longitude];
+                CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];
+                CLLocationDistance distance = [loc1 distanceFromLocation:loc2];
+                _totalDistance += distance;
+                
+                // Averaging speed values is less exact than totalDistance/timeMoving
+                if (speed > 0 && point.time != 0 && prev.time != 0) {
+                    _timeMoving = _timeMoving + (point.time - prev.time);
+                    _totalDistanceMoving += distance;
                 }
             }
         }
-        if(!isTimeSpecified()){
-            startTime = filestamp;
-            endTime = filestamp;
-        }
-        
-        // OUTPUT:
-        // 1. Total distance, Start time, End time
-        // 2. Time span
-        timeSpan = endTime - startTime;
-        
-        // 3. Time moving, if any
-        // 4. Elevation, eleUp, eleDown, if recorded
-        if (elevationPoints > 0) {
-            avgElevation =  totalElevation / elevationPoints;
-        }
-        
-        
-        
-        // 5. Max speed and Average speed, if any. Average speed is NOT overall (effective) speed, but only calculated for "moving" periods.
-        if(speedCount > 0) {
-            if(timeMoving > 0){
-                avgSpeed = (float) (totalDistanceMoving / timeMoving * 1000);
-            } else {
-                avgSpeed = (float) (totalSpeedSum / speedCount);
-            }
+    }
+    if(![self isTimeSpecified]){
+        _startTime = fileStamp;
+        _endTime = fileStamp;
+    }
+    
+    // OUTPUT:
+    // 1. Total distance, Start time, End time
+    // 2. Time span
+    _timeSpan = _endTime - _startTime;
+    
+    // 3. Time moving, if any
+    // 4. Elevation, eleUp, eleDown, if recorded
+    if (elevationPoints > 0) {
+        _avgElevation =  totalElevation / elevationPoints;
+    }
+    
+    
+    
+    // 5. Max speed and Average speed, if any. Average speed is NOT overall (effective) speed, but only calculated for "moving" periods.
+    if(speedCount > 0) {
+        if(_timeMoving > 0){
+            _avgSpeed = (float) (_totalDistanceMoving / _timeMoving * 1000);
         } else {
-            avgSpeed = -1;
+            _avgSpeed = (float) (totalSpeedSum / speedCount);
         }
-        return this;
+    } else {
+        _avgSpeed = -1;
     }
     
 }
 
-private static class SplitSegment {
 
-    
- 
-    public int getNumberOfPoints() {
-        return endPointInd - startPointInd + 2;
-    }
-    
-    public WptPt get(int j) {
-        final int ind = j + startPointInd;
-        if(j == 0) {
-            if(startCoeff == 0) {
-                return segment.points.get(ind);
-            }
-            return approx(segment.points.get(ind), segment.points.get(ind + 1), startCoeff);
-        }
-        if(j == getNumberOfPoints() - 1) {
-            if(endCoeff == 1) {
-                return segment.points.get(ind);
-            }
-            return approx(segment.points.get(ind - 1), segment.points.get(ind), endCoeff);
-        }
-        return segment.points.get(ind);
-    }
-    
-    
-    private WptPt approx(WptPt w1, WptPt w2, double cf) {
-        long time = value(w1.time, w2.time, 0, cf);
-        double speed = value(w1.speed, w2.speed, 0, cf);
-        double ele = value(w1.ele, w2.ele, 0, cf);
-        double hdop = value(w1.hdop, w2.hdop, 0, cf);
-        double lat = value(w1.lat, w2.lat, -360, cf);
-        double lon = value(w1.lon, w2.lon, -360, cf);
-        return new WptPt(lat, lon, time, ele, speed, hdop);
-    }
-    
-    private double value(double vl, double vl2, double none, double cf) {
-        if(vl == none || Double.isNaN(vl)) {
-            return vl2;
-        } else if (vl2 == none || Double.isNaN(vl2)) {
-            return vl;
-        }
-        return vl + cf * (vl2 - vl);
-    }
-    
-    private long value(long vl, long vl2, long none, double cf) {
-        if(vl == none) {
-            return vl2;
-        } else if(vl2 == none) {
-            return vl;
-        }
-        return vl + ((long) (cf * (vl2 - vl)));
-    }
-    
-    
-    public double setLastPoint(int pointInd, double endCf) {
-        endCoeff = endCf;
-        endPointInd = pointInd;
-        return endCoeff;
-    }
-    
-}
 
-private static SplitMetric getDistanceMetric() {
-    return new SplitMetric() {
-        
-        private float[] calculations = new float[1];
-        
-        @Override
-        public double metric(WptPt p1, WptPt p2) {
-            net.osmand.Location.distanceBetween(p1.lat, p1.lon, p2.lat, p2.lon, calculations);
-            return calculations[0];
-        }
-    };
-}
-
-private static SplitMetric getTimeSplit() {
-    return new SplitMetric() {
-        
-        @Override
-        public double metric(WptPt p1, WptPt p2) {
-            if(p1.time != 0 && p2.time != 0) {
-                return (int) Math.abs((p2.time - p1.time) / 1000l);
-            }
-            return 0;
-        }
-    };
-}
-
-private abstract static class SplitMetric {
-    
-    public abstract double metric(WptPt p1, WptPt p2);
-    
-}
-
-private static void splitSegment(SplitMetric metric, double metricLimit, List<SplitSegment> splitSegments,
-                                 TrkSegment segment) {
++(void) splitSegment:(OASplitMetric*)metric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
+             segment:(OAGpxTrkSeg*)segment
+{
     double currentMetricEnd = metricLimit;
-    SplitSegment sp = new SplitSegment(segment, 0, 0);
+    OASplitSegment *sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:0 cf:0];
     double total = 0;
-    WptPt prev = null ;
-    for (int k = 0; k < segment.points.size(); k++) {
-        WptPt point = segment.points.get(k);
+    OAGpxWpt *prev = nil;
+    for (int k = 0; k < segment.points.count; k++) {
+        OAGpxWpt *point = [segment.points objectAtIndex:k];
         if (k > 0) {
-            double currentSegment = metric.metric(prev, point);
+            double currentSegment = [metric metric:prev p2:point];
             while (total + currentSegment > currentMetricEnd) {
                 double p = currentMetricEnd - total;
-                double cf = (p / currentSegment); 
-                sp.setLastPoint(k - 1, cf);
+                double cf = (p / currentSegment);
+                [sp setLastPoint:k - 1 endCf:cf];
                 sp.metricEnd = currentMetricEnd;
-                splitSegments.add(sp);
+                [splitSegments addObject:sp];
                 
-                sp = new SplitSegment(segment, k - 1, cf);
+                sp = [[OASplitSegment alloc] initWithSplitSegment:segment pointInd:k-1 cf:cf];
                 currentMetricEnd += metricLimit;
-                prev = sp.get(0);
+                prev = [sp get:0];
             }
             total += currentSegment;
         }
         prev = point;
     }
-    if (segment.points.size() > 0
-        && !(sp.endPointInd == segment.points.size() - 1 && sp.startCoeff == 1)) {
+    if (segment.points.count > 0
+        && !(sp.endPointInd == segment.points.count - 1 && sp.startCoeff == 1)) {
         sp.metricEnd = total;
-        sp.setLastPoint(segment.points.size() - 2, 1);
-        splitSegments.add(sp);
+        [sp setLastPoint:segment.points.count - 2 endCf:1.0];
+        [splitSegments addObject:(sp)];
     }
 }
 
-private static List<GPXTrackAnalysis> convert(List<SplitSegment> splitSegments) {
-    List<GPXTrackAnalysis> ls = new ArrayList<GPXUtilities.GPXTrackAnalysis>();
-    for(SplitSegment s : splitSegments) {
-        GPXTrackAnalysis a = new GPXTrackAnalysis();
-        a.prepareInformation(0, s);
-        ls.add(a);
++(NSArray*) convert:(NSArray*)splitSegments
+{
+    NSMutableArray *ls = [NSMutableArray array];
+    for(OASplitSegment *s : splitSegments) {
+        OAGPXTrackAnalysis *a = [[OAGPXTrackAnalysis alloc] init];
+        [a prepareInformation:0 splitSegments:@[s]];
+        [ls addObject:a];
     }
     return ls;
 }
- */
+
 
 @end

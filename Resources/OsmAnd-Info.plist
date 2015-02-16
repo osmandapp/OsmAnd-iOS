@@ -36,9 +36,9 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>20</string>
+	<string>OSMAND_BUILD</string>
 	<key>GIT_COMMIT_HASH</key>
-	<string>3b59ae8_da04681_9fb5073</string>
+	<string>OSMAND_HASH</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

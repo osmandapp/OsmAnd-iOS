@@ -2,7 +2,7 @@
 //  OAGPXDocument.m
 //  OsmAnd
 //
-//  Created by Admin on 12/02/15.
+//  Created by Alexey Kulish on 12/02/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
@@ -11,29 +11,7 @@
 #include <QList>
 #include <QHash>
 #include <OsmAndCore/QKeyValueIterator.h>
-
-@implementation OAMetadata
-@end
-@implementation OALink
-@end
-@implementation OAGpxExtension
-@end
-@implementation OAGpxExtensions
-@end
-@implementation OARoute
-@end
-@implementation OARoutePoint
-@end
-@implementation OATrack
-@end
-@implementation OATrackPoint
-@end
-@implementation OATrackSegment
-@end
-@implementation OALocationMark
-@end
-@implementation OAExtraData
-@end
+#import "OAGPXTrackAnalysis.h"
 
 
 @implementation OAGPXDocument
@@ -67,52 +45,71 @@
 }
 
 
-/* Extra data
- if (gpxDocument->extraData != nullptr) {
- if (typeid(gpxDocument->extraData) == typeid(OsmAnd::GpxDocument::GpxExtension)) {
- 
- std::shared_ptr<OsmAnd::GpxDocument::GpxExtension> e = static_cast<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtension>>(gpxDocument->extraData);
- 
- OAGpxExtension *ext = [[OAGpxExtension alloc] init];
- ext.name = e->name.toNSString();
- ext.value = e->value.toNSString();
- if (!e->attributes.isEmpty()) {
- NSMutableDictionary *dict = [NSMutableDictionary dictionary];
- for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(e->attributes))) {
- [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
- }
- ext.attributes = dict;
- }
- 
- // todo subextensions
- 
- 
- } else if (typeid(gpxDocument->extraData) == typeid(OsmAnd::GpxDocument::GpxExtensions)) {
- 
- std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> e = static_cast<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions>>(gpxDocument->extraData);
- 
- OAGpxExtensions *exts = [[OAGpxExtensions alloc] init];
- exts.value = e->value.toNSString();
- if (!e->attributes.isEmpty()) {
- NSMutableDictionary *dict = [NSMutableDictionary dictionary];
- for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(e->attributes))) {
- [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
- }
- exts.attributes = dict;
- }
- 
- // todo extensions
- }
- }
- */
+- (NSArray *)fetchExtensions:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtension>>)extensions
+{
+    if (!extensions.isEmpty()) {
+        
+        NSMutableArray *_OAExtensions = [NSMutableArray array];
+        for (const auto& ext : extensions)
+        {
+            OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            
+            e.name = ext->name.toNSString();
+            e.value = ext->value.toNSString();
+            if (!ext->attributes.isEmpty()) {
+                NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+                for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(ext->attributes))) {
+                    [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+                }
+                e.attributes = dict;
+            }
+            
+            e.subextensions = [self fetchExtensions:ext->subextensions];
+            
+            [_OAExtensions addObject:e];
+        }
+        
+        return _OAExtensions;
+    }
+    
+    return nil;
+}
+
+- (OAGpxExtensions *)fetchExtra:(OsmAnd::Ref<OsmAnd::GeoInfoDocument::ExtraData>)extraData
+{
+    if (extraData != nullptr) {
+        
+        OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions> *_e = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxExtensions>*)&extraData;
+        const std::shared_ptr<const OsmAnd::GpxDocument::GpxExtensions> e = _e->shared_ptr();
+        
+        OAGpxExtensions *exts = [[OAGpxExtensions alloc] init];
+        exts.value = e->value.toNSString();
+        if (!e->attributes.isEmpty()) {
+            NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(e->attributes))) {
+                [dict setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+            }
+            exts.attributes = dict;
+        }
+        
+        exts.extensions = [self fetchExtensions:e->extensions];
+        
+        return exts;
+    }
+    return nil;
+}
 
 - (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Link>>)links
 {
     if (!links.isEmpty()) {
         NSMutableArray *_OALinks = [NSMutableArray array];
-        for (const auto& link : links)
+        for (const auto& l : links)
         {
-            OALink *_OALink = [[OALink alloc] init];
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxLink> *_l = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxLink>*)&l;
+            const std::shared_ptr<const OsmAnd::GpxDocument::GpxLink> link = _l->shared_ptr();
+
+            OAGpxLink *_OALink = [[OAGpxLink alloc] init];
+            _OALink.type = link->type.toNSString();
             _OALink.text = link->text.toNSString();
             _OALink.url = link->url.toNSURL();
             [_OALinks addObject:_OALink];
@@ -128,34 +125,50 @@
     self.creator = gpxDocument->creator.toNSString();
     
     if (gpxDocument->metadata != nullptr) {
-        OAMetadata *metadata = [[OAMetadata alloc] init];
+        OAGpxMetadata *metadata = [[OAGpxMetadata alloc] init];
         metadata.name = gpxDocument->metadata->name.toNSString();
         metadata.desc = gpxDocument->metadata->description.toNSString();
-        metadata.timestamp = [NSDate dateWithTimeIntervalSince1970:gpxDocument->metadata->timestamp.toTime_t()];
-        metadata.links = [self fetchLinks:gpxDocument->metadata->links];
+        metadata.time = gpxDocument->metadata->timestamp.toTime_t();
+        metadata.links = [self fetchLinks:gpxDocument->metadata->links];        
+        metadata.extraData = [self fetchExtra:gpxDocument->extraData];
         
-        // todo extra data
-        
+        self.metadata = metadata;
     }
     
     // Location Marks
     if (!gpxDocument->locationMarks.isEmpty()) {
-        QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> marks = gpxDocument->locationMarks;
+        const QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::LocationMark>> marks = gpxDocument->locationMarks;
+        
         NSMutableArray *_marks = [NSMutableArray array];
-        for (const auto& mark : marks)
+        for (const auto& m : marks)
         {
-            OALocationMark *_mark = [[OALocationMark alloc] init];
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_m = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&m;
+            const std::shared_ptr<const OsmAnd::GpxDocument::GpxWpt> mark = _m->shared_ptr();
             
+            OAGpxWpt *_mark = [[OAGpxWpt alloc] init];
             _mark.position = CLLocationCoordinate2DMake(mark->position.latitude, mark->position.longitude);
             _mark.name = mark->name.toNSString();
             _mark.desc = mark->description.toNSString();
             _mark.elevation = mark->elevation;
-            _mark.timestamp = [NSDate dateWithTimeIntervalSince1970:mark->timestamp.toTime_t()];
+            _mark.time = mark->timestamp.toTime_t();
             _mark.comment = mark->comment.toNSString();
             _mark.type = mark->type.toNSString();
-            _mark.links = [self fetchLinks:mark->links];
             
-            // todo extra data
+            _mark.magneticVariation = mark->magneticVariation;
+            _mark.geoidHeight = mark->geoidHeight;
+            _mark.source = mark->source.toNSString();
+            _mark.symbol = mark->symbol.toNSString();
+            _mark.fixType = (OAGpxFixType)mark->fixType;
+            _mark.satellitesUsedForFixCalculation = mark->satellitesUsedForFixCalculation;
+            _mark.horizontalDilutionOfPrecision = mark->horizontalDilutionOfPrecision;
+            _mark.verticalDilutionOfPrecision = mark->verticalDilutionOfPrecision;
+            _mark.positionDilutionOfPrecision = mark->positionDilutionOfPrecision;
+            _mark.ageOfGpsData = mark->ageOfGpsData;
+            _mark.dgpsStationId = mark->dgpsStationId;
+            
+            _mark.links = [self fetchLinks:mark->links];
+
+            _mark.extraData = [self fetchExtra:mark->extraData];
 
             [_marks addObject:_mark];
         }
@@ -166,45 +179,66 @@
     if (!gpxDocument->tracks.isEmpty()) {
         QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Track>> trcks = gpxDocument->tracks;
         NSMutableArray *_trcks = [NSMutableArray array];
-        for (const auto& track : trcks)
+        for (const auto& t : trcks)
         {
-            OATrack *_track = [[OATrack alloc] init];
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk> *_t = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrk>*)&t;
+            const std::shared_ptr<const OsmAnd::GpxDocument::GpxTrk> track = _t->shared_ptr();
+
+            OAGpxTrk *_track = [[OAGpxTrk alloc] init];
             
             _track.name = track->name.toNSString();
             _track.desc = track->description.toNSString();
             _track.comment = track->comment.toNSString();
             _track.type = track->type.toNSString();
             _track.links = [self fetchLinks:track->links];
+            
+            _track.source = track->source.toNSString();
+            _track.slotNumber = track->slotNumber;
 
             if (!track->segments.isEmpty()) {
                 NSMutableArray *seg = [NSMutableArray array];
                 
                 for (const auto& s : track->segments)
                 {
-                    OATrackSegment *_s = [[OATrackSegment alloc] init];
+                    OAGpxTrkSeg *_s = [[OAGpxTrkSeg alloc] init];
 
                     if (!s->points.isEmpty()) {
                         NSMutableArray *pts = [NSMutableArray array];
                         
-                        for (const auto& p : s->points)
+                        for (const auto& pt : s->points)
                         {
-                            OATrackPoint *_p = [[OATrackPoint alloc] init];
+                            OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkPt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxTrkPt>*)&pt;
+                            const std::shared_ptr<const OsmAnd::GpxDocument::GpxTrkPt> p = _pt->shared_ptr();
+
+                            OAGpxTrkPt *_p = [[OAGpxTrkPt alloc] init];
                             
                             _p.position = CLLocationCoordinate2DMake(p->position.latitude, p->position.longitude);
                             _p.name = p->name.toNSString();
                             _p.desc = p->description.toNSString();
                             _p.elevation = p->elevation;
-                            _p.timestamp = [NSDate dateWithTimeIntervalSince1970:p->timestamp.toTime_t()];
+                            _p.time = p->timestamp.toTime_t();
                             _p.comment = p->comment.toNSString();
                             _p.type = p->type.toNSString();
                             _p.links = [self fetchLinks:p->links];
                             
+                            _p.magneticVariation = p->magneticVariation;
+                            _p.geoidHeight = p->geoidHeight;
+                            _p.source = p->source.toNSString();
+                            _p.symbol = p->symbol.toNSString();
+                            _p.fixType = (OAGpxFixType)p->fixType;
+                            _p.satellitesUsedForFixCalculation = p->satellitesUsedForFixCalculation;
+                            _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
+                            _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
+                            _p.positionDilutionOfPrecision = p->positionDilutionOfPrecision;
+                            _p.ageOfGpsData = p->ageOfGpsData;
+                            _p.dgpsStationId = p->dgpsStationId;
+
                             [pts addObject:_p];
                         }
                         _s.points = pts;
                     }
                     
-                    // todo extra data
+                    _s.extraData = [self fetchExtra:s->extraData];
                     
                     [seg addObject:_s];
                 }
@@ -212,7 +246,7 @@
                 _track.segments = seg;
             }
             
-            // todo extra data
+            _track.extraData = [self fetchExtra:t->extraData];
             
             [_trcks addObject:_track];
         }
@@ -223,9 +257,12 @@
     if (!gpxDocument->routes.isEmpty()) {
         QList<OsmAnd::Ref<OsmAnd::GeoInfoDocument::Route>> rts = gpxDocument->routes;
         NSMutableArray *_rts = [NSMutableArray array];
-        for (const auto& route : rts)
+        for (const auto& r : rts)
         {
-            OARoute *_route = [[OARoute alloc] init];
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte> *_r = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxRte>*)&r;
+            const std::shared_ptr<const OsmAnd::GpxDocument::GpxRte> route = _r->shared_ptr();
+
+            OAGpxRte *_route = [[OAGpxRte alloc] init];
             
             _route.name = route->name.toNSString();
             _route.desc = route->description.toNSString();
@@ -233,32 +270,50 @@
             _route.type = route->type.toNSString();
             _route.links = [self fetchLinks:route->links];
             
+            _route.source = route->source.toNSString();
+            _route.slotNumber = route->slotNumber;
+
             if (!route->points.isEmpty()) {
                 NSMutableArray *_points = [NSMutableArray array];
                 
-                for (const auto& p : route->points)
+                for (const auto& pt : route->points)
                 {
-                    OATrackPoint *_p = [[OATrackPoint alloc] init];
+                    OsmAnd::Ref<OsmAnd::GpxDocument::GpxRtePt> *_pt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxRtePt>*)&pt;
+                    const std::shared_ptr<const OsmAnd::GpxDocument::GpxRtePt> p = _pt->shared_ptr();
+
+                    OAGpxRtePt *_p = [[OAGpxRtePt alloc] init];
                     
                     _p.position = CLLocationCoordinate2DMake(p->position.latitude, p->position.longitude);
                     _p.name = p->name.toNSString();
                     _p.desc = p->description.toNSString();
                     _p.elevation = p->elevation;
-                    _p.timestamp = [NSDate dateWithTimeIntervalSince1970:p->timestamp.toTime_t()];
+                    _p.time = p->timestamp.toTime_t();
                     _p.comment = p->comment.toNSString();
                     _p.type = p->type.toNSString();
                     _p.links = [self fetchLinks:p->links];
                     
+                    _p.magneticVariation = p->magneticVariation;
+                    _p.geoidHeight = p->geoidHeight;
+                    _p.source = p->source.toNSString();
+                    _p.symbol = p->symbol.toNSString();
+                    _p.fixType = (OAGpxFixType)p->fixType;
+                    _p.satellitesUsedForFixCalculation = p->satellitesUsedForFixCalculation;
+                    _p.horizontalDilutionOfPrecision = p->horizontalDilutionOfPrecision;
+                    _p.verticalDilutionOfPrecision = p->verticalDilutionOfPrecision;
+                    _p.positionDilutionOfPrecision = p->positionDilutionOfPrecision;
+                    _p.ageOfGpsData = p->ageOfGpsData;
+                    _p.dgpsStationId = p->dgpsStationId;
+                    
                     [_points addObject:_p];
                     
-                    // todo extra data
+                    _p.extraData = [self fetchExtra:p->extraData];
                     
                 }
                 
                 _route.points = _points;
             }
             
-            // todo extra data
+            _route.extraData = [self fetchExtra:r->extraData];
             
             [_rts addObject:_route];
         }
@@ -276,6 +331,48 @@
 - (void) saveTo:(NSString *)filename
 {
     
+}
+
+
+// Analysis
+- (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp
+{
+    OAGPXTrackAnalysis *g = [[OAGPXTrackAnalysis alloc] init];
+    g.wptPoints = self.locationMarks.count;
+    NSMutableArray *splitSegments = [NSMutableArray array];
+    for(OAGpxTrk *subtrack in self.tracks){
+        for(OAGpxTrkSeg *segment in subtrack.segments){
+            g.totalTracks ++;
+            if(segment.points.count > 1) {
+                [splitSegments addObject:[[OASplitSegment alloc] initWithTrackSegment:segment]];
+            }
+        }
+    }
+    [g prepareInformation:fileTimestamp splitSegments:splitSegments];
+    
+    return g;
+}
+
+
+-(NSArray*) splitByDistance:(int)meters
+{
+    return [self split:[[OADistanceMetric alloc] init] metricLimit:meters];
+}
+
+-(NSArray*) splitByTime:(int)seconds
+{
+    return [self split:[[OATimeSplit alloc] init] metricLimit:seconds];
+}
+
+-(NSArray*) split:(OASplitMetric*)metric metricLimit:(int)metricLimit
+{
+    NSMutableArray *splitSegments = [NSMutableArray array];
+    for (OAGpxTrk *subtrack in self.tracks) {
+        for (OAGpxTrkSeg *segment in subtrack.segments) {
+            [OAGPXTrackAnalysis splitSegment:metric metricLimit:metricLimit splitSegments:splitSegments segment:segment];
+        }
+    }
+    return [OAGPXTrackAnalysis convert:splitSegments];
 }
 
 @end

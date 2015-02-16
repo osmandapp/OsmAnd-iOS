@@ -132,12 +132,12 @@
             CGFloat topY = 0.0;
             CGFloat mapWidth = small;
             CGFloat mapHeight = 200.0;
-            //CGFloat mapBottom = topY + mapHeight;
+            CGFloat mapBottom = topY + mapHeight;
+            CGFloat scrollBottom = mapBottom + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            //self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
-            //self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
-            //self.scrollView.contentSize = CGSizeMake(small, 250.0);
+            self.mapTypeScrollView.frame = CGRectMake(0.0, mapBottom, small, self.mapTypeScrollView.bounds.size.height);
+            self.tableView.frame = CGRectMake(0.0, scrollBottom, small, big - scrollBottom);
             
         }
         
@@ -150,13 +150,12 @@
             
             CGFloat topY = 0.0;
             CGFloat mapHeight = small - topY;
-            CGFloat mapWidth = 220.0;
-            //CGFloat mapBottom = topY + mapHeight; 
+            CGFloat mapWidth = 190.0;
+            CGFloat scrollBottom = 64.0 + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            //self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
-            //self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
-            //self.scrollView.contentSize = CGSizeMake(big - mapWidth, 250.0);
+            self.mapTypeScrollView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, self.mapTypeScrollView.bounds.size.height);
+            self.tableView.frame = CGRectMake(mapWidth, scrollBottom, big - mapWidth, small - scrollBottom);
             
         }
         
@@ -549,11 +548,11 @@
 #pragma mark - Orientation
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
 }
 
 - (NSUInteger) supportedInterfaceOrientations {
-    return UIInterfaceOrientationMaskPortrait;
+    return UIInterfaceOrientationMaskAllButUpsideDown;
 }
     
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {

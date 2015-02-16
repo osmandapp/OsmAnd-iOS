@@ -55,39 +55,11 @@
         _settingMetricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:settingMetricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMetricSystemKey] : 0;
         _settingShowZoomButton = [[NSUserDefaults standardUserDefaults] objectForKey:settingZoomButtonKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingZoomButtonKey] : YES;
         _settingGeoFormat = [[NSUserDefaults standardUserDefaults] objectForKey:settingGeoFormatKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingGeoFormatKey] : 0;
-
-        // Map Settings
-        /*
-        OsmAndAppInstance app = [OsmAndApp instance];
-        typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
-        OAMapSource* lastMapSource = [[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                                andVariant:@"type_general"];
-        const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
-        const auto mapSourceResource = app.resourcesManager->getResource(resourceId);
-        if (mapSourceResource && mapSourceResource->type == OsmAndResourceType::MapStyle)
-        {
-            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
-            
-            // Configure with preset if such is set
-            if (lastMapSource.variant != nil)
-            {
-                const auto preset = app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
-                if (preset) {
-                    QHash< QString, QString > newSettings(preset->attributes);
-                    QHash<QString, int>::iterator i;
-                    for (auto i = newSettings.begin(); i != newSettings.end(); ++i)
-                        NSLog(@"+++ %@", [NSString stringWithUTF8String:i.key().toLatin1()]);
-
-                    //if([[OAAppSettings sharedManager] settingAppMode] == APPEARANCE_MODE_NIGHT) {
-                        //newSettings[QString::fromLatin1("nightMode")] = "true";
-                    //}
-                }
-            }
-        }
-         */
         
-        // --- Details
+        // Map Settings
         self.mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
+
+        // --- Details
         _mapSettingMoreDetails = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingMoreDetailsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingMoreDetailsKey] : NO;
         _mapSettingRoadSurface = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadSurfaceKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadSurfaceKey] : NO;
         _mapSettingRoadQuality = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingRoadQualityKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingRoadQualityKey] : NO;

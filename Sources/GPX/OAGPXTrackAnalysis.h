@@ -2,52 +2,65 @@
 //  OAGPXTrackAnalysis.h
 //  OsmAnd
 //
-//  Created by Admin on 13/02/15.
+//  Created by Alexey Kulish on 13/02/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGPXDocument.h"
+#import "OAGPXDocumentPrimitives.h"
+
+@interface OASplitMetric : NSObject
+
+-(double) metric:(OAGpxWpt*)p1 p2:(OAGpxWpt*)p2;
+
+@end
+
+@interface OADistanceMetric : OASplitMetric
+@end
+
+@interface OATimeSplit : OASplitMetric
+@end
 
 @interface OASplitSegment : NSObject
 
-@property (nonatomic) OATrackSegment *segment;
+@property (nonatomic) OAGpxTrkSeg *segment;
 @property (nonatomic, readonly) double startCoeff;
 @property (nonatomic, readonly) int startPointInd;
 @property (nonatomic, readonly) double endCoeff;
 @property (nonatomic, readonly) int endPointInd;
-@property (nonatomic, readonly) double metricEnd;
+@property (nonatomic) double metricEnd;
 
-- (instancetype)initWithTrackSegment:(OATrackSegment *)s;
-- (instancetype)initWithSplitSegment:(OATrackSegment *)s pointInd:(int)pointInd cf:(double)cf;
+- (instancetype)initWithTrackSegment:(OAGpxTrkSeg *)s;
+- (instancetype)initWithSplitSegment:(OAGpxTrkSeg *)s pointInd:(int)pointInd cf:(double)cf;
 
 -(int) getNumberOfPoints;
 
 @end
 
+
 @interface OAGPXTrackAnalysis : NSObject
 
-@property (nonatomic, readonly) float totalDistance;
-@property (nonatomic, readonly) int totalTracks;
-@property (nonatomic, readonly) long startTime;
-@property (nonatomic, readonly) long endTime;
-@property (nonatomic, readonly) long timeSpan;
-@property (nonatomic, readonly) long timeMoving;
-@property (nonatomic, readonly) float totalDistanceMoving;
+@property (nonatomic) float totalDistance;
+@property (nonatomic) int totalTracks;
+@property (nonatomic) long startTime;
+@property (nonatomic) long endTime;
+@property (nonatomic) long timeSpan;
+@property (nonatomic) long timeMoving;
+@property (nonatomic) float totalDistanceMoving;
 
-@property (nonatomic, readonly) double diffElevationUp;
-@property (nonatomic, readonly) double diffElevationDown;
-@property (nonatomic, readonly) double avgElevation;
-@property (nonatomic, readonly) double minElevation;
-@property (nonatomic, readonly) double maxElevation;
+@property (nonatomic) double diffElevationUp;
+@property (nonatomic) double diffElevationDown;
+@property (nonatomic) double avgElevation;
+@property (nonatomic) double minElevation;
+@property (nonatomic) double maxElevation;
 
-@property (nonatomic, readonly) float maxSpeed;
-@property (nonatomic, readonly) float avgSpeed;
+@property (nonatomic) float maxSpeed;
+@property (nonatomic) float avgSpeed;
 
-@property (nonatomic, readonly) int points;
-@property (nonatomic, readonly) int wptPoints;
+@property (nonatomic) int points;
+@property (nonatomic) int wptPoints;
 
-@property (nonatomic, readonly) double metricEnd;
+@property (nonatomic) double metricEnd;
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 
@@ -61,6 +74,11 @@
 
 -(BOOL) isSpeedSpecified;
 
-+(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OATrackSegment *)seg;
++(OAGPXTrackAnalysis *) segment:(long)filetimestamp seg:(OAGpxTrkSeg *)seg;
+-(void) prepareInformation:(long)fileStamp  splitSegments:(NSArray *)splitSegments;
+
++(void) splitSegment:(OASplitMetric*)metric metricLimit:(double)metricLimit splitSegments:(NSMutableArray*)splitSegments
+             segment:(OAGpxTrkSeg*)segment;
++(NSArray*) convert:(NSArray*)splitSegments;
 
 @end

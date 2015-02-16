@@ -23,23 +23,28 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
+
 #define _(name) OAGPXListViewController__##name
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
+
+
+
 typedef enum
 {
     kGPXCellTypeItem = 0,
     kGPXCellTypeMenu
-}
-kFavoriteCellType;
+    
+} kGpxCellType;
 
-#define FavoriteTableGroup _(FavoriteTableGroup)
-@interface FavoriteTableGroup : NSObject
+#define GpxTableGroup _(GpxTableGroup)
+@interface GpxTableGroup : NSObject
     @property int type;
     @property NSString* groupName;
     @property NSMutableArray*  groupItems;
 @end
-@implementation FavoriteTableGroup
+
+@implementation GpxTableGroup
 
 -(id) init {
     self = [super init];
@@ -51,6 +56,8 @@ kFavoriteCellType;
 
 @end
 
+
+
 @interface OAGPXListViewController ()
 
     @property (strong, nonatomic) NSMutableArray* groupsAndGPX;
@@ -60,21 +67,16 @@ kFavoriteCellType;
 
 @implementation OAGPXListViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    OsmAndAppInstance app = [OsmAndApp instance];
-
-//    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-//                                                                    withHandler:@selector(updateDistanceAndDirection)
-//                                                                     andObserve:app.locationServices.updateObserver];
-}
-
 -(void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
     [self generateData];
     [self setupView];
 }
 
 -(void)generateData {
+    
     OsmAndAppInstance app = [OsmAndApp instance];
     self.groupsAndGPX = [[NSMutableArray alloc] init];
     self.menuItems = [[NSArray alloc] init];
@@ -82,9 +84,9 @@ kFavoriteCellType;
     std::shared_ptr<OsmAnd::GpxDocument> gpxCollection = app.gpxCollection;
     
 //    NSString* name = gpxCollection->metadata->name.toNSString();
-    int tra = gpxCollection->tracks.count();
-    int rou = gpxCollection->routes.count();
-    int loc = gpxCollection->locationMarks.count();
+//    int tra = gpxCollection->tracks.count();
+//    int rou = gpxCollection->routes.count();
+//    int loc = gpxCollection->locationMarks.count();
 //    NSString* name = gpxCollection->metadata->name.toNSString();
 //    NSString* descr = gpxCollection->metadata->description.toNSString();
 
@@ -136,13 +138,13 @@ kFavoriteCellType;
 //    }
     
     // Sort items
-    NSArray *sortedArrayGroups = [self.groupsAndGPX sortedArrayUsingComparator:^NSComparisonResult(FavoriteTableGroup* obj1, FavoriteTableGroup* obj2) {
+    NSArray *sortedArrayGroups = [self.groupsAndGPX sortedArrayUsingComparator:^NSComparisonResult(GpxTableGroup* obj1, GpxTableGroup* obj2) {
         return [[obj1.groupName lowercaseString] compare:[obj2.groupName lowercaseString]];
     }];
     [self.groupsAndGPX setArray:sortedArrayGroups];
     
     // Generate menu items
-    FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
+    GpxTableGroup* itemData = [[GpxTableGroup alloc] init];
     itemData.groupName = @"Import/Export";
     itemData.type = kGPXCellTypeMenu;
     self.menuItems = @[@{@"text": @"Import GPX",
@@ -153,16 +155,16 @@ kFavoriteCellType;
                          @"action": @"onExportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
     
-    [self.favoriteTableView reloadData];
+    [self.gpxTableView reloadData];
 
 }
 
 -(void)setupView {
     
-    [self.favoriteTableView setDataSource:self];
-    [self.favoriteTableView setDelegate:self];
-    self.favoriteTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.favoriteTableView reloadData];
+    [self.gpxTableView setDataSource:self];
+    [self.gpxTableView setDelegate:self];
+    self.gpxTableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    [self.gpxTableView reloadData];
     
 }
 
@@ -176,7 +178,7 @@ kFavoriteCellType;
 -(NSArray*)getItemsForRows:(NSArray*)indexPath {
     NSMutableArray* itemList = [[NSMutableArray alloc] init];
     [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
-        FavoriteTableGroup* groupData = [self.groupsAndGPX objectAtIndex:path.section];
+        GpxTableGroup* groupData = [self.groupsAndGPX objectAtIndex:path.section];
         [itemList addObject:[groupData.groupItems objectAtIndex:path.row]];
     }];
     return itemList;
@@ -220,7 +222,7 @@ kFavoriteCellType;
     if (alertView.tag == kAlertViewRemoveId) {
         if (buttonIndex != alertView.cancelButtonIndex) {
             
-            NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+            NSArray *selectedRows = [self.gpxTableView indexPathsForSelectedRows];
             NSArray* selectedItems = [self getItemsForRows:selectedRows];
             [selectedItems enumerateObjectsUsingBlock:^(OAFavoriteItem* obj, NSUInteger idx, BOOL *stop) {
                 app.favoritesCollection->removeFavoriteLocation(obj.favorite);
@@ -304,9 +306,9 @@ kFavoriteCellType;
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([self.favoriteTableView isEditing]) {
+    if ([self.gpxTableView isEditing]) {
         OAFavoriteItem* item = [self.groupsAndGPX objectAtIndex:indexPath.row];
-        OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.favoriteTableView cellForRowAtIndexPath:indexPath];
+        OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.gpxTableView cellForRowAtIndexPath:indexPath];
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
         [cell.colorView setBackgroundColor:color];
         return;

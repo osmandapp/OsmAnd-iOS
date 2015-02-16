@@ -2,7 +2,7 @@
 //  OAMapSettingsSubviewController.m
 //  OsmAnd
 //
-//  Created by Admin on 11/02/15.
+//  Created by Alexey Kulish on 11/02/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
@@ -40,6 +40,19 @@
 -(void)viewWillAppear:(BOOL)animated {
     
     [self setupView];
+}
+
+#pragma mark - Orientation
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+    return YES;
+}
+
+- (NSUInteger) supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskAllButUpsideDown;
+}
+
+- (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
 }
 
 -(void)setupView {

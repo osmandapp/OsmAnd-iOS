@@ -21,6 +21,7 @@
 #import "OANavigationController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAFavoriteItemViewController.h"
+#import "OAMapStyleSettings.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -1590,6 +1591,13 @@
         if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            
+            
+            for (const auto& p : unresolvedMapStyle->parameters) {
+                NSLog(@"name = %@ title = %@ decs = %@ type = %d", p->name.toNSString(), p->title.toNSString(), p->description.toNSString(), p->dataType);
+            }
+            
+            
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
@@ -1637,7 +1645,16 @@
                     if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)
                         newSettings[QString::fromLatin1("nightMode")] = "true";
                     
-                    // --- Details
+                    // --- Apply Map Style Settings
+                    /*
+                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString()];
+                    
+                    NSArray *params = styleSettings.getAllParameters;
+                    for (OAMapStyleParameter *param in params) {
+                        newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
+                    }
+                    */
+                    
                     if (settings.mapSettingMoreDetails)
                         newSettings[QString::fromLatin1("moreDetailed")] = "true";
                     if (settings.mapSettingRoadSurface)

@@ -16,6 +16,7 @@
 
 #import "OsmAndApp.h"
 #import "OsmAndCore/GpxDocument.h"
+#import "OAGPXDatabase.h"
 
 
 #include <OsmAndCore.h>

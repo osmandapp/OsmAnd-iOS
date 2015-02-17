@@ -24,9 +24,6 @@
 #import <Reachability.h>
 #import "OAManageResourcesViewController.h"
 
-#import "OAGPXDocument.h"
-#import "OAGPXTrackAnalysis.h"
-
 #include <algorithm>
 
 #include <QList>
@@ -181,11 +178,6 @@
     _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
     _gpxCollection.reset(new OsmAnd::GpxDocument());
     _gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(_gpxFilename));
-    
-    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:_documentsDir.filePath(QLatin1String("mystic_basin_trail.gpx")).toNSString()];
-    
-    OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-    NSLog(@"totalDistance = %f", analysis.totalDistance);
     
 //    _gpxCollection->collectionChangeObservable.attach((__bridge const void*)self,
 //                                                            [self]

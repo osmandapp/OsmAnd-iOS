@@ -14,6 +14,8 @@
 @interface OAGPX : NSObject
 
 @property (nonatomic) NSString *gpxFileName;
+@property (nonatomic) NSString *gpxTitle;
+@property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate *importDate;
 
 // Statistics
@@ -49,7 +51,7 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(void)addGpxItem:(NSString *)fileName analysis:(OAGPXTrackAnalysis *)analysis;
+-(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc analysis:(OAGPXTrackAnalysis *)analysis;
 
 -(void) load;
 -(void) save;

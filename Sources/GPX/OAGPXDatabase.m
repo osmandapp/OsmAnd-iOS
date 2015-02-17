@@ -47,12 +47,14 @@
     return self;
 }
 
--(void)addGpxItem:(NSString *)fileName analysis:(OAGPXTrackAnalysis *)analysis
+-(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc analysis:(OAGPXTrackAnalysis *)analysis
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
     OAGPX *gpx = [[OAGPX alloc] init];
     gpx.gpxFileName = fileName;
+    gpx.gpxTitle = title;
+    gpx.gpxDescription = desc;
     gpx.importDate = [NSDate date];
     
     gpx.totalDistance = analysis.totalDistance;
@@ -97,6 +99,10 @@
             
             if ([key isEqualToString:@"gpxFileName"]) {
                 gpx.gpxFileName = value;
+            } else if ([key isEqualToString:@"gpxTitle"]) {
+                gpx.gpxTitle = value;
+            } else if ([key isEqualToString:@"gpxDescription"]) {
+                gpx.gpxDescription = value;
             } else if ([key isEqualToString:@"importDate"]) {
                 gpx.importDate = value;
             } else if ([key isEqualToString:@"totalDistance"]) {

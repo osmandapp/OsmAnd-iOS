@@ -19,6 +19,7 @@
 #import "OAFavoriteImportViewController.h"
 #import "OANavigationController.h"
 #import "OAOptionsPanelBlackViewController.h"
+#import "OAGPXListViewController.h"
 
 #include "Localization.h"
 
@@ -271,6 +272,52 @@
 
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Import Data")
+                                message:OALocalizedString(@"Please choose what to Import")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                                                             action:^{
+                                                             }]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Favorite")
+                                                             action:^{
+                                                                 
+                                                                 UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
+                                                                 if (incomingURLViewController == nil)
+                                                                     return;
+                                                                 
+                                                                 [self closeMenuAndPanelsAnimated:NO];
+                                                                 
+                                                                 // Open incoming-URL view controller as menu
+                                                                 [self openMenu:incomingURLViewController
+                                                                       fromRect:CGRectZero
+                                                                         inView:self.view
+                                                                       ofParent:self
+                                                                       animated:YES];
+                                                                 
+                                                             }],
+      
+                       [RIButtonItem itemWithLabel:OALocalizedString(@"GPX route")
+                                                             action:^{
+                                                                 
+                                                                 UIViewController* incomingURLViewController = [[OAGPXListViewController alloc] initWithImportGPXItem:url];
+                                                                 if (incomingURLViewController == nil)
+                                                                     return;
+                                                                 
+                                                                 [self closeMenuAndPanelsAnimated:NO];
+                                                                 
+                                                                 // Open incoming-URL view controller as menu
+                                                                 [self openMenu:incomingURLViewController
+                                                                       fromRect:CGRectZero
+                                                                         inView:self.view
+                                                                       ofParent:self
+                                                                       animated:YES];
+                                                                 
+                                                             }],
+      
+                        nil] show];
+    
+
+    /*
     UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
     if (incomingURLViewController == nil)
         return NO;
@@ -283,7 +330,8 @@
             inView:self.view
           ofParent:self
           animated:YES];
-
+    */
+    
     return YES;
 }
 

@@ -21,5 +21,6 @@
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
 
+- (instancetype)initWithImportGPXItem:(NSURL*)url;
 
 @end

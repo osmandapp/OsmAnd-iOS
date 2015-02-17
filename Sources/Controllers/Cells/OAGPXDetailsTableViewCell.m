@@ -22,6 +22,7 @@
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
     [self updateLayout];
 }
 
@@ -30,6 +31,9 @@
     CGFloat left = 15.0;
     CGFloat right = self.contentView.frame.size.width - 14.0;
     CGFloat mid = self.contentView.frame.size.height / 2.0;
+    
+    if (!self.iconView.hidden)
+        right -= self.iconView.frame.size.width;
     
     [self.textView sizeToFit];
     [self.descView sizeToFit];

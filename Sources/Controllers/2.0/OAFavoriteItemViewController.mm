@@ -171,23 +171,21 @@ typedef enum
     
     contentOriginY = self.favoriteNameButton.frame.origin.y;
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
     UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 230 - 64)];
     [mapButton setTitle:@"" forState:UIControlStateNormal];
     [mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:mapButton];
     
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:app.locationServices.updateObserver];
-
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
+    OsmAndAppInstance app = [OsmAndApp instance];
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(updateDistanceAndDirection)
+                                                                     andObserve:app.locationServices.updateObserver];
     [self setupView];
 
     if (_favAction != kFavoriteActionNone) {
@@ -198,8 +196,6 @@ typedef enum
     OAAppSettings* settings = [OAAppSettings sharedManager];
     _wasShowingFavorites = settings.mapSettingShowFavorites;
     [settings setMapSettingShowFavorites:YES];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
     
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
@@ -259,6 +255,11 @@ typedef enum
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
+    
+    if (self.locationServicesUpdateObserver) {
+        [self.locationServicesUpdateObserver detach];
+        self.locationServicesUpdateObserver = nil;
+    }
     
     if (_favAction != kFavoriteActionNone)
         return;
@@ -501,7 +502,7 @@ typedef enum
 }
 
 - (void)updateDistanceAndDirection
-{
+{    
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;

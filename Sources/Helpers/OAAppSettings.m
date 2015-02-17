@@ -57,7 +57,7 @@
         _settingGeoFormat = [[NSUserDefaults standardUserDefaults] objectForKey:settingGeoFormatKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingGeoFormatKey] : 0;
         
         // Map Settings
-        self.mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
+        _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
 
         // --- Details
         _mapSettingMoreDetails = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingMoreDetailsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingMoreDetailsKey] : NO;

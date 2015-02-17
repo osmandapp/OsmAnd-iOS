@@ -9,6 +9,7 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OsmAndApp.h"
 
 #define kDbName @"gpx.db"
 
@@ -82,6 +83,32 @@
     [res addObject:gpx];
     
     gpxList = res;
+}
+
+-(void)removeGpxItem:(NSString *)fileName
+{
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];
+    for (OAGPX *item in arr) {
+        if ([item.gpxFileName isEqualToString:fileName]) {
+            
+            [arr removeObject:item];
+            break;
+        }
+    }
+    gpxList = arr;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    [[NSFileManager defaultManager] removeItemAtPath:[app.gpxPath stringByAppendingPathComponent:fileName] error:nil];
+}
+
+-(BOOL)containsGPXItem:(NSString *)fileName
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFileName isEqualToString:fileName]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 -(void) load
@@ -179,6 +206,8 @@
         NSMutableDictionary *d = [NSMutableDictionary dictionary];
         
         [d setObject:gpx.gpxFileName forKey:@"gpxFileName"];
+        [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
+        [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
         
         [d setObject:@(gpx.totalDistance) forKey:@"totalDistance"];
@@ -201,29 +230,33 @@
         [d setObject:@(gpx.wptPoints) forKey:@"wptPoints"];
         [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
         
-        NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
-        [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
-        [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
-        [wpt setObject:gpx.locationStart.name forKey:@"name"];
-        [wpt setObject:gpx.locationStart.desc forKey:@"desc"];
-        [wpt setObject:@(gpx.locationStart.elevation) forKey:@"elevation"];
-        [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
-        [wpt setObject:gpx.locationStart.comment forKey:@"comment"];
-        [wpt setObject:gpx.locationStart.type forKey:@"type"];
-        [wpt setObject:@(gpx.locationStart.speed) forKey:@"speed"];
-        [d setObject:wpt forKey:@"locationStart"];
-
-        wpt = [NSMutableDictionary dictionary];
-        [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
-        [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
-        [wpt setObject:gpx.locationStart.name forKey:@"name"];
-        [wpt setObject:gpx.locationStart.desc forKey:@"desc"];
-        [wpt setObject:@(gpx.locationStart.elevation) forKey:@"elevation"];
-        [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
-        [wpt setObject:gpx.locationStart.comment forKey:@"comment"];
-        [wpt setObject:gpx.locationStart.type forKey:@"type"];
-        [wpt setObject:@(gpx.locationStart.speed) forKey:@"speed"];
-        [d setObject:wpt forKey:@"locationEnd"];
+        if (gpx.locationStart) {
+            NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
+            [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
+            [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
+            [wpt setObject:gpx.locationStart.name forKey:@"name"];
+            [wpt setObject:gpx.locationStart.desc forKey:@"desc"];
+            [wpt setObject:@(gpx.locationStart.elevation) forKey:@"elevation"];
+            [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
+            [wpt setObject:gpx.locationStart.comment forKey:@"comment"];
+            [wpt setObject:gpx.locationStart.type forKey:@"type"];
+            [wpt setObject:@(gpx.locationStart.speed) forKey:@"speed"];
+            [d setObject:wpt forKey:@"locationStart"];
+        }
+        
+        if (gpx.locationEnd) {
+            NSMutableDictionary *wpt = [NSMutableDictionary dictionary];
+            [wpt setObject:@(gpx.locationStart.position.latitude) forKey:@"position_lat"];
+            [wpt setObject:@(gpx.locationStart.position.longitude) forKey:@"position_lon"];
+            [wpt setObject:gpx.locationStart.name forKey:@"name"];
+            [wpt setObject:gpx.locationStart.desc forKey:@"desc"];
+            [wpt setObject:@(gpx.locationStart.elevation) forKey:@"elevation"];
+            [wpt setObject:@(gpx.locationStart.time) forKey:@"time"];
+            [wpt setObject:gpx.locationStart.comment forKey:@"comment"];
+            [wpt setObject:gpx.locationStart.type forKey:@"type"];
+            [wpt setObject:@(gpx.locationStart.speed) forKey:@"speed"];
+            [d setObject:wpt forKey:@"locationEnd"];
+        }
         
         [dbContent addObject:d];
     }

@@ -22,6 +22,7 @@
 
 - (void) layoutSubviews
 {
+    [super layoutSubviews];
     [self updateLayout];
 }
 
@@ -53,12 +54,12 @@
         self.elev1View.frame = CGRectMake(x, mid - self.elev1View.frame.size.height / 2.0, self.elev1View.frame.size.width, self.elev1View.frame.size.height);
 
         if (self.showArrows) {
-            x -= self.elev1View.frame.size.width - 2;
+            x -= self.elev1ArrowView.frame.size.width - 2;
             self.elev1ArrowView.frame = CGRectMake(x, mid - self.elev1ArrowView.frame.size.height / 2.0, self.elev1ArrowView.frame.size.width, self.elev1ArrowView.frame.size.height);
         }
 
-        self.elev1ArrowView.hidden = !self.showUpDown;
-        self.elev2ArrowView.hidden = !self.showUpDown;
+        self.elev1ArrowView.hidden = !self.showArrows;
+        self.elev2ArrowView.hidden = !self.showArrows;
         self.elev2View.hidden = NO;
         
     } else {

@@ -19,6 +19,4 @@
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) BOOL showUpDown;
 
-- (void) updateLayout;
-
 @end

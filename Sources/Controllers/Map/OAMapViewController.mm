@@ -148,6 +148,8 @@
 
     bool _lastPositionTrackStateCaptured;
     float _lastAzimuthInPositionTrack;
+    
+    BOOL _firstAppear;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -167,6 +169,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _firstAppear = YES;
 
     _rendererSync = [[NSObject alloc] init];
 
@@ -443,6 +446,17 @@
         
     }
 
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_firstAppear) {
+        _firstAppear = NO;
+        [_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                   Visibility:[[OAAppSettings sharedManager] mapSettingShowFavorites]];
+    }
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -1592,11 +1606,11 @@
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
             
-            
+            /*
             for (const auto& p : unresolvedMapStyle->parameters) {
                 NSLog(@"name = %@ title = %@ decs = %@ type = %d", p->name.toNSString(), p->title.toNSString(), p->description.toNSString(), p->dataType);
             }
-            
+            */
             
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());

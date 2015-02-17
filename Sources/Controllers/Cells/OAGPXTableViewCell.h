@@ -18,6 +18,4 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
 
-- (void) updateLayout;
-
 @end

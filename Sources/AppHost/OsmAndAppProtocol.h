@@ -30,6 +30,7 @@
 @property(nonatomic, readonly) NSString* dataPath;
 @property(nonatomic, readonly) NSString* documentsPath;
 @property(nonatomic, readonly) NSString* cachePath;
+@property(nonatomic, readonly) NSString* gpxPath;
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;

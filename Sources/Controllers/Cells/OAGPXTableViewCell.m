@@ -20,8 +20,14 @@
     // Configure the view for the selected state
 }
 
-- (void) updateLayout
+- (void) layoutSubviews
 {
+    [super layoutSubviews];
+    [self updateLayout];
+}
+
+- (void) updateLayout
+{    
     [self.descriptionDistanceView sizeToFit];
     [self.descriptionPointsView sizeToFit];
     

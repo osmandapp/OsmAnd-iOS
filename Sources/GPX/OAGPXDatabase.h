@@ -52,7 +52,8 @@
 + (OAGPXDatabase *)sharedDb;
 
 -(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc analysis:(OAGPXTrackAnalysis *)analysis;
-
+-(void)removeGpxItem:(NSString *)fileName;
+-(BOOL)containsGPXItem:(NSString *)fileName;
 -(void) load;
 -(void) save;
 

@@ -71,11 +71,6 @@ kFavoriteCellType;
     isDecelerating = NO;
 
     self.sortingType = 0;
-    OsmAndAppInstance app = [OsmAndApp instance];
-
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:app.locationServices.updateObserver];
 }
 
 - (void)updateDistanceAndDirection
@@ -148,7 +143,22 @@ kFavoriteCellType;
     [self generateData];
     [self setupView];
     
+    OsmAndAppInstance app = [OsmAndApp instance];
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(updateDistanceAndDirection)
+                                                                     andObserve:app.locationServices.updateObserver];
     [super viewWillAppear:animated];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (self.locationServicesUpdateObserver) {
+        [self.locationServicesUpdateObserver detach];
+        self.locationServicesUpdateObserver = nil;
+    }
+
 }
 
 -(void)generateData {
@@ -616,12 +626,15 @@ kFavoriteCellType;
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
-        return indexPath;
-    } else {
-        return nil;
+    if ([self.favoriteTableView isEditing]) {
+        FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+        if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
+            return indexPath;
+        } else {
+            return nil;
+        }
     }
+    return indexPath;
     
 }
 
@@ -680,12 +693,6 @@ kFavoriteCellType;
 
 -(void)didSelectRowAtIndexPathSorter:(NSIndexPath *)indexPath {
     if ([self.favoriteTableView isEditing]) {
-        /*
-        OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-        OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.favoriteTableView cellForRowAtIndexPath:indexPath];
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-        [cell.colorView setBackgroundColor:color];
-         */
         return;
     }
     
@@ -704,13 +711,6 @@ kFavoriteCellType;
 
 -(void)didSelectRowAtIndexPathUnsorter:(NSIndexPath *)indexPath {
     if ([self.favoriteTableView isEditing]) {
-        /*
-        FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
-        OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-        OAPointTableViewCell *cell = (OAPointTableViewCell*)[self.favoriteTableView cellForRowAtIndexPath:indexPath];
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-        [cell.colorView setBackgroundColor:color];
-         */
         return;
     }
     

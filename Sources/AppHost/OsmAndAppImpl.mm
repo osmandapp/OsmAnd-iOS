@@ -49,6 +49,7 @@
 @synthesize dataDir = _dataDir;
 @synthesize documentsPath = _documentsPath;
 @synthesize documentsDir = _documentsDir;
+@synthesize gpxPath = _gpxPath;
 @synthesize cachePath = _cachePath;
 @synthesize cacheDir = _cacheDir;
 
@@ -75,9 +76,13 @@
         _dataDir = QDir(QString::fromNSString(_dataPath));
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
+        _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         _cacheDir = QDir(QString::fromNSString(_cachePath));
 
+        [self buildFolders];
+        
         // First of all, initialize user defaults
         [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
 
@@ -99,6 +104,27 @@
 
 #define kAppData @"app_data"
 
+- (void) buildFolders
+{
+    NSError *error;
+    BOOL success;
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_gpxPath])
+    {
+        success = [[NSFileManager defaultManager]
+                   createDirectoryAtPath:_gpxPath
+                   withIntermediateDirectories:NO
+                   attributes:nil error:&error];
+        
+        if (!success)
+        {
+            OALog(@"Error creating GPX folder: %@", error.localizedFailureReason);
+            return;
+        }
+        
+    }
+}
+
 - (BOOL)initialize
 {
     NSError* versionError = nil;
@@ -107,6 +133,7 @@
 
     OALog(@"Data path: %@", _dataPath);
     OALog(@"Documents path: %@", _documentsPath);
+    OALog(@"GPX path: %@", _gpxPath);
     OALog(@"Cache path: %@", _cachePath);
 
     // Unpack app data
@@ -178,7 +205,7 @@
     _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
     _gpxCollection.reset(new OsmAnd::GpxDocument());
     _gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(_gpxFilename));
-    
+        
 //    _gpxCollection->collectionChangeObservable.attach((__bridge const void*)self,
 //                                                            [self]
 //                                                            (const OsmAnd::IFavoriteLocationsCollection* const collection)

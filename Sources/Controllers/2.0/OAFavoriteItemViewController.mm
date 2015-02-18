@@ -10,7 +10,6 @@
 
 #import "OsmAndApp.h"
 #import "OAAppData.h"
-#import "OAMapRendererView.h"
 #import "OALog.h"
 #import "OAFavoriteGroupViewController.h"
 #import "OAFavoriteColorViewController.h"
@@ -34,12 +33,7 @@ typedef enum
 
 @interface OAFavoriteItemViewController () {
     
-    OAMapViewController *_mapViewController;
-    OAMapMode _mainMapMode;
-    OsmAnd::PointI _mainMapTarget31;
-    float _mainMapZoom;
-    float _mainMapAzimuth;
-    float _mainMapEvelationAngle;
+    OsmAnd::PointI _newTarget31;
     
     EFavoriteAction _favAction;
     
@@ -189,7 +183,6 @@ typedef enum
     [self setupView];
 
     if (_favAction != kFavoriteActionNone) {
-        _favAction = kFavoriteActionNone;
         return;
     }
     
@@ -197,25 +190,9 @@ typedef enum
     _wasShowingFavorites = settings.mapSettingShowFavorites;
     [settings setMapSettingShowFavorites:YES];
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-
-    _mainMapMode = app.mapMode;
-    
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    _mainMapTarget31 = renderView.target31;
-    _mainMapZoom = renderView.zoom;
-    _mainMapAzimuth = renderView.azimuth;
-    _mainMapEvelationAngle = renderView.elevationAngle;
+    [[OARootViewController instance].mapPanel prepareMapForReuse:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()] zoom:kDefaultFavoriteZoom newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
     _showFavoriteOnExit = NO;
-
-    [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()]
-                             andZoom:kDefaultFavoriteZoom
-                            animated:NO];
-
-    renderView.azimuth = 0.0;
-    renderView.elevationAngle = 90.0;
 
     [self registerForKeyboardNotifications];
 
@@ -225,31 +202,13 @@ typedef enum
 {
     [super viewDidAppear:animated];
     
-    if (_favAction != kFavoriteActionNone)
+    if (_favAction != kFavoriteActionNone) {
+        _favAction = kFavoriteActionNone;
         return;
+    }
 
-    _mapViewController.view.frame = CGRectMake(0, 0, self.mapView.bounds.size.width, self.mapView.bounds.size.height);
+    [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
     
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [self addChildViewController:_mapViewController];
-    [self.mapView addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
-    [self.mapView bringSubviewToFront:_mapViewController.view];
-    
-    UIView * parent = self.mapView;
-    UIView * child = _mapViewController.view;
-    [child setTranslatesAutoresizingMaskIntoConstraints:NO];
-    
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[child]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[child]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-    [parent layoutIfNeeded];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -266,17 +225,8 @@ typedef enum
     
     if (_showFavoriteOnExit) {
         
-        [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31] andZoom:_mainMapZoom animated:YES];
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
         
-    } else {
-        
-        [OsmAndApp instance].mapMode = _mainMapMode;
-
-        OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
-        mapView.target31 = _mainMapTarget31;
-        mapView.zoom = _mainMapZoom;
-        mapView.azimuth = _mainMapAzimuth;
-        mapView.elevationAngle = _mainMapEvelationAngle;
     }
 
     [self unregisterKeyboardNotifications];
@@ -289,28 +239,6 @@ typedef enum
 
     if (_favAction != kFavoriteActionNone)
         return;
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    _mapViewController = mapPanel.mapViewController;
-    
-    _mapViewController.view.frame = CGRectMake(0, 0, mapPanel.view.bounds.size.width, mapPanel.view.bounds.size.height);
-    
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [mapPanel addChildViewController:_mapViewController];
-    [mapPanel.view addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
-    [mapPanel.view sendSubviewToBack:_mapViewController.view];
-    
-    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
-    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
     [settings setMapSettingShowFavorites:NO];
@@ -573,8 +501,7 @@ typedef enum
                                    Visibility:NO];
 
     // Go to favorite location
-    _mainMapTarget31 = itemData.favorite->getPosition31();
-    _mainMapZoom = kDefaultFavoriteZoom;
+    _newTarget31 = itemData.favorite->getPosition31();
     
     _showFavoriteOnExit = YES;
     

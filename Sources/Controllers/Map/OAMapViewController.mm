@@ -29,6 +29,7 @@
 #include <QStandardPaths>
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/GeoInfoPresenter.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
@@ -1866,6 +1867,31 @@
     {
         [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
         [mapView setZoom:zoom];
+    }
+}
+
+- (void)showGpxTrack:(NSString *)filePath
+{
+    OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+    
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> gpxPresenter;
+    const float symbolsScale = 1.0f;
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > geoInfoDocs;
+    geoInfoDocs.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filePath)));
+    gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(geoInfoDocs));
+    
+    if (gpxPresenter)
+    {
+        const std::shared_ptr<OsmAnd::MapPrimitivesProvider> gpxPrimitivesProvider(new OsmAnd::MapPrimitivesProvider(
+                                                                                                                     gpxPresenter->createMapObjectsProvider(),
+                                                                                                                     _mapPrimitiviser,
+                                                                                                                     256,
+                                                                                                                     OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+        auto tileProvider = new OsmAnd::MapRasterLayerProvider_Software(gpxPrimitivesProvider, false);
+        [rendererView setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>(tileProvider)) forLayer:10];
+        
+        _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(gpxPrimitivesProvider, 256u, symbolsScale));
+        [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
     }
 }
 

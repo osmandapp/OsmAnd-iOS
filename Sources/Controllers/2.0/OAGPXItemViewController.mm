@@ -12,16 +12,55 @@
 #import "OAGPXElevationTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDocument.h"
+#import "OAGPXPointListViewController.h"
+
+#import "OAMapRendererView.h"
+#import "OARootViewController.h"
+#import "OANativeUtilities.h"
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+
+
+typedef enum
+{
+    kGpxItemActionNone = 0,
+    kGpxItemActionShowPoints = 1,
+    
+} EGpxItemAction;
+
 
 @interface OAGPXItemViewController () {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
+    
+    OAMapViewController *_mapViewController;
+    
+    EGpxItemAction _action;
+    BOOL _showTrackOnExit;
 }
+
+@property (nonatomic) OAGPXDocument *doc;
 
 @end
 
 @implementation OAGPXItemViewController
+
+- (id)initWithGPXItem:(OAGPX *)gpxItem
+{
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        self.gpx = gpxItem;
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+        self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+        
+    }
+    return self;
+}
 
 - (void)viewWillLayoutSubviews
 {
@@ -83,14 +122,99 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    _app = [OsmAndApp instance];
     
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
     dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
     
     self.titleView.text = self.gpx.gpxTitle;
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    if (_action != kGpxItemActionNone) {
+        return;
+    }
+    
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+
+    double left = DBL_MAX;
+    double top;
+    double right;
+    double bottom;
+
+    for (OAGpxWpt *p in self.doc.locationMarks) {
+        if (left == DBL_MAX) {
+            left = p.position.longitude;
+            right = p.position.longitude;
+            top = p.position.latitude;
+            bottom = p.position.latitude;
+            
+        } else {
+            
+            left = MIN(left, p.position.longitude);
+            right = MAX(right, p.position.longitude);
+            top = MAX(top, p.position.latitude);
+            bottom = MIN(bottom, p.position.latitude);
+        }
+    }
+    
+    double clat = bottom / 2.0 + top / 2.0;
+    double clon = left / 2.0 + right / 2.0;
+    
+    const OsmAnd::LatLon latLon(clat, clon);
+    OsmAnd::PointI p = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    /*
+    double zoom = 7.0;
+    double tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
+    NSLog(@"metersPerTile 7 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
+    zoom = 8.0;
+    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
+    NSLog(@"metersPerTile 8 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
+    zoom = 9.0;
+    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
+    NSLog(@"metersPerTile 9 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
+    zoom = 10.0;
+    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
+    NSLog(@"metersPerTile 10 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
+    */
+    
+    [[OARootViewController instance].mapPanel prepareMapForReuse:[OANativeUtilities convertFromPointI:p] zoom:9.0 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+    [_mapViewController showGpxTrack:path];
+
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_action != kGpxItemActionNone) {
+        _action = kGpxItemActionNone;
+        return;
+    }
+    
+    [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    if (_action != kGpxItemActionShowPoints)
+        return;
+    
+    if (_showTrackOnExit) {
+        
+        const OsmAnd::LatLon latLon(self.gpx.locationStart.position.latitude, self.gpx.locationStart.position.longitude);
+        OsmAnd::PointI p = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:p] zoom:15.0 azimuth:0.0 elevationAngle:90.0 animated:YES];
+        
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,26 +233,16 @@
 
 - (IBAction)showPointsClicked:(id)sender
 {
-    //OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-    
-    //OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];
-    //[self.navigationController pushViewController:controller animated:YES];
+    OAGPXPointListViewController* controller = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+    [self.navigationController pushViewController:controller animated:YES];
 }
 
 - (IBAction)deleteClicked:(id)sender
 {
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove GPX item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove GPX?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [removeAlert show];
 }
 
-- (id)initWithGPXItem:(OAGPX *)gpxItem
-{
-    self = [super init];
-    if (self) {
-        self.gpx = gpxItem;
-    }
-    return self;
-}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
@@ -325,6 +439,7 @@
     // Show Location Points
     if (indexPath.section == 0 && indexPath.row == 1) {
         [self showPointsClicked:nil];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 

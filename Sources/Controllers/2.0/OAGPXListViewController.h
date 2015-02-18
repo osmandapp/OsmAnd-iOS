@@ -17,10 +17,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *exportButton;
+
+- (IBAction)exportClicked:(id)sender;
 
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
 
 - (instancetype)initWithImportGPXItem:(NSURL*)url;
+- (instancetype)initExport;
 
 @end

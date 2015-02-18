@@ -16,6 +16,11 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 
+#import "OAMapRendererView.h"
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -30,6 +35,13 @@
     OAAutoObserverProxy* _appModeObserver;
 
     BOOL _hudInvalidated;
+    
+    BOOL _mapNeedsRestore;
+    OAMapMode _mainMapMode;
+    OsmAnd::PointI _mainMapTarget31;
+    float _mainMapZoom;
+    float _mainMapAzimuth;
+    float _mainMapEvelationAngle;
 }
 
 - (instancetype)init
@@ -85,6 +97,19 @@
         [self updateHUD:animated];
         _hudInvalidated = NO;
     }
+    
+    if (_mapNeedsRestore) {
+        _mapNeedsRestore = NO;
+        [self restoreMapAfterReuse];
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if ([_mapViewController parentViewController] != self)
+        [self doMapRestore];
 }
 
 @synthesize mapViewController = _mapViewController;
@@ -159,5 +184,96 @@
         [self updateHUD:YES];
     });
 }
+
+- (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    if ([_mapViewController parentViewController] == self) {
+        
+        _mapNeedsRestore = YES;
+        _mainMapMode = _app.mapMode;
+        _mainMapTarget31 = renderView.target31;
+        _mainMapZoom = renderView.zoom;
+        _mainMapAzimuth = renderView.azimuth;
+        _mainMapEvelationAngle = renderView.elevationAngle;
+    }
+    
+    [_mapViewController goToPosition:destinationPoint
+                             andZoom:zoom
+                            animated:animated];
+    
+    renderView.azimuth = newAzimuth;
+    renderView.elevationAngle = newElevationAngle;
+}
+
+- (void)doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView
+{
+    _mapViewController.view.frame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
+
+    [_mapViewController willMoveToParentViewController:nil];
+    
+    [destinationViewController addChildViewController:_mapViewController];
+    [destinationView addSubview:_mapViewController.view];
+    [_mapViewController didMoveToParentViewController:self];
+    [destinationView bringSubviewToFront:_mapViewController.view];
+    
+    UIView * parent = destinationView;
+    UIView * child = _mapViewController.view;
+    [child setTranslatesAutoresizingMaskIntoConstraints:NO];
+    
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[child]|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:NSDictionaryOfVariableBindings(child)]];
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[child]|"
+                                                                   options:0
+                                                                   metrics:nil
+                                                                     views:NSDictionaryOfVariableBindings(child)]];
+    [parent layoutIfNeeded];
+}
+
+- (void)modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
+{
+    _mapNeedsRestore = NO;
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    renderView.azimuth = azimuth;
+    renderView.elevationAngle = elevationAngle;
+    [_mapViewController goToPosition:destinationPoint andZoom:_mainMapZoom animated:YES];
+}
+
+- (void)restoreMapAfterReuse
+{
+    _app.mapMode = _mainMapMode;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+    mapView.target31 = _mainMapTarget31;
+    mapView.zoom = _mainMapZoom;
+    mapView.azimuth = _mainMapAzimuth;
+    mapView.elevationAngle = _mainMapEvelationAngle;
+}
+
+- (void)doMapRestore
+{
+    _mapViewController.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
+    
+    [_mapViewController willMoveToParentViewController:nil];
+    
+    [self addChildViewController:_mapViewController];
+    [self.view addSubview:_mapViewController.view];
+    [_mapViewController didMoveToParentViewController:self];
+    [self.view sendSubviewToBack:_mapViewController.view];
+    
+    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_mapViewController.view}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
+                                                                      options:0
+                                                                      metrics:nil
+                                                                        views:@{@"view":_mapViewController.view}]];
+}
+
 
 @end

@@ -64,6 +64,9 @@ typedef enum
     NSURL *_importUrl;
     OAGPXDocument *_doc;
     NSString *_newGpxName;
+
+    BOOL _isExport;
+    NSInteger _selectedIndex;
 }
 
 @property (strong, nonatomic) NSMutableArray* gpxList;
@@ -78,8 +81,18 @@ typedef enum
 {
     self = [super init];
     if (self) {
-        if (!_app)
-            _app = [OsmAndApp instance];
+        _app = [OsmAndApp instance];
+    }
+    return self;
+}
+
+- (instancetype)initExport
+{
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _isExport = YES;
+        _selectedIndex = -1;
     }
     return self;
 }
@@ -193,6 +206,23 @@ typedef enum
     }
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    if (_isExport) {
+
+        [self.backButton removeTarget:self action:@selector(goRootScreen:) forControlEvents:UIControlEventTouchUpInside];
+        [self.backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.exportButton.hidden = NO;
+        
+    } else {
+        
+        self.exportButton.hidden = YES;
+    }
+}
+
 -(void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
@@ -247,7 +277,29 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)exportClicked:(id)sender
+{
+    if (_selectedIndex  < 0) {
+        
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select item for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [exportHelpAlert show];
+        
+    } else {
 
+        OAGPX* item = [self.gpxList objectAtIndex:_selectedIndex];
+
+        NSURL* gpxUrl = [NSURL fileURLWithPath:[_app.gpxPath stringByAppendingPathComponent:item.gpxFileName]];
+        _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
+        _exportController.UTI = @"net.osmand.gpx";
+        _exportController.delegate = self;
+        _exportController.name = item.gpxFileName;
+        [_exportController presentOptionsMenuFromRect:CGRectZero
+                                               inView:self.view
+                                             animated:YES];
+        
+    }
+    
+}
 
 - (IBAction)menuFavoriteClicked:(id)sender {
     OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
@@ -257,35 +309,36 @@ typedef enum
 - (IBAction)menuGPXClicked:(id)sender {
 }
 
+- (IBAction)backButtonClicked:(id)sender
+{
+    [super backButtonClicked:sender];
+}
+
 - (IBAction)goRootScreen:(id)sender {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
--(void)onImportClicked {
+- (void)onImportClicked {
     NSString* favoritesImportText = OALocalizedString(@"You can import your GPX files (standard format for storing map information supported by PC, iOS, Android)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function");
     UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [importHelpAlert show];
 }
 
--(void)onExportClicked {
-    /*
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Share all favorites
-    NSURL* favoritesUrl = [NSURL fileURLWithPath:app.favoritesStorageFilename];
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
-    _exportController.UTI = @"net.osmand.gpx";
-    _exportController.delegate = self;
-    _exportController.name = OALocalizedString(@"OsmAnd GPX.gpx");
-    [_exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:self.view
-                                         animated:YES];
-     */
+- (void)onExportClicked {
+    
+    if (self.gpxList.count > 0) {
+        OAGPXListViewController* exportController = [[OAGPXListViewController alloc] initExport];
+        [self.navigationController pushViewController:exportController animated:YES];
+    } else {
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"There are no GPX items" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [exportHelpAlert show];
+    }
 }
 
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.gpxList.count > 0)
+    if (self.gpxList.count > 0 && !_isExport)
         return 2;
     else
         return 1;
@@ -322,6 +375,12 @@ typedef enum
             [cell.textView setText:item.gpxTitle];
             [cell.descriptionDistanceView setText:[_app.locationFormatter stringFromDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d points", item.wptPoints]];
+            if (_isExport) {
+                if (indexPath.row == _selectedIndex)
+                    [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+                else
+                    [cell.iconView setImage:nil];
+            }
         }
         
         return cell;
@@ -358,7 +417,13 @@ typedef enum
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0 && self.gpxList.count > 0) {
+    if (_isExport) {
+        
+        _selectedIndex = indexPath.row;
+        [self.gpxTableView reloadData];
+        
+    } else if (indexPath.section == 0 && self.gpxList.count > 0) {
+        
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
         
         OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];

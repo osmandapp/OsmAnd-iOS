@@ -50,6 +50,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
             animated:(BOOL)animated;
 -(float)calculateMapRuler;
 
+- (void)showGpxTrack:(NSString *)filePath;
+
 @property(readonly) CGFloat displayDensityFactor;
 
 @property(readonly) OAObservable* framePreparedObservable;

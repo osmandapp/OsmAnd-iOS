@@ -523,12 +523,6 @@ kFavoriteCellType;
             
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            /*
-            if ([self.favoriteTableView isEditing])
-                [cell.cellViewContant setConstant:40];
-            else
-                [cell.cellViewContant setConstant:0];
-             */
         }
 
         return cell;
@@ -591,13 +585,6 @@ kFavoriteCellType;
             
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-
-            /*
-            if ([self.favoriteTableView isEditing])
-                [cell.cellViewContant setConstant:40];
-            else
-                [cell.cellViewContant setConstant:0];
-             */
             
         }
         

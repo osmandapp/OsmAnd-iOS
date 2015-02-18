@@ -54,8 +54,17 @@
     
     OAGPX *gpx = [[OAGPX alloc] init];
     gpx.gpxFileName = fileName;
-    gpx.gpxTitle = title;
-    gpx.gpxDescription = desc;
+    
+    if (title)
+        gpx.gpxTitle = title;
+    else
+        gpx.gpxTitle = [fileName stringByDeletingPathExtension];
+
+    if (desc)
+        gpx.gpxDescription = desc;
+    else
+        gpx.gpxDescription = @"";
+
     gpx.importDate = [NSDate date];
     
     gpx.totalDistance = analysis.totalDistance;

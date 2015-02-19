@@ -52,6 +52,7 @@
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
     OAGPX *gpx = [[OAGPX alloc] init];
+    gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
     
     if (title)

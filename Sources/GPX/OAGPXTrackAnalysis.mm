@@ -8,6 +8,7 @@
 
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
+#import <OsmAndCore/Utilities.h>
 
 
 @implementation OASplitMetric
@@ -273,12 +274,7 @@
                     }
                 }
                 
-                // totalDistance += MapUtils.getDistance(prev.lat, prev.lon, point.lat, point.lon);
-                // using ellipsoidal 'distanceBetween' instead of spherical haversine (MapUtils.getDistance) is
-                // a little more exact, also seems slightly faster:
-                CLLocation *loc1 = [[CLLocation alloc] initWithLatitude:prev.position.latitude longitude:prev.position.longitude];
-                CLLocation *loc2 = [[CLLocation alloc] initWithLatitude:point.position.latitude longitude:point.position.longitude];
-                CLLocationDistance distance = [loc1 distanceFromLocation:loc2];
+                double distance = OsmAnd::Utilities::distance(prev.position.longitude, prev.position.latitude, point.position.longitude, point.position.latitude);
                 _totalDistance += distance;
                 
                 // Averaging speed values is less exact than totalDistance/timeMoving
@@ -310,7 +306,7 @@
     // 5. Max speed and Average speed, if any. Average speed is NOT overall (effective) speed, but only calculated for "moving" periods.
     if(speedCount > 0) {
         if(_timeMoving > 0){
-            _avgSpeed = (float) (_totalDistanceMoving / _timeMoving * 1000);
+            _avgSpeed = (float) (_totalDistanceMoving / _timeMoving);
         } else {
             _avgSpeed = (float) (totalSpeedSum / speedCount);
         }

@@ -41,6 +41,8 @@ typedef enum
     
     EGpxItemAction _action;
     BOOL _showTrackOnExit;
+    
+    BOOL _startEndTimeExists;
 }
 
 @property (nonatomic) OAGPXDocument *doc;
@@ -128,22 +130,29 @@ typedef enum
     dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
     
     self.titleView.text = self.gpx.gpxTitle;
+    _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     
-    if (_action != kGpxItemActionNone) {
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    
+    if (_action != kGpxItemActionNone && _mapViewController.parentViewController == self) {
         return;
     }
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
     [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-    [_mapViewController showGpxTrack:path];
+    if (_action == kGpxItemActionNone) {
+        dispatch_async(dispatch_get_main_queue(), ^{            
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+            [_mapViewController showGpxTrack:path];
+        });
+    } else {
+        _action = kGpxItemActionNone;
+    }
 
 }
 
@@ -192,6 +201,7 @@ typedef enum
 
 - (IBAction)showPointsClicked:(id)sender
 {
+    _action = kGpxItemActionShowPoints;
     OAGPXPointListViewController* controller = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -205,7 +215,10 @@ typedef enum
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    if (_startEndTimeExists)
+        return 3;
+    else
+        return 2;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
@@ -213,7 +226,8 @@ typedef enum
         case 0:
             return @"Statistics";
         case 1:
-            return @"Route Time";
+            if (_startEndTimeExists)
+                return @"Route Time";
         case 2:
             return @"Uphills/Downhills";
             
@@ -227,9 +241,13 @@ typedef enum
     
     switch (section) {
         case 0:
-            return 3;
+            if (self.gpx.avgSpeed > 0)
+                return 3;
+            else
+                return 2;
         case 1:
-            return 2;
+            if (_startEndTimeExists)
+                return 2;
         case 2:
             return 4;
             
@@ -265,8 +283,12 @@ typedef enum
                 {
                     [cell.textView setText:@"Waypoints"];
                     [cell.descView setText:[NSString stringWithFormat:@"%d", self.gpx.wptPoints]];
-                    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-                    cell.iconView.hidden = NO;
+                    if (self.gpx.wptPoints > 0) {
+                        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                        cell.iconView.hidden = NO;
+                    } else {
+                        cell.iconView.hidden = YES;
+                    }
                     break;
                 }
                 case 2: // Avg Speed
@@ -284,7 +306,7 @@ typedef enum
             return cell;
         }
         case 1: // Route Time
-        {
+        if (_startEndTimeExists) {
             OAGPXDetailsTableViewCell* cell;
             cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
             if (cell == nil)
@@ -384,7 +406,7 @@ typedef enum
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 1)
+    if (indexPath.section == 0 && indexPath.row == 1 && self.gpx.wptPoints > 0)
         return indexPath;
     else
         return nil;
@@ -396,7 +418,7 @@ typedef enum
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     // Show Location Points
-    if (indexPath.section == 0 && indexPath.row == 1) {
+    if (indexPath.section == 0 && indexPath.row == 1 && self.gpx.wptPoints > 0) {
         [self showPointsClicked:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }

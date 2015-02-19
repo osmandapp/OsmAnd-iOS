@@ -281,7 +281,7 @@ typedef enum
 {
     if (_selectedIndex  < 0) {
         
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select item for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select GPX for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [exportHelpAlert show];
         
     } else {

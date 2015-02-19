@@ -376,9 +376,11 @@
     double clat = bottom / 2.0 + top / 2.0;
     double clon = left / 2.0 + right / 2.0;
     
-    self.bounds.center = CLLocationCoordinate2DMake(clat, clon);
-    self.bounds.topLeft = CLLocationCoordinate2DMake(top, left);
-    self.bounds.bottomRight = CLLocationCoordinate2DMake(bottom, right);
+    OAGpxBounds bounds;
+    bounds.center = CLLocationCoordinate2DMake(clat, clon);
+    bounds.topLeft = CLLocationCoordinate2DMake(top, left);
+    bounds.bottomRight = CLLocationCoordinate2DMake(bottom, right);
+    self.bounds = bounds;
     
     return YES;
 }

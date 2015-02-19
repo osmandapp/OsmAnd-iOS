@@ -11,8 +11,6 @@
 @interface OAGPXPointTableViewCell : UITableViewCell
 
 @property (weak, nonatomic) IBOutlet UILabel *textView;
-@property (weak, nonatomic) IBOutlet UILabel *descView;
-
-@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UITextView *descView;
 
 @end

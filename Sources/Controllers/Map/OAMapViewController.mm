@@ -1882,16 +1882,18 @@
     
     if (gpxPresenter)
     {
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
         const std::shared_ptr<OsmAnd::MapPrimitivesProvider> gpxPrimitivesProvider(new OsmAnd::MapPrimitivesProvider(
                                                                                                                      gpxPresenter->createMapObjectsProvider(),
                                                                                                                      _mapPrimitiviser,
-                                                                                                                     256,
+                                                                                                                     rasterTileSize,
                                                                                                                      OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
         auto tileProvider = new OsmAnd::MapRasterLayerProvider_Software(gpxPrimitivesProvider, false);
         [rendererView setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>(tileProvider)) forLayer:10];
         
-        _mapObjectsSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(gpxPrimitivesProvider, 256u, symbolsScale));
-        [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
+        std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpx;
+        _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(gpxPrimitivesProvider, rasterTileSize, symbolsScale));
+        [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
     }
 }
 

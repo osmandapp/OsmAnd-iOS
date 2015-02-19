@@ -20,6 +20,11 @@ typedef enum
     
 } OAGpxFixType;
 
+typedef struct {
+    CLLocationCoordinate2D center;
+    CLLocationCoordinate2D topLeft;
+    CLLocationCoordinate2D bottomRight;
+} OAGpxBounds;
 
 @interface OAExtraData : NSObject
 @end

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "OAMapViewController.h"
+#import "OAGPXDocumentPrimitives.h"
 
 @interface OAMapPanelViewController : UIViewController
 
@@ -18,6 +19,8 @@
 @property (nonatomic, strong, readonly) UIViewController* hudViewController;
 
 - (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;
+
+- (void)prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated;
 
 - (void)doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView;
 

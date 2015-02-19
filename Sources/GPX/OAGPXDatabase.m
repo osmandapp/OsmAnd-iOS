@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXDatabase.h"
-#import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OsmAndApp.h"
 
@@ -48,7 +47,7 @@
     return self;
 }
 
--(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc analysis:(OAGPXTrackAnalysis *)analysis
+-(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
@@ -128,6 +127,11 @@
     for (NSDictionary *dict in dbContent) {
 
         OAGPX *gpx = [[OAGPX alloc] init];
+        OAGpxBounds bounds;
+        bounds.center = CLLocationCoordinate2DMake([dict[@"center_lat"] doubleValue], [dict[@"center_lon"] doubleValue]);
+        bounds.topLeft = CLLocationCoordinate2DMake([dict[@"top_left_lat"] doubleValue], [dict[@"top_left_lon"] doubleValue]);
+        bounds.bottomRight = CLLocationCoordinate2DMake([dict[@"bottom_right_lat"] doubleValue], [dict[@"bottom_right_lon"] doubleValue]);
+        gpx.bounds = bounds;
         
         for (NSString *key in dict) {
             
@@ -218,6 +222,13 @@
         [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
         [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
         [d setObject:gpx.importDate forKey:@"importDate"];
+        
+        [d setObject:@(gpx.bounds.center.latitude) forKey:@"center_lat"];
+        [d setObject:@(gpx.bounds.center.longitude) forKey:@"center_lon"];
+        [d setObject:@(gpx.bounds.topLeft.latitude) forKey:@"top_left_lat"];
+        [d setObject:@(gpx.bounds.topLeft.longitude) forKey:@"top_left_lon"];
+        [d setObject:@(gpx.bounds.bottomRight.latitude) forKey:@"bottom_right_lat"];
+        [d setObject:@(gpx.bounds.bottomRight.longitude) forKey:@"bottom_right_lon"];
         
         [d setObject:@(gpx.totalDistance) forKey:@"totalDistance"];
         [d setObject:@(gpx.totalTracks) forKey:@"totalTracks"];

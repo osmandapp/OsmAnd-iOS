@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
+#import "OAGPXDocumentPrimitives.h"
 
-@class OAGpxWpt;
 @class OAGPXTrackAnalysis;
 
 @interface OAGPX : NSObject
@@ -17,6 +18,9 @@
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate *importDate;
+
+@property (nonatomic) OAGpxBounds bounds;
+
 
 // Statistics
 @property (nonatomic) float totalDistance;
@@ -51,7 +55,7 @@
 
 + (OAGPXDatabase *)sharedDb;
 
--(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc analysis:(OAGPXTrackAnalysis *)analysis;
+-(void)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 -(void)removeGpxItem:(NSString *)fileName;
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(void) load;

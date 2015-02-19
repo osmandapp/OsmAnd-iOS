@@ -46,6 +46,10 @@ typedef enum
     BOOL _wasShowingFavorites;
     BOOL _deleteFavorite;
 }
+
+@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
+@property (nonatomic) UIButton *mapButton;
+
 @end
 
 @implementation OAFavoriteItemViewController
@@ -129,6 +133,7 @@ typedef enum
             CGFloat mapBottom = topY + mapHeight;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
             self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
             self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
             self.scrollView.contentSize = CGSizeMake(small, 250.0);
@@ -148,6 +153,7 @@ typedef enum
             CGFloat mapBottom = topY + mapHeight;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
             self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
             self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
             self.scrollView.contentSize = CGSizeMake(big - mapWidth, 250.0);
@@ -165,10 +171,10 @@ typedef enum
     
     contentOriginY = self.favoriteNameButton.frame.origin.y;
     
-    UIButton* mapButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 64, DeviceScreenWidth, 230 - 64)];
-    [mapButton setTitle:@"" forState:UIControlStateNormal];
-    [mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:mapButton];
+    self.mapButton = [[UIButton alloc] initWithFrame:self.mapView.frame];
+    [self.mapButton setTitle:@"" forState:UIControlStateNormal];
+    [self.mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.mapButton];
     
 }
 

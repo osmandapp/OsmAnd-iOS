@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OsmAndCore/GpxDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import <CoreLocation/CoreLocation.h>
 
 @class OAGPXTrackAnalysis;
 @class OASplitMetric;
@@ -20,6 +21,8 @@
 @property (nonatomic) NSArray *tracks;
 @property (nonatomic) NSArray *routes;
 @property (nonatomic) OAExtraData *extraData;
+
+@property (nonatomic) OAGpxBounds bounds;
 
 @property (nonatomic) NSString *version;
 @property (nonatomic) NSString *creator;

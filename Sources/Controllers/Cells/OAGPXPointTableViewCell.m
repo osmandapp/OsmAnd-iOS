@@ -7,11 +7,18 @@
 //
 
 #import "OAGPXPointTableViewCell.h"
+#import "OAUtilities.h"
 
 @implementation OAGPXPointTableViewCell
 
 - (void)awakeFromNib {
-    // Initialization code
+    
+    self.descView.textContainer.lineFragmentPadding = 0;
+    if ([OAUtilities iosVersionIsAtLeast:@"7.0"]) {
+        self.descView.textContainerInset = UIEdgeInsetsZero;
+    } else {
+        self.descView.contentInset = UIEdgeInsetsZero;
+    }
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
@@ -19,5 +26,6 @@
 
     // Configure the view for the selected state
 }
+
 
 @end

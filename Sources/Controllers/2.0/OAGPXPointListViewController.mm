@@ -12,6 +12,7 @@
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
+#import "OAGPXPointViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -86,17 +87,17 @@ typedef enum
     
     [self.unsortedPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
         OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
-        const auto& favoritePosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-        const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+        const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+        const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
         
         const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                           newLocation.coordinate.latitude,
-                                                          favoriteLon, favoriteLat);
+                                                          wptLon, wptLat);
         
         itemData.distance = [_app.locationFormatter stringFromDistance:distance];
         itemData.distanceMeters = distance;
-        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
         itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);
         
     }];
@@ -240,21 +241,7 @@ typedef enum
     
     if (cell) {
         
-        OAGpxWptItem* item;
-        switch (sortingType) {
-            case EPointsSortingTypeNone:
-                item = [self.unsortedPoints objectAtIndex:indexPath.row];
-                break;
-            case EPointsSortingTypeAB:
-                item = [self.sortedABPoints objectAtIndex:indexPath.row];
-                break;
-            case EPointsSortingTypeDistance:
-                item = [self.sortedDistPoints objectAtIndex:indexPath.row];
-                break;
-                
-            default:
-                break;
-        }
+        OAGpxWptItem* item= [self getWptItem:indexPath.row];
         
         [cell.titleView setText:item.point.name];
         [cell.distanceView setText:item.distance];
@@ -295,6 +282,26 @@ typedef enum
     return NO;
 }
 
+-(OAGpxWptItem *)getWptItem:(NSInteger)row
+{
+    OAGpxWptItem* item;
+    switch (sortingType) {
+        case EPointsSortingTypeNone:
+            item = [self.unsortedPoints objectAtIndex:row];
+            break;
+        case EPointsSortingTypeAB:
+            item = [self.sortedABPoints objectAtIndex:row];
+            break;
+        case EPointsSortingTypeDistance:
+            item = [self.sortedDistPoints objectAtIndex:row];
+            break;
+            
+        default:
+            break;
+    }
+    return item;
+}
+
 #pragma mark -
 #pragma mark Deferred image loading (UIScrollViewDelegate)
 
@@ -321,11 +328,10 @@ typedef enum
 #pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    /*
-    OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-    OAFavoriteItemViewController* controller = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
-    [self.navigationController pushViewController:controller animated:YES];
-     */
+    
+    OAGpxWptItem* item= [self getWptItem:indexPath.row];
+    OAGPXPointViewController* controller = [[OAGPXPointViewController alloc] initWithWptItem:item];
+    [self.navigationController pushViewController:controller animated:YES];    
 }
 
 

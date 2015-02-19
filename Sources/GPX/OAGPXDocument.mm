@@ -14,7 +14,14 @@
 #import "OAGPXTrackAnalysis.h"
 
 
-@implementation OAGPXDocument
+@implementation OAGPXDocument {
+
+    double left;
+    double top;
+    double right;
+    double bottom;
+
+}
 
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
@@ -119,8 +126,30 @@
     return nil;
 }
 
+- (void)processBounds:(CLLocationCoordinate2D)coord
+{
+    if (left == DBL_MAX) {
+        left = coord.longitude;
+        right = coord.longitude;
+        top = coord.latitude;
+        bottom = coord.latitude;
+        
+    } else {
+        
+        left = MIN(left, coord.longitude);
+        right = MAX(right, coord.longitude);
+        top = MAX(top, coord.latitude);
+        bottom = MIN(bottom, coord.latitude);
+    }
+}
+
 - (BOOL) fetch:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument
 {
+    left = DBL_MAX;
+    top = DBL_MAX;
+    right = DBL_MAX;
+    bottom = DBL_MAX;
+
     self.version = gpxDocument->version.toNSString();
     self.creator = gpxDocument->creator.toNSString();
     
@@ -169,6 +198,8 @@
             _mark.links = [self fetchLinks:mark->links];
 
             _mark.extraData = [self fetchExtra:mark->extraData];
+            
+            [self processBounds:_mark.position];
 
             [_marks addObject:_mark];
         }
@@ -233,6 +264,18 @@
                             _p.ageOfGpsData = p->ageOfGpsData;
                             _p.dgpsStationId = p->dgpsStationId;
 
+                            _p.extraData = [self fetchExtra:p->extraData];
+                            if (_p.extraData) {
+                                OAGpxExtensions *exts = (OAGpxExtensions *)_p.extraData;
+                                for (OAGpxExtension *e in exts.extensions) {
+                                    if ([e.name isEqualToString:@"speed"]) {
+                                        _p.speed = [e.value doubleValue];
+                                        break;
+                                    }
+                                }
+                            }
+
+                            [self processBounds:_p.position];
                             [pts addObject:_p];
                         }
                         _s.points = pts;
@@ -304,9 +347,19 @@
                     _p.ageOfGpsData = p->ageOfGpsData;
                     _p.dgpsStationId = p->dgpsStationId;
                     
-                    [_points addObject:_p];
-                    
                     _p.extraData = [self fetchExtra:p->extraData];
+                    if (_p.extraData) {
+                        OAGpxExtensions *exts = (OAGpxExtensions *)_p.extraData;
+                        for (OAGpxExtension *e in exts.extensions) {
+                            if ([e.name isEqualToString:@"speed"]) {
+                                _p.speed = [e.value doubleValue];
+                                break;
+                            }
+                        }
+                    }
+                    
+                    [self processBounds:_p.position];
+                    [_points addObject:_p];
                     
                 }
                 
@@ -320,6 +373,13 @@
         self.routes = _rts;
     }
 
+    double clat = bottom / 2.0 + top / 2.0;
+    double clon = left / 2.0 + right / 2.0;
+    
+    self.bounds.center = CLLocationCoordinate2DMake(clat, clon);
+    self.bounds.topLeft = CLLocationCoordinate2DMake(top, left);
+    self.bounds.bottomRight = CLLocationCoordinate2DMake(bottom, right);
+    
     return YES;
 }
 

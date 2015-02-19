@@ -17,6 +17,7 @@
 #import "OALog.h"
 
 #import "OAMapRendererView.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -185,7 +186,7 @@
     });
 }
 
-- (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+- (void)saveMapStateIfNeeded
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -198,10 +199,53 @@
         _mainMapAzimuth = renderView.azimuth;
         _mainMapEvelationAngle = renderView.elevationAngle;
     }
+}
+
+- (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+{
+    [self saveMapStateIfNeeded];
     
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     [_mapViewController goToPosition:destinationPoint
                              andZoom:zoom
                             animated:animated];
+    
+    renderView.azimuth = newAzimuth;
+    renderView.elevationAngle = newElevationAngle;
+}
+
+- (void)prepareMapForReuse:(UIView *)destinationView mapBounds:(OAGpxBounds)mapBounds newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
+{
+    [self saveMapStateIfNeeded];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    if (mapBounds.topLeft.latitude != DBL_MAX) {
+        
+        const OsmAnd::LatLon latLon(mapBounds.center.latitude, mapBounds.center.longitude);
+        Point31 center = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+        
+        float metersPerPixel = [_mapViewController calculateMapRuler];
+        
+        //double distanceH = OsmAnd::Utilities::distance(left, top, right, top);
+        //double distanceV = OsmAnd::Utilities::distance(left, top, left, bottom);
+        double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
+        double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+        
+        CGSize mapSize = destinationView.bounds.size;
+        
+        CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
+        CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
+        CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
+        
+        OAMapRendererView *renderer = (OAMapRendererView*)_mapViewController.view;
+        CGFloat zoom = renderer.zoom - newZoom;
+        
+        [_mapViewController goToPosition:center
+                                 andZoom:zoom
+                                animated:animated];
+    }
+    
     
     renderView.azimuth = newAzimuth;
     renderView.elevationAngle = newElevationAngle;

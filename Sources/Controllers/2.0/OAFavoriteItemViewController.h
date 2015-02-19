@@ -45,22 +45,9 @@
 
 - (id)initWithFavoriteItem:(OAFavoriteItem*)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation;
+
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
-
-
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-
-@property(readonly) CGFloat displayDensityFactor;
-
-@property(readonly) OAObservable* framePreparedObservable;
-
-#if defined(OSMAND_IOS_DEV)
-@property(nonatomic) BOOL hideStaticSymbols;
-
-@property(nonatomic) BOOL forceDisplayDensityFactor;
-@property(nonatomic) CGFloat forcedDisplayDensityFactor;
-#endif // defined(OSMAND_IOS_DEV)
 
 
 @end

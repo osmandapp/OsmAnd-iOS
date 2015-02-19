@@ -139,49 +139,8 @@ typedef enum
     }
     
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-
-    double left = DBL_MAX;
-    double top;
-    double right;
-    double bottom;
-
-    for (OAGpxWpt *p in self.doc.locationMarks) {
-        if (left == DBL_MAX) {
-            left = p.position.longitude;
-            right = p.position.longitude;
-            top = p.position.latitude;
-            bottom = p.position.latitude;
-            
-        } else {
-            
-            left = MIN(left, p.position.longitude);
-            right = MAX(right, p.position.longitude);
-            top = MAX(top, p.position.latitude);
-            bottom = MIN(bottom, p.position.latitude);
-        }
-    }
     
-    double clat = bottom / 2.0 + top / 2.0;
-    double clon = left / 2.0 + right / 2.0;
-    
-    const OsmAnd::LatLon latLon(clat, clon);
-    OsmAnd::PointI p = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    /*
-    double zoom = 7.0;
-    double tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
-    NSLog(@"metersPerTile 7 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
-    zoom = 8.0;
-    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
-    NSLog(@"metersPerTile 8 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
-    zoom = 9.0;
-    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
-    NSLog(@"metersPerTile 9 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
-    zoom = 10.0;
-    tileY = OsmAnd::Utilities::getTileNumberY(zoom, clat);
-    NSLog(@"metersPerTile 10 = %f", OsmAnd::Utilities::getMetersPerTileUnit(zoom, tileY, 1));
-    */
-    
-    [[OARootViewController instance].mapPanel prepareMapForReuse:[OANativeUtilities convertFromPointI:p] zoom:9.0 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
     [_mapViewController showGpxTrack:path];

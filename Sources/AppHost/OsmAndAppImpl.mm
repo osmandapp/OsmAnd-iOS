@@ -58,7 +58,7 @@
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 
 @synthesize favoritesCollection = _favoritesCollection;
-@synthesize gpxCollection = _gpxCollection;
+//@synthesize gpxCollection = _gpxCollection;
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
@@ -202,9 +202,9 @@
     // Load GPX
 //    _gpxCollectionChangedObservable = [[OAObservable alloc] init];
 //    _gpxChangedObservable = [[OAObservable alloc] init];
-    _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
-    _gpxCollection.reset(new OsmAnd::GpxDocument());
-    _gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(_gpxFilename));
+//    _gpxFilename = _documentsDir.filePath(QLatin1String("GPX.gpx")).toNSString();
+//    _gpxCollection.reset(new OsmAnd::GpxDocument());
+//    _gpxCollection = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(_gpxFilename));
         
 //    _gpxCollection->collectionChangeObservable.attach((__bridge const void*)self,
 //                                                            [self]
@@ -334,7 +334,7 @@
 @synthesize gpxChangedObservable = _gpxChangedObservable;
 
 @synthesize favoritesStorageFilename = _favoritesFilename;
-@synthesize gpxStorageFilename = _gpxFilename;
+//@synthesize gpxStorageFilename = _gpxFilename;
 
 - (void)saveDataToPermamentStorage
 {
@@ -357,10 +357,10 @@
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
 
-- (void)saveGPXToPermamentStorage
-{
-    _gpxCollection->saveTo(QString::fromNSString(_gpxFilename));
-}
+//- (void)saveGPXToPermamentStorage
+//{
+//    _gpxCollection->saveTo(QString::fromNSString(_gpxFilename));
+//}
 
 - (TTTLocationFormatter*)locationFormatterDigits
 {

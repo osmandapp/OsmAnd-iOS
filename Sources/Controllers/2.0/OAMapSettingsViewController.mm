@@ -20,6 +20,7 @@
 #import "OAMapSettingsSubviewController.h"
 #import "OAMapSourcesViewController.h"
 
+#import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
 
 #include <QtMath>
@@ -58,6 +59,16 @@
 #define kOneSecondAnimatonTime 1.0f
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
+typedef enum
+{
+    EMapSettingsActionNone = 0,
+    EMapSettingsActionGpx,
+    EMapSettingsActionMapType,
+    EMapSettingsActionDetails,
+    EMapSettingsActionRoutes,
+    EMapSettingsActionHide,
+    
+} EMapSettingsAction;
 
 @interface OAMapStyle : NSObject
 @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
@@ -76,14 +87,8 @@
 
 @interface OAMapSettingsViewController () {
     
-    OAMapViewController *_mapViewController;
-    OAMapMode _mainMapMode;
-    OsmAnd::PointI _mainMapTarget31;
-    float _mainMapZoom;
-    float _mainMapAzimuth;
-    float _mainMapEvelationAngle;
+    EMapSettingsAction _action;
     
-    BOOL _inAction;
 }
 
 @property NSArray* tableData;
@@ -113,7 +118,7 @@
     CGFloat big;
     CGFloat small;
     
-    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGRect rect = self.view.bounds;
     if (rect.size.width > rect.size.height) {
         big = rect.size.width;
         small = rect.size.height;
@@ -174,69 +179,34 @@
 {
     [super viewWillAppear:animated];
     
-    if (_inAction)
+    if (_action != EMapSettingsActionNone)
         return;
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    OAGpxBounds bounds;
+    bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
     
-    _mainMapMode = _app.mapMode;
-    
-    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
-    
-    _mainMapTarget31 = renderView.target31;
-    _mainMapZoom = renderView.zoom;
-    _mainMapAzimuth = renderView.azimuth;
-    _mainMapEvelationAngle = renderView.elevationAngle;
+    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    if (_inAction) {
-        _inAction = NO;
+    if (_action != EMapSettingsActionNone) {
+        _action = EMapSettingsActionNone;
         return;
     }
     
-    _mapViewController.view.frame = CGRectMake(0, 0, self.mapView.bounds.size.width, self.mapView.bounds.size.height);
+    [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
     
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [self addChildViewController:_mapViewController];
-    [self.mapView addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
-    [self.mapView bringSubviewToFront:_mapViewController.view];
-    
-    UIView * parent = self.mapView;
-    UIView * child = _mapViewController.view;
-    [child setTranslatesAutoresizingMaskIntoConstraints:YES];
-    
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[child]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[child]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-
-    [parent layoutIfNeeded];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    if (_inAction)
+    if (_action != EMapSettingsActionNone)
         return;
-    
-    _app.mapMode = _mainMapMode;
-    
-    OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
-    mapView.target31 = _mainMapTarget31;
-    mapView.zoom = _mainMapZoom;
-    mapView.azimuth = _mainMapAzimuth;
-    mapView.elevationAngle = _mainMapEvelationAngle;
     
 }
 
@@ -244,32 +214,8 @@
 {
     [super viewDidDisappear:animated];
 
-    if (_inAction)
+    if (_action != EMapSettingsActionNone)
         return;
-    
-    //[_app.data.mapLayersConfiguration setLayer:kFavoritesLayerId Visibility:NO];
-    
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    _mapViewController = mapPanel.mapViewController;
-    
-    _mapViewController.view.frame = CGRectMake(0, 0, mapPanel.view.bounds.size.width, mapPanel.view.bounds.size.height);
-    
-    [_mapViewController willMoveToParentViewController:nil];
-    
-    [mapPanel addChildViewController:_mapViewController];
-    [mapPanel.view addSubview:_mapViewController.view];
-    [_mapViewController didMoveToParentViewController:self];
-    [mapPanel.view sendSubviewToBack:_mapViewController.view];
-    
-    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:@{@"view":_mapViewController.view}]];
-    [mapPanel.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                          options:0
-                                                                          metrics:nil
-                                                                            views:@{@"view":_mapViewController.view}]];
 
 }
 
@@ -502,7 +448,7 @@
             
         case 1: // Map Type
         {
-            _inAction = YES;
+            _action = EMapSettingsActionMapType;
 
             OAMapSourcesViewController* resourcesViewController = [[OAMapSourcesViewController alloc] initWithNibName:@"OAMapSourcesViewController" bundle:nil];
             [self.navigationController pushViewController:resourcesViewController animated:YES];
@@ -517,19 +463,21 @@
             switch (indexPath.row) {
                 case 0:
                     settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenDetails];
+                    _action = EMapSettingsActionDetails;
                     break;
                 case 1:
                     settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenRoutes];
+                    _action = EMapSettingsActionRoutes;
                     break;
                 case 2:
                     settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenHide];
+                    _action = EMapSettingsActionHide;
                     break;
                 default:
                     break;
             }
             
             if (settingsSubviewController) {
-                _inAction = YES;
                 [self.navigationController pushViewController:settingsSubviewController animated:YES];
             }
             

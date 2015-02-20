@@ -353,6 +353,7 @@
     // Setup renderer
     OsmAnd::MapRendererSetupOptions rendererSetup;
     rendererSetup.gpuWorkerThreadEnabled = true;
+    rendererSetup.displayDensityFactor = _displayDensityFactor;
     const auto capturedWorkerContext = _glWorkerContext;
     rendererSetup.gpuWorkerThreadPrologue =
         [capturedWorkerContext]

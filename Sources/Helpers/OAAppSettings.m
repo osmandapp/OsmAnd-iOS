@@ -58,6 +58,7 @@
         
         // Map Settings
         _mapSettingShowFavorites = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowFavoritesKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowFavoritesKey] : NO;
+        _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         // --- Details
         _mapSettingMoreDetails = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingMoreDetailsKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingMoreDetailsKey] : NO;
@@ -124,6 +125,33 @@
     [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
                                    Visibility:_mapSettingShowFavorites];
 }
+
+
+-(void)setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
+{
+    _mapSettingVisibleGpx = mapSettingVisibleGpx;
+    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingVisibleGpx forKey:mapSettingVisibleGpxKey];
+    //[[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+-(void)showGpx:(NSString *)fileName
+{
+    if (![_mapSettingVisibleGpx containsObject:fileName]) {
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+        [arr addObject:fileName];
+        self.mapSettingVisibleGpx = arr;
+    }
+}
+
+-(void)hideGpx:(NSString *)fileName
+{
+    if ([_mapSettingVisibleGpx containsObject:fileName]) {
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:_mapSettingVisibleGpx];
+        [arr removeObject:fileName];
+        self.mapSettingVisibleGpx = arr;
+    }
+}
+
 
 // --- Details
 -(void)setMapSettingMoreDetails:(BOOL)mapSettingMoreDetails {

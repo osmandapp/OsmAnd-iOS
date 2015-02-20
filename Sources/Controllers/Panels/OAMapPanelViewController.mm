@@ -283,7 +283,41 @@
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     renderView.azimuth = azimuth;
     renderView.elevationAngle = elevationAngle;
-    [_mapViewController goToPosition:destinationPoint andZoom:_mainMapZoom animated:YES];
+    [_mapViewController goToPosition:destinationPoint andZoom:zoom animated:YES];
+}
+
+- (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
+{
+    _mapNeedsRestore = NO;
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    renderView.azimuth = azimuth;
+    renderView.elevationAngle = elevationAngle;
+    
+    if (mapBounds.topLeft.latitude != DBL_MAX) {
+        
+        const OsmAnd::LatLon latLon(mapBounds.center.latitude, mapBounds.center.longitude);
+        Point31 center = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+        
+        float metersPerPixel = [_mapViewController calculateMapRuler];
+        
+        //double distanceH = OsmAnd::Utilities::distance(left, top, right, top);
+        //double distanceV = OsmAnd::Utilities::distance(left, top, left, bottom);
+        double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
+        double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+        
+        CGSize mapSize = self.view.bounds.size;
+        
+        CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
+        CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
+        CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
+        
+        OAMapRendererView *renderer = (OAMapRendererView*)_mapViewController.view;
+        CGFloat zoom = renderer.zoom - newZoom;
+        
+        [_mapViewController goToPosition:center
+                                 andZoom:zoom
+                                animated:animated];
+    }
 }
 
 - (void)restoreMapAfterReuse
@@ -299,6 +333,8 @@
 
 - (void)doMapRestore
 {
+    [_mapViewController hideTempGpxTrack];
+    
     _mapViewController.view.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height);
     
     [_mapViewController willMoveToParentViewController:nil];

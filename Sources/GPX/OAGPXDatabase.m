@@ -205,7 +205,10 @@
             }
             
         }
-        [res addObject:gpx];
+        
+        NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+            [res addObject:gpx];
     }
     
     gpxList = res;

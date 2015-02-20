@@ -37,7 +37,7 @@
     CGFloat big;
     CGFloat small;
     
-    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGRect rect = self.view.bounds;
     if (rect.size.width > rect.size.height) {
         big = rect.size.width;
         small = rect.size.height;

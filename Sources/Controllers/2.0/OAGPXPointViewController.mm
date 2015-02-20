@@ -18,6 +18,7 @@
 #import "OANativeUtilities.h"
 #import "OAFavoriteListViewController.h"
 #import "OAGPXPointTableViewCell.h"
+#import "OAMapViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -33,7 +34,9 @@ typedef enum
 @interface OAGPXPointViewController () {
     
     OsmAnd::PointI _newTarget31;
-    
+
+    OAMapViewController *_mapViewController;
+
     EGpxPointAction _action;
         
     BOOL _showPointOnExit;
@@ -67,7 +70,7 @@ typedef enum
     CGFloat big;
     CGFloat small;
     
-    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGRect rect = self.view.bounds;
     if (rect.size.width > rect.size.height) {
         big = rect.size.width;
         small = rect.size.height;
@@ -133,6 +136,8 @@ typedef enum
     
     [super viewWillAppear:animated];
     
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+
     OsmAndAppInstance app = [OsmAndApp instance];
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
@@ -172,15 +177,21 @@ typedef enum
         self.locationServicesUpdateObserver = nil;
     }
     
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
     if (_action != kGpxPointActionNone)
         return;
     
     if (_showPointOnExit) {
         
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultGpxZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
+        [_mapViewController keepTempGpxTrackVisible];
         
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultGpxZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
     }
-    
 }
 
 - (void)didReceiveMemoryWarning {

@@ -239,13 +239,12 @@ typedef enum
     self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     
     
-    // Sort items
-    /*
+    // Sort items by date-time added desc
     NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
-        return [[obj1.gpxTitle lowercaseString] compare:[obj2.gpxTitle lowercaseString]];
+        return [obj2.importDate compare:obj1.importDate];
     }];
     [self.gpxList setArray:sortedArrayGroups];
-     */
+    
     
     // Generate menu items
     GpxTableGroup* itemData = [[GpxTableGroup alloc] init];

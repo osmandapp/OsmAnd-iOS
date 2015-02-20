@@ -73,6 +73,9 @@
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
+#define kGpxLayerId 10
+#define kGpxTempLayerId 11
+
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -98,6 +101,18 @@
     std::shared_ptr<OsmAnd::MapPrimitiviser> _mapPrimitiviser;
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
+    
+    NSString *_gpxDocFileTemp;
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpx;
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxTemp;
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenter;
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterTemp;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpx;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxTemp;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProvider;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderTemp;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpx;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxTemp;
 
     // "My location" marker, "My course" marker and collection
     std::shared_ptr<OsmAnd::MapMarkersCollection> _myMarkersCollection;
@@ -379,6 +394,7 @@
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     mapView.userInteractionEnabled = YES;
     mapView.multipleTouchEnabled = YES;
+    mapView.displayDensityFactor = self.displayDensityFactor;
     [mapView createContext];
     
     // Attach gesture recognizers:
@@ -1588,9 +1604,31 @@
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
         _mapPrimitiviser.reset();
+
         if (_mapObjectsSymbolsProvider)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
         _mapObjectsSymbolsProvider.reset();
+
+        // Reset GPX
+        if (_mapObjectsSymbolsProviderGpx)
+            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        _mapObjectsSymbolsProviderGpx.reset();
+
+        if (_mapObjectsSymbolsProviderGpxTemp)
+            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
+        _mapObjectsSymbolsProviderGpxTemp.reset();
+        
+        [mapView resetProviderFor:kGpxLayerId];
+        [mapView resetProviderFor:kGpxTempLayerId];
+
+        _gpxPrimitivesProvider.reset();
+        _gpxPrimitivesProviderTemp.reset();
+        
+        _gpxPresenterTemp.reset();
+        _gpxPresenter.reset();
+        if (!_gpxDocFileTemp)
+            _geoInfoDocsGpxTemp.clear();
+        
         
         // Determine what type of map-source is being activated
         typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -1755,6 +1793,20 @@
                                                                                    rasterTileSize));
             [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 #endif
+      
+            if (_gpxDocFileTemp) {
+                [self showTempGpxTrack:_gpxDocFileTemp];
+            }
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self buildGpxInfoDocList];
+                
+                if (!_geoInfoDocsGpx.isEmpty())
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self initRendererWithGpxTracks];
+                    });
+            });
+            
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
         {
@@ -1870,30 +1922,126 @@
     }
 }
 
-- (void)showGpxTrack:(NSString *)filePath
+
+- (void)showTempGpxTrack:(NSString *)fileName
 {
-    OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
-    
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> gpxPresenter;
-    const float symbolsScale = 1.0f;
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > geoInfoDocs;
-    geoInfoDocs.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filePath)));
-    gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(geoInfoDocs));
-    
-    if (gpxPresenter)
+    @synchronized(_rendererSync)
     {
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
-        const std::shared_ptr<OsmAnd::MapPrimitivesProvider> gpxPrimitivesProvider(new OsmAnd::MapPrimitivesProvider(
-                                                                                                                     gpxPresenter->createMapObjectsProvider(),
-                                                                                                                     _mapPrimitiviser,
-                                                                                                                     rasterTileSize,
-                                                                                                                     OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
-        auto tileProvider = new OsmAnd::MapRasterLayerProvider_Software(gpxPrimitivesProvider, false);
-        [rendererView setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>(tileProvider)) forLayer:10];
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
+            _gpxDocFileTemp = nil;
+            return;
+        }
         
-        std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpx;
-        _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(gpxPrimitivesProvider, rasterTileSize, symbolsScale));
-        [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            if (_mapObjectsSymbolsProviderGpxTemp)
+                [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
+            _mapObjectsSymbolsProviderGpxTemp.reset();
+            [rendererView resetProviderFor:kGpxTempLayerId];
+            
+            const float symbolsScale = 1.0f;
+            if (![_gpxDocFileTemp isEqualToString:fileName] || _geoInfoDocsGpxTemp.isEmpty()) {
+                _geoInfoDocsGpxTemp.clear();
+                _gpxDocFileTemp = [fileName copy];
+                _geoInfoDocsGpxTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+            }
+            _gpxPresenterTemp.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxTemp));
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (_gpxPresenterTemp) {
+                    const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+                    _gpxPrimitivesProviderTemp.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterTemp->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+                    
+                    _rasterMapProviderGpxTemp.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderTemp, false));
+                    [rendererView setProvider:_rasterMapProviderGpxTemp forLayer:kGpxTempLayerId];
+                    
+                    _mapObjectsSymbolsProviderGpxTemp.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderTemp, rasterTileSize, symbolsScale));
+                    [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
+                }
+            });
+        });
+    }
+}
+
+- (void)hideTempGpxTrack
+{
+    @synchronized(_rendererSync)
+    {
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        if (_mapObjectsSymbolsProviderGpxTemp)
+            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
+        _mapObjectsSymbolsProviderGpxTemp.reset();
+        
+        [rendererView resetProviderFor:kGpxTempLayerId];
+        
+        _gpxPrimitivesProviderTemp.reset();
+        _geoInfoDocsGpxTemp.clear();
+        _gpxPresenterTemp.reset();
+        _gpxDocFileTemp = nil;
+    }
+}
+
+- (void)keepTempGpxTrackVisible
+{
+    if (!_gpxDocFileTemp || _geoInfoDocsGpxTemp.isEmpty())
+        return;
+
+    std::shared_ptr<const OsmAnd::GeoInfoDocument> doc = _geoInfoDocsGpxTemp.first();
+    if (!_geoInfoDocsGpx.contains(doc)) {
+        
+        _geoInfoDocsGpx.append(doc);
+        
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        [settings showGpx:_gpxDocFileTemp];
+        
+        if (!_geoInfoDocsGpx.isEmpty())
+            [self initRendererWithGpxTracks];
+    }
+}
+
+-(void)buildGpxInfoDocList
+{
+    _geoInfoDocsGpx.clear();
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    for (NSString *fileName in settings.mapSettingVisibleGpx) {
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+            _geoInfoDocsGpx.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+        else
+            [settings hideGpx:fileName];
+    }
+}
+
+-(void)initRendererWithGpxTracks
+{
+    @synchronized(_rendererSync)
+    {
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        if (_mapObjectsSymbolsProviderGpx)
+            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        _mapObjectsSymbolsProviderGpx.reset();
+        [rendererView resetProviderFor:kGpxLayerId];
+        
+        const float symbolsScale = 1.0f;
+        _gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpx));
+        
+        if (_gpxPresenter) {
+            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+            _gpxPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenter->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+            
+            _rasterMapProviderGpx.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProvider, false));
+            [rendererView setProvider:_rasterMapProviderGpx forLayer:kGpxLayerId];
+            
+            _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProvider, rasterTileSize, symbolsScale));
+            [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        }
     }
 }
 

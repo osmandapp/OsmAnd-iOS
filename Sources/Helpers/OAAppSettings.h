@@ -17,6 +17,7 @@
 
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
+#define mapSettingVisibleGpxKey @"mapSettingVisibleGpxKey"
 
 // --- Details ---
 // <renderingProperty attr="moreDetailed" name="More details" description="More details on map" type="boolean" possibleValues="" category="details"/>
@@ -74,6 +75,7 @@
 @property (assign, nonatomic) int settingGeoFormat; // 0 -
 
 @property (assign, nonatomic) BOOL mapSettingShowFavorites;
+@property (nonatomic) NSArray *mapSettingVisibleGpx;
 
 // Details
 @property (assign, nonatomic) BOOL mapSettingMoreDetails;
@@ -95,5 +97,8 @@
 @property (assign, nonatomic) BOOL mapSettingAlpineHiking;
 @property (copy, nonatomic) NSString *mapSettingRoadStyle;
 
+
+-(void)showGpx:(NSString *)fileName;
+-(void)hideGpx:(NSString *)fileName;
 
 @end

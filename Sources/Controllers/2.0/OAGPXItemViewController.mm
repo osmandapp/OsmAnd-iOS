@@ -46,6 +46,7 @@ typedef enum
 }
 
 @property (nonatomic) OAGPXDocument *doc;
+@property (nonatomic) UIButton *mapButton;
 
 @end
 
@@ -75,7 +76,7 @@ typedef enum
     CGFloat big;
     CGFloat small;
     
-    CGRect rect = [[UIScreen mainScreen] bounds];
+    CGRect rect = self.view.bounds;
     if (rect.size.width > rect.size.height) {
         big = rect.size.width;
         small = rect.size.height;
@@ -97,6 +98,7 @@ typedef enum
             CGFloat mapBottom = topY + mapHeight;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
             self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
             
         }
@@ -113,6 +115,7 @@ typedef enum
             CGFloat mapWidth = 220.0;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
             self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
             
         }
@@ -129,6 +132,11 @@ typedef enum
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
     dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
     
+    self.mapButton = [[UIButton alloc] initWithFrame:self.mapView.frame];
+    [self.mapButton setTitle:@"" forState:UIControlStateNormal];
+    [self.mapButton addTarget:self action:@selector(goToGpx) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.mapButton];
+
     self.titleView.text = self.gpx.gpxTitle;
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
 }
@@ -146,13 +154,12 @@ typedef enum
     [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
     if (_action == kGpxItemActionNone) {
-        dispatch_async(dispatch_get_main_queue(), ^{            
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-            [_mapViewController showGpxTrack:path];
-        });
+        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
     } else {
         _action = kGpxItemActionNone;
     }
+
+    _showTrackOnExit = NO;
 
 }
 
@@ -172,16 +179,15 @@ typedef enum
 {
     [super viewDidDisappear:animated];
     
-    if (_action != kGpxItemActionShowPoints)
+    if (_action != kGpxItemActionNone)
         return;
     
     if (_showTrackOnExit) {
+     
+        [_mapViewController keepTempGpxTrackVisible];
         
-        const OsmAnd::LatLon latLon(self.gpx.locationStart.position.latitude, self.gpx.locationStart.position.longitude);
-        OsmAnd::PointI p = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:p] zoom:15.0 azimuth:0.0 elevationAngle:90.0 animated:YES];
-        
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:self.gpx.bounds azimuth:0.0 elevationAngle:90.0 animated:YES];
+
     }
 }
 
@@ -428,10 +434,28 @@ typedef enum
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
     if (buttonIndex != alertView.cancelButtonIndex) {
+        
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
+            [settings hideGpx:self.gpx.gpxFileName];
+            [_mapViewController hideTempGpxTrack];
+            [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+        }
+
         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
         [[OAGPXDatabase sharedDb] save];
         [self.navigationController popViewControllerAnimated:YES];
     }
+}
+
+- (void)goToGpx
+{
+    OARootViewController* rootViewController = [OARootViewController instance];
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+        
+    _showTrackOnExit = YES;
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

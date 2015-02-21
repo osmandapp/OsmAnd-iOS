@@ -225,7 +225,7 @@
 
 - (float)zoom
 {
-    return _renderer->getState().requestedZoom;
+    return _renderer->getState().zoomLevel + (_renderer->getState().visualZoom >= 1.0f ? _renderer->getState().visualZoom - 1.0f : (_renderer->getState().visualZoom - 1.0f) * 2.0f);
 }
 
 - (void)setZoom:(float)zoom
@@ -235,7 +235,7 @@
 
 - (OsmAnd::ZoomLevel)zoomLevel
 {
-    return _renderer->getState().zoomBase;
+    return _renderer->getState().zoomLevel;
 }
 
 - (float)currentTileSizeOnScreenInPixels
@@ -252,12 +252,12 @@
 
 - (float)minZoom
 {
-    return _renderer->getMinZoom();
+    return _renderer->getMinZoomLevel();
 }
 
 - (float)maxZoom
 {
-    return _renderer->getMaxZoom();
+    return _renderer->getMaxZoomLevel();
 }
 
 @synthesize stateObservable = _stateObservable;

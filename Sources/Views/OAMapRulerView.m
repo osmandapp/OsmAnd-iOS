@@ -70,7 +70,7 @@
     float metersPerMinSize = metersPerPixel * kMapRulerMinWidth * [[UIScreen mainScreen] scale];
     int rulerWidth = 0;
     NSString * vl = @"";
-    if(metersPerPixel > 0 && metersPerPixel != INFINITY)
+    if(metersPerPixel > 0 && metersPerPixel < 10000000.0)
     {
         double roundedDist = [[OsmAndApp instance] calculateRoundedDist: metersPerMinSize];
         rulerWidth =  (roundedDist / metersPerPixel) / [[UIScreen mainScreen] scale];

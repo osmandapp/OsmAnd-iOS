@@ -228,6 +228,25 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
         else // if (displayDensityFactor >= 1.0f)
             resourceDir = [resourceDir stringByAppendingString:@"/drawable-mdpi"];
     }
+    else if (name.startsWith(QLatin1String("map/stubs/")))
+    {
+        auto resourceFileName = name;
+        resourceFileName = resourceFileName.replace(QLatin1String("map/stubs/"), QLatin1String(""));
+        const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
+        
+        resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
+        resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
+        if (displayDensityFactor >= 3.0f)
+            resourceDir = @"stubs/[ddf=3.0]";
+        else if (displayDensityFactor >= 2.0f)
+            resourceDir = @"stubs/[ddf=2.0]";
+        else if (displayDensityFactor >= 1.5f)
+            resourceDir = @"stubs/[ddf=1.5]";
+        else if (displayDensityFactor >= 1.0f)
+            resourceDir = @"stubs/[ddf=1.0]";
+        else
+            resourceDir = @"stubs";
+    }
     else
     {
         OALog(@"Unrecognized resource name '%@'", name.toNSString());

@@ -18,7 +18,9 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapSettingsSubviewController.h"
-#import "OAMapSourcesViewController.h"
+
+#import "OAMapSettingsMainScreen.h"
+#import "OAMapSettingsMapTypeScreen.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
@@ -59,16 +61,6 @@
 #define kOneSecondAnimatonTime 1.0f
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
-typedef enum
-{
-    EMapSettingsActionNone = 0,
-    EMapSettingsActionGpx,
-    EMapSettingsActionMapType,
-    EMapSettingsActionDetails,
-    EMapSettingsActionRoutes,
-    EMapSettingsActionHide,
-    
-} EMapSettingsAction;
 
 @interface OAMapStyle : NSObject
 @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
@@ -86,22 +78,35 @@ typedef enum
 
 
 @interface OAMapSettingsViewController () {
-    
-    EMapSettingsAction _action;
-    
+    BOOL isAppearFirstTime;
 }
 
 @property NSArray* tableData;
 @property OsmAndAppInstance app;
+@property EMapSettingsScreen settingsScreen;
+@property id<OAMapSettingsScreen> screenObj;
 
 @end
 
 @implementation OAMapSettingsViewController
 
+@synthesize screenObj;
 
--(id)init {
+- (instancetype)init
+{
     self = [super init];
     if (self) {
+        _settingsScreen = EMapSettingsScreenMain;
+        [self commonInit];
+    }
+    return self;
+}
+
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen
+{
+    self = [super init];
+    if (self) {
+        _settingsScreen = settingsScreen;
         [self commonInit];
     }
     return self;
@@ -179,8 +184,10 @@ typedef enum
 {
     [super viewWillAppear:animated];
     
-    if (_action != EMapSettingsActionNone)
-        return;
+    if (isAppearFirstTime)
+        isAppearFirstTime = NO;
+    else
+        [screenObj setupView];
     
     OAGpxBounds bounds;
     bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
@@ -192,31 +199,8 @@ typedef enum
 {
     [super viewDidAppear:animated];
     
-    if (_action != EMapSettingsActionNone) {
-        _action = EMapSettingsActionNone;
-        return;
-    }
-    
     [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
     
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    
-    if (_action != EMapSettingsActionNone)
-        return;
-    
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    if (_action != EMapSettingsActionNone)
-        return;
-
 }
 
 - (void)didReceiveMemoryWarning {
@@ -226,21 +210,35 @@ typedef enum
 
 -(void)commonInit {
     
+    isAppearFirstTime = YES;
     self.app = [OsmAndApp instance];
+    
 }
 
 
 -(void)setupView {
     
-    //[self.mapTypeScrollView setContentSize:CGSizeMake(404, 70)];
-    
+    switch (_settingsScreen) {
+        case EMapSettingsScreenMain:
+            screenObj = [[OAMapSettingsMainScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenMapType:
+            screenObj = [[OAMapSettingsMapTypeScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+            
+        default:
+            break;
+    }
+
     [self setupMapTypeButtons:self.app.data.lastMapSource.type];
     
-    [self.tableView setDelegate:self];
-    [self.tableView setDataSource:self];
+    self.tableView.dataSource = screenObj;
+    self.tableView.delegate = screenObj;
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    [self setupTableData];
+    self.titleView.text = screenObj.title;
+    [screenObj setupView];
+    
 }
 
 -(void)setupMapTypeButtons:(int)selectedMapType {
@@ -302,41 +300,6 @@ typedef enum
     }
 }
 
--(void)setupTableData {
-    self.tableData = @[@{@"groupName": @"Show on Map",
-                         @"cells": @[
-                                 @{@"name": @"Favorite",
-                                   @"value": @"",
-                                   @"type": @"OASwitchCell"},
-                                 @{@"name": @"GPX",
-                                   @"value": @"",
-                                   @"type": @"OASettingsCell"}
-                                 ]
-                         },
-                       @{@"groupName": @"Map Type",
-                         @"cells": @[
-                                 @{@"name": @"Map Type",
-                                   @"value": _app.data.lastMapSourceName,
-                                   @"type": @"OASettingsCell"}
-                                 ],
-                         },
-                       @{@"groupName": @"Map Style",
-                         @"cells": @[
-                                 @{@"name": @"Details",
-                                   @"value": @"",
-                                   @"type": @"OASettingsCell"},
-                                 @{@"name": @"Routes",
-                                   @"value": @"",
-                                   @"type": @"OASettingsCell"},
-                                 @{@"name": @"Hide",
-                                   @"value": @"",
-                                   @"type": @"OASettingsCell"}
-
-                                 ],
-                         }
-                       ];
-}
-
 - (IBAction)changeMapTypeButtonClicked:(id)sender {
     
     int type = ((UIButton*)sender).tag;
@@ -369,128 +332,6 @@ typedef enum
     }
     
 }
-
-
-#pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [self.tableData count];
-}
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [((NSDictionary*)[self.tableData objectAtIndex:section]) objectForKey:@"groupName"];
-}
-
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    return [((NSArray*)[((NSDictionary*)[self.tableData objectAtIndex:section]) objectForKey:@"cells"]) count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)[self.tableData objectAtIndex:indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
-
-    UITableViewCell* outCell = nil;
-    if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
-        
-        static NSString* const identifierCell = @"OASettingsTableViewCell";
-        OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-            cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
-        }
-
-        if (cell) {
-            [cell.textView setText: [data objectForKey:@"name"]];
-            [cell.descriptionView setText: [data objectForKey:@"value"]];
-        }
-        outCell = cell;
-        
-    } else if ([[data objectForKey:@"type"] isEqualToString:@"OASwitchCell"]) {
-        
-        static NSString* const identifierCell = @"OASwitchTableViewCell";
-        OASwitchTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASwitchCell" owner:self options:nil];
-            cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
-        }
-
-        if (cell) {
-            [cell.textView setText: [data objectForKey:@"name"]];
-            
-            if (indexPath.section == 0 && indexPath.row == 0) {
-                OAAppSettings* settings = [OAAppSettings sharedManager];
-                [cell.switchView setOn:settings.mapSettingShowFavorites];
-                [cell.switchView addTarget:self action:@selector(showFavoriteChanged) forControlEvents:UIControlEventValueChanged];
-            }
-
-        }
-        outCell = cell;
-    }
-    
-    return outCell;
-}
-
-- (void)showFavoriteChanged
-{
-    OASwitchTableViewCell *cell = (OASwitchTableViewCell*)[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-    if (cell) {
-        OAAppSettings* settings = [OAAppSettings sharedManager];
-        [settings setMapSettingShowFavorites:cell.switchView.isOn];
-    }
-}
-
-#pragma mark - UITableViewDelegate
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-
-    switch (indexPath.section) {
-            
-        case 1: // Map Type
-        {
-            _action = EMapSettingsActionMapType;
-
-            OAMapSourcesViewController* resourcesViewController = [[OAMapSourcesViewController alloc] initWithNibName:@"OAMapSourcesViewController" bundle:nil];
-            [self.navigationController pushViewController:resourcesViewController animated:YES];
-
-            break;
-        }
-            
-        case 2: // Map Style
-        {
-            OAMapSettingsSubviewController* settingsSubviewController;
-            
-            switch (indexPath.row) {
-                case 0:
-                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenDetails];
-                    _action = EMapSettingsActionDetails;
-                    break;
-                case 1:
-                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenRoutes];
-                    _action = EMapSettingsActionRoutes;
-                    break;
-                case 2:
-                    settingsSubviewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsScreenHide];
-                    _action = EMapSettingsActionHide;
-                    break;
-                default:
-                    break;
-            }
-            
-            if (settingsSubviewController) {
-                [self.navigationController pushViewController:settingsSubviewController animated:YES];
-            }
-            
-            break;
-        }
-            
-        default:
-            break;
-    }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-}
-
 
 
 #pragma mark - Orientation

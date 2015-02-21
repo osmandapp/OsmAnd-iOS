@@ -1156,6 +1156,9 @@
 }
 
 -(float)calculateMapRuler {
+    if (![self isViewLoaded])
+        return 0.0f;
+
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     if(self.currentZoomOutDelta != 0 || self.currentZoomInDelta != 0){
         return 0;
@@ -1699,49 +1702,15 @@
                         newSettings[QString::fromLatin1("nightMode")] = "true";
                     
                     // --- Apply Map Style Settings
-                    /*
                     OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString()];
                     
                     NSArray *params = styleSettings.getAllParameters;
                     for (OAMapStyleParameter *param in params) {
                         newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                     }
-                    */
-                    
-                    if (settings.mapSettingMoreDetails)
-                        newSettings[QString::fromLatin1("moreDetailed")] = "true";
-                    if (settings.mapSettingRoadSurface)
-                        newSettings[QString::fromLatin1("showSurfaces")] = "true";
-                    if (settings.mapSettingRoadQuality)
-                        newSettings[QString::fromLatin1("showSurfaceGrade")] = "true";
-                    if (settings.mapSettingAccessRestrictions)
-                        newSettings[QString::fromLatin1("showAccess")] = "true";
-                    if (settings.mapSettingContourLines)
-                        newSettings[QString::fromLatin1("contourLines")] = [settings.mapSettingContourLines UTF8String];
-                    if (settings.mapSettingColoredBuildings)
-                        newSettings[QString::fromLatin1("coloredBuildings")] = "true";
-                    if (settings.mapSettingStreetLighting)
-                        newSettings[QString::fromLatin1("streetLighting")] = "true";
 
-                    // --- Routes
-                    if (settings.mapSettingShowCycleRoutes)
-                        newSettings[QString::fromLatin1("showCycleRoutes")] = "true";
-                    if (settings.mapSettingOsmcTraces)
-                        newSettings[QString::fromLatin1("osmcTraces")] = "true";
-                    if (settings.mapSettingAlpineHiking)
-                        newSettings[QString::fromLatin1("alpineHiking")] = "true";
-                    if (settings.mapSettingRoadStyle)
-                        newSettings[QString::fromLatin1("roadStyle")] = [settings.mapSettingRoadStyle UTF8String];
-                    
-                    // --- Hide
-                    if (settings.mapSettingNoAdminboundaries)
-                        newSettings[QString::fromLatin1("noAdminboundaries")] = "true";
-                    if (settings.mapSettingNoPolygons)
-                        newSettings[QString::fromLatin1("noPolygons")] = "true";
-                    if (settings.mapSettingHideBuildings)
-                        newSettings[QString::fromLatin1("hideBuildings")] = "true";
-                                        
-                    _mapPresentationEnvironment->setSettings(newSettings);
+                    if (!newSettings.isEmpty())
+                        _mapPresentationEnvironment->setSettings(newSettings);
                 }
             }
             

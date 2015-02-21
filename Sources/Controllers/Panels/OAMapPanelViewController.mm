@@ -264,17 +264,17 @@
     
     UIView * parent = destinationView;
     UIView * child = _mapViewController.view;
-    [child setTranslatesAutoresizingMaskIntoConstraints:NO];
+    [child setTranslatesAutoresizingMaskIntoConstraints:YES];
     
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[child]|"
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
                                                                    options:0
                                                                    metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[child]|"
+                                                                     views:@{@"view":_mapViewController.view}]];
+    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
                                                                    options:0
                                                                    metrics:nil
-                                                                     views:NSDictionaryOfVariableBindings(child)]];
-    [parent layoutIfNeeded];
+                                                                     views:@{@"view":_mapViewController.view}]];
+    //[parent layoutIfNeeded];
 }
 
 - (void)modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated

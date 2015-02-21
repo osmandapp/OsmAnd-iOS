@@ -61,7 +61,8 @@
         return NO;
 
     OAMapSource* other = (OAMapSource*)object;
-    return [_resourceId isEqualToString:other.resourceId] && [_variant isEqualToString:other.variant];
+    return [_resourceId isEqualToString:other.resourceId]
+           && ([_variant isEqualToString:other.variant] || (_variant == other.variant)) ;
 }
 
 #pragma mark - NSCoding

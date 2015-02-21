@@ -1,15 +1,12 @@
 //
-//  OAMapSourcesViewController.m
+//  OAMapSettingsMapTypeScreen.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 12/02/15.
+//  Created by Alexey Kulish on 21/02/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAMapSourcesViewController.h"
-
-#import "OsmAndApp.h"
-#import "OAAutoObserverProxy.h"
+#import "OAMapSettingsMapTypeScreen.h"
 #include "Localization.h"
 
 #include <QSet>
@@ -36,6 +33,7 @@
 #define Item_MapStyle _(Item_MapStyle)
 @interface Item_MapStyle : Item
 @property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
+@property int sortIndex;
 @end
 @implementation Item_MapStyle
 @end
@@ -49,37 +47,36 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
-@end
-
-@implementation OAMapSourcesViewController
+@implementation OAMapSettingsMapTypeScreen
 {
-    OsmAndAppInstance _app;
-    
-    OAAutoObserverProxy* _lastMapSourceChangeObserver;
-    
     NSMutableArray* _offlineMapSources;
     NSMutableArray* _onlineMapSources;
+    NSDictionary *stylesTitlesOffline;
+    NSDictionary *stylesTitlesOnline;
 }
 
 #define kOfflineSourcesSection 0
 #define kOnlineSourcesSection 1
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        [self commonInit];
-    }
-    return self;
-}
+@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title;
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder
+
+-(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
-    self = [super initWithCoder:aDecoder];
+    self = [super init];
     if (self) {
+        app = [OsmAndApp instance];
+        settings = [OAAppSettings sharedManager];
+        title = @"Map Type";
+
+        settingsScreen = EMapSettingsScreenMapType;
+        
+        vwController = viewController;
+        tblView = tableView;
+        
         [self commonInit];
+        [self initData];
     }
     return self;
 }
@@ -91,13 +88,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)commonInit
 {
-    _app = [OsmAndApp instance];
-    
-    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onLastMapSourceChanged)
-                                                              andObserve:_app.data.lastMapSourceChangeObservable];
-    
-    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+    app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
                                                                   const QList< QString >& added,
@@ -107,37 +98,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                      [self onLocalResourcesChanged];
                                                                  });
     
-    _offlineMapSources = [[NSMutableArray alloc] init];
-    _onlineMapSources = [[NSMutableArray alloc] init];
+    _offlineMapSources = [NSMutableArray array];
+    _onlineMapSources = [NSMutableArray array];
 }
 
 - (void)deinit
 {
-    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    // Obtain initial map sources
-    [self obtainMapSources];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    // Perform selection of proper preset
-    //[self selectMapSource:animated];
-}
-
-- (IBAction)backButtonClicked:(id)sender
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
-- (void)obtainMapSources
+- (void)setupView
 {
     [_offlineMapSources removeAllObjects];
     [_onlineMapSources removeAllObjects];
@@ -146,16 +116,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
     
-    const auto builtinResources = _app.resourcesManager->getBuiltInResources();
+    const auto builtinResources = app.resourcesManager->getBuiltInResources();
     for(const auto& builtinResource : builtinResources)
     {
-        if (builtinResource->type == OsmAndResourceType::MapStyle)
-            mapStylesResources.push_back(builtinResource);
-        else if (builtinResource->type == OsmAndResourceType::OnlineTileSources)
+        //if (builtinResource->type == OsmAndResourceType::MapStyle)
+        //    mapStylesResources.push_back(builtinResource);
+        //else
+        if (builtinResource->type == OsmAndResourceType::OnlineTileSources)
             onlineTileSourcesResources.push_back(builtinResource);
     }
     
-    const auto localResources = _app.resourcesManager->getLocalResources();
+    const auto localResources = app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
     {
         if (localResource->type == OsmAndResourceType::MapStyle)
@@ -190,10 +161,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         NSString* resourceId = resource->id.toNSString();
         
         Item_MapStyle* item = [[Item_MapStyle alloc] init];
-        item.mapSource = [_app.data lastMapSourceByResourceId:resourceId];
+        item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
         {
-            const auto presetsForMapStyle = _app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+            const auto presetsForMapStyle = app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
             const auto itFirstFoundPreset = presetsForMapStyle.begin();
             NSString* variant = (itFirstFoundPreset == presetsForMapStyle.cend()) ? nil : (*itFirstFoundPreset)->name.toNSString();
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
@@ -201,74 +172,51 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         item.resource = resource;
         item.mapStyle = mapStyle;
-        
+
+        if ([item.mapStyle->title.toNSString() isEqualToString:@"default"])
+            item.sortIndex = 0;
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"UniRS"])
+            item.sortIndex = 1;
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Touring-view_(more-contrast-and-details).render"])
+            item.sortIndex = 2;
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"LightRS"])
+            item.sortIndex = 3;
+        else
+            item.sortIndex = 4;
+
         [_offlineMapSources addObject:item];
     }
+
+    NSArray *arr = [_offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_MapStyle* obj1, Item_MapStyle* obj2) {
+        if (obj1.sortIndex < obj2.sortIndex)
+            return NSOrderedAscending;
+        if (obj1.sortIndex > obj2.sortIndex)
+            return NSOrderedDescending;
+        return NSOrderedSame;
+    }];
+    
+    [_offlineMapSources setArray:arr];
 }
 
-/*
-- (void)selectMapSource:(BOOL)animated
-{
-    if (!self.isViewLoaded)
-        return;
-    
-    __block NSIndexPath* newSelected = nil;
-    if (newSelected == nil)
-    {
-        [_offlineMapSources enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            Item* item = (Item*)obj;
-            if (![_app.data.lastMapSource isEqual:item.mapSource])
-                return;
-            
-            newSelected = [NSIndexPath indexPathForRow:idx
-                                             inSection:kOfflineSourcesSection];
-            *stop = YES;
-        }];
-    }
-    if (newSelected == nil)
-    {
-        [_onlineMapSources enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            Item* item = (Item*)obj;
-            if (![_app.data.lastMapSource isEqual:item.mapSource])
-                return;
-            
-            newSelected = [NSIndexPath indexPathForRow:idx
-                                             inSection:kOnlineSourcesSection];
-            *stop = YES;
-        }];
-    }
-    
-    NSIndexPath* currentSelected = [self.tableView indexPathForSelectedRow];
-    if (currentSelected != nil)
-    {
-        if ([currentSelected isEqual:newSelected])
-            return;
-        [self.tableView deselectRowAtIndexPath:currentSelected animated:YES];
-    };
-    
-    if (newSelected != nil)
-    {
-        [self.tableView selectRowAtIndexPath:newSelected
-                                    animated:animated
-                              scrollPosition:UITableViewScrollPositionNone];
-    }
-}
-*/
 
-- (void)onLastMapSourceChanged
+-(void)initData
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        //[self selectMapSource:YES];
-    });
+    stylesTitlesOffline = @{@"default" : @"OsmAnd",
+                            @"UniRS" : @"UniRS",
+                            @"Touring-view_(more-contrast-and-details).render" : @"Touring view (contrast & details)",
+                            @"LightRS" : @"LightRS"};
+    
+    stylesTitlesOnline = @{@"osmand_hd" : @"OsmAnd HD (online tiles)",
+                           @"osmand_sd" : @"OsmAnd SD (online tiles)"};
 }
 
 - (void)onLocalResourcesChanged
 {
-    [self obtainMapSources];
+    [self setupView];
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded)
+        if (!vwController.isViewLoaded)
             return;
-        [self.tableView reloadData];
+        [tblView reloadData];
     });
 }
 
@@ -298,9 +246,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch (section)
     {
         case kOfflineSourcesSection:
-            return OALocalizedString(@"Offline maps");
+            return OALocalizedString(@"Styles for Offline Maps");
         case kOnlineSourcesSection:
-            return OALocalizedString(@"Online maps");
+            return OALocalizedString(@"Online Maps");
             
         default:
             return nil;
@@ -317,6 +265,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* description = nil;
     
     Item* someItem = [collection objectAtIndex:indexPath.row];
+    
     if (someItem.resource->type == OsmAndResourceType::MapStyle)
     {
         Item_MapStyle* item = (Item_MapStyle*)someItem;
@@ -343,11 +292,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
     
+    NSString *newCaption;
+    if (indexPath.section == kOfflineSourcesSection) {
+        newCaption = [stylesTitlesOffline objectForKey:caption];
+    } else {
+        newCaption = [stylesTitlesOnline objectForKey:caption];
+    }
+    if (newCaption)
+        caption = newCaption;
+    
     // Fill cell content
     cell.textLabel.text = caption;
     cell.detailTextLabel.text = description;
-    
-    if ([_app.data.lastMapSource isEqual:someItem.mapSource]) {
+
+    if ([app.data.lastMapSource isEqual:someItem.mapSource]) {
         cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
     } else {
         cell.accessoryView = nil;
@@ -356,40 +314,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
 
-- (NSIndexPath*)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Deselect any currently selected (if not the same)
-    NSIndexPath* currentlySelected = [tableView indexPathForSelectedRow];
-    if (currentlySelected != nil)
-    {
-        if ([currentlySelected isEqual:indexPath])
-            return indexPath;
-        [tableView deselectRowAtIndexPath:currentlySelected animated:YES];
-    }
-    
-    return indexPath;
-}
+#pragma mark - UITableViewDelegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
     Item* item = [collection objectAtIndex:indexPath.row];
-    _app.data.lastMapSource = item.mapSource;
-    _app.data.lastMapSourceName = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
-    
-    // For iPhone/iPod, since this menu wasn't opened in popover, return
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-        [self.navigationController popViewControllerAnimated:YES];
+    app.data.lastMapSource = item.mapSource;
+    app.data.lastMapSourceName = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
+
+    [tableView reloadData];
 }
 
-- (NSIndexPath*)tableView:(UITableView *)tableView willDeselectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Disallow manual deselection of any map source
-    return nil;
-}
 
-#pragma mark -
 
 @end

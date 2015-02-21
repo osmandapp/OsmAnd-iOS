@@ -56,14 +56,15 @@
 }
 
 -(void)setupView {
+    /*
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
         case kMapSettingsScreenMapType:
-            /*
-            self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
-                          ];
-            */
+     
+            //self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
+            //              @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
+            //              ];
+     
             break;
         case kMapSettingsScreenDetails:
             self.titleView.text = @"Details";
@@ -121,7 +122,7 @@
     [self.settingsTableView reloadData];
     [self.settingsTableView reloadInputViews];
     
-    
+    */
 }
 
 
@@ -131,7 +132,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    /*
     NSString *cellType = [[self.data objectAtIndex:indexPath.row] objectForKey:@"type"];
     
     if ([cellType isEqualToString:@"OASettingsCell"]) {
@@ -177,6 +178,9 @@
         }
         
         return cell;
+    
+        
+        
 
     } else if ([cellType isEqualToString:@"OASwitchCell"]) {
         
@@ -199,7 +203,7 @@
         
         return cell;
     }
-    
+    */
     return nil;
     
 }
@@ -215,6 +219,7 @@
 
 - (void) mapSettingSwitchChanged:(id)sender
 {
+    /*
     UISwitch *switchView = (UISwitch*)sender;
     if (switchView) {
         OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -249,13 +254,15 @@
             [settings setMapSettingNoPolygons:switchView.isOn];
         if ([key isEqualToString:mapSettingHideBuildingsKey])
             [settings setMapSettingHideBuildings:switchView.isOn];
+     
 
     }
+     */
 }
 
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+    /*
     if (self.settingsType == kMapSettingsContourLines) {
         
         OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -287,7 +294,7 @@
         OAMapSettingsSubviewController* settingsViewController = [[OAMapSettingsSubviewController alloc] initWithSettingsType:kMapSettingsRoadStyle];
         [self.navigationController pushViewController:settingsViewController animated:YES];
     }
-    
+    */
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 

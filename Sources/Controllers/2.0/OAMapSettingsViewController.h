@@ -11,8 +11,18 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 
+typedef enum
+{
+    EMapSettingsScreenUndefined = -1,
+    EMapSettingsScreenMain = 0,
+    EMapSettingsScreenGpx,
+    EMapSettingsScreenMapType,
+    EMapSettingsScreenCategory,
+    
+} EMapSettingsScreen;
 
-@interface OAMapSettingsViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
+
+@interface OAMapSettingsViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
@@ -24,5 +34,6 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
 
 @end

@@ -8,19 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAMapSource : NSObject <NSCopying, NSCoding>
+
+@interface OAMapSource : NSObject <NSCopying>
 
 - (instancetype)initWithResource:(NSString*)resourceId;
+
 - (instancetype)initWithResource:(NSString*)resourceId
                       andVariant:(NSString*)variant;
 
+- (instancetype)initWithResource:(NSString*)resourceId
+                      andVariant:(NSString*)variant
+                            name:(NSString*)name;
+
 // "OnlineTileSources" or "MapStyle" resource
-@property(readonly) NSString* resourceId;
+@property(nonatomic, readonly) NSString* resourceId;
 
 // For "OnlineTileSources": name of source
 // For "MapStyle": name of preset or nil
-@property(readonly) NSString* variant;
+@property(nonatomic, readonly) NSString* variant;
 
-@property int type;
+@property(nonatomic) NSString* name;
+
 
 @end

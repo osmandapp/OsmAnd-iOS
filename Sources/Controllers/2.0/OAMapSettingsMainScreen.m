@@ -58,7 +58,7 @@
                        @{@"groupName": @"Map Type",
                          @"cells": @[
                                  @{@"name": @"Map Type",
-                                   @"value": app.data.lastMapSourceName,
+                                   @"value": app.data.lastMapSource.name,
                                    @"type": @"OASettingsCell"}
                                  ],
                          },

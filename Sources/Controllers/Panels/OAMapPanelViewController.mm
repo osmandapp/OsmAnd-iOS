@@ -253,7 +253,9 @@
 
 - (void)doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView
 {
-    _mapViewController.view.frame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
+    CGRect newFrame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
+    if (!CGRectEqualToRect(_mapViewController.view.frame, newFrame))
+        _mapViewController.view.frame = newFrame;
 
     [_mapViewController willMoveToParentViewController:nil];
     
@@ -262,9 +264,10 @@
     [_mapViewController didMoveToParentViewController:self];
     [destinationView bringSubviewToFront:_mapViewController.view];
     
-    UIView * parent = destinationView;
-    UIView * child = _mapViewController.view;
-    [child setTranslatesAutoresizingMaskIntoConstraints:YES];
+    //UIView * parent = destinationView;
+    //UIView * child = _mapViewController.view;
+    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:YES];
+    /*
     
     [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
                                                                    options:0
@@ -274,6 +277,7 @@
                                                                    options:0
                                                                    metrics:nil
                                                                      views:@{@"view":_mapViewController.view}]];
+     */
     //[parent layoutIfNeeded];
 }
 

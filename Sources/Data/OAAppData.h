@@ -16,7 +16,6 @@
 @interface OAAppData : NSObject <NSCoding>
 
 @property OAMapSource* lastMapSource;
-@property (copy, nonatomic) NSString *lastMapSourceName;
 @property(readonly) OAObservable* lastMapSourceChangeObservable;
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;
 

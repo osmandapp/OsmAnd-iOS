@@ -53,32 +53,13 @@
 // https://github.com/osmandapp/OsmAnd-resources/blob/master/rendering_styles/default.render.xml
 
 
-#define kElevationMinAngle 30.0f
-#define kMapModePositionTrackingDefaultZoom 15.0f
-#define kMapModePositionTrackingDefaultElevationAngle 90.0f
-#define kMapModeFollowDefaultZoom 18.0f
-#define kMapModeFollowDefaultElevationAngle kElevationMinAngle
-#define kOneSecondAnimatonTime 1.0f
-#define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
-
-
-@interface OAMapStyle : NSObject
-@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
-@end
-@implementation OAMapStyle
-@end
-
-@interface OAMapStylePreset : NSObject
-@property OAMapSource* mapSource;
-@property std::shared_ptr<const OsmAnd::MapStylePreset> mapStylePreset;
-@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
-@end
-@implementation OAMapStylePreset
-@end
 
 
 @interface OAMapSettingsViewController () {
+
     BOOL isAppearFirstTime;
+    BOOL isOnlineMapSource;
+    OAAutoObserverProxy* _lastMapSourceChangeObserver;
 }
 
 @property NSArray* tableData;
@@ -146,8 +127,14 @@
             CGFloat scrollBottom = mapBottom + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapTypeScrollView.frame = CGRectMake(0.0, mapBottom, small, self.mapTypeScrollView.bounds.size.height);
-            self.tableView.frame = CGRectMake(0.0, scrollBottom, small, big - scrollBottom);
+            if (isOnlineMapSource) {
+                self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
+                self.mapTypeScrollView.hidden = YES;
+            } else {
+                self.mapTypeScrollView.frame = CGRectMake(0.0, mapBottom, small, self.mapTypeScrollView.bounds.size.height);
+                self.tableView.frame = CGRectMake(0.0, scrollBottom, small, big - scrollBottom);
+                self.mapTypeScrollView.hidden = NO;
+            }
             
         }
         
@@ -164,8 +151,14 @@
             CGFloat scrollBottom = 64.0 + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapTypeScrollView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, self.mapTypeScrollView.bounds.size.height);
-            self.tableView.frame = CGRectMake(mapWidth, scrollBottom, big - mapWidth, small - scrollBottom);
+            if (isOnlineMapSource) {
+                self.tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
+                self.mapTypeScrollView.hidden = YES;
+            } else {
+                self.mapTypeScrollView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, self.mapTypeScrollView.bounds.size.height);
+                self.tableView.frame = CGRectMake(mapWidth, scrollBottom, big - mapWidth, small - scrollBottom);
+                self.mapTypeScrollView.hidden = NO;
+            }
             
         }
         
@@ -203,6 +196,17 @@
     
 }
 
+
+-(IBAction)backButtonClicked:(id)sender
+{
+    if (_lastMapSourceChangeObserver) {
+        [_lastMapSourceChangeObserver detach];
+        _lastMapSourceChangeObserver = nil;
+    }
+    
+    [super backButtonClicked:sender];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -213,6 +217,11 @@
     isAppearFirstTime = YES;
     self.app = [OsmAndApp instance];
     
+    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onLastMapSourceChanged)
+                                                              andObserve:_app.data.lastMapSourceChangeObservable];
+
+    
 }
 
 
@@ -220,29 +229,54 @@
     
     switch (_settingsScreen) {
         case EMapSettingsScreenMain:
-            screenObj = [[OAMapSettingsMainScreen alloc] initWithTable:self.tableView viewController:self];
+            if (!screenObj)
+                screenObj = [[OAMapSettingsMainScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         case EMapSettingsScreenMapType:
-            screenObj = [[OAMapSettingsMapTypeScreen alloc] initWithTable:self.tableView viewController:self];
+            if (!screenObj)
+                screenObj = [[OAMapSettingsMapTypeScreen alloc] initWithTable:self.tableView viewController:self];
             break;
             
         default:
             break;
     }
 
-    [self setupMapTypeButtons:self.app.data.lastMapSource.type];
+    OAMapSource* mapSource = _app.data.lastMapSource;
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
     
-    self.tableView.dataSource = screenObj;
-    self.tableView.delegate = screenObj;
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
+    if (resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources) {
+        
+        isOnlineMapSource = YES;
+        
+    } else {
+        
+        isOnlineMapSource = NO;
+        OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsViewController variantToMapStyle:_app.data.lastMapSource.variant];
+        [self setupMapTypeButtons:[OAMapSettingsViewController mapStyleToTag:mapStyle]];
+        
+    }
+    
+    
+    if (!self.tableView.dataSource)
+        self.tableView.dataSource = screenObj;
+    if (!self.tableView.delegate)
+        self.tableView.delegate = screenObj;
+    if (!self.tableView.tableFooterView)
+        self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
     self.titleView.text = screenObj.title;
+    
     [screenObj setupView];
+    
+    if (_isOnlineMapSourcePrev != isOnlineMapSource)
+        [self.view setNeedsLayout];
     
 }
 
--(void)setupMapTypeButtons:(int)selectedMapType {
 
+-(void)setupMapTypeButtons:(int)tag {
+    
     UIColor* buttonColor = [UIColor colorWithRed:83.0/255.0 green:109.0/255.0 blue:254.0/255.0 alpha:1.0];
     
     self.mapTypeButtonView.layer.cornerRadius = 5;
@@ -274,7 +308,7 @@
     self.mapTypeButtonBike.layer.borderColor = [buttonColor CGColor];
     self.mapTypeButtonBike.layer.borderWidth = 1;
     
-    switch (selectedMapType) {
+    switch (tag) {
         case 0:
             [self.mapTypeButtonView setBackgroundColor:buttonColor];
             [self.mapTypeButtonView setImage:[UIImage imageNamed:@"btn_map_type_icon_view_selected.png"] forState:UIControlStateNormal];
@@ -302,37 +336,44 @@
 
 - (IBAction)changeMapTypeButtonClicked:(id)sender {
     
-    int type = ((UIButton*)sender).tag;
-    [self setupMapTypeButtons:type];
-    
+    int tag = ((UIButton*)sender).tag;
     
     OAMapSource* mapSource = _app.data.lastMapSource;
-    const auto resource = self.app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+    NSString *name = mapSource.name;
+    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
     NSString* resourceId = resource->id.toNSString();
     
     // Get the style
     const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-    OAMapStyle* mapStyleItem = [[OAMapStyle alloc] init];
-    mapStyleItem.mapStyle = mapStyle;
     const auto& presets = self.app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
     
-    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsViewController typeToMapStyle:type];
+    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsViewController tagToMapStyle:tag];
 
+    BOOL foundPreset = NO;
     for(const auto& preset : presets)
     {
-        if (preset->type != selectedType)
-            continue;
-        OAMapStylePreset* item = [[OAMapStylePreset alloc] init];
-        item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                    andVariant:preset->name.toNSString()];
-        item.mapStylePreset = preset;
-        item.mapStyle = mapStyle;
-        
-        _app.data.lastMapSource = item.mapSource;
+        if (preset->type == selectedType) {
+            
+            OAMapSource* mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:preset->name.toNSString() name:name];
+            _app.data.lastMapSource = mapSource;
+            
+            foundPreset = YES;
+            break;
+        }
+    }
+    
+    if (!foundPreset) {
+        [self setupMapTypeButtons:0];
     }
     
 }
 
+- (void)onLastMapSourceChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+    });
+}
 
 #pragma mark - Orientation
 
@@ -348,7 +389,7 @@
     return UIInterfaceOrientationPortrait;
 }
 
-+(OsmAnd::MapStylePreset::Type)typeToMapStyle:(int)type {
++(OsmAnd::MapStylePreset::Type)tagToMapStyle:(int)type {
     OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
     if (type == 1) {
         mapStyle = OsmAnd::MapStylePreset::Type::Car;
@@ -362,17 +403,17 @@
 
 +(OsmAnd::MapStylePreset::Type)variantToMapStyle:(NSString*)variant {
     OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
-    if ([variant isEqualToString:@""]) {
+    if ([variant isEqualToString:@"type_car"]) {
         mapStyle = OsmAnd::MapStylePreset::Type::Car;
-    } else if ([variant isEqualToString:@""]) {
+    } else if ([variant isEqualToString:@"type_pedestrian"]) {
         mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
-    } else if ([variant isEqualToString:@""]) {
+    } else if ([variant isEqualToString:@"type_bicycle"]) {
         mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
     }
     return mapStyle;
 }
 
-+(int)mapStyleToType:(OsmAnd::MapStylePreset::Type)mapStyle {
++(int)mapStyleToTag:(OsmAnd::MapStylePreset::Type)mapStyle {
     int type = 0;
     if (mapStyle == OsmAnd::MapStylePreset::Type::Car) {
         type = 1;

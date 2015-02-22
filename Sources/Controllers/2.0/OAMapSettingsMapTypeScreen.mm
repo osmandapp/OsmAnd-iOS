@@ -144,14 +144,22 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         for(const auto& onlineTileSource : onlineTileSources->getCollection())
         {
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
+            
+            NSString *caption = onlineTileSource->name.toNSString();
+            NSString *newCaption = [stylesTitlesOnline objectForKey:caption];
+            if (newCaption)
+                caption = newCaption;
+            
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
-                                                        andVariant:onlineTileSource->name.toNSString()];
+                                                        andVariant:onlineTileSource->name.toNSString() name:caption];
             item.resource = resource;
             item.onlineTileSource = onlineTileSource;
             
             [_onlineMapSources addObject:item];
         }
     }
+    
+    NSString *currVariant = app.data.lastMapSource.variant;
     
     // Process map styles
     for(const auto& resource : mapStylesResources)
@@ -165,11 +173,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (item.mapSource == nil)
         {
             const auto presetsForMapStyle = app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
-            const auto itFirstFoundPreset = presetsForMapStyle.begin();
-            NSString* variant = (itFirstFoundPreset == presetsForMapStyle.cend()) ? nil : (*itFirstFoundPreset)->name.toNSString();
+            BOOL presetFound = NO;
+            for(const auto& preset : presetsForMapStyle) {
+                if ([preset->name.toNSString() isEqualToString:currVariant]) {
+                    presetFound = YES;
+                    break;
+                }
+            }
+            NSString* variant = nil;
+            if (presetFound)
+                variant = currVariant;
+            else if (presetsForMapStyle.count() > 0)
+                variant = presetsForMapStyle.first()->name.toNSString();
+            
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:variant];
         }
+        
+        NSString *caption = mapStyle->title.toNSString();
+        NSString *newCaption = [stylesTitlesOffline objectForKey:caption];
+        if (newCaption)
+            caption = newCaption;
+        
+        item.mapSource.name = caption;
+        
         item.resource = resource;
         item.mapStyle = mapStyle;
 
@@ -270,7 +297,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         Item_MapStyle* item = (Item_MapStyle*)someItem;
         
-        caption = item.mapStyle->title.toNSString();
+        caption = item.mapSource.name;
         description = nil;
 #if defined(OSMAND_IOS_DEV)
         description = item.mapSource.variant;
@@ -280,7 +307,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
         
-        caption = item.onlineTileSource->name.toNSString();
+        caption = item.mapSource.name;
         description = nil;
 #if defined(OSMAND_IOS_DEV)
         description = item.resource->id.toNSString();
@@ -291,16 +318,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];
     if (cell == nil)
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
-    
-    NSString *newCaption;
-    if (indexPath.section == kOfflineSourcesSection) {
-        newCaption = [stylesTitlesOffline objectForKey:caption];
-    } else {
-        newCaption = [stylesTitlesOnline objectForKey:caption];
-    }
-    if (newCaption)
-        caption = newCaption;
-    
+        
     // Fill cell content
     cell.textLabel.text = caption;
     cell.detailTextLabel.text = description;
@@ -322,7 +340,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
     Item* item = [collection objectAtIndex:indexPath.row];
     app.data.lastMapSource = item.mapSource;
-    app.data.lastMapSourceName = [tableView cellForRowAtIndexPath:indexPath].textLabel.text;
 
     [tableView reloadData];
 }

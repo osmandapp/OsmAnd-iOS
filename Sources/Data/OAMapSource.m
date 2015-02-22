@@ -28,6 +28,7 @@
         [self commonInit];
         _resourceId = [resourceId copy];
         _variant = nil;
+        _name = @"OsmAnd";
 
     }
     return self;
@@ -41,7 +42,23 @@
         [self commonInit];
         _resourceId = [resourceId copy];
         _variant = [variant copy];
+        _name = @"OsmAnd";
 
+    }
+    return self;
+}
+
+- (instancetype)initWithResource:(NSString*)resourceId
+                      andVariant:(NSString*)variant
+                            name:(NSString*)name
+{
+    self = [super init];
+    if (self) {
+        [self commonInit];
+        _resourceId = [resourceId copy];
+        _variant = [variant copy];
+        _name = [name copy];
+        
     }
     return self;
 }
@@ -52,6 +69,7 @@
 
 @synthesize resourceId = _resourceId;
 @synthesize variant = _variant;
+@synthesize name = _name;
 
 - (BOOL)isEqual:(id)object
 {
@@ -69,11 +87,13 @@
 
 #define kResourceId @"resource"
 #define kVariantId @"variant"
+#define kNameId @"name"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_resourceId forKey:kResourceId];
     [aCoder encodeObject:_variant forKey:kVariantId];
+    [aCoder encodeObject:_name forKey:kNameId];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -83,9 +103,12 @@
         [self commonInit];
         _resourceId = [aDecoder decodeObjectForKey:kResourceId];
         _variant = [aDecoder decodeObjectForKey:kVariantId];
+        _name = [aDecoder decodeObjectForKey:kNameId];
 
         if (_variant == (id)[NSNull null])
             _variant = nil;
+        if (_name == nil)
+            _name = @"OsmAnd";
     }
     return self;
 }
@@ -95,7 +118,8 @@
 - (id)copyWithZone:(NSZone *)zone
 {
     OAMapSource* clone = [[OAMapSource allocWithZone:zone] initWithResource:_resourceId
-                                                                 andVariant:_variant];
+                                                                 andVariant:_variant
+                                                                       name:_name];
 
     return clone;
 }

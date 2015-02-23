@@ -1376,10 +1376,15 @@
 
 - (void)onDayNightModeChanged
 {
-    if (![self isViewLoaded])
-        return;
-
-    _mapSourceInvalidated = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        [self updateCurrentMapSource];
+    });
 }
 
 - (void)onLocationServicesStatusChanged
@@ -1648,12 +1653,6 @@
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
             
-            /*
-            for (const auto& p : unresolvedMapStyle->parameters) {
-                NSLog(@"name = %@ title = %@ decs = %@ type = %d", p->name.toNSString(), p->title.toNSString(), p->description.toNSString(), p->dataType);
-            }
-            */
-            
             const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
             OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
 
@@ -1702,11 +1701,12 @@
                         newSettings[QString::fromLatin1("nightMode")] = "true";
                     
                     // --- Apply Map Style Settings
-                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString()];
+                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() parameters:unresolvedMapStyle->parameters];
                     
                     NSArray *params = styleSettings.getAllParameters;
                     for (OAMapStyleParameter *param in params) {
-                        newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
+                        if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
+                            newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                     }
 
                     if (!newSettings.isEmpty())

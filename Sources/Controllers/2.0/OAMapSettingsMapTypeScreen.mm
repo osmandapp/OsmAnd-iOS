@@ -59,7 +59,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kOfflineSourcesSection 0
 #define kOnlineSourcesSection 1
 
-@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title;
+@synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
 
 
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
@@ -334,6 +334,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 34.0;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

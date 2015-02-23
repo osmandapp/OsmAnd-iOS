@@ -17,10 +17,13 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
-#import "OAMapSettingsSubviewController.h"
 
 #import "OAMapSettingsMainScreen.h"
 #import "OAMapSettingsMapTypeScreen.h"
+#import "OAMapSettingsCategoryScreen.h"
+#import "OAMapSettingsParameterScreen.h"
+#import "OAMapSettingsSettingScreen.h"
+#import "OAMapSettingsGpxScreen.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
@@ -62,16 +65,18 @@
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 }
 
-@property NSArray* tableData;
-@property OsmAndAppInstance app;
-@property EMapSettingsScreen settingsScreen;
-@property id<OAMapSettingsScreen> screenObj;
+@property (nonatomic) NSArray* tableData;
+@property (nonatomic) OsmAndAppInstance app;
+@property (nonatomic) EMapSettingsScreen settingsScreen;
+@property (nonatomic) id<OAMapSettingsScreen> screenObj;
+
+@property (nonatomic) id customParam;
 
 @end
 
 @implementation OAMapSettingsViewController
 
-@synthesize screenObj;
+@synthesize screenObj, customParam;
 
 - (instancetype)init
 {
@@ -91,6 +96,18 @@
         [self commonInit];
     }
     return self;
+}
+
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param
+{
+    self = [super init];
+    if (self) {
+        _settingsScreen = settingsScreen;
+        customParam = param;
+        [self commonInit];
+    }
+    return self;
+    
 }
 
 - (void)viewWillLayoutSubviews
@@ -184,7 +201,6 @@
     
     OAGpxBounds bounds;
     bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
-    
     [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
 }
 
@@ -232,9 +248,25 @@
             if (!screenObj)
                 screenObj = [[OAMapSettingsMainScreen alloc] initWithTable:self.tableView viewController:self];
             break;
+        case EMapSettingsScreenGpx:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsGpxScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
         case EMapSettingsScreenMapType:
             if (!screenObj)
                 screenObj = [[OAMapSettingsMapTypeScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenCategory:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsCategoryScreen alloc] initWithTable:self.tableView viewController:self param:customParam];
+            break;
+        case EMapSettingsScreenParameter:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsParameterScreen alloc] initWithTable:self.tableView viewController:self param:customParam];
+            break;
+        case EMapSettingsScreenSetting:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsSettingScreen alloc] initWithTable:self.tableView viewController:self param:customParam];
             break;
             
         default:
@@ -257,6 +289,8 @@
         
     }
     
+    screenObj.isOnlineMapSource = isOnlineMapSource;
+    
     
     if (!self.tableView.dataSource)
         self.tableView.dataSource = screenObj;
@@ -265,9 +299,9 @@
     if (!self.tableView.tableFooterView)
         self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     
-    self.titleView.text = screenObj.title;
-    
     [screenObj setupView];
+
+    self.titleView.text = screenObj.title;
     
     if (_isOnlineMapSourcePrev != isOnlineMapSource)
         [self.view setNeedsLayout];

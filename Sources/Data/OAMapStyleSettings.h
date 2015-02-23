@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/Map/UnresolvedMapStyle.h>
+
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
     OABoolean,
@@ -24,7 +27,6 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *mapStyleName;
 @property (nonatomic) NSString *category;
-@property (nonatomic) NSString *categoryTitle;
 @property (nonatomic) OAMapStyleValueDataType dataType;
 @property (nonatomic) NSString *value;
 @property (nonatomic) NSString *defaultValue;
@@ -34,10 +36,16 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 @interface OAMapStyleSettings : NSObject
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName;
+-(instancetype)initWithStyleName:(NSString *)mapStyleName parameters:(const QList< std::shared_ptr<const OsmAnd::UnresolvedMapStyle::Parameter>>)parameters;
+
 
 -(NSArray *) getAllParameters;
+-(OAMapStyleParameter *) getParameter:(NSString *)name;
+
+-(NSArray *) getAllCategories;
+-(NSString *) getCategoryTitle:(NSString *)categoryName;
 -(NSArray *) getParameters:(NSString *)category;
+
 -(void) saveParameters;
 -(void) save:(OAMapStyleParameter *)parameter;
 

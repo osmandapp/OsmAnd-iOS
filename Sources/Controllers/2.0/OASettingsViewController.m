@@ -44,23 +44,16 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
         case kSettingsScreenGeneral: {
-            NSString* appModeValue = settings.settingAppMode == 0 ? @"Day" : @"Night";
             NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Kilometers" : @"Miles";
             NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"Degrees" : @"Degrees and Minutes";
             
             self.data = @[
-                          @{@"name": @"Application mode", @"value": appModeValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Units", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Zoom button", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Location format", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"}
                           ];
         }
-            break;
-        case kSettingsScreenAppMode:
-            self.data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
-                          ];
             break;
         case kSettingsScreenMetricSystem:
             self.data = @[@{@"name": @"Kilometers", @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
@@ -133,9 +126,6 @@
         case kSettingsScreenGeneral:
             [self selectSettingGeneral:indexPath.row];
             break;
-        case kSettingsScreenAppMode:
-            [self selectSettingAppMode:indexPath.row];
-            break;
         case kSettingsScreenMetricSystem:
             [self selectSettingMetricSystem:indexPath.row];
             break;
@@ -155,21 +145,16 @@
 
     switch (index) {
         case 0: {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenAppMode];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-        }
-            break;
-        case 1: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
-        case 2: {
+        case 1: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenZoomButton];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
-        case 3: {
+        case 2: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
@@ -180,11 +165,6 @@
     }
 }
 
-
--(void)selectSettingAppMode:(NSInteger)index {
-    [[OAAppSettings sharedManager] setSettingAppMode:index];
-    [self backButtonClicked:nil];
-}
 
 -(void)selectSettingMetricSystem:(NSInteger)index {
     [[OAAppSettings sharedManager] setSettingMetricSystem:index];

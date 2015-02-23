@@ -17,13 +17,19 @@
 @property (nonatomic) UITableView *tblView;
 @property (nonatomic) NSArray *tableData;
 @property (nonatomic, readonly) EMapSettingsScreen settingsScreen;
+@property (nonatomic, assign) BOOL isOnlineMapSource;
 
 @property (nonatomic) NSString *title;
 
 @property OsmAndAppInstance app;
 @property OAAppSettings* settings;
 
+
+@optional
 - (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController;
+- (id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param;
+
+@required
 - (void)initData;
 - (void)setupView;
 

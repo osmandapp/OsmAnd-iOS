@@ -18,6 +18,8 @@ typedef enum
     EMapSettingsScreenGpx,
     EMapSettingsScreenMapType,
     EMapSettingsScreenCategory,
+    EMapSettingsScreenParameter,
+    EMapSettingsScreenSetting,
     
 } EMapSettingsScreen;
 
@@ -35,5 +37,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 -(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param;
 
 @end

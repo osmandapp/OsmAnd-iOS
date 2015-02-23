@@ -214,7 +214,7 @@ typedef enum
 
 - (IBAction)deleteClicked:(id)sender
 {
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove GPX?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove Track?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
     [removeAlert show];
 }
 

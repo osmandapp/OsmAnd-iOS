@@ -113,7 +113,7 @@ typedef enum
         if (_doc) {
             
             if (exists) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import GPX" message:@"The specified GPX file is already exists in the list. Please choose action." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Add new file", @"Overwrite", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import GPX" message:@"The specified Track file is already exists in the list. Please choose action." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Add new file", @"Overwrite", nil];
                 [alert show];
                 
             } else {
@@ -126,7 +126,7 @@ typedef enum
             _doc = nil;
             _importUrl = nil;
 
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import GPX" message:@"Cannot import specified GPX file" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import Track" message:@"Cannot import specified GPX file" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             [alert show];
             
         }
@@ -250,10 +250,10 @@ typedef enum
     GpxTableGroup* itemData = [[GpxTableGroup alloc] init];
     itemData.groupName = @"Import/Export";
     itemData.type = kGPXCellTypeMenu;
-    self.menuItems = @[@{@"text": @"Import GPX",
+    self.menuItems = @[@{@"text": @"Import Track",
                          @"icon": @"favorite_import_icon",
                          @"action": @"onImportClicked"},
-                       @{@"text": @"Export GPX",
+                       @{@"text": @"Export Track",
                          @"icon": @"favorite_export_icon.png",
                          @"action": @"onExportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
@@ -280,7 +280,7 @@ typedef enum
 {
     if (_selectedIndex  < 0) {
         
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select GPX for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select Track for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [exportHelpAlert show];
         
     } else {
@@ -329,7 +329,7 @@ typedef enum
         OAGPXListViewController* exportController = [[OAGPXListViewController alloc] initExport];
         [self.navigationController pushViewController:exportController animated:YES];
     } else {
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"There are no GPX items" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"There are no Tracks" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [exportHelpAlert show];
     }
 }
@@ -345,7 +345,7 @@ typedef enum
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0 && self.gpxList.count > 0)
-        return @"GPX routes";
+        return @"Tracks";
     return @"Import/Export";
 }
 

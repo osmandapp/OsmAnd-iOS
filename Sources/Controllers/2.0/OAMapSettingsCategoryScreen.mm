@@ -138,10 +138,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
-    OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
-    [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    if (p.dataType != OABoolean) {
+        OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
+        [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    }
 }
 
 - (void) mapSettingSwitchChanged:(id)sender

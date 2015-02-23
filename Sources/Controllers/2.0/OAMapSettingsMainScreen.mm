@@ -199,9 +199,11 @@
     switch (indexPath.section) {
         case 0:
         {
-            OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
-            [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
-
+            if (indexPath.row == 1) {
+                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
+                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+            }
+                
             break;
         }
         

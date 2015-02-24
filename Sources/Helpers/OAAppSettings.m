@@ -81,6 +81,10 @@
 
 // Map Settings
 -(void)setMapSettingShowFavorites:(BOOL)mapSettingShowFavorites {
+    
+    if (_mapSettingShowFavorites == mapSettingShowFavorites)
+        return;
+    
     _mapSettingShowFavorites = mapSettingShowFavorites;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowFavorites forKey:mapSettingShowFavoritesKey];
 

@@ -53,7 +53,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSMutableArray* _offlineMapSources;
     NSMutableArray* _onlineMapSources;
     NSDictionary *stylesTitlesOffline;
-    NSDictionary *stylesTitlesOnline;
 }
 
 #define kOfflineSourcesSection 0
@@ -146,9 +145,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
             
             NSString *caption = onlineTileSource->title.toNSString();
-            //NSString *newCaption = [stylesTitlesOnline objectForKey:caption];
-            //if (newCaption)
-            //    caption = newCaption;
             
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:onlineTileSource->name.toNSString() name:caption];
@@ -158,6 +154,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [_onlineMapSources addObject:item];
         }
     }
+    
+    
+    NSArray *arr = [_onlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_OnlineTileSource* obj1, Item_OnlineTileSource* obj2) {
+        NSString *caption1 = obj1.onlineTileSource->title.toNSString();
+        NSString *caption2 = obj2.onlineTileSource->title.toNSString();
+        return [caption2 compare:caption1];
+    }];
+    
+    [_onlineMapSources setArray:arr];
+    
     
     NSString *currVariant = app.data.lastMapSource.variant;
     
@@ -214,7 +220,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [_offlineMapSources addObject:item];
     }
 
-    NSArray *arr = [_offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_MapStyle* obj1, Item_MapStyle* obj2) {
+    arr = [_offlineMapSources sortedArrayUsingComparator:^NSComparisonResult(Item_MapStyle* obj1, Item_MapStyle* obj2) {
         if (obj1.sortIndex < obj2.sortIndex)
             return NSOrderedAscending;
         if (obj1.sortIndex > obj2.sortIndex)
@@ -230,11 +236,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     stylesTitlesOffline = @{@"default" : @"OsmAnd",
                             @"UniRS" : @"UniRS",
-                            @"Touring-view_(more-contrast-and-details).render" : @"Touring view (contrast & details)",
+                            @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                             @"LightRS" : @"LightRS"};
     
-    stylesTitlesOnline = @{@"osmand_hd" : @"OsmAnd HD (online tiles)",
-                           @"osmand_sd" : @"OsmAnd SD (online tiles)"};
 }
 
 - (void)onLocalResourcesChanged

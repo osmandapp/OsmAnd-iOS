@@ -52,7 +52,14 @@
     rootElement.title = OALocalizedString(@"Debug");
     rootElement.grouped = YES;
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
-    rootElement.presentationMode = QPresentationModeModalForm;
+
+    // Header
+    QSection* headerSection = [[QSection alloc] initWithTitle:OALocalizedString(@"")];
+    [rootElement addSection:headerSection];
+    
+    QButtonElement* backButtonElement = [[QButtonElement alloc] initWithTitle:OALocalizedString(@"Close")];
+    backButtonElement.controllerAction = NSStringFromSelector(@selector(onBackButtonClicked));
+    [headerSection addElement:backButtonElement];
 
     // Renderer section
     QSection* rendererSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Renderer")];
@@ -181,6 +188,11 @@
 
     _useRawSpeedAndAltitudeOnHUDElement.boolValue = _app.debugSettings.useRawSpeedAndAltitudeOnHUD;
     _setAllResourcesAsOutdatedElement.boolValue = _app.debugSettings.setAllResourcesAsOutdated;
+}
+
+- (void)onBackButtonClicked
+{
+    [self popToPreviousRootElement];
 }
 
 - (void)onForcedRenderingSettingChanged

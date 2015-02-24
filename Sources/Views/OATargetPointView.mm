@@ -104,7 +104,7 @@
     
     NSString *locText;
     if (self.isAddressFound)
-        locText = self.addressLabel.text;
+        locText = [self.addressLabel.text copy];
     else
         locText = self.formattedLocation;
     

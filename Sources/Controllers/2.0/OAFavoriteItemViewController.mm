@@ -273,9 +273,10 @@ typedef enum
         return;
     
     OAAppSettings* settings = [OAAppSettings sharedManager];
-    [settings setMapSettingShowFavorites:NO];
     if (_showFavoriteOnExit || _wasShowingFavorites)
         [settings setMapSettingShowFavorites:YES];
+    else
+        [settings setMapSettingShowFavorites:NO];
 }
 
 -(void)setupView {
@@ -456,6 +457,13 @@ typedef enum
         UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove favorite item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
         [removeAlert show];
     } else {
+        
+        if ([self.favoriteNameTextView isFirstResponder]) {
+            OsmAndAppInstance app = [OsmAndApp instance];
+            self.favorite.favorite->setTitle(QString::fromNSString(self.favoriteNameTextView.text));
+            [app saveFavoritesToPermamentStorage];
+        }
+        _newTarget31 = self.favorite.favorite->getPosition31();
         _showFavoriteOnExit = YES;
         [self.navigationController popViewControllerAnimated:YES];
     }

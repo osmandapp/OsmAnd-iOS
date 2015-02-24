@@ -1649,6 +1649,7 @@
             _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
             return;
         }
+        
         if (mapSourceResource->type == OsmAndResourceType::MapStyle)
         {
             const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
@@ -1680,6 +1681,8 @@
             
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
+                                                                                     1.0,
+                                                                                     1.0,
                                                                                      QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
                                                                                      langPreferences));
             
@@ -1793,6 +1796,62 @@
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider
                         forLayer:0];
+            
+            lastMapSource = [OAAppData defaults].lastMapSource;
+            const auto resourceId = QString::fromNSString(lastMapSource.resourceId);
+            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+            const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
+            
+            const auto& resolvedMapStyle = _app.resourcesManager->mapStylesCollection->getResolvedStyleByName(unresolvedMapStyle->name);
+            OALog(@"Using '%@' style from '%@' resource", unresolvedMapStyle->name.toNSString(), mapSourceResource->id.toNSString());
+            
+            _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
+            
+            NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
+            
+            OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+            
+            switch ([[OAAppSettings sharedManager] settingMapLanguage]) {
+                case 0:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+                case 1:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    break;
+                case 2:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+                    break;
+                default:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
+                    break;
+            }
+            
+            
+            _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
+                                                                                     self.displayDensityFactor,
+                                                                                     1.0,
+                                                                                     1.0,
+                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     langPreferences));
+            
+            
+            _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
+            _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
+                                                                           _mapPrimitiviser,
+                                                                           rasterTileSize));
+            
+            if (_gpxDocFileTemp) {
+                [self showTempGpxTrack:_gpxDocFileTemp];
+            }
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [self buildGpxInfoDocList];
+                
+                if (!_geoInfoDocsGpx.isEmpty())
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self initRendererWithGpxTracks];
+                    });
+            });
         }
     }
 }
@@ -1913,7 +1972,6 @@
             _mapObjectsSymbolsProviderGpxTemp.reset();
             [rendererView resetProviderFor:kGpxTempLayerId];
             
-            const float symbolsScale = 1.0f;
             if (![_gpxDocFileTemp isEqualToString:fileName] || _geoInfoDocsGpxTemp.isEmpty()) {
                 _geoInfoDocsGpxTemp.clear();
                 _gpxDocFileTemp = [fileName copy];
@@ -1929,7 +1987,7 @@
                     _rasterMapProviderGpxTemp.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderTemp, false));
                     [rendererView setProvider:_rasterMapProviderGpxTemp forLayer:kGpxTempLayerId];
                     
-                    _mapObjectsSymbolsProviderGpxTemp.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderTemp, rasterTileSize, symbolsScale));
+                    _mapObjectsSymbolsProviderGpxTemp.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderTemp, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
                     [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
                 }
             });
@@ -1998,7 +2056,6 @@
         _mapObjectsSymbolsProviderGpx.reset();
         [rendererView resetProviderFor:kGpxLayerId];
         
-        const float symbolsScale = 1.0f;
         _gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpx));
         
         if (_gpxPresenter) {
@@ -2008,7 +2065,7 @@
             _rasterMapProviderGpx.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProvider, false));
             [rendererView setProvider:_rasterMapProviderGpx forLayer:kGpxLayerId];
             
-            _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProvider, rasterTileSize, symbolsScale));
+            _mapObjectsSymbolsProviderGpx.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProvider, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
             [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         }
     }

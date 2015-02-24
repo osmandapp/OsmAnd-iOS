@@ -71,6 +71,7 @@
 @property (nonatomic) id<OAMapSettingsScreen> screenObj;
 
 @property (nonatomic) id customParam;
+@property (nonatomic) UIButton *mapButton;
 
 @end
 
@@ -144,6 +145,7 @@
             CGFloat scrollBottom = mapBottom + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
             if (isOnlineMapSource) {
                 self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
                 self.mapTypeScrollView.hidden = YES;
@@ -168,6 +170,7 @@
             CGFloat scrollBottom = 64.0 + self.mapTypeScrollView.bounds.size.height;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
             if (isOnlineMapSource) {
                 self.tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
                 self.mapTypeScrollView.hidden = YES;
@@ -188,6 +191,11 @@
 
     [self setupView];
     
+    CGRect f = self.mapView.frame;
+    self.mapButton = [[UIButton alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y + 64.0, f.size.width, f.size.height)];
+    [self.mapButton setTitle:@"" forState:UIControlStateNormal];
+    [self.mapButton addTarget:self action:@selector(goToMap) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.mapButton];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -240,6 +248,12 @@
     
 }
 
+- (void)goToMap
+{
+    OARootViewController* rootViewController = [OARootViewController instance];
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:YES];
+}
 
 -(void)setupView {
     

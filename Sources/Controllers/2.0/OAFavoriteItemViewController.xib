@@ -7,6 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAFavoriteItemViewController">
             <connections>
+                <outlet property="arrowColor" destination="9fl-Tx-Vn7" id="9h5-sR-phB"/>
+                <outlet property="arrowGroup" destination="pQe-fG-iGl" id="rby-9B-v5T"/>
                 <outlet property="distanceDirectionHolderView" destination="qeG-XX-C0X" id="JIB-Bf-AEn"/>
                 <outlet property="favoriteColorButton" destination="Ptg-Wi-sih" id="nLw-xX-jHK"/>
                 <outlet property="favoriteColorLabel" destination="iGf-8G-aVn" id="c2H-8B-ZEQ"/>
@@ -96,10 +98,6 @@
                             <color key="textColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <view contentMode="scaleToFill" id="fyP-8c-pRm">
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        </view>
                         <view userInteractionEnabled="NO" contentMode="scaleToFill" id="dp8-BD-VPb">
                             <rect key="frame" x="263" y="101" width="20" height="20"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>

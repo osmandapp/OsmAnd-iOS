@@ -29,6 +29,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoriteColorButton;
 @property (weak, nonatomic) IBOutlet UIButton *favoriteGroupButton;
 
+@property (weak, nonatomic) IBOutlet UIImageView *arrowColor;
+@property (weak, nonatomic) IBOutlet UIImageView *arrowGroup;
+
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;

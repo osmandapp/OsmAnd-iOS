@@ -137,9 +137,11 @@ typedef enum
             self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
             self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
             
-            CGFloat y = 25.0 - self.favoriteNameButton.frame.origin.y;
+            CGFloat y = 35.0 - self.favoriteNameButton.frame.origin.y;
             self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
             self.favoriteGroupButton.frame = CGRectOffset(self.favoriteGroupButton.frame, 0.0, y);
+            self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
+            self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
             self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
@@ -147,6 +149,7 @@ typedef enum
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
             
             self.scrollView.contentSize = CGSizeMake(small, 250.0);
+            self.scrollView.contentInset = UIEdgeInsetsZero;
 
         }
         
@@ -170,6 +173,8 @@ typedef enum
             CGFloat y = 0.0 - self.favoriteNameButton.frame.origin.y;
             self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
             self.favoriteGroupButton.frame = CGRectOffset(self.favoriteGroupButton.frame, 0.0, y);
+            self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
+            self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
             self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
@@ -177,6 +182,7 @@ typedef enum
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
 
             self.scrollView.contentSize = CGSizeMake(big - mapWidth, 250.0);
+            self.scrollView.contentInset = UIEdgeInsetsZero;
 
         }
         

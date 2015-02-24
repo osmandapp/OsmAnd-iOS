@@ -83,22 +83,10 @@
     self.shouldDelegateAutorotateToVisiblePanel = NO;
     
     self.navigationController.navigationBarHidden = YES;
+    
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-
-    [self.navigationController setNavigationBarHidden:YES
-                                             animated:animated];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES
-                                             animated:animated];
-}
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {

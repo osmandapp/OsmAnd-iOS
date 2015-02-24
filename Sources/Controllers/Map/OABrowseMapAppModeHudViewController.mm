@@ -406,6 +406,14 @@ NSLayoutConstraint* targetBottomConstraint;
     [self.sidePanelController showRightPanelAnimated:YES];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    if ([OAAppSettings sharedManager].settingAppMode == 0) {
+        return UIStatusBarStyleDefault;
+    } else {
+        return UIStatusBarStyleLightContent;
+    }
+}
 
 #pragma mark - OATargetPointViewDelegate
 

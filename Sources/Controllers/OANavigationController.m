@@ -8,6 +8,7 @@
 
 #import "OANavigationController.h"
 #import "OASuperViewController.h"
+#import "OAIntroViewController.h"
 
 @interface OANavigationController ()
 @end
@@ -26,22 +27,21 @@
 #pragma mark - Autorotation
 
 - (NSUInteger) supportedInterfaceOrientations {
-    //if ([[self visibleViewController] isKindOfClass:[OASuperViewController class]])
-        //return UIInterfaceOrientationMaskPortrait;
+    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
+        return UIInterfaceOrientationMaskPortrait;
     return UIInterfaceOrientationMaskAll;
-    
 }
 
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
-    //if ([[self visibleViewController] isKindOfClass:[OASuperViewController class]])
-        //return UIInterfaceOrientationPortrait;
+    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
+        return UIInterfaceOrientationPortrait;
     return UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    //if ([[self visibleViewController] isKindOfClass:[OASuperViewController class]])
-    //    return UIInterfaceOrientationIsPortrait(interfaceOrientation);
+    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
+        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
     return YES;
 }
 

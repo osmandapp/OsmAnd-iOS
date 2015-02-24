@@ -141,4 +141,9 @@
     [self invalidateActionsList];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleDefault;
+}
+
 @end

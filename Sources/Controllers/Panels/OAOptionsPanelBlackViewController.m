@@ -179,7 +179,10 @@
     [self.navigationController pushViewController:quizViewController animated:YES];
 }
 
-
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
 
 
 @end

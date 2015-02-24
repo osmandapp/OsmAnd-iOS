@@ -16,6 +16,8 @@
 
 @interface OATargetPointView : UIView
 
+@property (nonatomic, assign) BOOL isAddressFound;
+
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
 
 -(void)setAddress:(NSString*)address;

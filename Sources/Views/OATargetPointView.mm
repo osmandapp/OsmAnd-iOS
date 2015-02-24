@@ -102,8 +102,14 @@
 - (IBAction)buttonFavoriteClicked:(id)sender {
     
     
+    NSString *locText;
+    if (self.isAddressFound)
+        locText = self.addressLabel.text;
+    else
+        locText = self.formattedLocation;
+    
     OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(self.lat, self.lon)
-                                                                                                andTitle:self.formattedLocation];
+                                                                                                andTitle:locText];
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
         // For iPhone and iPod, push menu to navigation controller

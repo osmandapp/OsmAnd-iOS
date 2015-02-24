@@ -371,8 +371,12 @@ NSLayoutConstraint* targetBottomConstraint;
     
     
     NSString* addressString = nativeTitle;
-    if (!addressString || [addressString isEqualToString:@""])
+    if (!addressString || [addressString isEqualToString:@""]) {
         addressString = @"Address is not known yet";
+        self.targetMenuView.isAddressFound = NO;
+    } else {
+        self.targetMenuView.isAddressFound = YES;
+    }
     
     [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
     [self.targetMenuView setAddress:addressString];

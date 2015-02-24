@@ -51,7 +51,6 @@
 @synthesize documentsDir = _documentsDir;
 @synthesize gpxPath = _gpxPath;
 @synthesize cachePath = _cachePath;
-@synthesize cacheDir = _cacheDir;
 
 @synthesize resourcesManager = _resourcesManager;
 @synthesize localResourcesChangedObservable = _localResourcesChangedObservable;
@@ -79,7 +78,6 @@
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
 
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
-        _cacheDir = QDir(QString::fromNSString(_cachePath));
 
         [self buildFolders];
         
@@ -383,7 +381,8 @@
 
     return formatter;
 }
--(NSString*) getFormattedDistance:(float) meters {
+-(NSString*) getFormattedDistance:(float) meters
+{
     OAAppSettings* settings = [OAAppSettings sharedManager];
     NSString* mainUnitStr = @"km";
     float mainUnitInMeters;
@@ -394,22 +393,55 @@
         mainUnitInMeters = METERS_IN_ONE_MILE;
     }
     if (meters >= 100 * mainUnitInMeters) {
-        return [NSString stringWithFormat:@"%0.d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
+        return [NSString stringWithFormat:@"%d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
     } else if (meters > 9.99f * mainUnitInMeters) {
-        return [NSString stringWithFormat:@"%0.0f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+        return [NSString stringWithFormat:@"%.1f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
     } else if (meters > 0.999f * mainUnitInMeters) {
-        return [NSString stringWithFormat:@"%0.00f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+        return [NSString stringWithFormat:@"%.2f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
     } else {
         if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
-            return [NSString stringWithFormat:@"%0.d %@",   ((int) (meters + 0.5)), @"m"];
+            return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), @"m"];
         } else if (settings.settingMetricSystem == METRIC_SYSTEM_FEET) {
             int foots = (int) (meters * FOOTS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%0.d %@", foots, @"ft"];
+            return [NSString stringWithFormat:@"%d %@", foots, @"ft"];
         } else if (settings.settingMetricSystem == METRIC_SYSTEM_YARDS) {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            return [NSString stringWithFormat:@"%0.d %@", yards, @"yd"];
+            return [NSString stringWithFormat:@"%d %@", yards, @"yd"];
         }
-        return [NSString stringWithFormat:@"%0.d %@",   ((int) (meters + 0.5)), @"m"];
+        return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), @"m"];
+    }
+}
+
+- (NSString *) getFormattedAlt:(double) alt
+{
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+        return [NSString stringWithFormat:@"%d %@", ((int) (alt + 0.5)), @"m"];
+    } else {
+        return [NSString stringWithFormat:@"%d %@", ((int) (alt * FOOTS_IN_ONE_METER + 0.5)), @"ft"];
+    }
+}
+
+- (NSString *) getFormattedSpeed:(float) metersperseconds
+{
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    float kmh = metersperseconds * 3.6f;
+    if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
+        if (kmh >= 10) {
+            // case of car
+            return [NSString stringWithFormat:@"%d %@", ((int) round(kmh)), @"km/h"];
+        }
+        int kmh10 = (int) (kmh * 10.0f);
+        // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
+        return [NSString stringWithFormat:@"%.1f %@", (kmh10 / 10.0f), @"km/h"];
+    } else {
+        float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
+        if (mph >= 10) {
+            return [NSString stringWithFormat:@"%d %@", ((int) round(mph)), @"mph"];
+        } else {
+            int mph10 = (int) (mph * 10.0f);
+            return [NSString stringWithFormat:@"%.1f %@", (mph10 / 10.0f), @"mph"];
+        }
     }
 }
 

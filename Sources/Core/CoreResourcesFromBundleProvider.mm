@@ -155,6 +155,17 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
         if (!fontSubpath.isEmpty())
             resourceDir = [[resourceDir stringByAppendingString:@"/"] stringByAppendingString:fontSubpath.toNSString()];
     }
+    else if (name.startsWith(QLatin1String("misc/")))
+    {
+        auto resourceFileName = name;
+        resourceFileName = resourceFileName.replace(QLatin1String("misc/"), QLatin1String(""));
+        const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
+        
+        resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
+        resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
+        
+        resourceDir = @"";
+    }
     else
     {
         OALog(@"Unrecognized resource name '%@'", name.toNSString());
@@ -246,6 +257,17 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
             resourceDir = @"stubs/[ddf=1.0]";
         else
             resourceDir = @"stubs";
+    }
+    else if (name.startsWith(QLatin1String("misc/")))
+    {
+        auto resourceFileName = name;
+        resourceFileName = resourceFileName.replace(QLatin1String("misc/"), QLatin1String(""));
+        const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
+        
+        resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
+        resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
+
+        resourceDir = @"";
     }
     else
     {

@@ -55,6 +55,9 @@
 - (double)calculateRoundedDist:(double) baseMetersDist;
 - (NSString*) getFormattedDistance:(float) meters;
 
+- (NSString *) getFormattedSpeed:(float) metersperseconds;
+- (NSString *) getFormattedAlt:(double) alt;
+
 @property(readonly) OAObservable* favoritesCollectionChangedObservable;
 @property(readonly) OAObservable* favoriteChangedObservable;
 @property(readonly) NSString* favoritesStorageFilename;

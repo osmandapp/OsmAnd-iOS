@@ -281,7 +281,7 @@ typedef enum
                 case 0: // Distance
                 {
                     [cell.textView setText:@"Distance"];
-                    [cell.descView setText:[_app.locationFormatter stringFromDistance:self.gpx.totalDistance]];
+                    [cell.descView setText:[_app getFormattedDistance:self.gpx.totalDistance]];
                     cell.iconView.hidden = YES;
                     break;
                 }
@@ -300,7 +300,7 @@ typedef enum
                 case 2: // Avg Speed
                 {
                     [cell.textView setText:@"Average Speed"];
-                    [cell.descView setText:[_app.locationFormatter stringFromSpeed:self.gpx.avgSpeed]];
+                    [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
                     cell.iconView.hidden = YES;
                     break;
                 }
@@ -359,7 +359,7 @@ typedef enum
                 case 0: // Avg Elevation
                 {
                     [cell.textView setText:@"Average Elevation"];
-                    [cell.elev1View setText:[_app.locationFormatter stringFromDistance:self.gpx.avgElevation]];
+                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.avgElevation]];
                     cell.showArrows = NO;
                     cell.showUpDown = NO;
                     break;
@@ -367,8 +367,8 @@ typedef enum
                 case 1: // Elevation Range
                 {
                     [cell.textView setText:@"Elevation Range"];
-                    [cell.elev1View setText:[_app.locationFormatter stringFromDistance:self.gpx.minElevation]];
-                    [cell.elev2View setText:[_app.locationFormatter stringFromDistance:self.gpx.maxElevation]];
+                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.minElevation]];
+                    [cell.elev2View setText:[_app getFormattedAlt:self.gpx.maxElevation]];
                     cell.showArrows = NO;
                     cell.showUpDown = YES;
                     break;
@@ -376,8 +376,8 @@ typedef enum
                 case 2: // Up/Down
                 {
                     [cell.textView setText:@"Up/Down"];
-                    [cell.elev1View setText:[_app.locationFormatter stringFromDistance:self.gpx.diffElevationDown]];
-                    [cell.elev2View setText:[_app.locationFormatter stringFromDistance:self.gpx.diffElevationUp]];
+                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
+                    [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
                     cell.showArrows = YES;
                     cell.showUpDown = YES;
                     break;
@@ -385,7 +385,7 @@ typedef enum
                 case 3: // Uphills Total
                 {
                     [cell.textView setText:@"Uphills Total"];
-                    [cell.elev1View setText:[_app.locationFormatter stringFromDistance:self.gpx.totalDistanceMoving]];
+                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.totalDistanceMoving]];
                     cell.showArrows = NO;
                     cell.showUpDown = NO;
                     break;

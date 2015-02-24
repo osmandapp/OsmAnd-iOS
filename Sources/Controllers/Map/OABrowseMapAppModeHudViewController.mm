@@ -424,6 +424,7 @@ NSLayoutConstraint* targetBottomConstraint;
 }
 
 -(void)hideTargetPointMenu {
+    [_mapViewController hideContextPinMarker];
     [self.shadowButton removeFromSuperview];
     [targetBottomConstraint setConstant:kOATargetPointViewHeight + 10];
     [UIView animateWithDuration:0.5 animations:^{

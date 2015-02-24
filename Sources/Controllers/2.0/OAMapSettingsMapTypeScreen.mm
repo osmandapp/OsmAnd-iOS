@@ -145,10 +145,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             Item_OnlineTileSource* item = [[Item_OnlineTileSource alloc] init];
             
-            NSString *caption = onlineTileSource->name.toNSString();
-            NSString *newCaption = [stylesTitlesOnline objectForKey:caption];
-            if (newCaption)
-                caption = newCaption;
+            NSString *caption = onlineTileSource->title.toNSString();
+            //NSString *newCaption = [stylesTitlesOnline objectForKey:caption];
+            //if (newCaption)
+            //    caption = newCaption;
             
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:onlineTileSource->name.toNSString() name:caption];

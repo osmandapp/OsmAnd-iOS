@@ -23,7 +23,6 @@
 
 @property(nonatomic, readonly) QDir dataDir;
 @property(nonatomic, readonly) QDir documentsDir;
-@property(nonatomic, readonly) QDir cacheDir;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;

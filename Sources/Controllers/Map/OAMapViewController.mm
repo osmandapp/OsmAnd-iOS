@@ -1166,6 +1166,11 @@
     return mapView.currentPixelsToMetersScaleFactor ;
 }
 
+- (void)hideContextPinMarker
+{
+    _contextPinMarker->setIsHidden(true);
+}
+
 - (float)currentZoomOutDelta
 {
     if (![self isViewLoaded])
@@ -1792,7 +1797,7 @@
                 _app.data.lastMapSource = [OAAppData defaults].lastMapSource;
                 return;
             }
-            onlineMapTileProvider->setLocalCachePath(_app.cacheDir);
+            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
             _rasterMapProvider = onlineMapTileProvider;
             [mapView setProvider:_rasterMapProvider
                         forLayer:0];

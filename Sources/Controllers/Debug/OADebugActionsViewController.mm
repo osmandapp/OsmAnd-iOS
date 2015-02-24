@@ -52,6 +52,7 @@
     rootElement.title = OALocalizedString(@"Debug");
     rootElement.grouped = YES;
     rootElement.appearance.entryAlignment = NSTextAlignmentRight;
+    rootElement.presentationMode = QPresentationModeModalForm;
 
     // Renderer section
     QSection* rendererSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Renderer")];

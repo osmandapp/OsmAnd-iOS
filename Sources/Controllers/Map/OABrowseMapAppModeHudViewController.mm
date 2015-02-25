@@ -343,39 +343,47 @@ NSLayoutConstraint* targetBottomConstraint;
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
-
-    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
-    _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
-
-    std::shared_ptr<const OsmAnd::Road> road;
-
-    const OsmAnd::PointI position31(
-                                    OsmAnd::Utilities::get31TileNumberX(lon),
-                                    OsmAnd::Utilities::get31TileNumberY(lat));
-
-    road = _roadLocator->findNearestRoad(position31,
-                                         kMaxRoadDistanceInMeters,
-                                         OsmAnd::RoutingDataLevel::Detailed);
-
-    NSString* localizedTitle;
-    NSString* nativeTitle;
-    if (road) {
-        const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
-        const auto localizedName = road->getCaptionInLanguage(mainLanguage);
-        const auto nativeName = road->getCaptionInNativeLanguage();
-        if (!localizedName.isNull())
-            localizedTitle = localizedName.toNSString();
-        if (!nativeName.isNull())
-            nativeTitle = nativeName.toNSString();
-    }
     
-    
-    NSString* addressString = nativeTitle;
-    if (!addressString || [addressString isEqualToString:@""]) {
-        addressString = @"Address is not known yet";
-        self.targetMenuView.isAddressFound = NO;
+    NSString *title = [params objectForKey:@"title"];
+
+    NSString* addressString;
+    if (!title) {
+        std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+        _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+        
+        std::shared_ptr<const OsmAnd::Road> road;
+        
+        const OsmAnd::PointI position31(
+                                        OsmAnd::Utilities::get31TileNumberX(lon),
+                                        OsmAnd::Utilities::get31TileNumberY(lat));
+        
+        road = _roadLocator->findNearestRoad(position31,
+                                             kMaxRoadDistanceInMeters,
+                                             OsmAnd::RoutingDataLevel::Detailed);
+        
+        NSString* localizedTitle;
+        NSString* nativeTitle;
+        if (road) {
+            const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
+            const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+            const auto nativeName = road->getCaptionInNativeLanguage();
+            if (!localizedName.isNull())
+                localizedTitle = localizedName.toNSString();
+            if (!nativeName.isNull())
+                nativeTitle = nativeName.toNSString();
+        }
+        
+        
+        addressString = nativeTitle;
+        if (!addressString || [addressString isEqualToString:@""]) {
+            addressString = @"Address is not known yet";
+            self.targetMenuView.isAddressFound = NO;
+        } else {
+            self.targetMenuView.isAddressFound = YES;
+        }
     } else {
         self.targetMenuView.isAddressFound = YES;
+        addressString = title;
     }
     
     [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];

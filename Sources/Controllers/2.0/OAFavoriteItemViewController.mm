@@ -43,7 +43,7 @@ typedef enum
     BOOL isAdjustingVews;
 
     BOOL _showFavoriteOnExit;
-    BOOL _wasShowingFavorites;
+    BOOL _wasShowingFavorite;
     BOOL _deleteFavorite;
 }
 
@@ -218,10 +218,6 @@ typedef enum
         return;
     }
     
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    _wasShowingFavorites = settings.mapSettingShowFavorites;
-    [settings setMapSettingShowFavorites:YES];
-    
     [[OARootViewController instance].mapPanel prepareMapForReuse:[OANativeUtilities convertFromPointI:self.favorite.favorite->getPosition31()] zoom:kDefaultFavoriteZoom newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
     _showFavoriteOnExit = NO;
@@ -240,7 +236,11 @@ typedef enum
     }
 
     [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
-    
+
+    OAAppSettings* settings = [OAAppSettings sharedManager];
+    _wasShowingFavorite = settings.mapSettingShowFavorites;
+    [settings setMapSettingShowFavorites:YES];
+
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -259,6 +259,10 @@ typedef enum
         
         [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
         
+    } else {
+        OAAppSettings* settings = [OAAppSettings sharedManager];
+        if (!_showFavoriteOnExit && !_wasShowingFavorite)
+            [settings setMapSettingShowFavorites:NO];
     }
 
     [self unregisterKeyboardNotifications];
@@ -272,11 +276,26 @@ typedef enum
     if (_favAction != kFavoriteActionNone)
         return;
     
-    OAAppSettings* settings = [OAAppSettings sharedManager];
-    if (_showFavoriteOnExit || _wasShowingFavorites)
-        [settings setMapSettingShowFavorites:YES];
-    else
-        [settings setMapSettingShowFavorites:NO];
+    if (_showFavoriteOnExit && !self.newFavorite) {
+        
+        //OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+        
+        // Get location of the gesture
+        CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
+        touchPoint.x *= _mapView.contentScaleFactor;
+        touchPoint.y *= _mapView.contentScaleFactor;
+        
+        OsmAnd::LatLon latLon = self.favorite.favorite->getLatLon();
+        //[mapViewController showContextPinMarker:latLon.latitude longitude:latLon.longitude];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                            object: self
+                                                          userInfo:@{@"title" : self.favorite.favorite->getTitle().toNSString(),
+                                                                     @"lat": [NSNumber numberWithDouble:latLon.latitude],
+                                                                     @"lon": [NSNumber numberWithDouble:latLon.longitude],
+                                                                     @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
+                                                                     @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
+    }
 }
 
 -(void)setupView {
@@ -544,7 +563,7 @@ typedef enum
     _newTarget31 = itemData.favorite->getPosition31();
     
     _showFavoriteOnExit = YES;
-    
+
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

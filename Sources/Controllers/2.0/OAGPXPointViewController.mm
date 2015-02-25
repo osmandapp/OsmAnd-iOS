@@ -191,6 +191,23 @@ typedef enum
         [_mapViewController keepTempGpxTrackVisible];
         
         [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultGpxZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
+        
+        // Get location of the gesture
+        CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
+        touchPoint.x *= _mapView.contentScaleFactor;
+        touchPoint.y *= _mapView.contentScaleFactor;
+        
+        CLLocationCoordinate2D latLon = self.wptItem.point.position;
+
+        [_mapViewController showContextPinMarker:latLon.latitude longitude:latLon.longitude];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                            object: self
+                                                          userInfo:@{@"title" : self.wptItem.point.name,
+                                                                     @"lat": [NSNumber numberWithDouble:latLon.latitude],
+                                                                     @"lon": [NSNumber numberWithDouble:latLon.longitude],
+                                                                     @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
+                                                                     @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
     }
 }
 

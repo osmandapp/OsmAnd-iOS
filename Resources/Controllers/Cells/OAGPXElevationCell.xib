@@ -28,7 +28,7 @@
                         <color key="textColor" red="0.29803921568627451" green="0.69803921568627447" blue="0.21568627450980393" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up_icon.png" id="BeO-ZZ-KEb">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_arrow_up.png" id="BeO-ZZ-KEb">
                         <rect key="frame" x="129" y="10" width="20" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -39,7 +39,7 @@
                         <color key="textColor" red="0.85882352941176465" green="0.32549019607843138" blue="0.39215686274509803" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_up_icon.png" id="IKS-6u-KmT">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_arrow_down.png" id="IKS-6u-KmT">
                         <rect key="frame" x="225" y="10" width="20" height="25"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -56,7 +56,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="arrow_up_icon.png" width="25" height="25"/>
+        <image name="ic_arrow_down.png" width="16" height="16"/>
+        <image name="ic_arrow_up.png" width="16" height="16"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

@@ -1166,6 +1166,14 @@
     return mapView.currentPixelsToMetersScaleFactor ;
 }
 
+- (void)showContextPinMarker:(double)latitude longitude:(double)longitude
+{
+    const OsmAnd::LatLon latLon(latitude, longitude);
+    _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+    _contextPinMarker->setIsHidden(false);
+}
+
+
 - (void)hideContextPinMarker
 {
     _contextPinMarker->setIsHidden(true);

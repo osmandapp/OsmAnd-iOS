@@ -28,7 +28,7 @@
                         <color key="textColor" red="0.70588235294117641" green="0.70196078431372544" blue="0.71764705882352942" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_favorite_direction.png" id="iVs-u6-J98">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_distance.png" id="iVs-u6-J98">
                         <rect key="frame" x="15" y="31" width="10" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -39,7 +39,7 @@
                         <color key="textColor" red="0.70588235290000001" green="0.70196078429999997" blue="0.71764705880000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="icon_favorite_direction.png" id="ooY-br-udb">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_gpx_points.png" id="ooY-br-udb">
                         <rect key="frame" x="76" y="31" width="10" height="10"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
@@ -61,7 +61,8 @@
         </tableViewCell>
     </objects>
     <resources>
-        <image name="icon_favorite_direction.png" width="8" height="9"/>
+        <image name="ic_gpx_distance.png" width="13" height="13"/>
+        <image name="ic_gpx_points.png" width="13" height="13"/>
         <image name="menu_cell_pointer.png" width="6" height="10"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

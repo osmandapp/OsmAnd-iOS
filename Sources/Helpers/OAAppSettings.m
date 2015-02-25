@@ -82,15 +82,24 @@
 // Map Settings
 -(void)setMapSettingShowFavorites:(BOOL)mapSettingShowFavorites {
     
-    if (_mapSettingShowFavorites == mapSettingShowFavorites)
-        return;
+    //if (_mapSettingShowFavorites == mapSettingShowFavorites)
+    //    return;
     
     _mapSettingShowFavorites = mapSettingShowFavorites;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowFavorites forKey:mapSettingShowFavoritesKey];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:_mapSettingShowFavorites];
+    if (_mapSettingShowFavorites) {
+        if (![app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]) {
+            [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                           Visibility:YES];
+        }
+    } else {
+        if ([app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId]) {
+            [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
+                                           Visibility:NO];
+        }
+    }
 }
 
 

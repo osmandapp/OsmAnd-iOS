@@ -50,6 +50,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
             animated:(BOOL)animated;
 -(float)calculateMapRuler;
 
+- (void)showContextPinMarker:(double)latitude longitude:(double)longitude;
 - (void)hideContextPinMarker;
 
 - (void)showTempGpxTrack:(NSString *)fileName;

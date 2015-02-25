@@ -40,7 +40,7 @@
                                         <rect key="frame" x="242" y="24" width="38" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" image="menu_item_settings_icon.png"/>
+                                        <state key="normal" image="ic_update.png"/>
                                         <connections>
                                             <action selector="onUpdateBtnClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="6Tg-LT-6e2"/>
                                         </connections>
@@ -358,8 +358,8 @@
     </scenes>
     <resources>
         <image name="HUD_search_icon.png" width="25" height="25"/>
+        <image name="ic_update.png" width="25" height="25"/>
         <image name="menu_icon_back.png" width="10" height="20"/>
-        <image name="menu_item_settings_icon.png" width="25" height="25"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

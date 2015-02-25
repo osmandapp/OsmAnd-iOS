@@ -47,6 +47,8 @@
     
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _animator;
+    
+    CGRect prevBounds;
 }
 
 + (Class)layerClass
@@ -430,6 +432,12 @@
 
 - (void)layoutSubviews
 {
+    if (CGRectEqualToRect(prevBounds, self.bounds))
+        return;
+    
+    if (!CGRectIsEmpty(self.bounds))
+        prevBounds = self.bounds;
+    
     OALog(@"[OAMapRendererView %p] Recreating OpenGLES2 frame and render buffers due to resize", self);
 
     // Kill buffers, since window was resized

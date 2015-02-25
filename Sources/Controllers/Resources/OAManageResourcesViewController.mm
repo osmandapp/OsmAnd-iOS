@@ -50,6 +50,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property (weak, nonatomic) IBOutlet UIButton *updateButton;
 @property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
 
 @end
@@ -72,10 +74,9 @@ struct RegionResources
 
     NSInteger _lastUnusedSectionIndex;
 
-    NSInteger _subregionsSection;
-    NSMutableArray* _searchableSubregionItems;
     NSMutableArray* _allSubregionItems;
-    NSMutableArray* _localSubregionItems;
+    ResourceItem* _regionMap;
+    NSInteger _regionMapSection;
 
     NSInteger _outdatedResourcesSection;
     NSMutableArray* _outdatedResourceItems;
@@ -122,9 +123,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
         _currentScope = kAllResourcesScope;
 
-        _searchableSubregionItems = [NSMutableArray array];
         _allSubregionItems = [NSMutableArray array];
-        _localSubregionItems = [NSMutableArray array];
 
         _outdatedResourceItems = [NSMutableArray array];
 
@@ -143,8 +142,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                andScope:(NSInteger)scope
 {
     self.region = region;
-
-    //_searchableWorldwideRegionItems = [worldRegionItems copy];
     _currentScope = scope;
 }
 
@@ -152,6 +149,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     [super viewDidLoad];
 
+    if (self.openFromSplash) {
+        self.backButton.hidden = YES;
+        self.doneButton.hidden = NO;
+    }
+    
     if (self.region != _app.worldRegion)
         [self.titleView setText:self.region.name];
     else if (_currentScope == kLocalResourcesScope) {
@@ -200,7 +202,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     
     self.updateButton.hidden = hideUpdateButton;
     
-    [[UIApplication sharedApplication] setStatusBarHidden:_isSearching];
+    //[[UIApplication sharedApplication] setStatusBarHidden:_isSearching];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -209,8 +211,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
     // If there's no repository available and there's internet connection, just update it
     if (!_app.resourcesManager->isRepositoryAvailable() &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) {
         [self updateRepository];
+    } else {
+        if (self.openFromSplash)
+            [self onSearchBtnClicked:nil];
+    }
 }
 
 - (void)updateContent
@@ -349,102 +355,33 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     // Collect all regions (and their parents) that have at least one
     // resource available in repository or locally.
 
-    [_searchableSubregionItems removeAllObjects];
+    _regionMap = nil;
+    [_allResourceItems removeAllObjects];
     [_allSubregionItems removeAllObjects];
-    [_localSubregionItems removeAllObjects];
     
     for (OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
-        
-        /*
-        // Look in repository
-        BOOL foundRepositoryResource = NO;
-        for(const auto& resource : _resourcesInRepository)
-        {
-            
-            OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
-                                                                          thatContainsResource:resource->id];
-            if (!match)
-                continue;
-
-            OAWorldRegion* intermediateRegion = match;
-            while (intermediateRegion != subregion && intermediateRegion != nil)
-            {
-                if (![_searchableSubregionItems containsObject:intermediateRegion])
-                    [_searchableSubregionItems addObject:intermediateRegion];
-
-                intermediateRegion = intermediateRegion.superregion;
-            }
-
-            foundRepositoryResource = YES;
-            break;
-        }
-        */
-        
-        // Look in local resources
-        BOOL foundLocalResource = NO;
-        for(const auto& resource : _localResources)
-        {
-         
-            OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:subregion
-                                                                          thatContainsResource:resource->id];
-            if (!match)
-                continue;
-
-            /*
-            OAWorldRegion* intermediateRegion = match;
-            while (intermediateRegion != subregion && intermediateRegion != nil)
-            {
-                if (![_searchableSubregionItems containsObject:intermediateRegion])
-                    [_searchableSubregionItems addObject:intermediateRegion];
-
-                intermediateRegion = intermediateRegion.superregion;
-            }
-            */
-
-            foundLocalResource = YES;
-            break;
-        }
-
-        // If subregion has nothing to offer, skip it
-        /*
-        if (!foundRepositoryResource && !foundLocalResource)
-        {
-            OALog(@"Region %@ (%@) was skipped since it has no resources", subregion.name, subregion.regionId);
-            continue;
-        }
-         
-        if (![_searchableSubregionItems containsObject:subregion])
-            [_searchableSubregionItems addObject:subregion];
-        */
-        
-        if (subregion.superregion == self.region)
-        {
-            [_allSubregionItems addObject:subregion];
-            if (foundLocalResource)
-                [_localSubregionItems addObject:subregion];
+        if (subregion.superregion == self.region) {
+            if (subregion.subregions.count > 0)
+                [_allSubregionItems addObject:subregion];
+            else
+                [self collectSubregionItems:subregion];
         }
     }
-    [_searchableSubregionItems sortUsingSelector:@selector(compare:)];
-    [_allSubregionItems sortUsingSelector:@selector(compare:)];
-    [_localSubregionItems sortUsingSelector:@selector(compare:)];
     
 }
 
-- (void)collectResourcesDataAndItems
+- (void)collectSubregionItems:(OAWorldRegion *) region
 {
-    [_allResourceItems removeAllObjects];
-    [_localResourceItems removeAllObjects];
-
-    const auto citRegionResources = _resourcesByRegions.constFind(self.region);
+    const auto citRegionResources = _resourcesByRegions.constFind(region);
     if (citRegionResources == _resourcesByRegions.cend())
         return;
     const auto& regionResources = *citRegionResources;
-
+    
     for (const auto& resource_ : regionResources.allResources)
     {
         ResourceItem* item_ = nil;
-
+        
         if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(resource_))
         {
             if (regionResources.outdatedResources.contains(resource->id))
@@ -452,28 +389,28 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
-                item.title = [self titleOfResource:resource_ withRegionName:NO];
+                item.title = [self.class titleOfResource:resource_
+                                                inRegion:region
+                                          withRegionName:YES];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-
+                
                 if (item.title == nil)
                     continue;
-
-                [_localResourceItems addObject:item];
             }
             else
             {
                 LocalResourceItem* item = [[LocalResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
-                item.title = [self titleOfResource:resource_ withRegionName:NO];
+                item.title = [self.class titleOfResource:resource_
+                                                inRegion:region
+                                          withRegionName:YES];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-
+                
                 if (item.title == nil)
                     continue;
-
-                [_localResourceItems addObject:item];
             }
         }
         else if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::ResourceInRepository>(resource_))
@@ -481,19 +418,33 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
             item_ = item;
             item.resourceId = resource->id;
-            item.title = [self titleOfResource:resource_ withRegionName:NO];
+            item.title = [self.class titleOfResource:resource_
+                                            inRegion:region
+                                      withRegionName:YES];
             item.resource = resource;
             item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-
+            
             if (item.title == nil)
                 continue;
         }
-
-        [_allResourceItems addObject:item_];
+        
+        if (region == self.region)
+            _regionMap = item_;
+        else
+            [_allResourceItems addObject:item_];
+        
     }
-    [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
-    [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
+}
 
+- (void)collectResourcesDataAndItems
+{
+    [self collectSubregionItems:self.region];
+    
+    [_allResourceItems addObjectsFromArray:_allSubregionItems];
+    [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
+    
+    // Outdated Resources
+    [_localResourceItems removeAllObjects];
     [_outdatedResourceItems removeAllObjects];
     for (const auto& resource : _outdatedResources)
     {
@@ -510,13 +461,54 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
-
-        if (item.title == nil)
-            continue;
-
-        [_outdatedResourceItems addObject:item];
+        
+        if (item.title != nil) {
+            if (match == self.region) {
+                _regionMap = item;
+            } else {
+                [_outdatedResourceItems addObject:item];
+                [_localResourceItems addObject:item];
+            }
+        }
     }
     [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
+    
+    // Local Resources
+    for (const auto& resource : _localResources)
+    {
+        OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
+                                                                      thatContainsResource:resource->id];
+        if (!match)
+            continue;
+        
+        LocalResourceItem* item = [[LocalResourceItem alloc] init];
+        item.resourceId = resource->id;
+        item.title = [self.class titleOfResource:resource
+                                        inRegion:match
+                                  withRegionName:YES];
+        item.resource = resource;
+        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        
+        if (item.title != nil) {
+            if (match == self.region) {
+                if (!_regionMap)
+                    _regionMap = item;
+                
+            } else {
+                
+                BOOL exists = NO;
+                for (LocalResourceItem *i in _localResourceItems)
+                    if ([i.resourceId.toNSString() isEqualToString:item.resourceId.toNSString()]) {
+                        exists = YES;
+                        break;
+                    }
+                if (!exists)
+                    [_localResourceItems addObject:item];
+            }
+        }
+    }
+    [_localResourceItems sortUsingComparator:self.resourceItemsComparator];
+    
     NSMutableSet* regionsSet = [NSMutableSet set];
     for (OutdatedResourceItem* item in _outdatedResourceItems)
         [regionsSet addObject:item.worldRegion];
@@ -540,27 +532,19 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else
             _localResourcesSection = -1;
 
-        if ([[self getSubregionItems] count] > 0)
-            _subregionsSection = _lastUnusedSectionIndex++;
-        else
-            _subregionsSection = -1;
-
         if ([[self getResourceItems] count] > 0)
             _resourcesSection = _lastUnusedSectionIndex++;
         else
             _resourcesSection = -1;
 
+        if (_regionMap)
+            _regionMapSection = _lastUnusedSectionIndex++;
+        else
+            _regionMapSection = -1;
+
         // Configure search scope
-        //if (self.region == _app.worldRegion || [_searchableSubregionItems count] == 0)
-        //{
-            self.searchDisplayController.searchBar.scopeButtonTitles = nil;
-            self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search worldwide");
-        //}
-        //else
-        //{
-        //    self.searchDisplayController.searchBar.scopeButtonTitles = @[self.region.name, OALocalizedString(@"Worldwide")];
-        //    self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search in %@ or worldwide", self.region.name);
-        //}
+        self.searchDisplayController.searchBar.scopeButtonTitles = nil;
+        self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search worldwide");
     }
 }
 
@@ -576,20 +560,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         }
         [self.tableView reloadData];
     }
-}
-
-- (NSMutableArray*)getSubregionItems
-{
-    switch (_currentScope)
-    {
-        case kAllResourcesScope:
-            return _allSubregionItems;
-
-        case kLocalResourcesScope:
-            return _localSubregionItems;
-    }
-
-    return nil;
 }
 
 - (NSMutableArray*)getResourceItems
@@ -640,11 +610,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         }
 
         // Select where to look
-        NSArray* searchableContent = nil;
-        //if (self.region == _app.worldRegion || (searchScope == 0 && [_searchableSubregionItems count] > 0))
-        //    searchableContent = _searchableSubregionItems;
-        //else
-            searchableContent = _searchableWorldwideRegionItems;
+        NSArray* searchableContent = _searchableWorldwideRegionItems;
 
         // Search through subregions:
 
@@ -751,8 +717,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     [resourceItems addObject:item];
                 }
             }
-            [resourceItems sortUsingComparator:self.resourceItemsComparator];
-            
             [results addObjectsFromArray:resourceItems];
         }
         
@@ -775,6 +739,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                             }
                                 completionBlock:^{
                                     _refreshRepositoryBarButton.enabled = YES;
+                                    if (self.openFromSplash)
+                                        [self onSearchBtnClicked:nil];
                                 }];
 }
 
@@ -799,6 +765,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [self.navigationController pushViewController:detailsViewController
                                          animated:YES];
      */
+}
+
+- (IBAction)onDoneClicked:(id)sender
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void)onCustomBackButtonClicked
@@ -841,15 +812,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         return 1;
 
+    if (_currentScope == kLocalResourcesScope)
+        return 1 + (_regionMap ? 1 : 0);
+
     NSInteger sectionsCount = 0;
 
-    if (_subregionsSection >= 0)
+    if (_localResourcesSection > 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
         sectionsCount++;
     if (_resourcesSection >= 0)
         sectionsCount++;
-    if (_localSubregionItems.count > 0)
+    if (_regionMap)
         sectionsCount++;
 
     return sectionsCount;
@@ -860,13 +834,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         return [_searchResults count];
 
-    if (section == _subregionsSection)
-        return [[self getSubregionItems] count];
     if (section == _outdatedResourcesSection)
         return 1;
     if (section == _resourcesSection)
         return [[self getResourceItems] count];
     if (section == _localResourcesSection)
+        return 1;
+    if (section == _regionMapSection)
         return 1;
 
     return 0;
@@ -879,25 +853,33 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
     if (self.region.superregion == nil)
     {
-        if (section == _subregionsSection)
-            return OALocalizedString(@"By regions");
+        if (_currentScope == kLocalResourcesScope) {
+            if (section == _regionMapSection)
+                return OALocalizedString(@"World Map");
+            else
+                return OALocalizedString(@"Maps & resources");
+
+        }
+        
         if (section == _outdatedResourcesSection)
             return OALocalizedString(@"Updates");
         if (section == _resourcesSection)
             return OALocalizedString(@"Worldwide");
         if (section == _localResourcesSection)
             return OALocalizedString(@"Installed");
+        if (section == _regionMapSection)
+            return OALocalizedString(@"World Map");
         return nil;
     }
 
-    if (section == _subregionsSection)
-        return OALocalizedString(@"Regions");
     if (section == _outdatedResourcesSection)
         return OALocalizedString(@"Updates");
     if (section == _resourcesSection)
         return OALocalizedString(@"Maps & resources");
     if (section == _localResourcesSection)
         return OALocalizedString(@"Installed");
+    if (section == _regionMapSection)
+        return OALocalizedString(@"Region Map");
 
     return nil;
 }
@@ -943,21 +925,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = repositoryResourceCell;
 
             title = item.title;
-            subtitle = item.worldRegion.name;
+            if (item.worldRegion.superregion)
+                subtitle = item.worldRegion.superregion.name;
+            else
+                subtitle = item.worldRegion.name;
         }
     }
     else
     {
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-        {
-            item_ = [[self getSubregionItems] objectAtIndex:indexPath.row];
-            OAWorldRegion* worldRegion = (OAWorldRegion*)item_;
-
-            cellTypeId = subregionCell;
-            title = worldRegion.name;
-            subtitle = nil;
-        }
-        else if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
+        if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
         {
             cellTypeId = outdatedResourcesSubmenuCell;
             title = OALocalizedString(@"Updates available");
@@ -976,8 +952,36 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
             item_ = [[self getResourceItems] objectAtIndex:indexPath.row];
-            ResourceItem* item = (ResourceItem*)item_;
 
+            if ([item_ isKindOfClass:[OAWorldRegion class]])
+            {
+                OAWorldRegion* item = (OAWorldRegion*)item_;
+                
+                cellTypeId = subregionCell;
+                title = item.name;
+                if (item.superregion != nil)
+                    subtitle = item.superregion.name;
+                
+            } else {
+                
+                ResourceItem* item = (ResourceItem*)item_;
+                
+                if (item.downloadTask != nil)
+                    cellTypeId = downloadingResourceCell;
+                else if ([item isKindOfClass:[OutdatedResourceItem class]])
+                    cellTypeId = outdatedResourceCell;
+                else if ([item isKindOfClass:[LocalResourceItem class]])
+                    cellTypeId = localResourceCell;
+                else if ([item isKindOfClass:[RepositoryResourceItem class]])
+                    cellTypeId = repositoryResourceCell;
+                
+                title = item.title;
+            }
+        }
+        else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+        {
+            ResourceItem* item = _regionMap;
+            
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
             else if ([item isKindOfClass:[OutdatedResourceItem class]])
@@ -986,7 +990,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = localResourceCell;
             else if ([item isKindOfClass:[RepositoryResourceItem class]])
                 cellTypeId = repositoryResourceCell;
-
+            
             title = item.title;
         }
     }
@@ -1067,13 +1071,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     id item = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
         item = [_searchResults objectAtIndex:indexPath.row];
+    }
     else if (tableView == self.tableView)
     {
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
             item = [[self getResourceItems] objectAtIndex:indexPath.row];
+        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+            item = _regionMap;
     }
 
     if (item == nil)
@@ -1092,10 +1098,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     }
     else if (tableView == self.tableView) {
         
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
             item = [[self getResourceItems] objectAtIndex:indexPath.row];
+        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+            item = _regionMap;
     }
 
     if (item != nil)
@@ -1111,10 +1117,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
     {
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
             item = [[self getResourceItems] objectAtIndex:indexPath.row];
+        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+            item = _regionMap;
     }
 
     if (item == nil)
@@ -1133,10 +1139,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
     {
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
             item = [[self getResourceItems] objectAtIndex:indexPath.row];
+        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+            item = _regionMap;
     }
 
     if (item == nil)
@@ -1155,10 +1161,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
     {
-        if (indexPath.section == _subregionsSection && _subregionsSection >= 0)
-            item = [[self getSubregionItems] objectAtIndex:indexPath.row];
-        else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
             item = [[self getResourceItems] objectAtIndex:indexPath.row];
+        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+            item = _regionMap;
     }
 
     if (item == nil)
@@ -1188,11 +1194,19 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     return YES;
 }
 
+- (BOOL)prefersStatusBarHidden
+{
+    return _isSearching;
+}
+
 - (void)searchDisplayControllerWillBeginSearch:(UISearchDisplayController *)controller
 {
     _isSearching = YES;
     
-    [[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f)
+        [self setNeedsStatusBarAppearanceUpdate];
+    //[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    
     [UIView animateWithDuration:0.3
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
@@ -1213,7 +1227,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     _isSearching = NO;
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f)
+        [self setNeedsStatusBarAppearanceUpdate];
+    //[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+
     [UIView animateWithDuration:0.1
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
@@ -1240,10 +1257,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         if ([identifier isEqualToString:kOpenSubregionSegue])
         {
             OAWorldRegion* subregion = nil;
-            if (tableView == _tableView && _subregionsSection >= 0)
-                subregion = [[self getSubregionItems] objectAtIndex:cellPath.row];
-            else if (tableView == self.searchDisplayController.searchResultsTableView)
+            if (tableView == self.searchDisplayController.searchResultsTableView)
                 subregion = [_searchResults objectAtIndex:cellPath.row];
+            else if (tableView == _tableView)
+                subregion = [[self getResourceItems] objectAtIndex:cellPath.row];
 
             return (subregion != nil);
         }
@@ -1269,22 +1286,17 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         subregionViewController->_doNotSearch = _isSearching || _doNotSearch;
         
         OAWorldRegion* subregion = nil;
-        if (tableView == _tableView && _subregionsSection >= 0)
-        {
-            subregion = [[self getSubregionItems] objectAtIndex:cellPath.row];
-
-            self.navigationItem.backBarButtonItem = nil;
-        }
-        else if (tableView == self.searchDisplayController.searchResultsTableView)
+        if (tableView == self.searchDisplayController.searchResultsTableView)
         {
             subregion = [_searchResults objectAtIndex:cellPath.row];
         }
+        else if (tableView == _tableView)
+        {
+            subregion = [[self getResourceItems] objectAtIndex:cellPath.row];
 
-        /*
-        [subregionViewController setupWithRegion:subregion
-                             andWorldRegionItems:(self.region == _app.worldRegion) ? _searchableSubregionItems : _searchableWorldwideRegionItems
-                                        andScope:_currentScope];
-        */
+            self.navigationItem.backBarButtonItem = nil;
+        }
+
         [subregionViewController setupWithRegion:subregion
                              andWorldRegionItems:nil
                                         andScope:_currentScope];
@@ -1314,10 +1326,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             item = [_searchResults objectAtIndex:cellPath.row];
         else if (tableView == self.tableView)
         {
-            if (cellPath.section == _subregionsSection && _subregionsSection >= 0)
-                item = [[self getSubregionItems] objectAtIndex:cellPath.row];
-            else if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
+            if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
                 item = [[self getResourceItems] objectAtIndex:cellPath.row];
+            if (cellPath.section == _regionMapSection && _regionMapSection >= 0)
+                item = (LocalResourceItem*)_regionMap;
         }
 
         if (item) {

@@ -100,7 +100,7 @@
     [self.window makeKeyAndVisible];
 
     // Show intro screen
-    if (execCount == 1 or true) {
+    if (execCount == 1) {
         OAIntroViewController* cont = [[OAIntroViewController alloc] init];
         [self.rootViewController.navigationController pushViewController:cont animated:NO];
     }

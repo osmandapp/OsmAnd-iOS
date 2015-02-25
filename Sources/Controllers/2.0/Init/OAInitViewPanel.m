@@ -8,7 +8,6 @@
 
 #import "OAInitViewPanel.h"
 #import "MYBlurIntroductionView.h"
-#import "OAAutocompleteManager.h"
 
 @implementation OAInitViewPanel
 
@@ -24,11 +23,14 @@
     self = [super initWithFrame:frame nibNamed:nibName];
     [self.parentIntroductionView setEnabled:NO];
     
-    [HTAutocompleteTextField setDefaultAutocompleteDataSource:[OAAutocompleteManager sharedManager]];
-    
     return self;
 }
 
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
+{
+    [self nextButtonClicked:nil];
+    return NO;
+}
 
 #pragma mark - Interaction Methods
 //Override them if you want them!
@@ -36,6 +38,7 @@
 -(void)panelDidAppear{
     NSLog(@"Panel Did Appear");
     //You can use a MYIntroductionPanel subclass to create custom events and transitions for your introduction view
+    self.countryName.delegate = self;
     [self.parentIntroductionView setEnabled:NO];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
@@ -57,7 +60,7 @@
 #pragma mark Outlets
 
 - (IBAction)nextButtonClicked:(id)sender {
-    if (self.parentIntroductionView.CurrentPanelIndex == 1)
+    if (self.parentIntroductionView.CurrentPanelIndex == 1) 
         [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSwipeOut];
     else
         [self.parentIntroductionView changeToPanelAtIndex:self.parentIntroductionView.CurrentPanelIndex+1];

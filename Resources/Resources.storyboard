@@ -29,6 +29,18 @@
                                             <action selector="backButtonClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="osB-35-XUs"/>
                                         </connections>
                                     </button>
+                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="B0H-ih-pIM">
+                                        <rect key="frame" x="4" y="20" width="70" height="47"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
+                                        <state key="normal" title="Done">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="onDoneClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="pca-1f-RX5"/>
+                                        </connections>
+                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Maps &amp; Resources" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="C5O-TM-N7e">
                                         <rect key="frame" x="76" y="31" width="168" height="24"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -190,6 +202,8 @@
                     <navigationItem key="navigationItem" id="yAv-az-HE4"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
+                        <outlet property="backButton" destination="ReZ-N4-l3v" id="Bwf-wf-kQV"/>
+                        <outlet property="doneButton" destination="B0H-ih-pIM" id="fdl-X0-QbS"/>
                         <outlet property="searchButton" destination="yS2-Tu-WpJ" id="8Zc-qe-cWd"/>
                         <outlet property="searchDisplayController" destination="mBR-OL-CGm" id="uqv-Jo-ffv"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>

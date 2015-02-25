@@ -78,10 +78,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                                                 andObserve:_app.resourcesRepositoryUpdatedObservable];
 
         _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
-            ResourceItem *item1 = obj1;
-            ResourceItem *item2 = obj2;
+            NSString *str1;
+            NSString *str2;
+            
+            if ([obj1 isKindOfClass:[OAWorldRegion class]])
+                str1 = ((OAWorldRegion *)obj1).name;
+            else
+                str1 = ((ResourceItem *)obj1).title;
 
-            return [item1.title localizedCaseInsensitiveCompare:item2.title];
+            if ([obj2 isKindOfClass:[OAWorldRegion class]])
+                str2 = ((OAWorldRegion *)obj2).name;
+            else
+                str2 = ((ResourceItem *)obj2).title;
+            
+            return [str1 localizedCaseInsensitiveCompare:str2];
         };
     }
     return self;
@@ -194,7 +204,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 if (!includeRegionName || region == nil)
                     return OALocalizedString(@"Map of entire region");
                 else
-                    return OALocalizedString(@"Map of entire %@", region.name);
+                    return OALocalizedString(@"Map of %@", region.name);
             }
             else
             {
@@ -506,7 +516,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
                                                              action:^{
                                                                  [self cancelDownloadOf:item_];
                                                              }], nil] show];

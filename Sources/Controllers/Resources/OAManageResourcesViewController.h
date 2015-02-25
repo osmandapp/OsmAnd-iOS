@@ -11,6 +11,8 @@
 
 @interface OAManageResourcesViewController : OAResourcesBaseViewController
 
+@property (nonatomic, assign) BOOL openFromSplash;
+
 + (void)prepareData;
 
 @end

@@ -11,7 +11,7 @@
 #import "OAInitViewPanel.h"
 #import "OsmAndApp.h"
 #import "OAResourcesBaseViewController.h"
-#import "OAAutocompleteManager.h"
+#import "OAManageResourcesViewController.h"
 
 
 
@@ -70,58 +70,13 @@
 }
 
 -(void)introduction:(MYBlurIntroductionView *)introductionView didFinishWithType:(MYFinishType)finishType {
-    [self.navigationController popViewControllerAnimated:YES];
-}
+    
+    OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+    resourcesViewController.openFromSplash = YES;
+    [self.navigationController pushViewController:resourcesViewController animated:YES];
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender{
-    [sender resignFirstResponder];
-    OsmAndAppInstance app = [OsmAndApp instance];
+    //[self.navigationController popViewControllerAnimated:YES];
     
-    __block OAWorldRegion* region = [OAAutocompleteManager sharedManager].selectedRegion;
-    
-    if (!region) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region named %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        return YES;
-    }
-    
-    const auto regionId = QString::fromNSString(region.regionId);
-    const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
-    
-    QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > resourcesInRepository = app.resourcesManager->getResourcesInRepository();
-    QString resourceId;
-    for (const auto& resource : resourcesInRepository)
-    {
-        if (!resource->id.startsWith(downloadsIdPrefix))
-            continue;
-
-        resourceId = resource->id;
-        break;
-    }
-    
-    if (resourceId.isNull() || resourceId.isEmpty()) {
-        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"Sorry, can't find region %@", sender.text) delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
-        return YES;
-    }
-    
-    const auto resourceInRepository = app.resourcesManager->getResourceInRepository(resourceId);
-    [OAResourcesBaseViewController startBackgroundDownloadOf:resourceInRepository];
-    
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    hud.mode = MBProgressHUDModeCustomView;
-    hud.detailsLabelText = OALocalizedString(@"Downloading map %@", sender.text);
-    [hud hide:YES afterDelay:2.0];
-    
-    double delayInSeconds = 2.0;
-    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        
-        [self.navigationController popViewControllerAnimated:YES];
-        
-    });
-    
-    return YES;
 }
 
 

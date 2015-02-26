@@ -45,6 +45,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *resumeFollowingButton;
+@property (weak, nonatomic) IBOutlet UIView *leftWidgetsContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *leftWidgetsContainerBackground;
 @property (weak, nonatomic) IBOutlet UILabel *currentSpeedLabel;
 @property (weak, nonatomic) IBOutlet UILabel *currentAltitudeLabel;
@@ -270,8 +271,8 @@
 #endif // defined(OSMAND_IOS_DEV)
 
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
-    self.currentSpeedLabel.text = [_app.locationFormatter stringFromSpeed:speed];
-    self.currentAltitudeLabel.text = [_app.locationFormatter stringFromDistance:_lastCapturedLocation.altitude];
+    self.currentSpeedLabel.text = [_app getFormattedSpeed:speed];
+    self.currentAltitudeLabel.text = [_app getFormattedAlt:_lastCapturedLocation.altitude];
 }
 
 - (void)updateCurrentPosition
@@ -370,11 +371,15 @@
     BOOL shouldShowButton = (_app.mapMode != OAMapModeFollow);
 
     if (!animated)
+    {
         self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
+        self.leftWidgetsContainer.alpha = shouldShowButton ? 0.0f : 1.0f;
+    }
     else
     {
         [UIView animateWithDuration:0.3 animations:^{
             self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
+            self.leftWidgetsContainer.alpha = shouldShowButton ? 0.0f : 1.0f;
         }];
     }
 }

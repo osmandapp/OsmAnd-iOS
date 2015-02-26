@@ -10,6 +10,7 @@
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
 #import "OAGPXDatabase.h"
+#import "OARootViewController.h"
 
 @implementation OAMapSettingsGpxScreen {
     NSArray *gpxList;
@@ -119,6 +120,9 @@
         [settings hideGpx:gpx.gpxFileName];
     } else {
         [settings showGpx:gpx.gpxFileName];
+        vwController.goToMap = YES;
+        vwController.goToBounds = gpx.bounds;
+        [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     }
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     

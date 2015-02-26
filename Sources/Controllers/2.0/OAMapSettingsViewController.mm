@@ -194,7 +194,7 @@
     CGRect f = self.mapView.frame;
     self.mapButton = [[UIButton alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y + 64.0, f.size.width, f.size.height)];
     [self.mapButton setTitle:@"" forState:UIControlStateNormal];
-    [self.mapButton addTarget:self action:@selector(goToMap) forControlEvents:UIControlEventTouchUpInside];
+    [self.mapButton addTarget:self action:@selector(doGoToMap) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.mapButton];
 }
 
@@ -220,6 +220,14 @@
     
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    
+    if (_goToMap) {
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:self.goToBounds azimuth:0.0 elevationAngle:90.0 animated:YES];
+    }
+}
 
 -(IBAction)backButtonClicked:(id)sender
 {
@@ -238,6 +246,7 @@
 
 -(void)commonInit {
     
+    _goToMap = NO;
     isAppearFirstTime = YES;
     self.app = [OsmAndApp instance];
     
@@ -248,7 +257,7 @@
     
 }
 
-- (void)goToMap
+- (void)doGoToMap
 {
     OARootViewController* rootViewController = [OARootViewController instance];
     [rootViewController closeMenuAndPanelsAnimated:YES];

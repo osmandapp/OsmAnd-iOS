@@ -10,6 +10,7 @@
 #import "OACommonTypes.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAGPXDocumentPrimitives.h"
 
 typedef enum
 {
@@ -35,6 +36,9 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonBike;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic, assign) BOOL goToMap;
+@property (nonatomic, assign) OAGpxBounds goToBounds;
 
 -(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
 -(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param;

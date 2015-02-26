@@ -476,7 +476,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item.size = resource->size;
         
         if (item.title != nil) {
-            _worldMapInstalled = (match == _app.worldRegion);
             if (match == self.region) {
                 _regionMap = item;
             } else {
@@ -509,7 +508,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         _totalInstalledSize += resource->size;
         
         if (item.title != nil) {
-            _worldMapInstalled = (match == _app.worldRegion);
+            if (!_worldMapInstalled)
+                _worldMapInstalled = (match == _app.worldRegion);
             if (match == self.region) {
                 if (!_regionMap)
                     _regionMap = item;
@@ -547,7 +547,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else
             _outdatedResourcesSection = -1;
 
-        if (_currentScope == kAllResourcesScope && [_localResourceItems count] > 0 && self.region == _app.worldRegion)
+        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || _worldMapInstalled) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
         else
             _localResourcesSection = -1;
@@ -833,11 +833,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return 1 + (_regionMap ? 1 : 0);
+        return ([_localResourceItems count] > 0 ? 1 : 0) + (_regionMap ? 1 : 0);
 
     NSInteger sectionsCount = 0;
 
-    if (_localResourcesSection > 0)
+    if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
         sectionsCount++;

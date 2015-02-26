@@ -36,6 +36,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 
+@property (weak, nonatomic) IBOutlet UIImageView *favoriteStarView;
 @property (weak, nonatomic) IBOutlet UIView *favoriteColorView;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteColorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *favoriteGroupView;

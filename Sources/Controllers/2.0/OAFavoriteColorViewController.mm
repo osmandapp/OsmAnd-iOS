@@ -104,9 +104,17 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAViewTextCell" owner:self options:nil];
         cell = (OAViewTextTableViewCell *)[nib objectAtIndex:0];
+        
+        UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
+        CGRect f = cell.viewView.frame;
+        CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
+        star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
+        [cell.contentView addSubview:star];
+
     }
     
     if (cell) {
+        
         NSString* colorName = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:0];
         UIColor* currColor = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:1];
         [cell.textView setText:colorName];

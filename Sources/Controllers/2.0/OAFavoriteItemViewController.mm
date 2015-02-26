@@ -143,6 +143,7 @@ typedef enum
             self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
             self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
+            self.favoriteStarView.frame = CGRectOffset(self.favoriteStarView.frame, 0.0, y);
             self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
@@ -176,6 +177,7 @@ typedef enum
             self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
             self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
+            self.favoriteStarView.frame = CGRectOffset(self.favoriteStarView.frame, 0.0, y);
             self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);

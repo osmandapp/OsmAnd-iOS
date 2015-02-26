@@ -501,6 +501,12 @@ kFavoriteCellType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+            
+            UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
+            CGRect f = cell.colorView.frame;
+            CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
+            star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
+            [cell.cellView addSubview:star];
         }
         
         if (cell) {
@@ -520,7 +526,7 @@ kFavoriteCellType;
                 cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
                 cell.colorView.layer.borderWidth = 0.8;
             }
-            
+
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -561,6 +567,12 @@ kFavoriteCellType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+
+            UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
+            CGRect f = cell.colorView.frame;
+            CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
+            star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
+            [cell.cellView addSubview:star];
         }
 
         if (cell) {

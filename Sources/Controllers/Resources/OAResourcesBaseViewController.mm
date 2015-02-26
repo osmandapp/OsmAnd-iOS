@@ -354,7 +354,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
                        otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
                                                              action:^{
-                                                                 [self startDownloadOf:resourceInRepository];
+                                                                 [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                              }], nil] show];
 }
 
@@ -362,15 +362,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
-
-    OAWorldRegion *r;
-    if (self.searchDisplayController.isActive)
-        r = item.worldRegion;
-    else
-        r = self.region;
     
     NSString* resourceName = [self.class titleOfResource:item.resource
-                                          inRegion:r
+                                          inRegion:item.worldRegion
                                     withRegionName:YES];
 
     if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
@@ -410,15 +404,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSLog(@"%@", item.resource->id.toNSString());
     
-    OAWorldRegion *r;
-    
-    if (item.worldRegion)
-        r = item.worldRegion;
-    else
-        r = self.region;
-    
     NSString* name = [self.class titleOfResource:item.resource
-                                        inRegion:r
+                                        inRegion:item.worldRegion
                                   withRegionName:YES];
     
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
@@ -434,16 +421,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
+- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 {
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
 
     NSLog(@"%@", resource->id.toNSString());
-
-    NSString* name = [self.class titleOfResource:resource
-                                  inRegion:self.region
-                            withRegionName:YES];
     
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
@@ -458,14 +441,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-+ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
-    
-    NSString* name = [self.class titleOfResource:resource
-                                        inRegion:nil
-                                  withRegionName:YES];
     
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
@@ -531,36 +510,41 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
 }
 
-- (void)offerDeleteResourceOf:(LocalResourceItem*)item
+- (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
     BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
-
+    
     NSString* message = nil;
     if (isInstalled)
     {
         message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
                                     [self.class titleOfResource:item.resource
-                                                 inRegion:self.region
-                                           withRegionName:YES]);
+                                                       inRegion:item.worldRegion
+                                                 withRegionName:YES]);
     }
     else
     {
         message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
                                     [self.class titleOfResource:item.resource
-                                                 inRegion:self.region
-                                           withRegionName:YES]);
+                                                       inRegion:item.worldRegion
+                                                 withRegionName:YES]);
     }
-
+    
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
                        otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"Uninstall") : OALocalizedString(@"Delete")
                                                              action:^{
-                                                                 [self deleteResourceOf:item];
+                                                                 [self deleteResourceOf:item executeAfterSuccess:block];
                                                              }], nil] show];
 }
 
-- (void)deleteResourceOf:(LocalResourceItem*)item
+- (void)offerDeleteResourceOf:(LocalResourceItem*)item
+{
+    [self offerDeleteResourceOf:item executeAfterSuccess:nil];
+}
+
+- (void)deleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
     [_deleteResourceProgressHUD showAnimated:YES
                          whileExecutingBlock:^{
@@ -570,8 +554,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                  OALog(@"Failed to uninstall resource %@ from %@",
                                        item.resourceId.toNSString(),
                                        item.resource->localPath.toNSString());
+                             } else if (block) {
+                                 block();
                              }
                          }];
+}
+
+- (void)deleteResourceOf:(LocalResourceItem*)item
+{
+    [self deleteResourceOf:item executeAfterSuccess:nil];
 }
 
 - (void)showDetailsOf:(LocalResourceItem*)item

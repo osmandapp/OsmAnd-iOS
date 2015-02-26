@@ -22,6 +22,8 @@
 @interface ResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
+@property uint64_t size;
+@property uint64_t sizePkg;
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion* worldRegion;
 @end
@@ -67,13 +69,16 @@
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item;
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item;
 - (void)startDownloadOfItem:(RepositoryResourceItem*)item;
-- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
-+ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource;
+- (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
+;
++ (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name;
 
 - (void)offerCancelDownloadOf:(ResourceItem*)item;
 - (void)cancelDownloadOf:(ResourceItem*)item;
 
+- (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block;
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item;
+- (void)deleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block;
 - (void)deleteResourceOf:(LocalResourceItem*)item;
 
 - (void)showDetailsOf:(LocalResourceItem*)item;

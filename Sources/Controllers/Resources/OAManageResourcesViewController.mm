@@ -90,6 +90,9 @@ struct RegionResources
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
     NSArray* _searchResults;
+    
+    uint64_t _totalInstalledSize;
+    BOOL _worldMapInstalled;
 
     MBProgressHUD* _refreshRepositoryProgressHUD;
     UIBarButtonItem* _refreshRepositoryBarButton;
@@ -394,6 +397,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                                           withRegionName:YES];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+                item.size = resource->size;
+                item.worldRegion = region;
                 
                 if (item.title == nil)
                     continue;
@@ -408,6 +413,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                                           withRegionName:YES];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+                item.size = resource->size;
+                item.worldRegion = region;
                 
                 if (item.title == nil)
                     continue;
@@ -423,6 +430,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                                       withRegionName:YES];
             item.resource = resource;
             item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+            item.size = resource->size;
+            item.sizePkg = resource->packageSize;
+            item.worldRegion = region;
             
             if (item.title == nil)
                 continue;
@@ -443,6 +453,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [_allResourceItems addObjectsFromArray:_allSubregionItems];
     [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
     
+    _worldMapInstalled = NO;
+    
     // Outdated Resources
     [_localResourceItems removeAllObjects];
     [_outdatedResourceItems removeAllObjects];
@@ -461,8 +473,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
+        item.size = resource->size;
         
         if (item.title != nil) {
+            _worldMapInstalled = (match == _app.worldRegion);
             if (match == self.region) {
                 _regionMap = item;
             } else {
@@ -474,6 +488,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
     
     // Local Resources
+    _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
     {
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
@@ -488,8 +503,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                                   withRegionName:YES];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        item.size = resource->size;
+        item.worldRegion = match;
+        
+        _totalInstalledSize += resource->size;
         
         if (item.title != nil) {
+            _worldMapInstalled = (match == _app.worldRegion);
             if (match == self.region) {
                 if (!_regionMap)
                     _regionMap = item;
@@ -947,7 +967,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             cellTypeId = installedResourcesSubmenuCell;
             title = OALocalizedString(@"Installed");
             
-            subtitle = [NSString stringWithFormat:@"%d map(s)", _localResources.count()];
+            subtitle = [NSString stringWithFormat:@"%d map(s) - %@", _localResourceItems.count + (_worldMapInstalled ? 1 : 0), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -965,6 +985,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             } else {
                 
                 ResourceItem* item = (ResourceItem*)item_;
+                uint64_t _size = item.size;
                 
                 if (item.downloadTask != nil)
                     cellTypeId = downloadingResourceCell;
@@ -972,15 +993,20 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     cellTypeId = outdatedResourceCell;
                 else if ([item isKindOfClass:[LocalResourceItem class]])
                     cellTypeId = localResourceCell;
-                else if ([item isKindOfClass:[RepositoryResourceItem class]])
+                else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
                     cellTypeId = repositoryResourceCell;
+                    _size = item.sizePkg;
+                }
                 
                 title = item.title;
+                if (_size > 0)
+                    subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             }
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
         {
             ResourceItem* item = _regionMap;
+            uint64_t _size = item.size;
             
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
@@ -988,10 +1014,14 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = outdatedResourceCell;
             else if ([item isKindOfClass:[LocalResourceItem class]])
                 cellTypeId = localResourceCell;
-            else if ([item isKindOfClass:[RepositoryResourceItem class]])
+            else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
                 cellTypeId = repositoryResourceCell;
+                _size = item.sizePkg;
+            }
             
             title = item.title;
+            if (_size > 0)
+                subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
         }
     }
 
@@ -1003,6 +1033,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
@@ -1010,6 +1043,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
@@ -1017,6 +1053,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
@@ -1321,6 +1361,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];
 
+        resourceInfoViewController.baseController = self;
+        
         LocalResourceItem* item = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView)
             item = [_searchResults objectAtIndex:cellPath.row];
@@ -1345,6 +1387,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             NSString* resourceId = item.resourceId.toNSString();
             [resourceInfoViewController initWithLocalResourceId:resourceId];
         }
+        resourceInfoViewController.localItem = item;
 
     }
 }

@@ -186,7 +186,9 @@
                                                                  {
                                                                      const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                                                                      
-                                                                     [self startDownloadOf:resourceInRepository];
+                                                                     NSString* resourceName = [OAResourcesBaseViewController titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES];
+
+                                                                     [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                                  }
                                                              }], nil] show];
 }

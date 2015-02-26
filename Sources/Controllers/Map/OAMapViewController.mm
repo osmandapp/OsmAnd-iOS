@@ -1592,7 +1592,11 @@
         if (buttonIndex == 1) {
             // Download map
             const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
-            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap];
+            NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                inRegion:[OsmAndApp instance].worldRegion
+                                          withRegionName:YES];
+            ;
+            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
             
         } else if (buttonIndex == alertView.cancelButtonIndex) {
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];

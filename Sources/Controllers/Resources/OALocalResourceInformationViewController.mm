@@ -20,6 +20,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     NSArray *tableValues;
     
     NSDateFormatter *formatter;
+    
+    NSString *_resourceId;
 }
 
 @end
@@ -44,6 +46,18 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(IBAction)deleteButtonClicked:(id)sender;
+{
+    if (!_localItem)
+        return;
+    
+    [self.baseController offerDeleteResourceOf:self.localItem executeAfterSuccess:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.navigationController popViewControllerAnimated:YES];
+        });
+    }];
+}
+
 - (void)initWithLocalResourceId:(NSString*)resourceId
 {
     [self inflateRootWithLocalResourceId:resourceId forRegion:nil];
@@ -59,6 +73,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (void)inflateRootWithLocalResourceId:(NSString*)resourceId
                                       forRegion:(OAWorldRegion*)region
 {
+    _resourceId = resourceId;
     
     NSMutableArray *tKeys = [NSMutableArray array];
     NSMutableArray *tValues = [NSMutableArray array];

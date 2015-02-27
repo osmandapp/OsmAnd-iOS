@@ -39,6 +39,7 @@
 
     OAAppMode _appMode;
     OAMapMode _mapMode;
+    OAMapMode _prevMapMode;
 
     OAResourcesInstaller* _resourcesInstaller;
 
@@ -244,6 +245,7 @@
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
 
     _mapMode = OAMapModeFree;
+    _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
 
     _locationServices = [[OALocationServices alloc] initWith:self];
@@ -317,6 +319,7 @@
 {
     if (_mapMode == mapMode)
         return;
+    _prevMapMode = _mapMode;
     _mapMode = mapMode;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapMode forKey:kUDLastMapModePositionTrack];
     [[NSUserDefaults standardUserDefaults] synchronize];

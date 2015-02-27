@@ -26,6 +26,7 @@
 
 @property(nonatomic) OAAppMode appMode;
 @property(nonatomic) OAMapMode mapMode;
+@property(nonatomic) OAMapMode prevMapMode;
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;

@@ -64,7 +64,7 @@
 #define kTargetMoveDeceleration 4800.0f
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
-#define kMapModePositionTrackingDefaultZoom 15.0f
+#define kMapModePositionTrackingDefaultZoom 16.0f
 #define kMapModePositionTrackingDefaultElevationAngle 90.0f
 #define kMapModeFollowDefaultZoom 18.0f
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
@@ -134,9 +134,10 @@
 
     OAAutoObserverProxy* _mapModeObserver;
     OAMapMode _lastMapMode;
+    OAMapMode _lastMapModeBeforeDrive;
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
-
+    
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
     
@@ -164,8 +165,12 @@
 
     bool _lastPositionTrackStateCaptured;
     float _lastAzimuthInPositionTrack;
+    float _lastZoom;
+    float _lastElevationAngle;
     
     BOOL _firstAppear;
+    BOOL _rotatingToNorth;
+    BOOL _isIn3dMode;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -1071,19 +1076,23 @@
         return;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
+    
     // When user gesture has began, stop all animations
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
-    if (_lastMapMode == OAMapModeFollow)
-        _app.mapMode = OAMapModePositionTrack;
 
+    if (_lastMapMode == OAMapModeFollow) {
+        _rotatingToNorth = YES;
+        _app.mapMode = OAMapModePositionTrack;
+    }
+    
     // Animate azimuth change to north
     mapView.animator->animateAzimuthTo(0.0f,
                                        kQuickAnimationTime,
                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                        kUserInteractionAnimationKey);
     mapView.animator->resume();
+    
 }
 
 @synthesize zoomObservable = _zoomObservable;
@@ -1250,15 +1259,18 @@
     switch (_app.appMode)
     {
         case OAAppModeBrowseMap:
-            // When switching from any app mode to browse-map mode,
-            // just keep previous map-mode
-
+            
+            if (_lastAppMode == OAAppModeDrive) {
+                _app.mapMode = _lastMapModeBeforeDrive;
+            }
+            
             break;
 
         case OAAppModeDrive:
         case OAAppModeNavigation:
             // When switching to Drive and Navigation app-modes,
             // automatically change map-mode to Follow
+            _lastMapModeBeforeDrive = _app.mapMode;
             _app.mapMode = OAMapModeFollow;
             break;
 
@@ -1283,8 +1295,11 @@
             
         case OAMapModePositionTrack:
         {
+            if (_lastMapMode == OAMapModeFollow && !_rotatingToNorth)
+                _isIn3dMode = NO;
+            
             CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-            if (newLocation != nil)
+            if (newLocation != nil && !_rotatingToNorth)
             {
                 // Fly to last-known position without changing anything but target
                 
@@ -1307,11 +1322,11 @@
                                                        kOneSecondAnimatonTime,
                                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                        kLocationServicesAnimationKey);
-                    mapView.animator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
+                    mapView.animator->animateElevationAngleTo(_lastElevationAngle,
                                                               kOneSecondAnimatonTime,
                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                               kLocationServicesAnimationKey);
-                    mapView.animator->animateZoomTo(kMapModePositionTrackingDefaultZoom,
+                    mapView.animator->animateZoomTo(_lastZoom,
                                                     kOneSecondAnimatonTime,
                                                     OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
                                                     kLocationServicesAnimationKey);
@@ -1328,16 +1343,20 @@
 
                 mapView.animator->resume();
             }
+            _rotatingToNorth = NO;
             break;
         }
             
         case OAMapModeFollow:
         {
             // In case previous mode was PositionTrack, remember azimuth, elevation angle and zoom
-            if (_lastMapMode == OAMapModePositionTrack)
+            if (_lastMapMode == OAMapModePositionTrack && !_isIn3dMode)
             {
                 _lastAzimuthInPositionTrack = mapView.azimuth;
+                _lastZoom = mapView.zoom;
+                _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
                 _lastPositionTrackStateCaptured = true;
+                _isIn3dMode = YES;
             }
 
             mapView.animator->pause();
@@ -1461,19 +1480,20 @@
     {
         mapView.animator->pause();
 
-        const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
-                                                                            OsmAnd::MapAnimator::AnimatedValue::Azimuth);
         const auto targetAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
                                                                            OsmAnd::MapAnimator::AnimatedValue::Target);
 
-        mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
-                                                 OsmAnd::MapAnimator::AnimatedValue::Azimuth);
         mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
                                                  OsmAnd::MapAnimator::AnimatedValue::Target);
 
         // For "follow-me" mode azimuth is also controlled
         if (_app.mapMode == OAMapModeFollow)
         {
+            const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                                OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+            mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                                                     OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+
             // Update azimuth if there's one
             const auto direction = (_lastAppMode == OAAppModeBrowseMap)
                 ? newHeading

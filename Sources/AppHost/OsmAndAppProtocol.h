@@ -48,6 +48,7 @@
 @property(readonly) OAObservable* appModeObservable;
 
 @property(nonatomic) OAMapMode mapMode;
+@property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
 - (void)saveDataToPermamentStorage;

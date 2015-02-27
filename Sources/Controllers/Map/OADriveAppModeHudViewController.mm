@@ -104,40 +104,13 @@
 
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
 
-    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapModeChanged)
-                                                  andObserve:_app.mapModeObservable];
-    _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                    withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
-                                                     andObserve:_mapViewController.azimuthObservable];
-    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
-                                                  andObserve:_mapViewController.zoomObservable];
-    _mapFramePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onMapFramePrepared)
-                                                           andObserve:_mapViewController.framePreparedObservable];
-
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:_app.locationServices.updateObserver];
-
     _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
     _roadLocatorSync = [[NSObject alloc] init];
 
-    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
-                                                                 [self]
-                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
-                                                                  const QList< QString >& added,
-                                                                  const QList< QString >& removed,
-                                                                  const QList< QString >& updated)
-                                                                 {
-                                                                     [self onLocalResourcesChanged];
-                                                                 });
 }
 
 - (void)deinit
 {
-    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
 }
 
 - (void)viewDidLoad
@@ -172,6 +145,35 @@
 {
     [super viewWillAppear:animated];
 
+    _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapModeChanged)
+                                                  andObserve:_app.mapModeObservable];
+    _mapAzimuthObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                    withHandler:@selector(onMapAzimuthChanged:withKey:andValue:)
+                                                     andObserve:_mapViewController.azimuthObservable];
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:_mapViewController.zoomObservable];
+    _mapFramePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onMapFramePrepared)
+                                                           andObserve:_mapViewController.framePreparedObservable];
+    
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:_app.locationServices.updateObserver];
+    
+    _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
+                                                                 [self]
+                                                                 (const OsmAnd::ResourcesManager* const resourcesManager,
+                                                                  const QList< QString >& added,
+                                                                  const QList< QString >& removed,
+                                                                  const QList< QString >& updated)
+                                                                 {
+                                                                     [self onLocalResourcesChanged];
+                                                                 });
+    
+    
+    
     _lastCapturedLocation = _app.locationServices.lastKnownLocation;
 
     // Initially, show coordinates while road is not yet determined
@@ -201,6 +203,28 @@
 
     if (!_iOS70plus)
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+    
+    [_mapModeObserver detach];
+    _mapModeObserver = nil;
+    
+    [_mapAzimuthObserver detach];
+    _mapAzimuthObserver = nil;
+    
+    [_mapZoomObserver detach];
+    _mapZoomObserver = nil;
+    
+    [_mapFramePreparedObserver detach];
+    _mapFramePreparedObserver = nil;
+    
+    [_locationServicesUpdateObserver detach];
+    _locationServicesUpdateObserver = nil;
+    
+    [super viewDidDisappear:animated];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

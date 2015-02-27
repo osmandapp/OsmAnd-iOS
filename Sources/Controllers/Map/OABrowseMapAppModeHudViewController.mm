@@ -64,6 +64,8 @@
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
+    
+    BOOL _driveModeActive;
 
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -195,18 +197,18 @@ NSLayoutConstraint* targetBottomConstraint;
     
     [super viewWillAppear:animated];
     
-    // IOS-222
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack]) {
+    //IOS-222
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive) {
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
+    _driveModeActive = NO;
 }
 
 -(void)viewDidAppear:(BOOL)animated {
     
     [super viewDidAppear:animated];
     
-    // [self.rulerLabel setHidden: ![[OAAppSettings sharedManager] settingShowMapRulet]];
     [self.zoomButtonsView setHidden: ![[OAAppSettings sharedManager] settingShowZoomButton]];
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
@@ -214,7 +216,6 @@ NSLayoutConstraint* targetBottomConstraint;
         if (self.rulerLabel.hidden)
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
-
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -223,7 +224,10 @@ NSLayoutConstraint* targetBottomConstraint;
     switch (_app.mapMode)
     {
         case OAMapModeFree:
-            newMode = OAMapModePositionTrack;
+            if (_app.prevMapMode == OAMapModeFollow)
+                newMode = OAMapModeFollow;
+            else
+                newMode = OAMapModePositionTrack;
             break;
             
         case OAMapModePositionTrack:
@@ -406,6 +410,7 @@ NSLayoutConstraint* targetBottomConstraint;
 
 - (IBAction)onDriveModeButtonClicked:(id)sender
 {
+    _driveModeActive = YES;
     _app.appMode = OAAppModeDrive;
 }
 

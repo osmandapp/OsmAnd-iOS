@@ -27,6 +27,10 @@
 #define deinit _(deinit)
 
 @interface OAMapPanelViewController ()
+
+@property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
+@property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
+
 @end
 
 @implementation OAMapPanelViewController
@@ -122,13 +126,17 @@
     UIViewController* newHudController = nil;
     if (_app.appMode == OAAppModeBrowseMap)
     {
-        newHudController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
+        if (!self.browseMapViewController)
+            self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
+        newHudController = self.browseMapViewController;
     }
     else if (_app.appMode == OAAppModeDrive)
     {
-        newHudController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
+        if (!self.driveModeViewController)
+            self.driveModeViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
                                                                                bundle:nil];
+        newHudController = self.driveModeViewController;
     }
     [self addChildViewController:newHudController];
 

@@ -280,6 +280,8 @@
     _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                       action:@selector(moveGestureDetected:)];
     _grMove.delegate = self;
+    _grMove.minimumNumberOfTouches = 1;
+    _grMove.maximumNumberOfTouches = 1;
     
     // - Rotation gesture
     _grRotate = [[UIRotationGestureRecognizer alloc] initWithTarget:self
@@ -543,7 +545,14 @@
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     // Elevation gesture recognizer should not be mixed with others
-    if (gestureRecognizer == _grElevation || otherGestureRecognizer == _grElevation)
+    if (gestureRecognizer == _grElevation &&
+        (otherGestureRecognizer == _grMove || otherGestureRecognizer == _grRotate || otherGestureRecognizer == _grZoom))
+        return NO;
+    if (gestureRecognizer == _grMove && otherGestureRecognizer == _grElevation)
+        return NO;
+    if (gestureRecognizer == _grRotate && otherGestureRecognizer == _grElevation)
+        return NO;
+    if (gestureRecognizer == _grZoom && otherGestureRecognizer == _grElevation)
         return NO;
     
     return YES;
@@ -713,7 +722,7 @@
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        [mapView resumeSymbolsUpdate];
+        [mapView suspendSymbolsUpdate];
 
         _accumulatedRotationAngle = 0.0f;
     }
@@ -885,7 +894,7 @@
         mapView.animator->cancelAllAnimations();
 
         // Suspend symbols update
-        [mapView resumeSymbolsUpdate];
+        [mapView suspendSymbolsUpdate];
     }
     
     CGPoint translation = [recognizer translationInView:self.view];

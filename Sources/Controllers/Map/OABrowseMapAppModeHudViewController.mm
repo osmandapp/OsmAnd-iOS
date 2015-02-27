@@ -256,15 +256,15 @@ NSLayoutConstraint* targetBottomConstraint;
     UIImage* modeImage = nil;
     switch (_app.mapMode)
     {
-        case OAMapModeFree:
+        case OAMapModeFree: // Free mode
             modeImage = [UIImage imageNamed:@"free_map_mode_button.png"];
             break;
             
-        case OAMapModePositionTrack:
+        case OAMapModePositionTrack: // Trace point
             modeImage = [UIImage imageNamed:@"position_track_map_mode_button.png"];
             break;
             
-        case OAMapModeFollow:
+        case OAMapModeFollow: // Compass - 3D mode
             modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
             break;
 

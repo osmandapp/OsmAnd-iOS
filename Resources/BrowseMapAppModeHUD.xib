@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
@@ -26,12 +26,9 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iT3-1A-Wkq" userLabel="actionsMenuButton">
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="iT3-1A-Wkq" userLabel="actionsMenuButton">
                     <rect key="frame" x="305" y="21" width="15" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="15" id="GKN-xq-047"/>
-                        <constraint firstAttribute="height" constant="40" id="MjG-AR-sMP"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="HUD_more_halfbutton.png" backgroundImage="HUD_right_narrowbutton_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -39,11 +36,13 @@
                         <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="8sR-Ef-2iJ"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zKf-ZI-4L4" userLabel="compassBox">
+                <view contentMode="scaleToFill" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="8" y="21" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="duk-mu-8Hu" userLabel="compassButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="duk-mu-8Hu" userLabel="compassButton">
                             <rect key="frame" x="5" y="5" width="30" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" backgroundImage="HUD_compass_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -51,34 +50,18 @@
                                 <action selector="onCompassButtonClicked:" destination="-1" eventType="touchUpInside" id="tcA-jH-xge"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" translatesAutoresizingMaskIntoConstraints="NO" id="qfF-4i-ios" userLabel="compassImage">
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="HUD_compass.png" id="qfF-4i-ios" userLabel="compassImage">
                             <rect key="frame" x="17" y="11" width="6" height="18"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <accessibility key="accessibilityConfiguration">
                                 <accessibilityTraits key="traits" none="YES" image="YES" notEnabled="YES"/>
                             </accessibility>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="18" id="9pA-ey-0aR"/>
-                                <constraint firstAttribute="width" constant="6" id="koj-YJ-iSF"/>
-                            </constraints>
                         </imageView>
                     </subviews>
-                    <constraints>
-                        <constraint firstAttribute="bottom" secondItem="duk-mu-8Hu" secondAttribute="bottom" constant="5" id="AsG-GZ-wLJ"/>
-                        <constraint firstItem="qfF-4i-ios" firstAttribute="centerX" secondItem="duk-mu-8Hu" secondAttribute="centerX" id="CTE-sI-cl0"/>
-                        <constraint firstItem="duk-mu-8Hu" firstAttribute="top" secondItem="zKf-ZI-4L4" secondAttribute="top" constant="5" id="E8T-YM-82B"/>
-                        <constraint firstItem="qfF-4i-ios" firstAttribute="centerY" secondItem="duk-mu-8Hu" secondAttribute="centerY" id="Epi-2B-FSV"/>
-                        <constraint firstItem="duk-mu-8Hu" firstAttribute="leading" secondItem="zKf-ZI-4L4" secondAttribute="leading" constant="5" id="IZL-u4-aea"/>
-                        <constraint firstAttribute="width" constant="40" id="Liw-Ns-n88"/>
-                        <constraint firstAttribute="height" constant="40" id="YdJ-lK-Dr9"/>
-                        <constraint firstAttribute="trailing" secondItem="duk-mu-8Hu" secondAttribute="trailing" constant="5" id="hdu-9C-Qkm"/>
-                    </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QPn-ok-Vxm" userLabel="driveModeButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QPn-ok-Vxm" userLabel="driveModeButton">
                     <rect key="frame" x="224" y="515" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="irx-VT-YMC"/>
-                        <constraint firstAttribute="width" constant="40" id="zxa-0E-dKh"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="icon_drive_mode.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -86,11 +69,13 @@
                         <action selector="onDriveModeButtonClicked:" destination="-1" eventType="touchUpInside" id="eBM-Fz-ZQm"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="o72-6U-6Av" userLabel="zoomButtons">
+                <view contentMode="scaleToFill" id="o72-6U-6Av" userLabel="zoomButtons">
                     <rect key="frame" x="264" y="232" width="56" height="104"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GgY-iA-GiG" userLabel="zoomInButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GgY-iA-GiG" userLabel="zoomInButton">
                             <rect key="frame" x="0.0" y="8" width="56" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="HUD_zoom_in_button.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -98,8 +83,9 @@
                                 <action selector="onZoomInButtonClicked:" destination="-1" eventType="touchUpInside" id="OLM-9v-gVr"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l4t-EI-ihD" userLabel="zoomOutButton">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="l4t-EI-ihD" userLabel="zoomOutButton">
                             <rect key="frame" x="0.0" y="56" width="56" height="40"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="HUD_zoom_out_button.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -108,17 +94,10 @@
                             </connections>
                         </button>
                     </subviews>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="104" id="LYW-Uh-ga4"/>
-                        <constraint firstAttribute="width" constant="56" id="oAz-VF-7so"/>
-                    </constraints>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zUK-AA-Umg" userLabel="debugButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zUK-AA-Umg" userLabel="debugButton">
                     <rect key="frame" x="8" y="264" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="40" id="Tae-8X-egk"/>
-                        <constraint firstAttribute="width" constant="40" id="a1N-43-Bug"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="HUD_debug_button.png" backgroundImage="HUD_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -126,12 +105,9 @@
                         <action selector="onDebugButtonClicked:" destination="-1" eventType="touchUpInside" id="udt-Zy-sVw"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4" userLabel="optionsMenuButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4" userLabel="optionsMenuButton">
                     <rect key="frame" x="0.0" y="509" width="45" height="51"/>
-                    <constraints>
-                        <constraint firstAttribute="height" constant="51" id="ajh-TQ-M1u"/>
-                        <constraint firstAttribute="width" constant="45" id="lyx-Jm-gXz"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="menu_button.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -140,12 +116,9 @@
                         <action selector="onOptionsMenuButtonDown:" destination="-1" eventType="touchDragInside" id="BcB-jK-AfK"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton">
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tol-6L-Amr" userLabel="mapModeButton">
                     <rect key="frame" x="272" y="515" width="40" height="40"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="40" id="56V-yt-BAw"/>
-                        <constraint firstAttribute="height" constant="40" id="KS0-6c-FjX"/>
-                    </constraints>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="free_map_mode_button.png" backgroundImage="menu_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
@@ -154,22 +127,6 @@
                     </connections>
                 </button>
             </subviews>
-            <constraints>
-                <constraint firstAttribute="trailing" secondItem="o72-6U-6Av" secondAttribute="trailing" id="ALA-ql-9FZ"/>
-                <constraint firstAttribute="bottom" secondItem="QPn-ok-Vxm" secondAttribute="bottom" constant="13" id="IEa-Ve-oYp"/>
-                <constraint firstAttribute="centerY" secondItem="zUK-AA-Umg" secondAttribute="centerY" id="JEA-lb-iR9"/>
-                <constraint firstItem="zUK-AA-Umg" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="N3U-Pi-9c9"/>
-                <constraint firstItem="iT3-1A-Wkq" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="Rnd-jE-bfc"/>
-                <constraint firstAttribute="centerY" secondItem="o72-6U-6Av" secondAttribute="centerY" id="WY4-Qk-vnm"/>
-                <constraint firstItem="4" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="Wql-rL-VXF"/>
-                <constraint firstAttribute="trailing" secondItem="Tol-6L-Amr" secondAttribute="trailing" constant="8" id="be4-qD-Mmh"/>
-                <constraint firstItem="zKf-ZI-4L4" firstAttribute="top" secondItem="1" secondAttribute="top" constant="21" id="biP-He-Q3z"/>
-                <constraint firstAttribute="trailing" secondItem="iT3-1A-Wkq" secondAttribute="trailing" id="d3L-AV-1n6"/>
-                <constraint firstItem="Tol-6L-Amr" firstAttribute="leading" secondItem="QPn-ok-Vxm" secondAttribute="trailing" constant="8" id="fYf-S2-WDq"/>
-                <constraint firstAttribute="bottom" secondItem="Tol-6L-Amr" secondAttribute="bottom" constant="13" id="hCo-YU-PuE"/>
-                <constraint firstItem="zKf-ZI-4L4" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="hka-rL-j1F"/>
-                <constraint firstAttribute="bottom" secondItem="4" secondAttribute="bottom" constant="8" id="iDp-Mi-eNa"/>
-            </constraints>
         </view>
     </objects>
     <resources>

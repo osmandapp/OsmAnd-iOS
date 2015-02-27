@@ -271,7 +271,7 @@
 #endif // defined(OSMAND_IOS_DEV)
 
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
-    self.currentSpeedLabel.text = [_app getFormattedSpeed:speed];
+    self.currentSpeedLabel.text = [_app getFormattedSpeed:speed drive:YES];
     self.currentAltitudeLabel.text = [_app getFormattedAlt:_lastCapturedLocation.altitude];
 }
 
@@ -478,7 +478,10 @@
 
 - (IBAction)onActionsMenuButtonClicked:(id)sender
 {
-    [self.sidePanelController showRightPanelAnimated:YES];
+    _app.appMode = OAAppModeBrowseMap;
+    [[OARootViewController instance] closeMenuAndPanelsAnimated:YES];
+
+    //[self.sidePanelController showRightPanelAnimated:YES];
 }
 
 - (IBAction)onResumeFollowingButtonClicked:(id)sender

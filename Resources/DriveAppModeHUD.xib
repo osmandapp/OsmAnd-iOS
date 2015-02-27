@@ -52,20 +52,10 @@
                     </subviews>
                     <color key="backgroundColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="D2C-DA-iEq" userLabel="actionsMenuButton">
-                    <rect key="frame" x="305" y="520" width="15" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <state key="normal" image="HUD_more_halfbutton.png" backgroundImage="HUD_right_narrowbutton_bg.png">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="JFU-b0-IBe"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="j9F-8j-9bu" userLabel="optionsMenuButton">
-                    <rect key="frame" x="0.0" y="520" width="15" height="40"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="j9F-8j-9bu" userLabel="optionsMenuButton">
+                    <rect key="frame" x="0.0" y="509" width="45" height="51"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <state key="normal" image="HUD_menu_narrowbutton.png" backgroundImage="HUD_left_narrowbutton_bg.png">
+                    <state key="normal" image="menu_button.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
@@ -132,7 +122,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="tailTruncation" id="TDo-FW-7Xk" userLabel="resumeFollowingButton" customClass="OAHUDRegularButton">
-                    <rect key="frame" x="39" y="520" width="242" height="40"/>
+                    <rect key="frame" x="49" y="515" width="216" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="17"/>
                     <inset key="titleEdgeInsets" minX="8" minY="0.0" maxX="0.0" maxY="0.0"/>
@@ -143,11 +133,11 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" id="n7M-8R-EZ9" userLabel="leftWidgetsContainer">
-                    <rect key="frame" x="39" y="520" width="242" height="40"/>
+                    <rect key="frame" x="49" y="515" width="216" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qkc-ad-eNc" userLabel="leftWidgetsContainerBackground">
-                            <rect key="frame" x="0.0" y="0.0" width="242" height="40"/>
+                            <rect key="frame" x="0.0" y="0.0" width="216" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_speed.png" id="9q1-O8-vW0">
@@ -155,21 +145,21 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 km/h" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="7zY-7m-aJk" userLabel="currentSpeedLabel">
-                            <rect key="frame" x="48" y="6" width="70" height="30"/>
+                            <rect key="frame" x="45" y="6" width="70" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00000 m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="p2X-uL-p4S" userLabel="currentAltitudeLabel">
-                            <rect key="frame" x="164" y="6" width="70" height="30"/>
+                            <rect key="frame" x="138" y="6" width="70" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_distance.png" id="SRZ-2j-M47">
-                            <rect key="frame" x="128" y="6" width="28" height="28"/>
+                            <rect key="frame" x="112" y="6" width="28" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
@@ -177,6 +167,16 @@
                         <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                     </accessibility>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="D2C-DA-iEq" userLabel="actionsMenuButton">
+                    <rect key="frame" x="272" y="515" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    <state key="normal" image="ic_close.png" backgroundImage="HUD_button_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="JFU-b0-IBe"/>
+                    </connections>
+                </button>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <point key="canvasLocation" x="388" y="273"/>
@@ -187,15 +187,13 @@
         <image name="HUD_compass.png" width="6" height="18"/>
         <image name="HUD_compass_bg.png" width="30" height="30"/>
         <image name="HUD_debug_button.png" width="25" height="25"/>
-        <image name="HUD_left_narrowbutton_bg.png" width="15" height="40"/>
-        <image name="HUD_menu_narrowbutton.png" width="9" height="25"/>
-        <image name="HUD_more_halfbutton.png" width="13" height="25"/>
-        <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
         <image name="follow_map_mode_button.png" width="25" height="25"/>
+        <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_distance.png" width="25" height="25"/>
         <image name="ic_speed.png" width="25" height="25"/>
+        <image name="menu_button.png" width="45" height="51"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

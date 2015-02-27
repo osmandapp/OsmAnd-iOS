@@ -262,12 +262,17 @@
                                              selector:@selector(applicationWillEnterForeground:)
                                                  name:UIApplicationWillEnterForegroundNotification
                                                object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(applicationDidBecomeActive:)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
     
     // Subscribe to settings change notifications
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(onLanguageSettingsChange)
                                                  name:kNotificationSettingsLanguageChange
                                                object:nil];
+    
 
     // Create gesture recognizers:
     
@@ -315,6 +320,16 @@
     _grPointContextMenu.delegate = self;
 
     _lastPositionTrackStateCaptured = false;
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack]) {
+        OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
+        if (mapMode == OAMapModeFollow) {
+            _lastAzimuthInPositionTrack = 0.0f;
+            _lastZoom = kMapModePositionTrackingDefaultZoom;
+            _lastElevationAngle = kMapModePositionTrackingDefaultElevationAngle;
+            _lastPositionTrackStateCaptured = true;
+        }
+    }
+
 
     // Create location and course markers
     _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
@@ -497,6 +512,9 @@
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
 {
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+
     if (![self isViewLoaded])
         return;
 
@@ -513,6 +531,18 @@
     // Resume rendering
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     [mapView resumeRendering];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication*)application
+{
+    NSDate *lastMapUsedDate = [[NSUserDefaults standardUserDefaults] objectForKey:kLastMapUsedTime];
+    if (lastMapUsedDate)
+        if ([[NSDate date] timeIntervalSinceDate:lastMapUsedDate] > kInactiveHoursResetLocation * 60.0 * 60.0) {
+            if (_app.mapMode == OAMapModeFree)
+                _app.mapMode = OAMapModePositionTrack;
+        }
+    
+    [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer

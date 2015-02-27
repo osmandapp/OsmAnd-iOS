@@ -26,7 +26,8 @@
 #define kUDLastMapModePositionTrack @"kUDLastMapModePositionTrack"
 #define kNotificationSettingsLanguageChange @"kNotificationSettingsLanguageChange"
 
-
+#define kInactiveHoursResetLocation 2
+#define kLastMapUsedTime @"kLastMapUsedTime"
 
 
 #endif

@@ -50,6 +50,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
+- (QList< std::shared_ptr<const OsmAnd::MapSymbol> >)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;

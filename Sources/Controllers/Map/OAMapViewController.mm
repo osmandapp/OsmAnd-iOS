@@ -972,6 +972,19 @@
     _contextPinMarker->setIsHidden(false);
     
     
+    QList< std::shared_ptr<const OsmAnd::MapSymbol> > symbols = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
+    for (const auto symbol : symbols) {
+        
+        OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbol->groupPtr);
+        const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+        
+        //GeoInfoPresenter::WaypointMapObject;
+        
+        
+        NSLog(@"object = %@", mapObject->toString().toNSString());
+        
+    }
+    
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object: self

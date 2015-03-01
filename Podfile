@@ -35,7 +35,7 @@ end
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings
 #  - 'libPods.a' needs $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
-#  - Force architectures to '$(ARCHS_STANDARD_32_BIT)'
+#  - Force architectures to '$(ARCHS_STANDARD)'
 #  - Build all architectures for Pods
 post_install do |installer_representation|
     workDir = Dir.pwd
@@ -60,7 +60,7 @@ post_install do |installer_representation|
 
     installer_representation.project.targets.each do |target|
         target.build_configurations.each do |configuration|
-            configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD_32_BIT)'
+            configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
         end
     end

@@ -239,7 +239,7 @@ typedef enum
                                                       newLocation.coordinate.latitude,
                                                       self.wptItem.point.position.longitude, self.wptItem.point.position.latitude);
     
-    self.wptItem.distance = [app.locationFormatter stringFromDistance:distance];
+    self.wptItem.distance = [app getFormattedDistance:distance];
     self.wptItem.distanceMeters = distance;
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:self.wptItem.point.position.latitude longitude:self.wptItem.point.position.longitude]];
     self.wptItem.direction = -(itemDirection + newDirection / 180.0f * M_PI);

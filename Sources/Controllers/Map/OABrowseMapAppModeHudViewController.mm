@@ -20,6 +20,9 @@
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
+#import "OADestinationViewController.h"
+#import "OADestination.h"
+#import "OADestinationCell.h"
 
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -64,6 +67,8 @@
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
+    
+    OADestinationViewController *_destinationViewController;
     
     BOOL _driveModeActive;
 
@@ -216,6 +221,12 @@ NSLayoutConstraint* targetBottomConstraint;
         if (self.rulerLabel.hidden)
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
+}
+
+- (void)viewWillLayoutSubviews
+{
+    if (_destinationViewController)
+        [_destinationViewController updateFrame];
 }
 
 - (IBAction)onMapModeButtonClicked:(id)sender
@@ -406,6 +417,15 @@ NSLayoutConstraint* targetBottomConstraint;
         [self.shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.shadowButton];
     }];
+    
+    
+    if (!_destinationViewController) {
+        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
+        _destinationViewController.top = 20.0;
+        [self.view addSubview:_destinationViewController.view];
+    }
+    OADestination *destination = [[OADestination alloc] initWithDesc:addressString latitude:lat longitude:lon];
+    [_destinationViewController addDestination:destination];
 }
 
 - (IBAction)onDriveModeButtonClicked:(id)sender

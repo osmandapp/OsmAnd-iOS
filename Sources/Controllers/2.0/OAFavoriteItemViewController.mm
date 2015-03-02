@@ -509,7 +509,7 @@ typedef enum
                                                         newLocation.coordinate.latitude,
                                                         favoriteLon, favoriteLat);
         
-    self.favorite.distance = [app.locationFormatter stringFromDistance:distance];
+    self.favorite.distance = [app getFormattedDistance:distance];
     self.favorite.distanceMeters = distance;
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
     self.favorite.direction = -(itemDirection + newDirection / 180.0f * M_PI);

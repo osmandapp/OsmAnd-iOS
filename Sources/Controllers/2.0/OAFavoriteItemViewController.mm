@@ -82,12 +82,12 @@ typedef enum
         QString title = QString::fromNSString(formattedLocation);
         
         UIColor* color_ = (UIColor*)[UIColor blackColor];
-        OsmAnd::FColorARGB color;
-        [color_ getRed:&color.r
-                 green:&color.g
-                  blue:&color.b
-                 alpha:&color.a];
-        
+        CGFloat r,g,b,a;
+        [color_ getRed:&r
+                 green:&g
+                  blue:&b
+                 alpha:&a];
+        OsmAnd::FColorARGB color(a,r,g,b);
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                        title,
@@ -319,11 +319,12 @@ typedef enum
     NSUInteger selectedColor = 0;
     selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
         UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
-        OsmAnd::FColorARGB fcolor;
-        [uiColor getRed:&fcolor.r
-                  green:&fcolor.g
-                   blue:&fcolor.b
-                  alpha:&fcolor.a];
+        CGFloat r,g,b,a;
+        [uiColor getRed:&r
+                  green:&g
+                   blue:&b
+                  alpha:&a];
+        OsmAnd::FColorARGB fcolor(a,r,g,b);
         OsmAnd::ColorRGB color = OsmAnd::FColorRGB(fcolor);
         
         if (color == self.favorite.favorite->getColor())

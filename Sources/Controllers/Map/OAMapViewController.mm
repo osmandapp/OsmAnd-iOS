@@ -17,7 +17,6 @@
 #import "OAMapRendererView.h"
 
 #import "OAAutoObserverProxy.h"
-#import "OAAddFavoriteViewController.h"
 #import "OANavigationController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAFavoriteItemViewController.h"
@@ -653,7 +652,7 @@
     // If this is the end of gesture, get velocity for animation
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        float velocity = qBound(-kZoomVelocityAbsLimit, recognizer.velocity, kZoomVelocityAbsLimit);
+        float velocity = qBound(-kZoomVelocityAbsLimit, (float)recognizer.velocity, kZoomVelocityAbsLimit);
         mapView.animator->animateZoomWith(velocity,
                                           kZoomDeceleration,
                                           kUserInteractionAnimationKey);
@@ -807,7 +806,7 @@
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees(recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
+        float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees((float)recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
         mapView.animator->animateAzimuthWith(velocity,
                                              kRotateDeceleration,
                                              kUserInteractionAnimationKey);

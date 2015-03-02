@@ -13,10 +13,12 @@
 
 @interface OADestinationViewController : UIViewController<OADestinatioCellProtocol>
 
-@property (nonatomic) CGFloat top;
+- (void)startLocationUpdate;
+- (void)stopLocationUpdate;
+
+- (void)updateFrame;
 
 - (BOOL) addDestination:(OADestination *)destination;
 - (void) doLocationUpdate;
-- (void) updateFrame;
 
 @end

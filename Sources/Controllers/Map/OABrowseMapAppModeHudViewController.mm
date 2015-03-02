@@ -70,6 +70,10 @@
     
     OADestinationViewController *_destinationViewController;
     
+    NSString *_formattedTargetName;
+    double _targetLatitude;
+    double _targetLongitude;
+    
     BOOL _driveModeActive;
 
 #if defined(OSMAND_IOS_DEV)
@@ -138,7 +142,7 @@ NSLayoutConstraint* targetBottomConstraint;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
+	    
     if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
         _driveModeButton.hidden = NO;
     else
@@ -202,6 +206,9 @@ NSLayoutConstraint* targetBottomConstraint;
     
     [super viewWillAppear:animated];
     
+    if (_destinationViewController && !_destinationViewController.view.hidden)
+        [_destinationViewController startLocationUpdate];
+    
     //IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive) {
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
@@ -223,11 +230,19 @@ NSLayoutConstraint* targetBottomConstraint;
     });
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+
+    if (_destinationViewController && !_destinationViewController.view.hidden)
+        [_destinationViewController stopLocationUpdate];
+}
 - (void)viewWillLayoutSubviews
 {
     if (_destinationViewController)
         [_destinationViewController updateFrame];
 }
+
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
@@ -355,6 +370,7 @@ NSLayoutConstraint* targetBottomConstraint;
 
 -(void)onTargetPointSet:(NSNotification *)notification {
     NSDictionary *params = [notification userInfo];
+    NSString *caption = [params objectForKey:@"caption"];
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
@@ -390,6 +406,9 @@ NSLayoutConstraint* targetBottomConstraint;
         
         
         addressString = nativeTitle;
+        if (!addressString || [addressString isEqualToString:@""])
+            addressString = caption;
+        
         if (!addressString || [addressString isEqualToString:@""]) {
             addressString = @"Address is not known yet";
             self.targetMenuView.isAddressFound = NO;
@@ -401,6 +420,14 @@ NSLayoutConstraint* targetBottomConstraint;
         addressString = title;
     }
     
+    if (self.targetMenuView.isAddressFound) {
+        _formattedTargetName = addressString;
+    } else {
+        _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    }
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    
     [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
     [self.targetMenuView setAddress:addressString];
     
@@ -409,23 +436,18 @@ NSLayoutConstraint* targetBottomConstraint;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
 
     [targetBottomConstraint setConstant:0];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.3 animations:^{
         [self.view layoutIfNeeded];
+        
     } completion:^(BOOL finished) {
-        self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight - kOATargetPointViewHeight)];
-        [self.shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
-        [self.shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
+        
+        self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeight)];
+        _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
+        [_shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.shadowButton];
     }];
     
-    
-    if (!_destinationViewController) {
-        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
-        _destinationViewController.top = 20.0;
-        [self.view addSubview:_destinationViewController.view];
-    }
-    OADestination *destination = [[OADestination alloc] initWithDesc:addressString latitude:lat longitude:lon];
-    [_destinationViewController addDestination:destination];
 }
 
 - (IBAction)onDriveModeButtonClicked:(id)sender
@@ -441,11 +463,15 @@ NSLayoutConstraint* targetBottomConstraint;
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    return UIStatusBarStyleLightContent;
+
+    /*
     if ([OAAppSettings sharedManager].settingAppMode == 0) {
         return UIStatusBarStyleDefault;
     } else {
         return UIStatusBarStyleLightContent;
     }
+     */
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -461,12 +487,24 @@ NSLayoutConstraint* targetBottomConstraint;
 
 
 -(void)targetPointDirection {
+    
+    if (!_destinationViewController) {
+        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
+        _destinationViewController.view.frame = CGRectMake(0.0, 20.0, self.view.bounds.size.width, 20.0);
+    }
+    
+    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
+    if (![self.view.subviews containsObject:_destinationViewController.view])
+        [self.view addSubview:_destinationViewController.view];
+    [_destinationViewController addDestination:destination];
 
+    [self hideTargetPointMenu];
 }
 
 -(void)hideTargetPointMenu {
     [_mapViewController hideContextPinMarker];
-    [self.shadowButton removeFromSuperview];
+    [_shadowButton removeFromSuperview];
+    self.shadowButton = nil;
     [targetBottomConstraint setConstant:kOATargetPointViewHeight + 10];
     [UIView animateWithDuration:0.5 animations:^{
         [self.view layoutIfNeeded];

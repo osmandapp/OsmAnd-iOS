@@ -13,16 +13,16 @@
 @protocol OADestinatioCellProtocol <NSObject>
 @optional
 
-- (void)btnCloseClicked:(NSInteger)tag;
+- (void)btnCloseClicked:(OADestination *)destination;
 
 @end
 
 @interface OADestinationCell : NSObject
 
 @property (nonatomic) UIView *contentView;
-
 @property (nonatomic) NSArray *destinations;
 @property (weak, nonatomic) id<OADestinatioCellProtocol> delegate;
+@property (nonatomic, assign) BOOL drawSplitLine;
 
 - (instancetype)initWithDestination:(OADestination *)destination;
 - (instancetype)initWithDestinations:(NSArray *)destinations;

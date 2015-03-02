@@ -970,24 +970,25 @@
     _contextPinMarker->setPosition(touchLocation);
     _contextPinMarker->setIsHidden(false);
     
-    
+    NSString *caption;
     QList< std::shared_ptr<const OsmAnd::MapSymbol> > symbols = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     for (const auto symbol : symbols) {
         
         OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbol->groupPtr);
         const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         
-        //GeoInfoPresenter::WaypointMapObject;
-        
-        
-        NSLog(@"object = %@", mapObject->toString().toNSString());
+        caption = mapObject->getCaptionInNativeLanguage().toNSString();
+        //NSLog(@"object = %@ %d", mapObject->getCaptionInNativeLanguage().toNSString(), mapObject->captions.count());
         
     }
     
+    if (!caption)
+        caption = @"";
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object: self
-                                                      userInfo:@{@"lat": [NSNumber numberWithDouble:lat],
+                                                      userInfo:@{@"caption" : caption,
+                                                                 @"lat": [NSNumber numberWithDouble:lat],
                                                                  @"lon": [NSNumber numberWithDouble:lon],
                                                                  @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
                                                                  @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];

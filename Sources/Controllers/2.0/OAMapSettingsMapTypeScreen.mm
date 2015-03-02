@@ -114,16 +114,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Collect all needed resources
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
-    
+
+    /*
     const auto builtinResources = app.resourcesManager->getBuiltInResources();
     for(const auto& builtinResource : builtinResources)
     {
         //if (builtinResource->type == OsmAndResourceType::MapStyle)
         //    mapStylesResources.push_back(builtinResource);
         //else
-        if (builtinResource->type == OsmAndResourceType::OnlineTileSources)
-            onlineTileSourcesResources.push_back(builtinResource);
+        //if (builtinResource->type == OsmAndResourceType::OnlineTileSources)
+        //    onlineTileSourcesResources.push_back(builtinResource);
     }
+    */
     
     const auto localResources = app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)

@@ -50,37 +50,39 @@
 
 - (void)updateLayout:(CGRect)frame
 {
-    
-    CGFloat h = 50.0;
-    if (_destinations.count == 3 && _directionsView.bounds.size.width / 3.0 < 140.0)
-        h = 70.0;
-    
+    CGFloat h = frame.size.height;
+    CGFloat dirViewWidth = frame.size.width - 41.0;
+    if (_destinations.count == 3 && dirViewWidth / 3.0 < 140.0)
+        h += 20.0;
+
     CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     
     _contentView.frame = newFrame;
-    _directionsView.frame = CGRectMake(0.0, 0.0, newFrame.size.width - 41.0, h);
-    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h);
+    _directionsView.frame = CGRectMake(0.0, (_drawSplitLine ? 1.0 : 0.0), dirViewWidth, h - (_drawSplitLine ? 1.0 : 0.0));
+    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, (_drawSplitLine ? 1.0 : 0.0), 40.0, h - (_drawSplitLine ? 1.0 : 0.0));
     
     switch (_destinations.count) {
         case 1:
         {
             _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
             _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0, 21.0);
+            _distanceLabel.textAlignment = NSTextAlignmentLeft;
             _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
+            _descLabel.hidden = NO;
             
             if (_colorView2)
-                _colorView2.alpha = 0.0;
+                _colorView2.hidden = YES;
             if (_distanceLabel2)
-                _distanceLabel2.alpha = 0.0;
+                _distanceLabel2.hidden = YES;
             if (_descLabel2)
-                _descLabel2.alpha = 0.0;
+                _descLabel2.hidden = YES;
 
             if (_colorView3)
-                _colorView3.alpha = 0.0;
+                _colorView3.hidden = YES;
             if (_distanceLabel3)
-                _distanceLabel3.alpha = 0.0;
+                _distanceLabel3.hidden = YES;
             if (_descLabel3)
-                _descLabel3.alpha = 0.0;
+                _descLabel3.hidden = YES;
 
             break;
         }
@@ -91,31 +93,34 @@
             if (textWidth > 100.0) {
                 _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth, 21.0);
                 _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
+                _descLabel.hidden = NO;
             } else {
                 _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
-                _descLabel.alpha = 0.0;
+                _descLabel.hidden = YES;
             }
+            _distanceLabel.textAlignment = NSTextAlignmentLeft;
             
             _colorView2.frame = CGRectMake(newFrame.size.width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-            _colorView2.alpha = 1.0;
+            _colorView2.hidden = NO;
             
             if (textWidth > 100.0) {
                 _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
-                _distanceLabel2.alpha = 1.0;
+                _distanceLabel2.hidden = NO;
                 _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                _descLabel2.alpha = 1.0;
+                _descLabel2.hidden = NO;
             } else {
                 _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                _distanceLabel2.alpha = 1.0;
-                _descLabel2.alpha = 0.0;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.hidden = YES;
             }
+            _distanceLabel2.textAlignment = NSTextAlignmentLeft;
             
             if (_colorView3)
-                _colorView3.alpha = 0.0;
+                _colorView3.hidden = YES;
             if (_distanceLabel3)
-                _distanceLabel3.alpha = 0.0;
+                _distanceLabel3.hidden = YES;
             if (_descLabel3)
-                _descLabel3.alpha = 0.0;
+                _descLabel3.hidden = YES;
             
             break;
         }
@@ -127,56 +132,66 @@
                 _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
                 _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth, 21.0);
                 _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
+                _distanceLabel.textAlignment = NSTextAlignmentLeft;
+                _descLabel.hidden = NO;
 
                 _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
-                _colorView2.alpha = 1.0;
+                _colorView2.hidden = NO;
                 _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
-                _distanceLabel2.alpha = 1.0;
+                _distanceLabel2.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel2.hidden = NO;
                 _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                _descLabel2.alpha = 1.0;
+                _descLabel2.hidden = NO;
 
                 _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
-                _colorView3.alpha = 1.0;
+                _colorView3.hidden = NO;
                 _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
-                _distanceLabel3.alpha = 1.0;
+                _distanceLabel3.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel3.hidden = NO;
                 _descLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                _descLabel3.alpha = 1.0;
+                _descLabel3.hidden = NO;
 
             } else if (width >= 140) {
                 CGFloat textWidth = width - 60.0;
                 _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
                 _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
-                _descLabel.alpha = 0.0;
+                _distanceLabel.textAlignment = NSTextAlignmentLeft;
+                _descLabel.hidden = YES;
                 
                 _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
-                _colorView2.alpha = 1.0;
+                _colorView2.hidden = NO;
                 _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                _distanceLabel2.alpha = 1.0;
-                _descLabel2.alpha = 0.0;
+                _distanceLabel2.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.hidden = YES;
                 
                 _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
-                _colorView3.alpha = 1.0;
+                _colorView3.hidden = NO;
                 _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                _distanceLabel3.alpha = 1.0;
-                _descLabel3.alpha = 0.0;
+                _distanceLabel3.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel3.hidden = NO;
+                _descLabel3.hidden = YES;
                 
             } else {
                 CGFloat textWidth = 70.0;
                 _colorView.frame = CGRectMake(width / 2.0 - 20.0, 5.0, 40.0, 40.0);
                 _distanceLabel.frame = CGRectMake(width / 2.0 - 35.0, 48.0, textWidth, 21.0);
-                _descLabel.alpha = 0.0;
+                _distanceLabel.textAlignment = NSTextAlignmentCenter;
+                _descLabel.hidden = YES;
                 
                 _colorView2.frame = CGRectMake(width + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-                _colorView2.alpha = 1.0;
-                _distanceLabel2.frame = CGRectMake(width + width / 2.0 - 35.0, 15.0, textWidth, 21.0);
-                _distanceLabel2.alpha = 1.0;
-                _descLabel2.alpha = 0.0;
+                _colorView2.hidden = NO;
+                _distanceLabel2.frame = CGRectMake(width + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
+                _distanceLabel2.textAlignment = NSTextAlignmentCenter;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.hidden = YES;
                 
                 _colorView3.frame = CGRectMake(width * 2.0 + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-                _colorView3.alpha = 1.0;
-                _distanceLabel3.frame = CGRectMake(width * 2.0 + width / 2.0 - 35.0, 15.0, textWidth, 21.0);
-                _distanceLabel3.alpha = 1.0;
-                _descLabel3.alpha = 0.0;
+                _colorView3.hidden = NO;
+                _distanceLabel3.frame = CGRectMake(width * 2.0 + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
+                _distanceLabel3.textAlignment = NSTextAlignmentCenter;
+                _distanceLabel3.hidden = NO;
+                _descLabel3.hidden = YES;
             }
             
             break;
@@ -199,8 +214,8 @@
         self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 279.0, 50.0)];
         _directionsView.backgroundColor = [UIColor whiteColor];
         _directionsView.opaque = YES;
+        [_contentView addSubview:self.directionsView];
     }
-    [_contentView addSubview:self.directionsView];
     
     if (!self.btnClose) {
         self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
@@ -209,7 +224,6 @@
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
         [_btnClose setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
         [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
-        _btnClose.tag = 0;
         [_contentView addSubview:self.btnClose];
     }
     
@@ -219,6 +233,7 @@
         _colorView.layer.masksToBounds = YES;
         self.compassImage = [[UIImageView alloc] initWithFrame:_colorView.bounds];
         [_compassImage setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
+        _compassImage.contentMode = UIViewContentModeCenter;
         [_colorView addSubview:self.compassImage];
         [_directionsView addSubview:self.colorView];
     }
@@ -248,6 +263,7 @@
             _colorView2.layer.masksToBounds = YES;
             self.compassImage2 = [[UIImageView alloc] initWithFrame:_colorView.bounds];
             [_compassImage2 setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
+            _compassImage2.contentMode = UIViewContentModeCenter;
             [_colorView2 addSubview:self.compassImage2];
             [_directionsView addSubview:self.colorView2];
         }
@@ -278,6 +294,7 @@
             _colorView3.layer.masksToBounds = YES;
             self.compassImage3 = [[UIImageView alloc] initWithFrame:_colorView.bounds];
             [_compassImage3 setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
+            _compassImage3.contentMode = UIViewContentModeCenter;
             [_colorView3 addSubview:self.compassImage3];
             [_directionsView addSubview:self.colorView3];
         }
@@ -305,8 +322,11 @@
 - (void)setDestinations:(NSArray *)destinations
 {
     _destinations = destinations;
-    [self buildUI];
-    [self reloadData];
+    if (_destinations) {
+        [self buildUI];
+        [self reloadData];
+        [self updateLayout:_contentView.frame];
+    }
 }
 
 - (void)reloadData
@@ -343,17 +363,22 @@
 
 - (void)updateDirections
 {
+    CLLocation *loc = [OsmAndApp instance].locationServices.lastKnownLocation;
+
     for (int i = 0; i < _destinations.count; i++) {
         OADestination *destination = _destinations[i];
         switch (i) {
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
+                self.distanceLabel.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
+                self.distanceLabel2.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
+                self.distanceLabel3.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
                 break;
                 
             default:
@@ -381,7 +406,7 @@
 
 - (void)closeDestination:(id)sender {
     if (_delegate) {
-        [_delegate btnCloseClicked:((UIButton*)sender).tag];
+        [_delegate btnCloseClicked:_destinations[0]];
     }
 }
 

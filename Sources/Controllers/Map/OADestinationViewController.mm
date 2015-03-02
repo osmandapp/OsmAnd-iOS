@@ -8,6 +8,8 @@
 
 #import "OADestinationViewController.h"
 #import "OADestination.h"
+#import "OsmAndApp.h"
+#import "OAAutoObserverProxy.h"
 
 @interface OADestinationViewController ()
 
@@ -16,6 +18,8 @@
 
 @property (nonatomic) NSArray *colors;
 @property (nonatomic) NSMutableArray *usedColors;
+
+@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 
 @end
 
@@ -29,6 +33,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.destinations = [NSMutableArray array];
+        self.destinationCells = [NSMutableArray array];
         self.usedColors = [NSMutableArray array];
         
         self.colors = @[[UIColor colorWithRed:0.369f green:0.510f blue:0.914f alpha:1.00f],
@@ -41,12 +46,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)viewWillLayoutSubviews
@@ -59,7 +63,7 @@
     CGFloat big;
     CGFloat small;
     
-    CGRect rect = self.parentViewController.view.bounds;
+    CGRect rect = [UIScreen mainScreen].bounds;
     if (rect.size.width > rect.size.height) {
         big = rect.size.width;
         small = rect.size.height;
@@ -69,6 +73,7 @@
     }
     
     CGRect frame;
+    CGFloat top = self.view.frame.origin.y;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         
@@ -80,7 +85,7 @@
             CGFloat h = 50.0 * _destinations.count + _destinations.count - 1.0;
             if (h < 0.0)
                 h = 0.0;
-            frame = CGRectMake(0.0, _top, small, h);
+            frame = CGRectMake(0.0, top, small, h);
         }
         
     } else {
@@ -91,7 +96,10 @@
             
             _singleLineMode = YES;
             CGFloat h = 50.0;
-            frame = CGRectMake(0.0, _top, big, h);
+            if (_destinations.count == 0)
+                h = 0.0;
+            
+            frame = CGRectMake(0.0, top, big, h);
         }
     }
     
@@ -100,23 +108,7 @@
 
 - (void)updateLayout
 {
-    
-    if (_destinations.count == 0)
-        self.view.alpha = 0.0;
-    else
-        self.view.alpha = 1.0;
-    
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height) {
-        big = rect.size.width;
-        small = rect.size.height;
-    } else {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
+    CGFloat width = self.view.bounds.size.width;
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
         
@@ -125,16 +117,17 @@
             
         } else {
             
-            if (_destinationCells.count > 0) {
+            if (_destinationCells.count > 0 && _destinations.count > 0) {
                 OADestinationCell *cell = _destinationCells[0];
                 cell.destinations = @[_destinations[0]];
             }
             
             int i = 0;
             for (OADestinationCell *cell in _destinationCells) {
-                CGRect frame = CGRectMake(0.0, 50.0 * i + i, small, 50.0);
+                cell.drawSplitLine = i > 0;
+                CGRect frame = CGRectMake(0.0, 50.0 * i + i - (cell.drawSplitLine ? 1 : 0), width, 50.0 + (cell.drawSplitLine ? 1 : 0));
                 [cell updateLayout:frame];
-                cell.contentView.alpha = 1.0;
+                cell.contentView.hidden = NO;
                 i++;
             }
             
@@ -154,9 +147,11 @@
 
             int i = 0;
             for (OADestinationCell *cell in _destinationCells) {
-                CGRect frame = CGRectMake(0.0, 50.0 * i + i, small, 50.0);
-                [cell updateLayout:frame];
-                cell.contentView.alpha = (i == 0) ? 1.0 : 0.0;
+                if (i == 0) {
+                    CGRect frame = CGRectMake(0.0, 50.0 * i + i, width, 50.0);
+                    [cell updateLayout:frame];
+                }
+                cell.contentView.hidden = (i == 0) ? NO : YES;
                 i++;
             }
         }
@@ -165,26 +160,71 @@
     
 }
 
-- (void)btnCloseClicked:(NSInteger)tag
+- (BOOL)processCell:(OADestinationCell *)cell destination:(OADestination *)destination
 {
-    if (_destinations.count > tag) {
-        if (_destinationCells.count > tag) {
-            
-            OADestination *destination = _destinations[tag];
-            [_usedColors removeObject:destination.color];
-
-            OADestinationCell *cell = _destinationCells[tag];
-            [cell.contentView removeFromSuperview];
-            [_destinationCells removeObjectAtIndex:tag];
-            [_destinations removeObjectAtIndex:tag];
-            
-            [self updateFrame];
-            
-        } else {
-            [self updateLayout];
-        }
-        
+    BOOL isCellEmpty = NO;
+    
+    if (cell.destinations.count > 1) {
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:cell.destinations];
+        [arr removeObject:destination];
+        cell.destinations = [NSArray arrayWithArray:arr];
+    } else {
+        isCellEmpty = YES;
+        cell.destinations = nil;
     }
+    
+    if (isCellEmpty) {
+        [UIView animateWithDuration:.2 animations:^{
+            cell.contentView.alpha = 0.0;
+            
+        } completion:^(BOOL finished) {
+            [self updateFrame];
+            [cell.contentView removeFromSuperview];
+            if (_destinations.count == 0) {
+                [self.view removeFromSuperview];
+                [self stopLocationUpdate];
+            }
+        }];
+    }
+    
+    return isCellEmpty;
+
+}
+
+- (void)btnCloseClicked:(OADestination *)destination
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if ([_destinations containsObject:destination]) {
+            
+            [_usedColors removeObject:destination.color];
+            [_destinations removeObject:destination];
+            
+            NSMutableArray *cellsDel = [NSMutableArray array];
+            for (OADestinationCell *c in _destinationCells)
+                if ([c.destinations containsObject:destination])
+                    if ([self processCell:c destination:destination])
+                        [cellsDel addObject:c];
+            
+            for (OADestinationCell *c in cellsDel)
+                [_destinationCells removeObject:c];
+            
+            if (_destinationCells.count > 1) {
+                OADestinationCell *cell = _destinationCells[0];
+                OADestination *d = cell.destinations[0];
+                
+                for (int i = 1; i < _destinationCells.count; i++) {
+                    OADestinationCell *c = _destinationCells[i];
+                    if ([c.destinations containsObject:d]) {
+                        if ([self processCell:c destination:d])
+                            [_destinationCells removeObject:c];
+                        break;
+                    }
+                }
+            }
+            
+        }
+    });
 }
 
 - (BOOL) addDestination:(OADestination *)destination
@@ -196,11 +236,17 @@
     destination.color = [self getFreeColor];
 
     OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+    cell.delegate = self;
+    cell.contentView.alpha = 0.0;
     [_destinationCells addObject:cell];
     [self.view addSubview:cell.contentView];
     
-    [self updateFrame];
+    [UIView animateWithDuration:.2 animations:^{
+        cell.contentView.alpha = 1.0;
+    }];
 
+    [self startLocationUpdate];
+    
     return YES;
 }
 
@@ -217,8 +263,29 @@
 
 - (void)doLocationUpdate
 {
-    for (OADestinationCell *cell in _destinationCells)
-        [cell updateDirections];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        for (OADestinationCell *cell in _destinationCells)
+            [cell updateDirections];
+    });
+}
+
+- (void)startLocationUpdate
+{
+    if (_destinations.count == 0 || self.locationServicesUpdateObserver)
+        return;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(doLocationUpdate)
+                                                                     andObserve:app.locationServices.updateObserver];
+}
+
+- (void)stopLocationUpdate
+{
+    if (self.locationServicesUpdateObserver) {
+        [self.locationServicesUpdateObserver detach];
+        self.locationServicesUpdateObserver = nil;
+    }
 }
 
 @end

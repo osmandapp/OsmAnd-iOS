@@ -39,4 +39,6 @@
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 
+- (OADestination *)destinationByPoint:(CGPoint)point;
+
 @end

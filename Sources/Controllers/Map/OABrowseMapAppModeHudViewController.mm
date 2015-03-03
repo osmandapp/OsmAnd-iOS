@@ -24,6 +24,7 @@
 #import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -525,6 +526,13 @@ NSLayoutConstraint* targetBottomConstraint;
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
         }];
 
+}
+
+- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon
+{
+    OsmAnd::LatLon latLon(lat, lon);
+    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [_mapViewController goToPosition:point animated:YES];
 }
 
 #pragma mark - debug

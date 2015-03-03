@@ -15,6 +15,7 @@
 @optional
 
 - (void)destinationViewLayoutDidChange;
+- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon;
 
 @end
 

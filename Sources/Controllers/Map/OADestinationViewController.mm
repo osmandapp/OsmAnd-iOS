@@ -308,4 +308,37 @@
     }
 }
 
+/*
+-(void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesBegan:touches withEvent:event];
+}
+*/
+
+- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [super touchesEnded:touches withEvent:event];
+
+    if (!_delegate)
+        return;
+    
+    UITouch *touch = [[event allTouches] anyObject];
+    
+    if (!_singleLineMode) {
+        for (OADestinationCell *c in _destinationCells) {
+            CGPoint touchPoint = [touch locationInView:c.contentView];
+            OADestination *destination = [c destinationByPoint:touchPoint];
+            if (destination)
+                [_delegate destinationViewMoveToLatitude:destination.latitude lon:destination.longitude];
+        }
+    } else {
+        
+        CGPoint touchPoint = [touch locationInView:_multiCell.contentView];
+        OADestination *destination = [_multiCell destinationByPoint:touchPoint];
+        if (destination)
+            [_delegate destinationViewMoveToLatitude:destination.latitude lon:destination.longitude];
+        
+    }
+}
+
 @end

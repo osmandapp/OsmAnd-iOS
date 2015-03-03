@@ -28,6 +28,7 @@
 #import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/CachingRoadLocator.h>
@@ -567,5 +568,13 @@
         }];
     
 }
+
+- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon
+{
+    OsmAnd::LatLon latLon(lat, lon);
+    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [_mapViewController goToPosition:point animated:YES];
+}
+
 
 @end

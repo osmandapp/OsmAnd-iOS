@@ -21,6 +21,14 @@
     return self;
 }
 
+- (OADestination *)destinationByPoint:(CGPoint)point
+{
+    if (CGRectContainsPoint(_directionsView.frame, point))
+        return _destinations[0];
+    else
+        return nil;
+}
+
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;

@@ -34,6 +34,22 @@
     return self;
 }
 
+- (OADestination *)destinationByPoint:(CGPoint)point
+{
+    if (_editModeActive)
+        return nil;
+    
+    CGFloat width = _directionsView.bounds.size.width / _destinations.count;
+    
+    for (int i = 0; i < _destinations.count; i++) {
+        CGRect clickableFrame = CGRectMake(width * i, 0.0, width, _directionsView.bounds.size.height);
+        if (CGRectContainsPoint(clickableFrame, point))
+            return _destinations[i];
+    }
+    
+    return nil;
+}
+
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;

@@ -490,18 +490,25 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
     {
+        
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
-        if (!match)
-            continue;
         
+        if (!match && (resource->type != OsmAndResourceType::MapRegion))
+            continue;
+                
         LocalResourceItem* item = [[LocalResourceItem alloc] init];
         item.resourceId = resource->id;
-        item.title = [self.class titleOfResource:resource
+        if (match)
+            item.title = [self.class titleOfResource:resource
                                         inRegion:match
                                   withRegionName:YES];
+        else
+            item.title = resource->id.toNSString();
+            
         item.resource = resource;
-        item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
+        if (match)
+            item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.size = resource->size;
         item.worldRegion = match;
         
@@ -967,7 +974,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             cellTypeId = installedResourcesSubmenuCell;
             title = OALocalizedString(@"Installed");
             
-            subtitle = [NSString stringWithFormat:@"%d map(s) - %@", _localResourceItems.count + (_worldMapInstalled ? 1 : 0), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+            subtitle = [NSString stringWithFormat:@"%d map(s) - %@", (int)_localResourceItems.count + (_worldMapInstalled ? 1 : 0), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -1210,8 +1217,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (item == nil)
         return;
 
-    if ([item isKindOfClass:[LocalResourceItem class]])
+    if ([item isKindOfClass:[LocalResourceItem class]]) {
         [self offerDeleteResourceOf:item];
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
 }
 
 #pragma mark - UISearchDisplayDelegate

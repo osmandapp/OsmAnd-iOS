@@ -512,7 +512,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
-    BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
+    //BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
+    BOOL isInstalled = (item.worldRegion != nil);
     
     NSString* message = nil;
     if (isInstalled)

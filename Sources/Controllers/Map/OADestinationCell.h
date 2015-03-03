@@ -13,11 +13,18 @@
 @protocol OADestinatioCellProtocol <NSObject>
 @optional
 
-- (void)btnCloseClicked:(OADestination *)destination;
+- (void)btnCloseClicked:(id)sender destination:(OADestination *)destination;
 
 @end
 
 @interface OADestinationCell : NSObject
+
+@property (nonatomic) UIView *directionsView;
+@property (nonatomic) UIButton *btnClose;
+@property (nonatomic) UIView *colorView;
+@property (nonatomic) UIImageView *compassImage;
+@property (nonatomic) UILabel *distanceLabel;
+@property (nonatomic) UILabel *descLabel;
 
 @property (nonatomic) UIView *contentView;
 @property (nonatomic) NSArray *destinations;
@@ -25,12 +32,11 @@
 @property (nonatomic, assign) BOOL drawSplitLine;
 
 - (instancetype)initWithDestination:(OADestination *)destination;
-- (instancetype)initWithDestinations:(NSArray *)destinations;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
-
 - (void)updateDirections;
 
+- (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 
 @end

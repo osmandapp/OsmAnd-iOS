@@ -25,13 +25,17 @@
 #import "OALog.h"
 #include "Localization.h"
 
+#import "OADestinationViewController.h"
+#import "OADestination.h"
+#import "OADestinationCell.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/Data/Road.h>
 
 #define kMaxRoadDistanceInMeters 15.0
 
-@interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
+@interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol, OADestinationViewControllerProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
@@ -141,6 +145,8 @@
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
+
+    
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -185,6 +191,14 @@
     [self restartLocationUpdateTimer];
 
     [self showOrHideResumeFollowingButtonAnimated:animated];
+    
+    _destinationViewController.singleLineOnly = YES;
+    _destinationViewController.top = 100.0;
+    _destinationViewController.delegate = self;
+    
+    if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
+        [self.view addSubview:_destinationViewController.view];
+
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -195,6 +209,8 @@
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
 
     [self fadeInOptionalControlsWithDelay];
+
+    [_destinationViewController startLocationUpdate];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -203,6 +219,8 @@
 
     if (!_iOS70plus)
         [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+
+    [_destinationViewController stopLocationUpdate];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
@@ -225,6 +243,12 @@
     _locationServicesUpdateObserver = nil;
     
     [super viewDidDisappear:animated];
+}
+
+- (void)viewWillLayoutSubviews
+{
+    if (_destinationViewController)
+        [_destinationViewController updateFrame];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -527,6 +551,21 @@
         _debugHudViewController = nil;
     }
 #endif // defined(OSMAND_IOS_DEV)
+}
+
+#pragma mark - OADestinationViewControllerProtocol
+
+-(void)destinationViewLayoutDidChange
+{
+    CGFloat x = _compassBox.frame.origin.x;
+    CGSize size = _compassBox.frame.size;
+    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    
+    if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+        [UIView animateWithDuration:.2 animations:^{
+            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+        }];
+    
 }
 
 @end

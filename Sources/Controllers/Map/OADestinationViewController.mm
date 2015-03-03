@@ -10,11 +10,13 @@
 #import "OADestination.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OAMultiDestinationCell.h"
 
 @interface OADestinationViewController ()
 
 @property (nonatomic) NSMutableArray *destinations;
 @property (nonatomic) NSMutableArray *destinationCells;
+@property (nonatomic) OAMultiDestinationCell *multiCell;
 
 @property (nonatomic) NSArray *colors;
 @property (nonatomic) NSMutableArray *usedColors;
@@ -26,6 +28,11 @@
 @implementation OADestinationViewController {
     
     BOOL _singleLineMode;
+}
+
+- (NSArray *)allDestinations
+{
+    return [NSArray arrayWithArray:self.destinations];
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -73,9 +80,11 @@
     }
     
     CGRect frame;
-    CGFloat top = self.view.frame.origin.y;
     
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && _singleLineOnly)
+        big = small;
+    
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !_singleLineOnly) {
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
@@ -85,7 +94,15 @@
             CGFloat h = 50.0 * _destinations.count + _destinations.count - 1.0;
             if (h < 0.0)
                 h = 0.0;
-            frame = CGRectMake(0.0, top, small, h);
+            frame = CGRectMake(0.0, _top, small, h);
+
+            if (_multiCell) {
+                _multiCell.contentView.hidden = YES;
+                if (_multiCell.editModeActive)
+                    [_multiCell exitEditMode];
+            }
+            for (OADestinationCell *cell in _destinationCells)
+                cell.contentView.hidden = NO;
         }
         
     } else {
@@ -99,99 +116,45 @@
             if (_destinations.count == 0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, top, big, h);
+            frame = CGRectMake(0.0, _top, big, h);
+            
+            if (_multiCell)
+                _multiCell.contentView.hidden = NO;
+            for (OADestinationCell *cell in _destinationCells)
+                cell.contentView.hidden = YES;
         }
     }
     
     self.view.frame = frame;
+    
+    if (_delegate)
+        [_delegate destinationViewLayoutDidChange];
 }
 
 - (void)updateLayout
 {
     CGFloat width = self.view.bounds.size.width;
     
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-            
-        } else {
-            
-            if (_destinationCells.count > 0 && _destinations.count > 0) {
-                OADestinationCell *cell = _destinationCells[0];
-                cell.destinations = @[_destinations[0]];
-            }
-            
-            int i = 0;
-            for (OADestinationCell *cell in _destinationCells) {
-                cell.drawSplitLine = i > 0;
-                CGRect frame = CGRectMake(0.0, 50.0 * i + i - (cell.drawSplitLine ? 1 : 0), width, 50.0 + (cell.drawSplitLine ? 1 : 0));
-                [cell updateLayout:frame];
-                cell.contentView.hidden = NO;
-                i++;
-            }
-            
+    if (_singleLineMode) {
+        if (_multiCell) {
+            CGRect frame = CGRectMake(0.0, 0.0, width, 50.0);
+            [_multiCell updateLayout:frame];
+            //_multiCell.contentView.hidden = NO;
         }
-        
     } else {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-            
-        } else {
-            
-            if (_destinationCells.count > 0) {
-                OADestinationCell *cell = _destinationCells[0];
-                cell.destinations = [NSArray arrayWithArray:_destinations];
-            }
-
-            int i = 0;
-            for (OADestinationCell *cell in _destinationCells) {
-                if (i == 0) {
-                    CGRect frame = CGRectMake(0.0, 50.0 * i + i, width, 50.0);
-                    [cell updateLayout:frame];
-                }
-                cell.contentView.hidden = (i == 0) ? NO : YES;
-                i++;
-            }
+        int i = 0;
+        for (OADestinationCell *cell in _destinationCells) {
+            cell.drawSplitLine = i > 0;
+            CGRect frame = CGRectMake(0.0, 50.0 * i + i - (cell.drawSplitLine ? 1 : 0), width, 50.0 + (cell.drawSplitLine ? 1 : 0));
+            [cell updateLayout:frame];
+            //cell.contentView.hidden = NO;
+            i++;
         }
-        
     }
-    
 }
 
-- (BOOL)processCell:(OADestinationCell *)cell destination:(OADestination *)destination
-{
-    BOOL isCellEmpty = NO;
-    
-    if (cell.destinations.count > 1) {
-        NSMutableArray *arr = [NSMutableArray arrayWithArray:cell.destinations];
-        [arr removeObject:destination];
-        cell.destinations = [NSArray arrayWithArray:arr];
-    } else {
-        isCellEmpty = YES;
-        cell.destinations = nil;
-    }
-    
-    if (isCellEmpty) {
-        [UIView animateWithDuration:.2 animations:^{
-            cell.contentView.alpha = 0.0;
-            
-        } completion:^(BOOL finished) {
-            [self updateFrame];
-            [cell.contentView removeFromSuperview];
-            if (_destinations.count == 0) {
-                [self.view removeFromSuperview];
-                [self stopLocationUpdate];
-            }
-        }];
-    }
-    
-    return isCellEmpty;
 
-}
-
-- (void)btnCloseClicked:(OADestination *)destination
+- (void)btnCloseClicked:(id)sender destination:(OADestination *)destination
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -200,29 +163,63 @@
             [_usedColors removeObject:destination.color];
             [_destinations removeObject:destination];
             
-            NSMutableArray *cellsDel = [NSMutableArray array];
+            // process single cells
+            OADestinationCell *cell;
             for (OADestinationCell *c in _destinationCells)
-                if ([c.destinations containsObject:destination])
-                    if ([self processCell:c destination:destination])
-                        [cellsDel addObject:c];
-            
-            for (OADestinationCell *c in cellsDel)
-                [_destinationCells removeObject:c];
-            
-            if (_destinationCells.count > 1) {
-                OADestinationCell *cell = _destinationCells[0];
-                OADestination *d = cell.destinations[0];
-                
-                for (int i = 1; i < _destinationCells.count; i++) {
-                    OADestinationCell *c = _destinationCells[i];
-                    if ([c.destinations containsObject:d]) {
-                        if ([self processCell:c destination:d])
-                            [_destinationCells removeObject:c];
-                        break;
-                    }
+                if ([c.destinations containsObject:destination]) {
+                    cell = c;
+                    break;
                 }
+            
+            if (cell) {
+                
+                [_destinationCells removeObject:cell];
+                [UIView animateWithDuration:.2 animations:^{
+                    cell.contentView.alpha = 0.0;
+                    
+                } completion:^(BOOL finished) {
+                    [self updateFrame];
+                    [cell.contentView removeFromSuperview];
+                    if (_destinations.count == 0) {
+                        [self.view removeFromSuperview];
+                        [self stopLocationUpdate];
+                    }
+                }];
+                
             }
             
+            // process multi cell
+            BOOL isCellEmpty = NO;
+            
+            if (_multiCell.destinations.count > 1) {
+                NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
+                [arr removeObject:destination];
+                [UIView animateWithDuration:.2 animations:^{
+                    _multiCell.destinations = [NSArray arrayWithArray:arr];
+                }];
+            } else {
+                isCellEmpty = YES;
+                _multiCell.destinations = nil;
+            }
+            
+            if (isCellEmpty) {
+                [UIView animateWithDuration:.2 animations:^{
+                    _multiCell.contentView.alpha = 0.0;
+                    
+                } completion:^(BOOL finished) {
+                    
+                    if (_multiCell.editModeActive)
+                        [_multiCell exitEditMode];
+
+                    [self updateFrame];
+                    [_multiCell.contentView removeFromSuperview];
+                    _multiCell = nil;
+                    if (_destinations.count == 0) {
+                        [self.view removeFromSuperview];
+                        [self stopLocationUpdate];
+                    }
+                }];
+            }
         }
     });
 }
@@ -235,15 +232,36 @@
     [_destinations addObject:destination];
     destination.color = [self getFreeColor];
 
+    if (!_multiCell) {
+        self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:@[destination]];
+        _multiCell.delegate = self;
+        if (_singleLineMode)
+            _multiCell.contentView.alpha = 0.0;
+        [self.view addSubview:_multiCell.contentView];
+    } else {
+        [UIView animateWithDuration:.2 animations:^{
+            _multiCell.destinations = [NSArray arrayWithArray:_destinations];
+        }];
+    }
+    
     OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
     cell.delegate = self;
-    cell.contentView.alpha = 0.0;
+    if (!_singleLineMode)
+        cell.contentView.alpha = 0.0;
+    else
+        cell.contentView.hidden = YES;
+    
     [_destinationCells addObject:cell];
     [self.view addSubview:cell.contentView];
     
-    [UIView animateWithDuration:.2 animations:^{
-        cell.contentView.alpha = 1.0;
-    }];
+    if (!_singleLineMode)
+        [UIView animateWithDuration:.2 animations:^{
+            cell.contentView.alpha = 1.0;
+        }];
+    else  if (_multiCell.contentView.alpha == 0.0)
+        [UIView animateWithDuration:.2 animations:^{
+            _multiCell.contentView.alpha = 1.0;
+        }];
 
     [self startLocationUpdate];
     
@@ -264,6 +282,8 @@
 - (void)doLocationUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        if (_multiCell)
+            [_multiCell updateDirections];
         for (OADestinationCell *cell in _destinationCells)
             [cell updateDirections];
     });

@@ -18,6 +18,7 @@
 
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
+#import "OADestinationViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -30,6 +31,7 @@
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
+@property (nonatomic) OADestinationViewController *destinationViewController;
 
 @end
 
@@ -122,20 +124,27 @@
 
 - (void)updateHUD:(BOOL)animated
 {
+    if (!_destinationViewController)
+        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
+    
     // Inflate new HUD controller and add it
     UIViewController* newHudController = nil;
     if (_app.appMode == OAAppModeBrowseMap)
     {
-        if (!self.browseMapViewController)
+        if (!self.browseMapViewController) {
             self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
+            self.browseMapViewController.destinationViewController = self.destinationViewController;
+        }
         newHudController = self.browseMapViewController;
     }
     else if (_app.appMode == OAAppModeDrive)
     {
-        if (!self.driveModeViewController)
+        if (!self.driveModeViewController) {
             self.driveModeViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
                                                                                bundle:nil];
+            self.driveModeViewController.destinationViewController = self.destinationViewController;
+        }
         newHudController = self.driveModeViewController;
     }
     [self addChildViewController:newHudController];

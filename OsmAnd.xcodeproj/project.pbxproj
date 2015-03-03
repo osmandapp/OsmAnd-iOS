@@ -461,6 +461,18 @@
 		84BFC24F1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */; };
 		84BFC2501A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */; };
 		84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */; };
+		84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
+		84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
+		84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
+		84CC524C1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
+		84CC524D1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
+		84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
+		84CC52511AA5DD55000063CF /* three_dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524F1AA5DD55000063CF /* three_dots.png */; };
+		84CC52521AA5DD55000063CF /* three_dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524F1AA5DD55000063CF /* three_dots.png */; };
+		84CC52531AA5DD55000063CF /* three_dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524F1AA5DD55000063CF /* three_dots.png */; };
+		84CC52541AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
+		84CC52551AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
+		84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
 		84D81EE01AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
 		84D81EE11AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
 		84D81EE21AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
@@ -1232,6 +1244,11 @@
 		84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsSettingScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsSettingScreen.mm; sourceTree = "<group>"; };
 		84BFC24D1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsGpxScreen.h; path = Sources/Controllers/2.0/OAMapSettingsGpxScreen.h; sourceTree = "<group>"; };
 		84BFC24E1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsGpxScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsGpxScreen.mm; sourceTree = "<group>"; };
+		84CC52461AA58503000063CF /* OAMultiDestinationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMultiDestinationCell.h; path = Controllers/Map/OAMultiDestinationCell.h; sourceTree = "<group>"; };
+		84CC52471AA58503000063CF /* OAMultiDestinationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMultiDestinationCell.m; path = Controllers/Map/OAMultiDestinationCell.m; sourceTree = "<group>"; };
+		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
+		84CC524F1AA5DD55000063CF /* three_dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = three_dots.png; path = Resources/Icons/three_dots.png; sourceTree = "<group>"; };
+		84CC52501AA5DD55000063CF /* three_dots@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@2x.png"; path = "Resources/Icons/three_dots@2x.png"; sourceTree = "<group>"; };
 		84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_destination_arrow_small.png; path = Resources/Icons/ic_destination_arrow_small.png; sourceTree = "<group>"; };
 		84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@2x.png"; path = "Resources/Icons/ic_destination_arrow_small@2x.png"; sourceTree = "<group>"; };
 		84D81EDF1AA30404001098FD /* ic_destination_arrow_small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@3x.png"; path = "Resources/Icons/ic_destination_arrow_small@3x.png"; sourceTree = "<group>"; };
@@ -1769,6 +1786,8 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				84CC524F1AA5DD55000063CF /* three_dots.png */,
+				84CC52501AA5DD55000063CF /* three_dots@2x.png */,
 				84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */,
 				84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */,
 				84D81EDF1AA30404001098FD /* ic_destination_arrow_small@3x.png */,
@@ -1877,6 +1896,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				84CC524B1AA5A539000063CF /* nautical.render.xml */,
 				846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
 				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
@@ -1909,6 +1929,8 @@
 				84D81EEB1AA30500001098FD /* OADestinationViewController.xib */,
 				84D81EF21AA37075001098FD /* OADestinationCell.h */,
 				84D81EF31AA37075001098FD /* OADestinationCell.mm */,
+				84CC52461AA58503000063CF /* OAMultiDestinationCell.h */,
+				84CC52471AA58503000063CF /* OAMultiDestinationCell.m */,
 				84D81EF71AA370E9001098FD /* OADestination.h */,
 				84D81EF81AA370E9001098FD /* OADestination.mm */,
 			);
@@ -2535,6 +2557,7 @@
 			files = (
 				84451A2F1AA050B3003F4D8D /* ic_close.png in Resources */,
 				3AC639ED1A220A96001D5E57 /* icon_direction_active@2x.png in Resources */,
+				84CC52511AA5DD55000063CF /* three_dots.png in Resources */,
 				84B4FD671A91D4B800A147BA /* OAGPXItemViewController.xib in Resources */,
 				3A02BFC01A31FA820019377F /* icon_star@2x.png in Resources */,
 				3AFEEE6F1A0E5B9F00900A47 /* favorite_import_icon@2x.png in Resources */,
@@ -2648,6 +2671,7 @@
 				BBA3AF28197659270039D991 /* menu_goto_favorite_icon.png in Resources */,
 				842BFC581A94935A008CF87B /* OAGPXPointListViewController.xib in Resources */,
 				3AFEEE9F1A13722500900A47 /* OAMapSettingsViewController.xib in Resources */,
+				84CC52541AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				BBA6AD051940CD010066AF23 /* my_course_marker_icon.png in Resources */,
 				8A70772A1A84F0F9005E019B /* OptionsPanel.xib in Resources */,
 				8AF2197F1A7FAE400091071B /* OAPointCell.xib in Resources */,
@@ -2664,6 +2688,7 @@
 				843257951A9DAE4100A7964E /* ic_arrow_down@2x.png in Resources */,
 				BB451DCD18D70B5B005FBE09 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				BB451DC918D70B5B005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
+				84CC524C1AA5A539000063CF /* nautical.render.xml in Resources */,
 				BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
 				BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				843257EE1A9F807400A7964E /* ic_speed@2x.png in Resources */,
@@ -2748,6 +2773,7 @@
 			files = (
 				84451A301AA050B3003F4D8D /* ic_close.png in Resources */,
 				3AC639EE1A220A96001D5E57 /* icon_direction_active@2x.png in Resources */,
+				84CC52521AA5DD55000063CF /* three_dots.png in Resources */,
 				3A02BFC11A31FA820019377F /* icon_star@2x.png in Resources */,
 				3AFEEE701A0E5B9F00900A47 /* favorite_import_icon@2x.png in Resources */,
 				3AC639BD1A1E344E001D5E57 /* OAInitViewPanel.xib in Resources */,
@@ -2861,6 +2887,7 @@
 				842BFC591A94935A008CF87B /* OAGPXPointListViewController.xib in Resources */,
 				BB451E7618DCD224005FBE09 /* HUD_zoom_out_button@2x.png in Resources */,
 				BB451E7718DCD224005FBE09 /* HUD_compass_bg@2x.png in Resources */,
+				84CC52551AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
 				BBA3AF29197659270039D991 /* menu_goto_favorite_icon.png in Resources */,
 				3AFEEEA01A13722500900A47 /* OAMapSettingsViewController.xib in Resources */,
@@ -2877,6 +2904,7 @@
 				843257961A9DAE4100A7964E /* ic_arrow_down@2x.png in Resources */,
 				BB451E7F18DCD224005FBE09 /* HUD_more_halfbutton@2x.png in Resources */,
 				BB451EDC18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
+				84CC524D1AA5A539000063CF /* nautical.render.xml in Resources */,
 				BB451F1218EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				BBA3AEA4196D92C50039D991 /* favorite_location_pin_marker_icon@2x.png in Resources */,
 				843257EF1A9F807400A7964E /* ic_speed@2x.png in Resources */,
@@ -2961,6 +2989,7 @@
 			files = (
 				3AFEEE3F1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
 				3A02BFC21A31FA820019377F /* icon_star@2x.png in Resources */,
+				84CC52531AA5DD55000063CF /* three_dots.png in Resources */,
 				3AC639A01A1CEB1D001D5E57 /* OAIntroViewController.xib in Resources */,
 				3A02BFBF1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */,
 				3AFEEE391A0E34FD00900A47 /* left_menu_icon_map@2x.png in Resources */,
@@ -2986,6 +3015,7 @@
 				BBA3AF93197FC4BB0039D991 /* position_track_map_mode_button.png in Resources */,
 				BBA3AF94197FC4BB0039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				843257F31A9F807400A7964E /* ic_speed@3x.png in Resources */,
+				84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */,
 				BBA3AF95197FC4BB0039D991 /* HUD_button_bg@2x.png in Resources */,
 				BBA3AF96197FC4BB0039D991 /* DriveAppModeHUD~ipad.xib in Resources */,
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
@@ -3137,6 +3167,7 @@
 				BB27270D19CB3923007C5613 /* icudt52l.dat in Resources */,
 				BBA3AFDE197FC4BB0039D991 /* BrowseMapAppModeHUD~ipad.xib in Resources */,
 				8432579A1A9DAE4100A7964E /* ic_arrow_down@3x.png in Resources */,
+				84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */,
 				3AFEEEC61A13A87B00900A47 /* btn_map_type_icon_view_selected@2x.png in Resources */,
 				846310081A8E463B005B39F2 /* default.render.xml in Resources */,
@@ -3360,6 +3391,7 @@
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				3AFEEE151A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
@@ -3470,6 +3502,7 @@
 				84BFC24B1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3AFEEE161A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
+				84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
@@ -3524,6 +3557,7 @@
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
 				BBA3AF42197FC4BB0039D991 /* OAActionsPanelViewController.m in Sources */,
+				84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,

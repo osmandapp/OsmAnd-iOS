@@ -20,6 +20,7 @@
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
+
 #import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OADestinationCell.h"
@@ -33,7 +34,7 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OABrowseMapAppModeHudViewController ()
+@interface OABrowseMapAppModeHudViewController ()<OADestinationViewControllerProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
@@ -67,9 +68,7 @@
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
-    
-    OADestinationViewController *_destinationViewController;
-    
+        
     NSString *_formattedTargetName;
     double _targetLatitude;
     double _targetLongitude;
@@ -206,9 +205,14 @@ NSLayoutConstraint* targetBottomConstraint;
     
     [super viewWillAppear:animated];
     
-    if (_destinationViewController && !_destinationViewController.view.hidden)
-        [_destinationViewController startLocationUpdate];
+    _destinationViewController.singleLineOnly = NO;
+    _destinationViewController.top = 20.0;
+    _destinationViewController.delegate = self;
     
+    if (![self.view.subviews containsObject:_destinationViewController.view] &&
+        [_destinationViewController allDestinations].count > 0)
+        [self.view addSubview:_destinationViewController.view];
+
     //IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive) {
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
@@ -228,15 +232,17 @@ NSLayoutConstraint* targetBottomConstraint;
         if (self.rulerLabel.hidden)
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
+    
+    [_destinationViewController startLocationUpdate];
 }
 
--(void)viewDidDisappear:(BOOL)animated
+-(void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
 
-    if (_destinationViewController && !_destinationViewController.view.hidden)
-        [_destinationViewController stopLocationUpdate];
+    [_destinationViewController stopLocationUpdate];
 }
+
 - (void)viewWillLayoutSubviews
 {
     if (_destinationViewController)
@@ -488,16 +494,11 @@ NSLayoutConstraint* targetBottomConstraint;
 
 -(void)targetPointDirection {
     
-    if (!_destinationViewController) {
-        _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
-        _destinationViewController.view.frame = CGRectMake(0.0, 20.0, self.view.bounds.size.width, 20.0);
-    }
-    
     OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
     if (![self.view.subviews containsObject:_destinationViewController.view])
         [self.view addSubview:_destinationViewController.view];
     [_destinationViewController addDestination:destination];
-
+    
     [self hideTargetPointMenu];
 }
 
@@ -509,6 +510,21 @@ NSLayoutConstraint* targetBottomConstraint;
     [UIView animateWithDuration:0.5 animations:^{
         [self.view layoutIfNeeded];
     }];
+}
+
+#pragma mark - OADestinationViewControllerProtocol
+
+-(void)destinationViewLayoutDidChange
+{
+    CGFloat x = _compassBox.frame.origin.x;
+    CGSize size = _compassBox.frame.size;
+    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    
+    if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+        [UIView animateWithDuration:.2 animations:^{
+            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+        }];
+
 }
 
 #pragma mark - debug

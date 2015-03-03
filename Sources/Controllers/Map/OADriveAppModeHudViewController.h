@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+@class OADestinationViewController;
+
 @interface OADriveAppModeHudViewController : UIViewController
+
+@property (nonatomic) OADestinationViewController *destinationViewController;
 
 @end

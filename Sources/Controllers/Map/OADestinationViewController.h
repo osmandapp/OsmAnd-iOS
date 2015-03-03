@@ -11,7 +11,20 @@
 
 @class OADestination;
 
+@protocol OADestinationViewControllerProtocol
+@optional
+
+- (void)destinationViewLayoutDidChange;
+
+@end
+
 @interface OADestinationViewController : UIViewController<OADestinatioCellProtocol>
+
+@property (nonatomic, assign) BOOL singleLineOnly;
+@property (nonatomic, assign) CGFloat top;
+@property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
+
+- (NSArray *)allDestinations;
 
 - (void)startLocationUpdate;
 - (void)stopLocationUpdate;

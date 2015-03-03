@@ -63,7 +63,7 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" id="Mqu-Kg-TG4" userLabel="compassBox">
-                    <rect key="frame" x="272" y="108" width="40" height="40"/>
+                    <rect key="frame" x="272" y="101" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GGf-zp-Dy1" userLabel="compassButton">

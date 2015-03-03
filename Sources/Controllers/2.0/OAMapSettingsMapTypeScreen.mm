@@ -216,8 +216,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.sortIndex = 2;
         else if ([item.mapStyle->title.toNSString() isEqualToString:@"LightRS"])
             item.sortIndex = 3;
-        else
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"nautical"])
             item.sortIndex = 4;
+        else
+            item.sortIndex = 5;
 
         [_offlineMapSources addObject:item];
     }
@@ -237,6 +239,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 -(void)initData
 {
     stylesTitlesOffline = @{@"default" : @"OsmAnd",
+                            @"nautical" : @"Nautical",
                             @"UniRS" : @"UniRS",
                             @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                             @"LightRS" : @"LightRS"};

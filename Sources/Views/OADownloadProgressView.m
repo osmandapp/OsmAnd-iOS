@@ -32,8 +32,11 @@ typedef enum {
             self.buttonState = kDownloadProgressButtonStatePause;
             [self setButtonStatePause];
             
-            self.layer.borderWidth=1.0f;
-            self.layer.borderColor=[[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3] CGColor];
+            // drop shadow
+            [self.layer setShadowColor:[UIColor blackColor].CGColor];
+            [self.layer setShadowOpacity:0.8];
+            [self.layer setShadowRadius:3.0];
+            [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
         }
     }
     return self;
@@ -51,8 +54,11 @@ typedef enum {
             self.buttonState = kDownloadProgressButtonStatePause;
             [self setButtonStatePause];
 
-            self.layer.borderWidth=1.0f;
-            self.layer.borderColor=[[UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.3] CGColor];
+            // drop shadow
+            [self.layer setShadowColor:[UIColor blackColor].CGColor];
+            [self.layer setShadowOpacity:0.8];
+            [self.layer setShadowRadius:3.0];
+            [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
         }
     }
     return self;

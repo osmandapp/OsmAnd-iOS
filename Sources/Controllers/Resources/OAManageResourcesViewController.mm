@@ -341,12 +341,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             for (const auto& resource : regionResPrevious.outdatedResources)
                 if (!regionResources.allResources.contains(resource->id)) {
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
-                    NSLog(@"outdatedResources +");
                 }
             for (const auto& resource : regionResPrevious.localResources)
                 if (!regionResources.allResources.contains(resource->id)) {
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
-                    NSLog(@"localResources +");
                 }
         }
         
@@ -586,6 +584,42 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             [self.searchDisplayController.searchResultsTableView reloadData];
         }
         [self.tableView reloadData];
+    }
+}
+
+- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
+{
+    return;
+    @synchronized(_dataLock)
+    {
+        if (self.searchDisplayController.isActive)
+        {
+            for (int i = 0; i < _searchResults.count; i++) {
+                ResourceItem *item = _searchResults[i];
+                if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
+                    NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+                    [self.searchDisplayController.searchResultsTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+                    break;
+                }
+            }
+        }
+
+        NSMutableArray *resourceItems = [self getResourceItems];
+        for (int i = 0; i < resourceItems.count; i++) {
+            ResourceItem *item = resourceItems[i];
+            if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
+                NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
+                [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+                break;
+            }
+        }
+        
+        ResourceItem *item = _regionMap;
+        if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey]) {
+            NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:_regionMapSection];
+            [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+        }
+
     }
 }
 

@@ -48,6 +48,7 @@
 
 - (void)updateContent;
 - (void)refreshContent:(BOOL)update;
+- (void)refreshDownloadingContent:(NSString *)downloadTaskKey;
 
 + (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region

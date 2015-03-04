@@ -17,6 +17,7 @@
 #include <OsmAndCore/Map/IMapElevationDataProvider.h>
 #include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
+#include <OsmAndCore/Map/MapRendererDebugSettings.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
@@ -56,6 +57,9 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)removeKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeAllSymbolsProviders;
+
+- (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings;
+- (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings;
 
 - (UIImage*) getGLScreenshot;
 

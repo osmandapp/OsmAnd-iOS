@@ -185,6 +185,16 @@
     _renderer->removeAllSymbolsProviders();
 }
 
+- (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings
+{
+    return _renderer->getDebugSettings();
+}
+
+- (void) setMapDebugSettings:(std::shared_ptr<OsmAnd::MapRendererDebugSettings>) debugSettings
+{
+    _renderer->setDebugSettings(debugSettings);
+}
+
 - (float)fieldOfView
 {
     return _renderer->getState().fieldOfView;

@@ -178,6 +178,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
 }
 
+- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
+{
+}
+
 + (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
               withRegionName:(BOOL)includeRegionName
@@ -651,6 +655,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             return;
         [self.downloadView setProgress:[value floatValue]];
         [self refreshContent:NO];
+        //[self refreshDownloadingContent:task.key];
+        
     });
 }
 

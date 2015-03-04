@@ -63,17 +63,6 @@
     [self.layer setShadowOpacity:0.8];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
-    
-    // Buttons border
-    _buttonFavorite.layer.borderWidth = 1;
-    _buttonFavorite.layer.borderColor = [[UIColor colorWithWhite:0.1 alpha:0.3] CGColor];
-
-    _buttonShare.layer.borderWidth = 1;
-    _buttonShare.layer.borderColor = [[UIColor colorWithWhite:0.1 alpha:0.3] CGColor];
-
-    _buttonDirection.layer.borderWidth = 1;
-    _buttonDirection.layer.borderColor = [[UIColor colorWithWhite:0.1 alpha:0.3] CGColor];
-
 }
 
 -(void)setAddress:(NSString*)address {

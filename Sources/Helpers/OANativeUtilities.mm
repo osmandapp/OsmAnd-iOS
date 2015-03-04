@@ -13,6 +13,7 @@
 #include <QString>
 
 #include <SkImageDecoder.h>
+#include <SkCGUtils.h>
 
 @implementation OANativeUtilities
 
@@ -55,6 +56,22 @@
     output.x = input.x;
     output.y = input.y;
     return output;
+}
+
++ (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap
+{
+    if (skBitmap.isNull())
+        return nil;
+    
+    // First convert SkBitmap to CGImageRef.
+    CGImageRef cgImage = SkCreateCGImageRefWithColorspace(skBitmap, NULL);
+    // Now convert to UIImage.
+    UIImage *img = [UIImage imageWithCGImage:cgImage
+                                       scale:[UIScreen mainScreen].scale
+                                 orientation:UIImageOrientationUp];
+    CGImageRelease(cgImage);
+    
+    return img;
 }
 
 @end

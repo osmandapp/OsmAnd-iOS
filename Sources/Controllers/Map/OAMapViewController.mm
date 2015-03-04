@@ -44,6 +44,11 @@
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
+#include <OsmAndCore/Map/BillboardVectorMapSymbol.h>
+#include <OsmAndCore/Map/RasterMapSymbol.h>
+#include <OsmAndCore/Map/OnPathRasterMapSymbol.h>
+#include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
+
 #if defined(OSMAND_IOS_DEV)
 #   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
@@ -458,7 +463,7 @@
     
     // IOS-208
     
-    int showMapIterator = [[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
+    int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
     [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
@@ -962,109 +967,58 @@
     [mapView convert:touchPoint toLocation:&touchLocation];
 
     // Format location
-    const double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-    const double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-    NSString* formattedLocation = [[[OsmAndApp instance] locationFormatter] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
-
-    // Show context pin marker
-    _contextPinMarker->setPosition(touchLocation);
-    _contextPinMarker->setIsHidden(false);
+    double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
     NSString *caption;
+    UIImage *icon;
+    
     QList< std::shared_ptr<const OsmAnd::MapSymbol> > symbols = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     for (const auto symbol : symbols) {
+
+        if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbol))
+        {
+            lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
+            lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+        }
+
+        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbol))
+        {
+            std::shared_ptr<const SkBitmap> outIcon;
+            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
+            if (outIcon != nullptr)
+                icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
+        }
         
         OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbol->groupPtr);
         const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         
         caption = mapObject->getCaptionInNativeLanguage().toNSString();
-        //NSLog(@"object = %@ %d", mapObject->getCaptionInNativeLanguage().toNSString(), mapObject->captions.count());
+
+        break;
         
     }
+    
+    [self showContextPinMarker:lat longitude:lon];
     
     if (!caption)
         caption = @"";
     
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object: self
-                                                      userInfo:@{@"caption" : caption,
-                                                                 @"lat": [NSNumber numberWithDouble:lat],
-                                                                 @"lon": [NSNumber numberWithDouble:lon],
-                                                                 @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
-                                                                 @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
-    return;
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    [userInfo setObject:caption forKey:@"caption"];
+    [userInfo setObject:[NSNumber numberWithDouble:lat] forKey:@"lat"];
+    [userInfo setObject:[NSNumber numberWithDouble:lon] forKey:@"lon"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
+    if (icon)
+        [userInfo setObject:icon forKey:@"icon"];
     
-    // Show corresponding action-sheet
-    static NSString* const locationDetailsAction = OALocalizedString(@"What's here?");
-    static NSString* const addToFavoritesAction = OALocalizedString(@"Add to favorites");
-    static NSString* const shareLocationAction = OALocalizedString(@"Share this location");
-    static NSString* const targetpointLocationAction = OALocalizedString(@"Set as target point");
-    static NSArray* const actions = @[/*locationDetailsAction,*/
-                                      addToFavoritesAction,
-                                      targetpointLocationAction,
-                                      shareLocationAction];
-    [UIActionSheet presentOnView:mapView
-                       withTitle:formattedLocation
-                    cancelButton:OALocalizedString(@"Cancel")
-               destructiveButton:nil
-                    otherButtons:actions
-                        onCancel:^(UIActionSheet *) {
-                            _contextPinMarker->setIsHidden(true);
-                        }
-                   onDestructive:nil
-                 onClickedButton:^(UIActionSheet *, NSUInteger actionIdx) {
-                     NSString* action = [actions objectAtIndex:actionIdx];
-                     if (action == locationDetailsAction)
-                     {
-                         OALog(@"whats here");
-                     }
-                     else if (action == targetpointLocationAction)
-                     {
-                         OALog(@"set as target point");
-                     }
-                     else if (action == addToFavoritesAction)
-                     {
-                         
-                         OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(lat, lon)
-                                                                                                                     andTitle:formattedLocation];
-
-                         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-                         {
-                             // For iPhone and iPod, push menu to navigation controller
-                             [self.navigationController pushViewController:addFavoriteVC
-                                                                  animated:YES];
-                         }
-                         else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-                         {
-                             // For iPad, open menu in a popover with it's own navigation controller
-                             UINavigationController* navigationController = [[OANavigationController alloc] initWithRootViewController:addFavoriteVC];
-                             UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
-
-                             [popoverController presentPopoverFromRect:CGRectMake(touchPoint.x, touchPoint.y, 0.0f, 0.0f)
-                                                                inView:mapView
-                                              permittedArrowDirections:UIPopoverArrowDirectionAny
-                                                              animated:YES];
-                         }
-                     }
-                     else if (action == shareLocationAction)
-                     {
-
-                         UIImage *image = [mapView getGLScreenshot];
-                         NSString *string = [NSString stringWithFormat:@"Look at this location: %@", formattedLocation];
-                          
-                         UIActivityViewController *activityViewController =
-                         [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
-                                                           applicationActivities:nil];
-                         
-                         [self.navigationController presentViewController:activityViewController
-                                                            animated:YES
-                                                          completion:^{
-                                                          }];
-                     }
-
-                     _contextPinMarker->setIsHidden(true);
-                 }];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                        object:self
+                                                      userInfo:userInfo];
 }
+
+
 
 - (id<OAMapRendererViewProtocol>)mapRendererView
 {

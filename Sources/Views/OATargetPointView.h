@@ -15,6 +15,8 @@
 
 @interface OATargetPointView : UIView
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
+
 @property (nonatomic, assign) BOOL isAddressFound;
 
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;

@@ -26,5 +26,6 @@
 + (NSMutableArray*)QListOfStringsToNSMutableArray:(const QList<QString>&)list;
 + (Point31)convertFromPointI:(OsmAnd::PointI)input;
 + (OsmAnd::PointI)convertFromPoint31:(Point31)input;
++ (UIImage *) skBitmapToUIImage:(const SkBitmap&) skBitmap;
 
 @end

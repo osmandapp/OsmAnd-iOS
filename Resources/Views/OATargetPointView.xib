@@ -12,7 +12,7 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ул. Академика Крымского" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DEN-oc-cuE">
-                    <rect key="frame" x="16" y="12" width="288" height="21"/>
+                    <rect key="frame" x="16" y="12" width="265" height="21"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="15"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -75,8 +75,15 @@
                         <action selector="buttonFavoriteClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="c6c-vO-VjT"/>
                     </connections>
                 </button>
+                <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="50C-PP-spm">
+                    <rect key="frame" x="280" y="12" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                </imageView>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="addressLabel" destination="DEN-oc-cuE" id="GuH-OI-VN1"/>
@@ -84,6 +91,7 @@
                 <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="IP8-fj-2X0"/>
                 <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="G6e-gV-DVq"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
+                <outlet property="imageView" destination="50C-PP-spm" id="NFP-hv-9bT"/>
             </connections>
             <point key="canvasLocation" x="606" y="529.5"/>
         </view>

@@ -378,6 +378,7 @@ NSLayoutConstraint* targetBottomConstraint;
 -(void)onTargetPointSet:(NSNotification *)notification {
     NSDictionary *params = [notification userInfo];
     NSString *caption = [params objectForKey:@"caption"];
+    UIImage *icon = [params objectForKey:@"icon"];
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
@@ -438,6 +439,7 @@ NSLayoutConstraint* targetBottomConstraint;
     [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
     [self.targetMenuView setAddress:addressString];
     
+    [self.targetMenuView.imageView setImage:icon];
     
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];

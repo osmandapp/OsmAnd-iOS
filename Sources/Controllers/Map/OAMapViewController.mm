@@ -130,6 +130,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _contextPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
 
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationPinMarkersCollection;
+
     // Favorites presenter
     std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
 
@@ -369,6 +371,8 @@
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
                                                                      [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
 
+    _destinationPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
@@ -410,6 +414,7 @@
 
     // Add context pin markers
     [mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
+    [mapView addKeyedSymbolsProvider:_destinationPinMarkersCollection];
 }
 
 - (void)viewDidLoad
@@ -2191,5 +2196,40 @@
 }
 
 #endif // defined(OSMAND_IOS_DEV)
+
+- (void)addDestinationPin:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    OsmAnd::ColorARGB col(a*255.0, r*255.0, g*255.0, b*255.0);
+    
+    const OsmAnd::LatLon latLon(latitude, longitude);
+
+    OsmAnd::MapMarkerBuilder()
+    .setIsAccuracyCircleSupported(false)
+    .setBaseOrder(std::numeric_limits<int>::max() - 2)
+    .setIsHidden(false)
+    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"context_pin_marker_icon"])
+    .setPinIconModulationColor(col)
+    .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
+    .buildAndAddToCollection(_destinationPinMarkersCollection);
+}
+
+- (void)removeDestinationPin:(UIColor *)color
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    OsmAnd::ColorARGB col(a*255.0, r*255.0, g*255.0, b*255.0);
+
+    for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
+    {
+        OsmAnd::ColorARGB mCol = marker->getPinIconModulationColor();
+        if (col.argb == mCol.argb) {
+            _destinationPinMarkersCollection->removeMarker(marker);
+            break;
+        }
+    }
+}
+
 
 @end

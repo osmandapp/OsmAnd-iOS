@@ -556,6 +556,11 @@
 
 #pragma mark - OADestinationViewControllerProtocol
 
+- (void)destinationRemoved:(OADestination *)destination
+{
+    [_mapViewController removeDestinationPin:destination.color];
+}
+
 -(void)destinationViewLayoutDidChange
 {
     CGFloat x = _compassBox.frame.origin.x;

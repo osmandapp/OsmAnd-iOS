@@ -16,6 +16,7 @@
 
 - (void)destinationViewLayoutDidChange;
 - (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon;
+- (void)destinationRemoved:(OADestination *)destination;
 
 @end
 
@@ -32,7 +33,7 @@
 
 - (void)updateFrame;
 
-- (BOOL) addDestination:(OADestination *)destination;
+- (UIColor *) addDestination:(OADestination *)destination;
 - (void) doLocationUpdate;
 
 @end

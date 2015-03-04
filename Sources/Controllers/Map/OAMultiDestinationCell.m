@@ -483,7 +483,7 @@
             [self reloadData];
         }];
         
-    } else {        
+    } else {
         if (_delegate)
             [_delegate btnCloseClicked:self destination:_destinations[0]];
     }

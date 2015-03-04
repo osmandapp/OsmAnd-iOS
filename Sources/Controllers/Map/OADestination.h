@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OADestination : NSObject
+@interface OADestination : NSObject <NSCoding>
 
 @property (nonatomic) NSString *desc;
 @property (nonatomic) UIColor *color;

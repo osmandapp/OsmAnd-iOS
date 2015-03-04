@@ -500,7 +500,10 @@ NSLayoutConstraint* targetBottomConstraint;
     OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
     if (![self.view.subviews containsObject:_destinationViewController.view])
         [self.view addSubview:_destinationViewController.view];
-    [_destinationViewController addDestination:destination];
+    UIColor *color = [_destinationViewController addDestination:destination];
+    
+    if (color)
+        [_mapViewController addDestinationPin:color latitude:_targetLatitude longitude:_targetLongitude];
     
     [self hideTargetPointMenu];
 }
@@ -516,6 +519,11 @@ NSLayoutConstraint* targetBottomConstraint;
 }
 
 #pragma mark - OADestinationViewControllerProtocol
+
+- (void)destinationRemoved:(OADestination *)destination
+{
+    [_mapViewController removeDestinationPin:destination.color];
+}
 
 -(void)destinationViewLayoutDidChange
 {

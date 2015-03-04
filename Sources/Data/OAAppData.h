@@ -23,6 +23,8 @@
 
 @property(readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
+@property (nonatomic) NSMutableArray *destinations;
+
 + (OAAppData*)defaults;
 
 @end

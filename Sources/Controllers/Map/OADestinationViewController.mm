@@ -14,7 +14,6 @@
 
 @interface OADestinationViewController ()
 
-@property (nonatomic) NSMutableArray *destinations;
 @property (nonatomic) NSMutableArray *destinationCells;
 @property (nonatomic) OAMultiDestinationCell *multiCell;
 
@@ -28,18 +27,20 @@
 @implementation OADestinationViewController {
     
     BOOL _singleLineMode;
+    OsmAndAppInstance _app;
 }
 
 - (NSArray *)allDestinations
 {
-    return [NSArray arrayWithArray:self.destinations];
+    return [NSArray arrayWithArray:_app.data.destinations];
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
+    _app = [OsmAndApp instance];
+
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        self.destinations = [NSMutableArray array];
         self.destinationCells = [NSMutableArray array];
         self.usedColors = [NSMutableArray array];
         
@@ -53,6 +54,24 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (_app.data.destinations.count > 0) {
+        
+        if (!_multiCell) {
+            self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:_app.data.destinations];
+            _multiCell.delegate = self;
+            [self.view addSubview:_multiCell.contentView];
+        }
+        
+        for (OADestination *destination in _app.data.destinations) {
+            OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+            cell.delegate = self;
+            [_destinationCells addObject:cell];
+            [self.view addSubview:cell.contentView];
+            
+            [_usedColors addObject:destination.color];
+        }
+    }
 }
 
 
@@ -91,7 +110,7 @@
         } else {
            
             _singleLineMode = NO;
-            CGFloat h = 50.0 * _destinations.count + _destinations.count - 1.0;
+            CGFloat h = 50.0 * _app.data.destinations.count + _app.data.destinations.count - 1.0;
             if (h < 0.0)
                 h = 0.0;
             frame = CGRectMake(0.0, _top, small, h);
@@ -112,8 +131,8 @@
         } else {
             
             _singleLineMode = YES;
-            CGFloat h = 50.0;
-            if (_destinations.count == 0)
+            CGFloat h = 50.0 + (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && (_app.data.destinations.count == 3) ? 20.0 : 0.0);
+            if (_app.data.destinations.count == 0)
                 h = 0.0;
             
             frame = CGRectMake(0.0, _top, big, h);
@@ -158,10 +177,13 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        if ([_destinations containsObject:destination]) {
+        if ([_app.data.destinations containsObject:destination]) {
             
             [_usedColors removeObject:destination.color];
-            [_destinations removeObject:destination];
+            [_app.data.destinations removeObject:destination];
+            
+            if (_delegate)
+                [_delegate destinationRemoved:destination];
             
             // process single cells
             OADestinationCell *cell;
@@ -180,7 +202,7 @@
                 } completion:^(BOOL finished) {
                     [self updateFrame];
                     [cell.contentView removeFromSuperview];
-                    if (_destinations.count == 0) {
+                    if (_app.data.destinations.count == 0) {
                         [self.view removeFromSuperview];
                         [self stopLocationUpdate];
                     }
@@ -214,7 +236,7 @@
                     [self updateFrame];
                     [_multiCell.contentView removeFromSuperview];
                     _multiCell = nil;
-                    if (_destinations.count == 0) {
+                    if (_app.data.destinations.count == 0) {
                         [self.view removeFromSuperview];
                         [self stopLocationUpdate];
                     }
@@ -224,12 +246,12 @@
     });
 }
 
-- (BOOL) addDestination:(OADestination *)destination
+- (UIColor *) addDestination:(OADestination *)destination
 {
-    if (_destinations.count >= 3)
-        return NO;
+    if (_app.data.destinations.count >= 3)
+        return nil;
     
-    [_destinations addObject:destination];
+    [_app.data.destinations addObject:destination];
     destination.color = [self getFreeColor];
 
     if (!_multiCell) {
@@ -240,7 +262,7 @@
         [self.view addSubview:_multiCell.contentView];
     } else {
         [UIView animateWithDuration:.2 animations:^{
-            _multiCell.destinations = [NSArray arrayWithArray:_destinations];
+            _multiCell.destinations = [NSArray arrayWithArray:_app.data.destinations];
         }];
     }
     
@@ -265,7 +287,7 @@
 
     [self startLocationUpdate];
     
-    return YES;
+    return [destination.color copy];
 }
 
 - (UIColor *)getFreeColor
@@ -291,7 +313,7 @@
 
 - (void)startLocationUpdate
 {
-    if (_destinations.count == 0 || self.locationServicesUpdateObserver)
+    if (_app.data.destinations.count == 0 || self.locationServicesUpdateObserver)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];

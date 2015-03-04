@@ -19,6 +19,7 @@
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OADestinationViewController.h"
+#import "OADestination.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -124,8 +125,13 @@
 
 - (void)updateHUD:(BOOL)animated
 {
-    if (!_destinationViewController)
+    if (!_destinationViewController) {
         _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
+
+        for (OADestination *destination in _app.data.destinations)
+            [_mapViewController addDestinationPin:destination.color latitude:destination.latitude longitude:destination.longitude];
+
+    }
     
     // Inflate new HUD controller and add it
     UIViewController* newHudController = nil;

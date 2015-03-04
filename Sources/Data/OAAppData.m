@@ -41,6 +41,8 @@
         _mapLastViewedState = [[OAMapViewState alloc] init];
     if (_mapLayersConfiguration == nil)
         _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
+    if (_destinations == nil)
+        _destinations = [NSMutableArray array];
 }
 
 @synthesize lastMapSource = _lastMapSource;
@@ -119,6 +121,7 @@
 #define kLastMapSources @"last_map_sources"
 #define kMapLastViewedState @"map_last_viewed_state"
 #define kMapLayersConfiguration @"map_layers_configuration"
+#define kDestinations @"destinations"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -126,6 +129,7 @@
     [aCoder encodeObject:_lastMapSources forKey:kLastMapSources];
     [aCoder encodeObject:_mapLastViewedState forKey:kMapLastViewedState];
     [aCoder encodeObject:_mapLayersConfiguration forKey:kMapLayersConfiguration];
+    [aCoder encodeObject:_destinations forKey:kDestinations];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -137,6 +141,7 @@
         _lastMapSources = [aDecoder decodeObjectForKey:kLastMapSources];
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
         _mapLayersConfiguration = [aDecoder decodeObjectForKey:kMapLayersConfiguration];
+        _destinations = [aDecoder decodeObjectForKey:kDestinations];
         [self safeInit];
     }
     return self;

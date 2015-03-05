@@ -405,9 +405,6 @@
     self.view = mapView;
     mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     mapView.contentScaleFactor = [[UIScreen mainScreen] scale];
-    [_stateObserver observe:mapView.stateObservable];
-    [_settingsObserver observe:mapView.settingsObservable];
-    [_framePreparedObserver observe:mapView.framePreparedObservable];
 
     // Add "My location" and "My course" markers
     [mapView addKeyedSymbolsProvider:_myMarkersCollection];
@@ -421,8 +418,13 @@
 {
     [super viewDidLoad];
 
-    // Tell view to create context
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    [_stateObserver observe:mapView.stateObservable];
+    [_settingsObserver observe:mapView.settingsObservable];
+    [_framePreparedObserver observe:mapView.framePreparedObservable];
+
+    // Tell view to create context
     mapView.userInteractionEnabled = YES;
     mapView.multipleTouchEnabled = YES;
     mapView.displayDensityFactor = self.displayDensityFactor;

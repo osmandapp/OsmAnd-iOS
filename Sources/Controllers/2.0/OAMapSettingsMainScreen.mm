@@ -47,46 +47,33 @@
 -(void)setupView
 {
     
-    NSArray *arrTop;
+    NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
+    [section0fav setObject:@"Favorite" forKey:@"name"];
+    [section0fav setObject:@"" forKey:@"value"];
+    [section0fav setObject:@"OASwitchCell" forKey:@"type"];
+
+    NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
+    [section0tracks setObject:@"Tracks" forKey:@"name"];
+    [section0tracks setObject:@"" forKey:@"value"];
+    [section0tracks setObject:@"OASettingsCell" forKey:@"type"];
+
+    NSMutableArray *section0 = [NSMutableArray array];
+    [section0 addObject:section0fav];
+    if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0)
+        [section0 addObject:section0tracks];
     
-    if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0) {
-        
-        arrTop = @[@{@"groupName": @"Show on Map",
-                              @"cells": @[
-                                      @{@"name": @"Favorite",
-                                        @"value": @"",
-                                        @"type": @"OASwitchCell"},
-                                      @{@"name": @"Tracks",
-                                        @"value": @"",
-                                        @"type": @"OASettingsCell"}
-                                      ]
-                              },
-                            @{@"groupName": @"Map Type",
-                              @"cells": @[
-                                      @{@"name": @"Map Type",
-                                        @"value": app.data.lastMapSource.name,
-                                        @"type": @"OASettingsCell"}
-                                      ],
-                              }
-                            ];
-    } else {
-        
-        arrTop = @[@{@"groupName": @"Show on Map",
-                              @"cells": @[
-                                      @{@"name": @"Favorite",
-                                        @"value": @"",
-                                        @"type": @"OASwitchCell"}
-                                      ]
-                              },
-                            @{@"groupName": @"Map Type",
-                              @"cells": @[
-                                      @{@"name": @"Map Type",
-                                        @"value": app.data.lastMapSource.name,
-                                        @"type": @"OASettingsCell"}
-                                      ],
-                              }
-                            ];
-    }
+    
+    NSArray *arrTop = @[@{@"groupName": @"Show on Map",
+                          @"cells": section0
+                          },
+                        @{@"groupName": @"Map Type",
+                          @"cells": @[
+                                  @{@"name": @"Map Type",
+                                    @"value": app.data.lastMapSource.name,
+                                    @"type": @"OASettingsCell"}
+                                  ],
+                          }
+                        ];
     
     if (isOnlineMapSource) {
         tableData = arrTop;
@@ -112,9 +99,25 @@
                                  }
                                ];
 
+        
         tableData = [arrTop arrayByAddingObjectsFromArray:arrStyles];
     }
+
     
+    NSArray *arrOverlayUnderlay = @[@{@"groupName": @"Overlay / Underlay",
+                                      @"cells": @[
+                                              @{@"name": @"Overlay",
+                                                @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : @"None",
+                                                @"type": @"OASettingsCell"},
+                                              @{@"name": @"Underlay",
+                                                @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : @"None",
+                                                @"type": @"OASettingsCell"}
+                                              ]
+                                      }
+                                    ];
+
+    tableData = [tableData arrayByAddingObjectsFromArray:arrOverlayUnderlay];
+
     [tblView reloadData];
 }
 

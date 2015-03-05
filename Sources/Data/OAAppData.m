@@ -90,8 +90,49 @@
     }
 }
 
-@synthesize mapLastViewedState = _mapLastViewedState;
+@synthesize overlayMapSource = _overlayMapSource;
 
+- (OAMapSource*)overlayMapSource
+{
+    @synchronized(_lock)
+    {
+        return _overlayMapSource;
+    }
+}
+
+- (void)setOverlayMapSource:(OAMapSource*)overlayMapSource
+{
+    @synchronized(_lock)
+    {
+        _overlayMapSource = [overlayMapSource copy];
+        //[_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
+    }
+}
+
+@synthesize underlayMapSource = _underlayMapSource;
+
+- (OAMapSource*)underlayMapSource
+{
+    @synchronized(_lock)
+    {
+        return _underlayMapSource;
+    }
+}
+
+- (void)setUnderlayMapSource:(OAMapSource*)underlayMapSource
+{
+    @synchronized(_lock)
+    {
+        _underlayMapSource = [underlayMapSource copy];
+        //[_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
+    }
+}
+
+@synthesize overlayAlpha = _overlayAlpha;
+@synthesize underlayAlpha = _underlayAlpha;
+
+
+@synthesize mapLastViewedState = _mapLastViewedState;
 @synthesize mapLayersConfiguration = _mapLayersConfiguration;
 
 #pragma mark - defaults
@@ -123,6 +164,11 @@
 #define kMapLayersConfiguration @"map_layers_configuration"
 #define kDestinations @"destinations"
 
+#define kOverlayMapSource @"overlay_map_source"
+#define kUnderlayMapSource @"underlay_map_source"
+#define kOverlayAlpha @"overlay_alpha"
+#define kUnderlayAlpha @"underlay_alpha"
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
@@ -130,6 +176,11 @@
     [aCoder encodeObject:_mapLastViewedState forKey:kMapLastViewedState];
     [aCoder encodeObject:_mapLayersConfiguration forKey:kMapLayersConfiguration];
     [aCoder encodeObject:_destinations forKey:kDestinations];
+
+    [aCoder encodeObject:_overlayMapSource forKey:kOverlayMapSource];
+    [aCoder encodeObject:_underlayMapSource forKey:kUnderlayMapSource];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_overlayAlpha] forKey:kOverlayAlpha];
+    [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -142,6 +193,12 @@
         _mapLastViewedState = [aDecoder decodeObjectForKey:kMapLastViewedState];
         _mapLayersConfiguration = [aDecoder decodeObjectForKey:kMapLayersConfiguration];
         _destinations = [aDecoder decodeObjectForKey:kDestinations];
+
+        _overlayMapSource = [aDecoder decodeObjectForKey:kOverlayMapSource];
+        _underlayMapSource = [aDecoder decodeObjectForKey:kUnderlayMapSource];
+        _overlayAlpha = [[aDecoder decodeObjectForKey:kOverlayAlpha] doubleValue];
+        _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
+
         [self safeInit];
     }
     return self;

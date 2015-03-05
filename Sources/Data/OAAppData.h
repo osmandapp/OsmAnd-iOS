@@ -16,6 +16,12 @@
 @interface OAAppData : NSObject <NSCoding>
 
 @property OAMapSource* lastMapSource;
+
+@property OAMapSource* overlayMapSource;
+@property OAMapSource* underlayMapSource;
+@property double overlayAlpha;
+@property double underlayAlpha;
+
 @property(readonly) OAObservable* lastMapSourceChangeObservable;
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;
 

@@ -978,16 +978,16 @@
     NSString *caption;
     UIImage *icon;
     
-    QList< std::shared_ptr<const OsmAnd::MapSymbol> > symbols = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
-    for (const auto symbol : symbols) {
+    const auto& symbolInfos = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
+    for (const auto symbolInfo : symbolInfos) {
 
-        if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbol))
+        if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
             lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
             lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
         }
 
-        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbol))
+        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
         {
             std::shared_ptr<const SkBitmap> outIcon;
             _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
@@ -995,7 +995,7 @@
                 icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
         }
         
-        OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbol->groupPtr);
+        OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
         const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         
         caption = mapObject->getCaptionInNativeLanguage().toNSString();

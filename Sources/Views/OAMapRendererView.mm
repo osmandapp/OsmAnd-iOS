@@ -155,7 +155,7 @@
     _renderer->setElevationDataProvider(elevationDataProvider);
 }
 
-- (QList< std::shared_ptr<const OsmAnd::MapSymbol> >)getSymbolsAt:(OsmAnd::PointI)screenPoint
+- (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint
 {
     return _renderer->getSymbolsAt(screenPoint);
 }

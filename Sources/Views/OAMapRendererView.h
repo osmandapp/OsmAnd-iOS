@@ -18,6 +18,7 @@
 #include <OsmAndCore/Map/IMapTiledSymbolsProvider.h>
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
@@ -51,7 +52,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
-- (QList< std::shared_ptr<const OsmAnd::MapSymbol> >)getSymbolsAt:(OsmAnd::PointI)screenPoint;
+- (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;

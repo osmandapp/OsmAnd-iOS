@@ -133,29 +133,25 @@
         NSAssert(handlerSignature != nil, @"Whoa! Something is messed up with selector %@ in %@", NSStringFromSelector(_handler), owner);
         NSUInteger handlerArgsCount = [handlerSignature numberOfArguments] - 2; // Subtract "self" and "cmd_"
 
-        id (*response2)(id, SEL, id, id, id) = (id (*)(id, SEL, id, id, id)) objc_msgSend;
-        id (*response1)(id, SEL, id, id) = (id (*)(id, SEL, id, id)) objc_msgSend;
-        id (*response)(id, SEL, id) = (id (*)(id, SEL, id)) objc_msgSend;
-        
         if (handlerArgsCount == 3)
         {
-            response2(owner, _handler, observer, key, value);
+            ((void (*)(id, SEL, id, id, id))objc_msgSend)(owner, _handler, observer, key, value);
             return;
         }
         
         if (handlerArgsCount == 2)
         {
-            response1(owner, _handler, observer, key);
+            ((void (*)(id, SEL, id, id))objc_msgSend)(owner, _handler, observer, key);
             return;
         }
         
         if (handlerArgsCount == 1)
         {
-            response(owner, _handler, observer);
+            ((void (*)(id, SEL, id))objc_msgSend)(owner, _handler, observer);
             return;
         }
         
-        objc_msgSend(owner, _handler);
+        ((void (*)(id, SEL))objc_msgSend)(owner, _handler);
         return;
     }
     

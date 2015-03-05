@@ -233,6 +233,20 @@
             }
             break;
         }
+        case 3:
+        {
+            if (indexPath.row == 0) {
+                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
+                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                
+            } else {
+                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
+                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                
+            }
+            
+            break;
+        }
             
         default:
             break;

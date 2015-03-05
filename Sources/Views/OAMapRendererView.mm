@@ -185,6 +185,11 @@
     _renderer->removeAllSymbolsProviders();
 }
 
+- (BOOL) setMapLayerConfiguration:(int)layerIndex configuration:(OsmAnd::MapLayerConfiguration)configuration forcedUpdate:(BOOL)forcedUpdate
+{
+    return _renderer->setMapLayerConfiguration(layerIndex, configuration, forcedUpdate);
+}
+
 - (std::shared_ptr<OsmAnd::MapRendererDebugSettings>) getMapDebugSettings
 {
     return _renderer->getDebugSettings();

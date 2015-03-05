@@ -8,6 +8,7 @@
 
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #include "Localization.h"
+#import "OASliderCell.h"
 
 #include <QSet>
 
@@ -30,14 +31,6 @@
 @implementation Item
 @end
 
-#define Item_MapStyle _(Item_MapStyle)
-@interface Item_MapStyle : Item
-@property std::shared_ptr<const OsmAnd::UnresolvedMapStyle> mapStyle;
-@property int sortIndex;
-@end
-@implementation Item_MapStyle
-@end
-
 #define Item_OnlineTileSource _(Item_OnlineTileSource)
 @interface Item_OnlineTileSource : Item
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
@@ -47,24 +40,39 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
+typedef enum
+{
+    EMapSettingOverlay = 0,
+    EMapSettingUnderlay,
+    
+} EMapSettingType;
 
 @implementation OAMapSettingsOverlayUnderlayScreen
 {
     NSMutableArray* _onlineMapSources;
+    EMapSettingType _mapSettingType;
 }
 
 @synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
 
 
--(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
+-(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController param:(id)param
 {
     self = [super init];
     if (self) {
         app = [OsmAndApp instance];
         settings = [OAAppSettings sharedManager];
-        title = @"Map Type";
         
-        settingsScreen = EMapSettingsScreenMapType;
+        if ([param isEqualToString:@"overlay"]) {
+            _mapSettingType = EMapSettingOverlay;
+            title = @"Map Overlay";
+            settingsScreen = EMapSettingsScreenOverlay;
+
+        } else {
+            _mapSettingType = EMapSettingUnderlay;
+            title = @"Map Underlay";
+            settingsScreen = EMapSettingsScreenUnderlay;
+        }
         
         vwController = viewController;
         tblView = tableView;
@@ -95,6 +103,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     // Collect all needed resources
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
+    const auto localResources = app.resourcesManager->getLocalResources();
+    for(const auto& localResource : localResources)
+        if (localResource->type == OsmAndResourceType::OnlineTileSources)
+            onlineTileSourcesResources.push_back(localResource);
+    
     
     // Process online tile sources resources
     for(const auto& resource : onlineTileSourcesResources)
@@ -138,7 +151,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -147,6 +160,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         case 0:
             return [_onlineMapSources count];
+        case 1:
+            return 1;
             
         default:
             return 0;
@@ -158,7 +173,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch (section)
     {
         case 0:
-            return OALocalizedString(@"Online Maps");
+            return OALocalizedString(@"Available layers");
+        case 1:
+            return OALocalizedString(@"Transparency");
             
         default:
             return nil;
@@ -167,43 +184,87 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const mapSourceItemCell = @"mapSourceItemCell";
-    
-    // Get content for cell and it's type id
-    NSString* caption = nil;
-    NSString* description = nil;
-    
-    Item* someItem = [_onlineMapSources objectAtIndex:indexPath.row];
-    
-    if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
-    {
-        Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
+    if (indexPath.section == 0) {
         
-        caption = item.mapSource.name;
-        description = nil;
+        static NSString* const mapSourceItemCell = @"mapSourceItemCell";
+        
+        // Get content for cell and it's type id
+        NSString* caption = nil;
+        NSString* description = nil;
+        Item* someItem = nil;
+        
+        if (indexPath.row > 0) {
+            someItem = [_onlineMapSources objectAtIndex:indexPath.row - 1];
+            
+            if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+            {
+                Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
+                
+                caption = item.mapSource.name;
+                description = nil;
 #if defined(OSMAND_IOS_DEV)
-        description = item.resource->id.toNSString();
+                description = item.resource->id.toNSString();
 #endif // defined(OSMAND_IOS_DEV)
-    }
-    
-    // Obtain reusable cell or create one
-    UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];
-    if (cell == nil)
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
-    
-    // Fill cell content
-    cell.textLabel.text = caption;
-    cell.detailTextLabel.text = description;
-    
-    if ([app.data.lastMapSource isEqual:someItem.mapSource]) {
-        cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            }
+        } else {
+            caption = @"None";
+        }
+        
+        // Obtain reusable cell or create one
+        UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:mapSourceItemCell];
+        if (cell == nil)
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:mapSourceItemCell];
+        
+        // Fill cell content
+        cell.textLabel.text = caption;
+        cell.detailTextLabel.text = description;
+        
+        OAMapSource* mapSource;
+        if (_mapSettingType == EMapSettingOverlay)
+            mapSource = app.data.overlayMapSource;
+        else
+            mapSource = app.data.underlayMapSource;
+
+        if ((indexPath.row == 0 && mapSource == nil) || [mapSource isEqual:someItem.mapSource]) {
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+        } else {
+            cell.accessoryView = nil;
+        }
+        
+        return cell;
+        
     } else {
-        cell.accessoryView = nil;
+        
+        static NSString* const identifierCell = @"OASliderCell";
+        OASliderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderCell" owner:self options:nil];
+            cell = (OASliderCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell) {
+            if (_mapSettingType == EMapSettingOverlay)
+                cell.sliderView.value = app.data.overlayAlpha;
+            else
+                cell.sliderView.value = app.data.underlayAlpha;
+            
+            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+        }
+            
+        return cell;
     }
-    
-    return cell;
 }
 
+- (void)sliderValueChanged:(id)sender {
+    
+    UISlider *slider = sender;
+    if (_mapSettingType == EMapSettingOverlay)
+        app.data.overlayAlpha = slider.value;
+    else
+        app.data.underlayAlpha = slider.value;
+    
+}
 
 #pragma mark - UITableViewDelegate
 
@@ -214,10 +275,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    Item* item = [_onlineMapSources objectAtIndex:indexPath.row];
-    app.data.lastMapSource = item.mapSource;
-    
-    [tableView reloadData];
+    if (indexPath.section == 0) {
+        
+        if (indexPath.row > 0) {
+            Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
+            if (_mapSettingType == EMapSettingOverlay)
+                app.data.overlayMapSource = item.mapSource;
+            else
+                app.data.underlayMapSource = item.mapSource;
+        } else {
+            if (_mapSettingType == EMapSettingOverlay)
+                app.data.overlayMapSource = nil;
+            else
+                app.data.underlayMapSource = nil;
+        }
+        
+        [tableView reloadData];
+    }
 }
 
 

@@ -19,8 +19,14 @@
 
 @property OAMapSource* overlayMapSource;
 @property OAMapSource* underlayMapSource;
-@property double overlayAlpha;
-@property double underlayAlpha;
+@property (nonatomic) double overlayAlpha;
+@property (nonatomic) double underlayAlpha;
+
+@property(readonly) OAObservable* overlayMapSourceChangeObservable;
+@property(readonly) OAObservable* underlayMapSourceChangeObservable;
+@property(readonly) OAObservable* overlayAlphaChangeObservable;
+@property(readonly) OAObservable* underlayAlphaChangeObservable;
+
 
 @property(readonly) OAObservable* lastMapSourceChangeObservable;
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;

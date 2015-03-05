@@ -24,6 +24,7 @@
 #import "OAMapSettingsParameterScreen.h"
 #import "OAMapSettingsSettingScreen.h"
 #import "OAMapSettingsGpxScreen.h"
+#import "OAMapSettingsOverlayUnderlayScreen.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
@@ -290,6 +291,13 @@
         case EMapSettingsScreenSetting:
             if (!screenObj)
                 screenObj = [[OAMapSettingsSettingScreen alloc] initWithTable:self.tableView viewController:self param:customParam];
+            break;
+        case EMapSettingsScreenOverlay:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsOverlayUnderlayScreen alloc] initWithTable:self.tableView viewController:self param:@"overlay"];
+        case EMapSettingsScreenUnderlay:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsOverlayUnderlayScreen alloc] initWithTable:self.tableView viewController:self param:@"underlay"];
             break;
             
         default:

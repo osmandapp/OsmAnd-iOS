@@ -488,6 +488,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
     {
+        NSLog(@"%d %@", resource->type, [resource->localPath.toNSString() lastPathComponent]);
         
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];

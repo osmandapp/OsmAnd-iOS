@@ -79,6 +79,8 @@
 
 #define kGpxLayerId 10
 #define kGpxTempLayerId 11
+#define kOverlayLayerId 3
+#define kUnderlayLayerId -3
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -90,7 +92,12 @@
 @implementation OAMapViewController
 {
     OsmAndAppInstance _app;
-    
+
+    OAAutoObserverProxy* _overlayMapSourceChangeObserver;
+    OAAutoObserverProxy* _underlayMapSourceChangeObserver;
+    OAAutoObserverProxy* _overlayAlphaChangeObserver;
+    OAAutoObserverProxy* _underlayAlphaChangeObserver;
+
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 
     NSObject* _rendererSync;
@@ -98,6 +105,9 @@
     
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
+
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterOverlayMapProvider;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterUnderlayMapProvider;
 
     // Offline-specific providers & resources
     std::shared_ptr<OsmAnd::ObfMapObjectsProvider> _obfMapObjectsProvider;
@@ -199,6 +209,19 @@
     _firstAppear = YES;
 
     _rendererSync = [[NSObject alloc] init];
+
+    _overlayMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onOverlayLayerChanged)
+                                                              andObserve:_app.data.overlayMapSourceChangeObservable];
+    _overlayAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onOverlayLayerAlphaChanged)
+                                                              andObserve:_app.data.overlayAlphaChangeObservable];
+    _underlayMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onUnderlayLayerChanged)
+                                                              andObserve:_app.data.underlayMapSourceChangeObservable];
+    _underlayAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onUnderlayLayerAlphaChanged)
+                                                              andObserve:_app.data.underlayAlphaChangeObservable];
 
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
@@ -364,7 +387,7 @@
         .setIsAccuracyCircleSupported(false)
         .setBaseOrder(std::numeric_limits<int>::max() - 1)
         .setIsHidden(true)
-        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"context_pin_marker_icon"])
+        .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
     // Create favorites presenter
@@ -1656,6 +1679,10 @@
 
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
+
+        _rasterOverlayMapProvider.reset();
+        _rasterUnderlayMapProvider.reset();
+
         _obfMapObjectsProvider.reset();
         _mapPrimitivesProvider.reset();
         _mapPresentationEnvironment.reset();
@@ -1676,6 +1703,9 @@
         
         [mapView resetProviderFor:kGpxLayerId];
         [mapView resetProviderFor:kGpxTempLayerId];
+
+        [mapView resetProviderFor:kOverlayLayerId];
+        [mapView resetProviderFor:kUnderlayLayerId];
 
         _gpxPrimitivesProvider.reset();
         _gpxPrimitivesProviderTemp.reset();
@@ -1813,19 +1843,6 @@
                                                                                    rasterTileSize));
             [mapView addTiledSymbolsProvider:_mapObjectsSymbolsProvider];
 #endif
-      
-            if (_gpxDocFileTemp) {
-                [self showTempGpxTrack:_gpxDocFileTemp];
-            }
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self buildGpxInfoDocList];
-                
-                if (!_geoInfoDocsGpx.isEmpty())
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self initRendererWithGpxTracks];
-                    });
-            });
             
         }
         else if (mapSourceResource->type == OsmAndResourceType::OnlineTileSources)
@@ -1888,19 +1905,64 @@
                                                                            _mapPrimitiviser,
                                                                            rasterTileSize));
             
-            if (_gpxDocFileTemp) {
-                [self showTempGpxTrack:_gpxDocFileTemp];
-            }
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                [self buildGpxInfoDocList];
-                
-                if (!_geoInfoDocsGpx.isEmpty())
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [self initRendererWithGpxTracks];
-                    });
-            });
         }
+        
+        if (_gpxDocFileTemp) {
+            [self showTempGpxTrack:_gpxDocFileTemp];
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self buildGpxInfoDocList];
+            
+            if (!_geoInfoDocsGpx.isEmpty())
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self initRendererWithGpxTracks];
+                });
+        });
+        
+        
+        if (_app.data.overlayMapSource) {
+            
+            const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
+            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+            if (mapSourceResource) {
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+                
+                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
+                if (onlineMapTileProvider) {
+                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                    _rasterOverlayMapProvider = onlineMapTileProvider;
+                    [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+                    
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor(_app.data.overlayAlpha);
+                    [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+                }
+            }
+        }
+        
+        if (_app.data.underlayMapSource) {
+            
+            const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
+            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+            if (mapSourceResource) {
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+                
+                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
+                if (onlineMapTileProvider) {
+                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                    _rasterUnderlayMapProvider = onlineMapTileProvider;
+                    [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor(_app.data.underlayAlpha);
+                    [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+                }
+            }
+        }
+
     }
 }
 
@@ -1926,6 +1988,130 @@
             [mapView removeKeyedSymbolsProvider:_favoritesPresenter];
     }
 }
+
+
+- (void)onOverlayLayerAlphaChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self isViewLoaded])
+            return;
+        
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+        @synchronized(_rendererSync)
+        {
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(_app.data.overlayAlpha);
+            [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+        }
+    });
+}
+
+- (void)onOverlayLayerChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateOverlayLayer];
+    });
+}
+
+- (void)updateOverlayLayer
+{
+    if (![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        if (_app.data.overlayMapSource) {
+            
+            const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
+            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+            if (mapSourceResource) {
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+                
+                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
+                if (onlineMapTileProvider) {
+                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                    _rasterOverlayMapProvider = onlineMapTileProvider;
+                    [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+                    
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor(_app.data.overlayAlpha);
+                    [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+                }
+            }
+            
+        } else {
+            [mapView resetProviderFor:kOverlayLayerId];
+            _rasterOverlayMapProvider.reset();
+        }
+    }
+}
+
+
+
+- (void)onUnderlayLayerAlphaChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (![self isViewLoaded])
+            return;
+        
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        @synchronized(_rendererSync)
+        {
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(_app.data.underlayAlpha);
+            [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+        }
+    });
+}
+
+- (void)onUnderlayLayerChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateUnderlayLayer];
+    });
+}
+
+- (void)updateUnderlayLayer
+{
+    if (![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        if (_app.data.underlayMapSource) {
+            
+            const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
+            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+            if (mapSourceResource) {
+                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+                
+                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
+                if (onlineMapTileProvider) {
+                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                    _rasterUnderlayMapProvider = onlineMapTileProvider;
+                    [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+                    
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor(_app.data.underlayAlpha);
+                    [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+                }
+            }
+        } else {
+            [mapView resetProviderFor:kUnderlayLayerId];
+            _rasterUnderlayMapProvider.reset();
+        }
+    }
+}
+
+
 
 - (CGFloat)displayDensityFactor
 {

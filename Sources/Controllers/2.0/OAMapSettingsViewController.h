@@ -21,6 +21,8 @@ typedef enum
     EMapSettingsScreenCategory,
     EMapSettingsScreenParameter,
     EMapSettingsScreenSetting,
+    EMapSettingsScreenOverlay,
+    EMapSettingsScreenUnderlay,
     
 } EMapSettingsScreen;
 

@@ -40,7 +40,7 @@
 {
 #if defined(OSMAND_IOS_DEV)
     // Initialize TestFlight SDK
-    [TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
+    //[TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
 #endif // defined(OSMAND_IOS_DEV)
 
     // Configure device

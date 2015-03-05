@@ -31,6 +31,11 @@
 {
     _lock = [[NSObject alloc] init];
     _lastMapSourceChangeObservable = [[OAObservable alloc] init];
+
+    _overlayMapSourceChangeObservable = [[OAObservable alloc] init];
+    _overlayAlphaChangeObservable = [[OAObservable alloc] init];
+    _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
+    _underlayAlphaChangeObservable = [[OAObservable alloc] init];
 }
 
 - (void)safeInit
@@ -90,6 +95,11 @@
     }
 }
 
+@synthesize overlayMapSourceChangeObservable = _overlayMapSourceChangeObservable;
+@synthesize overlayAlphaChangeObservable = _overlayAlphaChangeObservable;
+@synthesize underlayMapSourceChangeObservable = _underlayMapSourceChangeObservable;
+@synthesize underlayAlphaChangeObservable = _underlayAlphaChangeObservable;
+
 @synthesize overlayMapSource = _overlayMapSource;
 
 - (OAMapSource*)overlayMapSource
@@ -105,7 +115,7 @@
     @synchronized(_lock)
     {
         _overlayMapSource = [overlayMapSource copy];
-        //[_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
+        [_overlayMapSourceChangeObservable notifyEventWithKey:self andValue:_overlayMapSource];
     }
 }
 
@@ -124,13 +134,30 @@
     @synchronized(_lock)
     {
         _underlayMapSource = [underlayMapSource copy];
-        //[_lastMapSourceChangeObservable notifyEventWithKey:self andValue:_lastMapSource];
+        [_underlayMapSourceChangeObservable notifyEventWithKey:self andValue:_underlayMapSource];
     }
 }
 
 @synthesize overlayAlpha = _overlayAlpha;
 @synthesize underlayAlpha = _underlayAlpha;
 
+- (void)setOverlayAlpha:(double)overlayAlpha
+{
+    @synchronized(_lock)
+    {
+        _overlayAlpha = overlayAlpha;
+        [_overlayAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_overlayAlpha]];
+    }
+}
+
+- (void)setUnderlayAlpha:(double)underlayAlpha
+{
+    @synchronized(_lock)
+    {
+        _underlayAlpha = underlayAlpha;
+        [_underlayAlphaChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithDouble:_underlayAlpha]];
+    }
+}
 
 @synthesize mapLastViewedState = _mapLastViewedState;
 @synthesize mapLayersConfiguration = _mapLayersConfiguration;

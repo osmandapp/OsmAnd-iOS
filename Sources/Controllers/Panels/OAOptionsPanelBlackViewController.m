@@ -175,7 +175,7 @@
 }
 
 - (IBAction)quizButtonClicked:(id)sender {
-    OAWebViewController* quizViewController = [[OAWebViewController alloc] initWithUrl:@"http://kwiksurveys.com/app/showpoll.asp?qid=457757&sid=iis3saqkqrn2pos457757&new=True"];
+    OAWebViewController* quizViewController = [[OAWebViewController alloc] initWithUrl:@"http://www.osmand.net/ios-poll.html"];
     [self.navigationController pushViewController:quizViewController animated:YES];
 }
 

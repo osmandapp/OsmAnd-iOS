@@ -56,7 +56,7 @@
 
     [self setCenterPanel:[[OAMapPanelViewController alloc] init]];
 
-    [self setRightPanel:[[OAActionsPanelViewController alloc] init]];
+    //[self setRightPanel:[[OAActionsPanelViewController alloc] init]];
 }
 
 - (void)loadView
@@ -87,6 +87,9 @@
     //[[UIApplication sharedApplication] setStatusBarHidden:NO];
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
@@ -147,11 +150,6 @@
 - (OAMapPanelViewController*)mapPanel
 {
     return (OAMapPanelViewController*)self.centerPanel;
-}
-
-- (OAActionsPanelViewController*)actionsPanel
-{
-    return (OAActionsPanelViewController*)self.rightPanel;
 }
 
 - (void)openMenu:(UIViewController*)menuViewController

@@ -70,7 +70,7 @@
                                 <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="1LP-5L-xCP" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="320" height="416"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="355"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" id="8s0-2h-M0v">
@@ -196,6 +196,41 @@
                                     <outlet property="delegate" destination="Lhe-yk-sVD" id="CVK-wc-517"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" id="xZm-qX-Rbq">
+                                <rect key="frame" x="0.0" y="419" width="320" height="61"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zlr-Vo-anF">
+                                        <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="12"/>
+                                        <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
+                                        <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
+                                            <color key="titleColor" red="1" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnToolbarMapsClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="P2P-HS-mYh"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="MQA-Ui-rQr">
+                                        <rect key="frame" x="162" y="0.0" width="158" height="61"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="12"/>
+                                        <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
+                                        <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
+                                        <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
+                                            <color key="titleColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="btnToolbarPurchasesClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="jh4-aY-ul2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
@@ -203,12 +238,15 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="backButton" destination="ReZ-N4-l3v" id="Bwf-wf-kQV"/>
+                        <outlet property="btnToolbarMaps" destination="zlr-Vo-anF" id="Yja-0I-eOi"/>
+                        <outlet property="btnToolbarPurchases" destination="MQA-Ui-rQr" id="44B-cL-EBf"/>
                         <outlet property="doneButton" destination="B0H-ih-pIM" id="fdl-X0-QbS"/>
                         <outlet property="searchButton" destination="yS2-Tu-WpJ" id="8Zc-qe-cWd"/>
                         <outlet property="searchDisplayController" destination="mBR-OL-CGm" id="uqv-Jo-ffv"/>
                         <outlet property="tableView" destination="1LP-5L-xCP" id="ZQA-zh-0uy"/>
                         <outlet property="titlePanelView" destination="jf8-2d-2JK" id="Ntx-so-aJh"/>
                         <outlet property="titleView" destination="C5O-TM-N7e" id="6x8-to-3em"/>
+                        <outlet property="toolbarView" destination="xZm-qX-Rbq" id="Bs1-3u-vja"/>
                         <outlet property="updateButton" destination="cJ3-RS-lHc" id="uwf-YY-0Qi"/>
                     </connections>
                 </viewController>
@@ -385,6 +423,8 @@
     </scenes>
     <resources>
         <image name="HUD_search_icon.png" width="25" height="25"/>
+        <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
+        <image name="ic_tabbar_maps_active.png" width="25" height="25"/>
         <image name="ic_update.png" width="25" height="25"/>
         <image name="icon_remove.png" width="18" height="23"/>
         <image name="menu_icon_back.png" width="10" height="20"/>

@@ -28,7 +28,7 @@
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
-    [self nextButtonClicked:nil];
+    [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSwipeOut];
     return NO;
 }
 
@@ -61,7 +61,7 @@
 
 - (IBAction)nextButtonClicked:(id)sender {
     if (self.parentIntroductionView.CurrentPanelIndex == 1) 
-        [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSwipeOut];
+        [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSkipButton];
     else
         [self.parentIntroductionView changeToPanelAtIndex:self.parentIntroductionView.CurrentPanelIndex+1];
 }

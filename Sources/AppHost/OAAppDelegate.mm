@@ -57,6 +57,9 @@
 
 #if defined(OSMAND_IOS_DEV)
 #   if defined(DEBUG)
+
+    /* Commented because of crash on iPhone 6+ simulator
+     
     // If this is a debug build, duplicate all core logs to a file
     std::shared_ptr<QIODevice> logFile(new QFile(_app.documentsDir.absoluteFilePath(QLatin1String("core.log"))));
     logFile->open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text);
@@ -81,6 +84,7 @@
             TFLogPreFormatted([prefix stringByAppendingString:line]);
         };
     OsmAnd::Logger::get()->addLogSink(std::shared_ptr<OsmAnd::ILogSink>(new OsmAnd::FunctorLogSink(testflightLog, nullptr)));
+     */
 #   endif
 #endif // defined(OSMAND_IOS_DEV)
 

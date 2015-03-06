@@ -65,7 +65,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="97S-Ol-wNi">
                             <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="12"/>
                             <inset key="titleEdgeInsets" minX="-22" minY="36" maxX="0.0" maxY="-6"/>
                             <inset key="imageEdgeInsets" minX="63" minY="-11" maxX="0.0" maxY="0.0"/>
@@ -79,7 +79,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EbN-uw-w8D">
                             <rect key="frame" x="162" y="0.0" width="158" height="61"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="12"/>
                             <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="50" minY="-11" maxX="0.0" maxY="0.0"/>

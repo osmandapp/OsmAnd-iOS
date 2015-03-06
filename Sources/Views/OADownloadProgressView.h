@@ -29,6 +29,11 @@
 
 
 @protocol OADownloadProgressViewDelegate <NSObject>
+
 - (void)resumeDownloadButtonClicked:(OADownloadProgressView *)view;
 - (void)pauseDownloadButtonClicked:(OADownloadProgressView *)view;
+
+- (void)downloadProgressViewDidAppear:(OADownloadProgressView *)view;
+- (void)downloadProgressViewDidDisappear:(OADownloadProgressView *)view;
+
 @end

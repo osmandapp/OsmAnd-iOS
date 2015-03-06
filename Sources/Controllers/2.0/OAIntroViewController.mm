@@ -71,11 +71,14 @@
 
 -(void)introduction:(MYBlurIntroductionView *)introductionView didFinishWithType:(MYFinishType)finishType {
     
-    OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
-    resourcesViewController.openFromSplash = YES;
-    [self.navigationController pushViewController:resourcesViewController animated:YES];
-
-    //[self.navigationController popViewControllerAnimated:YES];
+    if (finishType == MYFinishTypeSwipeOut) {
+        OAManageResourcesViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+        resourcesViewController.openFromSplash = YES;
+        [self.navigationController pushViewController:resourcesViewController animated:YES];
+        
+    } else {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     
 }
 

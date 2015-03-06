@@ -487,9 +487,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     // Local Resources
     _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
-    {
-        NSLog(@"%d %@", resource->type, [resource->localPath.toNSString() lastPathComponent]);
-        
+    {        
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
         
@@ -590,16 +588,16 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey
 {
-    return;
     @synchronized(_dataLock)
     {
         if (self.searchDisplayController.isActive)
         {
             for (int i = 0; i < _searchResults.count; i++) {
+                if ([_searchResults[i] isKindOfClass:[OAWorldRegion class]])
+                    continue;
                 ResourceItem *item = _searchResults[i];
                 if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-                    NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-                    [self.searchDisplayController.searchResultsTableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                     break;
                 }
             }
@@ -607,21 +605,32 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
         NSMutableArray *resourceItems = [self getResourceItems];
         for (int i = 0; i < resourceItems.count; i++) {
+            if ([resourceItems[i] isKindOfClass:[OAWorldRegion class]])
+                continue;
             ResourceItem *item = resourceItems[i];
             if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-                NSIndexPath *path = [NSIndexPath indexPathForRow:i inSection:0];
-                [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
                 break;
             }
         }
         
         ResourceItem *item = _regionMap;
-        if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-            NSIndexPath *path = [NSIndexPath indexPathForRow:0 inSection:_regionMapSection];
-            [self.tableView reloadRowsAtIndexPaths:@[path] withRowAnimation:UITableViewRowAnimationNone];
-        }
+        if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+            [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_regionMapSection]];
 
     }
+}
+
+- (void) updateTableLayout
+{
+    CGRect frame = self.tableView.frame;
+    CGFloat h = self.view.bounds.size.height - self.toolbarView.bounds.size.height - frame.origin.y;
+    if (self.downloadView.superview)
+        h -= self.downloadView.bounds.size.height;
+    
+    [UIView animateWithDuration:.2 animations:^{
+        self.tableView.frame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
+    }];
 }
 
 - (NSMutableArray*)getResourceItems
@@ -946,6 +955,83 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     return nil;
 }
 
+-(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    
+    UITableView *tableView;
+    if (self.searchDisplayController.isActive)
+        tableView = self.searchDisplayController.searchResultsTableView;
+    else
+        tableView = self.tableView;
+    
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    
+    static NSString* const downloadingResourceCell = @"downloadingResourceCell";
+    
+    NSString* cellTypeId = nil;
+    id item_ = nil;
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+    {
+        item_ = [_searchResults objectAtIndex:indexPath.row];
+        
+        if (![item_ isKindOfClass:[OAWorldRegion class]])
+        {
+            ResourceItem* item = (ResourceItem*)item_;
+            
+            if (item.downloadTask != nil)
+                cellTypeId = downloadingResourceCell;
+            
+        }
+    }
+    else
+    {
+        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
+        {
+            item_ = [[self getResourceItems] objectAtIndex:indexPath.row];
+            
+            if (![item_ isKindOfClass:[OAWorldRegion class]])
+            {
+                ResourceItem* item = (ResourceItem*)item_;
+                
+                if (item.downloadTask != nil)
+                    cellTypeId = downloadingResourceCell;
+            }
+        }
+        else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
+        {
+            item_ = _regionMap;
+            ResourceItem* item = (ResourceItem*)item_;
+            
+            if (item.downloadTask != nil)
+                cellTypeId = downloadingResourceCell;
+        }
+    }
+    
+    if ([cellTypeId isEqualToString:downloadingResourceCell])
+    {
+        ResourceItem* item = (ResourceItem*)item_;
+        FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+        
+        float progressCompleted = item.downloadTask.progressCompleted;
+        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = progressCompleted;
+        }
+        else if (item.downloadTask.state == OADownloadTaskStateFinished)
+        {
+            [progressView stopSpinProgressBackgroundLayer];
+            progressView.progress = 1.0f;
+        }
+        else
+        {
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
+    }
+
+}
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const subregionCell = @"subregionCell";
@@ -1047,7 +1133,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
         {
-            ResourceItem* item = _regionMap;
+            item_ = _regionMap;
+            ResourceItem* item = (ResourceItem*)item_;
             uint64_t _size = item.size;
             
             if (item.downloadTask != nil)
@@ -1300,6 +1387,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                          newBounds.origin.y = 0.0;
                          self.tableView.bounds = newBounds;
                          self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, -64.0);
+                         self.toolbarView.frame = CGRectOffset(self.toolbarView.frame, 0.0, 61.0);
                          self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
                          
                      } completion:^(BOOL finished) {
@@ -1315,13 +1403,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         [self setNeedsStatusBarAppearanceUpdate];
     //[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
 
+    CGFloat h = self.view.bounds.size.height - 64.0 - 61.0;
+    if (self.downloadView && self.downloadView.superview)
+        h -= self.downloadView.bounds.size.height;
+
     [UIView animateWithDuration:0.1
                           delay:0.0
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
 
+                         self.toolbarView.frame = CGRectOffset(self.toolbarView.frame, 0.0, -61.0);
                          self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, 64.0);
-                         self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, self.view.bounds.size.height - 64.0);
+                         self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
 
                      } completion:^(BOOL finished) {
                          self.titlePanelView.userInteractionEnabled = YES;
@@ -1437,5 +1530,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 }
 
 #pragma mark -
+
+- (IBAction)btnToolbarMapsClicked:(id)sender {
+}
+
+- (IBAction)btnToolbarPurchasesClicked:(id)sender {
+}
 
 @end

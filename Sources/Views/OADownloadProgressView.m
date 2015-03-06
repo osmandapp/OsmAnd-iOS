@@ -34,9 +34,9 @@ typedef enum {
             
             // drop shadow
             [self.layer setShadowColor:[UIColor blackColor].CGColor];
-            [self.layer setShadowOpacity:0.8];
-            [self.layer setShadowRadius:3.0];
-            [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+            [self.layer setShadowOpacity:0.2];
+            [self.layer setShadowRadius:2.0];
+            [self.layer setShadowOffset:CGSizeMake(0.0, -1.5)];
         }
     }
     return self;
@@ -56,12 +56,18 @@ typedef enum {
 
             // drop shadow
             [self.layer setShadowColor:[UIColor blackColor].CGColor];
-            [self.layer setShadowOpacity:0.8];
-            [self.layer setShadowRadius:3.0];
-            [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+            [self.layer setShadowOpacity:0.2];
+            [self.layer setShadowRadius:2.0];
+            [self.layer setShadowOffset:CGSizeMake(0.0, -1.5)];
         }
     }
     return self;
+}
+
+-(void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    [self.delegate downloadProgressViewDidAppear:self];
 }
 
 -(void)setProgress:(float)progress {

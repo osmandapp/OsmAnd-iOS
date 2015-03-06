@@ -44,8 +44,15 @@
 
 @interface OAResourcesBaseViewController : OASuperViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
+
+@property OADownloadProgressView* downloadView;
+
 @property BOOL dataInvalidated;
 
+- (void)updateTableLayout;
 - (void)updateContent;
 - (void)refreshContent:(BOOL)update;
 - (void)refreshDownloadingContent:(NSString *)downloadTaskKey;

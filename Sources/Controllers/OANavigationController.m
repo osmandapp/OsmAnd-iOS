@@ -15,6 +15,15 @@
 
 @implementation OANavigationController
 
+-(instancetype)initWithRootViewController:(UIViewController *)rootViewController
+{
+    self = [super initWithRootViewController:rootViewController];
+    if (self) {
+        self.navigationBarHidden = YES;
+    }
+    return self;
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     if (self.visibleViewController == nil)

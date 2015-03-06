@@ -63,8 +63,8 @@
                     </connections>
                 </button>
                 <view contentMode="scaleToFill" id="Mqu-Kg-TG4" userLabel="compassBox">
-                    <rect key="frame" x="272" y="101" width="40" height="40"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                    <rect key="frame" x="8" y="101" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="GGf-zp-Dy1" userLabel="compassButton">
                             <rect key="frame" x="5" y="5" width="30" height="30"/>
@@ -141,25 +141,25 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_speed.png" id="9q1-O8-vW0">
-                            <rect key="frame" x="12" y="6" width="28" height="28"/>
+                            <rect key="frame" x="10" y="6" width="28" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 km/h" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="7zY-7m-aJk" userLabel="currentSpeedLabel">
-                            <rect key="frame" x="45" y="6" width="70" height="30"/>
+                            <rect key="frame" x="43" y="6" width="70" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00000 m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="p2X-uL-p4S" userLabel="currentAltitudeLabel">
-                            <rect key="frame" x="138" y="6" width="70" height="30"/>
+                            <rect key="frame" x="143" y="6" width="70" height="30"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="Avenir-Heavy" family="Avenir" pointSize="16"/>
                             <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_distance.png" id="SRZ-2j-M47">
-                            <rect key="frame" x="112" y="6" width="28" height="28"/>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_height.png" id="SRZ-2j-M47">
+                            <rect key="frame" x="114" y="6" width="28" height="28"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
                         </imageView>
                     </subviews>
@@ -191,7 +191,7 @@
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
         <image name="follow_map_mode_button.png" width="25" height="25"/>
         <image name="ic_close.png" width="10" height="10"/>
-        <image name="ic_distance.png" width="25" height="25"/>
+        <image name="ic_height.png" width="25" height="25"/>
         <image name="ic_speed.png" width="25" height="25"/>
         <image name="menu_button.png" width="45" height="51"/>
     </resources>

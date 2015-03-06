@@ -38,8 +38,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @interface OAResourcesBaseViewController ()
 
-@property OADownloadProgressView* downloadView;
-
 
 @end
 
@@ -145,7 +143,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self.view addSubview:self.downloadView];
     
     // Constraints
-    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0.f];
+    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
@@ -403,6 +401,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOfItem:(RepositoryResourceItem*)item
 {
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:item.resource->url.toNSURL()];
     
@@ -427,6 +427,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 {
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
 
@@ -447,6 +449,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
+    [UIApplication sharedApplication].idleTimerDisabled = YES;
+
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
     
@@ -512,6 +516,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [item.downloadTask stop];
     
+    [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
@@ -654,8 +659,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (!self.isViewLoaded || self.view.window == nil)
             return;
         [self.downloadView setProgress:[value floatValue]];
-        [self refreshContent:NO];
-        //[self refreshDownloadingContent:task.key];
+        //[self refreshContent:NO];
+        [self refreshDownloadingContent:task.key];
         
     });
 }
@@ -694,6 +699,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
 
         [self updateContent];
+        
+        [UIApplication sharedApplication].idleTimerDisabled = NO;
     });
 }
 
@@ -716,7 +723,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return nil;
 }
 
-
+- (void) updateTableLayout
+{
+}
 
 #pragma mark - OADownloadProgressViewDelegate
 -(void) resumeDownloadButtonClicked:(OADownloadProgressView *)view {
@@ -734,5 +743,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [task pause];
     }
 }
+
+- (void)downloadProgressViewDidAppear:(OADownloadProgressView *)view
+{
+    [self updateTableLayout];
+}
+
+- (void)downloadProgressViewDidDisappear:(OADownloadProgressView *)view
+{
+    [self updateTableLayout];
+}
+
 
 @end

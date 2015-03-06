@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import "OASwitchTableViewCell.h"п
+#import "OASwitchTableViewCell.h"
 
 @implementation OASwitchTableViewCell
 

@@ -11,12 +11,10 @@
 #import <JASidePanelController.h>
 
 #import "OAMapPanelViewController.h"
-#import "OAActionsPanelViewController.h"
 
 @interface OARootViewController : JASidePanelController
 
 @property (nonatomic, weak, readonly) OAMapPanelViewController* mapPanel;
-@property (nonatomic, weak, readonly) OAActionsPanelViewController* actionsPanel;
 
 - (void)openMenu:(UIViewController*)menuViewController
         fromRect:(CGRect)originRect

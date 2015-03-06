@@ -259,7 +259,7 @@ typedef enum
     
     if (_showFavoriteOnExit) {
         
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoom azimuth:0.0 elevationAngle:90.0 animated:NO];
         
     } else {
         OAAppSettings* settings = [OAAppSettings sharedManager];
@@ -271,6 +271,7 @@ typedef enum
 
 }
 
+/*
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
@@ -299,6 +300,7 @@ typedef enum
                                                                      @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
     }
 }
+ */
 
 -(void)setupView {
     
@@ -552,15 +554,11 @@ typedef enum
 
 // open map with favorite item
 -(void)goToFavorite {
-    OsmAndAppInstance app = [OsmAndApp instance];
     
     OARootViewController* rootViewController = [OARootViewController instance];
     OAFavoriteItem* itemData = self.favorite;
     // Close everything
     [rootViewController closeMenuAndPanelsAnimated:YES];
-    // Ensure favorites layer is shown
-    [app.data.mapLayersConfiguration setLayer:kFavoritesLayerId
-                                   Visibility:NO];
 
     // Go to favorite location
     _newTarget31 = itemData.favorite->getPosition31();

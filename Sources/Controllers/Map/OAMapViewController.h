@@ -15,7 +15,7 @@
 #import "OAAppSettings.h"
 
 #define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
-#define kNotificationSetTargetPoint @"kNotificationLayersConfigurationChanged"
+#define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)

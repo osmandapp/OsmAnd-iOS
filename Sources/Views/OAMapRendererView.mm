@@ -323,6 +323,11 @@
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
+- (void)dumpResourcesInfo
+{
+    _renderer->dumpResourcesInfo();
+}
+
 @synthesize framePreparedObservable = _framePreparedObservable;
 
 - (const std::shared_ptr<OsmAnd::MapAnimator>&)getAnimator

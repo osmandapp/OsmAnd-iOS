@@ -83,6 +83,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
 
+- (void)dumpResourcesInfo;
+
 @property(readonly) OAObservable* framePreparedObservable;
 
 @property(nonatomic, readonly, getter=getAnimator) const std::shared_ptr<OsmAnd::MapAnimator>& animator;

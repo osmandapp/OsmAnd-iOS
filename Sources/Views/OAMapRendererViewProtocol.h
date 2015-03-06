@@ -44,4 +44,7 @@
 @property(nonatomic) BOOL forceRenderingOnEachFrame;
 #endif // defined(OSMAND_IOS_DEV)
 
+// Utilities:
+- (void)dumpResourcesInfo;
+
 @end

@@ -1921,48 +1921,57 @@
         });
         
         
-        if (_app.data.overlayMapSource) {
-            
-            const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
-            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-            if (mapSourceResource) {
-                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-                
-                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
-                if (onlineMapTileProvider) {
-                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                    _rasterOverlayMapProvider = onlineMapTileProvider;
-                    [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
-                    
-                    OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor(_app.data.overlayAlpha);
-                    [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
-                }
-            }
-        }
+        if (_app.data.overlayMapSource)
+            [self doUpdateOverlay];
         
-        if (_app.data.underlayMapSource) {
+        if (_app.data.underlayMapSource)
+            [self doUpdateUnderlay];
+    }
+}
+
+- (void)doUpdateOverlay
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
+    const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+    if (mapSourceResource) {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+        OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+        
+        const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
+        if (onlineMapTileProvider) {
+            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+            _rasterOverlayMapProvider = onlineMapTileProvider;
+            [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
             
-            const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
-            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-            if (mapSourceResource) {
-                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-                
-                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
-                if (onlineMapTileProvider) {
-                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                    _rasterUnderlayMapProvider = onlineMapTileProvider;
-                    [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
-
-                    OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor(_app.data.underlayAlpha);
-                    [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-                }
-            }
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(_app.data.overlayAlpha);
+            [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
         }
+    }
+}
 
+- (void)doUpdateUnderlay
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
+    const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+    if (mapSourceResource) {
+        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+        OALog(@"Underlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+        
+        const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
+        if (onlineMapTileProvider) {
+            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+            _rasterUnderlayMapProvider = onlineMapTileProvider;
+            [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+            
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
+            [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+        }
     }
 }
 
@@ -2024,24 +2033,7 @@
     @synchronized(_rendererSync)
     {
         if (_app.data.overlayMapSource) {
-            
-            const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
-            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-            if (mapSourceResource) {
-                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-                
-                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
-                if (onlineMapTileProvider) {
-                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                    _rasterOverlayMapProvider = onlineMapTileProvider;
-                    [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
-                    
-                    OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor(_app.data.overlayAlpha);
-                    [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
-                }
-            }
+            [self doUpdateOverlay];
             
         } else {
             [mapView resetProviderFor:kOverlayLayerId];
@@ -2063,7 +2055,7 @@
         @synchronized(_rendererSync)
         {
             OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(_app.data.underlayAlpha);
+            config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
             [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
         }
     });
@@ -2086,25 +2078,13 @@
     @synchronized(_rendererSync)
     {
         if (_app.data.underlayMapSource) {
+            [self doUpdateUnderlay];
             
-            const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
-            const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-            if (mapSourceResource) {
-                const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-                OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
-                
-                const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
-                if (onlineMapTileProvider) {
-                    onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-                    _rasterUnderlayMapProvider = onlineMapTileProvider;
-                    [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
-                    
-                    OsmAnd::MapLayerConfiguration config;
-                    config.setOpacityFactor(_app.data.underlayAlpha);
-                    [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
-                }
-            }
         } else {
+            OsmAnd::MapLayerConfiguration config;
+            config.setOpacityFactor(_app.data.underlayAlpha);
+            [mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];
+
             [mapView resetProviderFor:kUnderlayLayerId];
             _rasterUnderlayMapProvider.reset();
         }

@@ -112,7 +112,7 @@ typedef enum
             
             CGFloat topY = 64.0;
             CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
-            CGFloat mapWidth = 220.0;
+            CGFloat mapWidth = big / 2.0;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             self.mapButton.frame = self.mapView.frame;

@@ -401,8 +401,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOfItem:(RepositoryResourceItem*)item
 {
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:item.resource->url.toNSURL()];
     
@@ -427,8 +425,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 {
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
 
@@ -449,8 +445,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
-    [UIApplication sharedApplication].idleTimerDisabled = YES;
-
     // Create download tasks
     NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
     
@@ -515,8 +509,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self.downloadView removeFromSuperview];
     
     [item.downloadTask stop];
-    
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
 }
 
 - (void)offerDeleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
@@ -699,8 +691,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
 
         [self updateContent];
-        
-        [UIApplication sharedApplication].idleTimerDisabled = NO;
     });
 }
 

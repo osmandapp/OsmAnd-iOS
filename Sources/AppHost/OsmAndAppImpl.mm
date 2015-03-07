@@ -209,10 +209,11 @@
     }
     
     // Load world regions
-    NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions"
-                                                                     ofType:@"ocbf"];
+    NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
-
+    
+    [OAManageResourcesViewController prepareData];
+    
     _appMode = OAAppModeBrowseMap;
     _appModeObservable = [[OAObservable alloc] init];
 
@@ -240,8 +241,6 @@
     _appearanceChangeObservable = [[OAObservable alloc] init];
     if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
         QElement.appearance = [[OAQFlatAppearance alloc] init];
-
-    [OAManageResourcesViewController prepareData];
     
     return YES;
 }

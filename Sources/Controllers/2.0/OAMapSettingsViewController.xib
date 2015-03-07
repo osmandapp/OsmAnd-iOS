@@ -26,7 +26,7 @@
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" id="s5V-gy-zMG" customClass="OAMapRendererView">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="200"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </view>
                 <view alpha="0.80000000000000004" contentMode="scaleToFill" id="ykD-3k-wDP">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>

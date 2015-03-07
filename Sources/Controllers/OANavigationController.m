@@ -32,6 +32,9 @@
     return self.visibleViewController.preferredStatusBarStyle;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
 
 #pragma mark - Autorotation
 

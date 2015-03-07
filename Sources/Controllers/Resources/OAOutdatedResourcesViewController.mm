@@ -232,6 +232,35 @@
     return @"Updates";
 }
 
+-(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
+    
+    ResourceItem* item = (ResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
+    if (item.downloadTask == nil)
+        return;
+    
+    FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
+    
+    float progressCompleted = item.downloadTask.progressCompleted;
+    if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+    {
+        [progressView stopSpinProgressBackgroundLayer];
+        progressView.progress = progressCompleted;
+    }
+    else if (item.downloadTask.state == OADownloadTaskStateFinished)
+    {
+        [progressView stopSpinProgressBackgroundLayer];
+        progressView.progress = 1.0f;
+    }
+    else
+    {
+        if (!progressView.isSpinning)
+            [progressView startSpinProgressBackgroundLayer];
+    }
+}
+
+
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
@@ -259,6 +288,9 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
         }
@@ -266,6 +298,9 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
@@ -337,5 +372,22 @@
 }
 
 #pragma mark -
+
+- (void)refreshDownloadingContent:(NSString *)downloadTaskKey
+{
+    @synchronized(_dataLock)
+    {
+        for (int i = 0; i < _resourcesItems.count; i++) {
+            if ([_resourcesItems[i] isKindOfClass:[OAWorldRegion class]])
+                continue;
+            ResourceItem *item = _resourcesItems[i];
+            if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                break;
+            }
+        }
+    }
+}
+
 
 @end

@@ -35,7 +35,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" id="Qiy-IO-fbT">
+                <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" id="Qiy-IO-fbT">
                     <rect key="frame" x="0.0" y="230" width="320" height="188"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
@@ -162,7 +162,7 @@
                 <view userInteractionEnabled="NO" contentMode="scaleToFill" id="cmp-eQ-cbF">
                     <rect key="frame" x="0.0" y="64" width="320" height="166"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" red="0.12941176469999999" green="0.70588235290000001" blue="0.44705882349999998" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </view>
                 <view contentMode="scaleToFill" id="qeG-XX-C0X">
                     <rect key="frame" x="105" y="211" width="110" height="40"/>

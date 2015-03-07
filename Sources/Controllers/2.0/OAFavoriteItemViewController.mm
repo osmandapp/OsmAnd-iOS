@@ -149,7 +149,7 @@ typedef enum
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
             
-            self.scrollView.contentSize = CGSizeMake(small, 250.0);
+            self.scrollView.contentSize = CGSizeMake(big - mapWidth, self.favoriteGroupButton.frame.origin.y + self.favoriteGroupButton.frame.size.height - self.favoriteNameButton.frame.origin.y + 35.0);
             self.scrollView.contentInset = UIEdgeInsetsZero;
 
         }
@@ -162,13 +162,13 @@ typedef enum
         } else {
             
             CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height - 40.0;
-            CGFloat mapWidth = 220.0;
+            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
+            CGFloat mapWidth = big / 2.0;
             CGFloat mapBottom = topY + mapHeight;
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             self.mapButton.frame = self.mapView.frame;
-            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
             self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
 
             CGFloat y = 0.0 - self.favoriteNameButton.frame.origin.y;
@@ -183,7 +183,7 @@ typedef enum
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
 
-            self.scrollView.contentSize = CGSizeMake(big - mapWidth, 250.0);
+            self.scrollView.contentSize = CGSizeMake(big - mapWidth, self.favoriteGroupButton.frame.origin.y + self.favoriteGroupButton.frame.size.height - self.favoriteNameButton.frame.origin.y);
             self.scrollView.contentInset = UIEdgeInsetsZero;
 
         }

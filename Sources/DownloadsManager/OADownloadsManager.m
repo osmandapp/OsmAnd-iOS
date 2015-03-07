@@ -516,11 +516,11 @@
 
 - (BOOL)allowScreenTurnOff
 {
-    if (_sessionManager != nil)
-        return YES; // For iOS 7.0+ there's no sense of keeping screen on
+    //if (_sessionManager != nil)
+    //    return YES; // For iOS 7.0+ there's no sense of keeping screen on
 
     // For iOS pre-7.0 don't turn off screen while downloading something
-    return [self hasActiveDownloadTasks];
+    return ![self hasActiveDownloadTasks];
 }
 
 @end

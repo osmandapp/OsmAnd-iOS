@@ -477,9 +477,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             if (match == self.region) {
                 _regionMap = item;
             } else {
-                [_outdatedResourceItems addObject:item];
                 [_localResourceItems addObject:item];
             }
+            [_outdatedResourceItems addObject:item];
         }
     }
     [_outdatedResourceItems sortUsingComparator:self.resourceItemsComparator];
@@ -535,7 +535,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     
     NSMutableSet* regionsSet = [NSMutableSet set];
     for (OutdatedResourceItem* item in _outdatedResourceItems)
-        [regionsSet addObject:item.worldRegion];
+        if (item.worldRegion.regionId)
+            [regionsSet addObject:item.worldRegion];
     _regionsWithOutdatedResources = [[regionsSet allObjects] sortedArrayUsingSelector:@selector(compare:)];
 }
 
@@ -1200,7 +1201,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
     if ([cellTypeId isEqualToString:outdatedResourcesSubmenuCell])
     {
-        [_updateCouneView setText:[NSString stringWithFormat:@"%d", _outdatedResources.count()]];
+        [_updateCouneView setText:[NSString stringWithFormat:@"%d", _outdatedResourceItems.count]];
         cell.accessoryView = _updateCouneView;
     }
 

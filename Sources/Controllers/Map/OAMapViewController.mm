@@ -48,6 +48,7 @@
 #include <OsmAndCore/Map/RasterMapSymbol.h>
 #include <OsmAndCore/Map/OnPathRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
+#include <OsmAndCore/Map/MapSymbolsGroup.h>
 
 #if defined(OSMAND_IOS_DEV)
 #   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
@@ -177,6 +178,7 @@
     
     UIPanGestureRecognizer* _grElevation;
 
+    UITapGestureRecognizer* _grSymbolContextMenu;
     UILongPressGestureRecognizer* _grPointContextMenu;
 
     bool _lastPositionTrackStateCaptured;
@@ -343,6 +345,13 @@
     _grElevation.minimumNumberOfTouches = 2;
     _grElevation.maximumNumberOfTouches = 2;
 
+    // - Single-press context menu of a point gesture
+    _grSymbolContextMenu = [[UITapGestureRecognizer alloc] initWithTarget:self
+                                                        action:@selector(pointContextMenuGestureDetected:)];
+    _grSymbolContextMenu.delegate = self;
+    _grSymbolContextMenu.numberOfTapsRequired = 1;
+    _grSymbolContextMenu.numberOfTouchesRequired = 1;
+
     // - Long-press context menu of a point gesture
     _grPointContextMenu = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                         action:@selector(pointContextMenuGestureDetected:)];
@@ -458,6 +467,7 @@
     [mapView addGestureRecognizer:_grZoomIn];
     [mapView addGestureRecognizer:_grZoomOut];
     [mapView addGestureRecognizer:_grElevation];
+    [mapView addGestureRecognizer:_grSymbolContextMenu];
     [mapView addGestureRecognizer:_grPointContextMenu];
     
     // Adjust map-view target, zoom, azimuth and elevation angle to match last viewed
@@ -615,6 +625,11 @@
     if (gestureRecognizer == _grRotate && otherGestureRecognizer == _grElevation)
         return NO;
     if (gestureRecognizer == _grZoom && otherGestureRecognizer == _grElevation)
+        return NO;
+    
+    if (gestureRecognizer == _grPointContextMenu && otherGestureRecognizer == _grSymbolContextMenu)
+        return NO;
+    if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grPointContextMenu)
         return NO;
     
     return YES;
@@ -976,16 +991,17 @@
     }
 }
 
-- (void)pointContextMenuGestureDetected:(UILongPressGestureRecognizer*)recognizer
+- (void)pointContextMenuGestureDetected:(UITapGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
         return;
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
     // Capture only last state
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
+
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
     // Get location of the gesture
     CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
@@ -1001,6 +1017,8 @@
     NSString *caption;
     UIImage *icon;
     
+    BOOL isSymbolFound = NO;
+    
     const auto& symbolInfos = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     for (const auto symbolInfo : symbolInfos) {
 
@@ -1008,6 +1026,15 @@
         {
             lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
             lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+
+            if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters)) {
+                if (billboardAdditionalParams->overridesPosition31) {
+                    lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
+                    lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
+                }
+            }
+            
+            isSymbolFound = YES;
         }
 
         if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
@@ -1026,6 +1053,10 @@
         break;
         
     }
+    
+    // if single press and no symbol found - exit
+    if (recognizer.numberOfTapsRequired == 1 && recognizer.numberOfTouchesRequired == 1 && !isSymbolFound)
+        return;
     
     [self showContextPinMarker:lat longitude:lon];
     

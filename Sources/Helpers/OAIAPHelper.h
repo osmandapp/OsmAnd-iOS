@@ -23,6 +23,7 @@
 
 
 UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
+UIKIT_EXTERN NSString *const OAIAPProductPurchaseFailedNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
@@ -39,6 +40,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 +(NSArray *)inAppsMaps;
 +(NSArray *)inAppsAddons;
 -(SKProduct *)product:(NSString *)productIdentifier;
+-(int)productIndex:(NSString *)productIdentifier;
 -(BOOL)productsLoaded;
 
 @end

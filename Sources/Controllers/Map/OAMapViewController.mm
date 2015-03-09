@@ -50,6 +50,8 @@
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 
+#include <OsmAndCore/QKeyValueIterator.h>
+
 #if defined(OSMAND_IOS_DEV)
 #   include <OsmAndCore/Map/ObfMapObjectsMetricsLayerProvider.h>
 #   include <OsmAndCore/Map/MapPrimitivesMetricsLayerProvider.h>
@@ -631,6 +633,10 @@
         return NO;
     if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grPointContextMenu)
         return NO;
+    if (gestureRecognizer == _grSymbolContextMenu && otherGestureRecognizer == _grZoomIn)
+        return NO;
+    if (gestureRecognizer == _grZoomIn && otherGestureRecognizer == _grSymbolContextMenu)
+        return NO;
     
     return YES;
 }
@@ -1050,7 +1056,16 @@
         
         caption = mapObject->getCaptionInNativeLanguage().toNSString();
 
-        break;
+        if (!caption || caption.length == 0) {
+            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
+                if (entry.key() == 1) {
+                    caption = entry.value().toNSString();
+                    break;
+                }                    
+        }
+
+        if (caption && caption.length > 0)
+            break;
         
     }
     

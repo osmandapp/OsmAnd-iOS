@@ -58,7 +58,6 @@
 @synthesize resourcesRepositoryUpdatedObservable = _resourcesRepositoryUpdatedObservable;
 
 @synthesize favoritesCollection = _favoritesCollection;
-//@synthesize gpxCollection = _gpxCollection;
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
@@ -309,7 +308,6 @@
 @synthesize gpxChangedObservable = _gpxChangedObservable;
 
 @synthesize favoritesStorageFilename = _favoritesFilename;
-//@synthesize gpxStorageFilename = _gpxFilename;
 
 - (void)saveDataToPermamentStorage
 {
@@ -323,19 +321,12 @@
     // Favorites
     [self saveFavoritesToPermamentStorage];
 
-    // GPX
-    // [self saveGPXToPermamentStorage];
 }
 
 - (void)saveFavoritesToPermamentStorage
 {
     _favoritesCollection->saveTo(QString::fromNSString(_favoritesFilename));
 }
-
-//- (void)saveGPXToPermamentStorage
-//{
-//    _gpxCollection->saveTo(QString::fromNSString(_gpxFilename));
-//}
 
 - (TTTLocationFormatter*)locationFormatterDigits
 {

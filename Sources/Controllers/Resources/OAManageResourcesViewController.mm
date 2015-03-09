@@ -1371,9 +1371,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     _isSearching = YES;
     
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f)
-        [self setNeedsStatusBarAppearanceUpdate];
-    //[[UIApplication sharedApplication] setStatusBarHidden:YES withAnimation:UIStatusBarAnimationSlide];
+    [self setNeedsStatusBarAppearanceUpdate];
     
     [UIView animateWithDuration:0.3
                           delay:0.0
@@ -1383,8 +1381,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                          CGRect newBounds = self.tableView.bounds;
                          newBounds.origin.y = 0.0;
                          self.tableView.bounds = newBounds;
-                         self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, -64.0);
-                         self.toolbarView.frame = CGRectOffset(self.toolbarView.frame, 0.0, 61.0);
+                         
+                         self.titlePanelView.frame = CGRectMake(0.0, -self.titlePanelView.frame.size.height, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
+                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
                          self.tableView.frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height);
                          
                      } completion:^(BOOL finished) {
@@ -1396,9 +1395,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     _isSearching = NO;
 
-    if([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0f)
-        [self setNeedsStatusBarAppearanceUpdate];
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationSlide];
+    [self setNeedsStatusBarAppearanceUpdate];
 
     CGFloat h = self.view.bounds.size.height - 64.0 - 61.0;
     if (self.downloadView && self.downloadView.superview)
@@ -1409,8 +1406,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                         options:UIViewAnimationOptionCurveLinear
                      animations:^{
 
-                         self.toolbarView.frame = CGRectOffset(self.toolbarView.frame, 0.0, -61.0);
-                         self.titlePanelView.frame = CGRectOffset(self.titlePanelView.frame, 0.0, 64.0);
+                         self.titlePanelView.frame = CGRectMake(0.0, 0.0, self.titlePanelView.frame.size.width, self.titlePanelView.frame.size.height);
+                         self.toolbarView.frame = CGRectMake(0.0, self.view.frame.size.height - self.toolbarView.frame.size.height, self.toolbarView.frame.size.width, self.toolbarView.frame.size.height);
                          self.tableView.frame = CGRectMake(0.0, 64.0, self.view.bounds.size.width, h);
 
                      } completion:^(BOOL finished) {

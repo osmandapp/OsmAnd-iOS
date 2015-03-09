@@ -10,6 +10,7 @@
 #import "OALog.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
+NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end
@@ -80,6 +81,21 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
             return p;
     }
     return nil;
+}
+
+-(int)productIndex:(NSString *)productIdentifier
+{
+    NSArray *maps = [self.class inAppsMaps];
+    for (int i = 0; i < maps.count; i++)
+        if ([maps[i] isEqualToString:productIdentifier])
+            return i;
+    
+    NSArray *addons = [self.class inAppsAddons];
+    for (int i = 0; i < addons.count; i++)
+        if ([addons[i] isEqualToString:productIdentifier])
+            return i;
+
+    return -1;
 }
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers {
@@ -202,6 +218,8 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
         OALog(@"Transaction error: %@", transaction.error.localizedDescription);
     }
     
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:transaction.originalTransaction.payment.productIdentifier userInfo:nil];
+
     [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 }
 

@@ -10,7 +10,7 @@
 #import "OAIAPHelper.h"
 #import "OAInAppCell.h"
 #import <StoreKit/StoreKit.h>
-
+#import "OALog.h"
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -59,6 +59,10 @@
 {
     [super viewWillAppear:animated];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+
     if (![[OAIAPHelper sharedInstance] productsLoaded]) {
         
         [_loadProductsProgressHUD show:YES];
@@ -80,6 +84,10 @@
             }];
         });
     }
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - UITableViewDataSource
@@ -177,11 +185,70 @@
 
 #pragma mark - UITableViewDelegate
 
-- (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    NSString *identifier;
+    switch (indexPath.section) {
+        case 0: // Maps
+            identifier = [OAIAPHelper inAppsMaps][indexPath.row];
+            break;
+            
+        case 1: // Addons
+            identifier = [OAIAPHelper inAppsAddons][indexPath.row];
+            break;
+            
+        default:
+            break;
+    }
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
+    if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
+        return;
+    
+    SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+
+    if (product) {
+        [[OAIAPHelper sharedInstance] buyProduct:product];
+        
+        [_loadProductsProgressHUD show:YES];
+
+    }
+    
 }
 
+- (void)productPurchased:(NSNotification *)notification {
+    
+    NSString * identifier = notification.object;
+    int index = [[OAIAPHelper sharedInstance] productIndex:identifier];
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        [_loadProductsProgressHUD hide:YES];
+
+        if (index != -1) {
+            NSInteger section = [[OAIAPHelper inAppsMaps] containsObject:identifier] ? 0 : 1;
+            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    });
+}
+
+- (void)productPurchaseFailed:(NSNotification *)notification {
+    
+    NSString * identifier = notification.object;
+    SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_loadProductsProgressHUD hide:YES];
+
+        if (product) {
+            NSString *text = [NSString stringWithFormat:@"Purchase of \"%@\" has failed", product.localizedTitle];
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    });
+}
 
 -(void)backButtonClicked:(id)sender
 {

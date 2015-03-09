@@ -76,6 +76,8 @@
     id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKeyPrefix:@"resource:"];
     if (nextTask)
         [nextTask resume];
+    else
+        [_app updateScreenTurnOffSetting];
 }
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

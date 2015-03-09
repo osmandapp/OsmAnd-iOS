@@ -67,13 +67,11 @@
     if (purchased) {
         self.lbPrice.text = @"";
         self.imgPrice.layer.borderWidth = 0;
-        self.backgroundColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
-        //self.imgPrice.image = [UIImage imageNamed:@""];
+        self.imgPrice.image = [UIImage imageNamed:@"bt_bought_addon"];
         
     } else {
         self.imgPrice.layer.borderWidth = 0.8;
         self.imgPrice.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
-        self.backgroundColor = [UIColor whiteColor];
         self.imgPrice.image = nil;
     }
 

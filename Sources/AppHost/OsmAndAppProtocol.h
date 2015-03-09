@@ -69,7 +69,7 @@
 @property(readonly) NSString* gpxStorageFilename;
 
 - (void)saveFavoritesToPermamentStorage;
-//- (void)saveGPXToPermamentStorage;
+- (void)updateScreenTurnOffSetting;
 
 - (TTTLocationFormatter*)locationFormatterDigits;
 - (TTTLocationFormatter*)locationFormatter;

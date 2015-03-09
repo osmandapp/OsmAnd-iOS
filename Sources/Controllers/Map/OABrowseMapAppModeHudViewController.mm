@@ -383,10 +383,8 @@ NSLayoutConstraint* targetBottomConstraint;
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
-    NSString *title = [params objectForKey:@"title"];
-
     NSString* addressString;
-    if (!title) {
+    if (caption.length == 0) {
         std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
         _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
         
@@ -412,11 +410,7 @@ NSLayoutConstraint* targetBottomConstraint;
                 nativeTitle = nativeName.toNSString();
         }
         
-        
         addressString = nativeTitle;
-        if (!addressString || [addressString isEqualToString:@""])
-            addressString = caption;
-        
         if (!addressString || [addressString isEqualToString:@""]) {
             addressString = @"Address is not known yet";
             self.targetMenuView.isAddressFound = NO;
@@ -425,7 +419,7 @@ NSLayoutConstraint* targetBottomConstraint;
         }
     } else {
         self.targetMenuView.isAddressFound = YES;
-        addressString = title;
+        addressString = caption;
     }
     
     if (self.targetMenuView.isAddressFound) {
@@ -449,6 +443,11 @@ NSLayoutConstraint* targetBottomConstraint;
         [self.view layoutIfNeeded];
         
     } completion:^(BOOL finished) {
+        
+        if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
+            [_shadowButton removeFromSuperview];
+            self.shadowButton = nil;
+        }
         
         self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeight)];
         _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;

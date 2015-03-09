@@ -423,7 +423,7 @@
         if ([list count] == 0)
             [_activeTasks removeObjectForKey:task.key];
 
-        [_activeTasksCollectionChangedObservable notifyEventWithKey:self];
+        //[_activeTasksCollectionChangedObservable notifyEventWithKey:self];
     }
 }
 

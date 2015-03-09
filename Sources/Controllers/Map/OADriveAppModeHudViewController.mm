@@ -206,9 +206,6 @@
 {
     [super viewDidAppear:animated];
 
-    if (!_iOS70plus)
-        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleBlackTranslucent;
-
     [self fadeInOptionalControlsWithDelay];
 
     [_destinationViewController startLocationUpdate];

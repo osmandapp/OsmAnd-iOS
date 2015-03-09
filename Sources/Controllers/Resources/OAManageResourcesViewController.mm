@@ -26,6 +26,8 @@
 #import "OALog.h"
 #include "Localization.h"
 
+#import "OAPurchasesViewController.h"
+
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
@@ -844,20 +846,14 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)onCustomBackButtonClicked
+-(void)backButtonClicked:(id)sender
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.region.regionId == nil && _currentScope == kAllResourcesScope)
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    else
+        [self.navigationController popViewControllerAnimated:YES];
+    
 }
-
-/*
-- (IBAction)onScopeChanged:(id)sender
-{
-    _currentScope = _scopeControl.selectedSegmentIndex;
-
-    [self prepareContent];
-    [self refreshContent];
-}
- */
 
 - (IBAction)onUpdateBtnClicked:(id)sender
 {
@@ -1163,8 +1159,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -1173,8 +1169,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -1184,8 +1180,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -1482,7 +1478,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     else if ([segue.identifier isEqualToString:kOpenOutdatedResourcesSegue])
     {
         OAOutdatedResourcesViewController* outdatedResourcesViewController = [segue destinationViewController];
-
+        outdatedResourcesViewController.openFromSplash = _openFromSplash;
         [outdatedResourcesViewController setupWithRegion:self.region
                                         andOutdatedItems:_outdatedResourceItems];
     }
@@ -1498,7 +1494,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     else if ([segue.identifier isEqualToString:kOpenDetailsSegue])
     {
         OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];
-
+        resourceInfoViewController.openFromSplash = _openFromSplash;
         resourceInfoViewController.baseController = self;
         
         LocalResourceItem* item = nil;
@@ -1532,10 +1528,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 #pragma mark -
 
-- (IBAction)btnToolbarMapsClicked:(id)sender {
+- (IBAction)btnToolbarMapsClicked:(id)sender
+{
 }
 
-- (IBAction)btnToolbarPurchasesClicked:(id)sender {
+- (IBAction)btnToolbarPurchasesClicked:(id)sender
+{
+    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+    purchasesViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
 @end

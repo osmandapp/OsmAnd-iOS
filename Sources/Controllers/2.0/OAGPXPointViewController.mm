@@ -282,10 +282,26 @@ typedef enum
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     CGSize constraint = CGSizeMake(tableView.frame.size.width - 30.0, 20000.0);
-    CGSize size = [self.wptItem.point.desc sizeWithFont: [UIFont fontWithName:@"Avenir-Medium" size:12.0] constrainedToSize:constraint lineBreakMode:NSLineBreakByWordWrapping];
+    CGSize size = [self.wptItem.point.desc boundingRectWithSize:constraint
+                                                 options:NSStringDrawingUsesLineFragmentOrigin
+                                              attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:12.0]}
+                                                 context:nil].size;
+    
     return MAX(size.height + 56.0, 44.0);
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+        return 34.0;
+     else
+        return 0.1;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.1;
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 

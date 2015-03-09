@@ -9,20 +9,22 @@
 #import <StoreKit/StoreKit.h>
 
 
-#define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nautical"
-#define kInAppId_Continent_Africa @"net.osmand.inapp.continent.africa"
-#define kInAppId_Continent_Russia @"net.osmand.inapp.continent.russia"
-#define kInAppId_Continent_Asia @"net.osmand.inapp.continent.asia"
-#define kInAppId_Continent_Australia @"net.osmand.inapp.continent.australia"
-#define kInAppId_Continent_Europe @"net.osmand.inapp.continent.europe"
-#define kInAppId_Continent_Central_America @"net.osmand.inapp.continent.central_america"
-#define kInAppId_Continent_North_America @"net.osmand.inapp.continent.north_america"
-#define kInAppId_Continent_South_America @"net.osmand.inapp.continent.south_america"
+#define kInAppId_Region_Africa @"net.osmand.inapp.region.africa"
+#define kInAppId_Region_Russia @"net.osmand.inapp.region.russia"
+#define kInAppId_Region_Asia @"net.osmand.inapp.region.asia"
+#define kInAppId_Region_Australia @"net.osmand.inapp.region.australia"
+#define kInAppId_Region_Europe @"net.osmand.inapp.region.europe"
+#define kInAppId_Region_Central_America @"net.osmand.inapp.region.centralamerica"
+#define kInAppId_Region_North_America @"net.osmand.inapp.region.northamerica"
+#define kInAppId_Region_South_America @"net.osmand.inapp.region.southamerica"
+
+#define kInAppId_Addon_SkiMap @"net.osmand.inapp.addon.skimap"
+#define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
 
 
 UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
 
-typedef void (^RequestProductsCompletionHandler)(BOOL success, NSArray * products);
+typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @interface OAIAPHelper : NSObject
 
@@ -33,5 +35,10 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success, NSArray * product
 - (void)buyProduct:(SKProduct *)product;
 - (BOOL)productPurchased:(NSString *)productIdentifier;
 - (void)restoreCompletedTransactions;
+
++(NSArray *)inAppsMaps;
++(NSArray *)inAppsAddons;
+-(SKProduct *)product:(NSString *)productIdentifier;
+-(BOOL)productsLoaded;
 
 @end

@@ -11,6 +11,8 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OALocalResourceInfoCell.h"
+#import "OAPurchasesViewController.h"
+
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -164,6 +166,17 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return nil;
+}
+
+- (IBAction)btnToolbarMapsClicked:(id)sender
+{
+}
+
+- (IBAction)btnToolbarPurchasesClicked:(id)sender
+{
+    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+    purchasesViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
 
 @end

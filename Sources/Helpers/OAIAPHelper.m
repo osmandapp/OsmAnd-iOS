@@ -20,6 +20,8 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
     
     NSSet * _productIdentifiers;
     NSMutableSet * _purchasedProductIdentifiers;
+    
+    NSArray *_skProducts;
 
 }
 
@@ -28,21 +30,57 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
     static OAIAPHelper * sharedInstance;
     dispatch_once(&once, ^{
         NSSet * productIdentifiers = [NSSet setWithObjects:
+                                      kInAppId_Region_Africa,
+                                      kInAppId_Region_Russia,
+                                      kInAppId_Region_Asia,
+                                      kInAppId_Region_Australia,
+                                      kInAppId_Region_Europe,
+                                      kInAppId_Region_Central_America,
+                                      kInAppId_Region_North_America,
+                                      kInAppId_Region_South_America,
+                                      kInAppId_Addon_SkiMap,
                                       kInAppId_Addon_Nautical,
-                                      kInAppId_Continent_Africa,
-                                      kInAppId_Continent_Russia,
-                                      kInAppId_Continent_Asia,
-                                      kInAppId_Continent_Australia,
-                                      kInAppId_Continent_Europe,
-                                      kInAppId_Continent_Central_America,
-                                      kInAppId_Continent_North_America,
-                                      kInAppId_Continent_South_America,
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
     return sharedInstance;
 }
 
++(NSArray *)inAppsMaps
+{
+    return [NSArray arrayWithObjects:
+            kInAppId_Region_Africa,
+            kInAppId_Region_Russia,
+            kInAppId_Region_Asia,
+            kInAppId_Region_Australia,
+            kInAppId_Region_Europe,
+            kInAppId_Region_Central_America,
+            kInAppId_Region_North_America,
+            kInAppId_Region_South_America,
+            nil];
+}
+
++(NSArray *)inAppsAddons
+{
+    return [NSArray arrayWithObjects:
+            kInAppId_Addon_SkiMap,
+            kInAppId_Addon_Nautical,
+            nil];
+}
+
+-(BOOL)productsLoaded
+{
+    return _skProducts.count > 0;
+}
+
+-(SKProduct *)product:(NSString *)productIdentifier
+{
+    for (SKProduct *p in _skProducts) {
+        if ([p.productIdentifier isEqualToString:productIdentifier])
+            return p;
+    }
+    return nil;
+}
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers {
     
@@ -98,15 +136,15 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
     OALog(@"Loaded list of products...");
     _productsRequest = nil;
     
-    NSArray * skProducts = response.products;
-    for (SKProduct * skProduct in skProducts) {
+    _skProducts = response.products;
+    for (SKProduct * skProduct in _skProducts) {
         OALog(@"Found product: %@ %@ %0.2f",
               skProduct.productIdentifier,
               skProduct.localizedTitle,
               skProduct.price.floatValue);
     }
     
-    _completionHandler(YES, skProducts);
+    _completionHandler(YES);
     _completionHandler = nil;
     
 }
@@ -116,7 +154,7 @@ NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotif
     OALog(@"Failed to load list of products.");
     _productsRequest = nil;
     
-    _completionHandler(NO, nil);
+    _completionHandler(NO);
     _completionHandler = nil;
     
 }

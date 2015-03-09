@@ -7,8 +7,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPurchasesViewController">
             <connections>
+                <outlet property="backButton" destination="H9o-Md-CF4" id="xlu-qa-hd4"/>
                 <outlet property="btnToolbarMaps" destination="2wz-7h-uOJ" id="6n2-oM-Ehw"/>
                 <outlet property="btnToolbarPurchases" destination="afA-Kc-Aw8" id="gVl-XV-fAe"/>
+                <outlet property="doneButton" destination="4r6-Hs-k4U" id="gFZ-IW-oq6"/>
+                <outlet property="tableView" destination="P4b-42-BBD" id="L2l-2y-Zab"/>
+                <outlet property="titlePanelView" destination="j8U-NB-60c" id="Ywm-HG-sZB"/>
+                <outlet property="titleView" destination="LqJ-Hj-D99" id="kfL-4w-3ZE"/>
                 <outlet property="toolbarView" destination="auI-hx-O5x" id="8Gv-4Z-u66"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -30,6 +35,21 @@
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Opq-D7-ZdW"/>
+                            </connections>
+                        </button>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4r6-Hs-k4U">
+                            <rect key="frame" x="4" y="20" width="70" height="47"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Medium" family="Avenir" pointSize="14"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Q8h-w2-cJz"/>
+                            </connections>
                         </button>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchases" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LqJ-Hj-D99">
                             <rect key="frame" x="76" y="31" width="168" height="24"/>
@@ -41,10 +61,14 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="P4b-42-BBD" userLabel="tableView">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="75" sectionHeaderHeight="10" sectionFooterHeight="10" id="P4b-42-BBD" userLabel="tableView">
                     <rect key="frame" x="0.0" y="64" width="320" height="355"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="SzD-F0-ARZ"/>
+                        <outlet property="delegate" destination="-1" id="Kjs-hX-cna"/>
+                    </connections>
                 </tableView>
                 <view contentMode="scaleToFill" id="auI-hx-O5x">
                     <rect key="frame" x="0.0" y="419" width="320" height="61"/>

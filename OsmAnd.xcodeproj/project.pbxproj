@@ -551,6 +551,12 @@
 		844499A61AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444998D1AAA1FFA00ACA20D /* img_app_purchase_2@3x.png */; };
 		844499A71AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444998D1AAA1FFA00ACA20D /* img_app_purchase_2@3x.png */; };
 		844499A81AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8444998D1AAA1FFA00ACA20D /* img_app_purchase_2@3x.png */; };
+		844499AF1AAD7CA000ACA20D /* OAInAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499AB1AAD7CA000ACA20D /* OAInAppCell.xib */; };
+		844499B01AAD7CA000ACA20D /* OAInAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499AB1AAD7CA000ACA20D /* OAInAppCell.xib */; };
+		844499B11AAD7CA000ACA20D /* OAInAppCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499AB1AAD7CA000ACA20D /* OAInAppCell.xib */; };
+		844499B41AAD7CDB00ACA20D /* OAInAppCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 844499B31AAD7CDB00ACA20D /* OAInAppCell.m */; };
+		844499B51AAD7CDB00ACA20D /* OAInAppCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 844499B31AAD7CDB00ACA20D /* OAInAppCell.m */; };
+		844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 844499B31AAD7CDB00ACA20D /* OAInAppCell.m */; };
 		84451A2F1AA050B3003F4D8D /* ic_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 84451A2C1AA050B3003F4D8D /* ic_close.png */; };
 		84451A301AA050B3003F4D8D /* ic_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 84451A2C1AA050B3003F4D8D /* ic_close.png */; };
 		84451A311AA050B3003F4D8D /* ic_close.png in Resources */ = {isa = PBXBuildFile; fileRef = 84451A2C1AA050B3003F4D8D /* ic_close.png */; };
@@ -1440,6 +1446,9 @@
 		8444998B1AAA1FFA00ACA20D /* img_app_purchase_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_app_purchase_2.png; path = Resources/Icons/img_app_purchase_2.png; sourceTree = "<group>"; };
 		8444998C1AAA1FFA00ACA20D /* img_app_purchase_2@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_app_purchase_2@2x.png"; path = "Resources/Icons/img_app_purchase_2@2x.png"; sourceTree = "<group>"; };
 		8444998D1AAA1FFA00ACA20D /* img_app_purchase_2@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_app_purchase_2@3x.png"; path = "Resources/Icons/img_app_purchase_2@3x.png"; sourceTree = "<group>"; };
+		844499AB1AAD7CA000ACA20D /* OAInAppCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAInAppCell.xib; path = Resources/Controllers/Cells/OAInAppCell.xib; sourceTree = "<group>"; };
+		844499B21AAD7CDB00ACA20D /* OAInAppCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAInAppCell.h; path = Controllers/Cells/OAInAppCell.h; sourceTree = "<group>"; };
+		844499B31AAD7CDB00ACA20D /* OAInAppCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAInAppCell.m; path = Controllers/Cells/OAInAppCell.m; sourceTree = "<group>"; };
 		84451A2C1AA050B3003F4D8D /* ic_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_close.png; path = Resources/Icons/ic_close.png; sourceTree = "<group>"; };
 		84451A2D1AA050B3003F4D8D /* ic_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_close@2x.png"; path = "Resources/Icons/ic_close@2x.png"; sourceTree = "<group>"; };
 		84451A2E1AA050B3003F4D8D /* ic_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_close@3x.png"; path = "Resources/Icons/ic_close@3x.png"; sourceTree = "<group>"; };
@@ -1588,7 +1597,7 @@
 		BB451E0E18DA4180005FBE09 /* map_source_preset_type_pedestrian_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "map_source_preset_type_pedestrian_icon@2x.png"; sourceTree = "<group>"; };
 		BB451E0F18DA4180005FBE09 /* position_track_map_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = position_track_map_mode_button.png; sourceTree = "<group>"; };
 		BB451E1018DA4180005FBE09 /* position_track_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "position_track_map_mode_button@2x.png"; sourceTree = "<group>"; };
-		BB451E9A18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core).app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd DEV (prebuilt Core).app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB451E9A18DCD224005FBE09 /* OsmAnd COR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd COR.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BB451EA718E19376005FBE09 /* OAMapViewState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapViewState.h; path = Data/OAMapViewState.h; sourceTree = "<group>"; };
 		BB451EA818E19376005FBE09 /* OAMapViewState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapViewState.m; path = Data/OAMapViewState.m; sourceTree = "<group>"; };
 		BB451EB618E1938F005FBE09 /* OALocationServices.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OALocationServices.h; path = Services/OALocationServices.h; sourceTree = "<group>"; };
@@ -1990,6 +1999,7 @@
 		3ACA4AAF1A0B932600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				844499AB1AAD7CA000ACA20D /* OAInAppCell.xib */,
 				84185A6F1AA8BC0600F70328 /* OASliderCell.xib */,
 				84B4FD961A92321400A147BA /* OAGPXPointCell.xib */,
 				84B4FD881A9222C700A147BA /* OAGPXElevationCell.xib */,
@@ -2008,6 +2018,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				844499B21AAD7CDB00ACA20D /* OAInAppCell.h */,
+				844499B31AAD7CDB00ACA20D /* OAInAppCell.m */,
 				84185A761AA8BC6200F70328 /* OASliderCell.h */,
 				84185A771AA8BC6200F70328 /* OASliderCell.m */,
 				84B4FD9D1A92358600A147BA /* OAGPXPointTableViewCell.h */,
@@ -2257,7 +2269,7 @@
 			isa = PBXGroup;
 			children = (
 				BB098CF11793F7FD00423944 /* OsmAnd DEV.app */,
-				BB451E9A18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core).app */,
+				BB451E9A18DCD224005FBE09 /* OsmAnd COR.app */,
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd.app */,
 			);
 			name = Products;
@@ -2613,6 +2625,8 @@
 		BBA3AEE2197501260039D991 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84185AFC1AAA13C600F70328 /* OAPurchasesViewController.h */,
+				84185AFD1AAA13C600F70328 /* OAPurchasesViewController.m */,
 				BBA3AEE9197501330039D991 /* OALocalResourceInformationViewController.h */,
 				BBA3AEEA197501330039D991 /* OALocalResourceInformationViewController.mm */,
 				BBA3AFFE1986446F0039D991 /* OAResourcesBaseViewController.h */,
@@ -2623,8 +2637,6 @@
 				BBA3B00419864A730039D991 /* OAOutdatedResourcesViewController.mm */,
 				8A70772D1A86C0A3005E019B /* OALocalResourceInfoCell.h */,
 				8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */,
-				84185AFC1AAA13C600F70328 /* OAPurchasesViewController.h */,
-				84185AFD1AAA13C600F70328 /* OAPurchasesViewController.m */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2790,7 +2802,7 @@
 			);
 			name = "OsmAnd DEV (prebuilt Core)";
 			productName = OsmAnd;
-			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core).app */;
+			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd COR.app */;
 			productType = "com.apple.product-type.application";
 		};
 		BBA3AF30197FC4BB0039D991 /* OsmAnd */ = {
@@ -3122,6 +3134,7 @@
 				3AFEEE461A0E34FD00900A47 /* menu_cell_pointer@2x.png in Resources */,
 				BB451EF518E617F4005FBE09 /* HUD_debug_pin_button@2x.png in Resources */,
 				844499971AAA1FFA00ACA20D /* img_app_purchase_1.png in Resources */,
+				844499AF1AAD7CA000ACA20D /* OAInAppCell.xib in Resources */,
 				BBA6ACFB1940BD0A0066AF23 /* my_location_marker_icon.png in Resources */,
 				843257EB1A9F807400A7964E /* ic_speed.png in Resources */,
 				844499421AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
@@ -3394,6 +3407,7 @@
 				BBA6ACFC1940BD0A0066AF23 /* my_location_marker_icon.png in Resources */,
 				8463100B1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */,
 				844499981AAA1FFA00ACA20D /* img_app_purchase_1.png in Resources */,
+				844499B01AAD7CA000ACA20D /* OAInAppCell.xib in Resources */,
 				BBA6ACFE1940BD0A0066AF23 /* my_location_marker_icon@2x.png in Resources */,
 				843257EC1A9F807400A7964E /* ic_speed.png in Resources */,
 				844499431AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
@@ -3520,6 +3534,7 @@
 				84B4FD9C1A92321400A147BA /* OAGPXPointCell.xib in Resources */,
 				BBA3AFAE197FC4BB0039D991 /* follow_map_mode_button@2x.png in Resources */,
 				844499991AAA1FFA00ACA20D /* img_app_purchase_1.png in Resources */,
+				844499B11AAD7CA000ACA20D /* OAInAppCell.xib in Resources */,
 				843257B51A9DAEE400A7964E /* ic_update.png in Resources */,
 				844499691AAA1FC000ACA20D /* ic_tabbar_addons_active@3x.png in Resources */,
 				8A7077231A84A7BF005E019B /* OAFavoriteImportViewController.xib in Resources */,
@@ -3864,6 +3879,7 @@
 				3AFEEE961A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
 				3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */,
+				844499B41AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				3AC6399C1A1CE1FC001D5E57 /* OAIntroViewController.mm in Sources */,
 				84BFC24A1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
@@ -3978,6 +3994,7 @@
 				3AFEEE971A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */,
+				844499B51AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				3AC639A31A1CEB20001D5E57 /* OAIntroViewController.mm in Sources */,
 				BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				84BFC24B1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
@@ -4104,6 +4121,7 @@
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				BBA3AF5E197FC4BB0039D991 /* OAAutoObserverProxy.m in Sources */,
 				842BFC641A94DD3A008CF87B /* OAGpxWptItem.m in Sources */,
+				844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.m in Sources */,
@@ -4204,7 +4222,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
@@ -4264,7 +4282,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
 				INFOPLIST_PREPROCESS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"${PROJECT_DIR}/../core/externals/qtbase-ios/upstream.patched.ios.clang/lib",
@@ -4348,7 +4366,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "OsmAnd COR";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -4382,7 +4400,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "OsmAnd COR";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};

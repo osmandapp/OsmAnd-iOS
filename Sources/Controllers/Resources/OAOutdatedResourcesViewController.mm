@@ -18,6 +18,8 @@
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
 
+#import "OAPurchasesViewController.h"
+
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -288,8 +290,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -298,8 +300,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
@@ -389,5 +391,15 @@
     }
 }
 
+- (IBAction)btnToolbarMapsClicked:(id)sender
+{
+}
+
+- (IBAction)btnToolbarPurchasesClicked:(id)sender
+{
+    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+    purchasesViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:purchasesViewController animated:NO];
+}
 
 @end

@@ -20,7 +20,13 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *btnDelete;
 
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
+
 @property (strong, nonatomic) NSString *regionTitle;
+
+@property (nonatomic, assign) BOOL openFromSplash;
 
 @property (weak, nonatomic) OAResourcesBaseViewController *baseController;
 @property (nonatomic) LocalResourceItem* localItem;

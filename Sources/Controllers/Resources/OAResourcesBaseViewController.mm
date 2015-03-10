@@ -19,6 +19,7 @@
 #import "OALocalResourceInformationViewController.h"
 #import "OALog.h"
 #import "OAManageResourcesViewController.h"
+#import "OAIAPHelper.h"
 
 #include "Localization.h"
 
@@ -319,8 +320,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                        otherButtonItems:nil] show];
 }
 
+- (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
+{
+    if (region.regionId == nil || [region isInPurchasedArea] || [OAIAPHelper freeMapsAvailable] > 0) {
+        return YES;
+        
+    } else {
+        
+        [[[UIAlertView alloc] initWithTitle:nil message:@"You spent all free downloads. Please purchase continent to download / update the maps." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        
+        return NO;
+    }
+}
+
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item
 {
+    if (![self checkIfDownloadEnabled:item.worldRegion])
+        return;
+    
     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
     NSString* resourceName = [self.class titleOfResource:item.resource
@@ -362,6 +379,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item
 {
+    if (![self checkIfDownloadEnabled:item.worldRegion])
+        return;
+
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
     
@@ -688,7 +708,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 [self showDownloadViewForTask:nextTask];
             });
         }
-        
 
         [self updateContent];
     });

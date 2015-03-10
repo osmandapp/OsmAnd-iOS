@@ -18,6 +18,8 @@
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
+#import "OAIAPHelper.h"
+
 #define _(name) OAMapSourcesViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
@@ -199,6 +201,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         
         NSString *caption = mapStyle->title.toNSString();
+        
+        if ([caption isEqualToString:@"Ski-map"] && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_SkiMap])
+            continue;
+        if ([caption isEqualToString:@"nautical"] && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Nautical])
+            continue;
+        
         NSString *newCaption = [stylesTitlesOffline objectForKey:caption];
         if (newCaption)
             caption = newCaption;
@@ -216,10 +224,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             item.sortIndex = 2;
         else if ([item.mapStyle->title.toNSString() isEqualToString:@"LightRS"])
             item.sortIndex = 3;
-        else if ([item.mapStyle->title.toNSString() isEqualToString:@"nautical"])
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"Ski-map"])
             item.sortIndex = 4;
-        else
+        else if ([item.mapStyle->title.toNSString() isEqualToString:@"nautical"])
             item.sortIndex = 5;
+        else
+            item.sortIndex = 6;
 
         [_offlineMapSources addObject:item];
     }
@@ -240,6 +250,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     stylesTitlesOffline = @{@"default" : @"OsmAnd",
                             @"nautical" : @"Nautical",
+                            @"Ski-map" : @"Ski map",
                             @"UniRS" : @"UniRS",
                             @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
                             @"LightRS" : @"LightRS"};

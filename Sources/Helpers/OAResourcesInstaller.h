@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+UIKIT_EXTERN NSString *const OAResourceInstalledNotification;
+
 @interface OAResourcesInstaller : NSObject
 
 - (instancetype)init;

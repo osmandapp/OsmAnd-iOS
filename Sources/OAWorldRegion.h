@@ -25,6 +25,9 @@
 
 - (NSComparisonResult)compare:(OAWorldRegion*)other;
 
+- (BOOL)purchased;
+- (BOOL)isInPurchasedArea;
+
 + (OAWorldRegion*)loadFrom:(NSString*)ocbfFilename;
 
 @end

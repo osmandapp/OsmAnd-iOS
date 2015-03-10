@@ -21,15 +21,20 @@
 #define kInAppId_Addon_SkiMap @"net.osmand.inapp.addon.skimap"
 #define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
 
+#define kFreeMapsAvailableTotal 5
+
 
 UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductPurchaseFailedNotification;
+UIKIT_EXTERN NSString *const OAIAPProductsRestoredNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @interface OAIAPHelper : NSObject
 
 + (OAIAPHelper *)sharedInstance;
+
+@property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
@@ -42,5 +47,8 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 -(SKProduct *)product:(NSString *)productIdentifier;
 -(int)productIndex:(NSString *)productIdentifier;
 -(BOOL)productsLoaded;
+
++(int)freeMapsAvailable;
++(void)decreaseFreeMapsCount;
 
 @end

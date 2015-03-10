@@ -13,6 +13,9 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 
+NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
+
+
 @implementation OAResourcesInstaller
 {
     OsmAndAppInstance _app;
@@ -62,8 +65,11 @@
     {
         // Install or update given resource
         success = _app.resourcesManager->updateFromFile(resourceId, filePath);
-        if (!success)
+        if (!success) {
             success = _app.resourcesManager->installFromRepository(resourceId, filePath);
+            if (success)
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
+        }
     }
 
     // Remove downloaded file anyways

@@ -12,6 +12,7 @@
 
 #import "Localization.h"
 #import "OALog.h"
+#import "OAIAPHelper.h"
 
 @implementation OAWorldRegion
 {
@@ -332,6 +333,57 @@
 - (NSString*)description
 {
     return [NSString stringWithFormat:@"%@ (%@)", self.name, _regionId];
+}
+
+- (BOOL)purchased
+{
+    // world map
+    if (_regionId == nil)
+        return YES;
+    
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Africa];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Asia];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Australia];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Central_America];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Europe];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_North_America];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Russia];
+    }
+    if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
+        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_South_America];
+    }
+    return NO;
+}
+
+
+- (BOOL)isInPurchasedArea
+{
+    return [self isInPurchasedArea:self];
+}
+
+- (BOOL)isInPurchasedArea:(OAWorldRegion *)region
+{
+    if (region.regionId == nil)
+        return NO;
+    
+    if ([region purchased] || (region.superregion.regionId != nil && [region.superregion purchased]))
+        return YES;
+    if (region.superregion.regionId && [self isInPurchasedArea:region.superregion])
+        return YES;
+    return NO;
 }
 
 @end

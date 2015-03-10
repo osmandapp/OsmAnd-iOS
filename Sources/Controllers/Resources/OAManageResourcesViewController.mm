@@ -27,6 +27,8 @@
 #include "Localization.h"
 
 #import "OAPurchasesViewController.h"
+#import "OAResourcesInstaller.h"
+#import "OAIAPHelper.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -106,6 +108,13 @@ struct RegionResources
     UILabel *_updateCouneView;
     BOOL _doDataUpdate;
     BOOL _doDataUpdateReload;
+    
+    BOOL _displayBanner;
+    UIView *_freeDownloadsView;
+    UIView *_freeDownloadsBanner;
+    UILabel *_freeTextLabel;
+    UIButton *_btnPurchasesOnBanner;
+    NSInteger _bannerSection;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -167,6 +176,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
+    
+    if (_currentScope == kLocalResourcesScope ||
+        (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+        [self.region isInPurchasedArea])
+        _displayBanner = NO;
+    else
+        _displayBanner = YES;
 
     [self obtainDataAndItems];
     [self prepareContent];
@@ -180,6 +196,38 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _updateCouneView.textAlignment = NSTextAlignmentCenter;
     _updateCouneView.textColor = [UIColor whiteColor];
     
+    if (_displayBanner) {
+        _freeDownloadsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 76.0)];
+        _freeDownloadsView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+        
+        UIColor *bannerColor;
+        if ([OAIAPHelper freeMapsAvailable] > 0)
+            bannerColor = [UIColor colorWithRed:0.306f green:0.792f blue:0.388f alpha:1.00f];
+        else
+            bannerColor = [UIColor colorWithRed:0.992f green:0.749f blue:0.176f alpha:1.00f];
+        
+        _freeDownloadsBanner = [[UIView alloc] initWithFrame:CGRectMake(15.0, 15.0, 70.0, 60.0)];
+        _freeDownloadsBanner.backgroundColor = bannerColor;
+        _freeDownloadsBanner.layer.cornerRadius = 5.0;
+        _freeDownloadsBanner.layer.masksToBounds = YES;
+        _freeDownloadsBanner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        
+        [_freeDownloadsView addSubview:_freeDownloadsBanner];
+        
+        _freeTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 6.0, 46.0, 48.0)];
+        _freeTextLabel.backgroundColor = bannerColor;
+        _freeTextLabel.textColor = [UIColor whiteColor];
+        _freeTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+        _freeTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        _freeTextLabel.numberOfLines = 2;
+        
+        [_freeDownloadsBanner addSubview:_freeTextLabel];
+        
+        _btnPurchasesOnBanner = [[UIButton alloc] initWithFrame:_freeDownloadsBanner.bounds];
+        [_btnPurchasesOnBanner addTarget:self action:@selector(btnToolbarPurchasesClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _btnPurchasesOnBanner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        [_freeDownloadsBanner addSubview:_btnPurchasesOnBanner];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -207,7 +255,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     
     self.updateButton.hidden = hideUpdateButton;
     
-    //[[UIApplication sharedApplication] setStatusBarHidden:_isSearching];
+    [self updateFreeDownloadsBanner];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -224,12 +274,66 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     }
 }
 
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    if (_freeTextLabel) {
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+            _freeTextLabel.textAlignment = NSTextAlignmentLeft;
+        else
+            _freeTextLabel.textAlignment = NSTextAlignmentCenter;        
+    }
+}
+
+-(void)updateFreeDownloadsBanner
+{
+    int freeMaps = [OAIAPHelper freeMapsAvailable];
+
+    UIColor *bannerColor;
+    if (freeMaps > 0)
+        bannerColor = [UIColor colorWithRed:0.306f green:0.792f blue:0.388f alpha:1.00f];
+    else
+        bannerColor = [UIColor colorWithRed:0.992f green:0.749f blue:0.176f alpha:1.00f];
+
+    _freeDownloadsBanner.backgroundColor = bannerColor;
+    _freeTextLabel.backgroundColor = bannerColor;
+
+    if (freeMaps > 1) {
+        _freeTextLabel.text = [NSString stringWithFormat:@"There are %d free maps available without updates", freeMaps];
+    } else if (freeMaps == 1) {
+        _freeTextLabel.text = @"There is one free map available without update";
+    } else {
+        _freeTextLabel.text = @"You have no free maps availabe for download/update";
+    }
+}
+
+- (void)resourceInstalled:(NSNotification *)notification {
+    
+    NSString * resourceId = notification.object;
+    OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion
+                                                                thatContainsResource:QString([resourceId UTF8String])];
+    
+    if (!match || ![match isInPurchasedArea])
+        [OAIAPHelper decreaseFreeMapsCount];
+}
+
 - (void)updateContent
 {
     _doDataUpdate = YES;
     [self obtainDataAndItems];
     [self prepareContent];
     [self refreshContent:YES];
+    
+    if (_displayBanner)
+        [self updateFreeDownloadsBanner];
 }
 
 - (void)obtainDataAndItems
@@ -309,14 +413,16 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             regionResources.localResources.clear();
         }
         
-        for (const auto& resource : _outdatedResources)
-        {
-            if (!resource->id.startsWith(downloadsIdPrefix))
-                continue;
-            
-            regionResources.allResources.insert(resource->id, resource);
-            regionResources.outdatedResources.insert(resource->id, resource);
-            regionResources.localResources.insert(resource->id, resource);
+        if ([region purchased] || [region isInPurchasedArea]) {
+            for (const auto& resource : _outdatedResources)
+            {
+                if (!resource->id.startsWith(downloadsIdPrefix))
+                    continue;
+                
+                regionResources.allResources.insert(resource->id, resource);
+                regionResources.outdatedResources.insert(resource->id, resource);
+                regionResources.localResources.insert(resource->id, resource);
+            }
         }
         for (const auto& resource : _localResources)
         {
@@ -462,7 +568,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
-        if (!match)
+        if (!match || ![match isInPurchasedArea])
             continue;
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
@@ -548,6 +654,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         _lastUnusedSectionIndex = 0;
 
+        if (_displayBanner)
+            _bannerSection = _lastUnusedSectionIndex++;
+        else
+            _bannerSection = -1;
+        
+        
         // Updates always go first
         if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
             _outdatedResourcesSection = _lastUnusedSectionIndex++;
@@ -612,7 +724,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 continue;
             ResourceItem *item = resourceItems[i];
             if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:(_displayBanner ? 1 : 0)]];
                 break;
             }
         }
@@ -875,6 +987,31 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 #pragma mark - UITableViewDataSource
 
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return nil;
+
+    if (section == _bannerSection)
+        return _freeDownloadsView;
+    
+    return nil;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    if (tableView == self.searchDisplayController.searchResultsTableView)
+        return 0.0;
+
+    if (section == _bannerSection)
+        return _freeDownloadsView.bounds.size.height;
+    
+    if (section == 0)
+        return 56.0;
+    
+    return 40.0;
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     if (tableView == self.searchDisplayController.searchResultsTableView)
@@ -885,6 +1022,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
     NSInteger sectionsCount = 0;
 
+    if (_bannerSection >= 0)
+        sectionsCount++;
     if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
@@ -902,6 +1041,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         return [_searchResults count];
 
+    if (section == _bannerSection)
+        return 0;
     if (section == _outdatedResourcesSection)
         return 1;
     if (section == _resourcesSection)
@@ -1027,6 +1168,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         }
     }
 
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44.0;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1205,7 +1351,34 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
-    if ([cellTypeId isEqualToString:downloadingResourceCell])
+    
+    if ([cellTypeId isEqualToString:subregionCell]) {
+    
+        OAWorldRegion* item = (OAWorldRegion*)item_;
+        
+        if (item.superregion.regionId == nil) {
+            if ([item purchased]) {
+                UIView *purchasedView = [[UIView alloc] initWithFrame:CGRectMake(cell.contentView.bounds.size.width - 14.0, cell.contentView.bounds.size.height / 2.0 - 5.0, 10.0, 10.0)];
+                purchasedView.layer.cornerRadius = 5.0;
+                purchasedView.layer.masksToBounds = YES;
+                purchasedView.layer.backgroundColor = [UIColor colorWithRed:0.306f green:0.792f blue:0.388f alpha:1.00f].CGColor;
+                purchasedView.tag = -1;
+                purchasedView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleTopMargin;
+                
+                [cell.contentView addSubview:purchasedView];
+                
+            } else {
+                for (UIView *view in cell.contentView.subviews) {
+                    if (view.tag == -1) {
+                        [view removeFromSuperview];
+                        break;
+                    }
+                }
+            }
+        }
+        
+    }
+    else if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
         ResourceItem* item = (ResourceItem*)item_;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
@@ -1412,6 +1585,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
                      } completion:^(BOOL finished) {
                          self.titlePanelView.userInteractionEnabled = YES;
+                         if (_displayBanner)
+                             [self.tableView reloadData];
                      }];
 }
 

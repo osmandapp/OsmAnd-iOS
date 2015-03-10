@@ -11,6 +11,8 @@
 #import "OAInAppCell.h"
 #import <StoreKit/StoreKit.h>
 #import "OALog.h"
+#import "OAResourcesBaseViewController.h"
+#import "OsmAndApp.h"
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -21,12 +23,15 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *btnRestorePurchases;
+
 @end
 
 @implementation OAPurchasesViewController {
 
     NSNumberFormatter *_numberFormatter;
     MBProgressHUD* _loadProductsProgressHUD;
+    BOOL _restoringPurchases;
 
 }
 
@@ -60,8 +65,8 @@
     [super viewWillAppear:animated];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
 
     if (![[OAIAPHelper sharedInstance] productsLoaded]) {
         
@@ -210,10 +215,11 @@
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
 
     if (product) {
-        [[OAIAPHelper sharedInstance] buyProduct:product];
         
+        _restoringPurchases = NO;
         [_loadProductsProgressHUD show:YES];
-
+        
+        [[OAIAPHelper sharedInstance] buyProduct:product];
     }
     
 }
@@ -224,16 +230,29 @@
     int index = [[OAIAPHelper sharedInstance] productIndex:identifier];
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        [_loadProductsProgressHUD hide:YES];
+        if (!_restoringPurchases)
+            [_loadProductsProgressHUD hide:YES];
 
         if (index != -1) {
             NSInteger section = [[OAIAPHelper inAppsMaps] containsObject:identifier] ? 0 : 1;
             [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:section]] withRowAnimation:UITableViewRowAnimationFade];
         }
+        
+        if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap]) {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"Please turn on the \"Ski map\" style in the Map Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        }
+
+        if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical]) {
+            [[[UIAlertView alloc] initWithTitle:nil message:@"Please turn on the \"Nautical\" style in the Map Settings" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        }
+
     });
 }
 
 - (void)productPurchaseFailed:(NSNotification *)notification {
+    
+    if (_restoringPurchases)
+        return;
     
     NSString * identifier = notification.object;
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
@@ -250,6 +269,36 @@
     });
 }
 
+- (void)productsRestored:(NSNotification *)notification {
+
+    NSNumber *errorsCountObj = notification.object;
+    int errorsCount = errorsCountObj.intValue;
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_loadProductsProgressHUD hide:YES];
+
+        if (errorsCount > 0) {
+            NSString *text;
+            if (errorsCount > 1)
+                text = [NSString stringWithFormat:@"%d items were not restored. Please try again.", errorsCount];
+            else
+                text = @"One item was not restored. Please try again.";
+            
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+        }
+    });
+    
+}
+
+- (IBAction)btnRestorePurchasesClicked:(id)sender
+{
+    _restoringPurchases = YES;
+    [_loadProductsProgressHUD show:YES];
+    
+    [[OAIAPHelper sharedInstance] restoreCompletedTransactions];
+}
+
 -(void)backButtonClicked:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
@@ -262,6 +311,21 @@
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    /*
+    // Download map
+    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                           inRegion:[OsmAndApp instance].worldRegion
+                                                     withRegionName:YES];
+    
+    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+    */
 }
 
 @end

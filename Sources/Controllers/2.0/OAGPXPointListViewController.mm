@@ -95,7 +95,7 @@ typedef enum
                                                           newLocation.coordinate.latitude,
                                                           wptLon, wptLat);
         
-        itemData.distance = [_app.locationFormatter stringFromDistance:distance];
+        itemData.distance = [_app getFormattedDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
         itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);

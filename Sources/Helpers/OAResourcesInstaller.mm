@@ -47,10 +47,15 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     // Skip all downloads that are not resources
     if (![task.key hasPrefix:@"resource:"])
         return;
-
+    
     // Skip other states except Finished (and completed)
-    if (task.state != OADownloadTaskStateFinished || task.progressCompleted < 1.0f)
+    if (task.state != OADownloadTaskStateFinished || task.progressCompleted < 1.0f) {
+        
+        if (task.state == OADownloadTaskStateFinished)
+            [_app updateScreenTurnOffSetting];
+
         return;
+    }
 
     NSString* localPath = task.targetPath;
     NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];

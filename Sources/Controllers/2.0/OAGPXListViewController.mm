@@ -372,7 +372,7 @@ typedef enum
         if (cell) {
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
             [cell.textView setText:item.gpxTitle];
-            [cell.descriptionDistanceView setText:[_app.locationFormatter stringFromDistance:item.totalDistance]];
+            [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d points", item.wptPoints]];
             if (_isExport) {
                 if (indexPath.row == _selectedIndex)

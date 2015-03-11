@@ -26,6 +26,15 @@
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @implementation ResourceItem
+
+-(BOOL)isEqual:(id)object
+{
+    if (self.resourceId == nullptr || ((ResourceItem*)object).resourceId == nullptr)
+        return NO;
+    
+    return self.resourceId.compare(((ResourceItem*)object).resourceId) == 0;
+}
+
 @end
 
 @implementation RepositoryResourceItem
@@ -190,9 +199,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (resource->id == QLatin1String("world_basemap.map.obf"))
         {
             if (includeRegionName)
-                return OALocalizedString(@"Detailed worldwide overview map");
+                return OALocalizedString(@"Worldwide overview map");
             else
                 return OALocalizedString(@"Detailed overview map");
+        }
+        else if (resource->id == QLatin1String("world_seamarks_basemap.map.obf"))
+        {
+            if (includeRegionName)
+                return OALocalizedString(@"World seamarks basemap");
+            else
+                return OALocalizedString(@"World seamarks basemap");
         }
 
         // By default, world region has only predefined set of resources

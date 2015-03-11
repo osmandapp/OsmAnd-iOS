@@ -13,6 +13,9 @@
 #import "OALog.h"
 #import "OAResourcesBaseViewController.h"
 #import "OsmAndApp.h"
+#include "Localization.h"
+#import <Reachability.h>
+
 
 @interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -209,8 +212,8 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
-        return;
+    //if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
+    //    return;
     
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
 
@@ -243,7 +246,22 @@
         }
 
         if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical]) {
-            [[[UIAlertView alloc] initWithTitle:nil message:@"Please turn on the \"Nautical\" style in the Map Settings" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+            
+            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                       countStyle:NSByteCountFormatterCountStyleFile];
+            
+            NSString* message = nil;
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+                message = OALocalizedString(@"Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over cellular network. This may incur high charges. You may install it later through the Maps & Resources. Proceed?",
+                                            stringifiedSize);
+            else
+                message = OALocalizedString(@"Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over WiFi network. You may install it later through the Maps & Resources. Proceed?",
+                                            stringifiedSize);
+            
+            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"No, thanks") otherButtonTitles:OALocalizedString(@"Download map now"), nil];
+            mapDownloadAlert.tag = 100;
+            [mapDownloadAlert show];
         }
 
     });
@@ -317,15 +335,15 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     
-    /*
-    // Download map
-    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                           inRegion:[OsmAndApp instance].worldRegion
-                                                     withRegionName:YES];
-    
-    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-    */
+    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex) {
+        // Download map
+        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                               inRegion:[OsmAndApp instance].worldRegion
+                                                         withRegionName:YES];
+        
+        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+    }
 }
 
 @end

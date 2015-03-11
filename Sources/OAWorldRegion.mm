@@ -371,7 +371,7 @@
 
 - (BOOL)isInPurchasedArea
 {
-    return [self isInPurchasedArea:self];
+    return [self purchased] || [self isInPurchasedArea:self];
 }
 
 - (BOOL)isInPurchasedArea:(OAWorldRegion *)region

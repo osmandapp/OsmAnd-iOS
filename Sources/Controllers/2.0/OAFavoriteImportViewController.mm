@@ -11,6 +11,7 @@
 #import "OAPointTableViewCell.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAFavoriteItem.h"
+#import "OADefaultFavorite.h"
 
 #import "OsmAndApp.h"
 
@@ -351,8 +352,10 @@ kFavoriteCellType;
         
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
         [cell.titleView setText:item.favorite->getTitle().toNSString()];
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-        [cell.colorView setBackgroundColor:color];
+        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        cell.titleIcon.image = favCol.icon;
         
         cell.rightArrow.image = nil;
         cell.directionImageView.image = nil;
@@ -360,19 +363,6 @@ kFavoriteCellType;
         
         CGRect titleFrame = CGRectMake(cell.titleView.frame.origin.x, 15.0, cell.titleView.frame.size.width + 20.0, cell.titleView.frame.size.height);
         cell.titleView.frame = titleFrame;
-
-        CGFloat red;
-        CGFloat green;
-        CGFloat blue;
-        CGFloat alpha;
-        [color getRed:&red green:&green blue:&blue alpha:&alpha];
-        
-        if (red > 0.95 && green > 0.95 && blue > 0.95) {
-            cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
-            cell.colorView.layer.borderWidth = 0.8;
-        } else {
-            cell.colorView.layer.borderWidth = 0;
-        }
         
         [cell.distanceView setText:item.distance];
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);

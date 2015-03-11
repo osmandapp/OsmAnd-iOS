@@ -33,7 +33,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 {
     int freeMaps = kFreeMapsAvailableTotal;
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
-        freeMaps = [[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
     } else {
         [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
@@ -46,7 +46,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 {
     int freeMaps = kFreeMapsAvailableTotal;
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
-        freeMaps = [[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
+        freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
     }
     [[NSUserDefaults standardUserDefaults] setInteger:--freeMaps forKey:@"freeMapsAvailable"];
     [[NSUserDefaults standardUserDefaults] synchronize];

@@ -81,18 +81,20 @@ typedef enum
         
         QString title = QString::fromNSString(formattedLocation);
         
-        UIColor* color_ = (UIColor*)[UIColor blackColor];
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][0];
+    
+        UIColor* color_ = favCol.color;
         CGFloat r,g,b,a;
         [color_ getRed:&r
                  green:&g
                   blue:&b
                  alpha:&a];
-        OsmAnd::FColorARGB color(a,r,g,b);
+
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                        title,
                                                                        QString::null,
-                                                                       OsmAnd::FColorRGB(color));
+                                                                       OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [app saveFavoritesToPermamentStorage];
     }
@@ -143,8 +145,7 @@ typedef enum
             self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
             self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
-            self.favoriteStarView.frame = CGRectOffset(self.favoriteStarView.frame, 0.0, y);
-            self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
+            self.favoriteColorIcon.frame = CGRectOffset(self.favoriteColorIcon.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
@@ -177,8 +178,7 @@ typedef enum
             self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
             self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
             self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
-            self.favoriteStarView.frame = CGRectOffset(self.favoriteStarView.frame, 0.0, y);
-            self.favoriteColorView.frame = CGRectOffset(self.favoriteColorView.frame, 0.0, y);
+            self.favoriteColorIcon.frame = CGRectOffset(self.favoriteColorIcon.frame, 0.0, y);
             self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
             self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
             self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
@@ -271,77 +271,16 @@ typedef enum
 
 }
 
-/*
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-
-    if (_favAction != kFavoriteActionNone)
-        return;
-    
-    if (_showFavoriteOnExit && !self.newFavorite) {
-        
-        //OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        
-        // Get location of the gesture
-        CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
-        touchPoint.x *= _mapView.contentScaleFactor;
-        touchPoint.y *= _mapView.contentScaleFactor;
-        
-        OsmAnd::LatLon latLon = self.favorite.favorite->getLatLon();
-        //[mapViewController showContextPinMarker:latLon.latitude longitude:latLon.longitude];
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                            object: self
-                                                          userInfo:@{@"title" : self.favorite.favorite->getTitle().toNSString(),
-                                                                     @"lat": [NSNumber numberWithDouble:latLon.latitude],
-                                                                     @"lon": [NSNumber numberWithDouble:latLon.longitude],
-                                                                     @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
-                                                                     @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
-    }
-}
- */
-
 -(void)setupView {
-    
-    self.favoriteColorView.layer.cornerRadius = 10;
-    self.favoriteColorView.layer.masksToBounds = YES;
-    [self.favoriteColorView setBackgroundColor:[UIColor colorWithRed:self.favorite.favorite->getColor().r green:self.favorite.favorite->getColor().g blue:self.favorite.favorite->getColor().b alpha:1]];
-    if (self.favorite.favorite->getColor().r > 0.95 && self.favorite.favorite->getColor().g > 0.95 && self.favorite.favorite->getColor().b > 0.95) {
-        self.favoriteColorView.layer.borderColor = [[UIColor blackColor] CGColor];
-        self.favoriteColorView.layer.borderWidth = 0.8;
-    } else
-        self.favoriteColorView.layer.borderWidth = 0;
     
     [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
     
     // Color
-    NSArray* availableColors = [OADefaultFavorite builtinColors];
-    
-    NSUInteger selectedColor = 0;
-    selectedColor = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
-        CGFloat r,g,b,a;
-        [uiColor getRed:&r
-                  green:&g
-                   blue:&b
-                  alpha:&a];
-        OsmAnd::FColorARGB fcolor(a,r,g,b);
-        OsmAnd::ColorRGB color = OsmAnd::FColorRGB(fcolor);
+    UIColor* color = [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
         
-        if (color == self.favorite.favorite->getColor())
-            return YES;
-        return NO;
-    }];
-    
-    if (!selectedColor || selectedColor > [availableColors count] )
-        selectedColor = 0;
-    
-    NSString* colorName = @"Black";
-
-    colorName = [((NSArray*)[availableColors objectAtIndex:selectedColor]) objectAtIndex:0];
-    [self.favoriteColorLabel setText:colorName];
-    
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    [_favoriteColorIcon setImage:favCol.icon];
+    [_favoriteColorLabel setText:favCol.name];
     
     [self.favoriteDistance setText:self.favorite.distance];
     self.favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);

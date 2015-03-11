@@ -13,6 +13,7 @@
 #import "OAFavoriteItem.h"
 #import "OAMapViewController.h"
 #import "OAGPXListViewController.h"
+#import "OADefaultFavorite.h"
 
 #import "OsmAndApp.h"
 
@@ -501,32 +502,18 @@ kFavoriteCellType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-            
-            UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
-            CGRect f = cell.colorView.frame;
-            CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
-            star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
-            [cell.cellView addSubview:star];
         }
         
         if (cell) {
             
             OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
-            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-            [cell.colorView setBackgroundColor:color];
 
-            CGFloat red;
-            CGFloat green;
-            CGFloat blue;
-            CGFloat alpha;
-            [color getRed:&red green:&green blue:&blue alpha:&alpha];
+            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
             
-            if (red > 0.95 && green > 0.95 && blue > 0.95) {
-                cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
-                cell.colorView.layer.borderWidth = 0.8;
-            }
-
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            cell.titleIcon.image = favCol.icon;
+            
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
@@ -567,34 +554,17 @@ kFavoriteCellType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-
-            UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
-            CGRect f = cell.colorView.frame;
-            CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
-            star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
-            [cell.cellView addSubview:star];
         }
 
         if (cell) {
             
             OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
-            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-            [cell.colorView setBackgroundColor:color];
-            
-            CGFloat red;
-            CGFloat green;
-            CGFloat blue;
-            CGFloat alpha;
-            [color getRed:&red green:&green blue:&blue alpha:&alpha];
-            
-            if (red > 0.95 && green > 0.95 && blue > 0.95) {
-                cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
-                cell.colorView.layer.borderWidth = 0.8;
-            } else {
-                cell.colorView.layer.borderWidth = 0;
-            }
-            
+            UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            cell.titleIcon.image = favCol.icon;
+
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             

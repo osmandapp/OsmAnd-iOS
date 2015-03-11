@@ -21,6 +21,8 @@
 {
     if ([UIScreen mainScreen].scale > 1.0f)
         resourceName = [resourceName stringByAppendingString:@"@2x"];
+    else if ([UIScreen mainScreen].scale > 2.0f)
+        resourceName = [resourceName stringByAppendingString:@"@3x"];
 
     const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
                                                               ofType:@"png"];

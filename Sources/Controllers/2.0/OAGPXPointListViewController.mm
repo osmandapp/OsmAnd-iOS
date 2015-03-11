@@ -247,31 +247,13 @@ typedef enum
         [cell.distanceView setText:item.distance];
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
 
-        if (!cell.colorView.hidden) {
-            cell.colorView.hidden = YES;
+        if (!cell.titleIcon.hidden) {
+            cell.titleIcon.hidden = YES;
             CGRect f = cell.titleView.frame;
             cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
             cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
             cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
         }
-
-        
-        /*
-        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r green:item.favorite->getColor().g blue:item.favorite->getColor().b alpha:1];
-        [cell.colorView setBackgroundColor:color];
-        
-        CGFloat red;
-        CGFloat green;
-        CGFloat blue;
-        CGFloat alpha;
-        [color getRed:&red green:&green blue:&blue alpha:&alpha];
-        
-        if (red > 0.95 && green > 0.95 && blue > 0.95) {
-            cell.colorView.layer.borderColor = [[UIColor blackColor] CGColor];
-            cell.colorView.layer.borderWidth = 0.8;
-        }
-        */
-        
     }
     
     return cell;

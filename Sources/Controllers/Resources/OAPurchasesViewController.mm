@@ -212,8 +212,8 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    //if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
-    //    return;
+    if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
+        return;
     
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
 

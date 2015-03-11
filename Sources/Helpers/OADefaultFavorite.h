@@ -10,7 +10,20 @@
 
 #define kDefaultFavoriteZoom 15.0f
 
+@interface OAFavoriteColor : NSObject
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) UIColor *color;
+@property (nonatomic) UIImage *icon;
+@property (nonatomic) NSString *iconName;
+
+-(instancetype)initWithName:(NSString *)name color:(UIColor *)color iconName:(NSString *)iconName;
+
+@end
+
 @interface OADefaultFavorite : NSObject
+
++ (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor;
 
 + (NSArray*)builtinColors;
 + (NSArray*)builtinGroupNames;

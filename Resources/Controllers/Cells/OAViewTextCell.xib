@@ -14,11 +14,10 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <view contentMode="scaleToFill" id="dL4-Th-vrs">
+                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qJU-SM-ad0">
                         <rect key="frame" x="16" y="15" width="20" height="20"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="c1z-Xc-yb4">
                         <rect key="frame" x="50" y="14" width="233" height="21"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -33,9 +32,9 @@
                 </subviews>
             </tableViewCellContentView>
             <connections>
-                <outlet property="iconView" destination="Pqb-b0-7y2" id="zdu-9H-ox2"/>
+                <outlet property="iconView" destination="Pqb-b0-7y2" id="d9k-qG-fVZ"/>
                 <outlet property="textView" destination="c1z-Xc-yb4" id="WBA-CB-aQR"/>
-                <outlet property="viewView" destination="dL4-Th-vrs" id="dO6-Xq-AE7"/>
+                <outlet property="titleIcon" destination="qJU-SM-ad0" id="FKc-vd-Jp8"/>
             </connections>
             <point key="canvasLocation" x="223" y="283"/>
         </tableViewCell>

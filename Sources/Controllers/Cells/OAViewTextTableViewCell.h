@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @interface OAViewTextTableViewCell : UITableViewCell
-@property (weak, nonatomic) IBOutlet UIView *viewView;
+
+@property (weak, nonatomic) IBOutlet UIImageView *titleIcon;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 @property (weak, nonatomic) IBOutlet UIImageView *iconView;
-
--(void)setColor:(UIColor*)color;
-
 
 @end

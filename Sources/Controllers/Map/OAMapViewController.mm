@@ -21,6 +21,7 @@
 #import "OAResourcesBaseViewController.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAMapStyleSettings.h"
+#import "OADefaultFavorite.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -144,9 +145,10 @@
     std::shared_ptr<OsmAnd::MapMarker> _contextPinMarker;
 
     std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationPinMarkersCollection;
+    std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
 
     // Favorites presenter
-    std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
+    //std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
 
     OAAutoObserverProxy* _appModeObserver;
     OAAppMode _lastAppMode;
@@ -241,7 +243,6 @@
                                                                      merged << added << removed << updated;
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
-
     
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -402,11 +403,30 @@
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
     // Create favorites presenter
+    /*
     _favoritesPresenter.reset(new OsmAnd::FavoriteLocationsPresenter(_app.favoritesCollection,
                                                                      [OANativeUtilities skBitmapFromPngResource:@"favorite_location_pin_marker_icon"]));
+     */
+
+    _app.favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+                                                                [self]
+                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection)
+                                                                {
+                                                                    [self onFavoritesCollectionChanged];
+                                                                });
+    
+    _app.favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+                                                                [self]
+                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection,
+                                                                 const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
+                                                                {
+                                                                    [self onFavoriteLocationChanged:favoriteLocation];
+                                                                });
 
     _destinationPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
-
+    
+    [self refreshFavoritesMarkersCollection];
+    
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
@@ -415,9 +435,50 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
+- (void)refreshFavoritesMarkersCollection
+{
+    _favoritesMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+
+    for (const auto& favLoc : _app.favoritesCollection->getFavoriteLocations()) {
+        
+        UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        
+        OsmAnd::MapMarkerBuilder()
+        .setIsAccuracyCircleSupported(false)
+        .setBaseOrder(std::numeric_limits<int>::max() - 10)
+        .setIsHidden(false)
+        .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
+        .setPosition(favLoc->getPosition31())
+        .buildAndAddToCollection(_favoritesMarkersCollection);
+        
+    }
+}
+
+- (void)onFavoritesCollectionChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideLayers];
+        [self refreshFavoritesMarkersCollection];
+        [self updateLayers];
+    });
+}
+
+- (void)onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideLayers];
+        [self refreshFavoritesMarkersCollection];
+        [self updateLayers];
+    });
+}
+
 - (void)deinit
 {
     _app.resourcesManager->localResourcesChangeObservable.detach((__bridge const void*)self);
+
+    _app.favoritesCollection->collectionChangeObservable.detach((__bridge const void*)self);
+    _app.favoritesCollection->favoriteLocationChangeObservable.detach((__bridge const void*)self);
 
     // Unsubscribe from application notifications
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -2038,12 +2099,25 @@
     @synchronized(_rendererSync)
     {
         if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
-            [mapView addKeyedSymbolsProvider:_favoritesPresenter];
+            [mapView addKeyedSymbolsProvider:_favoritesMarkersCollection];
         else
-            [mapView removeKeyedSymbolsProvider:_favoritesPresenter];
+            [mapView removeKeyedSymbolsProvider:_favoritesMarkersCollection];
     }
 }
 
+- (void)hideLayers
+{
+    if (![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        if ([_app.data.mapLayersConfiguration isLayerVisible:kFavoritesLayerId])
+            [mapView removeKeyedSymbolsProvider:_favoritesMarkersCollection];
+    }
+}
 
 - (void)onOverlayLayerAlphaChanged
 {

@@ -11,6 +11,7 @@
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXListViewController.h"
+#import "OADefaultFavorite.h"
 
 #import "OsmAndApp.h"
 
@@ -21,36 +22,15 @@
 #include "Localization.h"
 
 
-@interface OAFavoriteColorViewController ()
-
-@property (strong, nonatomic) NSMutableArray* colors;
-
-@end
-
 @implementation OAFavoriteColorViewController
 
 -(id)initWithFavorite:(OAFavoriteItem*)item {
     self = [super init];
     if (self) {
-        self.colors = [NSMutableArray arrayWithArray:[OADefaultFavorite builtinColors]];
+        UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        self.colorIndex = [[OADefaultFavorite builtinColors] indexOfObject:favCol];
         self.favorite = item;
-
-        NSArray* availableColors = [OADefaultFavorite builtinColors];
-        self.colorIndex = [availableColors indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-            UIColor* uiColor = (UIColor*)[obj objectAtIndex:1];
-            CGFloat r,g,b,a;
-            [uiColor getRed:&r
-                     green:&g
-                      blue:&b
-                     alpha:&a];
-            OsmAnd::FColorARGB fcolor(a,r,g,b);
-            OsmAnd::ColorRGB color = OsmAnd::FColorRGB(fcolor);
-            
-            if (color == self.favorite.favorite->getColor())
-                return YES;
-            return NO;
-        }];
-        
     }
     return self;
 }
@@ -92,7 +72,7 @@
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.colors count];
+    return [[OADefaultFavorite builtinColors] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -105,21 +85,13 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAViewTextCell" owner:self options:nil];
         cell = (OAViewTextTableViewCell *)[nib objectAtIndex:0];
-        
-        UIImageView *star = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_mark_star.png"]];
-        CGRect f = cell.viewView.frame;
-        CGPoint p = CGPointMake(f.origin.x + f.size.width / 2.0 - star.frame.size.width / 2.0, f.origin.y + f.size.height / 2.0 - star.frame.size.height / 2.0);
-        star.frame = CGRectMake(p.x, p.y, star.frame.size.width, star.frame.size.height);
-        [cell.contentView addSubview:star];
-
     }
     
     if (cell) {
         
-        NSString* colorName = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:0];
-        UIColor* currColor = [((NSArray*)[self.colors objectAtIndex:indexPath.row]) objectAtIndex:1];
-        [cell.textView setText:colorName];
-        [cell setColor:currColor];
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][indexPath.row];
+        [cell.textView setText:favCol.name];
+        [cell.titleIcon setImage:favCol.icon];
         [cell.iconView setImage:nil];
         
         if (indexPath.row == self.colorIndex)
@@ -139,16 +111,14 @@
 - (IBAction)saveClicked:(id)sender {
     OsmAndAppInstance app = [OsmAndApp instance];
     
-    UIColor* color_ = [[[OADefaultFavorite builtinColors] objectAtIndex:self.colorIndex] objectAtIndex:1];
+    OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:self.colorIndex];
     CGFloat r,g,b,a;
-    [color_ getRed:&r
-              green:&g
-               blue:&b
-              alpha:&a];
-    OsmAnd::FColorARGB color(a,r,g,b);
+    [favCol.color getRed:&r
+                   green:&g
+                    blue:&b
+                   alpha:&a];
     
-    
-    self.favorite.favorite->setColor(OsmAnd::FColorRGB(color));
+    self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
     
     [app saveFavoritesToPermamentStorage];
     [self backButtonClicked:self];

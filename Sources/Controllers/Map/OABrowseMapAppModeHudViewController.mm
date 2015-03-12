@@ -26,6 +26,8 @@
 #import "OADestinationCell.h"
 #import "OANativeUtilities.h"
 
+#import "OAMapSettingsViewController.h"
+
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/CachingRoadLocator.h>
 
@@ -40,6 +42,9 @@
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
+
+@property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomOutButton;
@@ -75,6 +80,8 @@
     double _targetLongitude;
     
     BOOL _driveModeActive;
+    
+    OAMapSettingsViewController *_mapSettings;
 
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -304,6 +311,41 @@
     });
 }
 
+-(void)closeMapSettings
+{
+    OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+    if (lastMapSettingsCtrl)
+        [lastMapSettingsCtrl hidePopup:YES];
+
+    _mapSettings = nil;
+    
+    if (_shadowButton) {
+        [_shadowButton removeFromSuperview];
+        self.shadowButton = nil;
+    }
+}
+
+- (IBAction)onMapSettingsButtonClick:(id)sender {
+    
+    CGFloat settingsHeight = kMapSettingsPopupHeight;
+    
+    _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
+    [_mapSettings showPopupAnimated:self parentViewController:nil];
+    
+    if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
+        [_shadowButton removeFromSuperview];
+        self.shadowButton = nil;
+    }
+    
+    self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - settingsHeight)];
+    _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
+    [_shadowButton addTarget:self action:@selector(closeMapSettings) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.shadowButton];
+
+    
+}
+
 - (IBAction)onOptionsMenuButtonDown:(id)sender {
     self.sidePanelController.recognizesPanGesture = YES;
 }
@@ -529,11 +571,14 @@
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
+    CGFloat msX = _mapSettingsButton.frame.origin.x;
+    CGSize msSize = _mapSettingsButton.frame.size;
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
     
     if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         [UIView animateWithDuration:.2 animations:^{
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            _mapSettingsButton.frame = CGRectMake(msX, y, msSize.width, msSize.height);
         }];
 
 }

@@ -11,12 +11,25 @@
 #import "OASwitchTableViewCell.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXDatabase.h"
+#import "OAMapSource.h"
+#import "OAMapStylesCell.h"
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 
 
 @implementation OAMapSettingsMainScreen {
     
     OAMapStyleSettings *styleSettings;
+    NSInteger mapStyleIndex;
     
+    OAMapStylesCell *mapStylesCell;
+    
+    BOOL mapStyleCellPresent;
+    NSInteger favSection;
+    NSInteger favRow;
 }
 
 
@@ -44,9 +57,46 @@
 {
 }
 
+- (void)changeMapTypeButtonClicked:(id)sender {
+    
+    int tag = ((UIButton*)sender).tag;
+    
+    OAMapSource* mapSource = app.data.lastMapSource;
+    NSString *name = mapSource.name;
+    const auto resource = app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+    NSString* resourceId = resource->id.toNSString();
+    
+    // Get the style
+    const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
+    const auto& presets = self.app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+    
+    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsMainScreen tagToMapStyle:tag];
+    
+    BOOL foundPreset = NO;
+    for(const auto& preset : presets)
+    {
+        if (preset->type == selectedType) {
+            
+            OAMapSource* mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:preset->name.toNSString() name:name];
+            app.data.lastMapSource = mapSource;
+            
+            foundPreset = YES;
+            break;
+        }
+    }
+    
+    if (!foundPreset) {
+        [mapStylesCell setupMapTypeButtons:0];
+    }
+    
+}
+
 -(void)setupView
 {
     
+    NSMutableDictionary *sectionMapStyle = [NSMutableDictionary dictionary];
+    [sectionMapStyle setObject:@"OAMapStylesCell" forKey:@"type"];
+
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
     [section0fav setObject:@"Favorite" forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
@@ -62,6 +112,8 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0)
         [section0 addObject:section0tracks];
     
+    OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsMainScreen variantToMapStyle:app.data.lastMapSource.variant];
+    mapStyleIndex = [OAMapSettingsMainScreen mapStyleToTag:mapStyle];
     
     NSArray *arrTop = @[@{@"groupName": @"Show on Map",
                           @"cells": section0
@@ -77,8 +129,22 @@
     
     if (isOnlineMapSource) {
         tableData = arrTop;
+        mapStyleCellPresent = NO;
+        favSection = 0;
+        favRow = 0;
         
     } else {
+        
+        NSMutableArray *arr = [NSMutableArray arrayWithArray:arrTop];
+
+        NSDictionary *mapStyles = @{@"groupName": @"",
+                                    @"cells": @[sectionMapStyle]
+                                    };
+        [arr insertObject:mapStyles atIndex:0];
+
+        mapStyleCellPresent = YES;
+        favSection = 1;
+        favRow = 0;
         
         styleSettings = [[OAMapStyleSettings alloc] init];
         
@@ -100,7 +166,7 @@
                                ];
 
         
-        tableData = [arrTop arrayByAddingObjectsFromArray:arrStyles];
+        tableData = [arr arrayByAddingObjectsFromArray:arrStyles];
     }
 
     
@@ -128,20 +194,45 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [((NSDictionary*)[tableData objectAtIndex:section]) objectForKey:@"groupName"];
+    return [((NSDictionary*)tableData[section]) objectForKey:@"groupName"];
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return [((NSArray*)[((NSDictionary*)[tableData objectAtIndex:section]) objectForKey:@"cells"]) count];
+    return [((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) count];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"])
+        return 70.0;
+    else
+        return 44.0;
+}
+
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)[tableData objectAtIndex:indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
+    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
     
     UITableViewCell* outCell = nil;
-    if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"]) {
+        
+        if (!mapStylesCell) {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAMapStylesCell" owner:self options:nil];
+            mapStylesCell = (OAMapStylesCell *)[nib objectAtIndex:0];
+            [mapStylesCell.mapTypeButtonView addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [mapStylesCell.mapTypeButtonCar addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [mapStylesCell.mapTypeButtonWalk addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            [mapStylesCell.mapTypeButtonBike addTarget:self action:@selector(changeMapTypeButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+        }
+        
+        [mapStylesCell setSelectedIndex:mapStyleIndex];
+        
+        outCell = mapStylesCell;
+        
+    } else if ([[data objectForKey:@"type"] isEqualToString:@"OASettingsCell"]) {
         
         static NSString* const identifierCell = @"OASettingsTableViewCell";
         OASettingsTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
@@ -170,7 +261,7 @@
         if (cell) {
             [cell.textView setText: [data objectForKey:@"name"]];
             
-            if (indexPath.section == 0 && indexPath.row == 0) {
+            if (indexPath.section == favSection && indexPath.row == favRow) {
                 [cell.switchView setOn:settings.mapSettingShowFavorites];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
@@ -192,19 +283,28 @@
 
 #pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 34.0;
+    NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[section]) objectForKey:@"cells"]) objectAtIndex:0];
+    if ([[data objectForKey:@"type"] isEqualToString:@"OAMapStylesCell"])
+        return 0.01;
+    else
+        return 34.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    switch (indexPath.section) {
+    OAMapSettingsViewController *mapSettingsViewController;
+    
+    NSInteger section = indexPath.section;
+    if (mapStyleCellPresent)
+        section--;
+    
+    switch (section) {
         case 0:
         {
             if (indexPath.row == 1) {
-                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
-                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx popup:vwController.isPopup];
             }
                 
             break;
@@ -212,8 +312,7 @@
         
         case 1: // Map Type
         {
-            OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
-            [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType popup:vwController.isPopup];
 
             break;
         }
@@ -221,28 +320,23 @@
         case 2: // Map Style
         {
             if (indexPath.row == 0) {
-                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
-                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey popup:vwController.isPopup];
                 
             } else {
                 
                 NSArray *categories = [styleSettings getAllCategories];
                 
-                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1]];
-                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
             }
             break;
         }
         case 3:
         {
             if (indexPath.row == 0) {
-                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
-                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay popup:vwController.isPopup];
                 
             } else {
-                OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-                [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
-                
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay popup:vwController.isPopup];
             }
             
             break;
@@ -252,8 +346,51 @@
             break;
     }
     
+    if (mapSettingsViewController) {
+        if (!vwController.isPopup)
+            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
+        else
+            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
+    }
+
+    
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
++(OsmAnd::MapStylePreset::Type)tagToMapStyle:(int)type {
+    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
+    if (type == 1) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Car;
+    } else if (type == 2) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
+    } else if (type == 3) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
+    }
+    return mapStyle;
+}
+
++(OsmAnd::MapStylePreset::Type)variantToMapStyle:(NSString*)variant {
+    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
+    if ([variant isEqualToString:@"type_car"]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Car;
+    } else if ([variant isEqualToString:@"type_pedestrian"]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
+    } else if ([variant isEqualToString:@"type_bicycle"]) {
+        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
+    }
+    return mapStyle;
+}
+
++(int)mapStyleToTag:(OsmAnd::MapStylePreset::Type)mapStyle {
+    int type = 0;
+    if (mapStyle == OsmAnd::MapStylePreset::Type::Car) {
+        type = 1;
+    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Pedestrian) {
+        type = 2;
+    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Bicycle) {
+        type = 3;
+    }
+    return type;
+}
 
 @end

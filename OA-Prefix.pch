@@ -30,5 +30,8 @@
 #define kInactiveHoursResetLocation 24
 #define kLastMapUsedTime @"kLastMapUsedTime"
 
+#define kMapSettingsPopupHeight 240.0
+#define kMapSettingsPopupWidth 240.0
+
 
 #endif

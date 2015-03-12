@@ -29,20 +29,30 @@ typedef enum
 
 @interface OAMapSettingsViewController : OASuperViewController
 
+@property (weak, nonatomic) IBOutlet UIView *navbarView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
-@property (weak, nonatomic) IBOutlet UIScrollView *mapTypeScrollView;
-@property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonView;
-@property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonCar;
-@property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonWalk;
-@property (weak, nonatomic) IBOutlet UIButton *mapTypeButtonBike;
+
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (nonatomic, assign) BOOL goToMap;
 @property (nonatomic, assign) OAGpxBounds goToBounds;
+@property (nonatomic, readonly) BOOL isPopup;
 
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param;
+@property (nonatomic) UIViewController *parentVC;
+
+-(void)deleteParentVC:(BOOL)deleteAll;
+
+-(CGRect)viewFramePopup;
+
+-(void)showPopupAnimated:(UIViewController *)rootViewController parentViewController:(UIViewController *)parentViewController;
+-(void)hidePopup:(BOOL)hideAll;
+
+-(instancetype)initPopup;
+
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen popup:(BOOL)popup;
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param popup:(BOOL)popup;
 
 @end

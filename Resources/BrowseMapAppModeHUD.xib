@@ -14,6 +14,7 @@
                 <outlet property="debugButton" destination="zUK-AA-Umg" id="W0Q-by-MH6"/>
                 <outlet property="driveModeButton" destination="QPn-ok-Vxm" id="puw-oM-kqp"/>
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
+                <outlet property="mapSettingsButton" destination="Ezz-bP-gmB" id="fQV-HX-alr"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
@@ -64,6 +65,15 @@
                         </imageView>
                     </subviews>
                 </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
+                    <rect key="frame" x="52" y="21" width="40" height="40"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="left_menu_icon_map.png"/>
+                    <connections>
+                        <action selector="onMapSettingsButtonClick:" destination="-1" eventType="touchUpInside" id="0fq-p8-YC7"/>
+                    </connections>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QPn-ok-Vxm" userLabel="driveModeButton">
                     <rect key="frame" x="224" y="515" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -145,6 +155,7 @@
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
         <image name="free_map_mode_button.png" width="25" height="25"/>
         <image name="icon_drive_mode.png" width="40" height="40"/>
+        <image name="left_menu_icon_map.png" width="25" height="23"/>
         <image name="menu_button.png" width="45" height="51"/>
         <image name="menu_button_bg.png" width="40" height="40"/>
     </resources>

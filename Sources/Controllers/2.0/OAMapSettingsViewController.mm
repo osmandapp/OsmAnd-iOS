@@ -54,9 +54,6 @@
 #   include <OsmAndCore/Map/MapRasterMetricsLayerProvider.h>
 #endif // defined(OSMAND_IOS_DEV)
 
-// https://github.com/osmandapp/OsmAnd-resources/blob/master/rendering_styles/default.render.xml
-
-
 
 
 @interface OAMapSettingsViewController () {
@@ -90,20 +87,33 @@
     return self;
 }
 
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen
+-(instancetype)initPopup
 {
     self = [super init];
     if (self) {
+        _isPopup = YES;
+        _settingsScreen = EMapSettingsScreenMain;
+        [self commonInit];
+    }
+    return self;
+}
+
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen popup:(BOOL)popup
+{
+    self = [super init];
+    if (self) {
+        _isPopup = popup;
         _settingsScreen = settingsScreen;
         [self commonInit];
     }
     return self;
 }
 
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param popup:(BOOL)popup
 {
     self = [super init];
     if (self) {
+        _isPopup = popup;
         _settingsScreen = settingsScreen;
         customParam = param;
         [self commonInit];
@@ -120,83 +130,180 @@
 - (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
 {
     
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height) {
-        big = rect.size.width;
-        small = rect.size.height;
-    } else {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
-    
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+    if (_isPopup) {
         
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        CGFloat navHeight = 34.0;
+        CGRect navFrame = _navbarView.frame;
+        navFrame.size.height = navHeight;
+        _navbarView.frame = navFrame;
+        
+        _backButton.frame = CGRectMake(_backButton.frame.origin.x, 0.0, _backButton.frame.size.width, navHeight);
+        _titleView.frame = CGRectMake(self.view.frame.size.width / 2.0 - _titleView.frame.size.width / 2.0, 0.0, _titleView.frame.size.width, navHeight);
+        _tableView.frame = CGRectMake(0.0, navHeight, self.view.bounds.size.width, self.view.bounds.size.height - navHeight);
+
+    } else {
+        
+        CGFloat big;
+        CGFloat small;
+        
+        CGRect rect = self.view.bounds;
+        if (rect.size.width > rect.size.height) {
+            big = rect.size.width;
+            small = rect.size.height;
+        } else {
+            big = rect.size.height;
+            small = rect.size.width;
+        }
+        
+        if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
             
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                
+                
+            } else {
+                
+                CGFloat topY = 0.0;
+                CGFloat mapWidth = small;
+                CGFloat mapHeight = big - 280.0;
+                CGFloat mapBottom = topY + mapHeight;
+                
+                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
+                _tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
+                
+            }
             
         } else {
             
-            CGFloat topY = 0.0;
-            CGFloat mapWidth = small;
-            CGFloat mapHeight = 200.0;
-            CGFloat mapBottom = topY + mapHeight;
-            CGFloat scrollBottom = mapBottom + self.mapTypeScrollView.bounds.size.height;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-            if (isOnlineMapSource) {
-                self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
-                self.mapTypeScrollView.hidden = YES;
+            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+                
+                
             } else {
-                self.mapTypeScrollView.frame = CGRectMake(0.0, mapBottom, small, self.mapTypeScrollView.bounds.size.height);
-                self.tableView.frame = CGRectMake(0.0, scrollBottom, small, big - scrollBottom);
-                self.mapTypeScrollView.hidden = NO;
+                
+                CGFloat topY = 0.0;
+                CGFloat mapHeight = small - topY;
+                CGFloat mapWidth = big - 290.0;
+                
+                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
+                _tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
+
             }
             
         }
-        
-    } else {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-            
-        } else {
-            
-            CGFloat topY = 0.0;
-            CGFloat mapHeight = small - topY;
-            CGFloat mapWidth = 190.0;
-            CGFloat scrollBottom = 64.0 + self.mapTypeScrollView.bounds.size.height;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-            if (isOnlineMapSource) {
-                self.tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
-                self.mapTypeScrollView.hidden = YES;
-            } else {
-                self.mapTypeScrollView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, self.mapTypeScrollView.bounds.size.height);
-                self.tableView.frame = CGRectMake(mapWidth, scrollBottom, big - mapWidth, small - scrollBottom);
-                self.mapTypeScrollView.hidden = NO;
-            }
-            
+    }
+}
+
+-(CGRect)viewFramePopup
+{
+    return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
+}
+
+-(void)showPopupAnimated:(UIViewController *)rootViewController parentViewController:(UIViewController *)parentViewController;
+{
+    self.parentVC = parentViewController;
+    
+    [rootViewController addChildViewController:self];
+    [self willMoveToParentViewController:rootViewController];
+
+    CGRect parentFrame;
+    if (_parentVC)
+        parentFrame = CGRectOffset(_parentVC.view.frame, -50.0, 0.0);
+    
+    CGRect frame = [self viewFramePopup];
+    if (_settingsScreen == EMapSettingsScreenMain)
+        frame.origin.y = DeviceScreenHeight + 10.0;
+    else
+        frame.origin.x = DeviceScreenWidth + 10.0;
+
+    self.view.frame = frame;
+    [rootViewController.view addSubview:self.view];
+    [UIView animateWithDuration:.4 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+        if (_parentVC) {
+            _parentVC.view.frame = parentFrame;
+            _parentVC.view.alpha = 0.0;
         }
+        self.view.frame = [self viewFramePopup];
         
+    } completion:^(BOOL finished) {
+        [self didMoveToParentViewController:rootViewController];
+        if (_parentVC)
+            _parentVC.view.hidden = YES;
+    }];
+}
+
+-(void)hidePopup:(BOOL)hideAll
+{
+    if (!_isPopup)
+        return;
+    
+    CGRect parentFrame;
+    if (_parentVC) {
+        parentFrame = CGRectOffset(_parentVC.view.frame, 50.0, 0.0);
+        _parentVC.view.alpha = 0.0;
+        _parentVC.view.hidden = NO;
     }
     
+    [UIView animateWithDuration:.4 animations:^{
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+            if (_settingsScreen == EMapSettingsScreenMain || hideAll)
+                self.view.frame = CGRectMake(0.0, DeviceScreenHeight + 10.0, self.view.bounds.size.width, self.view.bounds.size.height);
+            else
+                self.view.frame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+        } else {
+            self.view.frame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+        }
+
+        if (_parentVC && !hideAll) {
+            _parentVC.view.frame = parentFrame;
+            _parentVC.view.alpha = 1.0;
+        }
+
+    } completion:^(BOOL finished) {
+        
+        [self deleteParentVC:hideAll];
+        
+    }];
+}
+
+-(void)deleteParentVC:(BOOL)deleteAll
+{
+    if (_parentVC) {
+        if (deleteAll) {
+            OAMapSettingsViewController *ctrl = (OAMapSettingsViewController *)_parentVC;
+            [ctrl deleteParentVC:YES];
+        }
+        self.parentVC = nil;
+    }
+    [self removeFromParentViewController];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    if (_isPopup/* && _settingsScreen != EMapSettingsScreenMain*/)
+        self.view.frame = [self viewFramePopup];
+    
     [self setupView];
     
-    CGRect f = self.mapView.frame;
-    self.mapButton = [[UIButton alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y + 64.0, f.size.width, f.size.height)];
-    [self.mapButton setTitle:@"" forState:UIControlStateNormal];
-    [self.mapButton addTarget:self action:@selector(doGoToMap) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.mapButton];
+    if (!_isPopup) {
+        CGRect f = _mapView.frame;
+        self.mapButton = [[UIButton alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y + 64.0, f.size.width, f.size.height)];
+        [_mapButton setTitle:@"" forState:UIControlStateNormal];
+        [_mapButton addTarget:self action:@selector(doGoToMap) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.mapButton];
+
+    } else {
+        [_mapView removeFromSuperview];
+        if (_settingsScreen == EMapSettingsScreenMain)
+            [_backButton removeFromSuperview];
+
+        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+        [self.view.layer setShadowOpacity:0.8];
+        [self.view.layer setShadowRadius:3.0];
+        [self.view.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -208,16 +315,20 @@
     else
         [screenObj setupView];
     
-    OAGpxBounds bounds;
-    bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
-    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    
+    if (!_isPopup) {
+        OAGpxBounds bounds;
+        bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
+        [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    }
 }
 
 -(void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     
-    [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
+    if (!_isPopup)
+        [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
     
 }
 
@@ -225,7 +336,7 @@
 {
     [super viewDidDisappear:animated];
     
-    if (_goToMap) {
+    if (!_isPopup && _goToMap) {
         [[OARootViewController instance].mapPanel modifyMapAfterReuse:self.goToBounds azimuth:0.0 elevationAngle:90.0 animated:YES];
     }
 }
@@ -237,7 +348,12 @@
         _lastMapSourceChangeObserver = nil;
     }
     
-    [super backButtonClicked:sender];
+    if (!_isPopup) {
+        [super backButtonClicked:sender];
+        
+    } else {
+        [self hidePopup:NO];
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -308,17 +424,7 @@
     const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
     
     BOOL _isOnlineMapSourcePrev = isOnlineMapSource;
-    if (resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources) {
-        
-        isOnlineMapSource = YES;
-        
-    } else {
-        
-        isOnlineMapSource = NO;
-        OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsViewController variantToMapStyle:_app.data.lastMapSource.variant];
-        [self setupMapTypeButtons:[OAMapSettingsViewController mapStyleToTag:mapStyle]];
-        
-    }
+    isOnlineMapSource = (resource->type == OsmAnd::ResourcesManager::ResourceType::OnlineTileSources);
     
     screenObj.isOnlineMapSource = isOnlineMapSource;
     
@@ -339,99 +445,6 @@
     
 }
 
-
--(void)setupMapTypeButtons:(int)tag {
-    
-    UIColor* buttonColor = [UIColor colorWithRed:83.0/255.0 green:109.0/255.0 blue:254.0/255.0 alpha:1.0];
-    
-    self.mapTypeButtonView.layer.cornerRadius = 5;
-    self.mapTypeButtonCar.layer.cornerRadius = 5;
-    self.mapTypeButtonWalk.layer.cornerRadius = 5;
-    self.mapTypeButtonBike.layer.cornerRadius = 5;
-
-    [self.mapTypeButtonView setImage:[UIImage imageNamed:@"btn_map_type_icon_view.png"] forState:UIControlStateNormal];
-    [self.mapTypeButtonCar setImage:[UIImage imageNamed:@"btn_map_type_icon_car.png"] forState:UIControlStateNormal];
-    [self.mapTypeButtonWalk setImage:[UIImage imageNamed:@"btn_map_type_icon_walk.png"] forState:UIControlStateNormal];
-    [self.mapTypeButtonBike setImage:[UIImage imageNamed:@"btn_map_type_icon_bike.png"] forState:UIControlStateNormal];
-    
-    [self.mapTypeButtonView setTitleColor:buttonColor forState:UIControlStateNormal];
-    [self.mapTypeButtonCar setTitleColor:buttonColor forState:UIControlStateNormal];
-    [self.mapTypeButtonWalk setTitleColor:buttonColor forState:UIControlStateNormal];
-    [self.mapTypeButtonBike setTitleColor:buttonColor forState:UIControlStateNormal];
-    
-    [self.mapTypeButtonView setBackgroundColor:[UIColor clearColor]];
-    [self.mapTypeButtonCar setBackgroundColor:[UIColor clearColor]];
-    [self.mapTypeButtonWalk setBackgroundColor:[UIColor clearColor]];
-    [self.mapTypeButtonBike setBackgroundColor:[UIColor clearColor]];
-    
-    self.mapTypeButtonView.layer.borderColor = [buttonColor CGColor];
-    self.mapTypeButtonView.layer.borderWidth = 1;
-    self.mapTypeButtonCar.layer.borderColor = [buttonColor CGColor];
-    self.mapTypeButtonCar.layer.borderWidth = 1;
-    self.mapTypeButtonWalk.layer.borderColor = [buttonColor CGColor];
-    self.mapTypeButtonWalk.layer.borderWidth = 1;
-    self.mapTypeButtonBike.layer.borderColor = [buttonColor CGColor];
-    self.mapTypeButtonBike.layer.borderWidth = 1;
-    
-    switch (tag) {
-        case 0:
-            [self.mapTypeButtonView setBackgroundColor:buttonColor];
-            [self.mapTypeButtonView setImage:[UIImage imageNamed:@"btn_map_type_icon_view_selected.png"] forState:UIControlStateNormal];
-            [self.mapTypeButtonView setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            break;
-        case 1:
-            [self.mapTypeButtonCar setBackgroundColor:buttonColor];
-            [self.mapTypeButtonCar setImage:[UIImage imageNamed:@"btn_map_type_icon_car_selected.png"] forState:UIControlStateNormal];
-            [self.mapTypeButtonCar setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            break;
-        case 2:
-            [self.mapTypeButtonWalk setBackgroundColor:buttonColor];
-            [self.mapTypeButtonWalk setImage:[UIImage imageNamed:@"btn_map_type_icon_walk_selected.png"] forState:UIControlStateNormal];
-            [self.mapTypeButtonWalk setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            break;
-        case 3:
-            [self.mapTypeButtonBike setBackgroundColor:buttonColor];
-            [self.mapTypeButtonBike setImage:[UIImage imageNamed:@"btn_map_type_icon_bike_selected.png"] forState:UIControlStateNormal];
-            [self.mapTypeButtonBike setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            break;
-        default:
-            break;
-    }
-}
-
-- (IBAction)changeMapTypeButtonClicked:(id)sender {
-    
-    int tag = ((UIButton*)sender).tag;
-    
-    OAMapSource* mapSource = _app.data.lastMapSource;
-    NSString *name = mapSource.name;
-    const auto resource = _app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
-    NSString* resourceId = resource->id.toNSString();
-    
-    // Get the style
-    const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-    const auto& presets = self.app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
-    
-    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsViewController tagToMapStyle:tag];
-
-    BOOL foundPreset = NO;
-    for(const auto& preset : presets)
-    {
-        if (preset->type == selectedType) {
-            
-            OAMapSource* mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:preset->name.toNSString() name:name];
-            _app.data.lastMapSource = mapSource;
-            
-            foundPreset = YES;
-            break;
-        }
-    }
-    
-    if (!foundPreset) {
-        [self setupMapTypeButtons:0];
-    }
-    
-}
 
 - (void)onLastMapSourceChanged
 {
@@ -454,41 +467,7 @@
     return UIInterfaceOrientationPortrait;
 }
 
-+(OsmAnd::MapStylePreset::Type)tagToMapStyle:(int)type {
-    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
-    if (type == 1) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Car;
-    } else if (type == 2) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
-    } else if (type == 3) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
-    }
-    return mapStyle;
-}
 
-+(OsmAnd::MapStylePreset::Type)variantToMapStyle:(NSString*)variant {
-    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
-    if ([variant isEqualToString:@"type_car"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Car;
-    } else if ([variant isEqualToString:@"type_pedestrian"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
-    } else if ([variant isEqualToString:@"type_bicycle"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
-    }
-    return mapStyle;
-}
-
-+(int)mapStyleToTag:(OsmAnd::MapStylePreset::Type)mapStyle {
-    int type = 0;
-    if (mapStyle == OsmAnd::MapStylePreset::Type::Car) {
-        type = 1;
-    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Pedestrian) {
-        type = 2;
-    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Bicycle) {
-        type = 3;
-    }
-    return type;
-}
 
 
         

@@ -132,15 +132,20 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 5.0;
+    return 0.01;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
     if (p.dataType != OABoolean) {
-        OAMapSettingsViewController *mapSourcesViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
-        [vwController.navigationController pushViewController:mapSourcesViewController animated:YES];
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name popup:vwController.isPopup];
+        
+        if (!vwController.isPopup)
+            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
+        else
+            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
+
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }

@@ -12,12 +12,18 @@
 #import "OAMapRendererView.h"
 
 @interface OATargetPointView()
+
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet UIButton *buttonShare;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDirection;
+
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (weak, nonatomic) IBOutlet UIView *backView1;
+@property (weak, nonatomic) IBOutlet UIView *backView2;
+@property (weak, nonatomic) IBOutlet UIView *backView3;
 
 @property double lat;
 @property double lon;
@@ -64,6 +70,69 @@
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
 }
+
+- (void)layoutSubviews
+{
+    CGFloat h = 125.0;
+    BOOL landscape = NO;
+    if (DeviceScreenWidth > 470.0) {
+        h = 72.0;
+        landscape = YES;
+    }
+    
+    CGRect frame = self.frame;
+    frame.origin.y = DeviceScreenHeight - h;
+    frame.size.width = DeviceScreenWidth;
+    frame.size.height = h;
+    self.frame = frame;
+    
+    if (landscape) {
+        
+        if (_imageView.image) {
+            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0, 21.0);
+        } else {
+            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
+        }
+        
+        _buttonsView.frame = CGRectMake(DeviceScreenWidth - 210.0, 0.0, 210.0, h);
+        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
+        CGFloat x = 0.0;
+        _backView1.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
+        x += backViewWidth + 1.0;
+        _backView2.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
+        x += backViewWidth + 1.0;
+        _backView3.frame = CGRectMake(x, 0.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height);
+        _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
+        _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
+        _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+        
+    } else {
+        
+        if (_imageView.image) {
+            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0, 21.0);
+        } else {
+            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
+        }
+        
+        _buttonsView.frame = CGRectMake(0.0, 73.0, DeviceScreenWidth, 53.0);
+        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
+        CGFloat x = 0.0;
+        _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+        x += backViewWidth + 1.0;
+        _backView2.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+        x += backViewWidth + 1.0;
+        _backView3.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
+        _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
+        _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
+        _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+    }
+    
+}
+
 
 -(void)setAddress:(NSString*)address {
     [self.addressLabel setText:address];

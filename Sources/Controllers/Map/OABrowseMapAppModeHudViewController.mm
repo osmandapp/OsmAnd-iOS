@@ -138,7 +138,6 @@
     self.sidePanelController.recognizesPanGesture = NO;
 }
 
-NSLayoutConstraint* targetBottomConstraint;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -179,23 +178,9 @@ NSLayoutConstraint* targetBottomConstraint;
     
     
     // Setup target point menu
-    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight + 10, DeviceScreenWidth, kOATargetPointViewHeight)];
-    self.targetMenuView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeight)];
     self.targetMenuView.delegate = self;
-    [self.view addSubview:self.targetMenuView];
     
-    // Constraints
-    targetBottomConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant: self.targetMenuView.frame.size.height + 10];
-    [self.view addConstraint:targetBottomConstraint];
-    
-    NSLayoutConstraint* targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:targetConstraint];
-    
-    targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0f constant:0.0f];
-    [self.view addConstraint:targetConstraint];
-    
-    targetConstraint = [NSLayoutConstraint constraintWithItem:self.targetMenuView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:kOATargetPointViewHeight];
-    [self.view addConstraint:targetConstraint];
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -438,9 +423,20 @@ NSLayoutConstraint* targetBottomConstraint;
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
 
-    [targetBottomConstraint setConstant:0];
+    
+    [self.targetMenuView layoutSubviews];
+    CGRect frame = self.targetMenuView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.targetMenuView.frame = frame;
+    
+    if ([self.view.subviews containsObject:self.targetMenuView])
+        [self.targetMenuView removeFromSuperview];
+    [self.view addSubview:self.targetMenuView];
+    
     [UIView animateWithDuration:0.3 animations:^{
-        [self.view layoutIfNeeded];
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
+        self.targetMenuView.frame = frame;
         
     } completion:^(BOOL finished) {
         
@@ -511,9 +507,14 @@ NSLayoutConstraint* targetBottomConstraint;
     [_mapViewController hideContextPinMarker];
     [_shadowButton removeFromSuperview];
     self.shadowButton = nil;
-    [targetBottomConstraint setConstant:kOATargetPointViewHeight + 10];
+
     [UIView animateWithDuration:0.5 animations:^{
-        [self.view layoutIfNeeded];
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight + 10.0;
+        self.targetMenuView.frame = frame;
+        
+    } completion:^(BOOL finished) {
+        [self.targetMenuView removeFromSuperview];
     }];
 }
 

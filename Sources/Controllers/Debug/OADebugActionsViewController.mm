@@ -33,6 +33,7 @@
     QDecimalElement* _forcedDisplayDensityFactorValueElement;
 
     QRadioSection* _forcedGpsAccuracySection;
+    QRadioSection* _textureFilteringQualitySection;
 
     QRadioSection* _visualMetricsSection;
 
@@ -148,6 +149,17 @@
     };
     [rootElement addSection: visualMetricsSection];
 
+    // Texture Filtering Quality section
+    QRadioSection* textureFilteringQualitySection = [[QRadioSection alloc] initWithItems:@[OALocalizedString(@"Normal"),
+                                                                                     OALocalizedString(@"Good"),
+                                                                                     OALocalizedString(@"Best")]
+                                                                          selected:0
+                                                                             title:OALocalizedString(@"Texture Filtering Quality")];
+    textureFilteringQualitySection.onSelected = ^(){
+        [self onTextureFilteringQualityChanged];
+    };
+    [rootElement addSection: textureFilteringQualitySection];
+    
     // HUD section
     QSection* hudSection = [[QSection alloc] initWithTitle:OALocalizedString(@"HUD")];
     [rootElement addSection:hudSection];
@@ -303,6 +315,7 @@
         _forcedDisplayDensityFactorValueElement = forcedDisplayDensityFactorValueElement;
         
         _forcedGpsAccuracySection = forcedGpsAccuracySection;
+        _textureFilteringQualitySection = textureFilteringQualitySection;
 
         _visualMetricsSection = visualMetricsSection;
 
@@ -360,6 +373,7 @@
     _forcedDisplayDensityFactorValueElement.numberValue = [NSNumber numberWithFloat:_mapViewController.forcedDisplayDensityFactor];
 
     _forcedGpsAccuracySection.selected = _app.locationServices.forceAccuracy;
+    _textureFilteringQualitySection.selected = _app.debugSettings.textureFilteringQuality;
 
     _visualMetricsSection.selected = _mapViewController.visualMetricsMode;
 
@@ -446,7 +460,10 @@
     _app.debugSettings.setAllResourcesAsOutdated = _setAllResourcesAsOutdatedElement.boolValue;
 }
 
-
+- (void)onTextureFilteringQualityChanged
+{
+    _app.debugSettings.textureFilteringQuality = _textureFilteringQualitySection.selected;
+}
 
 
 - (void)applyMapRenderDebugSettings

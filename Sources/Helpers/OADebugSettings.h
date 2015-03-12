@@ -10,7 +10,8 @@
 
 @interface OADebugSettings : NSObject
 
-@property BOOL useRawSpeedAndAltitudeOnHUD;
-@property BOOL setAllResourcesAsOutdated;
+@property (nonatomic) BOOL useRawSpeedAndAltitudeOnHUD;
+@property (nonatomic) BOOL setAllResourcesAsOutdated;
+@property (nonatomic) int textureFilteringQuality;
 
 @end

@@ -130,6 +130,13 @@
     _renderer->framePreparedObservable.detach((__bridge const void*)_framePreparedObservable);
 }
 
+- (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality
+{
+    const auto rendererConfig = std::static_pointer_cast<OsmAnd::AtlasMapRendererConfiguration>(_renderer->getConfiguration());
+    rendererConfig->texturesFilteringQuality = quality;
+    _renderer->setConfiguration(rendererConfig);
+}
+
 - (std::shared_ptr<OsmAnd::IMapLayerProvider>)providerFor:(unsigned int)layer
 {
     return _renderer->getState().mapLayersProviders[layer];

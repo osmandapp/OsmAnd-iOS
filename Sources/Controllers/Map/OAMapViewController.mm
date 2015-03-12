@@ -2495,7 +2495,7 @@
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(std::numeric_limits<int>::max() - 2)
     .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"context_pin_marker_icon"])
+    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"destination_pin_marker_icon"])
     .setPinIconModulationColor(col)
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .buildAndAddToCollection(_destinationPinMarkersCollection);

@@ -50,6 +50,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (void)setProvider:(std::shared_ptr<OsmAnd::IMapLayerProvider>)provider forLayer:(unsigned int)layer;
 - (void)resetProviderFor:(unsigned int)layer;
 
+- (void)setTextureFilteringQuality:(OsmAnd::TextureFilteringQuality)quality;
+
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;

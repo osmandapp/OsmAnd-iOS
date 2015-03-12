@@ -53,18 +53,22 @@ rasterize_resource() {
 		if [ ! -f "$ORIGIN/Resources.svg/$SUBPATH/${FILENAME}@2x.${INPUT_FORMAT}" ]; then
 			printf "\t+ 2.0x\n"
 			(cd "$ORIGIN" && $RSVG_CONVERT -z 2 -f png -o "$OUTPUT_PATH/${FILENAME}@2x.png" "$INPUT")
+            printf "\t+ 3.0x\n"
+            (cd "$ORIGIN" && $RSVG_CONVERT -z 3 -f png -o "$OUTPUT_PATH/${FILENAME}@3x.png" "$INPUT")
 		fi
 	fi
-	
+
 	# If original is 2x scale, ...
 	if [[ "$FILENAME" =~ @2x$ ]]; then
 		# ... and there's no source version that provides 1x, rasterize smaller version
 		if [ ! -f "$ORIGIN/Resources.svg/$SUBPATH/${FILENAME%@2x}.${INPUT_FORMAT}" ]; then
-			printf "\t+ 0.5x\n"
+			printf "\t+ 2x * 0.5x = 1.0x\n"
 			(cd "$ORIGIN" && $RSVG_CONVERT -z 0.5 -f png -o "$OUTPUT_PATH/${FILENAME%@2x}.png" "$INPUT")
 		fi
+        printf "\t+ 2x * 1.5x = 3.0x\n"
+        (cd "$ORIGIN" && $RSVG_CONVERT -z 1.5 -f png -o "$OUTPUT_PATH/${FILENAME%@2x}@3x.png" "$INPUT")
 	fi
-	
+
 	return $?
 }
 export -f rasterize_resource

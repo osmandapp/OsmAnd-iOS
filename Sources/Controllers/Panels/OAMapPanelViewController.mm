@@ -42,6 +42,8 @@
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
 
+@property (nonatomic, strong) UIViewController* prevHudViewController;
+
 @end
 
 @implementation OAMapPanelViewController
@@ -93,22 +95,15 @@
     OALog(@"Creating Map Panel views...");
     
     // Create root view
-    UIView* rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
+    UIView* rootView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.view = rootView;
     
     // Instantiate map view controller
     _mapViewController = [[OAMapViewController alloc] init];
     [self addChildViewController:_mapViewController];
-    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
     [self.view addSubview:_mapViewController.view];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
+    _mapViewController.view.frame = self.view.frame;
+    _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
@@ -171,39 +166,47 @@
         if (!self.browseMapViewController) {
             self.browseMapViewController = [[OABrowseMapAppModeHudViewController alloc] initWithNibName:@"BrowseMapAppModeHUD"
                                                                                    bundle:nil];
-            self.browseMapViewController.destinationViewController = self.destinationViewController;
+            _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            _browseMapViewController.destinationViewController = self.destinationViewController;
         }
         newHudController = self.browseMapViewController;
+
+        _mapViewController.view.frame = self.view.frame;
     }
     else if (_app.appMode == OAAppModeDrive)
     {
         if (!self.driveModeViewController) {
             self.driveModeViewController = [[OADriveAppModeHudViewController alloc] initWithNibName:@"DriveAppModeHUD"
                                                                                bundle:nil];
-            self.driveModeViewController.destinationViewController = self.destinationViewController;
+            _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+            _driveModeViewController.destinationViewController = self.destinationViewController;
         }
         newHudController = self.driveModeViewController;
+        
+        CGRect frame = self.view.frame;
+        frame.origin.y = 100.0;
+        frame.size.height = DeviceScreenHeight - 100.0;
+        _mapViewController.view.frame = frame;
+
     }
     [self addChildViewController:newHudController];
 
     // Switch views
-    [newHudController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
+    newHudController.view.frame = self.view.frame;
     [self.view addSubview:newHudController.view];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":newHudController.view}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":newHudController.view}]];
+    
     if (animated && _hudViewController != nil)
     {
+        _prevHudViewController = _hudViewController;
         [UIView transitionFromView:_hudViewController.view
                             toView:newHudController.view
                           duration:0.6
                            options:UIViewAnimationOptionTransitionFlipFromTop
-                        completion:nil];
+         
+                        completion:^(BOOL finished) {
+                            [_prevHudViewController.view removeFromSuperview];
+                            _prevHudViewController = nil;
+                        }];
     }
     else
     {
@@ -281,8 +284,6 @@
         
         float metersPerPixel = [_mapViewController calculateMapRuler];
         
-        //double distanceH = OsmAnd::Utilities::distance(left, top, right, top);
-        //double distanceV = OsmAnd::Utilities::distance(left, top, left, bottom);
         double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
         double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
         
@@ -318,21 +319,6 @@
     [_mapViewController didMoveToParentViewController:self];
     [destinationView bringSubviewToFront:_mapViewController.view];
     
-    //UIView * parent = destinationView;
-    //UIView * child = _mapViewController.view;
-    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:YES];
-    /*
-    
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:@{@"view":_mapViewController.view}]];
-    [parent addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                   options:0
-                                                                   metrics:nil
-                                                                     views:@{@"view":_mapViewController.view}]];
-     */
-    //[parent layoutIfNeeded];
 }
 
 - (void)modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
@@ -358,8 +344,6 @@
         
         float metersPerPixel = [_mapViewController calculateMapRuler];
         
-        //double distanceH = OsmAnd::Utilities::distance(left, top, right, top);
-        //double distanceV = OsmAnd::Utilities::distance(left, top, left, bottom);
         double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
         double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
         
@@ -402,15 +386,6 @@
     [_mapViewController didMoveToParentViewController:self];
     [self.view sendSubviewToBack:_mapViewController.view];
     
-    [_mapViewController.view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[view]|"
-                                                                      options:0
-                                                                      metrics:nil
-                                                                        views:@{@"view":_mapViewController.view}]];
 }
 
 -(void)closeMapSettings

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "OANavigationController.h"
 
-#define kOATargetPointViewHeight 125
+#define kOATargetPointViewHeightPortrait 125.0
+#define kOATargetPointViewHeightLandscape 72.0
 
 @protocol OATargetPointViewDelegate;
 

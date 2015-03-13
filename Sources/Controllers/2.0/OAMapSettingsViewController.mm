@@ -132,6 +132,8 @@
     
     if (_isPopup) {
         
+        self.view.frame = [self viewFramePopup:interfaceOrientation];
+        
         CGFloat navHeight = 34.0;
         CGRect navFrame = _navbarView.frame;
         navFrame.size.height = navHeight;
@@ -194,9 +196,19 @@
     }
 }
 
+
+-(CGRect)viewFramePopup:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+        return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
+    } else {
+        return CGRectMake(DeviceScreenWidth - kMapSettingsPopupWidth, 20.0, kMapSettingsPopupWidth, DeviceScreenHeight - 20.0);
+    }
+}
+
 -(CGRect)viewFramePopup
 {
-    return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
+    return [self viewFramePopup:self.interfaceOrientation];
 }
 
 -(void)showPopupAnimated:(UIViewController *)rootViewController parentViewController:(UIViewController *)parentViewController;
@@ -211,11 +223,11 @@
         parentFrame = CGRectOffset(_parentVC.view.frame, -50.0, 0.0);
     
     CGRect frame = [self viewFramePopup];
-    if (_settingsScreen == EMapSettingsScreenMain)
+    if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
         frame.origin.y = DeviceScreenHeight + 10.0;
     else
         frame.origin.x = DeviceScreenWidth + 10.0;
-
+    
     self.view.frame = frame;
     [rootViewController.view addSubview:self.view];
     [UIView animateWithDuration:.4 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
@@ -276,12 +288,13 @@
         self.parentVC = nil;
     }
     [self removeFromParentViewController];
+    [self.view removeFromSuperview];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    if (_isPopup/* && _settingsScreen != EMapSettingsScreenMain*/)
+    if (_isPopup)
         self.view.frame = [self viewFramePopup];
     
     [self setupView];

@@ -73,10 +73,10 @@
 
 - (void)layoutSubviews
 {
-    CGFloat h = 125.0;
+    CGFloat h = kOATargetPointViewHeightPortrait;
     BOOL landscape = NO;
     if (DeviceScreenWidth > 470.0) {
-        h = 72.0;
+        h = kOATargetPointViewHeightLandscape;
         landscape = YES;
     }
     

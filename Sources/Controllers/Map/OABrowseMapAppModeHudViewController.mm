@@ -185,7 +185,7 @@
     
     
     // Setup target point menu
-    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeight)];
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
     self.targetMenuView.delegate = self;
     
 
@@ -240,6 +240,9 @@
 {
     if (_destinationViewController)
         [_destinationViewController updateFrame];
+    
+    if (_shadowButton)
+        _shadowButton.frame = [self shadowButtonRect];
 }
 
 
@@ -325,10 +328,25 @@
     }
 }
 
+-(CGRect)shadowButtonRect
+{
+    CGRect frame;
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (_mapSettings)
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
+        else
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
+    } else {
+        if (_mapSettings)
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
+        else
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
+    }
+    return frame;
+}
+
 - (IBAction)onMapSettingsButtonClick:(id)sender {
-    
-    CGFloat settingsHeight = kMapSettingsPopupHeight;
-    
+
     _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
     [_mapSettings showPopupAnimated:self parentViewController:nil];
     
@@ -337,12 +355,10 @@
         self.shadowButton = nil;
     }
     
-    self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - settingsHeight)];
-    _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
     [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
     [_shadowButton addTarget:self action:@selector(closeMapSettings) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.shadowButton];
-
     
 }
 
@@ -487,8 +503,7 @@
             self.shadowButton = nil;
         }
         
-        self.shadowButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeight)];
-        _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+        self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
         [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
         [_shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
         [self.view addSubview:self.shadowButton];

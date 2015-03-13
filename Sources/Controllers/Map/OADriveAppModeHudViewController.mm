@@ -36,7 +36,7 @@
 
 #define kMaxRoadDistanceInMeters 15.0
 
-@interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol, OADestinationViewControllerProtocol>
+@interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
@@ -195,7 +195,6 @@
     
     _destinationViewController.singleLineOnly = YES;
     _destinationViewController.top = 100.0;
-    _destinationViewController.delegate = self;
     
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];
@@ -551,14 +550,8 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-#pragma mark - OADestinationViewControllerProtocol
 
-- (void)destinationRemoved:(OADestination *)destination
-{
-    [_mapViewController removeDestinationPin:destination.color];
-}
-
--(void)destinationViewLayoutDidChange
+- (void)updateDestinationViewLayout
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
@@ -569,13 +562,6 @@
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
         }];
     
-}
-
-- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon
-{
-    OsmAnd::LatLon latLon(lat, lon);
-    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [_mapViewController goToPosition:point animated:YES];
 }
 
 

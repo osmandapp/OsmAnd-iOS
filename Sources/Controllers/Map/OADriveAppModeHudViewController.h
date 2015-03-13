@@ -14,4 +14,6 @@
 
 @property (nonatomic) OADestinationViewController *destinationViewController;
 
+- (void)updateDestinationViewLayout;
+
 @end

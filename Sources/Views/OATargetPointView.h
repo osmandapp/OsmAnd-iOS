@@ -36,6 +36,5 @@
 -(void)targetPointAddFavorite;
 -(void)targetPointShare;
 -(void)targetPointDirection;
--(void)targetPointMenuHide;
 
 @end

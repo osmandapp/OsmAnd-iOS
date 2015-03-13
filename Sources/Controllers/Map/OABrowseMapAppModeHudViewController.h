@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OATargetPointView.h"
 
 @class OADestinationViewController;
 
-@interface OABrowseMapAppModeHudViewController : UIViewController<OATargetPointViewDelegate, UIGestureRecognizerDelegate>
+@interface OABrowseMapAppModeHudViewController : UIViewController<UIGestureRecognizerDelegate>
 
 @property (nonatomic) OADestinationViewController *destinationViewController;
+
+- (void)updateDestinationViewLayout;
 
 @end

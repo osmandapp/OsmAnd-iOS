@@ -152,7 +152,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         }
         
         // Add self as transaction observer
-        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+        //[[SKPaymentQueue defaultQueue] addTransactionObserver:self];
         
     }
     return self;

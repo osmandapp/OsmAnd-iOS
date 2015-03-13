@@ -20,19 +20,27 @@
 #import "OANativeUtilities.h"
 #import "OADestinationViewController.h"
 #import "OADestination.h"
+#import "OAMapSettingsViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Data/Road.h>
+#include <OsmAndCore/CachingRoadLocator.h>
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
-@interface OAMapPanelViewController ()
+#define kMaxRoadDistanceInMeters 1000
+
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
 @property (nonatomic) OADestinationViewController *destinationViewController;
+
+@property (strong, nonatomic) OATargetPointView* targetMenuView;
+@property (strong, nonatomic) UIButton* shadowButton;
 
 @end
 
@@ -50,6 +58,12 @@
     float _mainMapZoom;
     float _mainMapAzimuth;
     float _mainMapEvelationAngle;
+    
+    NSString *_formattedTargetName;
+    double _targetLatitude;
+    double _targetLongitude;
+
+    OAMapSettingsViewController *_mapSettings;
 }
 
 - (instancetype)init
@@ -68,6 +82,9 @@
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
                                                   andObserve:_app.appModeObservable];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
+
     _hudInvalidated = NO;
 }
 
@@ -92,6 +109,10 @@
                                                                       options:0
                                                                       metrics:nil
                                                                         views:@{@"view":_mapViewController.view}]];
+
+    // Setup target point menu
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
+    self.targetMenuView.delegate = self;
 
     [self updateHUD:NO];
 }
@@ -120,6 +141,15 @@
         [self doMapRestore];
 }
 
+- (void)viewWillLayoutSubviews
+{
+    if (_destinationViewController)
+        [_destinationViewController updateFrame];
+
+    if (_shadowButton)
+        _shadowButton.frame = [self shadowButtonRect];
+}
+
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
 
@@ -127,6 +157,7 @@
 {
     if (!_destinationViewController) {
         _destinationViewController = [[OADestinationViewController alloc] initWithNibName:@"OADestinationViewController" bundle:nil];
+        _destinationViewController.delegate = self;
 
         for (OADestination *destination in _app.data.destinations)
             [_mapViewController addDestinationPin:destination.color latitude:destination.latitude longitude:destination.longitude];
@@ -382,5 +413,209 @@
                                                                         views:@{@"view":_mapViewController.view}]];
 }
 
+-(void)closeMapSettings
+{
+    OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+    if (lastMapSettingsCtrl)
+        [lastMapSettingsCtrl hidePopup:YES];
+    
+    _mapSettings = nil;
+    
+    if (_shadowButton) {
+        [_shadowButton removeFromSuperview];
+        self.shadowButton = nil;
+    }
+}
+
+-(CGRect)shadowButtonRect
+{
+    CGRect frame;
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (_mapSettings)
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
+        else
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
+    } else {
+        if (_mapSettings)
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
+        else
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
+    }
+    return frame;
+}
+
+- (void)mapSettingsButtonClick:(id)sender {
+    
+    _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
+    [_mapSettings showPopupAnimated:self parentViewController:nil];
+    
+    if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
+        [_shadowButton removeFromSuperview];
+        self.shadowButton = nil;
+    }
+    
+    self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
+    [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
+    [_shadowButton addTarget:self action:@selector(closeMapSettings) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.shadowButton];
+    
+}
+
+-(void)onTargetPointSet:(NSNotification *)notification {
+    NSDictionary *params = [notification userInfo];
+    NSString *caption = [params objectForKey:@"caption"];
+    UIImage *icon = [params objectForKey:@"icon"];
+    double lat = [[params objectForKey:@"lat"] floatValue];
+    double lon = [[params objectForKey:@"lon"] floatValue];
+    CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
+    
+    NSString* addressString;
+    if (caption.length == 0) {
+        std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+        _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+        
+        std::shared_ptr<const OsmAnd::Road> road;
+        
+        const OsmAnd::PointI position31(
+                                        OsmAnd::Utilities::get31TileNumberX(lon),
+                                        OsmAnd::Utilities::get31TileNumberY(lat));
+        
+        road = _roadLocator->findNearestRoad(position31,
+                                             kMaxRoadDistanceInMeters,
+                                             OsmAnd::RoutingDataLevel::Detailed);
+        
+        NSString* localizedTitle;
+        NSString* nativeTitle;
+        if (road) {
+            const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
+            const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+            const auto nativeName = road->getCaptionInNativeLanguage();
+            if (!localizedName.isNull())
+                localizedTitle = localizedName.toNSString();
+            if (!nativeName.isNull())
+                nativeTitle = nativeName.toNSString();
+        }
+        
+        addressString = nativeTitle;
+        if (!addressString || [addressString isEqualToString:@""]) {
+            addressString = @"Address is not known yet";
+            self.targetMenuView.isAddressFound = NO;
+        } else {
+            self.targetMenuView.isAddressFound = YES;
+        }
+    } else {
+        self.targetMenuView.isAddressFound = YES;
+        addressString = caption;
+    }
+    
+    if (self.targetMenuView.isAddressFound) {
+        _formattedTargetName = addressString;
+    } else {
+        _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    }
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    
+    [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
+    [self.targetMenuView setAddress:addressString];
+    
+    [self.targetMenuView.imageView setImage:icon];
+    
+    [self.targetMenuView setNavigationController:self.navigationController];
+    [self.targetMenuView setMapViewInstance:_mapViewController.view];
+    
+    
+    [self.targetMenuView layoutSubviews];
+    CGRect frame = self.targetMenuView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.targetMenuView.frame = frame;
+    
+    if ([self.view.subviews containsObject:self.targetMenuView])
+        [self.targetMenuView removeFromSuperview];
+    [self.view addSubview:self.targetMenuView];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
+        self.targetMenuView.frame = frame;
+        
+    } completion:^(BOOL finished) {
+        
+        if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
+            [_shadowButton removeFromSuperview];
+            self.shadowButton = nil;
+        }
+        
+        self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
+        [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
+        [_shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
+        [self.view addSubview:self.shadowButton];
+    }];
+    
+}
+
+#pragma mark - OATargetPointViewDelegate
+
+-(void)targetPointAddFavorite {
+    [self hideTargetPointMenu];
+}
+
+-(void)targetPointShare {
+    
+}
+
+-(void)targetPointDirection {
+    
+    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
+    if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
+        [_hudViewController.view addSubview:_destinationViewController.view];
+    UIColor *color = [_destinationViewController addDestination:destination];
+    
+    if (color)
+        [_mapViewController addDestinationPin:color latitude:_targetLatitude longitude:_targetLongitude];
+    
+    [self hideTargetPointMenu];
+}
+
+-(void)hideTargetPointMenu {
+    [_mapViewController hideContextPinMarker];
+    [_shadowButton removeFromSuperview];
+    self.shadowButton = nil;
+    
+    [UIView animateWithDuration:0.5 animations:^{
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight + 10.0;
+        self.targetMenuView.frame = frame;
+        
+    } completion:^(BOOL finished) {
+        [self.targetMenuView removeFromSuperview];
+    }];
+}
+
+#pragma mark - OADestinationViewControllerProtocol
+
+- (void)destinationRemoved:(OADestination *)destination
+{
+    [_mapViewController removeDestinationPin:destination.color];
+}
+
+-(void)destinationViewLayoutDidChange
+{
+    if ([_hudViewController isKindOfClass:[OABrowseMapAppModeHudViewController class]]) {
+        OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
+        [browserMap updateDestinationViewLayout];
+        
+    } else if ([_hudViewController isKindOfClass:[OADriveAppModeHudViewController class]]) {
+        OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
+        [drive updateDestinationViewLayout];
+        
+    }
+    
+}
+
+- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon
+{
+    
+}
 
 @end

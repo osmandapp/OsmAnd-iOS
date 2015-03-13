@@ -150,10 +150,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                 OALog(@"Not purchased: %@", productIdentifier);
             }
         }
-        
-        // Add self as transaction observer
-        //[[SKPaymentQueue defaultQueue] addTransactionObserver:self];
-        
     }
     return self;
     
@@ -161,6 +157,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler {
     
+    // Add self as transaction observer
+    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+
     _completionHandler = [completionHandler copy];
     _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:_productIdentifiers];
     _productsRequest.delegate = self;

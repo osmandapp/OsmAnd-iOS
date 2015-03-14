@@ -223,14 +223,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 if (!includeRegionName || region == nil)
                     return OALocalizedString(@"Map of entire region");
                 else
-                    return OALocalizedString(@"Map of %@", region.name);
+                    //return OALocalizedString(@"Map of %@", region.name);
+                    return OALocalizedString(@"%@", region.name);
             }
             else
             {
                 if (!includeRegionName || region == nil)
                     return OALocalizedString(@"Map of the region");
                 else
-                    return OALocalizedString(@"Map of %@", region.name);
+                    //return OALocalizedString(@"Map of %@", region.name);
+                    return OALocalizedString(@"%@", region.name);
             }
             break;
 

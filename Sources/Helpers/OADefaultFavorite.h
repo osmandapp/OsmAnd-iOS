@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #define kDefaultFavoriteZoom 15.0f
+#define kDefaultFavoriteZoomOnShow 16.0f
 
 @interface OAFavoriteColor : NSObject
 

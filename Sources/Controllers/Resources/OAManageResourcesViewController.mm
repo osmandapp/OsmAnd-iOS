@@ -728,7 +728,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 ResourceItem *item = _searchResults[i];
                 if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
                     [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
-                    break;
+                    return;
                 }
             }
         }

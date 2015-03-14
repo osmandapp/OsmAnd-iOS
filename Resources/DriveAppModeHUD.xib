@@ -53,7 +53,7 @@
                     <color key="backgroundColor" red="0.25098039215686274" green="0.25098039215686274" blue="0.25490196078431371" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="j9F-8j-9bu" userLabel="optionsMenuButton">
-                    <rect key="frame" x="0.0" y="509" width="45" height="51"/>
+                    <rect key="frame" x="-5" y="512" width="46" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="menu_button.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -193,7 +193,7 @@
         <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_height.png" width="25" height="25"/>
         <image name="ic_speed.png" width="25" height="25"/>
-        <image name="menu_button.png" width="45" height="51"/>
+        <image name="menu_button.png" width="46" height="46"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

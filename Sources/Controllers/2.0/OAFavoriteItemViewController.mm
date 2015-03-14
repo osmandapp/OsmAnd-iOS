@@ -259,7 +259,7 @@ typedef enum
     
     if (_showFavoriteOnExit) {
         
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoom azimuth:0.0 elevationAngle:90.0 animated:NO];
+        [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultFavoriteZoomOnShow azimuth:0.0 elevationAngle:90.0 animated:NO];
         
     } else {
         OAAppSettings* settings = [OAAppSettings sharedManager];

@@ -8,6 +8,7 @@
 
 #import <StoreKit/StoreKit.h>
 
+#if defined(OSMAND_IOS_DEV)
 
 #define kInAppId_Region_Africa @"net.osmand.inapp.region.africa"
 #define kInAppId_Region_Russia @"net.osmand.inapp.region.russia"
@@ -20,6 +21,23 @@
 
 #define kInAppId_Addon_SkiMap @"net.osmand.inapp.addon.skimap"
 #define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
+
+#else
+
+#define kInAppId_Region_Africa @"net.osmand.maps.inapp.region.africa"
+#define kInAppId_Region_Russia @"net.osmand.maps.inapp.region.russia"
+#define kInAppId_Region_Asia @"net.osmand.maps.inapp.region.asia"
+#define kInAppId_Region_Australia @"net.osmand.maps.inapp.region.australia"
+#define kInAppId_Region_Europe @"net.osmand.maps.inapp.region.europe"
+#define kInAppId_Region_Central_America @"net.osmand.maps.inapp.region.centralamerica"
+#define kInAppId_Region_North_America @"net.osmand.maps.inapp.region.northamerica"
+#define kInAppId_Region_South_America @"net.osmand.maps.inapp.region.southamerica"
+
+#define kInAppId_Addon_SkiMap @"net.osmand.maps.inapp.addon.skimap"
+#define kInAppId_Addon_Nautical @"net.osmand.maps.inapp.addon.nautical"
+
+#endif
+
 
 #define kFreeMapsAvailableTotal 5
 

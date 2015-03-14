@@ -68,14 +68,14 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
                     <rect key="frame" x="52" y="21" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="left_menu_icon_map.png"/>
                     <connections>
                         <action selector="onMapSettingsButtonClick:" destination="-1" eventType="touchUpInside" id="0fq-p8-YC7"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QPn-ok-Vxm" userLabel="driveModeButton">
-                    <rect key="frame" x="224" y="515" width="40" height="40"/>
+                    <rect key="frame" x="216" y="512" width="46" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="icon_drive_mode.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -121,7 +121,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4" userLabel="optionsMenuButton">
-                    <rect key="frame" x="0.0" y="509" width="45" height="51"/>
+                    <rect key="frame" x="-5" y="512" width="46" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="menu_button.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -132,7 +132,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Tol-6L-Amr" userLabel="mapModeButton">
-                    <rect key="frame" x="272" y="515" width="40" height="40"/>
+                    <rect key="frame" x="266" y="512" width="46" height="46"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                     <state key="normal" image="free_map_mode_button.png" backgroundImage="menu_button_bg.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -154,10 +154,10 @@
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
         <image name="free_map_mode_button.png" width="25" height="25"/>
-        <image name="icon_drive_mode.png" width="40" height="40"/>
+        <image name="icon_drive_mode.png" width="46" height="46"/>
         <image name="left_menu_icon_map.png" width="25" height="23"/>
-        <image name="menu_button.png" width="45" height="51"/>
-        <image name="menu_button_bg.png" width="40" height="40"/>
+        <image name="menu_button.png" width="46" height="46"/>
+        <image name="menu_button_bg.png" width="46" height="46"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

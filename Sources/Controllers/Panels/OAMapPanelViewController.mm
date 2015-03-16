@@ -66,6 +66,7 @@
     double _targetLongitude;
 
     OAMapSettingsViewController *_mapSettings;
+    UILongPressGestureRecognizer *_shadowLongPress;
 }
 
 - (instancetype)init
@@ -395,11 +396,8 @@
         [lastMapSettingsCtrl hidePopup:YES];
     
     _mapSettings = nil;
-    
-    if (_shadowButton) {
-        [_shadowButton removeFromSuperview];
-        self.shadowButton = nil;
-    }
+
+    [self destroyShadowButton];
 }
 
 -(CGRect)shadowButtonRect
@@ -412,7 +410,7 @@
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
     } else {
         if (_mapSettings)
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
+            frame = CGRectMake(kMapSettingsPopupWidth, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
         else
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
     }
@@ -424,16 +422,7 @@
     _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
     [_mapSettings showPopupAnimated:self parentViewController:nil];
     
-    if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
-        [_shadowButton removeFromSuperview];
-        self.shadowButton = nil;
-    }
-    
-    self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
-    [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
-    [_shadowButton addTarget:self action:@selector(closeMapSettings) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.shadowButton];
-    
+    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil];
 }
 
 -(void)onTargetPointSet:(NSNotification *)notification {
@@ -500,7 +489,7 @@
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     
     
-    [self.targetMenuView layoutSubviews];
+    [self.targetMenuView doLayoutSubviews];
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.targetMenuView.frame = frame;
@@ -516,17 +505,40 @@
         
     } completion:^(BOOL finished) {
         
-        if (_shadowButton && [self.view.subviews containsObject:_shadowButton]) {
-            [_shadowButton removeFromSuperview];
-            self.shadowButton = nil;
-        }
-        
-        self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
-        [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
-        [_shadowButton addTarget:self action:@selector(hideTargetPointMenu) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.shadowButton];
+        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:)];
     }];
     
+}
+
+-(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent
+{
+    
+    if (_shadowButton && [self.view.subviews containsObject:_shadowButton])
+        [self destroyShadowButton];
+    
+    self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
+    [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
+    [_shadowButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    if (withLongPressEvent) {
+        _shadowLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:withLongPressEvent];
+        [_shadowButton addGestureRecognizer:_shadowLongPress];
+    }
+    [self.view addSubview:self.shadowButton];
+}
+
+-(void)destroyShadowButton
+{
+    [_shadowButton removeFromSuperview];
+    if (_shadowLongPress) {
+        [_shadowButton removeGestureRecognizer:_shadowLongPress];
+        _shadowLongPress = nil;
+    }
+    self.shadowButton = nil;
+}
+
+- (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture {
+    if ( gesture.state == UIGestureRecognizerStateEnded )
+        [_mapViewController simulateContextMenuPress:gesture];
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -554,12 +566,12 @@
 
 -(void)hideTargetPointMenu {
     [_mapViewController hideContextPinMarker];
-    [_shadowButton removeFromSuperview];
-    self.shadowButton = nil;
+    [self destroyShadowButton];
     
+    CGRect frame = self.targetMenuView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+
     [UIView animateWithDuration:0.5 animations:^{
-        CGRect frame = self.targetMenuView.frame;
-        frame.origin.y = DeviceScreenHeight + 10.0;
         self.targetMenuView.frame = frame;
         
     } completion:^(BOOL finished) {

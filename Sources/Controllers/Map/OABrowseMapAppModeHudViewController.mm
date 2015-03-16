@@ -67,7 +67,9 @@
 
     OAMapViewController* _mapViewController;
     UIPanGestureRecognizer* _grMove;
-            
+    
+    OAAutoObserverProxy* _dayNightModeObserver;
+
     BOOL _driveModeActive;
     
 #if defined(OSMAND_IOS_DEV)
@@ -110,6 +112,9 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:_mapViewController.zoomObservable];
+    _dayNightModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onDayNightModeChanged)
+                                                       andObserve:_app.dayNightModeObservable];
     
     // Menu guest recognizer
     _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
@@ -259,6 +264,13 @@
     _app.mapMode = newMode;
 }
 
+-(void)onDayNightModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.rulerLabel updateColors];
+    });
+}
+
 - (void)onMapModeChanged
 {
     UIImage* modeImage = nil;
@@ -293,7 +305,8 @@
 - (IBAction)onMapSettingsButtonClick:(id)sender {
 
     [((OAMapPanelViewController *)self.parentViewController) mapSettingsButtonClick:sender];
-    
+
+    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 - (IBAction)onOptionsMenuButtonDown:(id)sender {

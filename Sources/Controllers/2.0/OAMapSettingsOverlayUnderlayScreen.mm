@@ -159,9 +159,9 @@ typedef enum
     switch (section)
     {
         case 0:
-            return [_onlineMapSources count];
-        case 1:
             return 1;
+        case 1:
+            return [_onlineMapSources count];
             
         default:
             return 0;
@@ -173,9 +173,9 @@ typedef enum
     switch (section)
     {
         case 0:
-            return OALocalizedString(@"Available layers");
-        case 1:
             return OALocalizedString(@"Transparency");
+        case 1:
+            return OALocalizedString(@"Available layers");
             
         default:
             return nil;
@@ -184,7 +184,7 @@ typedef enum
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == 1) {
         
         static NSString* const mapSourceItemCell = @"mapSourceItemCell";
         
@@ -275,7 +275,7 @@ typedef enum
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == 1) {
         
         if (indexPath.row > 0) {
             Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];

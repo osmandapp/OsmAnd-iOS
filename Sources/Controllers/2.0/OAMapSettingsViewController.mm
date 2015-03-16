@@ -202,7 +202,7 @@
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
         return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
     } else {
-        return CGRectMake(DeviceScreenWidth - kMapSettingsPopupWidth, 20.0, kMapSettingsPopupWidth, DeviceScreenHeight - 20.0);
+        return CGRectMake(0.0, 20.0, kMapSettingsPopupWidth, DeviceScreenHeight - 20.0);
     }
 }
 
@@ -226,7 +226,7 @@
     if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
         frame.origin.y = DeviceScreenHeight + 10.0;
     else
-        frame.origin.x = DeviceScreenWidth + 10.0;
+        frame.origin.x = -10.0 - frame.size.width;
     
     self.view.frame = frame;
     [rootViewController.view addSubview:self.view];
@@ -263,7 +263,7 @@
             else
                 self.view.frame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
         } else {
-            self.view.frame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+            self.view.frame = CGRectMake(-10.0 - self.view.bounds.size.width, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
         }
 
         if (_parentVC && !hideAll) {
@@ -314,7 +314,7 @@
         [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
         [self.view.layer setShadowOpacity:0.8];
         [self.view.layer setShadowRadius:3.0];
-        [self.view.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+        [self.view.layer setShadowOffset:CGSizeMake(-2.0, 2.0)];
 
     }
 }

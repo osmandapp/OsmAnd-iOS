@@ -1058,7 +1058,12 @@
     }
 }
 
-- (void)pointContextMenuGestureDetected:(UITapGestureRecognizer*)recognizer
+-(void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer
+{
+    [self pointContextMenuGestureDetected:recognizer];
+}
+
+- (void)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
@@ -1082,56 +1087,57 @@
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
     NSString *caption;
-    UIImage *icon;
+    UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     
     BOOL isSymbolFound = NO;
     
     const auto& symbolInfos = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     for (const auto symbolInfo : symbolInfos) {
-
+        
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
-            lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
-            lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
-
-            if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters)) {
-                if (billboardAdditionalParams->overridesPosition31) {
-                    lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
-                    lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
+            if (!isSymbolFound && [recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+                
+                lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
+                lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+                
+                if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters)) {
+                    if (billboardAdditionalParams->overridesPosition31) {
+                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
+                        lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
+                    }
                 }
             }
-            
             isSymbolFound = YES;
-        }
-
-        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
-        {
-            std::shared_ptr<const SkBitmap> outIcon;
-            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
-            if (outIcon != nullptr)
-                icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
         }
         
         OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
         const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         
         caption = mapObject->getCaptionInNativeLanguage().toNSString();
-
+        
         if (!caption || caption.length == 0) {
             for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
                 if (entry.key() == 1) {
                     caption = entry.value().toNSString();
                     break;
-                }                    
+                }
         }
 
-        if (caption && caption.length > 0)
+        
+        OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
+        std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
+
+        
+        
+        if (caption && caption.length > 0 && icon)
             break;
         
     }
     
+    
     // if single press and no symbol found - exit
-    if (recognizer.numberOfTapsRequired == 1 && recognizer.numberOfTouchesRequired == 1 && !isSymbolFound)
+    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]] && !isSymbolFound)
         return;
     
     [self showContextPinMarker:lat longitude:lon];
@@ -1153,7 +1159,22 @@
                                                       userInfo:userInfo];
 }
 
-
+-(UIImage *)findIconAtPoint:(OsmAnd::PointI)touchPoint
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    const auto& symbolInfos = [mapView getSymbolsAt:touchPoint];
+    for (const auto symbolInfo : symbolInfos) {
+        
+        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
+        {
+            std::shared_ptr<const SkBitmap> outIcon;
+            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
+            if (outIcon != nullptr)
+                return [OANativeUtilities skBitmapToUIImage:*outIcon];
+        }
+    }
+    return nil;
+}
 
 - (id<OAMapRendererViewProtocol>)mapRendererView
 {

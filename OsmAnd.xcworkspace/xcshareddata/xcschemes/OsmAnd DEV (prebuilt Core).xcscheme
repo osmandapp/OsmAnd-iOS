@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-               BuildableName = "OsmAnd COR.app"
+               BuildableName = "OsmAnd DEV.app"
                BlueprintName = "OsmAnd DEV (prebuilt Core)"
                ReferencedContainer = "container:OsmAnd.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd COR.app"
+            BuildableName = "OsmAnd DEV.app"
             BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
@@ -48,11 +48,12 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd COR.app"
+            BuildableName = "OsmAnd DEV.app"
             BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>
@@ -66,11 +67,12 @@
       useCustomWorkingDirectory = "NO"
       buildConfiguration = "Release"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable>
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "BB451E1E18DCD224005FBE09"
-            BuildableName = "OsmAnd COR.app"
+            BuildableName = "OsmAnd DEV.app"
             BlueprintName = "OsmAnd DEV (prebuilt Core)"
             ReferencedContainer = "container:OsmAnd.xcodeproj">
          </BuildableReference>

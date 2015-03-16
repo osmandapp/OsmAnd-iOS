@@ -12,6 +12,11 @@
 #import "OAFavoriteListViewController.h"
 #import "OAWebViewController.h"
 
+#import <JASidePanelController.h>
+#import <UIViewController+JASidePanel.h>
+
+#import "OARootViewController.h"
+
 @interface OAOptionsPanelBlackViewController ()
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
@@ -149,8 +154,11 @@
 }
 
 - (IBAction)mapsButtonClicked:(id)sender {
-    OAMapSettingsViewController* settingsViewController = [[OAMapSettingsViewController alloc] init];
-    [self.navigationController pushViewController:settingsViewController animated:YES];
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel mapSettingsButtonClick:sender];
+    
+    //OAMapSettingsViewController* settingsViewController = [[OAMapSettingsViewController alloc] init];
+    //[self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (IBAction)myDataButtonClicked:(id)sender {

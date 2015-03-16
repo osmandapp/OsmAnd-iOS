@@ -9,6 +9,7 @@
 #import "OAMapRulerView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 @interface OAMapRulerView()
 
@@ -30,19 +31,16 @@
         // Add a bottomBorder.
         self.bottomBorder = [CALayer layer];
         self.bottomBorder.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 1.0f);
-        self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
         [self.layer addSublayer:self.bottomBorder];
         
         // Add a leftBorder.
         self.leftBorder = [CALayer layer];
         self.leftBorder.frame = CGRectMake(0, self.frame.size.height - 10, 1.0f, 10);
-        self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
         [self.layer addSublayer:self.leftBorder];
         
         // Add a rightBorder.
         self.rightBorder = [CALayer layer];
         self.rightBorder.frame = CGRectMake(self.frame.size.width-1, self.frame.size.height - 10, 1.0f, 10);
-        self.rightBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
         [self.layer addSublayer:self.rightBorder];
         
         self.textLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, self.frame.size.height - 20, self.frame.size.width - 10, 15)];
@@ -52,9 +50,35 @@
         frame.size.width = 0;
         self.frame = frame;
         self.hidden = true;
+        
+        [self updateColors];
     }
 
     return self;
+}
+
+-(void)updateColors
+{
+    if([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)
+        [self setNight];
+    else
+        [self setDay];
+}
+
+-(void)setDay
+{
+    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.rightBorder.backgroundColor = [UIColor colorWithWhite:0.3f alpha:1.0f].CGColor;
+    self.textLabel.textColor = [UIColor colorWithWhite:0.0f alpha:1.0f];
+}
+
+-(void)setNight
+{
+    self.bottomBorder.backgroundColor = [UIColor colorWithWhite:0.6f alpha:1.0f].CGColor;
+    self.leftBorder.backgroundColor = [UIColor colorWithWhite:0.6f alpha:1.0f].CGColor;
+    self.rightBorder.backgroundColor = [UIColor colorWithWhite:0.6f alpha:1.0f].CGColor;
+    self.textLabel.textColor = [UIColor colorWithWhite:0.7f alpha:1.0f];
 }
 
 -(void)invalidateLayout {

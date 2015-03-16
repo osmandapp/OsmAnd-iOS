@@ -28,6 +28,8 @@
 -(void)setMapViewInstance:(UIView*)mapView;
 -(void)setNavigationController:(UINavigationController*)controller;
 
+- (void)doLayoutSubviews;
+
 @end
 
 

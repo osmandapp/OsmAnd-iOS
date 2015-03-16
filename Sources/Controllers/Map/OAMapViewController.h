@@ -53,6 +53,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)showContextPinMarker:(double)latitude longitude:(double)longitude;
 - (void)hideContextPinMarker;
 
+-(void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+
 - (void)showTempGpxTrack:(NSString *)fileName;
 - (void)hideTempGpxTrack;
 - (void)keepTempGpxTrackVisible;

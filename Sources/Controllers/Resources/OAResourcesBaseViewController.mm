@@ -674,6 +674,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
 
         [self updateContent];
+        [self updateContent];
     });
 }
 

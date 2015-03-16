@@ -428,6 +428,7 @@
 -(void)onTargetPointSet:(NSNotification *)notification {
     NSDictionary *params = [notification userInfo];
     NSString *caption = [params objectForKey:@"caption"];
+    NSString *buildingNumber = [params objectForKey:@"buildingNumber"];
     UIImage *icon = [params objectForKey:@"icon"];
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
@@ -473,15 +474,20 @@
     }
     
     if (self.targetMenuView.isAddressFound) {
-        _formattedTargetName = addressString;
+        if (buildingNumber.length > 0)
+            _formattedTargetName = [NSString stringWithFormat:@"%@, %@", addressString, buildingNumber];
+        else
+            _formattedTargetName = addressString;
     } else {
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
     }
     _targetLatitude = lat;
     _targetLongitude = lon;
     
-    [self.targetMenuView setPointLat:lat Lon:lon andTouchPoint:touchPoint];
-    [self.targetMenuView setAddress:addressString];
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    [self.targetMenuView setPointLat:lat Lon:lon Zoom:renderView.zoom andTouchPoint:touchPoint];
+    [self.targetMenuView setAddress:_formattedTargetName];
     
     [self.targetMenuView.imageView setImage:icon];
     
@@ -548,7 +554,6 @@
 }
 
 -(void)targetPointShare {
-    
 }
 
 -(void)targetPointDirection {

@@ -27,6 +27,7 @@
 
 @property double lat;
 @property double lon;
+@property int zoom;
 @property CGPoint touchPoint;
 @property NSString* formattedLocation;
 @property OAMapRendererView* mapView;
@@ -143,9 +144,10 @@
     [self.addressLabel setText:address];
 }
 
--(void)setPointLat:(double)lat Lon:(double)lon andTouchPoint:(CGPoint)touchPoint {
+-(void)setPointLat:(double)lat Lon:(double)lon Zoom:(int)zoom andTouchPoint:(CGPoint)touchPoint {
     self.lat = lat;
     self.lon = lon;
+    self.zoom = zoom;
     self.touchPoint = touchPoint;
 
     self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
@@ -195,8 +197,11 @@
 
 - (IBAction)buttonShareClicked:(id)sender {
 
+    // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8 The location was shared with you by OsmAnd
+    
     UIImage *image = [self.mapView getGLScreenshot];
-    NSString *string = [NSString stringWithFormat:@"Look at this location: %@", self.formattedLocation];
+    
+    NSString *string = [NSString stringWithFormat:@"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d The location was shared with you by OsmAnd", _lat, _lon, _zoom];
     
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[image, string]

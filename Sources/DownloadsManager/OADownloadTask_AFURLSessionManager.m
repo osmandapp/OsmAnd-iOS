@@ -243,4 +243,6 @@
 
 @synthesize error = _error;
 
+@synthesize installResourceRetry = _installResourceRetry;
+
 @end

@@ -57,14 +57,24 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
         return;
     }
 
+    task.installResourceRetry = 0;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self performSelector:@selector(processResource:) withObject:task afterDelay:0.1];
+        
+    });
+
+}
+
+-(void)processResource:(id<OADownloadTask>)task
+{
     NSString* localPath = task.targetPath;
     NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
     const auto& resourceId = QString::fromNSString(nsResourceId);
     const auto& filePath = QString::fromNSString(localPath);
     bool success = false;
-
+    
     OALog(@"Going to install/update of %@", nsResourceId);
-
+    
     // Try to install only in case of successful download
     if (task.error == nil)
     {
@@ -72,17 +82,25 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
         success = _app.resourcesManager->updateFromFile(resourceId, filePath);
         if (!success) {
             success = _app.resourcesManager->installFromRepository(resourceId, filePath);
-            if (success)
+            if (success) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
+            } else {
+                task.installResourceRetry++;
+                if (task.installResourceRetry < 10) {
+                    OALog(@"installResourceRetry = %d", task.installResourceRetry);
+                    [self performSelector:@selector(processResource:) withObject:task afterDelay:0.5];
+                    return;
+                }
+            }
         }
     }
-
+    
     // Remove downloaded file anyways
     [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
                                                error:nil];
-
+    
     OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
-
+    
     // Start next resource download task if such exists
     id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKeyPrefix:@"resource:"];
     if (nextTask)

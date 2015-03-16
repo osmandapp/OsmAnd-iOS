@@ -38,6 +38,11 @@
 
 #pragma mark - Autorotation
 
+- (BOOL)shouldAutorotate
+{
+    return YES;
+}
+
 - (NSUInteger) supportedInterfaceOrientations {
     if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
         return UIInterfaceOrientationMaskPortrait;
@@ -48,13 +53,6 @@
     if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
         return UIInterfaceOrientationPortrait;
     return UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
-        return UIInterfaceOrientationIsPortrait(interfaceOrientation);
-    return YES;
 }
 
 @end

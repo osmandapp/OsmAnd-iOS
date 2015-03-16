@@ -23,7 +23,7 @@
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
 
 -(void)setAddress:(NSString*)address;
--(void)setPointLat:(double)lat Lon:(double)lon andTouchPoint:(CGPoint)touchPoint;
+-(void)setPointLat:(double)lat Lon:(double)lon Zoom:(int)zoom andTouchPoint:(CGPoint)touchPoint;
 
 -(void)setMapViewInstance:(UIView*)mapView;
 -(void)setNavigationController:(UINavigationController*)controller;

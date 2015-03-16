@@ -1087,6 +1087,7 @@
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
     NSString *caption;
+    NSString *buildingNumber;
     UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     
     BOOL isSymbolFound = NO;
@@ -1112,21 +1113,47 @@
         }
         
         OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-        const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
         
-        caption = mapObject->getCaptionInNativeLanguage().toNSString();
-        
-        if (!caption || caption.length == 0) {
+        if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
+            const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+            
+            //for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
+            //{ NSLog(@"%d = %@", entry.key(), entry.value().toNSString()); }
+            
+            caption = mapObject->getCaptionInNativeLanguage().toNSString();
+            
+            if (!caption || caption.length == 0) {
+                for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
+                    if (entry.key() == 1) {
+                        caption = entry.value().toNSString();
+                        break;
+                    }
+            }
+            
             for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
-                if (entry.key() == 1) {
-                    caption = entry.value().toNSString();
+                if (entry.key() == 3) {
+                    buildingNumber = entry.value().toNSString();
                     break;
                 }
+            
+            
+            if (!icon) {
+                OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
+                if (symbolGroup != nullptr) {
+                    std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
+                    
+                    if (mapIconSymbol != nullptr)
+                        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapIconSymbol))
+                        {
+                            std::shared_ptr<const SkBitmap> outIcon;
+                            _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
+                            if (outIcon != nullptr)
+                                icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
+                        }
+                }
+                
+            }
         }
-
-        
-        OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-        std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
 
         
         
@@ -1144,9 +1171,12 @@
     
     if (!caption)
         caption = @"";
+    if (!buildingNumber)
+        buildingNumber = @"";
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     [userInfo setObject:caption forKey:@"caption"];
+    [userInfo setObject:buildingNumber forKey:@"buildingNumber"];
     [userInfo setObject:[NSNumber numberWithDouble:lat] forKey:@"lat"];
     [userInfo setObject:[NSNumber numberWithDouble:lon] forKey:@"lon"];
     [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];

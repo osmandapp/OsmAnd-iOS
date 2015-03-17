@@ -195,7 +195,7 @@
     [self showOrHideResumeFollowingButtonAnimated:animated];
     
     _destinationViewController.singleLineOnly = YES;
-    _destinationViewController.top = 100.0;
+    _destinationViewController.top = 64.0;
     
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];

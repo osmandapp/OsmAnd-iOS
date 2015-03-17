@@ -185,8 +185,8 @@
         newHudController = self.driveModeViewController;
         
         CGRect frame = self.view.frame;
-        frame.origin.y = 100.0;
-        frame.size.height = DeviceScreenHeight - 100.0;
+        frame.origin.y = 64.0;
+        frame.size.height = DeviceScreenHeight - 64.0;
         _mapViewController.view.frame = frame;
 
     }

@@ -32,11 +32,13 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 +(int)freeMapsAvailable
 {
     int freeMaps = kFreeMapsAvailableTotal;
+#if !defined(OSMAND_IOS_DEV)
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
         freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
     } else {
         [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
+#endif
 
     OALog(@"Free maps available: %d", freeMaps);
     return freeMaps;

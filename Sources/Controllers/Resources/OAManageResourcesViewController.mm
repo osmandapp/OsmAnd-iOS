@@ -1185,16 +1185,19 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
         {
-            [progressView stopSpinProgressBackgroundLayer];
+            if (progressView.isSpinning)
+                [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            [progressView stopSpinProgressBackgroundLayer];
+            if (progressView.isSpinning)
+                [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = 1.0f;
         }
         else
         {
+            progressView.progress = 0.0;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }
@@ -1428,16 +1431,19 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         float progressCompleted = item.downloadTask.progressCompleted;
         if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
         {
-            [progressView stopSpinProgressBackgroundLayer];
+            if (progressView.isSpinning)
+                [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = progressCompleted;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            [progressView stopSpinProgressBackgroundLayer];
+            if (progressView.isSpinning)
+                [progressView stopSpinProgressBackgroundLayer];
             progressView.progress = 1.0f;
         }
         else
         {
+            progressView.progress = 0.0;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }

@@ -103,9 +103,7 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     
     // Start next resource download task if such exists
     id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKeyPrefix:@"resource:"];
-    if (nextTask)
-        [nextTask resume];
-    else
+    if (!nextTask)
         [_app updateScreenTurnOffSetting];
 }
 

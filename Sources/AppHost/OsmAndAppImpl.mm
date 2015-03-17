@@ -362,10 +362,21 @@
     }
     if (meters >= 100 * mainUnitInMeters) {
         return [NSString stringWithFormat:@"%d %@",  (int) (meters / mainUnitInMeters + 0.5), mainUnitStr];
+        
     } else if (meters > 9.99f * mainUnitInMeters) {
-        return [NSString stringWithFormat:@"%.1f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+        float num = ((float) meters) / mainUnitInMeters;
+        NSString *numStr = [NSString stringWithFormat:@"%.1f", num];
+        if ([[numStr substringFromIndex:numStr.length - 1] isEqualToString:@"0"])
+            numStr = [numStr substringToIndex:numStr.length - 2];
+        return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
+        
     } else if (meters > 0.999f * mainUnitInMeters) {
-        return [NSString stringWithFormat:@"%.2f %@",  ((float) meters) / mainUnitInMeters, mainUnitStr];
+        float num = ((float) meters) / mainUnitInMeters;
+        NSString *numStr = [NSString stringWithFormat:@"%.2f", num];
+        if ([[numStr substringFromIndex:numStr.length - 2] isEqualToString:@"00"])
+            numStr = [numStr substringToIndex:numStr.length - 3];
+        return [NSString stringWithFormat:@"%@ %@", numStr, mainUnitStr];
+        
     } else {
         if (settings.settingMetricSystem == METRIC_SYSTEM_METERS) {
             return [NSString stringWithFormat:@"%d %@",   ((int) (meters + 0.5)), @"m"];
@@ -406,14 +417,14 @@
         }
         int kmh10 = (int) (kmh * 10.0f);
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
-        return [NSString stringWithFormat:@"%.1f %@", (kmh10 / 10.0f), @"km/h"];
+        return [NSString stringWithFormat:@"%g %@", (kmh10 / 10.0f), @"km/h"];
     } else {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         if (mph >= 10) {
             return [NSString stringWithFormat:@"%d %@", ((int) round(mph)), @"mph"];
         } else {
             int mph10 = (int) (mph * 10.0f);
-            return [NSString stringWithFormat:@"%.1f %@", (mph10 / 10.0f), @"mph"];
+            return [NSString stringWithFormat:@"%g %@", (mph10 / 10.0f), @"mph"];
         }
     }
 }

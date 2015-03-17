@@ -340,7 +340,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
 {
-    if (region.regionId == nil || [region isInPurchasedArea] || [OAIAPHelper freeMapsAvailable] > 0) {
+    int tasksCount = _app.downloadsManager.keysOfDownloadTasks.count;
+    
+    if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable])) {
         return YES;
         
     } else {
@@ -711,8 +713,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             return;
         }
 
-        if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
-            [self.downloadView removeFromSuperview];
+        //if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
+        [self.downloadView removeFromSuperview];
         
         if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
             id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];

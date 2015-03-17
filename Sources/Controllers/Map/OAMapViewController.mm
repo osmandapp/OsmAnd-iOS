@@ -69,7 +69,7 @@
 #define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f
 #define kZoomVelocityAbsLimit 10.0f
-#define kTargetMoveDeceleration 10.0f
+#define kTargetMoveDeceleration 0.0f
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModePositionTrackingDefaultZoom 16.0f

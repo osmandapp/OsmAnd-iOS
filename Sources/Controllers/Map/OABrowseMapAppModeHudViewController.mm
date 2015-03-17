@@ -26,6 +26,9 @@
 #import "OADestinationCell.h"
 #import "OANativeUtilities.h"
 
+#import "OADownloadProgressView.h"
+#import "OADownloadTask.h"
+
 #include <OsmAndCore/Utilities.h>
 
 #define _(name) OAMapModeHudViewController__##name
@@ -53,6 +56,8 @@
 
 @property (strong, nonatomic) IBOutlet OAMapRulerView *rulerLabel;
 
+@property OADownloadProgressView* downloadView;
+
 @end
 
 @implementation OABrowseMapAppModeHudViewController
@@ -71,6 +76,9 @@
     OAAutoObserverProxy* _dayNightModeObserver;
 
     BOOL _driveModeActive;
+    
+    OAAutoObserverProxy* _downloadTaskProgressObserver;
+    OAAutoObserverProxy* _downloadTaskCompletedObserver;
     
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -116,6 +124,12 @@
                                                       withHandler:@selector(onDayNightModeChanged)
                                                        andObserve:_app.dayNightModeObservable];
     
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
+                                                               andObserve:_app.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                andObserve:_app.downloadsManager.completedObservable];
     // Menu guest recognizer
     _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                       action:@selector(moveGestureDetected:)];
@@ -392,7 +406,7 @@
     if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         [UIView animateWithDuration:.2 animations:^{
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
-            _mapSettingsButton.frame = CGRectMake(msX, y, msSize.width, msSize.height);
+            _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
         }];
 
 }
@@ -415,6 +429,72 @@
         _debugHudViewController = nil;
     }
 #endif // defined(OSMAND_IOS_DEV)
+}
+
+
+- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        if (!_downloadView) {
+            self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(94.0, 27.0, 216.0, 28.0)];
+            _downloadView.autoresizingMask = UIViewAutoresizingNone;
+
+            _downloadView.layer.cornerRadius = 5.0;
+            _downloadView.layer.shadowColor = [UIColor colorWithWhite:0.3 alpha:1.0].CGColor;
+            _downloadView.layer.shadowRadius = 2.0;
+            _downloadView.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+            
+            _downloadView.startStopButtonView.hidden = YES;
+            CGRect frame = _downloadView.progressBarView.frame;
+            frame.origin.y = 20.0;
+            frame.size.width = _downloadView.frame.size.width - 16.0;
+            _downloadView.progressBarView.frame = frame;
+
+            frame = _downloadView.titleView.frame;
+            frame.origin.y = 3.0;
+            frame.size.width = _downloadView.frame.size.width - 16.0;
+            _downloadView.titleView.frame = frame;
+            
+            [self.view addSubview:self.downloadView];
+        }
+        
+        if (![_downloadView.titleView.text isEqualToString:task.name])
+            [_downloadView setTitle: task.name];
+        
+        [self.downloadView setProgress:[value floatValue]];
+        
+    });
+}
+
+- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    id<OADownloadTask> task = key;
+    
+    // Skip all downloads that are not resources
+    if (![task.key hasPrefix:@"resource:"])
+        return;
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+            return;
+        
+        OADownloadProgressView *download = self.downloadView;
+        self.downloadView  = nil;
+        [UIView animateWithDuration:.4 animations:^{
+            download.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [download removeFromSuperview];
+        }];
+    });
 }
 
 @end

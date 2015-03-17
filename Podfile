@@ -5,7 +5,7 @@ platform :ios, '6.0'
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
 
-link_with 'OsmAnd'
+link_with 'OsmAnd Maps'
 pod 'AFNetworking', '~> 2.3.1'
 pod 'AFDownloadRequestOperation', '~> 2.0.1'
 pod 'JASidePanels', '~> 1.3.2'

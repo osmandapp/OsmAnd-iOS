@@ -3543,9 +3543,9 @@
 			productReference = BB451E9A18DCD224005FBE09 /* OsmAnd DEV.app */;
 			productType = "com.apple.product-type.application";
 		};
-		BBA3AF30197FC4BB0039D991 /* OsmAnd */ = {
+		BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd" */;
+			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
 				BBA3AF33197FC4BB0039D991 /* Check Pods Manifest.lock */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
@@ -3558,7 +3558,7 @@
 			dependencies = (
 				BBA3AF31197FC4BB0039D991 /* PBXTargetDependency */,
 			);
-			name = OsmAnd;
+			name = "OsmAnd Maps";
 			productName = OsmAnd;
 			productReference = BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */;
 			productType = "com.apple.product-type.application";
@@ -3603,7 +3603,7 @@
 			targets = (
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
-				BBA3AF30197FC4BB0039D991 /* OsmAnd */,
+				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};
@@ -5634,7 +5634,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_NAME = "OsmAnd Maps";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -5668,7 +5668,7 @@
 					"-lpng_static",
 					"-lz_static",
 				);
-				PRODUCT_NAME = "OsmAnd Maps";
+				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
@@ -5713,7 +5713,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd" */ = {
+		BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				BBA3AFEC197FC4BB0039D991 /* Debug */,

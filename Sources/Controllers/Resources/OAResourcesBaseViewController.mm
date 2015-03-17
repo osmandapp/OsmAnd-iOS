@@ -340,6 +340,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (BOOL)checkIfDownloadEnabled:(OAWorldRegion *)region
 {
+#if defined(OSMAND_IOS_DEV)
+    return YES;
+#endif
+    
     int tasksCount = _app.downloadsManager.keysOfDownloadTasks.count;
     
     if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable])) {

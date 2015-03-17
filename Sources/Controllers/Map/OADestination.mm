@@ -42,6 +42,7 @@
 #define kDestinationColor @"destination_color"
 #define kDestinationLatitude @"destination_latitude"
 #define kDestinationLongitude @"destination_longitude"
+#define kDestinationMarkerName @"destination_marker_name"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -49,6 +50,7 @@
     [aCoder encodeObject:_color forKey:kDestinationColor];
     [aCoder encodeObject:[NSNumber numberWithDouble:_latitude] forKey:kDestinationLatitude];
     [aCoder encodeObject:[NSNumber numberWithDouble:_longitude] forKey:kDestinationLongitude];
+    [aCoder encodeObject:_markerResourceName forKey:kDestinationMarkerName];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -59,6 +61,7 @@
         _color = [aDecoder decodeObjectForKey:kDestinationColor];
         _latitude = [[aDecoder decodeObjectForKey:kDestinationLatitude] doubleValue];
         _longitude = [[aDecoder decodeObjectForKey:kDestinationLongitude] doubleValue];
+        _markerResourceName = [aDecoder decodeObjectForKey:kDestinationMarkerName];
     }
     return self;
 }

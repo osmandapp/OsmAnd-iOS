@@ -18,6 +18,7 @@
 @property (nonatomic) OAMultiDestinationCell *multiCell;
 
 @property (nonatomic) NSArray *colors;
+@property (nonatomic) NSArray *markerNames;
 @property (nonatomic) NSMutableArray *usedColors;
 
 @property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
@@ -46,8 +47,8 @@
         
         self.colors = @[[UIColor colorWithRed:0.369f green:0.510f blue:0.914f alpha:1.00f],
                         [UIColor colorWithRed:0.992f green:0.627f blue:0.200f alpha:1.00f],
-                        [UIColor colorWithRed:0.541f green:0.741f blue:0.373f alpha:1.00f],
-                        [UIColor colorWithRed:0.988f green:0.502f blue:0.337f alpha:1.00f]];
+                        [UIColor colorWithRed:0.541f green:0.741f blue:0.373f alpha:1.00f]];
+        self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];
     }
     return self;
 }
@@ -252,7 +253,9 @@
         return nil;
     
     [_app.data.destinations addObject:destination];
-    destination.color = [self getFreeColor];
+    int colorIndex = [self getFreeColorIndex];
+    destination.color = _colors[colorIndex];
+    destination.markerResourceName = _markerNames[colorIndex];
 
     if (!_multiCell) {
         self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:@[destination]];
@@ -290,15 +293,16 @@
     return [destination.color copy];
 }
 
-- (UIColor *)getFreeColor
+- (int)getFreeColorIndex
 {
-    for (UIColor *c in _colors) {
+    for (int i = 0; i < _colors.count; i++) {
+        UIColor *c = _colors[i];
         if (![_usedColors containsObject:c]) {
             [_usedColors addObject:c];
-            return c;
+            return i;
         }
     }
-    return nil;
+    return 0;
 }
 
 - (void)doLocationUpdate

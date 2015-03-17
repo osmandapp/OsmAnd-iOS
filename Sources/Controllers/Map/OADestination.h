@@ -14,6 +14,7 @@
 @property (nonatomic) UIColor *color;
 @property (nonatomic) double latitude;
 @property (nonatomic) double longitude;
+@property (nonatomic) NSString *markerResourceName;
 
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;

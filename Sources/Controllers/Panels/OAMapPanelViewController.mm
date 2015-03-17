@@ -156,7 +156,7 @@
         _destinationViewController.delegate = self;
 
         for (OADestination *destination in _app.data.destinations)
-            [_mapViewController addDestinationPin:destination.color latitude:destination.latitude longitude:destination.longitude];
+            [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
 
     }
     
@@ -564,7 +564,7 @@
     UIColor *color = [_destinationViewController addDestination:destination];
     
     if (color)
-        [_mapViewController addDestinationPin:color latitude:_targetLatitude longitude:_targetLongitude];
+        [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
     
     [self hideTargetPointMenu];
 }

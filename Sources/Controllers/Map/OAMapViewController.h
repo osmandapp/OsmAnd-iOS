@@ -59,7 +59,7 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)hideTempGpxTrack;
 - (void)keepTempGpxTrackVisible;
 
-- (void)addDestinationPin:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
+- (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
 - (void)removeDestinationPin:(UIColor *)color;
 
 @property(readonly) CGFloat displayDensityFactor;

@@ -69,7 +69,7 @@
 #define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f
 #define kZoomVelocityAbsLimit 10.0f
-#define kTargetMoveDeceleration 0.0f
+#define kTargetMoveDeceleration 10000.0f
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModePositionTrackingDefaultZoom 16.0f
@@ -2534,21 +2534,21 @@
 
 #endif // defined(OSMAND_IOS_DEV)
 
-- (void)addDestinationPin:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
+- (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude
 {
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
-    OsmAnd::ColorARGB col(a*255.0, r*255.0, g*255.0, b*255.0);
-    
+    OsmAnd::FColorRGB col(r, g, b);
+
     const OsmAnd::LatLon latLon(latitude, longitude);
 
     OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
     .setBaseOrder(std::numeric_limits<int>::max() - 2)
     .setIsHidden(false)
-    .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"destination_pin_marker_icon"])
-    .setPinIconModulationColor(col)
+    .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
+    .setAccuracyCircleBaseColor(col)
     .buildAndAddToCollection(_destinationPinMarkersCollection);
 }
 
@@ -2556,12 +2556,12 @@
 {
     CGFloat r,g,b,a;
     [color getRed:&r green:&g blue:&b alpha:&a];
-    OsmAnd::ColorARGB col(a*255.0, r*255.0, g*255.0, b*255.0);
+    OsmAnd::FColorRGB col(r, g, b);
 
     for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
     {
-        OsmAnd::ColorARGB mCol = marker->getPinIconModulationColor();
-        if (col.argb == mCol.argb) {
+        const OsmAnd::FColorRGB mCol = marker->accuracyCircleBaseColor;
+        if (col == mCol) {
             _destinationPinMarkersCollection->removeMarker(marker);
             break;
         }

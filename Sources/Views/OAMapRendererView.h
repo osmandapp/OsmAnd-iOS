@@ -55,6 +55,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 @property(nonatomic) std::shared_ptr<OsmAnd::IMapElevationDataProvider> elevationDataProvider;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
+- (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
+
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
 - (void)addKeyedSymbolsProvider:(std::shared_ptr<OsmAnd::IMapKeyedSymbolsProvider>)provider;
 - (void)removeTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider;
@@ -84,6 +86,9 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 // Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(CGPoint)point toLocation64:(OsmAnd::PointI64*)location;
+
+- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
+- (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
 - (void)dumpResourcesInfo;
 

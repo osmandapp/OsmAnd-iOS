@@ -167,6 +167,11 @@
     return _renderer->getSymbolsAt(screenPoint);
 }
 
+- (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict
+{
+    return _renderer->getSymbolsIn(screenArea, strict);
+}
+
 - (void)addTiledSymbolsProvider:(std::shared_ptr<OsmAnd::IMapTiledSymbolsProvider>)provider
 {
     _renderer->addSymbolsProvider(provider);
@@ -328,6 +333,35 @@
     if (!location)
         return NO;
     return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
+}
+
+// virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
+// virtual bool obtainScreenPointFromPosition(const PointI& position31, PointI& outScreenPoint) const = 0;
+
+- (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
+{
+    if (!pos)
+        return NO;
+    OsmAnd::PointI _point(0, 0);
+    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point);
+    if (res) {
+        point->x = _point.x / [UIScreen mainScreen].scale;
+        point->y = _point.y / [UIScreen mainScreen].scale;
+    }
+    return res;
+}
+
+- (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point
+{
+    if (!pos64)
+        return NO;
+    OsmAnd::PointI _point(0, 0);
+    BOOL res = _renderer->obtainScreenPointFromPosition(*pos64, _point);
+    if (res) {
+        point->x = _point.x / [UIScreen mainScreen].scale;
+        point->y = _point.y / [UIScreen mainScreen].scale;
+    }
+    return res;
 }
 
 - (void)dumpResourcesInfo

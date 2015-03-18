@@ -1091,8 +1091,9 @@
     UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     
     BOOL isSymbolFound = NO;
-    
-    const auto& symbolInfos = [mapView getSymbolsAt:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
+    CGFloat delta = 8.0;
+    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
+    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
     for (const auto symbolInfo : symbolInfos) {
         
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
@@ -1192,7 +1193,11 @@
 -(UIImage *)findIconAtPoint:(OsmAnd::PointI)touchPoint
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    const auto& symbolInfos = [mapView getSymbolsAt:touchPoint];
+    
+    CGFloat delta = 8.0;
+    OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
+    const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
+
     for (const auto symbolInfo : symbolInfos) {
         
         if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(symbolInfo.mapSymbol))
@@ -1281,7 +1286,7 @@
     // Animate azimuth change to north
     mapView.animator->animateAzimuthTo(0.0f,
                                        kQuickAnimationTime,
-                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                       OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                        kUserInteractionAnimationKey);
     mapView.animator->resume();
     
@@ -1508,19 +1513,19 @@
                 {
                     mapView.animator->animateTargetTo(newTarget31,
                                                       kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                      OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                       kLocationServicesAnimationKey);
                     mapView.animator->animateAzimuthTo(_lastAzimuthInPositionTrack,
                                                        kOneSecondAnimatonTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                       OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                        kLocationServicesAnimationKey);
                     mapView.animator->animateElevationAngleTo(_lastElevationAngle,
                                                               kOneSecondAnimatonTime,
-                                                              OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                              OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                               kLocationServicesAnimationKey);
                     mapView.animator->animateZoomTo(_lastZoom,
                                                     kOneSecondAnimatonTime,
-                                                    OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                    OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                     kLocationServicesAnimationKey);
                     _lastPositionTrackStateCaptured = false;
                 }
@@ -1528,8 +1533,8 @@
                 {
                     mapView.animator->parabolicAnimateTargetTo(newTarget31,
                                                                kOneSecondAnimatonTime,
-                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
-                                                               OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                                kLocationServicesAnimationKey);
                 }
 
@@ -1556,12 +1561,12 @@
 
             mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
                                             kOneSecondAnimatonTime,
-                                            OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                            OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                             kLocationServicesAnimationKey);
 
             mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
                                                       kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                      OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                       kLocationServicesAnimationKey);
 
             CLLocation* newLocation = _app.locationServices.lastKnownLocation;
@@ -1735,7 +1740,7 @@
                 mapView.animator->parabolicAnimateTargetTo(newTarget31,
                                                            kOneSecondAnimatonTime,
                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                            kLocationServicesAnimationKey);
             }
         }
@@ -2283,17 +2288,26 @@
         return;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
+    const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
+    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
+    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
+    
+    const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
+    CGFloat screensToFly = distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
 
     _app.mapMode = OAMapModeFree;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
 
-    if (animated)
+    if (animated && screensToFly <= 3)
     {
         mapView.animator->parabolicAnimateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                                    kQuickAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                    kUserInteractionAnimationKey);
         mapView.animator->resume();
     }
@@ -2312,19 +2326,28 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
+    const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
+    const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
+    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
+    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
+
+    const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
+    CGFloat screensToFly = distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
+
     _app.mapMode = OAMapModeFree;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
 
-    if (animated)
+    if (animated && screensToFly <= 3)
     {
         mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                           kQuickAnimationTime,
-                                          OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                           kUserInteractionAnimationKey);
         mapView.animator->animateZoomTo(zoom,
                                         kQuickAnimationTime,
-                                        OsmAnd::MapAnimator::TimingFunction::EaseInOutQuadratic,
+                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                         kUserInteractionAnimationKey);
         mapView.animator->resume();
     }

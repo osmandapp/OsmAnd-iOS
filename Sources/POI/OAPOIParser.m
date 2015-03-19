@@ -34,7 +34,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSString *_defaultTagName;
     
     NSMutableArray *_poiItems;
-    NSMutableArray *_poiCategories;
+    NSMutableDictionary *_poisByCategory;
 }
 
 - (NSOperationQueue *)retrieverQueue {
@@ -48,8 +48,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 - (void)getPOIDataSync:(NSString*)poiFileName {
     
-    _poiItems = [[NSMutableArray alloc] init];
-    _poiCategories = [[NSMutableArray alloc] init];
+    _poiItems = [NSMutableArray array];
+    _poisByCategory = [NSMutableDictionary dictionary];
     self.fileName = poiFileName;
     [self parseForData];
 }
@@ -57,7 +57,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 - (void)getPOIDataAsync:(NSString*)poiFileName {
     
     _poiItems = [[NSMutableArray alloc] init];
-    _poiCategories = [[NSMutableArray alloc] init];
+    _poisByCategory = [NSMutableDictionary dictionary];
     self.fileName = poiFileName;
     
     // make an operation so we can push it into the queue
@@ -86,7 +86,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     } else {
         
         self.pois = [NSArray arrayWithArray:_poiItems];
-        self.categories = [NSArray arrayWithArray:_poiCategories];
+        self.poisByCategory = [NSDictionary dictionaryWithDictionary:_poisByCategory];
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(parserFinished)]) {
             [(id)[self delegate] performSelectorOnMainThread:@selector(parserFinished)
@@ -153,7 +153,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 _currentCategoryName = [[NSString alloc] initWithBytes:attributes[i].value
                                                        length:length
                                                      encoding:NSUTF8StringEncoding];
-                [_poiCategories addObject:_currentCategoryName];
                 
             } else if(0 == strncmp((const char*)attributes[i].localname, kDefaultTagAttributeName,
                                    kDefaultTagAttributeNameLength)) {
@@ -219,6 +218,13 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
         }
         [_poiItems addObject:_currentPOIItem];
+        NSMutableArray *p = [_poisByCategory objectForKey:_currentCategoryName];
+        if (!p) {
+            p = [NSMutableArray arrayWithObject:_currentPOIItem];
+            [_poisByCategory setObject:p forKey:_currentCategoryName];
+        } else {
+            [p addObject:_currentPOIItem];
+        }
     }
 }
 
@@ -253,7 +259,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     self.delegate = nil;
     self.fileName = nil;
     self.pois = nil;
-    self.categories = nil;
+    self.poisByCategory = nil;
 }
 
 @end

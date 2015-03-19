@@ -10,11 +10,12 @@
 
 @interface OAPOIHelper : NSObject
 
-@property (nonatomic, readonly) NSArray *categories;
 @property (nonatomic, readonly) NSArray *pois;
+@property (nonatomic, readonly) NSDictionary *poisByCategory;
 
 + (OAPOIHelper *)sharedInstance;
 
+- (void)updatePhrases;
 - (NSArray *)categoryPOIs:(NSString *)category;
 
 @end

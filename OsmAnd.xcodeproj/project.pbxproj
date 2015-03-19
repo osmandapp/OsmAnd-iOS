@@ -1142,6 +1142,9 @@
 		84C41E791AB9EE8F0089EABB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C41E781AB9EE8F0089EABB /* libxml2.dylib */; };
 		84C41E7A1AB9EE990089EABB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C41E781AB9EE8F0089EABB /* libxml2.dylib */; };
 		84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C41E781AB9EE8F0089EABB /* libxml2.dylib */; };
+		84C41E7E1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
+		84C41E7F1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
+		84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
 		84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
 		84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
 		84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
@@ -2198,6 +2201,8 @@
 		84C41E731AB9EE580089EABB /* OAPOIParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIParser.h; sourceTree = "<group>"; };
 		84C41E741AB9EE580089EABB /* OAPOIParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOIParser.m; sourceTree = "<group>"; };
 		84C41E781AB9EE8F0089EABB /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		84C41E7C1ABAC38D0089EABB /* OAPhrasesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPhrasesParser.h; sourceTree = "<group>"; };
+		84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPhrasesParser.m; sourceTree = "<group>"; };
 		84CC52461AA58503000063CF /* OAMultiDestinationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMultiDestinationCell.h; path = Controllers/Map/OAMultiDestinationCell.h; sourceTree = "<group>"; };
 		84CC52471AA58503000063CF /* OAMultiDestinationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMultiDestinationCell.m; path = Controllers/Map/OAMultiDestinationCell.m; sourceTree = "<group>"; };
 		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
@@ -3133,6 +3138,8 @@
 				84C41E6F1AB962420089EABB /* OAPOIHelper.mm */,
 				84C41E731AB9EE580089EABB /* OAPOIParser.h */,
 				84C41E741AB9EE580089EABB /* OAPOIParser.m */,
+				84C41E7C1ABAC38D0089EABB /* OAPhrasesParser.h */,
+				84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */,
 			);
 			path = POI;
 			sourceTree = "<group>";
@@ -5370,6 +5377,7 @@
 				844056091AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				3AFEEE8A1A10FAB200900A47 /* OAFavoriteGroupViewController.mm in Sources */,
 				84185A781AA8BC6200F70328 /* OASliderCell.m in Sources */,
+				84C41E7E1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				3AC639DE1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BB54F70219890A4100AB40D1 /* OAHUDButton.m in Sources */,
@@ -5489,6 +5497,7 @@
 				8440560A1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				3AFEEE8B1A10FAB200900A47 /* OAFavoriteGroupViewController.mm in Sources */,
 				84185A791AA8BC6200F70328 /* OASliderCell.m in Sources */,
+				84C41E7F1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				3AC639DF1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BB54F70319890A4100AB40D1 /* OAHUDButton.m in Sources */,
@@ -5575,6 +5584,7 @@
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
+				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				84BFC2221A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */,

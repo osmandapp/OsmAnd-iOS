@@ -10,7 +10,17 @@
 #import <libxml/tree.h>
 
 @class OAPOI;
-@protocol OAPOIParserDelegate;
+
+@protocol OAPOIParserDelegate <NSObject>
+
+@required
+- (void)parserFinished;
+
+@optional
+- (void)encounteredError:(NSError *)error;
+
+@end
+
 
 // define a struct to hold the attribute info
 struct _xmlSAX2Attributes {
@@ -30,19 +40,10 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
     xmlParserCtxtPtr _xmlParserContext;
     NSOperationQueue *_retrieverQueue;
     
-    // libxml2 parsing stuff
-    NSMutableString *_elevation;
-    BOOL _parsingElevation;
-    NSMutableString *_time;
-    BOOL _parsingTime;
-    NSMutableString *_speed;
-    BOOL _parsingSpeed;
-    NSMutableString *_course;
-    BOOL _parsingCourse;
 }
 
 @property(nonatomic) NSArray *pois;
-@property(nonatomic) NSArray *categories;
+@property(nonatomic) NSDictionary *poisByCategory;
 @property(nonatomic) BOOL error;
 @property(nonatomic) OAPOI *currentPOIItem;
 @property(nonatomic) NSMutableString *propertyValue;
@@ -52,15 +53,5 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 
 - (void)getPOIDataSync:(NSString*)poiFileName;
 - (void)getPOIDataAsync:(NSString*)poiFileName;
-
-@end
-
-@protocol OAPOIParserDelegate <NSObject>
-
-@required
-- (void)parserFinished;
-
-@optional
-- (void)encounteredError:(NSError *)error;
 
 @end

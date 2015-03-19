@@ -13,6 +13,7 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *tag;
 @property (nonatomic) NSString *value;
+@property (nonatomic) NSString *valueLocalized;
 
 @property (nonatomic) NSString *category;
 @property (nonatomic) NSString *filter;

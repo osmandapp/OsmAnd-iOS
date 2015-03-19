@@ -7,7 +7,8 @@
 //
 
 #import "OAPOIHelper.h"
-#import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAPOIParser.h"
 #import "OAPhrasesParser.h"
 
@@ -37,9 +38,9 @@
     NSString *poiXmlPath = [[NSBundle mainBundle] pathForResource:@"poi_types" ofType:@"xml"];
     
     OAPOIParser *parser = [[OAPOIParser alloc] init];
-    [parser getPOIDataSync:poiXmlPath];
-    _pois = parser.pois;
-    _poisByCategory = parser.poisByCategory;
+    [parser getPOITypesSync:poiXmlPath];
+    _poiTypes = parser.poiTypes;
+    _poiCategories = parser.poiCategories;
     
 }
 
@@ -50,15 +51,27 @@
     OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
     [parser getPhrasesSync:phrasesXmlPath];
     
-    if (parser.phrases.count > 0)
-        for (OAPOI *poi in _pois)
-            poi.valueLocalized = [parser.phrases objectForKey:[NSString stringWithFormat:@"poi_%@", poi.value]];
+    if (parser.phrases.count > 0) {
+        for (OAPOIType *poiType in _poiTypes)
+            poiType.nameLocalized = [parser.phrases objectForKey:[NSString stringWithFormat:@"poi_%@", poiType.value]];
+        for (OAPOICategory *c in _poiCategories.allKeys)
+            c.nameLocalized = [parser.phrases objectForKey:[NSString stringWithFormat:@"poi_%@", c.name]];
+    }
     
 }
 
-- (NSArray *)categoryPOIs:(NSString *)category;
+- (NSArray *)poiTypesForCategory:(NSString *)categoryName;
 {
-    return [_poisByCategory objectForKey:category];
+    for (OAPOICategory *c in _poiCategories.allKeys)
+        if ([c.name isEqualToString:categoryName])
+            return [_poiCategories objectForKey:c];
+
+    return nil;
+}
+
++ (UIImage *)categoryIcon:(NSString *)categoryName
+{
+    return [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", categoryName]];
 }
 
 @end

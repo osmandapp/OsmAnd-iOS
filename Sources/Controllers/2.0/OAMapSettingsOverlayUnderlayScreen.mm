@@ -161,7 +161,7 @@ typedef enum
         case 0:
             return 1;
         case 1:
-            return [_onlineMapSources count];
+            return [_onlineMapSources count] + 1;
             
         default:
             return 0;

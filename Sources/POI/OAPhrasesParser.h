@@ -21,20 +21,12 @@
 @end
 
 
-@interface OAPhrasesParser : NSObject {
+@interface OAPhrasesParser : NSObject
 
-    BOOL _done;
-    BOOL _error;
-    xmlParserCtxtPtr _xmlParserContext;
-    NSOperationQueue *_retrieverQueue;
-    
-}
 
 @property(nonatomic) NSDictionary *phrases;
 @property(nonatomic) BOOL error;
-@property(nonatomic) NSMutableString *propertyValue;
 @property(nonatomic, weak) id<OAPhrasesParserDelegate> delegate;
-@property(nonatomic) NSOperationQueue *retrieverQueue;
 @property(nonatomic) NSString *fileName;
 
 - (void)getPhrasesSync:(NSString*)fileName;

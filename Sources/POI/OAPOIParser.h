@@ -9,9 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <libxml/tree.h>
 
-@class OAPOI;
+@class OAPOIType;
 
-@protocol OAPOIParserDelegate <NSObject>
+@protocol OAPOITypesParserDelegate <NSObject>
 
 @required
 - (void)parserFinished;
@@ -33,25 +33,15 @@ struct _xmlSAX2Attributes {
 typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 
 
-@interface OAPOIParser : NSObject {
-    
-    BOOL _done;
-    BOOL _error;
-    xmlParserCtxtPtr _xmlParserContext;
-    NSOperationQueue *_retrieverQueue;
-    
-}
+@interface OAPOIParser : NSObject
 
-@property(nonatomic) NSArray *pois;
-@property(nonatomic) NSDictionary *poisByCategory;
+@property(nonatomic) NSArray *poiTypes;
+@property(nonatomic) NSDictionary *poiCategories;
+@property(nonatomic, weak) id<OAPOITypesParserDelegate> delegate;
 @property(nonatomic) BOOL error;
-@property(nonatomic) OAPOI *currentPOIItem;
-@property(nonatomic) NSMutableString *propertyValue;
-@property(nonatomic, weak) id<OAPOIParserDelegate> delegate;
-@property(nonatomic) NSOperationQueue *retrieverQueue;
 @property(nonatomic) NSString *fileName;
 
-- (void)getPOIDataSync:(NSString*)poiFileName;
-- (void)getPOIDataAsync:(NSString*)poiFileName;
+- (void)getPOITypesSync:(NSString*)fileName;
+- (void)getPOITypesAsync:(NSString*)fileName;
 
 @end

@@ -2,20 +2,23 @@
 //  OAPOI.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 18/03/15.
+//  Created by Alexey Kulish on 19/03/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import "OAPOIType.h"
 
 @interface OAPOI : NSObject
 
 @property (nonatomic) NSString *name;
-@property (nonatomic) NSString *tag;
-@property (nonatomic) NSString *value;
-@property (nonatomic) NSString *valueLocalized;
+@property (nonatomic) OAPOIType *type;
+@property (nonatomic) NSString *nameLocalized;
 
-@property (nonatomic) NSString *category;
-@property (nonatomic) NSString *filter;
+@property (nonatomic) double latitude;
+@property (nonatomic) double longitude;
+@property (nonatomic) double distanceMeters;
+@property (nonatomic) NSString *distance;
+@property (nonatomic) double direction;
 
 @end

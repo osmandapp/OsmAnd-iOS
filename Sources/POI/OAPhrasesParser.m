@@ -34,15 +34,21 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     BOOL _parsingString;
     
     NSMutableDictionary *_dictionary;
+    
+    BOOL _done;
+    xmlParserCtxtPtr _xmlParserContext;
+    NSOperationQueue *_retrieverQueue;
+
 }
 
-- (NSOperationQueue *)retrieverQueue {
-    if(nil == _retrieverQueue) {
-        // lazy creation of the queue for retrieving the poi data
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
         _retrieverQueue = [[NSOperationQueue alloc] init];
         _retrieverQueue.maxConcurrentOperationCount = 1;
     }
-    return _retrieverQueue;
+    return self;
 }
 
 - (void)getPhrasesSync:(NSString*)fileName {
@@ -62,7 +68,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self
                                                                      selector:method
                                                                        object:nil];
-    [self.retrieverQueue addOperation:op];
+    [_retrieverQueue addOperation:op];
 }
 
 - (BOOL)parseWithLibXML2Parser {

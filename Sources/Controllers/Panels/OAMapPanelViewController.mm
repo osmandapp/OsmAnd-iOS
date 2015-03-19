@@ -21,6 +21,7 @@
 #import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
+#import "OAPOISearchViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -66,6 +67,7 @@
     double _targetLongitude;
 
     OAMapSettingsViewController *_mapSettings;
+    OAPOISearchViewController *_searchPOI;
     UILongPressGestureRecognizer *_shadowLongPress;
 }
 
@@ -423,6 +425,13 @@
     [_mapSettings showPopupAnimated:self parentViewController:nil];
     
     [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil];
+}
+
+- (void)searchButtonClick:(id)sender {
+
+    _searchPOI = [[OAPOISearchViewController alloc] init];
+    [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
+    
 }
 
 -(void)onTargetPointSet:(NSNotification *)notification {

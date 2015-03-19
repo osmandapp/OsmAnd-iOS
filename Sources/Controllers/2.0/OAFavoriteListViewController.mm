@@ -70,7 +70,6 @@ kFavoriteCellType;
     [super viewDidLoad];
     
     isDecelerating = NO;
-
     self.sortingType = 0;
 }
 
@@ -710,10 +709,6 @@ kFavoriteCellType;
     if (controller == _exportController)
         _exportController = nil;
 }
-
-
-
-
 
 
 @end

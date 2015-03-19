@@ -7,7 +7,8 @@
 //
 
 #import "OAPOIParser.h"
-#import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 
 // called from libxml functions
 @interface OAPOIParser (LibXMLParserMethods)
@@ -21,6 +22,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 - (void)parsingError:(const char *)msg, ...;
 - (void)endDocument;
 
+
 @end
 
 // Forward reference. The structure is defined in full at the end of the file.
@@ -29,43 +31,51 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 
 @implementation OAPOIParser {
 
-    NSString *_currentCategoryName;
     NSString *_currentFilterName;
-    NSString *_defaultTagName;
     
-    NSMutableArray *_poiItems;
-    NSMutableDictionary *_poisByCategory;
+    NSMutableArray *_pTypes;
+    NSMutableDictionary *_pCategories;
+    
+    xmlParserCtxtPtr _xmlParserContext;
+    
+    BOOL _done;
+
+    OAPOIType *_currentPOIType;
+    OAPOICategory *_currentPOICategory;
+    NSMutableString *_propertyValue;
+    NSOperationQueue *_retrieverQueue;
 }
 
-- (NSOperationQueue *)retrieverQueue {
-    if(nil == _retrieverQueue) {
-        // lazy creation of the queue for retrieving the poi data
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
         _retrieverQueue = [[NSOperationQueue alloc] init];
         _retrieverQueue.maxConcurrentOperationCount = 1;
     }
-    return _retrieverQueue;
+    return self;
 }
 
-- (void)getPOIDataSync:(NSString*)poiFileName {
+- (void)getPOITypesSync:(NSString*)fileName {
     
-    _poiItems = [NSMutableArray array];
-    _poisByCategory = [NSMutableDictionary dictionary];
-    self.fileName = poiFileName;
+    _pTypes = [NSMutableArray array];
+    _pCategories = [NSMutableDictionary dictionary];
+    self.fileName = fileName;
     [self parseForData];
 }
 
-- (void)getPOIDataAsync:(NSString*)poiFileName {
+- (void)getPOITypesAsync:(NSString*)fileName {
     
-    _poiItems = [[NSMutableArray alloc] init];
-    _poisByCategory = [NSMutableDictionary dictionary];
-    self.fileName = poiFileName;
+    _pTypes = [NSMutableArray array];
+    _pCategories = [NSMutableDictionary dictionary];
+    self.fileName = fileName;
     
     // make an operation so we can push it into the queue
     SEL method = @selector(parseForData);
     NSInvocationOperation *op = [[NSInvocationOperation alloc] initWithTarget:self
                                                                      selector:method
                                                                        object:nil];
-    [self.retrieverQueue addOperation:op];
+    [_retrieverQueue addOperation:op];
 }
 
 - (BOOL)parseWithLibXML2Parser {
@@ -85,8 +95,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         }
     } else {
         
-        self.pois = [NSArray arrayWithArray:_poiItems];
-        self.poisByCategory = [NSDictionary dictionaryWithDictionary:_poisByCategory];
+        self.poiTypes = [NSArray arrayWithArray:_pTypes];
+        self.poiCategories = [NSDictionary dictionaryWithDictionary:_pCategories];
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(parserFinished)]) {
             [(id)[self delegate] performSelectorOnMainThread:@selector(parserFinished)
@@ -144,13 +154,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     
     if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength)) {
         
+        _currentPOICategory = [[OAPOICategory alloc] init];
+
         for(int i = 0;i < attributeCount;i++) {
 
             if(0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
                             kNameAttributeNameLength)) {
                 
                 int length = (int) (attributes[i].end - attributes[i].value);
-                _currentCategoryName = [[NSString alloc] initWithBytes:attributes[i].value
+                _currentPOICategory.name = [[NSString alloc] initWithBytes:attributes[i].value
                                                        length:length
                                                      encoding:NSUTF8StringEncoding];
                 
@@ -158,10 +170,11 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                    kDefaultTagAttributeNameLength)) {
                 
                 int length = (int) (attributes[i].end - attributes[i].value);
-                _defaultTagName = [[NSString alloc] initWithBytes:attributes[i].value
+                _currentPOICategory.tag = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
             }
+            
         }
 
     } else if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength)) {
@@ -180,10 +193,10 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         
     } else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength)) {
         
-        self.currentPOIItem = [[OAPOI alloc] init];
-        _currentPOIItem.category = _currentCategoryName;
-        _currentPOIItem.filter = _currentFilterName;
-        _currentPOIItem.tag = _defaultTagName;
+        _currentPOIType = [[OAPOIType alloc] init];
+        _currentPOIType.category = _currentPOICategory.name;
+        _currentPOIType.filter = _currentFilterName;
+        _currentPOIType.tag = _currentPOICategory.tag;
         
         for(int i = 0;i < attributeCount;i++) {
 
@@ -194,7 +207,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 NSString *name = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
-                _currentPOIItem.name = name;
+                _currentPOIType.name = name;
                 
             } else if(0 == strncmp((const char*)attributes[i].localname, kTagAttributeName,
                                    kTagAttributeNameLength)) {
@@ -204,7 +217,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                           length:length
                                                         encoding:NSUTF8StringEncoding];
 
-                _currentPOIItem.tag = tag;
+                _currentPOIType.tag = tag;
 
             } else if(0 == strncmp((const char*)attributes[i].localname, kValueAttributeName,
                                    kValueAttributeNameLength)) {
@@ -213,17 +226,18 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
                                                          length:length
                                                        encoding:NSUTF8StringEncoding];
-                _currentPOIItem.value = value;
+                _currentPOIType.value = value;
             }
             
         }
-        [_poiItems addObject:_currentPOIItem];
-        NSMutableArray *p = [_poisByCategory objectForKey:_currentCategoryName];
+        [_pTypes addObject:_currentPOIType];
+        
+        NSMutableArray *p = [_pCategories objectForKey:_currentPOICategory];
         if (!p) {
-            p = [NSMutableArray arrayWithObject:_currentPOIItem];
-            [_poisByCategory setObject:p forKey:_currentCategoryName];
+            p = [NSMutableArray arrayWithObject:_currentPOIType];
+            [_pCategories setObject:p forKey:_currentPOICategory];
         } else {
-            [p addObject:_currentPOIItem];
+            [p addObject:_currentPOIType];
         }
     }
 }
@@ -234,8 +248,11 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         _currentFilterName = nil;
         
     } else if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength)) {
-        _currentCategoryName = nil;
-        
+        _currentPOICategory = nil;
+
+    } else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength)) {
+        _currentPOIType = nil;
+    
     }
 }
 
@@ -258,8 +275,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     
     self.delegate = nil;
     self.fileName = nil;
-    self.pois = nil;
-    self.poisByCategory = nil;
+    self.poiTypes = nil;
+    self.poiCategories = nil;
 }
 
 @end

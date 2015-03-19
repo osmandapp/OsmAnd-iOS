@@ -323,6 +323,14 @@
     self.sidePanelController.recognizesPanGesture = NO;
 }
 
+- (IBAction)onSearchButtonClick:(id)sender {
+    
+    [((OAMapPanelViewController *)self.parentViewController) searchButtonClick:sender];
+    
+    self.sidePanelController.recognizesPanGesture = NO;
+}
+
+
 - (IBAction)onOptionsMenuButtonDown:(id)sender {
     self.sidePanelController.recognizesPanGesture = YES;
 }

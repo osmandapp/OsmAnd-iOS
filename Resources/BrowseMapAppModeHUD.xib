@@ -140,6 +140,15 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
                     </connections>
                 </button>
+                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gMm-Ly-WJo" userLabel="searchButton">
+                    <rect key="frame" x="90" y="26" width="30" height="30"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                    <state key="normal" image="search_icon.png" backgroundImage="HUD_compass_bg.png"/>
+                    <connections>
+                        <action selector="onSearchButtonClick:" destination="-1" eventType="touchUpInside" id="cYt-nS-ixL"/>
+                    </connections>
+                </button>
             </subviews>
         </view>
     </objects>
@@ -153,10 +162,11 @@
         <image name="HUD_right_narrowbutton_bg.png" width="15" height="40"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
-        <image name="free_map_mode_button.png" width="25" height="25"/>
+        <image name="free_map_mode_button.png" width="22" height="22"/>
         <image name="icon_drive_mode.png" width="46" height="46"/>
         <image name="menu_button.png" width="46" height="46"/>
         <image name="menu_button_bg.png" width="46" height="46"/>
+        <image name="search_icon.png" width="13" height="13"/>
         <image name="zoom_button_bg.png" width="46" height="46"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

@@ -52,7 +52,7 @@
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
     if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
         return UIInterfaceOrientationPortrait;
-    return UIInterfaceOrientationPortrait | UIInterfaceOrientationLandscapeLeft | UIInterfaceOrientationLandscapeRight;
+    return [self.visibleViewController interfaceOrientation];
 }
 
 @end

@@ -42,6 +42,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
 @property (weak, nonatomic) IBOutlet UIButton *mapSettingsButton;
+@property (weak, nonatomic) IBOutlet UIButton *searchButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet UIButton *zoomInButton;
@@ -238,6 +239,8 @@
 {
     if (_destinationViewController)
         [_destinationViewController updateFrame];    
+    if (_downloadView)
+        _downloadView.frame = CGRectMake(142.0, 27.0, DeviceScreenWidth - 154.0, 28.0);
 }
 
 
@@ -409,12 +412,16 @@
     CGSize size = _compassBox.frame.size;
     CGFloat msX = _mapSettingsButton.frame.origin.x;
     CGSize msSize = _mapSettingsButton.frame.size;
+    CGFloat sX = _searchButton.frame.origin.x;
+    CGSize sSize = _searchButton.frame.size;
+    
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
     
     if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         [UIView animateWithDuration:.2 animations:^{
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
             _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
+            _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
         }];
 
 }
@@ -439,7 +446,6 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
-
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
@@ -453,7 +459,7 @@
             return;
         
         if (!_downloadView) {
-            self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(94.0, 27.0, 216.0, 28.0)];
+            self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(142.0, 27.0, DeviceScreenWidth - 154.0, 28.0)];
             _downloadView.autoresizingMask = UIViewAutoresizingNone;
 
             _downloadView.layer.cornerRadius = 5.0;
@@ -492,7 +498,7 @@
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded)
             return;
         
         OADownloadProgressView *download = self.downloadView;

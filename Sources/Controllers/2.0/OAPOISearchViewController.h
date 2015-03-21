@@ -7,19 +7,7 @@
 //
 
 #import "OASuperViewController.h"
-#import "OAAutoObserverProxy.h"
 
 @interface OAPOISearchViewController : OASuperViewController
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-@property CGFloat azimuthDirection;
-
-@property NSTimeInterval lastUpdate;
-
-- (instancetype)initWithSearchString:(NSString *)searchString;
-- (instancetype)initWithType:(NSString *)poiTypeName;
-- (instancetype)initWithCategory:(NSString *)categoryName;
 
 @end

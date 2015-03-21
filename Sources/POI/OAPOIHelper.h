@@ -8,15 +8,31 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAPOI;
+
+@protocol OAPOISearchDelegate
+
+-(void)poiFound:(OAPOI *)poi;
+-(void)searchDone:(BOOL)wasInterrupted;
+
+@end
+
 @interface OAPOIHelper : NSObject
+
+@property (nonatomic, readonly) BOOL isSearchDone;
+@property (nonatomic, assign) int searchLimit;
 
 @property (nonatomic, readonly) NSArray *poiTypes;
 @property (nonatomic, readonly) NSDictionary *poiCategories;
+
+@property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
 
 + (OAPOIHelper *)sharedInstance;
 
 - (void)updatePhrases;
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
-+ (UIImage *)categoryIcon:(NSString *)categoryName;
+
+-(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type;
+-(void)breakSearch;
 
 @end

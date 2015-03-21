@@ -23,6 +23,7 @@
 #import "OALog.h"
 #import <Reachability.h>
 #import "OAManageResourcesViewController.h"
+#import "OAPOIHelper.h"
 
 #include <algorithm>
 
@@ -212,6 +213,8 @@
     _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
     
     [OAManageResourcesViewController prepareData];
+    
+    [OAPOIHelper sharedInstance];
     
     _appMode = OAAppModeBrowseMap;
     _appModeObservable = [[OAObservable alloc] init];

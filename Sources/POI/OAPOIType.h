@@ -18,6 +18,8 @@
 @property (nonatomic) NSString *nameLocalized;
 
 @property (nonatomic) NSString *category;
+@property (nonatomic) NSString *categoryLocalizedEN;
+@property (nonatomic) NSString *categoryLocalized;
 @property (nonatomic) NSString *filter;
 
 - (UIImage *)icon;

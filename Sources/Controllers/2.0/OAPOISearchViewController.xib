@@ -7,8 +7,11 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPOISearchViewController">
             <connections>
-                <outlet property="searchDisplayController" destination="UvR-8E-xZU" id="cK2-7d-t80"/>
-                <outlet property="tableView" destination="6VS-zr-H5j" id="f8v-jH-Fog"/>
+                <outlet property="btnBack" destination="JYN-zX-BiN" id="J1h-At-AUJ"/>
+                <outlet property="btnCancel" destination="bYO-Dn-GFh" id="lth-z2-S4H"/>
+                <outlet property="tableView" destination="6VS-zr-H5j" id="g6A-fW-sL8"/>
+                <outlet property="textField" destination="Ebb-jR-kOR" id="8X6-wQ-qBK"/>
+                <outlet property="topView" destination="RXJ-Yy-wKG" id="v7L-M9-bnT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,38 +20,63 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="6VS-zr-H5j">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="50" sectionHeaderHeight="22" sectionFooterHeight="22" id="6VS-zr-H5j">
+                    <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    <searchBar key="tableHeaderView" contentMode="redraw" id="j8H-py-Aj3">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                        <textInputTraits key="textInputTraits"/>
-                        <connections>
-                            <outlet property="delegate" destination="-1" id="2tQ-TN-EmM"/>
-                        </connections>
-                    </searchBar>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="a8r-7Q-nZu"/>
                         <outlet property="delegate" destination="-1" id="Azk-Uh-VEQ"/>
                     </connections>
                 </tableView>
+                <view contentMode="scaleToFill" id="RXJ-Yy-wKG">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="JYN-zX-BiN">
+                            <rect key="frame" x="2" y="25" width="40" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <state key="normal" image="menu_icon_back.png">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="btnBackClick:" destination="-1" eventType="touchUpInside" id="AhR-oQ-w9h"/>
+                            </connections>
+                        </button>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" clearButtonMode="always" id="Ebb-jR-kOR">
+                            <rect key="frame" x="44" y="25" width="202" height="30"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="13"/>
+                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                            <connections>
+                                <action selector="textFieldValueChanged:" destination="-1" eventType="editingChanged" id="Fci-OQ-OpD"/>
+                                <outlet property="delegate" destination="-1" id="KBu-YP-vJr"/>
+                            </connections>
+                        </textField>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="bYO-Dn-GFh">
+                            <rect key="frame" x="253" y="25" width="60" height="30"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="15"/>
+                            <state key="normal" title="Cancel">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="btnCancelClicked:" destination="-1" eventType="touchUpInside" id="x1J-tr-NDc"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="337" y="355"/>
+            <point key="canvasLocation" x="365" y="353"/>
         </view>
-        <searchDisplayController id="UvR-8E-xZU">
-            <connections>
-                <outlet property="delegate" destination="-1" id="WTS-uv-a9x"/>
-                <outlet property="searchBar" destination="j8H-py-Aj3" id="L89-Wm-0NE"/>
-                <outlet property="searchContentsController" destination="-1" id="eI2-31-Imn"/>
-                <outlet property="searchResultsDataSource" destination="-1" id="Gy0-Ah-dpj"/>
-                <outlet property="searchResultsDelegate" destination="-1" id="a54-HF-kUS"/>
-            </connections>
-        </searchDisplayController>
     </objects>
+    <resources>
+        <image name="menu_icon_back.png" width="11" height="21"/>
+    </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

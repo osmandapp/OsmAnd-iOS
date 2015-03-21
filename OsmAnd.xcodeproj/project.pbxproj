@@ -476,6 +476,12 @@
 		84387B2A1ABB36A600504DA7 /* OAPOI.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B291ABB36A600504DA7 /* OAPOI.m */; };
 		84387B2B1ABB36A600504DA7 /* OAPOI.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B291ABB36A600504DA7 /* OAPOI.m */; };
 		84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B291ABB36A600504DA7 /* OAPOI.m */; };
+		84387B331ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */; };
+		84387B341ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */; };
+		84387B351ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */; };
+		84387B381ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */; };
+		84387B391ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */; };
+		84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */; };
 		843E5C361AB22FE400BE14BE /* OAMapStylesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */; };
 		843E5C371AB22FE400BE14BE /* OAMapStylesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */; };
 		843E5C381AB22FE400BE14BE /* OAMapStylesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */; };
@@ -1959,6 +1965,9 @@
 		84387B241ABB369700504DA7 /* OAPOICategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOICategory.m; sourceTree = "<group>"; };
 		84387B281ABB36A600504DA7 /* OAPOI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOI.h; sourceTree = "<group>"; };
 		84387B291ABB36A600504DA7 /* OAPOI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOI.m; sourceTree = "<group>"; };
+		84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextDescCell.xib; path = Resources/Controllers/Cells/OAIconTextDescCell.xib; sourceTree = "<group>"; };
+		84387B361ABCABC600504DA7 /* OAIconTextDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIconTextDescCell.h; path = Controllers/Cells/OAIconTextDescCell.h; sourceTree = "<group>"; };
+		84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAIconTextDescCell.m; path = Controllers/Cells/OAIconTextDescCell.m; sourceTree = "<group>"; };
 		843E5C331AB22FE400BE14BE /* OAMapStylesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapStylesCell.h; path = Sources/Controllers/2.0/OAMapStylesCell.h; sourceTree = "<group>"; };
 		843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapStylesCell.m; path = Sources/Controllers/2.0/OAMapStylesCell.m; sourceTree = "<group>"; };
 		843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapStylesCell.xib; path = Sources/Controllers/2.0/OAMapStylesCell.xib; sourceTree = "<group>"; };
@@ -2733,6 +2742,7 @@
 				8AF219841A7FCD380091071B /* OAIconTextCell.xib */,
 				8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */,
 				8A7077141A83C25A005E019B /* OATextViewCell.xib */,
+				84387B2F1ABCAB6F00504DA7 /* OAIconTextDescCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -2740,6 +2750,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				84387B361ABCABC600504DA7 /* OAIconTextDescCell.h */,
+				84387B371ABCABC600504DA7 /* OAIconTextDescCell.m */,
 				844499B21AAD7CDB00ACA20D /* OAInAppCell.h */,
 				844499B31AAD7CDB00ACA20D /* OAInAppCell.m */,
 				84185A761AA8BC6200F70328 /* OASliderCell.h */,
@@ -4023,6 +4035,7 @@
 				8AF219861A7FCD380091071B /* OAIconTextCell.xib in Resources */,
 				84BD08C71AB16174006DA3F7 /* HUD_left_narrowbutton_bg@3x.png in Resources */,
 				BB451DCF18D70B5B005FBE09 /* HUD_search_icon@2x.png in Resources */,
+				84387B331ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */,
 				84BD089A1AB16174006DA3F7 /* Btn-Pause@3x.png in Resources */,
 				8A337E931A839AA500F5D01E /* OAViewTextCell.xib in Resources */,
 				8444998E1AAA1FFA00ACA20D /* bt_bought_addon.png in Resources */,
@@ -4469,6 +4482,7 @@
 				84B4FD681A91D4B800A147BA /* OAGPXItemViewController.xib in Resources */,
 				84BD08C81AB16174006DA3F7 /* HUD_left_narrowbutton_bg@3x.png in Resources */,
 				3ACA4AA81A0B8B9F00ECC792 /* OASettingsViewController.xib in Resources */,
+				84387B341ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */,
 				84BD089B1AB16174006DA3F7 /* Btn-Pause@3x.png in Resources */,
 				3AC40ACE19DDC669002FBC40 /* Btn-Play@2x.png in Resources */,
 				8444998F1AAA1FFA00ACA20D /* bt_bought_addon.png in Resources */,
@@ -4765,6 +4779,7 @@
 				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				84C41E191AB8600D0089EABB /* btn_map_type_icon_car@2x.png in Resources */,
 				84BD08C61AB16174006DA3F7 /* HUD_left_halfbutton_bg@3x.png in Resources */,
+				84387B351ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */,
 				BBA3AF8F197FC4BB0039D991 /* menu_item_install_icon.png in Resources */,
 				BBA3AF90197FC4BB0039D991 /* HUD_menu_halfbutton@2x.png in Resources */,
 				843E5D6E1AB341E000BE14BE /* menu_button_bg.png in Resources */,
@@ -5379,6 +5394,7 @@
 				3AC639B91A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84BFC2371A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
+				84387B381ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				3AFEEE671A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4019F43004003F1D42 /* OAMapRulerView.m in Sources */,
@@ -5502,6 +5518,7 @@
 				3AC639BA1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84BFC2381A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BBA3AED7197500DE0039D991 /* OAMapViewController.mm in Sources */,
+				84387B391ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				3AFEEE681A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4119F4F53D003F1D42 /* OAMapRulerView.m in Sources */,
@@ -5593,6 +5610,7 @@
 				3AFEEE771A0E63B600900A47 /* OAFavoriteItemViewController.mm in Sources */,
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
+				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
@@ -5820,6 +5838,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -5841,6 +5860,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5876,6 +5896,7 @@
 				);
 				PRODUCT_NAME = "OsmAnd DEV";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -5911,6 +5932,7 @@
 				);
 				PRODUCT_NAME = "OsmAnd DEV";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -5959,6 +5981,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -5993,6 +6016,7 @@
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

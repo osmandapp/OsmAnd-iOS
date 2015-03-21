@@ -24,6 +24,11 @@
     return NO;
 }
 
+-(NSUInteger)hash
+{
+    return [_name hash] + (_tag ? [_tag hash] : 1);
+}
+
 #pragma mark NSCopying
 
 - (id)copyWithZone:(NSZone *)zone

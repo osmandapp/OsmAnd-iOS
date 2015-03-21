@@ -16,6 +16,7 @@
                 <outlet property="mapModeButton" destination="Tol-6L-Amr" id="0Lv-8x-10z"/>
                 <outlet property="mapSettingsButton" destination="Ezz-bP-gmB" id="fQV-HX-alr"/>
                 <outlet property="optionsMenuButton" destination="4" id="Kh9-5L-HB6"/>
+                <outlet property="searchButton" destination="gMm-Ly-WJo" id="4xn-OZ-rlS"/>
                 <outlet property="view" destination="1" id="3"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
@@ -66,7 +67,7 @@
                     </subviews>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
-                    <rect key="frame" x="52" y="26" width="30" height="30"/>
+                    <rect key="frame" x="57" y="26" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <state key="normal" image="HUD_configure_map.png" backgroundImage="HUD_compass_bg.png"/>
                     <connections>
@@ -140,8 +141,8 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
                     </connections>
                 </button>
-                <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gMm-Ly-WJo" userLabel="searchButton">
-                    <rect key="frame" x="90" y="26" width="30" height="30"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gMm-Ly-WJo" userLabel="searchButton">
+                    <rect key="frame" x="100" y="26" width="30" height="30"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" image="search_icon.png" backgroundImage="HUD_compass_bg.png"/>

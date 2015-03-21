@@ -10,8 +10,6 @@
 
 #import <UIKit/UIKit.h>
 
-#import <TestFlight.h>
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"

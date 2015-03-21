@@ -28,8 +28,6 @@ pod 'HTAutocompleteTextField', '~> 1.3.1'
 # Development-only dependencies
 target :dev do
     link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
-
-    pod 'TestFlightSDK', '~> 3.0.2'
 end
 
 # Make changes to Pods.xcconfig: 

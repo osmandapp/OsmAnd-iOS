@@ -33,6 +33,6 @@
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
 
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type;
--(void)breakSearch;
+-(BOOL)breakSearch;
 
 @end

@@ -50,7 +50,7 @@
     BOOL _isSearching;
     BOOL _poiInList;
 
-    NSObject *_dataLock;
+    NSLock *_lock;
     
     UIPanGestureRecognizer *_tblMove;
     
@@ -73,7 +73,7 @@
 
 - (void)commonInit
 {
-    _dataLock = [[NSObject alloc] init];
+    _lock = [[NSLock alloc] init];
 }
 
 - (void)viewDidLoad {
@@ -249,12 +249,12 @@
 
 - (void)updateDistanceAndDirection
 {
-    @synchronized(_dataLock) {
-        
+    [_lock lock];
+    @try {
         if (!_poiInList)
             return;
 
-        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !_initData)
             return;
         self.lastUpdate = [[NSDate date] timeIntervalSince1970];
         
@@ -325,15 +325,18 @@
         if (isDecelerating)
             return;
         
-        //[self refreshVisibleRows];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_tableView reloadData];
-            if (_initData && _dataArray.count > 0) {
-                [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-            }
-            _initData = NO;
-        });
+    } @finally {
+        [_lock unlock];
     }
+    
+    //[self refreshVisibleRows];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_tableView reloadData];
+        if (_initData && _dataArray.count > 0) {
+            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        }
+        _initData = NO;
+    });
 }
 
 - (void)refreshVisibleRows
@@ -354,7 +357,9 @@
 
 -(void)generateData {
     
-    @synchronized(_dataLock) {
+    [_lock lock];
+    @try {
+        
         if (self.searchString) {
             
             //if (!_categoryName) {
@@ -362,14 +367,20 @@
             //    [self updateSearchResults];
             //} else {
             _ignoreSearchResult = NO;
-            [self startCoreSearch];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self startCoreSearch];
+            });
+            return;
             //}
             
         } else if (self.poiTypeName) {
             
             _ignoreSearchResult = NO;
             _poiInList = NO;
-            [self startCoreSearch];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self startCoreSearch];
+            });
+            return;
             
         } else if (self.categoryName) {
             
@@ -389,9 +400,13 @@
             }];
             self.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
         }
+        
         [_tableView reloadData];
         if (_dataArray.count > 0)
             [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        
+    } @finally {
+        [_lock unlock];
     }
 }
 
@@ -415,6 +430,13 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
+    // workaround for superfast typers
+    if (indexPath.row >= _dataArray.count) {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+        UITableViewCell *cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        return cell;
+    }
+    
     id obj = _dataArray[indexPath.row];
     
     if ([obj isKindOfClass:[OAPOI class]]) {
@@ -554,9 +576,8 @@
 
 - (void)performSearch:(NSString*)searchString
 {
-    @synchronized(_dataLock)
-    {
-        
+    [_lock lock];
+    @try {
         self.dataArray = [NSMutableArray array];
 
         // If case searchString is empty, there are no results
@@ -609,6 +630,8 @@
             self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:typesArray] mutableCopy];
         }
         
+    } @finally {
+        [_lock unlock];
     }
 }
 
@@ -664,14 +687,16 @@
 {
     _needRestartSearch = YES;
     
-    if ([[OAPOIHelper sharedInstance] isSearchDone]) {
+    if (![[OAPOIHelper sharedInstance] breakSearch]) {
         _needRestartSearch = NO;
     } else {
-        [[OAPOIHelper sharedInstance] breakSearch];
         return;
     }
     
+    [_lock lock];
     self.searchDataArray = [NSMutableArray array];
+    [_lock unlock];
+    
     [self showWaitingIndicator];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -689,20 +714,23 @@
 -(void)searchDone:(BOOL)wasInterrupted
 {
     if (!wasInterrupted && !_needRestartSearch) {
-        
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showSearchIcon];
+        });
+
         if (_ignoreSearchResult) {
             _poiInList = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self showSearchIcon];
-            });
             return;
         }
         
         _poiInList = _searchDataArray.count > 0;
-        @synchronized(_dataLock) {
-            self.dataArray = [NSMutableArray arrayWithArray:self.searchDataArray];
-            self.searchDataArray = nil;
-        }
+        
+        [_lock lock];
+        self.dataArray = [NSMutableArray arrayWithArray:self.searchDataArray];
+        self.searchDataArray = nil;
+        [_lock unlock];
+        
         if (_poiInList) {
             _initData = YES;
             [self updateDistanceAndDirection];
@@ -711,12 +739,8 @@
                 [_tableView reloadData];
             });
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showSearchIcon];
-        });
         
     } else if (_needRestartSearch) {
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self startCoreSearch];
         });

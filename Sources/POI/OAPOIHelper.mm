@@ -161,9 +161,10 @@
 
 }
 
--(void)breakSearch
+-(BOOL)breakSearch
 {
-    _breakSearch = YES;
+    _breakSearch = !_isSearchDone;
+    return _breakSearch;
 }
 
 -(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry

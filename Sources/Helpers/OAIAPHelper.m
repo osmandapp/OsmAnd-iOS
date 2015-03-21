@@ -169,7 +169,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 }
 
 - (BOOL)productPurchased:(NSString *)productIdentifier {
+#if !defined(OSMAND_IOS_DEV)
     return [_purchasedProductIdentifiers containsObject:productIdentifier];
+#else
+    return YES;
+#endif
 }
 
 - (void)buyProduct:(SKProduct *)product {

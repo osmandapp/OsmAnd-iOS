@@ -26,9 +26,9 @@ pod 'TPKeyboardAvoiding', '~> 1.2.3'
 pod 'HTAutocompleteTextField', '~> 1.3.1'
 
 # Development-only dependencies
-target :dev do
-    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
-end
+#target :dev do
+#    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
+#end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

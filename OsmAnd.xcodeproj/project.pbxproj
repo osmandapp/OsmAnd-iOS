@@ -749,6 +749,17 @@
 		844056091AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844056081AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm */; };
 		8440560A1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844056081AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm */; };
 		8440560B1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844056081AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm */; };
+		8440E2CE1ABEA7100088856A /* libOsmAndCore_static_standalone.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2CD1ABEA7100088856A /* libOsmAndCore_static_standalone.a */; };
+		8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2CF1ABEA7200088856A /* libarchive_static.a */; };
+		8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D11ABEA7360088856A /* libexpat_static.a */; };
+		8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D21ABEA7360088856A /* libgdal_static.a */; };
+		8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D31ABEA7360088856A /* libgif_static.a */; };
+		8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D41ABEA7360088856A /* libicu4c_static.a */; };
+		8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D51ABEA7360088856A /* libjpeg_static.a */; };
+		8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D61ABEA7360088856A /* libpng_static.a */; };
+		8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D71ABEA7360088856A /* libprotobuf_static.a */; };
+		8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D81ABEA7360088856A /* libskia_static.a */; };
+		8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8440E2D91ABEA7360088856A /* libz_static.a */; };
 		844499421AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */; };
 		844499431AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */; };
 		844499441AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */; };
@@ -2059,6 +2070,17 @@
 		843E5CAB1AB341E000BE14BE /* three_dots@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@3x.png"; path = "Resources/Icons/three_dots@3x.png"; sourceTree = "<group>"; };
 		844056071AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsOverlayUnderlayScreen.h; path = Sources/Controllers/2.0/OAMapSettingsOverlayUnderlayScreen.h; sourceTree = "<group>"; };
 		844056081AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsOverlayUnderlayScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsOverlayUnderlayScreen.mm; sourceTree = "<group>"; };
+		8440E2CD1ABEA7100088856A /* libOsmAndCore_static_standalone.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libOsmAndCore_static_standalone.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libOsmAndCore_static_standalone.a"; sourceTree = "<group>"; };
+		8440E2CF1ABEA7200088856A /* libarchive_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libarchive_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libarchive_static.a"; sourceTree = "<group>"; };
+		8440E2D11ABEA7360088856A /* libexpat_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libexpat_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libexpat_static.a"; sourceTree = "<group>"; };
+		8440E2D21ABEA7360088856A /* libgdal_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgdal_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libgdal_static.a"; sourceTree = "<group>"; };
+		8440E2D31ABEA7360088856A /* libgif_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libgif_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libgif_static.a"; sourceTree = "<group>"; };
+		8440E2D41ABEA7360088856A /* libicu4c_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libicu4c_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libicu4c_static.a"; sourceTree = "<group>"; };
+		8440E2D51ABEA7360088856A /* libjpeg_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libjpeg_static.a"; sourceTree = "<group>"; };
+		8440E2D61ABEA7360088856A /* libpng_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libpng_static.a"; sourceTree = "<group>"; };
+		8440E2D71ABEA7360088856A /* libprotobuf_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libprotobuf_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libprotobuf_static.a"; sourceTree = "<group>"; };
+		8440E2D81ABEA7360088856A /* libskia_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libskia_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libskia_static.a"; sourceTree = "<group>"; };
+		8440E2D91ABEA7360088856A /* libz_static.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libz_static.a; path = "../../osmand/binaries/ios.clang-iphoneos/Debug/libz_static.a"; sourceTree = "<group>"; };
 		844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPurchasesViewController.xib; path = Resources/OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		844499451AAA14E900ACA20D /* OADestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADestinationViewController.xib; path = Resources/OADestinationViewController.xib; sourceTree = "<group>"; };
 		844499491AAA1FC000ACA20D /* bt_buy_addon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bt_buy_addon.png; path = Resources/Icons/bt_buy_addon.png; sourceTree = "<group>"; };
@@ -2577,6 +2599,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */,
+				8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */,
+				8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */,
+				8440E2DD1ABEA7370088856A /* libicu4c_static.a in Frameworks */,
+				8440E2DE1ABEA7370088856A /* libjpeg_static.a in Frameworks */,
+				8440E2DF1ABEA7370088856A /* libpng_static.a in Frameworks */,
+				8440E2E01ABEA7370088856A /* libprotobuf_static.a in Frameworks */,
+				8440E2E11ABEA7370088856A /* libskia_static.a in Frameworks */,
+				8440E2E21ABEA7370088856A /* libz_static.a in Frameworks */,
+				8440E2D01ABEA7200088856A /* libarchive_static.a in Frameworks */,
+				8440E2CE1ABEA7100088856A /* libOsmAndCore_static_standalone.a in Frameworks */,
 				84C41E7B1AB9EEA20089EABB /* libxml2.dylib in Frameworks */,
 				84185A821AA9A00D00F70328 /* StoreKit.framework in Frameworks */,
 				7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */,
@@ -3247,6 +3280,17 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8440E2D11ABEA7360088856A /* libexpat_static.a */,
+				8440E2D21ABEA7360088856A /* libgdal_static.a */,
+				8440E2D31ABEA7360088856A /* libgif_static.a */,
+				8440E2D41ABEA7360088856A /* libicu4c_static.a */,
+				8440E2D51ABEA7360088856A /* libjpeg_static.a */,
+				8440E2D61ABEA7360088856A /* libpng_static.a */,
+				8440E2D71ABEA7360088856A /* libprotobuf_static.a */,
+				8440E2D81ABEA7360088856A /* libskia_static.a */,
+				8440E2D91ABEA7360088856A /* libz_static.a */,
+				8440E2CF1ABEA7200088856A /* libarchive_static.a */,
+				8440E2CD1ABEA7100088856A /* libOsmAndCore_static_standalone.a */,
 				84C41E781AB9EE8F0089EABB /* libxml2.dylib */,
 				84185A801AA99FFF00F70328 /* StoreKit.framework */,
 				BB48B5C019A88727008FCCA0 /* libz_static.a */,

@@ -10,6 +10,8 @@
 
 #import <UIKit/UIKit.h>
 
+#import <HockeySDK/HockeySDK.h>
+
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
@@ -37,8 +39,10 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 #if defined(OSMAND_IOS_DEV)
-    // Initialize TestFlight SDK
-    //[TestFlight takeOff:@"c3934cca-2d7e-4c09-a019-c7018422633f"];
+    // Initialize HockeyApp SDK
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"d0e3531de653eb594ed116297d16a284"];
+    [[BITHockeyManager sharedHockeyManager] startManager];
+    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
 #endif // defined(OSMAND_IOS_DEV)
 
     // Configure device

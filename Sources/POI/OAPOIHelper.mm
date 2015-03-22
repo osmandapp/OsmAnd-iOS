@@ -166,7 +166,8 @@
         searchCriteria->sourceFilter = ([self]
                                         (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
                                         {
-                                            return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
+                                            return true;
+                                            //return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
                                             
                                         });
         

@@ -21,6 +21,8 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OADefaultFavorite.h"
+#import "OANativeUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -497,7 +499,8 @@ typedef enum
     id obj = _dataArray[indexPath.row];
 
     if ([obj isKindOfClass:[OAPOI class]]) {
-        //OAPOI* item = obj;
+        OAPOI* item = obj;
+        [self goToPoint:item.latitude longitude:item.longitude name:item.name];
     
     } else if ([obj isKindOfClass:[OAPOIType class]]) {
         OAPOIType* item = obj;
@@ -720,6 +723,33 @@ typedef enum
         self.searchString = nil;
     
     [self generateData];
+}
+
+- (void)goToPoint:(double)latitude longitude:(double)longitude name:(NSString *)name
+{
+    OARootViewController* rootViewController = [OARootViewController instance];
+    [rootViewController closeMenuAndPanelsAnimated:YES];
+    
+    const OsmAnd::LatLon latLon(latitude, longitude);
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
+    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoom animated:YES];
+    [mapVC showContextPinMarker:latitude longitude:longitude];
+    
+    CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
+    touchPoint.x *= mapRendererView.contentScaleFactor;
+    touchPoint.y *= mapRendererView.contentScaleFactor;
+
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                        object: self
+                                                      userInfo:@{@"title" : name,
+                                                                 @"lat": [NSNumber numberWithDouble:latLon.latitude],
+                                                                 @"lon": [NSNumber numberWithDouble:latLon.longitude],
+                                                                 @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
+                                                                 @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
+
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UITextFieldDelegate

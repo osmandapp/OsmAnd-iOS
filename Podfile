@@ -68,7 +68,8 @@ end
 def adjustConfigFile(xcconfigFilename)
     xcconfig = File.read(xcconfigFilename)
     xcconfig = xcconfig.gsub(/HEADER_SEARCH_PATHS = "/, "HEADER_SEARCH_PATHS = $(inherited) \"")
-    xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\" \"")
+    xcconfig = xcconfig.gsub(/LIBRARY_SEARCH_PATHS = "/, "LIBRARY_SEARCH_PATHS = $(inherited) \"")
+    xcconfig = xcconfig.gsub(/FRAMEWORK_SEARCH_PATHS = "/, "FRAMEWORK_SEARCH_PATHS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/OTHER_CFLAGS = "/, "OTHER_CFLAGS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/OTHER_LDFLAGS = "/, "OTHER_LDFLAGS = $(inherited) \"")
     File.open(xcconfigFilename, "w") { |file| file << xcconfig }

@@ -5,7 +5,7 @@ platform :ios, '6.0'
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
 
-#link_with 'OsmAnd Maps'
+link_with 'OsmAnd Maps'
 pod 'AFNetworking', '~> 2.5.1'
 pod 'AFDownloadRequestOperation', '~> 2.0.1'
 pod 'JASidePanels', '~> 1.3.2'
@@ -26,9 +26,9 @@ pod 'TPKeyboardAvoiding', '~> 1.2.6'
 pod 'HTAutocompleteTextField', '~> 1.3.1'
 
 # Development-only dependencies
-#target :dev do
-#    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
-#end
+target :dev do
+    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
+end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

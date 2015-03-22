@@ -25,22 +25,24 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+typedef enum
+{
+    EPOIScopeUndefined = -1,
+    EPOIScopeCategory = 0,
+    EPOIScopeType,
+    
+} EPOIScope;
+
 @interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, OAPOISearchDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
-@property (weak, nonatomic) IBOutlet UIButton *btnBack;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 
 @property (nonatomic) NSMutableArray* dataArray;
 @property (nonatomic) NSMutableArray* searchDataArray;
 @property (nonatomic) NSString* searchString;
-
-@property (nonatomic) NSString* poiTypeName;
-@property (nonatomic) NSString* searchStringType;
-@property (nonatomic) NSString* categoryName;
-@property (nonatomic) NSString* searchStringCategory;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
@@ -64,6 +66,12 @@
     BOOL _needRestartSearch;
     BOOL _ignoreSearchResult;
     BOOL _initData;
+    
+    EPOIScope _currentScope;
+    NSString *_currentScopePoiTypeName;
+    NSString *_currentScopePoiTypeNameLoc;
+    NSString *_currentScopeCategoryName;
+    NSString *_currentScopeCategoryNameLoc;
 }
 
 - (instancetype)init
@@ -123,9 +131,7 @@
 {
     [super viewDidAppear:animated];
     
-    if (!_searchString && !_poiTypeName && !_categoryName)
-        [self.textField becomeFirstResponder];
-    
+    [self.textField becomeFirstResponder];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -140,53 +146,6 @@
     [self unregisterKeyboardNotifications];
 }
 
--(void)updateLayout:(BOOL)animated
-{
-    if (animated) {
-
-        [UIView animateWithDuration:.3 animations:^{
-            if (!_poiTypeName && !_categoryName) {
-                _btnBack.alpha = 0.0;
-                _textField.frame = CGRectMake(8.0, 25.0, DeviceScreenWidth - 82.0, 30.0);
-            } else {
-                _btnBack.alpha = 1.0;
-                _textField.frame = CGRectMake(44.0, 25.0, DeviceScreenWidth - 118.0, 30.0);
-            }
-        }];
-        
-    } else {
-        if (!_poiTypeName && !_categoryName) {
-            _btnBack.alpha = 0.0;
-            _textField.frame = CGRectMake(8.0, 25.0, DeviceScreenWidth - 82.0, 30.0);
-        } else {
-            _btnBack.alpha = 1.0;
-            _textField.frame = CGRectMake(44.0, 25.0, DeviceScreenWidth - 118.0, 30.0);
-        }
-    }
-}
-
--(void)viewWillLayoutSubviews
-{
-    [self updateLayout:NO];
-}
-
--(IBAction)btnBackClick:(id)sender
-{
-    if (_poiTypeName) {
-        self.poiTypeName = nil;
-        self.searchString = self.searchStringType;
-        self.searchStringType = nil;
-        [self updateTextField:self.searchString];
-        [self updateLayout:YES];
-        
-    } else if (_categoryName) {
-        self.categoryName = nil;
-        self.searchString = self.searchStringCategory;
-        self.searchStringCategory = nil;
-        [self updateTextField:self.searchString];
-        [self updateLayout:YES];
-    }
-}
 
 -(void)showWaitingIndicator
 {
@@ -361,39 +320,18 @@
 
 -(void)generateData {
     
+    [self acquireCurrentScope];
+
     [_lock lock];
     @try {
         
         if (self.searchString) {
             
-            //if (!_categoryName) {
-                _ignoreSearchResult = YES;
-                [self updateSearchResults];
-            //} else {
-            //    _ignoreSearchResult = NO;
-            //    dispatch_async(dispatch_get_main_queue(), ^{
-            //        [self startCoreSearch];
-            //    });
-            //    return;
-            //}
-            
-        } else if (self.poiTypeName) {
-            
-            _ignoreSearchResult = NO;
-            _poiInList = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self startCoreSearch];
-            });
-            return;
-            
-        } else if (self.categoryName) {
-            
             _ignoreSearchResult = YES;
-            _poiInList = NO;
-            NSArray *sortedArrayItems = [[[OAPOIHelper sharedInstance] poiTypesForCategory:_categoryName] sortedArrayUsingComparator:^NSComparisonResult(OAPOIType* obj1, OAPOIType* obj2) {
-                return [[obj1.nameLocalized lowercaseString] compare:[obj2.nameLocalized lowercaseString]];
-            }];
-            self.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateSearchResults];
+                [self refreshTable];
+            });
             
         } else {
             
@@ -403,15 +341,19 @@
                 return [[obj1.nameLocalized lowercaseString] compare:[obj2.nameLocalized lowercaseString]];
             }];
             self.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
+            [self refreshTable];
         }
-        
-        [_tableView reloadData];
-        if (_dataArray.count > 0)
-            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         
     } @finally {
         [_lock unlock];
     }
+}
+
+-(void)refreshTable
+{
+    [_tableView reloadData];
+    if (_dataArray.count > 0)
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 -(void)setupView {
@@ -436,8 +378,16 @@
 
     // workaround for superfast typers
     if (indexPath.row >= _dataArray.count) {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-        UITableViewCell *cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+        }
+        [cell.textView setText:@""];
         return cell;
     }
     
@@ -459,7 +409,7 @@
             
             OAPOI* item = obj;
             [cell.titleView setText:item.nameLocalized];
-            cell.titleIcon.image = [item.type icon];
+            cell.titleIcon.image = [item icon];
             [cell.descView setText:item.type.nameLocalized];
             
             [cell.distanceView setText:item.distance];
@@ -551,19 +501,13 @@
     
     } else if ([obj isKindOfClass:[OAPOIType class]]) {
         OAPOIType* item = obj;
-        self.poiTypeName = item.name;
-        self.searchStringType = self.searchString;
-        self.searchString = nil;
-        [self updateTextField:nil];
-        [self updateLayout:YES];
+        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
+        [self updateTextField:self.searchString];
         
     } else if ([obj isKindOfClass:[OAPOICategory class]]) {
         OAPOICategory* item = obj;
-        self.categoryName = item.name;
-        self.searchStringCategory = self.searchString;
-        self.searchString = nil;
-        [self updateTextField:nil];
-        [self updateLayout:YES];
+        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
+        [self updateTextField:self.searchString];
     }
 }
 
@@ -572,6 +516,99 @@
     NSString *t = (text ? text : @"");
     _textField.text = t;
     [self generateData];
+}
+
+-(NSString *)firstToken:(NSString *)text
+{
+    if (!text || text.length == 0)
+        return nil;
+    
+    NSRange r = [text rangeOfString:@" "];
+    if (r.length == 0)
+        return text;
+    else
+        return [text substringToIndex:r.location];
+}
+
+-(NSString *)nextTokens:(NSString *)text
+{
+    if (!text || text.length == 0)
+        return nil;
+    
+    NSRange r = [text rangeOfString:@" "];
+    if (r.length == 0)
+        return nil;
+    else if (text.length > r.location + 1)
+        return [text substringFromIndex:r.location + 1];
+    else
+        return nil;
+}
+
+-(void)acquireCurrentScope
+{
+    NSString *firstToken = [self firstToken:self.searchString];
+    if (!firstToken)
+        return;
+    
+    NSString *nextStr = [[[self nextTokens:self.searchString] lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+    
+    if (_currentScope != EPOIScopeUndefined && [firstToken isEqualToString:currentScopeNameLoc]) {
+        
+        if (_currentScope == EPOIScopeCategory && nextStr) {
+            NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
+            for (OAPOIType *poi in searchableContent) {
+                
+                if ([nextStr isEqualToString:[poi.nameLocalized lowercaseString]]) {
+                    _currentScope = EPOIScopeType;
+                    _currentScopePoiTypeName = poi.name;
+                    _currentScopePoiTypeNameLoc = poi.nameLocalized;
+                    _currentScopeCategoryName = poi.category;
+                    _currentScopeCategoryNameLoc = poi.categoryLocalized;
+                    
+                    self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:@" "];
+                    [self updateTextField:self.searchString];
+                    break;
+                }
+            }
+        }
+        return;
+    }
+    
+    _currentScope = EPOIScopeUndefined;
+    _currentScopePoiTypeName = nil;
+    _currentScopePoiTypeNameLoc = nil;
+    _currentScopeCategoryName = nil;
+    _currentScopeCategoryNameLoc = nil;
+
+    NSString *str = [firstToken lowercaseString];
+    NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
+    for (OAPOIType *poi in searchableContent) {
+        
+        if ([str isEqualToString:[poi.nameLocalized lowercaseString]]) {
+            _currentScope = EPOIScopeType;
+            _currentScopePoiTypeName = poi.name;
+            _currentScopePoiTypeNameLoc = poi.nameLocalized;
+            _currentScopeCategoryName = poi.category;
+            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+            
+            self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:@" "];
+            [self updateTextField:self.searchString];
+            break;
+            
+        } else if ([str isEqualToString:[poi.categoryLocalized lowercaseString]]) {
+            _currentScope = EPOIScopeCategory;
+            _currentScopePoiTypeName = nil;
+            _currentScopePoiTypeNameLoc = nil;
+            _currentScopeCategoryName = poi.category;
+            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+
+            self.searchString = [_currentScopeCategoryNameLoc stringByAppendingString:@" "];
+            [self updateTextField:self.searchString];
+            break;
+        }
+    }
+    
 }
 
 - (void)updateSearchResults
@@ -604,8 +641,10 @@
         };
         
         NSString *str = [searchString lowercaseString];
+        if (_currentScope != EPOIScopeUndefined)
+            str = [[self nextTokens:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        if (!_categoryName && !_poiTypeName) {
+        if (_currentScope == EPOIScopeUndefined) {
             NSArray *sortedCategories = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
                 return [[obj1.nameLocalized lowercaseString] compare:[obj2.nameLocalized lowercaseString]];
             }];
@@ -613,18 +652,21 @@
             for (OAPOICategory *c in sortedCategories)
                 if ([self beginWithOrAfterSpace:str text:c.nameLocalized])
                     [_dataArray addObject:c];
+
         }
 
-        if (!_poiTypeName) {
+        if (_currentScope != EPOIScopeType) {
             NSMutableArray *typesArray = [NSMutableArray array];
             for (OAPOIType *poi in searchableContent) {
                 
-                if (_categoryName && ![poi.category isEqualToString:_categoryName])
+                if (_currentScopeCategoryName && ![poi.category isEqualToString:_currentScopeCategoryName])
                     continue;
-                if (_poiTypeName && ![poi.name isEqualToString:_poiTypeName])
+                if (_currentScopePoiTypeName && ![poi.name isEqualToString:_currentScopePoiTypeName])
                     continue;
-                
-                if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
+
+                if (!str)
+                    [typesArray addObject:poi];
+                else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
                     [typesArray addObject:poi];
                 else if ([self beginWithOrAfterSpace:str text:poi.filter])
                     [typesArray addObject:poi];
@@ -634,7 +676,12 @@
             [typesArray sortUsingComparator:comparator];
             self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:typesArray] mutableCopy];
         }
-        
+
+        _ignoreSearchResult = NO;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self startCoreSearch];
+        });
+
     } @finally {
         [_lock unlock];
     }
@@ -704,12 +751,20 @@
     
     [self showWaitingIndicator];
     
+    OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+    
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-    [[OAPOIHelper sharedInstance] setVisibleScreenDimensions:[mapRendererView getVisibleBBox31] zoomLevel:mapRendererView.zoomLevel];
-
+    [poiHelper setVisibleScreenDimensions:[mapRendererView getVisibleBBox31] zoomLevel:mapRendererView.zoomLevel];
+    CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    poiHelper.myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[OAPOIHelper sharedInstance] findPOIsByKeyword:self.searchString categoryName:self.categoryName poiTypeName:self.poiTypeName];
+
+        if (_currentScope == EPOIScopeUndefined)
+            [poiHelper findPOIsByKeyword:self.searchString];
+        else
+            [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusMeters:1000.0];
     });
 }
 
@@ -736,7 +791,7 @@
         _poiInList = _searchDataArray.count > 0;
         
         [_lock lock];
-        self.dataArray = [NSMutableArray arrayWithArray:self.searchDataArray];
+        self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:self.searchDataArray] mutableCopy];
         self.searchDataArray = nil;
         [_lock unlock];
         

@@ -21,4 +21,6 @@
 @property (nonatomic) NSString *distance;
 @property (nonatomic) double direction;
 
+- (UIImage *)icon;
+
 @end

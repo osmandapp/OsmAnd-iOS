@@ -26,8 +26,7 @@
 @property (nonatomic, readonly) NSArray *poiTypes;
 @property (nonatomic, readonly) NSDictionary *poiCategories;
 
-@property (nonatomic, assign) double centerLat;
-@property (nonatomic, assign) double centerLon;
+@property (nonatomic) OsmAnd::PointI myLocation;
 
 @property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
 
@@ -38,7 +37,8 @@
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
--(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type;
+-(void)findPOIsByKeyword:(NSString *)keyword;
+-(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusMeters:(double)radius;
 -(BOOL)breakSearch;
 
 @end

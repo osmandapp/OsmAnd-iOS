@@ -10,4 +10,9 @@
 
 @implementation OAPOI
 
+- (UIImage *)icon
+{
+    return [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
+}
+
 @end

@@ -23,6 +23,7 @@
 #include <OsmAndCore/Search/ISearch.h>
 #include <OsmAndCore/Search/BaseSearch.h>
 #include <OsmAndCore/Search/AmenitiesByNameSearch.h>
+#include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAPOIHelper {
@@ -50,7 +51,7 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
-        _searchLimit = 5000000;
+        _searchLimit = 50;
         _isSearchDone = YES;
         [self readPOI];
         [self updatePhrases];
@@ -116,30 +117,17 @@
     _zoomLevel = zoom;
 }
 
--(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName
+-(void)findPOIsByKeyword:(NSString *)keyword
+{
+    [self findPOIsByKeyword:keyword categoryName:nil poiTypeName:nil radiusMeters:0.0];
+}
+
+-(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radiusMeters:(double)radius
 {
     _isSearchDone = NO;
     _breakSearch = NO;
     
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
-    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
-    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
-
-    searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
-    QHash<QString, QStringList> *categoriesFilter = new QHash<QString, QStringList>();
-    if (categoryName && typeName) {
-        categoriesFilter->insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
-    } else if (categoryName) {
-        categoriesFilter->insert(QString::fromNSString(categoryName), QStringList());
-    }
-
-    searchCriteria->categoriesFilter = *categoriesFilter;
-    searchCriteria->sourceFilter = ([self]
-                                    (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
-                                    {
-                                        return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
-                                        
-                                    });
     
     OsmAnd::FunctorQueryController *ctrl = new OsmAnd::FunctorQueryController([self]
                                        (const OsmAnd::FunctorQueryController* const controller)
@@ -150,15 +138,59 @@
     
     _limitCounter = _searchLimit;
     
-    search->performSearch(*searchCriteria,
-                          [self]
-                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                          {
-                              [self onPOIFound:resultEntry];
-                          },
-                          ctrl);
+    
+    if (radius == 0.0) {
+        
+        const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+        
+        searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
+        searchCriteria->sourceFilter = ([self]
+                                        (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
+                                        {
+                                            return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
+                                            
+                                        });
+        
+        const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+        search->performSearch(*searchCriteria,
+                              [self]
+                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                              {
+                                  [self onPOIFound:resultEntry];
+                              },
+                              ctrl);
+    } else {
+        
+        const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+        
+        searchCriteria->sourceFilter = ([self]
+                                        (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
+                                        {
+                                            return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
+                                            
+                                        });
+        
+        QHash<QString, QStringList> *categoriesFilter = new QHash<QString, QStringList>();
+        if (categoryName && typeName) {
+            categoriesFilter->insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
+        } else if (categoryName) {
+            categoriesFilter->insert(QString::fromNSString(categoryName), QStringList());
+        }
+        searchCriteria->categoriesFilter = *categoriesFilter;
+        searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, _myLocation);
+        
+        const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+        search->performSearch(*searchCriteria,
+                              [self]
+                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                              {
+                                  [self onPOIFound:resultEntry];
+                              },
+                              ctrl);
+        free(categoriesFilter);
+    }
+    
     free(ctrl);
-    free(categoriesFilter);
     
     _isSearchDone = YES;
     

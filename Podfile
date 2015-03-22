@@ -28,6 +28,8 @@ pod 'HTAutocompleteTextField', '~> 1.3.1'
 # Development-only dependencies
 target :dev do
     link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
+
+    pod 'HockeySDK', '~> 3.6.2'
 end
 
 # Make changes to Pods.xcconfig: 

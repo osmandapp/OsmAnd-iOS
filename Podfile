@@ -14,7 +14,7 @@ pod 'UIAlertView-Blocks', '~> 1.0'
 pod 'UIActionSheet-Blocks', '~> 1.0.1'
 pod 'DACircularProgress', '~> 2.2.0'
 pod 'FFCircularProgressView', '~> 0.4'
-pod 'QuickDialog/Core', '~> 1.0', :head
+pod 'QuickDialog/Core', :head
 pod 'QuickDialog/Extras', '~> 1.0'
 pod 'FormatterKit', '~> 1.8.0'
 pod 'SWTableViewCell', '~> 0.3.7'

@@ -14,7 +14,6 @@
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
 
-#include <OsmAndCore.h>
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
@@ -31,6 +30,10 @@
     OsmAndAppInstance _app;
     int _limitCounter;
     BOOL _breakSearch;
+    NSDictionary *_phrases;
+
+    OsmAnd::AreaI _visibleArea;
+    OsmAnd::ZoomLevel _zoomLevel;
 }
 
 + (OAPOIHelper *)sharedInstance {
@@ -47,7 +50,7 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
-        _searchLimit = 50;
+        _searchLimit = 5000000;
         _isSearchDone = YES;
         [self readPOI];
         [self updatePhrases];
@@ -68,26 +71,30 @@
 
 - (void)updatePhrases
 {
-    NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml"];
+    if (!_phrases) {
+        
+        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml"];
+        
+        OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
+        [parser getPhrasesSync:phrasesXmlPath];
+        _phrases = parser.phrases;
+    }
     
-    OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
-    [parser getPhrasesSync:phrasesXmlPath];
-    
-    if (parser.phrases.count > 0) {
+    if (_phrases.count > 0) {
         for (OAPOIType *poiType in _poiTypes) {
-            poiType.nameLocalized = [self getPhrase:poiType.name parser:parser];
-            poiType.categoryLocalized = [self getPhrase:poiType.category parser:parser];
-            poiType.filter = [self getPhrase:poiType.filter parser:parser];
+            poiType.nameLocalized = [self getPhrase:poiType.name];
+            poiType.categoryLocalized = [self getPhrase:poiType.category];
+            poiType.filter = [self getPhrase:poiType.filter];
         }
         for (OAPOICategory *c in _poiCategories.allKeys) {
-            c.nameLocalized = [self getPhrase:c.name parser:parser];
+            c.nameLocalized = [self getPhrase:c.name];
         }
     }
 }
 
--(NSString *)getPhrase:(NSString *)name parser:(OAPhrasesParser *)parser
+-(NSString *)getPhrase:(NSString *)name 
 {
-    NSString *phrase = [parser.phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
         return name;
     else
@@ -103,10 +110,14 @@
     return nil;
 }
 
+-(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
+{
+    _visibleArea = area;
+    _zoomLevel = zoom;
+}
+
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName
 {
-    NSLog(@"++++++++++++++++++++++++");
-
     _isSearchDone = NO;
     _breakSearch = NO;
     
@@ -126,11 +137,8 @@
     searchCriteria->sourceFilter = ([self]
                                     (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
                                     {
-                                        for (const auto& mapSection : obfInfo->mapSections) {
-                                            NSLog(@"obfMapName = %@", mapSection->name.toNSString());
-                                        }
+                                        return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
                                         
-                                        return true;
                                     });
     
     OsmAnd::FunctorQueryController *ctrl = new OsmAnd::FunctorQueryController([self]
@@ -157,8 +165,6 @@
     if (_delegate)
         [_delegate searchDone:_breakSearch];
 
-    NSLog(@"---------------------------");
-
 }
 
 -(BOOL)breakSearch
@@ -171,7 +177,6 @@
 {
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
-    //NSLog(@"amenity.nativeName = %@ lat = %f, lon = %f", amenity->nativeName.toNSString(), latLon.latitude, latLon.longitude);
     
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latLon.latitude;
@@ -179,32 +184,23 @@
     poi.name = amenity->nativeName.toNSString();
     poi.nameLocalized = amenity->nativeName.toNSString();
     
-    //for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(amenity->localizedNames)))
-    //{ NSLog(@"localized %@ = %@", entry.key().toNSString(), entry.value().toNSString()); }
-
-    /*
     if (amenity->categories.isEmpty())
         return;
-    const auto catIds = amenity->categories.first();
-    NSLog(@"catId main=%d sub=%d", catIds.mainCategoryIndex, catIds.subCategoryIndex);
     
-    const auto& values = amenity->getDecodedValues();
+    //for (const auto catIds : amenity->categories)
+    //    NSLog(@"catId (%d) main=%d sub=%d", amenity->categories.count(), catIds.getMainCategoryIndex(), catIds.getSubCategoryIndex());
     
-    for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(values)))
-    { NSLog(@"getDecodedValues %@ = %@", entry.key().toNSString(), entry.value().toNSString()); }
-
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
         return;
     NSString *category = catList.keys().first().toNSString();
     NSString *subCategory = catList.value(catList.keys().first()).first().toNSString();
-    NSLog(@"cat = %@ subCat = %@", category, subCategory);
     
     OAPOIType *type = [[OAPOIType alloc] init];
-    type.name = @"poi_shop_name";
-    type.nameLocalized = @"POI Type Name";
+    type.category = category;
+    type.name = subCategory;
+    type.nameLocalized = [self getPhrase:subCategory];
     poi.type = type;
-     */
     
     _limitCounter--;
     

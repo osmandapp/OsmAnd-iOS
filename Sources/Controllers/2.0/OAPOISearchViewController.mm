@@ -13,10 +13,14 @@
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIHelper.h"
-#import "OAPointTableViewCell.h"
+#import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
+
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapRendererView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -363,14 +367,14 @@
         if (self.searchString) {
             
             //if (!_categoryName) {
-            //    _ignoreSearchResult = YES;
-            //    [self updateSearchResults];
+                _ignoreSearchResult = YES;
+                [self updateSearchResults];
             //} else {
-            _ignoreSearchResult = NO;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self startCoreSearch];
-            });
-            return;
+            //    _ignoreSearchResult = NO;
+            //    dispatch_async(dispatch_get_main_queue(), ^{
+            //        [self startCoreSearch];
+            //    });
+            //    return;
             //}
             
         } else if (self.poiTypeName) {
@@ -441,14 +445,14 @@
     
     if ([obj isKindOfClass:[OAPOI class]]) {
         
-        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
+        static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
         
-        OAPointTableViewCell* cell;
-        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        OAPointDescCell* cell;
+        cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
-            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+            cell = (OAPointDescCell *)[nib objectAtIndex:0];
         }
         
         if (cell) {
@@ -456,6 +460,7 @@
             OAPOI* item = obj;
             [cell.titleView setText:item.nameLocalized];
             cell.titleIcon.image = [item.type icon];
+            [cell.descView setText:item.type.nameLocalized];
             
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
@@ -699,6 +704,10 @@
     
     [self showWaitingIndicator];
     
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
+    [[OAPOIHelper sharedInstance] setVisibleScreenDimensions:[mapRendererView getVisibleBBox31] zoomLevel:mapRendererView.zoomLevel];
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[OAPOIHelper sharedInstance] findPOIsByKeyword:self.searchString categoryName:self.categoryName poiTypeName:self.poiTypeName];
     });

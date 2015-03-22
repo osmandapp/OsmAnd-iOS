@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#include <OsmAndCore.h>
 
 @class OAPOI;
 
@@ -25,12 +26,17 @@
 @property (nonatomic, readonly) NSArray *poiTypes;
 @property (nonatomic, readonly) NSDictionary *poiCategories;
 
+@property (nonatomic, assign) double centerLat;
+@property (nonatomic, assign) double centerLon;
+
 @property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
 
 + (OAPOIHelper *)sharedInstance;
 
 - (void)updatePhrases;
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
+
+-(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type;
 -(BOOL)breakSearch;

@@ -90,6 +90,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
 - (BOOL)convert:(OsmAnd::PointI64*)pos64 toScreen64:(CGPoint*)point;
 
+- (OsmAnd::AreaI)getVisibleBBox31;
+
 - (void)dumpResourcesInfo;
 
 @property(readonly) OAObservable* framePreparedObservable;

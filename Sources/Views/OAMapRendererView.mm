@@ -364,6 +364,11 @@
     return res;
 }
 
+- (OsmAnd::AreaI)getVisibleBBox31
+{
+    return _renderer->getVisibleBBox31();
+}
+
 - (void)dumpResourcesInfo
 {
     _renderer->dumpResourcesInfo();

@@ -299,6 +299,8 @@
 
 - (CLLocation*)lastKnownLocation
 {
+    //return [[CLLocation alloc] initWithLatitude:44.953197568579 longitude:34.097549412400];
+
     if (_lastLocation != nil)
         return _lastLocation;
     return [_manager.location copy];

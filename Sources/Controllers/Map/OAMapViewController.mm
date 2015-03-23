@@ -1120,10 +1120,11 @@
         if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
             const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
             
-            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
-            { NSLog(@"%d = %@", entry.key(), entry.value().toNSString()); }
+            //for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
+            //{ NSLog(@"%d = %@", entry.key(), entry.value().toNSString()); }
             
             caption = mapObject->getCaptionInNativeLanguage().toNSString();
+            //NSLog(@"caption = %@", caption);
             
             if (!caption || caption.length == 0) {
                 for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))

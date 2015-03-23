@@ -629,7 +629,9 @@ typedef enum
             NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
             for (OAPOIType *poi in searchableContent) {
                 
-                if ([nextStr localizedCaseInsensitiveCompare:poi.nameLocalized] == NSOrderedSame) {
+                if ([nextStr localizedCaseInsensitiveCompare:poi.nameLocalized] == NSOrderedSame &&
+                    [_currentScopeCategoryName isEqualToString:poi.category])
+                {
                     _currentScope = EPOIScopeType;
                     _currentScopePoiTypeName = poi.name;
                     _currentScopePoiTypeNameLoc = poi.nameLocalized;

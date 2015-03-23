@@ -429,7 +429,8 @@
 
 - (void)searchButtonClick:(id)sender {
 
-    _searchPOI = [[OAPOISearchViewController alloc] init];
+    if (!_searchPOI)
+        _searchPOI = [[OAPOISearchViewController alloc] init];
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
     
 }

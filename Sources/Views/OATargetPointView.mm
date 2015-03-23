@@ -199,12 +199,12 @@
 
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8 The location was shared with you by OsmAnd
     
-    UIImage *image = [self.mapView getGLScreenshot];
+    //UIImage *image = [self.mapView getGLScreenshot];
     
     NSString *string = [NSString stringWithFormat:@"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d The location was shared with you by OsmAnd", _lat, _lon, _zoom];
     
     UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
+    [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]
                                       applicationActivities:nil];
     
     [self.navController presentViewController:activityViewController

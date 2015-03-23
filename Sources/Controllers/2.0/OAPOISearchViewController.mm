@@ -27,6 +27,8 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+#define kMaxTypeRows 5
+
 typedef enum
 {
     EPOIScopeUndefined = -1,
@@ -111,12 +113,12 @@ typedef enum
 
     [OAPOIHelper sharedInstance].delegate = self;
     
-    [self showSearchIcon];
+    [self generateData];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
     
-    [self generateData];
+    [self showSearchIcon];
     [self setupView];
     
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -272,16 +274,16 @@ typedef enum
                     NSString *name2 = @"";
                     
                     if ([obj1 isKindOfClass:[OAPOIType class]])
-                        name1 = [((OAPOIType *)obj1).nameLocalized lowercaseString];
+                        name1 = ((OAPOIType *)obj1).nameLocalized;
                     else if ([obj1 isKindOfClass:[OAPOICategory class]])
-                        name1 = [((OAPOICategory *)obj1).nameLocalized lowercaseString];
+                        name1 = ((OAPOICategory *)obj1).nameLocalized;
                     
                     if ([obj2 isKindOfClass:[OAPOIType class]])
-                        name2 = [((OAPOIType *)obj2).nameLocalized lowercaseString];
+                        name2 = ((OAPOIType *)obj2).nameLocalized;
                     else if ([obj2 isKindOfClass:[OAPOICategory class]])
-                        name2 = [((OAPOICategory *)obj2).nameLocalized lowercaseString];
+                        name2 = ((OAPOICategory *)obj2).nameLocalized;
                     
-                    return [name1 compare:name2];
+                    return [name1 localizedCaseInsensitiveCompare:name2];
                 }
             }];
             [_dataArray setArray:sortedArray];
@@ -340,7 +342,7 @@ typedef enum
             _ignoreSearchResult = YES;
             _poiInList = NO;
             NSArray *sortedArrayItems = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
-                return [[obj1.nameLocalized lowercaseString] compare:[obj2.nameLocalized lowercaseString]];
+                return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
             }];
             self.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
             [self refreshTable];
@@ -358,11 +360,8 @@ typedef enum
         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
--(void)setupView {
-    
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableView reloadData];
-    
+-(void)setupView
+{
 }
 
 
@@ -500,7 +499,7 @@ typedef enum
 
     if ([obj isKindOfClass:[OAPOI class]]) {
         OAPOI* item = obj;
-        [self goToPoint:item.latitude longitude:item.longitude name:item.name];
+        [self goToPoint:item.latitude longitude:item.longitude name:item.nameLocalized];
     
     } else if ([obj isKindOfClass:[OAPOIType class]]) {
         OAPOIType* item = obj;
@@ -517,8 +516,11 @@ typedef enum
 -(void)updateTextField:(NSString *)text
 {
     NSString *t = (text ? text : @"");
-    _textField.text = t;
-    [self generateData];
+    if (![_textField.text isEqualToString:t])
+    {
+        _textField.text = t;
+        [self generateData];
+    }
 }
 
 -(NSString *)firstToken:(NSString *)text
@@ -530,8 +532,8 @@ typedef enum
     if (r.length == 0)
         return text;
     else
-        return [text substringToIndex:r.location];
-}
+        return [text substringToIndex:r.location + 1];
+} 
 
 -(NSString *)nextTokens:(NSString *)text
 {
@@ -553,23 +555,25 @@ typedef enum
     if (!firstToken)
         return;
     
-    NSString *nextStr = [[[self nextTokens:self.searchString] lowercaseString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
+    
+    NSString *nextStr = [[self nextTokens:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
     
-    if (_currentScope != EPOIScopeUndefined && [firstToken isEqualToString:currentScopeNameLoc]) {
+    if (_currentScope != EPOIScopeUndefined && [firstToken isEqualToString:(trailingSpace ? [currentScopeNameLoc stringByAppendingString:@" "] : currentScopeNameLoc)]) {
         
         if (_currentScope == EPOIScopeCategory && nextStr) {
             NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
             for (OAPOIType *poi in searchableContent) {
                 
-                if ([nextStr isEqualToString:[poi.nameLocalized lowercaseString]]) {
+                if ([nextStr localizedCaseInsensitiveCompare:poi.nameLocalized] == NSOrderedSame) {
                     _currentScope = EPOIScopeType;
                     _currentScopePoiTypeName = poi.name;
                     _currentScopePoiTypeNameLoc = poi.nameLocalized;
                     _currentScopeCategoryName = poi.category;
                     _currentScopeCategoryNameLoc = poi.categoryLocalized;
                     
-                    self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:@" "];
+                    self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
                     [self updateTextField:self.searchString];
                     break;
                 }
@@ -578,38 +582,62 @@ typedef enum
         return;
     }
     
-    _currentScope = EPOIScopeUndefined;
-    _currentScopePoiTypeName = nil;
-    _currentScopePoiTypeNameLoc = nil;
-    _currentScopeCategoryName = nil;
-    _currentScopeCategoryNameLoc = nil;
+    EPOIScope prevScope = _currentScope;
+    NSString *prevScopeTypeName = _currentScopePoiTypeName;
+    NSString *prevScopeTypeNameLoc = _currentScopePoiTypeNameLoc;
+    NSString *prevScopeCategoryName = _currentScopeCategoryName;
+    NSString *prevScopeCategoryNameLoc = _currentScopeCategoryNameLoc;
+    
+    BOOL found = NO;
 
-    NSString *str = [firstToken lowercaseString];
+    NSString *str = [firstToken stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
-    for (OAPOIType *poi in searchableContent) {
-        
-        if ([str isEqualToString:[poi.nameLocalized lowercaseString]]) {
+    for (OAPOIType *poi in searchableContent)
+    {
+        if ([str localizedCaseInsensitiveCompare:poi.nameLocalized] == NSOrderedSame)
+        {
+            found = YES;
             _currentScope = EPOIScopeType;
             _currentScopePoiTypeName = poi.name;
             _currentScopePoiTypeNameLoc = poi.nameLocalized;
             _currentScopeCategoryName = poi.category;
             _currentScopeCategoryNameLoc = poi.categoryLocalized;
             
-            self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:@" "];
-            [self updateTextField:self.searchString];
             break;
-            
-        } else if ([str isEqualToString:[poi.categoryLocalized lowercaseString]]) {
+        }
+        else if ([str localizedCaseInsensitiveCompare:poi.categoryLocalized] == NSOrderedSame)
+        {
+            found = YES;
             _currentScope = EPOIScopeCategory;
             _currentScopePoiTypeName = nil;
             _currentScopePoiTypeNameLoc = nil;
             _currentScopeCategoryName = poi.category;
             _currentScopeCategoryNameLoc = poi.categoryLocalized;
 
-            self.searchString = [_currentScopeCategoryNameLoc stringByAppendingString:@" "];
-            [self updateTextField:self.searchString];
             break;
         }
+    }
+    
+    if (found)
+    {
+        if (prevScope != _currentScope ||
+            ![prevScopeTypeName isEqualToString:_currentScopePoiTypeName] ||
+            ![prevScopeTypeNameLoc isEqualToString:_currentScopePoiTypeNameLoc] ||
+            ![prevScopeCategoryName isEqualToString:_currentScopeCategoryName] ||
+            ![prevScopeCategoryNameLoc isEqualToString:_currentScopeCategoryNameLoc])
+        {
+            NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+            self.searchString = [currentScopeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
+            [self updateTextField:self.searchString];
+        }
+    }
+    else
+    {
+        _currentScope = EPOIScopeUndefined;
+        _currentScopePoiTypeName = nil;
+        _currentScopePoiTypeNameLoc = nil;
+        _currentScopeCategoryName = nil;
+        _currentScopeCategoryNameLoc = nil;
     }
     
 }
@@ -622,7 +650,8 @@ typedef enum
 - (void)performSearch:(NSString*)searchString
 {
     [_lock lock];
-    @try {
+    @try
+    {
         self.dataArray = [NSMutableArray array];
 
         // If case searchString is empty, there are no results
@@ -636,20 +665,22 @@ typedef enum
         // Select where to look
         NSArray* searchableContent = [OAPOIHelper sharedInstance].poiTypes;
         
-        NSComparator comparator = ^NSComparisonResult(id obj1, id obj2) {
+        NSComparator typeComparator = ^NSComparisonResult(id obj1, id obj2)
+        {
             OAPOIType *item1 = obj1;
             OAPOIType *item2 = obj2;
             
             return [item1.nameLocalized localizedCaseInsensitiveCompare:item2.nameLocalized];
         };
         
-        NSString *str = [searchString lowercaseString];
+        NSString *str = searchString;
         if (_currentScope != EPOIScopeUndefined)
             str = [[self nextTokens:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        if (_currentScope == EPOIScopeUndefined) {
+        if (_currentScope == EPOIScopeUndefined)
+        {
             NSArray *sortedCategories = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
-                return [[obj1.nameLocalized lowercaseString] compare:[obj2.nameLocalized lowercaseString]];
+                return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
             }];
             
             for (OAPOICategory *c in sortedCategories)
@@ -658,8 +689,10 @@ typedef enum
 
         }
 
-        if (_currentScope != EPOIScopeType) {
-            NSMutableArray *typesArray = [NSMutableArray array];
+        if (_currentScope != EPOIScopeType)
+        {
+            NSMutableArray *typesStrictArray = [NSMutableArray array];
+            NSMutableArray *typesOthersArray = [NSMutableArray array];
             for (OAPOIType *poi in searchableContent) {
                 
                 if (_currentScopeCategoryName && ![poi.category isEqualToString:_currentScopeCategoryName])
@@ -668,26 +701,76 @@ typedef enum
                     continue;
 
                 if (!str)
-                    [typesArray addObject:poi];
+                {
+                    if (poi.filter)
+                    {
+                        // todo make filter object later
+                        [typesOthersArray addObject:poi];
+                    }
+                    else
+                    {
+                        [typesOthersArray addObject:poi];
+                    }
+                }
                 else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
-                    [typesArray addObject:poi];
+                {
+                    if ([self containsWord:str inText:poi.nameLocalized])
+                        [typesStrictArray addObject:poi];
+                    else
+                        [typesOthersArray addObject:poi];
+                }
                 else if ([self beginWithOrAfterSpace:str text:poi.filter])
-                    [typesArray addObject:poi];
-                else if ([self beginWithOrAfterSpace:str text:poi.categoryLocalized])
-                    [typesArray addObject:poi];
+                {
+                    [typesOthersArray addObject:poi];
+                }
             }
-            [typesArray sortUsingComparator:comparator];
-            self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:typesArray] mutableCopy];
+
+            if (!str)
+            {
+                [typesOthersArray sortUsingComparator:typeComparator];
+                self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:typesOthersArray] mutableCopy];
+            }
+            else
+            {
+                [typesStrictArray sortUsingComparator:typeComparator];
+                
+                int rowsForOthers = kMaxTypeRows - typesStrictArray.count;
+                if (rowsForOthers > 0)
+                {
+                    [typesOthersArray sortUsingComparator:typeComparator];
+                    if (typesOthersArray.count > rowsForOthers)
+                        [typesOthersArray removeObjectsInRange:NSMakeRange(rowsForOthers, typesOthersArray.count - rowsForOthers)];
+                    
+                    typesStrictArray = [[typesStrictArray arrayByAddingObjectsFromArray:typesOthersArray] mutableCopy];
+                }
+                
+                self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:typesStrictArray] mutableCopy];
+            }
         }
 
         _ignoreSearchResult = NO;
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^
+        {
             [self startCoreSearch];
         });
 
-    } @finally {
+    }
+    @finally
+    {
         [_lock unlock];
     }
+}
+
+- (BOOL)containsWord:(NSString *)str inText:(NSString *)text
+{
+    NSString *src = [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSArray *tokens = [text componentsSeparatedByString:@" "];
+    
+    for (NSString *t in tokens)
+        if ([t localizedCaseInsensitiveCompare:src] == NSOrderedSame)
+            return YES;
+    
+    return NO;
 }
 
 - (BOOL)beginWithOrAfterSpace:(NSString *)str text:(NSString *)text
@@ -697,7 +780,7 @@ typedef enum
 
 - (BOOL)beginWith:(NSString *)str text:(NSString *)text
 {
-    return [[text lowercaseString] hasPrefix:str];
+    return [[text lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
 - (BOOL)beginWithAfterSpace:(NSString *)str text:(NSString *)text
@@ -707,7 +790,7 @@ typedef enum
         return NO;
     
     NSString *s = [text substringFromIndex:r.location + 1];
-    return [[s lowercaseString] hasPrefix:str];
+    return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
 - (IBAction)btnCancelClicked:(id)sender
@@ -743,7 +826,7 @@ typedef enum
 
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object: self
-                                                      userInfo:@{@"title" : name,
+                                                      userInfo:@{@"caption" : name,
                                                                  @"lat": [NSNumber numberWithDouble:latLon.latitude],
                                                                  @"lon": [NSNumber numberWithDouble:latLon.longitude],
                                                                  @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],

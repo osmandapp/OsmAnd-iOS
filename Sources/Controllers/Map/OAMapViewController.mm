@@ -400,6 +400,7 @@
         .setBaseOrder(std::numeric_limits<int>::max() - 1)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
+        .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
     // Create favorites presenter
@@ -450,6 +451,7 @@
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
+        .setPinIconAlignment(OsmAnd::MapMarker::Center)
         .buildAndAddToCollection(_favoritesMarkersCollection);
         
     }
@@ -1344,6 +1346,8 @@
         return;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    if (mapView.zoomLevel >= OsmAnd::ZoomLevel22)
+        return;
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
@@ -2571,6 +2575,7 @@
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
+    .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::Right))
     .setAccuracyCircleBaseColor(col)
     .buildAndAddToCollection(_destinationPinMarkersCollection);
 }

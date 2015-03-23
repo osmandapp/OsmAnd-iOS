@@ -97,9 +97,13 @@
 {
     NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
-        return name;
+    {
+        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
     else
+    {
         return phrase;
+    }
 }
 
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
@@ -171,13 +175,13 @@
                                             
                                         });
         
-        QHash<QString, QStringList> *categoriesFilter = new QHash<QString, QStringList>();
+        auto categoriesFilter = QHash<QString, QStringList>();
         if (categoryName && typeName) {
-            categoriesFilter->insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
+            categoriesFilter.insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
         } else if (categoryName) {
-            categoriesFilter->insert(QString::fromNSString(categoryName), QStringList());
+            categoriesFilter.insert(QString::fromNSString(categoryName), QStringList());
         }
-        searchCriteria->categoriesFilter = *categoriesFilter;
+        searchCriteria->categoriesFilter = categoriesFilter;
         searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, _myLocation);
         
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
@@ -188,7 +192,6 @@
                                   [self onPOIFound:resultEntry];
                               },
                               ctrl);
-        free(categoriesFilter);
     }
     
     free(ctrl);

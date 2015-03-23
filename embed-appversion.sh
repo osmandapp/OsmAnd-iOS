@@ -29,6 +29,6 @@ echo "Hash: $HASH"
 OSMAND_VERSION="$VERSION.$REVISION$RELEASE"
 OSMAND_BUILD_HASH="$HASH"
 echo "Embedding version in plist file: '${TARGET_BUILD_DIR}/${INFOPLIST_PATH}'"
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $OSMAND_VERSION" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $OSMAND_VERSION" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
-/usr/libexec/PlistBuddy -c "Set :OSMAND_BUILD $OSMAND_BUILD_HASH" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $OSMAND_VERSION" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $OSMAND_VERSION" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+/usr/libexec/PlistBuddy -c "Set :OSMAND_BUILD $OSMAND_BUILD_HASH" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"

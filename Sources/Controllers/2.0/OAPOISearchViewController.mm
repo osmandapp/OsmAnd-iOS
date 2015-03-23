@@ -33,8 +33,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 
 typedef enum
 {
-    EPOIScopeUndefined = -1,
-    EPOIScopeCategory = 0,
+    EPOIScopeUndefined = 0,
+    EPOIScopeCategory,
     EPOIScopeType,
     
 } EPOIScope;
@@ -74,8 +74,10 @@ typedef enum
     BOOL _ignoreSearchResult;
     BOOL _increaseSearchRadius;
     BOOL _initData;
+    BOOL _enteringCategoryOrType;
     
     int _searchRadiusIndex;
+    int _searchRadiusIndexMax;
     
     EPOIScope _currentScope;
     NSString *_currentScopePoiTypeName;
@@ -96,6 +98,7 @@ typedef enum
 - (void)commonInit
 {
     _lock = [[NSLock alloc] init];
+    _searchRadiusIndexMax = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]) - 1;
 }
 
 - (void)viewDidLoad {
@@ -357,7 +360,7 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_dataPoiArray.count > 0 ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined && _searchRadiusIndex < _searchRadiusIndexMax ? 1 : 0);
 }
 
 
@@ -371,8 +374,7 @@ typedef enum
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
             cell = (OASearchMoreCell *)[nib objectAtIndex:0];
         }
-        int s = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]);
-        if (_searchRadiusIndex + 1 < s)
+        if (_searchRadiusIndex < _searchRadiusIndexMax)
         {
             cell.textView.text = [NSString stringWithFormat:@"Increase search radius to %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]];
         }
@@ -493,8 +495,7 @@ typedef enum
 
     if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
     {
-        int s = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]);
-        if (_searchRadiusIndex + 1 < s)
+        if (_searchRadiusIndex < _searchRadiusIndexMax)
         {
             _searchRadiusIndex++;
             _ignoreSearchResult = NO;
@@ -515,16 +516,21 @@ typedef enum
 
     if ([obj isKindOfClass:[OAPOI class]]) {
         OAPOI* item = obj;
+        NSString *name = item.nameLocalized;
+        if (!name)
+            name = item.type.nameLocalized;
         [self goToPoint:item.latitude longitude:item.longitude name:item.nameLocalized];
     
     } else if ([obj isKindOfClass:[OAPOIType class]]) {
         OAPOIType* item = obj;
         self.searchString = [item.nameLocalized stringByAppendingString:@" "];
+        _enteringCategoryOrType = YES;
         [self updateTextField:self.searchString];
         
     } else if ([obj isKindOfClass:[OAPOICategory class]]) {
         OAPOICategory* item = obj;
         self.searchString = [item.nameLocalized stringByAppendingString:@" "];
+        _enteringCategoryOrType = YES;
         [self updateTextField:self.searchString];
     }
 }
@@ -540,18 +546,58 @@ typedef enum
 {
     if (!text || text.length == 0)
         return nil;
+
+    if (_enteringCategoryOrType)
+    {
+        _enteringCategoryOrType = NO;
+        return text;
+    }
+
+    if (_currentScope != EPOIScopeUndefined)
+    {
+        NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+        if ([self beginWith:currentScopeNameLoc text:text] && (text.length == currentScopeNameLoc.length || [text characterAtIndex:currentScopeNameLoc.length] == ' '))
+        {
+            if (text.length > currentScopeNameLoc.length)
+            {
+                return [text substringToIndex:currentScopeNameLoc.length + 1];
+            }
+            else
+            {
+                return text;
+            }
+        }
+    }
     
     NSRange r = [text rangeOfString:@" "];
     if (r.length == 0)
         return text;
     else
         return [text substringToIndex:r.location + 1];
-} 
+    
+}
 
 -(NSString *)nextTokens:(NSString *)text
 {
     if (!text || text.length == 0)
         return nil;
+    
+    if (_currentScope != EPOIScopeUndefined)
+    {
+        NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+        if ([self beginWith:currentScopeNameLoc text:text])
+        {
+            if (text.length > currentScopeNameLoc.length + 1)
+            {
+                NSString *res = [text substringFromIndex:currentScopeNameLoc.length + 1];
+                return res.length == 0 ? nil : res;
+            }
+            else
+            {
+                return nil;
+            }
+        }
+    }
     
     NSRange r = [text rangeOfString:@" "];
     if (r.length == 0)
@@ -566,7 +612,11 @@ typedef enum
 {
     NSString *firstToken = [self firstToken:self.searchString];
     if (!firstToken)
+    {
+        _currentScope = EPOIScopeUndefined;
         return NO;
+    }
+    
     
     BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
     
@@ -653,6 +703,7 @@ typedef enum
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
     }
+
     return NO;
 }
 
@@ -900,7 +951,16 @@ typedef enum
 
 -(void)poiFound:(OAPOI *)poi
 {
-    [_searchPoiArray addObject:poi];
+    if (_currentScope != EPOIScopeUndefined)
+    {
+        NSString *nextStr = [[self nextTokens:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (nextStr.length == 0 || [self beginWith:nextStr text:poi.nameLocalized])
+            [_searchPoiArray addObject:poi];
+    }
+    else
+    {
+        [_searchPoiArray addObject:poi];
+    }
 }
 
 -(void)searchDone:(BOOL)wasInterrupted

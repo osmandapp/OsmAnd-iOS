@@ -6,20 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXAggregateTarget section */
-		BB6B848917C263E000ACD753 /* OsmAnd Preparation */ = {
-			isa = PBXAggregateTarget;
-			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */;
-			buildPhases = (
-				BB6B848D17C263ED00ACD753 /* Generate appversion */,
-			);
-			dependencies = (
-			);
-			name = "OsmAnd Preparation";
-			productName = "OsmAnd Generators";
-		};
-/* End PBXAggregateTarget section */
-
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 		3A02BFB51A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
@@ -488,9 +474,6 @@
 		843E5C391AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
 		843E5C3A1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
 		843E5C3B1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
-		843E5C3D1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
-		843E5C3E1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
-		843E5C3F1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
 		843E5CAC1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
 		843E5CAD1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
 		843E5CAE1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
@@ -1770,30 +1753,6 @@
 		CE3A0DE019A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
-		};
-		BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
-		};
-		BBA3AF32197FC4BB0039D991 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
@@ -3801,11 +3760,11 @@
 				BB098CEE1793F7FD00423944 /* Frameworks */,
 				BB098CEF1793F7FD00423944 /* Resources */,
 				6BCB8D888EDC40C7BFF7DB2C /* Copy Pods Resources */,
+				BBFE8E961ABFFF2F003F9342 /* Embed appversion */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BB9B57BF17C5F817002EA93C /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV";
 			productName = OsmAnd;
@@ -3821,11 +3780,11 @@
 				BB451E3918DCD224005FBE09 /* Frameworks */,
 				BB451E5318DCD224005FBE09 /* Resources */,
 				F31050A1E495478BAAE8C96E /* Copy Pods Resources */,
+				BBFE8E951ABFFEE5003F9342 /* Embed appversion */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BB451E1F18DCD224005FBE09 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV (prebuilt Core)";
 			productName = OsmAnd;
@@ -3841,11 +3800,11 @@
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				BBA3AFEA197FC4BB0039D991 /* Copy Pods Resources */,
+				BBFE8E941ABFFECD003F9342 /* Embed appversion */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				BBA3AF31197FC4BB0039D991 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -3893,7 +3852,6 @@
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
-				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
 			);
 		};
 /* End PBXProject section */
@@ -4227,7 +4185,6 @@
 				843E5CC11AB341E000BE14BE /* icon_direction_active@3x.png in Resources */,
 				84E2DB741AB720FB001A7FEC /* btn_map_type_icon_car@2x.png in Resources */,
 				843E5D121AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
-				843E5C3D1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				84BD08FA1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A61AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
@@ -4675,7 +4632,6 @@
 				843E5CC21AB341E000BE14BE /* icon_direction_active@3x.png in Resources */,
 				84E2DB751AB720FB001A7FEC /* btn_map_type_icon_car@2x.png in Resources */,
 				843E5D131AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
-				843E5C3E1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				84BD08FB1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A71AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
 				8A7077191A83C25A005E019B /* OATextViewCell.xib in Resources */,
@@ -5126,7 +5082,6 @@
 				8444996C1AAA1FC000ACA20D /* ic_tabbar_addons_normal.png in Resources */,
 				84E2DBA01AB720FB001A7FEC /* btn_map_type_icon_walk_selected.png in Resources */,
 				843E5D3B1AB341E000BE14BE /* btn_map_type_icon_car@2x.png in Resources */,
-				843E5C3F1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				843E5CE11AB341E000BE14BE /* icon_favorite_direction@3x.png in Resources */,
 				84C41DE01AB8600D0089EABB /* free_map_mode_button.png in Resources */,
 				BBA3AFD4197FC4BB0039D991 /* my_course_marker_icon@2x.png in Resources */,
@@ -5275,20 +5230,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		BB6B848D17C263ED00ACD753 /* Generate appversion */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Generate appversion";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appversion.sh\"";
-		};
 		BBA3AF33197FC4BB0039D991 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5317,6 +5258,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BBFE8E941ABFFECD003F9342 /* Embed appversion */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed appversion";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
+			showEnvVarsInLog = 0;
+		};
+		BBFE8E951ABFFEE5003F9342 /* Embed appversion */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed appversion";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
+			showEnvVarsInLog = 0;
+		};
+		BBFE8E961ABFFF2F003F9342 /* Embed appversion */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed appversion";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
 			showEnvVarsInLog = 0;
 		};
 		D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */ = {
@@ -5725,24 +5711,6 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		BB451E1F18DCD224005FBE09 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */;
-		};
-		BB9B57BF17C5F817002EA93C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */;
-		};
-		BBA3AF31197FC4BB0039D991 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BBA3AF32197FC4BB0039D991 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -5804,8 +5772,6 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
-				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5866,8 +5832,6 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
-				INFOPLIST_PREPROCESS = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -6001,20 +5965,6 @@
 			};
 			name = Release;
 		};
-		BB6B848B17C263E000ACD753 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		BB6B848C17C263E000ACD753 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D88CDF890E541854A9D88519 /* Pods.debug.xcconfig */;
@@ -6111,15 +6061,6 @@
 			buildConfigurations = (
 				BB451E9818DCD224005FBE09 /* Debug */,
 				BB451E9918DCD224005FBE09 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BB6B848B17C263E000ACD753 /* Debug */,
-				BB6B848C17C263E000ACD753 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -20,31 +20,15 @@ echo "Resources git hash: $RESOURCES_GIT_HASH"
 VERSION="${BASH_REMATCH[1]}"
 RELEASE="${BASH_REMATCH[2]}"
 REVISION="${BASH_REMATCH[3]}"
-
-echo "plist file: '$INFOPLIST_FILE'"
-
 BUILD="$VERSION.$REVISION$RELEASE"
 HASH="${BASH_REMATCH[4]}_${CORE_GIT_HASH}_${RESOURCES_GIT_HASH}"
-
 echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
 echo "Hash: $HASH"
 
-# Generate appversion.prefix
-APPVERSION_FILE="$BUILD_ROOT/appversion.prefix"
-echo "AppVersion prefix file: '$APPVERSION_FILE'"
-rm -f "$APPVERSION_FILE"
-echo "" > "$APPVERSION_FILE"
-echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
-echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
-echo "#define OSMAND_HASH $HASH" >> "$APPVERSION_FILE"
-touch -c -m "$APPVERSION_FILE"
-
-# Touch plist file
-#touch -c -m "$INFOPLIST_FILE"
-#touch -c -A -01 -m "$INFOPLIST_FILE"
-
-# Output modification times
-echo -n "'$INFOPLIST_FILE' : "
-stat -f %m "$INFOPLIST_FILE"
-echo -n "'$APPVERSION_FILE' : "
-stat -f %m "$APPVERSION_FILE"
+# Embed version into plist file
+OSMAND_VERSION="$VERSION.$REVISION$RELEASE"
+OSMAND_BUILD_HASH="$HASH"
+echo "Embedding version in plist file: '${TARGET_BUILD_DIR}/${INFOPLIST_PATH}'"
+/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $OSMAND_VERSION" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
+/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $OSMAND_VERSION" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}
+/usr/libexec/PlistBuddy -c "Set :OSMAND_BUILD $OSMAND_BUILD_HASH" ${TARGET_BUILD_DIR}/${INFOPLIST_PATH}

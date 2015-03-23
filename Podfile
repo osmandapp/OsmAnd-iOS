@@ -62,6 +62,7 @@ post_install do |installer_representation|
         target.build_configurations.each do |configuration|
             configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'
+            configuration.build_settings['CONFIGURATION_BUILD_DIR'] = '${PROJECT_DIR}/../../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)'
         end
     end
 end

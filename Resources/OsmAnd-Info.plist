@@ -24,7 +24,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
-	<string>net.osmand.maps</string>
+	<string>OSMAND_BUNDLE_ID</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -32,11 +32,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>OSMAND_VERSION</string>
+	<string>OSMAND_BUILD</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>OSMAND_BUILD</string>
+	<string>OSMAND_VERSION</string>
 	<key>GIT_COMMIT_HASH</key>
 	<string>OSMAND_HASH</string>
 	<key>LSApplicationCategoryType</key>

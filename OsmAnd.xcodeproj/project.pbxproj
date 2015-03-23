@@ -7,16 +7,16 @@
 	objects = {
 
 /* Begin PBXAggregateTarget section */
-		BB6B848917C263E000ACD753 /* OsmAnd Preparation */ = {
+		BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */ = {
 			isa = PBXAggregateTarget;
-			buildConfigurationList = BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */;
+			buildConfigurationList = BBFE8E9E1AC018A2003F9342 /* Build configuration list for PBXAggregateTarget "Generate app.prefix" */;
 			buildPhases = (
-				BB6B848D17C263ED00ACD753 /* Generate appversion */,
+				BBFE8EA21AC018D0003F9342 /* Generate app.prefix */,
 			);
 			dependencies = (
 			);
-			name = "OsmAnd Preparation";
-			productName = "OsmAnd Generators";
+			name = "Generate app.prefix";
+			productName = "Generate app.prefix";
 		};
 /* End PBXAggregateTarget section */
 
@@ -488,9 +488,6 @@
 		843E5C391AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
 		843E5C3A1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
 		843E5C3B1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */; };
-		843E5C3D1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
-		843E5C3E1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
-		843E5C3F1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */; };
 		843E5CAC1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
 		843E5CAD1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
 		843E5CAE1AB341E000BE14BE /* favorite_export_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 843E5C561AB341DF00BE14BE /* favorite_export_icon.png */; };
@@ -1772,26 +1769,26 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */ = {
+		BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
 		};
-		BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */ = {
+		BBFE8EA51AC01915003F9342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
 		};
-		BBA3AF32197FC4BB0039D991 /* PBXContainerItemProxy */ = {
+		BBFE8EA71AC0191C003F9342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = BB6B848917C263E000ACD753;
-			remoteInfo = "OsmAnd Preparation";
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1988,7 +1985,6 @@
 		843E5C331AB22FE400BE14BE /* OAMapStylesCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapStylesCell.h; path = Sources/Controllers/2.0/OAMapStylesCell.h; sourceTree = "<group>"; };
 		843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMapStylesCell.m; path = Sources/Controllers/2.0/OAMapStylesCell.m; sourceTree = "<group>"; };
 		843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapStylesCell.xib; path = Sources/Controllers/2.0/OAMapStylesCell.xib; sourceTree = "<group>"; };
-		843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "OsmAnd-Dev-Info.plist"; path = "Resources/OsmAnd-Dev-Info.plist"; sourceTree = "<group>"; };
 		843E5C561AB341DF00BE14BE /* favorite_export_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = favorite_export_icon.png; path = Resources/Icons/favorite_export_icon.png; sourceTree = "<group>"; };
 		843E5C571AB341DF00BE14BE /* favorite_export_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "favorite_export_icon@3x.png"; path = "Resources/Icons/favorite_export_icon@3x.png"; sourceTree = "<group>"; };
 		843E5C581AB341DF00BE14BE /* favorite_import_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = favorite_import_icon.png; path = Resources/Icons/favorite_import_icon.png; sourceTree = "<group>"; };
@@ -3775,7 +3771,6 @@
 				BB451D8A18D70B4B005FBE09 /* Shipped */,
 				BB451D8918D70AE4005FBE09 /* Embedded */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
-				843E5C3C1AB3302800BE14BE /* OsmAnd-Dev-Info.plist */,
 				844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */,
 				844499451AAA14E900ACA20D /* OADestinationViewController.xib */,
 				BBACF10917C61D8500EBA761 /* BrowseMapAppModeHUD.xib */,
@@ -3805,7 +3800,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				BB9B57BF17C5F817002EA93C /* PBXTargetDependency */,
+				BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV";
 			productName = OsmAnd;
@@ -3825,7 +3820,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				BB451E1F18DCD224005FBE09 /* PBXTargetDependency */,
+				BBFE8EA61AC01915003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV (prebuilt Core)";
 			productName = OsmAnd;
@@ -3845,7 +3840,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				BBA3AF31197FC4BB0039D991 /* PBXTargetDependency */,
+				BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -3876,6 +3871,9 @@
 					BBA3AF30197FC4BB0039D991 = {
 						DevelopmentTeam = LM67P5MQ23;
 					};
+					BBFE8E9D1AC018A2003F9342 = {
+						CreatedOnToolsVersion = 6.3;
+					};
 				};
 			};
 			buildConfigurationList = BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */;
@@ -3893,7 +3891,7 @@
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
-				BB6B848917C263E000ACD753 /* OsmAnd Preparation */,
+				BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */,
 			);
 		};
 /* End PBXProject section */
@@ -4227,7 +4225,6 @@
 				843E5CC11AB341E000BE14BE /* icon_direction_active@3x.png in Resources */,
 				84E2DB741AB720FB001A7FEC /* btn_map_type_icon_car@2x.png in Resources */,
 				843E5D121AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
-				843E5C3D1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				84BD08FA1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A61AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
@@ -4675,7 +4672,6 @@
 				843E5CC21AB341E000BE14BE /* icon_direction_active@3x.png in Resources */,
 				84E2DB751AB720FB001A7FEC /* btn_map_type_icon_car@2x.png in Resources */,
 				843E5D131AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
-				843E5C3E1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				84BD08FB1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A71AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
 				8A7077191A83C25A005E019B /* OATextViewCell.xib in Resources */,
@@ -5126,7 +5122,6 @@
 				8444996C1AAA1FC000ACA20D /* ic_tabbar_addons_normal.png in Resources */,
 				84E2DBA01AB720FB001A7FEC /* btn_map_type_icon_walk_selected.png in Resources */,
 				843E5D3B1AB341E000BE14BE /* btn_map_type_icon_car@2x.png in Resources */,
-				843E5C3F1AB3302800BE14BE /* OsmAnd-Dev-Info.plist in Resources */,
 				843E5CE11AB341E000BE14BE /* icon_favorite_direction@3x.png in Resources */,
 				84C41DE01AB8600D0089EABB /* free_map_mode_button.png in Resources */,
 				BBA3AFD4197FC4BB0039D991 /* my_course_marker_icon@2x.png in Resources */,
@@ -5275,20 +5270,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		BB6B848D17C263ED00ACD753 /* Generate appversion */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Generate appversion";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appversion.sh\"";
-		};
 		BBA3AF33197FC4BB0039D991 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -5317,6 +5298,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		BBFE8EA21AC018D0003F9342 /* Generate app.prefix */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate app.prefix";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appprefix.sh\"";
 			showEnvVarsInLog = 0;
 		};
 		D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */ = {
@@ -5726,20 +5722,20 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		BB451E1F18DCD224005FBE09 /* PBXTargetDependency */ = {
+		BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BB451E2018DCD224005FBE09 /* PBXContainerItemProxy */;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */;
 		};
-		BB9B57BF17C5F817002EA93C /* PBXTargetDependency */ = {
+		BBFE8EA61AC01915003F9342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BB9B57BE17C5F817002EA93C /* PBXContainerItemProxy */;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA51AC01915003F9342 /* PBXContainerItemProxy */;
 		};
-		BBA3AF31197FC4BB0039D991 /* PBXTargetDependency */ = {
+		BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = BB6B848917C263E000ACD753 /* OsmAnd Preparation */;
-			targetProxy = BBA3AF32197FC4BB0039D991 /* PBXContainerItemProxy */;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA71AC0191C003F9342 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -5804,8 +5800,9 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
+				INFOPLIST_PREFIX_HEADER = $BUILD_ROOT/app.prefix;
 				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5866,8 +5863,9 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
-				INFOPLIST_PREFIX_HEADER = "$(BUILD_DIR)/appversion.prefix";
+				INFOPLIST_PREFIX_HEADER = $BUILD_ROOT/app.prefix;
 				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5899,7 +5897,8 @@
 					"$(inherited)",
 					OSMAND_IOS_DEV,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5921,7 +5920,8 @@
 					"$(inherited)",
 					OSMAND_IOS_DEV,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5943,7 +5943,8 @@
 					"$(inherited)",
 					OSMAND_IOS_DEV,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -5979,7 +5980,8 @@
 					"$(inherited)",
 					OSMAND_IOS_DEV,
 				);
-				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Dev-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -6001,20 +6003,6 @@
 			};
 			name = Release;
 		};
-		BB6B848B17C263E000ACD753 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		BB6B848C17C263E000ACD753 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D88CDF890E541854A9D88519 /* Pods.debug.xcconfig */;
@@ -6025,6 +6013,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
@@ -6060,6 +6049,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
@@ -6082,6 +6072,20 @@
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		BBFE8E9F1AC018A2003F9342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BBFE8EA01AC018A2003F9342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -6115,15 +6119,6 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		BB6B848A17C263E000ACD753 /* Build configuration list for PBXAggregateTarget "OsmAnd Preparation" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				BB6B848B17C263E000ACD753 /* Debug */,
-				BB6B848C17C263E000ACD753 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -6132,6 +6127,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		BBFE8E9E1AC018A2003F9342 /* Build configuration list for PBXAggregateTarget "Generate app.prefix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBFE8E9F1AC018A2003F9342 /* Debug */,
+				BBFE8EA01AC018A2003F9342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

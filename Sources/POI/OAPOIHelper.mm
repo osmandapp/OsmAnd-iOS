@@ -26,6 +26,8 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
+#define kSearchLimit 50
+
 @implementation OAPOIHelper {
 
     OsmAndAppInstance _app;
@@ -33,6 +35,8 @@
     BOOL _breakSearch;
     NSDictionary *_phrases;
 
+    double _radius;
+    
     OsmAnd::AreaI _visibleArea;
     OsmAnd::ZoomLevel _zoomLevel;
 }
@@ -51,7 +55,7 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
-        _searchLimit = 50;
+        _searchLimit = kSearchLimit;
         _isSearchDone = YES;
         [self readPOI];
         [self updatePhrases];
@@ -130,6 +134,7 @@
 {
     _isSearchDone = NO;
     _breakSearch = NO;
+    _radius = radius;
     
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
@@ -137,7 +142,7 @@
                                        (const OsmAnd::FunctorQueryController* const controller)
                                        {
                                            // should break?
-                                           return _limitCounter < 0 || _breakSearch;
+                                           return (_radius == 0.0 && _limitCounter < 0) || _breakSearch;
                                        });
     
     _limitCounter = _searchLimit;

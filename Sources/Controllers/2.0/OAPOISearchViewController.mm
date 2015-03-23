@@ -15,6 +15,7 @@
 #import "OAPOIHelper.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
+#import "OASearchMoreCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 
@@ -28,6 +29,7 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kMaxTypeRows 5
+const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 
 typedef enum
 {
@@ -45,7 +47,8 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 
 @property (nonatomic) NSMutableArray* dataArray;
-@property (nonatomic) NSMutableArray* searchDataArray;
+@property (nonatomic) NSMutableArray* dataPoiArray;
+@property (nonatomic) NSMutableArray* searchPoiArray;
 @property (nonatomic) NSString* searchString;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
@@ -69,7 +72,10 @@ typedef enum
     
     BOOL _needRestartSearch;
     BOOL _ignoreSearchResult;
+    BOOL _increaseSearchRadius;
     BOOL _initData;
+    
+    int _searchRadiusIndex;
     
     EPOIScope _currentScope;
     NSString *_currentScopePoiTypeName;
@@ -234,7 +240,7 @@ typedef enum
         ? newLocation.course
         : newHeading;
         
-        [_dataArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
+        [_dataPoiArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
             
             if ([item isKindOfClass:[OAPOI class]]) {
             
@@ -254,39 +260,15 @@ typedef enum
             
         }];
         
-        if ([_dataArray count] > 0) {
-            NSArray *sortedArray = [_dataArray sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        if ([_dataPoiArray count] > 0) {
+            NSArray *sortedArray = [_dataPoiArray sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
+            {
+                double distance1 = obj1.distanceMeters;
+                double distance2 = obj2.distanceMeters;
                 
-                double distance1 = 0;
-                double distance2 = 0;
-                
-                if ([obj1 isKindOfClass:[OAPOI class]])
-                    distance1 = ((OAPOI *)obj1).distanceMeters;
-                if ([obj2 isKindOfClass:[OAPOI class]])
-                    distance2 = ((OAPOI *)obj2).distanceMeters;
-                
-                if (distance1 > 0 || distance2 > 0) {
-                    return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
-                    
-                } else {
-                    
-                    NSString *name1 = @"";
-                    NSString *name2 = @"";
-                    
-                    if ([obj1 isKindOfClass:[OAPOIType class]])
-                        name1 = ((OAPOIType *)obj1).nameLocalized;
-                    else if ([obj1 isKindOfClass:[OAPOICategory class]])
-                        name1 = ((OAPOICategory *)obj1).nameLocalized;
-                    
-                    if ([obj2 isKindOfClass:[OAPOIType class]])
-                        name2 = ((OAPOIType *)obj2).nameLocalized;
-                    else if ([obj2 isKindOfClass:[OAPOICategory class]])
-                        name2 = ((OAPOICategory *)obj2).nameLocalized;
-                    
-                    return [name1 localizedCaseInsensitiveCompare:name2];
-                }
+                return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
             }];
-            [_dataArray setArray:sortedArray];
+            [_dataPoiArray setArray:sortedArray];
         }
         
         if (isDecelerating)
@@ -299,7 +281,7 @@ typedef enum
     //[self refreshVisibleRows];
     dispatch_async(dispatch_get_main_queue(), ^{
         [_tableView reloadData];
-        if (_initData && _dataArray.count > 0) {
+        if (_initData && _dataPoiArray.count > 0) {
             [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         }
         _initData = NO;
@@ -324,10 +306,13 @@ typedef enum
 
 -(void)generateData {
     
-    [self acquireCurrentScope];
+    if ([self acquireCurrentScope])
+        return;
 
     [_lock lock];
     @try {
+        
+        _searchRadiusIndex = 0;
         
         if (self.searchString) {
             
@@ -345,6 +330,7 @@ typedef enum
                 return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
             }];
             self.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
+            self.dataPoiArray = [NSMutableArray array];
             [self refreshTable];
         }
         
@@ -356,7 +342,7 @@ typedef enum
 -(void)refreshTable
 {
     [_tableView reloadData];
-    if (_dataArray.count > 0)
+    if (_dataArray.count > 0 || _dataPoiArray.count > 0)
         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
@@ -371,28 +357,38 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count;
+    return _dataArray.count + _dataPoiArray.count + (_dataPoiArray.count > 0 ? 1 : 0);
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
 
-    // workaround for superfast typers
-    if (indexPath.row >= _dataArray.count) {
-        OAIconTextTableViewCell* cell;
-        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+    if (indexPath.row >= _dataArray.count + _dataPoiArray.count) {
+        OASearchMoreCell* cell;
+        cell = (OASearchMoreCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
+            cell = (OASearchMoreCell *)[nib objectAtIndex:0];
         }
-        [cell.textView setText:@""];
+        int s = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]);
+        if (_searchRadiusIndex + 1 < s)
+        {
+            cell.textView.text = [NSString stringWithFormat:@"Increase search radius to %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]];
+        }
+        else
+        {
+            cell.textView.text = @"Maximum search radius reached";
+        }
         return cell;
     }
     
-    id obj = _dataArray[indexPath.row];
+    id obj;
+    if (indexPath.row >= _dataArray.count)
+        obj = _dataPoiArray[indexPath.row - _dataArray.count];
+    else
+        obj = _dataArray[indexPath.row];
+    
     
     if ([obj isKindOfClass:[OAPOI class]]) {
         
@@ -495,7 +491,27 @@ typedef enum
 
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 
-    id obj = _dataArray[indexPath.row];
+    if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
+    {
+        int s = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]);
+        if (_searchRadiusIndex + 1 < s)
+        {
+            _searchRadiusIndex++;
+            _ignoreSearchResult = NO;
+            _increaseSearchRadius = YES;
+            dispatch_async(dispatch_get_main_queue(), ^
+                           {
+                               [self startCoreSearch];
+                           });
+        }
+        return;
+    }
+    
+    id obj;
+    if (indexPath.row >= _dataArray.count)
+        obj = _dataPoiArray[indexPath.row - _dataArray.count];
+    else
+        obj = _dataArray[indexPath.row];
 
     if ([obj isKindOfClass:[OAPOI class]]) {
         OAPOI* item = obj;
@@ -516,11 +532,8 @@ typedef enum
 -(void)updateTextField:(NSString *)text
 {
     NSString *t = (text ? text : @"");
-    if (![_textField.text isEqualToString:t])
-    {
-        _textField.text = t;
-        [self generateData];
-    }
+    _textField.text = t;
+    [self generateData];
 }
 
 -(NSString *)firstToken:(NSString *)text
@@ -549,11 +562,11 @@ typedef enum
         return nil;
 }
 
--(void)acquireCurrentScope
+-(BOOL)acquireCurrentScope
 {
     NSString *firstToken = [self firstToken:self.searchString];
     if (!firstToken)
-        return;
+        return NO;
     
     BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
     
@@ -575,11 +588,11 @@ typedef enum
                     
                     self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
                     [self updateTextField:self.searchString];
-                    break;
+                    return YES;
                 }
             }
         }
-        return;
+        return NO;
     }
     
     EPOIScope prevScope = _currentScope;
@@ -629,6 +642,7 @@ typedef enum
             NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
             self.searchString = [currentScopeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
             [self updateTextField:self.searchString];
+            return YES;
         }
     }
     else
@@ -639,7 +653,7 @@ typedef enum
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
     }
-    
+    return NO;
 }
 
 - (void)updateSearchResults
@@ -653,6 +667,7 @@ typedef enum
     @try
     {
         self.dataArray = [NSMutableArray array];
+        self.dataPoiArray = [NSMutableArray array];
 
         // If case searchString is empty, there are no results
         if (searchString == nil || [searchString length] == 0)
@@ -839,7 +854,7 @@ typedef enum
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
-    self.searchString = nil;
+    //self.searchString = nil;
     return YES;
 }
 
@@ -859,7 +874,7 @@ typedef enum
     }
     
     [_lock lock];
-    self.searchDataArray = [NSMutableArray array];
+    self.searchPoiArray = [NSMutableArray array];
     [_lock unlock];
     
     [self showWaitingIndicator];
@@ -877,7 +892,7 @@ typedef enum
         if (_currentScope == EPOIScopeUndefined)
             [poiHelper findPOIsByKeyword:self.searchString];
         else
-            [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusMeters:1000.0];
+            [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusMeters:kSearchRadiusKm[_searchRadiusIndex] * 1000.0];
     });
 }
 
@@ -885,7 +900,7 @@ typedef enum
 
 -(void)poiFound:(OAPOI *)poi
 {
-    [_searchDataArray addObject:poi];
+    [_searchPoiArray addObject:poi];
 }
 
 -(void)searchDone:(BOOL)wasInterrupted
@@ -901,16 +916,17 @@ typedef enum
             return;
         }
         
-        _poiInList = _searchDataArray.count > 0;
+        _poiInList = _searchPoiArray.count > 0;
         
         [_lock lock];
-        self.dataArray = [[_dataArray arrayByAddingObjectsFromArray:self.searchDataArray] mutableCopy];
-        self.searchDataArray = nil;
+        self.dataPoiArray = [NSMutableArray arrayWithArray:self.searchPoiArray];
+        self.searchPoiArray = nil;
         [_lock unlock];
         
         if (_poiInList) {
-            _initData = YES;
+            _initData = !_increaseSearchRadius;
             [self updateDistanceAndDirection];
+            _increaseSearchRadius = NO;
         } else {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_tableView reloadData];

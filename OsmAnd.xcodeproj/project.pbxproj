@@ -5313,6 +5313,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appprefix.sh\"";
+			showEnvVarsInLog = 0;
 		};
 		D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

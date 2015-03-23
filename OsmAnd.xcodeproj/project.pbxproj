@@ -6,6 +6,20 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = BBFE8E9E1AC018A2003F9342 /* Build configuration list for PBXAggregateTarget "Generate app.prefix" */;
+			buildPhases = (
+				BBFE8EA21AC018D0003F9342 /* Generate app.prefix */,
+			);
+			dependencies = (
+			);
+			name = "Generate app.prefix";
+			productName = "Generate app.prefix";
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 		3A02BFB51A31F2FA0019377F /* OAGPXListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */; };
@@ -1753,6 +1767,30 @@
 		CE3A0DE019A103740035B296 /* OAQLabelElement.m in Sources */ = {isa = PBXBuildFile; fileRef = CE3A0DDE19A103740035B296 /* OAQLabelElement.m */; };
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
+		};
+		BBFE8EA51AC01915003F9342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
+		};
+		BBFE8EA71AC0191C003F9342 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = BBFE8E9D1AC018A2003F9342;
+			remoteInfo = "Generate app.prefix";
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
@@ -3758,12 +3796,11 @@
 				BB098CEE1793F7FD00423944 /* Frameworks */,
 				BB098CEF1793F7FD00423944 /* Resources */,
 				6BCB8D888EDC40C7BFF7DB2C /* Copy Pods Resources */,
-				BBFE8E961ABFFF2F003F9342 /* Embed appversion */,
-				BBFE8E991AC003C3003F9342 /* Change bundle identifier */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV";
 			productName = OsmAnd;
@@ -3779,12 +3816,11 @@
 				BB451E3918DCD224005FBE09 /* Frameworks */,
 				BB451E5318DCD224005FBE09 /* Resources */,
 				F31050A1E495478BAAE8C96E /* Copy Pods Resources */,
-				BBFE8E951ABFFEE5003F9342 /* Embed appversion */,
-				BBFE8E981AC003A7003F9342 /* Change bundle identifier */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BBFE8EA61AC01915003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd DEV (prebuilt Core)";
 			productName = OsmAnd;
@@ -3800,12 +3836,11 @@
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				BBA3AFEA197FC4BB0039D991 /* Copy Pods Resources */,
-				BBFE8E941ABFFECD003F9342 /* Embed appversion */,
-				BBFE8E971AC0036C003F9342 /* Change bundle identifier */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -3836,6 +3871,9 @@
 					BBA3AF30197FC4BB0039D991 = {
 						DevelopmentTeam = LM67P5MQ23;
 					};
+					BBFE8E9D1AC018A2003F9342 = {
+						CreatedOnToolsVersion = 6.3;
+					};
 				};
 			};
 			buildConfigurationList = BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */;
@@ -3853,6 +3891,7 @@
 				BB098CF01793F7FD00423944 /* OsmAnd DEV */,
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
+				BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */,
 			);
 		};
 /* End PBXProject section */
@@ -5261,94 +5300,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BBFE8E941ABFFECD003F9342 /* Embed appversion */ = {
+		BBFE8EA21AC018D0003F9342 /* Generate app.prefix */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Embed appversion";
+			name = "Generate app.prefix";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
-			showEnvVarsInLog = 0;
-		};
-		BBFE8E951ABFFEE5003F9342 /* Embed appversion */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed appversion";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
-			showEnvVarsInLog = 0;
-		};
-		BBFE8E961ABFFF2F003F9342 /* Embed appversion */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed appversion";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/embed-appversion.sh\"";
-		};
-		BBFE8E971AC0036C003F9342 /* Change bundle identifier */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Change bundle identifier";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/change-bundle-identifier.sh\" net.osmand.maps";
-			showEnvVarsInLog = 0;
-		};
-		BBFE8E981AC003A7003F9342 /* Change bundle identifier */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Change bundle identifier";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/change-bundle-identifier.sh\" net.osmand";
-			showEnvVarsInLog = 0;
-		};
-		BBFE8E991AC003C3003F9342 /* Change bundle identifier */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Change bundle identifier";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/change-bundle-identifier.sh\" net.osmand";
-			showEnvVarsInLog = 0;
+			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appprefix.sh\"";
 		};
 		D58A6F1C34BB4031969F6AD1 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -5756,6 +5720,24 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */;
+		};
+		BBFE8EA61AC01915003F9342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA51AC01915003F9342 /* PBXContainerItemProxy */;
+		};
+		BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
+			targetProxy = BBFE8EA71AC0191C003F9342 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
@@ -5817,6 +5799,9 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREFIX_HEADER = $BUILD_ROOT/app.prefix;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5877,6 +5862,9 @@
 					/usr/include/libxml2,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREFIX_HEADER = $BUILD_ROOT/app.prefix;
+				INFOPLIST_PREPROCESS = YES;
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -5909,6 +5897,7 @@
 					OSMAND_IOS_DEV,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5931,6 +5920,7 @@
 					OSMAND_IOS_DEV,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -5953,6 +5943,7 @@
 					OSMAND_IOS_DEV,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -5989,6 +5980,7 @@
 					OSMAND_IOS_DEV,
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -6020,6 +6012,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
@@ -6055,6 +6048,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
+				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
@@ -6077,6 +6071,20 @@
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		BBFE8E9F1AC018A2003F9342 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		BBFE8EA01AC018A2003F9342 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -6118,6 +6126,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		BBFE8E9E1AC018A2003F9342 /* Build configuration list for PBXAggregateTarget "Generate app.prefix" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BBFE8E9F1AC018A2003F9342 /* Debug */,
+				BBFE8EA01AC018A2003F9342 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};

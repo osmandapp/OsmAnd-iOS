@@ -7,10 +7,6 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-# Get bundle identifier
-OSMAND_BUNDLE_ID="$1"
-echo "Bundle ID: $OSMAND_BUNDLE_ID"
-
 # Get version tag/hash strings
 IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`
 echo "iOS git tag: $IOS_GIT_TAG"
@@ -33,11 +29,9 @@ OSMAND_BUILD="$BUILD"
 OSMAND_HASH="$HASH"
 
 # Generate app.prefix
-APPPREFIX_FILE="$BUILD_ROOT/app.prefix"
-echo "App prefix file: '$APPPREFIX_FILE'"
-rm -f "$APPPREFIX_FILE"
-echo "" > "$APPPREFIX_FILE"
-echo "#define OSMAND_BUNDLE_ID $OSMAND_BUNDLE_ID" >> "$APPPREFIX_FILE"
-echo "#define OSMAND_VERSION $OSMAND_VERSION" >> "$APPPREFIX_FILE"
-echo "#define OSMAND_BUILD $OSMAND_BUILD" >> "$APPPREFIX_FILE"
-echo "#define OSMAND_HASH $OSMAND_HASH" >> "$APPPREFIX_FILE"
+echo "App prefix file: '$INFOPLIST_PREFIX_HEADER'"
+rm -f "$INFOPLIST_PREFIX_HEADER"
+echo "" > "$INFOPLIST_PREFIX_HEADER"
+echo "#define OSMAND_VERSION $OSMAND_VERSION" >> "$INFOPLIST_PREFIX_HEADER"
+echo "#define OSMAND_BUILD $OSMAND_BUILD" >> "$INFOPLIST_PREFIX_HEADER"
+echo "#define OSMAND_HASH $OSMAND_HASH" >> "$INFOPLIST_PREFIX_HEADER"

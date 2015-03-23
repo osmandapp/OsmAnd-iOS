@@ -72,5 +72,6 @@ def adjustConfigFile(xcconfigFilename)
     xcconfig = xcconfig.gsub(/FRAMEWORK_SEARCH_PATHS = "/, "FRAMEWORK_SEARCH_PATHS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/OTHER_CFLAGS = "/, "OTHER_CFLAGS = $(inherited) \"")
     xcconfig = xcconfig.gsub(/OTHER_LDFLAGS = "/, "OTHER_LDFLAGS = $(inherited) \"")
+    xcconfig = xcconfig + "\nCONFIGURATION_BUILD_DIR = \"${PROJECT_DIR}/../../binaries/ios.clang${EFFECTIVE_PLATFORM_NAME}/$(CONFIGURATION)\"\n"
     File.open(xcconfigFilename, "w") { |file| file << xcconfig }
 end

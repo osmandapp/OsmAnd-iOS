@@ -37,10 +37,14 @@ echo "" > "$APPVERSION_FILE"
 echo "#define OSMAND_VERSION $VERSION.$REVISION$RELEASE" >> "$APPVERSION_FILE"
 echo "#define OSMAND_BUILD $BUILD" >> "$APPVERSION_FILE"
 echo "#define OSMAND_HASH $HASH" >> "$APPVERSION_FILE"
-
-touch -m "$APPVERSION_FILE"
+touch -c -m "$APPVERSION_FILE"
 
 # Touch plist file
-echo "plist file: '$INFOPLIST_FILE'"
-touch -m "$INFOPLIST_FILE"
-#touch -A -05 -m "$INFOPLIST_FILE"
+#touch -c -m "$INFOPLIST_FILE"
+#touch -c -A -01 -m "$INFOPLIST_FILE"
+
+# Output modification times
+echo -n "'$INFOPLIST_FILE' : "
+stat -f %m "$INFOPLIST_FILE"
+echo -n "'$APPVERSION_FILE' : "
+stat -f %m "$APPVERSION_FILE"

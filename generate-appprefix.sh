@@ -7,6 +7,10 @@ if [ -z "$BASH_VERSION" ]; then
 fi
 SRCLOC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+# Get bundle identifier
+OSMAND_BUNDLE_ID="$1"
+echo "Bundle ID: $OSMAND_BUNDLE_ID"
+
 # Get version tag/hash strings
 IOS_GIT_TAG=`(cd "$PROJECT_DIR" && git describe --long)`
 echo "iOS git tag: $IOS_GIT_TAG"
@@ -24,11 +28,16 @@ BUILD="$VERSION.$REVISION$RELEASE"
 HASH="${BASH_REMATCH[4]}_${CORE_GIT_HASH}_${RESOURCES_GIT_HASH}"
 echo "Version: $VERSION.$REVISION$RELEASE ($BUILD)"
 echo "Hash: $HASH"
-
-# Embed version into plist file
 OSMAND_VERSION="$VERSION.$REVISION$RELEASE"
-OSMAND_BUILD_HASH="$HASH"
-echo "Embedding version in plist file: '${TARGET_BUILD_DIR}/${INFOPLIST_PATH}'"
-/usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $OSMAND_VERSION" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
-/usr/libexec/PlistBuddy -c "Set :CFBundleVersion $OSMAND_VERSION" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
-/usr/libexec/PlistBuddy -c "Set :GIT_COMMIT_HASH $OSMAND_BUILD_HASH" "${TARGET_BUILD_DIR}/${INFOPLIST_PATH}"
+OSMAND_BUILD="$BUILD"
+OSMAND_HASH="$HASH"
+
+# Generate app.prefix
+APPPREFIX_FILE="$BUILD_ROOT/app.prefix"
+echo "App prefix file: '$APPPREFIX_FILE'"
+rm -f "$APPPREFIX_FILE"
+echo "" > "$APPPREFIX_FILE"
+echo "#define OSMAND_BUNDLE_ID $OSMAND_BUNDLE_ID" >> "$APPPREFIX_FILE"
+echo "#define OSMAND_VERSION $OSMAND_VERSION" >> "$APPPREFIX_FILE"
+echo "#define OSMAND_BUILD $OSMAND_BUILD" >> "$APPPREFIX_FILE"
+echo "#define OSMAND_HASH $OSMAND_HASH" >> "$APPPREFIX_FILE"

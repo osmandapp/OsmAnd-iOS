@@ -763,7 +763,7 @@
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         // Resume symbols update
-        [mapView resumeSymbolsUpdate];
+        while (![mapView resumeSymbolsUpdate]);
     }
 
     // If this is the end of gesture, get velocity for animation
@@ -918,7 +918,7 @@
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         // Resume symbols update
-        [mapView resumeSymbolsUpdate];
+        while (![mapView resumeSymbolsUpdate]);
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)

@@ -1114,6 +1114,8 @@
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
     for (const auto symbolInfo : symbolInfos) {
         
+        isSymbolFound = NO;
+        
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
             if (!isSymbolFound && [recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
@@ -1178,7 +1180,7 @@
 
         
         
-        if (caption && caption.length > 0 && icon)
+        if (((caption && caption.length > 0) || poiType) && icon)
             break;
         
     }
@@ -1186,8 +1188,13 @@
     
     // if single press and no symbol found - exit
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]] && !isSymbolFound)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
+                                                            object:self
+                                                          userInfo:nil];
         return;
-    
+    }
+
     [self showContextPinMarker:lat longitude:lon];
     
     if (!caption)

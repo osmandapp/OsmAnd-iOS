@@ -20,7 +20,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonShare;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDirection;
 
-@property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
+@property (weak, nonatomic) IBOutlet UIButton *buttonClose;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -104,7 +104,7 @@
             _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0 - 210.0, 21.0);
         }
         
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0, h);
+        //_buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0, h);
 
         _buttonsView.frame = CGRectMake(DeviceScreenWidth - 210.0, 0.0, 210.0, h);
         CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
@@ -128,7 +128,7 @@
             _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
         }
         
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 73.0);
+        //_buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 73.0);
         
         _buttonsView.frame = CGRectMake(0.0, 73.0, DeviceScreenWidth, 53.0);
         CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
@@ -224,7 +224,7 @@
     [self.delegate targetPointDirection];
 }
 
-- (IBAction)buttonShadowClicked:(id)sender {
+- (IBAction)buttonCloseClicked:(id)sender {
     [self.delegate targetHide];
 }
 

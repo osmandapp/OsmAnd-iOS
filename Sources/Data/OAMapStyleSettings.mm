@@ -92,10 +92,10 @@
         NSString *name = resolvedMapStyle->getStringById(p->nameId).toNSString();
         
         if ([name isEqualToString:@"appMode"] ||
-            [name isEqualToString:@"transportStops"] ||
-            [name isEqualToString:@"publicTransportMode"] ||
-            [name isEqualToString:@"tramTrainRoutes"] ||
-            [name isEqualToString:@"subwayMode"] ||
+            //[name isEqualToString:@"transportStops"] ||
+            //[name isEqualToString:@"publicTransportMode"] ||
+            //[name isEqualToString:@"tramTrainRoutes"] ||
+            //[name isEqualToString:@"subwayMode"] ||
             [name isEqualToString:@"engine_v1"] ||
             p->category.isEmpty())
 

@@ -15,6 +15,7 @@
 #import "OAAppSettings.h"
 
 #define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
+#define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
 #define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
 #if defined(OSMAND_IOS_DEV)

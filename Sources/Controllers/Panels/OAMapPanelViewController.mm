@@ -90,6 +90,7 @@
                                                   andObserve:_app.appModeObservable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
 
     _hudInvalidated = NO;
 }
@@ -435,6 +436,11 @@
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
 }
 
+-(void)onNoSymbolFound:(NSNotification *)notification
+{
+    [self hideTargetPointMenu];
+}
+
 -(void)onTargetPointSet:(NSNotification *)notification
 {
     NSDictionary *params = [notification userInfo];
@@ -478,11 +484,16 @@
         
         if (!nativeTitle || [nativeTitle isEqualToString:@""])
         {
-            addressString = @"Address is not known yet";
+            if (buildingNumber.length > 0)
+                addressString = buildingNumber;
+            else
+                addressString = @"Address is not known yet";
+            
+            self.targetMenuView.isAddressFound = YES;
         }
         else
         {
-            if (buildingNumber)
+            if (buildingNumber.length > 0)
                 addressString = [NSString stringWithFormat:@"%@, %@", nativeTitle, buildingNumber];
             else
                 addressString = nativeTitle;
@@ -499,6 +510,8 @@
         _formattedTargetName = addressString;
     else if (poiType)
         _formattedTargetName = poiType.nameLocalized;
+    else if (buildingNumber.length > 0)
+        _formattedTargetName = buildingNumber;
     else
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
     
@@ -563,22 +576,25 @@
     self.shadowButton = nil;
 }
 
-- (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture {
+- (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture
+{
     if ( gesture.state == UIGestureRecognizerStateEnded )
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
 #pragma mark - OATargetPointViewDelegate
 
--(void)targetPointAddFavorite {
+-(void)targetPointAddFavorite
+{
     [self hideTargetPointMenu];
 }
 
--(void)targetPointShare {
+-(void)targetPointShare
+{
 }
 
--(void)targetPointDirection {
-    
+-(void)targetPointDirection
+{
     OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
     if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
         [_hudViewController.view addSubview:_destinationViewController.view];
@@ -595,19 +611,23 @@
     [self hideTargetPointMenu];
 }
 
--(void)hideTargetPointMenu {
+-(void)hideTargetPointMenu
+{
     [_mapViewController hideContextPinMarker];
     //[self destroyShadowButton];
     
-    CGRect frame = self.targetMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-
-    [UIView animateWithDuration:0.5 animations:^{
-        self.targetMenuView.frame = frame;
+    if (self.targetMenuView.superview)
+    {
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight + 10.0;
         
-    } completion:^(BOOL finished) {
-        [self.targetMenuView removeFromSuperview];
-    }];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.targetMenuView.frame = frame;
+            
+        } completion:^(BOOL finished) {
+            [self.targetMenuView removeFromSuperview];
+        }];
+    }
 }
 
 #pragma mark - OADestinationViewControllerProtocol

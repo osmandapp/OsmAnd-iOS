@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonShare;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDirection;
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
+
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
 @property (weak, nonatomic) IBOutlet UIView *backView2;
@@ -95,13 +97,15 @@
     if (landscape) {
         
         if (_imageView.image) {
-            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0, 21.0);
+            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0 - 210.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0 - 210.0, 21.0);
         } else {
-            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
+            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0 - 210.0, 21.0);
+            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0 - 210.0, 21.0);
         }
         
+        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0, h);
+
         _buttonsView.frame = CGRectMake(DeviceScreenWidth - 210.0, 0.0, 210.0, h);
         CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
         CGFloat x = 0.0;
@@ -123,6 +127,8 @@
             _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0, 21.0);
             _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
         }
+        
+        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 73.0);
         
         _buttonsView.frame = CGRectMake(0.0, 73.0, DeviceScreenWidth, 53.0);
         CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
@@ -218,6 +224,9 @@
     [self.delegate targetPointDirection];
 }
 
+- (IBAction)buttonShadowClicked:(id)sender {
+    [self.delegate targetHide];
+}
 
 
 @end

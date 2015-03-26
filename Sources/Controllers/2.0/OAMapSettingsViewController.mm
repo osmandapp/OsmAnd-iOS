@@ -251,7 +251,7 @@
     
     CGRect parentFrame;
     if (_parentVC) {
-        parentFrame = CGRectOffset(_parentVC.view.frame, 50.0, 0.0);
+        parentFrame = CGRectOffset(_parentVC.view.frame, -_parentVC.view.frame.origin.x, 0.0);
         _parentVC.view.alpha = 0.0;
         _parentVC.view.hidden = NO;
     }

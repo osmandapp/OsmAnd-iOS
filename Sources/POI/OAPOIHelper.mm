@@ -119,6 +119,15 @@
     return nil;
 }
 
+- (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value
+{
+    for (OAPOIType *t in _poiTypes)
+        if ([t.tag isEqualToString:tag] && [t.value isEqualToString:value])
+            return t;
+    
+    return nil;
+}
+
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
 {
     _visibleArea = area;

@@ -10,6 +10,7 @@
 #include <OsmAndCore.h>
 
 @class OAPOI;
+@class OAPOIType;
 
 @protocol OAPOISearchDelegate
 
@@ -34,6 +35,7 @@
 
 - (void)updatePhrases;
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
+- (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

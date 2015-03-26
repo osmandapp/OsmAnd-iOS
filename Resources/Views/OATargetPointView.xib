@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6254" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -102,6 +102,22 @@
                     <rect key="frame" x="0.0" y="14" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rKO-ha-eo7" userLabel="Three dots">
+                    <rect key="frame" x="151" y="6" width="18" height="3"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="three_dots.png"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hve-we-D1N" userLabel="Shadow">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonShadowClicked:" destination="iN0-l3-epB" eventType="touchDown" id="7Py-5W-dvE"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
@@ -115,6 +131,7 @@
                 <outlet property="backView3" destination="ZW3-bX-U96" id="qqP-1F-dA2"/>
                 <outlet property="buttonDirection" destination="C1L-y5-El0" id="N28-5Z-AAb"/>
                 <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="IP8-fj-2X0"/>
+                <outlet property="buttonShadow" destination="hve-we-D1N" id="Fqv-5i-jJ4"/>
                 <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="G6e-gV-DVq"/>
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
@@ -127,6 +144,7 @@
         <image name="menu_direction_icon.png" width="23" height="23"/>
         <image name="menu_share_icon.png" width="25" height="25"/>
         <image name="menu_star_icon.png" width="24" height="23"/>
+        <image name="three_dots.png" width="25" height="4"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

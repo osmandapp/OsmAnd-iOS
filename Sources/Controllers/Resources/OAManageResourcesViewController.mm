@@ -181,12 +181,14 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
+#if !defined(OSMAND_IOS_DEV)
     if (_currentScope == kLocalResourcesScope ||
         (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
         _displayBanner = NO;
     else
         _displayBanner = YES;
+#endif
 
     [self obtainDataAndItems];
     [self prepareContent];
@@ -1292,6 +1294,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 
                 ResourceItem* item = (ResourceItem*)item_;
                 uint64_t _size = item.size;
+                uint64_t _sizePkg = item.sizePkg;
                 
                 if (item.downloadTask != nil)
                     cellTypeId = downloadingResourceCell;
@@ -1301,11 +1304,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     cellTypeId = localResourceCell;
                 else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
                     cellTypeId = repositoryResourceCell;
-                    _size = item.sizePkg;
                 }
                 
                 title = item.title;
-                if (_size > 0)
+                if (_sizePkg > 0)
+                    subtitle = [NSString stringWithFormat:@"%@ / %@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                else
                     subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             }
         }
@@ -1315,6 +1319,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
             ResourceItem* item = (ResourceItem*)item_;
             uint64_t _size = item.size;
+            uint64_t _sizePkg = item.sizePkg;
             
             if (item.downloadTask != nil)
                 cellTypeId = downloadingResourceCell;
@@ -1324,11 +1329,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = localResourceCell;
             else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
                 cellTypeId = repositoryResourceCell;
-                _size = item.sizePkg;
             }
             
             title = item.title;
-            if (_size > 0)
+            if (_sizePkg > 0)
+                subtitle = [NSString stringWithFormat:@"%@ / %@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+            else
                 subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
         }
     }

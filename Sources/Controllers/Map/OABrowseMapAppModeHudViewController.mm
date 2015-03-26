@@ -137,7 +137,7 @@
     _grMove.delegate = self;
     
     [_mapViewController.view addGestureRecognizer:_grMove];
-        
+
 }
 
 - (void)deinit
@@ -154,6 +154,12 @@
 {
     [super viewDidLoad];
 	    
+#if defined(OSMAND_IOS_DEV)
+    UILongPressGestureRecognizer* debugLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                 action:@selector(onDebugButtonLongClicked:)];
+    [_debugButton addGestureRecognizer:debugLongPress];
+#endif
+
     if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
         _driveModeButton.hidden = NO;
     else
@@ -420,6 +426,10 @@
 
 #pragma mark - debug
 
+- (void)onDebugButtonLongClicked:(id)sender
+{
+    _debugButton.hidden = YES;
+}
 
 - (IBAction)onDebugButtonClicked:(id)sender
 {

@@ -22,6 +22,7 @@
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
 #import "OAPOISearchViewController.h"
+#import "OAPOIType.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -427,16 +428,17 @@
     [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil];
 }
 
-- (void)searchButtonClick:(id)sender {
-
+- (void)searchButtonClick:(id)sender
+{
     if (!_searchPOI)
         _searchPOI = [[OAPOISearchViewController alloc] init];
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
-    
 }
 
--(void)onTargetPointSet:(NSNotification *)notification {
+-(void)onTargetPointSet:(NSNotification *)notification
+{
     NSDictionary *params = [notification userInfo];
+    OAPOIType *poiType = [params objectForKey:@"poiType"];
     NSString *caption = [params objectForKey:@"caption"];
     NSString *buildingNumber = [params objectForKey:@"buildingNumber"];
     UIImage *icon = [params objectForKey:@"icon"];
@@ -445,7 +447,9 @@
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
     NSString* addressString;
-    if (caption.length == 0) {
+    self.targetMenuView.isAddressFound = NO;
+    if (caption.length == 0 && !poiType)
+    {
         std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
         _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
         
@@ -461,7 +465,8 @@
         
         NSString* localizedTitle;
         NSString* nativeTitle;
-        if (road) {
+        if (road)
+        {
             const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
             const auto localizedName = road->getCaptionInLanguage(mainLanguage);
             const auto nativeName = road->getCaptionInNativeLanguage();
@@ -471,26 +476,32 @@
                 nativeTitle = nativeName.toNSString();
         }
         
-        addressString = nativeTitle;
-        if (!addressString || [addressString isEqualToString:@""]) {
+        if (!nativeTitle || [nativeTitle isEqualToString:@""])
+        {
             addressString = @"Address is not known yet";
-            self.targetMenuView.isAddressFound = NO;
-        } else {
+        }
+        else
+        {
+            if (buildingNumber)
+                addressString = [NSString stringWithFormat:@"%@, %@", nativeTitle, buildingNumber];
+            else
+                addressString = nativeTitle;
             self.targetMenuView.isAddressFound = YES;
         }
-    } else {
+    }
+    else if (caption.length > 0)
+    {
         self.targetMenuView.isAddressFound = YES;
         addressString = caption;
     }
     
-    if (self.targetMenuView.isAddressFound) {
-        if (buildingNumber.length > 0)
-            _formattedTargetName = [NSString stringWithFormat:@"%@, %@", addressString, buildingNumber];
-        else
-            _formattedTargetName = addressString;
-    } else {
+    if (self.targetMenuView.isAddressFound)
+        _formattedTargetName = addressString;
+    else if (poiType)
+        _formattedTargetName = poiType.nameLocalized;
+    else
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
-    }
+    
     _targetLatitude = lat;
     _targetLongitude = lon;
     
@@ -521,7 +532,7 @@
         
     } completion:^(BOOL finished) {
         
-        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:)];
+        //[self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:)];
     }];
     
 }
@@ -579,9 +590,14 @@
     [self hideTargetPointMenu];
 }
 
+-(void)targetHide
+{
+    [self hideTargetPointMenu];
+}
+
 -(void)hideTargetPointMenu {
     [_mapViewController hideContextPinMarker];
-    [self destroyShadowButton];
+    //[self destroyShadowButton];
     
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;

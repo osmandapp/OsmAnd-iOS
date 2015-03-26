@@ -22,6 +22,8 @@
 #import "OAFavoriteItemViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OADefaultFavorite.h"
+#import "OAPOIHelper.h"
+#import "OAPOIType.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -69,6 +71,7 @@
 #define kRotationGestureThresholdDegrees 5.0f
 #define kZoomDeceleration 40.0f
 #define kZoomVelocityAbsLimit 10.0f
+#define kTargetMoveVelocityLimit 3000.0f
 #define kTargetMoveDeceleration 10000.0f
 #define kRotateDeceleration 500.0f
 #define kRotateVelocityAbsLimitInDegrees 400.0f
@@ -506,12 +509,13 @@
     [_settingsObserver observe:mapView.settingsObservable];
     [_framePreparedObserver observe:mapView.framePreparedObservable];
 
-    // Add "My location" and "My course" markers
-    [mapView addKeyedSymbolsProvider:_myMarkersCollection];
-
     // Add context pin markers
     [mapView addKeyedSymbolsProvider:_contextPinMarkersCollection];
     [mapView addKeyedSymbolsProvider:_destinationPinMarkersCollection];
+    
+    // Add "My location" and "My course" markers
+    [mapView addKeyedSymbolsProvider:_myMarkersCollection];
+
 }
 
 - (void)viewDidLoad
@@ -830,9 +834,20 @@
     {
         // Obtain velocity from recognizer
         CGPoint screenVelocity = [recognizer velocityInView:self.view];
+
+        if (screenVelocity.x > 0)
+            screenVelocity.x = MIN(screenVelocity.x, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.x = MAX(screenVelocity.x, -kTargetMoveVelocityLimit);
+        
+        if (screenVelocity.y > 0)
+            screenVelocity.y = MIN(screenVelocity.y, kTargetMoveVelocityLimit);
+        else
+            screenVelocity.y = MAX(screenVelocity.y, -kTargetMoveVelocityLimit);
+        
         screenVelocity.x *= mapView.contentScaleFactor;
         screenVelocity.y *= mapView.contentScaleFactor;
-        
+
         // Take into account current azimuth and reproject to map space (points)
         CGPoint velocityInMapSpace;
         velocityInMapSpace.x = screenVelocity.x * cosAngle - screenVelocity.y * sinAngle;
@@ -1088,6 +1103,7 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
+    OAPOIType *poiType;
     NSString *caption;
     NSString *buildingNumber;
     UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
@@ -1123,23 +1139,24 @@
             //for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
             //{ NSLog(@"%d = %@", entry.key(), entry.value().toNSString()); }
             
-            caption = mapObject->getCaptionInNativeLanguage().toNSString();
-            //NSLog(@"caption = %@", caption);
+            const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
+            caption = mapObject->getCaptionInLanguage(lang).toNSString();
+            if (caption.length == 0)
+                caption = mapObject->getCaptionInNativeLanguage().toNSString();
             
-            if (!caption || caption.length == 0) {
-                for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
-                    if (entry.key() == 1) {
-                        caption = entry.value().toNSString();
-                        break;
-                    }
+            OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+            
+            for (const auto& ruleId : mapObject->typesRuleIds) {
+                const auto& rule = mapObject->encodingDecodingRules->decodingRules.value(ruleId);
+                if (rule.tag == QString("addr:housenumber"))
+                    buildingNumber = mapObject->captions.value(ruleId).toNSString();
+
+                if (!poiType)
+                    poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+                
             }
             
-            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
-                if (entry.key() == 3) {
-                    buildingNumber = entry.value().toNSString();
-                    break;
-                }
-            
+            //NSLog(@"caption=%@ housenumber=%@ poiType=%@", caption, buildingNumber, (poiType ? poiType.name : @"NO"));
             
             if (!icon) {
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
@@ -1179,6 +1196,8 @@
         buildingNumber = @"";
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    if (poiType)
+        [userInfo setObject:poiType forKey:@"poiType"];
     [userInfo setObject:caption forKey:@"caption"];
     [userInfo setObject:buildingNumber forKey:@"buildingNumber"];
     [userInfo setObject:[NSNumber numberWithDouble:lat] forKey:@"lat"];
@@ -1950,7 +1969,7 @@
                         newSettings[QString::fromLatin1("nightMode")] = "true";
                     
                     // --- Apply Map Style Settings
-                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() parameters:unresolvedMapStyle->parameters];
+                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString()];
                     
                     NSArray *params = styleSettings.getAllParameters;
                     for (OAMapStyleParameter *param in params) {

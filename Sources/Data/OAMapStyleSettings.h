@@ -36,7 +36,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 @interface OAMapStyleSettings : NSObject
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName parameters:(const QList< std::shared_ptr<const OsmAnd::UnresolvedMapStyle::Parameter>>)parameters;
+-(instancetype)initWithStyleName:(NSString *)mapStyleName;
 
 
 -(NSArray *) getAllParameters;

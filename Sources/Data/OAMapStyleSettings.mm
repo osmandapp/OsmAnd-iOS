@@ -10,6 +10,9 @@
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/Map/IMapStylesCollection.h>
+#include <OsmAndCore/Map/ResolvedMapStyle.h>
+#include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAMapStyleParameter
 @end
@@ -34,12 +37,12 @@
     return self;
 }
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName parameters:(const QList< std::shared_ptr<const OsmAnd::UnresolvedMapStyle::Parameter>>)parameters
+-(instancetype)initWithStyleName:(NSString *)mapStyleName
 {
     self = [super init];
     if (self) {
         self.mapStyleName = mapStyleName;
-        [self buildParameters:parameters];
+        [self buildParameters:mapStyleName];
         [self loadParameters];
     }
     return self;
@@ -68,36 +71,41 @@
     if (mapSourceResource->type == OsmAndResourceType::MapStyle)
     {
         const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
-
         self.mapStyleName = unresolvedMapStyle->name.toNSString();
 
-        [self buildParameters:unresolvedMapStyle->parameters];
+        [self buildParameters:self.mapStyleName];
     }
 }
 
--(void) buildParameters:(const QList< std::shared_ptr<const OsmAnd::UnresolvedMapStyle::Parameter>>)parameters
+-(void) buildParameters:(NSString *)styleName
 {
+    
+    const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
+    const auto& parameters = resolvedMapStyle->parameters;
+    
     NSMutableDictionary *categories = [NSMutableDictionary dictionary];
-    
     NSMutableArray *params = [NSMutableArray array];
-    
-    for (const auto& p : parameters) {
+
+    for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(parameters)))
+    {
+        const auto& p = entry.value();
+        NSString *name = resolvedMapStyle->getStringById(p->nameId).toNSString();
         
-        if ([p->name.toNSString() isEqualToString:@"appMode"] ||
-            [p->name.toNSString() isEqualToString:@"transportStops"] ||
-            [p->name.toNSString() isEqualToString:@"publicTransportMode"] ||
-            [p->name.toNSString() isEqualToString:@"tramTrainRoutes"] ||
-            [p->name.toNSString() isEqualToString:@"subwayMode"] ||
-            [p->name.toNSString() isEqualToString:@"engine_v1"] ||
+        if ([name isEqualToString:@"appMode"] ||
+            [name isEqualToString:@"transportStops"] ||
+            [name isEqualToString:@"publicTransportMode"] ||
+            [name isEqualToString:@"tramTrainRoutes"] ||
+            [name isEqualToString:@"subwayMode"] ||
+            [name isEqualToString:@"engine_v1"] ||
             p->category.isEmpty())
 
             continue;
         
-        //NSLog(@"name = %@ title = %@ decs = %@ type = %d", p->name.toNSString(), p->title.toNSString(), p->description.toNSString(), p->dataType);
+        //NSLog(@"name = %@ title = %@ decs = %@ type = %d", name, p->title.toNSString(), p->description.toNSString(), p->dataType);
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
-        param.name = p->name.toNSString();
+        param.name = name;
         param.title = p->title.toNSString();
         param.category = p->category.toNSString();
         
@@ -106,14 +114,15 @@
         NSMutableSet *values = [NSMutableSet set];
         [values addObject:@""];
         for (const auto& val : p->possibleValues)
-            [values addObject:val.toNSString()];
+            [values addObject:resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString()];
         
         param.possibleValues = [[values allObjects] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
             return [[obj1 lowercaseString] compare:[obj2 lowercaseString]];
         }];
         
         param.dataType = (OAMapStyleValueDataType)p->dataType;
-        switch (param.dataType) {
+        switch (param.dataType)
+        {
             case OABoolean:
                 param.defaultValue = @"false";
                 break;
@@ -129,7 +138,6 @@
 
     self.parameters = params;
     self.categories = categories;
-
 }
 
 -(NSArray *) getAllParameters

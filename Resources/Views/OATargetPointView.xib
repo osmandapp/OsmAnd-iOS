@@ -102,6 +102,25 @@
                     <rect key="frame" x="0.0" y="14" width="40" height="40"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hve-we-D1N" userLabel="Shadow">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="73"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonShadowClicked:" destination="iN0-l3-epB" eventType="touchDown" id="7Py-5W-dvE"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dBK-Tk-sBy" userLabel="Close">
+                    <rect key="frame" x="284" y="0.0" width="36" height="36"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <state key="normal" image="ic_close.png"/>
+                    <connections>
+                        <action selector="buttonCloseClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Rci-JF-QTB"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
@@ -113,17 +132,20 @@
                 <outlet property="backView1" destination="anZ-cB-J69" id="Z4O-QR-byV"/>
                 <outlet property="backView2" destination="KMX-Oj-GGz" id="D7D-8P-9p6"/>
                 <outlet property="backView3" destination="ZW3-bX-U96" id="qqP-1F-dA2"/>
+                <outlet property="buttonClose" destination="dBK-Tk-sBy" id="8rZ-J0-N13"/>
                 <outlet property="buttonDirection" destination="C1L-y5-El0" id="N28-5Z-AAb"/>
                 <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="IP8-fj-2X0"/>
+                <outlet property="buttonShadow" destination="hve-we-D1N" id="Fqv-5i-jJ4"/>
                 <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="G6e-gV-DVq"/>
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="NFP-hv-9bT"/>
             </connections>
-            <point key="canvasLocation" x="606" y="529.5"/>
+            <point key="canvasLocation" x="633" y="313.5"/>
         </view>
     </objects>
     <resources>
+        <image name="ic_close.png" width="10" height="10"/>
         <image name="menu_direction_icon.png" width="23" height="23"/>
         <image name="menu_share_icon.png" width="25" height="25"/>
         <image name="menu_star_icon.png" width="24" height="23"/>

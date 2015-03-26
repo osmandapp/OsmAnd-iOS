@@ -178,7 +178,8 @@
 }
 
 - (IBAction)helpButtonClicked:(id)sender {
-    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2015" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2015\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
 

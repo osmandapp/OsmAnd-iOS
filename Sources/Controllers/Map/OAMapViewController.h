@@ -16,6 +16,7 @@
 
 #define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
 #define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
+#define kNotificationContextMarkerClicked @"kNotificationContextMarkerClicked"
 #define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
 #if defined(OSMAND_IOS_DEV)

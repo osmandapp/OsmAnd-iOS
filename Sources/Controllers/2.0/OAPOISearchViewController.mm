@@ -909,7 +909,7 @@ typedef enum
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoom animated:YES];
+    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
     [mapVC showContextPinMarker:latitude longitude:longitude];
     
     CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);

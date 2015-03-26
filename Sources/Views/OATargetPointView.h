@@ -39,5 +39,6 @@
 -(void)targetPointShare;
 -(void)targetPointDirection;
 -(void)targetHide;
+-(void)targetGoToPoint;
 
 @end

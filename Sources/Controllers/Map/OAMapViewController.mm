@@ -381,6 +381,7 @@
 
     locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
+    locationAndCourseMarkerBuilder.setBaseOrder(1000);
     locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -400,7 +401,7 @@
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(std::numeric_limits<int>::max() - 1)
+        .setBaseOrder(1100)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
         .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
@@ -450,7 +451,7 @@
         
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(std::numeric_limits<int>::max() - 10)
+        .setBaseOrder(500)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
@@ -1106,6 +1107,7 @@
     OAPOIType *poiType;
     NSString *caption;
     NSString *buildingNumber;
+    BOOL isContextMarkerClicked = NO;
     UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
     
     BOOL isSymbolFound = NO;
@@ -1131,6 +1133,12 @@
                 }
             }
             isSymbolFound = YES;
+        }
+        
+        if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
+        {
+            isContextMarkerClicked = (markerGroup->getMapMarker() == _contextPinMarker.get());
+            break;
         }
         
         OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
@@ -1185,6 +1193,13 @@
         
     }
     
+    if (isContextMarkerClicked)
+    {
+        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
+                                                            object:self
+                                                          userInfo:nil];
+        return;
+    }
     
     // if single press and no symbol found - exit
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]] && !isSymbolFound)
@@ -2598,7 +2613,7 @@
 
     OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(std::numeric_limits<int>::max() - 2)
+    .setBaseOrder(200)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

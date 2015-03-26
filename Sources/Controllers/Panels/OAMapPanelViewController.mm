@@ -42,7 +42,6 @@
 @property (nonatomic) OADestinationViewController *destinationViewController;
 
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
-@property (strong, nonatomic) UIButton* shadowButton;
 
 @property (nonatomic, strong) UIViewController* prevHudViewController;
 
@@ -91,6 +90,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
     _hudInvalidated = NO;
 }
@@ -145,9 +145,6 @@
 {
     if (_destinationViewController)
         [_destinationViewController updateFrame];
-
-    if (_shadowButton)
-        _shadowButton.frame = [self shadowButtonRect];
 }
 
 @synthesize mapViewController = _mapViewController;
@@ -400,33 +397,12 @@
         [lastMapSettingsCtrl hidePopup:YES];
     
     _mapSettings = nil;
-
-    [self destroyShadowButton];
 }
 
--(CGRect)shadowButtonRect
+- (void)mapSettingsButtonClick:(id)sender
 {
-    CGRect frame;
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-        if (_mapSettings)
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
-        else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
-    } else {
-        if (_mapSettings)
-            frame = CGRectMake(kMapSettingsPopupWidth, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
-        else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
-    }
-    return frame;
-}
-
-- (void)mapSettingsButtonClick:(id)sender {
-    
     _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
     [_mapSettings showPopupAnimated:self parentViewController:nil];
-    
-    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil];
 }
 
 - (void)searchButtonClick:(id)sender
@@ -439,6 +415,14 @@
 -(void)onNoSymbolFound:(NSNotification *)notification
 {
     [self hideTargetPointMenu];
+}
+
+-(void)onContextMarkerClicked:(NSNotification *)notification
+{
+    if (!self.targetMenuView.superview)
+    {
+        [self showTargetPointMenu];
+    }
 }
 
 -(void)onTargetPointSet:(NSNotification *)notification
@@ -522,58 +506,9 @@
     
     [self.targetMenuView setPointLat:lat Lon:lon Zoom:renderView.zoom andTouchPoint:touchPoint];
     [self.targetMenuView setAddress:_formattedTargetName];
-    
     [self.targetMenuView.imageView setImage:icon];
     
-    [self.targetMenuView setNavigationController:self.navigationController];
-    [self.targetMenuView setMapViewInstance:_mapViewController.view];
-    
-    
-    [self.targetMenuView doLayoutSubviews];
-    CGRect frame = self.targetMenuView.frame;
-    frame.origin.y = DeviceScreenHeight + 10.0;
-    self.targetMenuView.frame = frame;
-    
-    if ([self.view.subviews containsObject:self.targetMenuView])
-        [self.targetMenuView removeFromSuperview];
-    [self.view addSubview:self.targetMenuView];
-    
-    [UIView animateWithDuration:0.3 animations:^{
-        CGRect frame = self.targetMenuView.frame;
-        frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
-        self.targetMenuView.frame = frame;
-        
-    } completion:^(BOOL finished) {
-        
-        //[self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:)];
-    }];
-    
-}
-
--(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent
-{
-    
-    if (_shadowButton && [self.view.subviews containsObject:_shadowButton])
-        [self destroyShadowButton];
-    
-    self.shadowButton = [[UIButton alloc] initWithFrame:[self shadowButtonRect]];
-    [_shadowButton setBackgroundColor:[UIColor colorWithWhite:0.3 alpha:0]];
-    [_shadowButton addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
-    if (withLongPressEvent) {
-        _shadowLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:withLongPressEvent];
-        [_shadowButton addGestureRecognizer:_shadowLongPress];
-    }
-    [self.view addSubview:self.shadowButton];
-}
-
--(void)destroyShadowButton
-{
-    [_shadowButton removeFromSuperview];
-    if (_shadowLongPress) {
-        [_shadowButton removeGestureRecognizer:_shadowLongPress];
-        _shadowLongPress = nil;
-    }
-    self.shadowButton = nil;
+    [self showTargetPointMenu];
 }
 
 - (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture
@@ -608,14 +543,40 @@
 
 -(void)targetHide
 {
+    [_mapViewController hideContextPinMarker];
     [self hideTargetPointMenu];
+}
+
+-(void)targetGoToPoint
+{
+    OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);
+    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [_mapViewController goToPosition:point animated:YES];
+}
+
+-(void)showTargetPointMenu
+{
+    [self.targetMenuView setNavigationController:self.navigationController];
+    [self.targetMenuView setMapViewInstance:_mapViewController.view];
+    
+    [self.targetMenuView doLayoutSubviews];
+    CGRect frame = self.targetMenuView.frame;
+    frame.origin.y = DeviceScreenHeight + 10.0;
+    self.targetMenuView.frame = frame;
+    
+    if ([self.view.subviews containsObject:self.targetMenuView])
+        [self.targetMenuView removeFromSuperview];
+    [self.view addSubview:self.targetMenuView];
+    
+    [UIView animateWithDuration:0.3 animations:^{
+        CGRect frame = self.targetMenuView.frame;
+        frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
+        self.targetMenuView.frame = frame;
+    }];
 }
 
 -(void)hideTargetPointMenu
 {
-    [_mapViewController hideContextPinMarker];
-    //[self destroyShadowButton];
-    
     if (self.targetMenuView.superview)
     {
         CGRect frame = self.targetMenuView.frame;

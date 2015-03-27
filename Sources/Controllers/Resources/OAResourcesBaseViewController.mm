@@ -144,6 +144,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #pragma mark - IOS-178 Add download view
 -(void)showDownloadViewForTask:(id<OADownloadTask>)task {
     
+    if (self.downloadView && self.downloadView.superview)
+        [self.downloadView removeFromSuperview];
+    
     self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - kOADownloadProgressViewHeight, DeviceScreenWidth, kOADownloadProgressViewHeight)];
     [self.downloadView setTaskName: [[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0] stringByReplacingOccurrencesOfString:@"resource:" withString:@""] ];
     self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -695,6 +698,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil)
             return;
+        
+        if (!self.downloadView || !self.downloadView.superview)
+            [self showDownloadViewForTask:task];
+        
         [self.downloadView setProgress:[value floatValue]];
         //[self refreshContent:NO];
         [self refreshDownloadingContent:task.key];
@@ -717,24 +724,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             return;
         }
 
-        //if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
-        [self.downloadView removeFromSuperview];
+        if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
+            [self.downloadView removeFromSuperview];
         
-        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
-            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
-            [nextTask resume];
-            
-            self.downloadView = nil;
-            
-            //update balance
-            double delayInSeconds = 0.5;
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self showDownloadViewForTask:nextTask];
-            });
+        if (task.progressCompleted < 1.0)
+        {
+            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0) {
+                id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+                [nextTask resume];
+
+                //update balance
+                double delayInSeconds = 0.5;
+                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                    [self showDownloadViewForTask:nextTask];
+                });
+                
+            }
+            [self updateContent];
+        }
+        else
+        {
+            [self refreshDownloadingContent:task.key];
         }
 
-        [self updateContent];
     });
 }
 

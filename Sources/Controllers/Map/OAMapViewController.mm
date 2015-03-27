@@ -381,7 +381,7 @@
 
     locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(1000);
+    locationAndCourseMarkerBuilder.setBaseOrder(200000);
     locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -401,7 +401,7 @@
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(1100)
+        .setBaseOrder(210000)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
         .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
@@ -451,7 +451,7 @@
         
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(500)
+        .setBaseOrder(205000)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
@@ -828,7 +828,7 @@
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         // Resume symbols update
-        [mapView resumeSymbolsUpdate];
+        while (![mapView resumeSymbolsUpdate]);
     }
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
@@ -1072,7 +1072,7 @@
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
         // Resume symbols update
-        [mapView resumeSymbolsUpdate];
+        while (![mapView resumeSymbolsUpdate]);
     }
 }
 
@@ -2613,7 +2613,7 @@
 
     OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(200)
+    .setBaseOrder(202000)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

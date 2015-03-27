@@ -1185,26 +1185,48 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
         
         float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
         {
+            progressView.iconPath = nil;
             if (progressView.isSpinning)
                 [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted;
+            progressView.progress = progressCompleted - 0.001;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = 1.0f;
+            progressView.iconPath = [self tickPath:progressView];
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+            progressView.progress = 0.0f;
         }
         else
         {
+            progressView.iconPath = [UIBezierPath bezierPath];
             progressView.progress = 0.0;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }
     }
 
+}
+
+-(UIBezierPath *)tickPath:(FFCircularProgressView *)progressView
+{
+    CGFloat radius = MIN(progressView.frame.size.width, progressView.frame.size.height)/2;
+    UIBezierPath *path = [UIBezierPath bezierPath];
+    CGFloat tickWidth = radius * .3;
+    [path moveToPoint:CGPointMake(0, 0)];
+    [path addLineToPoint:CGPointMake(0, tickWidth * 2)];
+    [path addLineToPoint:CGPointMake(tickWidth * 3, tickWidth * 2)];
+    [path addLineToPoint:CGPointMake(tickWidth * 3, tickWidth)];
+    [path addLineToPoint:CGPointMake(tickWidth, tickWidth)];
+    [path addLineToPoint:CGPointMake(tickWidth, 0)];
+    [path closePath];
+    
+    [path applyTransform:CGAffineTransformMakeRotation(-M_PI_4)];
+    [path applyTransform:CGAffineTransformMakeTranslation(radius * .46, 1.02 * radius)];
+    
+    return path;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -1433,25 +1455,29 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         ResourceItem* item = (ResourceItem*)item_;
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;
-
+        
         float progressCompleted = item.downloadTask.progressCompleted;
-        if (progressCompleted >= 0.0f && item.downloadTask.state == OADownloadTaskStateRunning)
+        if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
         {
+            progressView.iconPath = nil;
             if (progressView.isSpinning)
                 [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progressCompleted;
+            progressView.progress = progressCompleted - 0.001;
         }
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
-            if (progressView.isSpinning)
-                [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = 1.0f;
+            progressView.iconPath = [self tickPath:progressView];
+            progressView.progress = 0.0f;
+            if (!progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
         }
         else
         {
+            progressView.iconPath = [UIBezierPath bezierPath];
             progressView.progress = 0.0;
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
+            [progressView setNeedsDisplay];
         }
     }
 

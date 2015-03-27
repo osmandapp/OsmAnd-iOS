@@ -58,11 +58,11 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     }
 
     task.installResourceRetry = 0;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self performSelector:@selector(processResource:) withObject:task afterDelay:0.1];
-        
-    });
 
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
+    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+        [self processResource:task];
+    });
 }
 
 -(void)processResource:(id<OADownloadTask>)task
@@ -74,7 +74,6 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     bool success = false;
     
     OALog(@"Going to install/update of %@", nsResourceId);
-    
     // Try to install only in case of successful download
     if (task.error == nil)
     {
@@ -88,7 +87,10 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
                 task.installResourceRetry++;
                 if (task.installResourceRetry < 10) {
                     OALog(@"installResourceRetry = %d", task.installResourceRetry);
-                    [self performSelector:@selector(processResource:) withObject:task afterDelay:0.5];
+                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+                    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                        [self processResource:task];
+                    });
                     return;
                 }
             }
@@ -102,9 +104,15 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
     
     // Start next resource download task if such exists
-    id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKeyPrefix:@"resource:"];
-    if (!nextTask)
+    if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+    {
+        id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+        [nextTask resume];
+    }
+    else
+    {
         [_app updateScreenTurnOffSetting];
+    }
 }
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

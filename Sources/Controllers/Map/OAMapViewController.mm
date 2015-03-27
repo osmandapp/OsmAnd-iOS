@@ -81,6 +81,7 @@
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
 #define kQuickAnimationTime 0.4f
 #define kOneSecondAnimatonTime 1.0f
+#define kScreensToFlyWithAnimation 3
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
@@ -196,6 +197,8 @@
     BOOL _firstAppear;
     BOOL _rotatingToNorth;
     BOOL _isIn3dMode;
+    
+    NSDate *_startChangingMapMode;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -1557,6 +1560,8 @@
                 // used in PositionTrack mode
                 if (_lastMapMode == OAMapModeFollow && _lastPositionTrackStateCaptured)
                 {
+                    _startChangingMapMode = [NSDate date];
+
                     mapView.animator->animateTargetTo(newTarget31,
                                                       kOneSecondAnimatonTime,
                                                       OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
@@ -1577,11 +1582,18 @@
                 }
                 else
                 {
-                    mapView.animator->parabolicAnimateTargetTo(newTarget31,
-                                                               kOneSecondAnimatonTime,
-                                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                               kLocationServicesAnimationKey);
+                    if ([self screensToFly:[OANativeUtilities convertFromPointI:newTarget31]] <= kScreensToFlyWithAnimation)
+                    {
+                        _startChangingMapMode = [NSDate date];
+                        mapView.animator->animateTargetTo(newTarget31,
+                                                          kQuickAnimationTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                          kUserInteractionAnimationKey);
+                    }
+                    else
+                    {
+                        [mapView setTarget31:newTarget31];
+                    }
                 }
 
                 mapView.animator->resume();
@@ -1601,6 +1613,8 @@
                 _lastPositionTrackStateCaptured = true;
                 _isIn3dMode = YES;
             }
+
+            _startChangingMapMode = [NSDate date];
 
             mapView.animator->pause();
             mapView.animator->cancelAllAnimations();
@@ -1718,6 +1732,10 @@
                                                         OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
     }
 
+    // Wait for Map Mode changing animation if any, to prevent animation lags
+    if (_startChangingMapMode && [[NSDate date] timeIntervalSinceDate:_startChangingMapMode] < kOneSecondAnimatonTime)
+        return;
+    
     // If map mode is position-track or follow, move to that position
     if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
     {
@@ -1767,8 +1785,9 @@
         {
             mapView.animator->cancelAnimation(targetAnimation);
 
+            double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
             mapView.animator->animateTargetTo(newTarget31,
-                                              targetAnimation->getDuration() - targetAnimation->getTimePassed(),
+                                              duration,
                                               OsmAnd::MapAnimator::TimingFunction::Linear,
                                               kLocationServicesAnimationKey);
         }
@@ -1783,11 +1802,10 @@
             }
             else //if (_app.mapMode == OAMapModePositionTrack)
             {
-                mapView.animator->parabolicAnimateTargetTo(newTarget31,
-                                                           kOneSecondAnimatonTime,
-                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                           kLocationServicesAnimationKey);
+                mapView.animator->animateTargetTo(newTarget31,
+                                                  kOneSecondAnimatonTime,
+                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                  kLocationServicesAnimationKey);
             }
         }
 
@@ -2327,6 +2345,20 @@
     return self.view.contentScaleFactor;
 }
 
+- (CGFloat)screensToFly:(Point31)position31
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
+    const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
+    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
+    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
+    
+    const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
+    return distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
+}
+
 - (void)goToPosition:(Point31)position31
             animated:(BOOL)animated
 {
@@ -2335,26 +2367,18 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
-    const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
-    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
-    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
-    
-    const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
-    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
-    CGFloat screensToFly = distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
+    CGFloat screensToFly = [self screensToFly:position31];
 
     _app.mapMode = OAMapModeFree;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
 
-    if (animated && screensToFly <= 3)
+    if (animated && screensToFly <= kScreensToFlyWithAnimation)
     {
-        mapView.animator->parabolicAnimateTargetTo([OANativeUtilities convertFromPoint31:position31],
-                                                   kQuickAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kUserInteractionAnimationKey);
+        mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+                                          kQuickAnimationTime,
+                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                          kUserInteractionAnimationKey);
         mapView.animator->resume();
     }
     else
@@ -2372,20 +2396,13 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    const auto lon1 = OsmAnd::Utilities::get31LongitudeX(position31.x);
-    const auto lat1 = OsmAnd::Utilities::get31LatitudeY(position31.y);
-    const auto lon2 = OsmAnd::Utilities::get31LongitudeX(mapView.target31.x);
-    const auto lat2 = OsmAnd::Utilities::get31LatitudeY(mapView.target31.y);
-
-    const auto distance = OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
-    CGFloat distanceInPixels = distance / mapView.currentPixelsToMetersScaleFactor;
-    CGFloat screensToFly = distanceInPixels / ((DeviceScreenWidth + DeviceScreenHeight) / 2.0);
+    CGFloat screensToFly = [self screensToFly:position31];
 
     _app.mapMode = OAMapModeFree;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
 
-    if (animated && screensToFly <= 3)
+    if (animated && screensToFly <= kScreensToFlyWithAnimation)
     {
         mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
                                           kQuickAnimationTime,

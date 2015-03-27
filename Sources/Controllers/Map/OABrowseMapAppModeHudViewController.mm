@@ -317,22 +317,19 @@
     });
 }
 
-- (IBAction)onMapSettingsButtonClick:(id)sender {
-
+- (IBAction)onMapSettingsButtonClick:(id)sender
+{
     [((OAMapPanelViewController *)self.parentViewController) mapSettingsButtonClick:sender];
-
-    self.sidePanelController.recognizesPanGesture = NO;
 }
 
-- (IBAction)onSearchButtonClick:(id)sender {
-    
+- (IBAction)onSearchButtonClick:(id)sender
+{
     [((OAMapPanelViewController *)self.parentViewController) searchButtonClick:sender];
-    
-    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 
-- (IBAction)onOptionsMenuButtonDown:(id)sender {
+- (IBAction)onOptionsMenuButtonDown:(id)sender
+{
     self.sidePanelController.recognizesPanGesture = YES;
 }
 

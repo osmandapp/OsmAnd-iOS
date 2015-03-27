@@ -341,29 +341,34 @@
     if (_regionId == nil)
         return YES;
     
+    OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
+    
+    if ([iapHelper productPurchased:kInAppId_Region_All_World])
+        return YES;
+    
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Africa];
+        return [iapHelper productPurchased:kInAppId_Region_Africa];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Asia];
+        return [iapHelper productPurchased:kInAppId_Region_Asia];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Australia];
+        return [iapHelper productPurchased:kInAppId_Region_Australia];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Central_America];
+        return [iapHelper productPurchased:kInAppId_Region_Central_America];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Europe];
+        return [iapHelper productPurchased:kInAppId_Region_Europe];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_North_America];
+        return [iapHelper productPurchased:kInAppId_Region_North_America];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_Russia];
+        return [iapHelper productPurchased:kInAppId_Region_Russia];
     }
     if ([_regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()]) {
-        return [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_South_America];
+        return [iapHelper productPurchased:kInAppId_Region_South_America];
     }
     return NO;
 }

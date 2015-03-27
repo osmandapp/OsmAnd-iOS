@@ -19,6 +19,8 @@
 #define kInAppId_Region_North_America @"net.osmand.inapp.region.northamerica"
 #define kInAppId_Region_South_America @"net.osmand.inapp.region.southamerica"
 
+#define kInAppId_Region_All_World @"net.osmand.inapp.region.allworld"
+
 #define kInAppId_Addon_SkiMap @"net.osmand.inapp.addon.skimap"
 #define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
 
@@ -32,6 +34,8 @@
 #define kInAppId_Region_Central_America @"net.osmand.maps.inapp.region.centralamerica"
 #define kInAppId_Region_North_America @"net.osmand.maps.inapp.region.northamerica"
 #define kInAppId_Region_South_America @"net.osmand.maps.inapp.region.southamerica"
+
+#define kInAppId_Region_All_World @"net.osmand.maps.inapp.region.allworld"
 
 #define kInAppId_Addon_SkiMap @"net.osmand.maps.inapp.addon.skimap"
 #define kInAppId_Addon_Nautical @"net.osmand.maps.inapp.addon.nautical"

@@ -271,6 +271,18 @@
                                                                  if (incomingURLViewController == nil)
                                                                      return;
                                                                  
+                                                                 if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+                                                                 {
+                                                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                                                         
+                                                                         [[[UIAlertView alloc] initWithTitle:@"Import Failed" message:@"The specified file cannot be imported" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                                                                                              
+                                                                     });
+                                                                     
+                                                                     incomingURLViewController = nil;
+                                                                     return;
+                                                                 }
+
                                                                  [self closeMenuAndPanelsAnimated:NO];
                                                                  
                                                                  // Open incoming-URL view controller as menu

@@ -18,6 +18,8 @@
 @property NSMutableArray* ignoredNames;
 @property NSString* conflictedName;
 
+@property (nonatomic, readonly) BOOL handled;
+
 - (instancetype)initFor:(NSURL*)url;
 
 - (IBAction)cancelClicked:(id)sender;

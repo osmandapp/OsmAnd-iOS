@@ -72,7 +72,7 @@ kFavoriteCellType;
 {
     OsmAndAppInstance app = [OsmAndApp instance];
 
-    BOOL handled = NO;
+    _handled = NO;
     
     // Try to process as favorites
     std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
@@ -82,13 +82,14 @@ kFavoriteCellType;
         favoritesCollection = OsmAnd::FavoriteLocationsGpxCollection::tryLoadFrom(QString::fromNSString(url.path));
         [[NSFileManager defaultManager] removeItemAtPath:url.path error:nil];
         if (favoritesCollection)
-            handled = YES;
+            _handled = YES;
         
         self = [super init];
         if (self) {
             _url = [url copy];
             _app = app;
-            _favoritesCollection = favoritesCollection;
+            if (_handled)
+                _favoritesCollection = favoritesCollection;
         }
         
     }

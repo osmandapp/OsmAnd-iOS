@@ -181,14 +181,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_refreshRepositoryProgressHUD];
     
-#if !defined(OSMAND_IOS_DEV)
     if (_currentScope == kLocalResourcesScope ||
         (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
         (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
         _displayBanner = NO;
     else
         _displayBanner = YES;
-#endif
 
     [self obtainDataAndItems];
     [self prepareContent];

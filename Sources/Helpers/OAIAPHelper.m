@@ -32,13 +32,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 +(int)freeMapsAvailable
 {
     int freeMaps = kFreeMapsAvailableTotal;
-#if !defined(OSMAND_IOS_DEV)
     if ([[NSUserDefaults standardUserDefaults] objectForKey:@"freeMapsAvailable"]) {
         freeMaps = (int)[[NSUserDefaults standardUserDefaults] integerForKey:@"freeMapsAvailable"];
     } else {
         [[NSUserDefaults standardUserDefaults] setInteger:kFreeMapsAvailableTotal forKey:@"freeMapsAvailable"];
     }
-#endif
 
     OALog(@"Free maps available: %d", freeMaps);
     return freeMaps;
@@ -70,6 +68,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                       kInAppId_Region_Central_America,
                                       kInAppId_Region_North_America,
                                       kInAppId_Region_South_America,
+                                      kInAppId_Region_All_World,
                                       kInAppId_Addon_SkiMap,
                                       kInAppId_Addon_Nautical,
                                       nil];
@@ -89,6 +88,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Region_Central_America,
             kInAppId_Region_North_America,
             kInAppId_Region_South_America,
+            kInAppId_Region_All_World,
             nil];
 }
 
@@ -139,7 +139,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         // Check for previously purchased products
         _purchasedProductIdentifiers = [NSMutableSet set];
         for (NSString * productIdentifier in _productIdentifiers) {
+#if !defined(OSMAND_IOS_DEV)
             BOOL productPurchased = [[NSUserDefaults standardUserDefaults] boolForKey:productIdentifier];
+#else
+            BOOL productPurchased = YES;
+#endif            
             if (productPurchased) {
                 
                 if ([[self.class inAppsMaps] containsObject:productIdentifier])
@@ -157,8 +161,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     
 }
 
-- (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler {
-    
+- (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
+{
     // Add self as transaction observer
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 
@@ -168,16 +172,13 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [_productsRequest start];
 }
 
-- (BOOL)productPurchased:(NSString *)productIdentifier {
-#if !defined(OSMAND_IOS_DEV)
+- (BOOL)productPurchased:(NSString *)productIdentifier
+{
     return [_purchasedProductIdentifiers containsObject:productIdentifier];
-#else
-    return YES;
-#endif
 }
 
-- (void)buyProduct:(SKProduct *)product {
-    
+- (void)buyProduct:(SKProduct *)product
+{
     OALog(@"Buying %@...", product.productIdentifier);
     
     _restoringPurchases = NO;

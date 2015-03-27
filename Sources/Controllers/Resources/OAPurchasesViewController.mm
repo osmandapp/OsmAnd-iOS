@@ -311,6 +311,9 @@
 
 - (IBAction)btnRestorePurchasesClicked:(id)sender
 {
+    if (![[OAIAPHelper sharedInstance] productsLoaded])
+        return;
+    
     _restoringPurchases = YES;
     [_loadProductsProgressHUD show:YES];
     

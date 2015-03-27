@@ -422,8 +422,16 @@
     return frame;
 }
 
+- (void)removeGestureRecognizers
+{
+    while (self.view.gestureRecognizers.count > 0)
+        [self.view removeGestureRecognizer:self.view.gestureRecognizers[0]];
+}
+
 - (void)mapSettingsButtonClick:(id)sender
 {
+    [self removeGestureRecognizers];
+    
     _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
     [_mapSettings showPopupAnimated:self parentViewController:nil];
     
@@ -432,6 +440,8 @@
 
 - (void)searchButtonClick:(id)sender
 {
+    [self removeGestureRecognizers];
+
     if (!_searchPOI)
         _searchPOI = [[OAPOISearchViewController alloc] init];
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];

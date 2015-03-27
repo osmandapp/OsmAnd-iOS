@@ -241,6 +241,7 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASliderCell" owner:self options:nil];
             cell = (OASliderCell *)[nib objectAtIndex:0];
+            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         
         if (cell) {
@@ -248,8 +249,6 @@ typedef enum
                 cell.sliderView.value = app.data.overlayAlpha;
             else
                 cell.sliderView.value = app.data.underlayAlpha;
-            
-            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
             
         return cell;

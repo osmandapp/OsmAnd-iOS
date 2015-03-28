@@ -10,9 +10,17 @@
 #import "OsmAndApp.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAMapRendererView.h"
+#import "OATargetPoint.h"
+#import "OADefaultFavorite.h"
+
+#include <OsmAndCore.h>
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 @interface OATargetPointView()
 
+@property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 
@@ -28,10 +36,6 @@
 @property (weak, nonatomic) IBOutlet UIView *backView2;
 @property (weak, nonatomic) IBOutlet UIView *backView3;
 
-@property double lat;
-@property double lon;
-@property int zoom;
-@property CGPoint touchPoint;
 @property NSString* formattedLocation;
 @property OAMapRendererView* mapView;
 @property UINavigationController* navController;
@@ -73,6 +77,15 @@
     [self.layer setShadowOpacity:0.8];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+    
+    [OsmAndApp instance].favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
+                                                                      [self]
+                                                                      (const OsmAnd::IFavoriteLocationsCollection* const collection,
+                                                                       const std::shared_ptr<const OsmAnd::IFavoriteLocation> favoriteLocation)
+                                                                      {
+                                                                          [self onFavoriteLocationChanged:favoriteLocation];
+                                                                      });
+    
 }
 
 - (void)layoutSubviews
@@ -95,15 +108,23 @@
     frame.size.height = h;
     self.frame = frame;
     
+    
+    if (_imageView.image)
+    {
+        if (_imageView.bounds.size.width < _imageView.image.size.width ||
+            _imageView.bounds.size.height < _imageView.image.size.height)
+            _imageView.contentMode = UIViewContentModeScaleAspectFit;
+        else
+            _imageView.contentMode = UIViewContentModeTop;
+    }
+    
+    
+    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination ? 10.0 : 0.0);
+    
     if (landscape) {
         
-        if (_imageView.image) {
-            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0 - 210.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0 - 210.0, 21.0);
-        } else {
-            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0 - 210.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0 - 210.0, 21.0);
-        }
+        _addressLabel.frame = CGRectMake(textX, 12.0, DeviceScreenWidth - textX - 40.0 - 210.0, 21.0);
+        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0 - 210.0, 21.0);
         
         _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0 - 50.0, h);
         _buttonClose.frame = CGRectMake(DeviceScreenWidth - 210.0 - 36.0, 0.0, 36.0, 36.0);
@@ -122,13 +143,8 @@
         
     } else {
         
-        if (_imageView.image) {
-            _addressLabel.frame = CGRectMake(40.0, 12.0, DeviceScreenWidth - 52.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(40.0, 39.0, DeviceScreenWidth - 52.0, 21.0);
-        } else {
-            _addressLabel.frame = CGRectMake(16.0, 12.0, DeviceScreenWidth - 24.0, 21.0);
-            _coordinateLabel.frame = CGRectMake(16.0, 39.0, DeviceScreenWidth - 24.0, 21.0);
-        }
+        _addressLabel.frame = CGRectMake(textX, 12.0, DeviceScreenWidth - textX - 40.0, 21.0);
+        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0, 21.0);
         
         _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 50.0, 73.0);
         _buttonClose.frame = CGRectMake(DeviceScreenWidth - 36.0, 0.0, 36.0, 36.0);
@@ -148,28 +164,46 @@
     
 }
 
+-(void)setTargetPoint:(OATargetPoint *)targetPoint
+{
+    _targetPoint = targetPoint;
 
--(void)setAddress:(NSString*)address {
-    [self.addressLabel setText:address];
-}
+    _imageView.image = _targetPoint.icon;
+    [_addressLabel setText:_targetPoint.title];
+    self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
+    [_coordinateLabel setText:self.formattedLocation];
+    
+    _buttonDirection.enabled = _targetPoint.type != OATargetDestination;
 
--(void)setPointLat:(double)lat Lon:(double)lon Zoom:(int)zoom andTouchPoint:(CGPoint)touchPoint {
-    self.lat = lat;
-    self.lon = lon;
-    self.zoom = zoom;
-    self.touchPoint = touchPoint;
-
-    self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
-    [self.coordinateLabel setText:self.formattedLocation];
+    if (_targetPoint.type == OATargetFavorite)
+        [_buttonFavorite setTitle:@"Edit favorite" forState:UIControlStateNormal];
+    else
+        [_buttonFavorite setTitle:@"Add favorite" forState:UIControlStateNormal];
 }
 
 -(void)setMapViewInstance:(UIView*)mapView {
     self.mapView = (OAMapRendererView *)mapView;
 }
 
-
 -(void)setNavigationController:(UINavigationController*)controller {
     self.navController = controller;
+}
+
+- (void)onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation
+{
+    if (_targetPoint.type == OATargetFavorite)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            UIColor* color = [UIColor colorWithRed:favoriteLocation->getColor().r/255.0 green:favoriteLocation->getColor().g/255.0 blue:favoriteLocation->getColor().b/255.0 alpha:1.0];
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            
+            _targetPoint.title = favoriteLocation->getTitle().toNSString();
+            [_addressLabel setText:_targetPoint.title];
+            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+            _imageView.image = _targetPoint.icon;
+        });
+    }
 }
 
 #pragma mark - Actions
@@ -177,27 +211,51 @@
     
     NSString *locText;
     if (self.isAddressFound)
-        locText = [self.addressLabel.text copy];
+        locText = self.targetPoint.title;
     else
         locText = self.formattedLocation;
     
-    OAFavoriteItemViewController* addFavoriteVC = [[OAFavoriteItemViewController alloc] initWithLocation:CLLocationCoordinate2DMake(self.lat, self.lon)
-                                                                                                andTitle:locText];
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+    OAFavoriteItemViewController* favoriteViewController;
+    if (_targetPoint.type == OATargetFavorite)
     {
-        // For iPhone and iPod, push menu to navigation controller
-        [self.navController pushViewController:addFavoriteVC animated:YES];
+        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        {
+            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+            
+            if ((int)(_targetPoint.location.latitude * 10000.0) == favLat && (int)(_targetPoint.location.longitude * 10000.0) == favLon)
+            {
+                OAFavoriteItem* item = [[OAFavoriteItem alloc] init];
+                item.favorite = favLoc;
+                favoriteViewController = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
+                break;
+            }
+        }
     }
-    else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+    else
     {
-        // For iPad, open menu in a popover with it's own navigation controller
-        UINavigationController* navigationController = [[OANavigationController alloc] initWithRootViewController:addFavoriteVC];
-        UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
-        
-        [popoverController presentPopoverFromRect:CGRectMake(self.touchPoint.x, self.touchPoint.y, 0.0f, 0.0f)
-                                           inView:self.mapView
-                         permittedArrowDirections:UIPopoverArrowDirectionAny
-                                         animated:YES];
+        favoriteViewController = [[OAFavoriteItemViewController alloc] initWithLocation:self.targetPoint.location
+                                                                               andTitle:locText];
+    }
+    
+    if (favoriteViewController)
+    {
+        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
+        {
+            // For iPhone and iPod, push menu to navigation controller
+            [self.navController pushViewController:favoriteViewController animated:YES];
+        }
+        else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
+        {
+            // For iPad, open menu in a popover with it's own navigation controller
+            UINavigationController* navigationController = [[OANavigationController alloc] initWithRootViewController:favoriteViewController];
+            UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
+            
+            [popoverController presentPopoverFromRect:CGRectMake(_targetPoint.touchPoint.x, _targetPoint.touchPoint.y, 0.0f, 0.0f)
+                                               inView:self.mapView
+                             permittedArrowDirections:UIPopoverArrowDirectionAny
+                                             animated:YES];
+        }
     }
     
     [self.delegate targetPointAddFavorite];
@@ -209,7 +267,7 @@
     
     //UIImage *image = [self.mapView getGLScreenshot];
     
-    NSString *string = [NSString stringWithFormat:@"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d The location was shared with you by OsmAnd", _lat, _lon, _zoom];
+    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _targetPoint.zoom];
     
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]

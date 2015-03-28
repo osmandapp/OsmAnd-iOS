@@ -23,11 +23,16 @@
 #import "OAMapSettingsViewController.h"
 #import "OAPOISearchViewController.h"
 #import "OAPOIType.h"
+#import "OADefaultFavorite.h"
+#import "OATargetPoint.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/Road.h>
 #include <OsmAndCore/CachingRoadLocator.h>
+#include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/IFavoriteLocationsCollection.h>
+
 
 #define _(name) OAMapPanelViewController__##name
 #define commonInit _(commonInit)
@@ -464,6 +469,7 @@
 {
     NSDictionary *params = [notification userInfo];
     OAPOIType *poiType = [params objectForKey:@"poiType"];
+    NSString *objectType = [params objectForKey:@"objectType"];
     NSString *caption = [params objectForKey:@"caption"];
     NSString *buildingNumber = [params objectForKey:@"buildingNumber"];
     UIImage *icon = [params objectForKey:@"icon"];
@@ -471,9 +477,51 @@
     double lon = [[params objectForKey:@"lon"] floatValue];
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+
     NSString* addressString;
-    self.targetMenuView.isAddressFound = NO;
-    if (caption.length == 0 && !poiType)
+    _targetMenuView.isAddressFound = NO;
+    
+    if (objectType && [objectType isEqualToString:@"favorite"])
+    {
+        for (const auto& favLoc : _app.favoritesCollection->getFavoriteLocations()) {
+            
+            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+
+            if ((int)(lat * 10000.0) == favLat && (int)(lon * 10000.0) == favLon)
+            {
+                UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+                OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+                
+                caption = favLoc->getTitle().toNSString();
+                icon = [UIImage imageNamed:favCol.iconName];
+
+                targetPoint.type = OATargetFavorite;
+                break;
+            }
+        }
+
+    }
+    else if (objectType && [objectType isEqualToString:@"destination"])
+    {
+        for (OADestination *destination in _app.data.destinations)
+        {
+            if (destination.latitude == lat && destination.longitude == lon)
+            {
+                caption = destination.desc;
+                icon = [UIImage imageNamed:destination.markerResourceName];
+
+                targetPoint.type = OATargetDestination;
+                break;
+            }
+        }
+    }
+    
+    if (targetPoint.type == OATargetLocation && poiType)
+        targetPoint.type = OATargetPOI;
+    
+    if (caption.length == 0 && targetPoint.type == OATargetLocation)
     {
         std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
         _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
@@ -504,11 +552,14 @@
         if (!nativeTitle || [nativeTitle isEqualToString:@""])
         {
             if (buildingNumber.length > 0)
+            {
                 addressString = buildingNumber;
+                _targetMenuView.isAddressFound = YES;
+            }
             else
+            {
                 addressString = @"Address is not known yet";
-            
-            self.targetMenuView.isAddressFound = YES;
+            }
         }
         else
         {
@@ -516,16 +567,16 @@
                 addressString = [NSString stringWithFormat:@"%@, %@", nativeTitle, buildingNumber];
             else
                 addressString = nativeTitle;
-            self.targetMenuView.isAddressFound = YES;
+            _targetMenuView.isAddressFound = YES;
         }
     }
     else if (caption.length > 0)
     {
-        self.targetMenuView.isAddressFound = YES;
+        _targetMenuView.isAddressFound = YES;
         addressString = caption;
     }
     
-    if (self.targetMenuView.isAddressFound)
+    if (_targetMenuView.isAddressFound || addressString)
         _formattedTargetName = addressString;
     else if (poiType)
         _formattedTargetName = poiType.nameLocalized;
@@ -539,9 +590,13 @@
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
-    [self.targetMenuView setPointLat:lat Lon:lon Zoom:renderView.zoom andTouchPoint:touchPoint];
-    [self.targetMenuView setAddress:_formattedTargetName];
-    [self.targetMenuView.imageView setImage:icon];
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu];
 }
@@ -624,8 +679,10 @@
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.targetMenuView.frame = frame;
     
+    [self.targetMenuView.layer removeAllAnimations];
     if ([self.view.subviews containsObject:self.targetMenuView])
         [self.targetMenuView removeFromSuperview];
+    
     [self.view addSubview:self.targetMenuView];
     
     [UIView animateWithDuration:0.3 animations:^{
@@ -650,11 +707,12 @@
         CGRect frame = self.targetMenuView.frame;
         frame.origin.y = DeviceScreenHeight + 10.0;
         
-        [UIView animateWithDuration:0.5 animations:^{
+        [UIView animateWithDuration:0.4 animations:^{
             self.targetMenuView.frame = frame;
             
         } completion:^(BOOL finished) {
-            [self.targetMenuView removeFromSuperview];
+            if (finished)
+                [self.targetMenuView removeFromSuperview];
         }];
     }
 }

@@ -94,6 +94,33 @@
 #define commonInit _(commonInit)
 #define deinit _(deinit)
 
+typedef NS_ENUM(NSInteger, OAMapSymbolType)
+{
+    OAMapSymbolUndefined = 0,
+    OAMapSymbolContext,
+    OAMapSymbolDestination,
+    OAMapSymbolFavorite,
+    OAMapSymbolPOI,
+    OAMapSymbolLocation,
+};
+
+@interface OAMapSymbol : NSObject
+
+@property (nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic) CGPoint touchPoint;
+@property (nonatomic) OAPOIType *poiType;
+@property (nonatomic) UIImage *icon;
+@property (nonatomic) NSString *caption;
+@property (nonatomic) NSString *buildingNumber;
+@property (nonatomic) OAMapSymbolType type;
+@property (nonatomic) NSInteger sortIndex;
+
+@end
+
+@implementation OAMapSymbol
+@end
+
+
 @interface OAMapViewController ()
 @end
 
@@ -384,7 +411,7 @@
 
     locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(200000);
+    locationAndCourseMarkerBuilder.setBaseOrder(206000);
     locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -1107,23 +1134,21 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
-    OAPOIType *poiType;
-    NSString *caption;
-    NSString *buildingNumber;
-    BOOL isContextMarkerClicked = NO;
-    UIImage *icon = [self findIconAtPoint:OsmAnd::PointI(touchPoint.x, touchPoint.y)];
+    NSMutableArray *foundSymbols = [NSMutableArray array];
     
-    BOOL isSymbolFound = NO;
-    CGFloat delta = 8.0;
+    CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
+
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
     for (const auto symbolInfo : symbolInfos) {
         
-        isSymbolFound = NO;
+        OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+        symbol.type = OAMapSymbolLocation;
+        symbol.touchPoint = touchPoint;
         
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
-            if (!isSymbolFound && [recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
+            if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
                 
                 lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
                 lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
@@ -1135,43 +1160,62 @@
                     }
                 }
             }
-            isSymbolFound = YES;
         }
         
         if (const auto markerGroup = dynamic_cast<OsmAnd::MapMarker::SymbolsGroup*>(symbolInfo.mapSymbol->groupPtr))
         {
-            isContextMarkerClicked = (markerGroup->getMapMarker() == _contextPinMarker.get());
-            break;
+            if (markerGroup->getMapMarker() == _contextPinMarker.get())
+            {
+                symbol.type = OAMapSymbolContext;
+            }
+            else
+            {
+                for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+                    if (markerGroup->getMapMarker() == fav.get())
+                    {
+                        symbol.type = OAMapSymbolFavorite;
+                        lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
+                        lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+                        break;
+                    }
+                for (const auto& dest : _destinationPinMarkersCollection->getMarkers())
+                    if (markerGroup->getMapMarker() == dest.get())
+                    {
+                        symbol.type = OAMapSymbolDestination;
+                        lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
+                        lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
+                        break;
+                    }
+            }
         }
         
-        OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-        
-        if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
-            const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+        if (symbol.type != OAMapSymbolContext)
+        {
+            OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
             
-            //for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(mapObject->captions)))
-            //{ NSLog(@"%d = %@", entry.key(), entry.value().toNSString()); }
-            
-            const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
-            caption = mapObject->getCaptionInLanguage(lang).toNSString();
-            if (caption.length == 0)
-                caption = mapObject->getCaptionInNativeLanguage().toNSString();
-            
-            OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-            
-            for (const auto& ruleId : mapObject->typesRuleIds) {
-                const auto& rule = mapObject->encodingDecodingRules->decodingRules.value(ruleId);
-                if (rule.tag == QString("addr:housenumber"))
-                    buildingNumber = mapObject->captions.value(ruleId).toNSString();
-
-                if (!poiType)
-                    poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+            if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
+                const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
                 
-            }
-            
-            //NSLog(@"caption=%@ housenumber=%@ poiType=%@", caption, buildingNumber, (poiType ? poiType.name : @"NO"));
-            
-            if (!icon) {
+                const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
+                symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
+                if (symbol.caption.length == 0)
+                    symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
+                
+                OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+                
+                for (const auto& ruleId : mapObject->typesRuleIds) {
+                    const auto& rule = mapObject->encodingDecodingRules->decodingRules.value(ruleId);
+                    if (rule.tag == QString("addr:housenumber"))
+                        symbol.buildingNumber = mapObject->captions.value(ruleId).toNSString();
+                    
+                    if (!symbol.poiType)
+                        symbol.poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
+                    
+                }
+                
+                if (symbol.poiType)
+                    symbol.type = OAMapSymbolPOI;
+                
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
                 if (symbolGroup != nullptr) {
                     std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
@@ -1182,55 +1226,78 @@
                             std::shared_ptr<const SkBitmap> outIcon;
                             _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
                             if (outIcon != nullptr)
-                                icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
+                                symbol.icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
                         }
                 }
-                
             }
         }
 
+        symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        if (symbol.type == OAMapSymbolLocation)
+            symbol.sortIndex = (((symbol.caption && symbol.caption.length > 0) || symbol.poiType) && symbol.icon) ?  10 : 20;
+        else
+            symbol.sortIndex = (NSInteger)symbol.type;
         
-        
-        if (((caption && caption.length > 0) || poiType) && icon)
-            break;
+        [foundSymbols addObject:symbol];
         
     }
     
-    if (isContextMarkerClicked)
-    {
-        [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
-                                                            object:self
-                                                          userInfo:nil];
-        return;
-    }
+    [foundSymbols sortUsingComparator:^NSComparisonResult(OAMapSymbol *obj1, OAMapSymbol *obj2) {
+        if (obj1.sortIndex == obj2.sortIndex)
+            return NSOrderedSame;
+        else
+            return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
+    }];
+    
+    for (OAMapSymbol *s in foundSymbols)
+        if (s.type == OAMapSymbolContext)
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
+                                                                object:self
+                                                              userInfo:nil];
+            return;
+        }
+        else
+        {
+            [self postTargetNotification:s];
+            return;
+        }
     
     // if single press and no symbol found - exit
-    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]] && !isSymbolFound)
+    if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
     {
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
                                                             object:self
                                                           userInfo:nil];
-        return;
     }
+}
 
-    [self showContextPinMarker:lat longitude:lon];
+- (void)postTargetNotification:(OAMapSymbol *)symbol
+{
+    [self showContextPinMarker:symbol.location.latitude longitude:symbol.location.longitude];
     
-    if (!caption)
-        caption = @"";
-    if (!buildingNumber)
-        buildingNumber = @"";
+    if (!symbol.caption)
+        symbol.caption = @"";
+    if (!symbol.buildingNumber)
+        symbol.buildingNumber = @"";
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    if (poiType)
-        [userInfo setObject:poiType forKey:@"poiType"];
-    [userInfo setObject:caption forKey:@"caption"];
-    [userInfo setObject:buildingNumber forKey:@"buildingNumber"];
-    [userInfo setObject:[NSNumber numberWithDouble:lat] forKey:@"lat"];
-    [userInfo setObject:[NSNumber numberWithDouble:lon] forKey:@"lon"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
-    if (icon)
-        [userInfo setObject:icon forKey:@"icon"];
+    if (symbol.poiType)
+        [userInfo setObject:symbol.poiType forKey:@"poiType"];
+    
+    if (symbol.type == OAMapSymbolFavorite)
+        [userInfo setObject:@"favorite" forKey:@"objectType"];
+    else if (symbol.type == OAMapSymbolDestination)
+        [userInfo setObject:@"destination" forKey:@"objectType"];
+    
+    [userInfo setObject:symbol.caption forKey:@"caption"];
+    [userInfo setObject:symbol.buildingNumber forKey:@"buildingNumber"];
+    [userInfo setObject:[NSNumber numberWithDouble:symbol.location.latitude] forKey:@"lat"];
+    [userInfo setObject:[NSNumber numberWithDouble:symbol.location.longitude] forKey:@"lon"];
+    [userInfo setObject:[NSNumber numberWithFloat:symbol.touchPoint.x] forKey:@"touchPoint.x"];
+    [userInfo setObject:[NSNumber numberWithFloat:symbol.touchPoint.y] forKey:@"touchPoint.y"];
+    if (symbol.icon)
+        [userInfo setObject:symbol.icon forKey:@"icon"];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
@@ -2630,7 +2697,7 @@
 
     OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(202000)
+    .setBaseOrder(207000)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

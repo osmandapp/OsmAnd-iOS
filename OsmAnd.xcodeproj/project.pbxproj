@@ -889,6 +889,9 @@
 		84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
+		84B0AE241AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
+		84B0AE251AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
+		84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
 		84B4FD541A90F74800A147BA /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.m */; };
 		84B4FD551A90F74800A147BA /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.m */; };
 		84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.m */; };
@@ -2138,6 +2141,8 @@
 		8463101B1A8E8951005B39F2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
+		84B0AE221AC69D33005E1F78 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPoint.h; path = Data/OATargetPoint.h; sourceTree = "<group>"; };
+		84B0AE231AC69D33005E1F78 /* OATargetPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetPoint.m; path = Data/OATargetPoint.m; sourceTree = "<group>"; };
 		84B4FD521A90F74800A147BA /* OAGPXDocumentPrimitives.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocumentPrimitives.h; sourceTree = "<group>"; };
 		84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAGPXDocumentPrimitives.m; sourceTree = "<group>"; };
 		84B4FD571A912F7E00A147BA /* OAGPXDatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDatabase.h; sourceTree = "<group>"; };
@@ -3578,6 +3583,8 @@
 		BB451EA418E19293005FBE09 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				84B0AE221AC69D33005E1F78 /* OATargetPoint.h */,
+				84B0AE231AC69D33005E1F78 /* OATargetPoint.m */,
 				84B4FD5C1A91C7FB00A147BA /* OAMapStyleSettings.h */,
 				84B4FD5D1A91C7FB00A147BA /* OAMapStyleSettings.mm */,
 				3A2D893A1A2DBC2900511A5C /* OAAutocompleteManager.h */,
@@ -5410,6 +5417,7 @@
 				84D81EEC1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBBE454F1856544000F1C144 /* CoreResourcesFromBundleProvider.mm in Sources */,
+				84B0AE241AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AFF619854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
@@ -5536,6 +5544,7 @@
 				84D81EED1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AECC197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
+				84B0AE251AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				BBA3AFF719854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
@@ -5734,6 +5743,7 @@
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.m in Sources */,
+				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

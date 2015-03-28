@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAGPXListViewController.h"
+#import "OAFavoriteListViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -46,6 +47,8 @@ typedef enum
     BOOL _wasShowingFavorite;
     BOOL _deleteFavorite;
 }
+
+@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 
 @property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property (nonatomic) UIButton *mapButton;
@@ -122,6 +125,11 @@ typedef enum
         small = rect.size.width;
     }
     
+    if (_shareButton.hidden)
+        _saveRemoveButton.frame = CGRectMake(DeviceScreenWidth - 50.0, 20.0, 50.0, 44.0);
+    else
+        _saveRemoveButton.frame = CGRectMake(DeviceScreenWidth - 38.0, 20.0, 36.0, 44.0);
+    
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -133,11 +141,12 @@ typedef enum
             CGFloat mapWidth = small;
             CGFloat mapHeight = 166.0;
             CGFloat mapBottom = topY + mapHeight;
+            CGFloat toolbarHeight = (self.toolbarView.hidden ? 0.0 : self.toolbarView.frame.size.height);
             
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             self.mapButton.frame = self.mapView.frame;
             self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 19.0, 110.0, 40.0);
-            self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
+            self.scrollView.frame = CGRectMake(0.0, mapBottom, small, big - toolbarHeight - mapBottom);
             
             CGFloat y = 35.0 - self.favoriteNameButton.frame.origin.y;
             self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
@@ -162,15 +171,16 @@ typedef enum
             
         } else {
             
+            CGFloat toolbarHeight = (self.toolbarView.hidden ? 0.0 : self.toolbarView.frame.size.height);
             CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
+            CGFloat mapHeight = small - topY - toolbarHeight;
             CGFloat mapWidth = big / 2.0;
             CGFloat mapBottom = topY + mapHeight;
-            
+
             self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
             self.mapButton.frame = self.mapView.frame;
             self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
-            self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
+            self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - toolbarHeight - topY);
 
             CGFloat y = 0.0 - self.favoriteNameButton.frame.origin.y;
             self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
@@ -203,6 +213,9 @@ typedef enum
     [self.mapButton setTitle:@"" forState:UIControlStateNormal];
     [self.mapButton addTarget:self action:@selector(goToFavorite) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.mapButton];
+    
+    _shareButton.hidden = _newFavorite;
+    _toolbarView.hidden = _newFavorite || ![self.navigationController.viewControllers[self.navigationController.viewControllers.count - 2] isKindOfClass:[OAFavoriteListViewController class]];
     
 }
 
@@ -409,10 +422,14 @@ typedef enum
 
     [self.favoriteNameButton setTitle:@"" forState:UIControlStateNormal];
     [self.favoriteNameTextView setText:name];
+
     [self.favoriteNameTextView setDelegate:self];
     [self.favoriteNameTextView becomeFirstResponder];
     [self.favoriteNameTextView setHidden:NO];
-    
+
+    if (_newFavorite)
+        [self.favoriteNameTextView setSelectedTextRange:[self.favoriteNameTextView textRangeFromPosition:self.favoriteNameTextView.beginningOfDocument toPosition:self.favoriteNameTextView.endOfDocument]];
+
 }
 
 - (IBAction)saveButtonClicked:(id)sender {
@@ -462,7 +479,8 @@ typedef enum
     });
 }
 
--(IBAction)backButtonClicked:(id)sender {
+-(IBAction)backButtonClicked:(id)sender
+{
     OsmAndAppInstance app = [OsmAndApp instance];
     if (self.newFavorite) {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
@@ -471,24 +489,45 @@ typedef enum
     [super backButtonClicked:sender];
 }
 
-- (IBAction)favoriteChangeColorClicked:(id)sender {
+- (IBAction)favoriteChangeColorClicked:(id)sender
+{
     _favAction = kFavoriteActionChangeColor;
     OAFavoriteColorViewController* controller = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (IBAction)favoriteChangeGroupClicked:(id)sender {
+- (IBAction)favoriteChangeGroupClicked:(id)sender
+{
     _favAction = kFavoriteActionChangeGroup;
     OAFavoriteGroupViewController* controller = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
     [self.navigationController pushViewController:controller animated:YES];
 }
 
-- (IBAction)menuFavoriteClicked:(id)sender {
+- (IBAction)menuFavoriteClicked:(id)sender
+{
 }
 
-- (IBAction)menuGPXClicked:(id)sender {
+- (IBAction)menuGPXClicked:(id)sender
+{
     OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
     [self.navigationController pushViewController:favController animated:NO];
+}
+
+- (IBAction)shareButtonClicked:(id)sender
+{
+    const auto& favoritePosition31 = self.favorite.favorite->getPosition31();
+    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+    
+    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, favoriteLat, favoriteLon, (int)kDefaultFavoriteZoom];
+    
+    UIActivityViewController *activityViewController =
+    [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]
+                                      applicationActivities:nil];
+    
+    [self.navigationController presentViewController:activityViewController
+                                     animated:YES
+                                   completion:^{ }];
 }
 
 // open map with favorite item

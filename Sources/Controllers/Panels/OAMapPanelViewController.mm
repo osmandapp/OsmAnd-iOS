@@ -577,13 +577,23 @@
     }
     
     if (_targetMenuView.isAddressFound || addressString)
+    {
         _formattedTargetName = addressString;
+    }
     else if (poiType)
+    {
+        _targetMenuView.isAddressFound = YES;
         _formattedTargetName = poiType.nameLocalized;
+    }
     else if (buildingNumber.length > 0)
+    {
+        _targetMenuView.isAddressFound = YES;
         _formattedTargetName = buildingNumber;
+    }
     else
+    {
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    }
     
     _targetLatitude = lat;
     _targetLongitude = lon;

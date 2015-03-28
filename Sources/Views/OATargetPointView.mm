@@ -78,6 +78,13 @@
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
     
+    [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
+                                                                [self]
+                                                                (const OsmAnd::IFavoriteLocationsCollection* const collection)
+                                                                {
+                                                                    [self onFavoritesCollectionChanged];
+                                                                });
+
     [OsmAndApp instance].favoritesCollection->favoriteLocationChangeObservable.attach((__bridge const void*)self,
                                                                       [self]
                                                                       (const OsmAnd::IFavoriteLocationsCollection* const collection,
@@ -187,6 +194,30 @@
 
 -(void)setNavigationController:(UINavigationController*)controller {
     self.navController = controller;
+}
+
+- (void)onFavoritesCollectionChanged
+{
+    if (_targetPoint.type == OATargetFavorite)
+    {
+        BOOL favoriteOnTarget = NO;
+        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations()) {
+            
+            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+            
+            if ((int)(_targetPoint.location.latitude * 10000.0) == favLat && (int)(_targetPoint.location.longitude * 10000.0) == favLon)
+            {
+                favoriteOnTarget = YES;
+                break;
+            }
+        }
+        
+        if (!favoriteOnTarget)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.delegate targetHide];
+            });
+    }
 }
 
 - (void)onFavoriteLocationChanged:(const std::shared_ptr<const OsmAnd::IFavoriteLocation>)favoriteLocation

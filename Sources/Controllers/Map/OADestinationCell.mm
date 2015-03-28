@@ -10,6 +10,9 @@
 #import "OADestination.h"
 #import "OsmAndApp.h"
 
+#import <OsmAndCore.h>
+#import <OsmAndCore/Utilities.h>
+
 @implementation OADestinationCell
 
 - (instancetype)initWithDestination:(OADestination *)destination
@@ -166,8 +169,8 @@
     : newHeading;
     
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude]];
-    CGFloat direction = -(itemDirection + newDirection / 180.0f * M_PI);
     
+    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     imageView.transform = CGAffineTransformMakeRotation(direction);
 }
 

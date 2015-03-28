@@ -471,7 +471,7 @@ typedef enum
     self.favorite.distance = [app getFormattedDistance:distance];
     self.favorite.distanceMeters = distance;
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
-    self.favorite.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+    self.favorite.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
         
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.favoriteDistance setText:self.favorite.distance];

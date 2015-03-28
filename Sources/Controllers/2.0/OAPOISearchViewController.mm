@@ -281,7 +281,7 @@ typedef enum
                 itemData.distance = [app getFormattedDistance:distance];
                 itemData.distanceMeters = distance;
                 CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.latitude longitude:itemData.longitude]];
-                itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+                itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
             }
             
         }];

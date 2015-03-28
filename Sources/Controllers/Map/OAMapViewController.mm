@@ -1145,6 +1145,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
         symbol.type = OAMapSymbolLocation;
         symbol.touchPoint = touchPoint;
+        symbol.location = CLLocationCoordinate2DMake(lat, lon);
         
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
@@ -1232,7 +1233,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
             }
         }
 
-        symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
+            symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        
         if (symbol.type == OAMapSymbolLocation)
             symbol.sortIndex = (((symbol.caption && symbol.caption.length > 0) || symbol.poiType) && symbol.icon) ?  10 : 20;
         else
@@ -1269,6 +1272,14 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
                                                             object:self
                                                           userInfo:nil];
+    }
+    else
+    {
+        OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+        symbol.type = OAMapSymbolLocation;
+        symbol.touchPoint = touchPoint;
+        symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        [self postTargetNotification:symbol];
     }
 }
 

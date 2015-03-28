@@ -242,7 +242,7 @@ typedef enum
     self.wptItem.distance = [app getFormattedDistance:distance];
     self.wptItem.distanceMeters = distance;
     CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:self.wptItem.point.position.latitude longitude:self.wptItem.point.position.longitude]];
-    self.wptItem.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+    self.wptItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.itemDistance setText:self.wptItem.distance];

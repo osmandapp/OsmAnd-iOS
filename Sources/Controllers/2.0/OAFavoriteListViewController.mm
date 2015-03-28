@@ -106,7 +106,7 @@ kFavoriteCellType;
         itemData.distance = [app getFormattedDistance:distance];
         itemData.distanceMeters = distance;
         CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
-        itemData.direction = -(itemDirection + newDirection / 180.0f * M_PI);
+        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
         
      }];
     

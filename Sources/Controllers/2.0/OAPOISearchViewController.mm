@@ -12,6 +12,7 @@
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
@@ -34,6 +35,7 @@ typedef enum
 {
     EPOIScopeUndefined = 0,
     EPOIScopeCategory,
+    EPOIScopeFilter,
     EPOIScopeType,
     
 } EPOIScope;
@@ -77,7 +79,7 @@ typedef enum
     BOOL _ignoreSearchResult;
     BOOL _increasingSearchRadius;
     BOOL _initData;
-    BOOL _enteringCategoryOrType;
+    BOOL _enteringScope;
     
     int _searchRadiusIndex;
     int _searchRadiusIndexMax;
@@ -87,6 +89,8 @@ typedef enum
     NSString *_currentScopePoiTypeNameLoc;
     NSString *_currentScopeCategoryName;
     NSString *_currentScopeCategoryNameLoc;
+    NSString *_currentScopeFilterName;
+    NSString *_currentScopeFilterNameLoc;
 }
 
 - (instancetype)init
@@ -326,9 +330,12 @@ typedef enum
 
 -(void)generateData {
     
+    EPOIScope prevScope = _currentScope;
+    
     [self acquireCurrentScope];
     
-    _searchRadiusIndex = 0;
+    if (prevScope != _currentScope)
+        _searchRadiusIndex = 0;
     
     if (self.searchString)
     {
@@ -398,13 +405,14 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && (_searchRadiusIndex > 1 || _dataPoiArray.count > 0) && _searchRadiusIndex < _searchRadiusIndexMax ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && (_searchRadiusIndex > 1 || _dataPoiArray.count > 0) && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0);
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row >= _dataArray.count + _dataPoiArray.count) {
+    if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
+    {
         OASearchMoreCell* cell;
         cell = (OASearchMoreCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
         if (cell == nil)
@@ -430,8 +438,8 @@ typedef enum
         obj = _dataArray[indexPath.row];
     
     
-    if ([obj isKindOfClass:[OAPOI class]]) {
-        
+    if ([obj isKindOfClass:[OAPOI class]])
+    {
         static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
         
         OAPointDescCell* cell;
@@ -442,7 +450,8 @@ typedef enum
             cell = (OAPointDescCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             
             OAPOI* item = obj;
             [cell.titleView setText:item.nameLocalized];
@@ -452,11 +461,10 @@ typedef enum
             [cell.distanceView setText:item.distance];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
         }
-        
         return cell;
-        
-    } else if ([obj isKindOfClass:[OAPOIType class]]) {
-        
+    }
+    else if ([obj isKindOfClass:[OAPOIType class]])
+    {
         OAIconTextDescCell* cell;
         cell = (OAIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
         if (cell == nil)
@@ -467,7 +475,8 @@ typedef enum
             cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
-        if (cell) {
+        if (cell)
+        {
             OAPOIType* item = obj;
             
             [cell.textView setText:item.nameLocalized];
@@ -475,9 +484,31 @@ typedef enum
             [cell.iconView setImage: [item icon]];
         }
         return cell;
+    }
+    else if ([obj isKindOfClass:[OAPOIFilter class]])
+    {
+        OAIconTextDescCell* cell;
+        cell = (OAIconTextDescCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+        }
         
-    } else if ([obj isKindOfClass:[OAPOICategory class]]) {
-        
+        if (cell)
+        {
+            OAPOIFilter* item = obj;
+            
+            [cell.textView setText:item.nameLocalized];
+            [cell.descView setText:item.categoryLocalized];
+            [cell.iconView setImage: [item icon]];
+        }
+        return cell;
+    }
+    else if ([obj isKindOfClass:[OAPOICategory class]])
+    {
         OAIconTextTableViewCell* cell;
         cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
         if (cell == nil)
@@ -495,8 +526,9 @@ typedef enum
             [cell.iconView setImage: [item icon]];
         }
         return cell;
-        
-    } else {
+    }
+    else
+    {
         return nil;
     }
     
@@ -527,8 +559,8 @@ typedef enum
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
@@ -552,23 +584,34 @@ typedef enum
     else
         obj = _dataArray[indexPath.row];
     
-    if ([obj isKindOfClass:[OAPOI class]]) {
+    if ([obj isKindOfClass:[OAPOI class]])
+    {
         OAPOI* item = obj;
         NSString *name = item.nameLocalized;
         if (!name)
             name = item.type.nameLocalized;
-        [self goToPoint:item.latitude longitude:item.longitude name:item.nameLocalized];
         
-    } else if ([obj isKindOfClass:[OAPOIType class]]) {
+        [self goToPoint:item.latitude longitude:item.longitude name:item.nameLocalized icon:[item.type mapIcon]];
+    }
+    else if ([obj isKindOfClass:[OAPOIType class]])
+    {
         OAPOIType* item = obj;
         self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringCategoryOrType = YES;
+        _enteringScope = YES;
         [self updateTextField:self.searchString];
-        
-    } else if ([obj isKindOfClass:[OAPOICategory class]]) {
+    }
+    else if ([obj isKindOfClass:[OAPOIFilter class]])
+    {
+        OAPOIFilter* item = obj;
+        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
+        _enteringScope = YES;
+        [self updateTextField:self.searchString];
+    }
+    else if ([obj isKindOfClass:[OAPOICategory class]])
+    {
         OAPOICategory* item = obj;
         self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringCategoryOrType = YES;
+        _enteringScope = YES;
         [self updateTextField:self.searchString];
     }
 }
@@ -580,30 +623,42 @@ typedef enum
     [self generateData];
 }
 
+-(NSString *)currentScopeNameLoc
+{
+    switch (_currentScope) {
+        case EPOIScopeCategory:
+            return _currentScopeCategoryNameLoc;
+        case EPOIScopeFilter:
+            return _currentScopeFilterNameLoc;
+        case EPOIScopeType:
+            return _currentScopePoiTypeNameLoc;
+            
+        default:
+            break;
+    }
+    return nil;
+}
+
 -(NSString *)firstToken:(NSString *)text
 {
     if (!text || text.length == 0)
         return nil;
     
-    if (_enteringCategoryOrType)
+    if (_enteringScope)
     {
-        _enteringCategoryOrType = NO;
+        _enteringScope = NO;
         return text;
     }
     
     if (_currentScope != EPOIScopeUndefined)
     {
-        NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+        NSString *currentScopeNameLoc = [self currentScopeNameLoc];
         if ([self beginWith:currentScopeNameLoc text:text] && (text.length == currentScopeNameLoc.length || [text characterAtIndex:currentScopeNameLoc.length] == ' '))
         {
             if (text.length > currentScopeNameLoc.length)
-            {
                 return [text substringToIndex:currentScopeNameLoc.length + 1];
-            }
             else
-            {
                 return text;
-            }
         }
     }
     
@@ -622,7 +677,7 @@ typedef enum
     
     if (_currentScope != EPOIScopeUndefined)
     {
-        NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+        NSString *currentScopeNameLoc = [self currentScopeNameLoc];
         if ([self beginWith:currentScopeNameLoc text:text])
         {
             if (text.length > currentScopeNameLoc.length + 1)
@@ -659,7 +714,7 @@ typedef enum
     BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
     
     NSString *nextStr = [[self nextTokens:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
+    NSString *currentScopeNameLoc = [self currentScopeNameLoc];
     
     if (_currentScope != EPOIScopeUndefined && [firstToken isEqualToString:(trailingSpace ? [currentScopeNameLoc stringByAppendingString:@" "] : currentScopeNameLoc)]) {
         
@@ -673,8 +728,27 @@ typedef enum
                     _currentScope = EPOIScopeType;
                     _currentScopePoiTypeName = poi.name;
                     _currentScopePoiTypeNameLoc = poi.nameLocalized;
+                    _currentScopeFilterName = poi.filter;
+                    _currentScopeFilterNameLoc = poi.filterLocalized;
                     _currentScopeCategoryName = poi.category;
                     _currentScopeCategoryNameLoc = poi.categoryLocalized;
+                    
+                    return;
+                }
+            }
+            searchableContent = [OAPOIHelper sharedInstance].poiFilters.allKeys;
+            for (OAPOIFilter *filter in searchableContent) {
+                
+                if ([nextStr localizedCaseInsensitiveCompare:filter.nameLocalized] == NSOrderedSame &&
+                    [_currentScopeCategoryName isEqualToString:filter.category])
+                {
+                    _currentScope = EPOIScopeFilter;
+                    _currentScopePoiTypeName = nil;
+                    _currentScopePoiTypeNameLoc = nil;
+                    _currentScopeFilterName = filter.name;
+                    _currentScopeFilterNameLoc = filter.nameLocalized;
+                    _currentScopeCategoryName = filter.category;
+                    _currentScopeCategoryNameLoc = filter.categoryLocalized;
                     
                     return;
                 }
@@ -695,6 +769,21 @@ typedef enum
             _currentScope = EPOIScopeType;
             _currentScopePoiTypeName = poi.name;
             _currentScopePoiTypeNameLoc = poi.nameLocalized;
+            _currentScopeFilterName = poi.filter;
+            _currentScopeFilterNameLoc = poi.filterLocalized;
+            _currentScopeCategoryName = poi.category;
+            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+            
+            break;
+        }
+        else if ([str localizedCaseInsensitiveCompare:poi.filterLocalized] == NSOrderedSame)
+        {
+            found = YES;
+            _currentScope = EPOIScopeFilter;
+            _currentScopePoiTypeName = nil;
+            _currentScopePoiTypeNameLoc = nil;
+            _currentScopeFilterName = poi.filter;
+            _currentScopeFilterNameLoc = poi.filterLocalized;
             _currentScopeCategoryName = poi.category;
             _currentScopeCategoryNameLoc = poi.categoryLocalized;
             
@@ -706,6 +795,8 @@ typedef enum
             _currentScope = EPOIScopeCategory;
             _currentScopePoiTypeName = nil;
             _currentScopePoiTypeNameLoc = nil;
+            _currentScopeFilterName = nil;
+            _currentScopeFilterNameLoc = nil;
             _currentScopeCategoryName = poi.category;
             _currentScopeCategoryNameLoc = poi.categoryLocalized;
             
@@ -718,6 +809,8 @@ typedef enum
         _currentScope = EPOIScopeUndefined;
         _currentScopePoiTypeName = nil;
         _currentScopePoiTypeNameLoc = nil;
+        _currentScopeFilterName = nil;
+        _currentScopeFilterNameLoc = nil;
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
     }
@@ -764,7 +857,25 @@ typedef enum
         for (OAPOICategory *c in sortedCategories)
             if ([self beginWithOrAfterSpace:str text:c.nameLocalized])
                 [_dataArrayTemp addObject:c];
+
+        NSArray *sortedFilters = [[OAPOIHelper sharedInstance].poiFilters.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOIFilter* obj1, OAPOIFilter* obj2) {
+            return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
+        }];
         
+        for (OAPOIFilter *f in sortedFilters)
+            if ([self beginWithOrAfterSpace:str text:f.nameLocalized])
+                [_dataArrayTemp addObject:f];
+    }
+    
+    if (_currentScope == EPOIScopeCategory)
+    {
+        NSArray *sortedFilters = [[[OAPOIHelper sharedInstance] poiFiltersForCategory:_currentScopeCategoryName] sortedArrayUsingComparator:^NSComparisonResult(OAPOIFilter* obj1, OAPOIFilter* obj2) {
+            return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
+        }];
+        
+        for (OAPOIFilter *f in sortedFilters)
+            if (!str || [self beginWithOrAfterSpace:str text:f.nameLocalized])
+                [_dataArrayTemp addObject:f];
     }
     
     if (_currentScope != EPOIScopeType)
@@ -775,20 +886,15 @@ typedef enum
             
             if (_currentScopeCategoryName && ![poi.category isEqualToString:_currentScopeCategoryName])
                 continue;
+            if (_currentScopeFilterName && ![poi.filter isEqualToString:_currentScopeFilterName])
+                continue;
             if (_currentScopePoiTypeName && ![poi.name isEqualToString:_currentScopePoiTypeName])
                 continue;
             
             if (!str)
             {
-                if (poi.filter)
-                {
-                    // todo make filter object later
+                if (!poi.filter || _currentScope == EPOIScopeFilter)
                     [typesOthersArray addObject:poi];
-                }
-                else
-                {
-                    [typesOthersArray addObject:poi];
-                }
             }
             else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
             {
@@ -874,7 +980,7 @@ typedef enum
     [self generateData];
 }
 
-- (void)goToPoint:(double)latitude longitude:(double)longitude name:(NSString *)name
+- (void)goToPoint:(double)latitude longitude:(double)longitude name:(NSString *)name icon:(UIImage *)icon
 {
     OARootViewController* rootViewController = [OARootViewController instance];
     [rootViewController closeMenuAndPanelsAnimated:YES];
@@ -890,13 +996,22 @@ typedef enum
     touchPoint.x *= mapRendererView.contentScaleFactor;
     touchPoint.y *= mapRendererView.contentScaleFactor;
     
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    
+    //if (poiType)
+    //    [userInfo setObject:symbol.poiType forKey:@"poiType"];
+    
+    [userInfo setObject:name forKey:@"caption"];
+    [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
+    [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
+    if (icon)
+        [userInfo setObject:icon forKey:@"icon"];
+    
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object: self
-                                                      userInfo:@{@"caption" : name,
-                                                                 @"lat": [NSNumber numberWithDouble:latLon.latitude],
-                                                                 @"lon": [NSNumber numberWithDouble:latLon.longitude],
-                                                                 @"touchPoint.x": [NSNumber numberWithFloat:touchPoint.x],
-                                                                 @"touchPoint.y": [NSNumber numberWithFloat:touchPoint.y]}];
+                                                        object:self
+                                                      userInfo:userInfo];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

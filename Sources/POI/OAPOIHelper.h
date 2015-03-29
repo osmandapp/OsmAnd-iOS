@@ -28,6 +28,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 
 @property (nonatomic, readonly) NSArray *poiTypes;
 @property (nonatomic, readonly) NSDictionary *poiCategories;
+@property (nonatomic, readonly) NSDictionary *poiFilters;
 
 @property (nonatomic) OsmAnd::PointI myLocation;
 
@@ -36,7 +37,11 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 + (OAPOIHelper *)sharedInstance;
 
 - (void)updatePhrases;
+
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
+- (NSArray *)poiTypesForFilter:(NSString *)filterName;
+- (NSArray *)poiFiltersForCategory:(NSString *)categoryName;
+
 - (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
 

@@ -22,4 +22,17 @@
     return ([[[UIDevice currentDevice] systemVersion] compare:testVersion options:NSNumericSearch] == NSOrderedSame);
 }
 
++ (UIImage *)applyScaleFactorToImage:(UIImage *)image
+{
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
+    
+    UIGraphicsBeginImageContextWithOptions(newSize, NO, scaleFactor);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return newImage;
+}
+
 @end

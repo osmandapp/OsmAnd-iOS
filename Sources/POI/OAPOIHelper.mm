@@ -10,6 +10,7 @@
 #import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "OAPOIFilter.h"
 #import "OAPOIParser.h"
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
@@ -71,13 +72,14 @@
     [parser getPOITypesSync:poiXmlPath];
     _poiTypes = parser.poiTypes;
     _poiCategories = parser.poiCategories;
+    _poiFilters = parser.poiFilters;
     
 }
 
 - (void)updatePhrases
 {
-    if (!_phrases) {
-        
+    if (!_phrases)
+    {
         NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml"];
         
         OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
@@ -85,14 +87,21 @@
         _phrases = parser.phrases;
     }
     
-    if (_phrases.count > 0) {
-        for (OAPOIType *poiType in _poiTypes) {
+    if (_phrases.count > 0)
+    {
+        for (OAPOIType *poiType in _poiTypes)
+        {
             poiType.nameLocalized = [self getPhrase:poiType.name];
             poiType.categoryLocalized = [self getPhrase:poiType.category];
-            poiType.filter = [self getPhrase:poiType.filter];
+            poiType.filterLocalized = [self getPhrase:poiType.filter];
         }
-        for (OAPOICategory *c in _poiCategories.allKeys) {
+        for (OAPOICategory *c in _poiCategories.allKeys)
             c.nameLocalized = [self getPhrase:c.name];
+
+        for (OAPOIFilter *f in _poiFilters.allKeys)
+        {
+            f.nameLocalized = [self getPhrase:f.name];
+            f.categoryLocalized = [self getPhrase:f.category];
         }
     }
 }
@@ -110,13 +119,32 @@
     }
 }
 
-- (NSArray *)poiTypesForCategory:(NSString *)categoryName;
+- (NSArray *)poiTypesForCategory:(NSString *)categoryName
 {
     for (OAPOICategory *c in _poiCategories.allKeys)
         if ([c.name isEqualToString:categoryName])
             return [_poiCategories objectForKey:c];
 
     return nil;
+}
+
+- (NSArray *)poiTypesForFilter:(NSString *)filterName
+{
+    for (OAPOIFilter *f in _poiFilters.allKeys)
+        if ([f.name isEqualToString:filterName])
+            return [_poiFilters objectForKey:f];
+    
+    return nil;
+}
+
+- (NSArray *)poiFiltersForCategory:(NSString *)categoryName
+{
+    NSMutableArray *res = [NSMutableArray array];
+    for (OAPOIFilter *f in _poiFilters.allKeys)
+        if ([f.category isEqualToString:categoryName])
+            [res addObject:f];
+    
+    return [NSArray arrayWithArray:res];
 }
 
 - (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value

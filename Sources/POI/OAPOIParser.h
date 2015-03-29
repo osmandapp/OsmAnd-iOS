@@ -37,6 +37,7 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 
 @property(nonatomic) NSArray *poiTypes;
 @property(nonatomic) NSDictionary *poiCategories;
+@property(nonatomic) NSDictionary *poiFilters;
 @property(nonatomic, weak) id<OAPOITypesParserDelegate> delegate;
 @property(nonatomic) BOOL error;
 @property(nonatomic) NSString *fileName;

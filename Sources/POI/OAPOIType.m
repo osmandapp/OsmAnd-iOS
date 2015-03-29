@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIType.h"
+#import "OAUtilities.h"
 
 @implementation OAPOIType
 
@@ -15,10 +16,17 @@
     UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
     if (!img)
         img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@_%@", self.tag, self.value]];
-    //if (!img)
-    //    img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.value]];
     
     return img;
+}
+
+- (UIImage *)mapIcon
+{
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-xhdpi/mm_%@", self.name]];
+    if (!img)
+        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-xhdpi/mm_%@_%@", self.tag, self.value]];
+    
+    return [OAUtilities applyScaleFactorToImage:img];
 }
 
 @end

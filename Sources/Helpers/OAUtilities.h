@@ -13,4 +13,6 @@
 + (BOOL)iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL)iosVersionIsExactly:(NSString*)testVersion;
 
++ (UIImage *)applyScaleFactorToImage:(UIImage *)image;
+
 @end

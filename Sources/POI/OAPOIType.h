@@ -25,6 +25,8 @@
 @property (nonatomic) NSString *filterLocalizedEN;
 @property (nonatomic) NSString *filterLocalized;
 
+@property (nonatomic) BOOL reference;
+
 - (UIImage *)icon;
 - (UIImage *)mapIcon;
 

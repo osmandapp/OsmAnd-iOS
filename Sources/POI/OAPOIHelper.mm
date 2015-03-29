@@ -59,6 +59,7 @@
         _searchLimit = kSearchLimit;
         _isSearchDone = YES;
         [self readPOI];
+        [self updateReferences];
         [self updatePhrases];
     }
     return self;
@@ -73,7 +74,31 @@
     _poiTypes = parser.poiTypes;
     _poiCategories = parser.poiCategories;
     _poiFilters = parser.poiFilters;
-    
+}
+
+- (void)updateReferences
+{
+    for (OAPOIType *p in _poiTypes)
+    {
+        if (p.reference)
+        {
+            OAPOIType *pType = [self getPoiTypeByName:p.name];
+            if (pType)
+            {
+                p.tag = pType.tag;
+                p.value = pType.value;
+            }
+        }
+    }
+}
+
+- (OAPOIType *)getPoiTypeByName:(NSString *)name
+{
+    for (OAPOIType *p in _poiTypes)
+        if ([p.name isEqualToString:name] && !p.reference)
+            return p;
+
+    return nil;
 }
 
 - (void)updatePhrases

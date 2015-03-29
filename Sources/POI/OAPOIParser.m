@@ -142,6 +142,8 @@ static const char *kPoiFilterElementName = "poi_filter";
 static NSUInteger kPoiFilterElementNameLength = 11;
 static const char *kPoiTypeElementName = "poi_type";
 static NSUInteger kPoiTypeElementNameLength = 9;
+static const char *kPoiReferenceElementName = "poi_reference";
+static NSUInteger kPoiReferenceElementNameLength = 14;
 
 static const char *kNameAttributeName = "name";
 static NSUInteger kNameAttributeNameLength = 5;
@@ -156,88 +158,89 @@ static NSUInteger kValueAttributeNameLength = 6;
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
                  uri:(const xmlChar *)URI namespaceCount:(int)namespaceCount
           namespaces:(const xmlChar **)namespaces attributeCount:(int)attributeCount
-defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *)attributes {
-    
-    if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength)) {
-        
+defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *)attributes
+{
+    if (0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength))
+    {
         _currentPOICategory = [[OAPOICategory alloc] init];
 
-        for(int i = 0;i < attributeCount;i++) {
-
-            if(0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
-                            kNameAttributeNameLength)) {
-                
+        for(int i = 0; i < attributeCount; i++)
+        {
+            if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
+                            kNameAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 _currentPOICategory.name = [[NSString alloc] initWithBytes:attributes[i].value
                                                        length:length
                                                      encoding:NSUTF8StringEncoding];
-                
-            } else if(0 == strncmp((const char*)attributes[i].localname, kDefaultTagAttributeName,
-                                   kDefaultTagAttributeNameLength)) {
-                
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kDefaultTagAttributeName,
+                                   kDefaultTagAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 _currentPOICategory.tag = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
             }
-            
         }
-
-    } else if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength)) {
-        
+    }
+    else if (0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
+    {
         _currentPOIFilter = [[OAPOIFilter alloc] init];
         _currentPOIFilter.category = _currentPOICategory.name;
 
-        for(int i = 0;i < attributeCount;i++) {
-            
-            if(0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
-                            kNameAttributeNameLength)) {
-                
+        for(int i = 0; i < attributeCount; i++)
+        {
+            if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
+                            kNameAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 _currentPOIFilter.name = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
             }
         }
-        
-    } else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength)) {
-        
+    }
+    else if (0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength) ||
+             0 == strncmp((const char *)localname, kPoiReferenceElementName, kPoiReferenceElementNameLength))
+    {
         _currentPOIType = [[OAPOIType alloc] init];
         _currentPOIType.category = _currentPOICategory.name;
         _currentPOIType.filter = _currentPOIFilter ? _currentPOIFilter.name : nil;
         _currentPOIType.tag = _currentPOICategory.tag;
         
-        for(int i = 0;i < attributeCount;i++) {
-
-            if(0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
-                            kNameAttributeNameLength)) {
-                
+        for(int i = 0; i < attributeCount; i++)
+        {
+            if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
+                            kNameAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 NSString *name = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
                 _currentPOIType.name = name;
-                
-            } else if(0 == strncmp((const char*)attributes[i].localname, kTagAttributeName,
-                                   kTagAttributeNameLength)) {
-                
+                if (0 == strncmp((const char *)localname, kPoiReferenceElementName, kPoiReferenceElementNameLength))
+                    _currentPOIType.reference = YES;
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kTagAttributeName,
+                                   kTagAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 NSString *tag = [[NSString alloc] initWithBytes:attributes[i].value
                                                           length:length
                                                         encoding:NSUTF8StringEncoding];
 
                 _currentPOIType.tag = tag;
-
-            } else if(0 == strncmp((const char*)attributes[i].localname, kValueAttributeName,
-                                   kValueAttributeNameLength)) {
-                
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kValueAttributeName,
+                                   kValueAttributeNameLength))
+            {
                 int length = (int) (attributes[i].end - attributes[i].value);
                 NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
                                                          length:length
                                                        encoding:NSUTF8StringEncoding];
                 _currentPOIType.value = value;
-            }
-            
+            }            
         }
         [_pTypes addObject:_currentPOIType];
         
@@ -247,10 +250,13 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             if ([k.name isEqualToString:_currentPOICategory.name])
                 key = k;
         
-        if (!key) {
+        if (!key)
+        {
             NSMutableArray *p = [NSMutableArray arrayWithObject:_currentPOIType];
             [_pCategories setObject:p forKey:_currentPOICategory];
-        } else {
+        }
+        else
+        {
             NSMutableArray *p = [_pCategories objectForKey:key];
             [p addObject:_currentPOIType];
         }
@@ -263,10 +269,13 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 if ([k.name isEqualToString:_currentPOIFilter.name])
                     filterKey = k;
             
-            if (!filterKey) {
+            if (!filterKey)
+            {
                 NSMutableArray *p = [NSMutableArray arrayWithObject:_currentPOIType];
                 [_pFilters setObject:p forKey:_currentPOIFilter];
-            } else {
+            }
+            else
+            {
                 NSMutableArray *p = [_pFilters objectForKey:filterKey];
                 [p addObject:_currentPOIType];
             }
@@ -274,8 +283,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     }
 }
 
-- (void)endElement:(const xmlChar *)localname prefix:(const xmlChar *)prefix uri:(const xmlChar *)URI {
-
+- (void)endElement:(const xmlChar *)localname prefix:(const xmlChar *)prefix uri:(const xmlChar *)URI
+{
     if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength)) {
         _currentPOIFilter = nil;
         
@@ -288,7 +297,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     }
 }
 
-- (void)charactersFound:(const xmlChar *)characters length:(int)length {
+- (void)charactersFound:(const xmlChar *)characters length:(int)length
+{
 }
 
 - (void)parsingError:(const char *)msg, ... {

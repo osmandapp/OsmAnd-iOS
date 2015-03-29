@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #include <OsmAndCore.h>
 
+const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
+
 @class OAPOI;
 @class OAPOIType;
 
@@ -36,11 +38,12 @@
 - (void)updatePhrases;
 - (NSArray *)poiTypesForCategory:(NSString *)categoryName;
 - (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
+- (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
 -(void)findPOIsByKeyword:(NSString *)keyword;
--(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusMeters:(double)radius;
+-(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 -(BOOL)breakSearch;
 
 @end

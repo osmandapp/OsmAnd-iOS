@@ -12,7 +12,10 @@
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
+    if (_type)
+        return [_type icon];
+    else
+        return nil; //[UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
 }
 
 @end

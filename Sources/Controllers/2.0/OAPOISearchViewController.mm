@@ -29,7 +29,6 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kMaxTypeRows 5
-const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100, 200, 500};
 
 typedef enum
 {
@@ -327,8 +326,7 @@ typedef enum
 
 -(void)generateData {
     
-    if ([self acquireCurrentScope])
-        return;
+    [self acquireCurrentScope];
     
     _searchRadiusIndex = 0;
     
@@ -400,7 +398,7 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined && _searchRadiusIndex < _searchRadiusIndexMax ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && (_searchRadiusIndex > 1 || _dataPoiArray.count > 0) && _searchRadiusIndex < _searchRadiusIndexMax ? 1 : 0);
 }
 
 
@@ -648,13 +646,13 @@ typedef enum
         return nil;
 }
 
--(BOOL)acquireCurrentScope
+-(void)acquireCurrentScope
 {
     NSString *firstToken = [self firstToken:self.searchString];
     if (!firstToken)
     {
         _currentScope = EPOIScopeUndefined;
-        return NO;
+        return;
     }
     
     
@@ -678,20 +676,12 @@ typedef enum
                     _currentScopeCategoryName = poi.category;
                     _currentScopeCategoryNameLoc = poi.categoryLocalized;
                     
-                    self.searchString = [_currentScopePoiTypeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
-                    [self updateTextField:self.searchString];
-                    return YES;
+                    return;
                 }
             }
         }
-        return NO;
+        return;
     }
-    
-    EPOIScope prevScope = _currentScope;
-    NSString *prevScopeTypeName = _currentScopePoiTypeName;
-    NSString *prevScopeTypeNameLoc = _currentScopePoiTypeNameLoc;
-    NSString *prevScopeCategoryName = _currentScopeCategoryName;
-    NSString *prevScopeCategoryNameLoc = _currentScopeCategoryNameLoc;
     
     BOOL found = NO;
     
@@ -723,21 +713,7 @@ typedef enum
         }
     }
     
-    if (found)
-    {
-        if (prevScope != _currentScope ||
-            ![prevScopeTypeName isEqualToString:_currentScopePoiTypeName] ||
-            ![prevScopeTypeNameLoc isEqualToString:_currentScopePoiTypeNameLoc] ||
-            ![prevScopeCategoryName isEqualToString:_currentScopeCategoryName] ||
-            ![prevScopeCategoryNameLoc isEqualToString:_currentScopeCategoryNameLoc])
-        {
-            NSString *currentScopeNameLoc = (_currentScope == EPOIScopeCategory ? _currentScopeCategoryNameLoc : _currentScopePoiTypeNameLoc);
-            self.searchString = [currentScopeNameLoc stringByAppendingString:(trailingSpace ? @" " : @"")];
-            [self updateTextField:self.searchString];
-            return YES;
-        }
-    }
-    else
+    if (!found)
     {
         _currentScope = EPOIScopeUndefined;
         _currentScopePoiTypeName = nil;
@@ -745,8 +721,6 @@ typedef enum
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
     }
-    
-    return NO;
 }
 
 - (void)updateSearchResults
@@ -976,7 +950,7 @@ typedef enum
         if (_currentScope == EPOIScopeUndefined)
             [poiHelper findPOIsByKeyword:self.searchString];
         else
-            [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusMeters:kSearchRadiusKm[_searchRadiusIndex] * 1200.0];
+            [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusIndex:&_searchRadiusIndex];
     });
 }
 

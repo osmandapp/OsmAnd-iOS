@@ -128,6 +128,15 @@
     return nil;
 }
 
+- (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name
+{
+    for (OAPOIType *t in _poiTypes)
+        if ([t.category isEqualToString:category] && [t.name isEqualToString:name])
+            return t;
+    
+    return nil;
+}
+
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
 {
     _visibleArea = area;
@@ -136,14 +145,18 @@
 
 -(void)findPOIsByKeyword:(NSString *)keyword
 {
-    [self findPOIsByKeyword:keyword categoryName:nil poiTypeName:nil radiusMeters:0.0];
+    int radius = -1;
+    [self findPOIsByKeyword:keyword categoryName:nil poiTypeName:nil radiusIndex:&radius];
 }
 
--(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radiusMeters:(double)radius
+-(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radiusIndex:(int *)radiusIndex
 {
     _isSearchDone = NO;
     _breakSearch = NO;
-    _radius = radius;
+    if (*radiusIndex  < 0)
+        _radius = 0.0;
+    else
+        _radius = kSearchRadiusKm[*radiusIndex] * 1100.0;
     
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
@@ -157,7 +170,7 @@
     _limitCounter = _searchLimit;
     
     
-    if (radius == 0.0) {
+    if (_radius == 0.0) {
         
         const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
         
@@ -196,16 +209,30 @@
             categoriesFilter.insert(QString::fromNSString(categoryName), QStringList());
         }
         searchCriteria->categoriesFilter = categoriesFilter;
-        searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, _myLocation);
         
-        const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
-        search->performSearch(*searchCriteria,
-                              [self]
-                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
-                              {
-                                  [self onPOIFound:resultEntry];
-                              },
-                              ctrl);
+        while (true)
+        {
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
+            
+            const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+            search->performSearch(*searchCriteria,
+                                  [self]
+                                  (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                  {
+                                      [self onPOIFound:resultEntry];
+                                  },
+                                  ctrl);
+            
+            if (_limitCounter == _searchLimit && _radius < 5000.0)
+            {
+                *radiusIndex += 1;
+                _radius = kSearchRadiusKm[*radiusIndex] * 1100.0;
+            }
+            else
+            {
+                break;
+            }
+        }
     }
     
     free(ctrl);
@@ -243,14 +270,24 @@
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
         return;
+    
     NSString *category = catList.keys().first().toNSString();
     NSString *subCategory = catList.value(catList.keys().first()).first().toNSString();
     
-    OAPOIType *type = [[OAPOIType alloc] init];
-    type.category = category;
-    type.name = subCategory;
-    type.nameLocalized = [self getPhrase:subCategory];
+    OAPOIType *type = [self getPoiTypeByCategory:category name:subCategory];
+    if (!type)
+    {
+        type = [[OAPOIType alloc] init];
+        type.category = category;
+        type.name = subCategory;
+        type.nameLocalized = [self getPhrase:subCategory];
+    }
     poi.type = type;
+    
+    if (poi.name.length == 0)
+        poi.name = type.name;
+    if (poi.nameLocalized.length == 0)
+        poi.nameLocalized = type.nameLocalized;
     
     _limitCounter--;
     

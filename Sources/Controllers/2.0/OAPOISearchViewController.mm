@@ -949,8 +949,8 @@ typedef enum
             
             if (!str)
             {
-                if (!poi.filter || _currentScope == EPOIScopeFilter)
-                    [typesOthersArray addObject:poi];
+                //if (!poi.filter || _currentScope == EPOIScopeFilter)
+                //    [typesOthersArray addObject:poi];
             }
             else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
             {

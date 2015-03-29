@@ -28,7 +28,7 @@
                         <outlet property="delegate" destination="-1" id="Azk-Uh-VEQ"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" id="RXJ-Yy-wKG">
+                <view clipsSubviews="YES" contentMode="scaleToFill" id="RXJ-Yy-wKG">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="94"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>

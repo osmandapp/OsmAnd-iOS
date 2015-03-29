@@ -52,6 +52,8 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
             animated:(BOOL)animated;
 -(float)calculateMapRuler;
 
+-(BOOL)isMyLocationVisible;
+
 - (void)showContextPinMarker:(double)latitude longitude:(double)longitude;
 - (void)hideContextPinMarker;
 

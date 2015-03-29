@@ -26,7 +26,6 @@
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
 
-#include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
 #define kMaxTypeRows 5
@@ -91,6 +90,8 @@ typedef enum
     NSString *_currentScopeCategoryNameLoc;
     NSString *_currentScopeFilterName;
     NSString *_currentScopeFilterNameLoc;
+    
+    BOOL _dataInvalidated;
 }
 
 - (instancetype)init
@@ -168,6 +169,11 @@ typedef enum
     
     [self showSearchIcon];
     [self.textField becomeFirstResponder];
+    
+    if (_dataInvalidated)
+    {
+        [self generateData];
+    }
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -184,6 +190,35 @@ typedef enum
 
 - (void)appplicationIsActive:(NSNotification *)notification {
     [self showSearchIcon];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    if (_searchNearMapCenter)
+    {
+        CGRect frame = _topView.frame;
+        frame.size.height = 94.0;
+        _topView.frame = frame;
+        _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
+    }
+    else
+    {
+        CGRect frame = _topView.frame;
+        frame.size.height = 64.0;
+        _topView.frame = frame;
+        _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
+    }
+}
+
+-(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
+{
+    BOOL prevValue = _searchNearMapCenter;
+    _searchNearMapCenter = searchNearMapCenter;
+    if (prevValue != _searchNearMapCenter && self.isViewLoaded)
+    {
+        _dataInvalidated = YES;
+        [self.view setNeedsLayout];
+    }
 }
 
 -(void)showWaitingIndicator
@@ -261,6 +296,11 @@ typedef enum
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;
+    if (_searchNearMapCenter)
+    {
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
+        newLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+    }
     CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
     CLLocationDirection newDirection =
     (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
@@ -343,10 +383,12 @@ typedef enum
         
         dispatch_async(self.updateDispatchQueue, ^{
     
-            if ([self.searchString isEqualToString:self.searchStringPrev])
+            if ([self.searchString isEqualToString:self.searchStringPrev] && !_dataInvalidated)
                 return;
             else
                 self.searchStringPrev = [_searchString copy];
+
+            _dataInvalidated = NO;
 
             [self updateSearchResults];
 
@@ -459,7 +501,21 @@ typedef enum
             [cell.descView setText:item.type.nameLocalized];
             
             [cell.distanceView setText:item.distance];
-            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            if (_searchNearMapCenter)
+            {
+                cell.directionImageView.hidden = YES;
+                CGRect frame = cell.distanceView.frame;
+                frame.origin.x = 51.0;
+                cell.distanceView.frame = frame;
+            }
+            else
+            {
+                cell.directionImageView.hidden = NO;
+                CGRect frame = cell.distanceView.frame;
+                frame.origin.x = 69.0;
+                cell.distanceView.frame = frame;
+                cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            }
         }
         return cell;
     }
@@ -1059,8 +1115,7 @@ typedef enum
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
         [poiHelper setVisibleScreenDimensions:[mapRendererView getVisibleBBox31] zoomLevel:mapRendererView.zoomLevel];
-        CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-        poiHelper.myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+        poiHelper.myLocation = self.myLocation;
         
         if (_currentScope == EPOIScopeUndefined)
             [poiHelper findPOIsByKeyword:self.searchString];

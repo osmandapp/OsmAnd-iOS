@@ -2733,5 +2733,16 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     }
 }
 
+-(BOOL)isMyLocationVisible
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)self.view;
+    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
+    OsmAnd::PointI myLocation31(OsmAnd::Utilities::get31TileNumberX(myLocation.coordinate.longitude),
+                                OsmAnd::Utilities::get31TileNumberY(myLocation.coordinate.latitude));
+    
+    OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
+    
+    return (visibleArea.topLeft.x < myLocation31.x && visibleArea.topLeft.y < myLocation31.y && visibleArea.bottomRight.x > myLocation31.x && visibleArea.bottomRight.y > myLocation31.y);
+}
 
 @end

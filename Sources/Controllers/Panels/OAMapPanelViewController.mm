@@ -447,8 +447,35 @@
 {
     [self removeGestureRecognizers];
 
+    OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+    BOOL isMyLocationVisible = [_mapViewController isMyLocationVisible];
+
+    BOOL searchNearMapCenter = NO;
+    OsmAnd::PointI myLocation;
+    
+    if (!isMyLocationVisible)
+    {
+        if (mapView.zoom < 13.0)
+        {
+            [[[UIAlertView alloc] initWithTitle:@"" message:@"Zoom level is too low.\nPlease Zoom In and try to search again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+            return;
+        }
+        else
+        {
+            searchNearMapCenter = YES;
+            myLocation = mapView.target31;
+        }
+    }
+    else
+    {
+        CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+        myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+    }
+
     if (!_searchPOI)
         _searchPOI = [[OAPOISearchViewController alloc] init];
+    _searchPOI.myLocation = myLocation;
+    _searchPOI.searchNearMapCenter = searchNearMapCenter;
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
 }
 

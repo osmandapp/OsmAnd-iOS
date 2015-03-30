@@ -90,7 +90,12 @@ typedef enum
     NSString *_currentScopeCategoryNameLoc;
     NSString *_currentScopeFilterName;
     NSString *_currentScopeFilterNameLoc;
-    
+
+    EPOIScope _coreFoundScope;
+    NSString *_coreFoundScopePoiTypeName;
+    NSString *_coreFoundScopeCategoryName;
+    NSString *_coreFoundScopeFilterName;
+
     BOOL _dataInvalidated;
 }
 
@@ -382,6 +387,17 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+-(BOOL)isCoreSearchResultActual
+{
+    return _currentScope == _coreFoundScope &&
+    (_currentScopeCategoryName ?
+        [_currentScopeCategoryName isEqualToString:_coreFoundScopeCategoryName] : _coreFoundScopeCategoryName == nil) &&
+    (_currentScopeFilterName ?
+        [_currentScopeFilterName isEqualToString:_coreFoundScopeFilterName] : _coreFoundScopeFilterName == nil) &&
+    (_currentScopePoiTypeName ?
+        [_currentScopePoiTypeName isEqualToString:_coreFoundScopePoiTypeName] : _coreFoundScopePoiTypeName == nil);
+}
+
 -(void)generateData {
     
     EPOIScope prevScope = _currentScope;
@@ -407,20 +423,20 @@ typedef enum
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 self.dataArray = [NSMutableArray arrayWithArray:self.dataArrayTemp];
-                self.dataArrayTemp = nil;
 
                 NSString *str = self.searchString;
                 if (_currentScope != EPOIScopeUndefined)
                     str = [[self nextToken:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
-                _ignoreSearchResult = (str.length == 0 && _currentScope != EPOIScopeType && _currentScope != EPOIScopeFilter);
+                _ignoreSearchResult = (str.length == 0 && _currentScope == EPOIScopeUndefined);
                 if (!_ignoreSearchResult)
                 {
-                    if (self.searchPoiArray.count > 0 && _currentScope == prevScope && _currentScope != EPOIScopeUndefined)
+                    if (_searchPoiArray.count > 0 && _currentScope != EPOIScopeUndefined && [self isCoreSearchResultActual])
                     {
                         //NSLog(@"build");
                         [self buildPoiArray];
                         _initData = YES;
+                        _poiInList = YES;
                         [self updateDistanceAndDirection];
                     }
                     else
@@ -949,7 +965,7 @@ typedef enum
 
 - (void)updateSearchResults
 {
-    [self performSearch:self.searchString];
+    [self performSearch:[_searchString copy]];
 }
 
 - (void)performSearch:(NSString*)searchString
@@ -1162,6 +1178,11 @@ typedef enum
 
 -(void)startCoreSearch
 {
+    _coreFoundScope = EPOIScopeUndefined;
+    _coreFoundScopeCategoryName = nil;
+    _coreFoundScopeFilterName = nil;
+    _coreFoundScopePoiTypeName = nil;
+
     _needRestartSearch = YES;
     
     if (![[OAPOIHelper sharedInstance] breakSearch])
@@ -1214,7 +1235,6 @@ typedef enum
 {
     if (!wasInterrupted && !_needRestartSearch)
     {
-        
         dispatch_async(dispatch_get_main_queue(), ^{
             [self showSearchIcon];
         });
@@ -1222,8 +1242,14 @@ typedef enum
         if (_ignoreSearchResult)
         {
             _poiInList = NO;
+            [_searchPoiArray removeAllObjects];
             return;
         }
+        
+        _coreFoundScope = _currentScope;
+        _coreFoundScopeCategoryName = _currentScopeCategoryName;
+        _coreFoundScopeFilterName = _currentScopeFilterName;
+        _coreFoundScopePoiTypeName = _currentScopePoiTypeName;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -1243,8 +1269,6 @@ typedef enum
             }
             
         });
-        
-        
     }
     else if (_needRestartSearch)
     {
@@ -1264,7 +1288,7 @@ typedef enum
             [arr addObject:poi];
     }
 
-    [_dataPoiArray setArray:arr];
+    self.dataPoiArray = [arr mutableCopy];
 }
 
 @end

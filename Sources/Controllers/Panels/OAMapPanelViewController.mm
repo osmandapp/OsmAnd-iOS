@@ -455,7 +455,7 @@
     
     if (!isMyLocationVisible)
     {
-        if (mapView.zoom < 13.0)
+        if (mapView.zoom < 9.0)
         {
             [[[UIAlertView alloc] initWithTitle:@"" message:@"Zoom level is too low.\nPlease Zoom In and try to search again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
             return;

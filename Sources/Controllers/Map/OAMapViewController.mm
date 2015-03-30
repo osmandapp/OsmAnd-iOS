@@ -81,7 +81,7 @@
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
 #define kQuickAnimationTime 0.4f
 #define kOneSecondAnimatonTime 1.0f
-#define kScreensToFlyWithAnimation 3
+#define kScreensToFlyWithAnimation 4.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 

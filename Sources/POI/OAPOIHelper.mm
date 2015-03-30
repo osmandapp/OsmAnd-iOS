@@ -28,6 +28,7 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 
 #define kSearchLimit 50
+#define kRadiusKmToMetersKoef 1200.0
 
 @implementation OAPOIHelper {
 
@@ -209,7 +210,7 @@
     if (*radiusIndex  < 0)
         _radius = 0.0;
     else
-        _radius = kSearchRadiusKm[*radiusIndex] * 1100.0;
+        _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
     
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
@@ -279,7 +280,7 @@
             if (_limitCounter == _searchLimit && _radius < 5000.0)
             {
                 *radiusIndex += 1;
-                _radius = kSearchRadiusKm[*radiusIndex] * 1100.0;
+                _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
             }
             else
             {
@@ -307,7 +308,19 @@
 {
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
-    
+ 
+    /*
+    OsmAnd::AreaI area = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(1.0 * kRadiusKmToMetersKoef, _myLocation);
+    if (area.topLeft.x <= amenity->position31.x && area.topLeft.y <= amenity->position31.y && area.bottomRight.x >= amenity->position31.x && area.bottomRight.y >= amenity->position31.y)
+    {
+        NSLog(@"%@ is in area", amenity->nativeName.toNSString());
+    }
+    else
+    {
+        NSLog(@"!!! %@ is NOT in area", amenity->nativeName.toNSString());
+    }
+    */
+
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
@@ -316,10 +329,7 @@
     
     if (amenity->categories.isEmpty())
         return;
-    
-    //for (const auto catIds : amenity->categories)
-    //    NSLog(@"catId (%d) main=%d sub=%d", amenity->categories.count(), catIds.getMainCategoryIndex(), catIds.getSubCategoryIndex());
-    
+        
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
         return;

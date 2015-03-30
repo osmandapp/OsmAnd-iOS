@@ -293,6 +293,13 @@ typedef enum
         return;
     self.lastUpdate = [[NSDate date] timeIntervalSince1970];
     
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateDistancesAndSort];
+    });
+}
+
+-(void)updateDistancesAndSort
+{
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;
@@ -306,60 +313,67 @@ typedef enum
     (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
     ? newLocation.course
     : newHeading;
+
+    NSMutableArray *arr = [NSMutableArray array];
+    double radius = kSearchRadiusKm[_searchRadiusIndex] * 1000.0;
+
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-    
-        [_dataPoiArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
-            
-            if ([item isKindOfClass:[OAPOI class]]) {
-                
-                OAPOI *itemData = item;
-                
-                const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                                  newLocation.coordinate.latitude,
-                                                                  itemData.longitude, itemData.latitude);
-                
-                
-                
-                itemData.distance = [app getFormattedDistance:distance];
-                itemData.distanceMeters = distance;
-                CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.latitude longitude:itemData.longitude]];
-                itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-            }
-            
-        }];
+    [_dataPoiArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
         
-        if ([_dataPoiArray count] > 0) {
-            NSArray *sortedArray = [_dataPoiArray sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
-                                    {
-                                        double distance1 = obj1.distanceMeters;
-                                        double distance2 = obj2.distanceMeters;
-                                        
-                                        return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
-                                    }];
-            [_dataPoiArray setArray:sortedArray];
+        if ([item isKindOfClass:[OAPOI class]])
+        {
+            OAPOI *itemData = item;
+            
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              itemData.longitude, itemData.latitude);
+            
+            itemData.distance = [app getFormattedDistance:distance];
+            itemData.distanceMeters = distance;
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.latitude longitude:itemData.longitude]];
+            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            
+            if (_currentScope == EPOIScopeUndefined || distance <= radius)
+                [arr addObject:item];            
+        }
+        else
+        {
+            [arr addObject:item];
         }
         
-        if (isDecelerating)
-            return;
+    }];
+    
+    if ([arr count] > 0) {
+        NSArray *sortedArray = [arr sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
+                                {
+                                    double distance1 = obj1.distanceMeters;
+                                    double distance2 = obj2.distanceMeters;
+                                    
+                                    return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
+                                }];
         
-        //[self refreshVisibleRows];
-        [_tableView reloadData];
-        if (_initData && _dataPoiArray.count > 0) {
-            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        }
-        _initData = NO;
-    });
+        [_dataPoiArray setArray:sortedArray];
+    }
+    else
+    {
+        [_dataPoiArray setArray:arr];
+    }
+    
+    if (isDecelerating)
+        return;
+    
+    [_tableView reloadData];
+    if (_initData && _dataPoiArray.count > 0) {
+        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    }
+    _initData = NO;
 }
 
 - (void)refreshVisibleRows
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        
-        NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
-        [self.tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
-    });
+    [_tableView reloadData];
+    //NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+    //[self.tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
 }
 
 
@@ -379,8 +393,6 @@ typedef enum
     
     if (self.searchString)
     {
-        _ignoreSearchResult = NO;
-        
         dispatch_async(self.updateDispatchQueue, ^{
     
             if ([self.searchString isEqualToString:self.searchStringPrev] && !_dataInvalidated)
@@ -394,15 +406,36 @@ typedef enum
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [self showWaitingIndicator];
-
                 self.dataArray = [NSMutableArray arrayWithArray:self.dataArrayTemp];
                 self.dataArrayTemp = nil;
-                self.dataPoiArray = [NSMutableArray array];
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startCoreSearch) object:nil];
-                [self performSelector:@selector(startCoreSearch) withObject:nil afterDelay:.4];
-                
-                [self refreshTable];
+
+                NSString *str = self.searchString;
+                if (_currentScope != EPOIScopeUndefined)
+                    str = [[self nextToken:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+                _ignoreSearchResult = (str.length == 0 && _currentScope != EPOIScopeType && _currentScope != EPOIScopeFilter);
+                if (!_ignoreSearchResult)
+                {
+                    if (self.searchPoiArray.count > 0 && _currentScope == prevScope && _currentScope != EPOIScopeUndefined)
+                    {
+                        //NSLog(@"build");
+                        [self buildPoiArray];
+                        _initData = YES;
+                        [self updateDistanceAndDirection];
+                    }
+                    else
+                    {
+                        //NSLog(@"core");
+                        [self showWaitingIndicator];
+                        
+                        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startCoreSearch) object:nil];
+                        [self performSelector:@selector(startCoreSearch) withObject:nil afterDelay:.01];
+                    }
+                }
+                else
+                {
+                    [self refreshTable];
+                }
             });
         });
     }
@@ -695,6 +728,59 @@ typedef enum
     return nil;
 }
 
+-(NSString *)currentScopeName
+{
+    switch (_currentScope) {
+        case EPOIScopeCategory:
+            return _currentScopeCategoryName;
+        case EPOIScopeFilter:
+            return _currentScopeFilterName;
+        case EPOIScopeType:
+            return _currentScopePoiTypeName;
+            
+        default:
+            break;
+    }
+    return nil;
+}
+
+-(BOOL)firstTokenScoped:(NSString *)text scopeName:(NSString *)scopeName result:(NSString **)result
+{
+    if ([self beginWith:scopeName text:text] && (text.length == scopeName.length || [text characterAtIndex:scopeName.length] == ' '))
+    {
+        if (text.length > scopeName.length)
+        {
+            *result = [text substringToIndex:scopeName.length + 1];
+            return YES;
+        }
+        else
+        {
+            *result = text;
+            return YES;
+        }
+    }
+    return NO;
+}
+
+-(BOOL)nextTokenScoped:(NSString *)text scopeName:(NSString *)scopeName result:(NSString **)result
+{
+    if ([self beginWith:scopeName text:text])
+    {
+        if (text.length > scopeName.length + 1)
+        {
+            NSString *res = [text substringFromIndex:scopeName.length + 1];
+            *result = (res.length == 0 ? nil : res);
+            return YES;
+        }
+        else
+        {
+            *result = nil;
+            return YES;
+        }
+    }
+    return NO;
+}
+
 -(NSString *)firstToken:(NSString *)text
 {
     if (!text || text.length == 0)
@@ -708,14 +794,11 @@ typedef enum
     
     if (_currentScope != EPOIScopeUndefined)
     {
-        NSString *currentScopeNameLoc = [self currentScopeNameLoc];
-        if ([self beginWith:currentScopeNameLoc text:text] && (text.length == currentScopeNameLoc.length || [text characterAtIndex:currentScopeNameLoc.length] == ' '))
-        {
-            if (text.length > currentScopeNameLoc.length)
-                return [text substringToIndex:currentScopeNameLoc.length + 1];
-            else
-                return text;
-        }
+        NSString *ret;
+        if ([self firstTokenScoped:text scopeName:[self currentScopeNameLoc] result:&ret])
+            return ret;
+        if ([self firstTokenScoped:text scopeName:[self currentScopeName] result:&ret])
+            return ret;
     }
     
     NSRange r = [text rangeOfString:@" "];
@@ -726,26 +809,18 @@ typedef enum
     
 }
 
--(NSString *)nextTokens:(NSString *)text
+-(NSString *)nextToken:(NSString *)text
 {
     if (!text || text.length == 0)
         return nil;
     
     if (_currentScope != EPOIScopeUndefined)
     {
-        NSString *currentScopeNameLoc = [self currentScopeNameLoc];
-        if ([self beginWith:currentScopeNameLoc text:text])
-        {
-            if (text.length > currentScopeNameLoc.length + 1)
-            {
-                NSString *res = [text substringFromIndex:currentScopeNameLoc.length + 1];
-                return res.length == 0 ? nil : res;
-            }
-            else
-            {
-                return nil;
-            }
-        }
+        NSString *ret;
+        if ([self nextTokenScoped:text scopeName:[self currentScopeNameLoc] result:&ret])
+            return ret;
+        if ([self nextTokenScoped:text scopeName:[self currentScopeName] result:&ret])
+            return ret;
     }
     
     NSRange r = [text rangeOfString:@" "];
@@ -769,7 +844,7 @@ typedef enum
     
     BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
     
-    NSString *nextStr = [[self nextTokens:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSString *currentScopeNameLoc = [self currentScopeNameLoc];
     
     if (_currentScope != EPOIScopeUndefined && [firstToken isEqualToString:(trailingSpace ? [currentScopeNameLoc stringByAppendingString:@" "] : currentScopeNameLoc)]) {
@@ -874,7 +949,7 @@ typedef enum
 
 - (void)updateSearchResults
 {
-    [self performSearch:_searchString];
+    [self performSearch:self.searchString];
 }
 
 - (void)performSearch:(NSString*)searchString
@@ -902,7 +977,7 @@ typedef enum
     
     NSString *str = searchString;
     if (_currentScope != EPOIScopeUndefined)
-        str = [[self nextTokens:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        str = [[self nextToken:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if (_currentScope == EPOIScopeUndefined)
     {
@@ -911,7 +986,7 @@ typedef enum
         }];
         
         for (OAPOICategory *c in sortedCategories)
-            if ([self beginWithOrAfterSpace:str text:c.nameLocalized])
+            if ([self beginWithOrAfterSpace:str text:c.nameLocalized] || [self beginWithOrAfterSpace:str text:c.name])
                 [_dataArrayTemp addObject:c];
 
         NSArray *sortedFilters = [[OAPOIHelper sharedInstance].poiFilters.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOIFilter* obj1, OAPOIFilter* obj2) {
@@ -919,7 +994,7 @@ typedef enum
         }];
         
         for (OAPOIFilter *f in sortedFilters)
-            if ([self beginWithOrAfterSpace:str text:f.nameLocalized])
+            if ([self beginWithOrAfterSpace:str text:f.nameLocalized] || [self beginWithOrAfterSpace:str text:f.name])
                 [_dataArrayTemp addObject:f];
     }
     
@@ -930,7 +1005,7 @@ typedef enum
         }];
         
         for (OAPOIFilter *f in sortedFilters)
-            if (!str || [self beginWithOrAfterSpace:str text:f.nameLocalized])
+            if (!str || [self beginWithOrAfterSpace:str text:f.nameLocalized] || [self beginWithOrAfterSpace:str text:f.name])
                 [_dataArrayTemp addObject:f];
     }
     
@@ -949,17 +1024,18 @@ typedef enum
             
             if (!str)
             {
+                // remove POI Types if search string ie empty
                 //if (!poi.filter || _currentScope == EPOIScopeFilter)
                 //    [typesOthersArray addObject:poi];
             }
-            else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized])
+            else if ([self beginWithOrAfterSpace:str text:poi.nameLocalized] || [self beginWithOrAfterSpace:str text:poi.name])
             {
-                if ([self containsWord:str inText:poi.nameLocalized])
+                if ([self containsWord:str inText:poi.nameLocalized] || [self containsWord:str inText:poi.name])
                     [typesStrictArray addObject:poi];
                 else
                     [typesOthersArray addObject:poi];
             }
-            else if ([self beginWithOrAfterSpace:str text:poi.filter])
+            else if ([self beginWithOrAfterSpace:str text:poi.filterLocalized] || [self beginWithOrAfterSpace:str text:poi.filter])
             {
                 [typesOthersArray addObject:poi];
             }
@@ -1128,16 +1204,10 @@ typedef enum
 
 -(void)poiFound:(OAPOI *)poi
 {
-    if (_currentScope != EPOIScopeUndefined)
-    {
-        NSString *nextStr = [[self nextTokens:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (nextStr.length == 0 || [self beginWith:nextStr text:poi.nameLocalized])
-            [_searchPoiArray addObject:poi];
-    }
-    else
-    {
-        [_searchPoiArray addObject:poi];
-    }
+    if (_currentScope == EPOIScopeFilter && ![poi.type.filter isEqualToString:_currentScopeFilterName])
+        return;
+
+    [_searchPoiArray addObject:poi];
 }
 
 -(void)searchDone:(BOOL)wasInterrupted
@@ -1159,8 +1229,7 @@ typedef enum
             
             _poiInList = _searchPoiArray.count > 0;
             
-            self.dataPoiArray = [NSMutableArray arrayWithArray:self.searchPoiArray];
-            self.searchPoiArray = nil;
+            [self buildPoiArray];
             
             if (_poiInList)
             {
@@ -1183,6 +1252,19 @@ typedef enum
             [self startCoreSearch];
         });
     }
+}
+
+-(void)buildPoiArray
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (OAPOI *poi in self.searchPoiArray)
+    {
+        NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        if (nextStr.length == 0 || [self beginWith:nextStr text:poi.nameLocalized] || [self beginWithAfterSpace:nextStr text:poi.nameLocalized])
+            [arr addObject:poi];
+    }
+
+    [_dataPoiArray setArray:arr];
 }
 
 @end

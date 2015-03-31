@@ -121,15 +121,13 @@
 
 - (void)reloadData
 {
-    CLLocation *loc = [OsmAndApp instance].locationServices.lastKnownLocation;
-    
     for (int i = 0; i < _destinations.count; i++) {
         OADestination *destination = _destinations[i];
         switch (i) {
             case 0:
                 self.colorView.backgroundColor = destination.color;
                 [self updateDirection:destination imageView:self.compassImage];
-                self.distanceLabel.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
                 self.descLabel.text = destination.desc;
                 break;
                 
@@ -139,16 +137,19 @@
     }
 }
 
-- (void)updateDirections
+- (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
 {
-    CLLocation *loc = [OsmAndApp instance].locationServices.lastKnownLocation;
-
-    for (int i = 0; i < _destinations.count; i++) {
+    self.currentLocation = myLocation;
+    self.currentDirection = direction;
+    
+    for (int i = 0; i < _destinations.count; i++)
+    {
         OADestination *destination = _destinations[i];
-        switch (i) {
+        switch (i)
+        {
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
-                self.distanceLabel.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
                 break;
                 
             default:
@@ -159,18 +160,9 @@
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
+    CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude] sourceLocation:[[CLLocation alloc] initWithLatitude:self.currentLocation.latitude longitude:self.currentLocation.longitude]];
     
-    CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:destination.latitude longitude:destination.longitude]];
-    
-    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - self.currentDirection) * (M_PI / 180);
     imageView.transform = CGAffineTransformMakeRotation(direction);
 }
 

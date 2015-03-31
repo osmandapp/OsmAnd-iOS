@@ -180,6 +180,8 @@
             _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _browseMapViewController.destinationViewController = self.destinationViewController;
         }
+        _destinationViewController.calculateUsingMapCenter = YES;
+
         newHudController = self.browseMapViewController;
 
         _mapViewController.view.frame = self.view.frame;
@@ -192,6 +194,7 @@
             _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _driveModeViewController.destinationViewController = self.destinationViewController;
         }
+        _destinationViewController.calculateUsingMapCenter = NO;
         newHudController = self.driveModeViewController;
         
         CGRect frame = self.view.frame;
@@ -455,16 +458,8 @@
     
     if (!isMyLocationVisible)
     {
-        if (mapView.zoom < 9.0)
-        {
-            [[[UIAlertView alloc] initWithTitle:@"" message:@"Zoom level is too low.\nPlease Zoom In and try to search again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
-            return;
-        }
-        else
-        {
-            searchNearMapCenter = YES;
-            myLocation = mapView.target31;
-        }
+        searchNearMapCenter = YES;
+        myLocation = mapView.target31;
     }
     else
     {

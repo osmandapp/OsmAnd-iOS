@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OADestinationCell.h"
 
+
 @class OADestination;
 
 @protocol OADestinationViewControllerProtocol
@@ -26,6 +27,8 @@
 @property (nonatomic, assign) CGFloat top;
 @property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
 
+@property (nonatomic, assign) BOOL calculateUsingMapCenter;
+
 - (NSArray *)allDestinations;
 
 - (void)startLocationUpdate;
@@ -35,5 +38,7 @@
 
 - (UIColor *) addDestination:(OADestination *)destination;
 - (void) doLocationUpdate;
+
+- (void)updateDestinationsUsingMapCenter;
 
 @end

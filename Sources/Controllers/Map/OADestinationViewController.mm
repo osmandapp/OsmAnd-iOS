@@ -12,6 +12,9 @@
 #import "OAAutoObserverProxy.h"
 #import "OAMultiDestinationCell.h"
 
+#import <OsmAndCore.h>
+#import <OsmAndCore/Utilities.h>
+
 @interface OADestinationViewController ()
 
 @property (nonatomic) NSMutableArray *destinationCells;
@@ -49,23 +52,34 @@
                         [UIColor colorWithRed:0.992f green:0.627f blue:0.200f alpha:1.00f],
                         [UIColor colorWithRed:0.541f green:0.741f blue:0.373f alpha:1.00f]];
         self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];
+        
+        self.calculateUsingMapCenter = (_app.appMode == OAAppModeBrowseMap);
     }
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    if (_app.data.destinations.count > 0) {
-        
-        if (!_multiCell) {
+    if (_app.data.destinations.count > 0)
+    {
+        CLLocationCoordinate2D location;
+        CLLocationDirection direction;
+        [self obtainCurrentLocationDirection:&location direction:&direction];
+
+        if (!_multiCell)
+        {
             self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:_app.data.destinations];
+            [_multiCell updateDirections:location direction:direction];
             _multiCell.delegate = self;
             [self.view addSubview:_multiCell.contentView];
         }
         
-        for (OADestination *destination in _app.data.destinations) {
+        for (OADestination *destination in _app.data.destinations)
+        {
             OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+            [cell updateDirections:location direction:direction];
             cell.delegate = self;
             [_destinationCells addObject:cell];
             [self.view addSubview:cell.contentView];
@@ -75,8 +89,34 @@
     }
 }
 
+-(void)obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
+{
+    if (self.calculateUsingMapCenter)
+    {
+        Point31 mapCenter = _app.data.mapLastViewedState.target31;
+        float mapDirection = _app.data.mapLastViewedState.azimuth;
+        
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(mapCenter.x, mapCenter.y));
+        *location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        *direction = mapDirection;
+    }
+    else
+    {
+        // Obtain fresh location and heading
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        
+        *location = newLocation.coordinate;
+        *direction = newDirection;
+    }
+}
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
 }
 
@@ -252,6 +292,10 @@
     if (_app.data.destinations.count >= 3)
         return nil;
     
+    CLLocationCoordinate2D location;
+    CLLocationDirection direction;
+    [self obtainCurrentLocationDirection:&location direction:&direction];
+
     [_app.data.destinations addObject:destination];
     int colorIndex = [self getFreeColorIndex];
     destination.color = _colors[colorIndex];
@@ -268,8 +312,10 @@
             _multiCell.destinations = [NSArray arrayWithArray:_app.data.destinations];
         }];
     }
+    [_multiCell updateDirections:location direction:direction];
     
     OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+    [cell updateDirections:location direction:direction];
     cell.delegate = self;
     if (!_singleLineMode)
         cell.contentView.alpha = 0.0;
@@ -305,13 +351,45 @@
     return 0;
 }
 
+- (void)updateDestinationsUsingMapCenter
+{
+    Point31 mapCenter = _app.data.mapLastViewedState.target31;
+    float mapDirection = _app.data.mapLastViewedState.azimuth;
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(mapCenter.x, mapCenter.y));
+    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    CLLocationDirection direction = mapDirection;
+
+    if (_multiCell)
+        [_multiCell updateDirections:location direction:direction];
+    for (OADestinationCell *cell in _destinationCells)
+        [cell updateDirections:location direction:direction];
+}
+
 - (void)doLocationUpdate
 {
+    if (_calculateUsingMapCenter)
+        return;
+    
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        CLLocationCoordinate2D location;
+        CLLocationDirection direction;
+        
+        // Obtain fresh location and heading
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        
+        location = newLocation.coordinate;
+        direction = newDirection;
+        
         if (_multiCell)
-            [_multiCell updateDirections];
+            [_multiCell updateDirections:location direction:direction];
         for (OADestinationCell *cell in _destinationCells)
-            [cell updateDirections];
+            [cell updateDirections:location direction:direction];
     });
 }
 

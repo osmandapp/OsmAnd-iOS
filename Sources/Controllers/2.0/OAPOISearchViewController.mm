@@ -587,8 +587,6 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
         if (cell)
@@ -616,8 +614,6 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
         if (cell)
@@ -645,8 +641,6 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
         if (cell)
@@ -1066,6 +1060,9 @@ typedef enum
             if (_currentScopeFilterName && ![poi.filter isEqualToString:_currentScopeFilterName])
                 continue;
             if (_currentScopePoiTypeName && ![poi.name isEqualToString:_currentScopePoiTypeName])
+                continue;
+            
+            if (_currentScope == EPOIScopeUndefined && poi.reference)
                 continue;
             
             if (!str)

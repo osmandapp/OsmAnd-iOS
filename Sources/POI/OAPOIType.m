@@ -29,4 +29,43 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
+-(BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[OAPOIType class]]) {
+        OAPOIType *obj = object;
+        return [self.name isEqualToString:obj.name] && [self.tag isEqualToString:obj.tag];
+    }
+    return NO;
+}
+
+-(NSUInteger)hash
+{
+    return [_name hash] + (_tag ? [_tag hash] : 1);
+}
+
+#pragma mark NSCopying
+
+- (id)copyWithZone:(NSZone *)zone
+{
+    OAPOIType* clone = [[OAPOIType allocWithZone:zone] init];
+    
+    clone.name = self.name;
+    clone.tag = self.tag;
+    clone.value = self.value;
+    clone.nameLocalized = self.nameLocalized;
+    clone.nameLocalizedEN = self.nameLocalizedEN;
+
+    clone.category = self.category;
+    clone.categoryLocalized = self.categoryLocalized;
+    clone.categoryLocalizedEN = self.categoryLocalizedEN;
+
+    clone.filter = self.filter;
+    clone.filterLocalized = self.filterLocalized;
+    clone.filterLocalizedEN = self.filterLocalizedEN;
+    
+    clone.reference = self.reference;
+    
+    return clone;
+}
+
 @end

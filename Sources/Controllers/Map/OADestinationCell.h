@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @class OADestination;
 
@@ -31,11 +32,14 @@
 @property (weak, nonatomic) id<OADestinatioCellProtocol> delegate;
 @property (nonatomic, assign) BOOL drawSplitLine;
 
+@property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
+@property (nonatomic, assign) CLLocationDirection currentDirection;
+
 - (instancetype)initWithDestination:(OADestination *)destination;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
-- (void)updateDirections;
+- (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 

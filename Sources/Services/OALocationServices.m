@@ -561,41 +561,17 @@
 // Relative to north
 - (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation
 {
-    CLLocationCoordinate2D coord1 = self.lastKnownLocation.coordinate;
+    return [self radiusFromBearingToLocation:destinationLocation sourceLocation:self.lastKnownLocation];
+}
+
+- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation
+{
+    CLLocationCoordinate2D coord1 = sourceLocation.coordinate;
     CLLocationCoordinate2D coord2 = destinationLocation.coordinate;
     double distance, bearing;
     [self computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
     
     return bearing;
-    
-    //return [self locationDegreesBearingBetweenCoordinates:self.lastKnownLocation.coordinate andCoordinates:destinationLocation.coordinate];
-}
-
-static inline double DEG2RAD(double degrees) {
-    return degrees * M_PI / 180;
-}
-
-static inline double RAD2DEG(double radians) {
-    return radians * 180 / M_PI;
-}
-
-- (CLLocationDegrees) locationDegreesBearingBetweenCoordinates:(CLLocationCoordinate2D)originCoordinate andCoordinates:(CLLocationCoordinate2D) destinationCoordinate {
-    double lat1 = DEG2RAD(originCoordinate.latitude);
-    double lon1 = DEG2RAD(originCoordinate.longitude);
-    double lat2 = DEG2RAD(destinationCoordinate.latitude);
-    double lon2 = DEG2RAD(destinationCoordinate.longitude);
-    
-    double dLon = lon2 - lon1;
-    double y = sin(dLon) * cos(lat2);
-    double x = cos(lat1) * sin(lat2) - sin(lat1) * cos(lat2) * cos(dLon);
-    double bearing = atan2(y, x) + (2 * M_PI);
-    
-    // `atan2` works on a range of -π to 0 to π, so add on 2π and perform a modulo check
-    if (bearing > (2 * M_PI)) {
-        bearing = bearing - (2 * M_PI);
-    }
-    
-    return RAD2DEG(bearing);
 }
 
 - (CGFloat) radiusFromBearing:(CLLocationDegrees)bearing {

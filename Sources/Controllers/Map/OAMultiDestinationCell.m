@@ -359,8 +359,6 @@
 
 - (void)reloadData
 {
-    CLLocation *loc = [OsmAndApp instance].locationServices.lastKnownLocation;
-    
     for (int i = 0; i < _destinations.count; i++) {
         OADestination *destination = _destinations[i];
         switch (i) {
@@ -373,7 +371,7 @@
                     _compassImage.alpha = 1.0;
                     [self updateDirection:destination imageView:self.compassImage];
                 }
-                self.distanceLabel.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel.text = destination.desc;
                 break;
             case 1:
@@ -385,7 +383,7 @@
                     _compassImage2.alpha = 1.0;
                     [self updateDirection:destination imageView:self.compassImage2];
                 }
-                self.distanceLabel2.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel2.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel2.text = destination.desc;
                 break;
             case 2:
@@ -397,7 +395,7 @@
                     _compassImage3.alpha = 1.0;
                     [self updateDirection:destination imageView:self.compassImage3];
                 }
-                self.distanceLabel3.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel3.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel3.text = destination.desc;
                 break;
                 
@@ -439,24 +437,27 @@
         [_editButton3 removeFromSuperview];
 }
 
-- (void)updateDirections
+- (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
 {
-    CLLocation *loc = [OsmAndApp instance].locationServices.lastKnownLocation;
-    
-    for (int i = 0; i < _destinations.count; i++) {
+    self.currentLocation = myLocation;
+    self.currentDirection = direction;
+
+    for (int i = 0; i < _destinations.count; i++)
+    {
         OADestination *destination = _destinations[i];
-        switch (i) {
+        switch (i)
+        {
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
-                self.distanceLabel.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
-                self.distanceLabel2.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel2.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
-                self.distanceLabel3.text = [destination distanceStr:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+                self.distanceLabel3.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
                 break;
                 
             default:

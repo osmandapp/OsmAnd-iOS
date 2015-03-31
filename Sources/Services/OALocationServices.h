@@ -52,6 +52,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesForcedAccuracy)
 
 - (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation;
 - (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation;
+- (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation;
 
 - (void) computeDistanceAndBearing:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2 distance:(double *)distance initialBearing:(double *)initialBearing /*finalBearing:(double *)finalBearing*/;
 

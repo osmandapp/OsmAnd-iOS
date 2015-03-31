@@ -30,7 +30,7 @@
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
-- (void)updateDirections;
+- (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
 
 -(void)exitEditMode;
 

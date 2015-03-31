@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAPOIType : NSObject
+@interface OAPOIType : NSObject<NSCopying>
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *tag;

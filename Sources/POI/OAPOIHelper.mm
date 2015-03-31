@@ -27,7 +27,7 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
-#define kSearchLimit 50
+#define kSearchLimitRaw 1000
 #define kRadiusKmToMetersKoef 1200.0
 
 @implementation OAPOIHelper {
@@ -57,7 +57,7 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
-        _searchLimit = kSearchLimit;
+        _searchLimit = kSearchLimitRaw;
         _isSearchDone = YES;
         [self readPOI];
         [self updateReferences];
@@ -309,23 +309,13 @@
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
  
-    /*
-    OsmAnd::AreaI area = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(1.0 * kRadiusKmToMetersKoef, _myLocation);
-    if (area.topLeft.x <= amenity->position31.x && area.topLeft.y <= amenity->position31.y && area.bottomRight.x >= amenity->position31.x && area.bottomRight.y >= amenity->position31.y)
-    {
-        NSLog(@"%@ is in area", amenity->nativeName.toNSString());
-    }
-    else
-    {
-        NSLog(@"!!! %@ is NOT in area", amenity->nativeName.toNSString());
-    }
-    */
-
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
     poi.nameLocalized = amenity->nativeName.toNSString();
+    
+    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
     if (amenity->categories.isEmpty())
         return;
@@ -333,6 +323,8 @@
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
         return;
+    
+    //NSLog(@"id=%ld poi.name=%@ lat=%f lon=%f", (long)(amenity->id), poi.name, poi.latitude, poi.longitude);
     
     NSString *category = catList.keys().first().toNSString();
     NSString *subCategory = catList.value(catList.keys().first()).first().toNSString();

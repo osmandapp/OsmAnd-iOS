@@ -322,13 +322,11 @@ typedef enum
     NSMutableArray *arr = [NSMutableArray array];
     double radius = kSearchRadiusKm[_searchRadiusIndex] * 1000.0;
 
-    
     [_dataPoiArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
         
         if ([item isKindOfClass:[OAPOI class]])
         {
             OAPOI *itemData = item;
-            
             const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
                                                               newLocation.coordinate.latitude,
                                                               itemData.longitude, itemData.latitude);
@@ -339,7 +337,7 @@ typedef enum
             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
             
             if (_currentScope == EPOIScopeUndefined || distance <= radius)
-                [arr addObject:item];            
+                [arr addObject:item];
         }
         else
         {
@@ -348,7 +346,8 @@ typedef enum
         
     }];
     
-    if ([arr count] > 0) {
+    if ([arr count] > 0)
+    {
         NSArray *sortedArray = [arr sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
                                 {
                                     double distance1 = obj1.distanceMeters;
@@ -368,7 +367,8 @@ typedef enum
         return;
     
     [_tableView reloadData];
-    if (_initData && _dataPoiArray.count > 0) {
+    if (_initData && _dataPoiArray.count > 0)
+    {
         [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
     _initData = NO;
@@ -407,24 +407,34 @@ typedef enum
     if (prevScope != _currentScope)
         _searchRadiusIndex = 0;
     
-    if (self.searchString)
+    NSString *searchStr = [self.searchString copy];
+
+    if (![searchStr isEqualToString:self.searchStringPrev] || _dataInvalidated)
+    {
+        // Stop active core search
+        [[OAPOIHelper sharedInstance] breakSearch];
+    }
+
+    if (searchStr)
     {
         dispatch_async(self.updateDispatchQueue, ^{
     
-            if ([self.searchString isEqualToString:self.searchStringPrev] && !_dataInvalidated)
+            if ([searchStr isEqualToString:self.searchStringPrev] && !_dataInvalidated)
                 return;
             else
-                self.searchStringPrev = [_searchString copy];
+                self.searchStringPrev = [searchStr copy];
 
             _dataInvalidated = NO;
 
+            // Build category/filter/type items array
             [self updateSearchResults];
 
+            // Generate POIs (search via core or using the previous core search result)
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 self.dataArray = [NSMutableArray arrayWithArray:self.dataArrayTemp];
 
-                NSString *str = self.searchString;
+                NSString *str = searchStr;
                 if (_currentScope != EPOIScopeUndefined)
                     str = [[self nextToken:str] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
@@ -442,10 +452,7 @@ typedef enum
                     else
                     {
                         //NSLog(@"core");
-                        [self showWaitingIndicator];
-                        
-                        [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(startCoreSearch) object:nil];
-                        [self performSelector:@selector(startCoreSearch) withObject:nil afterDelay:.01];
+                        [self startCoreSearch];
                     }
                 }
                 else
@@ -461,6 +468,10 @@ typedef enum
             
             _ignoreSearchResult = YES;
             _poiInList = NO;
+
+            // Stop active core search
+            [[OAPOIHelper sharedInstance] breakSearch];
+
             self.searchStringPrev = nil;
             NSArray *sortedArrayItems = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
                 return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
@@ -576,14 +587,21 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
         if (cell)
         {
             OAPOIType* item = obj;
             
+            CGRect f = cell.textView.frame;
+            if (item.categoryLocalized.length == 0)
+                f.origin.y = 14.0;
+            else
+                f.origin.y = 8.0;
+            cell.textView.frame = f;
+
             [cell.textView setText:item.nameLocalized];
             [cell.descView setText:item.categoryLocalized];
             [cell.iconView setImage: [item icon]];
@@ -598,13 +616,20 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
             cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
-            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
         if (cell)
         {
             OAPOIFilter* item = obj;
+            
+            CGRect f = cell.textView.frame;
+            if (item.categoryLocalized.length == 0)
+                f.origin.y = 14.0;
+            else
+                f.origin.y = 8.0;
+            cell.textView.frame = f;
             
             [cell.textView setText:item.nameLocalized];
             [cell.descView setText:item.categoryLocalized];
@@ -620,13 +645,18 @@ typedef enum
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
-            cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
+            //cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            //cell.iconView.frame = CGRectMake(12.5, 12.5, 25.0, 25.0);
         }
         
-        if (cell) {
+        if (cell)
+        {
             OAPOICategory* item = obj;
             
+            CGRect f = cell.textView.frame;
+            f.origin.y = 14.0;
+            cell.textView.frame = f;
+
             [cell.textView setText:item.nameLocalized];
             [cell.iconView setImage: [item icon]];
         }
@@ -1235,17 +1265,32 @@ typedef enum
 {
     if (!wasInterrupted && !_needRestartSearch)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self showSearchIcon];
-        });
-        
         if (_ignoreSearchResult)
         {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showSearchIcon];
+            });
             _poiInList = NO;
             [_searchPoiArray removeAllObjects];
             return;
         }
         
+        if (_searchPoiArray.count > 0)
+        {
+            NSArray *sortedArray = [self.searchPoiArray sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
+                                    {
+                                        double distance1 = obj1.distanceMeters;
+                                        double distance2 = obj2.distanceMeters;
+                                        
+                                        return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
+                                    }];
+            
+            if (sortedArray.count > kSearchLimit)
+                [_searchPoiArray setArray:[sortedArray subarrayWithRange:NSMakeRange(0, kSearchLimit)]];
+            else
+                [_searchPoiArray setArray:sortedArray];
+        }
+
         _coreFoundScope = _currentScope;
         _coreFoundScopeCategoryName = _currentScopeCategoryName;
         _coreFoundScopeFilterName = _currentScopeFilterName;
@@ -1267,6 +1312,8 @@ typedef enum
             {
                 [_tableView reloadData];
             }
+
+            [self showSearchIcon];
             
         });
     }

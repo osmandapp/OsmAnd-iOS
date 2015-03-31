@@ -13,18 +13,18 @@
 
 - (UIImage *)icon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
     if (!img)
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@_%@", self.tag, self.value]];
+        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
     
-    return img;
+    return [OAUtilities applyScaleFactorToImage:img];
 }
 
 - (UIImage *)mapIcon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-xhdpi/mm_%@", self.name]];
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], self.name]];
     if (!img)
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-xhdpi/mm_%@_%@", self.tag, self.value]];
+        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
     
     return [OAUtilities applyScaleFactorToImage:img];
 }

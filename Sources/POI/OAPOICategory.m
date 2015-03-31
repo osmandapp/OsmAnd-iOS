@@ -7,12 +7,15 @@
 //
 
 #import "OAPOICategory.h"
+#import "OAUtilities.h"
 
 @implementation OAPOICategory
 
 - (UIImage *)icon
 {
-    return [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
+
+    return [OAUtilities applyScaleFactorToImage:img];
 }
 
 -(BOOL)isEqual:(id)object

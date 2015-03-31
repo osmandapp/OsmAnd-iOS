@@ -7,16 +7,17 @@
 //
 
 #import "OAPOIFilter.h"
+#import "OAUtilities.h"
 
 @implementation OAPOIFilter
 
 - (UIImage *)icon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
     if (!img)
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.category]];
+        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.category]];
     
-    return img;
+    return [OAUtilities applyScaleFactorToImage:img];
 }
 
 -(BOOL)isEqual:(id)object

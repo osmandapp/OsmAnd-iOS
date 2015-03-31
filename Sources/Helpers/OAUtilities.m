@@ -35,4 +35,21 @@
     return newImage;
 }
 
++ (NSString *)drawablePostfix
+{
+    int scale = (int)[UIScreen mainScreen].scale;
+    
+    switch (scale) {
+        case 1:
+            return @"mdpi";
+        case 2:
+            return @"xhdpi";
+        case 3:
+            return @"xxhdpi";
+            
+        default:
+            return @"xxhdpi";
+    }
+}
+
 @end

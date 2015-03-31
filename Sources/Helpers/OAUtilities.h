@@ -14,5 +14,6 @@
 + (BOOL)iosVersionIsExactly:(NSString*)testVersion;
 
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
++ (NSString *)drawablePostfix;
 
 @end

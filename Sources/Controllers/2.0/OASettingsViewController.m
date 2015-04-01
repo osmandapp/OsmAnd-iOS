@@ -47,11 +47,13 @@
             NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Kilometers" : @"Miles";
             NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"Degrees" : @"Degrees and Minutes";
+            NSString* mapArrowsValue = settings.settingMapArrows == MAP_ARROWS_LOCATION ? @"Location" : @"Map Center";
             
             self.data = @[
                           @{@"name": @"Units", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": @"Zoom button", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Location format", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"}
+                          @{@"name": @"Location format", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": @"Map arrows", @"value": mapArrowsValue, @"img": @"menu_cell_pointer.png"}
                           ];
         }
             break;
@@ -68,6 +70,11 @@
         case kSettingsScreenGeoCoords:
             self.data = @[@{@"name": @"Degrees", @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
                           @{@"name": @"Degrees and Minutes", @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
+                          ];
+            break;
+        case kSettingsScreenMapArrows:
+            self.data = @[@{@"name": @"Location", @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_LOCATION ? @"menu_cell_selected.png" : @""},
+                          @{@"name": @"Map Center", @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_MAP_CENTER ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         default:
@@ -135,6 +142,9 @@
         case kSettingsScreenGeoCoords:
             [self selectSettingGeoCode:indexPath.row];
             break;
+        case kSettingsScreenMapArrows:
+            [self selectSettingMapArrows:indexPath.row];
+            break;
         default:
             break;
     }
@@ -156,6 +166,11 @@
             break;
         case 2: {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
+            [self.navigationController pushViewController:settingsViewController animated:YES];
+        }
+            break;
+        case 3: {
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMapArrows];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
@@ -181,6 +196,10 @@
     [self backButtonClicked:nil];
 }
 
+-(void)selectSettingMapArrows:(NSInteger)index {
+    [[OAAppSettings sharedManager] setSettingMapArrows:index];
+    [self backButtonClicked:nil];
+}
 
 
 @end

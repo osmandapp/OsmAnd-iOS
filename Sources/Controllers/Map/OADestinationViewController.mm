@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMultiDestinationCell.h"
+#import "OAAppSettings.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -32,6 +33,7 @@
     
     BOOL _singleLineMode;
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
 }
 
 - (NSArray *)allDestinations
@@ -42,6 +44,7 @@
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
 
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -51,9 +54,7 @@
         self.colors = @[[UIColor colorWithRed:0.369f green:0.510f blue:0.914f alpha:1.00f],
                         [UIColor colorWithRed:0.992f green:0.627f blue:0.200f alpha:1.00f],
                         [UIColor colorWithRed:0.541f green:0.741f blue:0.373f alpha:1.00f]];
-        self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];
-        
-        self.calculateUsingMapCenter = (_app.appMode == OAAppModeBrowseMap);
+        self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];        
     }
     return self;
 }
@@ -91,7 +92,7 @@
 
 -(void)obtainCurrentLocationDirection:(CLLocationCoordinate2D*)location direction:(CLLocationDirection*)direction
 {
-    if (self.calculateUsingMapCenter)
+    if (_app.appMode == OAAppModeBrowseMap && _settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
     {
         Point31 mapCenter = _app.data.mapLastViewedState.target31;
         float mapDirection = _app.data.mapLastViewedState.azimuth;
@@ -367,7 +368,7 @@
 
 - (void)doLocationUpdate
 {
-    if (_calculateUsingMapCenter)
+    if (_app.appMode == OAAppModeBrowseMap && _settings.settingMapArrows == MAP_ARROWS_MAP_CENTER)
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{

@@ -343,7 +343,8 @@
 - (void)onMapAzimuthChanged:(id)observable withKey:(id)key andValue:(id)value
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_destinationViewController updateDestinationsUsingMapCenter];
+        if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
+            [_destinationViewController updateDestinationsUsingMapCenter];
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
     });
 }
@@ -382,7 +383,8 @@
 - (void)onMapChanged:(id)observable withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_destinationViewController updateDestinationsUsingMapCenter];
+        if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
+            [_destinationViewController updateDestinationsUsingMapCenter];
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
 }

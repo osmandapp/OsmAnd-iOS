@@ -27,8 +27,6 @@
 @property (nonatomic, assign) CGFloat top;
 @property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
 
-@property (nonatomic, assign) BOOL calculateUsingMapCenter;
-
 - (NSArray *)allDestinations;
 
 - (void)startLocationUpdate;

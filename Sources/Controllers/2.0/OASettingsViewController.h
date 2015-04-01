@@ -15,6 +15,7 @@ typedef enum
     kSettingsScreenMetricSystem,
     kSettingsScreenZoomButton,
     kSettingsScreenGeoCoords,
+    kSettingsScreenMapArrows,
 }
 kSettingsScreen;
 

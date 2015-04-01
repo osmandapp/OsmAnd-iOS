@@ -2078,7 +2078,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
             // Configure with preset if such is set
             if (lastMapSource.variant != nil)
             {
-                OALog(@"Using '%@' variant of style", lastMapSource.variant);
+                OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
                 const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
                 if (preset) {
                     OAAppSettings *settings = [OAAppSettings sharedManager];

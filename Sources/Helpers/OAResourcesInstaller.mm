@@ -79,13 +79,30 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     {
         // Install or update given resource
         success = _app.resourcesManager->updateFromFile(resourceId, filePath);
-        if (!success) {
+        if (!success)
+        {
             success = _app.resourcesManager->installFromRepository(resourceId, filePath);
-            if (success) {
+            if (success)
+            {
                 [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
-            } else {
+                
+                // Set NSURLIsExcludedFromBackupKey for installed resource
+                if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
+                {
+                    NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
+                    BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
+                    OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
+                }
+                else
+                {
+                    OALog(@"Cannot find installed resource %@", nsResourceId);
+                }
+            }
+            else
+            {
                 task.installResourceRetry++;
-                if (task.installResourceRetry < 10) {
+                if (task.installResourceRetry < 10)
+                {
                     OALog(@"installResourceRetry = %d", task.installResourceRetry);
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
                     dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){

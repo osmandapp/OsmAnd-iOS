@@ -176,6 +176,32 @@
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
                                                          });
 
+    // Check for NSURLIsExcludedFromBackupKey and setup if needed
+    const auto& localResources = _resourcesManager->getLocalResources();
+    for (const auto& resource : localResources)
+    {
+        if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
+        {
+            NSString *localPath = resource->localPath.toNSString();
+            NSURL *url = [NSURL fileURLWithPath:localPath];
+            
+            id flag = nil;
+            if ([url getResourceValue:&flag forKey:NSURLIsExcludedFromBackupKey error: nil])
+            {
+                OALog(@"NSURLIsExcludedFromBackupKey = %@ for %@", flag, localPath);
+                if (!flag || [flag boolValue] == NO)
+                {
+                    BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
+                    OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), localPath);
+                }
+            }
+            else
+            {
+                OALog(@"NSURLIsExcludedFromBackupKey = %@ for %@", flag, localPath);
+            }
+        }
+    }
+    
     // Load favorites
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
     _favoriteChangedObservable = [[OAObservable alloc] init];

@@ -214,12 +214,13 @@
     
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
     
-    OsmAnd::FunctorQueryController *ctrl = new OsmAnd::FunctorQueryController([self]
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self]
                                        (const OsmAnd::FunctorQueryController* const controller)
                                        {
                                            // should break?
                                            return (_radius == 0.0 && _limitCounter < 0) || _breakSearch;
-                                       });
+                                       }));
     
     _limitCounter = _searchLimit;
     
@@ -288,9 +289,7 @@
             }
         }
     }
-    
-    free(ctrl);
-    
+        
     _isSearchDone = YES;
     
     if (_delegate)

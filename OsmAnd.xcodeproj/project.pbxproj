@@ -1956,6 +1956,11 @@
 		842BFC541A94935A008CF87B /* OAGPXPointListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXPointListViewController.xib; path = Sources/Controllers/2.0/OAGPXPointListViewController.xib; sourceTree = "<group>"; };
 		842BFC601A94DD3A008CF87B /* OAGpxWptItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGpxWptItem.h; path = Models/OAGpxWptItem.h; sourceTree = "<group>"; };
 		842BFC611A94DD3A008CF87B /* OAGpxWptItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAGpxWptItem.m; path = Models/OAGpxWptItem.m; sourceTree = "<group>"; };
+		842D18BC1AE5471600763A91 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		842D18BD1AE5471C00763A91 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		842D18BE1AE5472700763A91 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		842D18BF1AE5472B00763A91 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		842D18C01AE5474200763A91 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		843257701A9CBC3100A7964E /* default.online_tile_sources.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.online_tile_sources.xml; path = ../resources/misc/default.online_tile_sources.xml; sourceTree = "<group>"; };
 		843257741A9DADE300A7964E /* ic_gpx_distance.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_gpx_distance.png; path = Resources/Icons/ic_gpx_distance.png; sourceTree = "<group>"; };
 		843257751A9DADE300A7964E /* ic_gpx_distance@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_gpx_distance@2x.png"; path = "Resources/Icons/ic_gpx_distance@2x.png"; sourceTree = "<group>"; };
@@ -3910,6 +3915,11 @@
 			knownRegions = (
 				en,
 				ru,
+				de,
+				it,
+				pt,
+				es,
+				fr,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -5785,6 +5795,11 @@
 			children = (
 				84F712571AE4FED70071B326 /* en */,
 				84F712581AE4FF940071B326 /* ru */,
+				842D18BC1AE5471600763A91 /* de */,
+				842D18BD1AE5471C00763A91 /* it */,
+				842D18BE1AE5472700763A91 /* pt */,
+				842D18BF1AE5472B00763A91 /* es */,
+				842D18C01AE5474200763A91 /* fr */,
 			);
 			name = Localizable.strings;
 			path = Resources;

@@ -449,9 +449,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)startDownloadOfItem:(RepositoryResourceItem*)item
 {
     // Create download tasks
-    NSURLRequest* request = [NSURLRequest requestWithURL:item.resource->url.toNSURL()];
+    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSURL* pureUrl = item.resource->url.toNSURL();
+    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
     
-    NSLog(@"%@ = %@", item.resource->id.toNSString(), item.resource->url.toNSURL());
+    NSLog(@"%@", url);
     
     NSString* name = [self.class titleOfResource:item.resource
                                         inRegion:item.worldRegion
@@ -473,9 +478,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)startDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource resourceName:(NSString *)name
 {
     // Create download tasks
-    NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
-
-    NSLog(@"%@", resource->id.toNSString());
+    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSURL* pureUrl = resource->url.toNSURL();
+    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+    
+    NSLog(@"%@", url);
     
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
@@ -493,8 +503,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (void)startBackgroundDownloadOf:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource  resourceName:(NSString *)name
 {
     // Create download tasks
-    NSURLRequest* request = [NSURLRequest requestWithURL:resource->url.toNSURL()];
+    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSURL* pureUrl = resource->url.toNSURL();
+    NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest* request = [NSURLRequest requestWithURL:url];
     
+    NSLog(@"%@", url);
+
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
                                                                      andName:name];
@@ -543,8 +560,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Yes")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_yes")
                                                              action:^{
                                                                  [self cancelDownloadOf:item_];
                                                              }], nil] show];
@@ -581,7 +598,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"No")]
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
                        otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"Uninstall") : OALocalizedString(@"Delete")
                                                              action:^{
                                                                  [self deleteResourceOf:item executeAfterSuccess:block];

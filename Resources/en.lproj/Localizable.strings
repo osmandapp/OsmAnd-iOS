@@ -1,19 +1,34 @@
 
 "OsmAnd Maps" = "OsmAnd Maps";
 
-// Common
-"btn_back" = "Back";
-"btn_ok" = "OK";
-"btn_cancel" = "Cancel";
-"no" = "No";
-"yes" = "Yes";
+// Shared Strings
+"shared_string_back" = "Back";
+"shared_string_ok" = "OK";
+"shared_string_cancel" = "Cancel";
+"shared_string_no" = "No";
+"shared_string_yes" = "Yes";
+"shared_string_save" = "Save";
 
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";
 
 // Favorites
+"fav_color" = "Color";
 "fav_colors" = "Colors";
+"fav_name" = "Name";
+"fav_group" = "Group";
+"fav_groups" = "Groups";
+"favorite" = "Favorite";
+"fav_no_group" = "No group";
+"fav_remove_q" = "Remove Favorite?";
+"fav_import_export" = "Import/Export";
+"fav_import_title" = "Import Favorite";
+"fav_export_title" = "Export Favorite";
+"fav_select_remove" = "Please select favorites to remove";
+"fav_remove_q" = "Remove selected favorite items?";
+"fav_export_select" = "Please select favorites to export";
+"fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";
@@ -30,7 +45,6 @@
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Points:";
 "gpx_points_b" = "points";
-"gpx_point" = "Point";
 "gpx_export" = "Export";
 
 "gpx_import_export" = "Import/Export";

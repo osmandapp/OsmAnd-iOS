@@ -65,6 +65,14 @@ kFavoriteCellType;
 
 @implementation OAFavoriteListViewController
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"favorite");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+        
+    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -221,7 +229,7 @@ kFavoriteCellType;
     if (!ungroupedFavorites.isEmpty())
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-        itemData.groupName = @"Favorites";
+        itemData.groupName = OALocalizedString(@"favorites");
         itemData.type = kFavoriteCellTypeUngrouped;
         
         for (const auto& favorite : ungroupedFavorites)
@@ -250,12 +258,12 @@ kFavoriteCellType;
     
     // Generate menu items
     FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-    itemData.groupName = @"Import/Export";
+    itemData.groupName = OALocalizedString(@"fav_import_export");
     itemData.type = kFavoriteCellTypeMenu;
-    self.menuItems = @[@{@"text": @"Import favorites",
+    self.menuItems = @[@{@"text": OALocalizedString(@"fav_import_title"),
                          @"icon": @"favorite_import_icon",
                          @"action": @"onImportClicked"},
-                       @{@"text": @"Export favorites",
+                       @{@"text": OALocalizedString(@"fav_export_title"),
                          @"icon": @"favorite_export_icon.png",
                          @"action": @"onExportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
@@ -297,12 +305,12 @@ kFavoriteCellType;
         
         NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
         if ([selectedRows count] == 0) {
-            UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select favorites to remove" delegate:nil cancelButtonTitle:@"No" otherButtonTitles:nil];
+            UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:nil];
             [removeAlert show];
             return;
         }
         
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove selected favorite items?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
         removeAlert.tag = kAlertViewRemoveId;
         [removeAlert show];
         
@@ -353,7 +361,7 @@ kFavoriteCellType;
     // Share selected favorites
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
     if ([selectedRows count] == 0) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select favorites to export" delegate:nil cancelButtonTitle:@"No" otherButtonTitles:nil];
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_export_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:nil];
         [removeAlert show];
         return;
     }
@@ -400,8 +408,8 @@ kFavoriteCellType;
 }
 
 -(void)onImportClicked {
-    NSString* favoritesImportText = OALocalizedString(@"You can import your favorites as waypoints in GPX file (standard format for storing map information supported by PC, iOS, Android)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.");
-    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    NSString* favoritesImportText = OALocalizedString(@"fav_import_desc");
+    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
     [importHelpAlert show];
 }
 
@@ -412,7 +420,7 @@ kFavoriteCellType;
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:favoritesUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
-    _exportController.name = OALocalizedString(@"OsmAnd Favorites.gpx");
+    _exportController.name = @"OsmAnd Favorites.gpx";
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];
@@ -459,8 +467,8 @@ kFavoriteCellType;
 
 -(NSString*)getSortedTitleForHeaderInSection:(NSInteger)section {
     if (section == 0)
-        return @"Favorites";
-    return @"Import/Export";
+        return OALocalizedString(@"favorites");
+    return OALocalizedString(@"fav_import_export");
 }
 
 -(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {

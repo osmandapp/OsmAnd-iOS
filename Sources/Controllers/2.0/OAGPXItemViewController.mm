@@ -127,9 +127,9 @@ typedef enum
 
 - (void)applyLocalization
 {
-    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
-    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {
@@ -221,7 +221,7 @@ typedef enum
 
 - (IBAction)deleteClicked:(id)sender
 {
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_remove") delegate:self cancelButtonTitle:OALocalizedString(@"no") otherButtonTitles:OALocalizedString(@"yes"), nil];
+    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_remove") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
     [removeAlert show];
 }
 

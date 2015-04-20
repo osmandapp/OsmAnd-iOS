@@ -113,7 +113,7 @@ typedef enum
         if (_doc) {
             
             if (exists) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"btn_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
                 [alert show];
                 
             } else {
@@ -126,7 +126,7 @@ typedef enum
             _doc = nil;
             _importUrl = nil;
 
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil, nil];
             [alert show];
             
         }
@@ -210,9 +210,9 @@ typedef enum
 {
     _titleView.text = OALocalizedString(@"tracks");
     [_exportButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
-    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
-    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
 }
 
 -(void)viewDidLoad
@@ -289,7 +289,7 @@ typedef enum
 {
     if (_selectedIndex  < 0) {
         
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_export_select_track") delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_export_select_track") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
         [exportHelpAlert show];
         
     } else {
@@ -328,7 +328,7 @@ typedef enum
 
 - (void)onImportClicked {
     NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
-    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
+    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
     [importHelpAlert show];
 }
 
@@ -338,7 +338,7 @@ typedef enum
         OAGPXListViewController* exportController = [[OAGPXListViewController alloc] initExport];
         [self.navigationController pushViewController:exportController animated:YES];
     } else {
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_no_tracks") delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_no_tracks") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
         [exportHelpAlert show];
     }
 }

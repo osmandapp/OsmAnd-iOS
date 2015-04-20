@@ -14,10 +14,12 @@
 #pragma GCC diagnostic ignored "-Wformat-security"
 
 #define OALocalizedString(defaultValue, ...) \
-    _OALocalizedString(defaultValue, ##__VA_ARGS__)
-    //[NSString stringWithFormat:NSLocalizedString(defaultValue, nil), ##__VA_ARGS__]
+    _OALocalizedString(false, defaultValue, ##__VA_ARGS__)
 
-static inline NSString* _OALocalizedString(NSString* defaultValue, ...)
+#define OALocalizedStringUp(defaultValue, ...) \
+    _OALocalizedString(true, defaultValue, ##__VA_ARGS__)
+
+static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValue, ...)
 {
     NSArray *arr = [defaultValue componentsSeparatedByString:@" "];
     NSString *key;
@@ -34,14 +36,22 @@ static inline NSString* _OALocalizedString(NSString* defaultValue, ...)
         NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:NSLocalizedString(key, nil)];
         va_list args;
         va_start(args, defaultValue);
-        res = [[NSString alloc] initWithFormat:newValue arguments:args];
+        if (upperCase)
+            res = [[[NSString alloc] initWithFormat:newValue arguments:args] uppercaseStringWithLocale:[NSLocale currentLocale]];
+        else
+            res = [[NSString alloc] initWithFormat:newValue arguments:args];
+        
         va_end(args);
     }
     else
     {
         va_list args;
         va_start(args, defaultValue);
-        res = [[NSString alloc] initWithFormat:NSLocalizedString(defaultValue, nil) arguments:args];
+        if (upperCase)
+            res = [[[NSString alloc] initWithFormat:NSLocalizedString(defaultValue, nil) arguments:args] uppercaseStringWithLocale:[NSLocale currentLocale]];
+        else
+            res = [[NSString alloc] initWithFormat:NSLocalizedString(defaultValue, nil) arguments:args];
+
         va_end(args);
     }
     

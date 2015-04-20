@@ -202,6 +202,19 @@ typedef enum
     
 }
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"favorite");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+
+    [_favoriteNameButton setTitle:OALocalizedString(@"fav_name") forState:UIControlStateNormal];
+    [_favoriteColorButton setTitle:OALocalizedString(@"fav_color") forState:UIControlStateNormal];
+    [_favoriteGroupButton setTitle:OALocalizedString(@"fav_group") forState:UIControlStateNormal];
+
+    
+    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
     
@@ -299,7 +312,7 @@ typedef enum
     self.favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
     
     if (self.favorite.favorite->getGroup().isEmpty())
-        [self.favoriteGroupView setText: @"No group"];
+        [self.favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
     else
         [self.favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
     
@@ -307,7 +320,7 @@ typedef enum
     [self.favoriteDistance setText:self.favorite.distance];
     
     if (self.newFavorite) {
-        [self.saveRemoveButton setTitle:@"Save" forState:UIControlStateNormal];
+        [self.saveRemoveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
         [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
         
         [self.distanceDirectionHolderView setHidden:YES];
@@ -434,7 +447,7 @@ typedef enum
 
 - (IBAction)saveButtonClicked:(id)sender {
     if (!self.newFavorite) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove favorite item?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
         [removeAlert show];
     } else {
         

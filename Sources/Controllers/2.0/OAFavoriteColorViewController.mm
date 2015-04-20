@@ -35,6 +35,15 @@
     return self;
 }
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"fav_color");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    [_favoriteButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self generateData];

@@ -65,9 +65,9 @@ typedef enum
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"gpx_waypoints");
-    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
-    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {

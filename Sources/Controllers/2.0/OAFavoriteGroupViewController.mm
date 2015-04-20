@@ -38,7 +38,7 @@
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"fav_color");
+    _titleView.text = OALocalizedString(@"fav_groups");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
     [_favoriteButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
@@ -85,7 +85,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [@[@"Ваши группы", @"Создать новую группу"] objectAtIndex:section];
+    return [@[OALocalizedString(@"fav_your_groups"), OALocalizedString(@"fav_create_group")] objectAtIndex:section];
 }
 
 
@@ -136,8 +136,8 @@ UITextField* textView;
         if (cell) {
             
             textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];
-            [textView setPlaceholder:@"Введите название группы"];
-            [textView setFont:[UIFont fontWithName:@"AvenirNextCondensed-Regular" size:14]];
+            [textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
+            [textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
             [textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
             [textView setDelegate:self];
             [cell addSubview:textView];

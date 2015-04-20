@@ -103,7 +103,7 @@ kFavoriteCellType;
         for(const auto& localFavorite : _app.favoritesCollection->getFavoriteLocations())
         {
             if ([favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()] && ![self.ignoredNames containsObject:favoriteTitle] ) {
-                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:@"Favorite with name \"%@\" already exists.", favoriteTitle] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Ignore", @"Rename", @"Replace", @"Replace All", nil];
+                UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"fav_ignore"), OALocalizedString(@"fav_rename"), OALocalizedString(@"fav_replace"), OALocalizedString(@"fav_replace_all"), nil];
                 alert.tag = kAlertConflictWarning;
                 [alert show];
                 self.conflictedName = favoriteTitle;
@@ -135,7 +135,7 @@ kFavoriteCellType;
         // Rename - ask name
         } else if (buttonIndex == 2) {
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Remane favorite" message:[NSString stringWithFormat:@"Please enter new name for favorite \"%@\"", self.conflictedName] delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles: @"OK", nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"fav_rename_q") message:OALocalizedString(@"fav_enter_new_name \"%@\"", self.conflictedName) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
             alert.alertViewStyle = UIAlertViewStylePlainTextInput;
             alert.tag = kAlertConflictRename;
             [alert show];
@@ -185,6 +185,12 @@ kFavoriteCellType;
     
 }
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"fav_import_title");
+    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [_importButton setTitle:OALocalizedString(@"fav_import") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
 
@@ -248,7 +254,7 @@ kFavoriteCellType;
     if (!ungroupedFavorites.isEmpty())
     {
         FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-        itemData.groupName = @"Favorites";
+        itemData.groupName = OALocalizedString(@"favorites");
         itemData.type = kFavoriteCellTypeUngrouped;
         
         for (const auto& favorite : ungroupedFavorites)

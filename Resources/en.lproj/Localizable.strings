@@ -23,12 +23,23 @@
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove Favorite?";
 "fav_import_export" = "Import/Export";
+"fav_import" = "Import";
 "fav_import_title" = "Import Favorite";
 "fav_export_title" = "Export Favorite";
 "fav_select_remove" = "Please select favorites to remove";
 "fav_remove_q" = "Remove selected favorite items?";
 "fav_export_select" = "Please select favorites to export";
 "fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
+"fav_your_groups" = "Groups";
+"fav_create_group" = "Create new group";
+"fav_enter_group_name" = "Enter group name";
+"fav_exists" = "Favorite with name \"%@\" already exists";
+"fav_ignore" = "Ignore";
+"fav_rename" = "Rename";
+"fav_replace" = "Replace";
+"fav_replace_all" = "Replace All";
+"fav_rename_q" = "Rename favorite";
+"fav_enter_new_name" = "Please enter new name for the favorite";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";

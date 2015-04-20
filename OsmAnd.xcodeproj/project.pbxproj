@@ -2322,6 +2322,8 @@
 		84E2DB411AB720FA001A7FEC /* zoom_out_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zoom_out_button.png; path = Resources/Icons/zoom_out_button.png; sourceTree = "<group>"; };
 		84E2DB421AB720FA001A7FEC /* zoom_out_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zoom_out_button@2x.png"; path = "Resources/Icons/zoom_out_button@2x.png"; sourceTree = "<group>"; };
 		84E2DB431AB720FA001A7FEC /* zoom_out_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zoom_out_button@3x.png"; path = "Resources/Icons/zoom_out_button@3x.png"; sourceTree = "<group>"; };
+		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
@@ -2387,7 +2389,6 @@
 		BB451DAF18D70B5B005FBE09 /* HUD_zoom_out_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_zoom_out_button@2x.png"; sourceTree = "<group>"; };
 		BB451DD618D71121005FBE09 /* HUD_debug_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HUD_debug_button.png; sourceTree = "<group>"; };
 		BB451DD718D71121005FBE09 /* HUD_debug_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HUD_debug_button@2x.png"; sourceTree = "<group>"; };
-		BB451DF218D8F7D7005FBE09 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BB451DFB18DA4176005FBE09 /* drive_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = drive_mode_button.png; sourceTree = "<group>"; };
 		BB451DFC18DA4176005FBE09 /* drive_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "drive_mode_button@2x.png"; sourceTree = "<group>"; };
 		BB451E9A18DCD224005FBE09 /* OsmAnd DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3908,6 +3909,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				ru,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -5781,7 +5783,8 @@
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				BB451DF218D8F7D7005FBE09 /* Base */,
+				84F712571AE4FED70071B326 /* en */,
+				84F712581AE4FF940071B326 /* ru */,
 			);
 			name = Localizable.strings;
 			path = Resources;

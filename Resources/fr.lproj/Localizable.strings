@@ -1,0 +1,17 @@
+"OsmAnd Maps" = "Cartes OsmAnd";
+// Shared Strings
+"shared_string_back" = "Retour";
+"shared_string_ok" = "Ok";
+"shared_string_cancel" = "Annuler";
+"shared_string_no" = "Non";
+"shared_string_yes" = "Oui";
+"shared_string_save" = "Enregistrer";
+"hud_no_movement" = "Aucun mouvement";
+// Favorites
+"fav_color" = "Couleur";
+"fav_colors" = "Couleurs";
+"fav_name" = "Nom";
+"fav_group" = "Groupe";
+"fav_groups" = "Groupes";
+"favorite" = "Favori";
+"fav_no_group" = "Aucun groupe";

@@ -367,7 +367,7 @@ kFavoriteCellType;
     if (exportCollection->getFavoriteLocationsCount() == 0)
         return;
         
-    NSString* filename = [OALocalizedString(@"Exported favorites") stringByAppendingString:@".gpx"];
+    NSString* filename = [@"Exported favorites" stringByAppendingString:@".gpx"];
     NSString* fullFilename = [NSTemporaryDirectory() stringByAppendingString:filename];
     if (!exportCollection->saveTo(QString::fromNSString(fullFilename)))
         return;

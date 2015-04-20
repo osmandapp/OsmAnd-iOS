@@ -62,11 +62,6 @@ static NSArray *colors;
     return colors;
 }
 
-+ (NSArray*)builtinGroupNames
-{
-    return @[OALocalizedString(@"My places")];
-}
-
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor
 {
     CGFloat distance = FLT_MAX;

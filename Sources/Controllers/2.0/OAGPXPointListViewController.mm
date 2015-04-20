@@ -62,6 +62,14 @@ typedef enum
     return self;
 }
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"gpx_waypoints");
+    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -220,7 +228,7 @@ typedef enum
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [NSString stringWithFormat:@"Points: %d", self.unsortedPoints.count];
+    return [NSString stringWithFormat:OALocalizedString(@"gpx_points %d", self.unsortedPoints.count)];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

@@ -27,6 +27,5 @@
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor;
 
 + (NSArray*)builtinColors;
-+ (NSArray*)builtinGroupNames;
 
 @end

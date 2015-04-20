@@ -391,10 +391,10 @@
         if (_lastCapturedLocation.course >= 0)
         {
             NSString* course = [_app.locationFormatter stringFromBearing:_lastCapturedLocation.course];
-            nativeTitle = OALocalizedString(@"Heading %@", course);
+            nativeTitle = OALocalizedString(@"hud_heading %@", course);
         }
         else
-            nativeTitle = OALocalizedString(@"No movement");
+            nativeTitle = OALocalizedString(@"hud_no_movement");
     }
 
     self.positionLocalizedTitleLabel.text = localizedTitle;

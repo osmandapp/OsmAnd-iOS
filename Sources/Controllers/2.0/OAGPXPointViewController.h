@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIButton *btnBack;
 
 @property (weak, nonatomic) IBOutlet UIView *distanceDirectionHolderView;
 @property (weak, nonatomic) IBOutlet UILabel *itemDistance;

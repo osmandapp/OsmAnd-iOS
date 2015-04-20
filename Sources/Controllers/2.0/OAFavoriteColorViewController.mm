@@ -67,7 +67,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [@[OALocalizedString(@"Colors")] objectAtIndex:section];
+    return [@[OALocalizedString(@"fav_colors")] objectAtIndex:section];
 }
 
 

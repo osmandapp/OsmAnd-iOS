@@ -113,7 +113,7 @@ typedef enum
         if (_doc) {
             
             if (exists) {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import GPX" message:@"The specified Track file is already exists in the list. Please choose action." delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Add new file", @"Overwrite", nil];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_import_already_exists") delegate:self cancelButtonTitle:OALocalizedString(@"btn_cancel") otherButtonTitles:OALocalizedString(@"gpx_add_new"), OALocalizedString(@"gpx_overwrite"), nil];
                 [alert show];
                 
             } else {
@@ -126,7 +126,7 @@ typedef enum
             _doc = nil;
             _importUrl = nil;
 
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Import Track" message:@"Cannot import specified GPX file" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_import_title") message:OALocalizedString(@"gpx_cannot_import") delegate:self cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil, nil];
             [alert show];
             
         }
@@ -206,6 +206,15 @@ typedef enum
     }
 }
 
+- (void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"tracks");
+    [_exportButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
+    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+}
+
 -(void)viewDidLoad
 {
     [super viewDidLoad];
@@ -248,12 +257,12 @@ typedef enum
     
     // Generate menu items
     GpxTableGroup* itemData = [[GpxTableGroup alloc] init];
-    itemData.groupName = @"Import/Export";
+    itemData.groupName = OALocalizedString(@"gpx_import_export");
     itemData.type = kGPXCellTypeMenu;
-    self.menuItems = @[@{@"text": @"Import Track",
+    self.menuItems = @[@{@"text": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"favorite_import_icon",
                          @"action": @"onImportClicked"},
-                       @{@"text": @"Export Track",
+                       @{@"text": OALocalizedString(@"gpx_export_title"),
                          @"icon": @"favorite_export_icon.png",
                          @"action": @"onExportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
@@ -280,7 +289,7 @@ typedef enum
 {
     if (_selectedIndex  < 0) {
         
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Please select Track for Export" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_export_select_track") delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
         [exportHelpAlert show];
         
     } else {
@@ -318,8 +327,8 @@ typedef enum
 }
 
 - (void)onImportClicked {
-    NSString* favoritesImportText = OALocalizedString(@"You can import your GPX files (standard format for storing map information supported by PC, iOS, Android)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function");
-    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
+    UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
     [importHelpAlert show];
 }
 
@@ -329,7 +338,7 @@ typedef enum
         OAGPXListViewController* exportController = [[OAGPXListViewController alloc] initExport];
         [self.navigationController pushViewController:exportController animated:YES];
     } else {
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"There are no Tracks" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_no_tracks") delegate:nil cancelButtonTitle:OALocalizedString(@"btn_ok") otherButtonTitles:nil];
         [exportHelpAlert show];
     }
 }
@@ -345,8 +354,8 @@ typedef enum
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0 && self.gpxList.count > 0)
-        return @"Tracks";
-    return @"Import/Export";
+        return OALocalizedString(@"tracks");
+    return OALocalizedString(@"gpx_import_export");
 }
 
 
@@ -373,7 +382,7 @@ typedef enum
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
             [cell.textView setText:item.gpxTitle];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
-            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d points", item.wptPoints]];
+            [cell.descriptionPointsView setText:OALocalizedString(@"%d gpx_points_b", item.wptPoints)];
             if (_isExport) {
                 if (indexPath.row == _selectedIndex)
                     [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];

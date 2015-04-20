@@ -14,7 +14,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
 #import "OALog.h"
-#include "Localization.h"
+#import "Localization.h"
 
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)

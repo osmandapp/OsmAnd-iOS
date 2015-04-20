@@ -19,6 +19,7 @@
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -124,6 +125,12 @@ typedef enum
     
 }
 
+- (void)applyLocalization
+{
+    [_backButton setTitle:OALocalizedString(@"btn_back") forState:UIControlStateNormal];
+    [_favoritesButtonView setTitle:OALocalizedString(@"favorites") forState:UIControlStateNormal];
+    [_gpxButtonView setTitle:OALocalizedString(@"tracks") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -214,7 +221,7 @@ typedef enum
 
 - (IBAction)deleteClicked:(id)sender
 {
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:@"Remove Track?" delegate:self cancelButtonTitle:@"No" otherButtonTitles:@"Yes", nil];
+    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_remove") delegate:self cancelButtonTitle:OALocalizedString(@"no") otherButtonTitles:OALocalizedString(@"yes"), nil];
     [removeAlert show];
 }
 
@@ -230,12 +237,12 @@ typedef enum
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return @"Statistics";
+            return OALocalizedString(@"gpx_stat");
         case 1:
             if (_startEndTimeExists)
-                return @"Route Time";
+                return OALocalizedString(@"gpx_route_time");
         case 2:
-            return @"Uphills/Downhills";
+            return OALocalizedString(@"gpx_uphldownhl");
             
         default:
             return @"";
@@ -280,14 +287,14 @@ typedef enum
             switch (indexPath.row) {
                 case 0: // Distance
                 {
-                    [cell.textView setText:@"Distance"];
+                    [cell.textView setText:OALocalizedString(@"gpx_distance")];
                     [cell.descView setText:[_app getFormattedDistance:self.gpx.totalDistance]];
                     cell.iconView.hidden = YES;
                     break;
                 }
                 case 1: // Waypoints
                 {
-                    [cell.textView setText:@"Waypoints"];
+                    [cell.textView setText:OALocalizedString(@"gpx_waypoints")];
                     [cell.descView setText:[NSString stringWithFormat:@"%d", self.gpx.wptPoints]];
                     if (self.gpx.wptPoints > 0) {
                         cell.selectionStyle = UITableViewCellSelectionStyleDefault;
@@ -299,7 +306,7 @@ typedef enum
                 }
                 case 2: // Avg Speed
                 {
-                    [cell.textView setText:@"Average Speed"];
+                    [cell.textView setText:OALocalizedString(@"gpx_average_speed")];
                     [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
                     cell.iconView.hidden = YES;
                     break;
@@ -324,14 +331,14 @@ typedef enum
             switch (indexPath.row) {
                 case 0: // Distance
                 {
-                    [cell.textView setText:@"Start"];
+                    [cell.textView setText:OALocalizedString(@"gpx_start")];
                     [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
                     cell.iconView.hidden = YES;
                     break;
                 }
                 case 1: // Avg Speed
                 {
-                    [cell.textView setText:@"Finish"];
+                    [cell.textView setText:OALocalizedString(@"gpx_finish")];
                     [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
                     cell.iconView.hidden = YES;
                     break;
@@ -358,7 +365,7 @@ typedef enum
             switch (indexPath.row) {
                 case 0: // Avg Elevation
                 {
-                    [cell.textView setText:@"Average Elevation"];
+                    [cell.textView setText:OALocalizedString(@"gpx_avg_elev")];
                     [cell.elev1View setText:[_app getFormattedAlt:self.gpx.avgElevation]];
                     cell.showArrows = NO;
                     cell.showUpDown = NO;
@@ -366,7 +373,7 @@ typedef enum
                 }
                 case 1: // Elevation Range
                 {
-                    [cell.textView setText:@"Elevation Range"];
+                    [cell.textView setText:OALocalizedString(@"gpx_elev_range")];
                     [cell.elev1View setText:[_app getFormattedAlt:self.gpx.minElevation]];
                     [cell.elev2View setText:[_app getFormattedAlt:self.gpx.maxElevation]];
                     cell.showArrows = NO;
@@ -375,7 +382,7 @@ typedef enum
                 }
                 case 2: // Up/Down
                 {
-                    [cell.textView setText:@"Up/Down"];
+                    [cell.textView setText:OALocalizedString(@"gpx_updown")];
                     [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
                     [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
                     cell.showArrows = YES;
@@ -384,7 +391,7 @@ typedef enum
                 }
                 case 3: // Uphills Total
                 {
-                    [cell.textView setText:@"Uphills Total"];
+                    [cell.textView setText:OALocalizedString(@"gpx_uphills_total")];
                     [cell.elev1View setText:[_app getFormattedAlt:self.gpx.totalDistanceMoving]];
                     cell.showArrows = NO;
                     cell.showUpDown = NO;

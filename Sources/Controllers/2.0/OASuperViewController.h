@@ -12,4 +12,6 @@
 
 -(IBAction)backButtonClicked:(id)sender;
 
+-(void)applyLocalization;
+
 @end

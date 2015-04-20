@@ -26,6 +26,8 @@
 #import "OADefaultFavorite.h"
 #import "OANativeUtilities.h"
 
+#import "Localization.h"
+
 #include <OsmAndCore/Utilities.h>
 
 #define kMaxTypeRows 5
@@ -45,6 +47,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
+@property (weak, nonatomic) IBOutlet UILabel *lbSearchNearCenter;
 
 @property (nonatomic) NSMutableArray* dataArray;
 @property (nonatomic) NSMutableArray* dataArrayTemp;
@@ -129,9 +132,15 @@ typedef enum
     _searchRadiusIndexMax = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]) - 1;
 }
 
+-(void)applyLocalization
+{
+    _lbSearchNearCenter.text = OALocalizedString(@"poi_search_near_center");
+    [_btnCancel setTitle:OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];
     
@@ -524,11 +533,11 @@ typedef enum
         }
         if (_searchRadiusIndex < _searchRadiusIndexMax)
         {
-            cell.textView.text = [NSString stringWithFormat:@"Increase search radius to %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]];
+            cell.textView.text = OALocalizedString(@"poi_insrease_radius %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]);
         }
         else
         {
-            cell.textView.text = @"Maximum search radius reached";
+            cell.textView.text = OALocalizedString(@"poi_max_radius_reached");
         }
         return cell;
     }

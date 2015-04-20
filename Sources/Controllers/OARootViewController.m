@@ -21,7 +21,7 @@
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAGPXListViewController.h"
 
-#include "Localization.h"
+#import "Localization.h"
 
 #define _(name) OARootViewController__##name
 #define commonInit _(commonInit)

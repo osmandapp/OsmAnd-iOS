@@ -82,7 +82,7 @@
 "map_settings_map" = "Карта";
 "map_settings_fav" = "Избранное";
 "map_settings_tracks" = "Треки";
-"map_settings_show" = "Показать на Карте";
+"map_settings_show" = "Показать на карте";
 "map_settings_type" = "Тип карты";
 "map_settings_mode" = "Режим приложения";
 "map_settings_day" = "День";
@@ -134,7 +134,7 @@
 "res_mapsres" = "Карты и Ресурсы";
 "res_installed" = "Установлено";
 "res_banner_many" = "Доступно %d бесплатных карт для загрузки";
-"res_banner_no" = "У вас нет бесплатных карт для загрузки и обновления.";
+"res_banner_no" = "У вас нет бесплатных карт для загрузки";
 "res_search_world" = "Искать по всему миру";
 "res_catalog_upd" = "Обновление каталога";
 "res_world_map" = "Мировая карта";
@@ -208,3 +208,4 @@
 "region_south_america" = "Южная Америка";
 // Help
 "help_quiz" = "Опрос";
+"gpx_import_already_exists" = "Указанный трек уже присутствует в списке. Пожалуйста выберите действие.";

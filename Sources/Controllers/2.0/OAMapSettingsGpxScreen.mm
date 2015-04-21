@@ -11,6 +11,7 @@
 #import "OASettingsTableViewCell.h"
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
+#import "Localization.h"
 
 @implementation OAMapSettingsGpxScreen {
     NSArray *gpxList;
@@ -60,7 +61,7 @@
 
 - (void)setupView
 {
-    title = @"Tracks";
+    title = OALocalizedString(@"map_settings_tracks");
 }
 
 #pragma mark - UITableViewDataSource

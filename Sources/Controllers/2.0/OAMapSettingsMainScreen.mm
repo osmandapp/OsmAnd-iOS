@@ -13,6 +13,7 @@
 #import "OAGPXDatabase.h"
 #import "OAMapSource.h"
 #import "OAMapStylesCell.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -42,7 +43,7 @@
     if (self) {
         app = [OsmAndApp instance];
         settings = [OAAppSettings sharedManager];
-        title = @"Map";
+        title = OALocalizedString(@"map_settings_map");
 
         settingsScreen = EMapSettingsScreenMain;
         
@@ -98,12 +99,12 @@
     [sectionMapStyle setObject:@"OAMapStylesCell" forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
-    [section0fav setObject:@"Favorite" forKey:@"name"];
+    [section0fav setObject:OALocalizedString(@"map_settings_fav") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
     [section0fav setObject:@"OASwitchCell" forKey:@"type"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
-    [section0tracks setObject:@"Tracks" forKey:@"name"];
+    [section0tracks setObject:OALocalizedString(@"map_settings_tracks") forKey:@"name"];
     [section0tracks setObject:@"" forKey:@"value"];
     [section0tracks setObject:@"OASettingsCell" forKey:@"type"];
 
@@ -115,12 +116,12 @@
     OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsMainScreen variantToMapStyle:app.data.lastMapSource.variant];
     mapStyleIndex = [OAMapSettingsMainScreen mapStyleToTag:mapStyle];
     
-    NSArray *arrTop = @[@{@"groupName": @"Show on Map",
+    NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
                           },
-                        @{@"groupName": @"Map Type",
+                        @{@"groupName": OALocalizedString(@"map_settings_type"),
                           @"cells": @[
-                                  @{@"name": @"Map Type",
+                                  @{@"name": OALocalizedString(@"map_settings_type"),
                                     @"value": app.data.lastMapSource.name,
                                     @"type": @"OASettingsCell"}
                                   ],
@@ -151,8 +152,8 @@
         NSArray *categories = [styleSettings getAllCategories];
         
         NSMutableArray *categoriesList = [NSMutableArray array];
-        [categoriesList addObject:@{@"name": @"Application mode",
-                                    @"value": settings.settingAppMode == 0 ? @"Day" : @"Night",
+        [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
+                                    @"value": settings.settingAppMode == 0 ? OALocalizedString(@"map_settings_day") : OALocalizedString(@"map_settings_night"),
                                     @"type": @"OASettingsCell"}];
         
         for (NSString *cName in categories)
@@ -160,7 +161,7 @@
                                         @"value": @"",
                                         @"type": @"OASettingsCell"}];
         
-        NSArray *arrStyles = @[@{@"groupName": @"Map Style",
+        NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),
                                  @"cells": categoriesList,
                                  }
                                ];
@@ -170,13 +171,13 @@
     }
 
     
-    NSArray *arrOverlayUnderlay = @[@{@"groupName": @"Overlay / Underlay",
+    NSArray *arrOverlayUnderlay = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
                                       @"cells": @[
-                                              @{@"name": @"Overlay",
+                                              @{@"name": OALocalizedString(@"map_settings_over"),
                                                 @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : @"None",
                                                 @"type": @"OASettingsCell"},
-                                              @{@"name": @"Underlay",
-                                                @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : @"None",
+                                              @{@"name": OALocalizedString(@"map_settings_under"),
+                                                @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : OALocalizedString(@"map_settings_none"),
                                                 @"type": @"OASettingsCell"}
                                               ]
                                       }

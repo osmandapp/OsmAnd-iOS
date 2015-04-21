@@ -69,7 +69,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (self) {
         app = [OsmAndApp instance];
         settings = [OAAppSettings sharedManager];
-        title = @"Map Type";
+        title = OALocalizedString(@"map_settings_type");
 
         settingsScreen = EMapSettingsScreenMapType;
         
@@ -293,9 +293,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch (section)
     {
         case kOfflineSourcesSection:
-            return OALocalizedString(@"Styles for Offline Maps");
+            return OALocalizedString(@"map_settings_offline");
         case kOnlineSourcesSection:
-            return OALocalizedString(@"Online Maps");
+            return OALocalizedString(@"map_settings_online");
             
         default:
             return nil;

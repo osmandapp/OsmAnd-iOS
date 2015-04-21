@@ -24,7 +24,7 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     NSArray *arr = [defaultValue componentsSeparatedByString:@" "];
     NSString *key;
     for (NSString *s in arr)
-        if (s.length > 0 && [s characterAtIndex:0] != '%')
+        if (s.length > 0 && [[NSCharacterSet letterCharacterSet] characterIsMember:[s characterAtIndex:0]])
         {
             key = s;
             break;
@@ -34,25 +34,28 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     if (key)
     {
         NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:NSLocalizedString(key, nil)];
-        va_list args;
-        va_start(args, defaultValue);
-        if (upperCase)
-            res = [[[NSString alloc] initWithFormat:newValue arguments:args] uppercaseStringWithLocale:[NSLocale currentLocale]];
+        if ([defaultValue isEqualToString:key])
+        {
+            if (upperCase)
+                res = [newValue uppercaseStringWithLocale:[NSLocale currentLocale]];
+            else
+                res = newValue;
+        }
         else
-            res = [[NSString alloc] initWithFormat:newValue arguments:args];
-        
-        va_end(args);
+        {
+            va_list args;
+            va_start(args, defaultValue);
+            if (upperCase)
+                res = [[[NSString alloc] initWithFormat:newValue arguments:args] uppercaseStringWithLocale:[NSLocale currentLocale]];
+            else
+                res = [[NSString alloc] initWithFormat:newValue arguments:args];
+            
+            va_end(args);
+        }
     }
     else
     {
-        va_list args;
-        va_start(args, defaultValue);
-        if (upperCase)
-            res = [[[NSString alloc] initWithFormat:NSLocalizedString(defaultValue, nil) arguments:args] uppercaseStringWithLocale:[NSLocale currentLocale]];
-        else
-            res = [[NSString alloc] initWithFormat:NSLocalizedString(defaultValue, nil) arguments:args];
-
-        va_end(args);
+        res = defaultValue;
     }
     
     return res;

@@ -12,6 +12,7 @@
 #import "OAMapRendererView.h"
 #import "OATargetPoint.h"
 #import "OADefaultFavorite.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -71,6 +72,9 @@
 
 
 -(void)awakeFromNib {
+    
+    [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
+    [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
     
     // drop shadow
     [self.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -183,9 +187,9 @@
     _buttonDirection.enabled = _targetPoint.type != OATargetDestination;
 
     if (_targetPoint.type == OATargetFavorite)
-        [_buttonFavorite setTitle:@"Edit favorite" forState:UIControlStateNormal];
+        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
     else
-        [_buttonFavorite setTitle:@"Add favorite" forState:UIControlStateNormal];
+        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
 }
 
 -(void)setMapViewInstance:(UIView*)mapView {

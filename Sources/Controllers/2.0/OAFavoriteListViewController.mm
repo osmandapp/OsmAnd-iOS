@@ -682,6 +682,7 @@ kFavoriteCellType;
         NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
+        [self.favoriteTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 
@@ -701,6 +702,7 @@ kFavoriteCellType;
         NSDictionary* item = [groupData.groupItems objectAtIndex:indexPath.row];
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
+        [self.favoriteTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 

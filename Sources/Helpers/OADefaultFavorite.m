@@ -42,21 +42,21 @@ static NSArray *colors;
 {
     if (!colors)
         colors = @[
-                   [[OAFavoriteColor alloc] initWithName:@"Purple" color:[UIColor colorWithRed:0.251f green:0.329f blue:0.698f alpha:1.00f] iconName:@"ic_favorite_1"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_purple") color:[UIColor colorWithRed:0.251f green:0.329f blue:0.698f alpha:1.00f] iconName:@"ic_favorite_1"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Green" color:[UIColor colorWithRed:0.278f green:0.624f blue:0.294f alpha:1.00f] iconName:@"ic_favorite_2"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_green") color:[UIColor colorWithRed:0.278f green:0.624f blue:0.294f alpha:1.00f] iconName:@"ic_favorite_2"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Yellow" color:[UIColor colorWithRed:0.992f green:0.698f blue:0.169f alpha:1.00f] iconName:@"ic_favorite_3"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_yellow") color:[UIColor colorWithRed:0.992f green:0.698f blue:0.169f alpha:1.00f] iconName:@"ic_favorite_3"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Orange" color:[UIColor colorWithRed:0.988f green:0.345f blue:0.188f alpha:1.00f] iconName:@"ic_favorite_4"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_orange") color:[UIColor colorWithRed:0.988f green:0.345f blue:0.188f alpha:1.00f] iconName:@"ic_favorite_4"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Gray" color:[UIColor colorWithRed:0.380f green:0.490f blue:0.541f alpha:1.00f] iconName:@"ic_favorite_5"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_gray") color:[UIColor colorWithRed:0.380f green:0.490f blue:0.541f alpha:1.00f] iconName:@"ic_favorite_5"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Red" color:[UIColor colorWithRed:0.902f green:0.145f blue:0.396f alpha:1.00f] iconName:@"ic_favorite_6"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_red") color:[UIColor colorWithRed:0.902f green:0.145f blue:0.396f alpha:1.00f] iconName:@"ic_favorite_6"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Blue" color:[UIColor colorWithRed:0.169f green:0.596f blue:0.941f alpha:1.00f] iconName:@"ic_favorite_7"],
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_blue") color:[UIColor colorWithRed:0.169f green:0.596f blue:0.941f alpha:1.00f] iconName:@"ic_favorite_7"],
                    
-                   [[OAFavoriteColor alloc] initWithName:@"Magenta" color:[UIColor colorWithRed:0.608f green:0.184f blue:0.682f alpha:1.00f] iconName:@"ic_favorite_8"]
+                   [[OAFavoriteColor alloc] initWithName:OALocalizedString(@"col_magenta") color:[UIColor colorWithRed:0.608f green:0.184f blue:0.682f alpha:1.00f] iconName:@"ic_favorite_8"]
                    ];
     
     return colors;

@@ -441,7 +441,7 @@ typedef enum
         NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
-        [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 #pragma mark - UIDocumentInteractionControllerDelegate

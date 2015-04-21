@@ -101,7 +101,7 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
             else
             {
                 task.installResourceRetry++;
-                if (task.installResourceRetry < 10)
+                if (task.installResourceRetry < 20)
                 {
                     OALog(@"installResourceRetry = %d", task.installResourceRetry);
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);

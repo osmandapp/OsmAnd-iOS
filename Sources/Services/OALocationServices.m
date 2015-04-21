@@ -546,10 +546,10 @@
 
 + (void)showDeniedAlert
 {
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Access denied")
-                                message:OALocalizedString(@"Access to location service has been denied")
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"loc_access_denied")
+                                message:OALocalizedString(@"loc_access_denied_desc")
                                delegate:nil
-                      cancelButtonTitle:OALocalizedString(@"OK")
+                      cancelButtonTitle:OALocalizedString(@"shared_string_ok")
                       otherButtonTitles:nil] show];
 }
 

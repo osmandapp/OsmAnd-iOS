@@ -36,8 +36,8 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
     _titleView.text = OALocalizedString(@"res_details");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+    [_btnToolbarMaps setTitle:OALocalizedStringUp(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
 }
 
 - (void)viewWillAppear:(BOOL)animated

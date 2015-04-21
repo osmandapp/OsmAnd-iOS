@@ -210,56 +210,56 @@
     // Create main regions:
 
     OAWorldRegion* africaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AfricaRegionId
-                                              withLocalizedName:OALocalizedString(@"Africa")
+                                              withLocalizedName:OALocalizedString(@"region_africa")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:africaRegion];
     [regionsLookupTable setValue:africaRegion forKey:africaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::AfricaRegionId);
 
     OAWorldRegion* asiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AsiaRegionId
-                                            withLocalizedName:OALocalizedString(@"Asia")
+                                            withLocalizedName:OALocalizedString(@"region_asia")
                                                          from:loadedWorldRegions];
     [entireWorld addSubregion:asiaRegion];
     [regionsLookupTable setValue:asiaRegion forKey:asiaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::AsiaRegionId);
 
     OAWorldRegion* australiaAndOceaniaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId
-                                                           withLocalizedName:OALocalizedString(@"Australia and Oceania")
+                                                           withLocalizedName:OALocalizedString(@"region_ausralia_and_oceania")
                                                                         from:loadedWorldRegions];
     [entireWorld addSubregion:australiaAndOceaniaRegion];
     [regionsLookupTable setValue:australiaAndOceaniaRegion forKey:australiaAndOceaniaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId);
 
     OAWorldRegion* centralAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::CentralAmericaRegionId
-                                                      withLocalizedName:OALocalizedString(@"Central America")
+                                                      withLocalizedName:OALocalizedString(@"region_central_america")
                                                                    from:loadedWorldRegions];
     [entireWorld addSubregion:centralAmericaRegion];
     [regionsLookupTable setValue:centralAmericaRegion forKey:centralAmericaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::CentralAmericaRegionId);
 
     OAWorldRegion* europeRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::EuropeRegionId
-                                              withLocalizedName:OALocalizedString(@"Europe")
+                                              withLocalizedName:OALocalizedString(@"region_europe")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:europeRegion];
     [regionsLookupTable setValue:europeRegion forKey:europeRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::EuropeRegionId);
 
     OAWorldRegion* northAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::NorthAmericaRegionId
-                                                    withLocalizedName:OALocalizedString(@"North America")
+                                                    withLocalizedName:OALocalizedString(@"region_north_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:northAmericaRegion];
     [regionsLookupTable setValue:northAmericaRegion forKey:northAmericaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::NorthAmericaRegionId);
 
     OAWorldRegion* russiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::RussiaRegionId
-                                              withLocalizedName:OALocalizedString(@"Russia")
+                                              withLocalizedName:OALocalizedString(@"region_russia")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:russiaRegion];
     [regionsLookupTable setValue:russiaRegion forKey:russiaRegion.regionId];
     loadedWorldRegions.remove(OsmAnd::WorldRegions::RussiaRegionId);
 
     OAWorldRegion* southAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::SouthAmericaRegionId
-                                                    withLocalizedName:OALocalizedString(@"South America")
+                                                    withLocalizedName:OALocalizedString(@"region_south_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:southAmericaRegion];
     [regionsLookupTable setValue:southAmericaRegion forKey:southAmericaRegion.regionId];

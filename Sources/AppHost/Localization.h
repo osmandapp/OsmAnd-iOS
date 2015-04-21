@@ -55,7 +55,10 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     }
     else
     {
-        res = defaultValue;
+        va_list args;
+        va_start(args, defaultValue);
+        res = [[NSString alloc] initWithFormat:defaultValue arguments:args];
+        va_end(args);
     }
     
     return res;

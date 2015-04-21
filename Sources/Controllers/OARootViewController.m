@@ -259,12 +259,12 @@
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"Import Data")
-                                message:OALocalizedString(@"Please choose what to Import")
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
+                                message:OALocalizedString(@"import_choose_type")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
                                                              action:^{
                                                              }]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Favorite")
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"import_favorite")
                                                              action:^{
                                                                  
                                                                  UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
@@ -275,7 +275,7 @@
                                                                  {
                                                                      dispatch_async(dispatch_get_main_queue(), ^{
                                                                          
-                                                                         [[[UIAlertView alloc] initWithTitle:@"Import Failed" message:@"The specified file cannot be imported" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+                                                                         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
                                                                                                               
                                                                      });
                                                                      
@@ -294,7 +294,7 @@
                                                                  
                                                              }],
       
-                       [RIButtonItem itemWithLabel:OALocalizedString(@"GPX route")
+                       [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
                                                              action:^{
                                                                  
                                                                  UIViewController* incomingURLViewController = [[OAGPXListViewController alloc] initWithImportGPXItem:url];
@@ -341,8 +341,8 @@
 - (void)showNoInternetAlertFor:(NSString*)actionTitle
 {
     [[[UIAlertView alloc] initWithTitle:actionTitle
-                                message:OALocalizedString(@"Internet connection required to perform this action. Please check your Internet connection.")
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Oh, OK then")]
+                                message:OALocalizedString(@"alert_inet_needed")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
                        otherButtonItems:nil] show];
 }
 

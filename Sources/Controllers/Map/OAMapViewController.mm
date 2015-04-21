@@ -615,18 +615,16 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         
         NSString* message = nil;
         if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-            message = OALocalizedString(@"Install detailed map overview to get more information about your locations.\n\nDowloading requires %1$@ over cellular network. This may incur high charges. Proceed?",
-                                        stringifiedSize);
+            message = [NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_cell_q"),
+                                        stringifiedSize];
         else
-            message = OALocalizedString(@"Install detailed map overview to get more information about your locations.\n\nDowloading requires %1$@ over WiFi network. Proceed?",
-                                        stringifiedSize);
+            message = [NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_wifi_q"),
+                                        stringifiedSize];
         
-        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"No, thanks") otherButtonTitles:OALocalizedString(@"Download map now"), OALocalizedString(@"Remind me later"), nil];
+        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"map_download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"map_nothanks") otherButtonTitles:OALocalizedString(@"map_download_now"), OALocalizedString(@"map_remind"), nil];
         mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
         [mapDownloadAlert show];
-        
     }
-
 }
 
 - (void)viewDidAppear:(BOOL)animated

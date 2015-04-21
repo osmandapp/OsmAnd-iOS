@@ -118,6 +118,9 @@
 // Intro
 "intro_skip" = "Skip";
 "intro_download" = "Download Map";
+"intro_next" = "Next";
+"intro_welcome" = "Welcome to\nOsmAnd";
+"intro_promo" = "Global Offline Maps";
 
 // Settings
 "sett_settings" = "Settings";
@@ -192,4 +195,28 @@
 "res_updates_avail_cell_q" = "%d updates are available. %@ will be downloaded over cellular network. This may incur high charges. Proceed?";
 "res_updates_avail_wifi_q" = "%d updates are available. %@ will be downloaded over WiFi network. Proceed?";
 
+// Menu
+"menu_maps" = "Maps";
+"menu_my_places" = "My Places";
+"menu_mapsres" = "Maps & Resources";
+"menu_settings" = "Settings";
+"menu_feedback" = "Feedback";
+"menu_about" = "About";
 
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+
+// Map
+"map_inst_det_map_cell_q" = "Install detailed map overview to get more information about your locations.\n\nDowloading requires %@ over cellular network. This may incur high charges. Proceed?";
+"map_inst_det_map_wifi_q" = "Install detailed map overview to get more information about your locations.\n\nDowloading requires %@ over WiFi network. Proceed?";
+"map_download" = "Download";
+"map_nothanks" = "No, thanks";
+"map_download_now" = "Download map now";
+"map_remind" = "Remind me later";
+"map_no_address" = "Address is not known yet";

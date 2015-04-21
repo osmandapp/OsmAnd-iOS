@@ -11,6 +11,7 @@
 #import "OASettingsViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAWebViewController.h"
+#import "Localization.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -119,10 +120,16 @@
     
 }
 
-
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
+    [_menuButtonMaps setTitle:OALocalizedString(@"menu_maps") forState:UIControlStateNormal];
+    [_menuButtonMyData setTitle:OALocalizedString(@"menu_my_places") forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setTitle:OALocalizedString(@"menu_mapsres") forState:UIControlStateNormal];
+    [_menuButtonSettings setTitle:OALocalizedString(@"menu_settings") forState:UIControlStateNormal];
+    [_menuButtonQuiz setTitle:OALocalizedString(@"menu_feedback") forState:UIControlStateNormal];
+    [_menuButtonHelp setTitle:OALocalizedString(@"menu_about") forState:UIControlStateNormal];
 }
 
 -(void)viewWillAppear:(BOOL)animated {

@@ -25,6 +25,7 @@
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
+#import "Localization.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -577,7 +578,7 @@
             }
             else
             {
-                addressString = @"Address is not known yet";
+                addressString = OALocalizedString(@"map_no_address");
             }
         }
         else

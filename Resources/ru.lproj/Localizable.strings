@@ -157,3 +157,54 @@
 "res_size" = "Размер";
 "res_created_on" = "Создано";
 "res_update_all" = "Обновить все";
+// Menu
+"menu_maps" = "Карты";
+"menu_my_places" = "Мои места";
+"menu_mapsres" = "Карты и Ресурсы";
+"menu_settings" = "Настройки";
+"menu_feedback" = "Отзыв";
+"menu_about" = "О программе";
+// Units
+"units_km" = "км";
+"units_m" = "м";
+"units_mi" = "мл";
+"units_yd" = "яр";
+"units_ft" = "фт";
+"units_kmh" = "км/ч";
+"units_mph" = "мл/ч";
+"map_download" = "Загрузить";
+"map_nothanks" = "Нет, спасибо";
+"map_download_now" = "Загрузить карту сейчас";
+"map_remind" = "Напомнить позже";
+"map_no_address" = "Адрес неизвестен";
+// Import
+"import_title" = "Импортировать данные";
+"import_choose_type" = "Выберите что импортировать";
+"import_favorite" = "Избранное";
+"import_failed" = "Импорт завершился не успешно";
+"import_gpx" = "GPX трек";
+// Context menu
+"ctx_mnu_edit_fav" = "Редактировать избранное";
+"ctx_mnu_add_fav" = "Добавить избранное";
+"ctx_mnu_share" = "Поделиться";
+"ctx_mnu_direction" = "Направление";
+// Location Services
+"loc_access_denied" = "Доступ запрещен";
+"col_green" = "Зеленый";
+"col_yellow" = "Желтый";
+"col_orange" = "Оранжевый";
+"col_gray" = "Серый";
+"col_red" = "Красный";
+"col_blue" = "Голубой";
+"col_magenta" = "Магента";
+// World Regions
+"region_africa" = "Африка";
+"region_asia" = "Азия";
+"region_ausralia_and_oceania" = "Австралия и Океания";
+"region_central_america" = "Центральная Америка";
+"region_europe" = "Европа";
+"region_north_america" = "Северная Америка";
+"region_russia" = "Россия";
+"region_south_america" = "Южная Америка";
+// Help
+"help_quiz" = "Опрос";

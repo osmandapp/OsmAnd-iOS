@@ -168,6 +168,9 @@
 {
     OAAppData* defaults = [[OAAppData alloc] init];
 
+    defaults.overlayAlpha = 0.5;
+    defaults.underlayAlpha = 0.5;
+    
     // Imagine that last viewed location was center of the world
     Point31 centerOfWorld;
     centerOfWorld.x = centerOfWorld.y = INT32_MAX>>1;

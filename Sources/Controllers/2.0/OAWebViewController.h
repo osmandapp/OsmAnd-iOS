@@ -10,6 +10,7 @@
 
 @interface OAWebViewController : OASuperViewController
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIWebView *webView;
 
 @property NSString* urlString;

@@ -16,15 +16,19 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _labelView.text = OALocalizedString(@"intro_welcome");
-        _descriptionView.text = OALocalizedString(@"intro_promo");
-        [_nextButton setTitle:OALocalizedStringUp(@"intro_next") forState:UIControlStateNormal];
     }
     return self;
 }
 
-- (id)initWithFrame:(CGRect)frame nibNamed:(NSString *)nibName {
+- (id)initWithFrame:(CGRect)frame nibNamed:(NSString *)nibName
+{
     self = [super initWithFrame:frame nibNamed:nibName];
+    
+    _labelView.text = OALocalizedString(@"intro_welcome");
+    _descriptionView.text = OALocalizedString(@"intro_promo");
+    [_nextButton setTitle:OALocalizedStringUp(@"intro_next") forState:UIControlStateNormal];
+    _countryName.placeholder = OALocalizedString(@"intro_placeholder");
+
     [self.parentIntroductionView setEnabled:NO];
     
     return self;

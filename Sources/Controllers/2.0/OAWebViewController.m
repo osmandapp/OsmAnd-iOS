@@ -7,6 +7,7 @@
 //
 
 #import "OAWebViewController.h"
+#import "Localization.h"
 
 @interface OAWebViewController ()
 
@@ -22,6 +23,11 @@
     return self;
 }
 
+-(void)applyLocalization
+{
+    _titleLabel.text = OALocalizedString(@"help_quiz");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

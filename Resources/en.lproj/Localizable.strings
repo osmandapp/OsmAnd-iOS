@@ -121,6 +121,7 @@
 "intro_next" = "Next";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global Offline Maps";
+"intro_placeholder" = "enter the name of your region";
 
 // Settings
 "sett_settings" = "Settings";
@@ -262,7 +263,8 @@
 "region_russia" = "Russia";
 "region_south_america" = "South America";
 
-
+// Help
+"help_quiz" = "Quiz";
 
 
 

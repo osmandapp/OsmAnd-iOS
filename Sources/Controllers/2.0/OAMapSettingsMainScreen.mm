@@ -320,16 +320,20 @@
             
         case 2: // Map Style
         {
-            if (indexPath.row == 0) {
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey popup:vwController.isPopup];
-                
-            } else {
-                
-                NSArray *categories = [styleSettings getAllCategories];
-                
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
+            if (mapStyleCellPresent)
+            {
+                if (indexPath.row == 0)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey popup:vwController.isPopup];
+                }
+                else
+                {
+                    NSArray *categories = [styleSettings getAllCategories];
+                    
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
+                }
+                break;
             }
-            break;
         }
         case 3:
         {

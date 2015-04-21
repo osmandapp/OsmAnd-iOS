@@ -1,0 +1,58 @@
+"shared_string_yes" = "Да";
+"shared_string_save" = "Сохранить";
+"shared_string_done" = "Готово";
+"shared_string_update" = "Обновить";
+"shared_string_install" = "Установить";
+"shared_string_uninstall" = "Удалить";
+"shared_string_delete" = "Удалить";
+// HUD
+"hud_heading" = "Направление";
+"hud_no_movement" = "Нет движения";
+// Favorites
+"fav_color" = "Цвет";
+"fav_colors" = "Цвета";
+"fav_name" = "Имя";
+"fav_group" = "Группа";
+"fav_groups" = "Группы";
+"favorite" = "Избранное";
+"fav_no_group" = "Без группы";
+"fav_import_export" = "Импорт/Экспорт";
+"fav_import" = "Импорт";
+"fav_import_title" = "Импортировать избранное";
+"fav_export_title" = "Экспортировать избранное";
+"fav_select_remove" = "Выберите избранные для удаления";
+"fav_remove_q" = "Удалить выбранные избранные?";
+"fav_export_select" = "Выберите избранные для экспорта";
+"fav_import_desc" = "Вы можете импортировать избранные как путевые точки GPX файла \n\nЧтобы поделиться файлом favorites.gpx вы можете открыть его в Dropbox, Email или в другой программе - Используйте функцию Открыть В";
+"fav_your_groups" = "Группы";
+"fav_create_group" = "Создать новую группу";
+"fav_enter_group_name" = "Введите имя группы";
+"fav_exists" = "Избранное  \"%@\" уже существует";
+"fav_ignore" = "Игнорировать";
+"fav_rename" = "Переименовать";
+"fav_replace" = "Заменить";
+"fav_replace_all" = "Заменить Все";
+"fav_rename_q" = "Переименовать избранное";
+"fav_enter_new_name" = "Введите имя для избранного";
+// POI
+"poi_insrease_radius" = "Увеличить поиск до";
+"poi_max_radius_reached" = "Достигнут максимальный радиус поиска";
+"poi_search_near_center" = "Поиск выполнен вокруг центра карты";
+"poi_hide" = "Спрятать";
+// My Places
+"favorites" = "Избранные";
+"tracks" = "Треки";
+// GPX
+"gpx_point" = "Точка";
+"gpx_waypoints" = "Путевые точки";
+"gpx_points" = "Точки:";
+"gpx_points_b" = "точки";
+"gpx_export" = "Экспорт";
+"gpx_import_export" = "Импорт/Экспорт";
+"gpx_import_title" = "Импортировать трек";
+"shared_string_ok" = "ОК";
+"OsmAnd Maps" = "OsmAnd Карты";
+// Shared Strings
+"shared_string_back" = "Назад";
+"shared_string_cancel" = "Отмена";
+"shared_string_no" = "Нет";

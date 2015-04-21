@@ -65,12 +65,12 @@ typedef enum
         
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
-            title = @"Map Overlay";
+            title = OALocalizedString(@"map_settings_map_over");
             settingsScreen = EMapSettingsScreenOverlay;
 
         } else {
             _mapSettingType = EMapSettingUnderlay;
-            title = @"Map Underlay";
+            title = OALocalizedString(@"map_settings_map_under");
             settingsScreen = EMapSettingsScreenUnderlay;
         }
         
@@ -173,9 +173,9 @@ typedef enum
     switch (section)
     {
         case 0:
-            return OALocalizedString(@"Transparency");
+            return OALocalizedString(@"map_settings_transp");
         case 1:
-            return OALocalizedString(@"Available layers");
+            return OALocalizedString(@"map_settings_avail_lay");
             
         default:
             return nil;
@@ -207,7 +207,7 @@ typedef enum
 #endif // defined(OSMAND_IOS_DEV)
             }
         } else {
-            caption = @"None";
+            caption = OALocalizedString(@"map_settings_none");
         }
         
         // Obtain reusable cell or create one

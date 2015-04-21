@@ -9,6 +9,7 @@
 #import "OAMapSettingsSettingScreen.h"
 #import "OAMapStyleSettings.h"
 #import "OASettingsTableViewCell.h"
+#import "Localization.h"
 
 @implementation OAMapSettingsSettingScreen {
     
@@ -59,9 +60,9 @@
 - (void)setupView
 {
     if ([settingKeyName isEqualToString:settingAppModeKey]) {
-        title = @"Application mode";
-        data = @[@{@"name": @"Day", @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
-                 @{@"name": @"Night", @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
+        title = OALocalizedString(@"map_settings_mode");
+        data = @[@{@"name": OALocalizedString(@"map_settings_day"), @"value": @"", @"img": settings.settingAppMode == 0 ? @"menu_cell_selected.png" : @""},
+                 @{@"name": OALocalizedString(@"map_settings_night"), @"value": @"", @"img": settings.settingAppMode == 1 ? @"menu_cell_selected.png" : @""}
                  ];
     }
 }

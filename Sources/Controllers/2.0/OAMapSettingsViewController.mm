@@ -25,6 +25,7 @@
 #import "OAMapSettingsSettingScreen.h"
 #import "OAMapSettingsGpxScreen.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
+#import "Localization.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
@@ -289,6 +290,12 @@
     }
     [self removeFromParentViewController];
     [self.view removeFromSuperview];
+}
+
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"map_settings_map");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad {

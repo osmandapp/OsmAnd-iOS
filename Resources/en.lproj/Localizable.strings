@@ -84,6 +84,27 @@
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills Total";
 
-// Favorite
+"m_style_overview" = "Overview";
+"m_style_car" = "Car";
+"m_style_walk" = "Walking";
+"m_style_bicycle" = "Bicycle";
 
-
+"map_settings_map" = "Map";
+"map_settings_fav" = "Favorite";
+"map_settings_tracks" = "Tracks";
+"map_settings_show" = "Show on Map";
+"map_settings_type" = "Map Type";
+"map_settings_mode" = "Application mode";
+"map_settings_day" = "Day";
+"map_settings_night" = "Night";
+"map_settings_style" = "Map Style";
+"map_settings_overunder" = "Overlay / Underlay";
+"map_settings_over" = "Overlay";
+"map_settings_under" = "Underlay";
+"map_settings_map_over" = "Map Overlay";
+"map_settings_map_under" = "Map Underlay";
+"map_settings_none" = "None";
+"map_settings_offline" = "Styles for Offline Maps";
+"map_settings_online" = "Online Maps";
+"map_settings_transp" = "Transparency";
+"map_settings_avail_lay" = "Available Layers";

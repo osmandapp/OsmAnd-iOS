@@ -113,6 +113,7 @@
     
     
     // Check if application was requested to open document/file/URL
+    /*
     NSURL* launchUrl = (NSURL*)[launchOptions valueForKey:UIApplicationLaunchOptionsURLKey];
     NSString* launchSourceApplication = (NSString*)[launchOptions valueForKey:UIApplicationLaunchOptionsSourceApplicationKey];
     id launchAnnotation = [launchOptions valueForKey:UIApplicationLaunchOptionsAnnotationKey];
@@ -123,6 +124,7 @@
         sourceApplication:launchSourceApplication
                annotation:launchAnnotation];
     }
+    */
     
     //[application setStatusBarStyle:UIStatusBarStyleLightContent];
 

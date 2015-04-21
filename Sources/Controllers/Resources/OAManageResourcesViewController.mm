@@ -163,6 +163,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _currentScope = scope;
 }
 
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"res_mapsres");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -175,7 +182,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (self.region != _app.worldRegion)
         [self.titleView setText:self.region.name];
     else if (_currentScope == kLocalResourcesScope) {
-        [self.titleView setText:OALocalizedString(@"Installed")];
+        [self.titleView setText:OALocalizedString(@"res_installed")];
     }
 
     _refreshRepositoryProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -314,11 +321,11 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _freeTextLabel.backgroundColor = bannerColor;
 
     if (freeMaps > 1) {
-        _freeTextLabel.text = [NSString stringWithFormat:@"There are %d free maps available without updates", freeMaps];
+        _freeTextLabel.text = [NSString stringWithFormat:OALocalizedString(@"res_banner_many"), freeMaps];
     } else if (freeMaps == 1) {
-        _freeTextLabel.text = @"There is one free map available without update";
+        _freeTextLabel.text = OALocalizedString(@"res_banner_one");
     } else {
-        _freeTextLabel.text = @"You have no free maps availabe for download/update";
+        _freeTextLabel.text = OALocalizedString(@"res_banner_no");
     }
 }
 
@@ -698,7 +705,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
         // Configure search scope
         self.searchDisplayController.searchBar.scopeButtonTitles = nil;
-        self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"Search worldwide");
+        self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"res_search_world");
     }
 }
 
@@ -944,7 +951,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 - (void)showNoInternetAlertForCatalogUpdate
 {
-    [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"Catalog update")];
+    [[OARootViewController instance] showNoInternetAlertFor:OALocalizedString(@"res_catalog_upd")];
 }
 
 - (void)updateRepository
@@ -1096,31 +1103,31 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         if (_currentScope == kLocalResourcesScope) {
             if (section == _regionMapSection)
-                return OALocalizedString(@"World Map");
+                return OALocalizedString(@"res_world_map");
             else
-                return OALocalizedString(@"Maps & resources");
+                return OALocalizedString(@"res_mapsres");
 
         }
         
         if (section == _outdatedResourcesSection)
-            return OALocalizedString(@"Updates");
+            return OALocalizedString(@"res_updates");
         if (section == _resourcesSection)
-            return OALocalizedString(@"Worldwide");
+            return OALocalizedString(@"res_worldwide");
         if (section == _localResourcesSection)
-            return OALocalizedString(@"Installed");
+            return OALocalizedString(@"res_installed");
         if (section == _regionMapSection)
-            return OALocalizedString(@"World Map");
+            return OALocalizedString(@"res_world_map");
         return nil;
     }
 
     if (section == _outdatedResourcesSection)
-        return OALocalizedString(@"Updates");
+        return OALocalizedString(@"res_updates");
     if (section == _resourcesSection)
-        return OALocalizedString(@"Maps & resources");
+        return OALocalizedString(@"res_mapsres");
     if (section == _localResourcesSection)
-        return OALocalizedString(@"Installed");
+        return OALocalizedString(@"res_installed");
     if (section == _regionMapSection)
-        return OALocalizedString(@"Region Map");
+        return OALocalizedString(@"res_region_map");
 
     return nil;
 }
@@ -1284,7 +1291,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         if (indexPath.section == _outdatedResourcesSection && _outdatedResourcesSection >= 0)
         {
             cellTypeId = outdatedResourcesSubmenuCell;
-            title = OALocalizedString(@"Updates available");
+            title = OALocalizedString(@"res_updates_avail");
 
             NSArray* regionsNames = [_regionsWithOutdatedResources valueForKey:NSStringFromSelector(@selector(name))];
             subtitle = [TTTArrayFormatter localizedStringFromArray:regionsNames
@@ -1293,9 +1300,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {
             cellTypeId = installedResourcesSubmenuCell;
-            title = OALocalizedString(@"Installed");
+            title = OALocalizedString(@"res_installed");
             
-            subtitle = [NSString stringWithFormat:@"%d map(s) - %@", (int)_localResourceItems.count + _localRegionMapItems.count, [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)_localResourceItems.count + _localRegionMapItems.count, OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {

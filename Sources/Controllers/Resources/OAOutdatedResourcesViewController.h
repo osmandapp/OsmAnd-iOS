@@ -11,10 +11,6 @@
 
 @interface OAOutdatedResourcesViewController : OAResourcesBaseViewController
 
-@property (weak, nonatomic) IBOutlet UIView *toolbarView;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
-@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
-
 @property (nonatomic, assign) BOOL openFromSplash;
 
 - (void)setupWithRegion:(OAWorldRegion*)region

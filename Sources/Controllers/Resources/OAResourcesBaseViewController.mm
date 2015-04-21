@@ -107,12 +107,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 @synthesize resourceItemsComparator = _resourceItemsComparator;
 
+-(void)applyLocalization
+{
+    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 
     _deleteResourceProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
-    _deleteResourceProgressHUD.labelText = OALocalizedString(@"Deleting...");
+    _deleteResourceProgressHUD.labelText = OALocalizedString(@"res_deleting");
     [self.view addSubview:_deleteResourceProgressHUD];
     
     // IOS-178 Add download view
@@ -202,16 +208,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (resource->id == QLatin1String("world_basemap.map.obf"))
         {
             if (includeRegionName)
-                return OALocalizedString(@"Worldwide overview map");
+                return OALocalizedString(@"res_wmap");
             else
-                return OALocalizedString(@"Detailed overview map");
+                return OALocalizedString(@"res_dmap");
         }
         else if (resource->id == QLatin1String("world_seamarks_basemap.map.obf"))
         {
             if (includeRegionName)
-                return OALocalizedString(@"World seamarks basemap");
+                return OALocalizedString(@"res_wsea_map");
             else
-                return OALocalizedString(@"World seamarks basemap");
+                return OALocalizedString(@"res_wsea_map");
         }
 
         // By default, world region has only predefined set of resources
@@ -224,7 +230,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"Map of entire region");
+                    return OALocalizedString(@"res_ent_region_map");
                 else
                     //return OALocalizedString(@"Map of %@", region.name);
                     return OALocalizedString(@"%@", region.name);
@@ -232,7 +238,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             else
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"Map of the region");
+                    return OALocalizedString(@"res_map_of_region");
                 else
                     //return OALocalizedString(@"Map of %@", region.name);
                     return OALocalizedString(@"%@", region.name);
@@ -324,20 +330,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* message = nil;
     if (isUpdate)
     {
-        message = OALocalizedString(@"Not enough space to update %1$@. %2$@ is needed. Please free up some space.",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_update_no_space"),
                                     resourceName,
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
     else
     {
-        message = OALocalizedString(@"Not enough space to install %1$@. %2$@ is needed. Please free up some space.",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_install_no_space"),
                                     resourceName,
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
                        otherButtonItems:nil] show];
 }
 
@@ -354,7 +360,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         
     } else {
         
-        [[[UIAlertView alloc] initWithTitle:nil message:@"You spent all free downloads. Please purchase continent to download / update the maps." delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_free_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
         
         return NO;
     }
@@ -384,21 +390,21 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* message = nil;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_upd_avail_cell_q"),
                                     resourceName,
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
     else
     {
-        message = OALocalizedString(@"An update is available for %1$@. %2$@ will be downloaded over WiFi network. Proceed?",
-                                    resourceName,
-                                    stringifiedSize);
+        message = [NSString stringWithFormat:OALocalizedString(@"res_upd_avail_wifi_q"),
+                   resourceName,
+                   stringifiedSize];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_update")
                                                              action:^{
                                                                  [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                              }], nil] show];
@@ -426,21 +432,21 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* message = nil;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be downloaded over cellular network. This may incur high charges. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
                                     resourceName,
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
     else
     {
-        message = OALocalizedString(@"Intallation of %1$@ needs %2$@ to be downloaded over WiFi network. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
                                     resourceName,
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Install")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_install")
                                                              action:^{
                                                                  [self startDownloadOfItem:item];
                                                              }], nil] show];
@@ -545,17 +551,17 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* message = nil;
     if (isUpdate)
     {
-        message = OALocalizedString(@"You're going to cancel %@ update. All downloaded data will be lost. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_cancel_upd_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]);
+                                           withRegionName:YES]];
     }
     else
     {
-        message = OALocalizedString(@"You're going to cancel %@ installation. All downloaded data will be lost. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]);
+                                           withRegionName:YES]];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
@@ -583,23 +589,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* message = nil;
     if (isInstalled)
     {
-        message = OALocalizedString(@"You're going to uninstall %@. You can reinstall it later from catalog. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"),
                                     [self.class titleOfResource:item.resource
                                                        inRegion:item.worldRegion
-                                                 withRegionName:YES]);
+                                                 withRegionName:YES]];
     }
     else
     {
-        message = OALocalizedString(@"You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"),
                                     [self.class titleOfResource:item.resource
                                                        inRegion:item.worldRegion
-                                                 withRegionName:YES]);
+                                                 withRegionName:YES]];
     }
     
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"Uninstall") : OALocalizedString(@"Delete")
+                       otherButtonItems:[RIButtonItem itemWithLabel:isInstalled ? OALocalizedString(@"shared_string_uninstall") : OALocalizedString(@"shared_string_delete")
                                                              action:^{
                                                                  [self deleteResourceOf:item executeAfterSuccess:block];
                                                              }], nil] show];

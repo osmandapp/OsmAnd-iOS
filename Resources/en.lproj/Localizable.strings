@@ -9,6 +9,10 @@
 "shared_string_yes" = "Yes";
 "shared_string_save" = "Save";
 "shared_string_done" = "Done";
+"shared_string_update" = "Update";
+"shared_string_install" = "Install";
+"shared_string_uninstall" = "Uninstall";
+"shared_string_delete" = "Delete";
 
 // HUD
 "hud_heading" = "Heading";
@@ -137,13 +141,55 @@
 "prch_maps" = "Maps";
 "prch_addons" = "Addons";
 "prch_ski_q" = "Please turn on the \"Ski map\" style in the Map Settings";
-"prch_nau_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over cellular network. This may incur high charges. You may install it later through the Maps & Resources. Proceed?";
-"prch_nau_wifi_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over WiFi network. You may install it later through the Maps & Resources. Proceed?";
+"prch_nau_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %@ over cellular network. This may incur high charges. You may install it later through the Maps & Resources. Proceed?";
+"prch_nau_wifi_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %@ over WiFi network. You may install it later through the Maps & Resources. Proceed?";
 "prch_download" = "Download";
 "prch_nothanks" = "No, thanks";
 "prch_download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "items were not restored. Please try again.";
 "prch_item_failed" = "One item was not restored. Please try again.";
+
+// Resources
+"res_mapsres" = "Maps & Resources";
+"res_installed" = "Installed";
+"res_banner_many" = "There are %d free maps available without updates";
+"res_banner_one" = "There is one free map available without update";
+"res_banner_no" = "You have no free maps availabe for download/update";
+"res_search_world" = "Search worldwide";
+"res_catalog_upd" = "Catalog update";
+"res_world_map" = "World Map";
+"res_updates" = "Updates";
+"res_worldwide" = "Worldwide";
+"res_region_map" = "Region Map";
+"res_updates_avail" = "Updates available";
+"res_maps_inst" = "map(s)";
+"res_deleting" = "Deleting...";
+"res_wsea_map" = "World seamarks basemap";
+"res_wmap" = "Worldwide overview map";
+"res_dmap" = "Detailed overview map";
+"res_ent_region_map" = "Map of entire region";
+"res_map_of_region" = "Map of the region";
+"res_update_no_space" = "Not enough space to update %@. %@ is needed. Please free up some space.";
+"res_install_no_space" = "Not enough space to install %@. %@ is needed. Please free up some space.";
+"res_free_exp" = "You spent all free downloads. Please purchase continent to download / update the maps.";
+"res_upd_avail_cell_q" = "An update is available for %@. %@ will be downloaded over cellular network. This may incur high charges. Proceed?";
+"res_upd_avail_wifi_q" = "An update is available for %@. %@ will be downloaded over WiFi network. Proceed?";
+"res_inst_avail_cell_q" = "Intallation of %@ needs %@ to be downloaded over cellular network. This may incur high charges. Proceed?";
+"res_inst_avail_wifi_q" = "Intallation of %@ needs %@ to be downloaded over WiFi network. Proceed?";
+"res_cancel_upd_q" = "You're going to cancel %@ update. All downloaded data will be lost. Proceed?";
+"res_cancel_inst_q" = "You're going to cancel %@ installation. All downloaded data will be lost. Proceed?";
+"res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog. Proceed?";
+"res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?";
+"res_details" = "Details";
+"res_type" = "Type";
+"res_map" = "Map";
+"res_unknown" = "Unknown";
+"res_size" = "Size";
+"res_created_on" = "Created on";
+"res_update_all" = "Update all";
+"res_updates_no_space" = "Not enough space to install %d updates. %@ is needed. Please free up some space.";
+"res_updates_avail_cell_q" = "%d updates are available. %@ will be downloaded over cellular network. This may incur high charges. Proceed?";
+"res_updates_avail_wifi_q" = "%d updates are available. %@ will be downloaded over WiFi network. Proceed?";
 
 

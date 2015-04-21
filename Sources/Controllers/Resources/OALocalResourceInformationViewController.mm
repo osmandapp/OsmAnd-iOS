@@ -32,6 +32,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 {
 }
 
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"res_details");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -88,26 +95,26 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     const auto installedResource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
 
     // Type
-    [tKeys addObject:OALocalizedString(@"Type")];
+    [tKeys addObject:OALocalizedString(@"res_type")];
     switch (localResource->type)
     {
         case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            [tValues addObject:OALocalizedString(@"Map")];
+            [tValues addObject:OALocalizedString(@"res_map")];
             break;
 
         default:
-            [tValues addObject:OALocalizedString(@"Unknown")];
+            [tValues addObject:OALocalizedString(@"res_unknown")];
             break;
     }
 
     // Size
-    [tKeys addObject:OALocalizedString(@"Size")];
+    [tKeys addObject:OALocalizedString(@"res_size")];
     [tValues addObject:[NSByteCountFormatter stringFromByteCount:localResource->size countStyle:NSByteCountFormatterCountStyleFile]];
 
     if (installedResource)
     {
         // Timestamp
-        [tKeys addObject:OALocalizedString(@"Created on")];
+        [tKeys addObject:OALocalizedString(@"res_created_on")];
         NSDate *d = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
         
         if (!formatter) {
@@ -137,7 +144,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"DETAILS";
+    return OALocalizedStringUp(@"res_details");
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

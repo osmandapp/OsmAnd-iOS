@@ -57,9 +57,17 @@
     _resourcesItems = [NSMutableArray arrayWithArray:items];
 }
 
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"res_updates");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [self.btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [self.btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad
 {
-    UIBarButtonItem* refreshAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"Update all")
+    UIBarButtonItem* refreshAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all")
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self
                                                                            action:@selector(onUpdateAllBarButtonClicked)];
@@ -154,10 +162,10 @@
                                                                    countStyle:NSByteCountFormatterCountStyleFile];
 
         [[[UIAlertView alloc] initWithTitle:nil
-                                    message:OALocalizedString(@"Not enough space to install %1$d updates. %2$@ is needed. Please free up some space.",
+                                    message:[NSString stringWithFormat:OALocalizedString(@"res_updates_no_space"),
                                                               [items count],
-                                                              stringifiedSize)
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"OK")]
+                                                              stringifiedSize]
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
                            otherButtonItems:nil] show];
         return;
     }
@@ -168,21 +176,21 @@
     NSString* message = nil;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = OALocalizedString(@"%1$d updates are available. %2$@ will be downloaded over cellular network. This may incur high charges. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_updates_avail_cell_q"),
                                     [items count],
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
     else
     {
-        message = OALocalizedString(@"%1$d updates are available. %2$@ will be downloaded over WiFi network. Proceed?",
+        message = [NSString stringWithFormat:OALocalizedString(@"res_updates_avail_wifi_q"),
                                     [items count],
-                                    stringifiedSize);
+                                    stringifiedSize];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
                                 message:message
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"Cancel")]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"Update all")
+                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
+                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"res_update_all")
                                                              action:^{
                                                                  for (OutdatedResourceItem* item in items)
                                                                  {
@@ -231,7 +239,7 @@
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Updates";
+    return OALocalizedStringUp(@"res_updates");
 }
 
 -(void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath

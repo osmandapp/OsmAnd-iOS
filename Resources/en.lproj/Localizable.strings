@@ -84,6 +84,7 @@
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills Total";
 
+// Map settings
 "m_style_overview" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
@@ -108,3 +109,25 @@
 "map_settings_online" = "Online Maps";
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available Layers";
+
+// Intro
+"intro_skip" = "Skip";
+"intro_download" = "Download Map";
+
+// Settings
+"sett_settings" = "Settings";
+"sett_units" = "Units";
+"sett_km" = "Kilometers";
+"sett_ml" = "Miles";
+"sett_zoom" = "Zoom button";
+"sett_show" = "Show";
+"sett_notshow" = "Don't show";
+"sett_loc_fmt" = "Location format";
+"sett_deg" = "Degrees";
+"sett_deg_min" = "Degrees and Minutes";
+"sett_arr" = "Map arrows";
+"sett_arr_loc" = "Location";
+"sett_arr_map" = "Map Center";
+
+
+

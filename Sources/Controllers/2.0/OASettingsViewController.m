@@ -9,6 +9,7 @@
 #import "OASettingsViewController.h"
 #import "OASettingsTableViewCell.h"
 #import "OAAppSettings.h"
+#import "Localization.h"
 
 @interface OASettingsViewController ()
 @property NSArray* data;
@@ -24,7 +25,11 @@
     return self;
 }
 
-
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"sett_settings");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -44,37 +49,37 @@
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
         case kSettingsScreenGeneral: {
-            NSString* metricSystemValue = settings.settingMetricSystem == 0 ? @"Kilometers" : @"Miles";
-            NSString* zoomButtonValue = settings.settingShowZoomButton ? @"Show" : @"Don't show";
-            NSString* geoFormatValue = settings.settingGeoFormat == 0 ? @"Degrees" : @"Degrees and Minutes";
-            NSString* mapArrowsValue = settings.settingMapArrows == MAP_ARROWS_LOCATION ? @"Location" : @"Map Center";
+            NSString* metricSystemValue = settings.settingMetricSystem == 0 ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
+            NSString* zoomButtonValue = settings.settingShowZoomButton ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
+            NSString* geoFormatValue = settings.settingGeoFormat == 0 ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
+            NSString* mapArrowsValue = settings.settingMapArrows == MAP_ARROWS_LOCATION ? OALocalizedString(@"sett_arr_loc") : OALocalizedString(@"sett_arr_map");
             
             self.data = @[
-                          @{@"name": @"Units", @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Zoom button", @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Location format", @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": @"Map arrows", @"value": mapArrowsValue, @"img": @"menu_cell_pointer.png"}
+                          @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": OALocalizedString(@"sett_zoom"), @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": OALocalizedString(@"sett_arr"), @"value": mapArrowsValue, @"img": @"menu_cell_pointer.png"}
                           ];
         }
             break;
         case kSettingsScreenMetricSystem:
-            self.data = @[@{@"name": @"Kilometers", @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Miles", @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": OALocalizedString(@"sett_km"), @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"sett_ml"), @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenZoomButton:
-            self.data = @[@{@"name": @"Show", @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Don't show", @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": OALocalizedString(@"sett_show"), @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"sett_notshow"), @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenGeoCoords:
-            self.data = @[@{@"name": @"Degrees", @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Degrees and Minutes", @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": OALocalizedString(@"sett_deg"), @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"sett_deg_min"), @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         case kSettingsScreenMapArrows:
-            self.data = @[@{@"name": @"Location", @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_LOCATION ? @"menu_cell_selected.png" : @""},
-                          @{@"name": @"Map Center", @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_MAP_CENTER ? @"menu_cell_selected.png" : @""}
+            self.data = @[@{@"name": OALocalizedString(@"sett_arr_loc"), @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_LOCATION ? @"menu_cell_selected.png" : @""},
+                          @{@"name": OALocalizedString(@"sett_arr_map"), @"value": @"", @"img": settings.settingMapArrows == MAP_ARROWS_MAP_CENTER ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         default:

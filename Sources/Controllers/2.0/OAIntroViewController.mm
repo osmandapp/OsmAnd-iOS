@@ -37,10 +37,10 @@
     OAInitViewPanel *panel2 = [[OAInitViewPanel alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) nibNamed:@"OAInitViewPanel"];
     panel2.nextButton.layer.cornerRadius = 5;
     [panel2.nextButton setAlpha:1];
-    [panel2.nextButton setTitle:@"Skip" forState:UIControlStateNormal];
+    [panel2.nextButton setTitle:OALocalizedString(@"intro_skip") forState:UIControlStateNormal];
     CGRect frame = panel2.labelView.frame;
     [panel2.labelView setFrame:frame];
-    [panel2.labelView setText:@"Download Map"];
+    [panel2.labelView setText:OALocalizedString(@"intro_download")];
     [panel2.descriptionView setText:@""];
     [panel2.countryName setHidden:NO];
     UIImageView* searchImage = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 35, 35)];

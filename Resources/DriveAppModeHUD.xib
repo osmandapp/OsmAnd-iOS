@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6751" systemVersion="14C1510" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OADriveAppModeHudViewController">
@@ -189,7 +189,7 @@
         <image name="HUD_debug_button.png" width="25" height="25"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
-        <image name="follow_map_mode_button.png" width="25" height="25"/>
+        <image name="follow_map_mode_button.png" width="22" height="22"/>
         <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_height.png" width="25" height="25"/>
         <image name="ic_speed.png" width="25" height="25"/>

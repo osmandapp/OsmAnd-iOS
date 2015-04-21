@@ -38,6 +38,16 @@
 
 }
 
+-(void)applyLocalization
+{
+    _titleView.text = OALocalizedString(@"purchases");
+    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
+    
+    [_btnToolbarMaps setTitle:OALocalizedStringUp(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
+}
+
 - (void)viewDidLoad {
 
     [super viewDidLoad];
@@ -123,10 +133,10 @@
 {
     switch (section) {
         case 0:
-            return @"Maps";
+            return OALocalizedString(@"prch_maps");
             
         case 1:
-            return @"Addons";
+            return OALocalizedString(@"prch_addons");
             
         default:
             return @"";
@@ -242,7 +252,7 @@
         }
         
         if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap]) {
-            [[[UIAlertView alloc] initWithTitle:nil message:@"Please turn on the \"Ski map\" style in the Map Settings" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
         }
 
         if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical]) {
@@ -253,13 +263,11 @@
             
             NSString* message = nil;
             if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-                message = OALocalizedString(@"Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over cellular network. This may incur high charges. You may install it later through the Maps & Resources. Proceed?",
-                                            stringifiedSize);
+                message = [NSString stringWithFormat:OALocalizedString(@"prch_nau_q"), stringifiedSize];
             else
-                message = OALocalizedString(@"Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %1$@ over WiFi network. You may install it later through the Maps & Resources. Proceed?",
-                                            stringifiedSize);
+                message = [NSString stringWithFormat:OALocalizedString(@"prch_nau_wifi_q"), stringifiedSize];
             
-            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"Download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"No, thanks") otherButtonTitles:OALocalizedString(@"Download map now"), nil];
+            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"prch_download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"prch_nothanks") otherButtonTitles:OALocalizedString(@"prch_download_now"), nil];
             mapDownloadAlert.tag = 100;
             [mapDownloadAlert show];
         }
@@ -279,9 +287,9 @@
         [_loadProductsProgressHUD hide:YES];
 
         if (product) {
-            NSString *text = [NSString stringWithFormat:@"Purchase of \"%@\" has failed", product.localizedTitle];
+            NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
             [alert show];
         }
     });
@@ -298,11 +306,11 @@
         if (errorsCount > 0) {
             NSString *text;
             if (errorsCount > 1)
-                text = [NSString stringWithFormat:@"%d items were not restored. Please try again.", errorsCount];
+                text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             else
-                text = @"One item was not restored. Please try again.";
+                text = OALocalizedString(@"prch_item_failed");
             
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
             [alert show];
         }
     });

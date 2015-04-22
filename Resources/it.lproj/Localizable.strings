@@ -1,0 +1,54 @@
+"shared_string_ok" = "OK";
+"shared_string_yes" = "Si";
+"shared_string_no" = "No";
+"shared_string_save" = "Salva";
+"shared_string_delete" = "Elimina";
+"rendering_attr_streetLighting_name" = "Illuminazione stradale";
+// Rendering categories
+"rendering_category_hide" = "Nascondi";
+"rendering_category_routes" = "Percorsi";
+"rendering_category_details" = "Dettagli";
+"rendering_category_transport" = "Trasporto";
+"rendering_category_others" = "Altri attributi della mappa";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Mostra le limitazioni di accesso";
+"rendering_attr_showSurfaceGrade_name" = "Mostra qualità strade";
+"rendering_attr_showSurfaces_name" = "Mostra il tipo di superficie delle strade";
+"rendering_attr_moreDetailed_name" = "Più dettagli";
+"rendering_attr_subwayMode_name" = "Percorsi metró";
+"rendering_attr_tramTrainRoutes_name" = "Percorsi tram e treno";
+"rendering_attr_coloredBuildings_name" = "Colora gli edifici per tipo";
+"rendering_attr_alpineHiking_name" = "Scala escursionismo alpino (SAC)";
+"rendering_attr_osmcTraces_name" = "Strato simboli escursionistici";
+"rendering_attr_showCycleRoutes_name" = "Mostra i percorsi per bicicletta";
+"rendering_attr_hideBuildings_name" = "Nascondi gli edifici";
+"rendering_attr_noPolygons_name" = "Nascondi i poligoni";
+"rendering_attr_noAdminboundaries_name" = "Nascondi i confini";
+"rendering_attr_publicTransportMode_name" = "Percorsi bus, filubus, servizi navetta";
+"OsmAnd Maps" = "Mappe OsmAnd";
+// Shared Strings
+"shared_string_back" = "Indietro";
+"shared_string_cancel" = "Abbandona";
+"shared_string_done" = "Fatto";
+"shared_string_update" = "Aggiorna";
+"shared_string_install" = "Installa";
+"shared_string_uninstall" = "Disinstalla";
+// HUD
+"hud_heading" = "Titolo";
+"hud_no_movement" = "Nessuno spostamento";
+// Favorites
+"fav_color" = "Colore";
+"fav_colors" = "Colori";
+"fav_name" = "Nomi";
+"fav_group" = "Gruppo";
+"groups" = "Gruppi";
+"favorite" = "Preferito";
+"fav_no_group" = "Nessun gruppo";
+"fav_import" = "Importa";
+"fav_import_title" = "Importa i preferiti";
+"fav_export_title" = "Esporta i preferiti";
+"fav_select_remove" = "Per favore selezionare i preferiti da eliminare";
+"fav_remove_q" = "Eliminare le voci selezionate?";
+"fav_export_select" = "Per favore selezionare i preferiti da esportare";
+"fav_create_group" = "Crea un nuovo gruppo";
+"fav_enter_group_name" = "Inserisci il nome del gruppo";

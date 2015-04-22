@@ -24,6 +24,7 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
+#import "OAUtilities.h"
 
 
 #define _(name) OAGPXListViewController__##name
@@ -211,8 +212,11 @@ typedef enum
     _titleView.text = OALocalizedString(@"tracks");
     [_exportButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 -(void)viewDidLoad

@@ -18,6 +18,7 @@
 #import "OANativeUtilities.h"
 #import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -130,6 +131,9 @@ typedef enum
     else
         _saveRemoveButton.frame = CGRectMake(DeviceScreenWidth - 38.0, 20.0, 36.0, 44.0);
     
+    if (self.newFavorite)
+        _saveRemoveButton.frame = CGRectMake(DeviceScreenWidth - 80.0, 20.0, 80.0, _saveRemoveButton.bounds.size.height);
+    
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -210,10 +214,11 @@ typedef enum
     [_favoriteNameButton setTitle:OALocalizedString(@"fav_name") forState:UIControlStateNormal];
     [_favoriteColorButton setTitle:OALocalizedString(@"fav_color") forState:UIControlStateNormal];
     [_favoriteGroupButton setTitle:OALocalizedString(@"fav_group") forState:UIControlStateNormal];
-
     
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {
@@ -308,24 +313,24 @@ typedef enum
     [_favoriteColorIcon setImage:favCol.icon];
     [_favoriteColorLabel setText:favCol.name];
     
-    [self.favoriteDistance setText:self.favorite.distance];
-    self.favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
+    [_favoriteDistance setText:self.favorite.distance];
+    _favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
     
     if (self.favorite.favorite->getGroup().isEmpty())
-        [self.favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
+        [_favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
     else
-        [self.favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
+        [_favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
     
-    [self.favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
-    [self.favoriteDistance setText:self.favorite.distance];
+    [_favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
+    [_favoriteDistance setText:self.favorite.distance];
     
     if (self.newFavorite) {
-        [self.saveRemoveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-        [self.saveRemoveButton setImage:nil forState:UIControlStateNormal];
+        [_saveRemoveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+        [_saveRemoveButton setImage:nil forState:UIControlStateNormal];
         
-        [self.distanceDirectionHolderView setHidden:YES];
-        [self.favoriteDirection setHidden:YES];
-        [self.favoriteDistance setHidden:YES];
+        [_distanceDirectionHolderView setHidden:YES];
+        [_favoriteDirection setHidden:YES];
+        [_favoriteDistance setHidden:YES];
     }
     
 }

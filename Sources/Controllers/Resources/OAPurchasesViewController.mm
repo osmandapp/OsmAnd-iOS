@@ -14,6 +14,7 @@
 #import "OAResourcesBaseViewController.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
+#import "OAUtilities.h"
 #import <Reachability.h>
 
 
@@ -46,6 +47,8 @@
     
     [_btnToolbarMaps setTitle:OALocalizedStringUp(@"maps") forState:UIControlStateNormal];
     [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
+    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void)viewDidLoad {

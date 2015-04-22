@@ -13,7 +13,7 @@
 #import <FFCircularProgressView.h>
 #import <MBProgressHUD.h>
 #import <FormatterKit/TTTArrayFormatter.h>
-
+#import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "FFCircularProgressView+isSpinning.h"
 #include "Localization.h"
@@ -63,6 +63,8 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [self.btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
     [self.btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
+    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void)viewDidLoad
@@ -305,8 +307,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -315,8 +317,8 @@
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

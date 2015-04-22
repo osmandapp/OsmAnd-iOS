@@ -19,6 +19,7 @@
 #import "OAFavoriteListViewController.h"
 #import "OAGPXPointTableViewCell.h"
 #import "OAMapViewController.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -125,8 +126,11 @@ typedef enum
 {
     _titleView.text = OALocalizedString(@"gpx_point");
     [_btnBack setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {
@@ -292,7 +296,7 @@ typedef enum
     CGSize constraint = CGSizeMake(tableView.frame.size.width - 30.0, 20000.0);
     CGSize size = [self.wptItem.point.desc boundingRectWithSize:constraint
                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                              attributes:@{NSFontAttributeName : [UIFont fontWithName:@"Avenir-Medium" size:12.0]}
+                                              attributes:@{NSFontAttributeName : [UIFont fontWithName:@"AvenirNext-Regular" size:12.0]}
                                                  context:nil].size;
     
     return MAX(size.height + 56.0, 44.0);

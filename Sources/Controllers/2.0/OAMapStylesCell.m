@@ -11,12 +11,32 @@
 
 @implementation OAMapStylesCell
 
+- (void)layoutComplexButton:(UIButton*)button
+{
+    // the space between the image and text
+    CGFloat spacing = 6.0;
+    
+    // lower the text and push it left so it appears centered
+    //  below the image
+    CGSize imageSize = button.imageView.image.size;
+    button.titleEdgeInsets = UIEdgeInsetsMake(0.0, - imageSize.width, - (20.0 + spacing), 0.0);
+    
+    // raise the image and push it right so it appears centered
+    //  above the text
+    CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
+    button.imageEdgeInsets = UIEdgeInsetsMake(- (titleSize.height + spacing), 0.0, -4.0, - titleSize.width);
+}
+
 - (void)awakeFromNib
 {
     [_mapTypeButtonView setTitle:OALocalizedString(@"m_style_overview") forState:UIControlStateNormal];
     [_mapTypeButtonCar setTitle:OALocalizedString(@"m_style_car") forState:UIControlStateNormal];
     [_mapTypeButtonWalk setTitle:OALocalizedString(@"m_style_walk") forState:UIControlStateNormal];
     [_mapTypeButtonBike setTitle:OALocalizedString(@"m_style_bicycle") forState:UIControlStateNormal];
+    [self layoutComplexButton:self.mapTypeButtonView];
+    [self layoutComplexButton:self.mapTypeButtonCar];
+    [self layoutComplexButton:self.mapTypeButtonWalk];
+    [self layoutComplexButton:self.mapTypeButtonBike];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

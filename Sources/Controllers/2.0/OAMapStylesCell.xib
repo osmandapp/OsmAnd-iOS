@@ -22,7 +22,7 @@
                                 <rect key="frame" x="11" y="10" width="60" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="11"/>
                                 <inset key="titleEdgeInsets" minX="-24" minY="30" maxX="0.0" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="12"/>
                                 <state key="normal" title="Overview" image="btn_map_type_icon_view_selected.png">
@@ -33,7 +33,7 @@
                                 <rect key="frame" x="79" y="10" width="60" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="11"/>
                                 <inset key="titleEdgeInsets" minX="-23" minY="30" maxX="0.0" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="18" minY="0.0" maxX="0.0" maxY="12"/>
                                 <state key="normal" title="Car" image="btn_map_type_icon_car_selected.png">
@@ -44,7 +44,7 @@
                                 <rect key="frame" x="147" y="10" width="60" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="11"/>
                                 <inset key="titleEdgeInsets" minX="-12" minY="30" maxX="0.0" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="15" minY="0.0" maxX="0.0" maxY="12"/>
                                 <state key="normal" title="Walking" image="btn_map_type_icon_walk_selected.png">
@@ -55,7 +55,7 @@
                                 <rect key="frame" x="215" y="10" width="60" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.32549019610000002" green="0.42745098040000001" blue="0.99607843139999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" name="Avenir-Roman" family="Avenir" pointSize="11"/>
+                                <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="11"/>
                                 <inset key="titleEdgeInsets" minX="-24" minY="30" maxX="0.0" maxY="0.0"/>
                                 <inset key="imageEdgeInsets" minX="13" minY="0.0" maxX="0.0" maxY="12"/>
                                 <state key="normal" title="Bicycle" image="btn_map_type_icon_bike_selected.png">

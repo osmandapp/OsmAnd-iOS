@@ -15,5 +15,6 @@
 
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
 + (NSString *)drawablePostfix;
++ (void)layoutComplexButton:(UIButton*)button;
 
 @end

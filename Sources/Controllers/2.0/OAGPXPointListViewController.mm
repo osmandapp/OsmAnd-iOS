@@ -13,6 +13,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXPointViewController.h"
+#import "OAUtilities.h"
 
 #import "OsmAndApp.h"
 
@@ -66,8 +67,11 @@ typedef enum
 {
     _titleView.text = OALocalizedString(@"gpx_waypoints");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {

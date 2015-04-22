@@ -12,6 +12,7 @@
 #import "OADefaultFavorite.h"
 #import "OAGPXListViewController.h"
 #import "OADefaultFavorite.h"
+#import "OAUtilities.h"
 
 #import "OsmAndApp.h"
 
@@ -40,8 +41,11 @@
     _titleView.text = OALocalizedString(@"fav_color");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+    
     [_favoriteButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoriteButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {

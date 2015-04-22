@@ -20,6 +20,7 @@
 #import "OALog.h"
 #import "OAManageResourcesViewController.h"
 #import "OAIAPHelper.h"
+#import "OAUtilities.h"
 
 #include "Localization.h"
 
@@ -109,8 +110,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 -(void)applyLocalization
 {
-    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+    [_btnToolbarMaps setTitle:OALocalizedStringUp(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
+    
+    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
+    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void)viewDidLoad

@@ -20,6 +20,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -128,8 +129,11 @@ typedef enum
 - (void)applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {

@@ -174,7 +174,7 @@
     NSArray *arrOverlayUnderlay = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
                                       @"cells": @[
                                               @{@"name": OALocalizedString(@"map_settings_over"),
-                                                @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : @"None",
+                                                @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : OALocalizedString(@"map_settings_none"),
                                                 @"type": @"OASettingsCell"},
                                               @{@"name": OALocalizedString(@"map_settings_under"),
                                                 @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : OALocalizedString(@"map_settings_none"),

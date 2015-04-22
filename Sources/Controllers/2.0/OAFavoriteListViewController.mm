@@ -14,6 +14,7 @@
 #import "OAMapViewController.h"
 #import "OAGPXListViewController.h"
 #import "OADefaultFavorite.h"
+#import "OAUtilities.h"
 
 #import "OsmAndApp.h"
 
@@ -72,6 +73,8 @@ kFavoriteCellType;
         
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
     [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.favoritesButtonView];
+    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {

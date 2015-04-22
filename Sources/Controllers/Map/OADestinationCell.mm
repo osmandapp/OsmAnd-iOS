@@ -91,7 +91,7 @@
     
     if (!self.distanceLabel) {
         self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-        _distanceLabel.font = [UIFont fontWithName:@"Avenir-Black" size:16.0];
+        _distanceLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
         _distanceLabel.textColor = [UIColor colorWithRed:0.369f green:0.510f blue:0.918f alpha:1.00f];
         _distanceLabel.minimumScaleFactor = 0.7;
@@ -100,7 +100,7 @@
     
     if (!self.descLabel) {
         self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-        _descLabel.font = [UIFont fontWithName:@"Avenir-Roman" size:13.0];
+        _descLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
         _descLabel.textAlignment = NSTextAlignmentLeft;
         _descLabel.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
         //_descLabel.minimumScaleFactor = 0.7;

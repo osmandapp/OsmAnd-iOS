@@ -151,6 +151,15 @@
         _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
         _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
         _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+
+        _buttonFavorite.frame = _backView1.bounds;
+        _buttonShare.frame = _backView2.bounds;
+        _buttonDirection.frame = _backView3.bounds;
+        
+        [self layoutComplexButton:self.buttonFavorite isPortrait:NO];
+        [self layoutComplexButton:self.buttonShare isPortrait:NO];
+        [self layoutComplexButton:self.buttonDirection isPortrait:NO];
+
         
     } else {
         
@@ -171,8 +180,43 @@
         _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
         _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
         _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+        
+        _buttonFavorite.frame = _backView1.bounds;
+        _buttonShare.frame = _backView2.bounds;
+        _buttonDirection.frame = _backView3.bounds;
+
+        [self layoutComplexButton:self.buttonFavorite isPortrait:YES];
+        [self layoutComplexButton:self.buttonShare isPortrait:YES];
+        [self layoutComplexButton:self.buttonDirection isPortrait:YES];
     }
     
+}
+
+- (void)layoutComplexButton:(UIButton*)button isPortrait:(BOOL)isPortrait
+{
+
+    CGFloat spacingExt = 18.0;
+    if (!isPortrait)
+        spacingExt = 30.0;
+    
+
+    // the space between the image and text
+    CGFloat spacing = 6.0;
+    
+    // lower the text and push it left so it appears centered
+    //  below the image
+    CGSize imageSize = button.imageView.image.size;
+    button.titleEdgeInsets = UIEdgeInsetsMake(
+                                              0.0, - imageSize.width, - (spacingExt + spacing), 0.0);
+    
+    // raise the image and push it right so it appears centered
+    //  above the text
+    CGSize titleSize = [button.titleLabel.text sizeWithAttributes:@{NSFontAttributeName: button.titleLabel.font}];
+    button.imageEdgeInsets = UIEdgeInsetsMake(
+                                              - (titleSize.height + spacing), 0.0, -0.0, - titleSize.width);
+    
+    button.titleLabel.numberOfLines = 2;
+    button.titleLabel.textAlignment = NSTextAlignmentCenter;
 }
 
 -(void)setTargetPoint:(OATargetPoint *)targetPoint

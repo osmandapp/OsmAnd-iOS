@@ -8,6 +8,8 @@
 
 #import "OAMapStyleSettings.h"
 #import "OsmAndApp.h"
+#import "OALog.h"
+#import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -101,15 +103,24 @@
 
             continue;
         
-        //NSLog(@"name = %@ title = %@ decs = %@ type = %d", name, p->title.toNSString(), p->description.toNSString(), p->dataType);
+        //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->title.toNSString(), p->description.toNSString(), p->category.toNSString());
+        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
+        NSString *attrLocText = OALocalizedString(attrLocKey);
+        if ([attrLocKey isEqualToString:attrLocText])
+            attrLocText = p->title.toNSString();
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
         param.name = name;
-        param.title = p->title.toNSString();
+        param.title = attrLocText;
         param.category = p->category.toNSString();
-        
-        [categories setObject:[param.category capitalizedString] forKey:param.category];
+
+        NSString *categoryLocKey = [NSString stringWithFormat:@"rendering_category_%@", param.category];
+        NSString *categoryLocText = OALocalizedString(categoryLocKey);
+        if ([categoryLocKey isEqualToString:categoryLocText])
+            categoryLocText = [param.category capitalizedString];
+
+        [categories setObject:categoryLocText forKey:param.category];
         
         NSMutableSet *values = [NSMutableSet set];
         [values addObject:@""];

@@ -165,6 +165,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 -(void)applyLocalization
 {
+    [super applyLocalization];
+
     _titleView.text = OALocalizedString(@"res_mapsres");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
@@ -203,7 +205,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _updateCouneView.layer.cornerRadius = 10.0;
     _updateCouneView.layer.masksToBounds = YES;
     _updateCouneView.backgroundColor = [UIColor colorWithRed:255.0/255.0 green:143.0/255.0 blue:0.0 alpha:1.0];
-    _updateCouneView.font = [UIFont fontWithName:@"Avenir-Roman" size:12.0];
+    _updateCouneView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
     _updateCouneView.textAlignment = NSTextAlignmentCenter;
     _updateCouneView.textColor = [UIColor whiteColor];
     
@@ -228,7 +230,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         _freeTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 6.0, 46.0, 48.0)];
         _freeTextLabel.backgroundColor = bannerColor;
         _freeTextLabel.textColor = [UIColor whiteColor];
-        _freeTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
+        _freeTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
         _freeTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _freeTextLabel.numberOfLines = 2;
         
@@ -1374,8 +1376,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -1384,8 +1386,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
@@ -1395,8 +1397,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
                                           reuseIdentifier:cellTypeId];
 
-            cell.textLabel.font = [UIFont fontWithName:@"Avenir-Light" size:17.0];
-            cell.detailTextLabel.font = [UIFont fontWithName:@"Avenir-Light" size:12.0];
+            cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
+            cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];

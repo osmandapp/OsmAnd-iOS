@@ -254,5 +254,28 @@
 // Help
 "help_quiz" = "Quiz";
 
+// Rendering categories
+"rendering_category_hide" = "Hide";
+"rendering_category_routes" = "Routes";
+"rendering_category_details" = "Details";
+"rendering_category_transport" = "Transport";
+"rendering_category_others" = "Other map attributes";
 
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Show access restrictions";
+"rendering_attr_showSurfaceGrade_name" = "Show road quality";
+"rendering_attr_showSurfaces_name" = "Show road surface";
+"rendering_attr_moreDetailed_name" = "More details";
+"rendering_attr_subwayMode_name" = "Subway routes";
+"rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
+"rendering_attr_streetLighting_name" = "Street lighting";
+"rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
+"rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
+"rendering_attr_osmcTraces_name" = "Hiking symbol overlay";
+"rendering_attr_showCycleRoutes_name" = "Show cycle routes";
+"rendering_attr_hideBuildings_name" = "Hide buildings";
+"rendering_attr_noPolygons_name" = "Hide polygons";
+"rendering_attr_noAdminboundaries_name" = "Hide boundaries";
+"rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
+"rendering_attr_contourLines_name" = "Show contour lines";
 

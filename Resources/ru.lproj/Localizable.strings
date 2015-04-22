@@ -244,3 +244,26 @@
 // Colors
 "col_purple" = "Фиолетовый";
 "loc_access_denied_desc" = "Доступ к службе геолокации запрещен";
+// Rendering categories
+"rendering_category_hide" = "Скрыть";
+"rendering_category_routes" = "Маршруты";
+"rendering_category_details" = "Подробности";
+"rendering_category_transport" = "Транспорт";
+"rendering_category_others" = "Другие атрибуты карты";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Отображать ограничения доступа";
+"rendering_attr_showSurfaceGrade_name" = "Отображать качество дорог";
+"rendering_attr_showSurfaces_name" = "Отображать тип покрытия";
+"rendering_attr_moreDetailed_name" = "Более подробно";
+"rendering_attr_subwayMode_name" = "Маршруты метро";
+"rendering_attr_tramTrainRoutes_name" = "Маршруты трамваев и поездов";
+"rendering_attr_streetLighting_name" = "Уличное освещение";
+"rendering_attr_coloredBuildings_name" = "Цветовая маркировка зданий по типу";
+"rendering_attr_alpineHiking_name" = "Пеший горный туризм по шкале (SAC)";
+"rendering_attr_osmcTraces_name" = "Наложение символов пешего туризма";
+"rendering_attr_showCycleRoutes_name" = "Отображать веломаршруты";
+"rendering_attr_hideBuildings_name" = "Скрыть строения";
+"rendering_attr_noPolygons_name" = "Скрыть полигоны";
+"rendering_attr_noAdminboundaries_name" = "Скрыть границы";
+"rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршруток";
+"rendering_attr_contourLines_name" = "Показывать горизонтали";

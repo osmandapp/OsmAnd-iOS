@@ -613,15 +613,29 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                    countStyle:NSByteCountFormatterCountStyleFile];
         
-        NSString* message = nil;
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-            message = [NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_cell_q"),
-                                        stringifiedSize];
-        else
-            message = [NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_wifi_q"),
-                                        stringifiedSize];
+        NSMutableString* message = [[NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_q"),
+                                     stringifiedSize] mutableCopy];
         
-        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"map_download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"map_nothanks") otherButtonTitles:OALocalizedString(@"map_download_now"), OALocalizedString(@"map_remind"), nil];
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+        {
+            [message appendString:@"\n\n"];
+            [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"),
+                       stringifiedSize]];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"incur_high_charges")];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+        }
+        else
+        {
+            [message appendString:@"\n\n"];
+            [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"),
+                                   stringifiedSize]];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+        }
+        
+        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), OALocalizedString(@"map_remind"), nil];
         mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
         [mapDownloadAlert show];
     }

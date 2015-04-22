@@ -257,7 +257,7 @@ typedef enum
     
     // Generate menu items
     GpxTableGroup* itemData = [[GpxTableGroup alloc] init];
-    itemData.groupName = OALocalizedString(@"gpx_import_export");
+    itemData.groupName = OALocalizedString(@"import_export");
     itemData.type = kGPXCellTypeMenu;
     self.menuItems = @[@{@"text": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"favorite_import_icon",
@@ -355,7 +355,7 @@ typedef enum
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0 && self.gpxList.count > 0)
         return OALocalizedString(@"tracks");
-    return OALocalizedString(@"gpx_import_export");
+    return OALocalizedString(@"import_export");
 }
 
 
@@ -382,7 +382,7 @@ typedef enum
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
             [cell.textView setText:item.gpxTitle];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
-            [cell.descriptionPointsView setText:OALocalizedString(@"%d gpx_points_b", item.wptPoints)];
+            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             if (_isExport) {
                 if (indexPath.row == _selectedIndex)
                     [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];

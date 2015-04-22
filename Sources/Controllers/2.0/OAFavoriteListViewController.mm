@@ -258,7 +258,7 @@ kFavoriteCellType;
     
     // Generate menu items
     FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
-    itemData.groupName = OALocalizedString(@"fav_import_export");
+    itemData.groupName = OALocalizedString(@"import_export");
     itemData.type = kFavoriteCellTypeMenu;
     self.menuItems = @[@{@"text": OALocalizedString(@"fav_import_title"),
                          @"icon": @"favorite_import_icon",
@@ -468,7 +468,7 @@ kFavoriteCellType;
 -(NSString*)getSortedTitleForHeaderInSection:(NSInteger)section {
     if (section == 0)
         return OALocalizedString(@"favorites");
-    return OALocalizedString(@"fav_import_export");
+    return OALocalizedString(@"import_export");
 }
 
 -(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {

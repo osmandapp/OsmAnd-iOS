@@ -173,18 +173,25 @@
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:totalDownloadSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSString* message = nil;
+    NSMutableString* message  = [[NSString stringWithFormat:@"%d %@",
+                                  [items count],
+                                  OALocalizedString(@"res_updates_avail_q")] mutableCopy];
+    
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_updates_avail_cell_q"),
-                                    [items count],
-                                    stringifiedSize];
+        [message appendString:@" "];
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"incur_high_charges")];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_updates_avail_wifi_q"),
-                                    [items count],
-                                    stringifiedSize];
+        [message appendString:@" "];
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil

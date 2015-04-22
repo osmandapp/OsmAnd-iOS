@@ -124,10 +124,10 @@
 {
     [super viewDidLoad];
 
-    [_menuButtonMaps setTitle:OALocalizedString(@"menu_maps") forState:UIControlStateNormal];
+    [_menuButtonMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"menu_my_places") forState:UIControlStateNormal];
-    [_menuButtonMapsAndResources setTitle:OALocalizedString(@"menu_mapsres") forState:UIControlStateNormal];
-    [_menuButtonSettings setTitle:OALocalizedString(@"menu_settings") forState:UIControlStateNormal];
+    [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
+    [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonQuiz setTitle:OALocalizedString(@"menu_feedback") forState:UIControlStateNormal];
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_about") forState:UIControlStateNormal];
 }

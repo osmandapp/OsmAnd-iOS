@@ -267,3 +267,4 @@
 "rendering_attr_noAdminboundaries_name" = "Скрыть границы";
 "rendering_attr_publicTransportMode_name" = "Маршруты автобусов, троллейбусов и маршруток";
 "rendering_attr_contourLines_name" = "Показывать горизонтали";
+"rendering_attr_OSMMapperAssistant_name" = "Помощник картографа OSM";

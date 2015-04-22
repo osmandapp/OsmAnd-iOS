@@ -99,12 +99,12 @@
     [sectionMapStyle setObject:@"OAMapStylesCell" forKey:@"type"];
 
     NSMutableDictionary *section0fav = [NSMutableDictionary dictionary];
-    [section0fav setObject:OALocalizedString(@"map_settings_fav") forKey:@"name"];
+    [section0fav setObject:OALocalizedString(@"favorite") forKey:@"name"];
     [section0fav setObject:@"" forKey:@"value"];
     [section0fav setObject:@"OASwitchCell" forKey:@"type"];
 
     NSMutableDictionary *section0tracks = [NSMutableDictionary dictionary];
-    [section0tracks setObject:OALocalizedString(@"map_settings_tracks") forKey:@"name"];
+    [section0tracks setObject:OALocalizedString(@"tracks") forKey:@"name"];
     [section0tracks setObject:@"" forKey:@"value"];
     [section0tracks setObject:@"OASettingsCell" forKey:@"type"];
 

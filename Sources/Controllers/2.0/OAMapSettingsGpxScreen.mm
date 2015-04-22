@@ -61,7 +61,7 @@
 
 - (void)setupView
 {
-    title = OALocalizedString(@"map_settings_tracks");
+    title = OALocalizedString(@"tracks");
 }
 
 #pragma mark - UITableViewDataSource

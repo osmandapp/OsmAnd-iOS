@@ -23,11 +23,10 @@
 "fav_colors" = "Colors";
 "fav_name" = "Name";
 "fav_group" = "Group";
-"fav_groups" = "Groups";
+"groups" = "Groups";
 "favorite" = "Favorite";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
-"fav_import_export" = "Import/Export";
 "fav_import" = "Import";
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
@@ -35,14 +34,13 @@
 "fav_remove_q" = "Remove selected favorite items?";
 "fav_export_select" = "Please select favorites to export";
 "fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
-"fav_your_groups" = "Groups";
 "fav_create_group" = "Create new group";
 "fav_enter_group_name" = "Enter group name";
 "fav_exists" = "Favorite with name \"%@\" already exists";
 "fav_ignore" = "Ignore";
 "fav_rename" = "Rename";
 "fav_replace" = "Replace";
-"fav_replace_all" = "Replace All";
+"fav_replace_all" = "Replace all";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 
@@ -59,11 +57,10 @@
 // GPX
 "gpx_point" = "Point";
 "gpx_waypoints" = "Waypoints";
-"gpx_points" = "Points:";
-"gpx_points_b" = "points";
+"gpx_points" = "Point(s)";
 "gpx_export" = "Export";
 
-"gpx_import_export" = "Import/Export";
+"import_export" = "Import/Export";
 
 "gpx_import_title" = "Import track";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
@@ -96,8 +93,6 @@
 "m_style_bicycle" = "Bicycle";
 
 "map_settings_map" = "Map";
-"map_settings_fav" = "Favorite";
-"map_settings_tracks" = "Tracks";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
 "map_settings_mode" = "Application mode";
@@ -107,8 +102,6 @@
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
-"map_settings_map_over" = "Map Overlay";
-"map_settings_map_under" = "Map Underlay";
 "map_settings_none" = "None";
 "map_settings_offline" = "Styles for offline maps";
 "map_settings_online" = "Online maps";
@@ -142,17 +135,21 @@
 "purchases" = "Purchases";
 
 // Purchases
-"prch_maps" = "Maps";
 "prch_addons" = "Addons";
 "prch_ski_q" = "Please turn on the \"Ski map\" style in the Map Settings";
-"prch_nau_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %@ over cellular network. This may incur high charges. You may install it later through the Maps & Resources. Proceed?";
-"prch_nau_wifi_q" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.\n\nDowloading requires %@ over WiFi network. You may install it later through the Maps & Resources. Proceed?";
-"prch_download" = "Download";
-"prch_nothanks" = "No, thanks";
-"prch_download_now" = "Download map now";
+
+"prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
+"prch_nau_q2_cell" = "Dowloading requires %@ over cellular network.";
+"incur_high_charges" = "This may incur high charges.";
+"prch_nau_q2_wifi" = "Dowloading requires %@ over WiFi network.";
+"prch_nau_q3" = "You may install it later through the Maps & Resources.";
+"proceed_q" = "Proceed?";
+
+"download" = "Download";
+"nothanks" = "No, thanks";
+"download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
-"prch_items_failed" = "items were not restored. Please try again.";
-"prch_item_failed" = "One item was not restored. Please try again.";
+"prch_items_failed" = "item(s) were not restored. Please try again.";
 
 // Resources
 "res_mapsres" = "Maps & Resources";
@@ -172,35 +169,30 @@
 "res_wsea_map" = "World seamarks basemap";
 "res_wmap" = "Worldwide overview map";
 "res_dmap" = "Detailed overview map";
-"res_ent_region_map" = "Map of entire region";
 "res_map_of_region" = "Map of the region";
-"res_update_no_space" = "Not enough space to update %@. %@ is needed. Please free up some space.";
-"res_install_no_space" = "Not enough space to install %@. %@ is needed. Please free up some space.";
+"res_update_no_space" = "Not enough space to update";
+"res_install_no_space" = "Not enough space to install";
+"res_no_space_free" = "is needed. Please free up some space.";
 "res_free_exp" = "You spent all free downloads. Please purchase continent to download / update the maps.";
-"res_upd_avail_cell_q" = "An update is available for %@. %@ will be downloaded over cellular network. This may incur high charges. Proceed?";
-"res_upd_avail_wifi_q" = "An update is available for %@. %@ will be downloaded over WiFi network. Proceed?";
-"res_inst_avail_cell_q" = "Intallation of %@ needs %@ to be downloaded over cellular network. This may incur high charges. Proceed?";
-"res_inst_avail_wifi_q" = "Intallation of %@ needs %@ to be downloaded over WiFi network. Proceed?";
-"res_cancel_upd_q" = "You're going to cancel %@ update. All downloaded data will be lost. Proceed?";
-"res_cancel_inst_q" = "You're going to cancel %@ installation. All downloaded data will be lost. Proceed?";
-"res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog. Proceed?";
-"res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed. Proceed?";
+"res_upd_avail_q" = "An update is available for";
+"res_inst_avail_cell_q" = "Intallation of %@ needs %@ to be downloaded over cellular network.";
+"res_inst_avail_wifi_q" = "Intallation of %@ needs %@ to be downloaded over WiFi network.";
+"res_cancel_upd_q" = "You're going to cancel %@ update.";
+"data_will_be_lost" = " All downloaded data will be lost.";
+"res_cancel_inst_q" = "You're going to cancel %@ installation.";
+"res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
+"res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "res_details" = "Details";
 "res_type" = "Type";
-"res_map" = "Map";
 "res_unknown" = "Unknown";
 "res_size" = "Size";
 "res_created_on" = "Created on";
 "res_update_all" = "Update all";
-"res_updates_no_space" = "Not enough space to install %d updates. %@ is needed. Please free up some space.";
-"res_updates_avail_cell_q" = "%d updates are available. %@ will be downloaded over cellular network. This may incur high charges. Proceed?";
-"res_updates_avail_wifi_q" = "%d updates are available. %@ will be downloaded over WiFi network. Proceed?";
+"res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
+"res_updates_avail_q" = "update(s) are available.";
 
 // Menu
-"menu_maps" = "Maps";
 "menu_my_places" = "My Places";
-"menu_mapsres" = "Maps & Resources";
-"menu_settings" = "Settings";
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
 
@@ -214,11 +206,7 @@
 "units_mph" = "mph";
 
 // Map
-"map_inst_det_map_cell_q" = "Install detailed map overview to get more information about your locations.\n\nDowloading requires %@ over cellular network. This may incur high charges. Proceed?";
-"map_inst_det_map_wifi_q" = "Install detailed map overview to get more information about your locations.\n\nDowloading requires %@ over WiFi network. Proceed?";
-"map_download" = "Download";
-"map_nothanks" = "No, thanks";
-"map_download_now" = "Download map now";
+"map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
 "map_no_address" = "Address is not known yet";
 

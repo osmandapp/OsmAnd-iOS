@@ -133,7 +133,7 @@
 {
     switch (section) {
         case 0:
-            return OALocalizedString(@"prch_maps");
+            return OALocalizedString(@"maps");
             
         case 1:
             return OALocalizedString(@"prch_addons");
@@ -261,13 +261,25 @@
             NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                        countStyle:NSByteCountFormatterCountStyleFile];
             
-            NSString* message = nil;
+            NSMutableString* message = [OALocalizedString(@"prch_nau_q1") mutableCopy];
+            [message appendString:@"\n\n"];
             if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-                message = [NSString stringWithFormat:OALocalizedString(@"prch_nau_q"), stringifiedSize];
+            {
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
+                [message appendString:@" "];
+                [message appendString:OALocalizedString(@"incur_high_charges")];
+            }
             else
-                message = [NSString stringWithFormat:OALocalizedString(@"prch_nau_wifi_q"), stringifiedSize];
+            {
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
+            }
             
-            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"prch_download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"prch_nothanks") otherButtonTitles:OALocalizedString(@"prch_download_now"), nil];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"prch_nau_q3")];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+            
+            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
             mapDownloadAlert.tag = 100;
             [mapDownloadAlert show];
         }
@@ -304,11 +316,7 @@
         [_loadProductsProgressHUD hide:YES];
 
         if (errorsCount > 0) {
-            NSString *text;
-            if (errorsCount > 1)
-                text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
-            else
-                text = OALocalizedString(@"prch_item_failed");
+            NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             
             UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:text delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
             [alert show];

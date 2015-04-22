@@ -99,7 +99,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     switch (localResource->type)
     {
         case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            [tValues addObject:OALocalizedString(@"res_map")];
+            [tValues addObject:OALocalizedString(@"map_settings_map")];
             break;
 
         default:

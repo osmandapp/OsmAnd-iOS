@@ -230,7 +230,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"res_ent_region_map");
+                    return OALocalizedString(@"res_map_of_region");
                 else
                     //return OALocalizedString(@"Map of %@", region.name);
                     return OALocalizedString(@"%@", region.name);
@@ -327,22 +327,32 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:size
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSString* message = nil;
+    NSMutableString* text;
     if (isUpdate)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_update_no_space"),
-                                    resourceName,
-                                    stringifiedSize];
+        text = [OALocalizedString(@"res_update_no_space") mutableCopy];
+        [text appendString:@" "];
+        [text appendString:resourceName];
+        [text appendString:@"."];
+        [text appendString:@" "];
+        [text appendString:stringifiedSize];
+        [text appendString:@" "];
+        [text appendString:OALocalizedString(@"res_no_space_free")];
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_install_no_space"),
-                                    resourceName,
-                                    stringifiedSize];
+        text = [OALocalizedString(@"res_install_no_space") mutableCopy];
+        [text appendString:@" "];
+        [text appendString:resourceName];
+        [text appendString:@"."];
+        [text appendString:@" "];
+        [text appendString:stringifiedSize];
+        [text appendString:@" "];
+        [text appendString:OALocalizedString(@"res_no_space_free")];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
-                                message:message
+                                message:text
                        cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_ok")]
                        otherButtonItems:nil] show];
 }
@@ -387,18 +397,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:resourceInRepository->packageSize
                                                                countStyle:NSByteCountFormatterCountStyleFile];
 
-    NSString* message = nil;
+    NSMutableString* message;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_upd_avail_cell_q"),
-                                    resourceName,
-                                    stringifiedSize];
+        message = [OALocalizedString(@"res_upd_avail_q") mutableCopy];
+        [message appendString:@" "];
+        [message appendString:resourceName];
+        [message appendString:@"."];
+        [message appendString:@" "];
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"incur_high_charges")];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];        
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_upd_avail_wifi_q"),
-                   resourceName,
-                   stringifiedSize];
+        message = [OALocalizedString(@"res_upd_avail_q") mutableCopy];
+        [message appendString:@" "];
+        [message appendString:resourceName];
+        [message appendString:@"."];
+        [message appendString:@" "];
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
@@ -429,18 +451,25 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return;
     }
 
-    NSString* message = nil;
+    NSMutableString* message;
     if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_cell_q"),
                                     resourceName,
-                                    stringifiedSize];
+                                    stringifiedSize] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"incur_high_charges")];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
+        
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
-                                    resourceName,
-                                    stringifiedSize];
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_inst_avail_wifi_q"),
+                    resourceName,
+                    stringifiedSize] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
@@ -548,20 +577,28 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if (!resource)
         return;
 
-    NSString* message = nil;
+    NSMutableString* message;
     if (isUpdate)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_cancel_upd_q"),
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_upd_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]];
+                                           withRegionName:YES]] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"data_will_be_lost")];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]];
+                                           withRegionName:YES]] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"data_will_be_lost")];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
 
     [[[UIAlertView alloc] initWithTitle:nil
@@ -586,20 +623,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     //BOOL isInstalled = (std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(item.resource) != nullptr);
     BOOL isInstalled = (item.worldRegion != nil);
     
-    NSString* message = nil;
+    NSMutableString* message;
     if (isInstalled)
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"),
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"),
                                     [self.class titleOfResource:item.resource
                                                        inRegion:item.worldRegion
-                                                 withRegionName:YES]];
+                                                 withRegionName:YES]] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
     else
     {
-        message = [NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"),
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"),
                                     [self.class titleOfResource:item.resource
                                                        inRegion:item.worldRegion
-                                                 withRegionName:YES]];
+                                                 withRegionName:YES]] mutableCopy];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"proceed_q")];
     }
     
     [[[UIAlertView alloc] initWithTitle:nil

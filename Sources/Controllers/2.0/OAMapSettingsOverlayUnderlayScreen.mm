@@ -65,12 +65,12 @@ typedef enum
         
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
-            title = OALocalizedString(@"map_settings_map_over");
+            title = OALocalizedString(@"map_settings_over");
             settingsScreen = EMapSettingsScreenOverlay;
 
         } else {
             _mapSettingType = EMapSettingUnderlay;
-            title = OALocalizedString(@"map_settings_map_under");
+            title = OALocalizedString(@"map_settings_under");
             settingsScreen = EMapSettingsScreenUnderlay;
         }
         

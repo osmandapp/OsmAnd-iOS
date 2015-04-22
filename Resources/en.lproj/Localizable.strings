@@ -178,7 +178,7 @@
 "res_inst_avail_cell_q" = "Intallation of %@ needs %@ to be downloaded over cellular network.";
 "res_inst_avail_wifi_q" = "Intallation of %@ needs %@ to be downloaded over WiFi network.";
 "res_cancel_upd_q" = "You're going to cancel %@ update.";
-"data_will_be_lost" = " All downloaded data will be lost.";
+"data_will_be_lost" = "All downloaded data will be lost.";
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";
 "res_uninst_managed_q" = "You're going to uninstall %@. You can reinstall it later from catalog.";
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";

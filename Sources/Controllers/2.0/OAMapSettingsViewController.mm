@@ -217,7 +217,7 @@
     if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
     } else {
-        return CGRectMake(0.0, 20.0, kMapSettingsPopupWidth, DeviceScreenHeight - 20.0);
+        return CGRectMake(0.0, 20.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsPopupWidth : 320.0, DeviceScreenHeight - 20.0);
     }
 }
 

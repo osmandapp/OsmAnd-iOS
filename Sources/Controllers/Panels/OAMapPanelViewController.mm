@@ -420,8 +420,11 @@
         else
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
     } else {
+        
+        CGFloat popupWidth = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsPopupWidth : 320.0;
+        
         if (_mapSettings)
-            frame = CGRectMake(kMapSettingsPopupWidth, 0.0, self.view.bounds.size.width - kMapSettingsPopupWidth, self.view.bounds.size.height);
+            frame = CGRectMake(popupWidth, 0.0, self.view.bounds.size.width - popupWidth, self.view.bounds.size.height);
         else
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
     }

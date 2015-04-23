@@ -110,7 +110,7 @@
 
 // Intro
 "intro_skip" = "Skip";
-"intro_download" = "Download map";
+"intro_download" = "Download\nmap";
 "intro_next" = "Next";
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";

@@ -56,6 +56,20 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat topY = 70.0;
+            CGFloat buttonHeight = 50.0;
+            CGFloat scrollHeight = big - topY;
+            
+            self.scrollView.frame = CGRectMake(0.0, topY, small, scrollHeight);
+            self.scrollView.contentSize = CGSizeMake(small, scrollHeight);
+            
+            self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, small + 2.0, buttonHeight);
+            self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, small + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
+            
+            self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
+            self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
+            self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, small + 2.0, buttonHeight);
             
         } else {
             
@@ -79,6 +93,20 @@
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat topY = 70.0;
+            CGFloat buttonHeight = 50.0;
+            CGFloat scrollHeight = small - topY;
+            
+            self.scrollView.frame = CGRectMake(0.0, topY, big, scrollHeight);
+            self.scrollView.contentSize = CGSizeMake(big, scrollHeight);
+            
+            self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, big + 2.0, buttonHeight);
+            self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, big + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, big + 2.0, buttonHeight);
+            
+            self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, big + 2.0, buttonHeight);
+            self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, big + 2.0, buttonHeight);
+            self.menuButtonHelp.frame = CGRectMake(-2.0, scrollHeight - buttonHeight, big + 2.0, buttonHeight);
             
         } else {
             

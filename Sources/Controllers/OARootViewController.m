@@ -165,6 +165,10 @@
     _lastMenuOriginViewController = parentViewController;
     _lastMenuViewController = menuViewController;
 
+    [self.navigationController pushViewController:menuViewController
+                                         animated:animated];
+
+    /*
     // Open menu actually
     if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
     {
@@ -184,6 +188,7 @@
                                   permittedArrowDirections:UIPopoverArrowDirectionAny
                                                   animated:animated];
     }
+     */
 
     [self setNeedsStatusBarAppearanceUpdate];
 }

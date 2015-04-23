@@ -22,6 +22,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *favoriteButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (assign, nonatomic) BOOL hideToolbar;
+
 -(id)initWithFavorite:(OAFavoriteItem*)item;
 
 @end

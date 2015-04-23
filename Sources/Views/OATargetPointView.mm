@@ -319,6 +319,9 @@
     
     if (favoriteViewController)
     {
+        [self.navController pushViewController:favoriteViewController animated:YES];
+
+        /*
         if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
         {
             // For iPhone and iPod, push menu to navigation controller
@@ -335,6 +338,7 @@
                              permittedArrowDirections:UIPopoverArrowDirectionAny
                                              animated:YES];
         }
+         */
     }
     
     [self.delegate targetPointAddFavorite];

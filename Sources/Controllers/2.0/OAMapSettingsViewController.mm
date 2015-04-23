@@ -162,7 +162,14 @@
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                 
+                CGFloat topY = 0.0;
+                CGFloat mapHeight = big - topY;
+                CGFloat mapWidth = small - 290.0;
                 
+                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
+                _tableView.frame = CGRectMake(mapWidth, 64.0, small - mapWidth, big - 64.0);
+
             } else {
                 
                 CGFloat topY = 0.0;
@@ -180,6 +187,13 @@
             
             if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
                 
+                CGFloat topY = 0.0;
+                CGFloat mapHeight = small - topY;
+                CGFloat mapWidth = big - 290.0;
+                
+                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
+                _tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
                 
             } else {
                 
@@ -200,7 +214,7 @@
 
 -(CGRect)viewFramePopup:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
     } else {
         return CGRectMake(0.0, 20.0, kMapSettingsPopupWidth, DeviceScreenHeight - 20.0);
@@ -224,7 +238,7 @@
         parentFrame = CGRectOffset(_parentVC.view.frame, -50.0, 0.0);
     
     CGRect frame = [self viewFramePopup];
-    if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
         frame.origin.y = DeviceScreenHeight + 10.0;
     else
         frame.origin.x = -10.0 - frame.size.width;
@@ -258,7 +272,7 @@
     }
     
     [UIView animateWithDuration:.4 animations:^{
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             if (_settingsScreen == EMapSettingsScreenMain || hideAll)
                 self.view.frame = CGRectMake(0.0, DeviceScreenHeight + 10.0, self.view.bounds.size.width, self.view.bounds.size.height);
             else

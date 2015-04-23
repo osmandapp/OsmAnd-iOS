@@ -84,6 +84,15 @@ typedef enum
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat topY = 64.0;
+            CGFloat mapHeight = big - topY - self.toolbarView.frame.size.height;
+            CGFloat mapWidth = small / 1.7;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
+            self.tableView.frame = CGRectMake(mapWidth, topY, small - mapWidth, big - self.toolbarView.frame.size.height - topY);
             
         } else {
             
@@ -103,6 +112,15 @@ typedef enum
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat topY = 64.0;
+            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
+            CGFloat mapWidth = big / 1.5;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
+            self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
             
         } else {
             

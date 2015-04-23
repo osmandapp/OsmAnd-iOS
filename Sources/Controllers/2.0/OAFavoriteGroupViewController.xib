@@ -13,6 +13,7 @@
                 <outlet property="saveButton" destination="6w8-mY-0w7" id="OGM-Mc-Vrc"/>
                 <outlet property="tableView" destination="zSR-Fs-UXX" id="lip-RO-Smg"/>
                 <outlet property="titleView" destination="X4a-6A-XmS" id="2mg-Vr-eyy"/>
+                <outlet property="toolbarView" destination="910-nj-qeq" id="ZOG-wK-vQY"/>
                 <outlet property="view" destination="oRL-9p-9dW" id="ROC-Xs-IDL"/>
             </connections>
         </placeholder>

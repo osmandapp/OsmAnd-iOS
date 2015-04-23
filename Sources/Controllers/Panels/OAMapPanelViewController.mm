@@ -414,7 +414,7 @@
 -(CGRect)shadowButtonRect
 {
     CGRect frame;
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
         if (_mapSettings)
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
         else

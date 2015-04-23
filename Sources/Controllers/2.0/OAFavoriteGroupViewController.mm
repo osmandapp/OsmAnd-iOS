@@ -61,6 +61,12 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(void)viewWillLayoutSubviews
+{
+    CGRect f = _tableView.frame;
+    f.size.height = (self.hideToolbar ? f.size.height + _toolbarView.bounds.size.height : f.size.height);
+    self.tableView.frame = f;
+}
 
 -(void)generateData {
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -75,12 +81,13 @@
 }
 
 
--(void)setupView {
-    
+-(void)setupView
+{    
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    
+    if (self.hideToolbar)
+        _toolbarView.hidden = YES;
 }
 
 #pragma mark - UITableViewDataSource

@@ -15,7 +15,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="54A6E8EB-D702-4D1E-B0D8-0DBA3ADBDA08" translatesAutoresizingMaskIntoConstraints="NO" id="Hqi-ep-G4R">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="0875AE07-7DC2-481D-986F-68D9D4354251" translatesAutoresizingMaskIntoConstraints="NO" id="Hqi-ep-G4R">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                 </imageView>
             </subviews>
@@ -31,7 +31,7 @@
         </view>
     </objects>
     <resources>
-        <image name="54A6E8EB-D702-4D1E-B0D8-0DBA3ADBDA08" width="320" height="568">
+        <image name="0875AE07-7DC2-481D-986F-68D9D4354251" width="320" height="568">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGPj9YJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK4HCBMU
 GR4fIyQsLzI4O1UkbnVsbNUJCgsMDQ4PEBESVk5TU2l6ZVYkY2xhc3NcTlNJbWFnZUZsYWdzVk5TUmVw

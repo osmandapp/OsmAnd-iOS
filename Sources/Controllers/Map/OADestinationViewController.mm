@@ -145,11 +145,24 @@
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && _singleLineOnly)
         big = small;
     
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !_singleLineOnly) {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !_singleLineOnly)
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            _singleLineMode = YES;
+            CGFloat h = 50.0 + (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && (_app.data.destinations.count == 3) ? 20.0 : 0.0);
+            if (_app.data.destinations.count == 0)
+                h = 0.0;
             
-        } else {
+            frame = CGRectMake(0.0, _top, small, h);
+            
+            if (_multiCell)
+                _multiCell.contentView.hidden = NO;
+            for (OADestinationCell *cell in _destinationCells)
+                cell.contentView.hidden = YES;
+        }
+        else
+        {
            
             _singleLineMode = NO;
             CGFloat h = 50.0 * _app.data.destinations.count + _app.data.destinations.count - 1.0;
@@ -166,12 +179,25 @@
                 cell.contentView.hidden = NO;
         }
         
-    } else {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+    }
+    else
+    {
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        {
+            _singleLineMode = YES;
+            CGFloat h = 50.0 + (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && (_app.data.destinations.count == 3) ? 20.0 : 0.0);
+            if (_app.data.destinations.count == 0)
+                h = 0.0;
             
-        } else {
+            frame = CGRectMake(0.0, _top, big, h);
             
+            if (_multiCell)
+                _multiCell.contentView.hidden = NO;
+            for (OADestinationCell *cell in _destinationCells)
+                cell.contentView.hidden = YES;
+        }
+        else
+        {
             _singleLineMode = YES;
             CGFloat h = 50.0 + (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && (_app.data.destinations.count == 3) ? 20.0 : 0.0);
             if (_app.data.destinations.count == 0)

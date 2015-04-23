@@ -302,7 +302,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [super viewWillLayoutSubviews];
     
     if (_freeTextLabel) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
             _freeTextLabel.textAlignment = NSTextAlignmentLeft;
         else
             _freeTextLabel.textAlignment = NSTextAlignmentCenter;        

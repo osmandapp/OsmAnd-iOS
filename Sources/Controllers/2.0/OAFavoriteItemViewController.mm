@@ -138,6 +138,30 @@ typedef enum
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat toolbarHeight = (self.toolbarView.hidden ? 0.0 : self.toolbarView.frame.size.height);
+            CGFloat topY = 64.0;
+            CGFloat mapHeight = big - topY - toolbarHeight;
+            CGFloat mapWidth = small / 1.7;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
+            self.scrollView.frame = CGRectMake(mapWidth, topY, small - mapWidth, big - toolbarHeight - topY);
+            
+            CGFloat y = 0.0 - self.favoriteNameButton.frame.origin.y;
+            self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
+            self.favoriteGroupButton.frame = CGRectOffset(self.favoriteGroupButton.frame, 0.0, y);
+            self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
+            self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
+            self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
+            self.favoriteColorIcon.frame = CGRectOffset(self.favoriteColorIcon.frame, 0.0, y);
+            self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
+            self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
+            self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
+            
+            self.scrollView.contentSize = CGSizeMake(small - mapWidth, self.favoriteGroupButton.frame.origin.y + self.favoriteGroupButton.frame.size.height - self.favoriteNameButton.frame.origin.y);
+            self.scrollView.contentInset = UIEdgeInsetsZero;
             
         } else {
             
@@ -172,6 +196,30 @@ typedef enum
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             
+            CGFloat toolbarHeight = (self.toolbarView.hidden ? 0.0 : self.toolbarView.frame.size.height);
+            CGFloat topY = 64.0;
+            CGFloat mapHeight = small - topY - toolbarHeight;
+            CGFloat mapWidth = big / 1.5;
+            CGFloat mapBottom = topY + mapHeight;
+            
+            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
+            self.mapButton.frame = self.mapView.frame;
+            self.distanceDirectionHolderView.frame = CGRectMake(mapWidth/2.0 - 110.0/2.0, mapBottom - 49.0, 110.0, 40.0);
+            self.scrollView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - toolbarHeight - topY);
+            
+            CGFloat y = 0.0 - self.favoriteNameButton.frame.origin.y;
+            self.favoriteNameButton.frame = CGRectOffset(self.favoriteNameButton.frame, 0.0, y);
+            self.favoriteGroupButton.frame = CGRectOffset(self.favoriteGroupButton.frame, 0.0, y);
+            self.arrowColor.frame = CGRectOffset(self.arrowColor.frame, 0.0, y);
+            self.arrowGroup.frame = CGRectOffset(self.arrowGroup.frame, 0.0, y);
+            self.favoriteColorButton.frame = CGRectOffset(self.favoriteColorButton.frame, 0.0, y);
+            self.favoriteColorIcon.frame = CGRectOffset(self.favoriteColorIcon.frame, 0.0, y);
+            self.favoriteColorLabel.frame = CGRectOffset(self.favoriteColorLabel.frame, 0.0, y);
+            self.favoriteGroupView.frame = CGRectOffset(self.favoriteGroupView.frame, 0.0, y);
+            self.favoriteNameTextView.frame = CGRectOffset(self.favoriteNameTextView.frame, 0.0, y);
+            
+            self.scrollView.contentSize = CGSizeMake(big - mapWidth, self.favoriteGroupButton.frame.origin.y + self.favoriteGroupButton.frame.size.height - self.favoriteNameButton.frame.origin.y);
+            self.scrollView.contentInset = UIEdgeInsetsZero;
             
         } else {
             
@@ -511,6 +559,7 @@ typedef enum
 {
     _favAction = kFavoriteActionChangeColor;
     OAFavoriteColorViewController* controller = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
+    controller.hideToolbar = _toolbarView.hidden;
     [self.navigationController pushViewController:controller animated:YES];
 }
 
@@ -518,6 +567,7 @@ typedef enum
 {
     _favAction = kFavoriteActionChangeGroup;
     OAFavoriteGroupViewController* controller = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
+    controller.hideToolbar = _toolbarView.hidden;
     [self.navigationController pushViewController:controller animated:YES];
 }
 

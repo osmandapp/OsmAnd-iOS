@@ -158,6 +158,8 @@
         cell = (OAInAppCell *)[nib objectAtIndex:0];
     }
     
+    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_All_World];
+    
     if (cell) {
         
         NSString *identifier;
@@ -198,7 +200,7 @@
         [cell.lbDescription setText:desc];
         [cell.lbPrice setText:price];
         
-        [cell setPurchased:[[OAIAPHelper sharedInstance] productPurchased:identifier]];
+        [cell setPurchased:[[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 0 && allWorldMapsPurchased)];
     }
     
     return cell;
@@ -225,7 +227,8 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    if ([[OAIAPHelper sharedInstance] productPurchased:identifier])
+    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_All_World];
+    if ([[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 0 && allWorldMapsPurchased))
         return;
     
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
@@ -243,16 +246,12 @@
 - (void)productPurchased:(NSNotification *)notification {
     
     NSString * identifier = notification.object;
-    int index = [[OAIAPHelper sharedInstance] productIndex:identifier];
     dispatch_async(dispatch_get_main_queue(), ^{
 
         if (!_restoringPurchases)
             [_loadProductsProgressHUD hide:YES];
 
-        if (index != -1) {
-            NSInteger section = [[OAIAPHelper inAppsMaps] containsObject:identifier] ? 0 : 1;
-            [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:section]] withRowAnimation:UITableViewRowAnimationFade];
-        }
+        [self.tableView reloadData];
         
         if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap]) {
             [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];

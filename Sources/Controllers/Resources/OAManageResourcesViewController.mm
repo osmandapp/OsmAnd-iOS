@@ -247,6 +247,17 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     [super viewWillAppear:animated];
     
+    if (_currentScope == kLocalResourcesScope ||
+        (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+        (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
+    {
+        if (_displayBanner)
+        {
+            _displayBanner = NO;
+            [self updateContent];
+        }
+    }
+    
     if (_doNotSearch || _currentScope == kLocalResourcesScope) {
         
         CGRect f = self.searchDisplayController.searchBar.frame;

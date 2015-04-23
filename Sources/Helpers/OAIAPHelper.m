@@ -80,6 +80,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 +(NSArray *)inAppsMaps
 {
     return [NSArray arrayWithObjects:
+            kInAppId_Region_All_World,
             kInAppId_Region_Africa,
             kInAppId_Region_Russia,
             kInAppId_Region_Asia,
@@ -88,7 +89,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Region_Central_America,
             kInAppId_Region_North_America,
             kInAppId_Region_South_America,
-            kInAppId_Region_All_World,
             nil];
 }
 

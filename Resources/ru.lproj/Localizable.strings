@@ -101,7 +101,7 @@
 // Intro
 "intro_skip" = "Пропустить";
 "intro_download" = "Загрузить карту";
-"intro_next" = "Следующий";
+"intro_next" = "Далее";
 "intro_welcome" = "Добро пожаловать\nOsmAnd";
 "intro_promo" = "Мировые офлайн карты";
 "intro_placeholder" = "введите название региона";

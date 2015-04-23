@@ -1151,8 +1151,12 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     CGFloat delta = 10.0;
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
+    BOOL doSkip = NO;
+
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
     for (const auto symbolInfo : symbolInfos) {
+        
+        doSkip = NO;
         
         OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
         symbol.type = OAMapSymbolLocation;
@@ -1221,6 +1225,14 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
                     if (rule.tag == QString("addr:housenumber"))
                         symbol.buildingNumber = mapObject->captions.value(ruleId).toNSString();
                     
+                    //NSLog(@"%@=%@", rule.tag.toNSString(), rule.value.toNSString());
+
+                    if (rule.tag == QString("highway"))
+                    {
+                        doSkip = YES;
+                        break;
+                    }
+                    
                     if (!symbol.poiType)
                         symbol.poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
                     
@@ -1253,7 +1265,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         else
             symbol.sortIndex = (NSInteger)symbol.type;
         
-        [foundSymbols addObject:symbol];
+        if (!doSkip)
+            [foundSymbols addObject:symbol];
         
     }
     

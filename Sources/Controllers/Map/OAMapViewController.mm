@@ -1145,6 +1145,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     // Format location
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    double lonTap = lon;
+    double latTap = lat;
     
     NSMutableArray *foundSymbols = [NSMutableArray array];
     
@@ -1271,10 +1273,20 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     }
     
     [foundSymbols sortUsingComparator:^NSComparisonResult(OAMapSymbol *obj1, OAMapSymbol *obj2) {
-        if (obj1.sortIndex == obj2.sortIndex)
-            return NSOrderedSame;
+        
+        double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
+        double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
+        
+        if (obj1.sortIndex == obj2.sortIndex) {
+            if (dist1 == dist2)
+                return NSOrderedSame;
+            else
+                return dist1 < dist2 ? NSOrderedAscending : NSOrderedDescending;
+        }
         else
+        {
             return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
+        }
     }];
     
     for (OAMapSymbol *s in foundSymbols)

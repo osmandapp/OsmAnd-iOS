@@ -156,8 +156,10 @@
      if (switchView) {
          OAMapStyleParameter *p = parameters[switchView.tag];
          if (p) {
-             p.value = switchView.isOn ? @"true" : @"false";
-             [styleSettings save:p];
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 p.value = switchView.isOn ? @"true" : @"false";
+                 [styleSettings save:p];
+             });
          }
      }
 }

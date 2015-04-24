@@ -134,7 +134,7 @@
     
     if (landscape) {
         
-        _addressLabel.frame = CGRectMake(textX, 12.0, DeviceScreenWidth - textX - 40.0 - 210.0, 21.0);
+        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0 - 210.0, 36.0);
         _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0 - 210.0, 21.0);
         
         _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0 - 50.0, h);
@@ -163,7 +163,7 @@
         
     } else {
         
-        _addressLabel.frame = CGRectMake(textX, 12.0, DeviceScreenWidth - textX - 40.0, 21.0);
+        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0, 36.0);
         _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0, 21.0);
         
         _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 50.0, 73.0);

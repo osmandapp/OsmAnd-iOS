@@ -265,10 +265,7 @@ typedef enum
     itemData.type = kGPXCellTypeMenu;
     self.menuItems = @[@{@"text": OALocalizedString(@"gpx_import_title"),
                          @"icon": @"favorite_import_icon",
-                         @"action": @"onImportClicked"},
-                       @{@"text": OALocalizedString(@"gpx_export_title"),
-                         @"icon": @"favorite_export_icon.png",
-                         @"action": @"onExportClicked"}];
+                         @"action": @"onImportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
     
     [self.gpxTableView reloadData];
@@ -359,7 +356,7 @@ typedef enum
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (section == 0 && self.gpxList.count > 0)
         return OALocalizedString(@"tracks");
-    return OALocalizedString(@"import_export");
+    return OALocalizedString(@"fav_import");
 }
 
 
@@ -448,6 +445,7 @@ typedef enum
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
+
 #pragma mark - UIDocumentInteractionControllerDelegate
 
 - (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller

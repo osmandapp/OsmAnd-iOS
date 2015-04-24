@@ -34,7 +34,7 @@ typedef enum
 } EGpxItemAction;
 
 
-@interface OAGPXItemViewController () {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -49,6 +49,7 @@ typedef enum
 
 @property (nonatomic) OAGPXDocument *doc;
 @property (nonatomic) UIButton *mapButton;
+@property (strong, nonatomic) UIDocumentInteractionController* exportController;
 
 @end
 
@@ -237,12 +238,38 @@ typedef enum
     [self.navigationController pushViewController:controller animated:YES];
 }
 
+- (IBAction)exportClicked:(id)sender
+{
+    
+    NSURL* gpxUrl = [NSURL fileURLWithPath:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName]];
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
+    _exportController.UTI = @"net.osmand.gpx";
+    _exportController.delegate = self;
+    _exportController.name = _gpx.gpxFileName;
+    [_exportController presentOptionsMenuFromRect:CGRectZero
+                                           inView:self.view
+                                         animated:YES];
+}
+
 - (IBAction)deleteClicked:(id)sender
 {
     UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_remove") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
     [removeAlert show];
 }
 
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    if (controller == _exportController)
+        _exportController = nil;
+}
+
+- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
+{
+    if (controller == _exportController)
+        _exportController = nil;
+}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {

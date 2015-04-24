@@ -26,6 +26,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *mapStyleName;
+@property (nonatomic) NSString *mapPresetName;
 @property (nonatomic) NSString *category;
 @property (nonatomic) OAMapStyleValueDataType dataType;
 @property (nonatomic) NSString *value;
@@ -36,7 +37,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 @interface OAMapStyleSettings : NSObject
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName;
+-(instancetype)initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName;
 
 
 -(NSArray *) getAllParameters;

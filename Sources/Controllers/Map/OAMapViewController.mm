@@ -2112,7 +2112,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
                         newSettings[QString::fromLatin1("nightMode")] = "true";
                     
                     // --- Apply Map Style Settings
-                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString()];
+                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
                     
                     NSArray *params = styleSettings.getAllParameters;
                     for (OAMapStyleParameter *param in params) {

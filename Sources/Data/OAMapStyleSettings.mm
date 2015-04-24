@@ -22,6 +22,7 @@
 @interface OAMapStyleSettings ()
 
 @property (nonatomic) NSString *mapStyleName;
+@property (nonatomic) NSString *mapPresetName;
 @property (nonatomic) NSArray *parameters;
 @property (nonatomic) NSDictionary *categories;
 
@@ -39,11 +40,12 @@
     return self;
 }
 
--(instancetype)initWithStyleName:(NSString *)mapStyleName
+-(instancetype)initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName
 {
     self = [super init];
     if (self) {
         self.mapStyleName = mapStyleName;
+        self.mapPresetName = mapPresetName;
         [self buildParameters:mapStyleName];
         [self loadParameters];
     }
@@ -74,6 +76,7 @@
     {
         const auto& unresolvedMapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(mapSourceResource->metadata)->mapStyle;
         self.mapStyleName = unresolvedMapStyle->name.toNSString();
+        self.mapPresetName = _app.data.lastMapSource.variant;
 
         [self buildParameters:self.mapStyleName];
     }
@@ -111,6 +114,7 @@
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
+        param.mapPresetName = self.mapPresetName;
         param.name = name;
         param.title = attrLocText;
         param.category = p->category.toNSString();
@@ -195,7 +199,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     for (OAMapStyleParameter *p in self.parameters) {
-        NSString *name = [NSString stringWithFormat:@"%@_%@", p.mapStyleName, p.name];
+        NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
         if ([defaults objectForKey:name]) {
             p.value = [defaults valueForKey:name];
         } else {
@@ -209,7 +213,7 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     
     for (OAMapStyleParameter *p in self.parameters) {
-        NSString *name = [NSString stringWithFormat:@"%@_%@", p.mapStyleName, p.name];
+        NSString *name = [NSString stringWithFormat:@"%@_%@_%@", p.mapStyleName, p.mapPresetName, p.name];
         [defaults setValue:p.value forKey:name];
     }
     [defaults synchronize];
@@ -217,7 +221,7 @@
 
 -(void) save:(OAMapStyleParameter *)parameter
 {
-    NSString *name = [NSString stringWithFormat:@"%@_%@", parameter.mapStyleName, parameter.name];
+    NSString *name = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
     [[NSUserDefaults standardUserDefaults] setValue:parameter.value forKey:name];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
 }

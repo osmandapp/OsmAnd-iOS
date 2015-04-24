@@ -58,8 +58,8 @@
 {
 }
 
-- (void)changeMapTypeButtonClicked:(id)sender {
-    
+- (void)changeMapTypeButtonClicked:(id)sender
+{    
     int tag = ((UIButton*)sender).tag;
     
     OAMapSource* mapSource = app.data.lastMapSource;
@@ -89,6 +89,8 @@
     if (!foundPreset) {
         [mapStylesCell setupMapTypeButtons:0];
     }
+    
+    [self setupView];
     
 }
 

@@ -383,8 +383,12 @@
 - (void)onMapChanged:(id)observable withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
             [_destinationViewController updateDestinationsUsingMapCenter];
+        else
+            [_destinationViewController doLocationUpdate];
+        
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
     });
 }

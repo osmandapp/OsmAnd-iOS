@@ -699,6 +699,19 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void)setupMapArrowsLocation:(CLLocationCoordinate2D)centerLocation
+{
+    [OAAppSettings sharedManager].mapCenter = centerLocation;
+    [[OAAppSettings sharedManager] setSettingMapArrows:MAP_ARROWS_MAP_CENTER];
+    [_mapObservable notifyEventWithKey:nil];
+}
+
+- (void)restoreMapArrowsLocation
+{
+    [[OAAppSettings sharedManager] setSettingMapArrows:MAP_ARROWS_LOCATION];
+    [_mapObservable notifyEventWithKey:nil];
+}
+
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
 {
     if (![self isViewLoaded])
@@ -809,6 +822,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![mapView resumeSymbolsUpdate]);
     }
@@ -834,6 +848,19 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+        // Get location of the gesture
+        CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
+        touchPoint.x *= mapView.contentScaleFactor;
+        touchPoint.y *= mapView.contentScaleFactor;
+        OsmAnd::PointI touchLocation;
+        [mapView convert:touchPoint toLocation:&touchLocation];
+        
+        // Format location
+        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+        
+        [self setupMapArrowsLocation:CLLocationCoordinate2DMake(lat, lon)];
+
         // When user gesture has began, stop all animations
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
@@ -869,6 +896,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![mapView resumeSymbolsUpdate]);
     }
@@ -975,6 +1003,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![mapView resumeSymbolsUpdate]);
     }
@@ -1113,6 +1142,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
     {
+        [self restoreMapArrowsLocation];
         // Resume symbols update
         while (![mapView resumeSymbolsUpdate]);
     }
@@ -1129,10 +1159,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     if (![self isViewLoaded])
         return;
 
-    // Capture only last state
-    if (recognizer.state != UIGestureRecognizerStateEnded)
-        return;
-
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
     // Get location of the gesture
@@ -1141,10 +1167,26 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     touchPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI touchLocation;
     [mapView convert:touchPoint toLocation:&touchLocation];
-
+    
     // Format location
     double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+    
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+        [self setupMapArrowsLocation:CLLocationCoordinate2DMake(lat, lon)];
+
+    if (recognizer.state == UIGestureRecognizerStateEnded ||
+        recognizer.state == UIGestureRecognizerStateCancelled)
+    {
+        [self restoreMapArrowsLocation];
+        // Resume symbols update
+        while (![mapView resumeSymbolsUpdate]);
+    }
+    
+    // Capture only last state
+    if (recognizer.state != UIGestureRecognizerStateEnded)
+        return;
+    
     double lonTap = lon;
     double latTap = lat;
     
@@ -1167,16 +1209,13 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         
         if (const auto billboardMapSymbol = std::dynamic_pointer_cast<const OsmAnd::IBillboardMapSymbol>(symbolInfo.mapSymbol))
         {
-            if ([recognizer isKindOfClass:[UITapGestureRecognizer class]]) {
-                
-                lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
-                lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
-                
-                if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters)) {
-                    if (billboardAdditionalParams->overridesPosition31) {
-                        lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
-                        lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
-                    }
+            lon = OsmAnd::Utilities::get31LongitudeX(billboardMapSymbol->getPosition31().x);
+            lat = OsmAnd::Utilities::get31LatitudeY(billboardMapSymbol->getPosition31().y);
+            
+            if (const auto billboardAdditionalParams = std::dynamic_pointer_cast<const OsmAnd::MapSymbolsGroup::AdditionalBillboardSymbolInstanceParameters>(symbolInfo.instanceParameters)) {
+                if (billboardAdditionalParams->overridesPosition31) {
+                    lon = OsmAnd::Utilities::get31LongitudeX(billboardAdditionalParams->position31.x);
+                    lat = OsmAnd::Utilities::get31LatitudeY(billboardAdditionalParams->position31.y);
                 }
             }
         }
@@ -1259,8 +1298,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
             }
         }
 
-        if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
-            symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        symbol.location = CLLocationCoordinate2DMake(lat, lon);
         
         if (symbol.type == OAMapSymbolLocation)
             symbol.sortIndex = (((symbol.caption && symbol.caption.length > 0) || symbol.poiType) && symbol.icon) ?  10 : 20;
@@ -1299,6 +1337,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
         }
         else
         {
+            if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]])
+                s.location = CLLocationCoordinate2DMake(latTap, lonTap);
             [self postTargetNotification:s];
             return;
         }

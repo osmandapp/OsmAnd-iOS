@@ -34,6 +34,10 @@
     BOOL _singleLineMode;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
+    
+    CLLocationCoordinate2D _location;
+    CLLocationDirection _direction;
+
 }
 
 - (NSArray *)allDestinations
@@ -380,12 +384,13 @@
 
 - (void)updateDestinationsUsingMapCenter
 {
-    Point31 mapCenter = _app.data.mapLastViewedState.target31;
     float mapDirection = _app.data.mapLastViewedState.azimuth;
-    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(OsmAnd::PointI(mapCenter.x, mapCenter.y));
-    CLLocationCoordinate2D location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    CLLocationCoordinate2D location = [OAAppSettings sharedManager].mapCenter;
     CLLocationDirection direction = mapDirection;
 
+    _location = location;
+    _direction = direction;
+        
     if (_multiCell)
         [_multiCell updateDirections:location direction:direction];
     for (OADestinationCell *cell in _destinationCells)
@@ -399,9 +404,6 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        CLLocationCoordinate2D location;
-        CLLocationDirection direction;
-        
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
@@ -410,13 +412,21 @@
         ? newLocation.course
         : newHeading;
         
-        location = newLocation.coordinate;
-        direction = newDirection;
-        
-        if (_multiCell)
-            [_multiCell updateDirections:location direction:direction];
-        for (OADestinationCell *cell in _destinationCells)
-            [cell updateDirections:location direction:direction];
+        if (_location.latitude != newLocation.coordinate.latitude ||
+            _location.longitude != newLocation.coordinate.longitude ||
+            _direction != newDirection)
+        {
+            _location = newLocation.coordinate;
+            _direction = newDirection;
+            
+            CLLocationCoordinate2D location = _location;
+            CLLocationDirection direction = _direction;
+
+            if (_multiCell)
+                [_multiCell updateDirections:location direction:direction];
+            for (OADestinationCell *cell in _destinationCells)
+                [cell updateDirections:location direction:direction];
+        }
     });
 }
 

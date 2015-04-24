@@ -371,6 +371,9 @@
 		842431681AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		842431691AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		8424316A1AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
+		8424316D1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
+		8424316E1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
+		8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
 		842BFC551A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC561A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC571A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
@@ -1951,6 +1954,8 @@
 		84185AFC1AAA13C600F70328 /* OAPurchasesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPurchasesViewController.h; path = Controllers/Resources/OAPurchasesViewController.h; sourceTree = "<group>"; };
 		84185AFD1AAA13C600F70328 /* OAPurchasesViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPurchasesViewController.mm; path = Controllers/Resources/OAPurchasesViewController.mm; sourceTree = "<group>"; };
 		842431671AE939B400925821 /* welcome_wide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome_wide.png; path = Resources/IntroImages/welcome_wide.png; sourceTree = "<group>"; };
+		8424316B1AEA19C700925821 /* OAOcbfHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOcbfHelper.h; sourceTree = "<group>"; };
+		8424316C1AEA19C700925821 /* OAOcbfHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOcbfHelper.m; sourceTree = "<group>"; };
 		842BFC521A94935A008CF87B /* OAGPXPointListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXPointListViewController.h; path = Sources/Controllers/2.0/OAGPXPointListViewController.h; sourceTree = "<group>"; };
 		842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXPointListViewController.mm; path = Sources/Controllers/2.0/OAGPXPointListViewController.mm; sourceTree = "<group>"; };
 		842BFC541A94935A008CF87B /* OAGPXPointListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXPointListViewController.xib; path = Sources/Controllers/2.0/OAGPXPointListViewController.xib; sourceTree = "<group>"; };
@@ -3742,6 +3747,8 @@
 				BBBAFE16198A32E000573FFA /* OADebugSettings.mm */,
 				BB0275D719D2EF41009AFBA8 /* OAUtilities.h */,
 				BB0275D819D2EF41009AFBA8 /* OAUtilities.m */,
+				8424316B1AEA19C700925821 /* OAOcbfHelper.h */,
+				8424316C1AEA19C700925821 /* OAOcbfHelper.m */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -5486,6 +5493,7 @@
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
 				84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
+				8424316D1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
@@ -5614,6 +5622,7 @@
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
+				8424316E1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
@@ -5658,6 +5667,7 @@
 				BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				BBA3AF38197FC4BB0039D991 /* OAMapViewState.m in Sources */,
 				BBA3AF39197FC4BB0039D991 /* OAManageResourcesViewController.mm in Sources */,
+				8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				BBA3AF3A197FC4BB0039D991 /* OAMapRendererView.mm in Sources */,
 				3ACA4AA61A0B8B8300ECC792 /* OASuperViewController.m in Sources */,
 				84B4FD661A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,

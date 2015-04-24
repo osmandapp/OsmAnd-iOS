@@ -24,6 +24,7 @@
 #import "FFCircularProgressView+isSpinning.h"
 #import "OAWorldRegion.h"
 #import "OALog.h"
+#import "OAOcbfHelper.h"
 #include "Localization.h"
 
 #import "OAPurchasesViewController.h"
@@ -973,6 +974,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _refreshRepositoryBarButton.enabled = NO;
     [_refreshRepositoryProgressHUD showAnimated:YES
                             whileExecutingBlock:^{
+                                [OAOcbfHelper downloadOcbfIfUpdated];
                                 _app.resourcesManager->updateRepository();
                             }
                                 completionBlock:^{

@@ -19,6 +19,7 @@
 #import "OASearchMoreCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
+#import "OAUtilities.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -696,6 +697,23 @@ typedef enum
 }
 
 #pragma mark - UITableViewDelegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    int index = indexPath.row - _dataArray.count;
+    if (index >= 0 && index < _dataPoiArray.count)
+    {
+        OAPOI* item = _dataPoiArray[index];
+        
+        CGSize size = [OAUtilities calculateTextBounds:item.nameLocalized width:_tableView.bounds.size.width - 59.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+        
+        return 30.0 + size.height;
+    }
+    else
+    {
+        return 50.0;
+    }
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

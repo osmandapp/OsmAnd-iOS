@@ -70,4 +70,17 @@
                                               - (titleSize.height + spacing), 0.0, 0.0, - titleSize.width);
 }
 
+
++ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font
+{
+    NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              font, NSFontAttributeName, nil];
+    
+    CGSize size = [text boundingRectWithSize:CGSizeMake(width, 1000.0)
+                                     options:NSStringDrawingUsesLineFragmentOrigin
+                                  attributes:attrDict context:nil].size;
+    
+    return CGSizeMake(ceil(size.width), ceil(size.height));
+}
+
 @end

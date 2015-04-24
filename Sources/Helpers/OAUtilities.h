@@ -17,4 +17,6 @@
 + (NSString *)drawablePostfix;
 + (void)layoutComplexButton:(UIButton*)button;
 
++ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
+
 @end

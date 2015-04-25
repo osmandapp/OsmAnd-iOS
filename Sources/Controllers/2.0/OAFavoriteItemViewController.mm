@@ -19,6 +19,7 @@
 #import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAUtilities.h"
+#import <UIAlertView+Blocks.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -47,6 +48,7 @@ typedef enum
     BOOL _showFavoriteOnExit;
     BOOL _wasShowingFavorite;
     BOOL _deleteFavorite;
+    BOOL _wasEdited;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
@@ -293,7 +295,13 @@ typedef enum
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:app.locationServices.updateObserver];
-    [self setupView];
+
+    if (_favAction == kFavoriteActionChangeColor)
+        [self setupColor];
+    else if (_favAction == kFavoriteActionChangeGroup)
+        [self setupGroup];
+    else
+        [self setupView];
 
     if (_favAction != kFavoriteActionNone) {
         return;
@@ -350,24 +358,34 @@ typedef enum
 
 }
 
--(void)setupView {
-    
-    [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
-    
+- (void)setupColor
+{
     // Color
     UIColor* color = [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
-        
+    
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     [_favoriteColorIcon setImage:favCol.icon];
     [_favoriteColorLabel setText:favCol.name];
-    
-    [_favoriteDistance setText:self.favorite.distance];
-    _favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
-    
+}
+
+- (void)setupGroup
+{
     if (self.favorite.favorite->getGroup().isEmpty())
         [_favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
     else
         [_favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
+}
+
+- (void)setupView {
+    
+    [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
+
+    [self setupColor];
+    
+    [_favoriteDistance setText:self.favorite.distance];
+    _favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
+
+    [self setupGroup];
     
     [_favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
     [_favoriteDistance setText:self.favorite.distance];
@@ -478,6 +496,8 @@ typedef enum
     
     [self.favoriteNameButton setTitle:self.favoriteNameTextView.text forState:UIControlStateNormal];
     
+    _wasEdited = YES;
+    
     return YES;
 }
 
@@ -498,20 +518,64 @@ typedef enum
 
 }
 
-- (IBAction)saveButtonClicked:(id)sender {
-    if (!self.newFavorite) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-        [removeAlert show];
-    } else {
-        
-        if ([self.favoriteNameTextView isFirstResponder]) {
-            OsmAndAppInstance app = [OsmAndApp instance];
-            self.favorite.favorite->setTitle(QString::fromNSString(self.favoriteNameTextView.text));
-            [app saveFavoritesToPermamentStorage];
+- (void)doSave:(BOOL)flyToFav
+{
+    if ([self.favoriteNameTextView isFirstResponder])
+        self.favorite.favorite->setTitle(QString::fromNSString(self.favoriteNameTextView.text));
+    
+    NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
+    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+    {
+        if ((localFavorite != self.favorite.favorite) &&
+            [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()]) {
+            
+            [[[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems:
+              [RIButtonItem itemWithLabel:OALocalizedString(@"fav_ignore") action:^{
+                [self saveAndExit:flyToFav];
+            }],
+              [RIButtonItem itemWithLabel:OALocalizedString(@"fav_replace") action:^{
+                for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+                {
+                    if ((localFavorite != self.favorite.favorite) &&
+                        [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()])
+                    {
+                        [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(localFavorite);
+                        break;
+                    }
+                }
+                [self saveAndExit:flyToFav];
+            }],
+              nil] show];
+            
+            return;
         }
+    }
+    
+    [self saveAndExit:flyToFav];
+}
+
+- (void)saveAndExit:(BOOL)flyToFav
+{
+    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    
+    if (flyToFav)
+    {
         _newTarget31 = self.favorite.favorite->getPosition31();
         _showFavoriteOnExit = YES;
-        [self.navigationController popViewControllerAnimated:YES];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (IBAction)saveButtonClicked:(id)sender
+{
+    if (!self.newFavorite)
+    {
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
+        [removeAlert show];
+    }
+    else
+    {
+        [self doSave:YES];
     }
 }
 
@@ -548,11 +612,18 @@ typedef enum
 -(IBAction)backButtonClicked:(id)sender
 {
     OsmAndAppInstance app = [OsmAndApp instance];
-    if (self.newFavorite) {
+    if (self.newFavorite)
+    {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
     }
-    [super backButtonClicked:sender];
+    else
+    {
+        if (_wasEdited)
+            [self doSave:NO];
+        else
+            [super backButtonClicked:nil];
+    }
 }
 
 - (IBAction)favoriteChangeColorClicked:(id)sender

@@ -20,6 +20,12 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
     OAColor,
 };
 
+@interface OAMapStyleParameterValue : NSObject
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *title;
+
+@end
 
 @interface OAMapStyleParameter : NSObject
 

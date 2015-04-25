@@ -19,6 +19,9 @@
 @implementation OAMapStyleParameter
 @end
 
+@implementation OAMapStyleParameterValue
+@end
+
 @interface OAMapStyleSettings ()
 
 @property (nonatomic) NSString *mapStyleName;
@@ -134,8 +137,25 @@
         for (const auto& val : p->getPossibleValues())
             [values addObject:resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString()];
         
-        param.possibleValues = [[values allObjects] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-            return [[obj1 lowercaseString] compare:[obj2 lowercaseString]];
+        NSMutableArray *valArr = [NSMutableArray array];
+        for (NSString *v in [values allObjects])
+        {
+            OAMapStyleParameterValue *val = [[OAMapStyleParameterValue alloc] init];
+            val.name = v;
+            NSString *valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", v];
+            NSString *valLocText = OALocalizedString(valLocKey);
+            if ([valLocKey isEqualToString:valLocText])
+                valLocText = v;
+            val.title = valLocText;
+            [valArr addObject:val];
+        }
+        
+        param.possibleValues = [valArr sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameterValue *obj1, OAMapStyleParameterValue *obj2) {
+            if (obj1.name.length == 0 && obj2.name.length > 0)
+                return NSOrderedAscending;
+            if (obj1.name.length > 0 && obj2.name.length == 0)
+                return NSOrderedDescending;
+            return [[obj1.title lowercaseString] compare:[obj2.title lowercaseString]];
         }];
         
         param.dataType = (OAMapStyleValueDataType)p->getDataType();

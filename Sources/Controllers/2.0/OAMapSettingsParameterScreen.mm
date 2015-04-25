@@ -91,12 +91,12 @@
     
     if (cell) {
         
-        NSString *value = parameter.possibleValues[indexPath.row];
+        OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
         
-        [cell.textView setText: value];
+        [cell.textView setText: value.title];
         [cell.descriptionView setText: @""];
         
-        if ([parameter.value isEqualToString:value])
+        if ([parameter.value isEqualToString:value.name])
             [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
         else
             [cell.iconView setImage:nil];
@@ -116,8 +116,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *value = parameter.possibleValues[indexPath.row];
-    parameter.value = value;
+    OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
+    parameter.value = value.name;
     [styleSettings save:parameter];
     
     [tableView reloadData];

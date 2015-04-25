@@ -280,3 +280,8 @@
 "rendering_attr_contourLines_name" = "Show contour lines";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
 "rendering_attr_roadStyle_name" = "Road style";
+"rendering_value__name" = "Default";
+"rendering_value_orange_name" = "Orange";
+"rendering_value_germanRoadAtlas_name" = "German road atlas";
+"rendering_value_highContrastRoads_name" = "High contrast roads";
+"rendering_value_americanRoadAtlas_name" = "American road atlas";

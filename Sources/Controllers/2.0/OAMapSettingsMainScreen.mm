@@ -165,7 +165,7 @@
                                         @"type": @"OASettingsCell"}];
         for (OAMapStyleParameter *p in topLevelParams)
             [categoriesList addObject:@{@"name": p.title,
-                                        @"value": p.value,
+                                        @"value": [p getValueTitle],
                                         @"type": @"OASettingsCell"}];
         
         NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),

@@ -17,6 +17,16 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 
 @implementation OAMapStyleParameter
+
+- (NSString *)getValueTitle
+{
+    for (OAMapStyleParameterValue *val in self.possibleValues)
+        if ([val.name isEqualToString:self.value])
+            return val.title;
+
+    return self.value;
+}
+
 @end
 
 @implementation OAMapStyleParameterValue

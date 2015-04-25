@@ -99,7 +99,7 @@
         
         if (cell) {
             [cell.textView setText: p.title];
-            [cell.descriptionView setText: p.value];
+            [cell.descriptionView setText: [p getValueTitle]];
         }
         
         return cell;

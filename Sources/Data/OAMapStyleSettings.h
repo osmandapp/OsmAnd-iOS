@@ -39,6 +39,8 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 @property (nonatomic) NSString *defaultValue;
 @property (nonatomic) NSArray *possibleValues;
 
+- (NSString *)getValueTitle;
+
 @end
 
 @interface OAMapStyleSettings : NSObject

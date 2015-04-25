@@ -15,3 +15,28 @@
 "fav_groups" = "Groupes";
 "favorite" = "Favori";
 "fav_no_group" = "Aucun groupe";
+"shared_string_delete" = "Supprimer";
+"rendering_attr_streetLighting_name" = "Éclairage public";
+"rendering_attr_publicTransportMode_name" = "Itinéraires de bus, tramways, et navettes";
+"rendering_attr_tramTrainRoutes_name" = "Itinéraires de tramway et train";
+"rendering_attr_subwayMode_name" = "Itinéraires de métropolitain";
+// Rendering categories
+"rendering_category_hide" = "Masquer";
+"rendering_category_routes" = "Routes";
+"rendering_category_details" = "Détails";
+"rendering_category_transport" = "Transport";
+"rendering_category_others" = "Autres éléments de la carte";
+"rendering_attr_OSMMapperAssistant_name" = "Assistant pour la cartographie OSM";
+"rendering_attr_coloredBuildings_name" = "Bâtiments colorés par type";
+"rendering_attr_hideBuildings_name" = "Masquer les bâtiments";
+"rendering_attr_moreDetailed_name" = "Plus détaillé";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Afficher les restrictions d'accès";
+"rendering_attr_showSurfaceGrade_name" = "Afficher la qualité des routes";
+"rendering_attr_showSurfaces_name" = "Afficher la surface des routes";
+"rendering_attr_showCycleRoutes_name" = "Afficher les pistes cyclables";
+"rendering_attr_alpineHiking_name" = "Difficulté des randonnées en montagne";
+"rendering_attr_osmcTraces_name" = "Surcouche de symboles de rando";
+"rendering_attr_noAdminboundaries_name" = "Masquer les limites administratives";
+"rendering_attr_noPolygons_name" = "Masquer les polygones";
+"rendering_attr_contourLines_name" = "Afficher les courbes de niveau";

@@ -91,7 +91,11 @@
     NSMutableDictionary *categories = [NSMutableDictionary dictionary];
     NSMutableArray *params = [NSMutableArray array];
 
+<<<<<<< HEAD
+    for(const auto& p : parameters)
+=======
     for(const auto& p : OsmAnd::constOf(parameters))
+>>>>>>> 367ce97abf06490fa5cdb3dc2f5c08316a73e094
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
         

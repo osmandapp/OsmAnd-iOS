@@ -269,3 +269,8 @@
 "rendering_attr_contourLines_name" = "Показывать горизонтали";
 "rendering_attr_OSMMapperAssistant_name" = "Помощник картографа OSM";
 "rendering_attr_roadStyle_name" = "Стиль отображения дорог";
+"rendering_value__name" = "По умолчанию";
+"rendering_value_germanRoadAtlas_name" = "Атлас дорог Германии";
+"rendering_value_highContrastRoads_name" = "Высокий контраст";
+"rendering_value_americanRoadAtlas_name" = "Атлас дорог Америки";
+"rendering_value_orange_name" = "Оранжевый";

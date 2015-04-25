@@ -86,15 +86,14 @@
 {
     
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
-    const auto& parameters = resolvedMapStyle->parameters;
+    const auto& parameters = resolvedMapStyle->getParameters();
     
     NSMutableDictionary *categories = [NSMutableDictionary dictionary];
     NSMutableArray *params = [NSMutableArray array];
 
-    for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(parameters)))
+    for(const auto& p : OsmAnd::constOf(parameters))
     {
-        const auto& p = entry.value();
-        NSString *name = resolvedMapStyle->getStringById(p->nameId).toNSString();
+        NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
         
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"transportStops"] ||
@@ -102,7 +101,7 @@
             //[name isEqualToString:@"tramTrainRoutes"] ||
             //[name isEqualToString:@"subwayMode"] ||
             [name isEqualToString:@"engine_v1"] ||
-            p->category.isEmpty())
+            p->getCategory().isEmpty())
 
             continue;
         
@@ -110,14 +109,14 @@
         NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
         NSString *attrLocText = OALocalizedString(attrLocKey);
         if ([attrLocKey isEqualToString:attrLocText])
-            attrLocText = p->title.toNSString();
+            attrLocText = p->getTitle().toNSString();
 
         OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
         param.mapStyleName = self.mapStyleName;
         param.mapPresetName = self.mapPresetName;
         param.name = name;
         param.title = attrLocText;
-        param.category = p->category.toNSString();
+        param.category = p->getCategory().toNSString();
 
         NSString *categoryLocKey = [NSString stringWithFormat:@"rendering_category_%@", param.category];
         NSString *categoryLocText = OALocalizedString(categoryLocKey);
@@ -128,14 +127,14 @@
         
         NSMutableSet *values = [NSMutableSet set];
         [values addObject:@""];
-        for (const auto& val : p->possibleValues)
+        for (const auto& val : p->getPossibleValues())
             [values addObject:resolvedMapStyle->getStringById(val.asSimple.asUInt).toNSString()];
         
         param.possibleValues = [[values allObjects] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
             return [[obj1 lowercaseString] compare:[obj2 lowercaseString]];
         }];
         
-        param.dataType = (OAMapStyleValueDataType)p->dataType;
+        param.dataType = (OAMapStyleValueDataType)p->getDataType();
         switch (param.dataType)
         {
             case OABoolean:

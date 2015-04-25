@@ -271,6 +271,12 @@
         _parentVC.view.hidden = NO;
     }
     
+    if (_parentVC)
+        if (!hideAll) {
+            OAMapSettingsViewController *ctrl = (OAMapSettingsViewController *)_parentVC;
+            [ctrl setupView];
+        }
+
     [UIView animateWithDuration:.4 animations:^{
         if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
             if (_settingsScreen == EMapSettingsScreenMain || hideAll)

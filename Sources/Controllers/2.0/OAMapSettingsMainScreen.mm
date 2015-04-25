@@ -152,6 +152,7 @@
         styleSettings = [[OAMapStyleSettings alloc] init];
         
         NSArray *categories = [styleSettings getAllCategories];
+        NSArray *topLevelParams = [styleSettings getParameters:@""];
         
         NSMutableArray *categoriesList = [NSMutableArray array];
         [categoriesList addObject:@{@"name": OALocalizedString(@"map_settings_mode"),
@@ -161,6 +162,10 @@
         for (NSString *cName in categories)
             [categoriesList addObject:@{@"name": [styleSettings getCategoryTitle:cName],
                                         @"value": @"",
+                                        @"type": @"OASettingsCell"}];
+        for (OAMapStyleParameter *p in topLevelParams)
+            [categoriesList addObject:@{@"name": p.title,
+                                        @"value": p.value,
                                         @"type": @"OASettingsCell"}];
         
         NSArray *arrStyles = @[@{@"groupName": OALocalizedString(@"map_settings_style"),
@@ -324,15 +329,28 @@
         {
             if (mapStyleCellPresent)
             {
+                NSArray *categories = [styleSettings getAllCategories];
+                NSArray *topLevelParams = [styleSettings getParameters:@""];
+                
                 if (indexPath.row == 0)
                 {
                     mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey popup:vwController.isPopup];
                 }
+                else if (indexPath.row <= categories.count)
+                {
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
+                }
                 else
                 {
-                    NSArray *categories = [styleSettings getAllCategories];
-                    
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
+                    OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - 1];
+                    if (p.dataType != OABoolean) {
+                        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name popup:vwController.isPopup];
+                        
+                        if (!vwController.isPopup)
+                            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
+                        else
+                            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
+                    }
                 }
                 break;
             }

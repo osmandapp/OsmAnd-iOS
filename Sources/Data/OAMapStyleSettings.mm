@@ -95,17 +95,18 @@
     {
         NSString *name = resolvedMapStyle->getStringById(p->getNameId()).toNSString();
         
+        //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->getTitle().toNSString(), p->getDescription().toNSString(), p->getCategory().toNSString());
+
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"transportStops"] ||
             //[name isEqualToString:@"publicTransportMode"] ||
             //[name isEqualToString:@"tramTrainRoutes"] ||
             //[name isEqualToString:@"subwayMode"] ||
-            [name isEqualToString:@"engine_v1"] ||
-            p->getCategory().isEmpty())
+            //p->getCategory().isEmpty() ||
+            [name isEqualToString:@"engine_v1"])
 
             continue;
         
-        //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->title.toNSString(), p->description.toNSString(), p->category.toNSString());
         NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
         NSString *attrLocText = OALocalizedString(attrLocKey);
         if ([attrLocKey isEqualToString:attrLocText])
@@ -118,12 +119,15 @@
         param.title = attrLocText;
         param.category = p->getCategory().toNSString();
 
-        NSString *categoryLocKey = [NSString stringWithFormat:@"rendering_category_%@", param.category];
-        NSString *categoryLocText = OALocalizedString(categoryLocKey);
-        if ([categoryLocKey isEqualToString:categoryLocText])
-            categoryLocText = [param.category capitalizedString];
-
-        [categories setObject:categoryLocText forKey:param.category];
+        if (param.category.length > 0)
+        {
+            NSString *categoryLocKey = [NSString stringWithFormat:@"rendering_category_%@", param.category];
+            NSString *categoryLocText = OALocalizedString(categoryLocKey);
+            if ([categoryLocKey isEqualToString:categoryLocText])
+                categoryLocText = [param.category capitalizedString];
+            
+            [categories setObject:categoryLocText forKey:param.category];
+        }
         
         NSMutableSet *values = [NSMutableSet set];
         [values addObject:@""];

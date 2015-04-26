@@ -3,3 +3,35 @@
 "shared_string_yes" = "Sí";
 "shared_string_no" = "No";
 "shared_string_save" = "Guardar";
+"rendering_value__name" = "Predeterminado";
+"rendering_value_highContrastRoads_name" = "Carreteras en alto contraste";
+"rendering_attr_OSMMapperAssistant_name" = "Asistente de mapeador OSM";
+"rendering_attr_roadStyle_name" = "Estilo carretera";
+"rendering_value_orange_name" = "Anaranjado";
+"rendering_value_germanRoadAtlas_name" = "Atlas alemán de carreteras";
+"rendering_category_routes" = "Rutas";
+"rendering_category_details" = "Detalles";
+"rendering_category_transport" = "Transporte";
+"rendering_category_others" = "Otros atributos del mapa";
+"rendering_attr_coloredBuildings_name" = "Edificios por código de color según el tipo";
+"rendering_attr_hideBuildings_name" = "Ocultar edificios";
+"rendering_attr_moreDetailed_name" = "Más detalles";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Mostrar restricciones de acceso";
+"rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de las carreteras";
+"rendering_attr_showSurfaces_name" = "Mostrar superficie de las carreteras";
+"rendering_attr_alpineHiking_name" = "Escala de senderismo Alpino (SAC)";
+"rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
+"rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";
+"rendering_attr_noPolygons_name" = "Ocultar polígonos";
+"rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
+"favorite" = "Favorito";
+"shared_string_delete" = "Borrar";
+"rendering_attr_streetLighting_name" = "Alumbrado público";
+"rendering_value_americanRoadAtlas_name" = "Atlas americano de carreteras";
+"rendering_attr_publicTransportMode_name" = "Rutas de autobús, trolebús y lanzadera";
+"rendering_attr_tramTrainRoutes_name" = "Rutas de tranvía y tren";
+"rendering_attr_subwayMode_name" = "Rutas de metro";
+// Rendering categories
+"rendering_category_hide" = "Ocultar";
+"rendering_attr_showCycleRoutes_name" = "Mostrar rutas ciclistas";

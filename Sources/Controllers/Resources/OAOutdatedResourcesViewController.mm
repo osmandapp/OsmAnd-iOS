@@ -60,17 +60,17 @@
 
 -(void)applyLocalization
 {
+    [super applyLocalization];
+    
     _titleView.text = OALocalizedString(@"res_updates");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
-    [self.btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [self.btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
-    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    
     UIBarButtonItem* refreshAllBarButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all")
                                                                             style:UIBarButtonItemStylePlain
                                                                            target:self

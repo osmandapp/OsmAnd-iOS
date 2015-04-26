@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+@property (weak, nonatomic) IBOutlet UIButton *updateAllButton;
 
 @end
 
@@ -61,6 +62,7 @@
 {
     _titleView.text = OALocalizedString(@"res_updates");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_updateAllButton setTitle:OALocalizedString(@"res_update_all") forState:UIControlStateNormal];
     [self.btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
     [self.btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
@@ -212,21 +214,37 @@
                                                              }], nil] show];
 }
 
+- (IBAction)updateAllClicked:(id)sender
+{
+    [self onUpdateAllBarButtonClicked];
+}
+
 - (void)onUpdateAllBarButtonClicked
 {
     NSMutableArray* resourcesToUpdate = [NSMutableArray array];
+    BOOL needPurchaseAny = NO;
     @synchronized(_dataLock)
     {
         for (OutdatedResourceItem* item in _resourcesItems)
         {
-            if (item.downloadTask != nil)
+            BOOL needPurchase = (item.worldRegion.regionId != nil && ![item.worldRegion isInPurchasedArea]);
+            if (!needPurchaseAny && needPurchase)
+                needPurchaseAny = YES;
+            
+            if (item.downloadTask != nil || needPurchase)
                 continue;
 
             [resourcesToUpdate addObject:item];
         }
     }
     if ([resourcesToUpdate count] == 0)
+    {
+        if (needPurchaseAny)
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_updates_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+        }
         return;
+    }
 
     if ([resourcesToUpdate count] == 1)
         [self offerDownloadAndUpdateOf:[resourcesToUpdate firstObject]];

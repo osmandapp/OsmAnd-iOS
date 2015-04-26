@@ -117,6 +117,8 @@ struct RegionResources
     UILabel *_freeTextLabel;
     UIButton *_btnPurchasesOnBanner;
     NSInteger _bannerSection;
+    
+    TTTArrayFormatter *_arrFmt;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -152,6 +154,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         _lastSearchString = @"";
         _lastSearchScope = 0;
         _searchResults = nil;
+        
+        _arrFmt = [[TTTArrayFormatter alloc] init];
+        _arrFmt.usesSerialDelimiter = NO;
+
     }
     return self;
 }
@@ -442,17 +448,16 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             regionResources.localResources.clear();
         }
         
-        if ([region purchased] || [region isInPurchasedArea]) {
-            for (const auto& resource : _outdatedResources)
-            {
-                if (!resource->id.startsWith(downloadsIdPrefix))
-                    continue;
-                
-                regionResources.allResources.insert(resource->id, resource);
-                regionResources.outdatedResources.insert(resource->id, resource);
-                regionResources.localResources.insert(resource->id, resource);
-            }
+        for (const auto& resource : _outdatedResources)
+        {
+            if (!resource->id.startsWith(downloadsIdPrefix))
+                continue;
+            
+            regionResources.allResources.insert(resource->id, resource);
+            regionResources.outdatedResources.insert(resource->id, resource);
+            regionResources.localResources.insert(resource->id, resource);
         }
+        
         for (const auto& resource : _localResources)
         {
             if (!resource->id.startsWith(downloadsIdPrefix))
@@ -597,7 +602,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
-        if (!match || ![match isInPurchasedArea])
+        if (!match)
             continue;
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
@@ -1309,8 +1314,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             title = OALocalizedString(@"res_updates_avail");
 
             NSArray* regionsNames = [_regionsWithOutdatedResources valueForKey:NSStringFromSelector(@selector(name))];
-            subtitle = [TTTArrayFormatter localizedStringFromArray:regionsNames
-                                                        arrayStyle:TTTArrayFormatterSentenceStyle];
+            subtitle = [_arrFmt stringFromArray:regionsNames];
         }
         else if (indexPath.section == _localResourcesSection && _localResourcesSection >= 0)
         {

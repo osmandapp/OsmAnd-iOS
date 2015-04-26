@@ -380,9 +380,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+- (BOOL)checkIfUpdateEnabled:(OAWorldRegion *)region
+{
+#if defined(OSMAND_IOS_DEV)
+    return YES;
+#endif
+    
+    if (region.regionId == nil || [region isInPurchasedArea]) {
+        return YES;
+        
+    } else {
+        
+        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"res_updates_exp") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+        
+        return NO;
+    }
+}
+
 - (void)offerDownloadAndUpdateOf:(OutdatedResourceItem*)item
 {
-    if (![self checkIfDownloadEnabled:item.worldRegion])
+    if (![self checkIfUpdateEnabled:item.worldRegion])
         return;
     
     const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);

@@ -190,6 +190,7 @@
 "res_update_all" = "Update all";
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
+"res_updates_exp" = "Please purchase continent(s) to update the maps";
 
 // Menu
 "menu_my_places" = "My Places";

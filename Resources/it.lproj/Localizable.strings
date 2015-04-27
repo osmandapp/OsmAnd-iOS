@@ -246,3 +246,5 @@
 "region_africa" = "Africa";
 "region_asia" = "Asia";
 "region_russia" = "Russia";
+"rendering_attr_roadStyle_name" = "Stile disegno delle strade";
+"rendering_value_orange_name" = "Arancione";

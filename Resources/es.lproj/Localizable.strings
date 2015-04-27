@@ -58,3 +58,32 @@
 "fav_create_group" = "Crear nuevo grupo";
 "fav_ignore" = "Ignorar";
 "fav_rename" = "Renombrar";
+"fav_export_select" = "Por favor, seleccione favoritos a exportar";
+"fav_import_desc" = "Puede importar sus favoritos como puntos de referencia en el archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo favorites.gpx puede abrir archivos desde Dropbox, Email o cualquier otra fuente - Use la función Abrir.";
+"fav_enter_group_name" = "Introduzca el nombre de grupo";
+"fav_exists" = "Favoritos con nombre \"% @\" ya existe";
+"fav_replace" = "Reemplazar";
+"fav_replace_all" = "Reemplazar todo";
+"fav_rename_q" = "Renombrar favorito";
+"fav_enter_new_name" = "Por favor, introduzca el nuevo nombre para el favorito";
+// POI
+"poi_insrease_radius" = "Aumentar el radio de búsqueda a";
+"poi_max_radius_reached" = "Radio de búsqueda máximo alcanzado";
+"poi_search_near_center" = "La búsqueda se realiza cerca del centro del mapa";
+"poi_hide" = "Ocultar";
+// My Places
+"favorites" = "Favoritos";
+"tracks" = "Pistas";
+// GPX
+"gpx_point" = "Punto";
+"gpx_waypoints" = "Puntos de ruta";
+"gpx_points" = "Punto (s)";
+"gpx_export" = "Exportar";
+"import_export" = "Importar/Exportar";
+"gpx_import_title" = "Importar pista";
+"gpx_import_already_exists" = "El archivo de pista especificada, ya existe en la lista. Por favor seleccione la acción.";
+"gpx_add_new" = "Añadir nuevo archivo";
+"gpx_overwrite" = "Sobrescribir";
+"gpx_cannot_import" = "No se puede importar el archivo GPX especificado";
+"gpx_export_title" = "Exportar pista";
+"gpx_export_select_track" = "Por favor, seleccione la pista a Exportar";

@@ -234,6 +234,12 @@
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
 
+- (void)updateOverlayUnderlayView:(BOOL)show
+{
+    if (self.browseMapViewController)
+        [_browseMapViewController updateOverlayUnderlayView:show];
+}
+
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     if (_hudViewController == nil)
@@ -402,13 +408,18 @@
 
 -(void)closeMapSettings
 {
-    OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
-    if (lastMapSettingsCtrl)
-        [lastMapSettingsCtrl hidePopup:YES];
-    
-    _mapSettings = nil;
-    
-    [self destroyShadowButton];
+    if (_mapSettings)
+    {
+        [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
+        
+        OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
+        if (lastMapSettingsCtrl)
+            [lastMapSettingsCtrl hidePopup:YES];
+        
+        _mapSettings = nil;
+        
+        [self destroyShadowButton];
+    }
 }
 
 -(CGRect)shadowButtonRect

@@ -16,4 +16,7 @@
 
 - (void)updateDestinationViewLayout;
 
+- (BOOL)isOverlayUnderlayViewVisible;
+- (void)updateOverlayUnderlayView:(BOOL)show;
+
 @end

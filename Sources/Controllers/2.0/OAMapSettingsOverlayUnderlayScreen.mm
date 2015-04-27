@@ -9,6 +9,8 @@
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #include "Localization.h"
 #import "OASliderCell.h"
+#import "OARootViewController.h";
+#import "OAMapPanelViewController.h";
 
 #include <QSet>
 
@@ -51,6 +53,7 @@ typedef enum
 {
     NSMutableArray* _onlineMapSources;
     EMapSettingType _mapSettingType;
+    UIButton *_btnShowOnMap;
 }
 
 @synthesize settingsScreen, app, tableData, vwController, tblView, settings, title, isOnlineMapSource;
@@ -76,6 +79,16 @@ typedef enum
         
         vwController = viewController;
         tblView = tableView;
+
+        _btnShowOnMap = [UIButton buttonWithType:UIButtonTypeSystem];
+        CGRect f = vwController.navbarView.frame;
+        CGFloat btnSize = 20.0;
+        _btnShowOnMap.frame = CGRectMake(f.size.width - 30.0, 8.0, btnSize, btnSize);
+        _btnShowOnMap.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [_btnShowOnMap setImage:[UIImage imageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
+        _btnShowOnMap.tintColor = [UIColor whiteColor];
+        [_btnShowOnMap addTarget:self action:@selector(btnShowOnMapPressed) forControlEvents:UIControlEventTouchUpInside];
+        [vwController.navbarView addSubview:_btnShowOnMap];
         
         [self commonInit];
         [self initData];
@@ -95,6 +108,12 @@ typedef enum
 
 - (void)deinit
 {
+}
+
+- (void)btnShowOnMapPressed
+{
+    [[OARootViewController instance].mapPanel updateOverlayUnderlayView:YES];
+    [[OARootViewController instance].mapPanel closeMapSettings];
 }
 
 - (void)setupView

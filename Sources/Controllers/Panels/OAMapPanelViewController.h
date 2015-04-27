@@ -30,7 +30,10 @@
 
 - (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
+- (void)closeMapSettings;
 - (void)mapSettingsButtonClick:(id)sender;
 - (void)searchButtonClick:(id)sender;
+
+- (void)updateOverlayUnderlayView:(BOOL)show;
 
 @end

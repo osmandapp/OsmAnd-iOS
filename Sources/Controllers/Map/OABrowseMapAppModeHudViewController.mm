@@ -20,6 +20,7 @@
 #   import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
+#import "OAOverlayUnderlayView.h"
 
 #import "OADestinationViewController.h"
 #import "OADestination.h"
@@ -80,6 +81,8 @@
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    
+    OAOverlayUnderlayView* _overlayUnderlayView;
     
 #if defined(OSMAND_IOS_DEV)
     OADebugHudViewController* _debugHudViewController;
@@ -236,11 +239,53 @@
 - (void)viewWillLayoutSubviews
 {
     if (_destinationViewController)
-        [_destinationViewController updateFrame];    
+        [_destinationViewController updateFrame];
+    
     if (_downloadView)
         _downloadView.frame = CGRectMake(142.0, 27.0, DeviceScreenWidth - 154.0, 28.0);
+    
+    if (_overlayUnderlayView)
+    {
+        CGFloat x1 = _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0;
+        CGFloat x2 = (_driveModeButton.hidden ? _mapModeButton.frame.origin.x : _driveModeButton.frame.origin.x) - 8.0;
+        
+        CGFloat w = x2 - x1;
+        CGFloat h = [_overlayUnderlayView getHeight:w];
+        _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 11.0, w, h);
+    }
 }
 
+- (BOOL)isOverlayUnderlayViewVisible
+{
+    return _overlayUnderlayView && _overlayUnderlayView.superview != nil;
+}
+
+- (void)updateOverlayUnderlayView:(BOOL)show
+{
+    if (!show)
+    {
+        if (_overlayUnderlayView && _overlayUnderlayView.superview)
+            [_overlayUnderlayView removeFromSuperview];
+        
+        return;
+    }
+    
+    if (!_overlayUnderlayView)
+    {
+        _overlayUnderlayView = [[OAOverlayUnderlayView alloc] init];
+    }
+    else
+    {
+        [_overlayUnderlayView updateView];
+        [self.view setNeedsLayout];
+    }
+ 
+    if (_overlayUnderlayView.viewLayout != OAViewLayoutNone && !_overlayUnderlayView.superview)
+        [self.view addSubview:_overlayUnderlayView];
+    else if (_overlayUnderlayView.viewLayout == OAViewLayoutNone && _overlayUnderlayView.superview)
+        [_overlayUnderlayView removeFromSuperview];
+
+}
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
@@ -314,6 +359,12 @@
             _driveModeButton.hidden = YES;
         
         [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
+        
+        if (_overlayUnderlayView && _overlayUnderlayView.superview)
+        {
+            [_overlayUnderlayView updateView];
+            [self.view setNeedsLayout];
+        }
     });
 }
 

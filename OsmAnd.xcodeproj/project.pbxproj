@@ -374,6 +374,12 @@
 		8424316D1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
 		8424316E1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
 		8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8424316C1AEA19C700925821 /* OAOcbfHelper.m */; };
+		842431711AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */; };
+		842431721AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */; };
+		842431731AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */; };
+		842431761AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
+		842431771AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
+		842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
 		842BFC551A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC561A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC571A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
@@ -1956,6 +1962,9 @@
 		842431671AE939B400925821 /* welcome_wide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome_wide.png; path = Resources/IntroImages/welcome_wide.png; sourceTree = "<group>"; };
 		8424316B1AEA19C700925821 /* OAOcbfHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOcbfHelper.h; sourceTree = "<group>"; };
 		8424316C1AEA19C700925821 /* OAOcbfHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOcbfHelper.m; sourceTree = "<group>"; };
+		842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOverlayUnderlayView.xib; path = Resources/Views/OAOverlayUnderlayView.xib; sourceTree = "<group>"; };
+		842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOverlayUnderlayView.h; path = Views/OAOverlayUnderlayView.h; sourceTree = "<group>"; };
+		842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOverlayUnderlayView.m; path = Views/OAOverlayUnderlayView.m; sourceTree = "<group>"; };
 		842BFC521A94935A008CF87B /* OAGPXPointListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXPointListViewController.h; path = Sources/Controllers/2.0/OAGPXPointListViewController.h; sourceTree = "<group>"; };
 		842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXPointListViewController.mm; path = Sources/Controllers/2.0/OAGPXPointListViewController.mm; sourceTree = "<group>"; };
 		842BFC541A94935A008CF87B /* OAGPXPointListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXPointListViewController.xib; path = Sources/Controllers/2.0/OAGPXPointListViewController.xib; sourceTree = "<group>"; };
@@ -2721,6 +2730,7 @@
 		3AC40ABF19DDC430002FBC40 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */,
 				3A83147C1A07DC2500473C38 /* OATargetPointView.xib */,
 				3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */,
 			);
@@ -3397,6 +3407,8 @@
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */,
+				842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */,
 				3A8314841A07EB4C00473C38 /* OATargetPointView.h */,
 				3A8314851A07EB4C00473C38 /* OATargetPointView.mm */,
 				3AC40AC219DDC476002FBC40 /* OADownloadProgressView.h */,
@@ -4025,6 +4037,7 @@
 				84E2DBBF1AB720FB001A7FEC /* zoom_out_button@3x.png in Resources */,
 				843257B91A9DAEE400A7964E /* ic_update@3x.png in Resources */,
 				844499641AAA1FC000ACA20D /* ic_tabbar_addons_active@2x.png in Resources */,
+				842431711AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */,
 				BB451DC518D70B5B005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
 				BB451DCA18D70B5B005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
 				8444999D1AAA1FFA00ACA20D /* img_app_purchase_1@3x.png in Resources */,
@@ -4473,6 +4486,7 @@
 				84E2DBC01AB720FB001A7FEC /* zoom_out_button@3x.png in Resources */,
 				843257BA1A9DAEE400A7964E /* ic_update@3x.png in Resources */,
 				844499651AAA1FC000ACA20D /* ic_tabbar_addons_active@2x.png in Resources */,
+				842431721AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */,
 				BB451E5E18DCD224005FBE09 /* HUD_menu_halfbutton@2x.png in Resources */,
 				BB451E5F18DCD224005FBE09 /* HUD_right_halfbutton_bg.png in Resources */,
 				8444999E1AAA1FFA00ACA20D /* img_app_purchase_1@3x.png in Resources */,
@@ -5225,6 +5239,7 @@
 				843E5CF61AB341E000BE14BE /* icon_map_mode.png in Resources */,
 				84BD08B41AB16174006DA3F7 /* HUD_compass_bg@3x.png in Resources */,
 				BBA3AFDF197FC4BB0039D991 /* regions.ocbf in Resources */,
+				842431731AEE1B0300925821 /* OAOverlayUnderlayView.xib in Resources */,
 				8444997E1AAA1FC000ACA20D /* ic_tabbar_maps_normal.png in Resources */,
 				84BD08D81AB16174006DA3F7 /* HUD_right_halfbutton_bg@3x.png in Resources */,
 				84BD08C91AB16174006DA3F7 /* HUD_left_narrowbutton_bg@3x.png in Resources */,
@@ -5425,6 +5440,7 @@
 				3A426F441A18E22500DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA31A0B881300ECC792 /* OASettingsViewController.m in Sources */,
+				842431761AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84BFC24F1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				842BFC621A94DD3A008CF87B /* OAGpxWptItem.m in Sources */,
 				84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
@@ -5554,6 +5570,7 @@
 				3A426F471A18F2F600DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA71A0B8B9F00ECC792 /* OASettingsViewController.m in Sources */,
+				842431771AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84BFC2501A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				842BFC631A94DD3A008CF87B /* OAGpxWptItem.m in Sources */,
 				84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
@@ -5775,6 +5792,7 @@
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.m in Sources */,
+				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

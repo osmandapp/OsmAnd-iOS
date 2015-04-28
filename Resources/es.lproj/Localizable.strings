@@ -87,3 +87,167 @@
 "gpx_cannot_import" = "No se puede importar el archivo GPX especificado";
 "gpx_export_title" = "Exportar pista";
 "gpx_export_select_track" = "Por favor, seleccione la pista a Exportar";
+// HUD
+"hud_heading" = "Partida";
+"gpx_import_desc" = "Puede importar sus archivos GPX (formato común de datos GPS)\n\nPara compartir el archivo GPX puede abrir archivos desde Dropbox, Email o cualquier otra fuente - Use la función Abrir";
+"gpx_no_tracks" = "Sin pistas";
+"gpx_remove" = "¿Quitar pistas?";
+"gpx_stat" = "Estadísticas";
+"gpx_route_time" = "Tiempo del recorrido";
+"gpx_uphldownhl" = "Subidas/Bajadas";
+"gpx_distance" = "Distancia";
+"gpx_average_speed" = "Velocidad media";
+"gpx_start" = "Inicio";
+"gpx_finish" = "Finalizar";
+"gpx_avg_elev" = "Elevación media";
+"gpx_elev_range" = "Rango de elevación";
+"gpx_updown" = "Arriba/Abajo";
+"gpx_uphills_total" = "Ascenso total";
+// Map settings
+"m_style_overview" = "Resumen";
+"m_style_car" = "Automóvil";
+"m_style_walk" = "Caminar";
+"m_style_bicycle" = "Bicicleta";
+"map_settings_map" = "Mapa";
+"map_settings_show" = "Mostrar en el mapa";
+"map_settings_type" = "Tipo de mapa";
+"map_settings_mode" = "Modo de aplicación";
+"map_settings_day" = "Día";
+"map_settings_night" = "Noche";
+"map_settings_style" = "Estilo de mapa";
+"map_settings_none" = "Ninguno";
+"map_settings_offline" = "Estilos de mapas fuera de línea";
+"map_settings_online" = "Mapas en línea";
+"map_settings_transp" = "Transparencia";
+"map_settings_avail_lay" = "Capas disponibles";
+// Intro
+"intro_skip" = "Omitir";
+"intro_download" = "Descargar\nmapa";
+"intro_next" = "Siguiente";
+"intro_welcome" = "Bienvenido a↵\nOsmAnd";
+"intro_promo" = "Mapas globales sin conexión";
+"intro_placeholder" = "Introduzca el nombre de su región";
+// Settings
+"sett_settings" = "Ajustes";
+"sett_units" = "Unidades";
+"sett_km" = "Kilómetros";
+"sett_ml" = "Millas";
+"sett_zoom" = "Botón de zoom";
+"sett_show" = "Mostrar";
+"sett_notshow" = "No mostrar";
+"sett_loc_fmt" = "Formato de ubicación";
+"sett_deg" = "Grados";
+"sett_deg_min" = "Grados y minutos";
+"sett_arr" = "Flechas del mapa";
+"sett_arr_loc" = "Ubicación";
+"sett_arr_map" = "Centro del mapa";
+"maps" = "Mapas";
+"purchases" = "Compras";
+// Purchases
+"prch_addons" = "Complementos";
+"prch_ski_q" = "Por favor encienda el estilo \"Mapa Ski\" en la configuración del mapa";
+"prch_nau_q1" = "Por favor encienda el estilo \"Náutico\" en la configuración del mapa e instale el mapamundi náutico base.";
+"incur_high_charges" = "Esto puede incurrir en cargos altos.";
+"prch_nau_q3" = "Puede instalarlo más tarde a través de Mapas & Recursos.";
+"proceed_q" = "¿Proceder?";
+"download" = "Descargar";
+"nothanks" = "No, gracias";
+"download_now" = "Descargar mapa ahora";
+"prch_failed" = "La compra de \"% @\" ha fallado";
+"prch_items_failed" = "Los item(s) no fueron restaurados. Por favor inténtelo nuevamente.";
+// Resources
+"res_mapsres" = "Mapas & Recursos";
+"res_installed" = "Instalado";
+"res_banner_many" = "Hay %d mapas gratis disponible para descargar";
+"res_banner_one" = "Hay un mapa gratuito disponible para su descarga";
+"res_banner_no" = "No tienes disponible mapas gratis para descargar";
+"res_search_world" = "Búsqueda mundial";
+"res_catalog_upd" = "Catálogo actualizado";
+"res_world_map" = "Mapa mundial";
+"res_updates" = "Actualizaciones";
+"res_worldwide" = "Mundial";
+"res_region_map" = "Mapa regional";
+"res_updates_avail" = "Actualizaciones disponibles";
+"res_maps_inst" = "mapa(s)";
+"res_deleting" = "Borrando...";
+"res_wsea_map" = "Balizas mundiales";
+"res_dmap" = "Resumen de mapa detallado";
+"res_map_of_region" = "Mapa de la región";
+"res_update_no_space" = "No hay suficiente espacio para actualizar";
+"res_install_no_space" = "No hay suficiente espacio para instalar";
+"res_no_space_free" = "es necesario. Por favor liberar algo de espacio.";
+"res_free_exp" = "Usted agotó todas sus descargas gratis. Por favor compre continente para descargar / actualizar los mapas.";
+"res_upd_avail_q" = "Una actualización está disponible para";
+"res_inst_avail_cell_q" = "Instalación de %@ necesita %@ ser descargado a través de la red celular.";
+"res_inst_avail_wifi_q" = "Instalación de %@ necesita %@ ser descargado a través de la red WiFi.";
+"res_cancel_upd_q" = "Va a cancelar %@ actualizaciones.";
+"data_will_be_lost" = "Se perderán todos los datos descargados.";
+"res_uninst_managed_q" = "Va a desinstalar %@. Lo puede reinstalar mas tarde desde el catálogo.";
+"res_details" = "Detalles";
+"res_type" = "Tipo";
+"res_unknown" = "Desconocido";
+"res_size" = "Tamaño";
+"res_created_on" = "Creado en";
+"res_update_all" = "Actualizar todos";
+"res_updates_no_space" = "No hay suficiente espacio para instalar %d actualización(es). Es necesario %@. Por favor libere algo de espacio.";
+"res_updates_avail_q" = "actualización(es) están disponibles.";
+"res_updates_exp" = "Por favor compre continent(s) para actualizar los mapas";
+// Menu
+"menu_my_places" = "Mis sitios";
+"menu_feedback" = "Retroalimentación";
+"menu_about" = "Acerca de";
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+// Map
+"map_inst_det_map_q" = "Instalar resumen del mapa detallado para obtener más información acerca de las ubicaciones.";
+"map_remind" = "Recordármelo más tarde";
+"map_no_address" = "Todavía no se conoce la dirección";
+// Import
+"import_title" = "Importar datos";
+"import_choose_type" = "Por favor elija que importar";
+"import_favorite" = "Favorito";
+"import_failed" = "Importación fallida";
+"import_cannot" = "No se puede importar el archivo especificado";
+"import_gpx" = "Traza GPX";
+// Alerts
+"alert_inet_needed" = "Conexión a Internet necesaria para realizar esta acción. Por favor, compruebe su conexión a Internet.";
+// Context menu
+"ctx_mnu_edit_fav" = "Editar favorito";
+"ctx_mnu_add_fav" = "Añadir favorito";
+"ctx_mnu_share" = "Compartir";
+"ctx_mnu_direction" = "Dirección";
+// Location Services
+"loc_access_denied" = "Acceso denegado";
+"loc_access_denied_desc" = "El acceso a su ubicación ha sido denegado";
+// Colors
+"col_purple" = "Púrpura";
+"col_green" = "Verde";
+"col_yellow" = "Amarillo";
+"col_orange" = "Anaranjado";
+"col_gray" = "Gris";
+"col_red" = "Rojo";
+"col_blue" = "Azul";
+"col_magenta" = "Magenta";
+// World Regions
+"region_africa" = "África";
+"region_asia" = "Asia";
+"region_ausralia_and_oceania" = "Australia y Oceanía";
+"region_central_america" = "Centroamérica";
+"region_europe" = "Europa";
+"region_north_america" = "Norteamérica";
+"region_russia" = "Rusia";
+"region_south_america" = "Sudamérica";
+"map_settings_overunder" = "Superpuesta / subyacente";
+"map_settings_over" = "Superposición";
+"map_settings_under" = "Subyacente";
+"prch_nau_q2_cell" = "Descarga requiere %@ a través de la red celular.";
+"prch_nau_q2_wifi" = "Descarga requiere %@ a través de la red WiFi.";
+"res_wmap" = "Mapa general mundial";
+"res_cancel_inst_q" = "Va a cancelar la instalación de %@.";
+"res_uninst_unmanaged_q" = "Va a borrar %@. Esto no es del catálogo, por favor asegúrese de tener una copia de seguridad si es necesario.";

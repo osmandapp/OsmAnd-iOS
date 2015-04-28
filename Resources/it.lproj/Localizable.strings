@@ -248,3 +248,7 @@
 "region_russia" = "Russia";
 "rendering_attr_roadStyle_name" = "Stile disegno delle strade";
 "rendering_value_orange_name" = "Arancione";
+"rendering_value__name" = "Default";
+"rendering_value_highContrastRoads_name" = "Alto contrasto strade";
+"rendering_value_germanRoadAtlas_name" = "Atlante strade tedesche";
+"rendering_value_americanRoadAtlas_name" = "Atlante strade americane";

@@ -83,4 +83,20 @@
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
++ (NSDictionary *)parseUrlQuery:(NSURL *)url
+{
+    NSMutableDictionary *queryStrings = [[NSMutableDictionary alloc] init];
+    for (NSString *qs in [url.query componentsSeparatedByString:@"&"]) {
+        // Get the parameter name
+        NSString *key = [[qs componentsSeparatedByString:@"="] objectAtIndex:0];
+        // Get the parameter value
+        NSString *value = [[qs componentsSeparatedByString:@"="] objectAtIndex:1];
+        value = [value stringByReplacingOccurrencesOfString:@"+" withString:@" "];
+        value = [value stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+        
+        queryStrings[key] = value;
+    }
+    return [NSDictionary dictionaryWithDictionary:queryStrings];
+}
+
 @end

@@ -13,6 +13,7 @@
 #import "OAObservable.h"
 #import <Reachability.h>
 #import "OAAppSettings.h"
+#import "OAPOIType.h"
 
 #define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
 #define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
@@ -28,6 +29,30 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
     OAVisualMetricsModeBinaryMapRasterize
 };
 #endif // defined(OSMAND_IOS_DEV)
+
+typedef NS_ENUM(NSInteger, OAMapSymbolType)
+{
+    OAMapSymbolUndefined = 0,
+    OAMapSymbolContext,
+    OAMapSymbolDestination,
+    OAMapSymbolFavorite,
+    OAMapSymbolPOI,
+    OAMapSymbolLocation,
+};
+
+@interface OAMapSymbol : NSObject
+
+@property (nonatomic) CLLocationCoordinate2D location;
+@property (nonatomic) CGPoint touchPoint;
+@property (nonatomic) OAPOIType *poiType;
+@property (nonatomic) UIImage *icon;
+@property (nonatomic) NSString *caption;
+@property (nonatomic) NSString *buildingNumber;
+@property (nonatomic) OAMapSymbolType type;
+@property (nonatomic) NSInteger sortIndex;
+
+@end
+
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -50,14 +75,16 @@ typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 - (void)goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
--(float)calculateMapRuler;
+- (float)calculateMapRuler;
 
--(BOOL)isMyLocationVisible;
+- (BOOL)isMyLocationVisible;
 
 - (void)showContextPinMarker:(double)latitude longitude:(double)longitude;
 - (void)hideContextPinMarker;
 
--(void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (void)postTargetNotification:(OAMapSymbol *)symbol;
+
+- (void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
 - (void)showTempGpxTrack:(NSString *)fileName;
 - (void)hideTempGpxTrack;

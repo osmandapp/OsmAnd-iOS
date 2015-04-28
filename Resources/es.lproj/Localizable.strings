@@ -35,3 +35,26 @@
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
 "rendering_attr_showCycleRoutes_name" = "Mostrar rutas ciclistas";
+"OsmAnd Maps" = "Mapas OsmAnd";
+// Shared Strings
+"shared_string_back" = "Atrás";
+"shared_string_done" = "Hecho";
+"shared_string_update" = "Actualizar";
+"shared_string_install" = "Instalar";
+"shared_string_uninstall" = "Desinstalar";
+"hud_no_movement" = "Sin movimiento";
+// Favorites
+"fav_color" = "Color";
+"fav_colors" = "Colores";
+"fav_name" = "Nombre";
+"fav_group" = "Grupo";
+"groups" = "Grupos";
+"fav_no_group" = "Sin grupo";
+"fav_import" = "Importar";
+"fav_import_title" = "Importar favorito";
+"fav_export_title" = "Exportar favorito";
+"fav_select_remove" = "Por favor, seleccione favoritos a borrar";
+"fav_remove_q" = "¿Borrar favoritos seleccionados?";
+"fav_create_group" = "Crear nuevo grupo";
+"fav_ignore" = "Ignorar";
+"fav_rename" = "Renombrar";

@@ -1244,7 +1244,7 @@
                     
                     //NSLog(@"%@=%@", rule.tag.toNSString(), rule.value.toNSString());
 
-                    if (rule.tag == QString("highway"))
+                    if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))
                     {
                         doSkip = YES;
                         break;

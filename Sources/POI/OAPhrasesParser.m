@@ -166,9 +166,14 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 
 - (void)charactersFound:(const xmlChar *)characters length:(int)length {
     if(_parsingString) {
-        NSString *value = [[NSString alloc] initWithBytes:(const void *)characters
-                                                   length:length encoding:NSUTF8StringEncoding];
-        _currentString = value;
+        NSString *value = [[[NSString alloc] initWithBytes:(const void *)characters
+                                                   length:length encoding:NSUTF8StringEncoding] stringByTrimmingCharactersInSet:
+        [NSCharacterSet whitespaceCharacterSet]];
+        
+        if (_currentString)
+            _currentString = [NSString stringWithFormat:@"%@ %@", _currentString, value];
+        else
+            _currentString = value;
     }
 }
 

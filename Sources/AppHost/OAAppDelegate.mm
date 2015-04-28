@@ -136,9 +136,9 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
-    NSLog(@"URL scheme: %@", [url scheme]);
-    NSLog(@"URL query: %@", [url query]);
+    //NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
+    //NSLog(@"URL scheme: %@", [url scheme]);
+    //NSLog(@"URL query: %@", [url query]);
  
     NSString *scheme = [[url scheme] lowercaseString];
 
@@ -161,9 +161,19 @@
         Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
+            OAMapViewController* mapViewController = [_rootViewController.mapPanel mapViewController];
             
-            [mapViewController goToPosition:pos31 andZoom:zoom animated:YES];
+            UIViewController *top = _rootViewController.navigationController.topViewController;
+            
+            if (![top isKindOfClass:[JASidePanelController class]])
+                [_rootViewController.navigationController popToRootViewControllerAnimated:NO];
+
+            if (_rootViewController.state != JASidePanelCenterVisible)
+                [_rootViewController showCenterPanelAnimated:NO];
+
+            [_rootViewController.mapPanel closeMapSettings];
+            
+            [mapViewController goToPosition:pos31 andZoom:zoom animated:NO];
             
             OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
             symbol.caption = title;

@@ -346,11 +346,11 @@
 
 - (IBAction)buttonShareClicked:(id)sender {
 
-    // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8 The location was shared with you by OsmAnd
+    // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
     
-    //UIImage *image = [self.mapView getGLScreenshot];
+    // UIImage *image = [self.mapView getGLScreenshot];
     
-    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _targetPoint.zoom];
+    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, _targetPoint.location.latitude, _targetPoint.location.longitude, _targetPoint.zoom, [_targetPoint.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]]];
     
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]

@@ -391,6 +391,10 @@
     // Set layer to be opaque to reduce perfomance loss, and anyways we use all area for rendering
     CAEAGLLayer* eaglLayer = (CAEAGLLayer*)self.layer;
     eaglLayer.opaque = YES;
+    eaglLayer.drawableProperties = @{
+                                     kEAGLDrawablePropertyRetainedBacking: [NSNumber numberWithBool:YES],
+                                     kEAGLDrawablePropertyColorFormat: kEAGLColorFormatRGBA8
+                                     };
     
     // Create OpenGLES 2.0 contexts
     _glRenderContext = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -804,7 +808,7 @@
     CGImageRelease( imageRef );
     CGDataProviderRelease(provider);
     CGColorSpaceRelease(colorSpaceRef);
-    free(buffer2);
+    //free(buffer2);
     
     return myImage;
 }

@@ -616,6 +616,7 @@ typedef enum
     {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
+        [super backButtonClicked:nil];
     }
     else
     {

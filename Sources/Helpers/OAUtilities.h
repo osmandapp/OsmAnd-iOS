@@ -19,4 +19,6 @@
 
 + (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 
++ (NSDictionary *)parseUrlQuery:(NSURL *)url;
+
 @end

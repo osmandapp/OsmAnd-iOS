@@ -36,6 +36,7 @@
     int _limitCounter;
     BOOL _breakSearch;
     NSDictionary *_phrases;
+    NSDictionary *_phrasesEN;
 
     double _radius;
     
@@ -106,13 +107,27 @@
 {
     if (!_phrases)
     {
-        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml"];
+        NSString *lang = [[NSLocale preferredLanguages] firstObject];
+
+        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", lang]];
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:phrasesXmlPath])
+        {
+            OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
+            [parser getPhrasesSync:phrasesXmlPath];
+            _phrases = parser.phrases;
+        }
+    }
+    
+    if (!_phrasesEN)
+    {
+        NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:@"phrases/en"];
         
         OAPhrasesParser *parser = [[OAPhrasesParser alloc] init];
         [parser getPhrasesSync:phrasesXmlPath];
-        _phrases = parser.phrases;
+        _phrasesEN = parser.phrases;
     }
-    
+
     if (_phrases.count > 0)
     {
         for (OAPOIType *poiType in _poiTypes)
@@ -130,11 +145,59 @@
             f.categoryLocalized = [self getPhrase:f.category];
         }
     }
+    
+    if (_phrasesEN.count > 0)
+    {
+        for (OAPOIType *poiType in _poiTypes)
+        {
+            poiType.nameLocalizedEN = [self getPhraseEN:poiType.name];
+            poiType.categoryLocalizedEN = [self getPhraseEN:poiType.category];
+            poiType.filterLocalizedEN = [self getPhraseEN:poiType.filter];
+            
+            if (_phrases.count == 0)
+            {
+                poiType.nameLocalized = poiType.nameLocalizedEN;
+                poiType.categoryLocalized = poiType.categoryLocalizedEN;
+                poiType.filterLocalized = poiType.filterLocalizedEN;
+            }
+        }
+        for (OAPOICategory *c in _poiCategories.allKeys)
+        {
+            c.nameLocalizedEN = [self getPhraseEN:c.name];
+            if (_phrases.count == 0)
+                c.nameLocalized = c.nameLocalizedEN;
+        }
+        
+        for (OAPOIFilter *f in _poiFilters.allKeys)
+        {
+            f.nameLocalizedEN = [self getPhraseEN:f.name];
+            f.categoryLocalizedEN = [self getPhraseEN:f.category];
+            
+            if (_phrases.count == 0)
+            {
+                f.nameLocalized = f.nameLocalizedEN;
+                f.categoryLocalized = f.categoryLocalizedEN;
+            }
+        }
+    }
 }
 
 -(NSString *)getPhrase:(NSString *)name 
 {
     NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    if (!phrase)
+    {
+        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    }
+    else
+    {
+        return phrase;
+    }
+}
+
+-(NSString *)getPhraseEN:(NSString *)name
+{
+    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
     if (!phrase)
     {
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
@@ -335,6 +398,7 @@
         type.category = category;
         type.name = subCategory;
         type.nameLocalized = [self getPhrase:subCategory];
+        type.nameLocalizedEN = [self getPhraseEN:subCategory];
     }
     poi.type = type;
     

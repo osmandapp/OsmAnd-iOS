@@ -35,6 +35,19 @@
 	<string>OSMAND_BUILD</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>net.osmand.maps</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>osmandmaps</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>OSMAND_VERSION</string>
 	<key>GIT_COMMIT_HASH</key>

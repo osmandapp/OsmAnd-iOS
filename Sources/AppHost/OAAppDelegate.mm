@@ -16,6 +16,8 @@
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
 #import "OANavigationController.h"
+#import "OAUtilities.h"
+#import "OANativeUtilities.h"
 #include "CoreResourcesFromBundleProvider.h"
 
 #include <QDir>
@@ -23,6 +25,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Logging.h>
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
 
@@ -133,9 +136,48 @@
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
-    return [_rootViewController handleIncomingURL:url
-                                sourceApplication:sourceApplication
-                                       annotation:annotation];
+    NSLog(@"Calling Application Bundle ID: %@", sourceApplication);
+    NSLog(@"URL scheme: %@", [url scheme]);
+    NSLog(@"URL query: %@", [url query]);
+ 
+    NSString *scheme = [[url scheme] lowercaseString];
+
+    if ([scheme isEqualToString:@"file"])
+    {
+        return [_rootViewController handleIncomingURL:url
+                                    sourceApplication:sourceApplication
+                                           annotation:annotation];
+    }
+    else if ([scheme isEqualToString:@"osmandmaps"])
+    {
+        NSDictionary *params = [OAUtilities parseUrlQuery:url];
+        
+        // osmandmaps://?lat=12.6313&lon=-7.9955&z=8&title=New+York
+        double lat = [params[@"lat"] doubleValue];
+        double lon = [params[@"lon"] doubleValue];
+        double zoom = [params[@"z"] doubleValue];
+        NSString *title = params[@"title"];
+        
+        Point31 pos31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon))];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            OAMapViewController* mapViewController = [[OARootViewController instance].mapPanel mapViewController];
+            
+            [mapViewController goToPosition:pos31 andZoom:zoom animated:YES];
+            
+            OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+            symbol.caption = title;
+            symbol.location = CLLocationCoordinate2DMake(lat, lon);
+            symbol.touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 2.0);
+            symbol.type = OAMapSymbolContext;
+            
+            [mapViewController postTargetNotification:symbol];
+        });
+        
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

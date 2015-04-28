@@ -23,7 +23,6 @@
 #import "OAMapStyleSettings.h"
 #import "OADefaultFavorite.h"
 #import "OAPOIHelper.h"
-#import "OAPOIType.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -93,29 +92,6 @@
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
-
-typedef NS_ENUM(NSInteger, OAMapSymbolType)
-{
-    OAMapSymbolUndefined = 0,
-    OAMapSymbolContext,
-    OAMapSymbolDestination,
-    OAMapSymbolFavorite,
-    OAMapSymbolPOI,
-    OAMapSymbolLocation,
-};
-
-@interface OAMapSymbol : NSObject
-
-@property (nonatomic) CLLocationCoordinate2D location;
-@property (nonatomic) CGPoint touchPoint;
-@property (nonatomic) OAPOIType *poiType;
-@property (nonatomic) UIImage *icon;
-@property (nonatomic) NSString *caption;
-@property (nonatomic) NSString *buildingNumber;
-@property (nonatomic) OAMapSymbolType type;
-@property (nonatomic) NSInteger sortIndex;
-
-@end
 
 @implementation OAMapSymbol
 @end

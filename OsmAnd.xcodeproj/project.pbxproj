@@ -380,6 +380,9 @@
 		842431761AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
 		842431771AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
 		842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */; };
+		8424317A1AEEBEEB00925821 /* phrases in Resources */ = {isa = PBXBuildFile; fileRef = 842431791AEEBEEB00925821 /* phrases */; };
+		8424317B1AEEBEEB00925821 /* phrases in Resources */ = {isa = PBXBuildFile; fileRef = 842431791AEEBEEB00925821 /* phrases */; };
+		8424317C1AEEBEEB00925821 /* phrases in Resources */ = {isa = PBXBuildFile; fileRef = 842431791AEEBEEB00925821 /* phrases */; };
 		842BFC551A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC561A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
 		842BFC571A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */; };
@@ -1965,6 +1968,7 @@
 		842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAOverlayUnderlayView.xib; path = Resources/Views/OAOverlayUnderlayView.xib; sourceTree = "<group>"; };
 		842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOverlayUnderlayView.h; path = Views/OAOverlayUnderlayView.h; sourceTree = "<group>"; };
 		842431751AEE1B2600925821 /* OAOverlayUnderlayView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOverlayUnderlayView.m; path = Views/OAOverlayUnderlayView.m; sourceTree = "<group>"; };
+		842431791AEEBEEB00925821 /* phrases */ = {isa = PBXFileReference; lastKnownFileType = folder; name = phrases; path = ../resources/poi/phrases; sourceTree = "<group>"; };
 		842BFC521A94935A008CF87B /* OAGPXPointListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXPointListViewController.h; path = Sources/Controllers/2.0/OAGPXPointListViewController.h; sourceTree = "<group>"; };
 		842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXPointListViewController.mm; path = Sources/Controllers/2.0/OAGPXPointListViewController.mm; sourceTree = "<group>"; };
 		842BFC541A94935A008CF87B /* OAGPXPointListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXPointListViewController.xib; path = Sources/Controllers/2.0/OAGPXPointListViewController.xib; sourceTree = "<group>"; };
@@ -3234,6 +3238,7 @@
 		84C41E531AB95F970089EABB /* search */ = {
 			isa = PBXGroup;
 			children = (
+				842431791AEEBEEB00925821 /* phrases */,
 				84C41E581AB960D10089EABB /* phrases.xml */,
 				84C41E541AB960070089EABB /* poi_types.xml */,
 			);
@@ -4016,6 +4021,7 @@
 				843257B31A9DAEE400A7964E /* ic_update.png in Resources */,
 				84E2DB9B1AB720FB001A7FEC /* btn_map_type_icon_walk@3x.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
+				8424317A1AEEBEEB00925821 /* phrases in Resources */,
 				84185AE11AAA11B600F70328 /* ic_favorite_7@2x.png in Resources */,
 				843E5DA51AB341E000BE14BE /* search_icon@3x.png in Resources */,
 				84E2DB4D1AB720FA001A7FEC /* HUD_configure_map.png in Resources */,
@@ -4465,6 +4471,7 @@
 				843257B41A9DAEE400A7964E /* ic_update.png in Resources */,
 				84E2DB9C1AB720FB001A7FEC /* btn_map_type_icon_walk@3x.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
+				8424317B1AEEBEEB00925821 /* phrases in Resources */,
 				84185AE21AAA11B600F70328 /* ic_favorite_7@2x.png in Resources */,
 				843E5DA61AB341E000BE14BE /* search_icon@3x.png in Resources */,
 				84E2DB4E1AB720FA001A7FEC /* HUD_configure_map.png in Resources */,
@@ -5157,6 +5164,7 @@
 				843E5CEA1AB341E000BE14BE /* icon_gpx_fill.png in Resources */,
 				3AFEEEA11A13722500900A47 /* OAMapSettingsViewController.xib in Resources */,
 				843E5D231AB341E000BE14BE /* left_menu_icon_star@3x.png in Resources */,
+				8424317C1AEEBEEB00925821 /* phrases in Resources */,
 				84185AAD1AAA11B600F70328 /* ic_favorite_1@2x.png in Resources */,
 				BBA3AFCF197FC4BB0039D991 /* HUD_zoom_in_button@2x.png in Resources */,
 				84E2DBB21AB720FB001A7FEC /* zoom_in_button.png in Resources */,

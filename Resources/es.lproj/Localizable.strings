@@ -102,7 +102,7 @@
 "gpx_avg_elev" = "Elevación media";
 "gpx_elev_range" = "Rango de elevación";
 "gpx_updown" = "Arriba/Abajo";
-"gpx_uphills_total" = "Ascenso total";
+"gpx_uphills_total" = "Ascensos totales";
 // Map settings
 "m_style_overview" = "Resumen";
 "m_style_car" = "Automóvil";
@@ -145,10 +145,10 @@
 "purchases" = "Compras";
 // Purchases
 "prch_addons" = "Complementos";
-"prch_ski_q" = "Por favor encienda el estilo \"Mapa Ski\" en la configuración del mapa";
+"prch_ski_q" = "Por favor encienda el estilo \"Mapa de esquí\" en la configuración del mapa";
 "prch_nau_q1" = "Por favor encienda el estilo \"Náutico\" en la configuración del mapa e instale el mapamundi náutico base.";
-"incur_high_charges" = "Esto puede incurrir en cargos altos.";
-"prch_nau_q3" = "Puede instalarlo más tarde a través de Mapas & Recursos.";
+"incur_high_charges" = "Esto puede incurrir en altos costos.";
+"prch_nau_q3" = "Puede instalarlo más tarde mediante Mapas & Recursos.";
 "proceed_q" = "¿Proceder?";
 "download" = "Descargar";
 "nothanks" = "No, gracias";
@@ -162,7 +162,7 @@
 "res_banner_one" = "Hay un mapa gratuito disponible para su descarga";
 "res_banner_no" = "No tienes disponible mapas gratis para descargar";
 "res_search_world" = "Búsqueda mundial";
-"res_catalog_upd" = "Catálogo actualizado";
+"res_catalog_upd" = "Actualizar catálogo";
 "res_world_map" = "Mapa mundial";
 "res_updates" = "Actualizaciones";
 "res_worldwide" = "Mundial";
@@ -176,9 +176,9 @@
 "res_update_no_space" = "No hay suficiente espacio para actualizar";
 "res_install_no_space" = "No hay suficiente espacio para instalar";
 "res_no_space_free" = "es necesario. Por favor liberar algo de espacio.";
-"res_free_exp" = "Usted agotó todas sus descargas gratis. Por favor compre continente para descargar / actualizar los mapas.";
+"res_free_exp" = "Ha agotado todas las descargas gratis. Por favor compre continente para descargar / actualizar los mapas.";
 "res_upd_avail_q" = "Una actualización está disponible para";
-"res_inst_avail_cell_q" = "Instalación de %@ necesita %@ ser descargado a través de la red celular.";
+"res_inst_avail_cell_q" = "La instalación de %@ necesita %@ para ser descargado a través de la red celular.";
 "res_inst_avail_wifi_q" = "Instalación de %@ necesita %@ ser descargado a través de la red WiFi.";
 "res_cancel_upd_q" = "Va a cancelar %@ actualizaciones.";
 "data_will_be_lost" = "Se perderán todos los datos descargados.";
@@ -248,7 +248,7 @@
 "map_settings_under" = "Subyacente";
 "prch_nau_q2_cell" = "Descarga requiere %@ a través de la red celular.";
 "prch_nau_q2_wifi" = "Descarga requiere %@ a través de la red WiFi.";
-"res_wmap" = "Mapa general mundial";
+"res_wmap" = "Mapa mundial general";
 "res_cancel_inst_q" = "Va a cancelar la instalación de %@.";
 "res_uninst_unmanaged_q" = "Va a borrar %@. Esto no es del catálogo, por favor asegúrese de tener una copia de seguridad si es necesario.";
 // Help

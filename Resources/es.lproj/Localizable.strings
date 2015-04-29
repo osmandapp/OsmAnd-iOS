@@ -251,3 +251,5 @@
 "res_wmap" = "Mapa general mundial";
 "res_cancel_inst_q" = "Va a cancelar la instalación de %@.";
 "res_uninst_unmanaged_q" = "Va a borrar %@. Esto no es del catálogo, por favor asegúrese de tener una copia de seguridad si es necesario.";
+// Help
+"help_quiz" = "Prueba";

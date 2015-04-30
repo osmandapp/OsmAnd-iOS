@@ -120,14 +120,12 @@
 {
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
-    [[[OsmAndApp instance] trackRecordingObservable] notifyEvent];
 }
 
 -(void)setMapSettingTrackRecordingGlobal:(BOOL)mapSettingTrackRecordingGlobal
 {
     _mapSettingTrackRecordingGlobal = mapSettingTrackRecordingGlobal;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecordingGlobal forKey:mapSettingTrackRecordingGlobalKey];
-    [[[OsmAndApp instance] trackRecordingObservable] notifyEvent];
 }
 
 -(void)setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval

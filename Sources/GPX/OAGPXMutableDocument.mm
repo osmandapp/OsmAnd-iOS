@@ -97,6 +97,16 @@
     
     [self fillLinks:wpt->links linkArray:w.links];
     
+    if (w.speed > 0)
+    {
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"speed";
+        e.value = [NSString stringWithFormat:@"%.3f", w.speed];
+        ext.extensions = @[e];
+        w.extraData = ext;
+    }
+
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (w.extraData)
         [self fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
@@ -160,6 +170,13 @@
             
             [self fillLinks:trkpt->links linkArray:p.links];
             
+            OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+            OAGpxExtension *e = [[OAGpxExtension alloc] init];
+            e.name = @"speed";
+            e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+            ext.extensions = @[e];
+            p.extraData = ext;
+
             extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
             if (p.extraData)
                 [self fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
@@ -236,6 +253,13 @@
         
         [self fillLinks:trkpt->links linkArray:p.links];
         
+        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+        OAGpxExtension *e = [[OAGpxExtension alloc] init];
+        e.name = @"speed";
+        e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+        ext.extensions = @[e];
+        p.extraData = ext;
+
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (p.extraData)
             [self fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
@@ -290,6 +314,13 @@
     trkpt->dgpsStationId = p.dgpsStationId;
     
     [self fillLinks:trkpt->links linkArray:p.links];
+    
+    OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
+    OAGpxExtension *e = [[OAGpxExtension alloc] init];
+    e.name = @"speed";
+    e.value = [NSString stringWithFormat:@"%.3f", p.speed];
+    ext.extensions = @[e];
+    p.extraData = ext;
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (p.extraData)

@@ -82,13 +82,17 @@ typedef enum
 @implementation OAGPXListViewController
 {
     OAGPXRecTableViewCell* _recCell;
+    OAAutoObserverProxy* _trackRecordingObserver;
+    OASavingTrackHelper *_savingHelper;
 }
 
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
+        _savingHelper = [OASavingTrackHelper sharedInstance];
     }
     return self;
 }
@@ -225,6 +229,32 @@ typedef enum
     
     [self generateData];
     [self setupView];
+    
+    _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onTrackRecordingChanged)
+                                                         andObserve:_app.trackRecordingObservable];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [_trackRecordingObserver detach];
+    _trackRecordingObserver = nil;
+}
+
+- (void)onTrackRecordingChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_recCell)
+        {
+            _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
+            [_recCell setNeedsLayout];
+        }
+        
+    });
 }
 
 -(void)generateData {
@@ -338,10 +368,11 @@ typedef enum
         
         if (_recCell)
         {
-            OAGPX* item = [[OAGPX alloc] init];
-            [_recCell.textView setText:@"Currently recording track"];
-            [_recCell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
-            [_recCell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+            [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
+
+            _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
+
             [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
             [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
             [self updateRecImg];
@@ -409,6 +440,8 @@ typedef enum
     }
     else
     {
+        [_savingHelper startNewSegment];
+        
         if (!settings.mapSettingTrackRecordingGlobal)
             settings.mapSettingTrackRecordingGlobal = YES;
         else if (!settings.mapSettingTrackRecording)

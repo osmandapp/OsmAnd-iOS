@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/GpxDocument.h>
+
 typedef enum
 {
     Unknown = -1,
@@ -20,11 +23,6 @@ typedef enum
     
 } OAGpxFixType;
 
-typedef struct {
-    CLLocationCoordinate2D center;
-    CLLocationCoordinate2D topLeft;
-    CLLocationCoordinate2D bottomRight;
-} OAGpxBounds;
 
 @interface OAExtraData : NSObject
 @end
@@ -130,6 +128,8 @@ typedef struct {
 
 @interface OAGpxWpt : OALocationMark
 
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
+
 @property (nonatomic) double speed;
 @property (nonatomic) double magneticVariation;
 @property (nonatomic) double geoidHeight;
@@ -146,6 +146,8 @@ typedef struct {
 @end
 
 @interface OAGpxTrkPt : OATrackPoint
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrkPt> trkpt;
 
 @property (nonatomic) double speed;
 @property (nonatomic) double magneticVariation;
@@ -166,6 +168,8 @@ typedef struct {
 
 @interface OAGpxTrkSeg : OATrackSegment
 
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrkSeg> trkseg;
+
 -(NSArray*) splitByDistance:(double)meters;
 -(NSArray*) splitByTime:(int)seconds;
 -(NSArray*) split:(OASplitMetric*)metric metricLimit:(double)metricLimit;
@@ -173,6 +177,8 @@ typedef struct {
 @end
 
 @interface OAGpxTrk : OATrack
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxTrk> trk;
 
 @property (nonatomic) NSString *source;
 @property (nonatomic) int slotNumber;

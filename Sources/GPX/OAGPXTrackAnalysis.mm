@@ -8,7 +8,9 @@
 
 #import "OAGPXTrackAnalysis.h"
 #import "OAGPXDocument.h"
-#import <OsmAndCore/Utilities.h>
+#import "OAGPXDocumentPrimitives.h"
+
+#include <OsmAndCore/Utilities.h>
 
 
 @implementation OASplitMetric

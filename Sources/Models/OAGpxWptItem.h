@@ -7,7 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGPXDocumentPrimitives.h"
+
+@class OAGpxWpt;
 
 @interface OAGpxWptItem : NSObject
 

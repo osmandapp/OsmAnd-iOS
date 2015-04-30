@@ -7,7 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAGPXDocumentPrimitives.h"
+
+@class OAGpxTrkSeg;
+@class OAGpxWpt;
 
 @interface OASplitMetric : NSObject
 

@@ -25,6 +25,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OAPOIHelper.h"
 #import "Localization.h"
+#import "OASavingTrackHelper.h"
 
 #include <algorithm>
 
@@ -71,6 +72,8 @@
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
+
+@synthesize trackRecordingObservable = _trackRecordingObservable;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -264,6 +267,8 @@
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
 
+    _trackRecordingObservable = [[OAObservable alloc] init];
+
     _mapMode = OAMapModeFree;
     _prevMapMode = OAMapModeFree;
     _mapModeObservable = [[OAObservable alloc] init];
@@ -285,6 +290,9 @@
     _appearanceChangeObservable = [[OAObservable alloc] init];
     if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
         QElement.appearance = [[OAQFlatAppearance alloc] init];
+    
+    // Init track recorder
+    [OASavingTrackHelper sharedInstance];
     
     return YES;
 }

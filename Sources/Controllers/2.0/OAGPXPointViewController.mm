@@ -9,6 +9,7 @@
 #import "OAGPXPointViewController.h"
 #import <CoreLocation/CoreLocation.h>
 #import "OAAutoObserverProxy.h"
+#import "OAGPXDocumentPrimitives.h"
 
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"

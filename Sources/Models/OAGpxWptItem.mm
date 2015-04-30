@@ -7,6 +7,7 @@
 //
 
 #import "OAGpxWptItem.h"
+#import "OAGPXDocumentPrimitives.h"
 
 @implementation OAGpxWptItem
 

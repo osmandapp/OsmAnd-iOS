@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OAGPXDocumentPrimitives.h"
+#import "OACommonTypes.h"
 
 @class OAGPXTrackAnalysis;
+@class OAGpxWpt;
 
 @interface OAGPX : NSObject
 

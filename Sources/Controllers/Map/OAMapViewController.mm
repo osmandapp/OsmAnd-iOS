@@ -12,12 +12,14 @@
 #import "OAAppSettings.h"
 
 #import <UIActionSheet+Blocks.h>
+#import <UIViewController+JASidePanel.h>
 
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
 
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
+#import "OARootViewController.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAMapStyleSettings.h"
@@ -241,6 +243,7 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
+    
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -820,9 +823,11 @@
     if (![self isViewLoaded])
         return;
     
+    self.sidePanelController.recognizesPanGesture = NO;
+
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
-    if (recognizer.state == UIGestureRecognizerStateBegan)
+    if (recognizer.state == UIGestureRecognizerStateBegan && recognizer.numberOfTouches > 0)
     {
         // Get location of the gesture
         CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
@@ -1990,7 +1995,7 @@
             _mapSourceInvalidated = YES;
             return;
         }
-
+        
         [self updateCurrentMapSource];
     });
 }

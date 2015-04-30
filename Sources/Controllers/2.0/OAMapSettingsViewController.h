@@ -10,7 +10,6 @@
 #import "OACommonTypes.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-#import "OAGPXDocumentPrimitives.h"
 
 typedef enum
 {

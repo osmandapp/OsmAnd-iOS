@@ -253,3 +253,5 @@
 "res_uninst_unmanaged_q" = "Va a borrar %@. Esto no es del catálogo, por favor asegúrese de tener una copia de seguridad si es necesario.";
 // Help
 "help_quiz" = "Prueba";
+"track_recording" = "Registrando traza";
+"track_recording_name" = "Actualmente registrando traza";

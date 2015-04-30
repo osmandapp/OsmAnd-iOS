@@ -10,21 +10,17 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
-@interface OAGPXListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIDocumentInteractionControllerDelegate, UIAlertViewDelegate>
+@interface OAGPXListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
-@property (weak, nonatomic) IBOutlet UIButton *exportButton;
-
-- (IBAction)exportClicked:(id)sender;
 
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
 
 - (instancetype)initWithImportGPXItem:(NSURL*)url;
-- (instancetype)initExport;
 
 @end

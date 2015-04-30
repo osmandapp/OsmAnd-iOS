@@ -7,9 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OsmAndCore/GpxDocument.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OACommonTypes.h"
 #import <CoreLocation/CoreLocation.h>
+
+#include <QList>
+#include <QHash>
+#include <QStack>
+#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 
 @class OAGPXTrackAnalysis;
 @class OASplitMetric;
@@ -30,7 +36,10 @@
 - (id)initWithGpxDocument:(std::shared_ptr<OsmAnd::GpxDocument>)gpxDocument;
 - (id)initWithGpxFile:(NSString *)filename;
 
-- (void) saveTo:(NSString *)filename;
+- (BOOL) saveTo:(NSString *)filename;
+
+- (BOOL) isEmpty;
+- (OAGpxWpt *) findPointToShow;
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp;
 
@@ -38,9 +47,15 @@
 - (NSArray*) splitByTime:(int)seconds;
 - (NSArray*) split:(OASplitMetric*)metric metricLimit:(int)metricLimit;
 
+- (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray;
+- (void) fillExtension:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtension>&)extension ext:(OAGpxExtension *)e;
+- (void) fillExtensions:(const std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions>&)extensions ext:(OAGpxExtensions *)ext;
+
+- (void)initBounds;
+- (void)processBounds:(CLLocationCoordinate2D)coord;
+- (void)applyBounds;
+
 @end
-
-
 
 
 

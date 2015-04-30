@@ -10,7 +10,7 @@
 
 @class OADestinationViewController;
 
-@interface OABrowseMapAppModeHudViewController : UIViewController<UIGestureRecognizerDelegate>
+@interface OABrowseMapAppModeHudViewController : UIViewController
 
 @property (nonatomic) OADestinationViewController *destinationViewController;
 

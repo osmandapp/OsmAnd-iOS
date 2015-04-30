@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
@@ -418,8 +419,8 @@
 
 - (BOOL)shouldBeRunningInBackground
 {
-    //TODO: Or if recording GPX track
-    if (_app.appMode == OAAppModeNavigation)
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    if (_app.appMode == OAAppModeNavigation || settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal)
         return YES;
 
     return NO;

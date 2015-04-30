@@ -84,6 +84,8 @@
 @property(readonly) OAObservable* dayNightModeObservable;
 @property(readonly) OAObservable* mapSettingsChangeObservable;
 
+@property(readonly) OAObservable* trackRecordingObservable;
+
 #if defined(OSMAND_IOS_DEV)
 @property(readonly) OADebugSettings* debugSettings;
 #endif // defined(OSMAND_IOS_DEV)

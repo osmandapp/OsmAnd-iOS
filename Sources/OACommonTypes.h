@@ -10,6 +10,7 @@
 #define OsmAnd_OACommonTypes_h
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @protocol OsmAndAppProtocol;
 @protocol OsmAndAppCppProtocol;
@@ -35,5 +36,11 @@ typedef struct Point31
 {
     int32_t x, y;
 } Point31;
+
+typedef struct {
+    CLLocationCoordinate2D center;
+    CLLocationCoordinate2D topLeft;
+    CLLocationCoordinate2D bottomRight;
+} OAGpxBounds;
 
 #endif // !defined(OsmAnd_OACommonTypes_h)

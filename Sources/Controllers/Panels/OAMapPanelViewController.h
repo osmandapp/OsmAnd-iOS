@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 #import "OAMapViewController.h"
-#import "OAGPXDocumentPrimitives.h"
+#import "OACommonTypes.h"
 #import "OATargetPointView.h"
 
 

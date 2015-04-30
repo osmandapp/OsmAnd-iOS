@@ -13,12 +13,15 @@
 #import "OAMapViewController.h"
 
 #import "OAGPXTableViewCell.h"
+#import "OAGPXRecTableViewCell.h"
 
 #import "OsmAndApp.h"
 #import "OsmAndCore/GpxDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
 #import "OAGPXTrackAnalysis.h"
+#import "OASavingTrackHelper.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -60,13 +63,13 @@ typedef enum
 @end
 
 
-@interface OAGPXListViewController () {
+@interface OAGPXListViewController ()
+{
     OsmAndAppInstance _app;
     NSURL *_importUrl;
     OAGPXDocument *_doc;
     NSString *_newGpxName;
 
-    BOOL _isExport;
     NSInteger _selectedIndex;
 }
 
@@ -77,23 +80,15 @@ typedef enum
 @end
 
 @implementation OAGPXListViewController
+{
+    OAGPXRecTableViewCell* _recCell;
+}
 
 - (instancetype)init
 {
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
-    }
-    return self;
-}
-
-- (instancetype)initExport
-{
-    self = [super init];
-    if (self) {
-        _app = [OsmAndApp instance];
-        _isExport = YES;
-        _selectedIndex = -1;
     }
     return self;
 }
@@ -210,7 +205,6 @@ typedef enum
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"tracks");
-    [_exportButton setTitle:OALocalizedString(@"gpx_export") forState:UIControlStateNormal];
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
     [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
@@ -223,17 +217,6 @@ typedef enum
 {
     [super viewDidLoad];
     
-    if (_isExport) {
-
-        [self.backButton removeTarget:self action:@selector(goRootScreen:) forControlEvents:UIControlEventTouchUpInside];
-        [self.backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
-        self.exportButton.hidden = NO;
-        
-    } else {
-        
-        self.exportButton.hidden = YES;
-    }
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -286,36 +269,13 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)exportClicked:(id)sender
-{
-    if (_selectedIndex  < 0) {
-        
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_export_select_track") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [exportHelpAlert show];
-        
-    } else {
-
-        OAGPX* item = [self.gpxList objectAtIndex:_selectedIndex];
-
-        NSURL* gpxUrl = [NSURL fileURLWithPath:[_app.gpxPath stringByAppendingPathComponent:item.gpxFileName]];
-        _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
-        _exportController.UTI = @"net.osmand.gpx";
-        _exportController.delegate = self;
-        _exportController.name = item.gpxFileName;
-        [_exportController presentOptionsMenuFromRect:CGRectZero
-                                               inView:self.view
-                                             animated:YES];
-        
-    }
-    
-}
-
 - (IBAction)menuFavoriteClicked:(id)sender {
     OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
     [self.navigationController pushViewController:favController animated:NO];
 }
 
-- (IBAction)menuGPXClicked:(id)sender {
+- (IBAction)menuGPXClicked:(id)sender
+{
 }
 
 - (IBAction)backButtonClicked:(id)sender
@@ -323,52 +283,74 @@ typedef enum
     [super backButtonClicked:sender];
 }
 
-- (IBAction)goRootScreen:(id)sender {
+- (IBAction)goRootScreen:(id)sender
+{
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
-- (void)onImportClicked {
+- (void)onImportClicked
+{
     NSString* favoritesImportText = OALocalizedString(@"gpx_import_desc");
     UIAlertView* importHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:favoritesImportText delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
     [importHelpAlert show];
 }
 
-- (void)onExportClicked {
-    
-    if (self.gpxList.count > 0) {
-        OAGPXListViewController* exportController = [[OAGPXListViewController alloc] initExport];
-        [self.navigationController pushViewController:exportController animated:YES];
-    } else {
-        UIAlertView* exportHelpAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_no_tracks") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
-        [exportHelpAlert show];
-    }
-}
-
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (self.gpxList.count > 0 && !_isExport)
-        return 2;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    if (self.gpxList.count > 0)
+        return 3;
     else
-        return 1;
+        return 2;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (section == 0 && self.gpxList.count > 0)
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return OALocalizedString(@"track_recording");
+    else if (section == 1 && self.gpxList.count > 0)
         return OALocalizedString(@"tracks");
+    
     return OALocalizedString(@"fav_import");
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == 0 && self.gpxList.count > 0)
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (section == 0)
+        return 1;
+    else if (section == 1 && self.gpxList.count > 0)
         return [self.gpxList count];
+    
     return [self.menuItems count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && self.gpxList.count > 0) {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        if (!_recCell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRecCell" owner:self options:nil];
+            _recCell = (OAGPXRecTableViewCell *)[nib objectAtIndex:0];
+        }
         
+        if (_recCell)
+        {
+            OAGPX* item = [[OAGPX alloc] init];
+            [_recCell.textView setText:@"Currently recording track"];
+            [_recCell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
+            [_recCell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+            [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
+            [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
+            [self updateRecImg];
+        }
+        
+        return _recCell;
+    }
+    else if (indexPath.section == 1 && self.gpxList.count > 0)
+    {
         static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
         
         OAGPXTableViewCell* cell;
@@ -384,18 +366,12 @@ typedef enum
             [cell.textView setText:item.gpxTitle];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
-            if (_isExport) {
-                if (indexPath.row == _selectedIndex)
-                    [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
-                else
-                    [cell.iconView setImage:nil];
-            }
         }
         
         return cell;
-        
-    } else {
-        
+    }
+    else
+    {
         static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
         
         OAIconTextTableViewCell* cell;
@@ -416,53 +392,80 @@ typedef enum
     }
 }
 
-
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
     return NO;
 }
 
+- (void)startStopRecPressed
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL recOn = settings.mapSettingTrackRecordingGlobal || settings.mapSettingTrackRecording;
+    if (recOn)
+    {
+        if (settings.mapSettingTrackRecordingGlobal)
+            settings.mapSettingTrackRecordingGlobal = NO;
+        if (settings.mapSettingTrackRecording)
+            settings.mapSettingTrackRecording = NO;
+    }
+    else
+    {
+        if (!settings.mapSettingTrackRecordingGlobal)
+            settings.mapSettingTrackRecordingGlobal = YES;
+        else if (!settings.mapSettingTrackRecording)
+            settings.mapSettingTrackRecording = YES;
+    }
+    [self updateRecImg];
+}
+
+- (void)updateRecImg
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    BOOL recOn = settings.mapSettingTrackRecordingGlobal || settings.mapSettingTrackRecording;
+    if (recOn)
+    {
+        [_recCell.btnStartStopRec setImage:[UIImage imageNamed:@"ic_action_rec_stop.png"] forState:UIControlStateNormal];
+        _recCell.btnStartStopRec.tintColor = [UIColor blackColor];
+    }
+    else
+    {
+        [_recCell.btnStartStopRec setImage:[UIImage imageNamed:@"ic_action_rec_start.png"] forState:UIControlStateNormal];
+        _recCell.btnStartStopRec.tintColor = [UIColor redColor];
+    }
+    
+}
+
+- (void)saveGpxPressed
+{
+    if ([[OASavingTrackHelper sharedInstance] hasDataToSave])
+        [[OASavingTrackHelper sharedInstance] saveDataToGpx];
+    
+    [self generateData];
+    [self setupView];
+}
+
 #pragma mark - UITableViewDelegate
 
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (_isExport) {
-        
-        _selectedIndex = indexPath.row;
-        [self.gpxTableView reloadData];
-        
-    } else if (indexPath.section == 0 && self.gpxList.count > 0) {
-        
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
+        //
+    }
+    else if (indexPath.section == 1 && self.gpxList.count > 0)
+    {
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
         
         OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];
         [self.navigationController pushViewController:controller animated:YES];
-        
-    } else {
+    }
+    else
+    {
         NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
-
-#pragma mark - UIDocumentInteractionControllerDelegate
-
-- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
-
-- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
-
-
-
-
 
 
 @end

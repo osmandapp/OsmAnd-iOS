@@ -134,23 +134,12 @@
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
                                                                 andObserve:_app.downloadsManager.completedObservable];
-    // Menu guest recognizer
-    _grMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
-                                                      action:@selector(moveGestureDetected:)];
-    _grMove.delegate = self;
-    
-    [_mapViewController.view addGestureRecognizer:_grMove];
 
 }
 
 - (void)deinit
 {
 
-}
-
-- (void)moveGestureDetected:(UIPanGestureRecognizer*)recognizer
-{
-    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 - (void)viewDidLoad

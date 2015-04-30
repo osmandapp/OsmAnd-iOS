@@ -437,7 +437,7 @@ typedef enum
                 case 3: // Uphills Total
                 {
                     [cell.textView setText:OALocalizedString(@"gpx_uphills_total")];
-                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.totalDistanceMoving]];
+                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation]];
                     cell.showArrows = NO;
                     cell.showUpDown = NO;
                     break;

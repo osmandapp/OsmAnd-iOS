@@ -53,7 +53,6 @@
     OAGPXMutableDocument *currentTrack;
     
     OAAutoObserverProxy* _locationServicesUpdateObserver;
-    OAAutoObserverProxy* _trackRecordingObserver;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance;
@@ -75,15 +74,11 @@
     {
         _app = [OsmAndApp instance];
 
-        _trackRecordingObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                          withHandler:@selector(onTrackRecordingChanged)
-                                                           andObserve:_app.trackRecordingObservable];
-
         [self createDb];
         
         currentTrack = [[OAGPXMutableDocument alloc] init];
-        
-        [self prepareCurrentTrackForRecording];
+
+        [self loadGpxFromDatabase];
         
         [self startLocationUpdate];
     }
@@ -335,6 +330,9 @@
     distance = 0;
     points = 0;
 
+    lastTimeUpdated = 0;
+    lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+    
     [currentTrack.locationMarks removeAllObjects];
     [currentTrack.tracks removeAllObjects];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
@@ -497,11 +495,14 @@
 
 - (void) startNewSegment
 {
-    lastTimeUpdated = 0;
-    lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
-    long time = (long)[[NSDate date] timeIntervalSince1970];
-    [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
-    [self addTrackPoint:nil newSegment:YES time:time];
+    if (lastTimeUpdated != 0 || lastPoint.latitude != 0 || lastPoint.longitude != 0)
+    {
+        lastTimeUpdated = 0;
+        lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+        long time = (long)[[NSDate date] timeIntervalSince1970];
+        [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
+        [self addTrackPoint:nil newSegment:YES time:time];
+    }
 }
 
 - (void) updateLocation
@@ -532,6 +533,8 @@
     if (record)
     {
         [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
+        
+        [[_app trackRecordingObservable] notifyEvent];
     }
 }
 

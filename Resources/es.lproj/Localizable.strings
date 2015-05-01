@@ -54,7 +54,7 @@
 "fav_import_title" = "Importar favorito";
 "fav_export_title" = "Exportar favorito";
 "fav_select_remove" = "Seleccione los favoritos a borrar";
-"fav_remove_q" = "¿Quitar elementos favoritos seleccionados?";
+"fav_remove_q" = "¿Quitar favorito?";
 "fav_create_group" = "Crear nuevo grupo";
 "fav_ignore" = "Ignorar";
 "fav_rename" = "Renombrar";

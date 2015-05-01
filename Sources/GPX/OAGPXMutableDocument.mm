@@ -33,6 +33,11 @@
     return self;
 }
 
+- (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
+{
+    return document;
+}
+
 - (void) updateDocAndMetadata
 {
     std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> metadata;

@@ -14,6 +14,7 @@
 #import "OAMapSource.h"
 #import "OAMapStylesCell.h"
 #import "Localization.h"
+#import "OASavingTrackHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -112,7 +113,7 @@
 
     NSMutableArray *section0 = [NSMutableArray array];
     [section0 addObject:section0fav];
-    if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0)
+    if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
     OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsMainScreen variantToMapStyle:app.data.lastMapSource.variant];

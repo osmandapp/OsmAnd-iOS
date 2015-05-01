@@ -47,15 +47,14 @@
     sqlite3 *tracksDB;
     NSString *databasePath;
     dispatch_queue_t dbQueue;
+    dispatch_queue_t syncQueue;
     
     CLLocationCoordinate2D lastPoint;
-
-    OAGPXMutableDocument *currentTrack;
     
     OAAutoObserverProxy* _locationServicesUpdateObserver;
 }
 
-@synthesize lastTimeUpdated, points, isRecording, distance;
+@synthesize lastTimeUpdated, points, isRecording, distance, currentTrack;
 
 + (OASavingTrackHelper*)sharedInstance
 {
@@ -73,12 +72,14 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        syncQueue = dispatch_queue_create("syncQueue", DISPATCH_QUEUE_SERIAL);
 
         [self createDb];
         
         currentTrack = [[OAGPXMutableDocument alloc] init];
 
-        [self loadGpxFromDatabase];
+        if (![self saveIfNeeded])
+            [self loadGpxFromDatabase];
         
         [self startLocationUpdate];
     }
@@ -193,7 +194,7 @@
     
 - (long)getLastTrackPointTime
 {
-    double __block res = 0.0;
+    long __block res = 0;
     dispatch_sync(dbQueue, ^{
         
         const char *dbpath = [databasePath UTF8String];
@@ -208,7 +209,7 @@
             {
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
-                    res = sqlite3_column_double(statement, 0);
+                    res = (long)sqlite3_column_double(statement, 0);
                     break;
                 }
                 sqlite3_finalize(statement);
@@ -218,6 +219,11 @@
     });
 
     return res;
+}
+
+- (BOOL) hasData
+{
+    return points > 0 || distance > 0;
 }
 
 - (BOOL) hasDataToSave
@@ -271,73 +277,80 @@
 
 - (void) saveDataToGpx
 {
-    NSDictionary *data = [self collectRecordedData:NO];
-    NSFileManager *fileManager = [NSFileManager defaultManager];
-    
-    // save file
-    NSString *fout;
-    for (NSString *f in data.allKeys)
-    {
-        fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, f];
-        OAGPXMutableDocument *doc = data[f];
-        if (![doc isEmpty])
+    dispatch_sync(syncQueue, ^{
+        
+        NSDictionary *data = [self collectRecordedData:NO];
+        NSFileManager *fileManager = [NSFileManager defaultManager];
+        
+        // save file
+        NSString *fout;
+        for (NSString *f in data.allKeys)
         {
-            OAGpxWpt *pt = [doc findPointToShow];
-            
-            NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
-            [simpleFormat setDateFormat:@"HH-mm_EEE"];
-            
-            NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
-            fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, fileName];
-            int ind = 1;
-            while ([fileManager fileExistsAtPath:fout]) {
-                fout = [NSString stringWithFormat:@"%@/%@_%d.gpx", _app.gpxPath, fileName, ++ind];
+            fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, f];
+            OAGPXMutableDocument *doc = data[f];
+            if (![doc isEmpty])
+            {
+                OAGpxWpt *pt = [doc findPointToShow];
+                
+                NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
+                [simpleFormat setDateFormat:@"HH-mm_EEE"];
+                
+                NSString *fileName = [NSString stringWithFormat:@"%@_%@", f, [simpleFormat stringFromDate:[NSDate dateWithTimeIntervalSince1970:pt.time]]];
+                fout = [NSString stringWithFormat:@"%@/%@.gpx", _app.gpxPath, fileName];
+                int ind = 1;
+                while ([fileManager fileExistsAtPath:fout]) {
+                    fout = [NSString stringWithFormat:@"%@/%@_%d.gpx", _app.gpxPath, fileName, ++ind];
+                }
             }
+            
+            [doc saveTo:fout];
+            
+            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+            [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] save];
         }
         
-        [doc saveTo:fout];
+        dispatch_async(dbQueue, ^{
+            sqlite3_stmt    *statement;
+            
+            const char *dbpath = [databasePath UTF8String];
+            
+            if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+            {
+                NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", TRACK_NAME, TRACK_COL_DATE, [[NSDate date] timeIntervalSince1970]];
+                const char *update_stmt = [updateSQL UTF8String];
+                
+                sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+                sqlite3_step(statement);
+                sqlite3_finalize(statement);
+                
+                updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970]];
+                update_stmt = [updateSQL UTF8String];
+                
+                sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+                sqlite3_step(statement);
+                sqlite3_finalize(statement);
+                
+                sqlite3_close(tracksDB);
+            }
+        });
         
-        OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-        [[OAGPXDatabase sharedDb] addGpxItem:[fout lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
-        [[OAGPXDatabase sharedDb] save];
-    }
-    
-    dispatch_async(dbQueue, ^{
-        sqlite3_stmt    *statement;
+        distance = 0;
+        points = 0;
         
-        const char *dbpath = [databasePath UTF8String];
+        lastTimeUpdated = 0;
+        lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
         
-        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
-        {
-            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", TRACK_NAME, TRACK_COL_DATE, [[NSDate date] timeIntervalSince1970]];
-            const char *update_stmt = [updateSQL UTF8String];
-            
-            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970]];
-            update_stmt = [updateSQL UTF8String];
-            
-            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
-            
-            sqlite3_close(tracksDB);
-        }
+        [currentTrack getDocument]->locationMarks.clear();
+        [currentTrack getDocument]->tracks.clear();
+        
+        [currentTrack.locationMarks removeAllObjects];
+        [currentTrack.tracks removeAllObjects];
+        currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
+        
+        [self prepareCurrentTrackForRecording];
+        
     });
-    
-    distance = 0;
-    points = 0;
-
-    lastTimeUpdated = 0;
-    lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
-    
-    [currentTrack.locationMarks removeAllObjects];
-    [currentTrack.tracks removeAllObjects];
-    currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
-    
-    [self prepareCurrentTrackForRecording];
 }
 
 - (NSDictionary *) collectRecordedData:(BOOL)fillCurrentTrack
@@ -449,10 +462,10 @@
                         segment = [[OAGpxTrkSeg alloc] init];
                         segment.points = [NSMutableArray array];
                         
+                        [gpx addTrackSegment:segment track:track];
+
                         if (!newInterval)
                             [gpx addTrackPoint:pt segment:segment];
-                        
-                        [gpx addTrackSegment:segment track:track];
                     }
                     else
                     {
@@ -495,47 +508,53 @@
 
 - (void) startNewSegment
 {
-    if (lastTimeUpdated != 0 || lastPoint.latitude != 0 || lastPoint.longitude != 0)
-    {
-        lastTimeUpdated = 0;
-        lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
-        long time = (long)[[NSDate date] timeIntervalSince1970];
-        [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
-        [self addTrackPoint:nil newSegment:YES time:time];
-    }
+    dispatch_sync(syncQueue, ^{
+        
+        if (lastTimeUpdated != 0 || lastPoint.latitude != 0 || lastPoint.longitude != 0)
+        {
+            lastTimeUpdated = 0;
+            lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+            long time = (long)[[NSDate date] timeIntervalSince1970];
+            [self doUpdateTrackLat:0.0 lon:0.0 alt:0.0 speed:0.0 hdop:0.0 time:time];
+            [self addTrackPoint:nil newSegment:YES time:time];
+        }
+    });
 }
 
 - (void) updateLocation
 {
-    CLLocation* location = _app.locationServices.lastKnownLocation;
-    long locationTime = (long)[location.timestamp timeIntervalSince1970];
-    
-    BOOL record = NO;
-    isRecording = NO;
-    
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    
-    if (settings.mapSettingTrackRecording
-        && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
-    {
-        record = true;
-    }
-    else if (settings.mapSettingTrackRecordingGlobal
-               && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
-    {
-        record = true;
-    }
-    
-    if (settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal) {
-        isRecording = true;
-    }
-    
-    if (record)
-    {
-        [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
+    dispatch_sync(syncQueue, ^{
         
-        [[_app trackRecordingObservable] notifyEvent];
-    }
+        CLLocation* location = _app.locationServices.lastKnownLocation;
+        long locationTime = (long)[location.timestamp timeIntervalSince1970];
+        
+        BOOL record = NO;
+        isRecording = NO;
+        
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        
+        if (settings.mapSettingTrackRecording
+            && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+        {
+            record = true;
+        }
+        else if (settings.mapSettingTrackRecordingGlobal
+                 && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
+        {
+            record = true;
+        }
+        
+        if (settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal) {
+            isRecording = true;
+        }
+        
+        if (record)
+        {
+            [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
+            
+            [[_app trackRecordingObservable] notifyEvent];
+        }
+    });
 }
 
 - (void) insertDataLat:(double)lat  lon:(double)lon alt:(double)alt speed:(double)speed hdop:(double)hdop time:(long)time
@@ -644,15 +663,18 @@
 
 - (void) loadGpxFromDatabase
 {
-    [currentTrack.locationMarks removeAllObjects];
-    [currentTrack.tracks removeAllObjects];
-    [self collectRecordedData:YES];
-    
-    [self prepareCurrentTrackForRecording];
-    
-    OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:(long)[[NSDate date] timeIntervalSince1970]];
-    distance = analysis.totalDistance;
-    points = analysis.wptPoints;
+    dispatch_sync(syncQueue, ^{
+        
+        [currentTrack.locationMarks removeAllObjects];
+        [currentTrack.tracks removeAllObjects];
+        [self collectRecordedData:YES];
+        
+        [self prepareCurrentTrackForRecording];
+        
+        OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:(long)[[NSDate date] timeIntervalSince1970]];
+        distance = analysis.totalDistance;
+        points = analysis.wptPoints;
+    });
 }
 
 - (void) prepareCurrentTrackForRecording
@@ -661,5 +683,17 @@
         [currentTrack addTrack:[[OAGpxTrk alloc] init]];
 }
 
+- (BOOL) saveIfNeeded
+{
+    if ([self hasDataToSave] && ([[NSDate date] timeIntervalSince1970] - [self getLastTrackPointTime] >= 60 * 30))
+    {
+        [self saveDataToGpx];
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+}
 
 @end

@@ -52,6 +52,7 @@
         _mapSettingSaveTrackInterval = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
         _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
 
+        _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
     }
     return self;
 }
@@ -120,12 +121,14 @@
 {
     _mapSettingTrackRecording = mapSettingTrackRecording;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecording forKey:mapSettingTrackRecordingKey];
+    [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
 -(void)setMapSettingTrackRecordingGlobal:(BOOL)mapSettingTrackRecordingGlobal
 {
     _mapSettingTrackRecordingGlobal = mapSettingTrackRecordingGlobal;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecordingGlobal forKey:mapSettingTrackRecordingGlobalKey];
+    [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
 -(void)setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
@@ -144,7 +147,12 @@
 {
     _mapSettingVisibleGpx = mapSettingVisibleGpx;
     [[NSUserDefaults standardUserDefaults] setObject:_mapSettingVisibleGpx forKey:mapSettingVisibleGpxKey];
-    //[[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+-(void)setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack
+{
+    _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
 }
 
 -(void)showGpx:(NSString *)fileName

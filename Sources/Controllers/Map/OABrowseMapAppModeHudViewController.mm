@@ -9,6 +9,7 @@
 #import "OABrowseMapAppModeHudViewController.h"
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
+#import "InfoWidgetsView.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -200,6 +201,14 @@
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
+    
+    if (![self.view.subviews containsObject:self.widgetsView])
+    {
+        _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.view addSubview:self.widgetsView];
+    }
+    
     _driveModeActive = NO;
 }
 
@@ -229,9 +238,6 @@
 {
     if (_destinationViewController)
         [_destinationViewController updateFrame];
-    
-    if (_downloadView)
-        _downloadView.frame = CGRectMake(142.0, 27.0, DeviceScreenWidth - 154.0, 28.0);
     
     if (_overlayUnderlayView)
     {
@@ -462,11 +468,24 @@
     
     if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         [UIView animateWithDuration:.2 animations:^{
+            
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
             _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
             _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+            
+            if (_widgetsView)
+                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+            if (_downloadView)
+                _downloadView.frame = [self getDownloadViewFrame];
+
         }];
 
+}
+
+- (CGRect)getDownloadViewFrame
+{
+    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+    return CGRectMake(142.0, y + 7.0, DeviceScreenWidth - 154.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
 #pragma mark - debug
@@ -506,13 +525,14 @@
             return;
         
         if (!_downloadView) {
-            self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(142.0, 27.0, DeviceScreenWidth - 154.0, 28.0)];
-            _downloadView.autoresizingMask = UIViewAutoresizingNone;
+            self.downloadView = [[OADownloadProgressView alloc] initWithFrame:[self getDownloadViewFrame]];
+            _downloadView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 
             _downloadView.layer.cornerRadius = 5.0;
-            _downloadView.layer.shadowColor = [UIColor colorWithWhite:0.3 alpha:1.0].CGColor;
-            _downloadView.layer.shadowRadius = 2.0;
-            _downloadView.layer.shadowOffset = CGSizeMake(0.0, 0.0);
+            [_downloadView.layer setShadowColor:[UIColor blackColor].CGColor];
+            [_downloadView.layer setShadowOpacity:0.3];
+            [_downloadView.layer setShadowRadius:2.0];
+            [_downloadView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
             
             _downloadView.startStopButtonView.hidden = YES;
             CGRect frame = _downloadView.progressBarView.frame;

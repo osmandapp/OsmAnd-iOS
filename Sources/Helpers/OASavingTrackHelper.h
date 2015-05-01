@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAGPXMutableDocument;
+
 @interface OASavingTrackHelper : NSObject
 
 @property (nonatomic, readonly) long lastTimeUpdated;
@@ -15,10 +17,15 @@
 @property (nonatomic, readonly) float distance;
 @property (nonatomic, readonly) BOOL isRecording;
 
+@property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
+
 + (OASavingTrackHelper *)sharedInstance;
 
+- (BOOL) hasData;
 - (BOOL) hasDataToSave;
 - (void) saveDataToGpx;
 - (void) startNewSegment;
+
+- (BOOL) saveIfNeeded;
 
 @end

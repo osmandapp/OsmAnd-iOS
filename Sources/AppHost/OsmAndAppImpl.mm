@@ -72,6 +72,7 @@
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
+@synthesize trackStartStopRecObservable = _trackStartStopRecObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
 
@@ -268,6 +269,7 @@
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
+    _trackStartStopRecObservable = [[OAObservable alloc] init];
 
     _mapMode = OAMapModeFree;
     _prevMapMode = OAMapModeFree;
@@ -630,6 +632,7 @@
 
 - (void)onApplicationDidBecomeActive
 {
+    [[OASavingTrackHelper sharedInstance] saveIfNeeded];
 }
 
 @end

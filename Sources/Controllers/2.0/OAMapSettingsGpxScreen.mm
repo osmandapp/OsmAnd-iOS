@@ -8,13 +8,18 @@
 
 #import "OAMapSettingsGpxScreen.h"
 #import "OAMapStyleSettings.h"
-#import "OASettingsTableViewCell.h"
+#import "OAGPXTableViewCell.h"
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
 #import "Localization.h"
+#import "OASavingTrackHelper.h"
+#import "OAGPXMutableDocument.h"
 
-@implementation OAMapSettingsGpxScreen {
+@implementation OAMapSettingsGpxScreen
+{
     NSArray *gpxList;
+    BOOL hasCurrentTrack;
+    OASavingTrackHelper *helper;
 }
 
 
@@ -24,8 +29,13 @@
 -(id)initWithTable:(UITableView *)tableView viewController:(OAMapSettingsViewController *)viewController
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         app = [OsmAndApp instance];
+
+        helper = [OASavingTrackHelper sharedInstance];
+        hasCurrentTrack = [helper hasData];
+        
         settings = [OAAppSettings sharedManager];
         
         settingsScreen = EMapSettingsScreenGpx;
@@ -55,7 +65,7 @@
 -(void)initData
 {
     gpxList = [[[OAGPXDatabase sharedDb] gpxList] sortedArrayUsingComparator:^NSComparisonResult(OAGPX *obj1, OAGPX *obj2) {
-        return [[obj1.gpxTitle lowercaseString] compare:[obj2.gpxTitle lowercaseString]];
+        return [obj2.importDate compare:obj1.importDate];
     }];
 }
 
@@ -73,36 +83,54 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return gpxList.count;
+    return gpxList.count + (hasCurrentTrack ? 1 : 0);
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString* const identifierCell = @"OASettingsTableViewCell";
-    OASettingsTableViewCell* cell = nil;
+    OAGPXTableViewCell* cell;
+    static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
     
-    cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
+    cell = (OAGPXTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
-        cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];
+        cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
     }
-    
-    if (cell) {
-        
-        NSArray *visible = settings.mapSettingVisibleGpx;
-        OAGPX *gpx = gpxList[indexPath.row];
-        
-        [cell.textView setText: gpx.gpxTitle];
-        [cell.descriptionView setText: @""];
-        if ([visible containsObject:gpx.gpxFileName])
-            [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        else
-            [cell.iconView setImage:nil];
+
+    if (hasCurrentTrack && indexPath.row == 0)
+    {
+        if (cell)
+        {
+            [cell.textView setText:OALocalizedString(@"track_recording_name")];
+            [cell.descriptionDistanceView setText:[app getFormattedDistance:helper.distance]];
+            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", helper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+            
+            if (settings.mapSettingShowRecordingTrack)
+                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            else
+                [cell.iconView setImage:nil];
+        }
+    }
+    else
+    {
+        if (cell)
+        {
+            OAGPX* item = [gpxList objectAtIndex:indexPath.row - (hasCurrentTrack ? 1 : 0)];
+            [cell.textView setText:item.gpxTitle];
+            [cell.descriptionDistanceView setText:[app getFormattedDistance:item.totalDistance]];
+            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+            
+            NSArray *visible = settings.mapSettingVisibleGpx;
+            
+            if ([visible containsObject:item.gpxFileName])
+                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            else
+                [cell.iconView setImage:nil];
+        }
     }
     
     return cell;
-    
 }
 
 
@@ -113,17 +141,44 @@
     return 0.01;
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50.0;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *visible = settings.mapSettingVisibleGpx;
-    OAGPX *gpx = gpxList[indexPath.row];
-    if ([visible containsObject:gpx.gpxFileName]) {
-        [settings hideGpx:gpx.gpxFileName];
-    } else {
-        [settings showGpx:gpx.gpxFileName];
-        vwController.goToMap = YES;
-        vwController.goToBounds = gpx.bounds;
-        [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    if (hasCurrentTrack && indexPath.row == 0)
+    {
+        if (settings.mapSettingShowRecordingTrack)
+        {
+            settings.mapSettingShowRecordingTrack = NO;
+        }
+        else
+        {
+            settings.mapSettingShowRecordingTrack = YES;
+            [helper.currentTrack applyBounds];
+            OAGpxBounds bounds = helper.currentTrack.bounds;
+            vwController.goToMap = YES;
+            vwController.goToBounds = bounds;
+            [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+        }
+    }
+    else
+    {
+        NSArray *visible = settings.mapSettingVisibleGpx;
+        OAGPX *gpx = gpxList[indexPath.row - (hasCurrentTrack ? 1 : 0)];
+        if ([visible containsObject:gpx.gpxFileName])
+        {
+            [settings hideGpx:gpx.gpxFileName];
+        }
+        else
+        {
+            [settings showGpx:gpx.gpxFileName];
+            vwController.goToMap = YES;
+            vwController.goToBounds = gpx.bounds;
+            [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+        }
     }
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     

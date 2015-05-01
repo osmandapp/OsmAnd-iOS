@@ -83,6 +83,7 @@
 
 @property(readonly) OAObservable* dayNightModeObservable;
 @property(readonly) OAObservable* mapSettingsChangeObservable;
+@property(readonly) OAObservable* trackStartStopRecObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 

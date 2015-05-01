@@ -16,14 +16,15 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #if defined(OSMAND_IOS_DEV)
-#   import "OADebugHudViewController.h"
+#import "OADebugHudViewController.h"
 #endif // defined(OSMAND_IOS_DEV)
 #import "OARootViewController.h"
 #import "OAUserInteractionInterceptorView.h"
 #import "OAAppearance.h"
 #import "OAUtilities.h"
 #import "OALog.h"
-#include "Localization.h"
+#import "Localization.h"
+#import "InfoWidgetsView.h"
 
 #import "OADestinationViewController.h"
 #import "OADestination.h"
@@ -199,6 +200,13 @@
     
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];
+    
+    if (![self.view.subviews containsObject:self.widgetsView])
+    {
+        _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        [self.view addSubview:self.widgetsView];
+    }
 
 }
 
@@ -561,6 +569,8 @@
     if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         [UIView animateWithDuration:.2 animations:^{
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            if (_widgetsView)
+                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         }];
     
 }

@@ -90,6 +90,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)hideTempGpxTrack;
 - (void)keepTempGpxTrackVisible;
 
+- (void)showRecGpxTrack;
+- (void)hideRecGpxTrack;
+
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
 - (void)removeDestinationPin:(UIColor *)color;
 

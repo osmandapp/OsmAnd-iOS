@@ -252,6 +252,9 @@ typedef enum
             _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
             _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
             [_recCell setNeedsLayout];
+            
+            if (!_recCell.btnSaveGpx.enabled && ([_savingHelper hasData]))
+                _recCell.btnSaveGpx.enabled = YES;
         }
         
     });
@@ -375,7 +378,9 @@ typedef enum
 
             [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
             [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
+            
             [self updateRecImg];
+            [self updateRecBtn];
         }
         
         return _recCell;
@@ -432,21 +437,10 @@ typedef enum
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL recOn = settings.mapSettingTrackRecordingGlobal || settings.mapSettingTrackRecording;
     if (recOn)
-    {
-        if (settings.mapSettingTrackRecordingGlobal)
-            settings.mapSettingTrackRecordingGlobal = NO;
-        if (settings.mapSettingTrackRecording)
-            settings.mapSettingTrackRecording = NO;
-    }
+        settings.mapSettingTrackRecordingGlobal = NO;
     else
-    {
-        [_savingHelper startNewSegment];
-        
-        if (!settings.mapSettingTrackRecordingGlobal)
-            settings.mapSettingTrackRecordingGlobal = YES;
-        else if (!settings.mapSettingTrackRecording)
-            settings.mapSettingTrackRecording = YES;
-    }
+        settings.mapSettingTrackRecordingGlobal = YES;
+
     [self updateRecImg];
 }
 
@@ -467,10 +461,17 @@ typedef enum
     
 }
 
+- (void)updateRecBtn
+{
+    _recCell.btnSaveGpx.enabled = [_savingHelper hasData];
+}
+
 - (void)saveGpxPressed
 {
-    if ([[OASavingTrackHelper sharedInstance] hasDataToSave])
-        [[OASavingTrackHelper sharedInstance] saveDataToGpx];
+    if ([_savingHelper hasDataToSave])
+        [_savingHelper saveDataToGpx];
+    
+    [self updateRecBtn];
     
     [self generateData];
     [self setupView];

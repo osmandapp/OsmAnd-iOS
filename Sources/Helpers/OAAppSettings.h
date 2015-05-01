@@ -26,6 +26,7 @@
 #define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
 #define mapSettingSaveTrackIntervalGlobalKey @"mapSettingSaveTrackIntervalGlobalKey"
 
+#define mapSettingShowRecordingTrackKey @"mapSettingShowRecordingTrackKey"
 
 @interface OAAppSettings : NSObject
 
@@ -62,6 +63,7 @@
 @property (assign, nonatomic) int mapSettingSaveTrackInterval;
 @property (assign, nonatomic) int mapSettingSaveTrackIntervalGlobal;
 
+@property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

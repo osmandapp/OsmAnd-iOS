@@ -9,10 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @class OADestinationViewController;
+@class InfoWidgetsView;
 
 @interface OABrowseMapAppModeHudViewController : UIViewController
 
 @property (nonatomic) OADestinationViewController *destinationViewController;
+@property (nonatomic) InfoWidgetsView *widgetsView;
 
 - (void)updateDestinationViewLayout;
 

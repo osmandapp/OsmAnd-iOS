@@ -26,6 +26,12 @@
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
 #import "Localization.h"
+#import "InfoWidgetsView.h"
+#import "OAAppSettings.h"
+#import "OASavingTrackHelper.h"
+
+#import <UIAlertView+Blocks.h>
+#import <UIAlertView-Blocks/RIButtonItem.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,11 +47,12 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
 @property (nonatomic) OADestinationViewController *destinationViewController;
+@property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (strong, nonatomic) OATargetPointView* targetMenuView;
 @property (strong, nonatomic) UIButton* shadowButton;
@@ -57,6 +64,8 @@
 @implementation OAMapPanelViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
+    OASavingTrackHelper *_recHelper;
 
     OAAutoObserverProxy* _appModeObserver;
 
@@ -91,6 +100,9 @@
 {
     _app = [OsmAndApp instance];
 
+    _settings = [OAAppSettings sharedManager];
+    _recHelper = [OASavingTrackHelper sharedInstance];
+
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
                                                   andObserve:_app.appModeObservable];
@@ -121,6 +133,9 @@
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
     self.targetMenuView.delegate = self;
 
+    _widgetsView = [[InfoWidgetsView alloc] init];
+    _widgetsView.delegate = self;
+    
     [self updateHUD:NO];
 }
 
@@ -160,6 +175,72 @@
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
 
+- (void) infoSelectPressed
+{
+    BOOL recOn = _settings.mapSettingTrackRecordingGlobal || _settings.mapSettingTrackRecording;
+
+    if (recOn)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"track_recording")
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
+                           otherButtonItems:
+          [RIButtonItem itemWithLabel:OALocalizedString(@"track_stop_rec")
+                               action:^{
+                                    _settings.mapSettingTrackRecordingGlobal = NO;
+                               }],
+          [RIButtonItem itemWithLabel:OALocalizedString(@"track_new_segment")
+                               action:^{
+                                   [_recHelper startNewSegment];
+                               }],
+          [RIButtonItem itemWithLabel:OALocalizedString(@"track_save")
+                               action:^{
+                                   if ([_recHelper hasDataToSave])
+                                       [_recHelper saveDataToGpx];
+                                   dispatch_async(dispatch_get_main_queue(), ^{
+                                       [_widgetsView updateGpxRec];
+                                   });
+                               }],
+          nil] show];
+    }
+    else
+    {
+        if ([_recHelper hasData])
+        {
+            [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"track_recording")
+                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
+                               otherButtonItems:
+              [RIButtonItem itemWithLabel:OALocalizedString(@"track_continue_rec")
+                                   action:^{
+                                       [_recHelper startNewSegment];
+                                       _settings.mapSettingTrackRecordingGlobal = YES;
+                                   }],
+              /*
+              [RIButtonItem itemWithLabel:OALocalizedString(@"track_new_segment")
+                                   action:^{
+                                       [_recHelper startNewSegment];
+                                       _settings.mapSettingTrackRecordingGlobal = YES;
+                                   }],
+               */
+              [RIButtonItem itemWithLabel:OALocalizedString(@"track_save")
+                                   action:^{
+                                       if ([_recHelper hasDataToSave])
+                                           [_recHelper saveDataToGpx];
+                                       dispatch_async(dispatch_get_main_queue(), ^{
+                                           [_widgetsView updateGpxRec];
+                                       });
+                                   }],
+              nil] show];
+        }
+        else
+        {
+            [_recHelper startNewSegment];
+            _settings.mapSettingTrackRecordingGlobal = YES;
+        }
+    }
+    
+
+}
+
 - (void)updateHUD:(BOOL)animated
 {
     if (!_destinationViewController) {
@@ -180,7 +261,9 @@
                                                                                    bundle:nil];
             _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _browseMapViewController.destinationViewController = self.destinationViewController;
+            _browseMapViewController.widgetsView = self.widgetsView;
         }
+        
         newHudController = self.browseMapViewController;
 
         _mapViewController.view.frame = self.view.frame;
@@ -192,7 +275,9 @@
                                                                                bundle:nil];
             _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _driveModeViewController.destinationViewController = self.destinationViewController;
+            _driveModeViewController.widgetsView = self.widgetsView;
         }
+
         newHudController = self.driveModeViewController;
         
         CGRect frame = self.view.frame;

@@ -21,7 +21,7 @@
 "fav_import_title" = "Импортировать избранное";
 "fav_export_title" = "Экспортировать избранное";
 "fav_select_remove" = "Выберите избранные для удаления";
-"fav_remove_q" = "Удалить избранные?";
+"fav_remove_q" = "Удалить избранное?";
 "fav_export_select" = "Выберите избранные для экспорта";
 "fav_import_desc" = "Вы можете импортировать избранные как путевые точки GPX файла.\n\nЧтобы поделиться файлом favorites.gpx вы можете открыть его в Dropbox, Email или в другой программе - Используйте функцию Открыть В.";
 "fav_your_groups" = "Группы";
@@ -40,7 +40,7 @@
 "poi_search_near_center" = "Поиск выполняется вокруг центра карты";
 "poi_hide" = "Скрыть";
 // My Places
-"favorites" = "Избранные";
+"favorites" = "Избранное";
 "tracks" = "Треки";
 // GPX
 "gpx_point" = "Точка";
@@ -184,8 +184,8 @@
 "import_failed" = "Импорт завершился не успешно";
 "import_gpx" = "GPX трек";
 // Context menu
-"ctx_mnu_edit_fav" = "Редактировать избранное";
-"ctx_mnu_add_fav" = "Добавить избранное";
+"ctx_mnu_edit_fav" = "Редактировать";
+"ctx_mnu_add_fav" = "В избранное";
 "ctx_mnu_share" = "Поделиться";
 "ctx_mnu_direction" = "Направление";
 // Location Services

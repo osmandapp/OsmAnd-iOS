@@ -255,3 +255,7 @@
 "help_quiz" = "Prueba";
 "track_recording" = "Registrando traza";
 "track_recording_name" = "Actualmente registrando traza";
+"track_stop_rec" = "Parar grabación";
+"track_new_segment" = "Iniciar nuevo segmento";
+"track_save" = "Guardar traza actual";
+"track_continue_rec" = "Continuar grabando";

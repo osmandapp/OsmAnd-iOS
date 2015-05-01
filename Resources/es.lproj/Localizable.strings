@@ -1,6 +1,6 @@
 "shared_string_ok" = "Aceptar";
 "shared_string_cancel" = "Cancelar";
-"shared_string_yes" = "Sí";
+"shared_string_yes" = "Si";
 "shared_string_no" = "No";
 "shared_string_save" = "Guardar";
 "rendering_value__name" = "Predeterminado";
@@ -154,7 +154,7 @@
 "nothanks" = "No, gracias";
 "download_now" = "Descargar el mapa ahora";
 "prch_failed" = "La compra de «%@» falló";
-"prch_items_failed" = "Los item(s) no fueron restaurados. Vuelva a intentar.";
+"prch_items_failed" = "elemento(s) no fueron restaurados. Vuelva a intentar.";
 // Resources
 "res_mapsres" = "Mapas y Recursos";
 "res_installed" = "Instalado";
@@ -163,7 +163,7 @@
 "res_banner_no" = "No tiene mapas gratuitos disponibles para descargar";
 "res_search_world" = "Búsqueda mundial";
 "res_catalog_upd" = "Actualizar catálogo";
-"res_world_map" = "Mapa mundial";
+"res_world_map" = "Mapa del mundo";
 "res_updates" = "Actualizaciones";
 "res_worldwide" = "Mundial";
 "res_region_map" = "Mapa regional";
@@ -179,7 +179,7 @@
 "res_free_exp" = "Agotó todas las descargas gratuitas. Compre para descargar / actualizar los mapas.";
 "res_upd_avail_q" = "Una actualización está disponible para";
 "res_inst_avail_cell_q" = "La instalación de %@ necesita %@ para ser descargado por la red celular.";
-"res_inst_avail_wifi_q" = "Instalación de %@ necesita %@ para ser descargado por la red WiFi.";
+"res_inst_avail_wifi_q" = "La instalación de %@ necesita %@ para ser descargado por la red WiFi.";
 "res_cancel_upd_q" = "Va a cancelar %@ actualizaciones.";
 "data_will_be_lost" = "Se perderán todos los datos descargados.";
 "res_uninst_managed_q" = "Va a desinstalar %@. Puede reinstalarlo mas tarde desde el catálogo.";
@@ -189,12 +189,12 @@
 "res_size" = "Tamaño";
 "res_created_on" = "Creado en";
 "res_update_all" = "Actualizar todos";
-"res_updates_no_space" = "No hay suficiente espacio para instalar %d actualización(es). Es necesario %@. Por favor libere algo de espacio.";
+"res_updates_no_space" = "No hay suficiente espacio para instalar %d actualización(es). Es necesario %@. Libere algo de espacio.";
 "res_updates_avail_q" = "actualización(es) están disponibles.";
-"res_updates_exp" = "Por favor compre continent(s) para actualizar los mapas";
+"res_updates_exp" = "Compre continente(s) para actualizar los mapas";
 // Menu
 "menu_my_places" = "Mis sitios";
-"menu_feedback" = "Retroalimentación";
+"menu_feedback" = "Comentario";
 "menu_about" = "Acerca de";
 // Units
 "units_km" = "km";
@@ -205,18 +205,18 @@
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 // Map
-"map_inst_det_map_q" = "Instalar resumen del mapa detallado para obtener más información acerca de las ubicaciones.";
-"map_remind" = "Recordármelo más tarde";
+"map_inst_det_map_q" = "Instale el mapa detallado general para obtener más información sobre las ubicaciones.";
+"map_remind" = "Recordar más tarde";
 "map_no_address" = "Todavía no se conoce la dirección";
 // Import
 "import_title" = "Importar datos";
-"import_choose_type" = "Por favor elija que importar";
+"import_choose_type" = "Elija que importar";
 "import_favorite" = "Favorito";
-"import_failed" = "Importación fallida";
+"import_failed" = "La importación falló";
 "import_cannot" = "No se puede importar el archivo especificado";
 "import_gpx" = "Traza GPX";
 // Alerts
-"alert_inet_needed" = "Conexión a Internet necesaria para realizar esta acción. Por favor, compruebe su conexión a Internet.";
+"alert_inet_needed" = "Requiere conexión a Internet para realizar esta acción. Compruebe su conexión a Internet.";
 // Context menu
 "ctx_mnu_edit_fav" = "Editar favorito";
 "ctx_mnu_add_fav" = "Añadir favorito";
@@ -224,7 +224,7 @@
 "ctx_mnu_direction" = "Dirección";
 // Location Services
 "loc_access_denied" = "Acceso denegado";
-"loc_access_denied_desc" = "El acceso a su ubicación ha sido denegado";
+"loc_access_denied_desc" = "El acceso al servicio de ubicación fue denegado";
 // Colors
 "col_purple" = "Púrpura";
 "col_green" = "Verde";
@@ -238,11 +238,11 @@
 "region_africa" = "África";
 "region_asia" = "Asia";
 "region_ausralia_and_oceania" = "Australia y Oceanía";
-"region_central_america" = "Centroamérica";
+"region_central_america" = "América central";
 "region_europe" = "Europa";
-"region_north_america" = "Norteamérica";
+"region_north_america" = "América del norte";
 "region_russia" = "Rusia";
-"region_south_america" = "Sudamérica";
+"region_south_america" = "América del sur";
 "map_settings_overunder" = "Superpuesta / Subyacente";
 "map_settings_over" = "Superpuesta";
 "map_settings_under" = "Subyacente";
@@ -250,7 +250,7 @@
 "prch_nau_q2_wifi" = "Descargando %@ por la red WiFi.";
 "res_wmap" = "Mapa mundial general";
 "res_cancel_inst_q" = "Va a cancelar la instalación de %@.";
-"res_uninst_unmanaged_q" = "Va a borrar %@. Esto no es del catálogo, por favor asegúrese de tener una copia de seguridad si es necesario.";
+"res_uninst_unmanaged_q" = "Va a borrar %@. No es del catálogo, así que asegúrese de tener un respaldo si es necesario.";
 // Help
 "help_quiz" = "Prueba";
 "track_recording" = "Registrando traza";

@@ -253,9 +253,9 @@
 "res_uninst_unmanaged_q" = "Va a borrar %@. No es del catálogo, así que asegúrese de tener un respaldo si es necesario.";
 // Help
 "help_quiz" = "Prueba";
-"track_recording" = "Registrando traza";
-"track_recording_name" = "Actualmente registrando traza";
+"track_recording" = "Grabando traza";
+"track_recording_name" = "Actualmente grabando traza";
 "track_stop_rec" = "Parar grabación";
 "track_new_segment" = "Iniciar nuevo segmento";
 "track_save" = "Guardar traza actual";
-"track_continue_rec" = "Continuar grabando";
+"track_continue_rec" = "Continuar grabación";

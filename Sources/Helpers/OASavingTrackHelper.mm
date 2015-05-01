@@ -39,6 +39,7 @@
 #define POINT_COL_LON @"lon"
 #define POINT_COL_DESCRIPTION @"description"
 
+#define ACCURACY_FOR_GPX_AND_ROUTING 50.0
 
 @implementation OASavingTrackHelper
 {
@@ -531,21 +532,24 @@
         BOOL record = NO;
         isRecording = NO;
         
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        
-        if (settings.mapSettingTrackRecording
-            && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+        if ([self isPointAccurateForRouting:location])
         {
-            record = true;
-        }
-        else if (settings.mapSettingTrackRecordingGlobal
-                 && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
-        {
-            record = true;
-        }
-        
-        if (settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal) {
-            isRecording = true;
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            
+            if (settings.mapSettingTrackRecording
+                && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+            {
+                record = true;
+            }
+            else if (settings.mapSettingTrackRecordingGlobal
+                     && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
+            {
+                record = true;
+            }
+            
+            if (settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal) {
+                isRecording = true;
+            }
         }
         
         if (record)
@@ -554,6 +558,7 @@
             
             [[_app trackRecordingObservable] notifyEvent];
         }
+        
     });
 }
 
@@ -694,6 +699,11 @@
     {
         return NO;
     }
+}
+
+- (BOOL) isPointAccurateForRouting:(CLLocation *)loc
+{
+    return loc != nil && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3.0 / 2.0);
 }
 
 @end

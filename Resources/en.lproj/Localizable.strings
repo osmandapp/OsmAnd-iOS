@@ -31,7 +31,6 @@
 "fav_import_title" = "Import favorite";
 "fav_export_title" = "Export favorite";
 "fav_select_remove" = "Please select favorites to remove";
-"fav_remove_q" = "Remove selected favorite items?";
 "fav_export_select" = "Please select favorites to export";
 "fav_import_desc" = "You can import your favorites as waypoints in GPX file (common GPS data format)\n\nTo share the favorites.gpx file you can open file from Dropbox, Email, or any other source - Use Open In function.";
 "fav_create_group" = "Create new group";

@@ -15,7 +15,7 @@
 @protocol OADestinationViewControllerProtocol
 @optional
 
-- (void)destinationViewLayoutDidChange;
+- (void)destinationViewLayoutDidChange:(BOOL)animated;
 - (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon;
 - (void)destinationRemoved:(OADestination *)destination;
 
@@ -32,7 +32,7 @@
 - (void)startLocationUpdate;
 - (void)stopLocationUpdate;
 
-- (void)updateFrame;
+- (void)updateFrame:(BOOL)animated;
 
 - (UIColor *) addDestination:(OADestination *)destination;
 - (void) doLocationUpdate;

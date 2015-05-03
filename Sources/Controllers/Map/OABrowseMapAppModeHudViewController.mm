@@ -236,8 +236,8 @@
 
 - (void)viewWillLayoutSubviews
 {
-    if (_destinationViewController)
-        [_destinationViewController updateFrame];
+    //if (_destinationViewController)
+    //    [_destinationViewController updateFrame:YES];
     
     if (_overlayUnderlayView)
     {
@@ -455,7 +455,7 @@
     return UIStatusBarStyleLightContent;
 }
 
--(void)updateDestinationViewLayout
+-(void)updateDestinationViewLayout:(BOOL)animated
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
@@ -466,19 +466,37 @@
     
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
     
-    if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+    if (animated)
+    {
         [UIView animateWithDuration:.2 animations:^{
             
-            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
-            _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
-            _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+            if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+            {
+                _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+                _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
+                _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+            }
             
             if (_widgetsView)
                 _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
             if (_downloadView)
                 _downloadView.frame = [self getDownloadViewFrame];
-
         }];
+    }
+    else
+    {
+        if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+        {
+            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
+            _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+        }
+        
+        if (_widgetsView)
+            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        if (_downloadView)
+            _downloadView.frame = [self getDownloadViewFrame];
+    }
 
 }
 

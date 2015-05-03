@@ -168,7 +168,7 @@
 - (void)viewWillLayoutSubviews
 {
     if (_destinationViewController)
-        [_destinationViewController updateFrame];
+        [_destinationViewController updateFrame:YES];
     
     if (_shadowButton)
         _shadowButton.frame = [self shadowButtonRect];
@@ -317,6 +317,8 @@
     if (_hudViewController != nil)
         [_hudViewController removeFromParentViewController];
     _hudViewController = newHudController;
+    
+    [_destinationViewController updateFrame:NO];
 
     [self.rootViewController setNeedsStatusBarAppearanceUpdate];
 }
@@ -855,15 +857,15 @@
     [_mapViewController removeDestinationPin:destination.color];
 }
 
--(void)destinationViewLayoutDidChange
+-(void)destinationViewLayoutDidChange:(BOOL)animated
 {
     if ([_hudViewController isKindOfClass:[OABrowseMapAppModeHudViewController class]]) {
         OABrowseMapAppModeHudViewController *browserMap = (OABrowseMapAppModeHudViewController *)_hudViewController;
-        [browserMap updateDestinationViewLayout];
+        [browserMap updateDestinationViewLayout:animated];
         
     } else if ([_hudViewController isKindOfClass:[OADriveAppModeHudViewController class]]) {
         OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
-        [drive updateDestinationViewLayout];
+        [drive updateDestinationViewLayout:animated];
         
     }
 }

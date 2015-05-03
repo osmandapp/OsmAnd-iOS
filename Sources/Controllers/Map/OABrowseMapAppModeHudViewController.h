@@ -16,7 +16,7 @@
 @property (nonatomic) OADestinationViewController *destinationViewController;
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
-- (void)updateDestinationViewLayout;
+- (void)updateDestinationViewLayout:(BOOL)animated;
 
 - (BOOL)isOverlayUnderlayViewVisible;
 - (void)updateOverlayUnderlayView:(BOOL)show;

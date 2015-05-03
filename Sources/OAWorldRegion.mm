@@ -41,7 +41,12 @@
         [self commonInit];
         _worldRegion = region;
         _regionId = _worldRegion->id.toNSString();
-        _downloadsIdPrefix = [_worldRegion->downloadId.toNSString() stringByAppendingString:@"."];
+        NSString *dPrefix = [_worldRegion->downloadId.toNSString() stringByAppendingString:@"."];
+        if ([[dPrefix substringToIndex:8] isEqualToString:@"england_"])
+            _downloadsIdPrefix = [NSString stringWithFormat:@"gb_%@", dPrefix];
+        else
+            _downloadsIdPrefix = dPrefix;
+
         _nativeName = _worldRegion->name.toNSString();
         [self setLocalizedNamesFrom:region->localizedNames];
     }

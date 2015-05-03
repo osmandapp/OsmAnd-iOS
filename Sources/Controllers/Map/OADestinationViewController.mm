@@ -130,7 +130,7 @@
     [self updateLayout];
 }
 
-- (void)updateFrame
+- (void)updateFrame:(BOOL)animated
 {
     CGFloat big;
     CGFloat small;
@@ -219,7 +219,7 @@
     self.view.frame = frame;
     
     if (_delegate)
-        [_delegate destinationViewLayoutDidChange];
+        [_delegate destinationViewLayoutDidChange:animated];
 }
 
 - (void)updateLayout
@@ -272,7 +272,7 @@
                     cell.contentView.alpha = 0.0;
                     
                 } completion:^(BOOL finished) {
-                    [self updateFrame];
+                    [self updateFrame:YES];
                     [cell.contentView removeFromSuperview];
                     if (_app.data.destinations.count == 0) {
                         [self.view removeFromSuperview];
@@ -305,7 +305,7 @@
                     if (_multiCell.editModeActive)
                         [_multiCell exitEditMode];
 
-                    [self updateFrame];
+                    [self updateFrame:YES];
                     [_multiCell.contentView removeFromSuperview];
                     _multiCell = nil;
                     if (_app.data.destinations.count == 0) {

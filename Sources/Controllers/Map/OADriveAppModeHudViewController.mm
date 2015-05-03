@@ -167,10 +167,6 @@
                                                           withHandler:@selector(onMapFramePrepared)
                                                            andObserve:_mapViewController.framePreparedObservable];
     
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:_app.locationServices.updateObserver];
-    
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -187,7 +183,7 @@
 
     // Initially, show coordinates while road is not yet determined
     _road.reset();
-    [self updatePositionLabels];
+    [self updatePositionLabels: _lastCapturedLocation];
     [self updateCurrentSpeedAndAltitude];
 
     [self updateCurrentLocation];
@@ -197,6 +193,10 @@
     
     _destinationViewController.singleLineOnly = YES;
     _destinationViewController.top = 64.0;
+    
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesUpdate)
+                                                                 andObserve:_app.locationServices.updateObserver];
     
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];
@@ -253,8 +253,8 @@
 
 - (void)viewWillLayoutSubviews
 {
-    if (_destinationViewController)
-        [_destinationViewController updateFrame];
+    //if (_destinationViewController)
+    //    [_destinationViewController updateFrame:YES];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -302,6 +302,7 @@
 - (void)safeUpdateCurrentLocation
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _lastCapturedLocation = _app.locationServices.lastKnownLocation;
         [self updateCurrentLocation];
     });
 }
@@ -344,23 +345,23 @@
                                         OsmAnd::Utilities::get31TileNumberY(_lastCapturedLocation.coordinate.latitude));
         _lastQueriedLocation = [_lastCapturedLocation copy];
 
+        CLLocation* tempLocation = [_lastCapturedLocation copy];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             @synchronized(_roadLocatorSync)
             {
-
                 _road = _roadLocator->findNearestRoad(position31,
                                                           kMaxRoadDistanceInMeters,
                                                           OsmAnd::RoutingDataLevel::Detailed);
             }
 
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self updatePositionLabels];
+                [self updatePositionLabels:tempLocation];
             });
         });
     }
 }
 
-- (void)updatePositionLabels
+- (void)updatePositionLabels:(CLLocation *)location
 {
     NSString* localizedTitle = nil;
     NSString* nativeTitle = nil;
@@ -391,14 +392,14 @@
 
     if (localizedTitle == nil)
     {
-        localizedTitle = [_app.locationFormatter stringFromCoordinate:_lastCapturedLocation.coordinate];;
+        localizedTitle = [_app.locationFormatter stringFromCoordinate:location.coordinate];
     }
 
     if (nativeTitle == nil)
     {
-        if (_lastCapturedLocation.course >= 0)
+        if (location.course >= 0)
         {
-            NSString* course = [_app.locationFormatter stringFromBearing:_lastCapturedLocation.course];
+            NSString* course = [_app.locationFormatter stringFromBearing:location.course];
             nativeTitle = OALocalizedString(@"hud_heading %@", course);
         }
         else
@@ -469,7 +470,6 @@
     if (![self isViewLoaded])
         return;
 
-    _lastCapturedLocation = _app.locationServices.lastKnownLocation;
     [self safeUpdateCurrentLocation];
 }
 
@@ -560,18 +560,30 @@
 }
 
 
-- (void)updateDestinationViewLayout
+- (void)updateDestinationViewLayout:(BOOL)animated
 {
     CGFloat x = _compassBox.frame.origin.x;
     CGSize size = _compassBox.frame.size;
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
     
-    if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+    if (animated)
+    {
         [UIView animateWithDuration:.2 animations:^{
-            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+                _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            
             if (_widgetsView)
                 _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         }];
+    }
+    else
+    {
+        if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+        
+        if (_widgetsView)
+            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+    }
     
 }
 

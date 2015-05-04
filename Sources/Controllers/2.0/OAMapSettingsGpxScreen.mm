@@ -36,7 +36,7 @@
         settings = [OAAppSettings sharedManager];
 
         helper = [OASavingTrackHelper sharedInstance];
-        hasCurrentTrack = [helper hasData] || settings.mapSettingTrackRecordingGlobal;
+        hasCurrentTrack = [helper hasData] || settings.mapSettingTrackRecording;
         
         settingsScreen = EMapSettingsScreenGpx;
         

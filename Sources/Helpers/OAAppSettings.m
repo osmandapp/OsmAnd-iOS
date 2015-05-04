@@ -8,7 +8,7 @@
 
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-
+#import "Localization.h"
 
 @implementation OAAppSettings
 
@@ -30,6 +30,8 @@
     self = [super init];
     if (self) {
         
+        _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
+        
         NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
         BOOL isMetricSystem = [[locale objectForKey:NSLocaleUsesMetricSystem] boolValue] && ![locale.localeIdentifier isEqualToString:@"en_GB"];
         
@@ -48,11 +50,11 @@
         _mapSettingVisibleGpx = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingVisibleGpxKey] : @[];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
-        _mapSettingTrackRecordingGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingGlobalKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingGlobalKey] : NO;
         _mapSettingSaveTrackInterval = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
         _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
 
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
+        _mapSettingSaveTrackIntervalApproved = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalApprovedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveTrackIntervalApprovedKey] : NO;
     }
     return self;
 }
@@ -124,13 +126,6 @@
     [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
 }
 
--(void)setMapSettingTrackRecordingGlobal:(BOOL)mapSettingTrackRecordingGlobal
-{
-    _mapSettingTrackRecordingGlobal = mapSettingTrackRecordingGlobal;
-    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingTrackRecordingGlobal forKey:mapSettingTrackRecordingGlobalKey];
-    [[[OsmAndApp instance] trackStartStopRecObservable] notifyEvent];
-}
-
 -(void)setMapSettingSaveTrackInterval:(int)mapSettingSaveTrackInterval
 {
     _mapSettingSaveTrackInterval = mapSettingSaveTrackInterval;
@@ -141,6 +136,8 @@
 {
     _mapSettingSaveTrackIntervalGlobal = mapSettingSaveTrackIntervalGlobal;
     [[NSUserDefaults standardUserDefaults] setInteger:_mapSettingSaveTrackIntervalGlobal forKey:mapSettingSaveTrackIntervalGlobalKey];
+    [self setMapSettingSaveTrackIntervalApproved:YES];
+    [self setMapSettingSaveTrackInterval:_mapSettingSaveTrackIntervalGlobal];
 }
 
 -(void)setMapSettingVisibleGpx:(NSArray *)mapSettingVisibleGpx
@@ -153,6 +150,12 @@
 {
     _mapSettingShowRecordingTrack = mapSettingShowRecordingTrack;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingShowRecordingTrack forKey:mapSettingShowRecordingTrackKey];
+}
+
+-(void)setMapSettingSaveTrackIntervalApproved:(BOOL)mapSettingSaveTrackIntervalApproved
+{
+    _mapSettingSaveTrackIntervalApproved = mapSettingSaveTrackIntervalApproved;
+    [[NSUserDefaults standardUserDefaults] setBool:_mapSettingSaveTrackIntervalApproved forKey:mapSettingSaveTrackIntervalApprovedKey];
 }
 
 -(void)showGpx:(NSString *)fileName
@@ -173,5 +176,16 @@
     }
 }
 
+- (NSString *)getFormattedTrackInterval:(int)value
+{
+    NSString *res;
+    if (value == 0)
+        res = OALocalizedString(@"rec_interval_minimum");
+    else if (value > 90)
+        res = [NSString stringWithFormat:@"%d %@", (int)(value / 60.0), OALocalizedString(@"units_minutes_short")];
+    else
+        res = [NSString stringWithFormat:@"%d %@", value, OALocalizedString(@"units_seconds_short")];
+    return res;
+}
 
 @end

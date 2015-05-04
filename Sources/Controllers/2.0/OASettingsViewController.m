@@ -45,36 +45,61 @@
     [self setupView];
 }
 
+
 -(void)setupView {
     OAAppSettings* settings = [OAAppSettings sharedManager];
     switch (self.settingsType) {
-        case kSettingsScreenGeneral: {
+        case kSettingsScreenGeneral:
+        {
             NSString* metricSystemValue = settings.settingMetricSystem == 0 ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
             NSString* zoomButtonValue = settings.settingShowZoomButton ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
+            NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
             
             self.data = @[
                           @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
                           @{@"name": OALocalizedString(@"sett_zoom"), @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
-                          @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"}
+                          @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
+                          @{@"name": OALocalizedString(@"rec_interval"), @"value": recIntervalValue, @"img": @"menu_cell_pointer.png"}
                           ];
-        }
             break;
+        }
         case kSettingsScreenMetricSystem:
+        {
+            _titleView.text = OALocalizedString(@"sett_units");
             self.data = @[@{@"name": OALocalizedString(@"sett_km"), @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
                           @{@"name": OALocalizedString(@"sett_ml"), @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
+        }
         case kSettingsScreenZoomButton:
+        {
+            _titleView.text = OALocalizedString(@"sett_zoom");
             self.data = @[@{@"name": OALocalizedString(@"sett_show"), @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
                           @{@"name": OALocalizedString(@"sett_notshow"), @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
                           ];
             break;
+        }
         case kSettingsScreenGeoCoords:
+        {
+            _titleView.text = OALocalizedString(@"sett_loc_fmt");
             self.data = @[@{@"name": OALocalizedString(@"sett_deg"), @"value": @"", @"img": settings.settingGeoFormat == 0 ? @"menu_cell_selected.png" : @""},
                           @{@"name": OALocalizedString(@"sett_deg_min"), @"value": @"", @"img": settings.settingGeoFormat == 1 ? @"menu_cell_selected.png" : @""}
                           ];
             break;
+        }
+        case kSettingsScreenRecInterval:
+        {
+            _titleView.text = OALocalizedString(@"rec_interval");
+            NSMutableArray *arr = [NSMutableArray array];
+            for (NSNumber *num in settings.trackIntervalArray)
+            {
+                [arr addObject:@{@"name": [settings getFormattedTrackInterval:[num intValue]], @"value": @"", @"img": settings.mapSettingSaveTrackIntervalGlobal == [num intValue] ? @"menu_cell_selected.png" : @""}];
+            }
+            self.data = [NSArray arrayWithArray:arr];
+            
+            break;
+        }
         default:
             break;
     }
@@ -141,6 +166,9 @@
         case kSettingsScreenGeoCoords:
             [self selectSettingGeoCode:indexPath.row];
             break;
+        case kSettingsScreenRecInterval:
+            [self selectSettingRecInterval:indexPath.row];
+            break;
         default:
             break;
     }
@@ -149,19 +177,29 @@
 
 -(void)selectSettingGeneral:(NSInteger)index {
 
-    switch (index) {
-        case 0: {
+    switch (index)
+    {
+        case 0:
+        {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenMetricSystem];
             [self.navigationController pushViewController:settingsViewController animated:YES];
-        }
             break;
-        case 1: {
+        }
+        case 1:
+        {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenZoomButton];
             [self.navigationController pushViewController:settingsViewController animated:YES];
-        }
             break;
-        case 2: {
+        }
+        case 2:
+        {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
+            [self.navigationController pushViewController:settingsViewController animated:YES];
+            break;
+        }
+        case 3:
+        {
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
             [self.navigationController pushViewController:settingsViewController animated:YES];
         }
             break;
@@ -184,6 +222,12 @@
 
 -(void)selectSettingGeoCode:(NSInteger)index {
     [[OAAppSettings sharedManager] setSettingGeoFormat:index];
+    [self backButtonClicked:nil];
+}
+
+-(void)selectSettingRecInterval:(NSInteger)index {
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    [settings setMapSettingSaveTrackIntervalGlobal:[settings.trackIntervalArray[index] intValue]];
     [self backButtonClicked:nil];
 }
 

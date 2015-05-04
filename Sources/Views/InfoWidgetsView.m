@@ -88,7 +88,7 @@
     _primaryColor = [UIColor blackColor];
     _unitsColor = [UIColor lightGrayColor];
     
-    _isRecording = (_settings.mapSettingTrackRecordingGlobal || _settings.mapSettingTrackRecording);
+    _isRecording = _settings.mapSettingTrackRecording;
     _tick = NO;
     [self updateGpxRec];
     
@@ -118,7 +118,7 @@
 
 - (void)onTrackRecChanged
 {
-    _isRecording = (_settings.mapSettingTrackRecordingGlobal || _settings.mapSettingTrackRecording);
+    _isRecording = _settings.mapSettingTrackRecording;
     _tick = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateGpxRec];
@@ -127,7 +127,7 @@
 
 - (void)onTrackRecording
 {
-    _tick = !_tick;
+    _tick = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateGpxRec];
     });
@@ -139,13 +139,27 @@
         [self.delegate infoSelectPressed];
 }
 
+- (void)turnLightOn
+{
+    _iconGpxRecWidget.image = [UIImage imageNamed:@"widget_monitoring_rec_big_day.png"];
+}
+
+- (void)turnLightOff
+{
+    _iconGpxRecWidget.image = [UIImage imageNamed:@"widget_monitoring_rec_small_day.png"];
+}
 
 - (void)updateGpxRec
 {
-    if ((_isRecording && !_tick) || !_isRecording)
-        _iconGpxRecWidget.image = [UIImage imageNamed:@"widget_monitoring_rec_big_day.png"];
-    else
-        _iconGpxRecWidget.image = [UIImage imageNamed:@"widget_monitoring_rec_small_day.png"];
+    if (!_isRecording)
+    {
+        [self turnLightOn];
+    }
+    else if (_tick)
+    {
+        [self turnLightOff];
+        [self performSelector:@selector(turnLightOn) withObject:nil afterDelay:.15];
+    }
     
     if (_isRecording || [_recHelper hasData])
     {

@@ -90,6 +90,9 @@
 "track_new_segment" = "Start new segment";
 "track_save" = "Save current track";
 "track_continue_rec" = "Continue recording";
+"track_continue_rec_q" = "Do you want to continue recording?";
+"rec_interval" = "Logging interval";
+"rec_interval_minimum" = "Minimum";
 
 // Map settings
 "m_style_overview" = "Overview";
@@ -291,3 +294,6 @@
 "rendering_value_germanRoadAtlas_name" = "German road atlas";
 "rendering_value_highContrastRoads_name" = "High contrast roads";
 "rendering_value_americanRoadAtlas_name" = "American road atlas";
+
+"units_minutes_short" = "min";
+"units_seconds_short" = "sec";

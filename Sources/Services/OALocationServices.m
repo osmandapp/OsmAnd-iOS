@@ -420,7 +420,7 @@
 - (BOOL)shouldBeRunningInBackground
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (_app.appMode == OAAppModeNavigation || settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal)
+    if (_app.appMode == OAAppModeNavigation || settings.mapSettingTrackRecording)
         return YES;
 
     return NO;

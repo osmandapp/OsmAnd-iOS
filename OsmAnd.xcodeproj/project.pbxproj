@@ -1492,6 +1492,21 @@
 		84E2DBBF1AB720FB001A7FEC /* zoom_out_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB431AB720FA001A7FEC /* zoom_out_button@3x.png */; };
 		84E2DBC01AB720FB001A7FEC /* zoom_out_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB431AB720FA001A7FEC /* zoom_out_button@3x.png */; };
 		84E2DBC11AB720FB001A7FEC /* zoom_out_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB431AB720FA001A7FEC /* zoom_out_button@3x.png */; };
+		84E441771AF7582500F87542 /* PXAlertView+Customization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441721AF7582500F87542 /* PXAlertView+Customization.m */; };
+		84E441781AF7582500F87542 /* PXAlertView+Customization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441721AF7582500F87542 /* PXAlertView+Customization.m */; };
+		84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441721AF7582500F87542 /* PXAlertView+Customization.m */; };
+		84E4417A1AF7582500F87542 /* PXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441741AF7582500F87542 /* PXAlertView.m */; };
+		84E4417B1AF7582500F87542 /* PXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441741AF7582500F87542 /* PXAlertView.m */; };
+		84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441741AF7582500F87542 /* PXAlertView.m */; };
+		84E4417D1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441761AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m */; };
+		84E4417E1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441761AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m */; };
+		84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441761AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m */; };
+		84E441821AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */; };
+		84E441831AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */; };
+		84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */; };
+		84E441861AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */; };
+		84E441871AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */; };
+		84E441881AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */; };
 		8A337E931A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E941A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
@@ -2529,6 +2544,15 @@
 		84E2DB411AB720FA001A7FEC /* zoom_out_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zoom_out_button.png; path = Resources/Icons/zoom_out_button.png; sourceTree = "<group>"; };
 		84E2DB421AB720FA001A7FEC /* zoom_out_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zoom_out_button@2x.png"; path = "Resources/Icons/zoom_out_button@2x.png"; sourceTree = "<group>"; };
 		84E2DB431AB720FA001A7FEC /* zoom_out_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "zoom_out_button@3x.png"; path = "Resources/Icons/zoom_out_button@3x.png"; sourceTree = "<group>"; };
+		84E441711AF7582500F87542 /* PXAlertView+Customization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PXAlertView+Customization.h"; sourceTree = "<group>"; };
+		84E441721AF7582500F87542 /* PXAlertView+Customization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "PXAlertView+Customization.m"; sourceTree = "<group>"; };
+		84E441731AF7582500F87542 /* PXAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PXAlertView.h; sourceTree = "<group>"; };
+		84E441741AF7582500F87542 /* PXAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PXAlertView.m; sourceTree = "<group>"; };
+		84E441751AF7582500F87542 /* UIAlertView+PXAlertViewOverride.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIAlertView+PXAlertViewOverride.h"; sourceTree = "<group>"; };
+		84E441761AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIAlertView+PXAlertViewOverride.m"; sourceTree = "<group>"; };
+		84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATrackIntervalDialogView.h; path = Views/OATrackIntervalDialogView.h; sourceTree = "<group>"; };
+		84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATrackIntervalDialogView.m; path = Views/OATrackIntervalDialogView.m; sourceTree = "<group>"; };
+		84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATrackIntervalDialogView.xib; path = Resources/Views/OATrackIntervalDialogView.xib; sourceTree = "<group>"; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
@@ -2918,6 +2942,7 @@
 		3AC40ABF19DDC430002FBC40 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				84E441851AF7BDF300F87542 /* OATrackIntervalDialogView.xib */,
 				84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */,
 				842431701AEE1B0300925821 /* OAOverlayUnderlayView.xib */,
 				3A83147C1A07DC2500473C38 /* OATargetPointView.xib */,
@@ -3551,6 +3576,20 @@
 			path = Resources/Icons/MapTypes;
 			sourceTree = "<group>";
 		};
+		84E441701AF7582500F87542 /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				84E441711AF7582500F87542 /* PXAlertView+Customization.h */,
+				84E441721AF7582500F87542 /* PXAlertView+Customization.m */,
+				84E441731AF7582500F87542 /* PXAlertView.h */,
+				84E441741AF7582500F87542 /* PXAlertView.m */,
+				84E441751AF7582500F87542 /* UIAlertView+PXAlertViewOverride.h */,
+				84E441761AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m */,
+			);
+			name = AlertView;
+			path = Controllers/AlertView;
+			sourceTree = "<group>";
+		};
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
@@ -3650,6 +3689,8 @@
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */,
+				84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */,
 				84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */,
 				84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */,
 				842431741AEE1B2600925821 /* OAOverlayUnderlayView.h */,
@@ -3689,6 +3730,7 @@
 		BB2545B71798167600E80B58 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				84E441701AF7582500F87542 /* AlertView */,
 				3ACA4AB01A0B933600ECC792 /* Cells */,
 				3ACA4A991A0A0F4500ECC792 /* 2.0 */,
 				BBA3AEC61975009E0039D991 /* Debug */,
@@ -4223,6 +4265,7 @@
 				843E5CCD1AB341E000BE14BE /* icon_drive_mode@3x.png in Resources */,
 				844499821AAA1FC000ACA20D /* ic_tabbar_maps_normal@3x.png in Resources */,
 				3AFEEEB81A13A87B00900A47 /* btn_map_type_icon_bike_selected@2x.png in Resources */,
+				84E441861AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */,
 				842432581AEFDD1900925821 /* widget_monitoring_rec_big_day@3x.png in Resources */,
 				843E5D3C1AB341E000BE14BE /* btn_map_type_icon_car@3x.png in Resources */,
 				BB476B6A18D4C7D90044D5E1 /* DriveAppModeHUD.xib in Resources */,
@@ -4714,6 +4757,7 @@
 				843E5CCE1AB341E000BE14BE /* icon_drive_mode@3x.png in Resources */,
 				844499831AAA1FC000ACA20D /* ic_tabbar_maps_normal@3x.png in Resources */,
 				BB451E5618DCD224005FBE09 /* DriveAppModeHUD.xib in Resources */,
+				84E441871AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */,
 				842432591AEFDD1900925821 /* widget_monitoring_rec_big_day@3x.png in Resources */,
 				843E5D3D1AB341E000BE14BE /* btn_map_type_icon_car@3x.png in Resources */,
 				3AFEEEC51A13A87B00900A47 /* btn_map_type_icon_view_selected@2x.png in Resources */,
@@ -5242,6 +5286,7 @@
 				BBA3AF94197FC4BB0039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				843E5D171AB341E000BE14BE /* left_menu_icon_quiz@3x.png in Resources */,
 				843257F31A9F807400A7964E /* ic_speed@3x.png in Resources */,
+				84E441881AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */,
 				84C41E1F1AB8600D0089EABB /* btn_map_type_icon_car_selected.png in Resources */,
 				84C41E3D1AB8600D0089EABB /* btn_map_type_icon_walk@2x.png in Resources */,
 				84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */,
@@ -5795,6 +5840,7 @@
 				3A02BFB51A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				84387B2A1ABB36A600504DA7 /* OAPOI.m in Sources */,
+				84E4417D1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				84185AFF1AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
 				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				3AC09BCB1A2783ED002698FE /* OAWebViewController.m in Sources */,
@@ -5809,6 +5855,7 @@
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				8A70772F1A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84C0FB1B1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
+				84E441771AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				BB0275D919D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				84B4FD911A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
 				3A426F441A18E22500DE5B1D /* OASwitchTableViewCell.m in Sources */,
@@ -5820,6 +5867,7 @@
 				84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				84B4FD751A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
+				84E4417A1AF7582500F87542 /* PXAlertView.m in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -5889,6 +5937,7 @@
 				8424316D1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
+				84E441821AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				BB63335B17C5388A00903AB1 /* UIViewController+OARootViewController.m in Sources */,
 				BBA3AED6197500DE0039D991 /* OAMapViewController.mm in Sources */,
 				3AC639B91A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
@@ -5929,6 +5978,7 @@
 				3A02BFB61A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				84387B2B1ABB36A600504DA7 /* OAPOI.m in Sources */,
+				84E4417E1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				84185B001AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
 				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
 				3AC09BCC1A2783ED002698FE /* OAWebViewController.m in Sources */,
@@ -5943,6 +5993,7 @@
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				8A7077301A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84C0FB1C1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
+				84E441781AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				BB0275DA19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				84B4FD921A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
 				3A426F471A18F2F600DE5B1D /* OASwitchTableViewCell.m in Sources */,
@@ -5954,6 +6005,7 @@
 				84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				84B4FD761A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
+				84E4417B1AF7582500F87542 /* PXAlertView.m in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
@@ -6023,6 +6075,7 @@
 				8424316E1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
+				84E441831AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				BB451E3418DCD224005FBE09 /* OARootViewController.m in Sources */,
 				3A2D893D1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
 				3AC639BA1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
@@ -6072,6 +6125,7 @@
 				BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				3ACE8D4219F4F53E003F1D42 /* OAMapRulerView.m in Sources */,
 				3AFEEE8C1A10FAB200900A47 /* OAFavoriteGroupViewController.mm in Sources */,
+				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
@@ -6153,6 +6207,7 @@
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
 				8440560B1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
+				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				8432E2731AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
@@ -6162,6 +6217,7 @@
 				844499B61AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
+				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.mm in Sources */,
@@ -6177,6 +6233,7 @@
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.m in Sources */,
+				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);

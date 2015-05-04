@@ -541,13 +541,8 @@
             {
                 record = true;
             }
-            else if (settings.mapSettingTrackRecordingGlobal
-                     && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackIntervalGlobal)
-            {
-                record = true;
-            }
             
-            if (settings.mapSettingTrackRecording || settings.mapSettingTrackRecordingGlobal) {
+            if (settings.mapSettingTrackRecording) {
                 isRecording = true;
             }
         }

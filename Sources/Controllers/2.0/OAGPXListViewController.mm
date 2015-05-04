@@ -435,11 +435,11 @@ typedef enum
 - (void)startStopRecPressed
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL recOn = settings.mapSettingTrackRecordingGlobal || settings.mapSettingTrackRecording;
+    BOOL recOn = settings.mapSettingTrackRecording;
     if (recOn)
-        settings.mapSettingTrackRecordingGlobal = NO;
+        settings.mapSettingTrackRecording = NO;
     else
-        settings.mapSettingTrackRecordingGlobal = YES;
+        settings.mapSettingTrackRecording = YES;
 
     [self updateRecImg];
 }
@@ -447,7 +447,7 @@ typedef enum
 - (void)updateRecImg
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL recOn = settings.mapSettingTrackRecordingGlobal || settings.mapSettingTrackRecording;
+    BOOL recOn = settings.mapSettingTrackRecording;
     if (recOn)
     {
         [_recCell.btnStartStopRec setImage:[UIImage imageNamed:@"ic_action_rec_stop.png"] forState:UIControlStateNormal];

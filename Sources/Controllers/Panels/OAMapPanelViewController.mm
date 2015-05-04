@@ -29,6 +29,8 @@
 #import "InfoWidgetsView.h"
 #import "OAAppSettings.h"
 #import "OASavingTrackHelper.h"
+#import "PXAlertView.h"
+#import "OATrackIntervalDialogView.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -179,64 +181,116 @@
 
 - (void) infoSelectPressed
 {
-    BOOL recOn = _settings.mapSettingTrackRecordingGlobal || _settings.mapSettingTrackRecording;
+    BOOL recOn = _settings.mapSettingTrackRecording;
 
     if (recOn)
     {
-        [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"track_recording")
-                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
-                           otherButtonItems:
-          [RIButtonItem itemWithLabel:OALocalizedString(@"track_stop_rec")
-                               action:^{
-                                    _settings.mapSettingTrackRecordingGlobal = NO;
-                               }],
-          [RIButtonItem itemWithLabel:OALocalizedString(@"track_new_segment")
-                               action:^{
-                                   [_recHelper startNewSegment];
-                               }],
-          [RIButtonItem itemWithLabel:OALocalizedString(@"track_save")
-                               action:^{
-                                   if ([_recHelper hasDataToSave])
-                                       [_recHelper saveDataToGpx];
-                                   dispatch_async(dispatch_get_main_queue(), ^{
-                                       [_widgetsView updateGpxRec];
-                                   });
-                               }],
-          nil] show];
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
+                                                     message:nil
+                                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                                 otherTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
+                                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                                      if (!cancelled) {
+                                                          switch (buttonIndex) {
+                                                              case 0:
+                                                              {
+                                                                  _settings.mapSettingTrackRecording = NO;
+                                                                  break;
+                                                              }
+                                                              case 1:
+                                                              {
+                                                                  [_recHelper startNewSegment];
+                                                                  break;
+                                                              }
+                                                              case 2:
+                                                              {
+                                                                  _settings.mapSettingTrackRecording = NO;
+                                                                  if ([_recHelper hasDataToSave])
+                                                                      [_recHelper saveDataToGpx];
+                                                                  dispatch_async(dispatch_get_main_queue(), ^{
+                                                                      [_widgetsView updateGpxRec];
+                                                                  });
+                                                                  
+                                                                  [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
+                                                                                          message:nil
+                                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
+                                                                                      otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                                       completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                                                                           if (!cancelled) {
+                                                                                               _settings.mapSettingTrackRecording = YES;
+
+                                                                                           }
+                                                                                       }];
+                                                                  
+                                                                  break;
+                                                              }
+                                                              default:
+                                                                  break;
+                                                          }
+                                                      }
+                                                  }];
+
     }
     else
     {
         if ([_recHelper hasData])
         {
-            [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"track_recording")
-                               cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")]
-                               otherButtonItems:
-              [RIButtonItem itemWithLabel:OALocalizedString(@"track_continue_rec")
-                                   action:^{
-                                       [_recHelper startNewSegment];
-                                       _settings.mapSettingTrackRecordingGlobal = YES;
-                                   }],
-              /*
-              [RIButtonItem itemWithLabel:OALocalizedString(@"track_new_segment")
-                                   action:^{
-                                       [_recHelper startNewSegment];
-                                       _settings.mapSettingTrackRecordingGlobal = YES;
-                                   }],
-               */
-              [RIButtonItem itemWithLabel:OALocalizedString(@"track_save")
-                                   action:^{
-                                       if ([_recHelper hasDataToSave])
-                                           [_recHelper saveDataToGpx];
-                                       dispatch_async(dispatch_get_main_queue(), ^{
-                                           [_widgetsView updateGpxRec];
-                                       });
-                                   }],
-              nil] show];
+            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_recording")
+                                    message:nil
+                                cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                 otherTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"track_save")]
+                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                     if (!cancelled) {
+                                         if (buttonIndex == 0)
+                                         {
+                                             [_recHelper startNewSegment];
+                                             _settings.mapSettingTrackRecording = YES;
+                                         }
+                                         else
+                                         {
+                                             if ([_recHelper hasDataToSave])
+                                                 [_recHelper saveDataToGpx];
+                                             dispatch_async(dispatch_get_main_queue(), ^{
+                                                 [_widgetsView updateGpxRec];
+                                             });
+                                         }
+                                         
+                                     }
+                                 }];
         }
         else
         {
-            [_recHelper startNewSegment];
-            _settings.mapSettingTrackRecordingGlobal = YES;
+            if (!_settings.mapSettingSaveTrackIntervalApproved)
+            {
+                OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
+                
+                [PXAlertView showAlertWithTitle:@"Start track recording"
+                                        message:nil
+                                    cancelTitle:@"Cancel"
+                                     otherTitle:@"OK"
+                                    contentView:view
+                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                         
+                                         if (!cancelled)
+                                         {
+                                             _settings.mapSettingSaveTrackInterval = [view getInterval];
+                                             if (view.swRemember.isOn)
+                                             {
+                                                 _settings.mapSettingSaveTrackIntervalApproved = YES;
+                                                 _settings.mapSettingSaveTrackIntervalGlobal = _settings.mapSettingSaveTrackInterval;
+                                             }
+                                             [_recHelper startNewSegment];
+                                             _settings.mapSettingTrackRecording = YES;
+                                         }
+                                     }];
+            }
+            else
+            {
+                [_recHelper startNewSegment];
+                _settings.mapSettingTrackRecording = YES;
+            }
+            
         }
     }
     

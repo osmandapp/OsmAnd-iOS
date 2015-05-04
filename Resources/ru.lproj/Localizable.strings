@@ -281,3 +281,8 @@
 "track_new_segment" = "Начать новый отрезок";
 "track_save" = "Сохранить трек";
 "track_continue_rec" = "Продолжить запись";
+"track_continue_rec_q" = "Продолжить запись?";
+"rec_interval" = "Интервал записи";
+"rec_interval_minimum" = "Минимум";
+"units_minutes_short" = "мин";
+"units_seconds_short" = "сек";

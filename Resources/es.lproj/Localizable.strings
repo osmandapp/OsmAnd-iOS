@@ -259,3 +259,8 @@
 "track_new_segment" = "Iniciar nuevo segmento";
 "track_save" = "Guardar traza actual";
 "track_continue_rec" = "Continuar grabación";
+"track_continue_rec_q" = "¿Quieres continuar grabando?";
+"rec_interval" = "Intervalo de registro";
+"rec_interval_minimum" = "Mínimo";
+"units_minutes_short" = "min";
+"units_seconds_short" = "seg";

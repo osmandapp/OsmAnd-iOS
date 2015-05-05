@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 @class OAGPXMutableDocument;
+@class OAGPX;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -20,6 +21,8 @@
 @property (nonatomic, readonly) OAGPXMutableDocument *currentTrack;
 
 + (OASavingTrackHelper *)sharedInstance;
+
+- (OAGPX *)getCurrentGPX;
 
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;

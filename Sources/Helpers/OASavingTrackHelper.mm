@@ -347,6 +347,7 @@
         
         [currentTrack.locationMarks removeAllObjects];
         [currentTrack.tracks removeAllObjects];
+        [currentTrack initBounds];
         currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
         
         [self prepareCurrentTrackForRecording];
@@ -668,6 +669,7 @@
         [currentTrack.locationMarks removeAllObjects];
         [currentTrack.tracks removeAllObjects];
         [self collectRecordedData:YES];
+        [currentTrack applyBounds];
         
         [self prepareCurrentTrackForRecording];
         
@@ -708,6 +710,13 @@
         block();
         
     });
+}
+
+- (OAGPX *)getCurrentGPX
+{
+    OAGPXTrackAnalysis *analysis = [currentTrack getAnalysis:0];
+    [currentTrack applyBounds];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:@"" title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds analysis:analysis];
 }
 
 @end

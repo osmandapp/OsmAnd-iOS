@@ -100,6 +100,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @property(readonly) OAObservable* framePreparedObservable;
 
+@property(nonatomic, assign) BOOL minimap;
+
 #if defined(OSMAND_IOS_DEV)
 @property(nonatomic) BOOL hideStaticSymbols;
 @property(nonatomic) OAVisualMetricsMode visualMetricsMode;

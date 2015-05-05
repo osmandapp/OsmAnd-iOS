@@ -505,6 +505,7 @@ typedef enum
 
 - (void)saveGpxPressed
 {
+    BOOL wasRecording = [OAAppSettings sharedManager].mapSettingTrackRecording;
     [OAAppSettings sharedManager].mapSettingTrackRecording = NO;
 
     if ([_savingHelper hasDataToSave])
@@ -515,19 +516,22 @@ typedef enum
     [self generateData];
     [self setupView];
     
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_no")
-                         otherTitle:OALocalizedString(@"shared_string_yes")
-                         otherImage:nil
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled) {
-                                 [OAAppSettings sharedManager].mapSettingTrackRecording = YES;
-                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                     [self updateRecImg];
-                                 });
-                             }
-                         }];
+    if (wasRecording)
+    {
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_no")
+                             otherTitle:OALocalizedString(@"shared_string_yes")
+                             otherImage:nil
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled) {
+                                     [OAAppSettings sharedManager].mapSettingTrackRecording = YES;
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [self updateRecImg];
+                                     });
+                                 }
+                             }];
+    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -536,12 +540,15 @@ typedef enum
 {
     if (indexPath.section == 0)
     {
-        //
+        if ([_savingHelper hasData])
+        {
+            OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
+            [self.navigationController pushViewController:controller animated:YES];
+        }
     }
     else if (indexPath.section == 1 && self.gpxList.count > 0)
     {
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-        
         OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];
         [self.navigationController pushViewController:controller animated:YES];
     }
@@ -550,8 +557,9 @@ typedef enum
         NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
         SEL action = NSSelectorFromString([item objectForKey:@"action"]);
         [self performSelector:action];
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 

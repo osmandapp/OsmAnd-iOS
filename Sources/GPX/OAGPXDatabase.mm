@@ -52,6 +52,14 @@
 {
     NSMutableArray *res = [NSMutableArray arrayWithArray:gpxList];
     
+    OAGPX *gpx = [self buildGpxItem:fileName title:title desc:desc bounds:bounds analysis:analysis];
+    [res addObject:gpx];
+    
+    gpxList = res;
+}
+
+-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis
+{
     OAGPX *gpx = [[OAGPX alloc] init];
     gpx.bounds = bounds;
     gpx.gpxFileName = fileName;
@@ -60,12 +68,12 @@
         gpx.gpxTitle = title;
     else
         gpx.gpxTitle = [fileName stringByDeletingPathExtension];
-
+    
     if (desc)
         gpx.gpxDescription = desc;
     else
         gpx.gpxDescription = @"";
-
+    
     gpx.importDate = [NSDate date];
     
     gpx.totalDistance = analysis.totalDistance;
@@ -77,22 +85,20 @@
     gpx.totalDistanceMoving = analysis.totalDistanceMoving;
     gpx.diffElevationUp = analysis.diffElevationUp;
     gpx.diffElevationDown = analysis.diffElevationDown;
-
+    
     gpx.avgElevation = analysis.avgElevation;
     gpx.minElevation = analysis.minElevation;
     gpx.maxElevation = analysis.maxElevation;
     gpx.maxSpeed = analysis.maxSpeed;
     gpx.avgSpeed = analysis.avgSpeed;
     gpx.points = analysis.points;
-
+    
     gpx.wptPoints = analysis.wptPoints;
     gpx.metricEnd = analysis.metricEnd;
     gpx.locationStart = analysis.locationStart;
     gpx.locationEnd = analysis.locationEnd;
-
-    [res addObject:gpx];
     
-    gpxList = res;
+    return gpx;
 }
 
 -(void)removeGpxItem:(NSString *)fileName

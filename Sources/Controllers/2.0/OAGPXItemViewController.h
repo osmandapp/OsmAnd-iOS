@@ -9,6 +9,7 @@
 #import "OASuperViewController.h"
 
 @class OAGPX;
+@class OAGPXDocument;
 
 @interface OAGPXItemViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
 
@@ -18,12 +19,16 @@
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIView *topView;
 
+@property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
+
+@property (nonatomic, readonly) BOOL showCurrentTrack;
 
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;
@@ -32,5 +37,6 @@
 - (IBAction)deleteClicked:(id)sender;
 
 - (id)initWithGPXItem:(OAGPX *)gpxItem;
+- (id)initWithCurrentGPXItem;
 
 @end

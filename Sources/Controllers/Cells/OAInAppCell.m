@@ -34,7 +34,7 @@
     [_lbPrice sizeToFit];
     CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, _lbPrice.bounds.size.width), MAX(kPriceMinTextHeight, _lbPrice.bounds.size.height));
     CGRect priceFrame = _lbPrice.frame;
-    priceFrame.origin = CGPointMake(self.contentView.bounds.size.width - priceSize.width - kPriceRectBorder - kPriceTextInset, 25.0);
+    priceFrame.origin = CGPointMake(self.bounds.size.width - priceSize.width - kPriceRectBorder - kPriceTextInset, 25.0);
     priceFrame.size = priceSize;
     _lbPrice.frame = priceFrame;
     
@@ -42,12 +42,10 @@
     
 
     CGRect titleFrame = _lbTitle.frame;
-    titleFrame.size = CGSizeMake(_imgPrice.frame.origin.x - titleFrame.origin.x - 8.0, titleFrame.size.height);
-    _lbTitle.frame = titleFrame;
+    _lbTitle.frame = CGRectMake(74.0, 18.0, _imgPrice.frame.origin.x - titleFrame.origin.x - 8.0, titleFrame.size.height);
 
     CGRect descFrame = _lbDescription.frame;
-    descFrame.size = CGSizeMake(_imgPrice.frame.origin.x - descFrame.origin.x - 8.0, descFrame.size.height);
-    _lbDescription.frame = descFrame;
+    _lbDescription.frame = CGRectMake(75.0, 36.0, _imgPrice.frame.origin.x - descFrame.origin.x - 8.0, descFrame.size.height);
     
     CGSize s = [_lbDescription.text boundingRectWithSize:CGSizeMake(_lbDescription.frame.size.width, 10000.0)
                                    options:NSStringDrawingUsesLineFragmentOrigin

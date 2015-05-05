@@ -71,6 +71,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                       kInAppId_Region_All_World,
                                       kInAppId_Addon_SkiMap,
                                       kInAppId_Addon_Nautical,
+                                      kInAppId_Addon_TrackRecording,
+                                      kInAppId_Addon_Parking,
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
@@ -97,6 +99,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return [NSArray arrayWithObjects:
             kInAppId_Addon_SkiMap,
             kInAppId_Addon_Nautical,
+            kInAppId_Addon_TrackRecording,
+            kInAppId_Addon_Parking,
             nil];
 }
 

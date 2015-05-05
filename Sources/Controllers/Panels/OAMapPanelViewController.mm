@@ -482,6 +482,7 @@
     [_mapViewController didMoveToParentViewController:self];
     [destinationView bringSubviewToFront:_mapViewController.view];
     
+    _mapViewController.minimap = YES;
 }
 
 - (void)modifyMapAfterReuse:(Point31)destinationPoint zoom:(CGFloat)zoom azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
@@ -491,6 +492,8 @@
     renderView.azimuth = azimuth;
     renderView.elevationAngle = elevationAngle;
     [_mapViewController goToPosition:destinationPoint andZoom:zoom animated:YES];
+    
+    _mapViewController.minimap = NO;
 }
 
 - (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated
@@ -523,6 +526,8 @@
                                  andZoom:zoom
                                 animated:animated];
     }
+    
+    _mapViewController.minimap = NO;
 }
 
 - (void)restoreMapAfterReuse
@@ -534,6 +539,9 @@
     mapView.zoom = _mainMapZoom;
     mapView.azimuth = _mainMapAzimuth;
     mapView.elevationAngle = _mainMapEvelationAngle;
+    
+    _mapViewController.minimap = NO;
+
 }
 
 - (void)doMapRestore

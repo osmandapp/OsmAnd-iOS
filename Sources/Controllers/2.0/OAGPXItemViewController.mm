@@ -21,6 +21,7 @@
 #import "OANativeUtilities.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OASavingTrackHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -54,6 +55,9 @@ typedef enum
 @end
 
 @implementation OAGPXItemViewController
+{
+    OASavingTrackHelper *_savingHelper;
+}
 
 - (id)initWithGPXItem:(OAGPX *)gpxItem
 {
@@ -66,6 +70,30 @@ typedef enum
         
     }
     return self;
+}
+
+- (id)initWithCurrentGPXItem
+{
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _savingHelper = [OASavingTrackHelper sharedInstance];
+        
+        [self updateCurrentGPXData];
+        
+        _showCurrentTrack = YES;
+        
+    }
+    return self;
+}
+
+- (void)updateCurrentGPXData
+{
+    OAGPX* item = [_savingHelper getCurrentGPX];
+    item.gpxTitle = OALocalizedString(@"track_recording_name");
+    
+    self.gpx = item;
+    self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
 }
 
 - (void)viewWillLayoutSubviews
@@ -165,6 +193,20 @@ typedef enum
 
     self.titleView.text = self.gpx.gpxTitle;
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
+    
+    if (self.showCurrentTrack)
+    {
+        UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        refreshButton.frame = _deleteButton.frame;
+        refreshButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
+        [refreshButton setImage:[UIImage imageNamed:@"ic_update.png"] forState:UIControlStateNormal];
+        refreshButton.tintColor = [UIColor whiteColor];
+        [refreshButton addTarget:self action:@selector(refreshPressed) forControlEvents:UIControlEventTouchUpInside];
+        [self.topView addSubview:refreshButton];
+
+        [self.deleteButton removeFromSuperview];
+        [self.exportButton removeFromSuperview];
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -179,9 +221,24 @@ typedef enum
     
     [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
-    if (_action == kGpxItemActionNone) {
-        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
-    } else {
+    if (_action == kGpxItemActionNone)
+    {
+        if (self.showCurrentTrack)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapViewController hideTempGpxTrack];
+                [_mapViewController showRecGpxTrack];
+            });
+        }
+        else
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
+            });
+        }
+    }
+    else
+    {
         _action = kGpxItemActionNone;
     }
 
@@ -222,6 +279,18 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+- (void)updateMap
+{
+    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    
+    if (self.showCurrentTrack)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapViewController showRecGpxTrack];
+        });
+    }
+}
+
 - (IBAction)menuFavoriteClicked:(id)sender {
     OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
     [self.navigationController pushViewController:favController animated:NO];
@@ -249,6 +318,13 @@ typedef enum
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];
+}
+
+- (void)refreshPressed
+{
+    [self updateCurrentGPXData];
+    [self updateMap];
+    [_tableView reloadData];
 }
 
 - (IBAction)deleteClicked:(id)sender

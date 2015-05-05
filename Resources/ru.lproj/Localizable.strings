@@ -287,3 +287,5 @@
 "units_minutes_short" = "мин";
 "units_seconds_short" = "сек";
 "track_start_rec" = "Начать запись трека";
+"track_rec_addon_q" = "Активируйте дополнение \"Запись треков\" для записи и сохранения ваших маршрутов";
+"track_interval_remember" = "Запомнить мой выбор";

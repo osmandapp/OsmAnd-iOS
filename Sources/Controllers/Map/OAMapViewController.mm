@@ -2678,23 +2678,26 @@
                 _mapObjectsSymbolsProviderGpxRec.reset();
                 [rendererView resetProviderFor:kGpxRecLayerId];
                 
-                _geoInfoDocsGpxRec.clear();
-                _geoInfoDocsGpxRec << [[OASavingTrackHelper sharedInstance].currentTrack getDocument];
-                
-                _gpxPresenterRec.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxRec));
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (_gpxPresenterRec) {
-                        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
-                        _gpxPrimitivesProviderRec.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRec->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
-                        
-                        _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRec, false));
-                        [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRecLayerId];
-                        
-                        _mapObjectsSymbolsProviderGpxRec.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRec, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
-                        [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
-                    }
-                });
+                [[OASavingTrackHelper sharedInstance] runSyncBlock:^{
+                    
+                    _geoInfoDocsGpxRec.clear();
+                    _geoInfoDocsGpxRec << [[OASavingTrackHelper sharedInstance].currentTrack getDocument];
+                    
+                    _gpxPresenterRec.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxRec));
+                    
+                        if (_gpxPresenterRec) {
+                            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+                            _gpxPrimitivesProviderRec.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRec->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+                            
+                            _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRec, false));
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRecLayerId];
+                                
+                                _mapObjectsSymbolsProviderGpxRec.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRec, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
+                                [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
+                            });
+                        }
+                }];
             });
         }
     }

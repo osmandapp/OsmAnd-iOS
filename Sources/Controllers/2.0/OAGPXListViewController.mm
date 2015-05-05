@@ -28,6 +28,9 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 #import "OAUtilities.h"
+#import "PXAlertView.h"
+
+#import "OATrackIntervalDialogView.h"
 
 
 #define _(name) OAGPXListViewController__##name
@@ -437,11 +440,45 @@ typedef enum
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL recOn = settings.mapSettingTrackRecording;
     if (recOn)
+    {
         settings.mapSettingTrackRecording = NO;
+        [self updateRecImg];
+    }
     else
-        settings.mapSettingTrackRecording = YES;
-
-    [self updateRecImg];
+    {
+        if (!settings.mapSettingSaveTrackIntervalApproved)
+        {
+            OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
+            
+            [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
+                                    message:nil
+                                cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                 otherTitle:OALocalizedString(@"shared_string_ok")
+                                 otherImage:nil
+                                contentView:view
+                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                     
+                                     if (!cancelled)
+                                     {
+                                         settings.mapSettingSaveTrackInterval = [view getInterval];
+                                         if (view.swRemember.isOn)
+                                         {
+                                             settings.mapSettingSaveTrackIntervalApproved = YES;
+                                             settings.mapSettingSaveTrackIntervalGlobal = settings.mapSettingSaveTrackInterval;
+                                         }
+                                         settings.mapSettingTrackRecording = YES;
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [self updateRecImg];
+                                         });
+                                     }
+                                 }];
+        }
+        else
+        {
+            settings.mapSettingTrackRecording = YES;
+            [self updateRecImg];
+        }
+    }
 }
 
 - (void)updateRecImg
@@ -468,13 +505,29 @@ typedef enum
 
 - (void)saveGpxPressed
 {
+    [OAAppSettings sharedManager].mapSettingTrackRecording = NO;
+
     if ([_savingHelper hasDataToSave])
         [_savingHelper saveDataToGpx];
     
     [self updateRecBtn];
-    
+
     [self generateData];
     [self setupView];
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled) {
+                                 [OAAppSettings sharedManager].mapSettingTrackRecording = YES;
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     [self updateRecImg];
+                                 });
+                             }
+                         }];
 }
 
 #pragma mark - UITableViewDelegate

@@ -93,6 +93,7 @@
 "track_continue_rec_q" = "Do you want to continue recording?";
 "rec_interval" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
+"track_start_rec" = "Start track recording";
 
 // Map settings
 "m_style_overview" = "Overview";

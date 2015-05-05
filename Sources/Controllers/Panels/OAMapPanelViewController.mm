@@ -190,6 +190,7 @@
                                                      message:nil
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
                                                  otherTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
+                                                 otherImages:@[@"track_recording_stop.png", @"track_new_segement.png" , @"track_save.png"]
                                                   completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                       if (!cancelled) {
                                                           switch (buttonIndex) {
@@ -216,6 +217,7 @@
                                                                                           message:nil
                                                                                       cancelTitle:OALocalizedString(@"shared_string_no")
                                                                                       otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                                          otherImage:nil
                                                                                        completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                                                            if (!cancelled) {
                                                                                                _settings.mapSettingTrackRecording = YES;
@@ -240,6 +242,7 @@
                                     message:nil
                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
                                  otherTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"track_save")]
+                                otherImages:@[@"ic_action_rec_start.png", @"track_save.png"]
                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                      if (!cancelled) {
                                          if (buttonIndex == 0)
@@ -265,10 +268,11 @@
             {
                 OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
                 
-                [PXAlertView showAlertWithTitle:@"Start track recording"
+                [PXAlertView showAlertWithTitle:OALocalizedString(@"track_start_rec")
                                         message:nil
-                                    cancelTitle:@"Cancel"
-                                     otherTitle:@"OK"
+                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                     otherTitle:OALocalizedString(@"shared_string_ok")
+                                     otherImage:nil
                                     contentView:view
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          
@@ -280,14 +284,12 @@
                                                  _settings.mapSettingSaveTrackIntervalApproved = YES;
                                                  _settings.mapSettingSaveTrackIntervalGlobal = _settings.mapSettingSaveTrackInterval;
                                              }
-                                             [_recHelper startNewSegment];
                                              _settings.mapSettingTrackRecording = YES;
                                          }
                                      }];
             }
             else
             {
-                [_recHelper startNewSegment];
                 _settings.mapSettingTrackRecording = YES;
             }
             

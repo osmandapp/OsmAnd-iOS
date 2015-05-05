@@ -286,3 +286,4 @@
 "rec_interval_minimum" = "Минимум";
 "units_minutes_short" = "мин";
 "units_seconds_short" = "сек";
+"track_start_rec" = "Начать запись трека";

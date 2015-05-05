@@ -32,12 +32,14 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                        otherImage:(NSString *)otherImage
                         completion:(PXAlertViewCompletionBlock)completion;
 
 + (instancetype)showAlertWithTitle:(NSString *)title
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                        otherImage:(NSString *)otherImage
                 buttonsShouldStack:(BOOL)shouldStack
                         completion:(PXAlertViewCompletionBlock)completion;
 
@@ -48,6 +50,7 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                        otherTitles:(NSArray *)otherTitles
+                       otherImages:(NSArray *)otherImages
                         completion:(PXAlertViewCompletionBlock)completion;
 
 
@@ -55,6 +58,7 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                        otherImage:(NSString *)otherImage
                        contentView:(UIView *)view
                         completion:(PXAlertViewCompletionBlock)completion;
 
@@ -62,6 +66,7 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                        otherImage:(NSString *)otherImage
                 buttonsShouldStack:(BOOL)shouldStack
                        contentView:(UIView *)view
                         completion:(PXAlertViewCompletionBlock)completion;
@@ -73,6 +78,7 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                        otherTitles:(NSArray *)otherTitles
+                       otherImages:(NSArray *)otherImages
                        contentView:(UIView *)view
                         completion:(PXAlertViewCompletionBlock)completion;
 
@@ -81,7 +87,7 @@ typedef void(^PXAlertViewCompletionBlock)(BOOL cancelled, NSInteger buttonIndex)
  * @param title The title of the new button
  * @return The index of the new button. Button indices start at 0 and increase in the order they are added.
  */
-- (NSInteger)addButtonWithTitle:(NSString *)title cmdButton:(BOOL)cmdButton cancelButton:(BOOL)cancelButton;
+- (NSInteger)addButtonWithTitle:(NSString *)title cmdButton:(BOOL)cmdButton cancelButton:(BOOL)cancelButton imageName:(NSString *)imageName;
 
 /**
  * Dismisses the receiver, optionally with animation.

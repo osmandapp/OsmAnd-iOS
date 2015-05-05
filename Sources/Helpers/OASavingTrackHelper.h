@@ -28,4 +28,6 @@
 
 - (BOOL) saveIfNeeded;
 
+- (void) runSyncBlock:(void (^)(void))block;
+
 @end

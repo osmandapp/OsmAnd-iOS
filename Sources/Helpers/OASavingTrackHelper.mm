@@ -524,7 +524,7 @@
 
 - (void) updateLocation
 {
-    dispatch_sync(syncQueue, ^{
+    dispatch_async(syncQueue, ^{
         
         CLLocation* location = _app.locationServices.lastKnownLocation;
         long locationTime = (long)[location.timestamp timeIntervalSince1970];
@@ -699,6 +699,15 @@
 - (BOOL) isPointAccurateForRouting:(CLLocation *)loc
 {
     return loc != nil && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3.0 / 2.0);
+}
+
+- (void) runSyncBlock:(void (^)(void))block
+{
+    dispatch_sync(syncQueue, ^{
+        
+        block();
+        
+    });
 }
 
 @end

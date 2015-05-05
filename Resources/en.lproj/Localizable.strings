@@ -94,6 +94,8 @@
 "rec_interval" = "Logging interval";
 "rec_interval_minimum" = "Minimum";
 "track_start_rec" = "Start track recording";
+"track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
+"track_interval_remember" = "Remember my choice";
 
 // Map settings
 "m_style_overview" = "Overview";

@@ -50,6 +50,7 @@
     delta = 1.0 / (_settings.trackIntervalArray.count - 1);
     _slInterval.value = interval * delta;
     [self updateIntervalLabel:interval];
+    _lbRemember.text = OALocalizedString(@"track_interval_remember");
 }
 
 - (void)updateInterval

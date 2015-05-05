@@ -15,5 +15,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
 
 @property (nonatomic, assign) BOOL openFromSplash;
+@property (nonatomic, assign) BOOL openFromCustomPlace;
 
 @end

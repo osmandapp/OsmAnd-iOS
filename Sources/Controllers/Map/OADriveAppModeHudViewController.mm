@@ -25,6 +25,7 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "InfoWidgetsView.h"
+#import "OAIAPHelper.h"
 
 #import "OADestinationViewController.h"
 #import "OADestination.h"
@@ -201,7 +202,7 @@
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];
     
-    if (![self.view.subviews containsObject:self.widgetsView])
+    if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
     {
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

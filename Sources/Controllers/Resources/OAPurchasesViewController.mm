@@ -65,9 +65,16 @@
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
-    if (self.openFromSplash) {
+    if (self.openFromSplash)
+    {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
+    }
+    
+    if (self.openFromCustomPlace)
+    {
+        [_toolbarView removeFromSuperview];
+        _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height + _toolbarView.frame.size.height);
     }
 }
 
@@ -340,7 +347,10 @@
 
 -(void)backButtonClicked:(id)sender
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    if (self.openFromCustomPlace)
+        [self.navigationController popViewControllerAnimated:YES];
+    else
+        [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (IBAction)btnToolbarMapsClicked:(id)sender

@@ -22,6 +22,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OASavingTrackHelper.h"
 #import "OAAppSettings.h"
+#import "OAIAPHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -29,6 +30,7 @@
 #include "Localization.h"
 #import "OAUtilities.h"
 #import "PXAlertView.h"
+#import "OAPurchasesViewController.h"
 
 #import "OATrackIntervalDialogView.h"
 
@@ -85,6 +87,7 @@ typedef enum
 @implementation OAGPXListViewController
 {
     OAGPXRecTableViewCell* _recCell;
+    UITableViewCell *_addonCell;
     OAAutoObserverProxy* _trackRecordingObserver;
     OASavingTrackHelper *_savingHelper;
 }
@@ -366,27 +369,56 @@ typedef enum
 {
     if (indexPath.section == 0)
     {
-        if (!_recCell)
+        if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRecCell" owner:self options:nil];
-            _recCell = (OAGPXRecTableViewCell *)[nib objectAtIndex:0];
-        }
-        
-        if (_recCell)
-        {
-            [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
-
-            _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
-            _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
-
-            [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
-            [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
+            if (!_recCell)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRecCell" owner:self options:nil];
+                _recCell = (OAGPXRecTableViewCell *)[nib objectAtIndex:0];
+            }
             
-            [self updateRecImg];
-            [self updateRecBtn];
+            if (_recCell)
+            {
+                [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
+                
+                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+                _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
+                
+                [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
+                [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
+                
+                [self updateRecImg];
+                [self updateRecBtn];
+            }
+            
+            return _recCell;
         }
-        
-        return _recCell;
+        else
+        {
+            if (!_addonCell)
+            {
+                UITableViewCell *cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.bounds.size.width, 44.0)];
+                
+                UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 0.0, tableView.bounds.size.width - 42.0, 44.0)];
+                label.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];
+                label.numberOfLines = 2;
+                label.textAlignment = NSTextAlignmentLeft;
+                label.textColor = [UIColor darkGrayColor];
+                label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+                label.text = OALocalizedString(@"track_rec_addon_q");
+                [cell addSubview:label];
+                
+                UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(tableView.bounds.size.width - 30.0, 12.5, 21.0, 21.0)];
+                imageView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
+                imageView.contentMode = UIViewContentModeCenter;
+                imageView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
+                [cell addSubview:imageView];
+                
+                _addonCell = cell;
+            }
+            
+            return _addonCell;
+        }
     }
     else if (indexPath.section == 1 && self.gpxList.count > 0)
     {
@@ -540,10 +572,19 @@ typedef enum
 {
     if (indexPath.section == 0)
     {
-        if ([_savingHelper hasData])
+        if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
         {
-            OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-            [self.navigationController pushViewController:controller animated:YES];
+            if ([_savingHelper hasData])
+            {
+                OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
+                [self.navigationController pushViewController:controller animated:YES];
+            }
+        }
+        else
+        {
+            OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+            purchasesViewController.openFromCustomPlace = YES;
+            [self.navigationController pushViewController:purchasesViewController animated:YES];
         }
     }
     else if (indexPath.section == 1 && self.gpxList.count > 0)

@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
 #import "InfoWidgetsView.h"
+#import "OAIAPHelper.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -202,7 +203,7 @@
         [_app setMapMode:mapMode];
     }
     
-    if (![self.view.subviews containsObject:self.widgetsView])
+    if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
     {
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;

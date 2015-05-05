@@ -265,3 +265,5 @@
 "units_minutes_short" = "min";
 "units_seconds_short" = "seg";
 "track_start_rec" = "Iniciar grabación de traza";
+"track_rec_addon_q" = "Active el complemento de monitorización de viaje para grabar y guardar sus trazas";
+"track_interval_remember" = "Recordar mi elección";

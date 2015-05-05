@@ -43,6 +43,7 @@
 #define kDestinationLatitude @"destination_latitude"
 #define kDestinationLongitude @"destination_longitude"
 #define kDestinationMarkerName @"destination_marker_name"
+#define kDestinationParking @"destination_parking"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -51,6 +52,7 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_latitude] forKey:kDestinationLatitude];
     [aCoder encodeObject:[NSNumber numberWithDouble:_longitude] forKey:kDestinationLongitude];
     [aCoder encodeObject:_markerResourceName forKey:kDestinationMarkerName];
+    [aCoder encodeObject:[NSNumber numberWithBool:_parking] forKey:kDestinationParking];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -62,6 +64,7 @@
         _latitude = [[aDecoder decodeObjectForKey:kDestinationLatitude] doubleValue];
         _longitude = [[aDecoder decodeObjectForKey:kDestinationLongitude] doubleValue];
         _markerResourceName = [aDecoder decodeObjectForKey:kDestinationMarkerName];
+        _parking = [[aDecoder decodeObjectForKey:kDestinationParking] boolValue];
     }
     return self;
 }

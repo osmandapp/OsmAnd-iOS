@@ -24,6 +24,8 @@
 @property (nonatomic) UIButton *btnClose;
 @property (nonatomic) UIView *colorView;
 @property (nonatomic) UIImageView *compassImage;
+@property (nonatomic) UIView *markerView;
+@property (nonatomic) UIImageView *markerImage;
 @property (nonatomic) UILabel *distanceLabel;
 @property (nonatomic) UILabel *descLabel;
 
@@ -34,6 +36,8 @@
 
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 @property (nonatomic, assign) CLLocationDirection currentDirection;
+
+@property (nonatomic, assign) BOOL mapCenterArrow;
 
 - (instancetype)initWithDestination:(OADestination *)destination;
 

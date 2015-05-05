@@ -16,11 +16,15 @@
 
 @property (nonatomic) UIView *colorView2;
 @property (nonatomic) UIImageView *compassImage2;
+@property (nonatomic) UIView *markerView2;
+@property (nonatomic) UIImageView *markerImage2;
 @property (nonatomic) UILabel *distanceLabel2;
 @property (nonatomic) UILabel *descLabel2;
 
 @property (nonatomic) UIView *colorView3;
 @property (nonatomic) UIImageView *compassImage3;
+@property (nonatomic) UIView *markerView3;
+@property (nonatomic) UIImageView *markerImage3;
 @property (nonatomic) UILabel *distanceLabel3;
 @property (nonatomic) UILabel *descLabel3;
 

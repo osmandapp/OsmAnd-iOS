@@ -392,9 +392,15 @@
     _direction = direction;
         
     if (_multiCell)
+    {
+        _multiCell.mapCenterArrow = YES;
         [_multiCell updateDirections:location direction:direction];
+    }
     for (OADestinationCell *cell in _destinationCells)
+    {
+        cell.mapCenterArrow = YES;
         [cell updateDirections:location direction:direction];
+    }
 }
 
 - (void)doLocationUpdate
@@ -423,9 +429,15 @@
             CLLocationDirection direction = _direction;
 
             if (_multiCell)
+            {
+                _multiCell.mapCenterArrow = NO;
                 [_multiCell updateDirections:location direction:direction];
+            }
             for (OADestinationCell *cell in _destinationCells)
+            {
+                cell.mapCenterArrow = NO;
                 [cell updateDirections:location direction:direction];
+            }
         }
     });
 }

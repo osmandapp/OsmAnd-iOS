@@ -46,6 +46,7 @@
     _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, (_drawSplitLine ? 1.0 : 0.0), 40.0, h - (_drawSplitLine ? 1.0 : 0.0));
     
     _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
+    _markerView.frame = CGRectMake(32.0, 32.0, 14.0, 14.0);
     _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0, 21.0);
     _distanceLabel.textAlignment = NSTextAlignmentLeft;
     _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
@@ -88,7 +89,17 @@
         [_colorView addSubview:self.compassImage];
         [_directionsView addSubview:self.colorView];
     }
-    
+
+    if (!self.markerView) {
+        self.markerView = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
+        _markerView.backgroundColor = [UIColor whiteColor];
+        _markerView.layer.cornerRadius = _markerView.bounds.size.width / 2.0;
+        _markerView.layer.masksToBounds = YES;
+        self.markerImage = [[UIImageView alloc] initWithFrame:_markerView.bounds];
+        _markerImage.contentMode = UIViewContentModeCenter;
+        [_markerView addSubview:self.markerImage];
+    }
+
     if (!self.distanceLabel) {
         self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
         _distanceLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
@@ -119,6 +130,35 @@
     }
 }
 
+- (void)updateMapCenterArrow:(BOOL)arrow
+{
+    if (arrow)
+    {
+        [_markerImage setImage:[UIImage imageNamed:@"destination_map_center"]];
+        if (!_markerView.superview)
+            [_directionsView addSubview:self.markerView];
+    }
+    else if (((OADestination *)_destinations[0]).parking)
+    {
+        [_markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
+        if (!_markerView.superview)
+            [_directionsView addSubview:self.markerView];
+    }
+    else
+    {
+        [_markerView removeFromSuperview];
+    }
+}
+
+- (void)setMapCenterArrow:(BOOL)mapCenterArrow
+{
+    if (_mapCenterArrow == mapCenterArrow)
+        return;
+    
+    _mapCenterArrow = mapCenterArrow;
+    [self updateMapCenterArrow:mapCenterArrow];
+}
+
 - (void)reloadData
 {
     for (int i = 0; i < _destinations.count; i++) {
@@ -126,6 +166,14 @@
         switch (i) {
             case 0:
                 self.colorView.backgroundColor = destination.color;
+                
+                if (destination.parking)
+                {
+                    [_markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
+                    if (!_markerView.superview)
+                        [_directionsView addSubview:self.markerView];
+                }
+
                 [self updateDirection:destination imageView:self.compassImage];
                 self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
                 self.descLabel.text = destination.desc;

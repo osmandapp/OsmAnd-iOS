@@ -264,3 +264,4 @@
 "rec_interval_minimum" = "Mínimo";
 "units_minutes_short" = "min";
 "units_seconds_short" = "seg";
+"track_start_rec" = "Iniciar grabación de traza";

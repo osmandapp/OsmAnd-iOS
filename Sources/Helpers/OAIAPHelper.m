@@ -8,15 +8,36 @@
 
 #import "OAIAPHelper.h"
 #import "OALog.h"
+#import "Localization.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
 NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotification";
 
+
+@implementation OAFunctionalAddon
+
+-(instancetype)initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName
+{
+    self = [super init];
+    if (self)
+    {
+        _addonId = [addonId copy];
+        _titleShort = [titleShort copy];
+        _titleWide = [titleWide copy];
+        _imageName = [imageName copy];
+    }
+    return self;
+}
+
+@end
+
+
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end
 
-@implementation OAIAPHelper {
+@implementation OAIAPHelper
+{
     SKProductsRequest * _productsRequest;
     RequestProductsCompletionHandler _completionHandler;
     
@@ -160,6 +181,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                 OALog(@"Not purchased: %@", productIdentifier);
             }
         }
+        [self buildFunctionalAddonsArray];
     }
     return self;
     
@@ -179,6 +201,31 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 - (BOOL)productPurchased:(NSString *)productIdentifier
 {
     return [_purchasedProductIdentifiers containsObject:productIdentifier];
+}
+
+- (void)buildFunctionalAddonsArray
+{
+    NSMutableArray *arr = [NSMutableArray array];
+
+    if ([_purchasedProductIdentifiers containsObject:kInAppId_Addon_Parking])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position.png"];
+        addon.sortIndex = 0;
+        [arr addObject:addon];
+    }
+
+    if ([_purchasedProductIdentifiers containsObject:kInAppId_Addon_TrackRecording])
+    {
+        OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
+        addon.sortIndex = 1;
+        [arr addObject:addon];
+    }
+    
+    [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {
+        return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
+    }];
+    
+    _functionalAddons = [NSArray arrayWithArray:arr];
 }
 
 - (void)buyProduct:(SKProduct *)product
@@ -294,7 +341,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
     [[NSUserDefaults standardUserDefaults] synchronize];
     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchasedNotification object:productIdentifier userInfo:nil];
-    
+
+    [self buildFunctionalAddonsArray];
 }
 
 - (void)restoreCompletedTransactions {

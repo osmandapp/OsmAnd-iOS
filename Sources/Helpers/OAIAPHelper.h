@@ -46,6 +46,9 @@
 
 #endif
 
+#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
+#define kId_Addon_Parking_Set @"addon.parking.set"
+
 
 #define kFreeMapsAvailableTotal 5
 
@@ -56,11 +59,25 @@ UIKIT_EXTERN NSString *const OAIAPProductsRestoredNotification;
 
 typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
+@interface OAFunctionalAddon : NSObject
+
+@property (nonatomic, readonly) NSString *addonId;
+@property (nonatomic, readonly) NSString *titleShort;
+@property (nonatomic, readonly) NSString *titleWide;
+@property (nonatomic, readonly) NSString *imageName;
+@property (nonatomic, assign) NSInteger sortIndex;
+
+-(instancetype)initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName;
+
+@end
+
 @interface OAIAPHelper : NSObject
 
 + (OAIAPHelper *)sharedInstance;
 
 @property (nonatomic, readonly) BOOL isAnyMapPurchased;
+
+@property (nonatomic, readonly) NSArray *functionalAddons;
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;

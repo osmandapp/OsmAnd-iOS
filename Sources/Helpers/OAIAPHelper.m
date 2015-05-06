@@ -205,7 +205,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (void)buildFunctionalAddonsArray
 {
-    [_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
+    //[_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
     //[_purchasedProductIdentifiers addObject:kInAppId_Addon_TrackRecording];
 
     NSMutableArray *arr = [NSMutableArray array];
@@ -227,6 +227,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {
         return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
     }];
+    
+    if (arr.count == 1)
+        _singleAddon = arr[0];
+    else
+        _singleAddon = nil;
     
     _functionalAddons = [NSArray arrayWithArray:arr];
 }

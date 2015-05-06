@@ -51,6 +51,7 @@
 {
     NSInteger _buttonsCount;
     CGFloat _buttonsWidthLandscape;
+    OAIAPHelper *_iapHelper;
 }
 
 - (instancetype)init
@@ -81,6 +82,8 @@
 
 -(void)awakeFromNib
 {
+    _iapHelper = [OAIAPHelper sharedInstance];
+    
     [self doUpdateUI];
 
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
@@ -114,7 +117,7 @@
 
 - (void)doUpdateUI
 {
-    _buttonsCount = 3 + ([OAIAPHelper sharedInstance].functionalAddons.count > 0 ? 1 : 0);
+    _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
     _buttonsWidthLandscape = 210.0;
     if (((DeviceScreenWidth > DeviceScreenHeight && DeviceScreenWidth > 480) ||
@@ -123,17 +126,18 @@
     
     if (_buttonsCount > 3)
     {
-        NSArray *addons = [OAIAPHelper sharedInstance].functionalAddons;
-        if (addons.count > 1)
+        NSInteger addonsCount = _iapHelper.functionalAddons.count;
+        if (addonsCount > 1)
         {
             [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
             [self.buttonMore setTitle:OALocalizedString(@"more") forState:UIControlStateNormal];
             self.buttonMore.tintColor = [UIColor grayColor];
         }
-        else if (addons.count == 1)
+        else if (addonsCount == 1)
         {
-            NSString *title = ((OAFunctionalAddon *)addons[0]).titleShort;
-            NSString *imageName = ((OAFunctionalAddon *)addons[0]).imageName;
+            OAFunctionalAddon *addon = _iapHelper.singleAddon;
+            NSString *title = addon.titleShort;
+            NSString *imageName = addon.imageName;
             [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             [self.buttonMore setTitle:title forState:UIControlStateNormal];
             self.buttonMore.tintColor = [UIColor colorWithRed:1.000f green:0.561f blue:0.000f alpha:1.00f];
@@ -297,7 +301,7 @@
     _buttonDirection.enabled = _targetPoint.type != OATargetDestination;
     if (_targetPoint.type == OATargetParking)
     {
-        BOOL parkingAddonSingle = [OAIAPHelper sharedInstance].functionalAddons.count == 1 && [((OAFunctionalAddon *)[OAIAPHelper sharedInstance].functionalAddons[0]).addonId isEqualToString:kId_Addon_Parking_Set];
+        BOOL parkingAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_Parking_Set];
         if (parkingAddonSingle)
             _buttonMore.enabled = NO;
     }
@@ -448,7 +452,7 @@
 
 - (IBAction)buttonMoreClicked:(id)sender
 {
-    NSArray *functionalAddons = [OAIAPHelper sharedInstance].functionalAddons;
+    NSArray *functionalAddons = _iapHelper.functionalAddons;
     if (functionalAddons.count > 1)
     {
         NSMutableArray *titles = [NSMutableArray array];
@@ -456,6 +460,9 @@
         
         for (OAFunctionalAddon *addon in functionalAddons)
         {
+            if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
+                continue;
+
             [titles addObject:addon.titleWide];
             [images addObject:addon.imageName];
         }

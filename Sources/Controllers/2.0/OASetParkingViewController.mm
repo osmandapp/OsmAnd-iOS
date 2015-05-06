@@ -208,11 +208,6 @@
     return OALocalizedString(@"sett_settings");
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
-{
-    return OALocalizedString(@"parking_description");
-}
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {

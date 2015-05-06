@@ -492,12 +492,10 @@ typedef enum
                                      
                                      if (!cancelled)
                                      {
-                                         settings.mapSettingSaveTrackInterval = [view getInterval];
+                                         settings.mapSettingSaveTrackIntervalGlobal = [settings.trackIntervalArray[[view getInterval]] intValue];
                                          if (view.swRemember.isOn)
-                                         {
                                              settings.mapSettingSaveTrackIntervalApproved = YES;
-                                             settings.mapSettingSaveTrackIntervalGlobal = settings.mapSettingSaveTrackInterval;
-                                         }
+
                                          settings.mapSettingTrackRecording = YES;
                                          dispatch_async(dispatch_get_main_queue(), ^{
                                              [self updateRecImg];

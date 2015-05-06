@@ -704,7 +704,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                              cancelTitle:cancelTitle
                                              otherTitles:otherTitles
                                              otherImages:otherImages
-                                      buttonsShouldStack:NO
+                                      buttonsShouldStack:YES
                                              contentView:nil
                                               completion:completion];
     [alertView show];

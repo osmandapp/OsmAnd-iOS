@@ -220,8 +220,6 @@
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 
-"parking_description" = "Parking place can be time limited. We show notification, when and where you must take your vehicle.";
-
 // Units
 "units_km" = "km";
 "units_m" = "m";

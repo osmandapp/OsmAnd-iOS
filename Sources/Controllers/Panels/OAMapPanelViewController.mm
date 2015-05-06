@@ -15,6 +15,7 @@
 #import "OAMapViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
+#import "OAIAPHelper.h"
 
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
@@ -279,12 +280,10 @@
                                          
                                          if (!cancelled)
                                          {
-                                             _settings.mapSettingSaveTrackInterval = [view getInterval];
+                                             _settings.mapSettingSaveTrackIntervalGlobal = [_settings.trackIntervalArray[[view getInterval]] intValue];
                                              if (view.swRemember.isOn)
-                                             {
                                                  _settings.mapSettingSaveTrackIntervalApproved = YES;
-                                                 _settings.mapSettingSaveTrackIntervalGlobal = _settings.mapSettingSaveTrackInterval;
-                                             }
+
                                              _settings.mapSettingTrackRecording = YES;
                                          }
                                      }];
@@ -320,7 +319,11 @@
                                                                                    bundle:nil];
             _browseMapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _browseMapViewController.destinationViewController = self.destinationViewController;
-            _browseMapViewController.widgetsView = self.widgetsView;
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+                _browseMapViewController.widgetsView = self.widgetsView;
+            else
+                _browseMapViewController.widgetsView = nil;
+            
         }
         
         newHudController = self.browseMapViewController;
@@ -334,7 +337,10 @@
                                                                                bundle:nil];
             _driveModeViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
             _driveModeViewController.destinationViewController = self.destinationViewController;
-            _driveModeViewController.widgetsView = self.widgetsView;
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+                _driveModeViewController.widgetsView = self.widgetsView;
+            else
+                _driveModeViewController.widgetsView = nil;
         }
 
         newHudController = self.driveModeViewController;

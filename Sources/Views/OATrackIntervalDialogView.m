@@ -47,9 +47,17 @@
 {
     _settings = [OAAppSettings sharedManager];
     int interval = _settings.mapSettingSaveTrackIntervalGlobal;
+    int index = 0;
+    for (int i = 0; i < _settings.trackIntervalArray.count; i++)
+        if ([_settings.trackIntervalArray[i] intValue] == interval)
+        {
+            index = i;
+            break;
+        }
+    
     delta = 1.0 / (_settings.trackIntervalArray.count - 1);
-    _slInterval.value = interval * delta;
-    [self updateIntervalLabel:interval];
+    _slInterval.value = index * delta;
+    [self updateIntervalLabel:index];
     _lbRemember.text = OALocalizedString(@"track_interval_remember");
 }
 

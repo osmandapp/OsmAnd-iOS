@@ -853,6 +853,16 @@
     [self hideTargetPointMenu];
 }
 
+- (void)targetPointParking
+{
+    // todo
+}
+
+- (void)targetPointAddWaypoint
+{
+    // todo
+}
+
 -(void)targetHide
 {
     [_mapViewController hideContextPinMarker];
@@ -871,6 +881,7 @@
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     
+    [self.targetMenuView doUpdateUI];
     [self.targetMenuView doLayoutSubviews];
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;

@@ -13,6 +13,8 @@
 #import "OATargetPoint.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
+#import "OAIAPHelper.h"
+#import "PXAlertView.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -28,6 +30,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonFavorite;
 @property (weak, nonatomic) IBOutlet UIButton *buttonShare;
 @property (weak, nonatomic) IBOutlet UIButton *buttonDirection;
+@property (weak, nonatomic) IBOutlet UIButton *buttonMore;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
 @property (weak, nonatomic) IBOutlet UIButton *buttonClose;
@@ -36,6 +39,7 @@
 @property (weak, nonatomic) IBOutlet UIView *backView1;
 @property (weak, nonatomic) IBOutlet UIView *backView2;
 @property (weak, nonatomic) IBOutlet UIView *backView3;
+@property (weak, nonatomic) IBOutlet UIView *backView4;
 
 @property NSString* formattedLocation;
 @property OAMapRendererView* mapView;
@@ -44,6 +48,10 @@
 @end
 
 @implementation OATargetPointView
+{
+    NSInteger _buttonsCount;
+    CGFloat _buttonsWidthLandscape;
+}
 
 - (instancetype)init
 {
@@ -71,11 +79,16 @@
 }
 
 
--(void)awakeFromNib {
-    
+-(void)awakeFromNib
+{
+    [self doUpdateUI];
+
     [_buttonShare setTitle:OALocalizedString(@"ctx_mnu_share") forState:UIControlStateNormal];
     [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
-    
+
+    _backView4.hidden = YES;
+    _buttonMore.hidden = YES;
+
     // drop shadow
     [self.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.layer setShadowOpacity:0.8];
@@ -97,6 +110,40 @@
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
     
+}
+
+- (void)doUpdateUI
+{
+    _buttonsCount = 3 + ([OAIAPHelper sharedInstance].functionalAddons.count > 0 ? 1 : 0);
+    
+    _buttonsWidthLandscape = 210.0;
+    if (((DeviceScreenWidth > DeviceScreenHeight && DeviceScreenWidth > 480) ||
+         (DeviceScreenHeight > DeviceScreenWidth && DeviceScreenHeight > 480)) && _buttonsCount > 3)
+        _buttonsWidthLandscape = 260.0;
+    
+    if (_buttonsCount > 3)
+    {
+        NSArray *addons = [OAIAPHelper sharedInstance].functionalAddons;
+        if (addons.count > 1)
+        {
+            [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
+            [self.buttonMore setTitle:OALocalizedString(@"more") forState:UIControlStateNormal];
+            self.buttonMore.tintColor = [UIColor grayColor];
+        }
+        else if (addons.count == 1)
+        {
+            NSString *title = ((OAFunctionalAddon *)addons[0]).titleShort;
+            NSString *imageName = ((OAFunctionalAddon *)addons[0]).imageName;
+            [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+            [self.buttonMore setTitle:title forState:UIControlStateNormal];
+            self.buttonMore.tintColor = [UIColor colorWithRed:1.000f green:0.561f blue:0.000f alpha:1.00f];
+        }
+    }
+    else
+    {
+        _backView4.hidden = YES;
+        _buttonMore.hidden = YES;
+    }
 }
 
 - (void)layoutSubviews
@@ -129,29 +176,38 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    
     CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination ? 10.0 : 0.0);
     
     if (landscape) {
         
-        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0 - 210.0, 36.0);
-        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0 - 210.0, 21.0);
+        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0 - _buttonsWidthLandscape, 36.0);
+        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0 - _buttonsWidthLandscape, 21.0);
         
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 210.0 - 50.0, h);
-        _buttonClose.frame = CGRectMake(DeviceScreenWidth - 210.0 - 36.0, 0.0, 36.0, 36.0);
+        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - _buttonsWidthLandscape - 50.0, h);
+        _buttonClose.frame = CGRectMake(DeviceScreenWidth - _buttonsWidthLandscape - 36.0, 0.0, 36.0, 36.0);
 
-        _buttonsView.frame = CGRectMake(DeviceScreenWidth - 210.0, 0.0, 210.0, h);
-        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
+        _buttonsView.frame = CGRectMake(DeviceScreenWidth - _buttonsWidthLandscape, 0.0, _buttonsWidthLandscape, h);
+        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
         CGFloat x = 1.0;
         _backView1.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
         x += backViewWidth + 1.0;
         _backView2.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
         x += backViewWidth + 1.0;
-        _backView3.frame = CGRectMake(x, 0.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height);
-        _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
-        _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
-        _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+        _backView3.frame = CGRectMake(x, 0.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height);
 
+        if (_buttonsCount > 3)
+        {
+            x += backViewWidth + 1.0;
+            _backView4.frame = CGRectMake(x, 0.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height);
+            if (_backView4.hidden)
+                _backView4.hidden = NO;
+            
+            _buttonMore.frame = _backView4.bounds;
+            if (_buttonMore.hidden)
+                _buttonMore.hidden = NO;
+            [self layoutComplexButton:self.buttonMore isPortrait:NO];
+        }
+        
         _buttonFavorite.frame = _backView1.bounds;
         _buttonShare.frame = _backView2.bounds;
         _buttonDirection.frame = _backView3.bounds;
@@ -170,16 +226,26 @@
         _buttonClose.frame = CGRectMake(DeviceScreenWidth - 36.0, 0.0, 36.0, 36.0);
         
         _buttonsView.frame = CGRectMake(0.0, 73.0, DeviceScreenWidth, 53.0);
-        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / 3.0);
+        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
         CGFloat x = 0.0;
         _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
         x += backViewWidth + 1.0;
         _backView2.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
         x += backViewWidth + 1.0;
-        _backView3.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
-        _buttonFavorite.frame = CGRectMake(_backView1.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView1.bounds.size.height / 2.0 - _buttonFavorite.bounds.size.height / 2.0, _buttonFavorite.bounds.size.width, _buttonFavorite.bounds.size.height);
-        _buttonShare.frame = CGRectMake(_backView2.bounds.size.width / 2.0 - _buttonShare.bounds.size.width / 2.0, _backView2.bounds.size.height / 2.0 - _buttonShare.bounds.size.height / 2.0, _buttonShare.bounds.size.width, _buttonFavorite.bounds.size.height);
-        _buttonDirection.frame = CGRectMake(_backView3.bounds.size.width / 2.0 - _buttonFavorite.bounds.size.width / 2.0, _backView3.bounds.size.height / 2.0 - _buttonDirection.bounds.size.height / 2.0, _buttonDirection.bounds.size.width, _buttonDirection.bounds.size.height);
+        _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height - 1.0);
+        
+        if (_buttonsCount > 3)
+        {
+            x += backViewWidth + 1.0;
+            _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
+            if (_backView4.hidden)
+                _backView4.hidden = NO;
+
+            _buttonMore.frame = _backView4.bounds;
+            if (_buttonMore.hidden)
+                _buttonMore.hidden = NO;
+            [self layoutComplexButton:self.buttonMore isPortrait:YES];
+        }
         
         _buttonFavorite.frame = _backView1.bounds;
         _buttonShare.frame = _backView2.bounds;
@@ -368,6 +434,48 @@
 - (IBAction)buttonDirectionClicked:(id)sender
 {
     [self.delegate targetPointDirection];
+}
+
+- (IBAction)buttonMoreClicked:(id)sender
+{
+    NSArray *functionalAddons = [OAIAPHelper sharedInstance].functionalAddons;
+    if (functionalAddons.count > 1)
+    {
+        NSMutableArray *titles = [NSMutableArray array];
+        NSMutableArray *images = [NSMutableArray array];
+        
+        for (OAFunctionalAddon *addon in functionalAddons)
+        {
+            [titles addObject:addon.titleWide];
+            [images addObject:addon.imageName];
+        }
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"other_options")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_cancel")
+                            otherTitles:titles
+                            otherImages:images
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled)
+                                     for (OAFunctionalAddon *addon in functionalAddons)
+                                         if (addon.sortIndex == buttonIndex)
+                                         {
+                                             if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+                                                 [self.delegate targetPointAddWaypoint];
+                                             else if ([addon.addonId isEqualToString:kId_Addon_Parking_Set])
+                                                 [self.delegate targetPointParking];
+                                             break;
+                                         }
+                             }];
+    }
+    else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+    {
+        [self.delegate targetPointAddWaypoint];
+    }
+    else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_Parking_Set])
+    {
+        [self.delegate targetPointParking];
+    }
 }
 
 - (IBAction)buttonShadowClicked:(id)sender

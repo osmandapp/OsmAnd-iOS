@@ -208,6 +208,13 @@
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
 
+"other_options" = "Other options";
+"add_parking" = "Add as Parking position";
+"add_parking_short" = "Add Parking";
+"add_waypoint" = "Add Waypoint to recorded track";
+"add_waypoint_short" = "Add Waypoint";
+"more" = "More";
+
 // Units
 "units_km" = "km";
 "units_m" = "m";

@@ -26,6 +26,7 @@
 -(void)setNavigationController:(UINavigationController*)controller;
 
 - (void)doLayoutSubviews;
+- (void)doUpdateUI;
 
 @end
 
@@ -35,6 +36,11 @@
 -(void)targetPointAddFavorite;
 -(void)targetPointShare;
 -(void)targetPointDirection;
+
+// Addons
+-(void)targetPointParking;
+-(void)targetPointAddWaypoint;
+
 -(void)targetHide;
 -(void)targetGoToPoint;
 

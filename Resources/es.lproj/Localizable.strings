@@ -267,3 +267,9 @@
 "track_start_rec" = "Iniciar grabación de traza";
 "track_rec_addon_q" = "Active el complemento de monitorización de viaje para grabar y guardar sus trazas";
 "track_interval_remember" = "Recordar mi elección";
+"other_options" = "Otras opciones";
+"add_parking" = "Añadir como ubicación de aparcamiento";
+"add_parking_short" = "Añadir aparcamiento";
+"add_waypoint" = "Añadir punto de ruta a la traza grabada";
+"add_waypoint_short" = "Añadir punto de ruta";
+"more" = "Más";

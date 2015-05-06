@@ -149,6 +149,7 @@ UITextField* textView;
             textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];
             [textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
             [textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
+            [textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
             [textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
             [textView setDelegate:self];
             [cell addSubview:textView];

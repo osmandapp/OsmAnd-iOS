@@ -31,6 +31,7 @@
 #import "OASavingTrackHelper.h"
 #import "PXAlertView.h"
 #import "OATrackIntervalDialogView.h"
+#import "OASetParkingViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -49,7 +50,7 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OASetParkingDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -699,7 +700,11 @@
                 caption = destination.desc;
                 icon = [UIImage imageNamed:destination.markerResourceName];
 
-                targetPoint.type = OATargetDestination;
+                if (destination.parking)
+                    targetPoint.type = OATargetParking;
+                else
+                    targetPoint.type = OATargetDestination;
+                
                 break;
             }
         }
@@ -848,14 +853,20 @@
     UIColor *color = [_destinationViewController addDestination:destination];
     
     if (color)
+    {
         [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+        [_mapViewController hideContextPinMarker];
+    }
     
     [self hideTargetPointMenu];
 }
 
 - (void)targetPointParking
 {
-    // todo
+    OASetParkingViewController *parking = [[OASetParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
+    parking.delegate = self;
+    [self.navigationController pushViewController:parking animated:YES];
+    [self hideTargetPointMenu];
 }
 
 - (void)targetPointAddWaypoint
@@ -923,6 +934,27 @@
                 [self.targetMenuView removeFromSuperview];
         }];
     }
+}
+
+#pragma mark - OASetParkingDelegate
+
+-(void)addParkingPoint:(OASetParkingViewController *)sender
+{
+    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:sender.coord.latitude longitude:sender.coord.longitude];
+    
+    destination.parking = YES;
+    destination.carPickupDateEnabled = sender.timeLimitActive;
+    destination.carPickupDate = sender.date;
+    
+    if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
+        [_hudViewController.view addSubview:_destinationViewController.view];
+    
+    UIColor *color = [_destinationViewController addDestination:destination];
+    if (color)
+    {
+        [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+        [_mapViewController hideContextPinMarker];
+    }    
 }
 
 #pragma mark - OADestinationViewControllerProtocol

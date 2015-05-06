@@ -267,8 +267,10 @@
             cell = (OASwitchTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.textView setText: [data objectForKey:@"name"]];
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             
             if (indexPath.section == favSection && indexPath.row == favRow) {
                 [cell.switchView setOn:settings.mapSettingShowFavorites];

@@ -78,6 +78,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
 @property (nonatomic, readonly) NSArray *functionalAddons;
+@property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;

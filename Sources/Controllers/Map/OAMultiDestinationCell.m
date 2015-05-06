@@ -76,6 +76,8 @@
                 
                 if (_colorView2)
                     _colorView2.hidden = YES;
+                if (_markerView2)
+                    _markerView2.hidden = YES;
                 if (_distanceLabel2)
                     _distanceLabel2.hidden = YES;
                 if (_descLabel2)
@@ -83,6 +85,8 @@
                 
                 if (_colorView3)
                     _colorView3.hidden = YES;
+                if (_markerView3)
+                    _markerView3.hidden = YES;
                 if (_distanceLabel3)
                     _distanceLabel3.hidden = YES;
                 if (_descLabel3)
@@ -108,6 +112,7 @@
                 _colorView2.frame = CGRectMake(newFrame.size.width / 2.0 - 20.0, 5.0, 40.0, 40.0);
                 _colorView2.hidden = NO;
                 _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView2.hidden = NO;
                 
                 if (textWidth > 100.0) {
                     _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
@@ -123,6 +128,8 @@
                 
                 if (_colorView3)
                     _colorView3.hidden = YES;
+                if (_markerView3)
+                    _markerView3.hidden = YES;
                 if (_distanceLabel3)
                     _distanceLabel3.hidden = YES;
                 if (_descLabel3)
@@ -145,6 +152,7 @@
                     _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
                     _colorView2.hidden = NO;
                     _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView2.hidden = NO;
                     _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
                     _distanceLabel2.textAlignment = NSTextAlignmentLeft;
                     _distanceLabel2.hidden = NO;
@@ -154,6 +162,7 @@
                     _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
                     _colorView3.hidden = NO;
                     _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView3.hidden = NO;
                     _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
                     _distanceLabel3.textAlignment = NSTextAlignmentLeft;
                     _distanceLabel3.hidden = NO;
@@ -171,6 +180,7 @@
                     _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
                     _colorView2.hidden = NO;
                     _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView2.hidden = NO;
                     _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
                     _distanceLabel2.textAlignment = NSTextAlignmentLeft;
                     _distanceLabel2.hidden = NO;
@@ -179,6 +189,7 @@
                     _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
                     _colorView3.hidden = NO;
                     _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView3.hidden = NO;
                     _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
                     _distanceLabel3.textAlignment = NSTextAlignmentLeft;
                     _distanceLabel3.hidden = NO;
@@ -195,6 +206,7 @@
                     _colorView2.frame = CGRectMake(width + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
                     _colorView2.hidden = NO;
                     _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView2.hidden = NO;
                     _distanceLabel2.frame = CGRectMake(width + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
                     _distanceLabel2.textAlignment = NSTextAlignmentCenter;
                     _distanceLabel2.hidden = NO;
@@ -203,6 +215,7 @@
                     _colorView3.frame = CGRectMake(width * 2.0 + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
                     _colorView3.hidden = NO;
                     _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
+                    _markerView3.hidden = NO;
                     _distanceLabel3.frame = CGRectMake(width * 2.0 + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
                     _distanceLabel3.textAlignment = NSTextAlignmentCenter;
                     _distanceLabel3.hidden = NO;
@@ -487,6 +500,10 @@
                     if (!self.markerView.superview)
                         [self.directionsView addSubview:self.markerView];
                 }
+                else
+                {
+                    [self.markerView removeFromSuperview];
+                }
                 self.distanceLabel.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel.text = destination.desc;
                 break;
@@ -505,6 +522,10 @@
                     if (!self.markerView2.superview)
                         [self.directionsView addSubview:self.markerView2];
                 }
+                else
+                {
+                    [self.markerView2 removeFromSuperview];
+                }
                 self.distanceLabel2.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel2.text = destination.desc;
                 break;
@@ -522,6 +543,10 @@
                     [self.markerImage3 setImage:[UIImage imageNamed:@"destination_parking_place"]];
                     if (!self.markerView3.superview)
                         [self.directionsView addSubview:self.markerView3];
+                }
+                else
+                {
+                    [self.markerView3 removeFromSuperview];
                 }
                 self.distanceLabel3.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
                 self.descLabel3.text = destination.desc;

@@ -321,10 +321,98 @@
     });
 }
 
+- (void)removeDestination:(OADestination *)destination
+{
+    
+    if ([_app.data.destinations containsObject:destination]) {
+        
+        [_usedColors removeObject:destination.color];
+        [_app.data.destinations removeObject:destination];
+        
+        if (_delegate)
+            [_delegate destinationRemoved:destination];
+        
+        // process single cells
+        OADestinationCell *cell;
+        for (OADestinationCell *c in _destinationCells)
+            if ([c.destinations containsObject:destination]) {
+                cell = c;
+                break;
+            }
+        
+        if (cell) {
+            
+            [_destinationCells removeObject:cell];
+            [self updateFrame:YES];
+            [cell.contentView removeFromSuperview];
+            if (_app.data.destinations.count == 0) {
+                [self.view removeFromSuperview];
+                [self stopLocationUpdate];
+            }
+        }
+        
+        // process multi cell
+        BOOL isCellEmpty = NO;
+        
+        if (_multiCell.destinations.count > 1) {
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
+            [arr removeObject:destination];
+            _multiCell.destinations = [NSArray arrayWithArray:arr];
+        } else {
+            isCellEmpty = YES;
+            _multiCell.destinations = nil;
+        }
+        
+        if (isCellEmpty) {
+            if (_multiCell.editModeActive)
+                [_multiCell exitEditMode];
+            
+            [self updateFrame:YES];
+            [_multiCell.contentView removeFromSuperview];
+            _multiCell = nil;
+            if (_app.data.destinations.count == 0) {
+                [self.view removeFromSuperview];
+                [self stopLocationUpdate];
+            }
+        }
+    }
+}
+
 - (UIColor *) addDestination:(OADestination *)destination
 {
-    if (_app.data.destinations.count >= 3)
+    BOOL isTherePlaceForParking = _app.data.destinations.count < 3;
+    if (!isTherePlaceForParking)
+    {
+        for (OADestination *dest in _app.data.destinations)
+            if (dest.parking)
+            {
+                isTherePlaceForParking = YES;
+                break;
+            }
+    }
+
+    if (destination.parking)
+    {
+        if (!isTherePlaceForParking)
+        {
+            // show - please remove one destination point at least and try to add parking marker again
+            return nil;
+        }
+    }
+    else if (_app.data.destinations.count >= 3)
+    {
         return nil;
+    }
+
+    if (destination.parking)
+    {
+        for (OADestination *dest in _app.data.destinations)
+            if (dest.parking)
+            {
+                [self removeDestination:dest];
+                break;
+            }
+    }
     
     CLLocationCoordinate2D location;
     CLLocationDirection direction;

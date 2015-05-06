@@ -273,3 +273,9 @@
 "add_waypoint" = "Añadir punto de ruta a la traza grabada";
 "add_waypoint_short" = "Añadir punto de ruta";
 "more" = "Más";
+"shared_string_add" = "Añadir";
+"parking_marker" = "Marcador de aparcamiento";
+"time_limited" = "Tiempo limitado";
+"pickup_car_at" = "Recoger el coche en";
+"add_notification_calendar" = "Añadir notificación al calendario";
+"parking_description" = "El lugar del aparcamiento puede ser por tiempo limitado. Mostramos notificación, cuando y donde debe tomar su vehículo.";

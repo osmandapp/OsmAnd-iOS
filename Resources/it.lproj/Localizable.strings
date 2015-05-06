@@ -28,7 +28,7 @@
 "OsmAnd Maps" = "Mappe OsmAnd";
 // Shared Strings
 "shared_string_back" = "Indietro";
-"shared_string_cancel" = "Abbandona";
+"shared_string_cancel" = "Annulla";
 "shared_string_done" = "Fatto";
 "shared_string_update" = "Aggiorna";
 "shared_string_install" = "Installa";

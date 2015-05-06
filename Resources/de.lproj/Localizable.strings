@@ -96,3 +96,34 @@
 "download" = "herunterladen";
 "nothanks" = "Nein, danke";
 "download_now" = "Karte jetzt herunterladen";
+"shared_string_ok" = "OK";
+"shared_string_add" = "Hinzufügen";
+"rendering_attr_streetLighting_name" = "Straßenbeleuchtung";
+"rendering_attr_roadStyle_name" = "Straßendarstellung";
+"rendering_value__name" = "Standard";
+"rendering_value_orange_name" = "Orange";
+"rendering_value_germanRoadAtlas_name" = "Deutscher Straßenatlas";
+"rendering_value_highContrastRoads_name" = "Kontrastreiche Straßen";
+"rendering_value_americanRoadAtlas_name" = "Amerikanischer Straßenatlas";
+"rendering_attr_publicTransportMode_name" = "Bus-, Oberleitungsbus-, Sammeltaxi-Linien";
+"rendering_attr_tramTrainRoutes_name" = "Straßen- und Eisenbahnlinien";
+"rendering_attr_subwayMode_name" = "U-Bahn-Linien";
+// Rendering categories
+"rendering_category_hide" = "Ausblenden";
+"rendering_category_routes" = "Routen";
+"rendering_category_details" = "Details";
+"rendering_category_transport" = "ÖPNV-Linien";
+"rendering_category_others" = "Weitere Kartenmerkmale";
+"rendering_attr_coloredBuildings_name" = "Gebäudefärbung nach Typ";
+"rendering_attr_hideBuildings_name" = "Gebäude ausblenden";
+"rendering_attr_moreDetailed_name" = "Mehr Details";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Zugangsbeschränkungen anzeigen";
+"rendering_attr_showSurfaceGrade_name" = "Straßenqualität anzeigen";
+"rendering_attr_showSurfaces_name" = "Straßenoberfläche anzeigen";
+"rendering_attr_showCycleRoutes_name" = "Fahrrad-Routen anzeigen";
+"rendering_attr_alpineHiking_name" = "Alpine Tourenskala (SAC)";
+"rendering_attr_osmcTraces_name" = "Wandersymboleinblendung";
+"rendering_attr_noAdminboundaries_name" = "Grenzen ausblenden";
+"rendering_attr_noPolygons_name" = "Flächen ausblenden";
+"rendering_attr_contourLines_name" = "Höhenlinien anzeigen";

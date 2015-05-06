@@ -13,6 +13,7 @@
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Delete";
+"shared_string_add" = "Add";
 
 // HUD
 "hud_heading" = "Heading";
@@ -214,6 +215,12 @@
 "add_waypoint" = "Add Waypoint to recorded track";
 "add_waypoint_short" = "Add Waypoint";
 "more" = "More";
+"parking_marker" = "Parking marker";
+"time_limited" = "Time limited";
+"pickup_car_at" = "Pickup the car at";
+"add_notification_calendar" = "Add notification to Calendar";
+
+"parking_description" = "Parking place can be time limited. We show notification, when and where you must take your vehicle.";
 
 // Units
 "units_km" = "km";

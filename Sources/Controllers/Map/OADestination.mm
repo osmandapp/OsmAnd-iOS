@@ -43,7 +43,10 @@
 #define kDestinationLatitude @"destination_latitude"
 #define kDestinationLongitude @"destination_longitude"
 #define kDestinationMarkerName @"destination_marker_name"
+
 #define kDestinationParking @"destination_parking"
+#define kDestinationParkingCarPickupDateEnabled @"destination_car_pickup_date_enabled"
+#define kDestinationParkingCarPickupDate @"destination_car_pickup_date"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -53,6 +56,8 @@
     [aCoder encodeObject:[NSNumber numberWithDouble:_longitude] forKey:kDestinationLongitude];
     [aCoder encodeObject:_markerResourceName forKey:kDestinationMarkerName];
     [aCoder encodeObject:[NSNumber numberWithBool:_parking] forKey:kDestinationParking];
+    [aCoder encodeObject:[NSNumber numberWithBool:_carPickupDateEnabled] forKey:kDestinationParkingCarPickupDateEnabled];
+    [aCoder encodeObject:_carPickupDate forKey:kDestinationParkingCarPickupDate];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -65,6 +70,8 @@
         _longitude = [[aDecoder decodeObjectForKey:kDestinationLongitude] doubleValue];
         _markerResourceName = [aDecoder decodeObjectForKey:kDestinationMarkerName];
         _parking = [[aDecoder decodeObjectForKey:kDestinationParking] boolValue];
+        _carPickupDateEnabled = [[aDecoder decodeObjectForKey:kDestinationParkingCarPickupDateEnabled] boolValue];
+        _carPickupDate = [aDecoder decodeObjectForKey:kDestinationParkingCarPickupDate];
     }
     return self;
 }

@@ -21,6 +21,7 @@
 @property (nonatomic) NSMutableArray *destinationCells;
 @property (nonatomic) OAMultiDestinationCell *multiCell;
 
+@property (nonatomic) UIColor *parkingColor;
 @property (nonatomic) NSArray *colors;
 @property (nonatomic) NSArray *markerNames;
 @property (nonatomic) NSMutableArray *usedColors;
@@ -54,6 +55,8 @@
     if (self) {
         self.destinationCells = [NSMutableArray array];
         self.usedColors = [NSMutableArray array];
+        
+        self.parkingColor = [UIColor colorWithRed:0.290f green:0.412f blue:0.925f alpha:1.00f];
         
         self.colors = @[[UIColor colorWithRed:0.369f green:0.510f blue:0.914f alpha:1.00f],
                         [UIColor colorWithRed:0.992f green:0.627f blue:0.200f alpha:1.00f],
@@ -328,9 +331,17 @@
     [self obtainCurrentLocationDirection:&location direction:&direction];
 
     [_app.data.destinations addObject:destination];
-    int colorIndex = [self getFreeColorIndex];
-    destination.color = _colors[colorIndex];
-    destination.markerResourceName = _markerNames[colorIndex];
+    if (destination.parking)
+    {
+        destination.color = _parkingColor;
+        destination.markerResourceName = @"map_parking_pin";
+    }
+    else
+    {
+        int colorIndex = [self getFreeColorIndex];
+        destination.color = _colors[colorIndex];
+        destination.markerResourceName = _markerNames[colorIndex];
+    }
 
     if (!_multiCell) {
         self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:@[destination]];

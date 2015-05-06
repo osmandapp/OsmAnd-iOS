@@ -176,7 +176,7 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     
     if (landscape) {
         
@@ -295,6 +295,16 @@
     [_coordinateLabel setText:self.formattedLocation];
     
     _buttonDirection.enabled = _targetPoint.type != OATargetDestination;
+    if (_targetPoint.type == OATargetParking)
+    {
+        BOOL parkingAddonSingle = [OAIAPHelper sharedInstance].functionalAddons.count == 1 && [((OAFunctionalAddon *)[OAIAPHelper sharedInstance].functionalAddons[0]).addonId isEqualToString:kId_Addon_Parking_Set];
+        if (parkingAddonSingle)
+            _buttonMore.enabled = NO;
+    }
+    else
+    {
+        _buttonMore.enabled = YES;
+    }
 
     if (_targetPoint.type == OATargetFavorite)
         [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];

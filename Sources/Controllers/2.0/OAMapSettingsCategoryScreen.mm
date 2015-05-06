@@ -119,6 +119,7 @@
         if (cell) {
             [cell.textView setText: p.title];
             [cell.switchView setOn: [p.value isEqualToString:@"true"]];
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView addTarget:self action:@selector(mapSettingSwitchChanged:) forControlEvents:UIControlEventValueChanged];
             cell.switchView.tag = indexPath.row;
         }

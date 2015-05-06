@@ -127,3 +127,75 @@
 "rendering_attr_noAdminboundaries_name" = "Grenzen ausblenden";
 "rendering_attr_noPolygons_name" = "Flächen ausblenden";
 "rendering_attr_contourLines_name" = "Höhenlinien anzeigen";
+"track_continue_rec_q" = "Soll die Aufzeichnung fortgesetzt werden?";
+"rec_interval" = "Aufzeichnungs-Intervall";
+"rec_interval_minimum" = "Minimum";
+"track_interval_remember" = "Auswahl merken";
+// Intro
+"intro_skip" = "Überspringen";
+"sett_deg" = "Grad";
+"incur_high_charges" = "Dies kann hohe Kosten verursachen.";
+"prch_failed" = "Erwerb von \"%@\" fehlgeschlagen";
+"res_installed" = "Installiert";
+"res_search_world" = "Weltweite Suche";
+"res_world_map" = "Weltkarte";
+"res_updates" = "Updates";
+"res_worldwide" = "Weltweit";
+"res_updates_avail" = "Updates verfügbar";
+"res_maps_inst" = "Karte(n)";
+"res_install_no_space" = "Nicht genug Speicherplatz zum Installieren";
+"res_upd_avail_q" = "Ein Update ist verfügbar für";
+"data_will_be_lost" = "Alle heruntergeladenen Daten gehen verloren.";
+"res_details" = "Details";
+"res_unknown" = "Unbekannt";
+"res_size" = "Größe";
+"res_created_on" = "Erstellt am";
+"res_updates_avail_q" = "Update(s) sind verfügbar.";
+// Menu
+"menu_my_places" = "Meien Orte";
+"menu_feedback" = "Rückmeldungen";
+"menu_about" = "Über";
+"other_options" = "Weitere Optionen";
+"more" = "Mehr";
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "Meilen";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+"map_remind" = "Später erinnern";
+"map_no_address" = "Adresse ist bisher nicht bekannt";
+// Import
+"import_title" = "Daten importieren";
+"import_favorite" = "Favorit";
+"import_failed" = "Import fehlgeschlagen";
+"import_cannot" = "Die ausgewählte Datei kann nicht importiert werden";
+// Context menu
+"ctx_mnu_edit_fav" = "Favorit bearbeiten";
+"ctx_mnu_add_fav" = "Favorit hinzufügen";
+"ctx_mnu_share" = "Teilen";
+// Location Services
+"loc_access_denied" = "Zugang verweigert";
+// Colors
+"col_purple" = "lila";
+"col_green" = "grün";
+"col_yellow" = "gelb";
+"col_orange" = "orange";
+"col_gray" = "grau";
+"col_red" = "rot";
+"col_blue" = "blau";
+"col_magenta" = "magenta";
+// World Regions
+"region_africa" = "Afrika";
+"region_asia" = "Asien";
+"region_ausralia_and_oceania" = "Australien und Ozeanien";
+"region_central_america" = "Mittelamerika";
+"region_europe" = "Europa";
+"region_north_america" = "Nordamerika";
+"region_russia" = "Russland";
+"region_south_america" = "Südamerika";
+// Help
+"help_quiz" = "Quiz";
+"rendering_attr_OSMMapperAssistant_name" = "OSM-Mapper-Assistent";
+"units_minutes_short" = "min";
+"units_seconds_short" = "sec";

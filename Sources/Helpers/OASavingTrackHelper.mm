@@ -276,6 +276,50 @@
     return res;
 }
 
+- (void) clearData
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+        {
+            NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", TRACK_NAME, TRACK_COL_DATE, [[NSDate date] timeIntervalSince1970]];
+            const char *update_stmt = [updateSQL UTF8String];
+            
+            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970]];
+            update_stmt = [updateSQL UTF8String];
+            
+            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(tracksDB);
+        }
+    });
+    
+    distance = 0;
+    points = 0;
+    
+    lastTimeUpdated = 0;
+    lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
+    
+    [currentTrack getDocument]->locationMarks.clear();
+    [currentTrack getDocument]->tracks.clear();
+    
+    [currentTrack.locationMarks removeAllObjects];
+    [currentTrack.tracks removeAllObjects];
+    [currentTrack initBounds];
+    currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
+    
+    [self prepareCurrentTrackForRecording];
+}
+
 - (void) saveDataToGpx
 {
     dispatch_sync(syncQueue, ^{
@@ -311,47 +355,7 @@
             [[OAGPXDatabase sharedDb] save];
         }
         
-        dispatch_async(dbQueue, ^{
-            sqlite3_stmt    *statement;
-            
-            const char *dbpath = [databasePath UTF8String];
-            
-            if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
-            {
-                NSString *updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", TRACK_NAME, TRACK_COL_DATE, [[NSDate date] timeIntervalSince1970]];
-                const char *update_stmt = [updateSQL UTF8String];
-                
-                sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-                sqlite3_step(statement);
-                sqlite3_finalize(statement);
-                
-                updateSQL = [NSString stringWithFormat: @"DELETE FROM %@ WHERE %@ <= %f", POINT_NAME, POINT_COL_DATE, [[NSDate date] timeIntervalSince1970]];
-                update_stmt = [updateSQL UTF8String];
-                
-                sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-                sqlite3_step(statement);
-                sqlite3_finalize(statement);
-                
-                sqlite3_close(tracksDB);
-            }
-        });
-        
-        distance = 0;
-        points = 0;
-        
-        lastTimeUpdated = 0;
-        lastPoint = CLLocationCoordinate2DMake(0.0, 0.0);
-        
-        [currentTrack getDocument]->locationMarks.clear();
-        [currentTrack getDocument]->tracks.clear();
-        
-        [currentTrack.locationMarks removeAllObjects];
-        [currentTrack.tracks removeAllObjects];
-        [currentTrack initBounds];
-        currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
-        
-        [self prepareCurrentTrackForRecording];
-        
+        [self clearData];
     });
 }
 

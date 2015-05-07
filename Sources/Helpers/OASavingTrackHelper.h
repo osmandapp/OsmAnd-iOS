@@ -26,6 +26,7 @@
 
 - (BOOL) hasData;
 - (BOOL) hasDataToSave;
+- (void) clearData;
 - (void) saveDataToGpx;
 - (void) startNewSegment;
 

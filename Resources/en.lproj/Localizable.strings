@@ -97,6 +97,8 @@
 "track_start_rec" = "Start track recording";
 "track_rec_addon_q" = "Please activate Trip recording addon to record and save your tracks";
 "track_interval_remember" = "Remember my choice";
+"track_clear" = "Clear current track";
+"track_clear_q" = "Do you want to clear current track?";
 
 // Map settings
 "m_style_overview" = "Overview";

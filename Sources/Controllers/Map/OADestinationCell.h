@@ -28,6 +28,7 @@
 @property (nonatomic) UIImageView *markerImage;
 @property (nonatomic) UILabel *distanceLabel;
 @property (nonatomic) UILabel *descLabel;
+@property (nonatomic) UILabel *infoLabel;
 
 @property (nonatomic) UIView *contentView;
 @property (nonatomic) NSArray *destinations;
@@ -37,13 +38,17 @@
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 @property (nonatomic, assign) CLLocationDirection currentDirection;
 
+@property (nonatomic) NSDateFormatter *timeFmt;
+
 @property (nonatomic, assign) BOOL mapCenterArrow;
+@property (nonatomic, assign) CGFloat infoLabelWidth;
 
 - (instancetype)initWithDestination:(OADestination *)destination;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
+- (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label;
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 

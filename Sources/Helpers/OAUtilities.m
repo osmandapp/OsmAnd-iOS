@@ -99,4 +99,12 @@
     return [NSDictionary dictionaryWithDictionary:queryStrings];
 }
 
++ (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds
+{
+    long secondsL = lroundf(timeInterval);
+    *hours = abs(secondsL / 3600);
+    *minutes = abs((secondsL % 3600) / 60);
+    *seconds = abs(secondsL % 60);
+}
+
 @end

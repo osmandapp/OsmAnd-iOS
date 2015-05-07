@@ -219,6 +219,9 @@
 "time_limited" = "Time limited";
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
+"parking_time_limited" = "Parking time limited to";
+"time_left" = "left";
+"time_overdue" = "overdue";
 
 // Units
 "units_km" = "km";
@@ -228,6 +231,10 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
+
+"units_hour" = "h";
+"units_min" = "min";
+
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";

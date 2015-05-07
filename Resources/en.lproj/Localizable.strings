@@ -223,9 +223,9 @@
 "parking_time_limited" = "Parking time limited to";
 "time_left" = "left";
 "time_overdue" = "overdue";
-"cannot_add_marker" = "Cannot add marker";
+"cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
-"cannot_add_destination" = "Cannot add direction";
+"cannot_add_destination" = "Cannot add Direction";
 
 // Units
 "units_km" = "km";
@@ -238,6 +238,7 @@
 
 "units_hour" = "h";
 "units_min" = "min";
+"units_sec" = "sec";
 
 
 // Map

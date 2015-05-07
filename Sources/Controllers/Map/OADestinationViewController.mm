@@ -398,6 +398,21 @@
     }
 }
 
+- (BOOL)isPlaceForParking
+{
+    BOOL isTherePlaceForParking = _app.data.destinations.count < 3;
+    if (!isTherePlaceForParking)
+    {
+        for (OADestination *dest in _app.data.destinations)
+            if (dest.parking)
+            {
+                isTherePlaceForParking = YES;
+                break;
+            }
+    }
+    return isTherePlaceForParking;
+}
+
 - (UIColor *) addDestination:(OADestination *)destination
 {
     BOOL isTherePlaceForParking = _app.data.destinations.count < 3;

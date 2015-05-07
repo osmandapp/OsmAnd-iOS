@@ -876,9 +876,18 @@
 
 - (void)targetPointParking
 {
-    OASetParkingViewController *parking = [[OASetParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
-    parking.delegate = self;
-    [self.navigationController pushViewController:parking animated:YES];
+    if (![_destinationViewController isPlaceForParking])
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+          ] show];
+    }
+    else
+    {
+        OASetParkingViewController *parking = [[OASetParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
+        parking.delegate = self;
+        [self.navigationController pushViewController:parking animated:YES];
+    }
+    
     [self hideTargetPointMenu];
 }
 
@@ -970,7 +979,7 @@
                 event.startDate = destination.carPickupDate;
                 event.endDate = destination.carPickupDate;
                 
-                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 15.0]];
+                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
                 
                 [event setCalendar:[eventStore defaultCalendarForNewEvents]];
                 NSError *err;

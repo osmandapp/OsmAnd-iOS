@@ -39,9 +39,20 @@
         _timeFmt = [[NSDateFormatter alloc] init];
         [_timeFmt setDateStyle:NSDateFormatterNoStyle];
         [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
-        _date = [NSDate dateWithTimeIntervalSinceNow:60 * 60];
+        _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
     }
     return self;
+}
+
+- (NSDate *)dateNoSec:(NSDate *)date
+{
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    
+    NSDateComponents *dateComponents = [calendar components:NSYearCalendarUnit | NSMonthCalendarUnit | NSDayCalendarUnit | NSHourCalendarUnit | NSMinuteCalendarUnit
+                                                   fromDate:date];
+    [dateComponents setSecond:0];
+    
+    return [calendar dateFromComponents:dateComponents];
 }
 
 - (void)viewWillLayoutSubviews
@@ -186,7 +197,7 @@
 -(void)timePickerChanged:(id)sender
 {
     UIDatePicker *picker = (UIDatePicker *)sender;
-    _date = picker.date;
+    _date = [self dateNoSec:picker.date];
     if (_timeLimitActive)
         [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
 }

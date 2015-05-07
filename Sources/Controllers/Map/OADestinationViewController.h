@@ -38,5 +38,6 @@
 - (void) doLocationUpdate;
 
 - (void)updateDestinationsUsingMapCenter;
+- (BOOL)isPlaceForParking;
 
 @end

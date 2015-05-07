@@ -20,5 +20,6 @@
 + (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
 
 + (NSDictionary *)parseUrlQuery:(NSURL *)url;
++ (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 
 @end

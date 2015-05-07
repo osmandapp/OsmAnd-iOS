@@ -950,7 +950,10 @@
     
     destination.parking = YES;
     destination.carPickupDateEnabled = sender.timeLimitActive;
-    destination.carPickupDate = sender.date;
+    if (sender.timeLimitActive)
+        destination.carPickupDate = sender.date;
+    else
+        destination.carPickupDate = nil;
     
     if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
         [_hudViewController.view addSubview:_destinationViewController.view];

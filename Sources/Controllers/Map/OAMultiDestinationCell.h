@@ -20,6 +20,7 @@
 @property (nonatomic) UIImageView *markerImage2;
 @property (nonatomic) UILabel *distanceLabel2;
 @property (nonatomic) UILabel *descLabel2;
+@property (nonatomic) UILabel *infoLabel2;
 
 @property (nonatomic) UIView *colorView3;
 @property (nonatomic) UIImageView *compassImage3;
@@ -27,6 +28,7 @@
 @property (nonatomic) UIImageView *markerImage3;
 @property (nonatomic) UILabel *distanceLabel3;
 @property (nonatomic) UILabel *descLabel3;
+@property (nonatomic) UILabel *infoLabel3;
 
 @property (nonatomic, readonly) BOOL editModeActive;
 

@@ -1045,7 +1045,7 @@
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
 
-    OsmAnd::PointI destLocation((mapView.target31.x + centerLocation.x) / 2.0, (mapView.target31.y + centerLocation.y) / 2.0);
+    OsmAnd::PointI destLocation(mapView.target31.x / 2.0 + centerLocation.x / 2.0, mapView.target31.y / 2.0 + centerLocation.y / 2.0);
     
     
     mapView.animator->animateTargetTo(destLocation,

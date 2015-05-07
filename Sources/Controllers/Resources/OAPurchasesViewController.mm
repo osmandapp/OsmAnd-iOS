@@ -129,10 +129,10 @@
 {
     switch (section) {
         case 0:
-            return [[OAIAPHelper inAppsMaps] count];
+            return [[OAIAPHelper inAppsAddons] count];
             
         case 1:
-            return [[OAIAPHelper inAppsAddons] count];
+            return [[OAIAPHelper inAppsMaps] count];
 
         default:
             return 0;
@@ -143,10 +143,10 @@
 {
     switch (section) {
         case 0:
-            return OALocalizedString(@"maps");
+            return OALocalizedString(@"prch_addons");
             
         case 1:
-            return OALocalizedString(@"prch_addons");
+            return OALocalizedString(@"maps");
             
         default:
             return @"";
@@ -175,21 +175,22 @@
         NSString *price;
         UIImage *imgTitle;
         
-        switch (indexPath.section) {
-            case 0: // Maps
-            {
-                identifier = [OAIAPHelper inAppsMaps][indexPath.row];
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
-                break;
-            }
-
-            case 1: // Addons
+        switch (indexPath.section)
+        {
+            case 0: // Addons
             {
                 identifier = [OAIAPHelper inAppsAddons][indexPath.row];
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
                 break;
             }
                 
+            case 1: // Maps
+            {
+                identifier = [OAIAPHelper inAppsMaps][indexPath.row];
+                imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
+                break;
+            }
+
             default:
                 break;
         }
@@ -207,7 +208,7 @@
         [cell.lbDescription setText:desc];
         [cell.lbPrice setText:price];
         
-        [cell setPurchased:[[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 0 && allWorldMapsPurchased)];
+        [cell setPurchased:[[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 1 && allWorldMapsPurchased)];
     }
     
     return cell;
@@ -219,13 +220,14 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier;
-    switch (indexPath.section) {
-        case 0: // Maps
-            identifier = [OAIAPHelper inAppsMaps][indexPath.row];
-            break;
-            
-        case 1: // Addons
+    switch (indexPath.section)
+    {
+        case 0: // Addons
             identifier = [OAIAPHelper inAppsAddons][indexPath.row];
+            break;
+
+        case 1: // Maps
+            identifier = [OAIAPHelper inAppsMaps][indexPath.row];
             break;
             
         default:
@@ -235,7 +237,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
     BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_All_World];
-    if ([[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 0 && allWorldMapsPurchased))
+    if ([[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 1 && allWorldMapsPurchased))
         return;
     
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];

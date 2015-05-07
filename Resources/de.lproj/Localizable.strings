@@ -130,7 +130,7 @@
 "track_continue_rec_q" = "Soll die Aufzeichnung fortgesetzt werden?";
 "rec_interval" = "Aufzeichnungs-Intervall";
 "rec_interval_minimum" = "Minimum";
-"track_interval_remember" = "Auswahl merken";
+"track_interval_remember" = "Meine Auswahl merken";
 // Intro
 "intro_skip" = "Überspringen";
 "sett_deg" = "Grad";
@@ -199,3 +199,59 @@
 "rendering_attr_OSMMapperAssistant_name" = "OSM-Mapper-Assistent";
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";
+"import_export" = "Import/Export";
+"gpx_start" = "Start";
+"track_recording_name" = "Aktuell aufgenommener Track";
+"track_stop_rec" = "Aufnahme beenden";
+"track_new_segment" = "Starte neuen Abschnitt";
+"track_start_rec" = "Starte Trackaufnahme";
+"track_rec_addon_q" = "Bitte das Reiseaufnahme Addon aktivieren zum aufnehmen und speichern deiner Tracks";
+"sett_loc_fmt" = "Koordinatenformat";
+"sett_arr" = "Kartenpfeile";
+"sett_arr_map" = "Kartenmitte";
+"purchases" = "Einkäufe";
+// Purchases
+"prch_addons" = "Erweiterungen";
+"prch_items_failed" = "Elemente wurde nicht wieder hergestellt. Bitte versuch es erneut.";
+// Resources
+"res_mapsres" = "Karten & Resourcen";
+"res_banner_many" = "Es sind %d kostenlose Karten zum herunterladen verfügbar";
+"res_banner_one" = "Es gibt eine kostenlose Karte zum herunterladen";
+"res_banner_no" = "Du hast keine kostenlosen Karten zum herunterladen";
+"res_catalog_upd" = "Katalog Aktualisierung";
+"res_region_map" = "Umgebungskarte";
+"res_deleting" = "löschen...";
+"res_wsea_map" = "Weltweite Seemarken Basiskarte";
+"res_wmap" = "Weltweite Übersichtskarte";
+"res_dmap" = "detaillierte Übersichtskarte";
+"res_map_of_region" = "Karte der Umgebung";
+"res_update_no_space" = "Für das Update ist zuwenig Speicher vorhanden";
+"res_no_space_free" = "ist notwendig. Bitte etwas Speicher freimachen.";
+"res_free_exp" = "Du hast alle freie Downloads verbraucht. Bitte  kaufe einen Kontinent zum herunteladen / aktualiseren der Karten.";
+"res_cancel_upd_q" = "Du bist dabei, die Aktualisierung von %@ abzubrechen.";
+"res_cancel_inst_q" = "Du bist dabei die Installation %@ abzubrechen.";
+"res_uninst_managed_q" = "Du bist dabei %@ zu deinstallieren. Du kannst es später wieder im Katalog installieren.";
+"res_uninst_unmanaged_q" = "Du bist dabei %@ zu löschen. Es ist nicht vom Katalog, also sei sicher das du bei Bedarf eine Sicherung hast.";
+"res_type" = "Typ";
+"res_update_all" = "alle aktualisieren";
+"res_updates_no_space" = "Nicht genug Speicher zum installieren von %d Aktualisierung(en). Bitte etwas Speicher freimachen.";
+"res_updates_exp" = "Bitte kaufe Kontinent(e) zum aktualisieren der Karten";
+"add_parking" = "als Parkposition hinzufügen";
+"add_parking_short" = "Parken hinzufügen";
+"add_waypoint" = "Wegpunkt hinzufügen zum gespeichtern Track";
+"add_waypoint_short" = "Wegpunkt hinzufügen";
+"time_limited" = "Zeit eingeschränkt";
+"pickup_car_at" = "Das Auto erreichen um";
+"add_notification_calendar" = "Ergänze Notiz zum Kalender";
+"units_yd" = "yd";
+"units_ft" = "ft";
+// Map
+"map_inst_det_map_q" = "Installiere detaillierte Übersichtskarte um mehr Informationen zu deinem Ort zu bekommen,";
+"import_choose_type" = "Bitte auswählen was importieren";
+"import_gpx" = "GPX Track";
+// Alerts
+"alert_inet_needed" = "Internetverbindung notwendig für diese Aktion. Bitte überprüfe deine Internetverbindung.";
+"ctx_mnu_direction" = "Richtung";
+"loc_access_denied_desc" = "Zugriff zum Ortungsdienst wurde abgelehnt";
+"gpx_export" = "Export";
+"gpx_import_already_exists" = "Die angegebene Track Datei existiert bereits in der Liste. Bitte Aktion wählen,";

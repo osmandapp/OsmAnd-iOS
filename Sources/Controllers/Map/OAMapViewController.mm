@@ -1044,7 +1044,11 @@
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.animator->animateTargetTo(centerLocation,
+
+    OsmAnd::PointI destLocation((mapView.target31.x + centerLocation.x) / 2.0, (mapView.target31.y + centerLocation.y) / 2.0);
+    
+    
+    mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
                                       OsmAnd::MapAnimator::TimingFunction::Linear,
                                       kUserInteractionAnimationKey);

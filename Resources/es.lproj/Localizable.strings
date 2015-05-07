@@ -279,3 +279,17 @@
 "pickup_car_at" = "Recoger el coche en";
 "add_notification_calendar" = "Añadir notificación al calendario";
 "parking_description" = "El lugar del aparcamiento puede ser por tiempo limitado. Mostramos notificación, cuando y donde debe tomar su vehículo.";
+"track_clear" = "Limpiar traza actual";
+"track_clear_q" = "¿Quieres limpiar la traza actual?";
+"pickup_car" = "Recoger el coche";
+"parking_time_limited" = "Tiempo de aparcamiento limitado a";
+"time_left" = "izquierda";
+"time_overdue" = "vencido";
+"cannot_add_marker" = "No se puede agregar aparcamiento";
+"cannot_add_marker_desc" = "Por favor quite al menos una dirección y vuelva a intentarlo";
+"cannot_add_destination" = "No se puede agregar dirección";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
+"cannot_access_calendar" = "No puede acceder al Calendario";
+"reminder_not_set_text" = "El aviso no se ha establecido, ya que no se permite el acceso al Calendario";

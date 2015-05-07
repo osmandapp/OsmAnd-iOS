@@ -1357,6 +1357,9 @@
 		84E442231AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
 		84E442241AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
 		84E442251AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
+		84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
+		84EE2D961AFB8FA1007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
+		84EE2D971AFB8FAF007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
 		8A337E931A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E941A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
@@ -2356,6 +2359,7 @@
 		84E441AE1AF8A07500F87542 /* track_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = track_save.png; path = Resources/Icons/track_save.png; sourceTree = "<group>"; };
 		84E441AF1AF8A07500F87542 /* track_save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@2x.png"; path = "Resources/Icons/track_save@2x.png"; sourceTree = "<group>"; };
 		84E441B01AF8A07500F87542 /* track_save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@3x.png"; path = "Resources/Icons/track_save@3x.png"; sourceTree = "<group>"; };
+		84EE2D941AFB8F91007C9A94 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		84F712571AE4FED70071B326 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84F712581AE4FF940071B326 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
@@ -2597,6 +2601,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EE2D971AFB8FAF007C9A94 /* EventKit.framework in Frameworks */,
 				84C41E791AB9EE8F0089EABB /* libxml2.dylib in Frameworks */,
 				84185A831AA9A01400F70328 /* StoreKit.framework in Frameworks */,
 				F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */,
@@ -2633,6 +2638,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EE2D961AFB8FA1007C9A94 /* EventKit.framework in Frameworks */,
 				84C41E7A1AB9EE990089EABB /* libxml2.dylib in Frameworks */,
 				84185A811AA99FFF00F70328 /* StoreKit.framework in Frameworks */,
 				006D2BBF3BA247A9A117E151 /* libPods-dev.a in Frameworks */,
@@ -2658,6 +2664,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */,
 				8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */,
 				8440E2DB1ABEA7370088856A /* libgdal_static.a in Frameworks */,
 				8440E2DC1ABEA7370088856A /* libgif_static.a in Frameworks */,
@@ -3344,6 +3351,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84EE2D941AFB8F91007C9A94 /* EventKit.framework */,
 				8440E2D11ABEA7360088856A /* libexpat_static.a */,
 				8440E2D21ABEA7360088856A /* libgdal_static.a */,
 				8440E2D31ABEA7360088856A /* libgif_static.a */,

@@ -217,11 +217,15 @@
 "more" = "More";
 "parking_marker" = "Parking marker";
 "time_limited" = "Time limited";
+"pickup_car" = "Pickup the car";
 "pickup_car_at" = "Pickup the car at";
 "add_notification_calendar" = "Add notification to Calendar";
 "parking_time_limited" = "Parking time limited to";
 "time_left" = "left";
 "time_overdue" = "overdue";
+"cannot_add_marker" = "Cannot add marker";
+"cannot_add_marker_desc" = "Please remove one direction at least and retry";
+"cannot_add_destination" = "Cannot add direction";
 
 // Units
 "units_km" = "km";
@@ -319,3 +323,6 @@
 
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";
+
+"cannot_access_calendar" = "Cannot access Calendar";
+"reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";

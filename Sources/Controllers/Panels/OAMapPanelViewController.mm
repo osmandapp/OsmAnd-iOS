@@ -17,6 +17,8 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 
+#import <EventKit/EventKit.h>
+
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OADestinationViewController.h"
@@ -863,6 +865,11 @@
         [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
         [_mapViewController hideContextPinMarker];
     }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+          ] show];
+    }
     
     [self hideTargetPointMenu];
 }
@@ -942,6 +949,41 @@
     }
 }
 
+-(void)addParkingReminderToCalendar:(OADestination *)destination
+{
+    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else if (!granted)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else
+            {
+                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+                event.title = OALocalizedString(@"pickup_car");
+                
+                event.startDate = destination.carPickupDate;
+                event.endDate = destination.carPickupDate;
+                
+                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 15.0]];
+                
+                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                NSError *err;
+                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                if (err)
+                    [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                else
+                    destination.eventIdentifier = [event.eventIdentifier copy];
+            }
+        });
+    }];
+}
+
 #pragma mark - OASetParkingDelegate
 
 -(void)addParkingPoint:(OASetParkingViewController *)sender
@@ -962,8 +1004,15 @@
     if (color)
     {
         [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+        if (sender.addToCalActive)
+            [self addParkingReminderToCalendar:destination];
         [_mapViewController hideContextPinMarker];
-    }    
+    }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+         ] show];
+    }
 }
 
 #pragma mark - OADestinationViewControllerProtocol

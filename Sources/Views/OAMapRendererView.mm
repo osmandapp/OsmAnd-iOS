@@ -316,7 +316,7 @@
     return _renderer->resumeSymbolsUpdate();
 }
 
-- (QList<OsmAnd::TileId>)visibleTiles
+- (QVector<OsmAnd::TileId>)visibleTiles
 {
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();
 }

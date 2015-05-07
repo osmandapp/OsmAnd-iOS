@@ -47,6 +47,7 @@
 #define kDestinationParking @"destination_parking"
 #define kDestinationParkingCarPickupDateEnabled @"destination_car_pickup_date_enabled"
 #define kDestinationParkingCarPickupDate @"destination_car_pickup_date"
+#define kDestinationParkingEventId @"destination_event_id"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -58,6 +59,7 @@
     [aCoder encodeObject:[NSNumber numberWithBool:_parking] forKey:kDestinationParking];
     [aCoder encodeObject:[NSNumber numberWithBool:_carPickupDateEnabled] forKey:kDestinationParkingCarPickupDateEnabled];
     [aCoder encodeObject:_carPickupDate forKey:kDestinationParkingCarPickupDate];
+    [aCoder encodeObject:_eventIdentifier forKey:kDestinationParkingEventId];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -72,6 +74,7 @@
         _parking = [[aDecoder decodeObjectForKey:kDestinationParking] boolValue];
         _carPickupDateEnabled = [[aDecoder decodeObjectForKey:kDestinationParkingCarPickupDateEnabled] boolValue];
         _carPickupDate = [aDecoder decodeObjectForKey:kDestinationParkingCarPickupDate];
+        _eventIdentifier = [aDecoder decodeObjectForKey:kDestinationParkingEventId];
     }
     return self;
 }

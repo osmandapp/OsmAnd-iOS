@@ -79,7 +79,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 - (BOOL)resumeSymbolsUpdate;
 
 // Misc properties:
-@property(nonatomic, readonly) QList<OsmAnd::TileId> visibleTiles;
+@property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;
 
 @property(nonatomic, readonly) float currentPixelsToMetersScaleFactor;
 

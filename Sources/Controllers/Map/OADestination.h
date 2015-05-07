@@ -19,6 +19,7 @@
 @property (nonatomic) BOOL parking;
 @property (nonatomic) BOOL carPickupDateEnabled;
 @property (nonatomic) NSDate *carPickupDate;
+@property (nonatomic) NSString *eventIdentifier;
 
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;

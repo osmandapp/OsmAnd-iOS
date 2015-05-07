@@ -491,7 +491,14 @@
 {
     OAMapRendererView* mapRendererView = (OAMapRendererView*)_mapViewController.mapRendererView;
 
-    _roadLocator->clearCacheNotInTiles(mapRendererView.visibleTiles.toSet(),
+    const auto& tiles = mapRendererView.visibleTiles;
+    
+    QSet<OsmAnd::TileId> result;
+    result.reserve(tiles.size());
+    for (int i = 0; i < tiles.size(); ++i)
+        result.insert(tiles.at(i));
+    
+    _roadLocator->clearCacheNotInTiles(result,
                                        mapRendererView.zoomLevel,
                                        true);
 }

@@ -12,6 +12,9 @@
 #import "OAAutoObserverProxy.h"
 #import "OAMultiDestinationCell.h"
 #import "OAAppSettings.h"
+#import "OALog.h"
+
+#import <EventKit/EventKit.h>
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -247,10 +250,25 @@
     }
 }
 
+- (void)removeParkingReminderFromCalendar:(OADestination *)destination
+{
+    if (destination.eventIdentifier)
+    {
+        EKEventStore *eventStore = [[EKEventStore alloc] init];
+        EKEvent *event = [eventStore eventWithIdentifier:destination.eventIdentifier];
+        NSError *error;
+        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error]) {
+            OALog(@"%@", [error localizedDescription]);
+        }
+    }
+}
 
 - (void)btnCloseClicked:(id)sender destination:(OADestination *)destination
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (destination.parking)
+            [self removeParkingReminderFromCalendar:destination];
         
         if ([_app.data.destinations containsObject:destination]) {
             
@@ -323,6 +341,8 @@
 
 - (void)removeDestination:(OADestination *)destination
 {
+    if (destination.parking)
+        [self removeParkingReminderFromCalendar:destination];
     
     if ([_app.data.destinations containsObject:destination]) {
         
@@ -395,7 +415,6 @@
     {
         if (!isTherePlaceForParking)
         {
-            // show - please remove one destination point at least and try to add parking marker again
             return nil;
         }
     }

@@ -205,7 +205,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (void)buildFunctionalAddonsArray
 {
-    //[_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
+    [_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
     //[_purchasedProductIdentifiers addObject:kInAppId_Addon_TrackRecording];
 
     NSMutableArray *arr = [NSMutableArray array];

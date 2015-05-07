@@ -586,18 +586,12 @@
                         [self.directionsView addSubview:self.markerView];
 
                     if (destination.carPickupDate)
-                    {
-                        NSString *timeLimit = [self.timeFmt stringFromDate:destination.carPickupDate];
-                        self.descLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-                        self.descLabel.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"parking_time_limited"), timeLimit];
                         [self setParkingTimerStr:destination label:self.infoLabel];
-                    }
                     else
-                    {
                         self.infoLabel.hidden = YES;
-                        self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-                        self.descLabel.text = destination.desc;
-                    }
+
+                    self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+                    self.descLabel.text = destination.desc;
                 }
                 else
                 {
@@ -626,18 +620,12 @@
                         [self.directionsView addSubview:self.markerView2];
 
                     if (destination.carPickupDate)
-                    {
-                        NSString *timeLimit = [self.timeFmt stringFromDate:destination.carPickupDate];
-                        self.descLabel2.lineBreakMode = NSLineBreakByTruncatingMiddle;
-                        self.descLabel2.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"parking_time_limited"), timeLimit];
                         [self setParkingTimerStr:destination label:self.infoLabel2];
-                    }
                     else
-                    {
                         self.infoLabel2.hidden = YES;
-                        self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
-                        self.descLabel2.text = destination.desc;
-                    }
+
+                    self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
+                    self.descLabel2.text = destination.desc;
                 }
                 else
                 {
@@ -665,18 +653,12 @@
                         [self.directionsView addSubview:self.markerView3];
                     
                     if (destination.carPickupDate)
-                    {
-                        NSString *timeLimit = [self.timeFmt stringFromDate:destination.carPickupDate];
-                        self.descLabel3.lineBreakMode = NSLineBreakByTruncatingMiddle;
-                        self.descLabel3.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"parking_time_limited"), timeLimit];
                         [self setParkingTimerStr:destination label:self.infoLabel3];
-                    }
                     else
-                    {
                         self.infoLabel3.hidden = YES;
-                        self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
-                        self.descLabel3.text = destination.desc;
-                    }
+
+                    self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
+                    self.descLabel3.text = destination.desc;
                 }
                 else
                 {

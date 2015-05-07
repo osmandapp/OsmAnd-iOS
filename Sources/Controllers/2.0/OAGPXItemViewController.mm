@@ -46,6 +46,7 @@ typedef enum
     BOOL _showTrackOnExit;
     
     BOOL _startEndTimeExists;
+    BOOL _hideToolbar;
 }
 
 @property (nonatomic) OAGPXDocument *doc;
@@ -82,6 +83,22 @@ typedef enum
         [self updateCurrentGPXData];
         
         _showCurrentTrack = YES;
+        
+    }
+    return self;
+}
+
+- (id)initWithCurrentGPXItemNoToolbar
+{
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _savingHelper = [OASavingTrackHelper sharedInstance];
+        
+        [self updateCurrentGPXData];
+        
+        _showCurrentTrack = YES;
+        _hideToolbar = YES;
         
     }
     return self;
@@ -181,6 +198,12 @@ typedef enum
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    if (_hideToolbar)
+    {
+        self.toolbarView.frame = CGRectZero;
+        [self.toolbarView removeFromSuperview];
+    }
     
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;

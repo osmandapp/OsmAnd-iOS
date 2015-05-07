@@ -38,5 +38,6 @@
 
 - (id)initWithGPXItem:(OAGPX *)gpxItem;
 - (id)initWithCurrentGPXItem;
+- (id)initWithCurrentGPXItemNoToolbar;
 
 @end

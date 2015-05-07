@@ -38,11 +38,7 @@
 
 - (void)commonInit
 {
-    _infoLabelWidth = 120.0;
-    
-    _timeFmt = [[NSDateFormatter alloc] init];
-    [_timeFmt setDateStyle:NSDateFormatterNoStyle];
-    [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
+    _infoLabelWidth = 120.0;    
 }
 
 - (OADestination *)destinationByPoint:(CGPoint)point
@@ -247,18 +243,15 @@
                 self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
                 if (destination.parking && destination.carPickupDate)
                 {
-                    NSString *timeLimit = [_timeFmt stringFromDate:destination.carPickupDate];
-                    self.descLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-                    self.descLabel.text = [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"parking_time_limited"), timeLimit];
                     [self setParkingTimerStr:destination label:self.infoLabel];
                     self.infoLabel.hidden = NO;
                 }
                 else
                 {
                     self.infoLabel.hidden = YES;
-                    self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-                    self.descLabel.text = destination.desc;
                 }
+                self.descLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+                self.descLabel.text = destination.desc;
                 break;
                 
             default:

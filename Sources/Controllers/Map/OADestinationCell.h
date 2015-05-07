@@ -38,8 +38,6 @@
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 @property (nonatomic, assign) CLLocationDirection currentDirection;
 
-@property (nonatomic) NSDateFormatter *timeFmt;
-
 @property (nonatomic, assign) BOOL mapCenterArrow;
 @property (nonatomic, assign) CGFloat infoLabelWidth;
 

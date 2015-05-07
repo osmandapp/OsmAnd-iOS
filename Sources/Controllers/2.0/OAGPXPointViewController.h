@@ -8,7 +8,7 @@
 
 #import "OASuperViewController.h"
 #import "OAGpxWptItem.h"
-
+#import <CoreLocation/CoreLocation.h>
 
 @interface OAGPXPointViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 
@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *btnBack;
+@property (weak, nonatomic) IBOutlet UIButton *btnSave;
 
 @property (weak, nonatomic) IBOutlet UIView *distanceDirectionHolderView;
 @property (weak, nonatomic) IBOutlet UILabel *itemDistance;
@@ -28,7 +29,10 @@
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 
+@property (nonatomic, readonly) BOOL isNew;
+
 - (id)initWithWptItem:(OAGpxWptItem*)wptItem;
+- (id)initWithLocation:(CLLocationCoordinate2D)coords andTitle:(NSString*)formattedLocation;
 
 - (IBAction)menuFavoriteClicked:(id)sender;
 - (IBAction)menuGPXClicked:(id)sender;

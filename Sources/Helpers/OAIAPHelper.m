@@ -205,19 +205,19 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (void)buildFunctionalAddonsArray
 {
-    [_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
+    //[_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
     //[_purchasedProductIdentifiers addObject:kInAppId_Addon_TrackRecording];
 
     NSMutableArray *arr = [NSMutableArray array];
 
-    if ([_purchasedProductIdentifiers containsObject:kInAppId_Addon_Parking])
+    if ([self productPurchased:kInAppId_Addon_Parking])
     {
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_Parking_Set titleShort:OALocalizedString(@"add_parking_short") titleWide:OALocalizedString(@"add_parking") imageName:@"parking_position.png"];
         addon.sortIndex = 0;
         [arr addObject:addon];
     }
 
-    if ([_purchasedProductIdentifiers containsObject:kInAppId_Addon_TrackRecording])
+    if ([self productPurchased:kInAppId_Addon_TrackRecording])
     {
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
         addon.sortIndex = 1;

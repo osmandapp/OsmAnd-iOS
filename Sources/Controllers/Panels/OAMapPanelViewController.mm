@@ -1031,7 +1031,7 @@
     if (color)
     {
         [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
-        if (sender.addToCalActive)
+        if (sender.timeLimitActive && sender.addToCalActive)
             [self addParkingReminderToCalendar:destination];
         [_mapViewController hideContextPinMarker];
     }

@@ -27,6 +27,7 @@
 #include "Localization.h"
 
 #define kDefaultGpxZoom 15.0f
+#define kLastGroupNameKey @"kLastGroupNameKey"
 
 typedef enum
 {
@@ -56,6 +57,21 @@ typedef enum
     self = [super init];
     if (self) {
         self.wptItem = wptItem;
+        _action = kGpxPointActionNone;
+    }
+    return self;
+}
+
+- (id)initWithLocation:(CLLocationCoordinate2D)coords andTitle:(NSString*)formattedLocation
+{
+    self = [super init];
+    if (self) {
+        _isNew = YES;
+        self.wptItem = [[OAGpxWptItem alloc] init];
+        _wptItem.point = [[OAGpxWpt alloc] init];
+        _wptItem.point.position = coords;
+        _wptItem.point.name = formattedLocation;
+        _wptItem.point.type = [[NSUserDefaults standardUserDefaults] objectForKey:kLastGroupNameKey];
         _action = kGpxPointActionNone;
     }
     return self;
@@ -152,8 +168,20 @@ typedef enum
     [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
+    if (self.isNew)
+    {
+        [self.toolbarView removeFromSuperview];
+        self.toolbarView.frame = CGRectZero;
+        _btnSave.hidden = NO;
+    }
+    else
+    {
+        _btnSave.hidden = YES;
+    }
     
     [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
 
@@ -219,7 +247,8 @@ typedef enum
     
     if (_showPointOnExit) {
         
-        [_mapViewController keepTempGpxTrackVisible];
+        if (!self.isNew)
+            [_mapViewController keepTempGpxTrackVisible];
         
         [[OARootViewController instance].mapPanel modifyMapAfterReuse:[OANativeUtilities convertFromPointI:_newTarget31] zoom:kDefaultGpxZoom azimuth:0.0 elevationAngle:90.0 animated:YES];
         
@@ -256,6 +285,11 @@ typedef enum
 
 -(IBAction)backButtonClicked:(id)sender {
     [super backButtonClicked:sender];
+}
+
+-(IBAction)saveButtonClicked:(id)sender
+{
+    //
 }
 
 - (void)updateDistanceAndDirection

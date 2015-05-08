@@ -86,6 +86,12 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 - (BOOL)productPurchased:(NSString *)productIdentifier;
 - (void)restoreCompletedTransactions;
 
+- (BOOL)productPurchasedIgnoreDisable:(NSString *)productIdentifier;
+- (void)enableProduct:(NSString *)productIdentifier;
+- (void)disableProduct:(NSString *)productIdentifier;
+- (BOOL)isProductDisabled:(NSString *)productIdentifier;
+
+
 +(NSArray *)inAppsMaps;
 +(NSArray *)inAppsAddons;
 -(SKProduct *)product:(NSString *)productIdentifier;

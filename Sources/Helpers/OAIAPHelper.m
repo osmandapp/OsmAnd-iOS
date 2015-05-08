@@ -9,6 +9,7 @@
 #import "OAIAPHelper.h"
 #import "OALog.h"
 #import "Localization.h"
+#import "OsmAndApp.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
@@ -43,6 +44,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     
     NSSet * _productIdentifiers;
     NSMutableSet * _purchasedProductIdentifiers;
+    NSMutableSet * _disabledProductIdentifiers;
     
     NSArray *_skProducts;
 
@@ -154,6 +156,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return -1;
 }
 
+- (NSString *) getDisabledId:(NSString *)productIdentifier
+{
+    return [productIdentifier stringByAppendingString:@"_disabled"];
+}
+
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers {
     
     if ((self = [super init])) {
@@ -161,8 +168,10 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         // Store product identifiers
         _productIdentifiers = productIdentifiers;
         
-        // Check for previously purchased products
         _purchasedProductIdentifiers = [NSMutableSet set];
+        _disabledProductIdentifiers = [NSMutableSet set];
+        
+        // Check for previously purchased products
         for (NSString * productIdentifier in _productIdentifiers) {
 #if !defined(OSMAND_IOS_DEV)
             BOOL productPurchased = [[NSUserDefaults standardUserDefaults] boolForKey:productIdentifier];
@@ -171,6 +180,10 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 #endif            
             if (productPurchased) {
                 
+                BOOL productDisabled = [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId:productIdentifier]];
+                if (productDisabled)
+                    [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
+
                 if ([[self.class inAppsMaps] containsObject:productIdentifier])
                     _isAnyMapPurchased = YES;
                 
@@ -198,9 +211,35 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [_productsRequest start];
 }
 
-- (BOOL)productPurchased:(NSString *)productIdentifier
+- (void)disableProduct:(NSString *)productIdentifier
+{
+    [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:productIdentifier]];
+    [self buildFunctionalAddonsArray];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:kInAppId_Addon_TrackRecording andValue:[NSNumber numberWithBool:NO]];
+}
+
+- (void)enableProduct:(NSString *)productIdentifier
+{
+    [_disabledProductIdentifiers removeObject:[self getDisabledId:productIdentifier]];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:[self getDisabledId:productIdentifier]];
+    [self buildFunctionalAddonsArray];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:kInAppId_Addon_TrackRecording andValue:[NSNumber numberWithBool:YES]];
+}
+
+- (BOOL)isProductDisabled:(NSString *)productIdentifier
+{
+    return [_disabledProductIdentifiers containsObject:[self getDisabledId:productIdentifier]];
+}
+
+- (BOOL)productPurchasedIgnoreDisable:(NSString *)productIdentifier
 {
     return [_purchasedProductIdentifiers containsObject:productIdentifier];
+}
+
+- (BOOL)productPurchased:(NSString *)productIdentifier
+{
+    return [_purchasedProductIdentifiers containsObject:productIdentifier] && ![_disabledProductIdentifiers containsObject:[self getDisabledId:productIdentifier]];
 }
 
 - (void)buildFunctionalAddonsArray
@@ -219,9 +258,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
     if ([self productPurchased:kInAppId_Addon_TrackRecording])
     {
+        /*
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
         addon.sortIndex = 1;
         [arr addObject:addon];
+        */
     }
     
     [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {

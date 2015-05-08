@@ -86,6 +86,7 @@
 @property(readonly) OAObservable* updateGpxTracksOnMapObservable;
 @property(readonly) OAObservable* updateRecTrackOnMapObservable;
 @property(readonly) OAObservable* trackStartStopRecObservable;
+@property(readonly) OAObservable* addonsSwitchObservable;
 
 @property(readonly) OAObservable* trackRecordingObservable;
 

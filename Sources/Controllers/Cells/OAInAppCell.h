@@ -17,6 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imgIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPrice;
 
--(void)setPurchased:(BOOL)purchased;
+-(void)setPurchased:(BOOL)purchased disabled:(BOOL)disabled;
 
 @end

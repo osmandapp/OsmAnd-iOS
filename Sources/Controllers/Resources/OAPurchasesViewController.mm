@@ -165,7 +165,7 @@
         cell = (OAInAppCell *)[nib objectAtIndex:0];
     }
     
-    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_All_World];
+    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];
     
     if (cell) {
         
@@ -208,7 +208,13 @@
         [cell.lbDescription setText:desc];
         [cell.lbPrice setText:price];
         
-        [cell setPurchased:[[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 1 && allWorldMapsPurchased)];
+        BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
+        BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+        
+        if (indexPath.section == 1)
+            [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
+        else
+            [cell setPurchased:purchased disabled:disabled];
     }
     
     return cell;
@@ -236,9 +242,31 @@
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Region_All_World];
-    if ([[OAIAPHelper sharedInstance] productPurchased:identifier] || (indexPath.section == 1 && allWorldMapsPurchased))
-        return;
+    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
+    BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];
+    
+    if (indexPath.section == 1)
+    {
+        if (purchased || allWorldMapsPurchased)
+            return;
+    }
+    else
+    {
+        if (purchased)
+        {
+            if (disabled)
+                [[OAIAPHelper sharedInstance] enableProduct:identifier];
+            else
+                [[OAIAPHelper sharedInstance] disableProduct:identifier];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            });
+            return;
+        }
+    }
+    
     
     SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
 

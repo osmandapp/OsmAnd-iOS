@@ -60,19 +60,23 @@
 
 }
 
--(void)setPurchased:(BOOL)purchased
+-(void)setPurchased:(BOOL)purchased disabled:(BOOL)disabled
 {
-    if (purchased) {
+    if (purchased)
+    {
         self.lbPrice.text = @"";
         self.imgPrice.layer.borderWidth = 0;
-        self.imgPrice.image = [UIImage imageNamed:@"bt_bought_addon"];
-        
-    } else {
+        if (!disabled)
+            self.imgPrice.image = [UIImage imageNamed:@"bt_bought_addon"];
+        else
+            self.imgPrice.image = [UIImage imageNamed:@"bt_bought_addon_disabled"];
+    }
+    else
+    {
         self.imgPrice.layer.borderWidth = 0.8;
         self.imgPrice.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
         self.imgPrice.image = nil;
     }
-
 }
 
 @end

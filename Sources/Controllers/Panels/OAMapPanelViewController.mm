@@ -75,6 +75,7 @@
     OASavingTrackHelper *_recHelper;
 
     OAAutoObserverProxy* _appModeObserver;
+    OAAutoObserverProxy* _addonsSwitchObserver;
 
     BOOL _hudInvalidated;
     
@@ -113,6 +114,10 @@
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
                                                   andObserve:_app.appModeObservable];
+    
+    _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                      withHandler:@selector(onAddonsSwitch:withKey:andValue:)
+                                                       andObserve:_app.addonsSwitchObservable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
@@ -451,6 +456,46 @@
 
         [self updateHUD:YES];
     });
+}
+
+- (void)onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value
+{
+    NSString *productIdentifier = key;
+    if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
+    {
+        BOOL active = [value boolValue];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (!active)
+            {
+                _settings.mapSettingTrackRecording = NO;
+
+                if ([_recHelper hasDataToSave])
+                    [_recHelper saveDataToGpx];
+
+                [_mapViewController hideRecGpxTrack];
+                
+                if (self.browseMapViewController)
+                    _browseMapViewController.widgetsView = nil;
+                if (self.driveModeViewController)
+                    _driveModeViewController.widgetsView = nil;
+                [self.widgetsView removeFromSuperview];
+            }
+            else
+            {
+                if (_app.appMode == OAAppModeBrowseMap)
+                {
+                    if (self.browseMapViewController)
+                        _browseMapViewController.widgetsView = self.widgetsView;
+                }
+                else if (_app.appMode == OAAppModeDrive)
+                {
+                    if (self.driveModeViewController)
+                        _driveModeViewController.widgetsView = self.widgetsView;
+                }
+            }
+        });
+    }
 }
 
 - (void)saveMapStateIfNeeded

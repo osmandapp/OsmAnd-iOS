@@ -322,3 +322,9 @@
 "product_title_asia" = "Asia";
 "product_desc_asia" = "Mapa de Asia";
 "my_location" = "Mi ubicación";
+"all_categories" = "Todas las categorías";
+"res_banner_free_maps_title" = "¡Tienes %d mapas gratuitos!";
+"res_banner_free_maps_desc" = "Puedes descargar %d mapas gratuitos, sin cambios";
+"res_banner_no_free_maps_title" = "¡No tienes mapas gratuitos!";
+"res_banner_no_free_maps_desc" = "Compre mapas regionales o mundiales";
+"get_unlimited_access" = "Obtén acceso ilimitado";

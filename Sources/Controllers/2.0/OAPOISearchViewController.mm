@@ -410,11 +410,9 @@ typedef enum
 
 -(void)generateData {
     
-    EPOIScope prevScope = _currentScope;
-    
     [self acquireCurrentScope];
     
-    if (prevScope != _currentScope)
+    if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
         _searchRadiusIndex = 0;
     
     NSString *searchStr = [self.searchString copy];
@@ -517,7 +515,7 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && (_searchRadiusIndex > 1 || _dataPoiArray.count > 0) && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0);
 }
 
 

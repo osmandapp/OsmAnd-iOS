@@ -101,6 +101,8 @@ typedef enum
     NSString *_coreFoundScopeFilterName;
 
     BOOL _dataInvalidated;
+
+    BOOL _showTopList;
 }
 
 - (instancetype)init
@@ -131,6 +133,7 @@ typedef enum
 - (void)commonInit
 {
     _searchRadiusIndexMax = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]) - 1;
+    _showTopList = YES;
 }
 
 -(void)applyLocalization
@@ -187,6 +190,14 @@ typedef enum
     
     if (_dataInvalidated)
     {
+        if (!self.searchString && _currentScope == EPOIScopeUndefined && !_showTopList)
+            _showTopList = YES;
+        
+        [self generateData];
+    }
+    else if (!self.searchString && _currentScope == EPOIScopeUndefined && !_showTopList)
+    {
+        _showTopList = YES;
         [self generateData];
     }
 }
@@ -482,17 +493,25 @@ typedef enum
 
             self.searchStringPrev = nil;
             
-            NSArray *categories = [OAPOIHelper sharedInstance].poiCategories.allKeys;
-            NSArray *filters = [OAPOIHelper sharedInstance].poiFilters.allKeys;
-             
             NSMutableArray *arr = [NSMutableArray array];
-            for (OAPOICategory *c in categories)
-                if (c.top)
+            NSArray *categories = [OAPOIHelper sharedInstance].poiCategories.allKeys;
+            if (_showTopList)
+            {
+                NSArray *filters = [OAPOIHelper sharedInstance].poiFilters.allKeys;
+                
+                for (OAPOICategory *c in categories)
+                    if (c.top)
+                        [arr addObject:c];
+                
+                for (OAPOIFilter *f in filters)
+                    if (f.top)
+                        [arr addObject:f];
+            }
+            else
+            {
+                for (OAPOICategory *c in categories)
                     [arr addObject:c];
-            
-            for (OAPOIFilter *f in filters)
-                if (f.top)
-                    [arr addObject:f];
+            }
             
             NSArray *sortedArrayItems = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
                 
@@ -542,7 +561,7 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) + (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0);
 }
 
 
@@ -550,22 +569,46 @@ typedef enum
     
     if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
     {
-        OASearchMoreCell* cell;
-        cell = (OASearchMoreCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
-        if (cell == nil)
+        if (_currentScope == EPOIScopeUndefined && _showTopList)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
-            cell = (OASearchMoreCell *)[nib objectAtIndex:0];
-        }
-        if (_searchRadiusIndex < _searchRadiusIndexMax)
-        {
-            cell.textView.text = OALocalizedString(@"poi_insrease_radius %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]);
+            OAIconTextTableViewCell* cell;
+            cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            }
+            
+            if (cell)
+            {
+                CGRect f = cell.textView.frame;
+                f.origin.y = 14.0;
+                cell.textView.frame = f;
+                
+                [cell.textView setText:OALocalizedString(@"all_categories")];
+                [cell.iconView setImage: nil];
+            }
+            return cell;
         }
         else
         {
-            cell.textView.text = OALocalizedString(@"poi_max_radius_reached");
+            OASearchMoreCell* cell;
+            cell = (OASearchMoreCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OASearchMoreCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASearchMoreCell" owner:self options:nil];
+                cell = (OASearchMoreCell *)[nib objectAtIndex:0];
+            }
+            if (_searchRadiusIndex < _searchRadiusIndexMax)
+            {
+                cell.textView.text = OALocalizedString(@"poi_insrease_radius %@", [[OsmAndApp instance] getFormattedDistance:kSearchRadiusKm[_searchRadiusIndex + 1] * 1000.0]);
+            }
+            else
+            {
+                cell.textView.text = OALocalizedString(@"poi_max_radius_reached");
+            }
+            return cell;
         }
-        return cell;
     }
     
     id obj;
@@ -746,7 +789,13 @@ typedef enum
     
     if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
     {
-        if (_searchRadiusIndex < _searchRadiusIndexMax)
+        if (_currentScope == EPOIScopeUndefined && _showTopList)
+        {
+            _showTopList = NO;
+            [self generateData];
+            return;
+        }
+        else if (_searchRadiusIndex < _searchRadiusIndexMax)
         {
             _searchRadiusIndex++;
             _ignoreSearchResult = NO;
@@ -1200,9 +1249,14 @@ typedef enum
 - (IBAction)textFieldValueChanged:(id)sender
 {
     if (_textField.text.length > 0)
+    {
         self.searchString = _textField.text;
+    }
     else
+    {
+        _showTopList = YES;
         self.searchString = nil;
+    }
     
     [self generateData];
 }

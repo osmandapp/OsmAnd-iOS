@@ -72,6 +72,8 @@
 
 @synthesize dayNightModeObservable = _dayNightModeObservable;
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
+@synthesize updateGpxTracksOnMapObservable = _updateGpxTracksOnMapObservable;
+@synthesize updateRecTrackOnMapObservable = _updateRecTrackOnMapObservable;
 @synthesize trackStartStopRecObservable = _trackStartStopRecObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
@@ -267,7 +269,9 @@
 
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
-
+    _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
+    _updateRecTrackOnMapObservable = [[OAObservable alloc] init];
+ 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
 

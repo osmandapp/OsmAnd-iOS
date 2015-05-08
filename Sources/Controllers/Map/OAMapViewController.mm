@@ -176,6 +176,8 @@
     OAMapMode _lastMapModeBeforeDrive;
     OAAutoObserverProxy* _dayNightModeObserver;
     OAAutoObserverProxy* _mapSettingsChangeObserver;
+    OAAutoObserverProxy* _updateGpxTracksObserver;
+    OAAutoObserverProxy* _updateRecTrackObserver;
     
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -287,6 +289,14 @@
     _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onMapSettingsChanged)
                                                        andObserve:_app.mapSettingsChangeObservable];
+    
+    _updateGpxTracksObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onUpdateGpxTracks)
+                                                            andObserve:_app.updateGpxTracksOnMapObservable];
+
+    _updateRecTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onUpdateRecTrack)
+                                                          andObserve:_app.updateRecTrackOnMapObservable];
 
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesStatusChanged)
@@ -1046,7 +1056,6 @@
     [mapView convert:centerPoint toLocation:&centerLocation];
 
     OsmAnd::PointI destLocation(mapView.target31.x / 2.0 + centerLocation.x / 2.0, mapView.target31.y / 2.0 + centerLocation.y / 2.0);
-    
     
     mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
@@ -1984,6 +1993,41 @@
     });
 }
 
+- (void)onUpdateGpxTracks
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        [self refreshGpxTracks];
+    });
+}
+
+- (void)onUpdateRecTrack
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+
+        if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        {
+            if (!_recTrackShowing)
+                [self showRecGpxTrack];
+        }
+        else
+        {
+            if (_recTrackShowing)
+                [self hideRecGpxTrack];
+        }
+    });
+}
+
 - (void)onTrackRecordingChanged
 {
     if (![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
@@ -2805,6 +2849,32 @@
             [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         }
     }
+}
+
+- (void)resetGpxTracks
+{
+    @synchronized(_rendererSync)
+    {
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        if (_mapObjectsSymbolsProviderGpx)
+            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
+        _mapObjectsSymbolsProviderGpx.reset();
+        
+        [rendererView resetProviderFor:kGpxLayerId];
+        
+        _gpxPrimitivesProvider.reset();
+        _geoInfoDocsGpx.clear();
+        _gpxPresenter.reset();
+        _gpxDocFileTemp = nil;
+    }
+}
+
+- (void)refreshGpxTracks
+{
+    [self resetGpxTracks];
+    [self buildGpxInfoDocList];
+    [self initRendererWithGpxTracks];
 }
 
 @synthesize framePreparedObservable = _framePreparedObservable;

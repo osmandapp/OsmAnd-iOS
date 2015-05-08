@@ -163,6 +163,7 @@
             vwController.goToBounds = bounds;
             [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }
+        [[[OsmAndApp instance] updateRecTrackOnMapObservable] notifyEvent];
     }
     else
     {
@@ -179,8 +180,8 @@
             vwController.goToBounds = gpx.bounds;
             [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }
+        [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }
-    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
     
     [tableView reloadData];
 }

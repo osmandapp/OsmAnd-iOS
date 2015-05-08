@@ -15,6 +15,7 @@
 "shared_string_delete" = "Delete";
 "shared_string_add" = "Add";
 "shared_string_buy" = "Buy";
+"shared_string_buy_for" = "for";
 
 // HUD
 "hud_heading" = "Heading";
@@ -170,9 +171,10 @@
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";
-"res_banner_many" = "There are %d free maps available for downloads";
-"res_banner_one" = "There is one free map available for download";
-"res_banner_no" = "You have no free maps availabe for download";
+"res_banner_free_maps_title" = "You have %d free maps!";
+"res_banner_free_maps_desc" = "You can download %d free maps, without updates";
+"res_banner_no_free_maps_title" = "You have no free maps!";
+"res_banner_no_free_maps_desc" = "Please purchase region maps or All World maps";
 "res_search_world" = "Search worldwide";
 "res_catalog_upd" = "Catalog update";
 "res_world_map" = "World map";
@@ -362,4 +364,4 @@
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
-
+"get_unlimited_access" = "Get unlimited access";

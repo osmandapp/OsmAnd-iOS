@@ -24,6 +24,7 @@
 #import <Reachability.h>
 #import "OAManageResourcesViewController.h"
 #import "OAPOIHelper.h"
+#import "OAIAPHelper.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 
@@ -301,6 +302,8 @@
     
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
+    
+    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     
     return YES;
 }

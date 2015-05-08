@@ -357,4 +357,8 @@
 "product_desc_southamerica" = "Map of South America";
 "product_title_allworld" = "All World Maps";
 "product_desc_allworld" = "Map of All World";
+"product_title_asia" = "Asia";
+"product_desc_asia" = "Map of Asia";
+
+"my_location" = "My Location";
 

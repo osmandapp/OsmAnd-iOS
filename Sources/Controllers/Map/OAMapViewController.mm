@@ -1204,7 +1204,26 @@
     
     NSMutableArray *foundSymbols = [NSMutableArray array];
     
+    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
+    CGPoint myLocationScreen;
+    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
+    [mapView convert:&myLocationI toScreen:&myLocationScreen];
+    myLocationScreen.x *= mapView.contentScaleFactor;
+    myLocationScreen.y *= mapView.contentScaleFactor;
+    
+    if (fabs(myLocationScreen.x - touchPoint.x) < 20.0 && fabs(myLocationScreen.y - touchPoint.y) < 20.0)
+    {
+        OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+        symbol.caption = OALocalizedString(@"my_location");
+        symbol.type = OAMapSymbolMyLocation;
+        symbol.touchPoint = touchPoint;
+        symbol.location = myLocation.coordinate;
+        symbol.sortIndex = (NSInteger)symbol.type;
+        [foundSymbols addObject:symbol];
+    }
+    
     CGFloat delta = 10.0;
+
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
     BOOL doSkip = NO;

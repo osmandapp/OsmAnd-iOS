@@ -98,16 +98,16 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-                //if (success) {
-                    [self.tableView reloadData];
-                    CATransition *animation = [CATransition animation];
-                    [animation setType:kCATransitionPush];
-                    [animation setSubtype:kCATransitionFromBottom];
-                    [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                    [animation setFillMode:kCAFillModeBoth];
-                    [animation setDuration:.3];
-                    [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-                //}
+                
+                [self.tableView reloadData];
+                CATransition *animation = [CATransition animation];
+                [animation setType:kCATransitionPush];
+                [animation setSubtype:kCATransitionFromBottom];
+                [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+                [animation setFillMode:kCAFillModeBoth];
+                [animation setDuration:.3];
+                [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+                
                 [_loadProductsProgressHUD hide:YES];
             }];
         });

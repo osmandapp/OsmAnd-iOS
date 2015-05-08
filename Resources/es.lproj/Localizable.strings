@@ -318,3 +318,7 @@
 "product_desc_southamerica" = "Mapa de Sudamérica";
 "product_title_allworld" = "Todos los mapas del mundo";
 "product_desc_allworld" = "Mapa de todo el mundo";
+"product_desc_skimap" = "Pistas de esquí para todas las estaciones de esquí en el mundo";
+"product_title_asia" = "Asia";
+"product_desc_asia" = "Mapa de Asia";
+"my_location" = "Mi ubicación";

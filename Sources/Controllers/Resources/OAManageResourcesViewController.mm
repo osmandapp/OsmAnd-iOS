@@ -25,6 +25,8 @@
 #import "OAWorldRegion.h"
 #import "OALog.h"
 #import "OAOcbfHelper.h"
+#import "OABannerView.h"
+
 #include "Localization.h"
 
 #import "OAPurchasesViewController.h"
@@ -33,6 +35,7 @@
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+#include <OsmAndCore/WorldRegions.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -45,7 +48,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 #define kAllResourcesScope 0
 #define kLocalResourcesScope 1
 
-@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
+@interface OAManageResourcesViewController () <UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate, OABannerViewDelegate>
 
 //@property (weak, nonatomic) IBOutlet UISegmentedControl *scopeControl;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -112,13 +115,11 @@ struct RegionResources
     BOOL _doDataUpdateReload;
     
     BOOL _displayBanner;
-    UIView *_freeDownloadsView;
-    UIView *_freeDownloadsBanner;
-    UILabel *_freeTextLabel;
-    UIButton *_btnPurchasesOnBanner;
+    OABannerView *_bannerView;
     NSInteger _bannerSection;
     
     TTTArrayFormatter *_arrFmt;
+    NSNumberFormatter *_numberFormatter;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -183,6 +184,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     [super viewDidLoad];
 
+    _numberFormatter = [[NSNumberFormatter alloc] init];
+    [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
+    [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+
     if (self.openFromSplash) {
         self.backButton.hidden = YES;
         self.doneButton.hidden = NO;
@@ -216,37 +221,14 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     _updateCouneView.textAlignment = NSTextAlignmentCenter;
     _updateCouneView.textColor = [UIColor whiteColor];
     
-    if (_displayBanner) {
-        _freeDownloadsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 76.0)];
-        _freeDownloadsView.backgroundColor = [UIColor groupTableViewBackgroundColor];
-        
-        UIColor *bannerColor;
-        if ([OAIAPHelper freeMapsAvailable] > 0)
-            bannerColor = [UIColor colorWithRed:0.306f green:0.792f blue:0.388f alpha:1.00f];
+    if (_displayBanner)
+    {
+        if (DeviceScreenWidth > 320.0)
+            _bannerView = [[OABannerView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 75.0)];
         else
-            bannerColor = [UIColor colorWithRed:0.992f green:0.749f blue:0.176f alpha:1.00f];
-        
-        _freeDownloadsBanner = [[UIView alloc] initWithFrame:CGRectMake(15.0, 15.0, 70.0, 60.0)];
-        _freeDownloadsBanner.backgroundColor = bannerColor;
-        _freeDownloadsBanner.layer.cornerRadius = 5.0;
-        _freeDownloadsBanner.layer.masksToBounds = YES;
-        _freeDownloadsBanner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        
-        [_freeDownloadsView addSubview:_freeDownloadsBanner];
-        
-        _freeTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(12.0, 6.0, 46.0, 48.0)];
-        _freeTextLabel.backgroundColor = bannerColor;
-        _freeTextLabel.textColor = [UIColor whiteColor];
-        _freeTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
-        _freeTextLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        _freeTextLabel.numberOfLines = 2;
-        
-        [_freeDownloadsBanner addSubview:_freeTextLabel];
-        
-        _btnPurchasesOnBanner = [[UIButton alloc] initWithFrame:_freeDownloadsBanner.bounds];
-        [_btnPurchasesOnBanner addTarget:self action:@selector(btnToolbarPurchasesClicked:) forControlEvents:UIControlEventTouchUpInside];
-        _btnPurchasesOnBanner.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-        [_freeDownloadsBanner addSubview:_btnPurchasesOnBanner];
+            _bannerView = [[OABannerView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 125.0)];
+
+        _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
     }
 }
 
@@ -319,34 +301,102 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 {
     [super viewWillLayoutSubviews];
     
-    if (_freeTextLabel) {
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-            _freeTextLabel.textAlignment = NSTextAlignmentLeft;
-        else
-            _freeTextLabel.textAlignment = NSTextAlignmentCenter;        
+  
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if (_displayBanner)
+    {
+        [UIView animateWithDuration:duration animations:^{            
+            [self.tableView beginUpdates];
+            if (DeviceScreenHeight > 320.0)
+                _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, DeviceScreenHeight, 75.0);
+            else
+                _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, DeviceScreenHeight, 125.0);
+            [self.tableView endUpdates];
+        }];
     }
+    
 }
 
 -(void)updateFreeDownloadsBanner
 {
-    int freeMaps = [OAIAPHelper freeMapsAvailable];
+    NSString *title;
+    NSString *desc;
+    NSString *buttonTitle = OALocalizedString(@"shared_string_buy");
+    
+    OAProduct *product;
 
-    UIColor *bannerColor;
-    if (freeMaps > 0)
-        bannerColor = [UIColor colorWithRed:0.306f green:0.792f blue:0.388f alpha:1.00f];
-    else
-        bannerColor = [UIColor colorWithRed:0.992f green:0.749f blue:0.176f alpha:1.00f];
-
-    _freeDownloadsBanner.backgroundColor = bannerColor;
-    _freeTextLabel.backgroundColor = bannerColor;
-
-    if (freeMaps > 1) {
-        _freeTextLabel.text = [NSString stringWithFormat:OALocalizedString(@"res_banner_many"), freeMaps];
-    } else if (freeMaps == 1) {
-        _freeTextLabel.text = OALocalizedString(@"res_banner_one");
-    } else {
-        _freeTextLabel.text = OALocalizedString(@"res_banner_no");
+    if (self.region == _app.worldRegion)
+    {
+        int freeMaps = [OAIAPHelper freeMapsAvailable];
+        if (freeMaps > 1)
+        {
+            title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
+            desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];
+        }
+        else
+        {
+            title = OALocalizedString(@"res_banner_no_free_maps_title");
+            desc = OALocalizedString(@"res_banner_no_free_maps_desc");
+        }
+        buttonTitle = OALocalizedString(@"get_unlimited_access");
     }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Africa];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Asia];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Australia];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Central_America];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Europe];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_North_America];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Russia];
+    }
+    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
+    {
+        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_South_America];
+    }
+
+    if (product)
+    {
+        title = product.localizedTitle;
+        if (product.price)
+        {
+            [_numberFormatter setLocale:product.priceLocale];
+            NSString *price = [_numberFormatter stringFromNumber:product.price];
+            buttonTitle = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"shared_string_buy"), price];
+            desc = [NSString stringWithFormat:@"%@ %@ %@ %@", OALocalizedString(@"shared_string_buy"), product.localizedDescription, OALocalizedString(@"shared_string_buy_for"), price];
+        }
+        else
+        {
+            desc = product.localizedDescription;
+        }
+    }
+
+    _bannerView.title = title;
+    _bannerView.desc = desc;
+    _bannerView.buttonTitle = buttonTitle;
+
+    [_bannerView setNeedsDisplay];
 }
 
 - (void)resourceInstalled:(NSNotification *)notification {
@@ -1052,7 +1102,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         return nil;
 
     if (section == _bannerSection)
-        return _freeDownloadsView;
+        return _bannerView;
     
     return nil;
 }
@@ -1063,7 +1113,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         return 0.0;
 
     if (section == _bannerSection)
-        return _freeDownloadsView.bounds.size.height;
+        return _bannerView.bounds.size.height;
     
     if (section == 0)
         return 56.0;
@@ -1814,5 +1864,14 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     purchasesViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
 }
+
+#pragma mark -
+#pragma mark OABannerViewDelegate
+
+- (void) bannerButtonPressed
+{
+    //
+}
+
 
 @end

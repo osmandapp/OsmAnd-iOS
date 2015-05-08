@@ -115,6 +115,10 @@
     _animator.reset(new OsmAnd::MapAnimator());
     _animator->setMapRenderer(_renderer);
     
+    auto debugSettings = [self getMapDebugSettings];
+    debugSettings->disableFastSymbolsCheckByFrustum = true;
+    [self setMapDebugSettings:debugSettings];
+
 #if defined(OSMAND_IOS_DEV)
     _forceRenderingOnEachFrame = NO;
 #endif // defined(OSMAND_IOS_DEV)

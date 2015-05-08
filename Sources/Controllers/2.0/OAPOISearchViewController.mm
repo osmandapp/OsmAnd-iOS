@@ -481,8 +481,35 @@ typedef enum
             [[OAPOIHelper sharedInstance] breakSearch];
 
             self.searchStringPrev = nil;
-            NSArray *sortedArrayItems = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
-                return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
+            
+            NSArray *categories = [OAPOIHelper sharedInstance].poiCategories.allKeys;
+            NSArray *filters = [OAPOIHelper sharedInstance].poiFilters.allKeys;
+             
+            NSMutableArray *arr = [NSMutableArray array];
+            for (OAPOICategory *c in categories)
+                if (c.top)
+                    [arr addObject:c];
+            
+            for (OAPOIFilter *f in filters)
+                if (f.top)
+                    [arr addObject:f];
+            
+            NSArray *sortedArrayItems = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+                
+                NSString *str1;
+                NSString *str2;
+                
+                if ([obj1 isKindOfClass:[OAPOICategory class]])
+                    str1 = ((OAPOICategory *)obj1).nameLocalized;
+                else if ([obj1 isKindOfClass:[OAPOIFilter class]])
+                    str1 = ((OAPOIFilter *)obj1).nameLocalized;
+
+                if ([obj2 isKindOfClass:[OAPOICategory class]])
+                    str2 = ((OAPOICategory *)obj2).nameLocalized;
+                else if ([obj2 isKindOfClass:[OAPOIFilter class]])
+                    str2 = ((OAPOIFilter *)obj2).nameLocalized;
+
+                return [str1 localizedCaseInsensitiveCompare:str2];
             }];
             
             dispatch_async(dispatch_get_main_queue(), ^{

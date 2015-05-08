@@ -19,6 +19,8 @@
 @property (nonatomic) NSString *categoryLocalizedEN;
 @property (nonatomic) NSString *categoryLocalized;
 
+@property (nonatomic) BOOL top;
+
 - (UIImage *)icon;
 
 @end

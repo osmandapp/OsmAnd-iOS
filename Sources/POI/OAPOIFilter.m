@@ -48,6 +48,8 @@
     clone.categoryLocalized = self.categoryLocalized;
     clone.categoryLocalizedEN = self.categoryLocalizedEN;
     
+    clone.top = self.top;
+
     return clone;
 }
 

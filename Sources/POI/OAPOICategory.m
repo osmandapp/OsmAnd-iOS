@@ -40,6 +40,7 @@
     
     clone.name = self.name;
     clone.tag = self.tag;
+    clone.top = self.top;
     clone.nameLocalized = self.nameLocalized;
     clone.nameLocalizedEN = self.nameLocalizedEN;
     

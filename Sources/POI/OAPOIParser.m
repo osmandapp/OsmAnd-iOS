@@ -153,6 +153,8 @@ static const char *kTagAttributeName = "tag";
 static NSUInteger kTagAttributeNameLength = 4;
 static const char *kValueAttributeName = "value";
 static NSUInteger kValueAttributeNameLength = 6;
+static const char *kTopAttributeName = "top";
+static NSUInteger kTopAttributeNameLength = 4;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -182,6 +184,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kTopAttributeName,
+                                  kTopAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                _currentPOICategory.top = [[value lowercaseString] isEqualToString:@"true"];
+            }
         }
     }
     else if (0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
@@ -198,6 +210,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 _currentPOIFilter.name = [[NSString alloc] initWithBytes:attributes[i].value
                                                                length:length
                                                              encoding:NSUTF8StringEncoding];
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kTopAttributeName,
+                                  kTopAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                _currentPOIFilter.top = [[value lowercaseString] isEqualToString:@"true"];
             }
         }
     }

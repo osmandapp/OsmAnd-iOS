@@ -14,6 +14,7 @@
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Delete";
 "shared_string_add" = "Add";
+"shared_string_buy" = "Buy";
 
 // HUD
 "hud_heading" = "Heading";
@@ -330,3 +331,30 @@
 
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
+
+//inapps
+"product_title_nautical" = "Nautical map";
+"product_desc_nautical" = "Nautical map of all world";
+"product_title_parking" = "Parking Position";
+"product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
+"product_title_skimap" = "Ski map";
+"product_desc_skimap" = "Ski slopes for all ski resorts in the world";
+"product_title_track_recording" = "Trip recording";
+"product_desc_track_recording" = "Activates the functionality to record and save your tracks";
+"product_title_africa" = "Africa";
+"product_desc_africa" = "Map of Africa";
+"product_title_australia" = "Australia";
+"product_desc_australia" = "Map of Australia";
+"product_title_centralamerica" = "Central America";
+"product_desc_centralamerica" = "Map of Central America";
+"product_title_europe" = "Europe";
+"product_desc_europe" = "Map of Europe";
+"product_title_northamerica" = "North America";
+"product_desc_northamerica" = "Map of North America";
+"product_title_russia" = "Russia";
+"product_desc_russia" = "Map of Russia";
+"product_title_southamerica" = "South America";
+"product_desc_southamerica" = "Map of South America";
+"product_title_allworld" = "All World Maps";
+"product_desc_allworld" = "Map of All World";
+

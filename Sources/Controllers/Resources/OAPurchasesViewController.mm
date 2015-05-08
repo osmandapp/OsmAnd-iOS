@@ -98,7 +98,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             
             [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-                if (success) {
+                //if (success) {
                     [self.tableView reloadData];
                     CATransition *animation = [CATransition animation];
                     [animation setType:kCATransitionPush];
@@ -107,7 +107,7 @@
                     [animation setFillMode:kCAFillModeBoth];
                     [animation setDuration:.3];
                     [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-                }
+                //}
                 [_loadProductsProgressHUD hide:YES];
             }];
         });
@@ -195,12 +195,20 @@
                 break;
         }
 
-        SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
-        if (product) {
+        OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+        if (product)
+        {
             title = product.localizedTitle;
             desc = product.localizedDescription;
-            [_numberFormatter setLocale:product.priceLocale];
-            price = [_numberFormatter stringFromNumber:product.price];
+            if (product.price)
+            {
+                [_numberFormatter setLocale:product.priceLocale];
+                price = [_numberFormatter stringFromNumber:product.price];
+            }
+            else
+            {
+                price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+            }
         }
 
         [cell.imgIcon setImage:imgTitle];
@@ -268,7 +276,7 @@
     }
     
     
-    SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
 
     if (product) {
         
@@ -332,7 +340,7 @@
         return;
     
     NSString * identifier = notification.object;
-    SKProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [_loadProductsProgressHUD hide:YES];

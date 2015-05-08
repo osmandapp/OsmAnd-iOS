@@ -71,6 +71,24 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @end
 
+@interface OAProduct : NSObject
+
+@property (nonatomic, readonly) NSString *localizedDescription;
+@property (nonatomic, readonly) NSString *localizedTitle;
+@property (nonatomic, readonly) NSDecimalNumber *price;
+@property (nonatomic, readonly) NSLocale *priceLocale;
+@property (nonatomic, readonly) NSString *productIdentifier;
+
+@property (nonatomic, readonly) SKProduct *skProductRef;
+
+- (id)initWithSkProduct:(SKProduct *)skProduct;
+- (id)initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier;
+-(id)initWithproductIdentifier:(NSString *)productIdentifier;
+
+- (void)setSkProduct:(SKProduct *)skProduct;
+
+@end
+
 @interface OAIAPHelper : NSObject
 
 + (OAIAPHelper *)sharedInstance;
@@ -82,7 +100,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 - (id)initWithProductIdentifiers:(NSSet *)productIdentifiers;
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler;
-- (void)buyProduct:(SKProduct *)product;
+- (void)buyProduct:(OAProduct *)product;
 - (BOOL)productPurchased:(NSString *)productIdentifier;
 - (void)restoreCompletedTransactions;
 
@@ -94,7 +112,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 +(NSArray *)inAppsMaps;
 +(NSArray *)inAppsAddons;
--(SKProduct *)product:(NSString *)productIdentifier;
+-(OAProduct *)product:(NSString *)productIdentifier;
 -(int)productIndex:(NSString *)productIdentifier;
 -(BOOL)productsLoaded;
 

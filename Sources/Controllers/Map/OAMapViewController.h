@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolFavorite,
     OAMapSymbolPOI,
     OAMapSymbolLocation,
-    OAMapSymbolParking,
+    OAMapSymbolMyLocation,
 };
 
 @interface OAMapSymbol : NSObject

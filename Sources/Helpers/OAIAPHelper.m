@@ -33,6 +33,61 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 @end
 
+@implementation OAProduct
+
+-(id)initWithSkProduct:(SKProduct *)skProduct
+{
+    self = [super init];
+    if (self)
+    {
+        [self setSkProduct:skProduct];
+    }
+    return self;
+}
+
+-(id)initWithTitle:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale productIdentifier:(NSString *)productIdentifier
+{
+    self = [super init];
+    if (self)
+    {
+        _productIdentifier = [productIdentifier copy];
+        _localizedTitle = [title copy];
+        _localizedDescription = [desc copy];
+        _price = [price copy];
+        _priceLocale = [priceLocale copy];        
+    }
+    return self;
+}
+
+- (void)setSkProduct:(SKProduct *)skProduct
+{
+    _productIdentifier = [skProduct.productIdentifier copy];
+    _localizedTitle = [skProduct.localizedTitle copy];
+    _localizedDescription = [skProduct.localizedDescription copy];
+    _price = [skProduct.price copy];
+    _priceLocale = [skProduct.priceLocale copy];
+    
+    _skProductRef = skProduct;
+}
+
+-(id)initWithproductIdentifier:(NSString *)productIdentifier
+{
+    self = [super init];
+    if (self)
+    {
+        _productIdentifier = [productIdentifier copy];
+        
+        NSString *postfix = [[productIdentifier componentsSeparatedByString:@"."] lastObject];
+        NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
+        NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+        
+        _localizedTitle = OALocalizedString(locTitleId);
+        _localizedDescription = OALocalizedString(locDescriptionId);
+    }
+    return self;
+}
+
+@end
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
 @end
@@ -46,7 +101,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     NSMutableSet * _purchasedProductIdentifiers;
     NSMutableSet * _disabledProductIdentifiers;
     
-    NSArray *_skProducts;
+    NSArray *_products;
 
     BOOL _restoringPurchases;
     NSInteger _transactionErrors;
@@ -129,12 +184,12 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 -(BOOL)productsLoaded
 {
-    return _skProducts.count > 0;
+    return _products.count > 0;
 }
 
--(SKProduct *)product:(NSString *)productIdentifier
+-(OAProduct *)product:(NSString *)productIdentifier
 {
-    for (SKProduct *p in _skProducts) {
+    for (OAProduct *p in _products) {
         if ([p.productIdentifier isEqualToString:productIdentifier])
             return p;
     }
@@ -277,29 +332,77 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     _functionalAddons = [NSArray arrayWithArray:arr];
 }
 
-- (void)buyProduct:(SKProduct *)product
+- (void)buyProduct:(OAProduct *)product
 {
     OALog(@"Buying %@...", product.productIdentifier);
     
     _restoringPurchases = NO;
     
-    SKPayment * payment = [SKPayment paymentWithProduct:product];
-    [[SKPaymentQueue defaultQueue] addPayment:payment];
+    if (product.skProductRef)
+    {
+        SKPayment * payment = [SKPayment paymentWithProduct:product.skProductRef];
+        [[SKPaymentQueue defaultQueue] addPayment:payment];
+    }
+    else
+    {
+        OAIAPHelper * __weak weakSelf = self;
+        _completionHandler = ^(BOOL success) {
+            if (!success)
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+            }
+            else
+            {
+                OAProduct *p = [weakSelf product:product.productIdentifier];
+                [weakSelf buyProduct:p];
+            }
+        };
+        
+        NSSet *s = [[NSSet alloc] initWithObjects:product.productIdentifier, nil];
+        _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:s];
+        _productsRequest.delegate = self;
+        [_productsRequest start];
+
+    }
 }
 
 #pragma mark - SKProductsRequestDelegate
 
-- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    
+- (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response
+{
     OALog(@"Loaded list of products...");
     _productsRequest = nil;
     
-    _skProducts = response.products;
-    for (SKProduct * skProduct in _skProducts) {
+    NSMutableArray *arr = [NSMutableArray array];
+    for (SKProduct * skProduct in response.products)
+    {
         OALog(@"Found product: %@ %@ %0.2f",
               skProduct.productIdentifier,
               skProduct.localizedTitle,
               skProduct.price.floatValue);
+        OAProduct *p = [[OAProduct alloc] initWithSkProduct:skProduct];
+        [arr addObject:p];
+    }
+    
+    if (_products.count == 0)
+    {
+        _products = [NSArray arrayWithArray:arr];
+    }
+    else
+    {
+        for (OAProduct *product in _products)
+        {
+            BOOL exist = NO;
+            for (OAProduct *p in arr)
+                if ([p.productIdentifier isEqualToString:product.productIdentifier])
+                {
+                    exist = YES;
+                    break;
+                }
+            if (!exist)
+                [arr addObject:product];
+        }
+        _products = [NSArray arrayWithArray:arr];
     }
     
     _completionHandler(YES);
@@ -307,11 +410,23 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     
 }
 
-- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error{
     
     OALog(@"Failed to load list of products.");
     _productsRequest = nil;
     
+    if (_products.count == 0)
+    {
+        NSMutableArray *arr = [NSMutableArray array];
+        for (NSString *prodId in _productIdentifiers)
+        {
+            OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+            [arr addObject:p];
+        }
+        
+        _products = [NSArray arrayWithArray:arr];
+    }
+
     _completionHandler(NO);
     _completionHandler = nil;
     

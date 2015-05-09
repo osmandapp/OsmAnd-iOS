@@ -19,8 +19,18 @@
 #define OALocalizedStringUp(defaultValue, ...) \
     _OALocalizedString(true, defaultValue, ##__VA_ARGS__)
 
+static NSBundle *enBundle = nil;
+
 static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValue, ...)
 {
+    
+    if (!enBundle)
+    {
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"en" ofType:@"lproj"];
+        enBundle = [NSBundle bundleWithPath:path];
+    }
+    
+    
     NSArray *arr = [defaultValue componentsSeparatedByString:@" "];
     NSString *key;
     for (NSString *s in arr)
@@ -33,7 +43,11 @@ static inline NSString* _OALocalizedString(BOOL upperCase, NSString* defaultValu
     NSString *res;
     if (key)
     {
-        NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:NSLocalizedString(key, nil)];
+        NSString *loc = [[NSBundle mainBundle] localizedStringForKey:key value:@"!!!" table:nil];
+        if ([loc isEqualToString:@"!!!"])
+            loc = [enBundle localizedStringForKey:key value:@"" table:nil];
+
+        NSString *newValue = [defaultValue stringByReplacingOccurrencesOfString:key withString:loc];
         if ([defaultValue isEqualToString:key])
         {
             if (upperCase)

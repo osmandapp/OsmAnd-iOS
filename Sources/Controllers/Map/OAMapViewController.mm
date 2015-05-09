@@ -1583,6 +1583,9 @@
     // Get base zoom delta
     float zoomDelta = [self currentZoomInDelta];
     
+    while ([mapView getSymbolsUpdateSuspended] < 0)
+        [mapView suspendSymbolsUpdate];
+
     // Animate zoom-in by +1
     zoomDelta += 1.0f;
     mapView.animator->pause();
@@ -1670,6 +1673,9 @@
 
     // Get base zoom delta
     float zoomDelta = [self currentZoomOutDelta];
+
+    while ([mapView getSymbolsUpdateSuspended] < 0)
+        [mapView suspendSymbolsUpdate];
 
     // Animate zoom-in by -1
     zoomDelta -= 1.0f;

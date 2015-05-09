@@ -1,0 +1,56 @@
+"OsmAnd Maps" = "OsmAnd Мапы";
+// Shared Strings
+"shared_string_back" = "Назад";
+"shared_string_ok" = "OK";
+"shared_string_cancel" = "Скасаваць";
+"shared_string_no" = "Не";
+"shared_string_yes" = "Так";
+"shared_string_save" = "Захаваць";
+"shared_string_done" = "Гатова";
+"shared_string_update" = "Абнавіць";
+"shared_string_install" = "Усталяваць";
+"shared_string_delete" = "Выдаліць";
+"shared_string_add" = "Дадаць";
+"shared_string_or" = "ці";
+// Favorites
+"fav_color" = "Колер";
+"fav_colors" = "Колеры";
+"fav_name" = "Назва";
+"fav_group" = "Група";
+"groups" = "Групы";
+"favorite" = "Упадабанае";
+"fav_import" = "Імрарт";
+"fav_ignore" = "Ігнараваць";
+"fav_rename" = "Пераназваць";
+"fav_replace" = "Замяніць";
+"poi_hide" = "Схаваць";
+// My Places
+"favorites" = "Упадабаныя";
+"gpx_waypoints" = "Кропкі шляху";
+"gpx_export" = "Экспарт";
+"gpx_stat" = "Статыстыка";
+"rec_interval" = "Інтэрвал запісу";
+// Map settings
+"m_style_overview" = "Агляд";
+"m_style_car" = "Аўтамабіль";
+"m_style_bicycle" = "Ровар";
+"map_settings_map" = "Мапа";
+"map_settings_show" = "Паказаць на мапе";
+"map_settings_day" = "Дзень";
+"map_settings_night" = "Ноч";
+"map_settings_style" = "Стыль мапы";
+"map_settings_overunder" = "Ніжні і верхні слаі";
+"map_settings_none" = "Нічога";
+"map_settings_online" = "Сеціўныя мапы";
+"intro_download" = "Сьцягнуць\nмапу";
+"intro_next" = "Далей";
+// Settings
+"sett_settings" = "Налады";
+"sett_km" = "Кілямэтры";
+"sett_ml" = "Мілі";
+"sett_show" = "Паказаць";
+"sett_arr_loc" = "Месцазнаходжанне";
+"download" = "Сьцягнуць";
+"nothanks" = "Не, дзякуй";
+"res_world_map" = "Сусьветная мапа";
+"res_updates" = "Абнаўленьні";

@@ -133,8 +133,6 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        NSLog(@"+++");
-        
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if (![mapVC isViewLoaded])
             return;

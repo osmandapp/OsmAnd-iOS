@@ -788,7 +788,7 @@
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        [mapView suspendSymbolsUpdate];
+        while (![mapView suspendSymbolsUpdate]);
 
         _initialZoomLevelDuringGesture = mapView.zoom;
         return;
@@ -876,7 +876,7 @@
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        [mapView suspendSymbolsUpdate];
+        while (![mapView suspendSymbolsUpdate]);
     }
     
     // Get movement delta in points (not pixels, that is for retina and non-retina devices value is the same)
@@ -963,7 +963,7 @@
         _app.mapMode = OAMapModeFree;
 
         // Suspend symbols update
-        [mapView suspendSymbolsUpdate];
+        while (![mapView suspendSymbolsUpdate]);
 
         _accumulatedRotationAngle = 0.0f;
     }
@@ -1139,7 +1139,7 @@
         mapView.animator->cancelAllAnimations();
 
         // Suspend symbols update
-        [mapView suspendSymbolsUpdate];
+        while (![mapView suspendSymbolsUpdate]);
     }
     
     CGPoint translation = [recognizer translationInView:self.view];

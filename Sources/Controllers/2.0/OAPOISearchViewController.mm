@@ -1353,6 +1353,7 @@ typedef enum
     if (_textField.text.length > 0)
     {
         self.searchString = _textField.text;
+        _showTopList = NO;
     }
     else
     {

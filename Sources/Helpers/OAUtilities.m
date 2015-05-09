@@ -222,5 +222,24 @@
     }
 }
 
++ (NSString *) floatToStrTrimZeros:(CGFloat)number
+{
+    NSString *str = [NSString stringWithFormat:@"%f", number];
+    int length = str.length;
+    for (int i = str.length; i > 0; i--)
+    {
+        if  ([str rangeOfString:@"."].location != NSNotFound)
+        {
+            NSRange prevChar = NSMakeRange(i-1, 1);
+            if ([[str substringWithRange:prevChar] isEqualToString:@"0"]||
+                [[str substringWithRange:prevChar] isEqualToString:@"."])
+                length--;
+            else
+                break;
+        }
+        str = [str substringToIndex:length];
+    }
+    return str;
+}
 
 @end

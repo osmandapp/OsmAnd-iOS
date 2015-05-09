@@ -16,6 +16,7 @@
 #import "OAPOIHelper.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAIconTextExTableViewCell.h"
 #import "OASearchMoreCell.h"
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
@@ -103,6 +104,9 @@ typedef enum
     BOOL _dataInvalidated;
 
     BOOL _showTopList;
+
+    BOOL _showCoordinates;
+    NSArray *_foundCoords;
 }
 
 - (instancetype)init
@@ -445,8 +449,17 @@ typedef enum
 
             _dataInvalidated = NO;
             
-            //NSArray *foundCoords = [OAUtilities splitCoordinates:searchStr];
-
+            if (_currentScope == EPOIScopeUndefined)
+            {
+                _foundCoords = [OAUtilities splitCoordinates:searchStr];
+                _showCoordinates = (_foundCoords.count > 0);
+            }
+            else
+            {
+                _foundCoords = nil;
+                _showCoordinates = NO;
+            }
+            
             // Build category/filter/type items array
             [self updateSearchResults];
 
@@ -487,6 +500,7 @@ typedef enum
     {
         dispatch_async(self.updateDispatchQueue, ^{
             
+            _showCoordinates = NO;
             _ignoreSearchResult = YES;
             _poiInList = NO;
 
@@ -563,13 +577,73 @@ typedef enum
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) + (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0);
+    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) + (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0) + (_showCoordinates ? 1 : 0);
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
+    NSInteger row = indexPath.row;
+
+    if (_showCoordinates)
+    {
+        if (row == 0)
+        {
+            OAIconTextExTableViewCell* cell;
+            cell = (OAIconTextExTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
+                cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
+            }
+            
+            if (cell)
+            {
+                int coordsCount = _foundCoords.count;
+                
+                CGRect f = cell.textView.frame;
+                CGFloat oldX = f.origin.x;
+                f.origin.x = 12.0;
+                f.origin.y = 14.0;
+
+                if (coordsCount == 1)
+                    f.size.width = tableView.frame.size.width - 24.0;
+                else
+                    f.size.width += (oldX - f.origin.x);
+
+                cell.textView.frame = f;
+
+                NSString *text = @"";
+                if (coordsCount == 1)
+                {
+                    NSString *coord1 = [OAUtilities floatToStrTrimZeros:[_foundCoords[0] doubleValue]];
+                    
+                    text = [NSString stringWithFormat:@"%@ %@ %@ #.## %@ ##’##’##.#", OALocalizedString(@"latitude"), coord1, OALocalizedString(@"longitude"), OALocalizedString(@"shared_string_or")];
+                    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                    cell.arrowIconView.hidden = YES;
+                }
+                else if (coordsCount > 1)
+                {
+                    NSString *coord1 = [OAUtilities floatToStrTrimZeros:[_foundCoords[0] doubleValue]];
+                    NSString *coord2 = [OAUtilities floatToStrTrimZeros:[_foundCoords[1] doubleValue]];
+
+                    text = [NSString stringWithFormat:@"%@: %@, %@", OALocalizedString(@"sett_arr_loc"), coord1, coord2];
+                    cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+                    cell.arrowIconView.hidden = NO;
+                }
+                
+                [cell.textView setText:text];
+                [cell.iconView setImage: nil];
+            }
+            return cell;
+        }
+        else
+        {
+            row--;
+        }
+    }
+    
+    if (row >= _dataArray.count + _dataPoiArray.count)
     {
         if (_currentScope == EPOIScopeUndefined && _showTopList)
         {
@@ -614,10 +688,10 @@ typedef enum
     }
     
     id obj;
-    if (indexPath.row >= _dataArray.count)
-        obj = _dataPoiArray[indexPath.row - _dataArray.count];
+    if (row >= _dataArray.count)
+        obj = _dataPoiArray[row - _dataArray.count];
     else
-        obj = _dataArray[indexPath.row];
+        obj = _dataArray[row];
     
     
     if ([obj isKindOfClass:[OAPOI class]])
@@ -770,7 +844,17 @@ typedef enum
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int index = indexPath.row - _dataArray.count;
+    int row = indexPath.row;
+    
+    if (_showCoordinates)
+    {
+        if (row == 0)
+            return 50.0;
+        else
+            row--;
+    }
+    
+    int index = row - _dataArray.count;
     if (index >= 0 && index < _dataPoiArray.count)
     {
         OAPOI* item = _dataPoiArray[index];
@@ -789,7 +873,23 @@ typedef enum
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    if (indexPath.row >= _dataArray.count + _dataPoiArray.count)
+    int row = indexPath.row;
+    if (_showCoordinates)
+    {
+        if (row == 0)
+        {
+            double lat = [_foundCoords[0] doubleValue];
+            double lon = [_foundCoords[1] doubleValue];
+            [self goToPoint:lat longitude:lon name:@"" icon:nil];
+            return;
+        }
+        else
+        {
+            row--;
+        }
+    }
+    
+    if (row >= _dataArray.count + _dataPoiArray.count)
     {
         if (_currentScope == EPOIScopeUndefined && _showTopList)
         {
@@ -811,10 +911,10 @@ typedef enum
     }
     
     id obj;
-    if (indexPath.row >= _dataArray.count)
-        obj = _dataPoiArray[indexPath.row - _dataArray.count];
+    if (row >= _dataArray.count)
+        obj = _dataPoiArray[row - _dataArray.count];
     else
-        obj = _dataArray[indexPath.row];
+        obj = _dataArray[row];
     
     if ([obj isKindOfClass:[OAPOI class]])
     {

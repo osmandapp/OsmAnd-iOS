@@ -77,6 +77,7 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 @property(nonatomic, readonly) BOOL isSymbolsUpdateSuspended;
 - (BOOL)suspendSymbolsUpdate;
 - (BOOL)resumeSymbolsUpdate;
+- (int)getSymbolsUpdateSuspended;
 
 // Misc properties:
 @property(nonatomic, readonly) QVector<OsmAnd::TileId> visibleTiles;

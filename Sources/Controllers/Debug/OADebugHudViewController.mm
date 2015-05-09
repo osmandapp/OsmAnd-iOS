@@ -133,11 +133,16 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        NSLog(@"+++");
+        
         OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
         if (![mapVC isViewLoaded])
             return;
         
         OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
+        
+        int count = [mapRendererView getSymbolsUpdateSuspended];
+        NSString *symStr = [NSString stringWithFormat:@"%@ (%d)", mapRendererView.isSymbolsUpdateSuspended ? @"yes" : @"no", count];
         
         NSMutableString* stateDump = [[NSMutableString alloc] init];
         
@@ -152,7 +157,7 @@
         [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];
         [stateDump appendFormat:@"elevation angle      : %f\n", mapRendererView.elevationAngle];
         [stateDump appendFormat:@"symbols              : %d\n", mapRendererView.symbolsCount];
-        [stateDump appendFormat:@"symbols suspended    : %s\n", mapRendererView.isSymbolsUpdateSuspended ? "yes" : "no"];
+        [stateDump appendFormat:@"symbols suspended    : %@\n", symStr];
         
         [self._stateTextview setText:stateDump];
         

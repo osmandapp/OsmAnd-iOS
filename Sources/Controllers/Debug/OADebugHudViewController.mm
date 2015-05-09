@@ -39,6 +39,7 @@
     OAAutoObserverProxy* _rendererSettingsObserver;
 
     UIPopoverController* _lastMenuPopoverController;
+    NSTimer *_repeatingTimer;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -70,6 +71,23 @@
                                            ? @"HUD_debug_pin_filled_button.png"
                                            : @"HUD_debug_pin_button.png"]
                                  forState:UIControlStateNormal];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    _repeatingTimer = [NSTimer scheduledTimerWithTimeInterval:0.5
+                                                      target:self selector:@selector(collectState)
+                                                    userInfo:nil repeats:YES];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    if (_repeatingTimer)
+        [_repeatingTimer invalidate];
 }
 
 - (void)openMenu:(UIViewController*)menuViewController fromView:(UIView*)view
@@ -112,28 +130,33 @@
 
 - (void)collectState
 {
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    if (![mapVC isViewLoaded])
-        return;
-
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-
-    NSMutableString* stateDump = [[NSMutableString alloc] init];
-
-    [stateDump appendFormat:@"target31             : %d %d\n",
-     mapRendererView.target31.x,
-     mapRendererView.target31.y];
-    [stateDump appendFormat:@"target (lon, lat)    : %f %f\n",
-     OsmAnd::Utilities::get31LongitudeX(mapRendererView.target31.x),
-     OsmAnd::Utilities::get31LatitudeY(mapRendererView.target31.y)];
-    [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
-    [stateDump appendFormat:@"zoom level           : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
-    [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];
-    [stateDump appendFormat:@"elevation angle      : %f\n", mapRendererView.elevationAngle];
-    [stateDump appendFormat:@"symbols              : %d\n", mapRendererView.symbolsCount];
-    [stateDump appendFormat:@"symbols suspended    : %s\n", mapRendererView.isSymbolsUpdateSuspended ? "yes" : "no"];
-
-    [self._stateTextview setText:stateDump];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+        if (![mapVC isViewLoaded])
+            return;
+        
+        OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
+        
+        NSMutableString* stateDump = [[NSMutableString alloc] init];
+        
+        [stateDump appendFormat:@"target31             : %d %d\n",
+         mapRendererView.target31.x,
+         mapRendererView.target31.y];
+        [stateDump appendFormat:@"target (lon, lat)    : %f %f\n",
+                         OsmAnd::Utilities::get31LongitudeX(mapRendererView.target31.x),
+                         OsmAnd::Utilities::get31LatitudeY(mapRendererView.target31.y)];
+        [stateDump appendFormat:@"zoom                 : %f\n", mapRendererView.zoom];
+        [stateDump appendFormat:@"zoom level           : %d\n", static_cast<int>(mapRendererView.zoomLevel)];
+        [stateDump appendFormat:@"azimuth              : %f\n", mapRendererView.azimuth];
+        [stateDump appendFormat:@"elevation angle      : %f\n", mapRendererView.elevationAngle];
+        [stateDump appendFormat:@"symbols              : %d\n", mapRendererView.symbolsCount];
+        [stateDump appendFormat:@"symbols suspended    : %s\n", mapRendererView.isSymbolsUpdateSuspended ? "yes" : "no"];
+        
+        [self._stateTextview setText:stateDump];
+        
+    });
 }
 
 - (void)onRendererStateChanged

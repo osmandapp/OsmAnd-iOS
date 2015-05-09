@@ -107,4 +107,120 @@
     *seconds = abs(secondsL % 60);
 }
 
++ (NSArray *) splitCoordinates:(NSString *)string
+{
+        NSMutableArray *split = [NSMutableArray array];
+        NSMutableString *prev = [NSMutableString string];
+        NSMutableString *other = [NSMutableString string];
+        BOOL south = NO;
+        BOOL west = NO;
+        for(int i = 0; i < string.length; i++)
+        {
+            unichar ch = [string characterAtIndex:i];
+            
+            if(ch == '\'' || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch] || ch =='#' ||
+               ch == '-' || ch == '.')
+            {
+                [prev appendString:[NSString stringWithCharacters:&ch length:1]];
+                if ([[[other stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]] lowercaseString] isEqualToString:@"s"])
+                    south = true;
+                
+                [other setString:@""];
+            }
+            else
+            {
+                [other appendString:[NSString stringWithCharacters:&ch length:1]];
+                if (prev.length > 0)
+                {
+                    [split addObject:[NSString stringWithString:prev]];
+                    [prev setString:@""];
+                }
+            }
+        }
+        if (prev.length > 0)
+        {
+            [split addObject:[NSString stringWithString:prev]];
+            [prev setString:@""];
+        }
+        if ([[[other stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]] lowercaseString] isEqualToString:@"w"])
+            west = YES;
+    
+        NSMutableArray *numbers = [OAUtilities splitNumbers:split];
+        NSMutableArray *dnumbers = [OAUtilities filterInts:numbers];
+        NSMutableArray *rnumbers = dnumbers.count >= 2 ? dnumbers : numbers;
+        if (rnumbers.count > 0 && [rnumbers[0] doubleValue] >= 0 && south)
+            [rnumbers setObject:[NSNumber numberWithDouble:-[rnumbers[0] doubleValue]] atIndexedSubscript:0];
+        if (rnumbers.count > 1 && [rnumbers[1] doubleValue] >= 0 && west)
+            [rnumbers setObject:[NSNumber numberWithDouble:-[rnumbers[1] doubleValue]] atIndexedSubscript:1];
+
+        if (rnumbers.count == 0) // Not a coordinate
+            return nil;
+        else if(rnumbers.count == 1) // Latitude X Longitude #.## or ##’##’##.#
+            return @[rnumbers[0]];
+        else // Latitude X Longitude Y
+            return @[rnumbers[0], rnumbers[1]];
+}
+
++ (NSMutableArray *) filterInts:(NSArray *)numbers
+{
+    NSMutableArray *dnumbers = [NSMutableArray array];
+    for (NSNumber *d in numbers)
+        if([d intValue] != [d doubleValue])
+            [dnumbers addObject:d];
+    
+    return dnumbers;
+}
+
++ (NSMutableArray *) splitNumbers:(NSArray *) split
+{
+        NSMutableString *prev = [NSMutableString string];
+        NSMutableArray *numbers = [NSMutableArray array];
+        for (NSString *p in split)
+        {
+            NSMutableArray *ps = [NSMutableArray array];
+            [prev setString:@""];
+            for (int i = 0; i < p.length; i++)
+            {
+                unichar ch = [p characterAtIndex:i];
+                if (ch =='#' || ch == '\'')
+                {
+                    if(!(prev.length > 0 && [prev characterAtIndex:0] == '-'))
+                        [prev replaceOccurrencesOfString:@"-" withString:@"" options:0 range:NSMakeRange(0, prev.length)];
+                    
+                    [OAUtilities addPrev:prev ps:ps];
+                    [prev setString:@""];
+                }
+                else
+                {
+                    [prev appendString:[NSString stringWithCharacters:&ch length:1]];
+                }
+            }
+            [OAUtilities addPrev:prev ps:ps];
+            if (ps.count > 0)
+            {
+                double n = [ps[0] doubleValue];
+                if (ps.count > 1)
+                {
+                    n += [ps[1] doubleValue] / 60.0;
+                    if (ps.count > 2)
+                        n += [ps[2] doubleValue] / 3600.0;
+                }
+                [numbers addObject:[NSNumber numberWithDouble:n]];
+            }
+        }
+        return numbers;
+}
+    
++ (void) addPrev:(NSString *)prev ps:(NSMutableArray *)ps
+{
+    NSString *trimmed = [prev stringByTrimmingCharactersInSet: [NSCharacterSet whitespaceCharacterSet]];
+    if (trimmed.length > 0)
+    {
+        double val = [trimmed doubleValue];
+        if (val != HUGE_VAL && val != -HUGE_VAL && val != 0.0)
+            [ps addObject:[NSNumber numberWithDouble:val]];
+    }
+}
+
+
 @end

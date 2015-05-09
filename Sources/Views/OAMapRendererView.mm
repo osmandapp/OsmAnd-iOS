@@ -310,6 +310,13 @@
     return _renderer->isSymbolsUpdateSuspended();
 }
 
+- (int)getSymbolsUpdateSuspended
+{
+    int count;
+    _renderer->isSymbolsUpdateSuspended(&count);
+    return count;
+}
+
 - (BOOL)suspendSymbolsUpdate
 {
     return _renderer->suspendSymbolsUpdate();

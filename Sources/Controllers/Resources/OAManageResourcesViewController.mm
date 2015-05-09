@@ -115,8 +115,10 @@ struct RegionResources
     BOOL _doDataUpdateReload;
     
     BOOL _displayBanner;
+    BOOL _displayBannerPurchaseAllMaps;
     OABannerView *_bannerView;
     NSInteger _bannerSection;
+    NSString *_purchaseInAppId;
     
     TTTArrayFormatter *_arrFmt;
     NSNumberFormatter *_numberFormatter;
@@ -223,11 +225,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     
     if (_displayBanner)
     {
-        if (DeviceScreenWidth > 320.0)
-            _bannerView = [[OABannerView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 75.0)];
-        else
-            _bannerView = [[OABannerView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 125.0)];
-
+        _bannerView = [[OABannerView alloc] init];
+        _bannerView.delegate = self;
+        [self updateBannerDimensions:DeviceScreenWidth];
         _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
     }
 }
@@ -269,9 +269,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     self.updateButton.hidden = hideUpdateButton;
     
     [self updateFreeDownloadsBanner];
+    
+    if (_displayBanner)
+        [self updateBannerDimensions:DeviceScreenWidth];
+    
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -310,14 +316,16 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     {
         [UIView animateWithDuration:duration animations:^{            
             [self.tableView beginUpdates];
-            if (DeviceScreenHeight > 320.0)
-                _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, DeviceScreenHeight, 75.0);
-            else
-                _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, DeviceScreenHeight, 125.0);
+            [self updateBannerDimensions:DeviceScreenHeight];
             [self.tableView endUpdates];
         }];
     }
-    
+}
+
+- (void)updateBannerDimensions:(CGFloat)width
+{
+    CGFloat height = [_bannerView getHeightByWidth:width];
+    _bannerView.frame = CGRectMake(_bannerView.frame.origin.x, _bannerView.frame.origin.y, width, height);
 }
 
 -(void)updateFreeDownloadsBanner
@@ -327,53 +335,78 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     NSString *buttonTitle = OALocalizedString(@"shared_string_buy");
     
     OAProduct *product;
+    NSString *regionId;
 
     if (self.region == _app.worldRegion)
     {
-        int freeMaps = [OAIAPHelper freeMapsAvailable];
-        if (freeMaps > 1)
+        if (!_displayBannerPurchaseAllMaps)
         {
-            title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
-            desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];
+            int freeMaps = [OAIAPHelper freeMapsAvailable];
+            if (freeMaps > 1)
+            {
+                title = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_title"), freeMaps];
+                desc = [NSString stringWithFormat:OALocalizedString(@"res_banner_free_maps_desc"), freeMaps];
+            }
+            else
+            {
+                title = OALocalizedString(@"res_banner_no_free_maps_title");
+                desc = OALocalizedString(@"res_banner_no_free_maps_desc");
+            }
+            buttonTitle = OALocalizedString(@"get_unlimited_access");
         }
         else
         {
-            title = OALocalizedString(@"res_banner_no_free_maps_title");
-            desc = OALocalizedString(@"res_banner_no_free_maps_desc");
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_All_World];
+            _purchaseInAppId = kInAppId_Region_All_World;
         }
-        buttonTitle = OALocalizedString(@"get_unlimited_access");
     }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
+    else
     {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Africa];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Asia];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Australia];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Central_America];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Europe];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_North_America];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Russia];
-    }
-    else if ([self.region.regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
-    {
-        product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_South_America];
+        if (self.region.superregion == _app.worldRegion)
+            regionId = self.region.regionId;
+        else
+            regionId = self.region.superregion.regionId;
+        
+        if ([regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Africa];
+            _purchaseInAppId = kInAppId_Region_Africa;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AsiaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Asia];
+            _purchaseInAppId = kInAppId_Region_Asia;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Australia];
+            _purchaseInAppId = kInAppId_Region_Australia;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::CentralAmericaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Central_America];
+            _purchaseInAppId = kInAppId_Region_Central_America;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::EuropeRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Europe];
+            _purchaseInAppId = kInAppId_Region_Europe;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::NorthAmericaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_North_America];
+            _purchaseInAppId = kInAppId_Region_North_America;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_Russia];
+            _purchaseInAppId = kInAppId_Region_Russia;
+        }
+        else if ([regionId isEqualToString:OsmAnd::WorldRegions::SouthAmericaRegionId.toNSString()])
+        {
+            product = [[OAIAPHelper sharedInstance] product:kInAppId_Region_South_America];
+            _purchaseInAppId = kInAppId_Region_South_America;
+        }
     }
 
     if (product)
@@ -1870,8 +1903,53 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 - (void) bannerButtonPressed
 {
-    //
+    if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
+    {
+        _displayBannerPurchaseAllMaps = YES;
+        [self updateFreeDownloadsBanner];
+        [_tableView beginUpdates];
+        [self updateBannerDimensions:DeviceScreenWidth];
+        [_tableView endUpdates];
+    }
+    else if (_purchaseInAppId)
+    {
+        OAProduct *product = [[OAIAPHelper sharedInstance] product:_purchaseInAppId];
+        if (product)
+        {
+            [_refreshRepositoryProgressHUD show:YES];
+            [[OAIAPHelper sharedInstance] buyProduct:product];
+        }
+    }
 }
 
+- (void)productPurchased:(NSNotification *)notification {
+    
+    //NSString * identifier = notification.object;
+    //OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_refreshRepositoryProgressHUD hide:YES];
+        
+        if (_currentScope == kLocalResourcesScope ||
+            (self.region == _app.worldRegion && [[OAIAPHelper sharedInstance] isAnyMapPurchased]) ||
+            (self.region != _app.worldRegion && [self.region isInPurchasedArea]))
+        {
+            if (_displayBanner)
+            {
+                _displayBanner = NO;
+                [self updateContent];
+            }
+        }
+    });
+}
+
+- (void)productPurchaseFailed:(NSNotification *)notification {
+    
+    //NSString * identifier = notification.object;
+    //OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_refreshRepositoryProgressHUD hide:YES];
+    });
+}
 
 @end

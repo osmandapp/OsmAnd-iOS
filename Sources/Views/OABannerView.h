@@ -23,4 +23,6 @@
 
 @property (nonatomic, weak) id<OABannerViewDelegate> delegate;
 
+- (CGFloat) getHeightByWidth:(CGFloat)width;
+
 @end

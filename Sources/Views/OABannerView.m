@@ -13,6 +13,8 @@
     UILabel *_freeTextLabel;
     UILabel *_freeTextDescLabel;
     UIButton *_btnBanner;
+    
+    BOOL _landscape;
 }
 
 
@@ -36,16 +38,9 @@
 
 - (void)layoutSubviews
 {
-    BOOL landscape = self.frame.size.width > 320.0;
-    
-    if (landscape)
+    if (_landscape)
     {
-        CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(240.0, 10000.0)
-                                              options:NSStringDrawingUsesLineFragmentOrigin
-                                           attributes:@{NSFontAttributeName : _btnBanner.titleLabel.font}
-                                              context:nil].size;
-        
-        CGSize btnSize = CGSizeMake(MAX(80.0, s.width + 25.0), _btnBanner.bounds.size.height);
+        CGSize btnSize = [self getButtonSize];
         _btnBanner.frame = CGRectMake(self.frame.size.width - btnSize.width - 20.0, self.frame.size.height / 2.0 - btnSize.height / 2.0, btnSize.width, btnSize.height);
 
         _freeTextLabel.frame = CGRectMake(_freeTextLabel.frame.origin.x, _freeTextLabel.frame.origin.y, _btnBanner.frame.origin.x - 80.0 - 12.0, 36.0);
@@ -61,13 +56,48 @@
         _freeTextDescLabel.frame = CGRectMake(_freeTextDescLabel.frame.origin.x, _freeTextDescLabel.frame.origin.y, self.frame.size.width - 80.0, 36.0);
         [_freeTextDescLabel sizeToFit];
         
-        CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(240.0, 10000.0)
+        CGSize btnSize = [self getButtonSize];
+        _btnBanner.frame = CGRectMake(60.0, _freeTextDescLabel.frame.origin.y + _freeTextDescLabel.frame.size.height + 6.0, btnSize.width, btnSize.height);
+    }
+}
+
+- (CGSize)getButtonSize
+{
+    CGSize s = [_buttonTitle boundingRectWithSize:CGSizeMake(240.0, 36.0)
+                                          options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:@{NSFontAttributeName : _btnBanner.titleLabel.font}
+                                          context:nil].size;
+    return CGSizeMake(MAX(80.0, s.width + 25.0), _btnBanner.bounds.size.height);
+}
+
+- (CGFloat) getHeightByWidth:(CGFloat)width
+{
+    CGSize btnSize = [self getButtonSize];
+    CGSize titleSize = [_title boundingRectWithSize:CGSizeMake(10000.0, 20.0)
+                                          options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:@{NSFontAttributeName : _freeTextLabel.font}
+                                          context:nil].size;
+
+    _landscape = (width - btnSize.width - 20.0 > _freeTextLabel.frame.origin.x + titleSize.width + 12.0) && width > 320.0;
+    
+    if (_landscape)
+    {
+        CGSize descSize = [_desc boundingRectWithSize:CGSizeMake(width - 80.0 - 12.0 - btnSize.width - 20.0, 36.0)
                                               options:NSStringDrawingUsesLineFragmentOrigin
-                                           attributes:@{NSFontAttributeName : _btnBanner.titleLabel.font}
+                                           attributes:@{NSFontAttributeName : _freeTextDescLabel.font}
                                               context:nil].size;
-        
-        CGSize btnSize = CGSizeMake(MAX(80.0, s.width + 25.0), _btnBanner.bounds.size.height);
-        _btnBanner.frame = CGRectMake(60.0, 85.0, btnSize.width, btnSize.height);
+        if (descSize.height > 20.0)
+            return 85.0;
+        else
+            return 75.0;
+    }
+    else
+    {
+        CGSize descSize = [_desc boundingRectWithSize:CGSizeMake(width - 80.0, 36.0)
+                                              options:NSStringDrawingUsesLineFragmentOrigin
+                                           attributes:@{NSFontAttributeName : _freeTextDescLabel.font}
+                                              context:nil].size;
+        return _freeTextDescLabel.frame.origin.y + descSize.height + 6.0 + btnSize.height + 12.0;
     }
 }
 

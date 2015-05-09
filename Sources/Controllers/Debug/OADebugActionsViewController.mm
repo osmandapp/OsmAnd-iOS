@@ -39,8 +39,7 @@
 
     QBooleanElement* _useRawSpeedAndAltitudeOnHUDElement;
     QBooleanElement* _setAllResourcesAsOutdatedElement;
-    
-    
+
     QBooleanElement* _debugStageEnabledElement;
     QBooleanElement* _excludeOnPathSymbolsFromProcessingElement;
     QBooleanElement* _excludeBillboardSymbolsFromProcessingElement;
@@ -64,6 +63,9 @@
     QBooleanElement* _mapLayersBatchingForbiddenElement;
     QBooleanElement* _disableJunkResourcesCleanupElement;
     QBooleanElement* _disableNeededResourcesRequestsElement;
+    QBooleanElement* _disableSkyStageElement;
+    QBooleanElement* _disableMapLayersStageElement;
+    QBooleanElement* _disableSymbolsStageElement;
 
     OAMapViewController* __weak _mapViewController;
     OAMapRendererView* __weak _mapRendererView;
@@ -301,9 +303,21 @@
     disableNeededResourcesRequestsElement.controllerAction = NSStringFromSelector(@selector(ondisableNeededResourcesRequestsSettingChanged));
     [mapRendererSection addElement:disableNeededResourcesRequestsElement];
     
-    
-    
-    
+    //bool disableSkyStage;
+    QBooleanElement* disableSkyStageElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"disableSkyStage") BoolValue:NO];
+    disableSkyStageElement.controllerAction = NSStringFromSelector(@selector(ondisableSkyStageSettingChanged));
+    [mapRendererSection addElement:disableSkyStageElement];
+
+    //bool disableMapLayersStage;
+    QBooleanElement* disableMapLayersStageElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"disableMapLayersStage") BoolValue:NO];
+    disableMapLayersStageElement.controllerAction = NSStringFromSelector(@selector(ondisableMapLayersStageSettingChanged));
+    [mapRendererSection addElement:disableMapLayersStageElement];
+
+    //bool disableSymbolsStage;
+    QBooleanElement* disableSymbolsStageElement = [[QBooleanElement alloc] initWithTitle:OALocalizedString(@"disableSymbolsStage") BoolValue:NO];
+    disableSymbolsStageElement.controllerAction = NSStringFromSelector(@selector(ondisableSymbolsStageSettingChanged));
+    [mapRendererSection addElement:disableSymbolsStageElement];
+
     self = [super initWithRoot:rootElement];
     if (self) {
         _app = app;
@@ -345,6 +359,9 @@
         _mapLayersBatchingForbiddenElement = mapLayersBatchingForbiddenElement;
         _disableJunkResourcesCleanupElement = disableJunkResourcesCleanupElement;
         _disableNeededResourcesRequestsElement = disableNeededResourcesRequestsElement;
+        _disableSkyStageElement = disableSkyStageElement;
+        _disableMapLayersStageElement = disableMapLayersStageElement;
+        _disableSymbolsStageElement = disableSymbolsStageElement;
         
     }
     return self;
@@ -404,6 +421,9 @@
     _mapLayersBatchingForbiddenElement.boolValue = _mapRendererDebugSettings->mapLayersBatchingForbidden;
     _disableJunkResourcesCleanupElement.boolValue = _mapRendererDebugSettings->disableJunkResourcesCleanup;
     _disableNeededResourcesRequestsElement.boolValue = _mapRendererDebugSettings->disableNeededResourcesRequests;
+    _disableSkyStageElement.boolValue = _mapRendererDebugSettings->disableSkyStage;
+    _disableMapLayersStageElement.boolValue = _mapRendererDebugSettings->disableMapLayersStage;
+    _disableSymbolsStageElement.boolValue = _mapRendererDebugSettings->disableSymbolsStage;
 }
 
 - (void)onBackButtonClicked
@@ -609,6 +629,22 @@
     [self applyMapRenderDebugSettings];
 }
 
+- (void)ondisableSkyStageSettingChanged
+{
+    _mapRendererDebugSettings->disableSkyStage = _disableSkyStageElement.boolValue;
+    [self applyMapRenderDebugSettings];
+}
 
+- (void)ondisableMapLayersStageSettingChanged
+{
+    _mapRendererDebugSettings->disableMapLayersStage = _disableMapLayersStageElement.boolValue;
+    [self applyMapRenderDebugSettings];
+}
+
+- (void)ondisableSymbolsStageSettingChanged
+{
+    _mapRendererDebugSettings->disableSymbolsStage = _disableSymbolsStageElement.boolValue;
+    [self applyMapRenderDebugSettings];
+}
 
 @end

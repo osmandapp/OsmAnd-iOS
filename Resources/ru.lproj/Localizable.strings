@@ -351,3 +351,6 @@
 "my_location" = "Мое местоположение";
 "all_categories" = "Все категории";
 "get_unlimited_access" = "Неограниченный доступ";
+"shared_string_or" = "или";
+"latitude" = "Широта";
+"longitude" = "Долгота";

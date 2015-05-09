@@ -444,6 +444,8 @@ typedef enum
                 self.searchStringPrev = [searchStr copy];
 
             _dataInvalidated = NO;
+            
+            //NSArray *foundCoords = [OAUtilities splitCoordinates:searchStr];
 
             // Build category/filter/type items array
             [self updateSearchResults];

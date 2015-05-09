@@ -22,4 +22,6 @@
 + (NSDictionary *)parseUrlQuery:(NSURL *)url;
 + (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 
++ (NSString *) splitCoordinates:(NSString *)string;
+
 @end

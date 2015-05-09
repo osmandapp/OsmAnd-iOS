@@ -16,6 +16,7 @@
 "shared_string_add" = "Add";
 "shared_string_buy" = "Buy";
 "shared_string_buy_for" = "for";
+"shared_string_or" = "or";
 
 // HUD
 "hud_heading" = "Heading";
@@ -365,3 +366,7 @@
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
+
+"latitude" = "Latitude";
+"longitude" = "Longitude";
+

@@ -1,0 +1,53 @@
+"OsmAnd Maps" = "OsmAnd 地圖";
+// Shared Strings
+"shared_string_back" = "返回";
+"shared_string_ok" = "確定";
+"shared_string_cancel" = "取消";
+"shared_string_no" = "否";
+"shared_string_yes" = "是";
+"shared_string_save" = "儲存";
+"shared_string_done" = "完成";
+"shared_string_update" = "更新";
+"shared_string_install" = "安裝";
+"shared_string_uninstall" = "解除安裝";
+"shared_string_delete" = "删除";
+"shared_string_add" = "新增";
+"shared_string_buy" = "購買";
+"shared_string_buy_for" = "給";
+"shared_string_or" = "或是";
+// HUD
+"hud_heading" = "標題";
+"hud_no_movement" = "未移動";
+// Favorites
+"fav_color" = "顏色";
+"fav_colors" = "顏色";
+"fav_name" = "名稱";
+"fav_group" = "群組";
+"groups" = "群組";
+"favorite" = "我的最愛";
+"fav_no_group" = "無群組";
+"fav_remove_q" = "移除我的最愛？";
+"fav_import" = "匯入";
+"fav_import_title" = "匯入我的最愛";
+"fav_export_title" = "匯出我的最愛";
+"fav_select_remove" = "請選擇要移除的我的最愛";
+"fav_export_select" = "請選擇要匯出的我的最愛";
+"fav_import_desc" = "您可以從 GPX 檔案，匯入您的我的最愛作為航點 （共通的 GPS 資料格式）\n\n 要分享 favorites.gpx 檔案，您可以從 Dropbox 開啟檔案、電子郵件或任何其它的來源 - 在功能裡使用開啟。";
+"fav_create_group" = "建立新群組";
+"fav_enter_group_name" = "輸入群組名稱";
+"fav_exists" = "我的最愛所用名稱\"%@\"已經存在";
+"fav_ignore" = "略過";
+"fav_rename" = "更名";
+"fav_replace" = "取代";
+"fav_replace_all" = "全部取代";
+"fav_rename_q" = "更名我的最愛";
+"fav_enter_new_name" = "請為我的最愛輸入新名稱";
+// POI
+"poi_insrease_radius" = "提高搜尋半徑到";
+"poi_max_radius_reached" = "已達到最大搜尋半徑";
+"poi_search_near_center" = "已執行在地圖中心附近的查尋";
+"poi_hide" = "隱藏";
+// My Places
+"favorites" = "我的最愛";
+// GPX
+"gpx_point" = "點";

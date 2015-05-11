@@ -325,3 +325,9 @@
 "product_desc_parking" = "Gør det nemt at huske hvor bilen er parkeret og hvor meget tid der er tilbage, hvis parkeringen er tidsbegrænset";
 "add_as" = "Tilføj som";
 "track_save_short_q" = "Sporet er for kort, vil du gemme?";
+"gpx_import_desc" = "Du kan importere dine GPX filer (fælles GPS dataformat)\n\nFor at dele GPX-filen, kan du åbne filen fra Dropbox, E-mail eller nogen anden kilde - brug Åbnes med funktionen";
+"res_no_space_free" = "er nødvendig. Frigør noget plads.";
+"res_inst_avail_cell_q" = "Intallation af %@ brug %@ til at blive hentet over mobilnetværk.";
+"res_inst_avail_wifi_q" = "Intallation af %@ brug %@ til at blive hentet over WiFi netværk.";
+"res_updates_exp" = "Køb kontinenter for at opdatere kortene";
+"loc_access_denied_desc" = "Adgang til placeringstjeneste er blevet nægtet";

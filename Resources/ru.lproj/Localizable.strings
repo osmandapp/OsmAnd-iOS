@@ -354,3 +354,5 @@
 "shared_string_or" = "или";
 "latitude" = "Широта";
 "longitude" = "Долгота";
+"track_save_short_q" = "Трек почти пустой, сохранить?";
+"add_as" = "Добавить как";

@@ -296,3 +296,6 @@
 "res_banner_no_free_maps_desc" = "Bitte regionale oder gesamte Weltkarten erwerben";
 "shared_string_buy_for" = "für";
 "all_categories" = "Alle Kategorien";
+"shared_string_or" = "oder";
+"show_info" = "Zeige Info";
+"res_banner_free_maps_desc" = "Download von %d kostenlosen Karten (Updates nicht verfügbar!) möglich";

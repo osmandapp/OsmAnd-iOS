@@ -2186,6 +2186,7 @@
 		8440E2E51ABEB2450088856A /* OAPointDescCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointDescCell.xib; path = Resources/Controllers/Cells/OAPointDescCell.xib; sourceTree = "<group>"; };
 		8440E2EC1ABEB28E0088856A /* OAPointDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointDescCell.h; path = Controllers/Cells/OAPointDescCell.h; sourceTree = "<group>"; };
 		8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointDescCell.m; path = Controllers/Cells/OAPointDescCell.m; sourceTree = "<group>"; };
+		84448CA31B008A0600B66A8A /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPurchasesViewController.xib; path = Resources/OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		844499451AAA14E900ACA20D /* OADestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADestinationViewController.xib; path = Resources/OADestinationViewController.xib; sourceTree = "<group>"; };
 		844499491AAA1FC000ACA20D /* bt_buy_addon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bt_buy_addon.png; path = Resources/Icons/bt_buy_addon.png; sourceTree = "<group>"; };
@@ -4074,6 +4075,7 @@
 				pt,
 				es,
 				fr,
+				da,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -6029,6 +6031,7 @@
 				842D18BE1AE5472700763A91 /* pt */,
 				842D18BF1AE5472B00763A91 /* es */,
 				842D18C01AE5474200763A91 /* fr */,
+				84448CA31B008A0600B66A8A /* da */,
 			);
 			name = Localizable.strings;
 			path = Resources;

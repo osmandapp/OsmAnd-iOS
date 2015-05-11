@@ -48,6 +48,19 @@
         _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     if (_destinations == nil)
         _destinations = [NSMutableArray array];
+    
+    if (isnan(_mapLastViewedState.zoom) || _mapLastViewedState.zoom < 1.0f || _mapLastViewedState.zoom > 23.0f)
+        _mapLastViewedState.zoom = 3.0f;
+    
+    if (_mapLastViewedState.target31.x < 0 || _mapLastViewedState.target31.y < 0)
+    {
+        Point31 p;
+        p.x = 1073741824;
+        p.y = 1073741824;
+        _mapLastViewedState.target31 = p;
+        _mapLastViewedState.zoom = 3.0f;
+    }
+    
 }
 
 @synthesize lastMapSource = _lastMapSource;

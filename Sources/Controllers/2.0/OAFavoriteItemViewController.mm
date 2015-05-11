@@ -518,37 +518,61 @@ typedef enum
 
 }
 
+
+- (BOOL) isFavExists:(NSString *)name
+{
+    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        if ((localFavorite != self.favorite.favorite) &&
+            [name isEqualToString:localFavorite->getTitle().toNSString()])
+        {
+            return YES;
+        }
+
+    return NO;
+}
+
+- (NSString *) getNewFavName:(NSString *)favoriteTitle
+{
+    NSString *newName;
+    for (int i = 2; i < 100000; i++) {
+        newName = [NSString stringWithFormat:@"%@_%d", favoriteTitle, i];
+        if (![self isFavExists:newName])
+            break;
+    }
+    return newName;
+}
+
 - (void)doSave:(BOOL)flyToFav
 {
     if ([self.favoriteNameTextView isFirstResponder])
         self.favorite.favorite->setTitle(QString::fromNSString(self.favoriteNameTextView.text));
     
     NSString *favoriteTitle = self.favorite.favorite->getTitle().toNSString();
-    for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+    
+    if ([self isFavExists:favoriteTitle])
     {
-        if ((localFavorite != self.favorite.favorite) &&
-            [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()]) {
-            
-            [[[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems:
-              [RIButtonItem itemWithLabel:OALocalizedString(@"fav_ignore") action:^{
-                [self saveAndExit:flyToFav];
-            }],
-              [RIButtonItem itemWithLabel:OALocalizedString(@"fav_replace") action:^{
-                for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        NSString *newName = [self getNewFavName:favoriteTitle];
+        
+        [[[UIAlertView alloc] initWithTitle:@"" message:[NSString stringWithFormat:OALocalizedString(@"fav_exists"), favoriteTitle] cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems:
+          [RIButtonItem itemWithLabel:[NSString stringWithFormat:@"%@ %@", OALocalizedString(@"add_as"), newName] action:^{
+            self.favorite.favorite->setTitle(QString::fromNSString(newName));
+            [self saveAndExit:flyToFav];
+        }],
+          [RIButtonItem itemWithLabel:OALocalizedString(@"fav_replace") action:^{
+            for(const auto& localFavorite : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+            {
+                if ((localFavorite != self.favorite.favorite) &&
+                    [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()])
                 {
-                    if ((localFavorite != self.favorite.favorite) &&
-                        [favoriteTitle isEqualToString:localFavorite->getTitle().toNSString()])
-                    {
-                        [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(localFavorite);
-                        break;
-                    }
+                    [OsmAndApp instance].favoritesCollection->removeFavoriteLocation(localFavorite);
+                    break;
                 }
-                [self saveAndExit:flyToFav];
-            }],
-              nil] show];
-            
-            return;
-        }
+            }
+            [self saveAndExit:flyToFav];
+        }],
+          nil] show];
+        
+        return;
     }
     
     [self saveAndExit:flyToFav];

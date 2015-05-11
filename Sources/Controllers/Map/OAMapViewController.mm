@@ -2648,8 +2648,10 @@
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
+    CGFloat z = [self normalizeZoom:zoom defaultZoom:mapView.zoom];
+    
     CGFloat screensToFly = [self screensToFly:position31];
-
+    
     _app.mapMode = OAMapModeFree;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
@@ -2660,7 +2662,7 @@
                                           kQuickAnimationTime,
                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                           kUserInteractionAnimationKey);
-        mapView.animator->animateZoomTo(zoom,
+        mapView.animator->animateZoomTo(z,
                                         kQuickAnimationTime,
                                         OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                         kUserInteractionAnimationKey);
@@ -2669,10 +2671,31 @@
     else
     {
         [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
-        [mapView setZoom:zoom];
+        [mapView setZoom:z];
     }
 }
 
+- (CGFloat)normalizeZoom:(CGFloat)zoom defaultZoom:(CGFloat)defaultZoom
+{
+    OAMapRendererView* renderer = (OAMapRendererView*)self.view;
+
+    if (!isnan(zoom))
+    {
+        if (zoom < renderer.minZoom)
+            return renderer.minZoom;
+        if (zoom > renderer.maxZoom)
+            return renderer.maxZoom;
+        return zoom;
+    }
+    else if (isnan(zoom) && !isnan(defaultZoom))
+    {
+        return defaultZoom;
+    }
+    else
+    {
+        return 3.0;
+    }
+}
 
 - (void)showTempGpxTrack:(NSString *)fileName
 {

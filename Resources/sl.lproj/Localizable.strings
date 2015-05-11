@@ -57,3 +57,33 @@
 "fav_import" = "Uvozi";
 "fav_import_title" = "Uvozi priljubljene točke";
 "fav_export_title" = "Izvozi priljubljene točke";
+"fav_create_group" = "Ustvari novo skupino";
+"fav_enter_group_name" = "Ime skupine";
+"fav_ignore" = "Prezri";
+"fav_rename" = "Preimenuj";
+"fav_replace" = "Zamenjaj";
+"fav_replace_all" = "Zamenjaj vse";
+"fav_rename_q" = "Odstrani priljubljeno";
+"fav_enter_new_name" = "Vnesite ime priljubljene točke";
+// POI
+"poi_insrease_radius" = "Povečaj območje iskanja";
+"poi_search_near_center" = "Iskanje se izvaja v bližini trenutne sredine zemljevida";
+"poi_hide" = "Skrij";
+// My Places
+"favorites" = "Priljubljene";
+"tracks" = "Sledi";
+// GPX
+"gpx_point" = "Točka";
+"gpx_waypoints" = "Vmesne točke";
+"gpx_points" = "Točke";
+"gpx_export" = "Izvozi";
+"import_export" = "Uvoz/Izvoz";
+"gpx_import_title" = "Uvozi sled";
+"gpx_add_new" = "Dodaj novo datoteko";
+"gpx_overwrite" = "Prepiši";
+"gpx_no_tracks" = "";
+"gpx_remove" = "Ali želite odstraniti sled?";
+"gpx_stat" = "Statistika";
+"gpx_route_time" = "Čas poti";
+"gpx_distance" = "Razdalja";
+"gpx_average_speed" = "Povprečna hitrost";

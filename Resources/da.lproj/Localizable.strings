@@ -323,3 +323,5 @@
 "alert_inet_needed" = "Internetforbindelse kræves for at udføre denne handling. Kontroller din internetforbindelse.";
 "cannot_access_calendar" = "Kan ikke få adgang Kalender";
 "product_desc_parking" = "Gør det nemt at huske hvor bilen er parkeret og hvor meget tid der er tilbage, hvis parkeringen er tidsbegrænset";
+"add_as" = "Tilføj som";
+"track_save_short_q" = "Sporet er for kort, vil du gemme?";

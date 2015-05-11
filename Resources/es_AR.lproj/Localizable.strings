@@ -1,0 +1,10 @@
+"rendering_attr_subwayMode_name" = "Rutas de subte";
+"rendering_attr_OSMMapperAssistant_name" = "Asistente de mapeador OSM";
+"rendering_value__name" = "Predeterminado";
+"rendering_value_orange_name" = "Anaranjado";
+"res_banner_free_maps_desc" = "Puedes descargar %d mapas gratis, sin cambios";
+"rendering_attr_hideBuildings_name" = "Ocultar edificios";
+"rendering_attr_moreDetailed_name" = "Más detalles";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Mostrar restricciones de acceso";
+"rendering_attr_showCycleRoutes_name" = "Mostrar rutas ciclistas";

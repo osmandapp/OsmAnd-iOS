@@ -222,25 +222,25 @@
                                                               }
                                                               case 3:
                                                               {
-                                                                  _settings.mapSettingTrackRecording = NO;
-                                                                  if ([_recHelper hasDataToSave])
-                                                                      [_recHelper saveDataToGpx];
-                                                                  dispatch_async(dispatch_get_main_queue(), ^{
-                                                                      [_widgetsView updateGpxRec];
-                                                                  });
-                                                                  
-                                                                  [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
-                                                                                          message:nil
-                                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
-                                                                                      otherTitle:OALocalizedString(@"shared_string_yes")
-                                                                                          otherImage:nil
-                                                                                       completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                                                                           if (!cancelled) {
-                                                                                               _settings.mapSettingTrackRecording = YES;
-
-                                                                                           }
-                                                                                       }];
-                                                                  
+                                                                  if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                                                                  {
+                                                                      [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
+                                                                                              message:nil
+                                                                                          cancelTitle:OALocalizedString(@"shared_string_no")
+                                                                                           otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                                           otherImage:nil
+                                                                                           completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                                                                               if (!cancelled) {
+                                                                                                   _settings.mapSettingTrackRecording = NO;
+                                                                                                   [self saveTrack:YES];
+                                                                                               }
+                                                                                           }];
+                                                                  }
+                                                                  else
+                                                                  {
+                                                                      _settings.mapSettingTrackRecording = NO;
+                                                                      [self saveTrack:YES];
+                                                                  }
                                                                   break;
                                                               }
                                                               default:
@@ -295,11 +295,23 @@
                                              }
                                              case 3:
                                              {
-                                                 if ([_recHelper hasDataToSave])
-                                                     [_recHelper saveDataToGpx];
-                                                 dispatch_async(dispatch_get_main_queue(), ^{
-                                                     [_widgetsView updateGpxRec];
-                                                 });
+                                                 if ([_recHelper hasDataToSave] && _recHelper.distance < 10.0)
+                                                 {
+                                                     [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
+                                                                             message:nil
+                                                                         cancelTitle:OALocalizedString(@"shared_string_no")
+                                                                          otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                          otherImage:nil
+                                                                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                                                              if (!cancelled) {
+                                                                                  [self saveTrack:NO];
+                                                                              }
+                                                                          }];
+                                                 }
+                                                 else
+                                                 {
+                                                     [self saveTrack:NO];
+                                                 }
                                                  break;
                                              }
                                                  
@@ -340,8 +352,30 @@
             
         }
     }
-    
+}
 
+- (void) saveTrack:(BOOL)askForRec
+{
+    if ([_recHelper hasDataToSave])
+        [_recHelper saveDataToGpx];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_widgetsView updateGpxRec];
+    });
+    
+    if (askForRec)
+    {
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_no")
+                             otherTitle:OALocalizedString(@"shared_string_yes")
+                             otherImage:nil
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled) {
+                                     _settings.mapSettingTrackRecording = YES;
+                                     
+                                 }
+                             }];
+    }
 }
 
 - (void)updateHUD:(BOOL)animated
@@ -518,6 +552,12 @@
     [self saveMapStateIfNeeded];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+
+    if (isnan(zoom))
+        zoom = renderView.zoom;
+    if (zoom > 22.0f)
+        zoom = 22.0f;
+    
     [_mapViewController goToPosition:destinationPoint
                              andZoom:zoom
                             animated:animated];
@@ -542,14 +582,21 @@
         double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
         double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
         
-        CGSize mapSize = destinationView.bounds.size;
+        CGSize mapSize;
+        if (destinationView)
+            mapSize = destinationView.bounds.size;
+        else
+            mapSize = self.view.bounds.size;
         
         CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
         CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
         CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
         
-        OAMapRendererView *renderer = (OAMapRendererView*)_mapViewController.view;
-        CGFloat zoom = renderer.zoom - newZoom;
+        CGFloat zoom = renderView.zoom - newZoom;
+        if (isnan(zoom))
+            zoom = renderView.zoom;
+        if (zoom > 22.0f)
+            zoom = 22.0f;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom
@@ -611,8 +658,11 @@
         CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
         CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
         
-        OAMapRendererView *renderer = (OAMapRendererView*)_mapViewController.view;
-        CGFloat zoom = renderer.zoom - newZoom;
+        CGFloat zoom = renderView.zoom - newZoom;
+        if (isnan(zoom))
+            zoom = renderView.zoom;
+        if (zoom > 22.0f)
+            zoom = 22.0f;
         
         [_mapViewController goToPosition:center
                                  andZoom:zoom

@@ -287,6 +287,13 @@
             }
         }
     }
+    
+    if (_maxElevation < _minElevation)
+    {
+        _maxElevation = 0.0;
+        _minElevation = 0.0;
+    }
+    
     if(![self isTimeSpecified]){
         _startTime = fileStamp;
         _endTime = fileStamp;

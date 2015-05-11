@@ -224,7 +224,7 @@
 
 - (BOOL) hasData
 {
-    return points > 0 || distance > 0;
+    return points > 0 || distance > 0 || lastPoint.longitude > 0 || lastPoint.latitude > 0;
 }
 
 - (BOOL) hasDataToSave
@@ -691,7 +691,7 @@
 
 - (BOOL) saveIfNeeded
 {
-    if ([self hasDataToSave] && ([[NSDate date] timeIntervalSince1970] - [self getLastTrackPointTime] >= 60 * 30))
+    if ([self hasDataToSave] && (distance > 10.0) && ([[NSDate date] timeIntervalSince1970] - [self getLastTrackPointTime] >= 60 * 30))
     {
         [self saveDataToGpx];
         return YES;

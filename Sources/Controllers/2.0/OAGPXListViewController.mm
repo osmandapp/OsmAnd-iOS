@@ -261,6 +261,8 @@ typedef enum
             
             if (!_recCell.btnSaveGpx.enabled && ([_savingHelper hasData]))
                 _recCell.btnSaveGpx.enabled = YES;
+
+            _recCell.selectionStyle = ([_savingHelper hasData] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone);
         }
         
     });
@@ -387,6 +389,8 @@ typedef enum
                 [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
                 [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
                 
+                _recCell.selectionStyle = ([_savingHelper hasData] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone);
+                
                 [self updateRecImg];
                 [self updateRecBtn];
             }
@@ -478,7 +482,7 @@ typedef enum
     }
     else
     {
-        if (!settings.mapSettingSaveTrackIntervalApproved)
+        if (!settings.mapSettingSaveTrackIntervalApproved && ![_savingHelper hasData])
         {
             OATrackIntervalDialogView *view = [[OATrackIntervalDialogView alloc] initWithFrame:CGRectMake(0.0, 0.0, 252.0, 116.0)];
             
@@ -535,14 +539,35 @@ typedef enum
 
 - (void)saveGpxPressed
 {
+    if ([_savingHelper hasDataToSave] && _savingHelper.distance < 10.0)
+    {
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_no")
+                             otherTitle:OALocalizedString(@"shared_string_yes")
+                             otherImage:nil
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled) {
+                                     [self doSaveTrack];
+                                 }
+                             }];
+    }
+    else
+    {
+        [self doSaveTrack];
+    }
+}
+
+- (void)doSaveTrack
+{
     BOOL wasRecording = [OAAppSettings sharedManager].mapSettingTrackRecording;
     [OAAppSettings sharedManager].mapSettingTrackRecording = NO;
-
+    
     if ([_savingHelper hasDataToSave])
         [_savingHelper saveDataToGpx];
     
     [self updateRecBtn];
-
+    
     [self generateData];
     [self setupView];
     

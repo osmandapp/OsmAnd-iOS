@@ -56,3 +56,7 @@
 "fav_rename_q" = "Renombrar favorito";
 "fav_enter_new_name" = "Ingrese el nuevo nombre para el favorito";
 "poi_max_radius_reached" = "Alcanzado máximo radio de búsqueda";
+"rendering_attr_roadStyle_name" = "Estilo vial";
+"rendering_attr_alpineHiking_name" = "Escala de senderismo Alpino (SAC)";
+"rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
+"rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";

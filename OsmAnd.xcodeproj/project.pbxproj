@@ -2232,6 +2232,7 @@
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		849686BC1B0344D700FC8DDA /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849686BD1B0344E100FC8DDA /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		849686BE1B03466E00FC8DDA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849E81271AFA142F00549953 /* OATimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATimeCell.xib; path = Resources/Controllers/Cells/OATimeCell.xib; sourceTree = "<group>"; };
 		849E812E1AFA146E00549953 /* OATimeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATimeTableViewCell.h; path = Controllers/Cells/OATimeTableViewCell.h; sourceTree = "<group>"; };
 		849E812F1AFA146E00549953 /* OATimeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATimeTableViewCell.m; path = Controllers/Cells/OATimeTableViewCell.m; sourceTree = "<group>"; };
@@ -4080,6 +4081,7 @@
 				da,
 				sl,
 				be,
+				pl,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -6038,6 +6040,7 @@
 				84448CA31B008A0600B66A8A /* da */,
 				849686BC1B0344D700FC8DDA /* be */,
 				849686BD1B0344E100FC8DDA /* sl */,
+				849686BE1B03466E00FC8DDA /* pl */,
 			);
 			name = Localizable.strings;
 			path = Resources;

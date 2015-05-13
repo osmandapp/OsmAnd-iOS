@@ -246,7 +246,7 @@
 "hud_heading" = "Retning";
 "fav_import_desc" = "Importer favoritter som rutepunkter i en GPX-fil (fælles GPS-data format)\n\nDel favorites.gpx ved at åbne filen fra Dropbox, e-mail eller en hvilken som helst anden kilde - Brug Åben med funktionen.";
 "gpx_route_time" = "Rutetiden";
-"gpx_uphldownhl" = "Op-/nedad";
+"gpx_uphldownhl" = "Op-/nedstigning";
 "track_recording" = "Optagelse af spor";
 "track_continue_rec_q" = "Fortsæt optagelsen?";
 "m_style_walk" = "Gang";

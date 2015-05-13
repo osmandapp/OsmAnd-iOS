@@ -232,3 +232,70 @@
 "more" = "更多";
 "parking_marker" = "停車標記";
 "time_limited" = "有時限";
+"add_notification_calendar" = "增加通知到日曆中";
+"parking_time_limited" = "停車時限到";
+"time_left" = "左";
+"time_overdue" = "已過時";
+"cannot_add_marker" = "不能增加停車場";
+"cannot_add_marker_desc" = "請至少移除一個指引，然後重試";
+"cannot_add_destination" = "不能增加指引";
+// Units
+"units_km" = "公里";
+"units_m" = "公尺";
+"units_mi" = "哩";
+"units_yd" = "碼";
+"units_ft" = "呎";
+"units_kmh" = "公里/時";
+"units_mph" = "哩/時";
+"units_hour" = "小時";
+"units_min" = "分";
+"units_sec" = "秒";
+"map_remind" = "稍後提醒我";
+"map_no_address" = "還不知道地址";
+// Import
+"import_title" = "匯入資料";
+"import_choose_type" = "請選擇要匯入的內容";
+"import_favorite" = "我的最愛";
+"import_failed" = "匯入失敗";
+"import_cannot" = "指定的檔案無法匯入";
+"import_gpx" = "GPX 軌跡";
+// Alerts
+"alert_inet_needed" = "執行此動作需要連線網際網路。請檢查您的網際網路連線。";
+// Context menu
+"ctx_mnu_edit_fav" = "編輯我的最愛";
+"ctx_mnu_add_fav" = "增加我的最愛";
+"ctx_mnu_share" = "分享";
+"ctx_mnu_direction" = "指引";
+// Location Services
+"loc_access_denied" = "存取被拒絕";
+"loc_access_denied_desc" = "位置服務的存取已被拒絕";
+// Colors
+"col_purple" = "紫色";
+"col_green" = "綠色";
+"col_yellow" = "黃色";
+"col_orange" = "橙色";
+"col_gray" = "灰色";
+"col_red" = "紅色";
+"col_blue" = "藍色";
+"col_magenta" = "洋紅色";
+// World Regions
+"region_africa" = "非洲";
+"region_asia" = "亞洲";
+"region_ausralia_and_oceania" = "澳大利亞和大洋洲";
+"region_central_america" = "中美洲";
+"region_europe" = "歐洲";
+"region_north_america" = "北美洲";
+"region_russia" = "俄羅斯";
+"region_south_america" = "南美洲";
+// Help
+"help_quiz" = "測驗";
+"units_minutes_short" = "分";
+"units_seconds_short" = "秒";
+"cannot_access_calendar" = "無法存取日曆";
+// Map
+"map_inst_det_map_q" = "安裝詳細的地圖概要，從您的位置中獲得週圍更多的詳細資訊。";
+"reminder_not_set_text" = "不設定提醒，因為您不允許存取日曆";
+//inapps
+"product_title_nautical" = "航海地圖";
+"product_desc_nautical" = "全世界的航海地圖";
+"product_title_parking" = "停車地點";

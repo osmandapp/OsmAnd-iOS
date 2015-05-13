@@ -2230,6 +2230,8 @@
 		8463101B1A8E8951005B39F2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
+		849686BC1B0344D700FC8DDA /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
+		849686BD1B0344E100FC8DDA /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849E81271AFA142F00549953 /* OATimeCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATimeCell.xib; path = Resources/Controllers/Cells/OATimeCell.xib; sourceTree = "<group>"; };
 		849E812E1AFA146E00549953 /* OATimeTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATimeTableViewCell.h; path = Controllers/Cells/OATimeTableViewCell.h; sourceTree = "<group>"; };
 		849E812F1AFA146E00549953 /* OATimeTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATimeTableViewCell.m; path = Controllers/Cells/OATimeTableViewCell.m; sourceTree = "<group>"; };
@@ -4076,6 +4078,8 @@
 				es,
 				fr,
 				da,
+				sl,
+				be,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -6032,6 +6036,8 @@
 				842D18BF1AE5472B00763A91 /* es */,
 				842D18C01AE5474200763A91 /* fr */,
 				84448CA31B008A0600B66A8A /* da */,
+				849686BC1B0344D700FC8DDA /* be */,
+				849686BD1B0344E100FC8DDA /* sl */,
 			);
 			name = Localizable.strings;
 			path = Resources;

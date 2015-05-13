@@ -681,7 +681,7 @@
         
         double delta = (lambda - lambdaOrig) / lambda;
 
-        if (abs(delta) < 1.0e-12)
+        if (fabs(delta) < 1.0e-12)
             break;
     }
     

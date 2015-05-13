@@ -93,10 +93,10 @@
 "gpx_cannot_import" = "無法匯入指定的 GPX 檔案";
 "gpx_export_title" = "匯出軌跡";
 "gpx_export_select_track" = "請選擇要匯出的軌跡";
-"add_waypoint" = "增加航點到已記錄的 軌跡";
+"add_waypoint" = "增加航點到已錄製的軌跡";
 "add_waypoint_short" = "增加航點";
 "gpx_import_desc" = "您可以匯入您的 GPX 檔案 （共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
-"gpx_no_tracks" = "那裡沒有軌跡";
+"gpx_no_tracks" = "沒有軌跡";
 "gpx_remove" = "要移除軌跡嗎？";
 "gpx_stat" = "統計";
 "gpx_route_time" = "路線時間";
@@ -118,14 +118,14 @@
 "track_continue_rec_q" = "您想要繼續錄製嗎？";
 "rec_interval" = "記錄間隔";
 "rec_interval_minimum" = "最小值";
-"track_start_rec" = "開始軌跡錄製";
+"track_start_rec" = "開始錄製軌跡";
 "track_rec_addon_q" = "請啟動旅程記錄外掛元件來記錄並儲存您的軌跡";
 "track_interval_remember" = "記住我的選擇";
 "track_clear" = "清除目前的軌跡";
 "track_clear_q" = "您想要清除目前的軌跡嗎？";
 "show_info" = "顯示資訊";
 // Map settings
-"m_style_overview" = "概要";
+"m_style_overview" = "概覽";
 "m_style_car" = "汽車";
 "m_style_walk" = "步行";
 "m_style_bicycle" = "自行車";
@@ -198,8 +198,8 @@
 "res_maps_inst" = "地圖";
 "res_deleting" = "正在刪除...";
 "res_wsea_map" = "全球航線標識";
-"res_wmap" = "全球概要地圖";
-"res_dmap" = "詳細概要地圖";
+"res_wmap" = "全球地圖概覽";
+"res_dmap" = "詳細地圖概覽";
 "res_map_of_region" = "區域的地圖";
 "res_update_no_space" = "剩餘空間不足以更新";
 "res_install_no_space" = "沒有足夠的空間安裝";
@@ -293,7 +293,7 @@
 "units_seconds_short" = "秒";
 "cannot_access_calendar" = "無法存取日曆";
 // Map
-"map_inst_det_map_q" = "安裝詳細的地圖概要，從您的位置中獲得週圍更多的詳細資訊。";
+"map_inst_det_map_q" = "安裝詳細的地圖概覽，從您的位置中獲得週圍更多的詳細資訊。";
 "reminder_not_set_text" = "不設定提醒，因為您不允許存取日曆";
 //inapps
 "product_title_nautical" = "航海地圖";
@@ -328,6 +328,6 @@
 "longitude" = "經度";
 "track_save_short_q" = "軌跡太短，您想要儲存嗎？";
 "add_as" = "新增為";
-"product_desc_track_recording" = "啟動功能，來記錄和儲存您的軌跡";
+"product_desc_track_recording" = "啟動記錄和儲存您軌跡的功能";
 "pickup_car" = "取車";
 "pickup_car_at" = "取車地方在";

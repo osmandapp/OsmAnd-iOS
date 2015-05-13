@@ -299,3 +299,7 @@
 "product_title_nautical" = "航海地圖";
 "product_desc_nautical" = "全世界的航海地圖";
 "product_title_parking" = "停車地點";
+"product_desc_parking" = "如果停車受時間限制的話，當把車停放的時候，能讓您很容易的記住，還剩餘多少時間";
+"product_title_skimap" = "滑雪地圖";
+"product_desc_skimap" = "全世界所有滑雪勝地的滑雪坡";
+"product_title_track_recording" = "錄製旅程";

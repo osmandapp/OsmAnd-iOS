@@ -328,3 +328,7 @@
 "res_banner_no_free_maps_title" = "¡No tienes mapas gratuitos!";
 "res_banner_no_free_maps_desc" = "Compre mapas regionales o mundiales";
 "get_unlimited_access" = "Obtén acceso ilimitado";
+"shared_string_or" = "o";
+"latitude" = "Latitud";
+"longitude" = "Longitud";
+"add_as" = "Añadir como";

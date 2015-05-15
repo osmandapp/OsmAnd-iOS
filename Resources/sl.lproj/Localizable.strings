@@ -31,7 +31,7 @@
 "rendering_attr_showAccess_name" = "Prikaži omejitve dostopa";
 "rendering_attr_showSurfaceGrade_name" = "Pokaži kakovost cest";
 "rendering_attr_showSurfaces_name" = "Pokaži površino cest";
-"rendering_attr_showCycleRoutes_name" = "Pokaži kolesarske poti";
+"rendering_attr_showCycleRoutes_name" = "Kolesarske poti";
 "rendering_attr_alpineHiking_name" = "Lestvica alpskega pohodništva (SAC)";
 "rendering_attr_osmcTraces_name" = "Prosojnica s simboli za pohodništvo";
 "rendering_attr_noAdminboundaries_name" = "Ne izriši upravnih mej";
@@ -87,3 +87,57 @@
 "gpx_route_time" = "Čas poti";
 "gpx_distance" = "Razdalja";
 "gpx_average_speed" = "Povprečna hitrost";
+"hud_no_movement" = "Ni zaznanega premikanja";
+"fav_select_remove" = "Izbor priljubljenih točk za izbris";
+"fav_export_select" = "Izbor priljubljenih točk za izvoz";
+"fav_exists" = "Priljubljena točka z imenom \"%@\" že obstaja";
+"gpx_cannot_import" = "Ni mogoče uvoziti določene datoteke GPX";
+"gpx_export_title" = "Izvozi sled";
+"gpx_export_select_track" = "Izbor sledi za izvoz";
+"gpx_start" = "Začni beleženje";
+"gpx_finish" = "Končaj beleženje";
+"gpx_avg_elev" = "Povprečna višina";
+"track_continue_rec_q" = "Ali želite nadaljevati z beleženjem sledi?";
+"rec_interval" = "Interval beleženja";
+"rec_interval_minimum" = "Najmanj";
+"show_info" = "Pokaži podrobnosti";
+// Map settings
+"m_style_overview" = "Pregled";
+"m_style_car" = "Vožnja z avtomobilom";
+"m_style_walk" = "Pohodništvo";
+"m_style_bicycle" = "Vožnja s kolesom";
+"map_settings_map" = "Zemljevid";
+"map_settings_show" = "Pokaži na zemljevidu";
+"map_settings_type" = "Vrsta zemljevida";
+"map_settings_mode" = "Način delovanja";
+"map_settings_style" = "Slog zemljevida";
+"map_settings_overunder" = "Prekrivni zemljevid/Zemljevid za podlogo";
+"map_settings_over" = "Prekrivni zemljevid";
+"map_settings_under" = "Zemljevid za podlogo";
+"map_settings_none" = "Brez";
+"map_settings_online" = "Spletni zemljevidi";
+"map_settings_transp" = "Prosojnost";
+// Intro
+"intro_skip" = "Preskoči";
+"intro_download" = "Prejem\nzemljevida";
+"intro_next" = "Naprej";
+"intro_welcome" = "Dobrodošli v\nOsmAnd";
+// Settings
+"sett_settings" = "Nastavitve";
+"sett_units" = "Enote";
+"sett_km" = "Kilometri";
+"sett_ml" = "Milje";
+"sett_zoom" = "Gumb za približanje";
+"sett_show" = "Pokaži";
+"sett_notshow" = "Ne pokaži";
+"sett_deg" = "Stopinje";
+"sett_deg_min" = "Stopinje in minute";
+"sett_arr_loc" = "Mesto";
+"maps" = "Zemljevidi";
+"purchases" = "Nakupi";
+// Purchases
+"prch_addons" = "Vstavki";
+"download" = "Prejmi";
+"nothanks" = "Ne, hvala";
+"res_world_map" = "Zemljevid sveta";
+"res_updates" = "Posodobitve";

@@ -14,7 +14,7 @@
 "rendering_category_routes" = "Rotas";
 "rendering_category_details" = "Detalhes";
 "rendering_attr_noPolygons_name" = "Ocultar polígonos";
-"rendering_attr_contourLines_name" = "Mostrar linhas de contorno";
+"rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "favorite" = "Favorito";
 "rendering_attr_roadStyle_name" = "Estilo das vias";
 "rendering_value_germanRoadAtlas_name" = "Atlas de vias alemãs";

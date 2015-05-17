@@ -1,5 +1,5 @@
 "rendering_attr_subwayMode_name" = "Rutas de subte";
-"rendering_attr_OSMMapperAssistant_name" = "Asistente de mapeador OSM";
+"rendering_attr_OSMMapperAssistant_name" = "Asistente al mapeador OSM";
 "rendering_value__name" = "Predeterminado";
 "rendering_value_orange_name" = "Anaranjado";
 "res_banner_free_maps_desc" = "Puedes descargar %d mapas gratis, sin cambios";
@@ -12,7 +12,7 @@
 "rendering_value_germanRoadAtlas_name" = "Atlas de caminos alemanes";
 "rendering_value_highContrastRoads_name" = "Caminos en alto contraste";
 "rendering_attr_publicTransportMode_name" = "Rutas de colectivo, trolebús y lanzadera";
-"rendering_attr_coloredBuildings_name" = "Edificios por código de color según el tipo";
+"rendering_attr_coloredBuildings_name" = "Color de los edificios según el tipo";
 "rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de los caminos";
 "rendering_attr_showSurfaces_name" = "Mostrar superficie de los caminos";
 "OsmAnd Maps" = "Mapas OsmAnd";
@@ -60,3 +60,116 @@
 "rendering_attr_alpineHiking_name" = "Escala de senderismo Alpino (SAC)";
 "rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
 "rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";
+"rendering_attr_noPolygons_name" = "Ocultar polígonos";
+"rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
+"rendering_attr_streetLighting_name" = "Alumbrado público";
+"rendering_attr_tramTrainRoutes_name" = "Rutas de tranvía y tren";
+"shared_string_done" = "Hecho";
+// HUD
+"hud_heading" = "Cabecera";
+// POI
+"poi_insrease_radius" = "Aumentar radio de búsqueda a";
+"poi_hide" = "Ocultar";
+// My Places
+"favorites" = "Favoritos";
+"tracks" = "Trazas";
+// GPX
+"gpx_point" = "Punto";
+"gpx_waypoints" = "Puntos de ruta";
+"gpx_points" = "Punto(s)";
+"gpx_export" = "Exportar";
+"import_export" = "Importar/Exportar";
+"gpx_import_title" = "Importar traza";
+"shared_string_buy_for" = "por";
+"poi_search_near_center" = "Buscar cerca del centro del mapa";
+"gpx_import_already_exists" = "El archivo de traza indicada, ya existe. Elija una acción.";
+"gpx_add_new" = "Añadir nuevo archivo";
+"gpx_overwrite" = "Sobrescribir";
+"gpx_cannot_import" = "No se puede importar archivo GPX indicado";
+"gpx_export_title" = "Exportar traza";
+"gpx_export_select_track" = "Elija traza a exportar";
+"gpx_import_desc" = "Puedes importar sus archivos GPX (formato de dato GPS común)\n\nPara compartir el archivo GPX, puedes abrir un archivo desde Dropbox, correo electrónico o cualquier otra fuente - Usar Abrir en la función";
+// Rendering categories
+"rendering_category_hide" = "Ocultar";
+"rendering_category_routes" = "Rutas";
+"rendering_category_details" = "Detalles";
+"rendering_category_transport" = "Transporte";
+"rendering_category_others" = "Otros atributos del mapa";
+"product_title_allworld" = "Mapas de todo el mundo";
+"product_desc_skimap" = "Pistas de esquí para todas las estaciones de esquí en el mundo";
+"product_desc_nautical" = "Mapa náutico mundial";
+"reminder_not_set_text" = "No se estableció recordatorio, porque no se permite el acceso al calendario";
+"cannot_access_calendar" = "No se pudo acceder al calendario";
+"cannot_add_destination" = "No se pudo añadir la dirección";
+"cannot_add_marker" = "No se pudo añadir el estacionamiento";
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "seg";
+"map_remind" = "Recordarme luego";
+"map_no_address" = "Dirección desconocida";
+// Import
+"import_title" = "Importar dato";
+"import_choose_type" = "Elija que importar";
+"import_favorite" = "Favorito";
+"import_failed" = "Falló importación";
+"import_cannot" = "El archivo elegido no fue importado";
+"import_gpx" = "Traza GPX";
+// Alerts
+"alert_inet_needed" = "Conexión a Internet requerida para realizar esta acción. Verifique su conexión.";
+// Context menu
+"ctx_mnu_edit_fav" = "Editar favorito";
+"ctx_mnu_add_fav" = "Añadir favorito";
+"ctx_mnu_share" = "Compartir";
+"ctx_mnu_direction" = "Dirección";
+// Location Services
+"loc_access_denied" = "Acceso denegado";
+"loc_access_denied_desc" = "El acceso a la ubicación fue denegado";
+// Colors
+"col_purple" = "Púrpura";
+"col_green" = "Verde";
+"col_yellow" = "Amarillo";
+"col_orange" = "Anaranjado";
+"col_gray" = "Gris";
+"col_red" = "Rojo";
+"col_blue" = "Azul";
+"col_magenta" = "Magenta";
+// World Regions
+"region_africa" = "África";
+"region_asia" = "Asia";
+"region_ausralia_and_oceania" = "Australia y Oceanía";
+"region_central_america" = "Centroamérica";
+"region_europe" = "Europa";
+"region_north_america" = "Norteamérica";
+"region_russia" = "Rusia";
+"region_south_america" = "Sudamérica";
+"gpx_no_tracks" = "Sin trazas";
+"gpx_remove" = "¿Quitar traza?";
+"gpx_stat" = "Estadísticas";
+"gpx_route_time" = "Tiempo de ruta";
+"gpx_uphldownhl" = "Ascenso/Descenso";
+"gpx_distance" = "Distancia";
+"gpx_average_speed" = "Velocidad media";
+"gpx_start" = "Iniciar";
+"gpx_finish" = "Finalizar";
+"gpx_avg_elev" = "Elevación media";
+"gpx_elev_range" = "Rango de elevación";
+"gpx_updown" = "Arriba/Abajo";
+"gpx_uphills_total" = "Ascenso total";
+"track_recording" = "Grabación de traza";
+"track_recording_name" = "Grabando traza actual";
+"track_stop_rec" = "Parar grabación";
+"track_new_segment" = "Iniciar nuevo segmento";
+"track_save" = "Guardar traza actual";
+"track_continue_rec" = "Continuar grabando";
+"track_continue_rec_q" = "¿Quieres seguir grabando?";
+"rec_interval" = "Intervalo de registro";
+"rec_interval_minimum" = "Mínimo";
+"track_start_rec" = "Iniciar traza grabada";

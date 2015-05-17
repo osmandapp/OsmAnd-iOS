@@ -13,8 +13,13 @@
 @property (weak, nonatomic) IBOutlet UIImageView *titleIcon;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UILabel *descView;
+@property (weak, nonatomic) IBOutlet UILabel *openingHoursView;
 @property (weak, nonatomic) IBOutlet UIImageView *directionImageView;
 @property (weak, nonatomic) IBOutlet UILabel *distanceView;
 @property (weak, nonatomic) IBOutlet UIView *cellView;
+@property (weak, nonatomic) IBOutlet UIImageView *timeIcon;
+
+- (void) updateDescVisibility;
+- (void) updateOpeningTimeInfo;
 
 @end

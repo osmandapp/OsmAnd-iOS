@@ -370,7 +370,7 @@
 {
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
- 
+    
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
@@ -379,6 +379,15 @@
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
+    const auto& decodedValues = amenity->getDecodedValues();
+    for(const auto& entry : OsmAnd::rangeOf(decodedValues))
+        if (entry.key() == QString("opening_hours"))
+        {
+            poi.hasOpeningHours = YES;
+            poi.openingHours = entry.value().toNSString();
+            break;
+        }
+
     if (amenity->categories.isEmpty())
         return;
         

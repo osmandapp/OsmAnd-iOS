@@ -713,6 +713,18 @@ typedef enum
             [cell.titleView setText:item.nameLocalized];
             cell.titleIcon.image = [item icon];
             [cell.descView setText:item.type.nameLocalized];
+            [cell updateDescVisibility];
+            if (item.hasOpeningHours)
+            {
+                [cell.openingHoursView setText:item.openingHours];
+                cell.timeIcon.hidden = NO;
+                [cell updateOpeningTimeInfo];
+            }
+            else
+            {
+                cell.openingHoursView.hidden = YES;
+                cell.timeIcon.hidden = YES;
+            }
             
             [cell.distanceView setText:item.distance];
             if (_searchNearMapCenter)

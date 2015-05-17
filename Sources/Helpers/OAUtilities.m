@@ -83,6 +83,18 @@
     return CGSizeMake(ceil(size.width), ceil(size.height));
 }
 
++ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font
+{
+    NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
+                              font, NSFontAttributeName, nil];
+    
+    CGSize size = [text boundingRectWithSize:CGSizeMake(width, height)
+                                     options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingTruncatesLastVisibleLine
+                                  attributes:attrDict context:nil].size;
+    
+    return CGSizeMake(ceil(size.width), ceil(size.height));
+}
+
 + (NSDictionary *)parseUrlQuery:(NSURL *)url
 {
     NSMutableDictionary *queryStrings = [[NSMutableDictionary alloc] init];
@@ -240,6 +252,47 @@
         str = [str substringToIndex:length];
     }
     return str;
+}
+
++ (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color
+{
+    CGFloat r, g, b, a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    if (r == 1 && g == 1 && b == 1) {
+        return source;
+    }
+    
+    if (CGColorEqualToColor(color.CGColor, [UIColor whiteColor].CGColor)) {
+        return source;
+    }
+    
+    // begin a new image context, to draw our colored image onto with the right scale
+    UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
+    
+    // get a reference to that context we created
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    // set the fill color
+    [color setFill];
+    
+    // translate/flip the graphics context (for transforming from CG* coords to UI* coords
+    CGContextTranslateCTM(context, 0, source.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
+    CGContextDrawImage(context, rect, source.CGImage);
+    
+    CGContextClipToMask(context, rect, source.CGImage);
+    CGContextAddRect(context, rect);
+    CGContextDrawPath(context,kCGPathFill);
+    
+    // generate a new UIImage from the graphics context we drew onto
+    UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    //return the color-burned image
+    return coloredImg;
 }
 
 @end

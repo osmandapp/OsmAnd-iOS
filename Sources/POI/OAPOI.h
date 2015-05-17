@@ -14,12 +14,14 @@
 @property (nonatomic) NSString *name;
 @property (nonatomic) OAPOIType *type;
 @property (nonatomic) NSString *nameLocalized;
+@property (nonatomic, assign) BOOL hasOpeningHours;
+@property (nonatomic) NSString *openingHours;
 
-@property (nonatomic) double latitude;
-@property (nonatomic) double longitude;
-@property (nonatomic) double distanceMeters;
+@property (nonatomic, assign) double latitude;
+@property (nonatomic, assign) double longitude;
+@property (nonatomic, assign) double distanceMeters;
 @property (nonatomic) NSString *distance;
-@property (nonatomic) double direction;
+@property (nonatomic, assign) double direction;
 
 - (UIImage *)icon;
 

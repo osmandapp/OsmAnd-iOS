@@ -8,6 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+//RGB color macro
+#define UIColorFromRGB(rgbValue) [UIColor \
+colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
+green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
+blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
+
 @interface OAUtilities : NSObject
 
 + (BOOL)iosVersionIsAtLeast:(NSString*)testVersion;
@@ -18,11 +24,14 @@
 + (void)layoutComplexButton:(UIButton*)button;
 
 + (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width font:(UIFont *)font;
++ (CGSize)calculateTextBounds:(NSString *)text width:(CGFloat)width height:(CGFloat)height font:(UIFont *)font;
 
 + (NSDictionary *)parseUrlQuery:(NSURL *)url;
 + (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds;
 
 + (NSArray *) splitCoordinates:(NSString *)string;
 + (NSString *) floatToStrTrimZeros:(CGFloat)number;
+
++ (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color;
 
 @end

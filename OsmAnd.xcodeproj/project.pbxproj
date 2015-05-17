@@ -877,6 +877,21 @@
 		8463101C1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101D1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101E1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
+		8470410B1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
+		8470410C1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
+		8470410D1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
+		8470410E1B07850900594C72 /* ic_small_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041091B07850900594C72 /* ic_small_time@2x.png */; };
+		8470410F1B07850900594C72 /* ic_small_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041091B07850900594C72 /* ic_small_time@2x.png */; };
+		847041101B07850900594C72 /* ic_small_time@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041091B07850900594C72 /* ic_small_time@2x.png */; };
+		847041111B07850900594C72 /* ic_small_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470410A1B07850900594C72 /* ic_small_time@3x.png */; };
+		847041121B07850900594C72 /* ic_small_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470410A1B07850900594C72 /* ic_small_time@3x.png */; };
+		847041131B07850900594C72 /* ic_small_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8470410A1B07850900594C72 /* ic_small_time@3x.png */; };
+		847041151B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */; };
+		847041161B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */; };
+		847041171B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */; };
+		8470412A1B079C6D00594C72 /* OpeningHoursParser.java in Sources */ = {isa = PBXBuildFile; fileRef = 847041291B079C6D00594C72 /* OpeningHoursParser.java */; };
+		8470412B1B079C6D00594C72 /* OpeningHoursParser.java in Sources */ = {isa = PBXBuildFile; fileRef = 847041291B079C6D00594C72 /* OpeningHoursParser.java */; };
+		8470412C1B079C6D00594C72 /* OpeningHoursParser.java in Sources */ = {isa = PBXBuildFile; fileRef = 847041291B079C6D00594C72 /* OpeningHoursParser.java */; };
 		84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
@@ -1858,6 +1873,20 @@
 		F117756C155545B587F98D34 /* libPods-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 46E6A59CC7494826B3DC682B /* libPods-dev.a */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXBuildRule section */
+		847041271B07985000594C72 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.java;
+			isEditable = 1;
+			outputFiles = (
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.m",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "\"${J2OBJC_HOME}/j2objc\" -d \"${DERIVED_FILES_DIR}\" -sourcepath \"${PROJECT_DIR}/Sources/Java\" --no-package-directories -use-arc \"${INPUT_FILE_PATH}\";";
+		};
+/* End PBXBuildRule section */
+
 /* Begin PBXContainerItemProxy section */
 		BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -2228,6 +2257,11 @@
 		846310051A8E463B005B39F2 /* default.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.render.xml; path = ../resources/rendering_styles/default.render.xml; sourceTree = "<group>"; };
 		846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.map_styles_presets.xml; path = ../resources/rendering_styles/default.map_styles_presets.xml; sourceTree = "<group>"; };
 		8463101B1A8E8951005B39F2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		847041081B07850900594C72 /* ic_small_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_time.png; path = Resources/Icons/ic_small_time.png; sourceTree = "<group>"; };
+		847041091B07850900594C72 /* ic_small_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@2x.png"; path = "Resources/Icons/ic_small_time@2x.png"; sourceTree = "<group>"; };
+		8470410A1B07850900594C72 /* ic_small_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@3x.png"; path = "Resources/Icons/ic_small_time@3x.png"; sourceTree = "<group>"; };
+		847041141B0791FF00594C72 /* j2objcSettings.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = j2objcSettings.xcconfig; sourceTree = "<group>"; };
+		847041291B079C6D00594C72 /* OpeningHoursParser.java */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.java; path = OpeningHoursParser.java; sourceTree = "<group>"; };
 		84770A021A8CF91D00585175 /* OAGPXDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXDocument.h; sourceTree = "<group>"; };
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		849686BC1B0344D700FC8DDA /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -2994,6 +3028,9 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				847041081B07850900594C72 /* ic_small_time.png */,
+				847041091B07850900594C72 /* ic_small_time@2x.png */,
+				8470410A1B07850900594C72 /* ic_small_time@3x.png */,
 				84EE2DBF1AFD149F007C9A94 /* img_purchase_banner_portrait.png */,
 				84EE2DC01AFD149F007C9A94 /* img_purchase_banner_portrait@2x.png */,
 				84EE2DC11AFD149F007C9A94 /* img_purchase_banner_portrait@3x.png */,
@@ -3318,6 +3355,15 @@
 			name = styles;
 			sourceTree = "<group>";
 		};
+		847041281B079C6D00594C72 /* Java */ = {
+			isa = PBXGroup;
+			children = (
+				847041291B079C6D00594C72 /* OpeningHoursParser.java */,
+			);
+			name = Java;
+			path = Sources/Java;
+			sourceTree = "<group>";
+		};
 		84770A011A8CF2B200585175 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
@@ -3440,7 +3486,9 @@
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
+				847041141B0791FF00594C72 /* j2objcSettings.xcconfig */,
 				BBA858EB17C222C500AADCC7 /* README.md */,
+				847041281B079C6D00594C72 /* Java */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
@@ -3988,6 +4036,7 @@
 				6BCB8D888EDC40C7BFF7DB2C /* Copy Pods Resources */,
 			);
 			buildRules = (
+				847041271B07985000594C72 /* PBXBuildRule */,
 			);
 			dependencies = (
 				BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */,
@@ -4244,6 +4293,7 @@
 				84C41DF01AB8600D0089EABB /* ic_destination_pin_2.png in Resources */,
 				84EE2DA71AFBF840007C9A94 /* icon_info.png in Resources */,
 				84185AC91AAA11B600F70328 /* ic_favorite_4@3x.png in Resources */,
+				8470410E1B07850900594C72 /* ic_small_time@2x.png in Resources */,
 				BB451EFB18E68E7A005FBE09 /* HUD_debug_pin_filled_button@2x.png in Resources */,
 				3A2D89201A28D44E00511A5C /* icon_edit_active@2x.png in Resources */,
 				3AFEEE431A0E34FD00900A47 /* menu_button@2x.png in Resources */,
@@ -4410,6 +4460,7 @@
 				849E81B51AFA5D6700549953 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
 				843E5CEB1AB341E000BE14BE /* icon_gpx_fill@3x.png in Resources */,
 				8424325B1AEFDD1900925821 /* widget_monitoring_rec_small_day.png in Resources */,
+				847041111B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				849E81511AFA5D2400549953 /* map_parking_pin@2x.png in Resources */,
 				84BD08CA1AB16174006DA3F7 /* HUD_menu_button@3x.png in Resources */,
 				84185AB41AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
@@ -4466,6 +4517,7 @@
 				84630FF41A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				843E5C391AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */,
 				BB451DC018D70B5B005FBE09 /* HUD_left_narrowbutton_bg.png in Resources */,
+				847041151B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */,
 				843E5CBE1AB341E000BE14BE /* icon_direction_active.png in Resources */,
 				BB476B6E18D4C8200044D5E1 /* NavigationAppModeHUD.xib in Resources */,
 				84D81EE61AA30404001098FD /* ic_destination_arrow_small@3x.png in Resources */,
@@ -4547,6 +4599,7 @@
 				843E5D901AB341E000BE14BE /* menu_share_icon.png in Resources */,
 				844499421AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
 				849E812B1AFA142F00549953 /* OATimeCell.xib in Resources */,
+				8470410B1B07850900594C72 /* ic_small_time.png in Resources */,
 				BBA6ACFD1940BD0A0066AF23 /* my_location_marker_icon@2x.png in Resources */,
 				84451A351AA050B3003F4D8D /* ic_close@3x.png in Resources */,
 				84C41DD51AB8600D0089EABB /* follow_map_mode_button.png in Resources */,
@@ -4702,6 +4755,7 @@
 				843E5CE31AB341E000BE14BE /* icon_favorite_item_direction.png in Resources */,
 				84EE2DA81AFBF840007C9A94 /* icon_info.png in Resources */,
 				84C41DF11AB8600D0089EABB /* ic_destination_pin_2.png in Resources */,
+				8470410F1B07850900594C72 /* ic_small_time@2x.png in Resources */,
 				84185ACA1AAA11B600F70328 /* ic_favorite_4@3x.png in Resources */,
 				BB451ED818E36BFB005FBE09 /* menu_item_my_data_icon@2x.png in Resources */,
 				BB451E6818DCD224005FBE09 /* drive_mode_button.png in Resources */,
@@ -4868,6 +4922,7 @@
 				849E81B61AFA5D6700549953 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
 				843E5CEC1AB341E000BE14BE /* icon_gpx_fill@3x.png in Resources */,
 				8424325C1AEFDD1900925821 /* widget_monitoring_rec_small_day.png in Resources */,
+				847041121B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				849E81521AFA5D2400549953 /* map_parking_pin@2x.png in Resources */,
 				3A02BFBE1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */,
 				84185AB51AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
@@ -4924,6 +4979,7 @@
 				BB451E8D18DCD224005FBE09 /* NavigationAppModeHUD.xib in Resources */,
 				843E5C3A1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */,
 				3AC639E41A2200E6001D5E57 /* icon_favorite_direction@2x.png in Resources */,
+				847041161B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */,
 				843E5CBF1AB341E000BE14BE /* icon_direction_active.png in Resources */,
 				84D81EE71AA30404001098FD /* ic_destination_arrow_small@3x.png in Resources */,
 				BB451EF418E617F4005FBE09 /* HUD_debug_pin_button.png in Resources */,
@@ -5005,6 +5061,7 @@
 				843E5D911AB341E000BE14BE /* menu_share_icon.png in Resources */,
 				844499431AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
 				849E812C1AFA142F00549953 /* OATimeCell.xib in Resources */,
+				8470410C1B07850900594C72 /* ic_small_time.png in Resources */,
 				BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */,
 				84451A361AA050B3003F4D8D /* ic_close@3x.png in Resources */,
 				84C41DD61AB8600D0089EABB /* follow_map_mode_button.png in Resources */,
@@ -5124,6 +5181,7 @@
 				3AC639E81A2200E6001D5E57 /* icon_favorite_item_direction@2x.png in Resources */,
 				84EE2DE51AFD149F007C9A94 /* restore_purchase.png in Resources */,
 				84BD089F1AB16174006DA3F7 /* Btn-Play@3x.png in Resources */,
+				847041131B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				84B4FD801A92167C00A147BA /* OAGPXDetailCell.xib in Resources */,
 				3A02BFBA1A31F2FA0019377F /* OAGPXListViewController.xib in Resources */,
 				3AC40ACF19DDC66A002FBC40 /* Btn-Pause@2x.png in Resources */,
@@ -5235,6 +5293,7 @@
 				84C41DEF1AB8600D0089EABB /* ic_destination_pin_1@3x.png in Resources */,
 				84E2DBBE1AB720FB001A7FEC /* zoom_out_button@2x.png in Resources */,
 				BBA3AFB4197FC4BB0039D991 /* drive_mode_button@2x.png in Resources */,
+				8470410D1B07850900594C72 /* ic_small_time.png in Resources */,
 				84185AC81AAA11B600F70328 /* ic_favorite_4@2x.png in Resources */,
 				849E81B11AFA5D6700549953 /* btn_map_type_icon_walk_selected.png in Resources */,
 				84C41DDA1AB8600D0089EABB /* follow_map_mode_button@2x.png in Resources */,
@@ -5271,6 +5330,7 @@
 				84185AEC1AAA11B600F70328 /* ic_favorite_8@2x.png in Resources */,
 				BBA3AFC1197FC4BB0039D991 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				84185AB91AAA11B600F70328 /* ic_favorite_2@3x.png in Resources */,
+				847041101B07850900594C72 /* ic_small_time@2x.png in Resources */,
 				84D81EE51AA30404001098FD /* ic_destination_arrow_small@2x.png in Resources */,
 				843E5CD51AB341E000BE14BE /* icon_edit_active@3x.png in Resources */,
 				842432601AEFDD1900925821 /* widget_monitoring_rec_small_day@2x.png in Resources */,
@@ -5439,6 +5499,7 @@
 				3AFEEE421A0E34FD00900A47 /* left_menu_icon_star@2x.png in Resources */,
 				BBA3AFE6197FC4BB0039D991 /* my_location_marker_icon.png in Resources */,
 				84C41E521AB8600D0089EABB /* position_track_map_mode_button@3x.png in Resources */,
+				847041171B0791FF00594C72 /* j2objcSettings.xcconfig in Resources */,
 				84E442221AF8A07500F87542 /* track_save@2x.png in Resources */,
 				843E5C3B1AB22FE400BE14BE /* OAMapStylesCell.xib in Resources */,
 				84B4FD721A91E01900A147BA /* OAGPXCell.xib in Resources */,
@@ -5641,6 +5702,7 @@
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				3AC639D21A1F9DFB001D5E57 /* OAFavoriteColorViewController.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
+				8470412A1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
 				842431C41AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84387B251ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				3A2D893C1A2DBC2900511A5C /* OAAutocompleteManager.mm in Sources */,
@@ -5784,6 +5846,7 @@
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				3AC639D31A1F9DFC001D5E57 /* OAFavoriteColorViewController.mm in Sources */,
+				8470412B1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
 				842431C51AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84387B261ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
@@ -5954,6 +6017,7 @@
 				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
+				8470412C1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
 				84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */,
 				84BFC2221A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */,
 				3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
@@ -6051,6 +6115,7 @@
 /* Begin XCBuildConfiguration section */
 		BB098D0C1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
@@ -6118,6 +6183,7 @@
 		};
 		BB098D0D1793F7FD00423944 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";

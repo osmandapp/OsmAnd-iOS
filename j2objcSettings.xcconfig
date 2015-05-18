@@ -9,7 +9,7 @@
 // with the name “j2objc-dist” to the parent directory of this project.
 
 // The path should be written without quotes, when modified use Xcode's Product -> Clean
-J2OBJC_HOME = /usr/bin/j2objc;
+//J2OBJC_HOME = /usr/bin/j2objc;
 
 HEADER_SEARCH_PATHS = $(inherited) "${J2OBJC_HOME}/include" "${DERIVED_FILES_DIR}";
 LIBRARY_SEARCH_PATHS = $(inherited) "${J2OBJC_HOME}/lib";

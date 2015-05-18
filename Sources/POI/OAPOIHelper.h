@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #include <OsmAndCore.h>
 
-#define kSearchLimit 50
+#define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI;

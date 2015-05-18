@@ -215,12 +215,14 @@
     if (timeInterval > 0.0)
     {
         label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
-        label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+        //label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+        label.text = [NSString stringWithFormat:@"%@", time];
     }
     else
     {
         label.textColor = [UIColor redColor];
-        label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+        //label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+        label.text = [NSString stringWithFormat:@"%@", time];
     }
 }
 

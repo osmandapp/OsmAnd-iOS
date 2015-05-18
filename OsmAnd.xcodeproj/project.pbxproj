@@ -1885,6 +1885,28 @@
 			);
 			script = "\"${J2OBJC_HOME}/j2objc\" -d \"${DERIVED_FILES_DIR}\" -sourcepath \"${PROJECT_DIR}/Sources/Java\" --no-package-directories -use-arc \"${INPUT_FILE_PATH}\";";
 		};
+		847BAA051B0A2BB700C1CA80 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.java;
+			isEditable = 1;
+			outputFiles = (
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.m",
+			);
+			script = "\"${J2OBJC_HOME}/j2objc\" -d \"${DERIVED_FILES_DIR}\" -sourcepath \"${PROJECT_DIR}/Sources/Java\" --no-package-directories -use-arc \"${INPUT_FILE_PATH}\";";
+		};
+		847BAA061B0A2BDE00C1CA80 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			fileType = sourcecode.java;
+			isEditable = 1;
+			outputFiles = (
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.m",
+				"${DERIVED_FILES_DIR}/${INPUT_FILE_BASE}.h",
+			);
+			script = "\"${J2OBJC_HOME}/j2objc\" -d \"${DERIVED_FILES_DIR}\" -sourcepath \"${PROJECT_DIR}/Sources/Java\" --no-package-directories -use-arc \"${INPUT_FILE_PATH}\";";
+		};
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
@@ -4057,6 +4079,7 @@
 				F31050A1E495478BAAE8C96E /* Copy Pods Resources */,
 			);
 			buildRules = (
+				847BAA061B0A2BDE00C1CA80 /* PBXBuildRule */,
 			);
 			dependencies = (
 				BBFE8EA61AC01915003F9342 /* PBXTargetDependency */,
@@ -4077,6 +4100,7 @@
 				BBA3AFEA197FC4BB0039D991 /* Copy Pods Resources */,
 			);
 			buildRules = (
+				847BAA051B0A2BB700C1CA80 /* PBXBuildRule */,
 			);
 			dependencies = (
 				BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */,

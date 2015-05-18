@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#define kMapRulerMinWidth 70
-#define kMapRulerMaxWidth 180
+#define kMapRulerMinWidth 40
+#define kMapRulerMaxWidth 120
 
 @interface OAMapRulerView : UIView
 

@@ -165,7 +165,7 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(100, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(50, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
     
@@ -173,7 +173,7 @@
     NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-15.0f];
     [self.view addConstraint:constraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:100.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:50.0f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
@@ -222,7 +222,11 @@
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         if (self.rulerLabel.hidden)
+        {
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+            if (!_driveModeButton.hidden)
+                self.rulerLabel.hidden = YES;
+        }
     });
     
     [_destinationViewController startLocationUpdate];
@@ -354,6 +358,8 @@
         else
             _driveModeButton.hidden = YES;
         
+        self.rulerLabel.hidden = !_driveModeButton.hidden;
+        
         [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
         
         if (_overlayUnderlayView && _overlayUnderlayView.superview)
@@ -419,6 +425,8 @@
         _zoomOutButton.enabled = [_mapViewController canZoomOut];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        if (!_driveModeButton.hidden)
+            self.rulerLabel.hidden = YES;
     });
 }
 
@@ -437,6 +445,8 @@
             [_destinationViewController doLocationUpdate];
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
+        if (!_driveModeButton.hidden)
+            self.rulerLabel.hidden = YES;
     });
 }
 

@@ -26,7 +26,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-
 typedef enum
 {
     kFavoriteActionNone = 0,
@@ -49,6 +48,12 @@ typedef enum
     BOOL _wasShowingFavorite;
     BOOL _deleteFavorite;
     BOOL _wasEdited;
+    
+    NSInteger _colorIndex;
+    NSString *_groupName;
+    
+    OAFavoriteColorViewController *_colorController;
+    OAFavoriteGroupViewController *_groupController;
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *shareButton;
@@ -66,6 +71,7 @@ typedef enum
         self.favorite = favorite;
         self.newFavorite = NO;
         _favAction = kFavoriteActionNone;
+        _colorIndex = -1;
     }
     return self;
 }
@@ -75,6 +81,7 @@ typedef enum
     if (self) {
         OsmAndAppInstance app = [OsmAndApp instance];
         
+        _colorIndex = -1;
         self.favorite = nil;
         self.location = location;
         self.newFavorite = YES;
@@ -87,7 +94,16 @@ typedef enum
         
         QString title = QString::fromNSString(formattedLocation);
         
-        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][0];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        int defaultColor = 0;
+        if ([userDefaults objectForKey:kFavoriteDefaultColorKey])
+            defaultColor = [userDefaults integerForKey:kFavoriteDefaultColorKey];
+        
+        NSString *groupName;
+        if ([userDefaults objectForKey:kFavoriteDefaultGroupKey])
+            groupName = [userDefaults stringForKey:kFavoriteDefaultGroupKey];
+
+        OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
     
         UIColor* color_ = favCol.color;
         CGFloat r,g,b,a;
@@ -96,10 +112,16 @@ typedef enum
                   blue:&b
                  alpha:&a];
 
+        QString group;
+        if (groupName)
+            group = QString::fromNSString(groupName);
+        else
+            group = QString::null;
+        
         OAFavoriteItem* fav = [[OAFavoriteItem alloc] init];
         fav.favorite = app.favoritesCollection->createFavoriteLocation(locationPoint,
                                                                        title,
-                                                                       QString::null,
+                                                                       group,
                                                                        OsmAnd::FColorRGB(r,g,b));
         self.favorite = fav;
         [app saveFavoritesToPermamentStorage];
@@ -366,6 +388,11 @@ typedef enum
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     [_favoriteColorIcon setImage:favCol.icon];
     [_favoriteColorLabel setText:favCol.name];
+    
+    if (self.newFavorite && _colorController)
+    {
+        _colorIndex = _colorController.colorIndex;
+    }
 }
 
 - (void)setupGroup
@@ -374,6 +401,11 @@ typedef enum
         [_favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
     else
         [_favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
+    
+    if (self.newFavorite && _groupController)
+    {
+        _groupName = _groupController.groupName;
+    }
 }
 
 - (void)setupView {
@@ -599,6 +631,12 @@ typedef enum
     }
     else
     {
+        // save color & group
+        if (_colorIndex != -1)
+            [[NSUserDefaults standardUserDefaults] setInteger:_colorIndex forKey:kFavoriteDefaultColorKey];
+
+        [[NSUserDefaults standardUserDefaults] setObject:_groupName forKey:kFavoriteDefaultGroupKey];
+        
         [self doSave:YES];
     }
 }
@@ -654,17 +692,17 @@ typedef enum
 - (IBAction)favoriteChangeColorClicked:(id)sender
 {
     _favAction = kFavoriteActionChangeColor;
-    OAFavoriteColorViewController* controller = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
-    controller.hideToolbar = _toolbarView.hidden;
-    [self.navigationController pushViewController:controller animated:YES];
+    _colorController = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
+    _colorController.hideToolbar = _toolbarView.hidden;
+    [self.navigationController pushViewController:_colorController animated:YES];
 }
 
 - (IBAction)favoriteChangeGroupClicked:(id)sender
 {
     _favAction = kFavoriteActionChangeGroup;
-    OAFavoriteGroupViewController* controller = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
-    controller.hideToolbar = _toolbarView.hidden;
-    [self.navigationController pushViewController:controller animated:YES];
+    _groupController = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
+    _groupController.hideToolbar = _toolbarView.hidden;
+    [self.navigationController pushViewController:_groupController animated:YES];
 }
 
 - (IBAction)menuFavoriteClicked:(id)sender

@@ -64,7 +64,7 @@
 -(void)viewWillLayoutSubviews
 {
     CGRect f = _tableView.frame;
-    f.size.height = (self.hideToolbar ? f.size.height + _toolbarView.bounds.size.height : f.size.height);
+    f.size.height = (self.hideToolbar ? DeviceScreenHeight - 64.0 : DeviceScreenHeight - 64.0 - _toolbarView.bounds.size.height);
     self.tableView.frame = f;
 }
 
@@ -102,7 +102,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0)
-        return [self.groups count];
+        return [self.groups count] + 1;
     else
         return 1;
 }
@@ -110,8 +110,8 @@
 UITextField* textView;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
-
+    if (indexPath.section == 0)
+    {
         static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
         
         OAIconTextTableViewCell* cell;
@@ -122,18 +122,31 @@ UITextField* textView;
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            NSString* item = [self.groups objectAtIndex:indexPath.row];
-            [cell showImage:NO];
-            [cell.textView setText:item];
-            [cell.arrowIconView setImage:nil];
-            if ([item isEqualToString:self.groupName])
-                [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+        if (cell)
+        {
+            if (indexPath.row > 0)
+            {
+                NSString* item = [self.groups objectAtIndex:indexPath.row - 1];
+                [cell showImage:NO];
+                [cell.textView setText:item];
+                [cell.arrowIconView setImage:nil];
+                if ([item isEqualToString:self.groupName])
+                    [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+            }
+            else
+            {
+                [cell showImage:NO];
+                [cell.textView setText:OALocalizedString(@"fav_no_group")];
+                [cell.arrowIconView setImage:nil];
+                if (self.groupName == nil)
+                    [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
+            }
         
         }
         return cell;
-    } else {
-
+    }
+    else
+    {
         static NSString* const reusableIdentifierPoint = @"OATextViewTableViewCell";
         
         OATextViewTableViewCell* cell;
@@ -144,8 +157,8 @@ UITextField* textView;
             cell = (OATextViewTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            
+        if (cell)
+        {
             textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];
             [textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
             [textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
@@ -164,21 +177,30 @@ UITextField* textView;
 #pragma mark - UITableViewDelegate
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.section == 0) {
-        self.groupName = [self.groups objectAtIndex:indexPath.row];
+    if (indexPath.section == 0)
+    {
+        if (indexPath.row == 0)
+            self.groupName = nil;
+        else
+            self.groupName = [self.groups objectAtIndex:indexPath.row - 1];
+        
         [self.tableView reloadData];
-    } else {
+    }
+    else
+    {
         self.groupName = [textView text];
         [self.tableView reloadData];
     }
 }
 
 #pragma mark - UITextFieldDelegate
-- (void)editGroupName:(id)sender {
+- (void)editGroupName:(id)sender
+{
     self.groupName = [((UITextField*)sender) text];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)sender{
+- (BOOL)textFieldShouldReturn:(UITextField *)sender
+{
     [sender resignFirstResponder];
     return YES;
 }
@@ -186,16 +208,23 @@ UITextField* textView;
 
 #pragma mark - Actions
 
-- (IBAction)saveClicked:(id)sender {
+- (IBAction)saveClicked:(id)sender
+{
     OsmAndAppInstance app = [OsmAndApp instance];
     
-    QString group = QString::fromNSString(self.groupName);
+    QString group;
+    if (self.groupName)
+        group = QString::fromNSString(self.groupName);
+    else
+        group = QString::null;
+    
     self.favorite.favorite->setGroup(group);
     [app saveFavoritesToPermamentStorage];
     [self backButtonClicked:self];
 }
 
-- (IBAction)favoriteClicked:(id)sender {
+- (IBAction)favoriteClicked:(id)sender
+{
 }
 
 - (IBAction)gpxClicked:(id)sender {

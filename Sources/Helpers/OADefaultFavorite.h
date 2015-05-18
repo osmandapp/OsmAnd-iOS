@@ -10,6 +10,8 @@
 
 #define kDefaultFavoriteZoom 15.0f
 #define kDefaultFavoriteZoomOnShow 16.0f
+#define kFavoriteDefaultColorKey @"FavoriteDefaultColorKey"
+#define kFavoriteDefaultGroupKey @"FavoriteDefaultGroupKey"
 
 @interface OAFavoriteColor : NSObject
 

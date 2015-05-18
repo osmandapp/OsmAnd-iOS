@@ -1285,9 +1285,9 @@
             if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
                 
-                const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
-                symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
-                if (symbol.caption.length == 0)
+                //const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
+                //symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
+                //if (symbol.caption.length == 0)
                     symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
                 
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];

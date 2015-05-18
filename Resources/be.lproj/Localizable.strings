@@ -96,3 +96,13 @@
 "hud_heading" = "Кірунак";
 "hud_no_movement" = "Няма руху";
 "fav_no_group" = "Бяз групы";
+// Rendering categories
+"rendering_category_hide" = "Схаваць";
+"rendering_category_routes" = "Маршруты";
+"rendering_category_details" = "Падрабязнасьці";
+"rendering_category_transport" = "Транспарт";
+"rendering_category_others" = "Іншыя атрыбуты мапы";
+// Rendering attributes
+"rendering_attr_showAccess_name" = "Паказаць абмежаваньні доступу";
+"rendering_attr_showSurfaceGrade_name" = "Адлюстроўваць якасьць дарог";
+"rendering_attr_alpineHiking_name" = "Пешы горны турызм";

@@ -138,7 +138,7 @@ UITextField* textView;
                 [cell showImage:NO];
                 [cell.textView setText:OALocalizedString(@"fav_no_group")];
                 [cell.arrowIconView setImage:nil];
-                if (self.groupName == nil)
+                if (self.groupName.length == 0)
                     [cell.arrowIconView setImage:[UIImage imageNamed:@"menu_cell_selected"]];
             }
         
@@ -180,7 +180,7 @@ UITextField* textView;
     if (indexPath.section == 0)
     {
         if (indexPath.row == 0)
-            self.groupName = nil;
+            self.groupName = @"";
         else
             self.groupName = [self.groups objectAtIndex:indexPath.row - 1];
         
@@ -213,7 +213,7 @@ UITextField* textView;
     OsmAndAppInstance app = [OsmAndApp instance];
     
     QString group;
-    if (self.groupName)
+    if (self.groupName.length > 0)
         group = QString::fromNSString(self.groupName);
     else
         group = QString::null;

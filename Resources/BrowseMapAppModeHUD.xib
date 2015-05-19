@@ -38,10 +38,10 @@
                         <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="8sR-Ef-2iJ"/>
                     </connections>
                 </button>
-                <view alpha="0.59999999999999964" contentMode="scaleToFill" id="lga-DK-9T5" userLabel="statusBar">
+                <view alpha="0.49999999999999961" contentMode="scaleToFill" id="lga-DK-9T5" userLabel="statusBar">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="zKf-ZI-4L4" userLabel="compassBox">
                     <rect key="frame" x="8" y="21" width="40" height="40"/>

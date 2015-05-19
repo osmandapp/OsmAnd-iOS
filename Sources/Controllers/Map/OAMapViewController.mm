@@ -83,7 +83,7 @@
 #define kMapModeFollowDefaultZoom 18.0f
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
 #define kQuickAnimationTime 0.1f
-#define kOneSecondAnimatonTime 1.0f
+#define kOneSecondAnimatonTime 0.5f
 #define kScreensToFlyWithAnimation 4.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
@@ -995,6 +995,8 @@
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
     
+    NSLog(@"%d %d", centerLocation.x, centerLocation.y);
+    
     // Rotate current target around center location
     OsmAnd::PointI target = mapView.target31;
     target -= centerLocation;
@@ -1006,6 +1008,8 @@
     newTarget += centerLocation;
     mapView.target31 = newTarget;
     
+    NSLog(@"target = %d %d", newTarget.x, newTarget.y);
+
     // Set rotation
     mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
 
@@ -1019,10 +1023,11 @@
 
     if (recognizer.state == UIGestureRecognizerStateEnded)
     {
-        float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees((float)recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
-        mapView.animator->animateAzimuthWith(velocity,
-                                             kRotateDeceleration,
-                                             kUserInteractionAnimationKey);
+        //float velocity = qBound(-kRotateVelocityAbsLimitInDegrees, -qRadiansToDegrees((float)recognizer.velocity), kRotateVelocityAbsLimitInDegrees);
+        //mapView.animator->animateAzimuthWith(velocity,
+        //                                     kRotateDeceleration,
+        //                                     kUserInteractionAnimationKey);
+        
         mapView.animator->resume();
     }
     [recognizer setRotation:0];
@@ -1059,7 +1064,7 @@
     
     mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                      OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
                                       kUserInteractionAnimationKey);
     
     // Increate zoom by 1
@@ -1108,9 +1113,12 @@
     centerPoint.y *= mapView.contentScaleFactor;
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
-    mapView.animator->animateTargetTo(centerLocation,
+    
+    OsmAnd::PointI destLocation(centerLocation.x - 2 * (centerLocation.x - mapView.target31.x), centerLocation.y - 2 * (centerLocation.y - mapView.target31.y));
+    
+    mapView.animator->animateTargetTo(destLocation,
                                       kQuickAnimationTime,
-                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                      OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomOut,
                                       kUserInteractionAnimationKey);
     
     // Decrease zoom by 1
@@ -1590,6 +1598,25 @@
     zoomDelta += 1.0f;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
+    
+    if (_lastAppMode == OAAppModeDrive)
+    {
+        CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+        centerPoint.x *= mapView.contentScaleFactor;
+        centerPoint.y *= mapView.contentScaleFactor;
+        
+        // Convert point from screen to location
+        OsmAnd::PointI bottomLocation;
+        [mapView convert:centerPoint toLocation:&bottomLocation];
+        
+        OsmAnd::PointI destLocation(mapView.target31.x / 2.0 + bottomLocation.x / 2.0, mapView.target31.y / 2.0 + bottomLocation.y / 2.0);
+
+        mapView.animator->animateTargetTo(destLocation,
+                                          kQuickAnimationTime,
+                                          OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomIn,
+                                          kUserInteractionAnimationKey);
+    }
+    
     mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -1681,6 +1708,25 @@
     zoomDelta -= 1.0f;
     mapView.animator->pause();
     mapView.animator->cancelAllAnimations();
+    
+    if (_lastAppMode == OAAppModeDrive)
+    {
+        CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+        centerPoint.x *= mapView.contentScaleFactor;
+        centerPoint.y *= mapView.contentScaleFactor;
+        
+        // Convert point from screen to location
+        OsmAnd::PointI bottomLocation;
+        [mapView convert:centerPoint toLocation:&bottomLocation];
+        
+        OsmAnd::PointI destLocation(bottomLocation.x - 2 * (bottomLocation.x - mapView.target31.x), bottomLocation.y - 2 * (bottomLocation.y - mapView.target31.y));
+        
+        mapView.animator->animateTargetTo(destLocation,
+                                          kQuickAnimationTime,
+                                          OsmAnd::MapAnimator::TimingFunction::Victor_ReverseExponentialZoomOut,
+                                          kUserInteractionAnimationKey);
+    }
+    
     mapView.animator->animateZoomBy(zoomDelta,
                                     kQuickAnimationTime,
                                     OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -1811,36 +1857,71 @@
             mapView.animator->pause();
             mapView.animator->cancelAllAnimations();
 
-            mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
-                                            kOneSecondAnimatonTime,
-                                            OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                            kLocationServicesAnimationKey);
-
-            mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
-                                                      kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                      kLocationServicesAnimationKey);
+            if (_lastAppMode == OAAppModeBrowseMap)
+            {
+                mapView.animator->animateZoomTo(kMapModeFollowDefaultZoom,
+                                                kOneSecondAnimatonTime,
+                                                OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                kLocationServicesAnimationKey);
+                
+                mapView.animator->animateElevationAngleTo(kMapModeFollowDefaultElevationAngle,
+                                                          kOneSecondAnimatonTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                          kLocationServicesAnimationKey);
+            }
 
             CLLocation* newLocation = _app.locationServices.lastKnownLocation;
             if (newLocation != nil)
             {
                 OsmAnd::PointI newTarget31(
-                    OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
-                    OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-                mapView.animator->animateTargetTo(newTarget31,
-                                                  kOneSecondAnimatonTime,
-                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                  kLocationServicesAnimationKey);
+                                           OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                           OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
 
-                const auto direction = (_lastAppMode == OAAppModeBrowseMap)
-                    ? _app.locationServices.lastKnownHeading
-                    : newLocation.course;
-                if (!isnan(direction) && direction >= 0)
+                if (_lastAppMode == OAAppModeBrowseMap)
                 {
-                    mapView.animator->animateAzimuthTo(direction,
-                                                       kOneSecondAnimatonTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
+                    
+                    mapView.animator->animateTargetTo(newTarget31,
+                                                      kOneSecondAnimatonTime,
+                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                      kLocationServicesAnimationKey);
+                    
+                    const auto direction = _app.locationServices.lastKnownHeading;
+                    
+                    if (!isnan(direction) && direction >= 0)
+                    {
+                        mapView.animator->animateAzimuthTo(direction,
+                                                           kOneSecondAnimatonTime,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
+                }
+                else
+                {
+                    mapView.zoom = kMapModeFollowDefaultZoom;
+                    mapView.elevationAngle = kMapModeFollowDefaultElevationAngle;
+
+                    double direction = newLocation.course;
+                    //double direction = _app.locationServices.lastKnownHeading;
+                    if (!isnan(direction) && direction >= 0)
+                    {
+                        // Set rotation
+                        mapView.azimuth = direction;
+                    }
+
+                    CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+                    centerPoint.x *= mapView.contentScaleFactor;
+                    centerPoint.y *= mapView.contentScaleFactor;
+                    
+                    // Convert point from screen to location
+                    OsmAnd::PointI bottomLocation;
+                    [mapView convert:centerPoint toLocation:&bottomLocation];
+                    
+                    OsmAnd::PointI targetCenter;
+                    targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
+                    targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
+                    
+                    mapView.target31 = targetCenter;
+                    //NSLog(@"targetCenter %d %d", targetCenter.x, targetCenter.y);
                 }
             }
 
@@ -1939,66 +2020,93 @@
         mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
                                                  OsmAnd::MapAnimator::AnimatedValue::Target);
 
-        // For "follow-me" mode azimuth is also controlled
-        if (_app.mapMode == OAMapModeFollow)
+        if (_lastAppMode == OAAppModeBrowseMap)
         {
-            const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
-                                                                                OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-            mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
-                                                     OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-
-            // Update azimuth if there's one
-            const auto direction = (_lastAppMode == OAAppModeBrowseMap)
+            // For "follow-me" mode azimuth is also controlled
+            if (_app.mapMode == OAMapModeFollow)
+            {
+                const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                                    OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+                mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                                                         OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+                
+                // Update azimuth if there's one
+                const auto direction = (_lastAppMode == OAAppModeBrowseMap)
                 ? newHeading
                 : newLocation.course;
-            if (!isnan(direction) && direction >= 0)
-            {
-                if (azimuthAnimation)
+                if (!isnan(direction) && direction >= 0)
                 {
-                    mapView.animator->cancelAnimation(azimuthAnimation);
-
-                    mapView.animator->animateAzimuthTo(direction,
-                                                       azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
-                }
-                else
-                {
-                    mapView.animator->animateAzimuthTo(direction,
-                                                       kOneSecondAnimatonTime,
-                                                       OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                       kLocationServicesAnimationKey);
+                    if (azimuthAnimation)
+                    {
+                        mapView.animator->cancelAnimation(azimuthAnimation);
+                        
+                        mapView.animator->animateAzimuthTo(direction,
+                                                           azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
+                    else
+                    {
+                        mapView.animator->animateAzimuthTo(direction,
+                                                           kOneSecondAnimatonTime,
+                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                           kLocationServicesAnimationKey);
+                    }
                 }
             }
-        }
-
-        // And also update target
-        if (targetAnimation)
-        {
-            mapView.animator->cancelAnimation(targetAnimation);
-
-            double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-            mapView.animator->animateTargetTo(newTarget31,
-                                              duration,
-                                              OsmAnd::MapAnimator::TimingFunction::Linear,
-                                              kLocationServicesAnimationKey);
+            
+            // And also update target
+            if (targetAnimation)
+            {
+                mapView.animator->cancelAnimation(targetAnimation);
+                
+                double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                mapView.animator->animateTargetTo(newTarget31,
+                                                  duration,
+                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                  kLocationServicesAnimationKey);
+            }
+            else
+            {
+                if (_app.mapMode == OAMapModeFollow)
+                {
+                    mapView.animator->animateTargetTo(newTarget31,
+                                                      kOneSecondAnimatonTime,
+                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                      kLocationServicesAnimationKey);
+                }
+                else //if (_app.mapMode == OAMapModePositionTrack)
+                {
+                    mapView.animator->animateTargetTo(newTarget31,
+                                                      kOneSecondAnimatonTime,
+                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                      kLocationServicesAnimationKey);
+                }
+            }
         }
         else
         {
-            if (_app.mapMode == OAMapModeFollow)
+            double direction = newLocation.course;
+            //double direction = _app.locationServices.lastKnownHeading;
+            if (!isnan(direction) && direction >= 0)
             {
-                mapView.animator->animateTargetTo(newTarget31,
-                                                  kOneSecondAnimatonTime,
-                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                  kLocationServicesAnimationKey);
+                // Set rotation
+                mapView.azimuth = direction;
             }
-            else //if (_app.mapMode == OAMapModePositionTrack)
-            {
-                mapView.animator->animateTargetTo(newTarget31,
-                                                  kOneSecondAnimatonTime,
-                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                  kLocationServicesAnimationKey);
-            }
+            CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+            centerPoint.x *= mapView.contentScaleFactor;
+            centerPoint.y *= mapView.contentScaleFactor;
+            
+            // Convert point from screen to location
+            OsmAnd::PointI bottomLocation;
+            [mapView convert:centerPoint toLocation:&bottomLocation];
+            
+            OsmAnd::PointI targetCenter;
+            targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
+            targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
+
+            mapView.target31 = targetCenter;
+            //NSLog(@"targetCenter2 %d %d", targetCenter.x, targetCenter.y);
         }
 
         mapView.animator->resume();

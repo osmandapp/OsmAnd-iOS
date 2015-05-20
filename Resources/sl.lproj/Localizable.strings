@@ -141,3 +141,9 @@
 "nothanks" = "Ne, hvala";
 "res_world_map" = "Zemljevid sveta";
 "res_updates" = "Posodobitve";
+"proceed_q" = "Ali želite nadaljevati?";
+"download_now" = "Prejmi zemljevid";
+// Resources
+"res_mapsres" = "Zemljevidi in drugi viri";
+"res_installed" = "Nameščeno";
+"res_banner_free_maps_title" = "Na voljo so prosto dostopni zemljevidi (%d)!";

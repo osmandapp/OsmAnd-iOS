@@ -52,6 +52,11 @@
     NSInteger _buttonsCount;
     CGFloat _buttonsWidthLandscape;
     OAIAPHelper *_iapHelper;
+    
+    CALayer *_horizontalLine;
+    CALayer *_verticalLine1;
+    CALayer *_verticalLine2;
+    CALayer *_verticalLine3;
 }
 
 - (instancetype)init
@@ -98,6 +103,20 @@
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
     
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine1 = [CALayer layer];
+    _verticalLine1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine2 = [CALayer layer];
+    _verticalLine2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _verticalLine3 = [CALayer layer];
+    _verticalLine3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    
+    [_buttonsView.layer addSublayer:_horizontalLine];
+    [_buttonsView.layer addSublayer:_verticalLine1];
+    [_buttonsView.layer addSublayer:_verticalLine2];
+    [_buttonsView.layer addSublayer:_verticalLine3];
+
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
@@ -220,6 +239,18 @@
         [self layoutComplexButton:self.buttonShare isPortrait:NO];
         [self layoutComplexButton:self.buttonDirection isPortrait:NO];
 
+        _horizontalLine.frame = CGRectMake(_backView1.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
+        _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
+        _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
+        if (_buttonsCount > 3)
+        {
+            _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
+            _verticalLine3.hidden = NO;
+        }
+        else
+        {
+            _verticalLine3.hidden = YES;
+        }
         
     } else {
         
@@ -258,6 +289,19 @@
         [self layoutComplexButton:self.buttonFavorite isPortrait:YES];
         [self layoutComplexButton:self.buttonShare isPortrait:YES];
         [self layoutComplexButton:self.buttonDirection isPortrait:YES];
+        
+        _horizontalLine.frame = CGRectMake(0.0, 0.5, _buttonsView.frame.size.width, 0.5);
+        _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+        _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+        if (_buttonsCount > 3)
+        {
+            _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+            _verticalLine3.hidden = NO;
+        }
+        else
+        {
+            _verticalLine3.hidden = YES;
+        }
     }
     
 }

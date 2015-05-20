@@ -28,6 +28,7 @@
 #import "OADestination.h"
 #import "OADestinationCell.h"
 #import "OANativeUtilities.h"
+#import "OAUtilities.h"
 
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
@@ -39,6 +40,8 @@
 #define deinit _(deinit)
 
 @interface OABrowseMapAppModeHudViewController ()
+
+@property (weak, nonatomic) IBOutlet UIView *statusBarView;
 
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
@@ -492,6 +495,12 @@
                 _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
             if (_downloadView)
                 _downloadView.frame = [self getDownloadViewFrame];
+            
+            if (_app.data.destinations.count == 0)
+                _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+            else
+                _statusBarView.backgroundColor = UIColorFromRGB(0xebebeb);
+            
         }];
     }
     else
@@ -507,6 +516,12 @@
             _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         if (_downloadView)
             _downloadView.frame = [self getDownloadViewFrame];
+
+        if (_app.data.destinations.count == 0)
+            _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        else
+            _statusBarView.backgroundColor = UIColorFromRGB(0xebebeb);
+
     }
 
 }

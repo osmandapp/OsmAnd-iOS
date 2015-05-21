@@ -42,6 +42,7 @@
     CLLocationCoordinate2D _location;
     CLLocationDirection _direction;
 
+    //CALayer *_lineLayer1
 }
 
 - (NSArray *)allDestinations

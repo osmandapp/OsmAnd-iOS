@@ -256,16 +256,6 @@
 
 + (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color
 {
-    CGFloat r, g, b, a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    if (r == 1 && g == 1 && b == 1) {
-        return source;
-    }
-    
-    if (CGColorEqualToColor(color.CGColor, [UIColor whiteColor].CGColor)) {
-        return source;
-    }
-    
     // begin a new image context, to draw our colored image onto with the right scale
     UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
     
@@ -279,7 +269,7 @@
     CGContextTranslateCTM(context, 0, source.size.height);
     CGContextScaleCTM(context, 1.0, -1.0);
     
-    CGContextSetBlendMode(context, kCGBlendModeMultiply);
+    CGContextSetBlendMode(context, kCGBlendModeNormal);
     CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
     CGContextDrawImage(context, rect, source.CGImage);
     

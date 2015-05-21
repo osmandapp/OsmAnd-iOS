@@ -168,7 +168,7 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(50, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(60, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
     
@@ -176,7 +176,7 @@
     NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-15.0f];
     [self.view addConstraint:constraint];
     
-    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:50.0f];
+    constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:60.0f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
@@ -201,10 +201,12 @@
         [self.view addSubview:_destinationViewController.view];
 
     //IOS-222
-    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive) {
+    if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive)
+    {
         OAMapMode mapMode = (OAMapMode)[[NSUserDefaults standardUserDefaults] integerForKey:kUDLastMapModePositionTrack];
         [_app setMapMode:mapMode];
     }
+    [self updateMapModeButton];
     
     if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
     {
@@ -336,6 +338,13 @@
 
 - (void)onMapModeChanged
 {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapModeButton];
+    });
+}
+
+- (void)updateMapModeButton
+{
     UIImage* modeImage = nil;
     switch (_app.mapMode)
     {
@@ -355,22 +364,41 @@
             break;
     }
     
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
-            _driveModeButton.hidden = NO;
-        else
-            _driveModeButton.hidden = YES;
-        
-        self.rulerLabel.hidden = !_driveModeButton.hidden;
-        
-        [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
-        
-        if (_overlayUnderlayView && _overlayUnderlayView.superview)
+    if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+        _driveModeButton.hidden = NO;
+    else
+        _driveModeButton.hidden = YES;
+    
+    self.rulerLabel.hidden = !_driveModeButton.hidden;
+
+    UIImage *backgroundImage;
+    
+    if (_app.locationServices.lastKnownLocation)
+    {
+        if (_app.mapMode == OAMapModeFree)
         {
-            [_overlayUnderlayView updateView];
-            [self.view setNeedsLayout];
+            backgroundImage = [UIImage imageNamed:@"bt_round_big_blue"];
+            modeImage = [OAUtilities tintImageWithColor:modeImage color:[UIColor whiteColor]];
         }
-    });
+        else
+        {
+            backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+            modeImage = [OAUtilities tintImageWithColor:modeImage color:UIColorFromRGB(0x5B7EF8)];
+        }
+    }
+    else
+    {
+        backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+    }
+
+    [_mapModeButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+    [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
+
+    if (_overlayUnderlayView && _overlayUnderlayView.superview)
+    {
+        [_overlayUnderlayView updateView];
+        [self.view setNeedsLayout];
+    }
 }
 
 - (IBAction)onMapSettingsButtonClick:(id)sender
@@ -486,13 +514,13 @@
             
             if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
             {
-                _compassBox.frame = CGRectMake(x, y, size.width, size.height);
-                _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
-                _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+                _compassBox.frame = CGRectMake(x, y + 7.0, size.width, size.height);
+                _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
+                _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
             }
             
             if (_widgetsView)
-                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
             if (_downloadView)
                 _downloadView.frame = [self getDownloadViewFrame];
             
@@ -507,13 +535,13 @@
     {
         if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
         {
-            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
-            _mapSettingsButton.frame = CGRectMake(msX, y + 5.0, msSize.width, msSize.height);
-            _searchButton.frame = CGRectMake(sX, y + 5.0, sSize.width, sSize.height);
+            _compassBox.frame = CGRectMake(x, y + 7.0, size.width, size.height);
+            _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
+            _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
         }
         
         if (_widgetsView)
-            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         if (_downloadView)
             _downloadView.frame = [self getDownloadViewFrame];
 
@@ -529,7 +557,7 @@
 - (CGRect)getDownloadViewFrame
 {
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
-    return CGRectMake(142.0, y + 7.0, DeviceScreenWidth - 154.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
+    return CGRectMake(146.0, y + 12.0, DeviceScreenWidth - 156.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
 #pragma mark - debug

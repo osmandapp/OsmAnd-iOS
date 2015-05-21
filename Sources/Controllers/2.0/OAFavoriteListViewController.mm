@@ -388,7 +388,7 @@ kFavoriteCellType;
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
     _exportController.name = filename;
-    [_exportController presentOptionsMenuFromRect:CGRectZero
+    [_exportController presentOptionsMenuFromRect:_shareButton.frame
                                            inView:self.view
                                          animated:YES];
     

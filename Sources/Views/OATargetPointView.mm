@@ -482,6 +482,9 @@
     [[UIActivityViewController alloc] initWithActivityItems:@[image, string]
                                       applicationActivities:nil];
     
+    activityViewController.popoverPresentationController.sourceView = self;
+    activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
+    
     [self.navController presentViewController:activityViewController
                                      animated:YES
                                    completion:^{ }];

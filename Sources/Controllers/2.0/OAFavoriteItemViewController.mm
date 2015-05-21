@@ -726,7 +726,8 @@ typedef enum
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]
                                       applicationActivities:nil];
-    
+    activityViewController.popoverPresentationController.sourceView = _shareButton;
+    activityViewController.popoverPresentationController.sourceRect = _shareButton.bounds;
     [self.navigationController presentViewController:activityViewController
                                      animated:YES
                                    completion:^{ }];

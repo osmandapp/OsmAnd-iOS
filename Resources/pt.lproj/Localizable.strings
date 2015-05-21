@@ -112,14 +112,14 @@
 "track_clear_q" = "Você quer limpar o trajeto atual?";
 "show_info" = "Mostrar informações";
 // Map settings
-"m_style_overview" = "Visão Geral";
+"m_style_overview" = "Explorar";
 "m_style_car" = "Carro";
 "m_style_walk" = "A pé";
 "m_style_bicycle" = "Bicicleta";
 "map_settings_map" = "Mapa";
 "map_settings_show" = "Mostrar no mapa";
 "map_settings_type" = "Tipo de mapa";
-"map_settings_mode" = "Modo de aplicação";
+"map_settings_mode" = "Modo Dia/Noite";
 "map_settings_day" = "Dia";
 "map_settings_night" = "Noite";
 "map_settings_style" = "Estilo de mapa";
@@ -280,7 +280,7 @@
 "region_russia" = "Rússia";
 "region_south_america" = "América do Sul";
 // Help
-"help_quiz" = "Prova";
+"help_quiz" = "Quiz";
 "rendering_category_others" = "Outros atributos do mapa";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Mostrar restrições de acesso";

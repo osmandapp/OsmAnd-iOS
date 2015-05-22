@@ -379,13 +379,12 @@
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
+    //NSLog(@"name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
+    
     const auto& decodedValues = amenity->getDecodedValues();
-    NSLog(@"---");
     for(const auto& entry : OsmAnd::rangeOf(decodedValues)) {
         
-        NSLog(@"%@=%@", entry.key().toNSString(), entry.value().toNSString());
-        // phone, website, description
-        
+        // phone, website, description        
         if (entry.key() == QString("opening_hours"))
         {
             poi.hasOpeningHours = YES;

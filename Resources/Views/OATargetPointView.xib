@@ -9,7 +9,7 @@
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="OATargetPointView">
             <rect key="frame" x="0.0" y="0.0" width="320" height="125"/>
-            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" id="lwK-8v-Cab">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="125"/>
@@ -171,6 +171,7 @@
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
+                <outlet property="topView" destination="lwK-8v-Cab" id="M0B-m4-jW0"/>
             </connections>
             <point key="canvasLocation" x="633" y="374.5"/>
         </view>

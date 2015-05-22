@@ -56,6 +56,11 @@
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
 
+#include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+
 #include <OsmAndCore/QKeyValueIterator.h>
 
 #if defined(OSMAND_IOS_DEV)
@@ -165,6 +170,8 @@
     std::shared_ptr<OsmAnd::MapMarkersCollection> _destinationPinMarkersCollection;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _favoritesMarkersCollection;
 
+    std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
+    
     // Favorites presenter
     //std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
 
@@ -271,6 +278,9 @@
                                                                      merged << added << removed << updated;
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
+    
+    _obfsDataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
+
     
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -1240,7 +1250,7 @@
     for (const auto symbolInfo : symbolInfos) {
         
         doSkip = NO;
-        
+                
         OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
         symbol.type = OAMapSymbolLocation;
         symbol.touchPoint = touchPoint;
@@ -1292,6 +1302,28 @@
             
             if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+                
+                if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
+                {
+                    std::shared_ptr<const OsmAnd::Amenity> amenity;
+                    if (_obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity))
+                    {
+                        const auto& decodedValues = amenity->getDecodedValues();
+                        for (const auto& entry : OsmAnd::rangeOf(decodedValues))
+                        {
+                            //NSLog(@"%@=%@", entry.key().toNSString(), entry.value().toNSString());
+
+                            if (entry.key() == QString("phone"))
+                                symbol.phone = entry.value().toNSString();
+                            if (entry.key() == QString("opening_hours"))
+                                symbol.openingHours = entry.value().toNSString();
+                            if (entry.key() == QString("website"))
+                                symbol.url = entry.value().toNSString();
+                            if (entry.key() == QString("description"))
+                                symbol.desc = entry.value().toNSString();
+                        }
+                    }
+                }
                 
                 //const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
                 //symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
@@ -1425,7 +1457,16 @@
     [userInfo setObject:[NSNumber numberWithFloat:symbol.touchPoint.y] forKey:@"touchPoint.y"];
     if (symbol.icon)
         [userInfo setObject:symbol.icon forKey:@"icon"];
-    
+
+    if (symbol.phone)
+        [userInfo setObject:symbol.phone forKey:@"phone"];
+    if (symbol.openingHours)
+        [userInfo setObject:symbol.openingHours forKey:@"openingHours"];
+    if (symbol.url)
+        [userInfo setObject:symbol.url forKey:@"url"];
+    if (symbol.desc)
+        [userInfo setObject:symbol.desc forKey:@"desc"];
+
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
                                                       userInfo:userInfo];

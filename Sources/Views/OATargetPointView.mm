@@ -24,6 +24,8 @@
 
 @interface OATargetPointView()
 
+@property (weak, nonatomic) IBOutlet UIView *topView;
+
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
@@ -59,10 +61,11 @@
     CALayer *_verticalLine2;
     CALayer *_verticalLine3;
 
-    CGFloat _infoHeight;
     CALayer *_horizontalLineInfo1;
     CALayer *_horizontalLineInfo2;
     CALayer *_horizontalLineInfo3;
+    
+    UIFont *_infoFont;
     
     UIImageView *_infoPhoneImage;
     UIButton *_infoPhoneText;
@@ -101,12 +104,11 @@
 
 - (void) setupInfoButton:(UIButton *)button
 {
-    _infoPhoneText.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:16.0];
-    _infoPhoneText.titleLabel.textColor = [UIColor blackColor];
-    _infoPhoneText.titleLabel.textAlignment = NSTextAlignmentLeft;
-    
-    //_infoPhoneText.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    //_infoPhoneText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+    button.titleLabel.font = [_infoFont copy];
+    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
 }
 
 -(void)awakeFromNib
@@ -120,24 +122,44 @@
     _horizontalLineInfo3 = [CALayer layer];
     _horizontalLineInfo3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
-    [self.layer addSublayer:_horizontalLineInfo1];
-    [self.layer addSublayer:_horizontalLineInfo2];
-    [self.layer addSublayer:_horizontalLineInfo3];
+    [_topView.layer addSublayer:_horizontalLineInfo1];
+    [_topView.layer addSublayer:_horizontalLineInfo2];
+    [_topView.layer addSublayer:_horizontalLineInfo3];
 
+    _infoFont = [UIFont fontWithName:@"AvenirNext-Medium" size:14.0];
+    
     _infoPhoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_phone_number"]];
+    _infoPhoneImage.contentMode = UIViewContentModeCenter;
+    [self addSubview:_infoPhoneImage];
     _infoOpeningHoursImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_working_time"]];
+    _infoOpeningHoursImage.contentMode = UIViewContentModeCenter;
+    [self addSubview:_infoOpeningHoursImage];
     _infoUrlImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_website"]];
+    _infoUrlImage.contentMode = UIViewContentModeCenter;
+    [self addSubview:_infoUrlImage];
     _infoDescImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_description"]];
+    _infoDescImage.contentMode = UIViewContentModeCenter;
+    [self addSubview:_infoDescImage];
     
     _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoPhoneText];
+    _infoPhoneText.userInteractionEnabled = NO;
+    [self addSubview:_infoPhoneText];
     
     _infoOpeningHoursText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoOpeningHoursText];
+    _infoOpeningHoursText.userInteractionEnabled = NO;
+    [self addSubview:_infoOpeningHoursText];
+    
     _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoUrlText];
+    _infoUrlText.userInteractionEnabled = NO;
+    [self addSubview:_infoUrlText];
+    
     _infoDescText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoDescText];
+    _infoDescText.userInteractionEnabled = NO;
+    [self addSubview:_infoDescText];
     
     [self doUpdateUI];
 
@@ -148,10 +170,10 @@
     _buttonMore.hidden = YES;
 
     // drop shadow
-    [self.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.layer setShadowOpacity:0.8];
-    [self.layer setShadowRadius:3.0];
-    [self.layer setShadowOffset:CGSizeMake(2.0, 2.0)];
+    [_topView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_topView.layer setShadowOpacity:0.3];
+    [_topView.layer setShadowRadius:3.0];
+    [_topView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
@@ -216,13 +238,17 @@
         _buttonMore.hidden = YES;
     }
     
-    _infoHeight = 0;
+    _infoPhoneImage.hidden = _targetPoint.phone == nil;
+    _infoPhoneText.hidden = _targetPoint.phone == nil;
     
-    if (_targetPoint.phone)
-    {
-        [OAUtilities calculateTextBounds:_targetPoint.phone width:DeviceScreenWidth font:nil];
-    }
+    _infoOpeningHoursImage.hidden = _targetPoint.openingHours == nil;
+    _infoOpeningHoursText.hidden = _targetPoint.openingHours == nil;
     
+    _infoUrlImage.hidden = _targetPoint.url == nil;
+    _infoUrlText.hidden = _targetPoint.url == nil;
+    
+    _infoDescImage.hidden = _targetPoint.desc == nil;
+    _infoDescText.hidden = _targetPoint.desc == nil;
 }
 
 - (void)layoutSubviews
@@ -239,10 +265,80 @@
         landscape = YES;
     }
     
+    _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
+    
+    CGFloat hf = h;
+    
+    if (_targetPoint.phone)
+    {
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGFloat ih = MAX(44.0, s.height + 16.0);
+        
+        _infoPhoneImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+        _infoPhoneText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
+        
+        hf += ih;
+        _horizontalLineInfo1.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
+        _horizontalLineInfo1.hidden = NO;
+    }
+    else
+    {
+        _horizontalLineInfo1.hidden = YES;
+    }
+    
+    if (_targetPoint.openingHours)
+    {
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGFloat ih = MAX(44.0, s.height + 16.0);
+        
+        _infoOpeningHoursImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+        _infoOpeningHoursText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
+
+        hf += ih;
+        _horizontalLineInfo2.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
+        _horizontalLineInfo2.hidden = NO;
+    }
+    else
+    {
+        _horizontalLineInfo2.hidden = YES;
+    }
+
+    if (_targetPoint.url)
+    {
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.url width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGFloat ih = MAX(44.0, s.height + 16.0);
+        
+        _infoUrlImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+        _infoUrlText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
+        
+        hf += ih;
+        _horizontalLineInfo3.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
+        _horizontalLineInfo3.hidden = NO;
+    }
+    else
+    {
+        _horizontalLineInfo3.hidden = YES;
+    }
+
+    if (_targetPoint.desc)
+    {
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGFloat ih = MAX(44.0, s.height + 16.0);
+        
+        _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+        _infoDescText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        [_infoDescText setTitle:_targetPoint.desc forState:UIControlStateNormal];
+        
+        hf += ih;
+    }
+
     CGRect frame = self.frame;
-    frame.origin.y = DeviceScreenHeight - h;
+    frame.origin.y = DeviceScreenHeight - hf;
     frame.size.width = DeviceScreenWidth;
-    frame.size.height = h;
+    frame.size.height = hf;
     self.frame = frame;
     
     

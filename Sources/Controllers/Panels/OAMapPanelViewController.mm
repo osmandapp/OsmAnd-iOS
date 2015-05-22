@@ -185,7 +185,7 @@
     if (_shadowButton)
         _shadowButton.frame = [self shadowButtonRect];
 }
-
+ 
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
 
@@ -724,7 +724,7 @@
         if (_mapSettings)
             frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
         else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightPortrait);
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - self.targetMenuView.frame.size.height);
     } else {
         
         CGFloat popupWidth = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsPopupWidth : 320.0;
@@ -732,7 +732,7 @@
         if (_mapSettings)
             frame = CGRectMake(popupWidth, 0.0, self.view.bounds.size.width - popupWidth, self.view.bounds.size.height);
         else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kOATargetPointViewHeightLandscape);
+            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - self.targetMenuView.frame.size.height);
     }
     return frame;
 }
@@ -804,6 +804,12 @@
     UIImage *icon = [params objectForKey:@"icon"];
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
+    
+    NSString *phone = [params objectForKey:@"phone"];
+    NSString *openingHours = [params objectForKey:@"openingHours"];
+    NSString *url = [params objectForKey:@"url"];
+    NSString *desc = [params objectForKey:@"desc"];
+    
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -938,6 +944,10 @@
     targetPoint.zoom = renderView.zoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
+    targetPoint.phone = phone;
+    targetPoint.openingHours = openingHours;
+    targetPoint.url = url;
+    targetPoint.desc = desc;
     
     [_targetMenuView setTargetPoint:targetPoint];
     

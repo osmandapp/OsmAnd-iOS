@@ -86,6 +86,7 @@
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     
@@ -139,6 +140,9 @@
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
                                                                 andObserve:_app.downloadsManager.completedObservable];
+    _locationServicesUpdateFirstTimeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onLocationServicesFirstTimeUpdate)
+                                                                 andObserve:_app.locationServices.updateFirstTimeObserver];
 
 }
 
@@ -478,6 +482,13 @@
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
         if (!_driveModeButton.hidden)
             self.rulerLabel.hidden = YES;
+    });
+}
+
+- (void)onLocationServicesFirstTimeUpdate
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapModeButton];
     });
 }
 

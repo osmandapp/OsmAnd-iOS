@@ -88,6 +88,7 @@
     _lastLocation = nil;
     _lastHeading = NAN;
     _updateObserver = [[OAObservable alloc] init];
+    _updateFirstTimeObserver = [[OAObservable alloc] init];
 
     _isSuspended = NO;
 
@@ -315,6 +316,7 @@
 }
 
 @synthesize updateObserver = _updateObserver;
+@synthesize updateFirstTimeObserver = _updateFirstTimeObserver;
 
 - (void)updateDeviceOrientation
 {
@@ -525,9 +527,14 @@
         [_statusObservable notifyEvent];
         _waitingForAuthorization = NO;
     }
-
+    
+    BOOL wasLocationUnknown = (_lastLocation == nil);
+    
     _lastLocation = [locations lastObject];
     [_updateObserver notifyEvent];
+
+    if (wasLocationUnknown)
+        [_updateFirstTimeObserver notifyEvent];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading

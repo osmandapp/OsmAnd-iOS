@@ -10,7 +10,10 @@
 
 #import <UIKit/UIKit.h>
 
+#if defined(OSMAND_IOS_DEV)
 #import <HockeySDK/HockeySDK.h>
+#import <HockeySDK/BITCrashManagerDelegate.h>
+#endif // defined(OSMAND_IOS_DEV)
 
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
@@ -18,6 +21,7 @@
 #import "OANavigationController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
+#import "OAMapRendererView.h"
 #include "CoreResourcesFromBundleProvider.h"
 
 #include <QDir>
@@ -31,6 +35,12 @@
 
 #import "OAIntroViewController.h"
 
+#if defined(OSMAND_IOS_DEV)
+@interface OAAppDelegate() <BITHockeyManagerDelegate, BITCrashManagerDelegate>
+@end
+#endif // defined(OSMAND_IOS_DEV)
+
+
 @implementation OAAppDelegate
 {
     id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol> _app;
@@ -43,7 +53,7 @@
 {
 #if defined(OSMAND_IOS_DEV)
     // Initialize HockeyApp SDK
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"d0e3531de653eb594ed116297d16a284"];
+    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"d0e3531de653eb594ed116297d16a284" delegate:self];
     [[BITHockeyManager sharedHockeyManager] startManager];
     [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
 #endif // defined(OSMAND_IOS_DEV)
@@ -233,5 +243,33 @@
     device.batteryMonitoringEnabled = NO;
     [device endGeneratingDeviceOrientationNotifications];
 }
+
+
+#if defined(OSMAND_IOS_DEV)
+
+#pragma mark -
+#pragma mark BITCrashManagerDelegate
+
+-(NSString *)applicationLogForCrashManager:(BITCrashManager *)crashManager
+{
+    NSMutableString *log = [NSMutableString string];
+    
+    [log appendString:@"--- Map params ---\n"];
+    [log appendFormat:@"Map source: resourceId=%@ name=%@ variant=%@\n", _app.data.lastMapSource.resourceId, _app.data.lastMapSource.name, _app.data.lastMapSource.variant];
+
+    OAMapViewController* mapVC = _rootViewController.mapPanel.mapViewController;
+    OAMapRendererView* mapView = (OAMapRendererView*)mapVC.view;
+
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(mapView.target31);
+    
+    [log appendFormat:@"Map position: x=%d y=%d lat=%f lon=%f zoom=%f azimuth=%f elevation=%f\n", mapView.target31.x, mapView.target31.y, latLon.latitude, latLon.longitude, mapView.zoom, mapView.azimuth, mapView.elevationAngle];
+    
+    [log appendString:@"--- Map params ---"];
+    
+    return @"";
+}
+
+#endif // defined(OSMAND_IOS_DEV)
+
 
 @end

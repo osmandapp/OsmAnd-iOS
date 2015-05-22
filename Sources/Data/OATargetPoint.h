@@ -24,6 +24,10 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) UIImage *icon;
 @property (nonatomic) CLLocationCoordinate2D location;
 @property (nonatomic) NSString *title;
+
+@property (nonatomic) NSString *phone;
+@property (nonatomic) NSString *openingHours;
+@property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
 
 @property (nonatomic) CGPoint touchPoint;

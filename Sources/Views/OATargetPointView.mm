@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "PXAlertView.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -57,6 +58,20 @@
     CALayer *_verticalLine1;
     CALayer *_verticalLine2;
     CALayer *_verticalLine3;
+
+    CGFloat _infoHeight;
+    CALayer *_horizontalLineInfo1;
+    CALayer *_horizontalLineInfo2;
+    CALayer *_horizontalLineInfo3;
+    
+    UIImageView *_infoPhoneImage;
+    UIButton *_infoPhoneText;
+    UIImageView *_infoOpeningHoursImage;
+    UIButton *_infoOpeningHoursText;
+    UIImageView *_infoUrlImage;
+    UIButton *_infoUrlText;
+    UIImageView *_infoDescImage;
+    UIButton *_infoDescText;
 }
 
 - (instancetype)init
@@ -84,10 +99,45 @@
     return self;
 }
 
+- (void) setupInfoButton:(UIButton *)button
+{
+    _infoPhoneText.titleLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:16.0];
+    _infoPhoneText.titleLabel.textColor = [UIColor blackColor];
+    _infoPhoneText.titleLabel.textAlignment = NSTextAlignmentLeft;
+    
+    //_infoPhoneText.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    //_infoPhoneText.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
+}
 
 -(void)awakeFromNib
 {
     _iapHelper = [OAIAPHelper sharedInstance];
+    
+    _horizontalLineInfo1 = [CALayer layer];
+    _horizontalLineInfo1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLineInfo2 = [CALayer layer];
+    _horizontalLineInfo2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLineInfo3 = [CALayer layer];
+    _horizontalLineInfo3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    
+    [self.layer addSublayer:_horizontalLineInfo1];
+    [self.layer addSublayer:_horizontalLineInfo2];
+    [self.layer addSublayer:_horizontalLineInfo3];
+
+    _infoPhoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_phone_number"]];
+    _infoOpeningHoursImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_working_time"]];
+    _infoUrlImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_website"]];
+    _infoDescImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_description"]];
+    
+    _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoPhoneText];
+    
+    _infoOpeningHoursText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoOpeningHoursText];
+    _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoUrlText];
+    _infoDescText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoDescText];
     
     [self doUpdateUI];
 
@@ -116,7 +166,7 @@
     [_buttonsView.layer addSublayer:_verticalLine1];
     [_buttonsView.layer addSublayer:_verticalLine2];
     [_buttonsView.layer addSublayer:_verticalLine3];
-
+    
     [OsmAndApp instance].favoritesCollection->collectionChangeObservable.attach((__bridge const void*)self,
                                                                 [self]
                                                                 (const OsmAnd::IFavoriteLocationsCollection* const collection)
@@ -150,7 +200,6 @@
         {
             [self.buttonMore setImage:[UIImage imageNamed:@"three_dots.png"] forState:UIControlStateNormal];
             [self.buttonMore setTitle:OALocalizedString(@"more") forState:UIControlStateNormal];
-            self.buttonMore.tintColor = [UIColor grayColor];
         }
         else if (addonsCount == 1)
         {
@@ -159,7 +208,6 @@
             NSString *imageName = addon.imageName;
             [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
             [self.buttonMore setTitle:title forState:UIControlStateNormal];
-            self.buttonMore.tintColor = [UIColor colorWithRed:1.000f green:0.561f blue:0.000f alpha:1.00f];
         }
     }
     else
@@ -167,6 +215,14 @@
         _backView4.hidden = YES;
         _buttonMore.hidden = YES;
     }
+    
+    _infoHeight = 0;
+    
+    if (_targetPoint.phone)
+    {
+        [OAUtilities calculateTextBounds:_targetPoint.phone width:DeviceScreenWidth font:nil];
+    }
+    
 }
 
 - (void)layoutSubviews

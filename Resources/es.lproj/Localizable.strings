@@ -6,7 +6,7 @@
 "rendering_value__name" = "Predeterminado";
 "rendering_value_highContrastRoads_name" = "Carreteras en alto contraste";
 "rendering_attr_OSMMapperAssistant_name" = "Asistente de mapeador OSM";
-"rendering_attr_roadStyle_name" = "Estilo carretera";
+"rendering_attr_roadStyle_name" = "Estilo de carretera";
 "rendering_value_orange_name" = "Anaranjado";
 "rendering_value_germanRoadAtlas_name" = "Atlas alemán de carreteras";
 "rendering_category_routes" = "Rutas";
@@ -20,7 +20,7 @@
 "rendering_attr_showAccess_name" = "Mostrar restricciones de acceso";
 "rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de las carreteras";
 "rendering_attr_showSurfaces_name" = "Mostrar superficie de las carreteras";
-"rendering_attr_alpineHiking_name" = "Escala de senderismo Alpino (SAC)";
+"rendering_attr_alpineHiking_name" = "Escala de senderismo alpino (SAC)";
 "rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
 "rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";
 "rendering_attr_noPolygons_name" = "Ocultar polígonos";

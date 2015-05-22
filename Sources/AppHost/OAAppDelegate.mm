@@ -266,7 +266,7 @@
     
     [log appendString:@"--- Map params ---"];
     
-    return @"";
+    return log;
 }
 
 #endif // defined(OSMAND_IOS_DEV)

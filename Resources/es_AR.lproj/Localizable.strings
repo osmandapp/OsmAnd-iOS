@@ -234,7 +234,7 @@
 "nothanks" = "No, gracias";
 "download_now" = "Descargar mapa ahora";
 "prch_failed" = "Falló la compra de \"%@\"";
-"prch_items_failed" = "item(s) no se restauraron. Intente de nuevo.";
+"prch_items_failed" = "elemento(s) no se restauraron. Intente de nuevo.";
 // Resources
 "res_mapsres" = "Mapas y Recursos";
 "res_installed" = "Instalado";
@@ -328,3 +328,14 @@
 "longitude" = "Longitud";
 "track_save_short_q" = "La traza es muy corta, ¿quiere guardarla?";
 "add_as" = "Añadir como";
+"shared_string_and" = "y";
+"sett_lang" = "Idioma del mapa";
+"sett_lang_local" = "Local";
+"sett_pref_lang" = "Idioma preferido";
+"sett_lang_show_local" = "Mostrar nombres locales";
+"sett_lang_show_trans" = "Nombres transliterados";
+"res_worldwide" = "Mundial";
+// Help
+"help_quiz" = "Preguntas";
+"make_call" = "Hacer llamada";
+"sett_lang_trans" = "translit";

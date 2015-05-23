@@ -1303,11 +1303,17 @@
             if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
                 
+                NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+
                 if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
                 {
                     std::shared_ptr<const OsmAnd::Amenity> amenity;
                     if (_obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity))
                     {
+                        NSString *descFieldLoc;
+                        if (prefLang)
+                            descFieldLoc = [@"description:" stringByAppendingString:@"prefLang"];
+                        
                         const auto& decodedValues = amenity->getDecodedValues();
                         for (const auto& entry : OsmAnd::rangeOf(decodedValues))
                         {
@@ -1319,16 +1325,25 @@
                                 symbol.openingHours = entry.value().toNSString();
                             if (entry.key() == QString("website"))
                                 symbol.url = entry.value().toNSString();
-                            if (entry.key() == QString("description"))
+                            if (entry.key().startsWith(QString("description")) && !symbol.desc)
+                                symbol.desc = entry.value().toNSString();
+                            if (descFieldLoc && entry.key() == QString::fromNSString(descFieldLoc))
                                 symbol.desc = entry.value().toNSString();
                         }
                     }
                 }
                 
-                //const QString lang = QString::fromNSString([[NSLocale preferredLanguages] objectAtIndex:0]);
-                //symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
-                //if (symbol.caption.length == 0)
+                if (prefLang)
+                {
+                    const QString lang = QString::fromNSString(prefLang);
+                    symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
+                    if (symbol.caption.length == 0)
+                        symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
+                }
+                else
+                {
                     symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
+                }
                 
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
                 
@@ -2373,22 +2388,34 @@
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
                 case 1:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
                     break;
                 case 2:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    break;
+                case 3:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalizedOrTransliterated;
+                    break;
+                case 4:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+                    break;
+                case 5:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliteratedAndNative;
                     break;
                 default:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
             }
             
+            NSString *langId = [[NSLocale preferredLanguages] firstObject];
+            if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
+                langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
             
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
-                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     QString::fromNSString(langId),
                                                                                      langPreferences));
             
             

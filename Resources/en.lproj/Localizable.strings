@@ -17,6 +17,7 @@
 "shared_string_buy" = "Buy";
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
+"shared_string_and" = "and";
 
 // HUD
 "hud_heading" = "Heading";
@@ -137,6 +138,7 @@
 // Settings
 "sett_settings" = "Settings";
 "sett_units" = "Units";
+"sett_lang" = "Map Language";
 "sett_km" = "Kilometers";
 "sett_ml" = "Miles";
 "sett_zoom" = "Zoom button";
@@ -148,6 +150,12 @@
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
+
+"sett_lang_local" = "Local";
+"sett_lang_trans" = "translit";
+"sett_pref_lang" = "Preferred Language";
+"sett_lang_show_local" = "Show local names";
+"sett_lang_show_trans" = "Transliterate names";
 
 "maps" = "Maps";
 "purchases" = "Purchases";

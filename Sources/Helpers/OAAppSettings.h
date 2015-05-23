@@ -10,7 +10,6 @@
 #import <CoreLocation/CoreLocation.h>
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
-#define settingMapLanguageKey @"settingMapLanguageKey"
 #define settingAppModeKey @"settingAppModeKey"
 #define settingMetricSystemKey @"settingMetricSystemKey"
 #define settingZoomButtonKey @"settingZoomButtonKey"
@@ -31,11 +30,20 @@
 #define mapSettingSaveTrackIntervalApprovedKey @"mapSettingSaveTrackIntervalApprovedKey"
 
 
+#define settingMapLanguageKey @"settingMapLanguageKey"
+#define settingPrefMapLanguageKey @"settingPrefMapLanguageKey"
+#define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
+#define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
 @property (assign, nonatomic) BOOL settingShowMapRulet;
+
 @property (assign, nonatomic) int settingMapLanguage;
+@property (nonatomic) NSString *settingPrefMapLanguage;
+@property (assign, nonatomic) BOOL settingMapLanguageShowLocal;
+@property (assign, nonatomic) BOOL settingMapLanguageTranslit;
 
 #define METRIC_SYSTEM_METERS 0
 #define METRIC_SYSTEM_FEET 1
@@ -51,6 +59,7 @@
 #define SAVE_TRACK_INTERVAL_DEFAULT 0
 
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
+@property (nonatomic, readonly) NSArray *mapLanguages;
 
 @property (assign, nonatomic) int settingAppMode; // 0 - Day; 1 - Night; 2 - Auto
 @property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English, 2 - 

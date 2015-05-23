@@ -159,6 +159,7 @@
     
     _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoUrlText];
+    _infoUrlText.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [_infoUrlText addTarget:self action:@selector(callUrl) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_infoUrlText];
     
@@ -357,11 +358,11 @@
     
     if (_targetPoint.phone)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:DeviceScreenWidth - 55.0 font:_infoFont];
         CGFloat ih = MAX(44.0, s.height + 16.0);
         
         _infoPhoneImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoPhoneText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        _infoPhoneText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 55.0, ih);
         [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
         
         hf += ih;
@@ -378,11 +379,11 @@
     
     if (_targetPoint.openingHours)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:DeviceScreenWidth - 55.0 font:_infoFont];
         CGFloat ih = MAX(44.0, s.height + 16.0);
         
         _infoOpeningHoursImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoOpeningHoursText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        _infoOpeningHoursText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 55.0, ih);
         [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
 
         hf += ih;
@@ -398,11 +399,10 @@
 
     if (_targetPoint.url)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.url width:DeviceScreenWidth - 50.0 font:_infoFont];
-        CGFloat ih = MAX(44.0, s.height + 16.0);
+        CGFloat ih = 44.0;
         
         _infoUrlImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoUrlText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        _infoUrlText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 55.0, ih);
         [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
         
         hf += ih;
@@ -418,11 +418,11 @@
 
     if (_targetPoint.desc)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:DeviceScreenWidth - 50.0 font:_infoFont];
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:DeviceScreenWidth - 55.0 font:_infoFont];
         CGFloat ih = MAX(44.0, s.height + 16.0);
         
         _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoDescText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        _infoDescText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 55.0, ih);
         [_infoDescText setTitle:_targetPoint.desc forState:UIControlStateNormal];
         
         hf += ih;

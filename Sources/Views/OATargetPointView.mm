@@ -75,6 +75,12 @@
     UIButton *_infoUrlText;
     UIImageView *_infoDescImage;
     UIButton *_infoDescText;
+    
+    BOOL _showFull;
+    CGFloat _fullHeight;
+    
+    UISwipeGestureRecognizer *_swipeUp;
+    UISwipeGestureRecognizer *_swipeDown;
 }
 
 - (instancetype)init
@@ -143,7 +149,7 @@
     
     _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoPhoneText];
-    _infoPhoneText.userInteractionEnabled = NO;
+    [_infoPhoneText addTarget:self action:@selector(callPhone) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_infoPhoneText];
     
     _infoOpeningHoursText = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -153,7 +159,7 @@
     
     _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoUrlText];
-    _infoUrlText.userInteractionEnabled = NO;
+    [_infoUrlText addTarget:self action:@selector(callUrl) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_infoUrlText];
     
     _infoDescText = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -204,6 +210,84 @@
                                                                           [self onFavoriteLocationChanged:favoriteLocation];
                                                                       });
     
+    _swipeUp = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeUpHandler:)];
+    _swipeUp.direction = UISwipeGestureRecognizerDirectionUp;
+    [self addGestureRecognizer:_swipeUp];
+    _swipeDown = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeDownHandler:)];
+    _swipeDown.direction = UISwipeGestureRecognizerDirectionDown;
+    [self addGestureRecognizer:_swipeDown];
+    
+}
+
+- (void)swipeUpHandler:(UISwipeGestureRecognizer *)recognizer
+{
+    if (!_showFull)
+    {
+        _showFull = YES;
+        CGRect frame = self.frame;
+        frame.size.height = _fullHeight;
+        self.frame = frame;
+        frame.origin.y = DeviceScreenHeight - _fullHeight;
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.frame = frame;
+        }];
+    }
+}
+
+- (void)swipeDownHandler:(UISwipeGestureRecognizer *)recognizer
+{
+    [self.delegate targetHideMenu];
+}
+
+- (void)callUrl
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_targetPoint.url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
+}
+
+- (NSString *)stripNonDigits:(NSString *)input
+{
+    NSCharacterSet *doNotWant = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
+    return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
+}
+
+- (void)callPhone
+{
+    NSArray* phones = [_targetPoint.phone componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
+    NSMutableArray *parsedPhones = [NSMutableArray array];
+    for (NSString *phone in phones)
+    {
+        NSString *p = [self stripNonDigits:phone];
+        [parsedPhones addObject:p];
+    }
+    
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i <parsedPhones.count; i++)
+        [images addObject:@"ic_phone_number"];
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"make_call")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:parsedPhones
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                                 for (int i = 0; i < parsedPhones.count; i++)
+                                 {
+                                     if (buttonIndex == i)
+                                     {
+                                         NSString *p = parsedPhones[i];
+                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
+                                         break;
+                                     }
+                                 }
+                         }];
+    
+}
+
+- (void)doInit
+{
+    _showFull = NO;
 }
 
 - (void)doUpdateUI
@@ -267,7 +351,9 @@
     
     _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
     
+    CGFloat maxHalfHeight = DeviceScreenHeight / 2.2;
     CGFloat hf = h;
+    CGFloat hh = h;
     
     if (_targetPoint.phone)
     {
@@ -279,6 +365,9 @@
         [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
         
         hf += ih;
+        if (hf < maxHalfHeight)
+            hh = hf;
+        
         _horizontalLineInfo1.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo1.hidden = NO;
     }
@@ -297,6 +386,8 @@
         [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
 
         hf += ih;
+        if (hf < maxHalfHeight)
+            hh = hf;
         _horizontalLineInfo2.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo2.hidden = NO;
     }
@@ -315,6 +406,8 @@
         [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
         
         hf += ih;
+        if (hf < maxHalfHeight)
+            hh = hf;
         _horizontalLineInfo3.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo3.hidden = NO;
     }
@@ -333,14 +426,26 @@
         [_infoDescText setTitle:_targetPoint.desc forState:UIControlStateNormal];
         
         hf += ih;
+        if (hf < maxHalfHeight)
+            hh = hf;
     }
 
     CGRect frame = self.frame;
-    frame.origin.y = DeviceScreenHeight - hf;
     frame.size.width = DeviceScreenWidth;
-    frame.size.height = hf;
+    if (_showFull)
+    {
+        frame.origin.y = DeviceScreenHeight - hf;
+        frame.size.height = hf;
+    }
+    else
+    {
+        frame.origin.y = DeviceScreenHeight - hh;
+        frame.size.height = hh;
+    }
+
     self.frame = frame;
     
+    _fullHeight = hf;
     
     if (_imageView.image)
     {

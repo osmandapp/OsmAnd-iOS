@@ -135,7 +135,7 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="buttonShadowClicked:" destination="iN0-l3-epB" eventType="touchDown" id="7Py-5W-dvE"/>
+                                <action selector="buttonShadowClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="fkU-Ff-N7N"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="dBK-Tk-sBy" userLabel="Close">

@@ -371,4 +371,4 @@
 "longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
-
+"make_call" = "Make a call";

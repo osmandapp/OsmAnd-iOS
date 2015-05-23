@@ -719,22 +719,7 @@
 
 -(CGRect)shadowButtonRect
 {
-    CGRect frame;
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        if (_mapSettings)
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - kMapSettingsPopupHeight);
-        else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - self.targetMenuView.frame.size.height);
-    } else {
-        
-        CGFloat popupWidth = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsPopupWidth : 320.0;
-        
-        if (_mapSettings)
-            frame = CGRectMake(popupWidth, 0.0, self.view.bounds.size.width - popupWidth, self.view.bounds.size.height);
-        else
-            frame = CGRectMake(0.0, 0.0, self.view.bounds.size.width, self.view.bounds.size.height - self.targetMenuView.frame.size.height);
-    }
-    return frame;
+    return self.view.frame;
 }
 
 - (void)removeGestureRecognizers
@@ -966,7 +951,8 @@
         _shadowLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:withLongPressEvent];
         [_shadowButton addGestureRecognizer:_shadowLongPress];
     }
-    [self.view addSubview:self.shadowButton];
+    
+    [self.view insertSubview:self.shadowButton aboveSubview:_mapViewController.view];
 }
 
 -(void)destroyShadowButton
@@ -1045,6 +1031,11 @@
     [self hideTargetPointMenu];
 }
 
+-(void)targetHideMenu
+{
+    [self hideTargetPointMenu];
+}
+
 -(void)targetGoToPoint
 {
     OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);
@@ -1057,6 +1048,7 @@
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     
+    [self.targetMenuView doInit];
     [self.targetMenuView doUpdateUI];
     [self.targetMenuView doLayoutSubviews];
     CGRect frame = self.targetMenuView.frame;

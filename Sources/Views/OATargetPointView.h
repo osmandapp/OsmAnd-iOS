@@ -25,6 +25,7 @@
 -(void)setMapViewInstance:(UIView*)mapView;
 -(void)setNavigationController:(UINavigationController*)controller;
 
+- (void)doInit;
 - (void)doLayoutSubviews;
 - (void)doUpdateUI;
 
@@ -42,6 +43,7 @@
 -(void)targetPointAddWaypoint;
 
 -(void)targetHide;
+-(void)targetHideMenu;
 -(void)targetGoToPoint;
 
 @end

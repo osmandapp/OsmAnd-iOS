@@ -13,7 +13,8 @@
 @implementation OAAppSettings
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguage=_settingMapLanguage, settingAppMode=_settingAppMode;
-@synthesize mapSettingShowFavorites=_mapSettingShowFavorites;
+@synthesize mapSettingShowFavorites=_mapSettingShowFavorites, settingPrefMapLanguage=_settingPrefMapLanguage;
+@synthesize settingMapLanguageShowLocal=_settingMapLanguageShowLocal, settingMapLanguageTranslit=_settingMapLanguageTranslit;
 
 + (OAAppSettings*)sharedManager
 {
@@ -32,12 +33,24 @@
         
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
+        _mapLanguages = @[@"ar", @"be", @"ca", @"cs", @"da", @"de", @"el", @"es", @"fi", @"fr", @"he", @"hi",
+                          @"hr", @"hu", @"it", @"ja", @"ko", @"lt", @"lv", @"nl", @"pl", @"ro", @"ru", @"sk", @"sl", @"sv", @"sw", @"uk", @"zh"];
+        
         NSLocale *locale = [NSLocale autoupdatingCurrentLocale];
         BOOL isMetricSystem = [[locale objectForKey:NSLocaleUsesMetricSystem] boolValue] && ![locale.localeIdentifier isEqualToString:@"en_GB"];
         
         // Common Settings
-        _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMapLanguageKey] : 0;
+        
+        // todo: temp fix crash
+        if (_settingMapLanguage == 3 || _settingMapLanguage == 5)
+            _settingMapLanguage = 0;
+        
+        _settingPrefMapLanguage = [[NSUserDefaults standardUserDefaults] objectForKey:settingPrefMapLanguageKey];
+        _settingMapLanguageShowLocal = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageShowLocalKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageShowLocalKey] : NO;
+        _settingMapLanguageTranslit = [[NSUserDefaults standardUserDefaults] objectForKey:settingMapLanguageTranslitKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingMapLanguageTranslitKey] : NO;
+
+        _settingShowMapRulet = [[NSUserDefaults standardUserDefaults] objectForKey:settingShowMapRuletKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:settingShowMapRuletKey] : YES;
         _settingAppMode = [[NSUserDefaults standardUserDefaults] objectForKey:settingAppModeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingAppModeKey] : 0;
 
         _settingMetricSystem = [[NSUserDefaults standardUserDefaults] objectForKey:settingMetricSystemKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:settingMetricSystemKey] : (isMetricSystem ? 0 : 1);
@@ -54,7 +67,7 @@
         _mapSettingSaveTrackIntervalGlobal = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalGlobalKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingSaveTrackIntervalGlobalKey] : SAVE_TRACK_INTERVAL_DEFAULT;
 
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
-        _mapSettingSaveTrackIntervalApproved = NO;//[[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalApprovedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveTrackIntervalApprovedKey] : NO;
+        _mapSettingSaveTrackIntervalApproved = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalApprovedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveTrackIntervalApprovedKey] : NO;
     }
     return self;
 }
@@ -68,6 +81,26 @@
 -(void)setSettingMapLanguage:(int)settingMapLanguage {
     _settingMapLanguage = settingMapLanguage;
     [[NSUserDefaults standardUserDefaults] setInteger:_settingMapLanguage forKey:settingMapLanguageKey];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+-(void)setSettingPrefMapLanguage:(NSString *)settingPrefMapLanguage
+{
+    _settingPrefMapLanguage = settingPrefMapLanguage;
+    [[NSUserDefaults standardUserDefaults] setObject:_settingPrefMapLanguage forKey:settingPrefMapLanguageKey];
+    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
+-(void)setSettingMapLanguageShowLocal:(BOOL)settingMapLanguageShowLocal
+{
+    _settingMapLanguageShowLocal = settingMapLanguageShowLocal;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageShowLocal forKey:settingMapLanguageShowLocalKey];
+}
+
+-(void)setSettingMapLanguageTranslit:(BOOL)settingMapLanguageTranslit
+{
+    _settingMapLanguageTranslit = settingMapLanguageTranslit;
+    [[NSUserDefaults standardUserDefaults] setBool:_settingMapLanguageTranslit forKey:settingMapLanguageTranslitKey];
 }
 
 -(void)setSettingAppMode:(int)settingAppMode {

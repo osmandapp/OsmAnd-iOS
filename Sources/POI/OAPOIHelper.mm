@@ -14,6 +14,7 @@
 #import "OAPOIParser.h"
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -42,6 +43,8 @@
     
     OsmAnd::AreaI _visibleArea;
     OsmAnd::ZoomLevel _zoomLevel;
+    
+    NSString *_prefLang;
 }
 
 + (OAPOIHelper *)sharedInstance {
@@ -287,6 +290,7 @@
     
     _limitCounter = _searchLimit;
     
+    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
     
     if (_radius == 0.0) {
         
@@ -375,15 +379,32 @@
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
-    poi.nameLocalized = amenity->nativeName.toNSString();
+    
+    if (_prefLang)
+    {
+        const QString lang = QString::fromNSString(_prefLang);
+        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+        {
+            //NSLog(@"%@=%@", entry.key().toNSString(), entry.value().toNSString());
+            if (entry.key() == lang)
+            {
+                poi.nameLocalized = entry.value().toNSString();
+                break;
+            }
+        }
+        
+    }
+
+    if (!poi.nameLocalized)
+        poi.nameLocalized = amenity->nativeName.toNSString();
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
     //NSLog(@"name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
     
     const auto& decodedValues = amenity->getDecodedValues();
-    for(const auto& entry : OsmAnd::rangeOf(decodedValues)) {
-        
+    for(const auto& entry : OsmAnd::rangeOf(decodedValues))
+    {
         // phone, website, description        
         if (entry.key() == QString("opening_hours"))
         {

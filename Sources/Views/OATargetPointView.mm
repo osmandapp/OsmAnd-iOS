@@ -17,6 +17,9 @@
 #import "PXAlertView.h"
 #import "OAUtilities.h"
 
+#import "OpeningHoursParser.h"
+#include "java/util/Calendar.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -74,7 +77,7 @@
     UIImageView *_infoUrlImage;
     UIButton *_infoUrlText;
     UIImageView *_infoDescImage;
-    UIButton *_infoDescText;
+    UITextView *_infoDescText;
     
     BOOL _showFull;
     CGFloat _fullHeight;
@@ -136,37 +139,43 @@
     
     _infoPhoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_phone_number"]];
     _infoPhoneImage.contentMode = UIViewContentModeCenter;
-    [self addSubview:_infoPhoneImage];
+    [self insertSubview:_infoPhoneImage atIndex:0];
+    
     _infoOpeningHoursImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_working_time"]];
     _infoOpeningHoursImage.contentMode = UIViewContentModeCenter;
-    [self addSubview:_infoOpeningHoursImage];
+    [self insertSubview:_infoOpeningHoursImage atIndex:0];
+
     _infoUrlImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_website"]];
     _infoUrlImage.contentMode = UIViewContentModeCenter;
-    [self addSubview:_infoUrlImage];
+    [self insertSubview:_infoUrlImage atIndex:0];
+
     _infoDescImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_description"]];
     _infoDescImage.contentMode = UIViewContentModeCenter;
-    [self addSubview:_infoDescImage];
+    [self insertSubview:_infoDescImage atIndex:0];
     
     _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoPhoneText];
     [_infoPhoneText addTarget:self action:@selector(callPhone) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_infoPhoneText];
+    [self insertSubview:_infoPhoneText atIndex:0];
     
     _infoOpeningHoursText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoOpeningHoursText];
     _infoOpeningHoursText.userInteractionEnabled = NO;
-    [self addSubview:_infoOpeningHoursText];
+    [self insertSubview:_infoOpeningHoursText atIndex:0];
     
     _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoUrlText];
     _infoUrlText.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [_infoUrlText addTarget:self action:@selector(callUrl) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_infoUrlText];
+    [self insertSubview:_infoUrlText atIndex:0];
     
-    _infoDescText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoDescText];
-    _infoDescText.userInteractionEnabled = NO;
-    [self addSubview:_infoDescText];
+    _infoDescText = [[UITextView alloc] init];
+    _infoDescText.font = [_infoFont copy];
+    _infoDescText.textColor = [UIColor blackColor];
+    _infoDescText.backgroundColor = self.backgroundColor;
+    _infoDescText.editable = NO;
+    _infoDescText.selectable = NO;
+    [self insertSubview:_infoDescText atIndex:0];
     
     [self doUpdateUI];
 
@@ -323,6 +332,20 @@
         _buttonMore.hidden = YES;
     }
     
+    if (_targetPoint.openingHours)
+    {
+        NetOsmandUtilOpeningHoursParser_OpeningHours *parser = [NetOsmandUtilOpeningHoursParser parseOpenedHoursWithNSString:_targetPoint.openingHours];
+        JavaUtilCalendar *cal = JavaUtilCalendar_getInstance();
+        BOOL isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+        
+        UIColor *color;
+        if (isOpened)
+            color = UIColorFromRGB(0x2BBE31);
+        else
+            color = UIColorFromRGB(0xDA3A3A);
+        [_infoOpeningHoursText setTitleColor:color forState:UIControlStateNormal];
+    }
+    
     _infoPhoneImage.hidden = _targetPoint.phone == nil;
     _infoPhoneText.hidden = _targetPoint.phone == nil;
     
@@ -418,12 +441,21 @@
 
     if (_targetPoint.desc)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:DeviceScreenWidth - 55.0 font:_infoFont];
+        CGFloat hText = 150.0;
+        if (landscape)
+            hText = 80.0;
+        
+        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:DeviceScreenWidth - 50.0 height:hText font:_infoFont];
         CGFloat ih = MAX(44.0, s.height + 16.0);
         
         _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoDescText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 55.0, ih);
-        [_infoDescText setTitle:_targetPoint.desc forState:UIControlStateNormal];
+        _infoDescText.frame = CGRectMake(50.0, hf, DeviceScreenWidth - 50.0, ih);
+        _infoDescText.text = _targetPoint.desc;
+        
+        if (ih == 44.0)
+            _infoDescText.contentInset = UIEdgeInsetsMake(4,-4,0,0);
+        else
+            _infoDescText.contentInset = UIEdgeInsetsMake(0,-4,0,0);
         
         hf += ih;
         if (hf < maxHalfHeight)

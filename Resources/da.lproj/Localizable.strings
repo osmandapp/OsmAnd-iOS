@@ -331,3 +331,4 @@
 "res_inst_avail_wifi_q" = "Intallation af %@ behøver %@ der bliver hentet over WiFi netværk.";
 "res_updates_exp" = "Køb kontinenter for at opdatere kortene";
 "loc_access_denied_desc" = "Adgang til placeringstjeneste er blevet nægtet";
+"make_call" = "Foretag et opkald";

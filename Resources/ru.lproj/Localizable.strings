@@ -361,6 +361,6 @@
 "sett_lang" = "Язык карты";
 "sett_lang_local" = "Локальный";
 "sett_lang_trans" = "транслит";
-"sett_pref_lang" = "Предпочтительный язык";
-"sett_lang_show_local" = "Локальные названия";
+"sett_pref_lang" = "Язык";
+"sett_lang_show_local" = "Локальные имена";
 "sett_lang_show_trans" = "Транслитерация";

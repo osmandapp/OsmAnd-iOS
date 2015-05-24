@@ -1,0 +1,72 @@
+"OsmAnd Maps" = "Mapes de l'OsmAnd";
+// Shared Strings
+"shared_string_back" = "Enrere";
+"shared_string_ok" = "D'acord";
+"shared_string_cancel" = "Cancel·la";
+"shared_string_no" = "No";
+"shared_string_yes" = "Sí";
+"shared_string_save" = "Desa";
+"shared_string_done" = "Fet";
+"shared_string_update" = "Actualitza";
+"shared_string_install" = "Instal·la";
+"shared_string_uninstall" = "Desinstal·la";
+"shared_string_delete" = "Suprimeix";
+"shared_string_add" = "Afegeix";
+"shared_string_buy" = "Compra";
+"shared_string_buy_for" = "per";
+"shared_string_or" = "o";
+"shared_string_and" = "i";
+// HUD
+"hud_heading" = "Encapçalament";
+"hud_no_movement" = "Sense moviment";
+// Favorites
+"fav_color" = "Color";
+"fav_colors" = "Colors";
+"fav_name" = "Nom";
+"fav_group" = "Grup";
+"groups" = "Grups";
+"favorite" = "Preferit";
+"fav_no_group" = "Cap grup";
+"fav_remove_q" = "Voleu suprimir el preferit?";
+"fav_import" = "Importa";
+"fav_import_title" = "Importa un preferit";
+"fav_export_title" = "Exporta un preferit";
+"fav_select_remove" = "Seleccioneu els preferits per suprimir";
+"fav_export_select" = "Seleccioneu els preferits per exportar";
+"fav_import_desc" = "Podeu importar els vostres preferits com a fites en un fitxer GPX (format de dades GPS més comú)\n\nPer compartir el fitxer preferits.gpx podeu obrir-lo des del Dropbox, des del correu electrònic o des de qualsevol altra font - Utilitza Obre a la funció.";
+"fav_create_group" = "Crea un grup nou";
+"fav_enter_group_name" = "Introduïu el nom del grup";
+"fav_exists" = "Ja existeix un preferit amb el nom «%@»";
+"fav_ignore" = "Ignora";
+"fav_rename" = "Reanomena";
+"fav_replace" = "Reemplaça";
+"fav_replace_all" = "Reemplaça-ho tot";
+"fav_rename_q" = "Canvia el nom d'un preferit";
+"fav_enter_new_name" = "Introduïu un nom nou pel preferit";
+// POI
+"poi_insrease_radius" = "Incrementa el radi de cerca a";
+"poi_hide" = "Amaga";
+// My Places
+"favorites" = "Preferits";
+"tracks" = "Traces";
+// GPX
+"gpx_point" = "Punt";
+"gpx_waypoints" = "Fites";
+"gpx_points" = "Punt(s)";
+"gpx_export" = "Exporta";
+"import_export" = "Importa/exporta";
+"gpx_import_title" = "Importa una traça";
+"gpx_import_already_exists" = "La traça especificada ja existeix a la llista. Trieu una acció.";
+"gpx_add_new" = "Afegeix un fitxer nou";
+"gpx_overwrite" = "Sobreescriu";
+"gpx_cannot_import" = "No s'ha pogut importar el fitxer GPX especificat";
+"gpx_export_title" = "Exporta una traça";
+"gpx_export_select_track" = "Seleccioneu la traça per exportar";
+"gpx_no_tracks" = "No hi ha traces";
+"gpx_remove" = "Voleu suprimir la traça?";
+"gpx_stat" = "Estadístiques";
+"gpx_route_time" = "Temps de ruta";
+"gpx_distance" = "Distància";
+"gpx_average_speed" = "Velocitat mitjana";
+"gpx_start" = "Inicia";
+"gpx_finish" = "Acaba";

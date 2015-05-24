@@ -1,6 +1,6 @@
 "OsmAnd Maps" = "OsmAnd";
 "rendering_attr_hideBuildings_name" = "Ukrywanie budynków";
-"rendering_attr_OSMMapperAssistant_name" = "Asystent mapowanie OSM";
+"rendering_attr_OSMMapperAssistant_name" = "Asystent mapowania OSM";
 "shared_string_ok" = "OK";
 "shared_string_cancel" = "Anuluj";
 "shared_string_yes" = "Tak";
@@ -36,5 +36,5 @@
 "rendering_attr_osmcTraces_name" = "Symbol nakładki wędrówek";
 "rendering_attr_noAdminboundaries_name" = "Ukrywanie granic";
 "rendering_attr_noPolygons_name" = "Ukrywanie wielokątów";
-"rendering_attr_contourLines_name" = "Pokaż poziomice";
+"rendering_attr_contourLines_name" = "Wyświetlanie poziomic";
 "favorite" = "Ulubione";

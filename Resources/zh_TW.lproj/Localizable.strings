@@ -331,3 +331,11 @@
 "product_desc_track_recording" = "啟動記錄和儲存您軌跡的功能";
 "pickup_car" = "取車";
 "pickup_car_at" = "取車地方在";
+"shared_string_and" = "以及";
+"sett_lang" = "地圖上的語言";
+"sett_lang_local" = "本機";
+"sett_pref_lang" = "優先的語言";
+"sett_lang_show_local" = "顯示本地名稱";
+"sett_lang_show_trans" = "直譯名稱";
+"make_call" = "打電話";
+"sett_lang_trans" = "直譯";

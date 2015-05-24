@@ -322,3 +322,5 @@
 "cannot_add_marker" = "Kann nicht das Parken ergänzen";
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";
 "cannot_add_destination" = "Kann nicht Richtung ergänzen";
+//inapps
+"product_title_nautical" = "Nautische Karte";

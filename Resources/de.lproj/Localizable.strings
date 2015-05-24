@@ -152,7 +152,7 @@
 "res_created_on" = "Erstellt am";
 "res_updates_avail_q" = "Update(s) sind verfügbar.";
 // Menu
-"menu_my_places" = "Meien Orte";
+"menu_my_places" = "Meine Orte";
 "menu_feedback" = "Rückmeldungen";
 "menu_about" = "Über";
 "other_options" = "Weitere Optionen";
@@ -299,3 +299,26 @@
 "shared_string_or" = "oder";
 "show_info" = "Zeige Info";
 "res_banner_free_maps_desc" = "Download von %d kostenlosen Karten (Updates nicht verfügbar!) möglich";
+"map_settings_avail_lay" = "Verfügbare Layer";
+"map_settings_under" = "Hintergrund";
+"map_settings_over" = "Vordergrund";
+"map_settings_overunder" = "Vordergrund / Hintergrund";
+"shared_string_and" = "und";
+"hud_no_movement" = "Keine Bewegung";
+"fav_import_desc" = "Du kannst Deine Favoriten als Wegpunkte in einer GPX Datei (Common GPS Datenformat) importieren\n\nZum veröffentlichen der favorites.gpx Datei kannst Du Dateien von Dropbox, E-Mail, oder anderen Quellen öffnen- benutze Öffnen in Funktion.";
+"gpx_route_time" = "Routenzeit";
+"track_clear" = "leere aktuellen Track";
+"track_clear_q" = "Möchtest Du den aktuellen Track leeren?";
+"sett_lang" = "Kartensprache";
+"sett_arr_loc" = "Standort";
+"sett_lang_local" = "Lokal";
+"sett_pref_lang" = "bevorzugte Sprache";
+"sett_lang_show_local" = "zeige lokale Namen";
+"prch_nau_q1" = "Bitte den \"See\" Stil einschalten in den Karten Einstellungen und installiere die weltweite Seemarken Basiskarte.";
+"prch_nau_q3" = "Du kannst es später installieren über die Karten & Resourcen.";
+"res_banner_free_maps_title" = "Du hast %d freie Karten!";
+"parking_marker" = "Parkmarkierung";
+"pickup_car" = "zum Auto gehen";
+"cannot_add_marker" = "Kann nicht das Parken ergänzen";
+"cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";
+"cannot_add_destination" = "Kann nicht Richtung ergänzen";

@@ -12,6 +12,7 @@
 
 @interface OAMapRulerView : UIView
 
+-(BOOL)hasNoData;
 -(void)updateColors;
 -(void)setRulerData:(float) metersPerPixel;
 

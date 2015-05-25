@@ -64,16 +64,16 @@
             languageValue = OALocalizedString(@"sett_lang_local");
             break;
         case 4: // LocalizedAndNative
-            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), OALocalizedString(@"sett_lang_local")];
+            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
             break;
         case 1: // LocalizedOrNative
-            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), OALocalizedString(@"sett_lang_local")];
+            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
             break;
         case 5: // LocalizedOrTransliteratedAndNative
-            languageValue = [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, OALocalizedString(@"sett_lang_trans"), OALocalizedString(@"shared_string_and"), OALocalizedString(@"sett_lang_local")];
+            languageValue = [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
             break;
-        case 3: // LocalizedOrTransliterated
-            languageValue = [NSString stringWithFormat:@"%@ (%@)", prefLang, OALocalizedString(@"sett_lang_trans")];
+        case 6: // LocalizedOrTransliterated
+            languageValue = [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
             break;
             
         default:
@@ -385,23 +385,26 @@
     
     /*
      // "name" only
-     NativeOnly,
+     0 NativeOnly,
      
      // "name:$locale" or "name"
-     LocalizedOrNative,
+     1 LocalizedOrNative,
      
      // "name" and "name:$locale"
-     NativeAndLocalized,
+     2 NativeAndLocalized,
      
      // "name" and ( "name:$locale" or transliterate("name") )
-     NativeAndLocalizedOrTransliterated,
+     3 NativeAndLocalizedOrTransliterated,
      
      // "name:$locale" and "name"
-     LocalizedAndNative,
+     4 LocalizedAndNative,
      
      // ( "name:$locale" or transliterate("name") ) and "name"
-     LocalizedOrTransliteratedAndNative
+     5 LocalizedOrTransliteratedAndNative
      
+     // ( "name:$locale" or transliterate("name") )
+     6 LocalizedOrTransliterated,
+
      */
     
     int newValue;
@@ -419,7 +422,7 @@
     }
     else if (settings.settingMapLanguageTranslit)
     {
-        newValue = 3; // ?
+        newValue = 6;
     }
     else
     {

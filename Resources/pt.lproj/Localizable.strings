@@ -331,3 +331,11 @@
 "longitude" = "Longitude";
 "track_save_short_q" = "Trajeto é muito curto, você quer salvar?";
 "add_as" = "Adicionar como";
+"shared_string_and" = "e";
+"sett_lang" = "Idioma do mapa";
+"sett_lang_local" = "Local";
+"sett_pref_lang" = "Idioma preferido";
+"sett_lang_show_local" = "Mostrar nomes locais";
+"sett_lang_show_trans" = "Nomes transliterados";
+"make_call" = "Ligar";
+"sett_lang_trans" = "transliterar";

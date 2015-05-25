@@ -172,12 +172,12 @@
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
-    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(60, DeviceScreenHeight - 40, kMapRulerMinWidth, 25)];
+    self.rulerLabel = [[OAMapRulerView alloc] initWithFrame:CGRectMake(60, DeviceScreenHeight - 42, kMapRulerMinWidth, 25)];
     self.rulerLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.rulerLabel];
     
     // Constraints
-    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-15.0f];
+    NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:1.0f constant:-17.0f];
     [self.view addConstraint:constraint];
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0f constant:60.0f];
@@ -230,7 +230,7 @@
     
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 2.0 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-        if (self.rulerLabel.hidden)
+        if ([self.rulerLabel hasNoData])
         {
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
             if (!_driveModeButton.hidden)
@@ -250,17 +250,26 @@
 
 - (void)viewWillLayoutSubviews
 {
-    //if (_destinationViewController)
-    //    [_destinationViewController updateFrame:YES];
-    
     if (_overlayUnderlayView)
     {
-        CGFloat x1 = _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0;
-        CGFloat x2 = (_driveModeButton.hidden ? _mapModeButton.frame.origin.x : _driveModeButton.frame.origin.x) - 8.0;
-        
-        CGFloat w = x2 - x1;
-        CGFloat h = [_overlayUnderlayView getHeight:w];
-        _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 11.0, w, h);
+        if (_driveModeButton.hidden || UIInterfaceOrientationIsLandscape(self.interfaceOrientation))
+        {
+            CGFloat x1 =  (_driveModeButton.hidden ? _optionsMenuButton.frame.origin.x + _optionsMenuButton.frame.size.width + 8.0 : _driveModeButton.frame.origin.x + _driveModeButton.frame.size.width + 8.0);
+            CGFloat x2 = _mapModeButton.frame.origin.x - 8.0;
+            
+            CGFloat w = x2 - x1;
+            CGFloat h = [_overlayUnderlayView getHeight:w];
+            _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0, w, h);
+        }
+        else
+        {
+            CGFloat x1 = _driveModeButton.frame.origin.x;
+            CGFloat x2 = _zoomButtonsView.frame.origin.x - 8.0;
+            
+            CGFloat w = x2 - x1;
+            CGFloat h = [_overlayUnderlayView getHeight:w];
+            _overlayUnderlayView.frame = CGRectMake(x1, DeviceScreenHeight - h - 15.0 - _optionsMenuButton.frame.size.height - 8.0, w, h);
+        }
     }
 }
 

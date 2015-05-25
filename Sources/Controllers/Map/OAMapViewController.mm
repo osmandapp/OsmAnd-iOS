@@ -1369,9 +1369,9 @@
                     symbol.type = OAMapSymbolPOI;
                 
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
-                if (symbolGroup != nullptr) {
+                if (symbolGroup != nullptr)
+                {
                     std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
-                    
                     if (mapIconSymbol != nullptr)
                         if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapIconSymbol))
                         {
@@ -1379,6 +1379,13 @@
                             _mapPresentationEnvironment->obtainMapIcon(rasterMapSymbol->content, outIcon);
                             if (outIcon != nullptr)
                                 symbol.icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
+                        }
+
+                    std::shared_ptr<OsmAnd::MapSymbol> mapCaptionSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Caption);
+                    if (mapCaptionSymbol != nullptr)
+                        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapCaptionSymbol))
+                        {
+                            symbol.caption = rasterMapSymbol->content.toNSString();
                         }
                 }
             }
@@ -2393,8 +2400,8 @@
                 case 2:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
                     break;
-                case 3:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalizedOrTransliterated;
+                case 6:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
                     break;
                 case 4:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;

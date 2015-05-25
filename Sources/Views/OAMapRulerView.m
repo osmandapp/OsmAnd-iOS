@@ -58,6 +58,11 @@
     return self;
 }
 
+-(BOOL)hasNoData
+{
+    return self.textLabel.text.length == 0;
+}
+
 -(void)updateColors
 {
     if([OAAppSettings sharedManager].settingAppMode == APPEARANCE_MODE_NIGHT)

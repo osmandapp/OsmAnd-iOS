@@ -2291,6 +2291,7 @@
 		8440E2E51ABEB2450088856A /* OAPointDescCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointDescCell.xib; path = Resources/Controllers/Cells/OAPointDescCell.xib; sourceTree = "<group>"; };
 		8440E2EC1ABEB28E0088856A /* OAPointDescCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPointDescCell.h; path = Controllers/Cells/OAPointDescCell.h; sourceTree = "<group>"; };
 		8440E2ED1ABEB28E0088856A /* OAPointDescCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAPointDescCell.m; path = Controllers/Cells/OAPointDescCell.m; sourceTree = "<group>"; };
+		8441CB131B11EBA30033AC95 /* hu */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hu; path = hu.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84448CA31B008A0600B66A8A /* da */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = da; path = da.lproj/Localizable.strings; sourceTree = "<group>"; };
 		844499411AAA14A800ACA20D /* OAPurchasesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPurchasesViewController.xib; path = Resources/OAPurchasesViewController.xib; sourceTree = "<group>"; };
 		844499451AAA14E900ACA20D /* OADestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OADestinationViewController.xib; path = Resources/OADestinationViewController.xib; sourceTree = "<group>"; };
@@ -4245,6 +4246,7 @@
 				sl,
 				be,
 				pl,
+				hu,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -6273,6 +6275,7 @@
 				849686BC1B0344D700FC8DDA /* be */,
 				849686BD1B0344E100FC8DDA /* sl */,
 				849686BE1B03466E00FC8DDA /* pl */,
+				8441CB131B11EBA30033AC95 /* hu */,
 			);
 			name = Localizable.strings;
 			path = Resources;

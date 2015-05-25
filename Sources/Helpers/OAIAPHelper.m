@@ -462,6 +462,12 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
 }
 
+// Sent when an error is encountered while adding transactions from the user's purchase history back to the queue.
+- (void)paymentQueue:(SKPaymentQueue *)queue restoreCompletedTransactionsFailedWithError:(NSError *)error
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
+}
+
 - (void)completeTransaction:(SKPaymentTransaction *)transaction {
     OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
     

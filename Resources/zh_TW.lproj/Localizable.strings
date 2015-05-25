@@ -32,7 +32,7 @@
 "fav_export_title" = "匯出我的最愛";
 "fav_select_remove" = "請選擇要移除的我的最愛";
 "fav_export_select" = "請選擇要匯出的我的最愛";
-"fav_import_desc" = "您可以從 GPX 檔案，匯入您的我的最愛作為航點 （共通的 GPS 資料格式）\n\n 要分享 favorites.gpx 檔案，您可以從 Dropbox 開啟檔案、電子郵件或任何其它的來源 - 在功能裡使用開啟。";
+"fav_import_desc" = "您可以從 GPX 檔案，匯入您的我的最愛作為航點（共通的 GPS 資料格式）\n\n 要分享 favorites.gpx 檔案，您可以從 Dropbox 、電子郵件或任何其它的來源開啟檔案 - 在功能裡開啟。";
 "fav_create_group" = "建立新群組";
 "fav_enter_group_name" = "輸入群組名稱";
 "fav_exists" = "我的最愛所用名稱\"%@\"已經存在";
@@ -95,7 +95,7 @@
 "gpx_export_select_track" = "請選擇要匯出的軌跡";
 "add_waypoint" = "增加航點到已錄製的軌跡";
 "add_waypoint_short" = "增加航點";
-"gpx_import_desc" = "您可以匯入您的 GPX 檔案 （共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
+"gpx_import_desc" = "您可以匯入您的 GPX 檔案（共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
 "gpx_no_tracks" = "沒有軌跡";
 "gpx_remove" = "要移除軌跡嗎？";
 "gpx_stat" = "統計";

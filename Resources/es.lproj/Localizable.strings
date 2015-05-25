@@ -335,3 +335,4 @@
 "shared_string_buy_for" = "para";
 "product_desc_parking" = "Dejamos que memorice fácilmente cuándo el automóvil fue aparcado y la cantidad de tiempo restante si el estacionamiento está limitado por tiempo";
 "track_save_short_q" = "La traza es demasiado corta, ¿Quiere guardar?";
+"shared_string_and" = "y";

@@ -1,0 +1,47 @@
+"OsmAnd Maps" = "OsmAnd Mapas";
+// Shared Strings
+"shared_string_back" = "Voltar";
+"shared_string_ok" = "Ok";
+"shared_string_cancel" = "Cancelar";
+"shared_string_no" = "Não";
+"shared_string_yes" = "Sim";
+"shared_string_save" = "Salvar";
+"shared_string_done" = "Concluído";
+"shared_string_update" = "Atualizar";
+"shared_string_install" = "Instalar";
+"shared_string_uninstall" = "Desinstalar";
+"shared_string_delete" = "Apagar";
+"shared_string_add" = "Adicionar";
+"shared_string_buy" = "Comprar";
+"shared_string_buy_for" = "por";
+"shared_string_or" = "ou";
+"shared_string_and" = "e";
+// HUD
+"hud_heading" = "Cabeçalho";
+"hud_no_movement" = "Sem movimento";
+// Favorites
+"fav_color" = "Cor";
+"fav_colors" = "Cores";
+"fav_name" = "Nome";
+"fav_group" = "Grupo";
+"groups" = "Grupos";
+"favorite" = "Favorito";
+"fav_no_group" = "Nenhum grupo";
+"fav_remove_q" = "Apagar favorito?";
+"fav_import" = "Importar";
+"fav_import_title" = "Importar favorito";
+"fav_export_title" = "Exportar favorito";
+"fav_select_remove" = "Selecione favoritos para apagar";
+"fav_export_select" = "Selecione favoritos para exportar";
+"fav_import_desc" = "Você pode importar seus favoritos como marcos de trajeto no arquivo GPX (formato de dados GPS comum)\n\nPara compartilhar o arquivo favorites.gpx você pode abri-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'.";
+"fav_create_group" = "Criar novo grupo";
+"fav_enter_group_name" = "Digite o nome do grupo";
+"fav_exists" = "Favorito com o nome \"%@\" já existe";
+"fav_ignore" = "Ignorar";
+"fav_rename" = "Renomear";
+"fav_replace" = "Substituir";
+"fav_replace_all" = "Substituir tudo";
+"fav_rename_q" = "Renomear favorito";
+"fav_enter_new_name" = "Por favor, insira o novo nome para o favorito";
+// POI
+"poi_insrease_radius" = "Aumentar o raio de busca para";

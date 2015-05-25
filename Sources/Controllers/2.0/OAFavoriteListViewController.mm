@@ -15,6 +15,7 @@
 #import "OAGPXListViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
+#import "OAMultiselectableHeaderView.h"
 
 #import "OsmAndApp.h"
 
@@ -52,7 +53,7 @@ kFavoriteCellType;
 
 @end
 
-@interface OAFavoriteListViewController () {
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate> {
     
     BOOL isDecelerating;
 }
@@ -65,6 +66,11 @@ kFavoriteCellType;
 @end
 
 @implementation OAFavoriteListViewController
+{
+    OAMultiselectableHeaderView *_sortedHeaderView;
+    OAMultiselectableHeaderView *_menuHeaderView;
+    NSArray *_unsortedHeaderViews;
+}
 
 - (void)applyLocalization
 {
@@ -82,6 +88,15 @@ kFavoriteCellType;
     
     isDecelerating = NO;
     self.sortingType = 0;
+    
+    _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+    _sortedHeaderView.delegate = self;
+    [_sortedHeaderView setTitle:OALocalizedString(@"favorites")];
+    
+    _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+    [_menuHeaderView setTitle:OALocalizedString(@"import_export")];
+    
+    self.favoriteTableView.contentInset = UIEdgeInsetsMake(-30, 0, 0, 0);
 }
 
 - (void)updateDistanceAndDirection
@@ -172,11 +187,14 @@ kFavoriteCellType;
 
 }
 
--(void)generateData {
+-(void)generateData
+{
     OsmAndAppInstance app = [OsmAndApp instance];
     self.groupsAndFavorites = [[NSMutableArray alloc] init];
     self.menuItems = [[NSArray alloc] init];
     self.sortedFavoriteItems = [[NSMutableArray alloc] init];
+    
+    NSMutableArray *headerViews = [NSMutableArray array];
     
     const auto allFavorites = app.favoritesCollection->getFavoriteLocations();
     QHash< QString, QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > > groupedFavorites;
@@ -258,7 +276,16 @@ kFavoriteCellType;
     }];
     [self.sortedFavoriteItems setArray:sortedArray];
 
-    
+    int i = 0;
+    for (FavoriteTableGroup *group in self.groupsAndFavorites)
+    {
+        OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+        [headerView setTitle:group.groupName];
+        headerView.section = i++;
+        headerView.delegate = self;
+        [headerViews addObject:headerView];
+    }
+
     // Generate menu items
     FavoriteTableGroup* itemData = [[FavoriteTableGroup alloc] init];
     itemData.groupName = OALocalizedString(@"import_export");
@@ -271,8 +298,15 @@ kFavoriteCellType;
                          @"action": @"onExportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
     [self.groupsAndFavorites addObject:itemData];
-    
+
+    OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+    [headerView setTitle:OALocalizedString(@"import_export")];
+    headerView.editable = NO;
+    [headerViews addObject:headerView];
+
     [self.favoriteTableView reloadData];
+
+    _unsortedHeaderViews = [NSArray arrayWithArray:headerViews];
 
 }
 
@@ -462,6 +496,32 @@ kFavoriteCellType;
     return [self.groupsAndFavorites count];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 46.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (self.directionButton.tag == 1)
+    {
+        if (section == 0)
+            return _sortedHeaderView;
+        else
+            return _menuHeaderView;
+    }
+    else
+    {
+        return _unsortedHeaderViews[section];
+    }
+}
+
+/*
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (self.directionButton.tag == 1)
         return [self getSortedTitleForHeaderInSection:section];
@@ -477,7 +537,7 @@ kFavoriteCellType;
 -(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {
     return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;
 }
-
+*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.directionButton.tag == 1)
@@ -723,5 +783,26 @@ kFavoriteCellType;
         _exportController = nil;
 }
 
+#pragma mark - OAMultiselectableHeaderDelegate
+
+-(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+{
+    OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
+    NSInteger section = headerView.section;
+    NSInteger rowsCount = [self.favoriteTableView numberOfRowsInSection:section];
+    
+    [self.favoriteTableView beginUpdates];
+    if (value)
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.favoriteTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    else
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.favoriteTableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+    }
+    [self.favoriteTableView endUpdates];
+}
 
 @end

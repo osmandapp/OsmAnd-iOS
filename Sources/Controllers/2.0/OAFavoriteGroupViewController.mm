@@ -51,6 +51,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _saveChanges = NO;
+    
     [self generateData];
     [self setupView];
     
@@ -210,16 +213,20 @@ UITextField* textView;
 
 - (IBAction)saveClicked:(id)sender
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
-    QString group;
-    if (self.groupName.length > 0)
-        group = QString::fromNSString(self.groupName);
-    else
-        group = QString::null;
-    
-    self.favorite.favorite->setGroup(group);
-    [app saveFavoritesToPermamentStorage];
+    if (self.favorite)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        
+        QString group;
+        if (self.groupName.length > 0)
+            group = QString::fromNSString(self.groupName);
+        else
+            group = QString::null;
+        
+        self.favorite.favorite->setGroup(group);
+        [app saveFavoritesToPermamentStorage];
+    }
+    _saveChanges = YES;
     [self backButtonClicked:self];
 }
 

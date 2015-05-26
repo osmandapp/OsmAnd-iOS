@@ -15,6 +15,13 @@
 #import "OAObservable.h"
 #import "OAAppSettings.h"
 
+typedef enum
+{
+    kFavoriteActionNone = 0,
+    kFavoriteActionChangeColor = 1,
+    kFavoriteActionChangeGroup = 2,
+} EFavoriteAction;
+
 @interface OAFavoriteItemViewController : OASuperViewController<UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;

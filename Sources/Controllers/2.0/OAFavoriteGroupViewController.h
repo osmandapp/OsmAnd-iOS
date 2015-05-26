@@ -25,6 +25,8 @@
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (assign, nonatomic) BOOL hideToolbar;
 
+@property (nonatomic, readonly) BOOL saveChanges;
+
 -(id)initWithFavorite:(OAFavoriteItem*)item;
 
 @end

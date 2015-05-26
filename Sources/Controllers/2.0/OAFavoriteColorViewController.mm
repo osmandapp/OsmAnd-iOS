@@ -25,7 +25,8 @@
 
 @implementation OAFavoriteColorViewController
 
--(id)initWithFavorite:(OAFavoriteItem*)item {
+-(id)initWithFavorite:(OAFavoriteItem *)item
+{
     self = [super init];
     if (self) {
         UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
@@ -48,14 +49,18 @@
     [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
+    _saveChanges = NO;
+    
     [self generateData];
     [self setupView];
-    
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -67,12 +72,13 @@
     self.tableView.frame = f;
 }
 
--(void)generateData {
+-(void)generateData
+{
 }
 
 
--(void)setupView {
-    
+-(void)setupView
+{
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
@@ -82,21 +88,24 @@
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
     return [@[OALocalizedString(@"fav_colors")] objectAtIndex:section];
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
     return [[OADefaultFavorite builtinColors] count];
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString* const reusableIdentifierPoint = @"OAViewTextTableViewCell";
     
     OAViewTextTableViewCell* cell;
@@ -128,26 +137,34 @@
 }
 
 #pragma mark - Actions
-- (IBAction)saveClicked:(id)sender {
-    OsmAndAppInstance app = [OsmAndApp instance];
-    
-    OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:self.colorIndex];
-    CGFloat r,g,b,a;
-    [favCol.color getRed:&r
-                   green:&g
-                    blue:&b
-                   alpha:&a];
-    
-    self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
-    
-    [app saveFavoritesToPermamentStorage];
+
+- (IBAction)saveClicked:(id)sender
+{
+    if (self.favorite)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        
+        OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:self.colorIndex];
+        CGFloat r,g,b,a;
+        [favCol.color getRed:&r
+                       green:&g
+                        blue:&b
+                       alpha:&a];
+        
+        self.favorite.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+        
+        [app saveFavoritesToPermamentStorage];
+    }
+    _saveChanges = YES;
     [self backButtonClicked:self];
 }
 
-- (IBAction)favoriteClicked:(id)sender {
+- (IBAction)favoriteClicked:(id)sender
+{
 }
 
-- (IBAction)gpxClicked:(id)sender {
+- (IBAction)gpxClicked:(id)sender
+{
     OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
     [self.navigationController pushViewController:favController animated:NO];
 }

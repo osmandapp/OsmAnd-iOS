@@ -107,3 +107,5 @@
 "rendering_attr_showSurfaceGrade_name" = "Адлюстроўваць якасьць дарог";
 "rendering_attr_alpineHiking_name" = "Пешы горны турызм";
 "shared_string_and" = "і";
+// GPX
+"gpx_point" = "Кропка";

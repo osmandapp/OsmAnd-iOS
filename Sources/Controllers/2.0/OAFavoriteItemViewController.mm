@@ -26,12 +26,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-typedef enum
-{
-    kFavoriteActionNone = 0,
-    kFavoriteActionChangeColor = 1,
-    kFavoriteActionChangeGroup = 2,
-} EFavoriteAction;
 
 @interface OAFavoriteItemViewController () {
     

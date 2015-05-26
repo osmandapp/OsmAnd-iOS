@@ -47,6 +47,7 @@
 "fav_replace_all" = "Replace all";
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
+"fav_select" = "Please select favorites";
 
 // POI
 "poi_insrease_radius" = "Increase search radius to";

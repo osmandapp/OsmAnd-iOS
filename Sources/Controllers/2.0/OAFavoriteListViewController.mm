@@ -16,6 +16,8 @@
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OAMultiselectableHeaderView.h"
+#import "OAFavoriteColorViewController.h"
+#import "OAFavoriteGroupViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -53,7 +55,7 @@ kFavoriteCellType;
 
 @end
 
-@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate> {
+@interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate>{
     
     BOOL isDecelerating;
 }
@@ -70,6 +72,10 @@ kFavoriteCellType;
     OAMultiselectableHeaderView *_sortedHeaderView;
     OAMultiselectableHeaderView *_menuHeaderView;
     NSArray *_unsortedHeaderViews;
+
+    EFavoriteAction _favAction;
+    OAFavoriteColorViewController *_colorController;
+    OAFavoriteGroupViewController *_groupController;
 }
 
 - (void)applyLocalization
@@ -88,6 +94,8 @@ kFavoriteCellType;
     
     isDecelerating = NO;
     self.sortingType = 0;
+    _favAction = kFavoriteActionNone;
+    self.view.backgroundColor = [UIColor groupTableViewBackgroundColor];
     
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
@@ -96,7 +104,7 @@ kFavoriteCellType;
     _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     [_menuHeaderView setTitle:OALocalizedString(@"import_export")];
     
-    self.favoriteTableView.contentInset = UIEdgeInsetsMake(-30, 0, 0, 0);
+    _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
 }
 
 - (void)updateDistanceAndDirection
@@ -166,6 +174,17 @@ kFavoriteCellType;
 
 -(void)viewWillAppear:(BOOL)animated {
     
+    if (_favAction == kFavoriteActionChangeColor)
+        [self setupColor];
+    else if (_favAction == kFavoriteActionChangeGroup)
+        [self setupGroup];
+    else
+        [self setupView];
+    
+    if (_favAction != kFavoriteActionNone) {
+        return;
+    }
+    
     [self generateData];
     [self setupView];
     
@@ -176,10 +195,23 @@ kFavoriteCellType;
     [super viewWillAppear:animated];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_favAction != kFavoriteActionNone) {
+        _favAction = kFavoriteActionNone;
+        return;
+    }
+}
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
+    if (_favAction != kFavoriteActionNone)
+        return;
+
     if (self.locationServicesUpdateObserver) {
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
@@ -326,41 +358,170 @@ kFavoriteCellType;
 
 #pragma mark - Actions
 
-- (IBAction)sortByDistance:(id)sender {
-    if (![self.favoriteTableView isEditing]) {
-        if (self.directionButton.tag == 0) {
+- (IBAction)sortByDistance:(id)sender
+{
+    if (![self.favoriteTableView isEditing])
+    {
+        if (self.directionButton.tag == 0)
+        {
             self.directionButton.tag = 1;
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
             self.sortingType = 1;
-        } else {
+        }
+        else
+        {
             self.directionButton.tag = 0;
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
             self.sortingType = 0;
         }
         [self generateData];
-    } else {
-        
-        NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-        if ([selectedRows count] == 0) {
-            UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:nil];
-            [removeAlert show];
-            return;
-        }
-        
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-        removeAlert.tag = kAlertViewRemoveId;
-        [removeAlert show];
-        
     }
 }
 
--(NSArray*)getItemsForRows:(NSArray*)indexPath {
+- (IBAction)deletePressed:(id)sender
+{
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0) {
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select_remove") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+        [removeAlert show];
+        return;
+    }
+    
+    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
+    removeAlert.tag = kAlertViewRemoveId;
+    [removeAlert show];
+}
+
+- (IBAction)favoriteChangeColorClicked:(id)sender
+{
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
+    _favAction = kFavoriteActionChangeColor;
+    _colorController = [[OAFavoriteColorViewController alloc] init];
+    _colorController.hideToolbar = YES;
+    [self.navigationController pushViewController:_colorController animated:YES];
+}
+
+- (IBAction)favoriteChangeGroupClicked:(id)sender
+{
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0) {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+
+    _favAction = kFavoriteActionChangeGroup;
+    _groupController = [[OAFavoriteGroupViewController alloc] init];
+    _groupController.hideToolbar = YES;
+    [self.navigationController pushViewController:_groupController animated:YES];
+}
+
+- (void)setupColor
+{
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0)
+        return;
+
+    if (_colorController.saveChanges)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+
+        for (NSIndexPath *indexPath in selectedRows)
+        {
+            OAFavoriteItem* item;
+            if (self.directionButton.tag == 1)
+            {
+                if (indexPath.section == 0)
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            }
+            else
+            {
+                FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+                if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
+                    item = [groupData.groupItems objectAtIndex:indexPath.row];
+            }
+            
+            if (item)
+            {
+                OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
+                CGFloat r,g,b,a;
+                [favCol.color getRed:&r
+                               green:&g
+                                blue:&b
+                               alpha:&a];
+                
+                item.favorite->setColor(OsmAnd::FColorRGB(r,g,b));
+            }
+        }
+        
+        [app saveFavoritesToPermamentStorage];
+    }
+    
+    [self editButtonClicked:nil];
+    [self generateData];
+}
+
+- (void)setupGroup
+{
+    NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0)
+        return;
+    
+    if (_groupController.saveChanges)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        
+        for (NSIndexPath *indexPath in selectedRows)
+        {
+            OAFavoriteItem* item;
+            if (self.directionButton.tag == 1)
+            {
+                if (indexPath.section == 0)
+                    item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
+            }
+            else
+            {
+                FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
+                if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
+                    item = [groupData.groupItems objectAtIndex:indexPath.row];
+            }
+            
+            if (item)
+            {
+                QString group;
+                if (_groupController.groupName.length > 0)
+                    group = QString::fromNSString(_groupController.groupName);
+                else
+                    group = QString::null;
+                
+                item.favorite->setGroup(group);
+            }
+        }
+        
+        [app saveFavoritesToPermamentStorage];
+    }
+    
+    [self editButtonClicked:nil];
+    [self generateData];
+}
+
+-(NSArray*)getItemsForRows:(NSArray*)indexPath
+{
     NSMutableArray* itemList = [[NSMutableArray alloc] init];
     if (self.directionButton.tag == 1) { // Sorted
-        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
+        [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop)
+        {
             [itemList addObject:[self.sortedFavoriteItems objectAtIndex:path.row]];
         }];
-    } else {
+    }
+    else
+    {
         [indexPath enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
             FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:path.section];
             [itemList addObject:[groupData.groupItems objectAtIndex:path.row]];
@@ -369,36 +530,53 @@ kFavoriteCellType;
     return itemList;
 }
 
-- (IBAction)editButtonClicked:(id)sender {
+- (IBAction)editButtonClicked:(id)sender
+{
     [self.favoriteTableView setEditing:![self.favoriteTableView isEditing] animated:YES];
     
-    if ([self.favoriteTableView isEditing]) {
+    if ([self.favoriteTableView isEditing])
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            _mainToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _mainToolbarView.bounds.size.height);
+            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
+        }];
+
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
         [self.backButton setHidden:YES];
-        [self.shareButton setHidden:NO];
-        [self.directionButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
+        [self.directionButton setHidden:YES];
     }
-    else {
+    else
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            _mainToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _mainToolbarView.bounds.size.height, DeviceScreenWidth, _mainToolbarView.bounds.size.height);
+            _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _mainToolbarView.bounds.size.height);
+        }];
+
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 
         [self.backButton setHidden:NO];
-        [self.shareButton setHidden:YES];
 
         if (self.directionButton.tag == 1)
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
         else
             [self.directionButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+
+        [self.directionButton setHidden:NO];
     
     }
     
     //[self.favoriteTableView reloadData];
 }
 
-- (IBAction)shareButtonClicked:(id)sender {
+- (IBAction)shareButtonClicked:(id)sender
+{
     // Share selected favorites
     NSArray *selectedRows = [self.favoriteTableView indexPathsForSelectedRows];
-    if ([selectedRows count] == 0) {
-        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_export_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:nil];
+    if ([selectedRows count] == 0)
+    {
+        UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_export_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
         [removeAlert show];
         return;
     }
@@ -422,14 +600,12 @@ kFavoriteCellType;
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
     _exportController.name = filename;
-    [_exportController presentOptionsMenuFromRect:_shareButton.frame
+    [_exportController presentOptionsMenuFromRect:_exportButton.frame
                                            inView:self.view
                                          animated:YES];
     
     [self editButtonClicked:nil];
     [self generateData];
-
-    
 }
 
 - (IBAction)menuFavoriteClicked:(id)sender {
@@ -450,7 +626,12 @@ kFavoriteCellType;
     [importHelpAlert show];
 }
 
--(void)onExportClicked {
+-(void)onExportClicked
+{
+    
+    if (self.sortedFavoriteItems.count == 0)
+        return;
+    
     OsmAndAppInstance app = [OsmAndApp instance];
     // Share all favorites
     NSURL* favoritesUrl = [NSURL fileURLWithPath:app.favoritesStorageFilename];
@@ -520,24 +701,6 @@ kFavoriteCellType;
         return _unsortedHeaderViews[section];
     }
 }
-
-/*
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    if (self.directionButton.tag == 1)
-        return [self getSortedTitleForHeaderInSection:section];
-    return [self getUnsortedTitleForHeaderInSection:section];
-}
-
--(NSString*)getSortedTitleForHeaderInSection:(NSInteger)section {
-    if (section == 0)
-        return OALocalizedString(@"favorites");
-    return OALocalizedString(@"import_export");
-}
-
--(NSString*)getUnsortedTitleForHeaderInSection:(NSInteger)section {
-    return ((FavoriteTableGroup*)[self.groupsAndFavorites objectAtIndex:section]).groupName;
-}
-*/
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (self.directionButton.tag == 1)

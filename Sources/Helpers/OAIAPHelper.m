@@ -382,6 +382,15 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
               skProduct.price.floatValue);
         OAProduct *p = [[OAProduct alloc] initWithSkProduct:skProduct];
         [arr addObject:p];
+        
+        if (p.price.floatValue == 0.0 && ![self productPurchasedIgnoreDisable:p.productIdentifier])
+        {
+            [_purchasedProductIdentifiers addObject:p.productIdentifier];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:p.productIdentifier];
+            [_disabledProductIdentifiers addObject:[self getDisabledId:p.productIdentifier]];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:p.productIdentifier]];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
     }
     
     if (_products.count == 0)

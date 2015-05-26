@@ -283,7 +283,7 @@
 "rendering_attr_moreDetailed_name" = "Mais detalhes";
 "rendering_attr_subwayMode_name" = "Rotas de metrô";
 "rendering_attr_tramTrainRoutes_name" = "Rotas de bonde e trem";
-"rendering_attr_streetLighting_name" = "Iluminação das vias";
+"rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_attr_coloredBuildings_name" = "Colorir edifícios conforme o tipo";
 "rendering_attr_alpineHiking_name" = "Escala de montanhismo (SAC)";
 "rendering_attr_osmcTraces_name" = "Sobreposição de símbolo de montanhismo";

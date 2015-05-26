@@ -22,10 +22,10 @@
 "rendering_attr_noAdminboundaries_name" = "Ocultar limites";
 "rendering_category_transport" = "Transporte";
 "rendering_attr_tramTrainRoutes_name" = "Rotas de bonde e trem";
-"rendering_attr_streetLighting_name" = "Iluminação das vias";
+"rendering_attr_streetLighting_name" = "Iluminação pública";
 "rendering_value__name" = "Predefinido";
 "rendering_value_highContrastRoads_name" = "Vias em alto contraste";
-"res_banner_free_maps_desc" = "Você pode baixar %d mapas gratuitos, sem atualizações";
+"res_banner_free_maps_desc" = "Você pode descarregar %d mapas gratuitos, sem actualizações";
 "OsmAnd Maps" = "Mapas OsmAnd";
 // Shared Strings
 "shared_string_back" = "Voltar";
@@ -68,23 +68,23 @@
 "poi_hide" = "Ocultar";
 // My Places
 "favorites" = "Favoritos";
-"tracks" = "Trajetos";
+"tracks" = "Trajectos";
 // GPX
 "gpx_point" = "Ponto";
-"gpx_waypoints" = "Pontos de parada";
+"gpx_waypoints" = "Pontos de passagem";
 "gpx_points" = "Ponto(s)";
 "gpx_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar trajeto";
-"gpx_import_already_exists" = "O trajeto especificado já existe na lista. Por favor, escolha a ação.";
+"gpx_import_title" = "Importar trajecto";
+"gpx_import_already_exists" = "O trajecto especificado já existe na lista. Por favor, escolha a acção.";
 "gpx_add_new" = "Adicionar novo ficheiro";
 "gpx_overwrite" = "Sobrescrever";
 "gpx_cannot_import" = "Não é possível importar ficheiro GPX especificado";
-"gpx_export_title" = "Exportar trajeto";
-"gpx_export_select_track" = "Por favor selecione o trajeto para Exportar";
-"gpx_import_desc" = "Você pode importar seus ficheiros GPX (formato de dados GPS comum)\n\nPara compartilhar o ficheiro GPX você pode abrir-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'";
-"gpx_no_tracks" = "Não há trajetos";
-"gpx_remove" = "Remover trajeto?";
+"gpx_export_title" = "Exportar trajecto";
+"gpx_export_select_track" = "Por favor seleccione o trajecto para Exportar";
+"gpx_import_desc" = "Você pode importar seus ficheiros GPX (formato comum de dados GPS)\n\nPara compartilhar o ficheiro GPX você pode abri-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'";
+"gpx_no_tracks" = "Não há trajectos";
+"gpx_remove" = "Remover trajecto?";
 "gpx_stat" = "Estatísticas";
 "gpx_route_time" = "Tempo de percurso";
 "gpx_uphldownhl" = "Subidas/Descidas";
@@ -96,20 +96,20 @@
 "gpx_elev_range" = "Intervalo de altitute";
 "gpx_updown" = "Acima/Abaixo";
 "gpx_uphills_total" = "Total de subida";
-"track_recording" = "Gravando trajeto";
-"track_recording_name" = "Atualmente gravando o trajeto";
+"track_recording" = "Gravando trajecto";
+"track_recording_name" = "Actualmente gravando o trajecto";
 "track_stop_rec" = "Parar gravação";
 "track_new_segment" = "Iniciar novo segmento";
-"track_save" = "Salvar trajeto atual";
+"track_save" = "Salvar trajecto actual";
 "track_continue_rec" = "Continuar gravando";
 "track_continue_rec_q" = "Você quer continuar gravando?";
 "rec_interval" = "Intervalo de registo";
 "rec_interval_minimum" = "Mínimo";
-"track_start_rec" = "Iniciar gravação de trajeto";
-"track_rec_addon_q" = "Por favor ative o addon de gravação de viagem para gravar e salvar seus trajetos";
+"track_start_rec" = "Iniciar gravação de trajecto";
+"track_rec_addon_q" = "Por favor active o addon de gravação de viagem para gravar e salvar seus trajectos";
 "track_interval_remember" = "Lembrar minha escolha";
-"track_clear" = "Limpar trajeto atual";
-"track_clear_q" = "Você quer limpar o trajeto atual?";
+"track_clear" = "Limpar trajecto actual";
+"track_clear_q" = "Você quer limpar o trajecto actual?";
 "show_info" = "Mostrar informações";
 // Map settings
 "m_style_overview" = "Explorar";
@@ -173,28 +173,28 @@
 "res_installed" = "Instalado";
 "res_banner_free_maps_title" = "Você tem %d mapas gratuitos!";
 "res_banner_no_free_maps_title" = "Você não tem nenhum mapa gratuito!";
-"res_banner_no_free_maps_desc" = "Por favor, compre mapas da região ou mapas de todo mundo";
+"res_banner_no_free_maps_desc" = "Por favor, compre mapas da região ou mapas de todo o mundo";
 "res_search_world" = "Pesquisar em todo o mundo";
 "res_catalog_upd" = "Atualização do catálogo";
 "res_world_map" = "Mapa do mundo";
-"res_updates" = "Atualizações";
+"res_updates" = "Actualizações";
 "res_worldwide" = "Em todo o mundo";
 "res_region_map" = "Mapa regional";
-"res_updates_avail" = "Atualizações disponíveis";
+"res_updates_avail" = "Actualizações disponíveis";
 "res_maps_inst" = "mapa(s)";
 "res_deleting" = "Apagando...";
 "res_wsea_map" = "Mapa base mundial naútico";
 "res_wmap" = "Mapa mundial de visão geral";
-"res_dmap" = "Visão geral do mapa detalhado";
+"res_dmap" = "Visão geral detalhada do mapa";
 "res_map_of_region" = "Mapa da região";
-"res_update_no_space" = "Não há espaço suficiente para atualizar";
+"res_update_no_space" = "Não há espaço suficiente para actualizar";
 "res_install_no_space" = "Não há espaço suficiente para instalar";
 "res_no_space_free" = "é necessário. Por favor libere algum espaço.";
-"res_free_exp" = "Você gastou todos os downloads gratuitos. Por favor, compre para baixar/atualizar os mapas.";
-"res_upd_avail_q" = "Uma atualização está disponível para";
+"res_free_exp" = "Você gastou todos os downloads gratuitos. Por favor, compre para baixar/actualizar os mapas.";
+"res_upd_avail_q" = "Uma actualização está disponível para";
 "res_inst_avail_cell_q" = "Instalação de %@ precisa de %@ para ser baixado pela rede celular.";
 "res_inst_avail_wifi_q" = "Instalação de %@ precisa de %@ para ser baixado através da rede WiFi.";
-"res_cancel_upd_q" = "Você vai cancelar a atualização de %@.";
+"res_cancel_upd_q" = "Você vai cancelar a actualização de %@.";
 "data_will_be_lost" = "Todos os dados baixados serão perdidos.";
 "res_cancel_inst_q" = "Você vai cancelar a instalação de %@.";
 "res_uninst_managed_q" = "Você vai desinstalar %@. Você pode reinstalá-lo depois do catálogo.";
@@ -204,10 +204,10 @@
 "res_unknown" = "Desconhecido";
 "res_size" = "Tamanho";
 "res_created_on" = "Criado em";
-"res_update_all" = "Atualizar todos";
-"res_updates_no_space" = "Não há espaço suficiente para instalar %d atualização(s). %@ é necessário. Por favor libere algum espaço.";
-"res_updates_avail_q" = "atualização(s) disponível(is).";
-"res_updates_exp" = "Por favor, compre continente(s) para atualizar os mapas";
+"res_update_all" = "Actualizar todos";
+"res_updates_no_space" = "Não há espaço suficiente para instalar %d actualização(s). %@ é necessário. Por favor libere algum espaço.";
+"res_updates_avail_q" = "actualização(s) disponível(is).";
+"res_updates_exp" = "Por favor, compre continente(s) para actualizar os mapas";
 // Menu
 "menu_my_places" = "Meus locais";
 "menu_feedback" = "Retorno";
@@ -215,8 +215,8 @@
 "other_options" = "Outras opções";
 "add_parking" = "Adicionar como posição de estacionamento";
 "add_parking_short" = "Adicionar estacionamento";
-"add_waypoint" = "Adicionar ponto de passagem para trajeto gravado";
-"add_waypoint_short" = "Adicionar como ponto de passagem";
+"add_waypoint" = "Adicionar ponto de passagem para trajecto gravado";
+"add_waypoint_short" = "Adicionar ponto de passagem";
 "more" = "Mais";
 "parking_marker" = "Marcador de estacionamento";
 "time_limited" = "Tempo limitado";
@@ -224,11 +224,11 @@
 "pickup_car_at" = "Buscar o carro em";
 "add_notification_calendar" = "Adicionar notificação ao calendário";
 "parking_time_limited" = "Tempo de estacionamento limitado a";
-"time_left" = "esquerda";
+"time_left" = "restante(s)";
 "time_overdue" = "atrasado";
 "cannot_add_marker" = "Não é possível adicionar estacionamento";
-"cannot_add_marker_desc" = "Por favor, remova uma direção no mínimo e tente novamente";
-"cannot_add_destination" = "Não é possível adicionar a direção";
+"cannot_add_marker_desc" = "Por favor, remova uma direcção no mínimo e tente novamente";
+"cannot_add_destination" = "Não é possível adicionar a direcção";
 // Units
 "units_km" = "km";
 "units_m" = "m";
@@ -248,11 +248,11 @@
 "import_title" = "Importar dados";
 "import_choose_type" = "Por favor, escolha o que importar";
 "import_favorite" = "Favorito";
-"import_failed" = "Importação falhada";
+"import_failed" = "Importação falhou";
 "import_cannot" = "O ficheiro especificado não pode ser importado";
-"import_gpx" = "Trajeto GPX";
+"import_gpx" = "Trajecto GPX";
 // Alerts
-"alert_inet_needed" = "Conexão com a Internet necessária para executar esta ação. Por favor, verifique sua conexão.";
+"alert_inet_needed" = "Conexão com a Internet necessária para executar esta acção. Por favor, verifique sua conexão.";
 // Context menu
 "ctx_mnu_edit_fav" = "Editar favorito";
 "ctx_mnu_add_fav" = "Adicionar favorito";
@@ -303,9 +303,9 @@
 "product_title_parking" = "Local de estacionamento";
 "product_desc_parking" = "Permite lembrar facilmente onde o carro foi estacionado e quanto tempo resta, caso o estacionamento seja com tempo limitado";
 "product_title_skimap" = "Mapa de esqui";
-"product_desc_skimap" = "Pistas de esqui para todos as estações de esqui do mundo";
+"product_desc_skimap" = "Pistas de esqui para todas as estações de esqui do mundo";
 "product_title_track_recording" = "Gravação de viagem";
-"product_desc_track_recording" = "Ativa a funcionalidade para gravar e salvar seus trajetos";
+"product_desc_track_recording" = "Activa a funcionalidade para gravar e salvar seus trajectos";
 "product_title_africa" = "África";
 "product_desc_africa" = "Mapa da África";
 "product_title_australia" = "Austrália";
@@ -329,7 +329,7 @@
 "get_unlimited_access" = "Obter acesso ilimitado";
 "latitude" = "Latitude";
 "longitude" = "Longitude";
-"track_save_short_q" = "Trajeto é muito curto, você quer salvar?";
+"track_save_short_q" = "Trajecto é muito curto, você quer salvar?";
 "add_as" = "Adicionar como";
 "shared_string_and" = "e";
 "sett_lang" = "Idioma do mapa";

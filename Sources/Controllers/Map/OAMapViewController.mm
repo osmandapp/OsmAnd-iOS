@@ -1385,7 +1385,9 @@
                     if (mapCaptionSymbol != nullptr)
                         if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapCaptionSymbol))
                         {
-                            symbol.caption = rasterMapSymbol->content.toNSString();
+                            NSString *s = rasterMapSymbol->content.toNSString();
+                            if (!symbol.buildingNumber || ![s isEqualToString:symbol.buildingNumber])
+                                symbol.caption = s;
                         }
                 }
             }

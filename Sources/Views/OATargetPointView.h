@@ -11,6 +11,7 @@
 
 #define kOATargetPointViewHeightPortrait 125.0
 #define kOATargetPointViewHeightLandscape 72.0
+#define kOATargetPointViewMaxHalfHeightKoef 0.2
 
 @class OATargetPoint;
 

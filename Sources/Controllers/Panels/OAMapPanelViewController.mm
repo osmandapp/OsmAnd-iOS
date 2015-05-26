@@ -735,7 +735,7 @@
     _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
     [_mapSettings showPopupAnimated:self parentViewController:nil];
     
-    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil];
+    [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
 }
 
 - (void)searchButtonClick:(id)sender
@@ -864,6 +864,9 @@
         NSString* nativeTitle;
         if (road)
         {
+            //for (const auto& entry : OsmAnd::rangeOf(road->captions))
+            //    NSLog(@"%d=%@", entry.key(), entry.value().toNSString());
+
             const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
             const auto localizedName = road->getCaptionInLanguage(mainLanguage);
             const auto nativeName = road->getCaptionInNativeLanguage();
@@ -939,7 +942,7 @@
     [self showTargetPointMenu];
 }
 
--(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent
+-(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
 {
     if (_shadowButton && [self.view.subviews containsObject:_shadowButton])
         [self destroyShadowButton];
@@ -952,7 +955,7 @@
         [_shadowButton addGestureRecognizer:_shadowLongPress];
     }
     
-    [self.view insertSubview:self.shadowButton aboveSubview:_mapViewController.view];
+    [self.view insertSubview:self.shadowButton belowSubview:topView];
 }
 
 -(void)destroyShadowButton
@@ -1069,7 +1072,7 @@
         
     } completion:^(BOOL finished) {
         
-        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:)];
+        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:self.targetMenuView];
         
     }];
 }

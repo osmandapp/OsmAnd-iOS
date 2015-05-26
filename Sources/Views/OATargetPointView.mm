@@ -375,7 +375,7 @@
     
     _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
     
-    CGFloat maxHalfHeight = DeviceScreenHeight / 2.2;
+    CGFloat maxHalfHeight = DeviceScreenHeight * kOATargetPointViewMaxHalfHeightKoef;
     CGFloat hf = h;
     CGFloat hh = h;
     

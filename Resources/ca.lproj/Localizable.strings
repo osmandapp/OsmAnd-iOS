@@ -70,3 +70,9 @@
 "gpx_average_speed" = "Velocitat mitjana";
 "gpx_start" = "Inicia";
 "gpx_finish" = "Acaba";
+"rendering_attr_OSMMapperAssistant_name" = "Assistent cartogràfic per OSM";
+"fav_select" = "Si us plau seleccioneu preferits";
+"poi_max_radius_reached" = "Radi de cerca màxim assolit";
+"poi_search_near_center" = "La cerca es realitza prop del centre del mapa";
+"gpx_import_desc" = "Podeu importar els vostres arxius GPX (un format de dades GPS habitual)\n\nPer compartir l'arxiu GPX podeu obrir el fitxer des Dropbox, e-mail o qualsevol altra font - Utilitzeu la funció <<Obrir en>>";
+"gpx_uphldownhl" = "Pujades/Baixades";

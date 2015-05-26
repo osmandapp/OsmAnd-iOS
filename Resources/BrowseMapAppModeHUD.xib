@@ -157,7 +157,7 @@
     <resources>
         <image name="HUD_button_bg.png" width="40" height="40"/>
         <image name="HUD_compass.png" width="18" height="18"/>
-        <image name="HUD_compass_bg.png" width="41" height="41"/>
+        <image name="HUD_compass_bg.png" width="30" height="30"/>
         <image name="HUD_configure_map.png" width="18" height="18"/>
         <image name="HUD_debug_button.png" width="25" height="25"/>
         <image name="HUD_more_halfbutton.png" width="13" height="25"/>

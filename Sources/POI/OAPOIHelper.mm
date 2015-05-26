@@ -380,14 +380,14 @@
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
     
-    NSLog(@">>> name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
+    //NSLog(@">>> name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
 
     if (_prefLang)
     {
         const QString lang = QString::fromNSString(_prefLang);
         for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
         {
-            NSLog(@"loc %@=%@", entry.key().toNSString(), entry.value().toNSString());
+            //NSLog(@"loc %@=%@", entry.key().toNSString(), entry.value().toNSString());
             if (entry.key() == lang)
             {
                 poi.nameLocalized = entry.value().toNSString();
@@ -405,7 +405,7 @@
     const auto& decodedValues = amenity->getDecodedValues();
     for(const auto& entry : OsmAnd::rangeOf(decodedValues))
     {
-        NSLog(@"dec %@=%@", entry.key().toNSString(), entry.value().toNSString());
+        //NSLog(@"dec %@=%@", entry.key().toNSString(), entry.value().toNSString());
         // phone, website, description
         if (entry.key() == QString("opening_hours"))
         {

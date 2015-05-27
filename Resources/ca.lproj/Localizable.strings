@@ -33,7 +33,7 @@
 "fav_export_title" = "Exporta un preferit";
 "fav_select_remove" = "Seleccioneu els preferits per suprimir";
 "fav_export_select" = "Seleccioneu els preferits per exportar";
-"fav_import_desc" = "Podeu importar els vostres preferits com a fites en un fitxer GPX (format de dades GPS més comú)\n\nPer compartir el fitxer preferits.gpx podeu obrir-lo des del Dropbox, des del correu electrònic o des de qualsevol altra font - Utilitza Obre a la funció.";
+"fav_import_desc" = "Podeu importar els vostres preferits com a fites en un fitxer GPX (format de dades GPS més comú)\n\nPer compartir el fitxer favorites.gpx podeu obrir-lo des  Dropbox,  correu electrònic o qualsevol altra font - Utilitzeu la funció  <<Obre a>>.";
 "fav_create_group" = "Crea un grup nou";
 "fav_enter_group_name" = "Introduïu el nom del grup";
 "fav_exists" = "Ja existeix un preferit amb el nom «%@»";
@@ -69,7 +69,7 @@
 "gpx_distance" = "Distància";
 "gpx_average_speed" = "Velocitat mitjana";
 "gpx_start" = "Inicia";
-"gpx_finish" = "Acaba";
+"gpx_finish" = "Finalitza";
 "rendering_attr_OSMMapperAssistant_name" = "Assistent cartogràfic per OSM";
 "fav_select" = "Si us plau seleccioneu preferits";
 "poi_max_radius_reached" = "Radi de cerca màxim assolit";

@@ -288,9 +288,9 @@
 "rendering_attr_alpineHiking_name" = "Escala de montanhismo (SAC)";
 "rendering_attr_osmcTraces_name" = "Sobreposição de símbolo de montanhismo";
 "rendering_attr_showCycleRoutes_name" = "Mostrar rotas para bicicletas";
-"rendering_attr_hideBuildings_name" = "Ocultar edifícios";
-"rendering_attr_noPolygons_name" = "Ocultar polígonos";
-"rendering_attr_noAdminboundaries_name" = "Ocultar limites";
+"rendering_attr_hideBuildings_name" = "Edifícios";
+"rendering_attr_noPolygons_name" = "Polígonos";
+"rendering_attr_noAdminboundaries_name" = "Limites";
 "rendering_attr_publicTransportMode_name" = "Rotas de ônibus e trólebus";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";

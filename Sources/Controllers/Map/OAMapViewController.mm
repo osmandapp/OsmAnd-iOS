@@ -2544,22 +2544,35 @@
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
                 case 1:
-                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrNative;
                     break;
                 case 2:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeAndLocalized;
+                    break;
+                case 6:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliterated;
+                    break;
+                case 4:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedAndNative;
+                    break;
+                case 5:
+                    langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::LocalizedOrTransliteratedAndNative;
                     break;
                 default:
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
             }
             
+            NSString *langId = [[NSLocale preferredLanguages] firstObject];
+            if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
+                langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            
             
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
                                                                                      1.0,
                                                                                      1.0,
-                                                                                     QString::fromNSString([[NSLocale preferredLanguages] firstObject]),
+                                                                                     QString::fromNSString(langId),
                                                                                      langPreferences));
             
             

@@ -396,25 +396,33 @@
         }
         
     }
-
-    if (!poi.nameLocalized)
-        poi.nameLocalized = amenity->nativeName.toNSString();
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
     const auto& decodedValues = amenity->getDecodedValues();
     for(const auto& entry : OsmAnd::rangeOf(decodedValues))
     {
-        //NSLog(@"dec %@=%@", entry.key().toNSString(), entry.value().toNSString());
+        //NSString *s = entry.value().toNSString();
+        //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 20 ? [s substringToIndex:20] : s));
+        
         // phone, website, description
         if (entry.key() == QString("opening_hours"))
         {
             poi.hasOpeningHours = YES;
             poi.openingHours = entry.value().toNSString();
-            break;
+        }
+        
+        if (_prefLang && !poi.nameLocalized)
+        {
+            const QString langTag = QString("name:").append(QString::fromNSString(_prefLang));
+            if (entry.key() == langTag)
+                poi.nameLocalized = entry.value().toNSString();
         }
     }
     
+    if (!poi.nameLocalized)
+        poi.nameLocalized = amenity->nativeName.toNSString();
+
     if (amenity->categories.isEmpty())
         return;
         

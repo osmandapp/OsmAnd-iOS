@@ -195,6 +195,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 _currentPOICategory.top = [[value lowercaseString] isEqualToString:@"true"];
             }
         }
+        
+        // Category
+        OAPOICategory *key;
+        for (OAPOICategory *k in _pCategories.allKeys)
+            if ([k.name isEqualToString:_currentPOICategory.name])
+                key = k;
+        
+        if (!key)
+        {
+            [_pCategories setObject:[NSMutableArray array] forKey:_currentPOICategory];
+        }
     }
     else if (0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
     {

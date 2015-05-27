@@ -1192,6 +1192,27 @@ typedef enum
     
     if (!found)
     {
+        NSArray* searchableContent = [OAPOIHelper sharedInstance].poiCategories.allKeys;
+        for (OAPOICategory *category in searchableContent)
+        {
+            if ([str localizedCaseInsensitiveCompare:category.nameLocalized] == NSOrderedSame)
+            {
+                found = YES;
+                _currentScope = EPOIScopeCategory;
+                _currentScopePoiTypeName = nil;
+                _currentScopePoiTypeNameLoc = nil;
+                _currentScopeFilterName = nil;
+                _currentScopeFilterNameLoc = nil;
+                _currentScopeCategoryName = category.name;
+                _currentScopeCategoryNameLoc = category.nameLocalized;
+                
+                break;
+            }
+        }
+    }
+    
+    if (!found)
+    {
         _currentScope = EPOIScopeUndefined;
         _currentScopePoiTypeName = nil;
         _currentScopePoiTypeNameLoc = nil;

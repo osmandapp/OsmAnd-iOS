@@ -683,7 +683,21 @@
     mapView.elevationAngle = _mainMapEvelationAngle;
     
     _mapViewController.minimap = NO;
+}
 
+- (void)restoreMapAfterReuseAnimated
+{
+    _app.mapMode = _mainMapMode;
+ 
+    if (_mainMapMode == OAMapModeFree || _mainMapMode == OAMapModeUnknown)
+    {
+        OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
+        mapView.azimuth = _mainMapAzimuth;
+        mapView.elevationAngle = _mainMapEvelationAngle;
+        [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31] andZoom:_mainMapZoom animated:YES];
+    }
+    
+    _mapViewController.minimap = NO;
 }
 
 - (void)doMapRestore
@@ -1056,14 +1070,21 @@
     [_mapViewController goToPosition:point animated:YES];
 }
 
+-(void)targetViewSizeChanged:(CGRect)newFrame
+{
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 bottomInset:newFrame.size.height animated:YES];
+}
+
 -(void)showTargetPointMenu
 {
+    [self saveMapStateIfNeeded];
+    
     [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     
-    [self.targetMenuView doInit];
-    [self.targetMenuView doUpdateUI];
-    [self.targetMenuView doLayoutSubviews];
+    [self.targetMenuView prepare];
+
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.targetMenuView.frame = frame;
@@ -1073,7 +1094,10 @@
         [self.targetMenuView removeFromSuperview];
     
     [self.view addSubview:self.targetMenuView];
-    
+
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+    [_mapViewController correctPosition:targetPoint31 bottomInset:frame.size.height animated:YES];
+
     [UIView animateWithDuration:0.3 animations:^{
         
         CGRect frame = self.targetMenuView.frame;
@@ -1089,6 +1113,8 @@
 
 -(void)hideTargetPointMenu
 {
+    [self restoreMapAfterReuseAnimated];
+    
     [self destroyShadowButton];
     
     if (self.targetMenuView.superview)

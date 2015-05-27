@@ -858,20 +858,26 @@
         
         road = _roadLocator->findNearestRoad(position31,
                                              kMaxRoadDistanceInMeters,
-                                             OsmAnd::RoutingDataLevel::Detailed);
+                                             OsmAnd::RoutingDataLevel::Detailed,
+                                             true);
         
         NSString* localizedTitle;
         NSString* nativeTitle;
         if (road)
         {
+            NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+
             //for (const auto& entry : OsmAnd::rangeOf(road->captions))
             //    NSLog(@"%d=%@", entry.key(), entry.value().toNSString());
 
-            const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
-            const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+            if (prefLang)
+            {
+                const auto mainLanguage = QString::fromNSString(prefLang);
+                const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+                if (!localizedName.isNull())
+                    localizedTitle = localizedName.toNSString();
+            }
             const auto nativeName = road->getCaptionInNativeLanguage();
-            if (!localizedName.isNull())
-                localizedTitle = localizedName.toNSString();
             if (!nativeName.isNull())
                 nativeTitle = nativeName.toNSString();
         }

@@ -859,7 +859,11 @@
         road = _roadLocator->findNearestRoad(position31,
                                              kMaxRoadDistanceInMeters,
                                              OsmAnd::RoutingDataLevel::Detailed,
-                                             true);
+                                             [self]
+                                             (const std::shared_ptr<const OsmAnd::Road>& road)
+                                             {
+                                                 return road->containsTag(QString("highway")) && road->captions.count() > 0;
+                                             });
         
         NSString* localizedTitle;
         NSString* nativeTitle;

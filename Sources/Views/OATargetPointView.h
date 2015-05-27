@@ -11,7 +11,6 @@
 
 #define kOATargetPointViewHeightPortrait 125.0
 #define kOATargetPointViewHeightLandscape 72.0
-#define kOATargetPointViewMaxHalfHeightKoef 0.2
 
 @class OATargetPoint;
 
@@ -26,9 +25,7 @@
 -(void)setMapViewInstance:(UIView*)mapView;
 -(void)setNavigationController:(UINavigationController*)controller;
 
-- (void)doInit;
-- (void)doLayoutSubviews;
-- (void)doUpdateUI;
+- (void)prepare;
 
 @end
 
@@ -46,5 +43,6 @@
 -(void)targetHide;
 -(void)targetHideMenu;
 -(void)targetGoToPoint;
+-(void)targetViewSizeChanged:(CGRect)newFrame;
 
 @end

@@ -2873,6 +2873,33 @@
     }
 }
 
+- (void)correctPosition:(Point31)targetPosition31
+            bottomInset:(CGFloat)bottomInset
+               animated:(BOOL)animated
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+
+    CGFloat bottomTargetInset = 40.0;
+    
+    CGPoint targetPoint;
+    OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
+    [mapView convert:&targetPositionI toScreen:&targetPoint];
+
+    CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
+    if (targetY < targetPoint.y)
+    {
+        CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
+        minPoint.x *= mapView.contentScaleFactor;
+        minPoint.y *= mapView.contentScaleFactor;
+        OsmAnd::PointI minLocation;
+        [mapView convert:minPoint toLocation:&minLocation];
+        
+        Point31 newPosition31 = [OANativeUtilities convertFromPointI:OsmAnd::PointI(mapView.target31.x, mapView.target31.y - (minLocation.y - targetPosition31.y))];
+        [self goToPosition:newPosition31 animated:animated];
+    }
+    
+}
+
 - (CGFloat)normalizeZoom:(CGFloat)zoom defaultZoom:(CGFloat)defaultZoom
 {
     OAMapRendererView* renderer = (OAMapRendererView*)self.view;

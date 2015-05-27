@@ -81,6 +81,11 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)goToPosition:(Point31)position31
              andZoom:(CGFloat)zoom
             animated:(BOOL)animated;
+
+- (void)correctPosition:(Point31)targetPosition31
+                bottomInset:(CGFloat)bottomInset
+            animated:(BOOL)animated;
+
 - (float)calculateMapRuler;
 
 - (BOOL)isMyLocationVisible;

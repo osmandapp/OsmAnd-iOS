@@ -81,6 +81,7 @@
     
     BOOL _showFull;
     CGFloat _fullHeight;
+    BOOL _hideButtons;
     
     UISwipeGestureRecognizer *_swipeUp;
     UISwipeGestureRecognizer *_swipeDown;
@@ -231,9 +232,11 @@
 
 - (void)swipeUpHandler:(UISwipeGestureRecognizer *)recognizer
 {
-    if (!_showFull)
+    if (!_showFull && [self hasInfo])
     {
         _showFull = YES;
+        _hideButtons = YES;
+        
         CGRect frame = self.frame;
         frame.size.height = _fullHeight;
         self.frame = frame;
@@ -241,13 +244,39 @@
         
         [UIView animateWithDuration:.3 animations:^{
             self.frame = frame;
+            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - frame.origin.y + 1.0, _buttonsView.bounds.size.width, _buttonsView.bounds.size.height);
         }];
+        
+        [self.delegate targetViewSizeChanged:frame];
     }
 }
 
 - (void)swipeDownHandler:(UISwipeGestureRecognizer *)recognizer
 {
-    [self.delegate targetHideMenu];
+    if (_showFull)
+    {
+        _showFull = NO;
+        _hideButtons = NO;
+
+        CGFloat h = kOATargetPointViewHeightPortrait;
+        if (DeviceScreenWidth > 470.0) {
+            h = kOATargetPointViewHeightLandscape;
+        }
+        CGRect frame = self.frame;
+        self.frame = frame;
+        frame.origin.y = DeviceScreenHeight - h;
+        
+        [UIView animateWithDuration:.3 animations:^{
+            self.frame = frame;
+            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
+        }];
+
+        [self.delegate targetViewSizeChanged:frame];
+    }
+    else
+    {
+        [self.delegate targetHideMenu];
+    }
 }
 
 - (void)callUrl
@@ -295,6 +324,13 @@
     
 }
 
+- (void)prepare
+{
+    [self doInit];
+    [self doUpdateUI];
+    [self doLayoutSubviews];
+}
+
 - (void)doInit
 {
     _showFull = NO;
@@ -302,6 +338,7 @@
 
 - (void)doUpdateUI
 {
+    _hideButtons = NO;
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
     _buttonsWidthLandscape = 210.0;
@@ -359,6 +396,11 @@
     _infoDescText.hidden = _targetPoint.desc == nil;
 }
 
+- (BOOL)hasInfo
+{
+    return _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc;
+}
+
 - (void)layoutSubviews
 {
     [self doLayoutSubviews];
@@ -373,11 +415,12 @@
         landscape = YES;
     }
     
-    _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
+    if (landscape)
+        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
+    else
+        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 73);
     
-    CGFloat maxHalfHeight = DeviceScreenHeight * kOATargetPointViewMaxHalfHeightKoef;
-    CGFloat hf = h;
-    CGFloat hh = h;
+    CGFloat hf = _topView.frame.size.height;
     
     if (_targetPoint.phone)
     {
@@ -389,8 +432,6 @@
         [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
         
         hf += ih;
-        if (hf < maxHalfHeight)
-            hh = hf;
         
         _horizontalLineInfo1.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo1.hidden = NO;
@@ -410,8 +451,7 @@
         [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
 
         hf += ih;
-        if (hf < maxHalfHeight)
-            hh = hf;
+
         _horizontalLineInfo2.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo2.hidden = NO;
     }
@@ -429,8 +469,7 @@
         [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
         
         hf += ih;
-        if (hf < maxHalfHeight)
-            hh = hf;
+
         _horizontalLineInfo3.frame = CGRectMake(15.0, hf, DeviceScreenWidth - 15.0, .5);
         _horizontalLineInfo3.hidden = NO;
     }
@@ -458,8 +497,6 @@
             _infoDescText.contentInset = UIEdgeInsetsMake(0,-4,0,0);
         
         hf += ih;
-        if (hf < maxHalfHeight)
-            hh = hf;
     }
 
     CGRect frame = self.frame;
@@ -471,8 +508,8 @@
     }
     else
     {
-        frame.origin.y = DeviceScreenHeight - hh;
-        frame.size.height = hh;
+        frame.origin.y = DeviceScreenHeight - h;
+        frame.size.height = h;
     }
 
     self.frame = frame;
@@ -549,7 +586,11 @@
         _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 50.0, 73.0);
         _buttonClose.frame = CGRectMake(DeviceScreenWidth - 36.0, 0.0, 36.0, 36.0);
         
-        _buttonsView.frame = CGRectMake(0.0, 73.0, DeviceScreenWidth, 53.0);
+        if (_hideButtons)
+            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, DeviceScreenWidth, 53.0);
+        else
+            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
+        
         CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
         CGFloat x = 0.0;
         _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
@@ -579,7 +620,7 @@
         [self layoutComplexButton:self.buttonShare isPortrait:YES];
         [self layoutComplexButton:self.buttonDirection isPortrait:YES];
         
-        _horizontalLine.frame = CGRectMake(0.0, 0.5, _buttonsView.frame.size.width, 0.5);
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
         _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
         _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
         if (_buttonsCount > 3)

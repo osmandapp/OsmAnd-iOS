@@ -11,6 +11,7 @@
 
 #define kOATargetPointViewHeightPortrait 125.0
 #define kOATargetPointViewHeightLandscape 72.0
+#define kInfoViewLanscapeWidth 260.0
 
 @class OATargetPoint;
 
@@ -24,8 +25,22 @@
 
 -(void)setMapViewInstance:(UIView*)mapView;
 -(void)setNavigationController:(UINavigationController*)controller;
+-(void)setParentViewInstance:(UIView*)parentView;
+
+- (UIView *)bottomMostView;
+
+- (BOOL)isLandscape;
+- (BOOL)hasInfo;
 
 - (void)prepare;
+- (void)prepareForRotation;
+
+- (void)beforeAppearAnimation;
+- (void)onAppearAnimation;
+- (void)afterAppearAnimation;
+- (void)beforeDisappearAnimation;
+- (void)onDisappearAnimation;
+- (void)afterDisappearAnimation;
 
 @end
 
@@ -41,7 +56,7 @@
 -(void)targetPointAddWaypoint;
 
 -(void)targetHide;
--(void)targetHideMenu;
+-(void)targetHideMenu:(CGFloat)animationDuration;
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame;
 

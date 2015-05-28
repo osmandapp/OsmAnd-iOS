@@ -52,6 +52,10 @@
                                 <action selector="buttonCloseClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Rci-JF-QTB"/>
                             </connections>
                         </button>
+                        <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_poi_info_dots.png" id="fIE-MR-h8E">
+                            <rect key="frame" x="145" y="-8" width="30" height="10"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
@@ -171,6 +175,7 @@
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>
+                <outlet property="topImageView" destination="fIE-MR-h8E" id="2L3-gG-mlI"/>
                 <outlet property="topView" destination="lwK-8v-Cab" id="M0B-m4-jW0"/>
             </connections>
             <point key="canvasLocation" x="633" y="374.5"/>
@@ -178,6 +183,7 @@
     </objects>
     <resources>
         <image name="ic_close.png" width="10" height="10"/>
+        <image name="ic_poi_info_dots.png" width="26" height="8"/>
         <image name="menu_direction_icon.png" width="22" height="22"/>
         <image name="menu_share_icon.png" width="22" height="22"/>
         <image name="menu_star_icon.png" width="22" height="22"/>

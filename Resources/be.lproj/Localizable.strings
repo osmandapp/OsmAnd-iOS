@@ -109,3 +109,82 @@
 "shared_string_and" = "і";
 // GPX
 "gpx_point" = "Кропка";
+"fav_remove_q" = "Выдаліць выбранае?";
+"fav_import_title" = "Імпартаваць выбранае";
+"fav_export_title" = "Экспартаваць выбранае";
+"fav_select_remove" = "Абярыце выбраныя для выдаленьня";
+"fav_export_select" = "Абярыце выбраныя для экспарту";
+"fav_import_desc" = "Вы можаце імпартаваць выбраныя як шляхавыя кропкі GPX файла.\n\nКаб падзяліцца файлам favorites.gpx вы можаце адкрыць яго ў Dropbox, Email ці ў іншай праграме - Выкарыстоўвайце функцыю Адкрыць у.";
+"fav_create_group" = "Стварыць новую групу";
+"fav_enter_group_name" = "Увядзіце імя групы";
+"fav_exists" = "Выбранае \"%@\" ужо існуе";
+"fav_replace_all" = "Замяніць усё";
+"poi_max_radius_reached" = "Дасягнуты максімальны радыюс пошуку";
+"poi_search_near_center" = "Пошук выконваецца вакол цэнтра карты";
+"tracks" = "Трэкі";
+"gpx_points" = "Кропкі";
+"import_export" = "Імпарт/Экспарт";
+"gpx_import_title" = "Імпартаваць трэк";
+"gpx_add_new" = "Дадаць новы файл";
+"gpx_overwrite" = "Перазапісаць";
+"gpx_cannot_import" = "Немагчыма імпартаваць GPX файл";
+"gpx_export_title" = "Экспартаваць трэк";
+"gpx_export_select_track" = "Абярыце трэк для экспарту";
+"gpx_no_tracks" = "Няма трэкаў";
+"gpx_remove" = "Выдаліць трэк?";
+"gpx_route_time" = "Час маршруту";
+"gpx_uphldownhl" = "Уздымы/Спускі";
+"gpx_distance" = "Адлегласьць";
+"gpx_average_speed" = "Сярэдняя хуткасьць";
+"gpx_start" = "Пачатак";
+"gpx_finish" = "Канец";
+"gpx_avg_elev" = "Сярэдняя вышыня";
+"gpx_elev_range" = "Рознасць вышынь";
+"gpx_updown" = "Угару/Уніз";
+"gpx_uphills_total" = "Усяго ўздым";
+"map_settings_type" = "Тып карты";
+"map_settings_over" = "Пакрыццё";
+"map_settings_under" = "Падкладка";
+"map_settings_offline" = "Стылі афлайн карт";
+"map_settings_transp" = "Празрыстасьць";
+"map_settings_avail_lay" = "Даступныя пласты";
+// Intro
+"intro_skip" = "Прапусціць";
+"intro_promo" = "Сусветныя афлайн карты";
+"intro_placeholder" = "увядзіце назву рэгіёна";
+"sett_units" = "Памернасць";
+"cannot_add_marker" = "Нельга дадаць паркоўку";
+"cannot_add_destination" = "Нельга дадаць кірунак";
+// Units
+"units_km" = "км";
+"units_m" = "м";
+"units_mi" = "мл";
+"units_yd" = "яр";
+"units_ft" = "фт";
+"units_hour" = "г";
+// Map
+"map_inst_det_map_q" = "Усталюеце дэталёвую карту для атрымання больш падрабязнай інфармацыі пра сваё месцазнаходжанне.";
+// Alerts
+"alert_inet_needed" = "Для гэтага патрабуецца інтэрнэт злучэнне. Калі ласка праверце ваша злучэнне з інтэрнэтам.";
+"col_green" = "Зялёны";
+"col_yellow" = "Жоўты";
+"col_gray" = "Шэры";
+"col_red" = "Чырвоны";
+"col_magenta" = "Магента";
+// World Regions
+"region_africa" = "Афрыка";
+"region_asia" = "Азія";
+"region_ausralia_and_oceania" = "Аўстралія і Акіянія";
+"region_central_america" = "Цэнтральная Амерыка";
+"region_europe" = "Еўропа";
+"region_north_america" = "Паўночная Амерыка";
+"region_russia" = "Расея";
+"region_south_america" = "Паўднёвая Амерыка";
+// Help
+"help_quiz" = "Апытанне";
+"sett_lang" = "Мова мапы";
+"sett_pref_lang" = "Мова";
+"maps" = "Мапы";
+"sett_lang_show_local" = "Паказваць мясцовыя назвы";
+"sett_lang_show_trans" = "Транслітараваць назвы";
+"sett_lang_trans" = "трансліт";

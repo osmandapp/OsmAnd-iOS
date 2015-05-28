@@ -2874,17 +2874,21 @@
 }
 
 - (void)correctPosition:(Point31)targetPosition31
+              leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
                animated:(BOOL)animated
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    CGFloat bottomTargetInset = 40.0;
+    CGFloat leftTargetInset = kCorrectionMinLeftSpace;
+    CGFloat bottomTargetInset = kCorrectionMinBottomSpace;
     
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
     [mapView convert:&targetPositionI toScreen:&targetPoint];
 
+    OsmAnd::PointI newPositionI = mapView.target31;
+    
     CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
     if (targetY < targetPoint.y)
     {
@@ -2894,10 +2898,23 @@
         OsmAnd::PointI minLocation;
         [mapView convert:minPoint toLocation:&minLocation];
         
-        Point31 newPosition31 = [OANativeUtilities convertFromPointI:OsmAnd::PointI(mapView.target31.x, mapView.target31.y - (minLocation.y - targetPosition31.y))];
-        [self goToPosition:newPosition31 animated:animated];
+        newPositionI.y = mapView.target31.y - (minLocation.y - targetPosition31.y);
     }
-    
+
+    CGFloat targetX = leftInset + leftTargetInset;
+    if (targetX > targetPoint.x)
+    {
+        CGPoint minPoint = CGPointMake(targetX, DeviceScreenHeight / 2.0);
+        minPoint.x *= mapView.contentScaleFactor;
+        minPoint.y *= mapView.contentScaleFactor;
+        OsmAnd::PointI minLocation;
+        [mapView convert:minPoint toLocation:&minLocation];
+
+        newPositionI.x = mapView.target31.x + (-minLocation.x + targetPosition31.x);
+    }
+    Point31 newPosition31 = [OANativeUtilities convertFromPointI:newPositionI];
+    [self goToPosition:newPosition31 animated:animated];
+
 }
 
 - (CGFloat)normalizeZoom:(CGFloat)zoom defaultZoom:(CGFloat)defaultZoom

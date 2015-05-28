@@ -20,6 +20,9 @@
 #define kNotificationContextMarkerClicked @"kNotificationContextMarkerClicked"
 #define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
+#define kCorrectionMinLeftSpace 40.0
+#define kCorrectionMinBottomSpace 40.0
+
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
 {
@@ -83,8 +86,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
             animated:(BOOL)animated;
 
 - (void)correctPosition:(Point31)targetPosition31
-                bottomInset:(CGFloat)bottomInset
-            animated:(BOOL)animated;
+              leftInset:(CGFloat)leftInset
+            bottomInset:(CGFloat)bottomInset
+               animated:(BOOL)animated;
 
 - (float)calculateMapRuler;
 

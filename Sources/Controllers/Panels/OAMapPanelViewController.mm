@@ -144,6 +144,9 @@
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
     self.targetMenuView.delegate = self;
+    [self.targetMenuView setNavigationController:self.navigationController];
+    [self.targetMenuView setMapViewInstance:_mapViewController.view];
+    [self.targetMenuView setParentViewInstance:self.view];
 
     _widgetsView = [[InfoWidgetsView alloc] init];
     _widgetsView.delegate = self;
@@ -1058,9 +1061,9 @@
     [self hideTargetPointMenu];
 }
 
--(void)targetHideMenu
+-(void)targetHideMenu:(CGFloat)animationDuration
 {
-    [self hideTargetPointMenu];
+    [self hideTargetPointMenu:animationDuration];
 }
 
 -(void)targetGoToPoint
@@ -1073,15 +1076,12 @@
 -(void)targetViewSizeChanged:(CGRect)newFrame
 {
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 bottomInset:newFrame.size.height animated:YES];
+    [_mapViewController correctPosition:targetPoint31 leftInset:0.0 bottomInset:newFrame.size.height animated:YES];
 }
 
 -(void)showTargetPointMenu
 {
     [self saveMapStateIfNeeded];
-    
-    [self.targetMenuView setNavigationController:self.navigationController];
-    [self.targetMenuView setMapViewInstance:_mapViewController.view];
     
     [self.targetMenuView prepare];
 
@@ -1096,22 +1096,30 @@
     [self.view addSubview:self.targetMenuView];
 
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 bottomInset:frame.size.height animated:YES];
+    [_mapViewController correctPosition:targetPoint31 leftInset:([self.targetMenuView isLandscape] && [self.targetMenuView hasInfo] ? kInfoViewLanscapeWidth : 0.0)  bottomInset:frame.size.height animated:YES];
 
+    [self.targetMenuView beforeAppearAnimation];
     [UIView animateWithDuration:0.3 animations:^{
         
         CGRect frame = self.targetMenuView.frame;
         frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
         self.targetMenuView.frame = frame;
+        [self.targetMenuView onAppearAnimation];
         
     } completion:^(BOOL finished) {
         
-        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:self.targetMenuView];
+        [self.targetMenuView afterAppearAnimation];
+        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
         
     }];
 }
 
 -(void)hideTargetPointMenu
+{
+    [self hideTargetPointMenu:.3];
+}
+
+-(void)hideTargetPointMenu:(CGFloat)animationDuration
 {
     [self restoreMapAfterReuseAnimated];
     
@@ -1122,14 +1130,23 @@
         CGRect frame = self.targetMenuView.frame;
         frame.origin.y = DeviceScreenHeight + 10.0;
         
-        [UIView animateWithDuration:0.4 animations:^{
+        [self.targetMenuView beforeDisappearAnimation];
+        [UIView animateWithDuration:animationDuration animations:^{
             self.targetMenuView.frame = frame;
+            [self.targetMenuView onDisappearAnimation];
             
         } completion:^(BOOL finished) {
+            [self.targetMenuView afterDisappearAnimation];
             if (finished)
                 [self.targetMenuView removeFromSuperview];
         }];
     }
+}
+
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    if (self.targetMenuView.superview)
+        [self.targetMenuView prepareForRotation];
 }
 
 -(void)addParkingReminderToCalendar:(OADestination *)destination

@@ -336,3 +336,11 @@
 "product_desc_parking" = "Dejamos que memorice fácilmente cuándo el automóvil fue aparcado y la cantidad de tiempo restante si el estacionamiento está limitado por tiempo";
 "track_save_short_q" = "La traza es demasiado corta, ¿Quiere guardar?";
 "shared_string_and" = "y";
+"fav_select" = "Seleccione favoritos";
+"sett_lang" = "Idioma del mapa";
+"sett_lang_local" = "Local";
+"sett_lang_trans" = "transliteración";
+"sett_pref_lang" = "Idioma preferido";
+"sett_lang_show_local" = "Mostrar nombres locales";
+"sett_lang_show_trans" = "Nombres transliterados";
+"make_call" = "Haga una llamada";

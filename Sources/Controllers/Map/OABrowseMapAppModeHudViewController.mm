@@ -670,4 +670,40 @@
     });
 }
 
+- (void)showTopControls
+{
+    if (_compassBox.alpha == 0.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+           
+            _compassBox.alpha = 1.0;
+            _mapSettingsButton.alpha = 1.0;
+            _searchButton.alpha = 1.0;
+            
+            _downloadView.alpha = 1.0;
+            _widgetsView.alpha = 1.0;
+            _destinationViewController.view.alpha = 1.0;
+            
+        }];
+    }
+}
+
+- (void)hideTopControls
+{
+    if (_compassBox.alpha == 1.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _compassBox.alpha = 0.0;
+            _mapSettingsButton.alpha = 0.0;
+            _searchButton.alpha = 0.0;
+            
+            _downloadView.alpha = 0.0;
+            _widgetsView.alpha = 0.0;
+            _destinationViewController.view.alpha = 0.0;
+            
+        }];
+    }
+}
+
 @end

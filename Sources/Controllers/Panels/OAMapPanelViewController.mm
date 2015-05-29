@@ -35,7 +35,7 @@
 #import "OASavingTrackHelper.h"
 #import "PXAlertView.h"
 #import "OATrackIntervalDialogView.h"
-#import "OASetParkingViewController.h"
+#import "OAParkingViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -54,7 +54,7 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OASetParkingDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -93,6 +93,9 @@
     OAMapSettingsViewController *_mapSettings;
     OAPOISearchViewController *_searchPOI;
     UILongPressGestureRecognizer *_shadowLongPress;
+    
+    BOOL _customStatusBarStyleNeeded;
+    UIStatusBarStyle _customStatusBarStyle;
 }
 
 - (instancetype)init
@@ -476,6 +479,9 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
+    if (_customStatusBarStyleNeeded)
+        return _customStatusBarStyle;
+    
     if (_hudViewController == nil)
         return UIStatusBarStyleDefault;
 
@@ -1001,6 +1007,22 @@
         [_mapViewController simulateContextMenuPress:gesture];
 }
 
+- (void)showTopControls
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController showTopControls];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController showTopControls];
+}
+
+- (void)hideTopControls
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController hideTopControls];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController hideTopControls];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 -(void)targetPointAddFavorite
@@ -1039,15 +1061,22 @@
     {
         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
           ] show];
+     
+        [self hideTargetPointMenu];
     }
     else
     {
-        OASetParkingViewController *parking = [[OASetParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
+        OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
         parking.delegate = self;
-        [self.navigationController pushViewController:parking animated:YES];
+        parking.view.frame = self.view.frame;
+        [self.targetMenuView setCustomViewController:parking];
+        
+        [self hideTopControls];
+        
+        _customStatusBarStyle = UIStatusBarStyleLightContent;
+        _customStatusBarStyleNeeded = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
     }
-    
-    [self hideTargetPointMenu];
 }
 
 - (void)targetPointAddWaypoint
@@ -1073,10 +1102,10 @@
     [_mapViewController goToPosition:point animated:YES];
 }
 
--(void)targetViewSizeChanged:(CGRect)newFrame
+-(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 leftInset:0.0 bottomInset:newFrame.size.height animated:YES];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) animated:animated];
 }
 
 -(void)showTargetPointMenu
@@ -1096,21 +1125,10 @@
     [self.view addSubview:self.targetMenuView];
 
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 leftInset:([self.targetMenuView isLandscape] && [self.targetMenuView hasInfo] ? kInfoViewLanscapeWidth : 0.0)  bottomInset:frame.size.height animated:YES];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) animated:YES];
 
-    [self.targetMenuView beforeAppearAnimation];
-    [UIView animateWithDuration:0.3 animations:^{
-        
-        CGRect frame = self.targetMenuView.frame;
-        frame.origin.y = DeviceScreenHeight - self.targetMenuView.bounds.size.height;
-        self.targetMenuView.frame = frame;
-        [self.targetMenuView onAppearAnimation];
-        
-    } completion:^(BOOL finished) {
-        
-        [self.targetMenuView afterAppearAnimation];
+    [self.targetMenuView show:YES onComplete:^{
         [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
-        
     }];
 }
 
@@ -1122,25 +1140,12 @@
 -(void)hideTargetPointMenu:(CGFloat)animationDuration
 {
     [self restoreMapAfterReuseAnimated];
-    
     [self destroyShadowButton];
-    
-    if (self.targetMenuView.superview)
-    {
-        CGRect frame = self.targetMenuView.frame;
-        frame.origin.y = DeviceScreenHeight + 10.0;
-        
-        [self.targetMenuView beforeDisappearAnimation];
-        [UIView animateWithDuration:animationDuration animations:^{
-            self.targetMenuView.frame = frame;
-            [self.targetMenuView onDisappearAnimation];
-            
-        } completion:^(BOOL finished) {
-            [self.targetMenuView afterDisappearAnimation];
-            if (finished)
-                [self.targetMenuView removeFromSuperview];
-        }];
-    }
+    [self.targetMenuView hide:YES duration:animationDuration onComplete:nil];
+
+    [self showTopControls];
+    _customStatusBarStyleNeeded = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -1184,9 +1189,9 @@
     }];
 }
 
-#pragma mark - OASetParkingDelegate
+#pragma mark - OAParkingDelegate
 
--(void)addParkingPoint:(OASetParkingViewController *)sender
+- (void)addParking:(OAParkingViewController *)sender
 {
     OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:sender.coord.latitude longitude:sender.coord.longitude];
     
@@ -1207,12 +1212,18 @@
         if (sender.timeLimitActive && sender.addToCalActive)
             [self addParkingReminderToCalendar:destination];
         [_mapViewController hideContextPinMarker];
+        [self hideTargetPointMenu];
     }
     else
     {
         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
          ] show];
     }
+}
+
+- (void)cancelParking:(OAParkingViewController *)sender
+{
+    [self hideTargetPointMenu];
 }
 
 #pragma mark - OADestinationViewControllerProtocol

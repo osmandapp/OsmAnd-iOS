@@ -21,6 +21,7 @@
 
 @interface OASetParkingViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonCancel;
 @property (weak, nonatomic) IBOutlet UIButton *buttonAdd;
@@ -34,6 +35,6 @@
 
 @property (weak, nonatomic) id<OASetParkingDelegate> delegate;
 
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate isPopup:(BOOL)isPopup;
 
 @end

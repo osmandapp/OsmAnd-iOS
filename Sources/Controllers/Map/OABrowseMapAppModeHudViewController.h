@@ -21,4 +21,7 @@
 - (BOOL)isOverlayUnderlayViewVisible;
 - (void)updateOverlayUnderlayView:(BOOL)show;
 
+- (void)showTopControls;
+- (void)hideTopControls;
+
 @end

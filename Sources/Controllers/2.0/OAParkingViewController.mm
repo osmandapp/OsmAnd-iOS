@@ -1,12 +1,12 @@
 //
-//  OASetParkingViewController.m
+//  OAParkingViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 06/05/15.
+//  Created by Alexey Kulish on 29/05/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASetParkingViewController.h"
+#import "OAParkingViewController.h"
 #import "Localization.h"
 #import "OASwitchTableViewCell.h"
 #import "OADateTimePickerTableViewCell.h"
@@ -18,25 +18,20 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OASetParkingViewController ()
+@interface OAParkingViewController ()
 
 @end
 
-@implementation OASetParkingViewController
+@implementation OAParkingViewController
 {
-    OAMapViewController *_mapViewController;
-    
     NSDateFormatter *_timeFmt;
-    BOOL _isPopup;
 }
 
-
-- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate isPopup:(BOOL)isPopup
+- (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
     self = [super init];
     if (self) {
         _coord = coordinate;
-        _isPopup = isPopup;
         _timeLimitActive = NO;
         _addToCalActive = YES;
         _timeFmt = [[NSDateFormatter alloc] init];
@@ -58,79 +53,16 @@
     return [calendar dateFromComponents:dateComponents];
 }
 
-- (void)viewWillLayoutSubviews
+- (CGFloat)contentHeight
 {
-    [self updateLayout:self.interfaceOrientation];
-}
-
-- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
-{
-    
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height)
-    {
-        big = rect.size.width;
-        small = rect.size.height;
-    }
-    else
-    {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
-    
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation))
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = big - topY;
-            CGFloat mapWidth = small / 1.7;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.tableView.frame = CGRectMake(mapWidth, topY, small - mapWidth, big - topY);
-        }
-        else
-        {
-            CGFloat topY = 64.0;
-            CGFloat mapWidth = small;
-            CGFloat mapHeight = 150.0;
-            CGFloat mapBottom = topY + mapHeight;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
-        }
-    }
-    else
-    {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        {
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY;
-            CGFloat mapWidth = big / 1.5;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - topY);
-        }
-        else
-        {
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY;
-            CGFloat mapWidth = big / 2.0;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - topY);
-        }
-    }
+    return (_timeLimitActive ? 44.0 * 3.0 + 162.0 : 44.0) + 34.0 + 16.0;
 }
 
 - (void)applyLocalization
 {
-    [_buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [_buttonAdd setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
-    _titleView.text = OALocalizedString(@"parking_marker");
+    [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    [self.buttonOK setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
+    self.titleView.text = OALocalizedString(@"parking_marker");
 }
 
 - (void)viewDidLoad
@@ -138,49 +70,37 @@
     [super viewDidLoad];
 }
 
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    
-    if (!_isPopup)
-    {
-        _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-        
-        Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_coord.latitude, _coord.longitude))];
-        
-        [[OARootViewController instance].mapPanel prepareMapForReuse:point zoom:15.0 newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    }
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (!_isPopup)
-        [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
-}
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
 }
 
--(UIStatusBarStyle)preferredStatusBarStyle
+- (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
 }
 
--(IBAction)cancelPressed:(id)sender
+- (BOOL)hasTopToolbar
 {
-    [self.navigationController popViewControllerAnimated:YES];
+    return YES;
 }
 
--(IBAction)addPressed:(id)sender
+- (void)okPressed
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(addParkingPoint:)])
-        [self.delegate addParkingPoint:self];
-    
-    [self.navigationController popViewControllerAnimated:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(addParking:)])
+        [self.delegate addParking:self];
+}
+
+- (void)cancelPressed
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(cancelParking:)])
+        [self.delegate cancelParking:self];
+}
+
+- (void)setContentBackgroundColor:(UIColor *)color
+{
+    [super setContentBackgroundColor:color];
+    _tableView.backgroundColor = color;
 }
 
 -(void)timeLimitSwitched:(id)sender
@@ -199,6 +119,9 @@
         [_tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
     
     [_tableView endUpdates];
+    
+    if (self.heightChangeListenerBlock)
+        self.heightChangeListenerBlock([self contentHeight]);
 }
 
 -(void)timePickerChanged:(id)sender
@@ -320,6 +243,16 @@
 
 
 #pragma mark - UITableViewDelegate
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 34.0;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 16.0;
+}
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

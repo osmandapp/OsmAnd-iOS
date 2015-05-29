@@ -595,5 +595,12 @@
     
 }
 
+- (void)showTopControls
+{
+}
+
+- (void)hideTopControls
+{
+}
 
 @end

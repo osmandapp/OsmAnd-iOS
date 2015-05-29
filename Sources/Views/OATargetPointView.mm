@@ -54,12 +54,13 @@
 @property UINavigationController* navController;
 @property UIView* parentView;
 
+@property OATargetMenuViewController* customController;
+
 @end
 
 @implementation OATargetPointView
 {
     NSInteger _buttonsCount;
-    CGFloat _buttonsWidthLandscape;
     OAIAPHelper *_iapHelper;
     
     CALayer *_horizontalLine;
@@ -239,6 +240,9 @@
 
 - (void)moveToolbar:(UIPanGestureRecognizer *)gesture
 {
+    if ([self isLandscape])
+        return;
+    
     CGPoint translatedPoint = [gesture translationInView:self.superview];
     CGPoint translatedVelocity = [gesture velocityInView:self.superview];
     
@@ -270,13 +274,18 @@
         
         if (![self isLandscape] && [self hasInfo])
         {
-            if (f.size.height < h && _buttonsView.frame.origin.y <= _topView.bounds.size.height)
+            CGFloat by = _buttonsViewStartSlidingPos.y - translatedPoint.y * 1.3;
+            if (f.size.height < h && by <= _topView.bounds.size.height)
                 _buttonsView.center = CGPointMake(_buttonsView.center.x, _topView.bounds.size.height + _buttonsView.bounds.size.height / 2.0);
-            else
-                _buttonsView.center = CGPointMake(_buttonsView.center.x, _buttonsViewStartSlidingPos.y - translatedPoint.y * 1.3 + _buttonsView.bounds.size.height / 2.0);
+            else //if (by < f.size.height - _buttonsView.bounds.size.height)
+                _buttonsView.center = CGPointMake(_buttonsView.center.x, f.size.height - _buttonsView.bounds.size.height / 2.0);
+            //else
+            //    _buttonsView.center = CGPointMake(_buttonsView.center.x, by + _buttonsView.bounds.size.height / 2.0);
         }
 
         self.frame = f;
+        
+        [self.delegate targetViewSizeChanged:f animated:NO];
     }
     
     if ([gesture state] == UIGestureRecognizerStateEnded ||
@@ -291,7 +300,7 @@
             if ([self hasInfo])
             {
                 _showFull = YES;
-                _hideButtons = YES;
+                _hideButtons = NO;
                 frame.size.height = _fullHeight;
                 frame.origin.y = DeviceScreenHeight - _fullHeight;
             }
@@ -316,7 +325,7 @@
                 }
             }];
             
-            [self.delegate targetViewSizeChanged:frame];
+            [self.delegate targetViewSizeChanged:frame animated:YES];
         }
         else
         {
@@ -343,7 +352,7 @@
                         _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
                 }];
                 
-                [self.delegate targetViewSizeChanged:frame];
+                [self.delegate targetViewSizeChanged:frame animated:YES];
             }
             else
             {
@@ -356,6 +365,61 @@
             }
         }
     }
+}
+
+- (void)showFullMenu
+{
+    if (![self hasInfo])
+        return;
+    
+    BOOL showTopToolbar = (self.customController && [self.customController hasTopToolbar] && self.customController.navBar.hidden);
+    
+    CGRect topToolbatFrame;
+    
+    if (showTopToolbar)
+    {
+        if ([self isLandscape])
+        {
+            CGRect f = self.customController.navBar.frame;
+            self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, kInfoViewLanscapeWidth, f.size.height);
+            topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+        }
+        else
+        {
+            CGRect f = self.customController.navBar.frame;
+            self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
+            topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
+        }
+        self.customController.navBar.hidden = NO;
+        [self.parentView addSubview:self.customController.navBar];
+    }
+    
+    CGRect frame = self.frame;
+    
+    if ([self isLandscape])
+    {
+        
+    }
+    else
+    {
+        _showFull = YES;
+        _hideButtons = NO;
+        frame.size.height = _fullHeight;
+        frame.origin.y = DeviceScreenHeight - _fullHeight;
+    }
+    
+    [UIView animateWithDuration:.3 animations:^{
+        
+        self.frame = frame;
+        
+        if (showTopToolbar)
+            self.customController.navBar.frame = topToolbatFrame;
+        
+        if (![self isLandscape] && _hideButtons)
+            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - frame.origin.y + 1.0, _buttonsView.bounds.size.width, _buttonsView.bounds.size.height);
+    }];
+    
+    [self.delegate targetViewSizeChanged:frame animated:YES];
 }
 
 - (void)callUrl
@@ -422,9 +486,21 @@
     }
 }
 
+- (void)clearCustomControllerIfNeeded
+{
+    if (self.customController)
+    {
+        [self.customController.navBar removeFromSuperview];
+        [self.customController.contentView removeFromSuperview];
+        [self.customController setContentHeightChangeListener:nil];
+        self.customController = nil;
+    }
+}
+
 - (void)doInit
 {
     _showFull = NO;
+    [self clearCustomControllerIfNeeded];
 }
 
 - (void)doUpdateUI
@@ -432,20 +508,37 @@
     _hideButtons = NO;
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
-    if ([self isLandscape] && [self hasInfo])
+    if ([self isLandscape])
     {
-        [self.parentView addSubview:_infoView];
+        if (self.customController)
+        {
+            [_infoView removeFromSuperview];
+            if (self.superview)
+                [self.parentView insertSubview:self.customController.contentView belowSubview:self];
+            else
+                [self.parentView addSubview:self.customController.contentView];
+        }
+        else
+        {
+            if (self.superview)
+                [self.parentView insertSubview:_infoView belowSubview:self];
+            else
+                [self.parentView addSubview:_infoView];
+        }
     }
     else
     {
-        [self insertSubview:_infoView atIndex:0];
+        if (self.customController.contentView)
+        {
+            [_infoView removeFromSuperview];
+            [self insertSubview:self.customController.contentView atIndex:0];
+        }
+        else
+        {
+            [self insertSubview:_infoView atIndex:0];
+        }
     }
-    
-    _buttonsWidthLandscape = 210.0;
-    if (((DeviceScreenWidth > DeviceScreenHeight && DeviceScreenWidth > 480) ||
-         (DeviceScreenHeight > DeviceScreenWidth && DeviceScreenHeight > 480)) && _buttonsCount > 3)
-        _buttonsWidthLandscape = 260.0;
-    
+        
     if (_buttonsCount > 3)
     {
         NSInteger addonsCount = _iapHelper.functionalAddons.count;
@@ -498,7 +591,7 @@
 
 - (BOOL)hasInfo
 {
-    return _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc;
+    return _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || self.customController;
 }
 
 - (BOOL)isLandscape
@@ -506,38 +599,117 @@
     return DeviceScreenWidth > 470.0;
 }
 
-- (void)beforeAppearAnimation
+- (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    if ([self isLandscape])
-        _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+    if (animated)
+    {
+        CGRect frame = self.frame;
+        if ([self isLandscape])
+        {
+            frame.origin.x = -self.bounds.size.width;
+            frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
+            self.frame = frame;
+
+            _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+
+            frame.origin.x = 0.0;
+        }
+        else
+        {
+            frame.origin.x = 0.0;
+            frame.origin.y = DeviceScreenHeight + 10.0;
+            self.frame = frame;
+
+            frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
+        }
+
+        [UIView animateWithDuration:0.3 animations:^{
+            
+            self.frame = frame;
+            _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+            
+        } completion:^(BOOL finished) {
+            if (onComplete)
+                onComplete();
+        }];
+    }
+    else
+    {
+        CGRect frame = self.frame;
+        frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
+        self.frame = frame;
+        
+        if ([self isLandscape])
+            _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+        
+        if (onComplete)
+            onComplete();
+    }
 }
 
-- (void)onAppearAnimation
+- (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
-    if ([self isLandscape])
-        _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
-}
+    if (self.superview)
+    {
+        CGRect frame = self.frame;
+        if ([self isLandscape])
+            frame.origin.x = -frame.size.width;
+        else
+            frame.origin.y = DeviceScreenHeight + 10.0;
 
--(void)afterAppearAnimation
-{
+        if (animated && duration > 0.0)
+        {
+            BOOL showingTopToolbar = (self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden);
+            CGRect newTopToolbarFrame;
+            if (showingTopToolbar)
+            {
+                newTopToolbarFrame = self.customController.navBar.frame;
+                if ([self isLandscape])
+                    newTopToolbarFrame.origin.x = -newTopToolbarFrame.size.width;
+                else
+                    newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
+            }
+            
+            [UIView animateWithDuration:duration animations:^{
+                
+                self.frame = frame;
+                
+                if (showingTopToolbar)
+                    self.customController.navBar.frame = newTopToolbarFrame;
+                
+                if ([self isLandscape])
+                    _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+                
+            } completion:^(BOOL finished) {
+                
+                [_infoView removeFromSuperview];
+                if (finished)
+                    [self removeFromSuperview];
+            
+                [self clearCustomControllerIfNeeded];
+
+                if (onComplete)
+                    onComplete();
+            }];
+        }
+        else
+        {
+            self.frame = frame;
+            if ([self isLandscape])
+                _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+            
+            [_infoView removeFromSuperview];
+            [self removeFromSuperview];
+            
+            [self clearCustomControllerIfNeeded];
+
+            if (onComplete)
+                onComplete();
+        }
+    }
     
 }
 
--(void)beforeDisappearAnimation
-{
-    
-}
-
-- (void)onDisappearAnimation
-{
-    if ([self isLandscape])
-        _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
-}
-
--(void)afterDisappearAnimation
-{
-    [_infoView removeFromSuperview];
-}
 
 - (UIView *)bottomMostView
 {
@@ -563,98 +735,113 @@
     _topImageView.hidden = (landscape || ![self hasInfo]);
     
     if (landscape)
-        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, h);
+        _topView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, kOATargetPointTopViewHeight);
     else
-        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 73);
+        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointTopViewHeight);
     
     CGFloat hf = (landscape ? 20.0 : 0.0);
-    CGFloat infoWidth = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
     
-    if (_targetPoint.phone)
+    if (!self.customController)
     {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:infoWidth - 55.0 font:_infoFont];
-        CGFloat ih = MAX(44.0, s.height + 16.0);
+        CGFloat infoWidth = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
         
-        _infoPhoneImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoPhoneText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-        [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
-        
-        hf += ih;
-        
-        _horizontalLineInfo1.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-        _horizontalLineInfo1.hidden = NO;
-    }
-    else
-    {
-        _horizontalLineInfo1.hidden = YES;
-    }
-    
-    if (_targetPoint.openingHours)
-    {
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:infoWidth - 55.0 font:_infoFont];
-        CGFloat ih = MAX(44.0, s.height + 16.0);
-        
-        _infoOpeningHoursImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoOpeningHoursText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-        [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
-
-        hf += ih;
-
-        _horizontalLineInfo2.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-        _horizontalLineInfo2.hidden = NO;
-    }
-    else
-    {
-        _horizontalLineInfo2.hidden = YES;
-    }
-
-    if (_targetPoint.url)
-    {
-        CGFloat ih = 44.0;
-        
-        _infoUrlImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoUrlText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-        [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
-        
-        hf += ih;
-
-        _horizontalLineInfo3.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-        _horizontalLineInfo3.hidden = NO;
-    }
-    else
-    {
-        _horizontalLineInfo3.hidden = YES;
-    }
-
-    if (_targetPoint.desc)
-    {
-        CGFloat hText = 150.0;
-        if (landscape)
-            hText = 80.0;
-        
-        CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:infoWidth - 50.0 height:hText font:_infoFont];
-        CGFloat ih = MAX(44.0, s.height + 16.0);
-        
-        _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-        _infoDescText.frame = CGRectMake(50.0, hf, infoWidth - 50.0, ih - 1.0);
-        _infoDescText.text = _targetPoint.desc;
-        
-        if (ih == 44.0)
-            _infoDescText.contentInset = UIEdgeInsetsMake(4,-4,0,0);
+        if (_targetPoint.phone)
+        {
+            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:infoWidth - 55.0 font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoPhoneImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoPhoneText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo1.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo1.hidden = NO;
+        }
         else
-            _infoDescText.contentInset = UIEdgeInsetsMake(0,-4,0,0);
+        {
+            _horizontalLineInfo1.hidden = YES;
+        }
         
-        hf += ih;
+        if (_targetPoint.openingHours)
+        {
+            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:infoWidth - 55.0 font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoOpeningHoursImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoOpeningHoursText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo2.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo2.hidden = NO;
+        }
+        else
+        {
+            _horizontalLineInfo2.hidden = YES;
+        }
+        
+        if (_targetPoint.url)
+        {
+            CGFloat ih = 44.0;
+            
+            _infoUrlImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoUrlText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo3.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo3.hidden = NO;
+        }
+        else
+        {
+            _horizontalLineInfo3.hidden = YES;
+        }
+        
+        if (_targetPoint.desc)
+        {
+            CGFloat hText = 150.0;
+            if (landscape)
+                hText = 80.0;
+            
+            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:infoWidth - 50.0 height:hText font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoDescText.frame = CGRectMake(50.0, hf, infoWidth - 50.0, ih - 1.0);
+            _infoDescText.text = _targetPoint.desc;
+            
+            if (ih == 44.0)
+                _infoDescText.contentInset = UIEdgeInsetsMake(4,-4,0,0);
+            else
+                _infoDescText.contentInset = UIEdgeInsetsMake(0,-4,0,0);
+            
+            hf += ih;
+        }
+        
+        hf -= 1.0;
     }
-
-    hf -= 1.0;
+    else
+    {
+        CGRect f = self.customController.contentView.frame;
+        if (landscape)
+            f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] ? self.customController.navBar.bounds.size.height : 0.0);
+        else
+            f.size.height = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
+    
+        self.customController.contentView.frame = f;
+        hf = f.size.height;
+    }
     
     _fullInfoHeight = hf;
 
-    hf += _topView.frame.size.height;
+    hf += _topView.frame.size.height + _buttonsView.frame.size.height;
     
     CGRect frame = self.frame;
-    frame.size.width = DeviceScreenWidth;
+    frame.size.width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
     if (_showFull && !landscape)
     {
         frame.origin.y = DeviceScreenHeight - hf;
@@ -681,117 +868,75 @@
     
     CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     
-    if (landscape) {
+    CGFloat width = self.frame.size.width;
+    
+    if (landscape)
+    {
+        _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
         
-        _infoView.frame = CGRectMake(0.0, 00.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
-        
-        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0 - _buttonsWidthLandscape, 36.0);
-        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0 - _buttonsWidthLandscape, 21.0);
-        
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - _buttonsWidthLandscape - 50.0, h);
-        _buttonClose.frame = CGRectMake(DeviceScreenWidth - _buttonsWidthLandscape - 36.0, 0.0, 36.0, 36.0);
+        if (self.customController)
+            self.customController.contentView.frame = CGRectMake(0.0, ([self.customController hasTopToolbar] ? self.customController.navBar.bounds.size.height : 0.0), kInfoViewLanscapeWidth, self.customController.contentView.frame.size.height);
+    }
+    else
+    {
+        _infoView.frame = CGRectMake(0.0, _topView.frame.size.height, width, _fullInfoHeight);
 
-        _buttonsView.frame = CGRectMake(DeviceScreenWidth - _buttonsWidthLandscape, 0.0, _buttonsWidthLandscape, h);
-        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
-        CGFloat x = 1.0;
-        _backView1.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
-        x += backViewWidth + 1.0;
-        _backView2.frame = CGRectMake(x, 0.0, backViewWidth, _buttonsView.frame.size.height);
-        x += backViewWidth + 1.0;
-        _backView3.frame = CGRectMake(x, 0.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height);
-
-        if (_buttonsCount > 3)
-        {
-            x += backViewWidth + 1.0;
-            _backView4.frame = CGRectMake(x, 0.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height);
-            if (_backView4.hidden)
-                _backView4.hidden = NO;
-            
-            _buttonMore.frame = _backView4.bounds;
-            if (_buttonMore.hidden)
-                _buttonMore.hidden = NO;
-            [self layoutComplexButton:self.buttonMore isPortrait:NO];
-        }
-        
-        _buttonFavorite.frame = _backView1.bounds;
-        _buttonShare.frame = _backView2.bounds;
-        _buttonDirection.frame = _backView3.bounds;
-        
-        [self layoutComplexButton:self.buttonFavorite isPortrait:NO];
-        [self layoutComplexButton:self.buttonShare isPortrait:NO];
-        [self layoutComplexButton:self.buttonDirection isPortrait:NO];
-
-        _horizontalLine.frame = CGRectMake(_backView1.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
-        _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
-        _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
-        if (_buttonsCount > 3)
-        {
-            _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.0, 0.5, _buttonsView.frame.size.height);
-            _verticalLine3.hidden = NO;
-        }
-        else
-        {
-            _verticalLine3.hidden = YES;
-        }
-        
-    } else {
-        
-        _infoView.frame = CGRectMake(0.0, _topView.frame.size.height, self.frame.size.width, _fullInfoHeight);
-
-        _addressLabel.frame = CGRectMake(textX, 3.0, DeviceScreenWidth - textX - 40.0, 36.0);
-        _coordinateLabel.frame = CGRectMake(textX, 39.0, DeviceScreenWidth - textX - 40.0, 21.0);
-        
-        _buttonShadow.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth - 50.0, 73.0);
-        _buttonClose.frame = CGRectMake(DeviceScreenWidth - 36.0, 0.0, 36.0, 36.0);
-        
-        if (_hideButtons)
-            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, DeviceScreenWidth, 53.0);
-        else
-            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
-        
-        CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
-        CGFloat x = 0.0;
-        _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
-        x += backViewWidth + 1.0;
-        _backView2.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
-        x += backViewWidth + 1.0;
-        _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height - 1.0);
-        
-        if (_buttonsCount > 3)
-        {
-            x += backViewWidth + 1.0;
-            _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
-            if (_backView4.hidden)
-                _backView4.hidden = NO;
-
-            _buttonMore.frame = _backView4.bounds;
-            if (_buttonMore.hidden)
-                _buttonMore.hidden = NO;
-            [self layoutComplexButton:self.buttonMore isPortrait:YES];
-        }
-        
-        _buttonFavorite.frame = _backView1.bounds;
-        _buttonShare.frame = _backView2.bounds;
-        _buttonDirection.frame = _backView3.bounds;
-
-        [self layoutComplexButton:self.buttonFavorite isPortrait:YES];
-        [self layoutComplexButton:self.buttonShare isPortrait:YES];
-        [self layoutComplexButton:self.buttonDirection isPortrait:YES];
-        
-        _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
-        _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-        _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-        if (_buttonsCount > 3)
-        {
-            _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
-            _verticalLine3.hidden = NO;
-        }
-        else
-        {
-            _verticalLine3.hidden = YES;
-        }
+        if (self.customController.contentView)
+            self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
     }
     
+    _addressLabel.frame = CGRectMake(textX, 3.0, width - textX - 40.0, 36.0);
+    _coordinateLabel.frame = CGRectMake(textX, 39.0, width - textX - 40.0, 21.0);
+    
+    _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
+    _buttonClose.frame = CGRectMake(width - 36.0, 0.0, 36.0, 36.0);
+    
+    if (_hideButtons)
+        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, width, 53.0);
+    else
+        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, width, 53.0);
+    
+    CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
+    CGFloat x = 0.0;
+    _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+    x += backViewWidth + 1.0;
+    _backView2.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
+    x += backViewWidth + 1.0;
+    _backView3.frame = CGRectMake(x, 1.0, (_buttonsCount > 3 ? backViewWidth : _buttonsView.frame.size.width - x), _buttonsView.frame.size.height - 1.0);
+    
+    if (_buttonsCount > 3)
+    {
+        x += backViewWidth + 1.0;
+        _backView4.frame = CGRectMake(x, 1.0, _buttonsView.frame.size.width - x, _buttonsView.frame.size.height - 1.0);
+        if (_backView4.hidden)
+            _backView4.hidden = NO;
+        
+        _buttonMore.frame = _backView4.bounds;
+        if (_buttonMore.hidden)
+            _buttonMore.hidden = NO;
+        [self layoutComplexButton:self.buttonMore isPortrait:YES];
+    }
+    
+    _buttonFavorite.frame = _backView1.bounds;
+    _buttonShare.frame = _backView2.bounds;
+    _buttonDirection.frame = _backView3.bounds;
+    
+    [self layoutComplexButton:self.buttonFavorite isPortrait:YES];
+    [self layoutComplexButton:self.buttonShare isPortrait:YES];
+    [self layoutComplexButton:self.buttonDirection isPortrait:YES];
+    
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, _buttonsView.frame.size.width, 0.5);
+    _verticalLine1.frame = CGRectMake(_backView2.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    _verticalLine2.frame = CGRectMake(_backView3.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+    if (_buttonsCount > 3)
+    {
+        _verticalLine3.frame = CGRectMake(_backView4.frame.origin.x - 0.5, 0.5, 0.5, _buttonsView.frame.size.height);
+        _verticalLine3.hidden = NO;
+    }
+    else
+    {
+        _verticalLine3.hidden = YES;
+    }
 }
 
 - (void)layoutComplexButton:(UIButton*)button isPortrait:(BOOL)isPortrait
@@ -861,6 +1006,26 @@
 -(void)setParentViewInstance:(UIView*)parentView
 {
     self.parentView = parentView;
+}
+
+-(void)setCustomViewController:(OATargetMenuViewController *)customController
+{
+    [self clearCustomControllerIfNeeded];
+
+    self.customController = customController;
+    [self.customController setContentBackgroundColor:self.backgroundColor];
+    
+    OATargetPointView * __weak weakSelf = self;
+    [self.customController setContentHeightChangeListener:^(CGFloat newHeight) {
+        [UIView animateWithDuration:.3 animations:^{
+            [weakSelf doLayoutSubviews];
+            [weakSelf.delegate targetViewSizeChanged:weakSelf.frame animated:YES];
+        }];
+    }];
+
+    [self doUpdateUI];
+    [self doLayoutSubviews];
+    [self showFullMenu];
 }
 
 - (void)onFavoritesCollectionChanged

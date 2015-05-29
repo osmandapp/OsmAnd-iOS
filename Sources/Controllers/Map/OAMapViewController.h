@@ -86,6 +86,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
             animated:(BOOL)animated;
 
 - (void)correctPosition:(Point31)targetPosition31
+       originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
                animated:(BOOL)animated;

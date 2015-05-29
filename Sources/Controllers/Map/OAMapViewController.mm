@@ -2874,6 +2874,7 @@
 }
 
 - (void)correctPosition:(Point31)targetPosition31
+       originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
                animated:(BOOL)animated
@@ -2883,6 +2884,8 @@
     CGFloat leftTargetInset = kCorrectionMinLeftSpace;
     CGFloat bottomTargetInset = kCorrectionMinBottomSpace;
     
+    OsmAnd::PointI originalCenterI = [OANativeUtilities convertFromPoint31:originalCenter31];
+
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
     [mapView convert:&targetPositionI toScreen:&targetPoint];
@@ -2890,28 +2893,27 @@
     OsmAnd::PointI newPositionI = mapView.target31;
     
     CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
-    if (targetY < targetPoint.y)
-    {
-        CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
-        minPoint.x *= mapView.contentScaleFactor;
-        minPoint.y *= mapView.contentScaleFactor;
-        OsmAnd::PointI minLocation;
-        [mapView convert:minPoint toLocation:&minLocation];
-        
-        newPositionI.y = mapView.target31.y - (minLocation.y - targetPosition31.y);
-    }
 
+    CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
+    minPoint.x *= mapView.contentScaleFactor;
+    minPoint.y *= mapView.contentScaleFactor;
+    OsmAnd::PointI minLocation;
+    [mapView convert:minPoint toLocation:&minLocation];
+    
+    newPositionI.y = mapView.target31.y - (minLocation.y - targetPosition31.y);
+    if (newPositionI.y < originalCenterI.y)
+        newPositionI.y = originalCenterI.y;
+    
     CGFloat targetX = leftInset + leftTargetInset;
-    if (targetX > targetPoint.x)
-    {
-        CGPoint minPoint = CGPointMake(targetX, DeviceScreenHeight / 2.0);
-        minPoint.x *= mapView.contentScaleFactor;
-        minPoint.y *= mapView.contentScaleFactor;
-        OsmAnd::PointI minLocation;
-        [mapView convert:minPoint toLocation:&minLocation];
+    minPoint = CGPointMake(targetX, DeviceScreenHeight / 2.0);
+    minPoint.x *= mapView.contentScaleFactor;
+    minPoint.y *= mapView.contentScaleFactor;
+    [mapView convert:minPoint toLocation:&minLocation];
+    
+    newPositionI.x = mapView.target31.x + (-minLocation.x + targetPosition31.x);
+    if (newPositionI.x > originalCenterI.x)
+        newPositionI.x = originalCenterI.x;
 
-        newPositionI.x = mapView.target31.x + (-minLocation.x + targetPosition31.x);
-    }
     Point31 newPosition31 = [OANativeUtilities convertFromPointI:newPositionI];
     [self goToPosition:newPosition31 animated:animated];
 

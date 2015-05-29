@@ -18,4 +18,7 @@
 
 - (void)updateDestinationViewLayout:(BOOL)animated;
 
+- (void)showTopControls;
+- (void)hideTopControls;
+
 @end

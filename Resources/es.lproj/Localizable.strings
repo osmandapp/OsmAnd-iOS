@@ -205,7 +205,7 @@
 "units_kmh" = "km/h";
 "units_mph" = "mph";
 // Map
-"map_inst_det_map_q" = "Instale el mapa detallado general para obtener más información sobre las ubicaciones.";
+"map_inst_det_map_q" = "Instale el mapa detallado general para obtener más información sobre sus ubicaciones.";
 "map_remind" = "Recordar más tarde";
 "map_no_address" = "Todavía no se conoce la dirección";
 // Import
@@ -327,7 +327,7 @@
 "res_banner_free_maps_desc" = "Puede descargar %d mapas libres, sin actualizar";
 "res_banner_no_free_maps_title" = "¡No tienes mapas gratuitos!";
 "res_banner_no_free_maps_desc" = "Compre mapas regionales o mundiales";
-"get_unlimited_access" = "Obtén acceso ilimitado";
+"get_unlimited_access" = "Obtenga acceso ilimitado";
 "shared_string_or" = "o";
 "latitude" = "Latitud";
 "longitude" = "Longitud";

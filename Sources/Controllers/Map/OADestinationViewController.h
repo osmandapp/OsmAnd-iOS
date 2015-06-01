@@ -17,7 +17,7 @@
 @optional
 
 - (void)destinationViewLayoutDidChange:(BOOL)animated;
-- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon;
+- (void)destinationViewMoveTo:(OADestination *)destination;
 - (void)destinationRemoved:(OADestination *)destination;
 
 @end

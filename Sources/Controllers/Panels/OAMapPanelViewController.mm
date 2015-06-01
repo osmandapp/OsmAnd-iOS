@@ -98,6 +98,8 @@
     
     BOOL _customStatusBarStyleNeeded;
     UIStatusBarStyle _customStatusBarStyle;
+    
+    BOOL _mapStateSaved;
 }
 
 - (instancetype)init
@@ -800,7 +802,7 @@
 {
     if (!self.targetMenuView.superview)
     {
-        [self showTargetPointMenu];
+        [self showTargetPointMenu:YES];
     }
 }
 
@@ -978,7 +980,7 @@
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu];
+    [self showTargetPointMenu:YES];
 }
 
 -(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
@@ -1042,7 +1044,7 @@
 
 -(void)targetPointDirection
 {
-    if (_targetDestination && !_targetDestination.parking)
+    if (_targetDestination)
     {
         [_destinationViewController btnCloseClicked:nil destination:_targetDestination];
         _targetDestination = nil;
@@ -1127,9 +1129,12 @@
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) animated:animated];
 }
 
--(void)showTargetPointMenu
+-(void)showTargetPointMenu:(BOOL)saveMapState
 {
-    [self saveMapStateIfNeeded];
+    if (saveMapState)
+        [self saveMapStateIfNeeded];
+    
+    _mapStateSaved = saveMapState;
     
     [self.targetMenuView prepare];
 
@@ -1158,7 +1163,11 @@
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration
 {
-    [self restoreMapAfterReuseAnimated];
+    if (_mapStateSaved)
+        [self restoreMapAfterReuseAnimated];
+    
+    _mapStateSaved = NO;
+    
     [self destroyShadowButton];
     [self.targetMenuView hide:YES duration:animationDuration onComplete:nil];
 
@@ -1265,9 +1274,44 @@
     }
 }
 
-- (void)destinationViewMoveToLatitude:(double)lat lon:(double)lon
+- (void)destinationViewMoveTo:(OADestination *)destination
 {
-    OsmAnd::LatLon latLon(lat, lon);
+    [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude];
+
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = destination.desc;
+    UIImage *icon = [UIImage imageNamed:destination.markerResourceName];
+    
+    if (destination.parking)
+        targetPoint.type = OATargetParking;
+    else
+        targetPoint.type = OATargetDestination;
+    
+    _targetDestination = destination;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    _targetLatitude = destination.latitude;
+    _targetLongitude = destination.longitude;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:NO];
+    
+    OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [_mapViewController goToPosition:point animated:YES];
 }

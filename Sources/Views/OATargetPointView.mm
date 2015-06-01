@@ -611,7 +611,7 @@
         [_infoOpeningHoursText setTitleColor:color forState:UIControlStateNormal];
     }
     
-    if (_targetPoint.type == OATargetDestination)
+    if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking)
     {
         [_buttonDirection setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];

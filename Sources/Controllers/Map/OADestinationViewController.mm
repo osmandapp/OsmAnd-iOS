@@ -615,14 +615,14 @@
             CGPoint touchPoint = [touch locationInView:c.contentView];
             OADestination *destination = [c destinationByPoint:touchPoint];
             if (destination)
-                [_delegate destinationViewMoveToLatitude:destination.latitude lon:destination.longitude];
+                [_delegate destinationViewMoveTo:destination];
         }
     } else {
         
         CGPoint touchPoint = [touch locationInView:_multiCell.contentView];
         OADestination *destination = [_multiCell destinationByPoint:touchPoint];
         if (destination)
-            [_delegate destinationViewMoveToLatitude:destination.latitude lon:destination.longitude];
+            [_delegate destinationViewMoveTo:destination];
         
     }
 }

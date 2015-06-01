@@ -39,7 +39,9 @@
 - (BOOL)isLandscape;
 - (BOOL)hasInfo;
 
+- (void)doInit:(BOOL)showFull;
 - (void)prepare;
+- (void)prepareNoInit;
 - (void)prepareForRotation;
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
@@ -63,5 +65,6 @@
 -(void)targetHideMenu:(CGFloat)animationDuration;
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
+-(void)targetSetTopControlsVisible:(BOOL)visible;
 
 @end

@@ -36,6 +36,7 @@
 #import "PXAlertView.h"
 #import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
+#import "OAFavoriteViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -151,7 +152,6 @@
     // Setup target point menu
     self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
     self.targetMenuView.delegate = self;
-    [self.targetMenuView setNavigationController:self.navigationController];
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
 
@@ -183,6 +183,8 @@
 {
     [super viewDidAppear:animated];
     
+    [self.targetMenuView setNavigationController:self.navigationController];
+
     if ([_mapViewController parentViewController] != self)
         [self doMapRestore];
 }
@@ -1084,7 +1086,7 @@
     else
     {
         OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
-        parking.delegate = self;
+        parking.parkingDelegate = self;
         parking.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:parking];
         
@@ -1136,8 +1138,34 @@
     
     _mapStateSaved = saveMapState;
     
-    [self.targetMenuView prepare];
-
+    if (_targetMenuView.targetPoint.type == OATargetFavorite)
+    {
+        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        {
+            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
+            
+            if ((int)(_targetLatitude * 10000.0) == favLat && (int)(_targetLongitude * 10000.0) == favLon)
+            {
+                item.favorite = favLoc;
+                break;
+            }
+        }
+        
+        [self.targetMenuView doInit:NO];
+        
+        OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithFavoriteItem:item];
+        favoriteViewController.view.frame = self.view.frame;
+        [self.targetMenuView setCustomViewController:favoriteViewController];
+        
+        [self.targetMenuView prepareNoInit];
+    }
+    else
+    {
+        [self.targetMenuView prepare];
+    }
+    
     CGRect frame = self.targetMenuView.frame;
     frame.origin.y = DeviceScreenHeight + 10.0;
     self.targetMenuView.frame = frame;
@@ -1152,8 +1180,27 @@
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) animated:YES];
 
     [self.targetMenuView show:YES onComplete:^{
+        
         [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
+        
     }];
+}
+
+-(void)targetSetTopControlsVisible:(BOOL)visible
+{
+    if (visible)
+    {
+        [self showTopControls];
+        _customStatusBarStyleNeeded = NO;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
+    else
+    {
+        [self hideTopControls];
+        _customStatusBarStyle = UIStatusBarStyleLightContent;
+        _customStatusBarStyleNeeded = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
 }
 
 -(void)hideTargetPointMenu

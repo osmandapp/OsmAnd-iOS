@@ -10,6 +10,16 @@
 
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
+@protocol OATargetMenuViewControllerDelegate <NSObject>
+
+@optional
+
+- (void) contentHeightChanged:(CGFloat)newHeight;
+- (void) btnOkPressed;
+- (void) btnCancelPressed;
+
+@end
+
 @interface OATargetMenuViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -18,15 +28,19 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
 
-@property (nonatomic, copy) ContentHeightChangeListenerBlock heightChangeListenerBlock;
+@property (nonatomic) UINavigationController* navController;
+
+@property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
+
+-(void)setNavigationController:(UINavigationController *)controller;
 
 - (BOOL)hasTopToolbar;
+- (BOOL)showTopToolbarWithFullMenuOnly;
 
 - (void)okPressed;
 - (void)cancelPressed;
 
 - (CGFloat)contentHeight;
-- (void)setContentHeightChangeListener:(ContentHeightChangeListenerBlock)block;
 - (void)setContentBackgroundColor:(UIColor *)color;
 
 @end

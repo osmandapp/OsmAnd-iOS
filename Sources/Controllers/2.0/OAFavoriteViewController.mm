@@ -23,6 +23,8 @@
 #import "OATextLineViewCell.h"
 #import "OAColorViewCell.h"
 #import "OAGroupViewCell.h"
+#import "OATextViewTableViewCell.h"
+#import "OATextMultiViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -56,6 +58,21 @@
     OAFavoriteGroupViewController *_groupController;
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+- (BOOL)hasTopToolbar
+{
+    return YES;
+}
+
+- (BOOL)showTopToolbarWithFullMenuOnly
+{
+    return YES;
+}
+
 - (void)cancelPressed
 {
     // back / cancel
@@ -64,14 +81,15 @@
     {
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
-        [super backButtonClicked:nil];
+        if (self.delegate)
+            [self.delegate btnCancelPressed];
     }
     else
     {
         if (_wasEdited)
             [self doSave:NO];
-        else
-            [super backButtonClicked:nil];
+        else if (self.delegate)
+                [self.delegate btnCancelPressed];
     }
 }
 
@@ -84,6 +102,11 @@
     [[NSUserDefaults standardUserDefaults] setObject:_groupName forKey:kFavoriteDefaultGroupKey];
     
     [self doSave:YES];
+}
+
+- (CGFloat)contentHeight
+{
+    return [self.tableView numberOfRowsInSection:0] * 44.0;
 }
 
 - (IBAction)sharePressed:(id)sender
@@ -99,7 +122,7 @@
                                       applicationActivities:nil];
     activityViewController.popoverPresentationController.sourceView = _shareButton;
     activityViewController.popoverPresentationController.sourceRect = _shareButton.bounds;
-    [self.navigationController presentViewController:activityViewController
+    [self.navController presentViewController:activityViewController
                                             animated:YES
                                           completion:^{ }];
 }
@@ -113,8 +136,6 @@
         app.favoritesCollection->removeFavoriteLocation(self.favorite.favorite);
         [app saveFavoritesToPermamentStorage];
         _deleteFavorite = YES;
-        
-        [self.navigationController popViewControllerAnimated:YES];
         
     }],
       nil] show];
@@ -191,7 +212,11 @@
 - (void)applyLocalization
 {
     self.titleView.text = OALocalizedString(@"favorite");
-    [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    if (self.newFavorite)
+        [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    else
+        [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    
     [self.buttonOK setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -211,6 +236,8 @@
         self.shareButton.hidden = NO;
         self.deleteButton.hidden = NO;
     }
+    
+    self.tableView.backgroundColor = UIColorFromRGB(0xf2f2f2);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -265,16 +292,9 @@
     [self unregisterKeyboardNotifications];
 }
 
-/*
 - (void)setupColor
 {
     // Color
-    UIColor* color = [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
-    
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    [_favoriteColorIcon setImage:favCol.icon];
-    [_favoriteColorLabel setText:favCol.name];
-    
     if (self.newFavorite && _colorController)
     {
         _colorIndex = _colorController.colorIndex;
@@ -283,17 +303,12 @@
 
 - (void)setupGroup
 {
-    if (self.favorite.favorite->getGroup().isEmpty())
-        [_favoriteGroupView setText: OALocalizedString(@"fav_no_group")];
-    else
-        [_favoriteGroupView setText: self.favorite.favorite->getGroup().toNSString()];
-    
     if (self.newFavorite && _groupController)
     {
         _groupName = _groupController.groupName;
     }
 }
-*/
+
 
 - (void)setupView
 {
@@ -522,7 +537,7 @@
     _favAction = kFavoriteActionChangeColor;
     _colorController = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
     _colorController.hideToolbar = YES;
-    [self.navigationController pushViewController:_colorController animated:YES];
+    [self.navController pushViewController:_colorController animated:YES];
 }
 
 - (IBAction)favoriteChangeGroupClicked:(id)sender
@@ -530,7 +545,7 @@
     _favAction = kFavoriteActionChangeGroup;
     _groupController = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
     _groupController.hideToolbar = YES;
-    [self.navigationController pushViewController:_groupController animated:YES];
+    [self.navController pushViewController:_groupController animated:YES];
 }
 
 // open map with favorite item
@@ -556,15 +571,12 @@
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return OALocalizedString(@"sett_settings");
-}
-
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    if (self.editing)
+        return 4;
+    else
+        return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -572,8 +584,14 @@
     static NSString* const reusableIdentifierTextLineCell = @"OATextLineViewCell";
     static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
     static NSString* const reusableIdentifierGroupCell = @"OAGroupViewCell";
+    static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
+    static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
     
-    switch (indexPath.row)
+    int index = indexPath.row;
+    if (!self.editing)
+        index++;
+    
+    switch (index)
     {
         case 0:
         {
@@ -586,7 +604,8 @@
             }
             
             cell.textView.text = self.favorite.favorite->getTitle().toNSString();
-            
+            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+
             return cell;
         }
         case 1:
@@ -599,8 +618,15 @@
                 cell = (OAColorViewCell *)[nib objectAtIndex:0];
             }
             
-            cell.textView.text = self.favorite.favorite->getTitle().toNSString();
+            UIColor* color = [UIColor colorWithRed:self.favorite.favorite->getColor().r/255.0 green:self.favorite.favorite->getColor().g/255.0 blue:self.favorite.favorite->getColor().b/255.0 alpha:1.0];
             
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            [cell.colorIconView setImage:favCol.icon];
+            [cell.descriptionView setText:favCol.name];
+            
+            cell.textView.text = OALocalizedString(@"fav_color");
+            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+
             return cell;
         }
         case 2:
@@ -613,8 +639,34 @@
                 cell = (OAGroupViewCell *)[nib objectAtIndex:0];
             }
             
-            cell.textView.text = self.favorite.favorite->getTitle().toNSString();
+            if (self.favorite.favorite->getGroup().isEmpty())
+                [cell.descriptionView setText: OALocalizedString(@"fav_no_group")];
+            else
+                [cell.descriptionView setText: self.favorite.favorite->getGroup().toNSString()];
+
+            cell.textView.text = OALocalizedString(@"fav_group");
+            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+
+            return cell;
+        }
+        case 3:
+        {
+            OATextMultiViewCell* cell;
+            cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextMultiViewCell];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATextMultiViewCell" owner:self options:nil];
+                cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
+            }
             
+            cell.textView.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0];
+            cell.textView.contentInset = UIEdgeInsetsMake(4,-4,0,0);
+            cell.textView.text = @"No description";
+            cell.textView.textAlignment = NSTextAlignmentCenter;
+            cell.textView.textColor = [UIColor lightGrayColor];
+            cell.textView.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+
             return cell;
         }
             
@@ -629,28 +681,54 @@
 
 #pragma mark - UITableViewDelegate
 
-/*
+
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 34.0;
+    return 0.0;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 16.0;
+    return 0.0;
 }
-*/
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 2)
-        return 162.0;
-    else
-        return 44.0;
+    return 44.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    int index = indexPath.row;
+    if (!self.editing)
+        index++;
+    
+    switch (index)
+    {
+        case 0: // name
+        {
+            break;
+        }
+        case 1: // color
+        {
+            [self favoriteChangeColorClicked:nil];
+            break;
+        }
+        case 2: // group
+        {
+            [self favoriteChangeGroupClicked:nil];
+            break;
+        }
+        case 3: // description
+        {
+            break;
+        }
+            
+        default:
+            break;
+    }
 }
 
 @end

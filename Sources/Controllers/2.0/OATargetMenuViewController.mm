@@ -25,6 +25,11 @@
     [super didReceiveMemoryWarning];
 }
 
+-(void)setNavigationController:(UINavigationController*)controller
+{
+    self.navController = controller;
+}
+
 - (IBAction)buttonOKPressed:(id)sender
 {
     [self okPressed];
@@ -50,17 +55,17 @@
     return 0.0; // override
 }
 
-- (void)setContentHeightChangeListener:(ContentHeightChangeListenerBlock)block
-{
-    self.heightChangeListenerBlock = block;
-}
-
 - (void)setContentBackgroundColor:(UIColor *)color
 {
     _contentView.backgroundColor = color;
 }
 
 -(BOOL)hasTopToolbar
+{
+    return NO; // override
+}
+
+- (BOOL)showTopToolbarWithFullMenuOnly
 {
     return NO; // override
 }

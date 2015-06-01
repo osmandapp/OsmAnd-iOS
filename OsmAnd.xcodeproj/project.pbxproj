@@ -1045,6 +1045,12 @@
 		848D17591B1C97C100A656F4 /* OAGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17551B1C97C100A656F4 /* OAGroupViewCell.m */; };
 		848D175A1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17551B1C97C100A656F4 /* OAGroupViewCell.m */; };
 		848D175B1B1C97C100A656F4 /* OAGroupViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17551B1C97C100A656F4 /* OAGroupViewCell.m */; };
+		848D17621B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */; };
+		848D17631B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */; };
+		848D17641B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */; };
+		848D17671B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */; };
+		848D17681B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */; };
+		848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */; };
 		849E812B1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
 		849E812C1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
 		849E812D1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
@@ -2498,6 +2504,9 @@
 		848D17531B1C97C100A656F4 /* OAColorViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAColorViewCell.m; path = Controllers/Cells/OAColorViewCell.m; sourceTree = "<group>"; };
 		848D17541B1C97C100A656F4 /* OAGroupViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGroupViewCell.h; path = Controllers/Cells/OAGroupViewCell.h; sourceTree = "<group>"; };
 		848D17551B1C97C100A656F4 /* OAGroupViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAGroupViewCell.m; path = Controllers/Cells/OAGroupViewCell.m; sourceTree = "<group>"; };
+		848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextMultiViewCell.xib; path = Resources/Controllers/Cells/OATextMultiViewCell.xib; sourceTree = "<group>"; };
+		848D17651B1CC7CD00A656F4 /* OATextMultiViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATextMultiViewCell.h; path = Controllers/Cells/OATextMultiViewCell.h; sourceTree = "<group>"; };
+		848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATextMultiViewCell.m; path = Controllers/Cells/OATextMultiViewCell.m; sourceTree = "<group>"; };
 		849686BC1B0344D700FC8DDA /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849686BD1B0344E100FC8DDA /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849686BE1B03466E00FC8DDA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3217,6 +3226,7 @@
 				848D17341B1C90BA00A656F4 /* OATextLineViewCell.xib */,
 				848D17421B1C977600A656F4 /* OAColorViewCell.xib */,
 				848D174B1B1C979100A656F4 /* OAGroupViewCell.xib */,
+				848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -3224,6 +3234,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				848D17651B1CC7CD00A656F4 /* OATextMultiViewCell.h */,
+				848D17661B1CC7CD00A656F4 /* OATextMultiViewCell.m */,
 				848D17521B1C97C100A656F4 /* OAColorViewCell.h */,
 				848D17531B1C97C100A656F4 /* OAColorViewCell.m */,
 				848D17541B1C97C100A656F4 /* OAGroupViewCell.h */,
@@ -4796,6 +4808,7 @@
 				847041111B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				849E81511AFA5D2400549953 /* map_parking_pin@2x.png in Resources */,
 				84BD08CA1AB16174006DA3F7 /* HUD_menu_button@3x.png in Resources */,
+				848D17621B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */,
 				848D174F1B1C979100A656F4 /* OAGroupViewCell.xib in Resources */,
 				84185AB41AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
 				8434BAB71B175AB7003FD0FC /* ic_poi_info_dots@2x.png in Resources */,
@@ -5302,6 +5315,7 @@
 				847041121B07850900594C72 /* ic_small_time@3x.png in Resources */,
 				849E81521AFA5D2400549953 /* map_parking_pin@2x.png in Resources */,
 				3A02BFBE1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */,
+				848D17631B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */,
 				848D17501B1C979100A656F4 /* OAGroupViewCell.xib in Resources */,
 				84185AB51AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
 				8434BAB81B175AB7003FD0FC /* ic_poi_info_dots@2x.png in Resources */,
@@ -5532,6 +5546,7 @@
 				84E441881AF7BDF300F87542 /* OATrackIntervalDialogView.xib in Resources */,
 				84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */,
 				BBA3AF95197FC4BB0039D991 /* HUD_button_bg@2x.png in Resources */,
+				848D17641B1CC6CA00A656F4 /* OATextMultiViewCell.xib in Resources */,
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
 				843E5CB11AB341E000BE14BE /* favorite_export_icon@3x.png in Resources */,
 				8432577C1A9DADE300A7964E /* ic_gpx_distance.png in Resources */,
@@ -6217,6 +6232,7 @@
 				84C41E7E1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BBE1D2AF190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				3AC639DE1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
+				848D17671B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				BB54F70219890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				BBA3AEF7197501330039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				84C41E6B1AB962350089EABB /* OAPOIType.m in Sources */,
@@ -6368,6 +6384,7 @@
 				84C41E7F1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BBA3AEBD197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				3AC639DF1A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
+				848D17681B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				BB54F70319890A4100AB40D1 /* OAHUDButton.m in Sources */,
 				BB451F0A18E6DDF1005FBE09 /* OATableViewCellWithSwitch.m in Sources */,
 				84C41E6C1AB962350089EABB /* OAPOIType.m in Sources */,
@@ -6435,6 +6452,7 @@
 				84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
 				84BFC24C1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3A2D893E1A2DBFDB00511A5C /* OAAutocompleteManager.mm in Sources */,
+				848D17691B1CC7CD00A656F4 /* OATextMultiViewCell.m in Sources */,
 				3AC2D50919F007DD00DC8556 /* OAAppSettings.m in Sources */,
 				84BFC2391A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				3AFEEE801A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,

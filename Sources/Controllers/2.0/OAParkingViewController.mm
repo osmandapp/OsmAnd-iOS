@@ -87,14 +87,14 @@
 
 - (void)okPressed
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(addParking:)])
-        [self.delegate addParking:self];
+    if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(addParking:)])
+        [self.parkingDelegate addParking:self];
 }
 
 - (void)cancelPressed
 {
-    if (self.delegate && [self.delegate respondsToSelector:@selector(cancelParking:)])
-        [self.delegate cancelParking:self];
+    if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(cancelParking:)])
+        [self.parkingDelegate cancelParking:self];
 }
 
 - (void)setContentBackgroundColor:(UIColor *)color
@@ -120,8 +120,8 @@
     
     [_tableView endUpdates];
     
-    if (self.heightChangeListenerBlock)
-        self.heightChangeListenerBlock([self contentHeight]);
+    if (self.delegate)
+        [self.delegate contentHeightChanged:[self contentHeight]];
 }
 
 -(void)timePickerChanged:(id)sender

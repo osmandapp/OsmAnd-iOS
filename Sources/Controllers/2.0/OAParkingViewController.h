@@ -29,7 +29,7 @@
 @property (nonatomic, readonly) BOOL addToCalActive;
 @property (nonatomic, readonly) NSDate *date;
 
-@property (weak, nonatomic) id<OAParkingDelegate> delegate;
+@property (weak, nonatomic) id<OAParkingDelegate> parkingDelegate;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
 

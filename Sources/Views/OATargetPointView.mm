@@ -26,7 +26,7 @@
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
 
-@interface OATargetPointView()
+@interface OATargetPointView() <OATargetMenuViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
@@ -325,6 +325,9 @@
                 _hideButtons = NO;
                 frame.size.height = _fullHeight;
                 frame.origin.y = DeviceScreenHeight - _fullHeight;
+                
+                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                    [self showTopToolbar:YES];
             }
             else
             {
@@ -332,6 +335,9 @@
                 _hideButtons = NO;
                 frame.size.height = h;
                 frame.origin.y = DeviceScreenHeight - h;
+
+                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                    [self hideTopToolbar:YES];
             }
             
             [UIView animateWithDuration:.3 animations:^{
@@ -378,6 +384,9 @@
                 if (duration < .1)
                     duration = .1;
                 
+                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                    [self hideTopToolbar:YES];
+
                 [UIView animateWithDuration:duration animations:^{
                     self.frame = frame;
                     if (![self isLandscape])
@@ -398,6 +407,77 @@
                     duration = .3;
                 [self.delegate targetHideMenu:duration];
             }
+        }
+    }
+}
+
+- (void)showTopToolbar:(BOOL)animated
+{
+    if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
+        return;
+
+    CGRect topToolbatFrame;
+
+    if ([self isLandscape])
+    {
+        CGRect f = self.customController.navBar.frame;
+        self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, kInfoViewLanscapeWidth, f.size.height);
+        topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+    }
+    else
+    {
+        CGRect f = self.customController.navBar.frame;
+        self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
+        topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
+    }
+    self.customController.navBar.hidden = NO;
+    [self.parentView addSubview:self.customController.navBar];
+    
+    [self.delegate targetSetTopControlsVisible:NO];
+    
+    if (animated)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            self.customController.navBar.frame = topToolbatFrame;
+        }];
+    }
+    else
+    {
+        self.customController.navBar.frame = topToolbatFrame;
+    }
+}
+
+- (void)hideTopToolbar:(BOOL)animated
+{
+    if (!self.customController || !self.customController.hasTopToolbar)
+        return;
+
+    BOOL showingTopToolbar = (!self.customController.navBar.hidden);
+    CGRect newTopToolbarFrame;
+    if (showingTopToolbar)
+    {
+        newTopToolbarFrame = self.customController.navBar.frame;
+        if ([self isLandscape])
+            newTopToolbarFrame.origin.x = -newTopToolbarFrame.size.width;
+        else
+            newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
+     
+        [self.delegate targetSetTopControlsVisible:YES];
+
+        if (animated)
+        {
+            [UIView animateWithDuration:.3 animations:^{
+                
+                self.customController.navBar.frame = newTopToolbarFrame;
+            } completion:^(BOOL finished) {
+                self.customController.navBar.hidden = YES;
+            }];
+        }
+        else
+        {
+            self.customController.navBar.frame = newTopToolbarFrame;
+            self.customController.navBar.hidden = YES;
         }
     }
 }
@@ -504,7 +584,13 @@
 
 - (void)prepare
 {
-    [self doInit];
+    [self doInit:NO];
+    [self doUpdateUI];
+    [self doLayoutSubviews];
+}
+
+- (void)prepareNoInit
+{
     [self doUpdateUI];
     [self doLayoutSubviews];
 }
@@ -525,16 +611,18 @@
 {
     if (self.customController)
     {
+        [self.customController removeFromParentViewController];
         [self.customController.navBar removeFromSuperview];
         [self.customController.contentView removeFromSuperview];
-        [self.customController setContentHeightChangeListener:nil];
+        self.customController.delegate = nil;
         self.customController = nil;
+        [self.navController setNeedsStatusBarAppearanceUpdate];
     }
 }
 
-- (void)doInit
+- (void)doInit:(BOOL)showFull
 {
-    _showFull = NO;
+    _showFull = showFull;
     [self clearCustomControllerIfNeeded];
 }
 
@@ -1041,19 +1129,16 @@
     [self clearCustomControllerIfNeeded];
 
     self.customController = customController;
+    self.customController.delegate = self;
+    self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
     
-    OATargetPointView * __weak weakSelf = self;
-    [self.customController setContentHeightChangeListener:^(CGFloat newHeight) {
-        [UIView animateWithDuration:.3 animations:^{
-            [weakSelf doLayoutSubviews];
-            [weakSelf.delegate targetViewSizeChanged:weakSelf.frame animated:YES];
-        }];
-    }];
-
-    [self doUpdateUI];
-    [self doLayoutSubviews];
-    [self showFullMenu];
+    if (self.superview)
+    {
+        [self doUpdateUI];
+        [self doLayoutSubviews];
+        [self showFullMenu];
+    }
 }
 
 - (void)onFavoritesCollectionChanged
@@ -1238,6 +1323,27 @@
 - (IBAction)buttonCloseClicked:(id)sender
 {
     [self.delegate targetHide];
+}
+
+#pragma mark
+#pragma mark - OATargetMenuViewControllerDelegate
+
+- (void) contentHeightChanged:(CGFloat)newHeight
+{
+    [UIView animateWithDuration:.3 animations:^{
+        [self doLayoutSubviews];
+        [self.delegate targetViewSizeChanged:self.frame animated:YES];
+    }];
+}
+
+- (void) btnOkPressed
+{
+    
+}
+
+- (void) btnCancelPressed
+{
+    [self.delegate targetHideMenu:.3];
 }
 
 @end

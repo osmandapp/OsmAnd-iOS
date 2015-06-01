@@ -89,6 +89,8 @@
     NSString *_formattedTargetName;
     double _targetLatitude;
     double _targetLongitude;
+    
+    OADestination *_targetDestination;
 
     OAMapSettingsViewController *_mapSettings;
     OAPOISearchViewController *_searchPOI;
@@ -822,6 +824,8 @@
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
 
+    _targetDestination = nil;
+    
     NSString* addressString;
     _targetMenuView.isAddressFound = NO;
     
@@ -859,6 +863,8 @@
                     targetPoint.type = OATargetParking;
                 else
                     targetPoint.type = OATargetDestination;
+                
+                _targetDestination = destination;
                 
                 break;
             }
@@ -968,7 +974,7 @@
     targetPoint.phone = phone;
     targetPoint.openingHours = openingHours;
     targetPoint.url = url;
-    targetPoint.desc = desc;
+    targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
     
     [_targetMenuView setTargetPoint:targetPoint];
     
@@ -1036,20 +1042,29 @@
 
 -(void)targetPointDirection
 {
-    OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
-    if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
-        [_hudViewController.view addSubview:_destinationViewController.view];
-    UIColor *color = [_destinationViewController addDestination:destination];
-    
-    if (color)
+    if (_targetDestination && !_targetDestination.parking)
     {
-        [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+        [_destinationViewController btnCloseClicked:nil destination:_targetDestination];
+        _targetDestination = nil;
         [_mapViewController hideContextPinMarker];
     }
     else
     {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-          ] show];
+        OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
+        if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
+            [_hudViewController.view addSubview:_destinationViewController.view];
+        UIColor *color = [_destinationViewController addDestination:destination];
+        
+        if (color)
+        {
+            [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+            [_mapViewController hideContextPinMarker];
+        }
+        else
+        {
+            [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_destination") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
+              ] show];
+        }
     }
     
     [self hideTargetPointMenu];
@@ -1099,7 +1114,11 @@
 {
     OsmAnd::LatLon latLon(_targetLatitude, _targetLongitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [_mapViewController goToPosition:point animated:YES];
+    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+
+    //[_mapViewController goToPosition:point animated:YES];
+    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : self.targetMenuView.frame.size.height) animated:YES];
+
 }
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated

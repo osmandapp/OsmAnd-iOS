@@ -76,7 +76,7 @@
     NSDictionary *attrDict = [NSDictionary dictionaryWithObjectsAndKeys:
                               font, NSFontAttributeName, nil];
     
-    CGSize size = [text boundingRectWithSize:CGSizeMake(width, 1000.0)
+    CGSize size = [text boundingRectWithSize:CGSizeMake(width, 10000.0)
                                      options:NSStringDrawingUsesLineFragmentOrigin
                                   attributes:attrDict context:nil].size;
     

@@ -9,9 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "OANavigationController.h"
 #import "OATargetMenuViewController.h"
+#import "OAButton.h"
 
-#define kOATargetPointViewHeightPortrait 125.0
-#define kOATargetPointViewHeightLandscape 125.0
+#define kOATargetPointTopPanTreshold 16.0
+#define kOATargetPointViewHeightPortrait 125.0 + kOATargetPointTopPanTreshold
+#define kOATargetPointViewHeightLandscape 125.0 + kOATargetPointTopPanTreshold
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointTopViewHeight 73.0
 #define kOATargetPointViewFullHeightKoef 0.66

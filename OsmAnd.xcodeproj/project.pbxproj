@@ -1018,6 +1018,9 @@
 		848D17181B188D9700A656F4 /* OAParkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D17141B188D9700A656F4 /* OAParkingViewController.xib */; };
 		848D17191B188D9700A656F4 /* OAParkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D17141B188D9700A656F4 /* OAParkingViewController.xib */; };
 		848D171A1B188D9700A656F4 /* OAParkingViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D17141B188D9700A656F4 /* OAParkingViewController.xib */; };
+		848D171D1B1C47B200A656F4 /* OAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D171C1B1C47B200A656F4 /* OAButton.m */; };
+		848D171E1B1C47B200A656F4 /* OAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D171C1B1C47B200A656F4 /* OAButton.m */; };
+		848D171F1B1C47B200A656F4 /* OAButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 848D171C1B1C47B200A656F4 /* OAButton.m */; };
 		849E812B1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
 		849E812C1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
 		849E812D1AFA142F00549953 /* OATimeCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E81271AFA142F00549953 /* OATimeCell.xib */; };
@@ -2463,6 +2466,8 @@
 		848D17121B188D9700A656F4 /* OAParkingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAParkingViewController.h; path = Sources/Controllers/2.0/OAParkingViewController.h; sourceTree = "<group>"; };
 		848D17131B188D9700A656F4 /* OAParkingViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAParkingViewController.mm; path = Sources/Controllers/2.0/OAParkingViewController.mm; sourceTree = "<group>"; };
 		848D17141B188D9700A656F4 /* OAParkingViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAParkingViewController.xib; path = Sources/Controllers/2.0/OAParkingViewController.xib; sourceTree = "<group>"; };
+		848D171B1B1C47B200A656F4 /* OAButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAButton.h; path = Views/OAButton.h; sourceTree = "<group>"; };
+		848D171C1B1C47B200A656F4 /* OAButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAButton.m; path = Views/OAButton.m; sourceTree = "<group>"; };
 		849686BC1B0344D700FC8DDA /* be */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = be; path = be.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849686BD1B0344E100FC8DDA /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		849686BE1B03466E00FC8DDA /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3843,6 +3848,8 @@
 		BB2545B31798161500E80B58 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				848D171B1B1C47B200A656F4 /* OAButton.h */,
+				848D171C1B1C47B200A656F4 /* OAButton.m */,
 				84EE2DEC1AFD2D58007C9A94 /* OABannerView.h */,
 				84EE2DED1AFD2D58007C9A94 /* OABannerView.m */,
 				84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */,
@@ -6065,6 +6072,7 @@
 				84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				84B4FD751A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
 				84E4417A1AF7582500F87542 /* PXAlertView.m in Sources */,
+				848D171D1B1C47B200A656F4 /* OAButton.m in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
@@ -6212,6 +6220,7 @@
 				84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				84B4FD761A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
 				84E4417B1AF7582500F87542 /* PXAlertView.m in Sources */,
+				848D171E1B1C47B200A656F4 /* OAButton.m in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
@@ -6438,6 +6447,7 @@
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
+				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,

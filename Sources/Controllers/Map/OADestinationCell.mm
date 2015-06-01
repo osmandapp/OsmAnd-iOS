@@ -38,7 +38,7 @@
 
 - (void)commonInit
 {
-    _infoLabelWidth = 120.0;    
+    _infoLabelWidth = 100.0;
 }
 
 - (OADestination *)destinationByPoint:(CGPoint)point
@@ -54,7 +54,7 @@
     BOOL isParking = (self.destinations.count > 0) && ((OADestination *)self.destinations[0]).parking;
     
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - 41.0;
+    CGFloat dirViewWidth = frame.size.width - (kOADestinationEditModeEnabled ? 41.0 : 0.0);
     if (_destinations.count == 3 && dirViewWidth / 3.0 < 140.0)
         h += 20.0;
 
@@ -62,7 +62,8 @@
     
     _contentView.frame = newFrame;
     _directionsView.frame = CGRectMake(0.0, (_drawSplitLine ? 1.0 : 0.0), dirViewWidth, h - (_drawSplitLine ? 1.0 : 0.0));
-    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, (_drawSplitLine ? 1.0 : 0.0), 40.0, h - (_drawSplitLine ? 1.0 : 0.0));
+    if (kOADestinationEditModeEnabled)
+        _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, (_drawSplitLine ? 1.0 : 0.0), 40.0, h - (_drawSplitLine ? 1.0 : 0.0));
     
     _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
     _markerView.frame = CGRectMake(32.0, 32.0, 14.0, 14.0);
@@ -88,7 +89,7 @@
         [_contentView addSubview:self.directionsView];
     }
     
-    if (!self.btnClose) {
+    if (!self.btnClose && kOADestinationEditModeEnabled) {
         self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
         _btnClose.backgroundColor = [UIColor whiteColor];
         _btnClose.opaque = YES;

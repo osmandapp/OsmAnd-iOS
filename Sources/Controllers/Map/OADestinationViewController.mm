@@ -157,7 +157,7 @@
     
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !_singleLineOnly)
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad || kOADestinationsSingleLineOnly)
         {
             _singleLineMode = YES;
             CGFloat h = 50.0 + (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && (_app.data.destinations.count == 3) ? 20.0 : 0.0);

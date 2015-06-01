@@ -52,7 +52,7 @@
                                 <action selector="buttonCloseClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="Rci-JF-QTB"/>
                             </connections>
                         </button>
-                        <imageView userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_poi_info_dots.png" id="fIE-MR-h8E">
+                        <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_poi_info_dots.png" id="fIE-MR-h8E">
                             <rect key="frame" x="145" y="-8" width="30" height="10"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
@@ -67,7 +67,7 @@
                             <rect key="frame" x="0.0" y="1" width="78" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gGt-3L-A3v">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gGt-3L-A3v" customClass="OAButton">
                                     <rect key="frame" x="6" y="6" width="67" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -78,6 +78,9 @@
                                     <state key="normal" title="Add favorite" image="menu_star_icon.png">
                                         <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="buttonFavoriteClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="c6c-vO-VjT"/>
                                     </connections>
@@ -89,7 +92,7 @@
                             <rect key="frame" x="81" y="1" width="86" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MS8-UJ-8Y2">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MS8-UJ-8Y2" customClass="OAButton">
                                     <rect key="frame" x="13" y="6" width="53" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -100,6 +103,9 @@
                                     <state key="normal" title="Share" image="menu_share_icon.png">
                                         <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="buttonShareClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="0Sy-n7-VEK"/>
                                     </connections>
@@ -111,7 +117,7 @@
                             <rect key="frame" x="169" y="1" width="73" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="C1L-y5-El0">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="C1L-y5-El0" customClass="OAButton">
                                     <rect key="frame" x="8" y="6" width="55" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -122,6 +128,9 @@
                                     <state key="normal" title="Direction" image="menu_direction_icon.png">
                                         <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="buttonDirectionClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="snw-2L-ye9"/>
                                     </connections>
@@ -133,7 +142,7 @@
                             <rect key="frame" x="247" y="1" width="73" height="52"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
-                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WaX-6E-FvP">
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="WaX-6E-FvP" customClass="OAButton">
                                     <rect key="frame" x="8" y="6" width="55" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -144,6 +153,9 @@
                                     <state key="normal" title="More" image="three_dots.png">
                                         <color key="titleColor" red="0.58823529409999997" green="0.58823529409999997" blue="0.58823529409999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     </state>
+                                    <userDefinedRuntimeAttributes>
+                                        <userDefinedRuntimeAttribute type="boolean" keyPath="centerVertically" value="YES"/>
+                                    </userDefinedRuntimeAttributes>
                                     <connections>
                                         <action selector="buttonMoreClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="ne7-KB-g5j"/>
                                     </connections>
@@ -155,7 +167,7 @@
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.94901960784313721" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
@@ -167,11 +179,11 @@
                 <outlet property="backView3" destination="ZW3-bX-U96" id="qqP-1F-dA2"/>
                 <outlet property="backView4" destination="T7q-tG-GRq" id="W4z-B7-l0X"/>
                 <outlet property="buttonClose" destination="dBK-Tk-sBy" id="8rZ-J0-N13"/>
-                <outlet property="buttonDirection" destination="C1L-y5-El0" id="N28-5Z-AAb"/>
-                <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="IP8-fj-2X0"/>
-                <outlet property="buttonMore" destination="WaX-6E-FvP" id="IKM-5p-jsZ"/>
+                <outlet property="buttonDirection" destination="C1L-y5-El0" id="Y68-bQ-1ee"/>
+                <outlet property="buttonFavorite" destination="gGt-3L-A3v" id="CEI-vr-BLp"/>
+                <outlet property="buttonMore" destination="WaX-6E-FvP" id="Rc7-ak-9Ap"/>
                 <outlet property="buttonShadow" destination="hve-we-D1N" id="Fqv-5i-jJ4"/>
-                <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="G6e-gV-DVq"/>
+                <outlet property="buttonShare" destination="MS8-UJ-8Y2" id="bFp-OD-ZPN"/>
                 <outlet property="buttonsView" destination="fz2-Bo-hKc" id="KW8-ZV-EHZ"/>
                 <outlet property="coordinateLabel" destination="YCG-gf-JuU" id="0WA-8b-Q2o"/>
                 <outlet property="imageView" destination="50C-PP-spm" id="8bc-8f-hxn"/>

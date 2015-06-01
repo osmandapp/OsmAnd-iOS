@@ -676,6 +676,8 @@
     {
         [UIView animateWithDuration:.3 animations:^{
            
+            _statusBarView.alpha = 1.0;
+            
             _compassBox.alpha = 1.0;
             _mapSettingsButton.alpha = 1.0;
             _searchButton.alpha = 1.0;
@@ -694,6 +696,8 @@
     {
         [UIView animateWithDuration:.3 animations:^{
             
+            _statusBarView.alpha = 0.0;
+
             _compassBox.alpha = 0.0;
             _mapSettingsButton.alpha = 0.0;
             _searchButton.alpha = 0.0;

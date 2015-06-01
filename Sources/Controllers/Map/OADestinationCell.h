@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+#define kOADestinationEditModeEnabled NO
+
 @class OADestination;
 
 @protocol OADestinatioCellProtocol <NSObject>

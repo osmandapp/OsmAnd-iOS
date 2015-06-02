@@ -874,11 +874,7 @@
         OsmAnd::PointI touchLocation;
         [mapView convert:touchPoint toLocation:&touchLocation];
         
-        // Format location
-        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
-        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
-        
-        [self setupMapArrowsLocation:CLLocationCoordinate2DMake(lat, lon)];
+        [self restoreMapArrowsLocation];
 
         // When user gesture has began, stop all animations
         mapView.animator->pause();
@@ -1810,6 +1806,7 @@
         case OAAppModeBrowseMap:
             
             if (_lastAppMode == OAAppModeDrive) {
+                _lastMapMode = OAMapModeFollow;
                 _app.mapMode = _lastMapModeBeforeDrive;
             }
             

@@ -307,7 +307,7 @@
             // process multi cell
             BOOL isCellEmpty = NO;
             
-            if (_multiCell.destinations.count > 1) {
+            if (_multiCell.destinations.count > 0) {
                 NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
                 [arr removeObject:destination];
                 [UIView animateWithDuration:.2 animations:^{

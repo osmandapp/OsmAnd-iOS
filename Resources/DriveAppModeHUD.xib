@@ -185,7 +185,7 @@
     <resources>
         <image name="HUD_button_bg.png" width="40" height="40"/>
         <image name="HUD_compass.png" width="18" height="18"/>
-        <image name="HUD_compass_bg.png" width="30" height="30"/>
+        <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="HUD_debug_button.png" width="25" height="25"/>
         <image name="HUD_zoom_in_button.png" width="25" height="25"/>
         <image name="HUD_zoom_out_button.png" width="25" height="25"/>
@@ -193,8 +193,8 @@
         <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_height.png" width="25" height="25"/>
         <image name="ic_speed.png" width="25" height="25"/>
-        <image name="menu_button.png" width="46" height="46"/>
-        <image name="zoom_button_bg.png" width="46" height="46"/>
+        <image name="menu_button.png" width="48" height="51"/>
+        <image name="zoom_button_bg.png" width="51" height="51"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

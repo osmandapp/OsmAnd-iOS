@@ -302,8 +302,8 @@
 "pickup_car_at" = "Забрать машину в";
 "add_notification_calendar" = "Напоминание в календаре";
 "parking_time_limited" = "Парковка до";
-"time_left" = "ост.";
-"time_overdue" = "прев";
+"time_left" = "осталось";
+"time_overdue" = "превышено";
 "cannot_add_marker" = "Нельзя добавить парковку";
 "cannot_add_marker_desc" = "Уберите одно из направлений и повторите попытку";
 "cannot_add_destination" = "Нельзя добавить направление";
@@ -364,3 +364,4 @@
 "sett_pref_lang" = "Язык";
 "sett_lang_show_local" = "Локальные имена";
 "sett_lang_show_trans" = "Транслитерация";
+"fav_select" = "Пожалуйста, выберите избранное";

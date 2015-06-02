@@ -14,6 +14,7 @@
 {
     // Initialization code
     self.textView.selectable = NO;
+    self.iconView.hidden = YES;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

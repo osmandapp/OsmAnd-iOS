@@ -31,7 +31,7 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-@interface OAFavoriteViewController ()
+@interface OAFavoriteViewController () <OAFavoriteColorViewControllerDelegate, OAFavoriteGroupViewControllerDelegate>
 
 @end
 
@@ -56,6 +56,9 @@
     
     OAFavoriteColorViewController *_colorController;
     OAFavoriteGroupViewController *_groupController;
+    
+    CGFloat _descHeight;
+    BOOL _descSingleLine;
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -106,7 +109,7 @@
 
 - (CGFloat)contentHeight
 {
-    return [self.tableView numberOfRowsInSection:0] * 44.0;
+    return ([self.tableView numberOfRowsInSection:0] - 1) * 44.0 + _descHeight;
 }
 
 - (IBAction)deletePressed:(id)sender
@@ -206,6 +209,8 @@
     
     [super viewDidLoad];
     
+    [self setupView];
+
     if (self.newFavorite)
     {
         self.buttonOK.hidden = NO;
@@ -292,28 +297,14 @@
 
 - (void)setupView
 {
-    /*
-    [self.distanceDirectionHolderView setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"onmap_placeholder"]]];
+    NSString *desc = @"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
     
-    [self setupColor];
+    CGSize s = [OAUtilities calculateTextBounds:desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+    CGFloat h = MIN(88.0, s.height);
+    h = MAX(44.0, h);
     
-    [_favoriteDistance setText:self.favorite.distance];
-    _favoriteDirection.transform = CGAffineTransformMakeRotation(self.favorite.direction);
-    
-    [self setupGroup];
-    
-    [_favoriteNameButton setTitle:self.favorite.favorite->getTitle().toNSString() forState:UIControlStateNormal];
-    [_favoriteDistance setText:self.favorite.distance];
-    
-    if (self.newFavorite) {
-        [_saveRemoveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
-        [_saveRemoveButton setImage:nil forState:UIControlStateNormal];
-        
-        [_distanceDirectionHolderView setHidden:YES];
-        [_favoriteDirection setHidden:YES];
-        [_favoriteDistance setHidden:YES];
-    }
-    */
+    _descHeight = h;
+    _descSingleLine = (s.height < 24.0);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -516,6 +507,7 @@
 {
     _favAction = kFavoriteActionChangeColor;
     _colorController = [[OAFavoriteColorViewController alloc] initWithFavorite:self.favorite];
+    _colorController.delegate = self;
     _colorController.hideToolbar = YES;
     [self.navController pushViewController:_colorController animated:YES];
 }
@@ -524,6 +516,7 @@
 {
     _favAction = kFavoriteActionChangeGroup;
     _groupController = [[OAFavoriteGroupViewController alloc] initWithFavorite:self.favorite];
+    _groupController.delegate = self;
     _groupController.hideToolbar = YES;
     [self.navController pushViewController:_groupController animated:YES];
 }
@@ -639,11 +632,29 @@
                 cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
             }
             
-            cell.textView.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13.0];
-            cell.textView.contentInset = UIEdgeInsetsMake(4,-4,0,0);
-            cell.textView.text = @"No description";
-            cell.textView.textAlignment = NSTextAlignmentCenter;
-            cell.textView.textColor = [UIColor lightGrayColor];
+            NSString *desc = @"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
+            
+            if (!desc)
+            {
+                cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+                cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
+                cell.textView.text = OALocalizedString(@"enter_description");
+                cell.iconView.hidden = NO;
+            }
+            else
+            {
+                cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];
+                
+                if (_descSingleLine)
+                    cell.textView.textContainerInset = UIEdgeInsetsMake(12,11,0,35);
+                else if (_descHeight > 44.0)
+                    cell.textView.textContainerInset = UIEdgeInsetsMake(5,11,0,35);
+                else
+                    cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
+
+                cell.textView.text = desc;
+                cell.iconView.hidden = NO;
+            }
             cell.textView.backgroundColor = UIColorFromRGB(0xf2f2f2);
             cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
 
@@ -674,7 +685,14 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    int index = indexPath.row;
+    if (!self.editing)
+        index++;
+
+    if (index == 3) // description
+        return _descHeight;
+    else
+        return 44.0;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -709,6 +727,22 @@
         default:
             break;
     }
+}
+
+#pragma mark
+#pragma mark - OAFavoriteColorViewControllerDelegate
+
+-(void)favoriteColorChanged
+{
+    [self.tableView reloadData];
+}
+
+#pragma mark
+#pragma mark - OAFavoriteGroupViewControllerDelegate
+
+-(void)favoriteGroupChanged
+{
+    [self.tableView reloadData];
 }
 
 @end

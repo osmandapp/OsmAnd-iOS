@@ -562,6 +562,18 @@
     }
 }
 
+- (void)saveMapStateNoRestore
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+
+    _mapNeedsRestore = NO;
+    _mainMapMode = _app.mapMode;
+    _mainMapTarget31 = renderView.target31;
+    _mainMapZoom = renderView.zoom;
+    _mainMapAzimuth = renderView.azimuth;
+    _mainMapEvelationAngle = renderView.elevationAngle;
+}
+
 - (void)prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
 {
     [self saveMapStateIfNeeded];
@@ -1130,7 +1142,7 @@
 -(void)showTargetPointMenu:(BOOL)saveMapState
 {
     if (saveMapState)
-        [self saveMapStateIfNeeded];
+        [self saveMapStateNoRestore];
     
     _mapStateSaved = saveMapState;
     

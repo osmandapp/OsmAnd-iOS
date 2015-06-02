@@ -156,6 +156,10 @@
         [app saveFavoritesToPermamentStorage];
     }
     _saveChanges = YES;
+    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(favoriteColorChanged)])
+        [self.delegate favoriteColorChanged];
+    
     [self backButtonClicked:self];
 }
 

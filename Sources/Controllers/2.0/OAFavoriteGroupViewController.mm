@@ -227,6 +227,10 @@ UITextField* textView;
         [app saveFavoritesToPermamentStorage];
     }
     _saveChanges = YES;
+
+    if (self.delegate && [self.delegate respondsToSelector:@selector(favoriteGroupChanged)])
+        [self.delegate favoriteGroupChanged];
+
     [self backButtonClicked:self];
 }
 

@@ -9,6 +9,13 @@
 #import "OASuperViewController.h"
 #import "OAFavoriteItem.h"
 
+@protocol OAFavoriteGroupViewControllerDelegate <NSObject>
+
+@optional
+- (void) favoriteGroupChanged;
+
+@end
+
 @interface OAFavoriteGroupViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate>
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;
@@ -26,6 +33,8 @@
 @property (assign, nonatomic) BOOL hideToolbar;
 
 @property (nonatomic, readonly) BOOL saveChanges;
+
+@property (weak, nonatomic) id delegate;
 
 -(id)initWithFavorite:(OAFavoriteItem*)item;
 

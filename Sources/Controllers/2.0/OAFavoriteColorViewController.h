@@ -9,6 +9,13 @@
 #import "OASuperViewController.h"
 #import "OAFavoriteItem.h"
 
+@protocol OAFavoriteColorViewControllerDelegate <NSObject>
+
+@optional
+- (void) favoriteColorChanged;
+
+@end
+
 @interface OAFavoriteColorViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;
@@ -26,6 +33,8 @@
 @property (assign, nonatomic) BOOL hideToolbar;
 
 @property (nonatomic, readonly) BOOL saveChanges;
+
+@property (weak, nonatomic) id delegate;
 
 -(id)initWithFavorite:(OAFavoriteItem*)item;
 

@@ -869,6 +869,7 @@
                     targetPoint.type = OATargetDestination;
                 
                 _targetDestination = destination;
+                targetPoint.targetObj = destination;
                 
                 break;
             }
@@ -1089,12 +1090,7 @@
         parking.parkingDelegate = self;
         parking.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:parking];
-        
-        [self hideTopControls];
-        
-        _customStatusBarStyle = UIStatusBarStyleLightContent;
-        _customStatusBarStyleNeeded = YES;
-        [self setNeedsStatusBarAppearanceUpdate];
+        [self.targetMenuView updateTargetPointType:OATargetParking];
     }
 }
 
@@ -1158,6 +1154,23 @@
         OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithFavoriteItem:item];
         favoriteViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:favoriteViewController];
+        
+        [self.targetMenuView prepareNoInit];
+    }
+    else if (_targetMenuView.targetPoint.type == OATargetParking)
+    {
+        [self.targetMenuView doInit:NO];
+
+        OAParkingViewController *parking;
+        if (self.targetMenuView.targetPoint.targetObj)
+            parking = [[OAParkingViewController alloc] initWithParking:self.targetMenuView.targetPoint.targetObj];
+        else
+            parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
+
+        parking.parkingDelegate = self;
+        parking.view.frame = self.view.frame;
+        
+        [self.targetMenuView setCustomViewController:parking];
         
         [self.targetMenuView prepareNoInit];
     }
@@ -1296,6 +1309,23 @@
     }
 }
 
+- (void)saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking
+{
+    parking.carPickupDateEnabled = sender.timeLimitActive;
+    if (sender.timeLimitActive)
+        parking.carPickupDate = sender.date;
+    else
+        parking.carPickupDate = nil;
+    
+    if (parking.eventIdentifier)
+        [_destinationViewController removeParkingReminderFromCalendar:parking];
+    if (sender.timeLimitActive && sender.addToCalActive)
+        [self addParkingReminderToCalendar:parking];
+    
+    [_destinationViewController updateDestinations];
+    [self hideTargetPointMenu];
+}
+
 - (void)cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
@@ -1341,6 +1371,8 @@
     else
         targetPoint.type = OATargetDestination;
     
+    targetPoint.targetObj = destination;
+    
     _targetDestination = destination;
     
     _targetMenuView.isAddressFound = YES;
@@ -1356,11 +1388,12 @@
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:NO];
+    [self showTargetPointMenu:YES];
     
     OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [_mapViewController goToPosition:point animated:YES];
+    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
 }
 
 @end

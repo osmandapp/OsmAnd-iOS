@@ -43,12 +43,13 @@
 @property (nonatomic, assign) BOOL mapCenterArrow;
 @property (nonatomic, assign) CGFloat infoLabelWidth;
 
++ (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText;
+
 - (instancetype)initWithDestination:(OADestination *)destination;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
-- (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label;
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 

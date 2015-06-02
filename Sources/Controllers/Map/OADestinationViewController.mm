@@ -61,7 +61,7 @@
         
         self.parkingColor = [UIColor colorWithRed:0.290f green:0.412f blue:0.925f alpha:1.00f];
         
-        self.colors = @[[UIColor colorWithRed:0.369f green:0.510f blue:0.914f alpha:1.00f],
+        self.colors = @[[UIColor colorWithRed:0.000f green:0.522f blue:0.588f alpha:1.00f],
                         [UIColor colorWithRed:0.992f green:0.627f blue:0.200f alpha:1.00f],
                         [UIColor colorWithRed:0.541f green:0.741f blue:0.373f alpha:1.00f]];
         self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];        
@@ -257,9 +257,10 @@
         EKEventStore *eventStore = [[EKEventStore alloc] init];
         EKEvent *event = [eventStore eventWithIdentifier:destination.eventIdentifier];
         NSError *error;
-        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error]) {
+        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
             OALog(@"%@", [error localizedDescription]);
-        }
+        else
+            destination.eventIdentifier = nil;
     }
 }
 
@@ -503,7 +504,16 @@
     return [destination.color copy];
 }
 
-- (int)getFreeColorIndex
+- (void) updateDestinations
+{
+    CLLocationCoordinate2D location;
+    CLLocationDirection direction;
+    [self obtainCurrentLocationDirection:&location direction:&direction];
+    [_multiCell updateDirections:location direction:direction];
+    [self.view setNeedsLayout];
+}
+
+- (int) getFreeColorIndex
 {
     for (int i = 0; i < _colors.count; i++) {
         UIColor *c = _colors[i];

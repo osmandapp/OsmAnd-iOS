@@ -10,12 +10,14 @@
 #import "OsmAndApp.h"
 #import "OAFavoriteItemViewController.h"
 #import "OAMapRendererView.h"
-#import "OATargetPoint.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "PXAlertView.h"
 #import "OAUtilities.h"
+#import "OADestination.h"
+#import "OADestinationCell.h"
+#import "OAAutoObserverProxy.h"
 
 #import "OpeningHoursParser.h"
 #include "java/util/Calendar.h"
@@ -56,6 +58,7 @@
 @property UIView* parentView;
 
 @property OATargetMenuViewController* customController;
+@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 
 @end
 
@@ -95,6 +98,8 @@
     CGPoint _buttonsViewStartSlidingPos;
     
     UIPanGestureRecognizer *_panGesture;
+
+    OATargetPointType _previousTargetType;
 }
 
 - (instancetype)init
@@ -237,6 +242,52 @@
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
     [self addGestureRecognizer:_panGesture];
 
+}
+
+- (void)startLocationUpdate
+{
+    if (self.locationServicesUpdateObserver)
+        return;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                    withHandler:@selector(doLocationUpdate)
+                                                                     andObserve:app.locationServices.updateObserver];
+}
+
+- (void)stopLocationUpdate
+{
+    if (self.locationServicesUpdateObserver) {
+        [self.locationServicesUpdateObserver detach];
+        self.locationServicesUpdateObserver = nil;
+    }
+}
+
+- (void)doLocationUpdate
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        /*
+        // Obtain fresh location and heading
+        OsmAndAppInstance app = [OsmAndApp instance];
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        */
+        
+        if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
+        {
+            OADestination *d = _targetPoint.targetObj;
+            if (d && d.carPickupDateEnabled)
+            {
+                [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
+            }
+        }
+        
+    });
 }
 
 - (void)moveToolbar:(UIPanGestureRecognizer *)gesture
@@ -487,28 +538,6 @@
     if (![self hasInfo])
         return;
     
-    BOOL showTopToolbar = (self.customController && [self.customController hasTopToolbar] && self.customController.navBar.hidden);
-    
-    CGRect topToolbatFrame;
-    
-    if (showTopToolbar)
-    {
-        if ([self isLandscape])
-        {
-            CGRect f = self.customController.navBar.frame;
-            self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, kInfoViewLanscapeWidth, f.size.height);
-            topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
-        }
-        else
-        {
-            CGRect f = self.customController.navBar.frame;
-            self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
-            topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
-        }
-        self.customController.navBar.hidden = NO;
-        [self.parentView addSubview:self.customController.navBar];
-    }
-    
     CGRect frame = self.frame;
     
     if ([self isLandscape])
@@ -523,12 +552,11 @@
         frame.origin.y = DeviceScreenHeight - _fullHeight;
     }
     
+    [self showTopToolbar:YES];
+    
     [UIView animateWithDuration:.3 animations:^{
         
         self.frame = frame;
-        
-        if (showTopToolbar)
-            self.customController.navBar.frame = topToolbatFrame;
         
         if (![self isLandscape] && _hideButtons)
             _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - frame.origin.y + 1.0, _buttonsView.bounds.size.width, _buttonsView.bounds.size.height);
@@ -739,6 +767,8 @@
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    [self applyTargetPoint];
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -784,6 +814,8 @@
         if (onComplete)
             onComplete();
     }
+
+    [self startLocationUpdate];
 }
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
@@ -826,6 +858,7 @@
                     [self removeFromSuperview];
             
                 [self clearCustomControllerIfNeeded];
+                [self restoreTargetType];
 
                 if (onComplete)
                     onComplete();
@@ -843,6 +876,7 @@
             [self removeFromSuperview];
             
             [self clearCustomControllerIfNeeded];
+            [self restoreTargetType];
 
             if (onComplete)
                 onComplete();
@@ -854,6 +888,8 @@
     {
         _sliding = NO;
     }
+
+    [self stopLocationUpdate];
 }
 
 
@@ -1085,13 +1121,51 @@
 -(void)setTargetPoint:(OATargetPoint *)targetPoint
 {
     _targetPoint = targetPoint;
+    _previousTargetType = targetPoint.type;
+}
 
-    _imageView.image = _targetPoint.icon;
-    [_addressLabel setText:_targetPoint.title];
-    self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
-    [_coordinateLabel setText:self.formattedLocation];
+-(void)updateTargetPointType:(OATargetPointType)targetType
+{
+    _targetPoint.type = targetType;
+    [self applyTargetPoint];
+}
+
+-(void)restoreTargetType
+{
+    if (_previousTargetType != _targetPoint.type)
+    {
+        _targetPoint.type = _previousTargetType;
+        [self applyTargetPoint];
+    }
+}
+
+- (void)applyTargetPoint
+{
+    if (_targetPoint.type == OATargetParking)
+    {
+        _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
+        [_addressLabel setText:OALocalizedString(@"parking_marker")];
+        OADestination *d = _targetPoint.targetObj;
+        if (d && d.carPickupDateEnabled)
+        {
+            [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
+        }
+        else
+        {
+            self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
+            [_coordinateLabel setText:self.formattedLocation];
+            [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+        }
+    }
+    else
+    {
+        _imageView.image = _targetPoint.icon;
+        [_addressLabel setText:_targetPoint.title];
+        self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
+        [_coordinateLabel setText:self.formattedLocation];
+        [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    }
     
-    //_buttonDirection.enabled = _targetPoint.type != OATargetDestination;
     if (_targetPoint.type == OATargetParking)
     {
         BOOL parkingAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_Parking_Set];
@@ -1102,7 +1176,7 @@
     {
         _buttonMore.enabled = YES;
     }
-
+    
     if (_targetPoint.type == OATargetFavorite)
         [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
     else

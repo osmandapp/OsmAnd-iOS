@@ -71,7 +71,7 @@
         switch (_destinations.count) {
             case 1:
             {
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking;
+                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
 
                 _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
                 _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
@@ -109,8 +109,8 @@
             }
             case 2:
             {
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking;
-                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking;
+                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
+                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled;
 
                 _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
                 _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
@@ -208,9 +208,9 @@
             {
                 CGFloat width = _directionsView.bounds.size.width / 3.0;
 
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking && width > 260.0;
-                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && width > 260.0;
-                BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && width > 260.0;
+                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled && width > 260.0;
+                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled && width > 260.0;
+                BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && ((OADestination *)self.destinations[2]).carPickupDateEnabled && width > 260.0;
 
                 if (width >= 160) {
                     CGFloat textWidth = width - 60.0;
@@ -631,7 +631,7 @@
                         [self.directionsView addSubview:self.markerView];
 
                     if (destination.carPickupDate)
-                        [self setParkingTimerStr:destination label:self.infoLabel];
+                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                     else
                         self.infoLabel.hidden = YES;
 
@@ -665,7 +665,7 @@
                         [self.directionsView addSubview:self.markerView2];
 
                     if (destination.carPickupDate)
-                        [self setParkingTimerStr:destination label:self.infoLabel2];
+                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
                     else
                         self.infoLabel2.hidden = YES;
 
@@ -698,7 +698,7 @@
                         [self.directionsView addSubview:self.markerView3];
                     
                     if (destination.carPickupDate)
-                        [self setParkingTimerStr:destination label:self.infoLabel3];
+                        [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
                     else
                         self.infoLabel3.hidden = YES;
 
@@ -766,17 +766,17 @@
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
                 self.distanceLabel.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
-                [self setParkingTimerStr:destination label:self.infoLabel];
+                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
                 self.distanceLabel2.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
-                [self setParkingTimerStr:destination label:self.infoLabel2];
+                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
                 self.distanceLabel3.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
-                [self setParkingTimerStr:destination label:self.infoLabel3];
+                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
                 break;
                 
             default:

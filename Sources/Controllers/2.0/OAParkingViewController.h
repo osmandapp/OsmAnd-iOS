@@ -11,11 +11,13 @@
 #import <CoreLocation/CoreLocation.h>
 
 @class OAParkingViewController;
+@class OADestination;
 
 @protocol OAParkingDelegate <NSObject>
 
 @optional
 - (void)addParking:(OAParkingViewController *)sender;
+- (void)saveParking:(OAParkingViewController *)sender parking:(OADestination *)parking;
 - (void)cancelParking:(OAParkingViewController *)sender;
 
 @end
@@ -29,8 +31,11 @@
 @property (nonatomic, readonly) BOOL addToCalActive;
 @property (nonatomic, readonly) NSDate *date;
 
+@property (nonatomic, readonly) BOOL isNew;
+
 @property (weak, nonatomic) id<OAParkingDelegate> parkingDelegate;
 
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate;
+- (id)initWithParking:(OADestination *)parking;
 
 @end

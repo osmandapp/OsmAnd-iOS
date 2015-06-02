@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
 
+@property (nonatomic) id targetObj;
+
 @property (nonatomic) CGPoint touchPoint;
 @property (nonatomic) int zoom;
 

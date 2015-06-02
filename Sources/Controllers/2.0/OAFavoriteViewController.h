@@ -25,7 +25,6 @@ typedef enum
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
-@property (weak, nonatomic) IBOutlet UIButton *shareButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
 @property (nonatomic, readonly) BOOL editing;

@@ -36,9 +36,12 @@
 - (void)updateFrame:(BOOL)animated;
 
 - (UIColor *) addDestination:(OADestination *)destination;
+- (void) updateDestinations;
 - (void) doLocationUpdate;
 
 - (void)updateDestinationsUsingMapCenter;
 - (BOOL)isPlaceForParking;
+
+- (void)removeParkingReminderFromCalendar:(OADestination *)destination;
 
 @end

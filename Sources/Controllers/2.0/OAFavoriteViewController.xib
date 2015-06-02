@@ -12,7 +12,6 @@
                 <outlet property="contentView" destination="NFj-ch-hfP" id="vxB-gC-ASL"/>
                 <outlet property="deleteButton" destination="nxf-ZF-kTT" id="ScC-as-B5p"/>
                 <outlet property="navBar" destination="wtn-Ag-xrz" id="UhW-Bs-rFt"/>
-                <outlet property="shareButton" destination="imG-0a-S9S" id="Xow-tj-Ljj"/>
                 <outlet property="tableView" destination="wE8-6H-ny1" id="aB1-tq-BgY"/>
                 <outlet property="titleView" destination="jcT-Ix-x7i" id="g4f-mJ-chT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -45,20 +44,8 @@
                                 <action selector="buttonCancelPressed:" destination="-1" eventType="touchUpInside" id="mZl-rg-gXQ"/>
                             </connections>
                         </button>
-                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="imG-0a-S9S" userLabel="Share">
-                            <rect key="frame" x="244" y="20" width="36" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
-                            <state key="normal" image="favorite_share_icon.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="sharePressed:" destination="-1" eventType="touchUpInside" id="rGc-R0-Ink"/>
-                            </connections>
-                        </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="nxf-ZF-kTT" userLabel="Delete">
-                            <rect key="frame" x="282" y="20" width="36" height="44"/>
+                            <rect key="frame" x="276" y="20" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
                             <state key="normal" image="icon_remove.png">
@@ -87,10 +74,10 @@
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="wE8-6H-ny1">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="wE8-6H-ny1">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             <connections>
                                 <outlet property="dataSource" destination="-1" id="2FD-sp-YgF"/>
                                 <outlet property="delegate" destination="-1" id="aup-v5-tkj"/>
@@ -106,7 +93,6 @@
         </view>
     </objects>
     <resources>
-        <image name="favorite_share_icon.png" width="14" height="19"/>
         <image name="icon_remove.png" width="18" height="23"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

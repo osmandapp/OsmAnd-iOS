@@ -188,7 +188,7 @@
     [self updateMapCenterArrow:mapCenterArrow];
 }
 
-- (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label
++ (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText
 {
     if (!destination.carPickupDate)
         return;
@@ -216,14 +216,18 @@
     if (timeInterval > 0.0)
     {
         label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
-        //label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
-        label.text = [NSString stringWithFormat:@"%@", time];
+        if (!shortText)
+            label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+        else
+            label.text = [NSString stringWithFormat:@"%@", time];
     }
     else
     {
         label.textColor = [UIColor redColor];
-        //label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
-        label.text = [NSString stringWithFormat:@"%@", time];
+        if (!shortText)
+            label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+        else
+            label.text = [NSString stringWithFormat:@"%@", time];
     }
 }
 
@@ -246,7 +250,7 @@
                 self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
                 if (destination.parking && destination.carPickupDate)
                 {
-                    [self setParkingTimerStr:destination label:self.infoLabel];
+                    [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                     self.infoLabel.hidden = NO;
                 }
                 else
@@ -276,7 +280,7 @@
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
                 self.distanceLabel.text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
-                [self setParkingTimerStr:destination label:self.infoLabel];
+                [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
                 
             default:

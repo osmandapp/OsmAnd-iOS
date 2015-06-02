@@ -109,24 +109,6 @@
     return [self.tableView numberOfRowsInSection:0] * 44.0;
 }
 
-- (IBAction)sharePressed:(id)sender
-{
-    const auto& favoritePosition31 = self.favorite.favorite->getPosition31();
-    const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-    const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-    
-    NSString *string = [NSString stringWithFormat:kShareLinkTemplate, favoriteLat, favoriteLon, (int)kDefaultFavoriteZoom];
-    
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[/*image,*/ string]
-                                      applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = _shareButton;
-    activityViewController.popoverPresentationController.sourceRect = _shareButton.bounds;
-    [self.navController presentViewController:activityViewController
-                                            animated:YES
-                                          completion:^{ }];
-}
-
 - (IBAction)deletePressed:(id)sender
 {
     [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"fav_remove_q") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_no")] otherButtonItems:
@@ -227,13 +209,11 @@
     if (self.newFavorite)
     {
         self.buttonOK.hidden = NO;
-        self.shareButton.hidden = YES;
         self.deleteButton.hidden = YES;
     }
     else
     {
         self.buttonOK.hidden = YES;
-        self.shareButton.hidden = NO;
         self.deleteButton.hidden = NO;
     }
     
@@ -684,12 +664,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 0.0;
+    return 0.01;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 0.0;
+    return 0.01;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

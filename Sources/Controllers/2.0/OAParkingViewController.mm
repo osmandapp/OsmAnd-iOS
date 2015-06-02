@@ -14,11 +14,14 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
+#import "OADestination.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
 @interface OAParkingViewController ()
+
+@property (nonatomic) OADestination *parking;
 
 @end
 
@@ -30,7 +33,9 @@
 - (id)initWithCoordinate:(CLLocationCoordinate2D)coordinate
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        _isNew = YES;
         _coord = coordinate;
         _timeLimitActive = NO;
         _addToCalActive = YES;
@@ -38,6 +43,28 @@
         [_timeFmt setDateStyle:NSDateFormatterNoStyle];
         [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
         _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
+    }
+    return self;
+}
+
+- (id)initWithParking:(OADestination *)parking
+{
+    self = [super init];
+    if (self)
+    {
+        _isNew = NO;
+        self.parking = parking;
+        _coord = CLLocationCoordinate2DMake(parking.latitude, parking.longitude);
+        _timeLimitActive = parking.carPickupDateEnabled;
+        _addToCalActive = (parking.eventIdentifier != nil);
+
+        _timeFmt = [[NSDateFormatter alloc] init];
+        [_timeFmt setDateStyle:NSDateFormatterNoStyle];
+        [_timeFmt setTimeStyle:NSDateFormatterShortStyle];
+        if (parking.carPickupDate)
+            _date = parking.carPickupDate;
+        else
+            _date = [self dateNoSec:[NSDate dateWithTimeIntervalSinceNow:60 * 60]];
     }
     return self;
 }
@@ -55,13 +82,17 @@
 
 - (CGFloat)contentHeight
 {
-    return (_timeLimitActive ? 44.0 * 3.0 + 162.0 : 44.0) + 34.0 + 16.0;
+    return (_timeLimitActive ? 44.0 * 3.0 + 162.0 : 44.0);
 }
 
 - (void)applyLocalization
 {
     [self.buttonCancel setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.buttonOK setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
+    if (self.isNew)
+        [self.buttonOK setTitle:OALocalizedString(@"shared_string_add") forState:UIControlStateNormal];
+    else
+        [self.buttonOK setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+
     self.titleView.text = OALocalizedString(@"parking_marker");
 }
 
@@ -85,10 +116,23 @@
     return YES;
 }
 
+- (BOOL)showTopToolbarWithFullMenuOnly
+{
+    return YES;
+}
+
 - (void)okPressed
 {
-    if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(addParking:)])
-        [self.parkingDelegate addParking:self];
+    if (_isNew)
+    {
+        if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(addParking:)])
+            [self.parkingDelegate addParking:self];
+    }
+    else
+    {
+        if (self.parkingDelegate && [self.parkingDelegate respondsToSelector:@selector(saveParking:parking:)])
+            [self.parkingDelegate saveParking:self parking:self.parking];
+    }
 }
 
 - (void)cancelPressed
@@ -143,12 +187,6 @@
 {
     return 1;
 }
-
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    return OALocalizedString(@"sett_settings");
-}
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -246,12 +284,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 34.0;
+    return 0.01;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 16.0;
+    return 0.01;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

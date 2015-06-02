@@ -10,6 +10,7 @@
 #import "OANavigationController.h"
 #import "OATargetMenuViewController.h"
 #import "OAButton.h"
+#import "OATargetPoint.h"
 
 #define kOATargetPointTopPanTreshold 16.0
 #define kOATargetPointViewHeightPortrait 125.0 + kOATargetPointTopPanTreshold
@@ -31,6 +32,7 @@
 -(void)setMapViewInstance:(UIView *)mapView;
 -(void)setNavigationController:(UINavigationController *)controller;
 -(void)setParentViewInstance:(UIView *)parentView;
+-(void)updateTargetPointType:(OATargetPointType)targetType;
 
 -(void)setCustomViewController:(OATargetMenuViewController *)customController;
 

@@ -341,3 +341,5 @@
 "make_call" = "Ligar";
 "fav_select" = "Por favor, selecione favoritos";
 "enter_description" = "Insira a descrição";
+"description" = "Descrição";
+"enter_fav_name" = "Inserir nome do favorito";

@@ -341,3 +341,5 @@
 "fav_select" = "Калі ласка, абярыце ўлюбёныя";
 "intro_welcome" = "Сардэчна запрашаем у\nOsmAnd";
 "enter_description" = "Увесьці апісаньне";
+"description" = "Апісаньне";
+"enter_fav_name" = "Увядзіце назву ўлюбёнага";

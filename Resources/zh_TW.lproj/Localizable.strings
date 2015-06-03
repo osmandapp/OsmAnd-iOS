@@ -341,3 +341,5 @@
 "sett_lang_trans" = "直譯";
 "fav_select" = "請選擇我的最愛";
 "enter_description" = "輸入記述";
+"description" = "記述";
+"enter_fav_name" = "輸入我的最愛名稱";

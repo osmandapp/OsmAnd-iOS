@@ -70,4 +70,19 @@
     return NO; // override
 }
 
+- (BOOL)supportEditing
+{
+    return NO; // override
+}
+
+- (void)activateEditing
+{
+    // override
+}
+
+- (void)commitChangesAndExit
+{
+    // override
+}
+
 @end

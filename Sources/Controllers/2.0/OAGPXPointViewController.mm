@@ -318,7 +318,7 @@ typedef enum
 - (void)goToPoint
 {
     OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:YES];
+    [rootViewController closeMenuAndPanelsAnimated:NO];
     
     // Go to wpt location
     const OsmAnd::LatLon latLon(self.wptItem.point.position.latitude, self.wptItem.point.position.longitude);

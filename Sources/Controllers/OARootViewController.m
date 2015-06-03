@@ -60,6 +60,17 @@
     //[self setRightPanel:[[OAActionsPanelViewController alloc] init]];
 }
 
+- (void)restoreCenterPanel:(UIViewController *)viewController
+{
+    [viewController willMoveToParentViewController:nil];
+    [viewController.view removeFromSuperview];
+    [viewController removeFromParentViewController];
+    
+    [self addChildViewController:viewController];
+    [self.centerPanelContainer insertSubview:viewController.view atIndex:0];
+    [viewController didMoveToParentViewController:self];
+}
+
 - (void)loadView
 {
     self.view = [[UIView alloc] initWithFrame:[UIScreen mainScreen].applicationFrame];
@@ -256,10 +267,14 @@
 
     // Close all menus and panels
     [self closeMenuAnimated:animated];
+    [self showCenterPanelAnimated:animated];
+    
+    /*
     if (self.state == JASidePanelLeftVisible)
         [self toggleLeftPanel:self];
     else if (self.state == JASidePanelRightVisible)
         [self toggleRightPanel:self];
+     */
 }
 
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

@@ -46,6 +46,8 @@
 - (void)prepareNoInit;
 - (void)prepareForRotation;
 
+- (void)showTopToolbar:(BOOL)animated;
+
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 
@@ -64,7 +66,7 @@
 -(void)targetPointAddWaypoint;
 
 -(void)targetHide;
--(void)targetHideMenu:(CGFloat)animationDuration;
+-(void)targetHideMenu:(CGFloat)animationDuration buttonClicked:(BOOL)buttonClicked;
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
 -(void)targetSetTopControlsVisible:(BOOL)visible;

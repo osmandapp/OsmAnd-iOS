@@ -101,6 +101,7 @@
     UIStatusBarStyle _customStatusBarStyle;
     
     BOOL _mapStateSaved;
+    BOOL _pushed;
 }
 
 - (instancetype)init
@@ -187,6 +188,16 @@
 
     if ([_mapViewController parentViewController] != self)
         [self doMapRestore];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_pushed)
+    {
+        _pushed = NO;
+        [[OARootViewController instance] restoreCenterPanel:self];
+    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -816,7 +827,7 @@
 {
     if (!self.targetMenuView.superview)
     {
-        [self showTargetPointMenu:YES];
+        [self showTargetPointMenu:YES showFullMenu:NO];
     }
 }
 
@@ -995,7 +1006,7 @@
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES];
+    [self showTargetPointMenu:YES showFullMenu:NO];
 }
 
 -(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
@@ -1050,7 +1061,17 @@
 
 -(void)targetPointAddFavorite
 {
-    [self hideTargetPointMenu];
+
+    OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
+    
+    UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+    
+    [favoriteViewController activateEditing];
+    favoriteViewController.view.frame = self.view.frame;
+    [self.targetMenuView setCustomViewController:favoriteViewController];
+    [self.targetMenuView updateTargetPointType:OATargetFavorite];
 }
 
 -(void)targetPointShare
@@ -1108,7 +1129,7 @@
 
 - (void)targetPointAddWaypoint
 {
-    // todo
+    //
 }
 
 -(void)targetHide
@@ -1117,9 +1138,12 @@
     [self hideTargetPointMenu];
 }
 
--(void)targetHideMenu:(CGFloat)animationDuration
+-(void)targetHideMenu:(CGFloat)animationDuration buttonClicked:(BOOL)buttonClicked
 {
-    [self hideTargetPointMenu:animationDuration];
+    if (buttonClicked)
+        [self hideTargetPointMenuAndPopup:animationDuration];
+    else
+        [self hideTargetPointMenu:animationDuration];
 }
 
 -(void)targetGoToPoint
@@ -1139,12 +1163,14 @@
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) animated:animated];
 }
 
--(void)showTargetPointMenu:(BOOL)saveMapState
+-(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
     if (saveMapState)
         [self saveMapStateNoRestore];
     
     _mapStateSaved = saveMapState;
+    
+    BOOL showToolbar = NO;
     
     if (_targetMenuView.targetPoint.type == OATargetFavorite)
     {
@@ -1161,17 +1187,19 @@
             }
         }
         
-        [self.targetMenuView doInit:NO];
+        [self.targetMenuView doInit:showFullMenu];
         
         OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithFavoriteItem:item];
         favoriteViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:favoriteViewController];
+        if (showFullMenu)
+            showToolbar = YES;
         
         [self.targetMenuView prepareNoInit];
     }
     else if (_targetMenuView.targetPoint.type == OATargetParking)
     {
-        [self.targetMenuView doInit:NO];
+        [self.targetMenuView doInit:showFullMenu];
 
         OAParkingViewController *parking;
         if (self.targetMenuView.targetPoint.targetObj)
@@ -1201,6 +1229,9 @@
     
     [self.view addSubview:self.targetMenuView];
 
+    if (showToolbar)
+        [self.targetMenuView showTopToolbar:YES];
+    
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) animated:YES];
 
@@ -1241,11 +1272,41 @@
     _mapStateSaved = NO;
     
     [self destroyShadowButton];
-    [self.targetMenuView hide:YES duration:animationDuration onComplete:nil];
+    [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
+        
+        if (_pushed)
+        {
+            _pushed = NO;
+            [[OARootViewController instance] restoreCenterPanel:self];
+            [[OARootViewController instance] closeMenuAndPanelsAnimated:NO];
+            [self.navigationController popToRootViewControllerAnimated:NO];
+        }
+        
+    }];
 
     [self showTopControls];
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
+
+}
+
+-(void)hideTargetPointMenuAndPopup:(CGFloat)animationDuration
+{
+    if (_mapStateSaved)
+        [self restoreMapAfterReuseAnimated];
+    
+    _mapStateSaved = NO;
+    
+    [self destroyShadowButton];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    [self.targetMenuView hide:YES duration:animationDuration onComplete:nil];
+    
+    [self showTopControls];
+    _customStatusBarStyleNeeded = NO;
+    [self setNeedsStatusBarAppearanceUpdate];
+    
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -1288,6 +1349,49 @@
         });
     }];
 }
+
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
+{
+    _pushed = pushed;
+    
+    double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
+    double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
+    
+    [_mapViewController showContextPinMarker:lat longitude:lon];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = item.favorite->getTitle().toNSString();
+    
+    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    UIImage *icon = [UIImage imageNamed:favCol.iconName];
+    
+    targetPoint.type = OATargetFavorite;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:YES];
+    [self targetGoToPoint];
+}
+
 
 #pragma mark - OAParkingDelegate
 
@@ -1400,7 +1504,7 @@
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES];
+    [self showTargetPointMenu:YES showFullMenu:NO];
     
     OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];

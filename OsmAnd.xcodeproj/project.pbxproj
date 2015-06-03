@@ -362,6 +362,12 @@
 		841C474D1AF91B800039B3BF /* destination_parking_place@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C473D1AF91B800039B3BF /* destination_parking_place@3x.png */; };
 		841C474E1AF91B800039B3BF /* destination_parking_place@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C473D1AF91B800039B3BF /* destination_parking_place@3x.png */; };
 		841C474F1AF91B800039B3BF /* destination_parking_place@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 841C473D1AF91B800039B3BF /* destination_parking_place@3x.png */; };
+		8420EEF71B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.mm */; };
+		8420EEF81B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.mm */; };
+		8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.mm */; };
+		8420EEFA1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
+		8420EEFB1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
+		8420EEFC1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
 		842431681AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		842431691AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		8424316A1AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
@@ -2236,6 +2242,9 @@
 		841C473B1AF91B800039B3BF /* destination_parking_place.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = destination_parking_place.png; path = Resources/Icons/destination_parking_place.png; sourceTree = "<group>"; };
 		841C473C1AF91B800039B3BF /* destination_parking_place@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "destination_parking_place@2x.png"; path = "Resources/Icons/destination_parking_place@2x.png"; sourceTree = "<group>"; };
 		841C473D1AF91B800039B3BF /* destination_parking_place@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "destination_parking_place@3x.png"; path = "Resources/Icons/destination_parking_place@3x.png"; sourceTree = "<group>"; };
+		8420EEF41B1EE7C000797AC4 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditDescriptionViewController.h; path = Sources/Controllers/2.0/OAEditDescriptionViewController.h; sourceTree = "<group>"; };
+		8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAEditDescriptionViewController.mm; path = Sources/Controllers/2.0/OAEditDescriptionViewController.mm; sourceTree = "<group>"; };
+		8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAEditDescriptionViewController.xib; path = Sources/Controllers/2.0/OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
 		842431671AE939B400925821 /* welcome_wide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome_wide.png; path = Resources/IntroImages/welcome_wide.png; sourceTree = "<group>"; };
 		8424316B1AEA19C700925821 /* OAOcbfHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOcbfHelper.h; sourceTree = "<group>"; };
 		8424316C1AEA19C700925821 /* OAOcbfHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOcbfHelper.m; sourceTree = "<group>"; };
@@ -3160,6 +3169,9 @@
 				843E5C331AB22FE400BE14BE /* OAMapStylesCell.h */,
 				843E5C341AB22FE400BE14BE /* OAMapStylesCell.m */,
 				843E5C351AB22FE400BE14BE /* OAMapStylesCell.xib */,
+				8420EEF41B1EE7C000797AC4 /* OAEditDescriptionViewController.h */,
+				8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.mm */,
+				8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */,
 				3AFEEE991A13722500900A47 /* OAMapSettingsViewController.h */,
 				3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */,
 				3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */,
@@ -4524,6 +4536,7 @@
 				849E81A91AFA5D6700549953 /* btn_map_type_icon_walk@2x.png in Resources */,
 				84185AE11AAA11B600F70328 /* ic_favorite_7@2x.png in Resources */,
 				8458BB801B0F1E7A00738132 /* ic_phone_number@2x.png in Resources */,
+				8420EEFA1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */,
 				843E5DA51AB341E000BE14BE /* search_icon@3x.png in Resources */,
 				84E2DB4D1AB720FA001A7FEC /* HUD_configure_map.png in Resources */,
 				843E5D1B1AB341E000BE14BE /* left_menu_icon_settings@3x.png in Resources */,
@@ -5031,6 +5044,7 @@
 				849E81AA1AFA5D6700549953 /* btn_map_type_icon_walk@2x.png in Resources */,
 				84185AE21AAA11B600F70328 /* ic_favorite_7@2x.png in Resources */,
 				8458BB811B0F1E7A00738132 /* ic_phone_number@2x.png in Resources */,
+				8420EEFB1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */,
 				843E5DA61AB341E000BE14BE /* search_icon@3x.png in Resources */,
 				84E2DB4E1AB720FA001A7FEC /* HUD_configure_map.png in Resources */,
 				843E5D1C1AB341E000BE14BE /* left_menu_icon_settings@3x.png in Resources */,
@@ -5812,6 +5826,7 @@
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				843E5CE41AB341E000BE14BE /* icon_favorite_item_direction.png in Resources */,
 				84BFC2251A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */,
+				8420EEFC1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */,
 				3ACA4AC51A0BA79E00ECC792 /* OASettingsCell.xib in Resources */,
 				BBA3AFCB197FC4BB0039D991 /* HUD_right_narrowbutton_bg.png in Resources */,
 				BBA3AFCC197FC4BB0039D991 /* HUD_debug_pin_filled_button.png in Resources */,
@@ -6123,6 +6138,7 @@
 				84E441771AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				BB0275D919D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				84B4FD911A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
+				8420EEF71B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */,
 				3A426F441A18E22500DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0001986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA31A0B881300ECC792 /* OASettingsViewController.m in Sources */,
@@ -6275,6 +6291,7 @@
 				84E441781AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				BB0275DA19D2EF41009AFBA8 /* OAUtilities.m in Sources */,
 				84B4FD921A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
+				8420EEF81B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */,
 				3A426F471A18F2F600DE5B1D /* OASwitchTableViewCell.m in Sources */,
 				BBA3B0011986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				3ACA4AA71A0B8B9F00ECC792 /* OASettingsViewController.m in Sources */,
@@ -6521,6 +6538,7 @@
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
+				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.mm in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,

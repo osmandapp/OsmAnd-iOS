@@ -8,6 +8,7 @@
 
 #import "OAWorldRegion.h"
 
+#include <OsmAndCore/WorldRegion.h>
 #include <OsmAndCore/WorldRegions.h>
 
 #import "Localization.h"
@@ -16,7 +17,7 @@
 
 @implementation OAWorldRegion
 {
-    std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion> _worldRegion;
+    std::shared_ptr<const OsmAnd::WorldRegion> _worldRegion;
 }
 
 - (instancetype)initWorld
@@ -34,20 +35,20 @@
     return self;
 }
 
-- (instancetype)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)region
+- (instancetype)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion>&)region
 {
     self = [super init];
     if (self) {
         [self commonInit];
         _worldRegion = region;
-        _regionId = _worldRegion->id.toNSString();
-        NSString *dPrefix = [_worldRegion->downloadId.toNSString() stringByAppendingString:@"."];
+        _regionId = _worldRegion->fullRegionName.toNSString();
+        NSString *dPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         if ([[dPrefix substringToIndex:8] isEqualToString:@"england_"])
             _downloadsIdPrefix = [NSString stringWithFormat:@"gb_%@", dPrefix];
         else
             _downloadsIdPrefix = dPrefix;
 
-        _nativeName = _worldRegion->name.toNSString();
+        _nativeName = _worldRegion->nativeName.toNSString();
         [self setLocalizedNamesFrom:region->localizedNames];
     }
     return self;
@@ -160,7 +161,7 @@
     return self;
 }
 
-- (void)setWorldRegion:(const std::shared_ptr<const OsmAnd::WorldRegions::WorldRegion>&)worldRegion
+- (void)setWorldRegion:(const std::shared_ptr<const OsmAnd::WorldRegion>&)worldRegion
 {
     _worldRegion = worldRegion;
 }
@@ -203,8 +204,8 @@
 {
     OsmAnd::WorldRegions worldRegionsRegistry(QString::fromNSString(ocbfFilename));
 
-    QHash< QString, std::shared_ptr< const OsmAnd::WorldRegions::WorldRegion > > loadedWorldRegions;
-    if (!worldRegionsRegistry.loadWorldRegions(loadedWorldRegions))
+    QList< std::shared_ptr< const OsmAnd::WorldRegion > > loadedWorldRegions;
+    if (!worldRegionsRegistry.loadWorldRegions(&loadedWorldRegions))
         return nil;
 
     NSMutableDictionary* regionsLookupTable = [[NSMutableDictionary alloc] initWithCapacity:loadedWorldRegions.size()];
@@ -219,67 +220,59 @@
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:africaRegion];
     [regionsLookupTable setValue:africaRegion forKey:africaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::AfricaRegionId);
 
     OAWorldRegion* asiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AsiaRegionId
                                             withLocalizedName:OALocalizedString(@"region_asia")
                                                          from:loadedWorldRegions];
     [entireWorld addSubregion:asiaRegion];
     [regionsLookupTable setValue:asiaRegion forKey:asiaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::AsiaRegionId);
 
     OAWorldRegion* australiaAndOceaniaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId
                                                            withLocalizedName:OALocalizedString(@"region_ausralia_and_oceania")
                                                                         from:loadedWorldRegions];
     [entireWorld addSubregion:australiaAndOceaniaRegion];
     [regionsLookupTable setValue:australiaAndOceaniaRegion forKey:australiaAndOceaniaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::AustraliaAndOceaniaRegionId);
 
     OAWorldRegion* centralAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::CentralAmericaRegionId
                                                       withLocalizedName:OALocalizedString(@"region_central_america")
                                                                    from:loadedWorldRegions];
     [entireWorld addSubregion:centralAmericaRegion];
     [regionsLookupTable setValue:centralAmericaRegion forKey:centralAmericaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::CentralAmericaRegionId);
 
     OAWorldRegion* europeRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::EuropeRegionId
                                               withLocalizedName:OALocalizedString(@"region_europe")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:europeRegion];
     [regionsLookupTable setValue:europeRegion forKey:europeRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::EuropeRegionId);
 
     OAWorldRegion* northAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::NorthAmericaRegionId
                                                     withLocalizedName:OALocalizedString(@"region_north_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:northAmericaRegion];
     [regionsLookupTable setValue:northAmericaRegion forKey:northAmericaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::NorthAmericaRegionId);
 
     OAWorldRegion* russiaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::RussiaRegionId
                                               withLocalizedName:OALocalizedString(@"region_russia")
                                                            from:loadedWorldRegions];
     [entireWorld addSubregion:russiaRegion];
     [regionsLookupTable setValue:russiaRegion forKey:russiaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::RussiaRegionId);
 
     OAWorldRegion* southAmericaRegion = [OAWorldRegion createRegionAs:OsmAnd::WorldRegions::SouthAmericaRegionId
                                                     withLocalizedName:OALocalizedString(@"region_south_america")
                                                                  from:loadedWorldRegions];
     [entireWorld addSubregion:southAmericaRegion];
     [regionsLookupTable setValue:southAmericaRegion forKey:southAmericaRegion.regionId];
-    loadedWorldRegions.remove(OsmAnd::WorldRegions::SouthAmericaRegionId);
-
+    
     // Process remaining regions
     for(;;)
     {
         unsigned int processedRegions = 0;
-
-        QMutableHashIterator< QString, std::shared_ptr< const OsmAnd::WorldRegions::WorldRegion > > itRegion(loadedWorldRegions);
+        
+        QMutableListIterator< std::shared_ptr< const OsmAnd::WorldRegion > > itRegion(loadedWorldRegions);
         while(itRegion.hasNext())
         {
-            const auto& region = itRegion.next().value();
-            NSString* parentRegionId = region->parentId.toNSString();
+            const auto& region = itRegion.next();
+            NSString* parentRegionId = region->parentRegionName.toNSString();
 
             // Try to find parent of this region
             OAWorldRegion* parentRegion = [regionsLookupTable objectForKey:parentRegionId];
@@ -303,8 +296,8 @@
     for(const auto& orphanedRegion : loadedWorldRegions)
     {
         OALog(@"Found orphaned region '%s' in '%s'",
-              qPrintable(orphanedRegion->id),
-              qPrintable(orphanedRegion->parentId));
+              qPrintable(orphanedRegion->fullRegionName),
+              qPrintable(orphanedRegion->parentRegionName));
     }
 
     return [entireWorld makeImmutable];
@@ -312,24 +305,27 @@
 
 + (OAWorldRegion*)createRegionAs:(const QString&)regionId
                withLocalizedName:(NSString*)localizedName
-                            from:(const QHash< QString, std::shared_ptr< const OsmAnd::WorldRegions::WorldRegion > >&)regionsDb
+                            from:(QList< std::shared_ptr< const OsmAnd::WorldRegion > >&)regionsDb
 {
     // First try to find this region in database
-    const auto citRegion = regionsDb.constFind(regionId);
-    if (citRegion != regionsDb.cend())
+    for (const auto& region : regionsDb)
     {
-        const auto& region = *citRegion;
-
-        OAWorldRegion* worldRegion = [[OAWorldRegion alloc] initWithId:regionId.toNSString()
-                                                   andDownloadIdPrefix:[region->downloadId.toNSString() stringByAppendingString:@"."]
-                                                      andLocalizedName:nil];
-        [worldRegion setWorldRegion:region];
-        [worldRegion setNativeName:region->name.toNSString()];
-        [worldRegion setLocalizedNamesFrom:region->localizedNames
-                             withExtraName:localizedName];
-        return worldRegion;
+        if (region->fullRegionName == regionId)
+        {
+            OAWorldRegion* worldRegion = [[OAWorldRegion alloc] initWithId:regionId.toNSString()
+                                                       andDownloadIdPrefix:[region->downloadName.toNSString() stringByAppendingString:@"."]
+                                                          andLocalizedName:nil];
+            [worldRegion setWorldRegion:region];
+            [worldRegion setNativeName:region->nativeName.toNSString()];
+            [worldRegion setLocalizedNamesFrom:region->localizedNames
+                                 withExtraName:localizedName];
+            
+            regionsDb.removeOne(region);
+            
+            return worldRegion;
+        }
     }
-
+    
     return [[OAWorldRegion alloc] initWithId:regionId.toNSString()
                          andDownloadIdPrefix:[regionId.toNSString() stringByAppendingString:@"."]
                             andLocalizedName:localizedName];

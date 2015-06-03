@@ -292,7 +292,7 @@
 
 - (void)moveToolbar:(UIPanGestureRecognizer *)gesture
 {
-    if ([self isLandscape])
+    if ([self isLandscape] || (self.customController && self.customController.showingKeyboard))
         return;
     
     CGPoint translatedPoint = [gesture translationInView:self.superview];
@@ -456,7 +456,7 @@
                 CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
                 if (duration > .3)
                     duration = .3;
-                [self.delegate targetHideMenu:duration];
+                [self.delegate targetHideMenu:duration buttonClicked:NO];
             }
         }
     }
@@ -822,6 +822,14 @@
 {
     if (self.superview)
     {
+        if (self.customController && self.customController.editing)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.customController commitChangesAndExit];
+            });
+            return;
+        }
+        
         CGRect frame = self.frame;
         if ([self isLandscape])
             frame.origin.x = -frame.size.width;
@@ -1265,54 +1273,20 @@
     else
         locText = self.formattedLocation;
     
-    OAFavoriteItemViewController* favoriteViewController;
     if (_targetPoint.type == OATargetFavorite)
     {
-        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        if (self.customController && [self.customController supportEditing])
         {
-            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
-            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
-            
-            if ((int)(_targetPoint.location.latitude * 10000.0) == favLat && (int)(_targetPoint.location.longitude * 10000.0) == favLon)
-            {
-                OAFavoriteItem* item = [[OAFavoriteItem alloc] init];
-                item.favorite = favLoc;
-                favoriteViewController = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
-                break;
-            }
+            [self.customController activateEditing];
+            if (!_showFull)
+                [self showFullMenu];
         }
     }
     else
     {
-        favoriteViewController = [[OAFavoriteItemViewController alloc] initWithLocation:self.targetPoint.location
-                                                                               andTitle:locText];
+        [self.delegate targetPointAddFavorite];        
     }
     
-    if (favoriteViewController)
-    {
-        [self.navController pushViewController:favoriteViewController animated:YES];
-
-        /*
-        if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone)
-        {
-            // For iPhone and iPod, push menu to navigation controller
-            [self.navController pushViewController:favoriteViewController animated:YES];
-        }
-        else //if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-        {
-            // For iPad, open menu in a popover with it's own navigation controller
-            UINavigationController* navigationController = [[OANavigationController alloc] initWithRootViewController:favoriteViewController];
-            UIPopoverController* popoverController = [[UIPopoverController alloc] initWithContentViewController:navigationController];
-            
-            [popoverController presentPopoverFromRect:CGRectMake(_targetPoint.touchPoint.x, _targetPoint.touchPoint.y, 0.0f, 0.0f)
-                                               inView:self.mapView
-                             permittedArrowDirections:UIPopoverArrowDirectionAny
-                                             animated:YES];
-        }
-         */
-    }
-    
-    [self.delegate targetPointAddFavorite];
 }
 
 - (IBAction)buttonShareClicked:(id)sender {
@@ -1412,12 +1386,13 @@
 
 - (void) btnOkPressed
 {
-    
+    _previousTargetType = _targetPoint.type;
+    [self.delegate targetHideMenu:.3 buttonClicked:YES];
 }
 
 - (void) btnCancelPressed
 {
-    [self.delegate targetHideMenu:.3];
+    [self.delegate targetHideMenu:.3 buttonClicked:YES];
 }
 
 @end

@@ -733,7 +733,7 @@
     OARootViewController* rootViewController = [OARootViewController instance];
     OAFavoriteItem* itemData = self.favorite;
     // Close everything
-    [rootViewController closeMenuAndPanelsAnimated:YES];
+    [rootViewController closeMenuAndPanelsAnimated:NO];
 
     // Go to favorite location
     _newTarget31 = itemData.favorite->getPosition31();

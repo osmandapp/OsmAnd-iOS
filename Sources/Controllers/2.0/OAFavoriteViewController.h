@@ -10,13 +10,6 @@
 #import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
 
-typedef enum
-{
-    kFavoriteActionNone = 0,
-    kFavoriteActionChangeColor = 1,
-    kFavoriteActionChangeGroup = 2,
-} EFavoriteAction;
-
 @interface OAFavoriteViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (strong, nonatomic) OAFavoriteItem* favorite;
@@ -26,8 +19,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-
-@property (nonatomic, readonly) BOOL editing;
 
 - (id)initWithFavoriteItem:(OAFavoriteItem *)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;

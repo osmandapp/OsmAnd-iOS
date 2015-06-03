@@ -417,7 +417,7 @@
 - (void)doGoToMap
 {
     OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:YES];
+    [rootViewController closeMenuAndPanelsAnimated:NO];
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 

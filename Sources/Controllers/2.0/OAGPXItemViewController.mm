@@ -602,7 +602,7 @@ typedef enum
 - (void)goToGpx
 {
     OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:YES];
+    [rootViewController closeMenuAndPanelsAnimated:NO];
         
     _showTrackOnExit = YES;
     

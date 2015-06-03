@@ -25,6 +25,7 @@
 @property(readonly) BOOL isMenuOpened;
 
 - (void)closeMenuAndPanelsAnimated:(BOOL)animated;
+- (void)restoreCenterPanel:(UIViewController *)viewController;
 
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation;
 

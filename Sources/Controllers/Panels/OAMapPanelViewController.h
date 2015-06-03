@@ -12,6 +12,7 @@
 #import "OACommonTypes.h"
 #import "OATargetPointView.h"
 
+@class OAFavoriteItem;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -35,5 +36,7 @@
 - (void)searchButtonClick:(id)sender;
 
 - (void)updateOverlayUnderlayView:(BOOL)show;
+
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 
 @end

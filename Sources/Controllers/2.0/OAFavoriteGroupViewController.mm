@@ -110,7 +110,6 @@
         return 1;
 }
 
-UITextField* textView;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == 0)
@@ -162,13 +161,11 @@ UITextField* textView;
         
         if (cell)
         {
-            textView = [[UITextField alloc] initWithFrame:CGRectMake(10, 0, 300, 50)];
-            [textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
-            [textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
-            [textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
-            [textView setDelegate:self];
-            [cell addSubview:textView];
+            [cell.textView setPlaceholder:OALocalizedString(@"fav_enter_group_name")];
+            [cell.textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:14]];
+            [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
+            [cell.textView addTarget:self action:@selector(editGroupName:) forControlEvents:UIControlEventEditingChanged];
+            [cell.textView setDelegate:self];
             
             return cell;
         }
@@ -191,7 +188,6 @@ UITextField* textView;
     }
     else
     {
-        self.groupName = [textView text];
         [self.tableView reloadData];
     }
 }

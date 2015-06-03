@@ -383,3 +383,5 @@
 "make_call" = "Make a call";
 
 "enter_description" = "Enter description";
+"description" = "Description";
+"enter_fav_name" = "Enter favorite name";

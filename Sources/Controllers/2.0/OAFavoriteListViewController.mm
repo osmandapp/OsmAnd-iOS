@@ -18,6 +18,7 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OAFavoriteColorViewController.h"
 #import "OAFavoriteGroupViewController.h"
+#import "OARootViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -900,9 +901,8 @@ kFavoriteCellType;
     
     if (indexPath.section == 0) {
         OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-
-        OAFavoriteItemViewController* controller = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
-        [self.navigationController pushViewController:controller animated:YES];
+        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
 
     } else {
         NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
@@ -920,9 +920,8 @@ kFavoriteCellType;
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-        
-        OAFavoriteItemViewController* controller = [[OAFavoriteItemViewController alloc] initWithFavoriteItem:item];
-        [self.navigationController pushViewController:controller animated:YES];
+        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
         
     } else {
         NSDictionary* item = [groupData.groupItems objectAtIndex:indexPath.row];

@@ -343,3 +343,11 @@
 "enter_description" = "Ingrese descripción";
 "description" = "Descripción";
 "enter_fav_name" = "Ingrese nombre del favorito";
+"product_title_wiki" = "Wikipedia";
+"product_desc_wiki" = "Datos de Wikipedia";
+"product_title_srtm" = "Curvas de nivel";
+"product_desc_srtm" = "Mostrar curvas de nivel";
+"res_installing" = "Instalando…";
+"res_roads" = "Caminos";
+"res_srtm" = "SRTM";
+"res_wiki" = "Wiki";

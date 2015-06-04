@@ -344,3 +344,10 @@
 "description" = "Beskrivelse";
 "enter_fav_name" = "Indtast favoritnavn";
 "res_installing" = "Installation…";
+"product_title_wiki" = "Wikipedia";
+"product_desc_wiki" = "Wikipedia data";
+"product_title_srtm" = "Højdekurver";
+"product_desc_srtm" = "Visning af højdekurver";
+"res_roads" = "Veje";
+"res_srtm" = "Srtm";
+"res_wiki" = "Wiki";

@@ -341,3 +341,5 @@
 "sett_lang_show_trans" = "Omskriv navne";
 "fav_select" = "Vælg favoritter";
 "enter_description" = "Indtast beskrivelse";
+"description" = "Beskrivelse";
+"enter_fav_name" = "Indtast favoritnavn";

@@ -344,3 +344,10 @@
 "description" = "Leírás";
 "enter_fav_name" = "Kedvenc nevének megadása";
 "res_installing" = "Telepítés…";
+"product_title_wiki" = "Wikipédia";
+"product_desc_wiki" = "Wikipédia adatok";
+"product_title_srtm" = "Szintvonalak";
+"product_desc_srtm" = "Szintvonalak megjelenítése";
+"res_roads" = "Utak";
+"res_srtm" = "Srtm";
+"res_wiki" = "Wiki";

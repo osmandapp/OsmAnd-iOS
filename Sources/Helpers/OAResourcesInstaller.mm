@@ -12,6 +12,8 @@
 #import "OADownloadsManager.h"
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
+#import <MBProgressHUD.h>
+#import "Localization.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 
@@ -22,6 +24,8 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
+
+    MBProgressHUD* _progressHUD;
 }
 
 - (instancetype)init
@@ -77,6 +81,20 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     // Try to install only in case of successful download
     if (task.error == nil)
     {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (!_progressHUD)
+            {
+                UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+                _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+                _progressHUD.removeFromSuperViewOnHide = YES;
+                _progressHUD.labelText = OALocalizedString(@"res_installing");
+                [topView addSubview:_progressHUD];
+                
+                [_progressHUD show:YES];
+            }
+        });
+
         // Install or update given resource
         success = _app.resourcesManager->updateFromFile(resourceId, filePath);
         if (!success)
@@ -112,6 +130,15 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
                 }
             }
         }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            if (_progressHUD)
+            {
+                [_progressHUD hide:YES];
+                _progressHUD = nil;
+            }
+        });
     }
     
     // Remove downloaded file anyways

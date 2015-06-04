@@ -385,3 +385,5 @@
 "enter_description" = "Enter description";
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";
+"res_installing" = "Installing...";
+

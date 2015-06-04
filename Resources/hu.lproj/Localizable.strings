@@ -341,3 +341,5 @@
 "sett_lang_trans" = "átírás";
 "fav_select" = "Válasszon kedvenceket";
 "enter_description" = "Leírás megadása";
+"description" = "Leírás";
+"enter_fav_name" = "Kedvenc nevének megadása";

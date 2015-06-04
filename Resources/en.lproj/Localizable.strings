@@ -372,6 +372,11 @@
 "product_title_asia" = "Asia";
 "product_desc_asia" = "Map of Asia";
 
+"product_title_wiki" = "Wikipedia";
+"product_desc_wiki" = "Wikipedia data";
+"product_title_srtm" = "Contour lines";
+"product_desc_srtm" = "Display of contour lines";
+
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -386,4 +391,6 @@
 "description" = "Description";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing...";
-
+"res_roads" = "Roads";
+"res_srtm" = "Srtm";
+"res_wiki" = "Wiki";

@@ -10,6 +10,10 @@
 
 #include <OsmAndCore/WorldRegion.h>
 #include <OsmAndCore/WorldRegions.h>
+#include <OsmAndCore/Data/MapObject.h>
+#include <OsmAndCore/Data/BinaryMapObject.h>
+#include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/KeyedEntriesCollection.h>
 
 #import "Localization.h"
 #import "OALog.h"
@@ -45,6 +49,19 @@
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
         [self setLocalizedNamesFrom:region->localizedNames];
+        
+        if (!_localizedName && _nativeName.length == 0)
+        {
+            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(region->mapObject->captions)))
+            {
+                const auto& rule = *region->mapObject->attributeMapping->decodeMap.getRef(entry.key());
+                if (rule.tag == QString("key_name"))
+                {
+                    _nativeName = [entry.value().toNSString() capitalizedStringWithLocale:[NSLocale currentLocale]];
+                    break;
+                }
+            }
+        }
     }
     return self;
 }
@@ -200,7 +217,7 @@
     OsmAnd::WorldRegions worldRegionsRegistry(QString::fromNSString(ocbfFilename));
 
     QList< std::shared_ptr< const OsmAnd::WorldRegion > > loadedWorldRegions;
-    if (!worldRegionsRegistry.loadWorldRegions(&loadedWorldRegions))
+    if (!worldRegionsRegistry.loadWorldRegions(&loadedWorldRegions, true))
         return nil;
 
     NSMutableDictionary* regionsLookupTable = [[NSMutableDictionary alloc] initWithCapacity:loadedWorldRegions.size()];

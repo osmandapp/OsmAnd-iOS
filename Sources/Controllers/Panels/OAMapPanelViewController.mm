@@ -37,6 +37,8 @@
 #import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OAWikiMenuViewController.h"
+#import "OAWikiWebViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -55,7 +57,7 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -846,6 +848,8 @@
     NSString *openingHours = [params objectForKey:@"openingHours"];
     NSString *url = [params objectForKey:@"url"];
     NSString *desc = [params objectForKey:@"desc"];
+
+    NSDictionary *content = [params objectForKey:@"content"];
     
     BOOL centerMap = ([params objectForKey:@"centerMap"] != nil);
     
@@ -899,6 +903,10 @@
                 break;
             }
         }
+    }
+    else if (objectType && [objectType isEqualToString:@"wiki"])
+    {
+        targetPoint.type = OATargetWiki;
     }
     
     if (targetPoint.type == OATargetLocation && poiType)
@@ -1004,6 +1012,7 @@
     targetPoint.phone = phone;
     targetPoint.openingHours = openingHours;
     targetPoint.url = url;
+    targetPoint.localizedContent = content;
     targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
     
     [_targetMenuView setTargetPoint:targetPoint];
@@ -1232,6 +1241,29 @@
         [self.targetMenuView setCustomViewController:parking];
         
         [self.targetMenuView prepareNoInit];
+    }
+    else if (_targetMenuView.targetPoint.type == OATargetWiki)
+    {
+        NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:[[NSLocale preferredLanguages] firstObject]];
+        if (!content)
+            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:@""];
+        
+        if (content)
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            
+            OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithContent:content];
+            wiki.menuDelegate = self;
+            wiki.view.frame = self.view.frame;
+            
+            [self.targetMenuView setCustomViewController:wiki];
+            
+            [self.targetMenuView prepareNoInit];
+        }
+        else
+        {
+            [self.targetMenuView prepare];
+        }
     }
     else
     {
@@ -1468,6 +1500,14 @@
 - (void)cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
+}
+
+#pragma mark - OAWikiMenuDelegate
+
+- (void)openWiki:(OAWikiMenuViewController *)sender
+{
+    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent];
+    [self.navigationController pushViewController:wikiWeb animated:YES];
 }
 
 #pragma mark - OADestinationViewControllerProtocol

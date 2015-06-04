@@ -399,11 +399,26 @@
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
+    NSMutableDictionary *content = [NSMutableDictionary dictionary];
+    
     const auto& decodedValues = amenity->getDecodedValues();
     for(const auto& entry : OsmAnd::rangeOf(decodedValues))
     {
-        //NSString *s = entry.value().toNSString();
+        NSString *s = entry.value().toNSString();
         //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 20 ? [s substringToIndex:20] : s));
+
+        if (entry.key().startsWith(QString("content")))
+        {
+            NSString *key = entry.key().toNSString();
+            NSString *loc;
+            if (key.length > 8)
+                loc = [key substringFromIndex:8];
+            else
+                loc = @"";
+            
+            [content setObject:s forKey:loc];
+        }
+
         
         // phone, website, description
         if (entry.key() == QString("opening_hours"))
@@ -419,6 +434,8 @@
                 poi.nameLocalized = entry.value().toNSString();
         }
     }
+    
+    poi.localizedContent = [NSDictionary dictionaryWithDictionary:content];
     
     if (!poi.nameLocalized)
         poi.nameLocalized = amenity->nativeName.toNSString();

@@ -44,7 +44,6 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     
     BOOL _showFavoriteOnExit;
     BOOL _wasShowingFavorite;
-    BOOL _wasEdited;
     
     NSString *_favName;
     NSInteger _colorIndex;
@@ -62,6 +61,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 }
 
 @synthesize editing = _editing;
+@synthesize wasEdited = _wasEdited;
 @synthesize showingKeyboard = _showingKeyboard;
 
 - (UIStatusBarStyle)preferredStatusBarStyle

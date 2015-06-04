@@ -21,12 +21,12 @@
 #import "OANavigationController.h"
 #import "OARootViewController.h"
 #import "OAResourcesBaseViewController.h"
-#import "OAFavoriteItemViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OADefaultFavorite.h"
 #import "OAPOIHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
+#import "OAFavoriteItem.h"
 
 #include <OpenGLES/ES2/gl.h>
 

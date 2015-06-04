@@ -31,6 +31,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic) UINavigationController* navController;
 
 @property (nonatomic, readonly) BOOL editing;
+@property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;

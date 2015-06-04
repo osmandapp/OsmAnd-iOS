@@ -8,7 +8,6 @@
 
 #import "OATargetPointView.h"
 #import "OsmAndApp.h"
-#import "OAFavoriteItemViewController.h"
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
@@ -363,7 +362,7 @@
         [gesture state] == UIGestureRecognizerStateCancelled ||
         [gesture state] == UIGestureRecognizerStateFailed)
     {
-        if (translatedVelocity.y < 0.0)
+        if (translatedVelocity.y < 200.0)
         //if (self.frame.origin.y < (DeviceScreenHeight - h - 20.0))
         {
             CGRect frame = self.frame;
@@ -391,6 +390,25 @@
                     [self hideTopToolbar:YES];
             }
             
+            if (self.customController)
+            {
+                CGRect cf = self.customController.contentView.frame;
+                cf.size.height = frame.size.height - h;
+                if (cf.size.height < 0)
+                    cf.size.height = 0;
+                if (self.customController.contentView.frame.size.height < cf.size.height)
+                    self.customController.contentView.frame = cf;
+            }
+            else
+            {
+                CGRect cf = _infoView.frame;
+                cf.size.height = frame.size.height - h;
+                if (cf.size.height < 0)
+                    cf.size.height = 0;
+                if (_infoView.frame.size.height < cf.size.height)
+                _infoView.frame = cf;
+            }
+
             [UIView animateWithDuration:.3 animations:^{
                 self.frame = frame;
                 if (![self isLandscape])
@@ -419,7 +437,7 @@
         }
         else
         {
-            if (_showFull || translatedVelocity.y < 0.0)
+            if (_showFull || translatedVelocity.y < 200.0)
             {
                 _showFull = NO;
                 _hideButtons = NO;
@@ -822,7 +840,7 @@
 {
     if (self.superview)
     {
-        if (self.customController && self.customController.editing)
+        if (self.customController && self.customController.wasEdited)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.customController commitChangesAndExit];

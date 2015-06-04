@@ -234,16 +234,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch(resource->type)
     {
         case OsmAndResourceType::MapRegion:
-            typeStr = @"Map";
+            typeStr = OALocalizedString(@"map_settings_map");
             break;
+        /*
         case OsmAndResourceType::RoadMapRegion:
-            typeStr = @"Roads";
+            typeStr = OALocalizedString(@"res_roads");
             break;
+        */
         case OsmAndResourceType::SrtmMapRegion:
-            typeStr = @"Srtm";
+            typeStr = OALocalizedString(@"res_srtm");
             break;
         case OsmAndResourceType::WikiMapRegion:
-            typeStr = @"Wiki";
+            typeStr = OALocalizedString(@"res_wiki");
             break;
             
         default:
@@ -253,7 +255,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     switch(resource->type)
     {
         case OsmAndResourceType::MapRegion:
-        case OsmAndResourceType::RoadMapRegion:
+        //case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
 
@@ -278,6 +280,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         default:
             nameStr = nil;
     }
+    
+    if (resource->type == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+        nameStr = nil;
+    if (resource->type == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+        nameStr = nil;
     
     if (!nameStr)
         return nil;

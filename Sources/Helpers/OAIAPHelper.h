@@ -25,6 +25,8 @@
 #define kInAppId_Addon_Nautical @"net.osmand.inapp.addon.nauticalmap"
 #define kInAppId_Addon_TrackRecording @"net.osmand.inapp.addon.track_recording"
 #define kInAppId_Addon_Parking @"net.osmand.inapp.addon.parking"
+#define kInAppId_Addon_Wiki @"net.osmand.inapp.addon.wiki"
+#define kInAppId_Addon_Srtm @"net.osmand.inapp.addon.srtm"
 
 #else
 
@@ -43,6 +45,8 @@
 #define kInAppId_Addon_Nautical @"net.osmand.maps.inapp.addon.nautical"
 #define kInAppId_Addon_TrackRecording @"net.osmand.maps.inapp.addon.track_recording"
 #define kInAppId_Addon_Parking @"net.osmand.maps.inapp.addon.parking"
+#define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
+#define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
 
 #endif
 

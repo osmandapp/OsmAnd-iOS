@@ -344,3 +344,10 @@
 "description" = "Апісаньне";
 "enter_fav_name" = "Увядзіце назву ўпадабанага";
 "res_installing" = "Усталёўка...";
+"product_title_wiki" = "Вікіпэдыя";
+"product_desc_wiki" = "Зьвесткі вікіпэдыі";
+"product_title_srtm" = "Ізалініі вышынь";
+"res_roads" = "Дарогі";
+"res_srtm" = "Srtm";
+"res_wiki" = "Вікі";
+"product_desc_srtm" = "Паказ ізаліній вышынь";

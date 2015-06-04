@@ -341,3 +341,5 @@
 "sett_lang_trans" = "transliteración";
 "fav_select" = "Elige los favoritos";
 "enter_description" = "Ingrese descripción";
+"description" = "Descripción";
+"enter_fav_name" = "Ingrese nombre del favorito";

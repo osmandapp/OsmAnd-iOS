@@ -228,30 +228,64 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return nil;
     }
 
+    NSString *nameStr;
+    NSString *typeStr;
+    
     switch(resource->type)
     {
         case OsmAndResourceType::MapRegion:
+            typeStr = @"Map";
+            break;
+        case OsmAndResourceType::RoadMapRegion:
+            typeStr = @"Roads";
+            break;
+        case OsmAndResourceType::SrtmMapRegion:
+            typeStr = @"Srtm";
+            break;
+        case OsmAndResourceType::WikiMapRegion:
+            typeStr = @"Wiki";
+            break;
+            
+        default:
+            typeStr = nil;
+    }
+    
+    switch(resource->type)
+    {
+        case OsmAndResourceType::MapRegion:
+        case OsmAndResourceType::RoadMapRegion:
+        case OsmAndResourceType::SrtmMapRegion:
+        case OsmAndResourceType::WikiMapRegion:
+
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"res_map_of_region");
+                    nameStr = OALocalizedString(@"res_map_of_region");
                 else
-                    //return OALocalizedString(@"Map of %@", region.name);
-                    return OALocalizedString(@"%@", region.name);
+                    //nameStr =  OALocalizedString(@"Map of %@", region.name);
+                    nameStr =  OALocalizedString(@"%@", region.name);
             }
             else
             {
                 if (!includeRegionName || region == nil)
-                    return OALocalizedString(@"res_map_of_region");
+                    nameStr =  OALocalizedString(@"res_map_of_region");
                 else
-                    //return OALocalizedString(@"Map of %@", region.name);
-                    return OALocalizedString(@"%@", region.name);
+                    //nameStr =  OALocalizedString(@"Map of %@", region.name);
+                    nameStr =  OALocalizedString(@"%@", region.name);
             }
             break;
 
         default:
-            return nil;
+            nameStr = nil;
     }
+    
+    if (!nameStr)
+        return nil;
+    
+    if (nameStr.length == 0)
+        return typeStr;
+    else
+        return [nameStr stringByAppendingString:[NSString stringWithFormat:@" - %@", typeStr]];
 }
 
 - (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_
@@ -680,6 +714,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)deleteResourceOf:(LocalResourceItem*)item executeAfterSuccess:(dispatch_block_t)block
 {
+    [[[[UIApplication sharedApplication] windows] lastObject] addSubview:_deleteResourceProgressHUD];
     [_deleteResourceProgressHUD showAnimated:YES
                          whileExecutingBlock:^{
                              const auto success = _app.resourcesManager->uninstallResource(item.resourceId);

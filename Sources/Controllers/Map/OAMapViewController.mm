@@ -279,8 +279,6 @@
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
     
-    _obfsDataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
-
     
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -1238,6 +1236,8 @@
     
     CGFloat delta = 10.0;
 
+    _obfsDataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
+
     OsmAnd::AreaI area(OsmAnd::PointI(touchPoint.x - delta, touchPoint.y - delta), OsmAnd::PointI(touchPoint.x + delta, touchPoint.y + delta));
 
     BOOL doSkip = NO;
@@ -1401,6 +1401,8 @@
         
     }
     
+    _obfsDataInterface.reset();
+
     [foundSymbols sortUsingComparator:^NSComparisonResult(OAMapSymbol *obj1, OAMapSymbol *obj2) {
         
         double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);

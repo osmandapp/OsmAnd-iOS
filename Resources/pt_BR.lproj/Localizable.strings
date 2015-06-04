@@ -344,3 +344,10 @@
 "description" = "Descrição";
 "enter_fav_name" = "Inserir nome do favorito";
 "res_installing" = "Instalando...";
+"product_title_wiki" = "Wikipédia";
+"product_desc_wiki" = "Dados da Wikipédia";
+"product_title_srtm" = "Curvas de nível";
+"product_desc_srtm" = "Exibir curvas de nível";
+"res_roads" = "Vias";
+"res_wiki" = "Wiki";
+"res_srtm" = "Srtm";

@@ -456,7 +456,7 @@
                 CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
                 if (duration > .3)
                     duration = .3;
-                [self.delegate targetHideMenu:duration buttonClicked:NO];
+                [self.delegate targetHideMenu:duration backButtonClicked:NO];
             }
         }
     }
@@ -1387,12 +1387,12 @@
 - (void) btnOkPressed
 {
     _previousTargetType = _targetPoint.type;
-    [self.delegate targetHideMenu:.3 buttonClicked:YES];
+    [self.delegate targetHideMenu:.3 backButtonClicked:NO];
 }
 
 - (void) btnCancelPressed
 {
-    [self.delegate targetHideMenu:.3 buttonClicked:YES];
+    [self.delegate targetHideMenu:.3 backButtonClicked:YES];
 }
 
 @end

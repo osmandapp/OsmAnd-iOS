@@ -66,7 +66,7 @@
 -(void)targetPointAddWaypoint;
 
 -(void)targetHide;
--(void)targetHideMenu:(CGFloat)animationDuration buttonClicked:(BOOL)buttonClicked;
+-(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
 -(void)targetSetTopControlsVisible:(BOOL)visible;

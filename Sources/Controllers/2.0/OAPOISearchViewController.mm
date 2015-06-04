@@ -1418,6 +1418,7 @@ typedef enum
     //if (poiType)
     //    [userInfo setObject:symbol.poiType forKey:@"poiType"];
     
+    [userInfo setObject:@"yes" forKey:@"centerMap"];
     [userInfo setObject:name forKey:@"caption"];
     [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
     [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];

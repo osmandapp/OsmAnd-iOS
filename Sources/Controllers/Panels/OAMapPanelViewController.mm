@@ -847,6 +847,8 @@
     NSString *url = [params objectForKey:@"url"];
     NSString *desc = [params objectForKey:@"desc"];
     
+    BOOL centerMap = ([params objectForKey:@"centerMap"] != nil);
+    
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
@@ -1007,6 +1009,23 @@
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO];
+    
+    if (centerMap)
+        [self goToTargetPointDefault];
+}
+
+- (void)goToTargetPointDefault
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+    renderView.zoom = kDefaultFavoriteZoomOnShow;
+    
+    _mainMapAzimuth = 0.0;
+    _mainMapEvelationAngle = 90.0;
+    _mainMapZoom = kDefaultFavoriteZoomOnShow;
+    
+    [self targetGoToPoint];
 }
 
 -(void)createShadowButton:(SEL)action withLongPressEvent:(SEL)withLongPressEvent topView:(UIView *)topView
@@ -1138,9 +1157,9 @@
     [self hideTargetPointMenu];
 }
 
--(void)targetHideMenu:(CGFloat)animationDuration buttonClicked:(BOOL)buttonClicked
+-(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked
 {
-    if (buttonClicked)
+    if (backButtonClicked)
         [self hideTargetPointMenuAndPopup:animationDuration];
     else
         [self hideTargetPointMenu:animationDuration];
@@ -1389,7 +1408,11 @@
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:YES];
-    [self targetGoToPoint];
+
+    if (pushed)
+        [self goToTargetPointDefault];
+    else
+        [self targetGoToPoint];
 }
 
 

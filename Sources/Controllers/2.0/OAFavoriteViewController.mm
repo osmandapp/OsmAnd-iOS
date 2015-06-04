@@ -57,6 +57,8 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     CGFloat _descHeight;
     BOOL _descSingleLine;
     CGFloat dy;
+    
+    BOOL _backButtonPressed;
 }
 
 @synthesize editing = _editing;
@@ -88,7 +90,6 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
         return;
     
     _editing = YES;
-    _wasEdited = YES;
     
     if (![self isViewLoaded])
         return;
@@ -103,6 +104,8 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 - (void)cancelPressed
 {
+    _backButtonPressed = YES;
+    
     // back / cancel
     OsmAndAppInstance app = [OsmAndApp instance];
     if (self.newFavorite)
@@ -113,14 +116,19 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     else
     {
         if (_wasEdited)
+        {
             [self doSave];
+        }
         else if (self.delegate)
-                [self.delegate btnCancelPressed];
+        {
+            [self.delegate btnCancelPressed];
+        }
     }
 }
 
 - (void)okPressed
 {
+    _backButtonPressed = NO;
     // save
     if (_colorIndex != -1)
         [[NSUserDefaults standardUserDefaults] setInteger:_colorIndex forKey:kFavoriteDefaultColorKey];
@@ -128,6 +136,21 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     [[NSUserDefaults standardUserDefaults] setObject:_groupName forKey:kFavoriteDefaultGroupKey];
     
     [self doSave];
+}
+
+- (void) processButtonPress
+{
+    if (_backButtonPressed)
+    {
+        if (self.delegate)
+            [self.delegate btnCancelPressed];
+    }
+    else
+    {
+        if (self.delegate)
+            [self.delegate btnOkPressed];
+    }
+    _backButtonPressed = NO;
 }
 
 - (CGFloat)contentHeight
@@ -384,7 +407,10 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 -(void)commitChangesAndExit
 {
-    [self doSave];
+    if (_wasEdited)
+        [self doSave];
+    else
+        [self doExit];
 }
 
 - (void)doSave
@@ -426,14 +452,16 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 - (void)saveAndExit
 {
     [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    [self doExit];
+}
 
+- (void)doExit
+{
     _editing = NO;
     _wasEdited = NO;
     
-    if (self.delegate)
-        [self.delegate btnOkPressed];
+    [self processButtonPress];
 }
-
 
 
 - (IBAction)favoriteChangeColorClicked:(id)sender
@@ -670,6 +698,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 -(void)favoriteColorChanged
 {
+    _wasEdited = YES;
     [self setupColor];
     [self.tableView reloadData];
 }
@@ -679,6 +708,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 -(void)favoriteGroupChanged
 {
+    _wasEdited = YES;
     [self setupGroup];
     [self.tableView reloadData];
 }
@@ -688,6 +718,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 -(void)descriptionChanged
 {
+    _wasEdited = YES;
     //self.favorite.favorite->setDescription(QString::fromNSString(_editDescController.desc));
     kTestDescription = _editDescController.desc;
     [self setupView];
@@ -699,6 +730,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 #pragma mark - UITextFieldDelegate
 - (void)editFavName:(id)sender
 {
+    _wasEdited = YES;
     _favName = [((UITextField*)sender) text];
 }
 

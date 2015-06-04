@@ -109,15 +109,15 @@
 "shared_string_and" = "і";
 // GPX
 "gpx_point" = "Кропка";
-"fav_remove_q" = "Выдаліць выбранае?";
-"fav_import_title" = "Імпартаваць выбранае";
-"fav_export_title" = "Экспартаваць выбранае";
-"fav_select_remove" = "Абярыце выбраныя для выдаленьня";
-"fav_export_select" = "Абярыце выбраныя для экспарту";
-"fav_import_desc" = "Вы можаце імпартаваць выбраныя як шляхавыя кропкі GPX файла.\n\nКаб падзяліцца файлам favorites.gpx вы можаце адкрыць яго ў Dropbox, Email ці ў іншай праграме - Выкарыстоўвайце функцыю Адкрыць у.";
+"fav_remove_q" = "Выдаліць упадабанае?";
+"fav_import_title" = "Імпартаваць упадабанае";
+"fav_export_title" = "Экспартаваць упадабанае";
+"fav_select_remove" = "Абярыце ўпадабаныя для выдаленьня";
+"fav_export_select" = "Абярыце ўпадабаныя для экспарту";
+"fav_import_desc" = "Вы можаце імпартаваць упадабаныя як шляхавыя кропкі GPX файла.\n\nКаб падзяліцца файлам favorites.gpx вы можаце адкрыць яго ў Dropbox, Email ці ў іншай праграме - Выкарыстоўвайце функцыю Адкрыць у.";
 "fav_create_group" = "Стварыць новую групу";
 "fav_enter_group_name" = "Увядзіце імя групы";
-"fav_exists" = "Выбранае \"%@\" ужо існуе";
+"fav_exists" = "Упадабанае \"%@\" ужо існуе";
 "fav_replace_all" = "Замяніць усё";
 "poi_max_radius_reached" = "Дасягнуты максімальны радыюс пошуку";
 "poi_search_near_center" = "Пошук выконваецца вакол цэнтра карты";
@@ -188,8 +188,8 @@
 "sett_lang_show_local" = "Паказваць мясцовыя назвы";
 "sett_lang_show_trans" = "Транслітараваць назвы";
 "sett_lang_trans" = "трансліт";
-"fav_rename_q" = "Пераназваць выбранае";
-"fav_enter_new_name" = "Увядзіце імя для выбранага";
+"fav_rename_q" = "Пераназваць упадабанае";
+"fav_enter_new_name" = "Увядзіце імя для ўпадабанага";
 // POI
 "poi_insrease_radius" = "Павялічыць пошук да";
 "gpx_import_already_exists" = "Паказаны трэк ужо прысутнічае ў спісе. Калі ласка абярыце дзеянне.";
@@ -284,13 +284,13 @@
 // Import
 "import_title" = "Імпартаваць дадзеныя";
 "import_choose_type" = "Абярыце што імпартаваць";
-"import_favorite" = "Выбранае";
+"import_favorite" = "Упадабанае";
 "import_failed" = "Імпарт завяршыўся не паспяхова";
 "import_cannot" = "Паказаны файл не можа быць імпартаваны";
 "import_gpx" = "GPX трэк";
 // Context menu
-"ctx_mnu_edit_fav" = "Рэдагаваць";
-"ctx_mnu_add_fav" = "У выбранае";
+"ctx_mnu_edit_fav" = "Рэдагаваць ўпадабанае";
+"ctx_mnu_add_fav" = "Дадаць упадабанае";
 "ctx_mnu_share" = "Падзяліцца";
 "ctx_mnu_direction" = "Кірунак";
 // Location Services
@@ -338,9 +338,9 @@
 "col_orange" = "Аранжавы";
 "col_blue" = "Блакітны";
 "units_minutes_short" = "хв";
-"fav_select" = "Калі ласка, абярыце ўлюбёныя";
+"fav_select" = "Калі ласка, абярыце ўпадабаныя";
 "intro_welcome" = "Сардэчна запрашаем у\nOsmAnd";
 "enter_description" = "Увесьці апісаньне";
 "description" = "Апісаньне";
-"enter_fav_name" = "Увядзіце назву ўлюбёнага";
+"enter_fav_name" = "Увядзіце назву ўпадабанага";
 "res_installing" = "Усталёўка...";

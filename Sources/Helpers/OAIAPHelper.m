@@ -151,6 +151,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                       kInAppId_Addon_Nautical,
                                       kInAppId_Addon_TrackRecording,
                                       kInAppId_Addon_Parking,
+                                      kInAppId_Addon_Wiki,
+                                      kInAppId_Addon_Srtm,
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
@@ -179,6 +181,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Addon_Nautical,
             kInAppId_Addon_TrackRecording,
             kInAppId_Addon_Parking,
+            kInAppId_Addon_Wiki,
+            kInAppId_Addon_Srtm,
             nil];
 }
 

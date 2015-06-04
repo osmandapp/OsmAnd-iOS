@@ -9,7 +9,6 @@
 #import "OAFavoriteListViewController.h"
 #import "OAPointTableViewCell.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAFavoriteItemViewController.h"
 #import "OAFavoriteItem.h"
 #import "OAMapViewController.h"
 #import "OAGPXListViewController.h"
@@ -37,6 +36,13 @@ typedef enum
     kFavoriteCellTypeMenu
 }
 kFavoriteCellType;
+
+typedef enum
+{
+    kFavoriteActionNone = 0,
+    kFavoriteActionChangeColor = 1,
+    kFavoriteActionChangeGroup = 2,
+} EFavoriteAction;
 
 #define FavoriteTableGroup _(FavoriteTableGroup)
 @interface FavoriteTableGroup : NSObject

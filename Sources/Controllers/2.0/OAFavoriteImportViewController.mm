@@ -9,7 +9,6 @@
 #import "OAFavoriteImportViewController.h"
 
 #import "OAPointTableViewCell.h"
-#import "OAFavoriteItemViewController.h"
 #import "OAFavoriteItem.h"
 #import "OADefaultFavorite.h"
 

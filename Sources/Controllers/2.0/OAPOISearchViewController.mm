@@ -892,7 +892,7 @@ typedef enum
         {
             double lat = [_foundCoords[0] doubleValue];
             double lon = [_foundCoords[1] doubleValue];
-            [self goToPoint:lat longitude:lon name:@"" icon:nil];
+            [self goToPoint:lat longitude:lon];
             return;
         }
         else
@@ -935,7 +935,7 @@ typedef enum
         if (!name)
             name = item.type.nameLocalized;
         
-        [self goToPoint:item.latitude longitude:item.longitude name:item.nameLocalized icon:[item.type mapIcon]];
+        [self goToPoint:item];
     }
     else if ([obj isKindOfClass:[OAPOIType class]])
     {
@@ -1397,17 +1397,27 @@ typedef enum
     [self generateData];
 }
 
-- (void)goToPoint:(double)latitude longitude:(double)longitude name:(NSString *)name icon:(UIImage *)icon
+- (void)goToPoint:(double)latitude longitude:(double)longitude
+{
+    OAPOI *poi = [[OAPOI alloc] init];
+    poi.latitude = latitude;
+    poi.longitude = longitude;
+    poi.nameLocalized = @"";
+    
+    [self goToPoint:poi];
+}
+
+- (void)goToPoint:(OAPOI *)poi
 {
     OARootViewController* rootViewController = [OARootViewController instance];
     [rootViewController closeMenuAndPanelsAnimated:YES];
     
-    const OsmAnd::LatLon latLon(latitude, longitude);
+    const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:latitude longitude:longitude];
+    [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude];
     
     CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
     touchPoint.x *= mapRendererView.contentScaleFactor;
@@ -1415,15 +1425,24 @@ typedef enum
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
     
-    //if (poiType)
-    //    [userInfo setObject:symbol.poiType forKey:@"poiType"];
+    //if (poi.type)
+    //    [userInfo setObject:poi.type forKey:@"poiType"];
+    
+    if (poi.type && [poi.type.name isEqualToString:@"wiki_place"])
+        [userInfo setObject:@"wiki" forKey:@"objectType"];
     
     [userInfo setObject:@"yes" forKey:@"centerMap"];
-    [userInfo setObject:name forKey:@"caption"];
+    [userInfo setObject:poi.nameLocalized forKey:@"caption"];
     [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
     [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];
     [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
     [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
+    
+    if (poi.localizedContent)
+        [userInfo setObject:poi.localizedContent forKey:@"content"];
+    
+    
+    UIImage *icon = (poi.type ? [poi.type mapIcon] : nil);
     if (icon)
         [userInfo setObject:icon forKey:@"icon"];
     

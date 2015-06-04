@@ -16,6 +16,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetDestination,
     OATargetFavorite,
     OATargetParking,
+    OATargetWiki,
 };
 
 @interface OATargetPoint : NSObject
@@ -29,6 +30,8 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *openingHours;
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
+
+@property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) id targetObj;
 

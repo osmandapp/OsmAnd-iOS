@@ -23,6 +23,8 @@
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
+@property (nonatomic) NSDictionary *localizedContent;
+
 - (UIImage *)icon;
 
 @end

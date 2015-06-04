@@ -592,7 +592,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             if (subregion.subregions.count > 0)
             {
                 [_allSubregionItems addObject:subregion];
-                NSLog(@"%@=%@", subregion.name, subregion.downloadsIdPrefix);
             }
             else
             {

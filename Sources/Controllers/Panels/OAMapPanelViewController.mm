@@ -1200,8 +1200,6 @@
     
     _mapStateSaved = saveMapState;
     
-    BOOL showToolbar = NO;
-    
     if (_targetMenuView.targetPoint.type == OATargetFavorite)
     {
         OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
@@ -1222,9 +1220,7 @@
         OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithFavoriteItem:item];
         favoriteViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:favoriteViewController];
-        if (showFullMenu)
-            showToolbar = YES;
-        
+
         [self.targetMenuView prepareNoInit];
     }
     else if (_targetMenuView.targetPoint.type == OATargetParking)
@@ -1283,9 +1279,6 @@
         [self.targetMenuView removeFromSuperview];
     
     [self.view addSubview:self.targetMenuView];
-
-    if (showToolbar)
-        [self.targetMenuView showTopToolbar:YES];
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) animated:YES];
@@ -1440,6 +1433,7 @@
     targetPoint.zoom = renderView.zoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = pushed;
     
     [_targetMenuView setTargetPoint:targetPoint];
     

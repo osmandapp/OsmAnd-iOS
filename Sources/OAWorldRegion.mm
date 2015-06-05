@@ -55,6 +55,7 @@
             for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(region->mapObject->captions)))
             {
                 const auto& rule = *region->mapObject->attributeMapping->decodeMap.getRef(entry.key());
+                //NSLog(@"tag=%@ value=%@", rule.tag.toNSString(), rule.value.toNSString());
                 if (rule.tag == QString("key_name"))
                 {
                     _nativeName = [entry.value().toNSString() capitalizedStringWithLocale:[NSLocale currentLocale]];

@@ -74,9 +74,9 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     return YES;
 }
 
-- (BOOL)showTopToolbarWithFullMenuOnly
+- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
-    return YES;
+    return isViewVisible && self.editing;
 }
 
 - (BOOL)supportEditing

@@ -116,9 +116,9 @@
     return YES;
 }
 
-- (BOOL)showTopToolbarWithFullMenuOnly
+- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
-    return YES;
+    return isViewVisible;
 }
 
 - (void)okPressed

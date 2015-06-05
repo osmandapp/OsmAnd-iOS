@@ -555,6 +555,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         if (doInit) {
             for (const auto& resource : _resourcesInRepository)
             {
+                //NSLog(@"resId=%@, downloadPrefix=%@", resource->id.toNSString(), downloadsIdPrefix.toNSString());
+                
                 if (!resource->id.startsWith(downloadsIdPrefix))
                     continue;
                 

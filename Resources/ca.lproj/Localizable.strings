@@ -327,3 +327,7 @@
 "prch_failed" = "La compra de \"%@\" no s'ha fet";
 "res_wmap" = "Mapa general del món";
 "res_dmap" = "Mapa detallat";
+"prch_nau_q2_cell" = "La baixada requereix %@ de la transmissió de dades.";
+"prch_nau_q2_wifi" = "La baixada requereix % @ des la xarxa WiFi.";
+"res_inst_avail_cell_q" = "La instal·lació de %@ implica descarregar %@ de dades.";
+"res_inst_avail_wifi_q" = "La instal·lació de %@ implica descarregar %@ de dades amb la WIFI.";

@@ -382,20 +382,22 @@
     
     //NSLog(@">>> name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
 
-    if (_prefLang)
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+
+    const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+    for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
     {
-        const QString lang = QString::fromNSString(_prefLang);
-        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-        {
-            //NSLog(@"loc %@=%@", entry.key().toNSString(), entry.value().toNSString());
-            if (entry.key() == lang)
-            {
-                poi.nameLocalized = entry.value().toNSString();
-                break;
-            }
-        }
-        
+        //NSLog(@"loc %@=%@", entry.key().toNSString(), entry.value().toNSString());
+        if (lang != QString::null && entry.key() == lang)
+            poi.nameLocalized = entry.value().toNSString();
+
+        [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
     }
+    
+    if (![names objectForKey:@""])
+        [names setObject:poi.name forKey:@""];
+    
+    poi.localizedNames = [NSDictionary dictionaryWithDictionary:names];
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
@@ -405,14 +407,14 @@
     for(const auto& entry : OsmAnd::rangeOf(decodedValues))
     {
         NSString *s = entry.value().toNSString();
-        //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 20 ? [s substringToIndex:20] : s));
+        //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 50 ? [s substringToIndex:50] : s));
 
         if (entry.key().startsWith(QString("content")))
         {
             NSString *key = entry.key().toNSString();
             NSString *loc;
             if (key.length > 8)
-                loc = [key substringFromIndex:8];
+                loc = [[key substringFromIndex:8] lowercaseString];
             else
                 loc = @"";
             

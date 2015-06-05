@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
 
+@property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 
 @property (nonatomic) id targetObj;

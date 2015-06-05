@@ -394,3 +394,7 @@
 "res_roads" = "Roads";
 "res_srtm" = "Srtm";
 "res_wiki" = "Wiki";
+
+"select_language" = "Select language";
+"language_short" = "Lang";
+"open_url" = "Open URL in browser";

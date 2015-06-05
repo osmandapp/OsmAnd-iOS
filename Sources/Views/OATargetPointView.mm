@@ -406,7 +406,7 @@
                 if (cf.size.height < 0)
                     cf.size.height = 0;
                 if (_infoView.frame.size.height < cf.size.height)
-                _infoView.frame = cf;
+                    _infoView.frame = cf;
             }
 
             [UIView animateWithDuration:.3 animations:^{

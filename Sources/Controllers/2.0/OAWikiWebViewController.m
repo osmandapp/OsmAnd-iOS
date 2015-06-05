@@ -9,34 +9,80 @@
 #import "OAWikiWebViewController.h"
 #import "Localization.h"
 
-@interface OAWikiWebViewController ()
+@interface OAWikiWebViewController () <UIActionSheetDelegate>
 
 @end
 
 @implementation OAWikiWebViewController
+{
+    NSArray *_namesSorted;
+    NSString *_contentLocale;
+    NSURL *_baseUrl;
+    
+    CALayer *_horizontalLine;
+}
 
-- (id)initWithLocalizedContent:(NSDictionary *)localizedContent
+- (id)initWithLocalizedContent:(NSDictionary *)localizedContent localizedNames:(NSDictionary *)localizedNames
 {
     self = [super init];
     if (self)
     {
+        _localizedNames = localizedNames;
         _localizedContent = localizedContent;
     }
     return self;
+}
+
+-(void)applyLocalization
+{
+    [_buttonBack setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_bottomButton setTitle:OALocalizedString(@"open_url") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    [self.buttonBack setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-
-    NSString *content = [self.localizedContent objectForKey:[[NSLocale preferredLanguages] firstObject]];
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.bottomView.layer addSublayer:_horizontalLine];
+    
+    _contentLocale = [[NSLocale preferredLanguages] firstObject];
+    NSString *content = [self.localizedContent objectForKey:_contentLocale];
     if (!content)
-        content = [self.localizedContent objectForKey:@""];
+    {
+        _contentLocale = @"en";
+        content = [self.localizedContent objectForKey:_contentLocale];
+    }
+    if (!content)
+    {
+        _contentLocale = @"";
+        content = [self.localizedContent objectForKey:_contentLocale];
+    }
+
+    _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
+    
+    NSString *locBtnStr = (_contentLocale.length == 0 ? OALocalizedString(@"language_short") : [_contentLocale uppercaseString]);
+    [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
+    
+    [self buildBaseUrl];
     
     if (content)
-        [_contentView loadHTMLString:content baseURL:nil];
+        [_contentView loadHTMLString:content baseURL:_baseUrl];
+}
+
+- (void) buildBaseUrl
+{
+    _baseUrl = [NSURL URLWithString:[NSString stringWithFormat:@"http://%@.wikipedia.org/wiki/%@", (_contentLocale.length == 0 ? @"en" : _contentLocale), [_titleView.text isEqualToString:@"Wikipedia"] ? @"" : [[_titleView.text stringByReplacingOccurrencesOfString:@" " withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+    
+    //NSLog(@"baseUrl=%@", _baseUrl);
+}
+
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 - (void)didReceiveMemoryWarning
@@ -45,5 +91,68 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)bottomButtonClicked:(id)sender
+{
+    if (_baseUrl)
+        [[UIApplication sharedApplication] openURL:_baseUrl];
+}
+
+- (IBAction)localeButtonClicked:(id)sender
+{
+    if (_localizedContent.allKeys.count <= 1)
+        return;
+    
+    UIActionSheet *actions = [[UIActionSheet alloc] initWithTitle:OALocalizedString(@"select_language") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") destructiveButtonTitle:nil otherButtonTitles:nil];
+    
+    NSMutableArray *locales = [NSMutableArray array];
+    NSString *nativeStr;
+    for (NSString *loc in _localizedContent.allKeys)
+    {
+        if (loc.length == 0)
+            nativeStr = loc;
+        else
+            [locales addObject:loc];
+    }
+    
+    [locales sortUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    if (nativeStr)
+    {
+        nativeStr = OALocalizedString(@"sett_lang_local");
+        [actions addButtonWithTitle:nativeStr];
+    }
+
+    for (NSString *loc in locales)
+        [actions addButtonWithTitle:[loc uppercaseString]];
+    
+    if (nativeStr)
+        [locales insertObject:@"" atIndex:0];
+    
+    _namesSorted = [NSArray arrayWithArray:locales];
+    
+    [actions showFromRect:_localeButton.frame inView:_navBar animated:YES];
+}
+
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex)
+    {
+        _contentLocale = _namesSorted[buttonIndex - 1];
+        
+        NSString *content = [self.localizedContent objectForKey:_contentLocale];
+
+        NSString *locBtnStr = (_contentLocale.length == 0 ? OALocalizedString(@"language_short") : [_contentLocale uppercaseString]);
+        [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
+        
+        _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
+
+        [self buildBaseUrl];
+        [_contentView loadHTMLString:content baseURL:_baseUrl];
+    }
+}
 
 @end

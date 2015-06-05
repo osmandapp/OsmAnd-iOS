@@ -849,6 +849,7 @@
     NSString *url = [params objectForKey:@"url"];
     NSString *desc = [params objectForKey:@"desc"];
 
+    NSDictionary *names = [params objectForKey:@"names"];
     NSDictionary *content = [params objectForKey:@"content"];
     
     BOOL centerMap = ([params objectForKey:@"centerMap"] != nil);
@@ -1012,6 +1013,7 @@
     targetPoint.phone = phone;
     targetPoint.openingHours = openingHours;
     targetPoint.url = url;
+    targetPoint.localizedNames = names;
     targetPoint.localizedContent = content;
     targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
     
@@ -1245,6 +1247,8 @@
     else if (_targetMenuView.targetPoint.type == OATargetWiki)
     {
         NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:[[NSLocale preferredLanguages] firstObject]];
+        if (!content)
+            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:@"en"];
         if (!content)
             content = [self.targetMenuView.targetPoint.localizedContent objectForKey:@""];
         
@@ -1506,7 +1510,7 @@
 
 - (void)openWiki:(OAWikiMenuViewController *)sender
 {
-    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent];
+    OAWikiWebViewController *wikiWeb = [[OAWikiWebViewController alloc] initWithLocalizedContent:self.targetMenuView.targetPoint.localizedContent localizedNames:self.targetMenuView.targetPoint.localizedNames];
     [self.navigationController pushViewController:wikiWeb animated:YES];
 }
 

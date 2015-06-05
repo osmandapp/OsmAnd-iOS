@@ -353,4 +353,5 @@
 "res_srtm" = "Srtm";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";
-"open_url" = "Abrir URL no navegador";
+"open_url" = "Abrir página no navegador";
+"no_other_translations" = "Não há outras traduções";

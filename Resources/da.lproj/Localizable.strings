@@ -353,4 +353,5 @@
 "res_wiki" = "Wiki";
 "select_language" = "Vælg sprog";
 "language_short" = "Sprog";
-"open_url" = "Åbn URL i browseren";
+"open_url" = "Åbn side i browseren";
+"no_other_translations" = "Der er ingen andre oversættelser";

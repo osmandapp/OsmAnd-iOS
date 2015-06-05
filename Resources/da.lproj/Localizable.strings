@@ -351,3 +351,6 @@
 "res_roads" = "Veje";
 "res_srtm" = "Srtm";
 "res_wiki" = "Wiki";
+"select_language" = "Vælg sprog";
+"language_short" = "Sprog";
+"open_url" = "Åbn URL i browseren";

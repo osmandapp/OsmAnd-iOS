@@ -65,7 +65,7 @@
     return NO; // override
 }
 
-- (BOOL)showTopToolbarWithFullMenuOnly
+- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
     return NO; // override
 }

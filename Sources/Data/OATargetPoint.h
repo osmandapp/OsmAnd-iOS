@@ -39,4 +39,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) CGPoint touchPoint;
 @property (nonatomic) int zoom;
 
+@property (nonatomic) BOOL toolbarNeeded;
+
 @end

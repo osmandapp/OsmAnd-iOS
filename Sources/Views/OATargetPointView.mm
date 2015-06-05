@@ -376,7 +376,7 @@
                 frame.size.height = _fullHeight;
                 frame.origin.y = DeviceScreenHeight - _fullHeight;
                 
-                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
                     [self showTopToolbar:YES];
             }
             else
@@ -386,7 +386,7 @@
                 frame.size.height = h;
                 frame.origin.y = DeviceScreenHeight - h;
 
-                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
             }
             
@@ -453,7 +453,7 @@
                 if (duration < .1)
                     duration = .1;
                 
-                if (self.customController && [self.customController hasTopToolbar] && [self.customController showTopToolbarWithFullMenuOnly])
+                if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
 
                 [UIView animateWithDuration:duration animations:^{
@@ -570,7 +570,8 @@
         frame.origin.y = DeviceScreenHeight - _fullHeight;
     }
     
-    [self showTopToolbar:YES];
+    if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
+        [self showTopToolbar:YES];
     
     [UIView animateWithDuration:.3 animations:^{
         
@@ -787,6 +788,12 @@
 {
     [self applyTargetPoint];
 
+    if (self.customController && [self.customController hasTopToolbar])
+    {
+        if ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded)
+            [self showTopToolbar:YES];
+    }
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -808,7 +815,7 @@
 
             frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
         }
-
+        
         [UIView animateWithDuration:0.3 animations:^{
             
             self.frame = frame;
@@ -1158,6 +1165,8 @@
 
 -(void)restoreTargetType
 {
+    _targetPoint.toolbarNeeded = NO;
+
     if (_previousTargetType != _targetPoint.type)
     {
         _targetPoint.type = _previousTargetType;
@@ -1297,7 +1306,14 @@
         {
             [self.customController activateEditing];
             if (!_showFull)
+            {
                 [self showFullMenu];
+            }
+            else
+            {
+                if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
+                    [self showTopToolbar:YES];
+            }
         }
     }
     else

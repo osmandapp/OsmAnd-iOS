@@ -39,7 +39,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 -(void)setNavigationController:(UINavigationController *)controller;
 
 - (BOOL)hasTopToolbar;
-- (BOOL)showTopToolbarWithFullMenuOnly;
+- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 
 - (BOOL)supportEditing;
 - (void)activateEditing;

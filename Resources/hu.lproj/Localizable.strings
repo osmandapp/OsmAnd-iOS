@@ -351,3 +351,6 @@
 "res_roads" = "Utak";
 "res_srtm" = "Srtm";
 "res_wiki" = "Wiki";
+"select_language" = "Nyelv kiválasztása";
+"language_short" = "Nyelv";
+"open_url" = "URL megnyitása böngészőben";

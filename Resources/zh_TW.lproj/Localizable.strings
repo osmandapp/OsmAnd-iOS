@@ -344,3 +344,10 @@
 "description" = "記述";
 "enter_fav_name" = "輸入我的最愛名稱";
 "res_installing" = "正在安裝...";
+"product_title_wiki" = "維基百科";
+"product_desc_wiki" = "維琪百科資料";
+"product_title_srtm" = "等高線";
+"product_desc_srtm" = "顯示等高線";
+"res_roads" = "道路";
+"res_srtm" = "Srtm";
+"res_wiki" = "維基";

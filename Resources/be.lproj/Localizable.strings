@@ -351,3 +351,6 @@
 "res_srtm" = "Srtm";
 "res_wiki" = "Вікі";
 "product_desc_srtm" = "Паказ ізаліній вышынь";
+"select_language" = "Абраць мову";
+"language_short" = "Мова";
+"open_url" = "Адкрыйце URL у браўзары";

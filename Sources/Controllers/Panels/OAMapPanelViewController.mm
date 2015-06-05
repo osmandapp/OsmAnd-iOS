@@ -1242,12 +1242,22 @@
     }
     else if (_targetMenuView.targetPoint.type == OATargetWiki)
     {
-        NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:[[NSLocale preferredLanguages] firstObject]];
-        if (!content)
-            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:@"en"];
-        if (!content)
-            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:@""];
+        NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        if (!contentLocale)
+            contentLocale = [[NSLocale preferredLanguages] firstObject];
         
+        NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+        if (!content)
+        {
+            contentLocale = @"";
+            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+        }
+        if (!content && self.targetMenuView.targetPoint.localizedContent.count > 0)
+        {
+            contentLocale = self.targetMenuView.targetPoint.localizedContent.allKeys[0];
+            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+        }
+                
         if (content)
         {
             [self.targetMenuView doInit:showFullMenu];

@@ -397,4 +397,5 @@
 
 "select_language" = "Select language";
 "language_short" = "Lang";
-"open_url" = "Open URL in browser";
+"open_url" = "Open page in browser";
+"no_other_translations" = "There are no other translations";

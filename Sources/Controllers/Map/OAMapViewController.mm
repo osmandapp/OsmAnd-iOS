@@ -872,7 +872,7 @@
         OsmAnd::PointI touchLocation;
         [mapView convert:touchPoint toLocation:&touchLocation];
         
-        [self restoreMapArrowsLocation];
+        //[self restoreMapArrowsLocation];
 
         // When user gesture has began, stop all animations
         mapView.animator->pause();
@@ -999,8 +999,6 @@
     OsmAnd::PointI centerLocation;
     [mapView convert:centerPoint toLocation:&centerLocation];
     
-    NSLog(@"%d %d", centerLocation.x, centerLocation.y);
-    
     // Rotate current target around center location
     OsmAnd::PointI target = mapView.target31;
     target -= centerLocation;
@@ -1012,8 +1010,6 @@
     newTarget += centerLocation;
     mapView.target31 = newTarget;
     
-    NSLog(@"target = %d %d", newTarget.x, newTarget.y);
-
     // Set rotation
     mapView.azimuth -= qRadiansToDegrees(recognizer.rotation);
 

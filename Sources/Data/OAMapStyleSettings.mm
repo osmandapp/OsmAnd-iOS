@@ -20,11 +20,21 @@
 
 - (NSString *)getValueTitle
 {
+    NSString *res;
+    
     for (OAMapStyleParameterValue *val in self.possibleValues)
         if ([val.name isEqualToString:self.value])
-            return val.title;
+        {
+            res = val.title;
+            break;
+        }
 
-    return self.value;
+    res = self.value;
+    
+    if ([res isEqualToString:@"--"])
+        res = @"";
+    
+    return res;
 }
 
 @end
@@ -156,6 +166,8 @@
             NSString *valLocText = OALocalizedString(valLocKey);
             if ([valLocKey isEqualToString:valLocText])
                 valLocText = v;
+            if (v.length == 0)
+                valLocText = @"--";
             val.title = valLocText;
             [valArr addObject:val];
         }

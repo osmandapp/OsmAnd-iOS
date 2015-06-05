@@ -8,6 +8,7 @@
 
 #import "OAWikiWebViewController.h"
 #import "Localization.h"
+#import "OAAppSettings.h"
 
 @interface OAWikiWebViewController () <UIActionSheetDelegate>
 
@@ -47,22 +48,25 @@
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.bottomView.layer addSublayer:_horizontalLine];
     
-    _contentLocale = [[NSLocale preferredLanguages] firstObject];
+    _contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    if (!_contentLocale)
+        _contentLocale = [[NSLocale preferredLanguages] firstObject];
+    
     NSString *content = [self.localizedContent objectForKey:_contentLocale];
-    if (!content)
-    {
-        _contentLocale = @"en";
-        content = [self.localizedContent objectForKey:_contentLocale];
-    }
     if (!content)
     {
         _contentLocale = @"";
         content = [self.localizedContent objectForKey:_contentLocale];
     }
+    if (!content && self.localizedContent.count > 0)
+    {
+        _contentLocale = self.localizedContent.allKeys[0];
+        content = [self.localizedContent objectForKey:_contentLocale];
+    }
 
     _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");
     
-    NSString *locBtnStr = (_contentLocale.length == 0 ? OALocalizedString(@"language_short") : [_contentLocale uppercaseString]);
+    NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
     [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
     
     [self buildBaseUrl];
@@ -100,7 +104,11 @@
 - (IBAction)localeButtonClicked:(id)sender
 {
     if (_localizedContent.allKeys.count <= 1)
+    {
+        [[[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"no_other_translations") delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        
         return;
+    }
     
     UIActionSheet *actions = [[UIActionSheet alloc] initWithTitle:OALocalizedString(@"select_language") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") destructiveButtonTitle:nil otherButtonTitles:nil];
     
@@ -119,10 +127,7 @@
     }];
     
     if (nativeStr)
-    {
-        nativeStr = OALocalizedString(@"sett_lang_local");
-        [actions addButtonWithTitle:nativeStr];
-    }
+        [actions addButtonWithTitle:@"EN"];
 
     for (NSString *loc in locales)
         [actions addButtonWithTitle:[loc uppercaseString]];
@@ -145,7 +150,7 @@
         
         NSString *content = [self.localizedContent objectForKey:_contentLocale];
 
-        NSString *locBtnStr = (_contentLocale.length == 0 ? OALocalizedString(@"language_short") : [_contentLocale uppercaseString]);
+        NSString *locBtnStr = (_contentLocale.length == 0 ? @"EN" : [_contentLocale uppercaseString]);
         [_localeButton setTitle:locBtnStr forState:UIControlStateNormal];
         
         _titleView.text = ([self.localizedNames objectForKey:_contentLocale] ? [self.localizedNames objectForKey:_contentLocale] : @"Wikipedia");

@@ -353,4 +353,5 @@
 "res_wiki" = "Wiki";
 "select_language" = "Nyelv kiválasztása";
 "language_short" = "Nyelv";
-"open_url" = "URL megnyitása böngészőben";
+"open_url" = "Oldal megnyitása a böngészőben";
+"no_other_translations" = "Nincsenek egyéb fordítások";

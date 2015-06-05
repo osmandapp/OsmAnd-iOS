@@ -353,4 +353,5 @@
 "product_desc_srtm" = "Паказ ізаліній вышынь";
 "select_language" = "Абраць мову";
 "language_short" = "Мова";
-"open_url" = "Адкрыйце URL у браўзары";
+"open_url" = "Адкрыць старонку ў браўзары";
+"no_other_translations" = "Няма іншых перакладаў";

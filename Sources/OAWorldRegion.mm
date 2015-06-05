@@ -276,6 +276,7 @@
     [entireWorld addSubregion:southAmericaRegion];
     [regionsLookupTable setValue:southAmericaRegion forKey:southAmericaRegion.regionId];
     
+    
     // Process remaining regions
     for(;;)
     {

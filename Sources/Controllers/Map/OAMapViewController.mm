@@ -227,6 +227,8 @@
     
     BOOL _tempTrackShowing;
     BOOL _recTrackShowing;
+    
+    CLLocationCoordinate2D _centerLocationForMapArrows;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -714,15 +716,26 @@
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
 }
 
+- (void)setupMapArrowsLocation
+{
+    [self setupMapArrowsLocation:_centerLocationForMapArrows];
+}
+
 - (void)setupMapArrowsLocation:(CLLocationCoordinate2D)centerLocation
 {
-    [OAAppSettings sharedManager].mapCenter = centerLocation;
-    [[OAAppSettings sharedManager] setSettingMapArrows:MAP_ARROWS_MAP_CENTER];
-    [_mapObservable notifyEventWithKey:nil];
+    OAAppSettings * settings = [OAAppSettings sharedManager];
+    if (settings.settingMapArrows != MAP_ARROWS_MAP_CENTER)
+    {
+        settings.mapCenter = centerLocation;
+        [settings setSettingMapArrows:MAP_ARROWS_MAP_CENTER];
+        [_mapObservable notifyEventWithKey:nil];
+    }
 }
 
 - (void)restoreMapArrowsLocation
 {
+    [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(setupMapArrowsLocation) object:nil];
+    
     [[OAAppSettings sharedManager] setSettingMapArrows:MAP_ARROWS_LOCATION];
     [_mapObservable notifyEventWithKey:nil];
 }
@@ -872,7 +885,10 @@
         OsmAnd::PointI touchLocation;
         [mapView convert:touchPoint toLocation:&touchLocation];
         
-        //[self restoreMapArrowsLocation];
+        double lon = OsmAnd::Utilities::get31LongitudeX(touchLocation.x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
+        _centerLocationForMapArrows = CLLocationCoordinate2DMake(lat, lon);
+        [self performSelector:@selector(setupMapArrowsLocation) withObject:nil afterDelay:1.0];
 
         // When user gesture has began, stop all animations
         mapView.animator->pause();

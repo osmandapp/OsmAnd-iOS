@@ -1018,6 +1018,15 @@
 		848A14CB1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
 		848A14CC1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
 		848A14CD1B209FF600A31AE7 /* OAWikiWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */; };
+		848A14D11B223A4C00A31AE7 /* bg_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CE1B223A4C00A31AE7 /* bg_title.png */; };
+		848A14D21B223A4C00A31AE7 /* bg_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CE1B223A4C00A31AE7 /* bg_title.png */; };
+		848A14D31B223A4C00A31AE7 /* bg_title.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CE1B223A4C00A31AE7 /* bg_title.png */; };
+		848A14D41B223A4C00A31AE7 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
+		848A14D51B223A4C00A31AE7 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
+		848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
+		848A14D71B223A4C00A31AE7 /* bg_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14D01B223A4C00A31AE7 /* bg_title@3x.png */; };
+		848A14D81B223A4C00A31AE7 /* bg_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14D01B223A4C00A31AE7 /* bg_title@3x.png */; };
+		848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14D01B223A4C00A31AE7 /* bg_title@3x.png */; };
 		848D170C1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
 		848D170D1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
 		848D170E1B188BAA00A656F4 /* OATargetMenuViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */; };
@@ -2502,6 +2511,9 @@
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
 		848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWikiWebViewController.m; path = Sources/Controllers/2.0/OAWikiWebViewController.m; sourceTree = "<group>"; };
 		848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWikiWebViewController.xib; path = Sources/Controllers/2.0/OAWikiWebViewController.xib; sourceTree = "<group>"; };
+		848A14CE1B223A4C00A31AE7 /* bg_title.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bg_title.png; path = Resources/Icons/bg_title.png; sourceTree = "<group>"; };
+		848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_title@2x.png"; path = "Resources/Icons/bg_title@2x.png"; sourceTree = "<group>"; };
+		848A14D01B223A4C00A31AE7 /* bg_title@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_title@3x.png"; path = "Resources/Icons/bg_title@3x.png"; sourceTree = "<group>"; };
 		848D17091B188BAA00A656F4 /* OATargetMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetMenuViewController.h; path = Sources/Controllers/2.0/OATargetMenuViewController.h; sourceTree = "<group>"; };
 		848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OATargetMenuViewController.mm; path = Sources/Controllers/2.0/OATargetMenuViewController.mm; sourceTree = "<group>"; };
 		848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetMenuViewController.xib; path = Sources/Controllers/2.0/OATargetMenuViewController.xib; sourceTree = "<group>"; };
@@ -3306,6 +3318,9 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				848A14CE1B223A4C00A31AE7 /* bg_title.png */,
+				848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */,
+				848A14D01B223A4C00A31AE7 /* bg_title@3x.png */,
 				8434BAB11B175AB7003FD0FC /* ic_poi_info_dots.png */,
 				8434BAB21B175AB7003FD0FC /* ic_poi_info_dots@2x.png */,
 				8434BAB31B175AB7003FD0FC /* ic_poi_info_dots@3x.png */,
@@ -4549,6 +4564,7 @@
 				8441CB3B1B1370580033AC95 /* delete_items.png in Resources */,
 				843E5CBB1AB341E000BE14BE /* favorite_share_icon@3x.png in Resources */,
 				84E2DB4A1AB720FA001A7FEC /* HUD_compass@3x.png in Resources */,
+				848A14D11B223A4C00A31AE7 /* bg_title.png in Resources */,
 				BB451DD018D70B5B005FBE09 /* HUD_zoom_in_button.png in Resources */,
 				843257B31A9DAEE400A7964E /* ic_update.png in Resources */,
 				BB451DBE18D70B5B005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
@@ -4762,6 +4778,7 @@
 				8441CB351B1370580033AC95 /* change_item_color@2x.png in Resources */,
 				843E5D7B1AB341E000BE14BE /* menu_cell_pointer@3x.png in Resources */,
 				84185AE41AAA11B600F70328 /* ic_favorite_7@3x.png in Resources */,
+				848A14D71B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				BB451DBF18D70B5B005FBE09 /* HUD_left_halfbutton_bg@2x.png in Resources */,
 				84E1DED41B0DFE64002A6946 /* bt_round_big@3x.png in Resources */,
 				8441CB321B1370580033AC95 /* change_item_color.png in Resources */,
@@ -4830,6 +4847,7 @@
 				BB451EDB18E36BFB005FBE09 /* menu_item_settings_icon@2x.png in Resources */,
 				BB451F1118EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				843257EE1A9F807400A7964E /* ic_speed@2x.png in Resources */,
+				848A14D41B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				3AFEEE181A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				84E2DBAD1AB720FB001A7FEC /* zoom_button_bg@3x.png in Resources */,
 				3AFEEE491A0E34FD00900A47 /* menu_cell_selected@2x.png in Resources */,
@@ -5058,6 +5076,7 @@
 				8441CB3C1B1370580033AC95 /* delete_items.png in Resources */,
 				843E5CBC1AB341E000BE14BE /* favorite_share_icon@3x.png in Resources */,
 				84E2DB4B1AB720FA001A7FEC /* HUD_compass@3x.png in Resources */,
+				848A14D21B223A4C00A31AE7 /* bg_title.png in Resources */,
 				BB451E5D18DCD224005FBE09 /* HUD_left_halfbutton_bg.png in Resources */,
 				843257B41A9DAEE400A7964E /* ic_update.png in Resources */,
 				BB451EE718E60EBB005FBE09 /* HUD_debug_actions_button.png in Resources */,
@@ -5271,6 +5290,7 @@
 				8441CB361B1370580033AC95 /* change_item_color@2x.png in Resources */,
 				3A8AC24A19E57A220062DDE9 /* Btn-Pause.png in Resources */,
 				843E5D7C1AB341E000BE14BE /* menu_cell_pointer@3x.png in Resources */,
+				848A14D81B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				84185AE51AAA11B600F70328 /* ic_favorite_7@3x.png in Resources */,
 				84E1DED51B0DFE64002A6946 /* bt_round_big@3x.png in Resources */,
 				8441CB331B1370580033AC95 /* change_item_color.png in Resources */,
@@ -5339,6 +5359,7 @@
 				BB451F1218EB34A5005FBE09 /* Resources.storyboard in Resources */,
 				843257EF1A9F807400A7964E /* ic_speed@2x.png in Resources */,
 				3AFEEE4A1A0E34FD00900A47 /* menu_cell_selected@2x.png in Resources */,
+				848A14D51B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				3AFEEE191A0CF07400900A47 /* OAFavoriteListViewController.xib in Resources */,
 				84E2DBAE1AB720FB001A7FEC /* zoom_button_bg@3x.png in Resources */,
 				84BD08B01AB16174006DA3F7 /* HUD_button_bg@3x.png in Resources */,
@@ -5516,6 +5537,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				84E4421F1AF8A07500F87542 /* track_save.png in Resources */,
+				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				843E5D0B1AB341E000BE14BE /* icon_star@3x.png in Resources */,
 				3AFEEE3F1A0E34FD00900A47 /* left_menu_icon_settings@2x.png in Resources */,
 				8434BAB01B149CE2003FD0FC /* HUD_compass_bg@3x.png in Resources */,
@@ -5890,6 +5912,7 @@
 				8441CB3A1B1370580033AC95 /* change_item_color@3x.png in Resources */,
 				843257B81A9DAEE400A7964E /* ic_update@2x.png in Resources */,
 				3AC639C21A1E4E71001D5E57 /* search_icon@2x.png in Resources */,
+				848A14D31B223A4C00A31AE7 /* bg_title.png in Resources */,
 				8458BB7C1B0F1E7A00738132 /* ic_description@3x.png in Resources */,
 				BBA3AFD3197FC4BB0039D991 /* HUD_button_bg.png in Resources */,
 				843257941A9DAE4100A7964E /* ic_arrow_down.png in Resources */,
@@ -6000,6 +6023,7 @@
 				BBA3AFE7197FC4BB0039D991 /* my_location_marker_icon@2x.png in Resources */,
 				8432578B1A9DADE300A7964E /* ic_gpx_points@3x.png in Resources */,
 				849E81961AFA5D6700549953 /* btn_map_type_icon_view.png in Resources */,
+				848A14D91B223A4C00A31AE7 /* bg_title@3x.png in Resources */,
 				843E5D741AB341E000BE14BE /* menu_button.png in Resources */,
 				84BD08CF1AB16174006DA3F7 /* HUD_menu_halfbutton@3x.png in Resources */,
 				84C41E4F1AB8600D0089EABB /* position_track_map_mode_button@2x.png in Resources */,

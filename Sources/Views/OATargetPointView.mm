@@ -1045,9 +1045,16 @@
     {
         CGRect f = self.customController.contentView.frame;
         if (landscape)
+        {
             f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] ? self.customController.navBar.bounds.size.height : 0.0);
+        }
         else
-            f.size.height = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
+        {
+            if (self.customController.editing)
+                f.size.height = [self.customController contentHeight];
+            else
+                f.size.height = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
+        }
     
         self.customController.contentView.frame = f;
         hf = f.size.height;

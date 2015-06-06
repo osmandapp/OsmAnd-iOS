@@ -331,3 +331,27 @@
 "prch_nau_q2_wifi" = "La baixada requereix % @ des la xarxa WiFi.";
 "res_inst_avail_cell_q" = "La instal·lació de %@ implica descarregar %@ de dades.";
 "res_inst_avail_wifi_q" = "La instal·lació de %@ implica descarregar %@ de dades amb la WIFI.";
+"res_cancel_upd_q" = "Esteu a punt d'aturar l'actualització %@.";
+"res_cancel_inst_q" = "Esteu a punt d'aturar la instal·lació %@.";
+"res_uninst_managed_q" = "Esteu a punt de desinstal·lar %@. Podeu tornar-ho a instal·lar més endavant, des el catàleg.";
+"res_uninst_unmanaged_q" = "Esteu a punt d'esborrar %@. No és al catàleg, per tant us convé assegurar-ne una còpia per si desprès cal.";
+// Map
+"map_inst_det_map_q" = "Instal·leu el mapa general detallat per obtenir més informació al voltant les vostres ubicacions.";
+"ctx_mnu_add_fav" = "Afegeix a preferits";
+// Help
+"help_quiz" = "Consulta";
+"product_title_wiki" = "Viquipèdia";
+"product_desc_wiki" = "Dades de Viquipèdia";
+"product_title_srtm" = "Corbes de nivell";
+"product_desc_srtm" = "Mostra les corbes de nivell";
+"enter_description" = "Introduïu la descripció";
+"description" = "Descripció";
+"enter_fav_name" = "Introducció del nom del preferit";
+"res_installing" = "Instal·lant...";
+"res_roads" = "Carreteres";
+"res_srtm" = "SRTM";
+"res_wiki" = "Wiki";
+"select_language" = "Trieu l'idioma";
+"language_short" = "Idioma";
+"open_url" = "Obre la pàgina al navegador";
+"no_other_translations" = "No hi ha altres traduccions";

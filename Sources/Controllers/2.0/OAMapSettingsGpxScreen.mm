@@ -159,9 +159,8 @@
             settings.mapSettingShowRecordingTrack = YES;
             [helper.currentTrack applyBounds];
             OAGpxBounds bounds = helper.currentTrack.bounds;
-            vwController.goToMap = YES;
-            vwController.goToBounds = bounds;
-            [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+
+            [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }
         [[[OsmAndApp instance] updateRecTrackOnMapObservable] notifyEvent];
     }
@@ -176,9 +175,8 @@
         else
         {
             [settings showGpx:gpx.gpxFileName];
-            vwController.goToMap = YES;
-            vwController.goToBounds = gpx.bounds;
-            [[OARootViewController instance].mapPanel prepareMapForReuse:vwController.mapView mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+
+            [[OARootViewController instance].mapPanel prepareMapForReuse:nil mapBounds:gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
         }
         [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
     }

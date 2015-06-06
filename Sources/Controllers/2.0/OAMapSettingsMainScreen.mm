@@ -315,7 +315,7 @@
         case 0:
         {
             if (indexPath.row == 1) {
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx popup:vwController.isPopup];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
             }
                 
             break;
@@ -323,7 +323,7 @@
         
         case 1: // Map Type
         {
-            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType popup:vwController.isPopup];
+            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapType];
 
             break;
         }
@@ -337,22 +337,20 @@
                 
                 if (indexPath.row == 0)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey popup:vwController.isPopup];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenSetting param:settingAppModeKey];
                 }
                 else if (indexPath.row <= categories.count)
                 {
-                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1] popup:vwController.isPopup];
+                    mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenCategory param:categories[indexPath.row - 1]];
                 }
                 else
                 {
                     OAMapStyleParameter *p = topLevelParams[indexPath.row - categories.count - 1];
-                    if (p.dataType != OABoolean) {
-                        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name popup:vwController.isPopup];
+                    if (p.dataType != OABoolean)
+                    {
+                        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
                         
-                        if (!vwController.isPopup)
-                            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
-                        else
-                            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
+                            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
                     }
                 }
                 break;
@@ -361,10 +359,10 @@
         case 3:
         {
             if (indexPath.row == 0) {
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay popup:vwController.isPopup];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
                 
             } else {
-                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay popup:vwController.isPopup];
+                mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
             }
             
             break;
@@ -374,12 +372,8 @@
             break;
     }
     
-    if (mapSettingsViewController) {
-        if (!vwController.isPopup)
-            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
-        else
-            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
-    }
+    if (mapSettingsViewController)
+            [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
 
     
     [tableView deselectRowAtIndexPath:indexPath animated:NO];

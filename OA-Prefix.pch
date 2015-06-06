@@ -33,8 +33,8 @@
 #define kInactiveHoursResetLocation 24
 #define kLastMapUsedTime @"kLastMapUsedTime"
 
-#define kMapSettingsPopupHeight DeviceScreenHeight / 2.0
-#define kMapSettingsPopupWidth 290.0
+#define kMapSettingsContentHeight DeviceScreenHeight / 2.0
+#define kMapSettingsLandscapeWidth 290.0
 
 #define kShareLinkTemplate @"http://osmand.net/go.html?lat=%.5f&lon=%.5f&z=%d The location was shared with you by OsmAnd"
 

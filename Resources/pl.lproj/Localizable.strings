@@ -39,3 +39,53 @@
 "rendering_attr_contourLines_name" = "Wyświetlanie poziomic";
 "favorite" = "Ulubione";
 "shared_string_and" = "i";
+// Shared Strings
+"shared_string_back" = "Wróć";
+"shared_string_done" = "Wykonane";
+"shared_string_update" = "Uaktualnij";
+"shared_string_install" = "Zainstaluj";
+"shared_string_uninstall" = "Odinstaluj";
+"shared_string_buy" = "Kup";
+"shared_string_buy_for" = "dla";
+// HUD
+"hud_heading" = "Kierunek";
+"hud_no_movement" = "Brak ruchu";
+// Favorites
+"fav_color" = "Kolor";
+"fav_colors" = "Kolory";
+"fav_name" = "Nazwa";
+"fav_group" = "Grupa";
+"groups" = "Grupy";
+"fav_no_group" = "Bez grupy";
+"fav_remove_q" = "Usunąć ulubione?";
+"fav_import" = "Zaimportuj";
+"fav_import_title" = "Zaimportuj ulubione";
+"fav_export_title" = "Eksportuj ulubione";
+"fav_select_remove" = "Wybierz ulubione do usunięcia";
+"fav_export_select" = "Wybierz ulubione do eksportu";
+"fav_import_desc" = "Można importować ulubione jako punkty trasy w pliku GPX (w typowym formacie danych GPS)\n\nAby wykorzystać plik favorites.gpx można użyć pliku z Dropbox'a, emaila lub innego źródła - Użyj funkcji \"Otwórz z\".";
+"fav_create_group" = "Utwórz nową grupę";
+"fav_enter_group_name" = "Wpisz nazwę grupy";
+"fav_exists" = "Istnieje już Ulubiony o nazwie \"%@\"";
+"fav_ignore" = "Ignoruj";
+"fav_rename" = "Zmień nazwę";
+"fav_replace" = "Zastąp";
+"fav_replace_all" = "Zastąp wszystkie";
+"fav_rename_q" = "Zmień nazwę ulubionego";
+"fav_enter_new_name" = "Wprowadź nową nazwę ulubionego";
+"fav_select" = "Wybierz ulubione";
+// POI
+"poi_insrease_radius" = "Zwiększ promień wyszukiwania";
+"poi_max_radius_reached" = "Osiągnięto maksymalny promień poszukiwania";
+"poi_search_near_center" = "Wyszukiwanie prowadzone jest blisko centrum mapy";
+"poi_hide" = "Ukryj";
+// My Places
+"favorites" = "Ulubione";
+"tracks" = "Ścieżki";
+// GPX
+"gpx_point" = "Punkt";
+"gpx_waypoints" = "Punkty trasy";
+"gpx_points" = "Punkt(y)";
+"gpx_export" = "Eksportuj";
+"import_export" = "Importuj/Eksportuj";
+"gpx_import_title" = "Importuj trasę";

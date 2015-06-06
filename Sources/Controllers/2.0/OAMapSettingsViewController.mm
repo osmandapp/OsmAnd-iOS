@@ -26,6 +26,7 @@
 #import "OAMapSettingsGpxScreen.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
 #import <CoreLocation/CoreLocation.h>
 #import "OsmAndApp.h"
@@ -70,7 +71,6 @@
 @property (nonatomic) id<OAMapSettingsScreen> screenObj;
 
 @property (nonatomic) id customParam;
-@property (nonatomic) UIButton *mapButton;
 
 @end
 
@@ -88,33 +88,20 @@
     return self;
 }
 
--(instancetype)initPopup
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen
 {
     self = [super init];
     if (self) {
-        _isPopup = YES;
-        _settingsScreen = EMapSettingsScreenMain;
-        [self commonInit];
-    }
-    return self;
-}
-
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen popup:(BOOL)popup
-{
-    self = [super init];
-    if (self) {
-        _isPopup = popup;
         _settingsScreen = settingsScreen;
         [self commonInit];
     }
     return self;
 }
 
--(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param popup:(BOOL)popup
+-(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen param:(id)param
 {
     self = [super init];
     if (self) {
-        _isPopup = popup;
         _settingsScreen = settingsScreen;
         customParam = param;
         [self commonInit];
@@ -130,103 +117,49 @@
 
 - (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
 {
+    self.view.frame = [self contentViewFrame:interfaceOrientation];
+    _navbarView.frame = [self navbarViewFrame:interfaceOrientation];
+    _navbarBackgroundView.frame = [self navbarViewFrame:interfaceOrientation];
     
-    if (_isPopup) {
-        
-        self.view.frame = [self viewFramePopup:interfaceOrientation];
-        
-        CGFloat navHeight = 34.0;
-        CGRect navFrame = _navbarView.frame;
-        navFrame.size.height = navHeight;
-        _navbarView.frame = navFrame;
-        
-        _backButton.frame = CGRectMake(_backButton.frame.origin.x, 0.0, _backButton.frame.size.width, navHeight);
-        _titleView.frame = CGRectMake(self.view.frame.size.width / 2.0 - _titleView.frame.size.width / 2.0, 0.0, _titleView.frame.size.width, navHeight);
-        _tableView.frame = CGRectMake(0.0, navHeight, self.view.bounds.size.width, self.view.bounds.size.height - navHeight);
+    [self updateNavbarBackground:interfaceOrientation];
+}
 
-    } else {
-        
-        CGFloat big;
-        CGFloat small;
-        
-        CGRect rect = self.view.bounds;
-        if (rect.size.width > rect.size.height) {
-            big = rect.size.width;
-            small = rect.size.height;
-        } else {
-            big = rect.size.height;
-            small = rect.size.width;
-        }
-        
-        if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                
-                CGFloat topY = 0.0;
-                CGFloat mapHeight = big - topY;
-                CGFloat mapWidth = small - 290.0;
-                
-                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-                _tableView.frame = CGRectMake(mapWidth, 64.0, small - mapWidth, big - 64.0);
 
-            } else {
-                
-                CGFloat topY = 0.0;
-                CGFloat mapWidth = small;
-                CGFloat mapHeight = big - 280.0;
-                CGFloat mapBottom = topY + mapHeight;
-                
-                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-                _tableView.frame = CGRectMake(0.0, mapBottom, small, big - mapBottom);
-                
-            }
-            
-        } else {
-            
-            if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-                
-                CGFloat topY = 0.0;
-                CGFloat mapHeight = small - topY;
-                CGFloat mapWidth = big - 290.0;
-                
-                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-                _tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
-                
-            } else {
-                
-                CGFloat topY = 0.0;
-                CGFloat mapHeight = small - topY;
-                CGFloat mapWidth = big - 290.0;
-                
-                _mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-                _mapButton.frame = CGRectMake(0.0, topY + 64.0, mapWidth, mapHeight - 64.0);
-                _tableView.frame = CGRectMake(mapWidth, 64.0, big - mapWidth, small - 64.0);
-
-            }
-            
-        }
+-(CGRect)contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsContentHeight, DeviceScreenWidth, kMapSettingsContentHeight);
+    }
+    else
+    {
+        return CGRectMake(0.0, 64.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, DeviceScreenHeight - 64.0);
     }
 }
 
-
--(CGRect)viewFramePopup:(UIInterfaceOrientation)interfaceOrientation
+-(CGRect)contentViewFrame
 {
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsPopupHeight, DeviceScreenWidth, kMapSettingsPopupHeight);
-    } else {
-        return CGRectMake(0.0, 20.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsPopupWidth : 320.0, DeviceScreenHeight - 20.0);
+    return [self contentViewFrame:self.interfaceOrientation];
+}
+
+-(CGRect)navbarViewFrame:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        return CGRectMake(0.0, 0.0, DeviceScreenWidth, 64.0);
+    }
+    else
+    {
+        return CGRectMake(0.0, 0.0, UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone ? kMapSettingsLandscapeWidth : 320.0, 64.0);
     }
 }
 
--(CGRect)viewFramePopup
+-(CGRect)navbarViewFrame
 {
-    return [self viewFramePopup:self.interfaceOrientation];
+    return [self navbarViewFrame:self.interfaceOrientation];
 }
 
--(void)showPopupAnimated:(UIViewController *)rootViewController parentViewController:(UIViewController *)parentViewController;
+-(void)show:(UIViewController *)rootViewController parentViewController:(OAMapSettingsViewController *)parentViewController animated:(BOOL)animated;
 {
     self.parentVC = parentViewController;
     
@@ -234,82 +167,192 @@
     [self willMoveToParentViewController:rootViewController];
 
     CGRect parentFrame;
+    CGRect parentNavbarFrame;
     if (_parentVC)
+    {
         parentFrame = CGRectOffset(_parentVC.view.frame, -50.0, 0.0);
-    
-    CGRect frame = [self viewFramePopup];
-    if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-        frame.origin.y = DeviceScreenHeight + 10.0;
-    else
-        frame.origin.x = -10.0 - frame.size.width;
-    
-    self.view.frame = frame;
-    [rootViewController.view addSubview:self.view];
-    [UIView animateWithDuration:.4 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
-        if (_parentVC) {
-            _parentVC.view.frame = parentFrame;
-            _parentVC.view.alpha = 0.0;
-        }
-        self.view.frame = [self viewFramePopup];
-        
-    } completion:^(BOOL finished) {
-        [self didMoveToParentViewController:rootViewController];
-        if (_parentVC)
-            _parentVC.view.hidden = YES;
-    }];
-}
-
--(void)hidePopup:(BOOL)hideAll
-{
-    if (!_isPopup)
-        return;
-    
-    CGRect parentFrame;
-    if (_parentVC) {
-        parentFrame = CGRectOffset(_parentVC.view.frame, -_parentVC.view.frame.origin.x, 0.0);
-        _parentVC.view.alpha = 0.0;
-        _parentVC.view.hidden = NO;
+        parentNavbarFrame = CGRectOffset(_parentVC.navbarView.frame, -50.0, 0.0);
     }
     
-    if (_parentVC)
-        if (!hideAll) {
-            OAMapSettingsViewController *ctrl = (OAMapSettingsViewController *)_parentVC;
-            [ctrl setupView];
-        }
+    CGRect frame = [self contentViewFrame];
+    CGRect navbarFrame = [self navbarViewFrame];
+    if (_settingsScreen == EMapSettingsScreenMain && UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        frame.origin.y = DeviceScreenHeight + 10.0;
+        navbarFrame.origin.y = -navbarFrame.size.height;
+    }
+    else
+    {
+        frame.origin.x = -10.0 - frame.size.width;
+        navbarFrame.origin.x = -10.0 - navbarFrame.size.width;
+    }
+    
+    self.view.frame = frame;
+    if (!_parentVC)
+        [rootViewController.view addSubview:self.view];
+    else
+        [rootViewController.view insertSubview:self.view aboveSubview:_parentVC.view];
 
-    [UIView animateWithDuration:.4 animations:^{
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-            if (_settingsScreen == EMapSettingsScreenMain || hideAll)
-                self.view.frame = CGRectMake(0.0, DeviceScreenHeight + 10.0, self.view.bounds.size.width, self.view.bounds.size.height);
+    if (!_parentVC)
+    {
+        _navbarBackgroundView.frame = navbarFrame;
+        _navbarBackgroundView.hidden = NO;
+        [rootViewController.view addSubview:self.navbarBackgroundView];
+        
+        [[OARootViewController instance].mapPanel setTopControlsVisible:NO];
+    }
+    
+    self.navbarView.frame = navbarFrame;
+    [rootViewController.view addSubview:self.navbarView];
+    
+    if (animated)
+    {
+        [UIView animateWithDuration:.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
+            if (_parentVC)
+            {
+                _parentVC.view.frame = parentFrame;
+                _parentVC.view.alpha = 0.0;
+                _parentVC.navbarView.frame = parentNavbarFrame;
+                _parentVC.navbarView.alpha = 0.0;
+            }
             else
-                self.view.frame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
-        } else {
-            self.view.frame = CGRectMake(-10.0 - self.view.bounds.size.width, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
-        }
+            {
+                _navbarBackgroundView.frame = [self navbarViewFrame];
+            }
 
-        if (_parentVC && !hideAll) {
+            _navbarView.frame = [self navbarViewFrame];
+            self.view.frame = [self contentViewFrame];
+            
+        } completion:^(BOOL finished) {
+            [self didMoveToParentViewController:rootViewController];
+            if (_parentVC)
+            {
+                _parentVC.view.hidden = YES;
+                _parentVC.navbarView.hidden = YES;
+            }
+        }];
+    }
+    else
+    {
+        _navbarView.frame = [self navbarViewFrame];
+        self.view.frame = [self contentViewFrame];
+        
+        [self didMoveToParentViewController:rootViewController];
+        if (_parentVC)
+        {
+            _parentVC.view.hidden = YES;
+            _parentVC.navbarView.hidden = YES;
+        }
+        else
+        {
+            _navbarBackgroundView.frame = [self navbarViewFrame];
+        }
+    }
+}
+
+-(void)hide:(BOOL)hideAll animated:(BOOL)animated
+{
+    CGRect parentFrame;
+    CGRect parentNavbarFrame;
+    if (_parentVC)
+    {
+        parentFrame = CGRectOffset(_parentVC.view.frame, -_parentVC.view.frame.origin.x, 0.0);
+        parentNavbarFrame = CGRectOffset(_parentVC.navbarView.frame, -_parentVC.navbarView.frame.origin.x, 0.0);
+        _parentVC.view.alpha = 0.0;
+        _parentVC.view.hidden = NO;
+        _parentVC.navbarView.alpha = 0.0;
+        _parentVC.navbarView.hidden = NO;
+    }
+    
+    if (_parentVC && !hideAll)
+        [_parentVC setupView];
+    
+    if (!_parentVC || hideAll)
+        [[OARootViewController instance].mapPanel setTopControlsVisible:YES];
+    
+    if (animated)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+
+            CGRect navbarFrame;
+            CGRect contentFrame;
+            
+            if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+            {
+                if (_settingsScreen == EMapSettingsScreenMain || hideAll)
+                {
+                    navbarFrame = CGRectMake(0.0, -_navbarView.frame.size.height, _navbarView.frame.size.width, _navbarView.frame.size.height);
+                    contentFrame = CGRectMake(0.0, DeviceScreenHeight + 10.0, self.view.bounds.size.width, self.view.bounds.size.height);
+                }
+                else
+                {
+                    navbarFrame = CGRectMake(DeviceScreenWidth + 10.0, _navbarView.frame.origin.y, _navbarView.frame.size.width, _navbarView.frame.size.height);
+                    contentFrame = CGRectMake(DeviceScreenWidth + 10.0, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+                }
+            }
+            else
+            {
+                navbarFrame = CGRectMake(-10.0 - _navbarView.bounds.size.width, _navbarView.frame.origin.y, _navbarView.frame.size.width, _navbarView.frame.size.height);
+                contentFrame = CGRectMake(-10.0 - self.view.bounds.size.width, self.view.frame.origin.y, self.view.bounds.size.width, self.view.bounds.size.height);
+            }
+            _navbarView.frame = navbarFrame;
+            self.view.frame = contentFrame;
+            if (!_parentVC || hideAll)
+            {
+                OAMapSettingsViewController *topVC = self;
+                OAMapSettingsViewController *pVC = _parentVC;
+                while (pVC)
+                {
+                    topVC = pVC;
+                    pVC = pVC.parentVC;
+                }
+                topVC.navbarBackgroundView.frame = navbarFrame;
+            }
+            
+            if (_parentVC && !hideAll)
+            {
+                _parentVC.view.frame = parentFrame;
+                _parentVC.view.alpha = 1.0;
+                _parentVC.navbarView.frame = parentNavbarFrame;
+                _parentVC.navbarView.alpha = 1.0;
+            }
+            
+        } completion:^(BOOL finished) {
+            
+            [self deleteParentVC:hideAll];
+            
+        }];
+    }
+    else
+    {
+        if (_parentVC && !hideAll)
+        {
             _parentVC.view.frame = parentFrame;
             _parentVC.view.alpha = 1.0;
+            _parentVC.navbarView.frame = parentNavbarFrame;
+            _parentVC.navbarView.alpha = 1.0;
         }
-
-    } completion:^(BOOL finished) {
         
         [self deleteParentVC:hideAll];
-        
-    }];
+    }
 }
 
 -(void)deleteParentVC:(BOOL)deleteAll
 {
-    if (_parentVC) {
-        if (deleteAll) {
-            OAMapSettingsViewController *ctrl = (OAMapSettingsViewController *)_parentVC;
-            [ctrl deleteParentVC:YES];
-        }
+    if (_parentVC)
+    {
+        if (deleteAll)
+            [_parentVC deleteParentVC:YES];
+        
         self.parentVC = nil;
     }
+    
     [self removeFromParentViewController];
+    [self.navbarView removeFromSuperview];
     [self.view removeFromSuperview];
+    
+    if (!_parentVC)
+        [self.navbarBackgroundView removeFromSuperview];
 }
 
 -(void)applyLocalization
@@ -318,32 +361,38 @@
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
-- (void)viewDidLoad {
+-(void)updateNavbarBackground:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    {
+        _navbarBackgroundView.backgroundColor = [UIColor clearColor];
+        _navbarBackgroundImg.hidden = NO;
+    }
+    else
+    {
+        _navbarBackgroundView.backgroundColor = UIColorFromRGB(0xFF8F00);
+        _navbarBackgroundImg.hidden = YES;
+    }
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
 
-    if (_isPopup)
-        self.view.frame = [self viewFramePopup];
+    _navbarBackgroundView.hidden = YES;
+    [self updateNavbarBackground:self.interfaceOrientation];
     
     [self setupView];
     
-    if (!_isPopup) {
-        CGRect f = _mapView.frame;
-        self.mapButton = [[UIButton alloc] initWithFrame:CGRectMake(f.origin.x, f.origin.y + 64.0, f.size.width, f.size.height)];
-        [_mapButton setTitle:@"" forState:UIControlStateNormal];
-        [_mapButton addTarget:self action:@selector(doGoToMap) forControlEvents:UIControlEventTouchUpInside];
-        [self.view addSubview:self.mapButton];
-
-    } else {
-        [_mapView removeFromSuperview];
-        if (_settingsScreen == EMapSettingsScreenMain)
-            [_backButton removeFromSuperview];
-
-        [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-        [self.view.layer setShadowOpacity:0.8];
-        [self.view.layer setShadowRadius:3.0];
-        [self.view.layer setShadowOffset:CGSizeMake(-2.0, 2.0)];
-
-    }
+    if (_settingsScreen == EMapSettingsScreenMain)
+        [_backButton removeFromSuperview];
+    
+    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.view.layer setShadowOpacity:0.8];
+    [self.view.layer setShadowRadius:3.0];
+    [self.view.layer setShadowOffset:CGSizeMake(-2.0, 2.0)];
+    
+    [self updateLayout:self.interfaceOrientation];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -355,55 +404,27 @@
     else
         [screenObj setupView];
     
-    
-    if (!_isPopup) {
-        OAGpxBounds bounds;
-        bounds.topLeft = CLLocationCoordinate2DMake(DBL_MAX, DBL_MAX);
-        [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    }
-}
-
--(void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (!_isPopup)
-        [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
-    
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    if (!_isPopup && _goToMap) {
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:self.goToBounds azimuth:0.0 elevationAngle:90.0 animated:YES];
-    }
 }
 
 -(IBAction)backButtonClicked:(id)sender
 {
-    if (_lastMapSourceChangeObserver) {
+    if (_lastMapSourceChangeObserver)
+    {
         [_lastMapSourceChangeObserver detach];
         _lastMapSourceChangeObserver = nil;
     }
     
-    if (!_isPopup) {
-        [super backButtonClicked:sender];
-        
-    } else {
-        [self hidePopup:NO];
-    }
+    [self hide:NO animated:YES];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
--(void)commonInit {
-    
-    _goToMap = NO;
+-(void)commonInit
+{
     isAppearFirstTime = YES;
     self.app = [OsmAndApp instance];
     
@@ -411,14 +432,7 @@
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
 
-    
-}
-
-- (void)doGoToMap
-{
-    OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:NO];
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    self.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
 }
 
 -(void)setupView {

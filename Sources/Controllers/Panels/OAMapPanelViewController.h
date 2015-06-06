@@ -35,6 +35,7 @@
 - (void)mapSettingsButtonClick:(id)sender;
 - (void)searchButtonClick:(id)sender;
 
+- (void)setTopControlsVisible:(BOOL)visible;
 - (void)updateOverlayUnderlayView:(BOOL)show;
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;

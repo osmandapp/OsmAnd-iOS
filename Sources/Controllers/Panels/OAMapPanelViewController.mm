@@ -763,7 +763,7 @@
         
         OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hidePopup:YES];
+            [lastMapSettingsCtrl hide:YES animated:YES];
         
         _mapSettings = nil;
         
@@ -786,8 +786,8 @@
 {
     [self removeGestureRecognizers];
     
-    _mapSettings = [[OAMapSettingsViewController alloc] initPopup];
-    [_mapSettings showPopupAnimated:self parentViewController:nil];
+    _mapSettings = [[OAMapSettingsViewController alloc] init];
+    [_mapSettings show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
 }
@@ -1087,6 +1087,23 @@
         [self.driveModeViewController hideTopControls];
 }
 
+-(void)setTopControlsVisible:(BOOL)visible
+{
+    if (visible)
+    {
+        [self showTopControls];
+        _customStatusBarStyleNeeded = NO;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
+    else
+    {
+        [self hideTopControls];
+        _customStatusBarStyle = UIStatusBarStyleLightContent;
+        _customStatusBarStyleNeeded = YES;
+        [self setNeedsStatusBarAppearanceUpdate];
+    }
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 -(void)targetPointAddFavorite
@@ -1302,19 +1319,7 @@
 
 -(void)targetSetTopControlsVisible:(BOOL)visible
 {
-    if (visible)
-    {
-        [self showTopControls];
-        _customStatusBarStyleNeeded = NO;
-        [self setNeedsStatusBarAppearanceUpdate];
-    }
-    else
-    {
-        [self hideTopControls];
-        _customStatusBarStyle = UIStatusBarStyleLightContent;
-        _customStatusBarStyleNeeded = YES;
-        [self setNeedsStatusBarAppearanceUpdate];
-    }
+    [self setTopControlsVisible:visible];
 }
 
 -(void)hideTargetPointMenu

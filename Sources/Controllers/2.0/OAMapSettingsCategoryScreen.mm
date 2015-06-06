@@ -139,13 +139,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAMapStyleParameter *p = parameters[indexPath.row];
-    if (p.dataType != OABoolean) {
-        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name popup:vwController.isPopup];
+    if (p.dataType != OABoolean)
+    {
+        OAMapSettingsViewController *mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenParameter param:p.name];
         
-        if (!vwController.isPopup)
-            [vwController.navigationController pushViewController:mapSettingsViewController animated:YES];
-        else
-            [mapSettingsViewController showPopupAnimated:vwController.parentViewController parentViewController:vwController];
+        [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
 
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }

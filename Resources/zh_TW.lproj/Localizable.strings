@@ -351,3 +351,7 @@
 "res_roads" = "道路";
 "res_srtm" = "Srtm";
 "res_wiki" = "維基";
+"select_language" = "選擇語言";
+"language_short" = "語言";
+"open_url" = "在瀏覽器中開啟頁面";
+"no_other_translations" = "沒有其他翻譯";

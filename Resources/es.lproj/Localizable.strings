@@ -76,7 +76,7 @@
 "tracks" = "Trazas";
 // GPX
 "gpx_point" = "Punto";
-"gpx_waypoints" = "Puntos de interés";
+"gpx_waypoints" = "Puntos de ruta";
 "gpx_points" = "Punto(s)";
 "gpx_export" = "Exportar";
 "import_export" = "Importar/Exportar";
@@ -88,7 +88,7 @@
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Seleccione la traza a exportar";
 // HUD
-"hud_heading" = "Encabezado";
+"hud_heading" = "Dirección";
 "gpx_import_desc" = "Puede importar sus archivos GPX (formato común de datos GPS)\n\nPara compartir el archivo GPX usted puede abrir el archivo desde dropbox, email o cualquier otra fuente - Use la función Abrir en";
 "gpx_no_tracks" = "No hay trazas";
 "gpx_remove" = "¿Quitar traza?";
@@ -324,7 +324,7 @@
 "my_location" = "Mi ubicación";
 "all_categories" = "Todas las categorías";
 "res_banner_free_maps_title" = "¡Tienes %d mapas gratuitos!";
-"res_banner_free_maps_desc" = "Puede descargar %d mapas libres, sin actualizar";
+"res_banner_free_maps_desc" = "Puede descargar %d mapas libres sin actualizar";
 "res_banner_no_free_maps_title" = "¡No tienes mapas gratuitos!";
 "res_banner_no_free_maps_desc" = "Compre mapas regionales o mundiales";
 "get_unlimited_access" = "Obtenga acceso ilimitado";

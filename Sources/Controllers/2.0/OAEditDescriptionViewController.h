@@ -28,6 +28,6 @@
 
 @property (nonatomic, copy) NSString *desc;
 
--(id)initWithDescription:(NSString *)desc;
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew;
 
 @end

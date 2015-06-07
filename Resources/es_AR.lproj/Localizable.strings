@@ -351,3 +351,7 @@
 "res_roads" = "Caminos";
 "res_srtm" = "SRTM";
 "res_wiki" = "Wiki";
+"select_language" = "Eligir idioma";
+"open_url" = "Abrir web en el navegador";
+"no_other_translations" = "Sin otras traducciones";
+"language_short" = "Idioma";

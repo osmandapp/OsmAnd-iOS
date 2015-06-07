@@ -43,7 +43,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL)supportEditing;
 - (void)activateEditing;
-- (void)commitChangesAndExit;
+- (BOOL)commitChangesAndExit;
 
 - (void)okPressed;
 - (void)cancelPressed;

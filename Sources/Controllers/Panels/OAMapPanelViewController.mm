@@ -1329,6 +1329,9 @@
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration
 {
+    if (![self.targetMenuView preHide])
+        return;
+    
     if (_mapStateSaved)
         [self restoreMapAfterReuseAnimated];
     

@@ -58,6 +58,7 @@
     CGFloat dy;
     
     BOOL _backButtonPressed;
+    BOOL _editNameFirstTime;
 }
 
 @synthesize editing = _editing;
@@ -90,6 +91,7 @@
         return;
     
     _editing = YES;
+    _editNameFirstTime = YES;
     
     if (![self isViewLoaded])
         return;
@@ -405,15 +407,20 @@
     return newName;
 }
 
--(void)commitChangesAndExit
+-(BOOL)commitChangesAndExit
 {
     if (_wasEdited)
-        [self doSave];
+    {
+        return [self doSave];
+    }
     else
+    {
         [self doExit];
+        return YES;
+    }
 }
 
-- (void)doSave
+- (BOOL)doSave
 {
     if (_favName)
         self.favorite.favorite->setTitle(QString::fromNSString(_favName));
@@ -443,10 +450,12 @@
         }],
           nil] show];
         
-        return;
+        return NO;
     }
     
     [self saveAndExit];
+    
+    return YES;
 }
 
 - (void)saveAndExit
@@ -485,6 +494,12 @@
     _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_favDescription isNew:self.newFavorite];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
+}
+
+- (void)editFavName:(id)sender
+{
+    _wasEdited = YES;
+    _favName = [((UITextField*)sender) text];
 }
 
 #pragma mark - UITableViewDataSource
@@ -725,14 +740,21 @@
 }
 
 #pragma mark - UITextFieldDelegate
-- (void)editFavName:(id)sender
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField
 {
-    _wasEdited = YES;
-    _favName = [((UITextField*)sender) text];
+    if (self.newFavorite && _editNameFirstTime)
+    {
+        [textField selectAll:nil];
+    }
+    _editNameFirstTime = NO;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)sender
 {
+    self.favorite.favorite->setTitle(QString::fromNSString(_favName));
+    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+
     [sender resignFirstResponder];
     return YES;
 }

@@ -80,9 +80,9 @@
     // override
 }
 
-- (void)commitChangesAndExit
+- (BOOL)commitChangesAndExit
 {
-    // override
+    return YES; // override
 }
 
 @end

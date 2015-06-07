@@ -437,7 +437,7 @@
         }
         else
         {
-            if (_showFull || translatedVelocity.y < 200.0)
+            if (_showFull || translatedVelocity.y < 200.0 || ![self preHide])
             {
                 _showFull = NO;
                 _hideButtons = NO;
@@ -849,14 +849,6 @@
 {
     if (self.superview)
     {
-        if (self.customController && self.customController.wasEdited)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.customController commitChangesAndExit];
-            });
-            return;
-        }
-        
         CGRect frame = self.frame;
         if ([self isLandscape])
             frame.origin.x = -frame.size.width;
@@ -927,6 +919,13 @@
     [self stopLocationUpdate];
 }
 
+- (BOOL)preHide
+{
+    if (self.customController && self.customController.wasEdited)
+        return [self.customController commitChangesAndExit];
+    else
+        return YES;
+}
 
 - (UIView *)bottomMostView
 {

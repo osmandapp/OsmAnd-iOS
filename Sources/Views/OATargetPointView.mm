@@ -761,6 +761,8 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
+    _buttonFavorite.enabled = (!self.customController || !self.customController.editing);
+    
     _infoPhoneImage.hidden = _targetPoint.phone == nil;
     _infoPhoneText.hidden = _targetPoint.phone == nil;
     
@@ -1174,7 +1176,7 @@
 {
     _targetPoint.toolbarNeeded = NO;
 
-    if (_previousTargetType != _targetPoint.type)
+    if (_previousTargetType != _targetPoint.type && _targetPoint.type != OATargetFavorite)
     {
         _targetPoint.type = _previousTargetType;
         [self applyTargetPoint];
@@ -1312,6 +1314,7 @@
         if (self.customController && [self.customController supportEditing])
         {
             [self.customController activateEditing];
+            _buttonFavorite.enabled = NO;
             if (!_showFull)
             {
                 [self showFullMenu];

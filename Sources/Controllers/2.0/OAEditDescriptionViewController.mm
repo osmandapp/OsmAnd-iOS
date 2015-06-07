@@ -16,14 +16,16 @@
 @implementation OAEditDescriptionViewController
 {
     CGFloat _keyboardHeight;
+    BOOL _isNew;
 }
 
--(id)initWithDescription:(NSString *)desc
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew
 {
     self = [super init];
     if (self)
     {
         self.desc = desc;
+        _isNew = isNew;
         _keyboardHeight = 0.0;
     }
     return self;
@@ -47,6 +49,14 @@
 {
     [super viewWillAppear:animated];
     [self registerForKeyboardNotifications];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if (_isNew)
+        [self.textView becomeFirstResponder];
 }
 
 -(void)viewDidDisappear:(BOOL)animated

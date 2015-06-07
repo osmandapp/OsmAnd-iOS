@@ -32,7 +32,6 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-static NSString *kTestDescription = nil;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
 
 @interface OAFavoriteViewController () <OAFavoriteColorViewControllerDelegate, OAFavoriteGroupViewControllerDelegate, OAEditDescriptionViewControllerDelegate, UITextFieldDelegate>
 
@@ -48,6 +47,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
     NSString *_favName;
     NSInteger _colorIndex;
     NSString *_groupName;
+    NSString *_favDescription;
     
     OAFavoriteColorViewController *_colorController;
     OAFavoriteGroupViewController *_groupController;
@@ -181,6 +181,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
         self.newFavorite = NO;
         _colorIndex = -1;
         _favName = favorite.favorite->getTitle().toNSString();
+        _favDescription = favorite.favorite->getDescription().toNSString();
     }
     return self;
 }
@@ -193,6 +194,8 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
         OsmAndAppInstance app = [OsmAndApp instance];
         
         _favName = formattedLocation;
+        _favDescription = formattedLocation;
+        _favDescription = @"";
         _colorIndex = -1;
         self.favorite = nil;
         self.location = location;
@@ -288,10 +291,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 - (void)setupView
 {
-    //NSString *desc = self.favorite.favorite->getDescription().toNSString();
-    NSString *desc = kTestDescription;
-    
-    CGSize s = [OAUtilities calculateTextBounds:desc width:self.tableView.bounds.size.width - 38.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
+    CGSize s = [OAUtilities calculateTextBounds:_favDescription width:self.tableView.bounds.size.width - 38.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:14.0]];
     CGFloat h = MIN(88.0, s.height + 10.0);
     h = MAX(44.0, h);
     
@@ -482,10 +482,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 
 - (IBAction)favoriteChangeDescriptionClicked:(id)sender
 {
-    //NSString *desc = self.favorite.favorite->getDescription().toNSString();
-    NSString *desc = kTestDescription;
-    
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:desc];
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:_favDescription isNew:self.newFavorite];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
 }
@@ -594,10 +591,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
                 cell = (OATextMultiViewCell *)[nib objectAtIndex:0];
             }
             
-            //NSString *desc = self.favorite.favorite->getDescription().toNSString();
-            NSString *desc = kTestDescription;
-            
-            if (!desc)
+            if (_favDescription.length == 0)
             {
                 cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
                 cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
@@ -615,7 +609,7 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
                 else
                     cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
 
-                cell.textView.text = desc;
+                cell.textView.text = _favDescription;
                 cell.iconView.hidden = NO;
             }
             cell.textView.backgroundColor = UIColorFromRGB(0xf2f2f2);
@@ -719,8 +713,11 @@ static NSString *kTestDescription = nil;//@"When Export is started, you may see 
 -(void)descriptionChanged
 {
     _wasEdited = YES;
-    //self.favorite.favorite->setDescription(QString::fromNSString(_editDescController.desc));
-    kTestDescription = _editDescController.desc;
+    
+    _favDescription = _editDescController.desc;
+    self.favorite.favorite->setDescription(QString::fromNSString(_favDescription));
+    [[OsmAndApp instance] saveFavoritesToPermamentStorage];
+    
     [self setupView];
     [self.tableView reloadData];
     if (self.delegate)

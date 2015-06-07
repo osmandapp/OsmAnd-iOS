@@ -16,6 +16,7 @@
 @property (nonatomic) NSString *nameLocalized;
 @property (nonatomic, assign) BOOL hasOpeningHours;
 @property (nonatomic) NSString *openingHours;
+@property (nonatomic) NSString *desc;
 
 @property (nonatomic, assign) double latitude;
 @property (nonatomic, assign) double longitude;

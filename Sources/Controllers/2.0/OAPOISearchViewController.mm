@@ -1438,6 +1438,11 @@ typedef enum
     [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
     [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
     
+    if ([poi hasOpeningHours])
+        [userInfo setObject:poi.openingHours forKey:@"openingHours"];
+    if (poi.desc)
+        [userInfo setObject:poi.desc forKey:@"desc"];
+
     if (poi.localizedNames)
         [userInfo setObject:poi.localizedNames forKey:@"names"];
     if (poi.localizedContent)

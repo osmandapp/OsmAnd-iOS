@@ -1320,7 +1320,7 @@
                     {
                         NSString *descFieldLoc;
                         if (prefLang)
-                            descFieldLoc = [@"description:" stringByAppendingString:@"prefLang"];
+                            descFieldLoc = [@"description:" stringByAppendingString:prefLang];
                         
                         const auto& decodedValues = amenity->getDecodedValues();
                         for (const auto& entry : OsmAnd::rangeOf(decodedValues))

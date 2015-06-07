@@ -403,6 +403,10 @@
     
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     
+    NSString *descFieldLoc;
+    if (_prefLang)
+        descFieldLoc = [@"description:" stringByAppendingString:_prefLang];
+
     const auto& decodedValues = amenity->getDecodedValues();
     for(const auto& entry : OsmAnd::rangeOf(decodedValues))
     {
@@ -435,6 +439,11 @@
             if (entry.key() == langTag)
                 poi.nameLocalized = entry.value().toNSString();
         }
+        
+        if (entry.key().startsWith(QString("description")) && !poi.desc)
+            poi.desc = entry.value().toNSString();
+        if (descFieldLoc && entry.key() == QString::fromNSString(descFieldLoc))
+            poi.desc = entry.value().toNSString();
     }
     
     poi.localizedContent = [NSDictionary dictionaryWithDictionary:content];

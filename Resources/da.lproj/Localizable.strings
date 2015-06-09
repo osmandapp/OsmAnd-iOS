@@ -349,7 +349,7 @@
 "product_title_srtm" = "Højdekurver";
 "product_desc_srtm" = "Visning af højdekurver";
 "res_roads" = "Veje";
-"res_srtm" = "Srtm";
+"res_srtm" = "SRTM";
 "res_wiki" = "Wiki";
 "select_language" = "Vælg sprog";
 "language_short" = "Sprog";

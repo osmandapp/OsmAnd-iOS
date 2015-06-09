@@ -355,3 +355,5 @@
 "language_short" = "Sprog";
 "open_url" = "Åbn side i browseren";
 "no_other_translations" = "Der er ingen andre oversættelser";
+"shared_string_edit" = "Rediger";
+"wpt_remove_q" = "Fjern rutepunkt?";

@@ -6,21 +6,15 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OATargetMenuViewController.h"
+#import "OAEditTargetViewController.h"
 #import "OAFavoriteItem.h"
 #import <CoreLocation/CoreLocation.h>
 
-@interface OAFavoriteViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
+@interface OAFavoriteViewController : OAEditTargetViewController
 
-@property (strong, nonatomic) OAFavoriteItem* favorite;
-@property (assign, nonatomic) CLLocationCoordinate2D location;
-@property (assign, nonatomic) BOOL newFavorite;
+@property (nonatomic) OAFavoriteItem *favorite;
 
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-
-@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
-
-- (id)initWithFavoriteItem:(OAFavoriteItem *)favorite;
+- (id)initWithItem:(OAFavoriteItem *)favorite;
 - (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString *)formattedLocation;
 
 @end

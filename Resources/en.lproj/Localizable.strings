@@ -18,6 +18,8 @@
 "shared_string_buy_for" = "for";
 "shared_string_or" = "or";
 "shared_string_and" = "and";
+"shared_string_edit" = "Edit";
+
 
 // HUD
 "hud_heading" = "Heading";
@@ -399,3 +401,6 @@
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
 "no_other_translations" = "There are no other translations";
+"wpt_remove_q" = "Remove waypoint?";
+
+

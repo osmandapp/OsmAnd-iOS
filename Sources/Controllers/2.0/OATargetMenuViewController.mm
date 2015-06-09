@@ -25,11 +25,6 @@
     [super didReceiveMemoryWarning];
 }
 
--(void)setNavigationController:(UINavigationController*)controller
-{
-    self.navController = controller;
-}
-
 - (IBAction)buttonOKPressed:(id)sender
 {
     [self okPressed];

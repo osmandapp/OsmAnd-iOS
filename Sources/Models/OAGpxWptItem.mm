@@ -8,7 +8,34 @@
 
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAUtilities.h"
 
 @implementation OAGpxWptItem
+
+- (void)setPoint:(OAGpxWpt *)point
+{
+    _point = point;
+    [self acquireColor];
+}
+
+- (void)setColor:(UIColor *)color
+{
+    _color = color;
+    [self applyColor];
+}
+
+- (void) applyColor
+{
+    if (!self.point)
+        return;
+    
+    self.point.color = [OAUtilities colorToString:self.color];
+}
+
+- (void) acquireColor
+{
+    if (self.point.color.length > 0)
+        self.color = [OAUtilities colorFromString:self.point.color];
+}
 
 @end

@@ -355,3 +355,5 @@
 "language_short" = "Nyelv";
 "open_url" = "Oldal megnyitása a böngészőben";
 "no_other_translations" = "Nincsenek egyéb fordítások";
+"shared_string_edit" = "Szerkesztés";
+"wpt_remove_q" = "Útvonalpont eltávolítása?";

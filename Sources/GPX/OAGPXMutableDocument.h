@@ -26,6 +26,8 @@
 - (void) addTrackSegment:(OAGpxTrkSeg *)s track:(OAGpxTrk *)track;
 - (void) addTrackPoint:(OAGpxTrkPt *)p segment:(OAGpxTrkSeg *)segment;
 
+- (void)deleteWpt:(OAGpxWpt *)w;
+
 - (BOOL) saveTo:(NSString *)filename;
 
 @end

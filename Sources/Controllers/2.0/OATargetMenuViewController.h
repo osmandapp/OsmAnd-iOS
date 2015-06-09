@@ -36,8 +36,6 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
--(void)setNavigationController:(UINavigationController *)controller;
-
 - (BOOL)hasTopToolbar;
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 

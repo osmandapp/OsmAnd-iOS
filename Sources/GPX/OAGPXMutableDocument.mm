@@ -49,7 +49,7 @@
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (self.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)self.extraData];
+        [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)self.extraData];
     document->extraData = extensions;
     extensions = nullptr;
     
@@ -60,11 +60,11 @@
         metadata->description = QString::fromNSString(self.metadata.desc);
         metadata->timestamp = QDateTime::fromTime_t(self.metadata.time);
         
-        [self fillLinks:metadata->links linkArray:self.metadata.links];
+        [OAGPXDocument fillLinks:metadata->links linkArray:self.metadata.links];
         
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (self.metadata.extraData)
-            [self fillExtensions:extensions ext:(OAGpxExtensions *)self.metadata.extraData];
+            [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)self.metadata.extraData];
         metadata->extraData = extensions;
         extensions = nullptr;
     }
@@ -100,7 +100,7 @@
     wpt->ageOfGpsData = w.ageOfGpsData;
     wpt->dgpsStationId = w.dgpsStationId;
     
-    [self fillLinks:wpt->links linkArray:w.links];
+    [OAGPXDocument fillLinks:wpt->links linkArray:w.links];
     
     if (w.speed > 0)
     {
@@ -114,7 +114,7 @@
 
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (w.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
+        [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)w.extraData];
     wpt->extraData = extensions;
     extensions = nullptr;
     
@@ -125,6 +125,20 @@
     [self processBounds:w.position];
     
     [self.locationMarks addObject:w];
+}
+
+- (void)deleteWpt:(OAGpxWpt *)w
+{
+    for (OAGpxWpt *wpt in self.locationMarks)
+    {
+        if (wpt == w || wpt.time == w.time)
+        {
+            [self.locationMarks removeObject:wpt];
+            document->locationMarks.removeOne(wpt.wpt);
+            w.wpt = nullptr;
+            break;
+        }
+    }
 }
 
 - (void) addTrack:(OAGpxTrk *)t
@@ -173,7 +187,7 @@
             trkpt->ageOfGpsData = p.ageOfGpsData;
             trkpt->dgpsStationId = p.dgpsStationId;
             
-            [self fillLinks:trkpt->links linkArray:p.links];
+            [OAGPXDocument fillLinks:trkpt->links linkArray:p.links];
             
             OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
             OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -184,7 +198,7 @@
 
             extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
             if (p.extraData)
-                [self fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+                [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
             trkpt->extraData = extensions;
             extensions = nullptr;
             
@@ -197,7 +211,7 @@
         
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (s.extraData)
-            [self fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
+            [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
         trkseg->extraData = extensions;
         extensions = nullptr;
         
@@ -206,11 +220,11 @@
         trkseg = nullptr;
     }
     
-    [self fillLinks:trk->links linkArray:t.links];
+    [OAGPXDocument fillLinks:trk->links linkArray:t.links];
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (t.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)t.extraData];
+        [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)t.extraData];
     trk->extraData = extensions;
     extensions = nullptr;
     
@@ -256,7 +270,7 @@
         trkpt->ageOfGpsData = p.ageOfGpsData;
         trkpt->dgpsStationId = p.dgpsStationId;
         
-        [self fillLinks:trkpt->links linkArray:p.links];
+        [OAGPXDocument fillLinks:trkpt->links linkArray:p.links];
         
         OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
         OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -267,7 +281,7 @@
 
         extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
         if (p.extraData)
-            [self fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+            [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
         trkpt->extraData = extensions;
         extensions = nullptr;
         
@@ -280,7 +294,7 @@
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (s.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
+        [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)s.extraData];
     trkseg->extraData = extensions;
     extensions = nullptr;
     
@@ -318,7 +332,7 @@
     trkpt->ageOfGpsData = p.ageOfGpsData;
     trkpt->dgpsStationId = p.dgpsStationId;
     
-    [self fillLinks:trkpt->links linkArray:p.links];
+    [OAGPXDocument fillLinks:trkpt->links linkArray:p.links];
     
     OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
     OAGpxExtension *e = [[OAGpxExtension alloc] init];
@@ -329,7 +343,7 @@
     
     extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
     if (p.extraData)
-        [self fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
+        [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)p.extraData];
     trkpt->extraData = extensions;
     extensions = nullptr;
     

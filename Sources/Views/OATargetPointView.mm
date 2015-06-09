@@ -17,6 +17,8 @@
 #import "OADestination.h"
 #import "OADestinationCell.h"
 #import "OAAutoObserverProxy.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAGpxWptItem.h"
 
 #import "OpeningHoursParser.h"
 #include "java/util/Calendar.h"
@@ -761,6 +763,11 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
+    if (_targetPoint.type == OATargetWpt)
+        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+    else
+        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+    
     _buttonFavorite.enabled = (!self.customController || !self.customController.editing);
     
     _infoPhoneImage.hidden = _targetPoint.phone == nil;
@@ -779,6 +786,24 @@
 - (BOOL)hasInfo
 {
     return _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || self.customController;
+}
+
+- (void)applyTargetObjectChanges
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (_targetPoint.type == OATargetWpt)
+        {
+            OAGpxWptItem *item = _targetPoint.targetObj;
+            _targetPoint.title = item.point.name;
+            [_addressLabel setText:_targetPoint.title];
+            
+            UIColor* color = item.color;
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+            _imageView.image = _targetPoint.icon;
+        }
+    });
 }
 
 - (BOOL)isLandscape
@@ -1222,6 +1247,8 @@
     
     if (_targetPoint.type == OATargetFavorite)
         [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
+    else if (_targetPoint.type == OATargetWpt)
+        [_buttonFavorite setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
     else
         [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
 }
@@ -1308,7 +1335,7 @@
     else
         locText = self.formattedLocation;
     
-    if (_targetPoint.type == OATargetFavorite)
+    if (_targetPoint.type == OATargetFavorite || _targetPoint.type == OATargetWpt)
     {
         if (self.customController && [self.customController supportEditing])
         {
@@ -1372,6 +1399,8 @@
         for (OAFunctionalAddon *addon in functionalAddons)
         {
             if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
+                continue;
+            if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
                 continue;
 
             [titles addObject:addon.titleWide];

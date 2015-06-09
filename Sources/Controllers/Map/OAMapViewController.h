@@ -42,6 +42,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolFavorite,
     OAMapSymbolPOI,
     OAMapSymbolLocation,
+    OAMapSymbolWpt,
 };
 
 @interface OAMapSymbol : NSObject
@@ -63,6 +64,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @end
 
 
+@class OAGpxWpt;
+
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property(weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
@@ -74,6 +77,14 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @property(readonly) OAObservable* zoomObservable;
 @property(readonly) OAObservable* mapObservable;
+
+@property (nonatomic) OAGpxWpt *foundWpt;
+
+- (BOOL)findWpt:(CLLocationCoordinate2D)location;
+- (BOOL)deleteFoundWpt;
+- (BOOL)saveFoundWpt;
+- (BOOL)addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName;
+
 - (BOOL)canZoomIn;
 - (void)animatedZoomIn;
 - (BOOL)canZoomOut;

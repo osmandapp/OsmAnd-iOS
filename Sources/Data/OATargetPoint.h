@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetFavorite,
     OATargetParking,
     OATargetWiki,
+    OATargetWpt,
 };
 
 @interface OATargetPoint : NSObject

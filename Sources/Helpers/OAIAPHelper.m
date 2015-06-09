@@ -317,11 +317,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
     if ([self productPurchased:kInAppId_Addon_TrackRecording])
     {
-        /*
         OAFunctionalAddon *addon = [[OAFunctionalAddon alloc] initWithAddonId:kId_Addon_TrackRecording_Add_Waypoint titleShort:OALocalizedString(@"add_waypoint_short") titleWide:OALocalizedString(@"add_waypoint") imageName:@"add_waypoint_to_track.png"];
         addon.sortIndex = 1;
         [arr addObject:addon];
-        */
     }
     
     [arr sortUsingComparator:^NSComparisonResult(OAFunctionalAddon *obj1, OAFunctionalAddon *obj2) {

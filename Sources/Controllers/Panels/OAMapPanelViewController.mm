@@ -39,6 +39,7 @@
 #import "OAFavoriteViewController.h"
 #import "OAWikiMenuViewController.h"
 #import "OAWikiWebViewController.h"
+#import "OAGPXWptViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -57,7 +58,7 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
-@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate>
+@interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
 @property (nonatomic) OADriveAppModeHudViewController *driveModeViewController;
@@ -909,6 +910,17 @@
     {
         targetPoint.type = OATargetWiki;
     }
+    else if (objectType && [objectType isEqualToString:@"waypoint"])
+    {
+        targetPoint.type = OATargetWpt;
+        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
+        item.point = [_mapViewController foundWpt];
+        targetPoint.targetObj = item;
+        
+        UIColor* color = item.color;
+        OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+        icon = [UIImage imageNamed:favCol.iconName];
+    }
     
     if (targetPoint.type == OATargetLocation && poiType)
         targetPoint.type = OATargetPOI;
@@ -1234,7 +1246,7 @@
         
         [self.targetMenuView doInit:showFullMenu];
         
-        OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithFavoriteItem:item];
+        OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithItem:item];
         favoriteViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:favoriteViewController];
 
@@ -1291,6 +1303,19 @@
         {
             [self.targetMenuView prepare];
         }
+    }
+    else if (_targetMenuView.targetPoint.type == OATargetWpt)
+    {
+
+        [self.targetMenuView doInit:showFullMenu];
+            
+        OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
+        wptViewController.mapViewController = self.mapViewController;
+        wptViewController.wptDelegate = self;
+        wptViewController.view.frame = self.view.frame;
+        [self.targetMenuView setCustomViewController:wptViewController];
+        
+        [self.targetMenuView prepareNoInit];
     }
     else
     {
@@ -1516,6 +1541,13 @@
 - (void)cancelParking:(OAParkingViewController *)sender
 {
     [self hideTargetPointMenu];
+}
+
+#pragma mark - OAGPXWptViewControllerDelegate
+
+- (void) changedWptItem
+{
+    [self.targetMenuView applyTargetObjectChanges];
 }
 
 #pragma mark - OAWikiMenuDelegate

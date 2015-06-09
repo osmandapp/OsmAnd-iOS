@@ -16,6 +16,7 @@
 - (void)openWiki:(OAWikiMenuViewController *)sender;
 
 @end
+
 @interface OAWikiMenuViewController : OATargetMenuViewController
 
 @property (weak, nonatomic) IBOutlet UIWebView *webView;

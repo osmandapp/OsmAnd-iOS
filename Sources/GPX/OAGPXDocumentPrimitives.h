@@ -130,6 +130,7 @@ typedef enum
 
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> wpt;
 
+@property (nonatomic) NSString *color;
 @property (nonatomic) double speed;
 @property (nonatomic) double magneticVariation;
 @property (nonatomic) double geoidHeight;

@@ -14,9 +14,10 @@
 #import "OAGPXListViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
+#import "OANativeUtilities.h"
 #import "OAMultiselectableHeaderView.h"
-#import "OAFavoriteColorViewController.h"
-#import "OAFavoriteGroupViewController.h"
+#import "OAEditColorViewController.h"
+#import "OAEditGroupViewController.h"
 #import "OARootViewController.h"
 
 #import "OsmAndApp.h"
@@ -81,8 +82,8 @@ typedef enum
     NSArray *_unsortedHeaderViews;
 
     EFavoriteAction _favAction;
-    OAFavoriteColorViewController *_colorController;
-    OAFavoriteGroupViewController *_groupController;
+    OAEditColorViewController *_colorController;
+    OAEditGroupViewController *_groupController;
 }
 
 - (void)applyLocalization
@@ -409,8 +410,7 @@ typedef enum
     }
 
     _favAction = kFavoriteActionChangeColor;
-    _colorController = [[OAFavoriteColorViewController alloc] init];
-    _colorController.hideToolbar = YES;
+    _colorController = [[OAEditColorViewController alloc] init];
     [self.navigationController pushViewController:_colorController animated:YES];
 }
 
@@ -424,8 +424,10 @@ typedef enum
     }
 
     _favAction = kFavoriteActionChangeGroup;
-    _groupController = [[OAFavoriteGroupViewController alloc] init];
-    _groupController.hideToolbar = YES;
+
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSArray *groups = [[OANativeUtilities QListOfStringsToNSMutableArray:app.favoritesCollection->getGroups().toList()] copy];
+    _groupController = [[OAEditGroupViewController alloc] initWithGroupName:nil groups:groups];
     [self.navigationController pushViewController:_groupController animated:YES];
 }
 

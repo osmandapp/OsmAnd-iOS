@@ -52,6 +52,7 @@
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 - (BOOL)preHide;
 
+- (void)applyTargetObjectChanges;
 
 @end
 

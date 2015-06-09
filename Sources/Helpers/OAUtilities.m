@@ -285,4 +285,60 @@
     return coloredImg;
 }
 
++ (NSString *)colorToString:(UIColor *)color
+{
+    CGFloat r,g,b,a;
+    [color getRed:&r green:&g blue:&b alpha:&a];
+    
+    uint32_t red = r * 255;
+    uint32_t green = g * 255;
+    uint32_t blue = b * 255;
+    
+    return [NSString stringWithFormat:@"#%.6x", (red << 16) + (green << 8) + blue];
+}
+
++ (UIColor *)colorFromString:(NSString *)string
+{
+    string = [string lowercaseString];
+    string = [string stringByReplacingOccurrencesOfString:@"#" withString:@""];
+    string = [string stringByReplacingOccurrencesOfString:@"0x" withString:@""];
+    
+    switch ([string length])
+    {
+        case 0:
+        {
+            string = @"00000000";
+            break;
+        }
+        case 3:
+        {
+            NSString *red = [string substringWithRange:NSMakeRange(0, 1)];
+            NSString *green = [string substringWithRange:NSMakeRange(1, 1)];
+            NSString *blue = [string substringWithRange:NSMakeRange(2, 1)];
+            string = [NSString stringWithFormat:@"%1$@%1$@%2$@%2$@%3$@%3$@ff", red, green, blue];
+            break;
+        }
+        case 6:
+        {
+            string = [string stringByAppendingString:@"ff"];
+            break;
+        }
+        case 8:
+        {
+            //do nothing
+            break;
+        }
+        default:
+        {
+            return nil;
+        }
+    }
+
+    uint32_t rgba;
+    NSScanner *scanner = [NSScanner scannerWithString:string];
+    [scanner scanHexInt:&rgba];
+    return UIColorFromRGBA(rgba);
+}
+
+
 @end

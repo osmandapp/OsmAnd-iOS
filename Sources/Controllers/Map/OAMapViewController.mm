@@ -26,6 +26,8 @@
 #import "OAPOIHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
+#import "OAGPXDatabase.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OAFavoriteItem.h"
 
 #include <OpenGLES/ES2/gl.h>
@@ -138,6 +140,8 @@
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
     
     NSString *_gpxDocFileTemp;
+    NSArray *_geoInfoDocsGpxPaths;
+    NSString *_foundWptDocPath;
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpx;
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxTemp;
     std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenter;
@@ -1375,6 +1379,8 @@
                 
                 if (symbol.poiType)
                     symbol.type = OAMapSymbolPOI;
+                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                    symbol.type = OAMapSymbolWpt;
                 
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
                 if (symbolGroup != nullptr)
@@ -1482,6 +1488,8 @@
         [userInfo setObject:@"favorite" forKey:@"objectType"];
     else if (symbol.type == OAMapSymbolDestination)
         [userInfo setObject:@"destination" forKey:@"objectType"];
+    else if (symbol.type == OAMapSymbolWpt)
+        [userInfo setObject:@"waypoint" forKey:@"objectType"];
     
     [userInfo setObject:symbol.caption forKey:@"caption"];
     [userInfo setObject:symbol.buildingNumber forKey:@"buildingNumber"];
@@ -3117,15 +3125,193 @@
 
 -(void)buildGpxInfoDocList
 {
+    NSMutableArray *paths = [NSMutableArray array];
     _geoInfoDocsGpx.clear();
     OAAppSettings *settings = [OAAppSettings sharedManager];
-    for (NSString *fileName in settings.mapSettingVisibleGpx) {
+    for (NSString *fileName in settings.mapSettingVisibleGpx)
+    {
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        {
             _geoInfoDocsGpx.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+            [paths addObject:path];
+        }
         else
+        {
             [settings hideGpx:fileName];
+        }
     }
+    _geoInfoDocsGpxPaths = [NSArray arrayWithArray:paths];
+}
+
+- (BOOL)findWpt:(CLLocationCoordinate2D)location
+{
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+
+    for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
+    {
+        NSString *locStr = [NSString stringWithFormat:@"%.6f %.6f", wptItem.position.latitude, wptItem.position.longitude];
+        NSString *targetStr = [NSString stringWithFormat:@"%.6f %.6f", location.latitude, location.longitude];
+        
+        if ([locStr isEqualToString:targetStr])
+        {
+            _foundWpt = wptItem;
+            _foundWptDocPath = nil;
+            
+            return YES;
+        }
+    }
+    
+    int i = 0;
+    for (const auto& doc : _geoInfoDocsGpx)
+    {
+        for (auto& loc : doc->locationMarks)
+        {
+            NSString *locStr = [NSString stringWithFormat:@"%.6f %.6f", loc->position.latitude, loc->position.longitude];
+            NSString *targetStr = [NSString stringWithFormat:@"%.6f %.6f", location.latitude, location.longitude];
+            
+            if ([locStr isEqualToString:targetStr])
+            {
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
+                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+
+                OAGpxWpt *wptItem = [OAGPXDocument fetchWpt:w];
+                wptItem.wpt = w;
+                
+                _foundWpt = wptItem;
+                
+                _foundWptDocPath = _geoInfoDocsGpxPaths[i];
+                
+                return YES;
+            }
+        }
+        i++;
+    }
+    return NO;
+}
+
+- (BOOL)deleteFoundWpt
+{
+    if (!self.foundWpt)
+        return NO;
+    
+    if (!_foundWptDocPath)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        
+        [helper deleteWpt:self.foundWpt];
+        
+        // update map
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showRecGpxTrack];
+        });
+        
+        return YES;
+    }
+    else
+    {
+        for (int i = 0; i < _geoInfoDocsGpxPaths.count; i++)
+        {
+            if ([_geoInfoDocsGpxPaths[i] isEqualToString:_foundWptDocPath])
+            {
+                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_geoInfoDocsGpx[i]);
+                auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+                gpx->locationMarks.removeOne(_foundWpt.wpt);
+                gpx->saveTo(QString::fromNSString(_foundWptDocPath));
+                
+                // update map
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self initRendererWithGpxTracks];
+                });
+                
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)saveFoundWpt
+{
+    if (!self.foundWpt)
+        return NO;
+    
+    if (!_foundWptDocPath)
+    {
+        OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+        
+        [helper saveWpt:self.foundWpt];
+        
+        // update map
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showRecGpxTrack];
+        });
+        
+        return YES;
+    }
+    else
+    {
+        for (int i = 0; i < _geoInfoDocsGpxPaths.count; i++)
+        {
+            if ([_geoInfoDocsGpxPaths[i] isEqualToString:_foundWptDocPath])
+            {
+                const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_geoInfoDocsGpx[i]);
+                doc->saveTo(QString::fromNSString(_foundWptDocPath));
+                
+                // update map
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self initRendererWithGpxTracks];
+                });
+                
+                return YES;
+            }
+        }
+    }
+    return NO;
+}
+
+- (BOOL)addNewWpt:(OAGpxWpt *)wpt gpxFileName:(NSString *)gpxFileName
+{
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+
+    if (!gpxFileName)
+    {
+        [helper addWpt:wpt];
+        
+        // update map
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showRecGpxTrack];
+        });
+        
+        return YES;
+    }
+    else
+    {
+        for (int i = 0; i < _geoInfoDocsGpxPaths.count; i++)
+        {
+            if ([_geoInfoDocsGpxPaths[i] isEqualToString:gpxFileName])
+            {
+                auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_geoInfoDocsGpx[i]);
+                auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+                
+                std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
+                p.reset(new OsmAnd::GpxDocument::GpxWpt());
+                [OAGPXDocument fillWpt:p usingWpt:wpt];
+                
+                gpx->locationMarks.append(p);
+                gpx->saveTo(QString::fromNSString(_foundWptDocPath));
+                
+                // update map
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self initRendererWithGpxTracks];
+                });
+                
+                return YES;
+            }
+        }
+    }
+    
+    return YES;
 }
 
 -(void)initRendererWithGpxTracks

@@ -10,6 +10,7 @@
 
 @class OAGPXMutableDocument;
 @class OAGPX;
+@class OAGpxWpt;
 
 @interface OASavingTrackHelper : NSObject
 
@@ -31,6 +32,10 @@
 - (void) startNewSegment;
 
 - (BOOL) saveIfNeeded;
+
+- (void)addWpt:(OAGpxWpt *)wpt;
+- (void)deleteWpt:(OAGpxWpt *)wpt;
+- (void)saveWpt:(OAGpxWpt *)wpt;
 
 - (void) runSyncBlock:(void (^)(void))block;
 

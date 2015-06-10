@@ -205,7 +205,7 @@
 "res_map_of_region" = "Mapa de la regió";
 "res_updates_no_space" = "No hi ha prou espai per instal·lar %d actualització(ons). En cal %@ . Si us plau, allibereu més espai.";
 "add_parking" = "Desar com a posició d'aparcament";
-"add_waypoint" = "Desa la fita en la traça enregistrada";
+"add_waypoint" = "Incorpora la fita a la traça";
 "pickup_car" = "Recollida del cotxe";
 "pickup_car_at" = "Recollida del cotxe en";
 "add_notification_calendar" = "Desa la notificació al calendari";
@@ -355,3 +355,10 @@
 "language_short" = "Idioma";
 "open_url" = "Obre la pàgina al navegador";
 "no_other_translations" = "No hi ha altres traduccions";
+"shared_string_edit" = "Edita";
+"wpt_remove_q" = "Elimina la fita?";
+"gpx_select_track" = "Seleccioneu la traça";
+"gpx_curr_new_track" = "Traça actual/nova";
+"enter_name" = "Introduïu el nom";
+"not_selected" = "No seleccionat";
+"language" = "Llengua";

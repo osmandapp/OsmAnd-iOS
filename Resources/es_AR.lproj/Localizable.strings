@@ -355,3 +355,8 @@
 "open_url" = "Abrir web en el navegador";
 "no_other_translations" = "Sin otras traducciones";
 "language_short" = "Idioma";
+"shared_string_edit" = "Editar";
+"wpt_remove_q" = "¿Quitar punto de ruta?";
+"gpx_select_track" = "Elige traza";
+"gpx_curr_new_track" = "Traza actual/nueva";
+"enter_name" = "Ingrese nombre";

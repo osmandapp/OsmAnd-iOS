@@ -5,7 +5,7 @@
 "shared_string_save" = "Guardar";
 "rendering_value__name" = "Predeterminado";
 "rendering_value_highContrastRoads_name" = "Carreteras en alto contraste";
-"rendering_attr_OSMMapperAssistant_name" = "Asistente de mapeador OSM";
+"rendering_attr_OSMMapperAssistant_name" = "Asistente mapeador OSM";
 "rendering_attr_roadStyle_name" = "Estilo de carretera";
 "rendering_value_orange_name" = "Anaranjado";
 "rendering_value_germanRoadAtlas_name" = "Atlas alemán de carreteras";
@@ -18,8 +18,8 @@
 "rendering_attr_moreDetailed_name" = "Más detalles";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Mostrar restricciones de acceso";
-"rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de las carreteras";
-"rendering_attr_showSurfaces_name" = "Mostrar superficie de las carreteras";
+"rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de carreteras";
+"rendering_attr_showSurfaces_name" = "Mostrar superficie de carreteras";
 "rendering_attr_alpineHiking_name" = "Escala de senderismo alpino (SAC)";
 "rendering_attr_osmcTraces_name" = "Superponer símbolo de senderismo";
 "rendering_attr_noAdminboundaries_name" = "Ocultar fronteras";
@@ -59,7 +59,7 @@
 "fav_ignore" = "Ignorar";
 "fav_rename" = "Renombrar";
 "fav_export_select" = "Seleccione los favoritos a exportar";
-"fav_import_desc" = "Puede importar sus favoritos como puntos de interés en el archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo favorites.gpx puede abrir el archivo desde dropbox, email o cualquier otra fuente - Use la función Abrir en.";
+"fav_import_desc" = "Puede importar sus favoritos como puntos de interés en el archivo GPX (formato común de datos GPS)\n\nPara compartir el archivo favorites.gpx puede abrir el archivo desde dropbox, correo electrónico o cualquier otra fuente - Utilice la función Abrir en.";
 "fav_enter_group_name" = "Introduzca el nombre del grupo";
 "fav_exists" = "Favorito con el nombre «%@» ya existe";
 "fav_replace" = "Reemplazar";
@@ -84,13 +84,13 @@
 "gpx_import_already_exists" = "El archivo de la traza especificada ya existe en la lista. Seleccione la acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
-"gpx_cannot_import" = "No se puede importar el archivo GPX especificado";
+"gpx_cannot_import" = "No se pudo importar el archivo GPX especificado";
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Seleccione la traza a exportar";
 // HUD
 "hud_heading" = "Dirección";
-"gpx_import_desc" = "Puede importar sus archivos GPX (formato común de datos GPS)\n\nPara compartir el archivo GPX usted puede abrir el archivo desde dropbox, email o cualquier otra fuente - Use la función Abrir en";
-"gpx_no_tracks" = "No hay trazas";
+"gpx_import_desc" = "Puede importar sus archivos GPX (formato común de datos GPS)\n\nPara compartir el archivo GPX usted puede abrir el archivo desde dropbox, correo electrónico o cualquier otra fuente - Utilice la función Abrir en";
+"gpx_no_tracks" = "No existen trazas";
 "gpx_remove" = "¿Quitar traza?";
 "gpx_stat" = "Estadísticas";
 "gpx_route_time" = "Tiempo del recorrido";
@@ -153,7 +153,7 @@
 "download" = "Descargar";
 "nothanks" = "No, gracias";
 "download_now" = "Descargar el mapa ahora";
-"prch_failed" = "La compra de «%@» falló";
+"prch_failed" = "Fallo en la compra de «%@»";
 "prch_items_failed" = "elemento(s) no fueron restaurados. Vuelva a intentar.";
 // Resources
 "res_mapsres" = "Mapas y Recursos";
@@ -173,10 +173,10 @@
 "res_wsea_map" = "Mapa naútico base";
 "res_dmap" = "Mapa detallado general";
 "res_map_of_region" = "Mapa de la región";
-"res_update_no_space" = "No hay suficiente espacio para actualizar";
-"res_install_no_space" = "No hay suficiente espacio para instalar";
+"res_update_no_space" = "No existe suficiente espacio para actualizar";
+"res_install_no_space" = "No existe suficiente espacio para instalar";
 "res_no_space_free" = "es necesario. Libere algo de espacio.";
-"res_free_exp" = "Agotó todas las descargas gratuitas. Compre para descargar / actualizar los mapas.";
+"res_free_exp" = "Agotó todas las descargas libres. Compre para descargar / actualizar los mapas.";
 "res_upd_avail_q" = "Una actualización está disponible para";
 "res_inst_avail_cell_q" = "La instalación de %@ necesita %@ para ser descargado por la red celular.";
 "res_inst_avail_wifi_q" = "La instalación de %@ necesita %@ para ser descargado por la red WiFi.";
@@ -189,7 +189,7 @@
 "res_size" = "Tamaño";
 "res_created_on" = "Creado en";
 "res_update_all" = "Actualizar todos";
-"res_updates_no_space" = "No hay suficiente espacio para instalar %d actualización(es). Es necesario %@. Libere algo de espacio.";
+"res_updates_no_space" = "No existe suficiente espacio para instalar %d actualización(es). Es necesario %@. Libere algo de espacio.";
 "res_updates_avail_q" = "actualización(es) están disponibles.";
 "res_updates_exp" = "Compre continente(s) para actualizar los mapas";
 // Menu
@@ -210,10 +210,10 @@
 "map_no_address" = "Todavía no se conoce la dirección";
 // Import
 "import_title" = "Importar datos";
-"import_choose_type" = "Elija que importar";
+"import_choose_type" = "Elija qué desea importar";
 "import_favorite" = "Favorito";
-"import_failed" = "La importación falló";
-"import_cannot" = "No se puede importar el archivo especificado";
+"import_failed" = "Fallo en la importación";
+"import_cannot" = "No se pudo importar el archivo especificado";
 "import_gpx" = "Traza GPX";
 // Alerts
 "alert_inet_needed" = "Requiere conexión a Internet para realizar esta acción. Compruebe su conexión a Internet.";
@@ -323,10 +323,10 @@
 "product_desc_asia" = "Mapa de Asia";
 "my_location" = "Mi ubicación";
 "all_categories" = "Todas las categorías";
-"res_banner_free_maps_title" = "¡Tienes %d mapas gratuitos!";
+"res_banner_free_maps_title" = "¡Tiene %d mapas libres!";
 "res_banner_free_maps_desc" = "Puede descargar %d mapas libres sin actualizar";
-"res_banner_no_free_maps_title" = "¡No tienes mapas gratuitos!";
-"res_banner_no_free_maps_desc" = "Compre mapas regionales o mundiales";
+"res_banner_no_free_maps_title" = "¡No tiene mapas libres!";
+"res_banner_no_free_maps_desc" = "Compre mapas regionales o mapas mundiales";
 "get_unlimited_access" = "Obtenga acceso ilimitado";
 "shared_string_or" = "o";
 "latitude" = "Latitud";
@@ -358,6 +358,6 @@
 "select_language" = "Seleccione el idioma";
 "language_short" = "Idioma";
 "open_url" = "Abrir página en el navegador";
-"no_other_translations" = "No hay otras traducciones";
+"no_other_translations" = "No existen otras traducciones";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "¿Quitar punto de ruta?";

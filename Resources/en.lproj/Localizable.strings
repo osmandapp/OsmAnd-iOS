@@ -230,8 +230,8 @@
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
-"add_waypoint" = "Add Waypoint to recorded track";
-"add_waypoint_short" = "Add Waypoint";
+"add_waypoint" = "Add waypoint to track";
+"add_waypoint_short" = "Add waypoint";
 "more" = "More";
 "parking_marker" = "Parking marker";
 "time_limited" = "Time limited";

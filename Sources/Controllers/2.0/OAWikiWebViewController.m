@@ -21,6 +21,11 @@
     NSURL *_baseUrl;
     
     CALayer *_horizontalLine;
+    
+    NSLocale *_currentLocal;
+    id _localIdentifier;
+    NSLocale *_theLocal;
+
 }
 
 - (id)initWithLocalizedContent:(NSDictionary *)localizedContent localizedNames:(NSDictionary *)localizedNames
@@ -44,6 +49,10 @@
 {
     [super viewDidLoad];
     
+    _currentLocal = [NSLocale autoupdatingCurrentLocale];
+    _localIdentifier = [_currentLocal objectForKey:NSLocaleIdentifier];
+    _theLocal = [NSLocale localeWithLocaleIdentifier:_localIdentifier];
+
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.bottomView.layer addSublayer:_horizontalLine];
@@ -101,6 +110,11 @@
         [[UIApplication sharedApplication] openURL:_baseUrl];
 }
 
+- (NSString *)getTranslatedLangname:(NSString *)lang
+{
+    return [_theLocal displayNameForKey:NSLocaleIdentifier value:lang];
+}
+
 - (IBAction)localeButtonClicked:(id)sender
 {
     if (_localizedContent.allKeys.count <= 1)
@@ -127,10 +141,10 @@
     }];
     
     if (nativeStr)
-        [actions addButtonWithTitle:@"EN"];
+        [actions addButtonWithTitle:[[self getTranslatedLangname:@"en"] capitalizedStringWithLocale:[NSLocale currentLocale]]];
 
     for (NSString *loc in locales)
-        [actions addButtonWithTitle:[loc uppercaseString]];
+        [actions addButtonWithTitle:[[self getTranslatedLangname:loc] capitalizedStringWithLocale:[NSLocale currentLocale]]];
     
     if (nativeStr)
         [locales insertObject:@"" atIndex:0];

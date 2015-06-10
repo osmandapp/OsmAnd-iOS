@@ -281,7 +281,7 @@
 "other_options" = "Otras opciones";
 "add_parking" = "Añadir ubicación de estacionamiento";
 "add_parking_short" = "Añadir estacionamiento";
-"add_waypoint" = "Añadir punto de ruta a traza grabada";
+"add_waypoint" = "Añadir punto de ruta a la traza";
 "add_waypoint_short" = "Añadir punto de ruta";
 "more" = "Más";
 "parking_marker" = "Marca de estacionamiento";
@@ -360,3 +360,5 @@
 "gpx_select_track" = "Elige traza";
 "gpx_curr_new_track" = "Traza actual/nueva";
 "enter_name" = "Ingrese nombre";
+"not_selected" = "No seleccionado";
+"language" = "Idioma";

@@ -204,7 +204,7 @@
 "other_options" = "Outras opções";
 "add_parking" = "Adicionar como posição de estacionamento";
 "add_parking_short" = "Adicionar estacionamento";
-"add_waypoint" = "Adicionar parada para trajeto gravado";
+"add_waypoint" = "Adicionar parada ao trajeto";
 "add_waypoint_short" = "Adicionar parada";
 "more" = "Mais";
 "parking_marker" = "Marcador de estacionamento";
@@ -360,3 +360,5 @@
 "gpx_select_track" = "Selecionar trajeto";
 "gpx_curr_new_track" = "Trajeto atual/novo";
 "enter_name" = "Inserir nome";
+"not_selected" = "Nada selecionado";
+"language" = "Idioma";

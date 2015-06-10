@@ -40,6 +40,8 @@
 #import "OAWikiMenuViewController.h"
 #import "OAWikiWebViewController.h"
 #import "OAGPXWptViewController.h"
+#import "OAGPXDocumentPrimitives.h"
+#import "OAUtilities.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -868,10 +870,8 @@
     {
         for (const auto& favLoc : _app.favoritesCollection->getFavoriteLocations()) {
             
-            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
-            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
-
-            if ((int)(lat * 10000.0) == favLat && (int)(lon * 10000.0) == favLon)
+            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:lon] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:lat])
             {
                 UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
                 OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
@@ -914,7 +914,8 @@
     {
         targetPoint.type = OATargetWpt;
         OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-        item.point = [_mapViewController foundWpt];
+        item.point = _mapViewController.foundWpt;
+        item.groups = _mapViewController.foundWptGroups;
         targetPoint.targetObj = item;
         
         UIColor* color = item.color;
@@ -1120,7 +1121,6 @@
 
 -(void)targetPointAddFavorite
 {
-
     OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
     
     UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
@@ -1188,7 +1188,95 @@
 
 - (void)targetPointAddWaypoint
 {
-    //
+    NSMutableArray *names = [NSMutableArray array];
+    NSMutableArray *paths = [NSMutableArray array];
+    
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    for (NSString *fileName in settings.mapSettingVisibleGpx)
+    {
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path])
+        {
+            [names addObject:[fileName stringByDeletingPathExtension]];
+            [paths addObject:path];
+        }
+    }
+    
+    // Ask for track where to add waypoint
+    if (names.count > 0)
+    {
+        [names insertObject:OALocalizedString(@"gpx_curr_new_track") atIndex:0];
+        [paths insertObject:@"" atIndex:0];
+    
+        if (names.count > 5)
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_select_track") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems: nil];
+            
+            for (int i = 0; i < names.count; i++)
+            {
+                NSString *name = names[i];
+                [alert addButtonItem:[RIButtonItem itemWithLabel:name action:^{
+                    NSString *gpxFileName = paths[i];
+                    if (gpxFileName.length == 0)
+                        gpxFileName = nil;
+                    
+                    [self targetPointAddWaypoint:gpxFileName];
+                }]];
+            }
+            [alert show];
+        }
+        else
+        {
+            NSMutableArray *images = [NSMutableArray array];
+            for (int i = 0; i < names.count; i++)
+                [images addObject:@"add_waypoint_to_track"];
+            
+            [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
+                                    message:nil
+                                cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                otherTitles:names
+                                otherImages:images
+                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                     if (!cancelled)
+                                     {
+                                         NSInteger trackId = buttonIndex;
+                                         NSString *gpxFileName = paths[trackId];
+                                         if (gpxFileName.length == 0)
+                                             gpxFileName = nil;
+                                         
+                                         [self targetPointAddWaypoint:gpxFileName];
+                                     }
+                                 }];
+        }
+
+    }
+    else
+    {
+        [self targetPointAddWaypoint:nil];
+    }
+
+}
+
+- (void)targetPointAddWaypoint:(NSString *)gpxFileName
+{
+    OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title gpxFileName:gpxFileName];
+    
+    wptViewController.mapViewController = self.mapViewController;
+    wptViewController.wptDelegate = self;
+    
+    [_mapViewController addNewWpt:wptViewController.wpt.point gpxFileName:gpxFileName];
+    wptViewController.wpt.groups = _mapViewController.foundWptGroups;
+
+    UIColor* color = wptViewController.wpt.color;
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+    self.targetMenuView.targetPoint.targetObj = wptViewController.wpt;
+    
+    [wptViewController activateEditing];
+    wptViewController.view.frame = self.view.frame;
+    [self.targetMenuView setCustomViewController:wptViewController];
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
+
 }
 
 -(void)targetHide
@@ -1482,6 +1570,59 @@
     
     [self showTargetPointMenu:YES showFullMenu:YES];
 
+    if (pushed)
+        [self goToTargetPointDefault];
+    else
+        [self targetGoToPoint];
+}
+
+- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
+{
+    _pushed = pushed;
+    
+    double lat = item.point.position.latitude;
+    double lon = item.point.position.longitude;
+    
+    [_mapViewController showContextPinMarker:lat longitude:lon];
+    
+    if ([_mapViewController findWpt:item.point.position])
+    {
+        item.point = _mapViewController.foundWpt;
+        item.groups = _mapViewController.foundWptGroups;
+    }
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = item.point.name;
+    
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:item.color];
+    UIImage *icon = [UIImage imageNamed:favCol.iconName];
+    
+    targetPoint.type = OATargetWpt;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = pushed;
+    targetPoint.targetObj = item;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:YES];
+    
     if (pushed)
         [self goToTargetPointDefault];
     else

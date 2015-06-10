@@ -14,6 +14,8 @@
 
 @property (nonatomic) OAGpxWpt *point;
 @property (nonatomic) UIColor *color;
+@property (nonatomic) NSArray *groups;
+
 @property (nonatomic, assign) CGFloat direction;
 @property (nonatomic) NSString* distance;
 @property (nonatomic, assign) double distanceMeters;

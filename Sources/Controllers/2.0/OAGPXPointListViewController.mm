@@ -14,6 +14,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXPointViewController.h"
 #import "OAUtilities.h"
+#import "OARootViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -24,8 +25,7 @@
 
 typedef enum
 {
-    EPointsSortingTypeNone = 0,
-    EPointsSortingTypeAB,
+    EPointsSortingTypeGrouped = 0,
     EPointsSortingTypeDistance
     
 } EPointsSortingType;
@@ -38,19 +38,20 @@ typedef enum
     EPointsSortingType sortingType;
 }
 
-@property (strong, nonatomic) NSArray* sortedABPoints;
 @property (strong, nonatomic) NSArray* sortedDistPoints;
+@property (strong, nonatomic) NSDictionary* groupedPoints;
 @property (strong, nonatomic) NSArray* unsortedPoints;
+@property (strong, nonatomic) NSArray* groups;
 
 @end
 
 @implementation OAGPXPointListViewController
 
-
 - (id)initWithLocationMarks:(NSArray *)locationMarks
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         NSMutableArray *arr = [NSMutableArray array];
         for (OAGpxWpt *p in locationMarks) {
@@ -58,6 +59,7 @@ typedef enum
             item.point = p;
             [arr addObject:item];
         }
+        
         self.unsortedPoints = arr;
     }
     return self;
@@ -79,7 +81,7 @@ typedef enum
     
     isDecelerating = NO;
     
-    sortingType = EPointsSortingTypeNone;
+    sortingType = EPointsSortingTypeGrouped;
 }
 
 - (void)updateDistanceAndDirection
@@ -161,13 +163,46 @@ typedef enum
     
 }
 
--(void)generateData {
+-(void)generateData
+{
+
+    NSMutableSet *groups = [NSMutableSet set];
+    for (OAGpxWptItem *item in self.unsortedPoints)
+        [groups addObject:(item.point.type ? item.point.type : @"")];
     
-    // Sort items
-    self.sortedABPoints = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem* obj1, OAGpxWptItem* obj2) {
-        return [[obj1.point.name lowercaseString] compare:[obj2.point.name lowercaseString]];
+    NSMutableArray *groupsArray = [[[groups allObjects]
+                                    sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2)
+                                    {
+                                        return [obj1 localizedCaseInsensitiveCompare:obj2];
+                                    }] mutableCopy];
+        
+    NSArray *sortedArr = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem *obj1, OAGpxWptItem *obj2) {
+        return [obj1.point.name localizedCaseInsensitiveCompare:obj2.point.name];
     }];
     
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    for (NSString *group in groupsArray)
+         [dict setObject:[NSMutableArray array] forKey:group];
+    
+    for (OAGpxWptItem *item in sortedArr)
+    {
+        NSString *group = item.point.type;
+        NSMutableArray *arr;
+        if (group.length > 0)
+            arr = [dict objectForKey:group];
+        else
+            arr = [dict objectForKey:@""];
+
+        [arr addObject:item];
+    }
+    
+    if (((NSMutableArray *)[dict objectForKey:@""]).count == 0)
+        [groupsArray removeObjectAtIndex:0];
+
+    self.groups = [NSArray arrayWithArray:groupsArray];
+    self.groupedPoints = [NSDictionary dictionaryWithDictionary:dict];
+    
+    // Sort items
     self.sortedDistPoints = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem* obj1, OAGpxWptItem* obj2) {
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
@@ -176,16 +211,16 @@ typedef enum
     
 }
 
--(void)setupView {
-    
+-(void)setupView
+{
     [self.tableView setDataSource:self];
     [self.tableView setDelegate:self];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [self.tableView reloadData];
-    
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -197,17 +232,13 @@ typedef enum
     if (![self.tableView isEditing]) {
         
         switch (sortingType) {
-            case EPointsSortingTypeNone:
-                [self.sortButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
-                sortingType = EPointsSortingTypeAB;
-                break;
-            case EPointsSortingTypeAB:
+            case EPointsSortingTypeGrouped:
                 [self.sortButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
                 sortingType = EPointsSortingTypeDistance;
                 break;
             case EPointsSortingTypeDistance:
                 [self.sortButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
-                sortingType = EPointsSortingTypeNone;
+                sortingType = EPointsSortingTypeGrouped;
                 break;
                 
             default:
@@ -218,28 +249,67 @@ typedef enum
     }
 }
 
-- (IBAction)menuFavoriteClicked:(id)sender {
+- (IBAction)menuFavoriteClicked:(id)sender
+{
     OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
     [self.navigationController pushViewController:favController animated:NO];
 }
 
-- (IBAction)menuGPXClicked:(id)sender {
+- (IBAction)menuGPXClicked:(id)sender
+{
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    switch (sortingType)
+    {
+        case EPointsSortingTypeGrouped:
+            return self.groups.count;
+            
+        case EPointsSortingTypeDistance:
+            return 1;
+            
+        default:
+            return 1;
+    }
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    return [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_points"), self.unsortedPoints.count];
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (sortingType)
+    {
+        case EPointsSortingTypeGrouped:
+        {
+            NSString *group = self.groups[section];
+            return (group.length == 0 ? OALocalizedString(@"fav_no_group") : group);
+        }
+        case EPointsSortingTypeDistance:
+        {
+            return [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_points"), self.unsortedPoints.count];
+        }
+            
+        default:
+            return nil;
+    }
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.unsortedPoints.count;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (sortingType)
+    {
+        case EPointsSortingTypeGrouped:
+            return ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[section]]).count;
+            
+        case EPointsSortingTypeDistance:
+            return self.unsortedPoints.count;
+            
+        default:
+            return 0;
+    }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
         
     static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
     
@@ -253,7 +323,7 @@ typedef enum
     
     if (cell) {
         
-        OAGpxWptItem* item= [self getWptItem:indexPath.row];
+        OAGpxWptItem* item = [self getWptItem:indexPath];
         
         [cell.titleView setText:item.point.name];
         [cell.distanceView setText:item.distance];
@@ -272,22 +342,20 @@ typedef enum
     
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return NO;
 }
 
--(OAGpxWptItem *)getWptItem:(NSInteger)row
+-(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item;
     switch (sortingType) {
-        case EPointsSortingTypeNone:
-            item = [self.unsortedPoints objectAtIndex:row];
-            break;
-        case EPointsSortingTypeAB:
-            item = [self.sortedABPoints objectAtIndex:row];
+        case EPointsSortingTypeGrouped:
+            item = ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[indexPath.section]])[indexPath.row];
             break;
         case EPointsSortingTypeDistance:
-            item = [self.sortedDistPoints objectAtIndex:row];
+            item = [self.sortedDistPoints objectAtIndex:indexPath.row];
             break;
             
         default:
@@ -321,11 +389,11 @@ typedef enum
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    OAGpxWptItem* item= [self getWptItem:indexPath.row];
-    OAGPXPointViewController* controller = [[OAGPXPointViewController alloc] initWithWptItem:item];
-    [self.navigationController pushViewController:controller animated:YES];    
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAGpxWptItem* item = [self getWptItem:indexPath];
+    [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
 }
 
 

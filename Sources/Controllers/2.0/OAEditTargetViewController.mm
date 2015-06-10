@@ -513,7 +513,7 @@
             if (cell)
             {
                 [cell.textView setText:self.name];
-                [cell.textView setPlaceholder:OALocalizedString(@"enter_favself.name")];
+                [cell.textView setPlaceholder:OALocalizedString(@"enter_name")];
                 [cell.textView setFont:[UIFont fontWithName:@"AvenirNext-Regular" size:16]];
                 [cell.textView removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
                 [cell.textView addTarget:self action:@selector(editFavName:) forControlEvents:UIControlEventEditingChanged];
@@ -580,6 +580,7 @@
                 cell.textView.font = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
                 cell.textView.textContainerInset = UIEdgeInsetsMake(11,11,0,0);
                 cell.textView.text = OALocalizedString(@"enter_description");
+                cell.textView.textColor = [UIColor lightGrayColor];
                 cell.iconView.hidden = NO;
             }
             else
@@ -593,6 +594,7 @@
                 else
                     cell.textView.textContainerInset = UIEdgeInsetsMake(3,11,0,35);
                 
+                cell.textView.textColor = [UIColor blackColor];
                 cell.textView.text = self.desc;
                 cell.iconView.hidden = NO;
             }

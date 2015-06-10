@@ -1333,6 +1333,12 @@
 		84C0FB1F1AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
 		84C0FB201AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
 		84C0FB211AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
+		84C3D83E1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */; };
+		84C3D83F1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */; };
+		84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */; };
+		84C3D8431B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */; };
+		84C3D8441B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */; };
+		84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */; };
 		84C41DD51AB8600D0089EABB /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */; };
 		84C41DD61AB8600D0089EABB /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */; };
 		84C41DD71AB8600D0089EABB /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */; };
@@ -2662,6 +2668,10 @@
 		84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = InfoWidgetsView.h; path = Views/InfoWidgetsView.h; sourceTree = "<group>"; };
 		84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = InfoWidgetsView.m; path = Views/InfoWidgetsView.m; sourceTree = "<group>"; };
 		84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoWidgetsView.xib; path = Resources/Views/InfoWidgetsView.xib; sourceTree = "<group>"; };
+		84C3D83C1B28ABB800C1507E /* OAMapSettingsLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.h; sourceTree = "<group>"; };
+		84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsLanguageScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.mm; sourceTree = "<group>"; };
+		84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsPreferredLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsPreferredLanguageScreen.h; sourceTree = "<group>"; };
+		84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsPreferredLanguageScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsPreferredLanguageScreen.mm; sourceTree = "<group>"; };
 		84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = follow_map_mode_button.png; path = Resources/Icons/follow_map_mode_button.png; sourceTree = "<group>"; };
 		84C41DAB1AB8600C0089EABB /* follow_map_mode_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "follow_map_mode_button@2x.png"; path = "Resources/Icons/follow_map_mode_button@2x.png"; sourceTree = "<group>"; };
 		84C41DAC1AB8600C0089EABB /* follow_map_mode_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "follow_map_mode_button@3x.png"; path = "Resources/Icons/follow_map_mode_button@3x.png"; sourceTree = "<group>"; };
@@ -3222,6 +3232,10 @@
 				84BFC2491A9B732800D807B4 /* OAMapSettingsSettingScreen.mm */,
 				844056071AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.h */,
 				844056081AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm */,
+				84C3D83C1B28ABB800C1507E /* OAMapSettingsLanguageScreen.h */,
+				84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */,
+				84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */,
+				84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */,
 				3AC639991A1CE1FC001D5E57 /* OAIntroViewController.h */,
 				3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.mm */,
 				3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */,
@@ -6232,6 +6246,7 @@
 				842431761AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84BFC24F1A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				842BFC621A94DD3A008CF87B /* OAGpxWptItem.mm in Sources */,
+				84C3D8431B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8417A6791B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
@@ -6295,6 +6310,7 @@
 				3ACA4A9F1A0B87C100ECC792 /* OASuperViewController.m in Sources */,
 				8432E2711AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
 				84B4FD641A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,
+				84C3D83E1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
 				BBE1D2AB190D186F00D90F0A /* OALog.mm in Sources */,
 				84BFC2321A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				84B4FD9F1A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
@@ -6388,6 +6404,7 @@
 				842431771AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84BFC2501A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,
 				842BFC631A94DD3A008CF87B /* OAGpxWptItem.mm in Sources */,
+				84C3D8441B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8417A67A1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
@@ -6451,6 +6468,7 @@
 				BBA3AEC1197140D40039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				8432E2721AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
 				84B4FD651A91D4B800A147BA /* OAGPXItemViewController.mm in Sources */,
+				84C3D83F1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
 				BBA3B02919880DEC0039D991 /* OANavigationController.m in Sources */,
 				84BFC2331A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				84B4FDA01A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
@@ -6532,6 +6550,7 @@
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
 				8417A67B1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
+				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
@@ -6645,6 +6664,7 @@
 				849E81401AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,
+				84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */,
 				842BFC571A94935A008CF87B /* OAGPXPointListViewController.mm in Sources */,
 				84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */,
 				84BFC2511A9B7F4400D807B4 /* OAMapSettingsGpxScreen.mm in Sources */,

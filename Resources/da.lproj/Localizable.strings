@@ -201,7 +201,7 @@
 "track_clear_q" = "Skal det aktuelle spor ryddes?";
 "menu_about" = "Om";
 "other_options" = "Andre valgmuligheder";
-"add_waypoint" = "Tilføj rutepunkt til optaget GPX-spor";
+"add_waypoint" = "Tilføj rutepunkt til spor";
 "add_waypoint_short" = "Tilføj rutepunkt";
 "more" = "Mere";
 "time_limited" = "Tidsbegrænset";

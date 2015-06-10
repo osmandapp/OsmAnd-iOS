@@ -360,3 +360,5 @@
 "gpx_select_track" = "Vælg spor";
 "gpx_curr_new_track" = "Aktuel/nyt spor";
 "enter_name" = "Indtast navn";
+"language" = "Sprog";
+"not_selected" = "Ikke markeret";

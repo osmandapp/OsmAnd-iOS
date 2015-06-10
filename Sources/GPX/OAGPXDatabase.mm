@@ -127,6 +127,17 @@
     return NO;
 }
 
+-(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFileName isEqualToString:fileName]) {
+            item.wptPoints = pointsCount;
+            return YES;
+        }
+    }
+    return NO;
+}
+
 -(void) load
 {
     NSMutableArray *res = [NSMutableArray array];

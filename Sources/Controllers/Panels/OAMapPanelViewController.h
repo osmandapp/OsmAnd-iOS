@@ -13,6 +13,7 @@
 #import "OATargetPointView.h"
 
 @class OAFavoriteItem;
+@class OAGpxWptItem;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -39,5 +40,6 @@
 - (void)updateOverlayUnderlayView:(BOOL)show;
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 
 @end

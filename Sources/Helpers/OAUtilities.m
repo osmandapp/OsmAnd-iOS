@@ -340,5 +340,12 @@
     return UIColorFromRGBA(rgba);
 }
 
++ (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination
+{
+    long a = (long)round(source * pow(10.0, digits));
+    long b = (long)round(destination * pow(10.0, digits));
+    
+    return a == b;
+}
 
 @end

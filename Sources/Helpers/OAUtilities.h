@@ -43,4 +43,6 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (NSString *)colorToString:(UIColor *)color;
 + (UIColor *)colorFromString:(NSString *)colorStr;
 
++ (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
+
 @end

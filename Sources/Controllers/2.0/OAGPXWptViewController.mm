@@ -19,12 +19,15 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/GeoInfoDocument.h>
+#include <OsmAndCore/GpxDocument.h>
 #include "Localization.h"
 
 
 @implementation OAGPXWptViewController
 {
     OsmAndAppInstance _app;
+    NSString *_gpxFileName;
 }
 
 - (id)initWithItem:(OAGpxWptItem *)wpt
@@ -41,12 +44,14 @@
     return self;
 }
 
-- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation
+- (id)initWithLocation:(CLLocationCoordinate2D)location andTitle:(NSString*)formattedLocation gpxFileName:(NSString *)gpxFileName
 {
     self = [super initWithLocation:location andTitle:formattedLocation];
     if (self)
     {
         _app = [OsmAndApp instance];
+        
+        _gpxFileName = gpxFileName;
         
         // Create wpt
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
@@ -66,8 +71,18 @@
         p.name = formattedLocation;
         p.position = location;
         p.type = groupName;
+        p.time = (long)[[NSDate date] timeIntervalSince1970];
         wpt.point = p;
         wpt.color = color;
+
+        /*
+        std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w;
+        w.reset(new OsmAnd::GpxDocument::GpxWpt());
+        [OAGPXDocument fillWpt:w usingWpt:wpt.point];
+        wpt.point.wpt = w;
+        w = nullptr;
+         */
+        
         self.wpt = wpt;
     }
     return self;
@@ -109,6 +124,9 @@
         
         [_mapViewController deleteFoundWpt];
         
+        if (self.delegate)
+            [self.delegate btnDeletePressed];
+
     }],
       nil] show];
 }
@@ -128,6 +146,10 @@
 
 - (void)removeNewItemFromCollection
 {
+    [_mapViewController deleteFoundWpt];
+    
+    if (self.delegate)
+        [self.delegate btnCancelPressed];
 }
 
 - (NSString *)getItemName
@@ -159,13 +181,14 @@
 - (void)setItemGroup:(NSString *)groupName
 {
     self.wpt.point.type = groupName;
+    
+    if (![self.wpt.groups containsObject:groupName])
+        self.wpt.groups = [self.wpt.groups arrayByAddingObject:groupName];
 }
 
 - (NSArray *)getItemGroups
 {
-    // todo
-    //return [[OANativeUtilities QListOfStringsToNSMutableArray:_app.favoritesCollection->getGroups().toList()] copy];
-    return @[];
+    return self.wpt.groups;
 }
 
 - (NSString *)getItemDesc

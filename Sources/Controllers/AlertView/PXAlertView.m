@@ -95,7 +95,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         self.mainWindow = [self windowWithLevel:UIWindowLevelNormal];
         
         self.alertWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-        self.alertWindow.windowLevel = UIWindowLevelAlert;
+        self.alertWindow.windowLevel = UIWindowLevelNormal;
         self.alertWindow.backgroundColor = [UIColor clearColor];
         self.alertWindow.rootViewController = self;
         
@@ -583,6 +583,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
 #pragma mark -
 #pragma mark UIViewController
 
+/*
 - (BOOL)prefersStatusBarHidden
 {
     return [UIApplication sharedApplication].statusBarHidden;
@@ -590,8 +591,9 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
 
 -(UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleLightContent;
+    return UIStatusBarStyleDefault;
 }
+ */
 
 - (BOOL)shouldAutorotate
 {

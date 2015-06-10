@@ -727,7 +727,7 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@=%f, %@=%f, %@=%ld", POINT_NAME, POINT_COL_LAT, lat, POINT_COL_LON, lon, POINT_COL_DATE, time];
+            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@=%f AND %@=%f AND %@=%ld", POINT_NAME, POINT_COL_LAT, lat, POINT_COL_LON, lon, POINT_COL_DATE, time];
             
             const char *update_stmt = [query UTF8String];
             
@@ -743,6 +743,8 @@
 - (void)deleteWpt:(OAGpxWpt *)wpt
 {
     [currentTrack deleteWpt:wpt];
+    
+    points--;
     
     [self doDeletePointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time];
 }

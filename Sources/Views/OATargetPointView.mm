@@ -101,6 +101,7 @@
     UIPanGestureRecognizer *_panGesture;
 
     OATargetPointType _previousTargetType;
+    UIImage *_previousTargetIcon;
 }
 
 - (instancetype)init
@@ -1188,6 +1189,7 @@
 {
     _targetPoint = targetPoint;
     _previousTargetType = targetPoint.type;
+    _previousTargetIcon = targetPoint.icon;
 }
 
 -(void)updateTargetPointType:(OATargetPointType)targetType
@@ -1200,9 +1202,10 @@
 {
     _targetPoint.toolbarNeeded = NO;
 
-    if (_previousTargetType != _targetPoint.type && _targetPoint.type != OATargetFavorite)
+    if (_previousTargetType != _targetPoint.type && _targetPoint.type != OATargetFavorite && _targetPoint.type != OATargetWpt)
     {
         _targetPoint.type = _previousTargetType;
+        _targetPoint.icon = _previousTargetIcon;
         [self applyTargetPoint];
     }
 }
@@ -1240,6 +1243,12 @@
         if (parkingAddonSingle)
             _buttonMore.enabled = NO;
     }
+    else if (_targetPoint.type == OATargetWpt)
+    {
+        BOOL trackRecAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint];
+        if (trackRecAddonSingle)
+            _buttonMore.enabled = NO;
+    }
     else
     {
         _buttonMore.enabled = YES;
@@ -1251,6 +1260,11 @@
         [_buttonFavorite setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
     else
         [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
+    
+    if (_targetPoint.type == OATargetWpt)
+        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+    else
+        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
 }
 
 -(void)setMapViewInstance:(UIView*)mapView
@@ -1292,10 +1306,8 @@
         BOOL favoriteOnTarget = NO;
         for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations()) {
             
-            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
-            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
-            
-            if ((int)(_targetPoint.location.latitude * 10000.0) == favLat && (int)(_targetPoint.location.longitude * 10000.0) == favLon)
+            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:_targetPoint.location.longitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:_targetPoint.location.latitude])
             {
                 favoriteOnTarget = YES;
                 break;
@@ -1459,12 +1471,18 @@
 - (void) btnOkPressed
 {
     _previousTargetType = _targetPoint.type;
+    _previousTargetIcon = _targetPoint.icon;
     [self.delegate targetHideMenu:.3 backButtonClicked:NO];
 }
 
 - (void) btnCancelPressed
 {
     [self.delegate targetHideMenu:.3 backButtonClicked:YES];
+}
+
+- (void) btnDeletePressed
+{
+    [self.delegate targetHide];
 }
 
 @end

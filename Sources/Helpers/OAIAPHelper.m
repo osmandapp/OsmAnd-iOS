@@ -275,7 +275,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:productIdentifier]];
     [self buildFunctionalAddonsArray];
-    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:kInAppId_Addon_TrackRecording andValue:[NSNumber numberWithBool:NO]];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:productIdentifier andValue:[NSNumber numberWithBool:NO]];
 }
 
 - (void)enableProduct:(NSString *)productIdentifier
@@ -283,7 +283,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [_disabledProductIdentifiers removeObject:[self getDisabledId:productIdentifier]];
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:[self getDisabledId:productIdentifier]];
     [self buildFunctionalAddonsArray];
-    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:kInAppId_Addon_TrackRecording andValue:[NSNumber numberWithBool:YES]];
+    [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:productIdentifier andValue:[NSNumber numberWithBool:YES]];
 }
 
 - (BOOL)isProductDisabled:(NSString *)productIdentifier

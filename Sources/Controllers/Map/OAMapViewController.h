@@ -79,6 +79,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(readonly) OAObservable* mapObservable;
 
 @property (nonatomic) OAGpxWpt *foundWpt;
+@property (nonatomic) NSArray *foundWptGroups;
+@property (nonatomic) NSString *foundWptDocPath;
+
 
 - (BOOL)findWpt:(CLLocationCoordinate2D)location;
 - (BOOL)deleteFoundWpt;

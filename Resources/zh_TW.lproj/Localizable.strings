@@ -355,3 +355,5 @@
 "language_short" = "語言";
 "open_url" = "在瀏覽器中開啟頁面";
 "no_other_translations" = "沒有其他翻譯";
+"shared_string_edit" = "編輯";
+"wpt_remove_q" = "移除航點嗎？";

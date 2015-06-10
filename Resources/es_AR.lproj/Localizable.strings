@@ -85,7 +85,7 @@
 "gpx_import_already_exists" = "El archivo de traza indicada, ya existe. Elija una acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
-"gpx_cannot_import" = "No se puede importar archivo GPX indicado";
+"gpx_cannot_import" = "No se pudo importar archivo GPX indicado";
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Elija traza a exportar";
 "gpx_import_desc" = "Puedes importar sus archivos GPX (formato de dato GPS común)\n\nPara compartir el archivo GPX, puedes abrir un archivo desde Dropbox, correo electrónico o cualquier otra fuente - Usar Abrir en la función";

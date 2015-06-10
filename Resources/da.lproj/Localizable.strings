@@ -357,3 +357,6 @@
 "no_other_translations" = "Der er ingen andre oversættelser";
 "shared_string_edit" = "Rediger";
 "wpt_remove_q" = "Fjern rutepunkt?";
+"gpx_select_track" = "Vælg spor";
+"gpx_curr_new_track" = "Aktuel/nyt spor";
+"enter_name" = "Indtast navn";

@@ -359,3 +359,5 @@
 "language_short" = "Idioma";
 "open_url" = "Abrir página en el navegador";
 "no_other_translations" = "No hay otras traducciones";
+"shared_string_edit" = "Editar";
+"wpt_remove_q" = "¿Quitar punto de ruta?";

@@ -266,8 +266,8 @@
 "other_options" = "Іншыя налады";
 "add_parking" = "Дадаць паркоўку";
 "add_parking_short" = "Паркоўка";
-"add_waypoint" = "Дадаць кропку на трэк";
-"add_waypoint_short" = "Шляхавая кропка";
+"add_waypoint" = "Дадаць кропку шляху да сьледу";
+"add_waypoint_short" = "Дадаць шляхавую кропку";
 "more" = "Больш";
 "parking_marker" = "Паркоўка";
 "time_limited" = "Абмежаванне часу";

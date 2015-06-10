@@ -357,3 +357,6 @@
 "no_other_translations" = "Няма іншых перакладаў";
 "shared_string_edit" = "Правіць";
 "wpt_remove_q" = "Выдаліць шляхавую кропку?";
+"gpx_select_track" = "Абраць сьлед";
+"gpx_curr_new_track" = "Бягучы/новы сьлед";
+"enter_name" = "Задаць назву";

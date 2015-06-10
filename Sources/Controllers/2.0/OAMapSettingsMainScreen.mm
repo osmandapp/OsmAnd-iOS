@@ -15,6 +15,7 @@
 #import "OAMapStylesCell.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -93,6 +94,41 @@
     
     [self setupView];
     
+}
+
+- (NSString *)getMapLangValueStr
+{
+    NSString *prefLang;
+    NSString *prefLangId = settings.settingPrefMapLanguage;
+    if (prefLangId)
+        prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
+    else
+        prefLang = OALocalizedString(@"not_selected");
+    
+    NSString* languageValue;
+    switch (settings.settingMapLanguage)
+    {
+        case 0: // NativeOnly
+            languageValue = OALocalizedString(@"sett_lang_local");
+            break;
+        case 4: // LocalizedAndNative
+            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            break;
+        case 1: // LocalizedOrNative
+            languageValue = [NSString stringWithFormat:@"%@ %@ %@", prefLang, OALocalizedString(@"shared_string_or"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            break;
+        case 5: // LocalizedOrTransliteratedAndNative
+            languageValue = [NSString stringWithFormat:@"%@ (%@) %@ %@", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]], OALocalizedString(@"shared_string_and"), [OALocalizedString(@"sett_lang_local") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            break;
+        case 6: // LocalizedOrTransliterated
+            languageValue = [NSString stringWithFormat:@"%@ (%@)", prefLang, [OALocalizedString(@"sett_lang_trans") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+            break;
+            
+        default:
+            break;
+    }
+    
+    return languageValue;
 }
 
 -(void)setupView
@@ -193,6 +229,16 @@
 
     tableData = [tableData arrayByAddingObjectsFromArray:arrOverlayUnderlay];
 
+    NSString *languageValue = [self getMapLangValueStr];
+    NSArray *arrayLanguage = @[@{@"groupName" : OALocalizedString(@"language"),
+                                 @"cells": @[
+                                         @{@"name": OALocalizedString(@"sett_lang"),
+                                           @"value": languageValue,
+                                           @"type": @"OASettingsCell"}
+                                         ]}];
+    
+    tableData = [tableData arrayByAddingObjectsFromArray:arrayLanguage];
+
     [tblView reloadData];
 }
 
@@ -222,7 +268,8 @@
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSDictionary* data = (NSDictionary*)[((NSArray*)[((NSDictionary*)tableData[indexPath.section]) objectForKey:@"cells"]) objectAtIndex:indexPath.row];
     
     UITableViewCell* outCell = nil;
@@ -365,6 +412,11 @@
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
             }
             
+            break;
+        }
+        case 4:
+        {
+            mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenLanguage];
             break;
         }
             

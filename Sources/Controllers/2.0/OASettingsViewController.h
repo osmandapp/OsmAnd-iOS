@@ -16,12 +16,6 @@ typedef enum
     kSettingsScreenZoomButton,
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,
-
-    kSettingsScreenMapLanguage,
-    kSettingsScreenMapLanguagePreferred,
-    kSettingsScreenMapLanguageShowNative,
-    kSettingsScreenMapLanguageTranslit,
-
 }
 kSettingsScreen;
 

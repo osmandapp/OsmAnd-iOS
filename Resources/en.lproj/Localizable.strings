@@ -405,5 +405,7 @@
 "gpx_select_track" = "Select track";
 "gpx_curr_new_track" = "Current/new track";
 "enter_name" = "Enter name";
+"not_selected" = "Not selected";
+"language" = "Language";
 
 

@@ -25,6 +25,8 @@
 #import "OAMapSettingsSettingScreen.h"
 #import "OAMapSettingsGpxScreen.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
+#import "OAMapSettingsLanguageScreen.h"
+#import "OAMapSettingsPreferredLanguageScreen.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 
@@ -468,6 +470,13 @@
         case EMapSettingsScreenUnderlay:
             if (!screenObj)
                 screenObj = [[OAMapSettingsOverlayUnderlayScreen alloc] initWithTable:self.tableView viewController:self param:@"underlay"];
+        case EMapSettingsScreenLanguage:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsLanguageScreen alloc] initWithTable:self.tableView viewController:self];
+            break;
+        case EMapSettingsScreenPreferredLanguage:
+            if (!screenObj)
+                screenObj = [[OAMapSettingsPreferredLanguageScreen alloc] initWithTable:self.tableView viewController:self];
             break;
             
         default:

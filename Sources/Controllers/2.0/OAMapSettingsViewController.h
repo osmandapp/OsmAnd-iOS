@@ -22,6 +22,8 @@ typedef enum
     EMapSettingsScreenSetting,
     EMapSettingsScreenOverlay,
     EMapSettingsScreenUnderlay,
+    EMapSettingsScreenLanguage,
+    EMapSettingsScreenPreferredLanguage,
     
 } EMapSettingsScreen;
 

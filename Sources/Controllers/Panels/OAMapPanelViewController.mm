@@ -52,6 +52,7 @@
 #include <OsmAndCore/CachingRoadLocator.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
+#include <OsmAndCore/ICU.h>
 
 
 #define _(name) OAMapPanelViewController__##name
@@ -961,6 +962,7 @@
         
         NSString* localizedTitle;
         NSString* nativeTitle;
+        NSString* roadTitle;
         if (road)
         {
             NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
@@ -980,7 +982,20 @@
                 nativeTitle = nativeName.toNSString();
         }
         
-        if (!nativeTitle || [nativeTitle isEqualToString:@""])
+        if (localizedTitle)
+        {
+            roadTitle = localizedTitle;
+        }
+        else if (nativeTitle)
+        {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            if (settings.settingMapLanguageTranslit)
+                roadTitle = OsmAnd::ICU::transliterateToLatin(road->getCaptionInNativeLanguage()).toNSString();
+            else
+                roadTitle = nativeTitle;
+        }
+        
+        if (!roadTitle || roadTitle.length == 0)
         {
             if (buildingNumber.length > 0)
             {
@@ -995,9 +1010,9 @@
         else
         {
             if (buildingNumber.length > 0)
-                addressString = [NSString stringWithFormat:@"%@, %@", nativeTitle, buildingNumber];
+                addressString = [NSString stringWithFormat:@"%@, %@", roadTitle, buildingNumber];
             else
-                addressString = nativeTitle;
+                addressString = roadTitle;
             _targetMenuView.isAddressFound = YES;
         }
     }

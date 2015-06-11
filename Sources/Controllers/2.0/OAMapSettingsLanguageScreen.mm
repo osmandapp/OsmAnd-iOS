@@ -198,7 +198,9 @@
     UISwitch *sw = sender;
     settings.settingMapLanguageShowLocal = sw.isOn;
     
-    [self updateMapLanguageSetting];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapLanguageSetting];
+    });
 }
 
 - (void)showTranslitChanged:(id)sender
@@ -206,7 +208,9 @@
     UISwitch *sw = sender;
     settings.settingMapLanguageTranslit = sw.isOn;
 
-    [self updateMapLanguageSetting];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateMapLanguageSetting];
+    });
 }
 
 #pragma mark - UITableViewDelegate

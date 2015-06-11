@@ -362,3 +362,5 @@
 "enter_name" = "Ingrese nombre";
 "not_selected" = "No seleccionado";
 "language" = "Idioma";
+"you_searching" = "Buscando";
+"from_location" = "desde su ubicación";

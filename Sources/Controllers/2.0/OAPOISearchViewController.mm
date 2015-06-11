@@ -33,6 +33,7 @@
 #include <OsmAndCore/Utilities.h>
 
 #define kMaxTypeRows 5
+#define kMapCenterSearchToolbarHeight 108.0
 
 typedef enum
 {
@@ -50,6 +51,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UILabel *lbSearchNearCenter;
+@property (weak, nonatomic) IBOutlet UIButton *btnMyLocation;
 
 @property (nonatomic) NSMutableArray* dataArray;
 @property (nonatomic) NSMutableArray* dataArrayTemp;
@@ -142,7 +144,6 @@ typedef enum
 
 -(void)applyLocalization
 {
-    _lbSearchNearCenter.text = OALocalizedString(@"poi_search_near_center");
     [_btnCancel setTitle:OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
 }
 
@@ -227,7 +228,7 @@ typedef enum
     if (_searchNearMapCenter)
     {
         CGRect frame = _topView.frame;
-        frame.size.height = 94.0;
+        frame.size.height = kMapCenterSearchToolbarHeight;
         _topView.frame = frame;
         _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
     }
@@ -244,6 +245,10 @@ typedef enum
 {
     BOOL prevValue = _searchNearMapCenter;
     _searchNearMapCenter = searchNearMapCenter;
+    
+    if (searchNearMapCenter)
+        _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+
     if (prevValue != _searchNearMapCenter && self.isViewLoaded)
     {
         _dataInvalidated = YES;
@@ -1379,6 +1384,19 @@ typedef enum
 - (IBAction)btnCancelClicked:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)btnMyLocationClicked:(id)sender
+{
+    if (!_searchNearMapCenter)
+        return;
+    
+    [self setSearchNearMapCenter:NO];
+    [UIView animateWithDuration:.25 animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        [self generateData];
+    }];
 }
 
 - (IBAction)textFieldValueChanged:(id)sender

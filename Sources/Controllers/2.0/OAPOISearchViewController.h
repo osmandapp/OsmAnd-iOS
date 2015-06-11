@@ -12,6 +12,7 @@
 @interface OAPOISearchViewController : OASuperViewController
 
 @property (nonatomic, assign) BOOL searchNearMapCenter;
+@property (nonatomic, assign) double distanceFromMyLocation;
 @property (nonatomic, assign) OsmAnd::PointI myLocation;
 
 @end

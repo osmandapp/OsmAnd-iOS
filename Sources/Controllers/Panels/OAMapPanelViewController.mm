@@ -803,22 +803,35 @@
     BOOL isMyLocationVisible = [_mapViewController isMyLocationVisible];
 
     BOOL searchNearMapCenter = NO;
-    OsmAnd::PointI myLocation;
+    OsmAnd::PointI searchLocation;
+
+    CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+
+    double distanceFromMyLocation;
     
     if (!isMyLocationVisible)
     {
-        searchNearMapCenter = YES;
-        myLocation = mapView.target31;
+        distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
+        if (distanceFromMyLocation > 15000)
+        {
+            searchNearMapCenter = YES;
+            searchLocation = mapView.target31;
+        }
+        else
+        {
+            searchLocation = myLocation;
+        }
     }
     else
     {
-        CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-        myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+        searchLocation = myLocation;
     }
 
     if (!_searchPOI)
         _searchPOI = [[OAPOISearchViewController alloc] init];
-    _searchPOI.myLocation = myLocation;
+    _searchPOI.myLocation = searchLocation;
+    _searchPOI.distanceFromMyLocation = distanceFromMyLocation;
     _searchPOI.searchNearMapCenter = searchNearMapCenter;
     [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
 }

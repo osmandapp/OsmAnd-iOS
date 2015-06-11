@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXPointListViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "OAPointTableViewCell.h"
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -69,11 +68,6 @@ typedef enum
 {
     _titleView.text = OALocalizedString(@"gpx_waypoints");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-
-    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.favoritesButtonView];
-    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {
@@ -249,15 +243,6 @@ typedef enum
     }
 }
 
-- (IBAction)menuFavoriteClicked:(id)sender
-{
-    OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
-    [self.navigationController pushViewController:favController animated:NO];
-}
-
-- (IBAction)menuGPXClicked:(id)sender
-{
-}
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

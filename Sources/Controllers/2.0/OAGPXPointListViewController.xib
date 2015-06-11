@@ -8,8 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAGPXPointListViewController">
             <connections>
                 <outlet property="backButton" destination="2dp-Zd-3MI" id="OwF-Ie-o8F"/>
-                <outlet property="favoritesButtonView" destination="5ge-bv-K6A" id="eBr-dz-cdU"/>
-                <outlet property="gpxButtonView" destination="plq-iy-HxW" id="6VU-dg-WW9"/>
                 <outlet property="sortButton" destination="Ogs-Dp-Dv9" id="VUt-ZP-811"/>
                 <outlet property="tableView" destination="f8r-8O-Lv2" id="E6L-f1-4sE"/>
                 <outlet property="titleView" destination="cez-bx-Vsp" id="5Ev-aO-WNv"/>
@@ -61,43 +59,8 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <view contentMode="scaleToFill" id="DwL-jl-mkZ">
-                    <rect key="frame" x="0.0" y="419" width="320" height="61"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                    <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="5ge-bv-K6A">
-                            <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
-                            <inset key="titleEdgeInsets" minX="-22" minY="36" maxX="0.0" maxY="-6"/>
-                            <inset key="imageEdgeInsets" minX="63" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="FAVORITES" image="icon_star.png">
-                                <color key="titleColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="menuFavoriteClicked:" destination="-1" eventType="touchUpInside" id="F4a-1t-rHQ"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="plq-iy-HxW">
-                            <rect key="frame" x="162" y="0.0" width="158" height="61"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
-                            <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
-                            <inset key="imageEdgeInsets" minX="50" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="TRACKS" image="icon_gpx_fill.png">
-                                <color key="titleColor" red="1" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="menuGPXClicked:" destination="-1" eventType="touchUpInside" id="OSz-S4-Mqe"/>
-                            </connections>
-                        </button>
-                    </subviews>
-                    <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" id="f8r-8O-Lv2">
-                    <rect key="frame" x="0.0" y="64" width="320" height="355"/>
+                    <rect key="frame" x="0.0" y="64" width="320" height="416"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                 </tableView>
@@ -109,8 +72,6 @@
     </objects>
     <resources>
         <image name="icon_direction.png" width="25" height="25"/>
-        <image name="icon_gpx_fill.png" width="25" height="25"/>
-        <image name="icon_star.png" width="25" height="24"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

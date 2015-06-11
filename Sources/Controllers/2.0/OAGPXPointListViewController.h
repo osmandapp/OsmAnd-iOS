@@ -17,12 +17,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *sortButton;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
-@property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
-
-- (IBAction)menuFavoriteClicked:(id)sender;
-- (IBAction)menuGPXClicked:(id)sender;
-
 - (IBAction)sortBtnClicked:(id)sender;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;

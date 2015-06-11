@@ -197,6 +197,14 @@
         _localizedName = extraLocalizedName;
     else
         _localizedName = (*citLocalizedName).toNSString();
+    
+    if (!_localizedName)
+    {
+        const auto citLocalizedName = localizedNames.constFind(QString("en"));
+        if (citLocalizedName != localizedNames.cend())
+            _localizedName = (*citLocalizedName).toNSString();
+    }
+    
     NSMutableArray* allNames = (_nativeName != nil) ? [NSMutableArray arrayWithObject:_nativeName] : [NSMutableArray array];
     for (const auto& name_ : localizedNames)
     {

@@ -1371,6 +1371,11 @@
                         doSkip = YES;
                         break;
                     }
+                    if (rule.tag == QString("contour"))
+                    {
+                        doSkip = YES;
+                        break;
+                    }
                     
                     if (!symbol.poiType)
                         symbol.poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];

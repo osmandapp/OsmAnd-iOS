@@ -13,7 +13,7 @@
 
 + (void) downloadOcbfIfUpdated
 {
-    NSString *urlString = @"http://download.osmand.net/regions.ocbf";
+    NSString *urlString = @"http://download.osmand.net/regions_v2.ocbf";
     
     OALog(@"Downloading HTTP header from: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];

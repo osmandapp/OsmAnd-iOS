@@ -51,7 +51,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *actionsMenuButton;
 @property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
-@property (weak, nonatomic) IBOutlet UIButton *resumeFollowingButton;
+@property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
 @property (weak, nonatomic) IBOutlet UIView *leftWidgetsContainer;
 @property (weak, nonatomic) IBOutlet UIImageView *leftWidgetsContainerBackground;
 @property (weak, nonatomic) IBOutlet UILabel *currentSpeedLabel;
@@ -127,17 +127,6 @@
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
-
-    /*
-    UIImageView *backgroundViewIn = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
-    [backgroundViewIn setFrame:CGRectMake(_zoomInButton.frame.origin.x + 8, _zoomInButton.frame.origin.y, _zoomInButton.frame.size.width - 16, _zoomInButton.frame.size.height)];
-    [_zoomInButton.superview insertSubview:backgroundViewIn belowSubview:_zoomInButton];
-    
-    
-    UIImageView *backgroundViewOut = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"HUD_button_bg"]];
-    [backgroundViewOut setFrame:CGRectMake(_zoomOutButton.frame.origin.x + 8, _zoomOutButton.frame.origin.y, _zoomOutButton.frame.size.width - 16, _zoomOutButton.frame.size.height)];
-    [_zoomOutButton.superview insertSubview:backgroundViewOut belowSubview:_zoomOutButton];
-    */
     
     OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
     interceptorView.delegate = self;
@@ -146,10 +135,12 @@
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
+#else
+    UILongPressGestureRecognizer* debugLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
+                                                                                                 action:@selector(onDebugButtonLongClicked:)];
+    [_debugButton addGestureRecognizer:debugLongPress];
 #endif // !defined(OSMAND_IOS_DEV)
 }
-
-
     
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -190,7 +181,7 @@
     [self updateCurrentLocation];
     [self restartLocationUpdateTimer];
 
-    [self showOrHideResumeFollowingButtonAnimated:animated];
+    [self updateMapModeButton];
     
     _destinationViewController.singleLineOnly = YES;
     _destinationViewController.top = 64.0;
@@ -263,10 +254,19 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (void)onDebugButtonLongClicked:(id)sender
+{
+    _debugButton.hidden = YES;
+}
+
 - (void)fadeInOptionalControlsWithDelay
 {
     if (_fadeInTimer != nil)
         [_fadeInTimer invalidate];
+    
+    if (_app.mapMode != OAMapModeFollow)
+        return;
+    
     _fadeInTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
                                                     target:self
                                                   selector:@selector(optionalControlsFadeInAnimation)
@@ -276,28 +276,23 @@
 
 - (void)optionalControlsFadeInAnimation
 {
+    if (_app.mapMode != OAMapModeFollow)
+        return;
+
     [UIView animateWithDuration:0.3
                      animations:^{
-                         self.zoomButtons.alpha = 0.0f;
+                         self.zoomButtons.alpha = 0.0;
+                         self.mapModeButton.alpha = 0.0;
                      }];
-}
-
-- (void)hideOptionalControls
-{
-    self.zoomButtons.hidden = YES;
 }
 
 - (void)optionalControlsFadeOutAnimation
 {
     [UIView animateWithDuration:0.3
                      animations:^{
-                         self.zoomButtons.alpha = 1.0f;
+                         self.zoomButtons.alpha = 1.0;
+                         self.mapModeButton.alpha = 1.0;
                      }];
-}
-
-- (void)showOptionalControls
-{
-    self.zoomButtons.hidden = NO;
 }
 
 - (void)safeUpdateCurrentLocation
@@ -422,24 +417,6 @@
                                                            repeats:YES];
 }
 
-- (void)showOrHideResumeFollowingButtonAnimated:(BOOL)animated
-{
-    BOOL shouldShowButton = (_app.mapMode != OAMapModeFollow);
-
-    if (!animated)
-    {
-        self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
-        self.leftWidgetsContainer.alpha = shouldShowButton ? 0.0f : 1.0f;
-    }
-    else
-    {
-        [UIView animateWithDuration:0.3 animations:^{
-            self.resumeFollowingButton.alpha = shouldShowButton ? 1.0f : 0.0f;
-            self.leftWidgetsContainer.alpha = shouldShowButton ? 0.0f : 1.0f;
-        }];
-    }
-}
-
 - (BOOL)shouldInterceptInteration:(CGPoint)point withEvent:(UIEvent *)event inView:(UIView*)view
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -462,7 +439,7 @@
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self showOrHideResumeFollowingButtonAnimated:YES];
+        [self updateMapModeButton];
     });
 }
 
@@ -501,6 +478,52 @@
     _roadLocator->clearCacheNotInTiles(result,
                                        mapRendererView.zoomLevel,
                                        true);
+}
+
+- (void)updateMapModeButton
+{
+    UIImage* modeImage = nil;
+    switch (_app.mapMode)
+    {
+        case OAMapModeFree: // Free mode
+            modeImage = [UIImage imageNamed:@"free_map_mode_button.png"];
+            break;
+            
+        case OAMapModePositionTrack: // Trace point
+            modeImage = [UIImage imageNamed:@"position_track_map_mode_button.png"];
+            break;
+            
+        case OAMapModeFollow: // Compass - 3D mode
+            modeImage = [UIImage imageNamed:@"follow_map_mode_button.png"];
+            break;
+            
+        default:
+            break;
+    }
+    
+    UIImage *backgroundImage;
+    
+    if (_app.locationServices.lastKnownLocation)
+    {
+        if (_app.mapMode == OAMapModeFree)
+        {
+            backgroundImage = [UIImage imageNamed:@"bt_round_big_blue"];
+            modeImage = [OAUtilities tintImageWithColor:modeImage color:[UIColor whiteColor]];
+        }
+        else
+        {
+            backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+            modeImage = [OAUtilities tintImageWithColor:modeImage color:UIColorFromRGB(0x5B7EF8)];
+        }
+    }
+    else
+    {
+        backgroundImage = [UIImage imageNamed:@"bt_round_big"];
+    }
+    
+    [_mapModeButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
+    [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
+    
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender
@@ -546,9 +569,13 @@
     //[self.sidePanelController showRightPanelAnimated:YES];
 }
 
-- (IBAction)onResumeFollowingButtonClicked:(id)sender
+- (IBAction)onMapModeButtonClicked:(id)sender
 {
-    _app.mapMode = OAMapModeFollow;
+    if (_app.mapMode != OAMapModeFollow)
+    {
+        _app.mapMode = OAMapModeFollow;
+        [self fadeInOptionalControlsWithDelay];
+    }
 }
 
 - (IBAction)onDebugButtonClicked:(id)sender

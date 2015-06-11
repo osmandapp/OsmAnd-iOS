@@ -360,3 +360,5 @@
 "gpx_select_track" = "Абраць сьлед";
 "gpx_curr_new_track" = "Бягучы/новы сьлед";
 "enter_name" = "Задаць назву";
+"not_selected" = "Ня выбрана";
+"language" = "Мова";

@@ -305,7 +305,8 @@
 
     if (_lastLocation != nil)
         return _lastLocation;
-    return [_manager.location copy];
+
+    return _manager.location;
 }
 
 - (CLLocationDirection)lastKnownHeading

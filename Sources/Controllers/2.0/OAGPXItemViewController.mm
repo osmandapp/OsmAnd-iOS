@@ -7,7 +7,6 @@
 //
 
 #import "OAGPXItemViewController.h"
-#import "OAFavoriteListViewController.h"
 #import "OAGPXDetailsTableViewCell.h"
 #import "OAGPXElevationTableViewCell.h"
 #import "OsmAndApp.h"
@@ -189,11 +188,6 @@ typedef enum
 - (void)applyLocalization
 {
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-
-    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.favoritesButtonView];
-    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {
@@ -313,15 +307,6 @@ typedef enum
         });
     }
 }
-
-- (IBAction)menuFavoriteClicked:(id)sender {
-    OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
-    [self.navigationController pushViewController:favController animated:NO];
-}
-
-- (IBAction)menuGPXClicked:(id)sender {
-}
-
 
 - (IBAction)showPointsClicked:(id)sender
 {

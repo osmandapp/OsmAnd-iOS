@@ -24,14 +24,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *exportButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
-@property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (nonatomic, readonly) BOOL showCurrentTrack;
-
-- (IBAction)menuFavoriteClicked:(id)sender;
-- (IBAction)menuGPXClicked:(id)sender;
 
 - (IBAction)showPointsClicked:(id)sender;
 - (IBAction)deleteClicked:(id)sender;

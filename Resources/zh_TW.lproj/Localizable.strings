@@ -93,7 +93,7 @@
 "gpx_cannot_import" = "無法匯入指定的 GPX 檔案";
 "gpx_export_title" = "匯出軌跡";
 "gpx_export_select_track" = "請選擇要匯出的軌跡";
-"add_waypoint" = "增加航點到已錄製的軌跡";
+"add_waypoint" = "增加航點到軌跡";
 "add_waypoint_short" = "增加航點";
 "gpx_import_desc" = "您可以匯入您的 GPX 檔案（共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
 "gpx_no_tracks" = "沒有軌跡";
@@ -357,3 +357,8 @@
 "no_other_translations" = "沒有其他翻譯";
 "shared_string_edit" = "編輯";
 "wpt_remove_q" = "移除航點嗎？";
+"gpx_select_track" = "選取軌跡";
+"gpx_curr_new_track" = "目前的/新的軌跡";
+"enter_name" = "輸入名稱";
+"not_selected" = "未選取";
+"language" = "語言";

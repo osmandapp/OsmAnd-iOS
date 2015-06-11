@@ -170,6 +170,10 @@ typedef enum
     
     [self showSearchIcon];
     [self generateData];
+    
+    if (_searchNearMapCenter)
+        _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -1569,10 +1573,10 @@ typedef enum
                                         return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
                                     }];
             
-            if (sortedArray.count > kSearchLimit)
-                [_searchPoiArray setArray:[sortedArray subarrayWithRange:NSMakeRange(0, kSearchLimit)]];
-            else
-                [_searchPoiArray setArray:sortedArray];
+            //if (sortedArray.count > kSearchLimit)
+            //    [_searchPoiArray setArray:[sortedArray subarrayWithRange:NSMakeRange(0, kSearchLimit)]];
+            //else
+            [_searchPoiArray setArray:sortedArray];
         }
 
         _coreFoundScope = _currentScope;
@@ -1612,11 +1616,15 @@ typedef enum
 -(void)buildPoiArray
 {
     NSMutableArray *arr = [NSMutableArray array];
+    NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     for (OAPOI *poi in self.searchPoiArray)
     {
-        NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        if (nextStr.length == 0 || [self beginWith:nextStr text:poi.nameLocalized] || [self beginWithAfterSpace:nextStr text:poi.nameLocalized])
+        if (nextStr.length == 0 || [self beginWith:nextStr text:poi.nameLocalized] || [self beginWithAfterSpace:nextStr text:poi.nameLocalized] || [self beginWith:nextStr text:poi.name] || [self beginWithAfterSpace:nextStr text:poi.name])
+        {
             [arr addObject:poi];
+            if (arr.count > kSearchLimit)
+                break;
+        }
     }
 
     self.dataPoiArray = [arr mutableCopy];

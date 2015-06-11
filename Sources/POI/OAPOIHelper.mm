@@ -28,7 +28,7 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
-#define kSearchLimitRaw 1000
+#define kSearchLimitRaw 5000
 #define kRadiusKmToMetersKoef 1200.0
 
 @implementation OAPOIHelper {

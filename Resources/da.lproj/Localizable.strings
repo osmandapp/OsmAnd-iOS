@@ -335,7 +335,7 @@
 "shared_string_and" = "og";
 "sett_lang" = "Sprog på kort";
 "sett_lang_local" = "Lokal";
-"sett_lang_trans" = "translit";
+"sett_lang_trans" = "Translit";
 "sett_pref_lang" = "Foretrukket sprog";
 "sett_lang_show_local" = "Vis lokale navne";
 "sett_lang_show_trans" = "Omskriv navne";

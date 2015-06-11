@@ -361,3 +361,10 @@
 "no_other_translations" = "No existen otras traducciones";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "¿Quitar punto de ruta?";
+"gpx_select_track" = "Seleccionar traza";
+"gpx_curr_new_track" = "Actual/Nueva traza";
+"enter_name" = "Introduzca el nombre";
+"not_selected" = "No seleccionado";
+"language" = "Idioma";
+"you_searching" = "Esta buscando";
+"from_location" = "desde su ubicación";

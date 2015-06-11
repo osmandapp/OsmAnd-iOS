@@ -362,3 +362,5 @@
 "enter_name" = "Indtast navn";
 "language" = "Sprog";
 "not_selected" = "Ikke markeret";
+"you_searching" = "Du søger";
+"from_location" = "fra din placering";

@@ -12,7 +12,7 @@
 "rendering_value_germanRoadAtlas_name" = "Atlas de caminos alemanes";
 "rendering_value_highContrastRoads_name" = "Caminos en alto contraste";
 "rendering_attr_publicTransportMode_name" = "Rutas de colectivo, trolebús y lanzadera";
-"rendering_attr_coloredBuildings_name" = "Color de los edificios según el tipo";
+"rendering_attr_coloredBuildings_name" = "Colorear edificios según el tipo";
 "rendering_attr_showSurfaceGrade_name" = "Mostrar calidad de los caminos";
 "rendering_attr_showSurfaces_name" = "Mostrar superficie de los caminos";
 "OsmAnd Maps" = "Mapas OsmAnd";

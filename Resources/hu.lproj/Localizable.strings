@@ -362,3 +362,5 @@
 "enter_name" = "Név megadása";
 "not_selected" = "Nincs kiválasztva";
 "language" = "Nyelv";
+"you_searching" = "Ezt keresi:";
+"from_location" = "a helyzetétől";

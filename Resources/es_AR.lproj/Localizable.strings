@@ -349,8 +349,8 @@
 "product_desc_srtm" = "Mostrar curvas de nivel";
 "res_installing" = "Instalando…";
 "res_roads" = "Caminos";
-"res_srtm" = "SRTM";
-"res_wiki" = "Wiki";
+"res_srtm" = "Curvas de nivel";
+"res_wiki" = "Wikipedia";
 "select_language" = "Eligir idioma";
 "open_url" = "Abrir web en el navegador";
 "no_other_translations" = "Sin otras traducciones";
@@ -364,3 +364,5 @@
 "language" = "Idioma";
 "you_searching" = "Está buscando";
 "from_location" = "desde su ubicación";
+"res_hillshade" = "Sombreado";
+"show_alt_in_drive" = "Ver altitud en modo conducción";

@@ -315,9 +315,10 @@
             break;
     }
 
+    OALog(@"Found orphaned regions: %d", loadedWorldRegions.count());
     for(const auto& orphanedRegion : loadedWorldRegions)
     {
-        OALog(@"Found orphaned region '%s' in '%s'",
+        OALog(@"Orphaned region '%s' in '%s'",
               qPrintable(orphanedRegion->fullRegionName),
               qPrintable(orphanedRegion->parentRegionName));
     }

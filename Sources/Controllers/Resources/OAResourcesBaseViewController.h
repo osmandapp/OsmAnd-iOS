@@ -22,6 +22,7 @@
 @interface ResourceItem : NSObject
 @property NSString* title;
 @property QString resourceId;
+@property OsmAnd::ResourcesManager::ResourceType resourceType;
 @property uint64_t size;
 @property uint64_t sizePkg;
 @property id<OADownloadTask> __weak downloadTask;

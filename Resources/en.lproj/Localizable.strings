@@ -394,8 +394,9 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing...";
 "res_roads" = "Roads";
-"res_srtm" = "Srtm";
-"res_wiki" = "Wiki";
+"res_srtm" = "Contour lines";
+"res_wiki" = "Wikipedia";
+"res_hillshade" = "Hillshade";
 
 "select_language" = "Select language";
 "language_short" = "Lang";

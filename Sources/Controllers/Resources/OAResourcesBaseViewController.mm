@@ -21,6 +21,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
+#import "OAPurchasesViewController.h"
 
 #include "Localization.h"
 
@@ -267,10 +268,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             nameStr = nil;
     }
     
-    if (resource->type == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
-        nameStr = nil;
-    if (resource->type == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
-        nameStr = nil;
+    //if (resource->type == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+    //    nameStr = nil;
+    //if (resource->type == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+    //    nameStr = nil;
     
     if (!nameStr)
     {
@@ -763,7 +764,20 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
             
-            [self offerDownloadAndInstallOf:item];
+            if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            {
+                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+                [self.navigationController pushViewController:purchasesViewController animated:NO];
+            }
+            else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+            {
+                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+                [self.navigationController pushViewController:purchasesViewController animated:NO];
+            }
+            else
+            {
+                [self offerDownloadAndInstallOf:item];
+            }
         }
     }
 }

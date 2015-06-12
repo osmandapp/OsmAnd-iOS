@@ -91,14 +91,24 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             NSString *str2;
             
             if ([obj1 isKindOfClass:[OAWorldRegion class]])
+            {
                 str1 = ((OAWorldRegion *)obj1).name;
+            }
             else
-                str1 = ((ResourceItem *)obj1).title;
+            {
+                ResourceItem *item = obj1;
+                str1 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+            }
 
             if ([obj2 isKindOfClass:[OAWorldRegion class]])
+            {
                 str2 = ((OAWorldRegion *)obj2).name;
+            }
             else
-                str2 = ((ResourceItem *)obj2).title;
+            {
+                ResourceItem *item = obj2;
+                str2 = [NSString stringWithFormat:@"%@%d", item.title, item.resourceType];
+            }
             
             return [str1 localizedCaseInsensitiveCompare:str2];
         };
@@ -229,50 +239,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 
     NSString *nameStr;
-    NSString *typeStr;
-    
-    switch(resource->type)
-    {
-        case OsmAndResourceType::MapRegion:
-            typeStr = OALocalizedString(@"map_settings_map");
-            break;
-        /*
-        case OsmAndResourceType::RoadMapRegion:
-            typeStr = OALocalizedString(@"res_roads");
-            break;
-        */
-        case OsmAndResourceType::SrtmMapRegion:
-            typeStr = OALocalizedString(@"res_srtm");
-            break;
-        case OsmAndResourceType::WikiMapRegion:
-            typeStr = OALocalizedString(@"res_wiki");
-            break;
-            
-        default:
-            typeStr = nil;
-    }
-    
     switch(resource->type)
     {
         case OsmAndResourceType::MapRegion:
         //case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
+        //case OsmAndResourceType::HillshadeRegion:
 
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
-                    nameStr = OALocalizedString(@"res_map_of_region");
+                    nameStr = OALocalizedString(@"res_mapsres");
                 else
-                    //nameStr =  OALocalizedString(@"Map of %@", region.name);
                     nameStr =  OALocalizedString(@"%@", region.name);
             }
             else
             {
                 if (!includeRegionName || region == nil)
-                    nameStr =  OALocalizedString(@"res_map_of_region");
+                    nameStr =  OALocalizedString(@"res_mapsres");
                 else
-                    //nameStr =  OALocalizedString(@"Map of %@", region.name);
                     nameStr =  OALocalizedString(@"%@", region.name);
             }
             break;
@@ -287,12 +273,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         nameStr = nil;
     
     if (!nameStr)
+    {
+        OALog(@"Resource %@ without name!", resource->id.toNSString());
         return nil;
+    }
     
-    if (nameStr.length == 0)
-        return typeStr;
-    else
-        return [nameStr stringByAppendingString:[NSString stringWithFormat:@" - %@", typeStr]];
+    return nameStr;
 }
 
 - (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_

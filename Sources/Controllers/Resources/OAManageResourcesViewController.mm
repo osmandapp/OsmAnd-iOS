@@ -590,15 +590,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     
     for (OAWorldRegion* subregion in self.region.flattenedSubregions)
     {
-        if (subregion.superregion == self.region) {
+        if (subregion.superregion == self.region)
+        {
             if (subregion.subregions.count > 0)
-            {
                 [_allSubregionItems addObject:subregion];
-            }
             else
-            {
                 [self collectSubregionItems:subregion];
-            }
         }
     }
     
@@ -611,6 +608,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         return;
     const auto& regionResources = *citRegionResources;
     
+    
+    NSMutableArray *regionMapArray = [NSMutableArray array];
+    NSMutableArray *allResourcesArray = [NSMutableArray array];
+    
     for (const auto& resource_ : regionResources.allResources)
     {
         ResourceItem* item_ = nil;
@@ -622,6 +623,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
+                item.resourceType = resource->type;
                 item.title = [self.class titleOfResource:resource_
                                                 inRegion:region
                                           withRegionName:YES];
@@ -638,6 +640,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 LocalResourceItem* item = [[LocalResourceItem alloc] init];
                 item_ = item;
                 item.resourceId = resource->id;
+                item.resourceType = resource->type;
                 item.title = [self.class titleOfResource:resource_
                                                 inRegion:region
                                           withRegionName:YES];
@@ -655,6 +658,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
             item_ = item;
             item.resourceId = resource->id;
+            item.resourceType = resource->type;
             item.title = [self.class titleOfResource:resource_
                                             inRegion:region
                                       withRegionName:YES];
@@ -669,11 +673,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         }
         
         if (region == self.region)
-            [_regionMapItems addObject:item_];
+            [regionMapArray addObject:item_];
         else
-            [_allResourceItems addObject:item_];
+            [allResourcesArray addObject:item_];
         
     }
+    
+    [_regionMapItems addObjectsFromArray:regionMapArray];
+    
+    if (allResourcesArray.count > 1)
+        [_allSubregionItems addObject:region];
+    else
+        [_allResourceItems addObjectsFromArray:allResourcesArray];
 }
 
 - (void)collectResourcesDataAndItems
@@ -696,6 +707,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
         item.resourceId = resource->id;
+        item.resourceType = resource->type;
         item.title = [self.class titleOfResource:resource
                                   inRegion:match
                             withRegionName:YES];
@@ -727,6 +739,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         
         LocalResourceItem* item = [[LocalResourceItem alloc] init];
         item.resourceId = resource->id;
+        item.resourceType = resource->type;
         if (match)
             item.title = [self.class titleOfResource:resource
                                         inRegion:match
@@ -801,15 +814,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else
             _localResourcesSection = -1;
 
-        if ([[self getResourceItems] count] > 0)
-            _resourcesSection = _lastUnusedSectionIndex++;
-        else
-            _resourcesSection = -1;
-
         if ([[self getRegionMapItems] count] > 0)
             _regionMapSection = _lastUnusedSectionIndex++;
         else
             _regionMapSection = -1;
+
+        if ([[self getResourceItems] count] > 0)
+            _resourcesSection = _lastUnusedSectionIndex++;
+        else
+            _resourcesSection = -1;
 
         // Configure search scope
         self.searchDisplayController.searchBar.scopeButtonTitles = nil;
@@ -909,7 +922,26 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     return nil;
 }
 
-- (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
+- (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
+{
+    switch (type) {
+        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
+            return OALocalizedString(@"map_settings_map");
+        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
+            return OALocalizedString(@"res_srtm");
+        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
+            return OALocalizedString(@"res_wiki");
+        case OsmAnd::ResourcesManager::ResourceType::RoadMapRegion:
+            return OALocalizedString(@"res_roads");
+        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
+            return OALocalizedString(@"res_hillshade");
+            
+        default:
+            return OALocalizedString(@"res_unknown");
+    }
+}
+
+- (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
               withRegionName:(BOOL)includeRegionName
 {
     return [self.class titleOfResource:resource
@@ -1004,6 +1036,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     {
                         OutdatedResourceItem* item = [[OutdatedResourceItem alloc] init];
                         item.resourceId = resource->id;
+                        item.resourceType = resource->type;
                         item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
                                             withRegionName:YES];
@@ -1020,6 +1053,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     {
                         LocalResourceItem* item = [[LocalResourceItem alloc] init];
                         item.resourceId = resource->id;
+                        item.resourceType = resource->type;
                         item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
                                             withRegionName:YES];
@@ -1037,6 +1071,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 {
                     RepositoryResourceItem* item = [[RepositoryResourceItem alloc] init];
                     item.resourceId = resource->id;
+                    item.resourceType = resource->type;
                     item.title = [self.class titleOfResource:resource_
                                               inRegion:region
                                         withRegionName:YES];
@@ -1443,9 +1478,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 
                 title = item.title;
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@ / %@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
                 else
-                    subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             }
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
@@ -1468,9 +1503,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             
             title = item.title;
             if (_sizePkg > 0)
-                subtitle = [NSString stringWithFormat:@"%@ / %@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             else
-                subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
         }
     }
 

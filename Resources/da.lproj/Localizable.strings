@@ -349,8 +349,8 @@
 "product_title_srtm" = "Højdekurver";
 "product_desc_srtm" = "Visning af højdekurver";
 "res_roads" = "Veje";
-"res_srtm" = "SRTM";
-"res_wiki" = "Wiki";
+"res_srtm" = "Højdekurver";
+"res_wiki" = "Wikipedia";
 "select_language" = "Vælg sprog";
 "language_short" = "Sprog";
 "open_url" = "Åbn side i browseren";
@@ -365,3 +365,4 @@
 "you_searching" = "Du søger";
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køreilstand";
+"res_hillshade" = "Relief skygger";

@@ -366,3 +366,5 @@
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køreilstand";
 "res_hillshade" = "Relief skygger";
+"purchase_get" = "Hent";
+"srtm_disabled" = "Højdekurver deaktiveret";

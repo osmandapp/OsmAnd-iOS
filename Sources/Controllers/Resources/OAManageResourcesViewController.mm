@@ -122,6 +122,9 @@ struct RegionResources
     
     TTTArrayFormatter *_arrFmt;
     NSNumberFormatter *_numberFormatter;
+    
+    BOOL _srtmDisabled;
+    BOOL _hasSrtm;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -580,6 +583,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 }
 - (void)collectSubregionsDataAndItems
 {
+    _srtmDisabled = ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm];
+    _hasSrtm = NO;
+
     // Collect all regions (and their parents) that have at least one
     // resource available in repository or locally.
     
@@ -607,7 +613,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     if (citRegionResources == _resourcesByRegions.cend())
         return;
     const auto& regionResources = *citRegionResources;
-    
     
     NSMutableArray *regionMapArray = [NSMutableArray array];
     NSMutableArray *allResourcesArray = [NSMutableArray array];
@@ -670,6 +675,22 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
             if (item.title == nil)
                 continue;
+            
+            if (region != self.region && _srtmDisabled)
+            {
+                if (_hasSrtm && resource->type == OsmAndResourceType::SrtmMapRegion)
+                    continue;
+                
+                if (resource->type == OsmAndResourceType::SrtmMapRegion)
+                {
+                    item.title = OALocalizedString(@"srtm_disabled");
+                    item.size = 0;
+                    item.sizePkg = 0;
+                }
+                
+                if (!_hasSrtm && resource->type == OsmAndResourceType::SrtmMapRegion)
+                    _hasSrtm = YES;
+            }
         }
         
         if (region == self.region)
@@ -1405,6 +1426,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     NSString* cellTypeId = nil;
     NSString* title = nil;
     NSString* subtitle = nil;
+    BOOL disabled = NO;
+    
     id item_ = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView)
     {
@@ -1485,11 +1508,23 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     cellTypeId = repositoryResourceCell;
                 }
                 
+                if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+                {
+                    disabled = YES;
+                }
+                if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+                {
+                    disabled = YES;
+                }
+
                 title = item.title;
+                
                 if (_sizePkg > 0)
                     subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
-                else
+                else if (_size > 0)
                     subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                else
+                    subtitle = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
             }
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
@@ -1510,11 +1545,23 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = repositoryResourceCell;
             }
             
+            if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            {
+                disabled = YES;
+            }
+            if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+            {
+                disabled = YES;
+            }
+
             title = item.title;
+            
             if (_sizePkg > 0)
                 subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
-            else
+            else if (_size > 0)
                 subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+            else
+                subtitle = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
         }
     }
 
@@ -1569,6 +1616,36 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     }
 
     // Fill cell content
+    
+    if ([cellTypeId isEqualToString:repositoryResourceCell])
+    {
+        if (!disabled)
+        {
+            cell.textLabel.textColor = [UIColor blackColor];
+            UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        }
+        else
+        {
+            cell.textLabel.textColor = [UIColor lightGrayColor];
+            
+            UIView *itemGetView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 54.0, 26.0)];
+            itemGetView.layer.cornerRadius = 4;
+            itemGetView.layer.masksToBounds = YES;
+            itemGetView.layer.borderWidth = 0.8;
+            itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
+
+            UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(4.0, 0.0, 54.0 - 8.0, 26.0)];
+            labelGet.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13];
+            labelGet.textAlignment = NSTextAlignmentCenter;
+            labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
+            labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
+            [itemGetView addSubview:labelGet];
+            
+            cell.accessoryView = itemGetView;
+        }
+    }
+    
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
@@ -1610,7 +1687,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 if (view.tag == -1) {
                     [view removeFromSuperview];
                     break;
-                }            
+                }
         }
         
     }

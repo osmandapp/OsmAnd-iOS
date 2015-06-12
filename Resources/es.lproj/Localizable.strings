@@ -353,8 +353,8 @@
 "enter_fav_name" = "Introduzca el nombre del favorito";
 "res_installing" = "Instalando...";
 "res_roads" = "Carreteras";
-"res_srtm" = "SRTM";
-"res_wiki" = "Wiki";
+"res_srtm" = "Curvas de nivel";
+"res_wiki" = "Wikipedia";
 "select_language" = "Seleccione el idioma";
 "language_short" = "Idioma";
 "open_url" = "Abrir página en el navegador";
@@ -367,4 +367,6 @@
 "not_selected" = "No seleccionado";
 "language" = "Idioma";
 "you_searching" = "Esta buscando";
-"from_location" = "desde su ubicación";
+"from_location" = "a mucha distancia";
+"res_hillshade" = "Sombreado";
+"show_alt_in_drive" = "Mostrar altitud en modo conducir";

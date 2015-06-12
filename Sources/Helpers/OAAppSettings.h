@@ -15,6 +15,8 @@
 #define settingZoomButtonKey @"settingZoomButtonKey"
 #define settingGeoFormatKey @"settingGeoFormatKey"
 #define settingMapArrowsKey @"settingMapArrowsKey"
+#define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
+
 
 
 #define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
@@ -65,6 +67,7 @@
 @property (assign, nonatomic) int settingMetricSystem; // 0 - Metric; 1 - English, 2 - 
 @property (assign, nonatomic) BOOL settingShowZoomButton;
 @property (assign, nonatomic) int settingGeoFormat; // 0 -
+@property (assign, nonatomic) BOOL settingShowAltInDriveMode;
 
 @property (assign, nonatomic) int settingMapArrows; // 0 - from Location; 1 - from Map Center
 @property (assign, nonatomic) CLLocationCoordinate2D mapCenter;

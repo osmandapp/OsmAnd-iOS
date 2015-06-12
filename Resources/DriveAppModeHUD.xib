@@ -11,11 +11,11 @@
                 <outlet property="compassBox" destination="Mqu-Kg-TG4" id="Q3v-8y-uZ6"/>
                 <outlet property="compassButton" destination="GGf-zp-Dy1" id="pDc-eC-67L"/>
                 <outlet property="compassImage" destination="Ykf-s1-V3b" id="Sft-4a-W0l"/>
-                <outlet property="currentAltitudeLabel" destination="p2X-uL-p4S" id="wAi-1r-bB3"/>
+                <outlet property="currentAltitudeLabel" destination="nsx-ol-cin" id="InK-mU-a7k"/>
+                <outlet property="currentAltitudeWidget" destination="kcM-Uz-KRl" id="Q0f-xd-vUc"/>
                 <outlet property="currentSpeedLabel" destination="7zY-7m-aJk" id="gOI-Mb-T6x"/>
+                <outlet property="currentSpeedWidget" destination="n7M-8R-EZ9" id="cD7-lO-GbG"/>
                 <outlet property="debugButton" destination="BiQ-TS-B8N" id="9pk-35-oiy"/>
-                <outlet property="leftWidgetsContainer" destination="n7M-8R-EZ9" id="gbd-kt-2L7"/>
-                <outlet property="leftWidgetsContainerBackground" destination="qkc-ad-eNc" id="mKJ-CR-9tm"/>
                 <outlet property="mapModeButton" destination="tI7-jm-O6m" id="ozO-9m-dQG"/>
                 <outlet property="optionsMenuButton" destination="j9F-8j-9bu" id="gfw-T5-Rnt"/>
                 <outlet property="positionLocalizedTitleLabel" destination="5xQ-km-akD" id="fYX-qN-SRz"/>
@@ -131,37 +131,30 @@
                         <action selector="onActionsMenuButtonClicked:" destination="-1" eventType="touchUpInside" id="qg5-Ly-561"/>
                     </connections>
                 </button>
-                <view contentMode="scaleToFill" id="n7M-8R-EZ9" userLabel="leftWidgetsContainer">
-                    <rect key="frame" x="57" y="185" width="216" height="40"/>
+                <view contentMode="scaleToFill" id="n7M-8R-EZ9" userLabel="speedWidget">
+                    <rect key="frame" x="226" y="106" width="94" height="32"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="qkc-ad-eNc" userLabel="leftWidgetsContainerBackground">
-                            <rect key="frame" x="0.0" y="0.0" width="216" height="40"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_speed.png" id="9q1-O8-vW0">
+                            <rect key="frame" x="2" y="3.5" width="24" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_speed.png" id="9q1-O8-vW0">
-                            <rect key="frame" x="10" y="6" width="28" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="000 km/h" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="7zY-7m-aJk" userLabel="currentSpeedLabel">
-                            <rect key="frame" x="43" y="6" width="70" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="7zY-7m-aJk" userLabel="currentSpeedLabel">
+                            <rect key="frame" x="28" y="5.5" width="64" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <attributedString key="attributedText">
+                                <fragment content="km/h">
+                                    <attributes>
+                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="16" name="AvenirNext-DemiBold"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="-00000 m" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="p2X-uL-p4S" userLabel="currentAltitudeLabel">
-                            <rect key="frame" x="143" y="6" width="70" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="16"/>
-                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                            <nil key="highlightedColor"/>
-                        </label>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_height.png" id="SRZ-2j-M47">
-                            <rect key="frame" x="114" y="6" width="28" height="28"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
-                        </imageView>
                     </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <accessibility key="accessibilityConfiguration">
                         <accessibilityTraits key="traits" none="YES" notEnabled="YES"/>
                     </accessibility>
@@ -176,6 +169,31 @@
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="UwD-4U-agj"/>
                     </connections>
                 </button>
+                <view contentMode="scaleToFill" id="kcM-Uz-KRl" userLabel="altWidget">
+                    <rect key="frame" x="226" y="146" width="94" height="32"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <subviews>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_height.png" id="ulR-3v-D1e">
+                            <rect key="frame" x="2" y="4" width="24" height="24"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="12" id="nsx-ol-cin" userLabel="currentAltitudeLabel">
+                            <rect key="frame" x="28" y="6.5" width="64" height="22"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <attributedString key="attributedText">
+                                <fragment content="0 m">
+                                    <attributes>
+                                        <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <font key="NSFont" size="16" name="AvenirNext-DemiBold"/>
+                                        <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="truncatingTail" baseWritingDirection="natural"/>
+                                    </attributes>
+                                </fragment>
+                            </attributedString>
+                            <nil key="highlightedColor"/>
+                        </label>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <point key="canvasLocation" x="388" y="273"/>

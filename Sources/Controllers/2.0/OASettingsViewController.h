@@ -16,6 +16,7 @@ typedef enum
     kSettingsScreenZoomButton,
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,
+    kSettingsScreenShowAltInDrive,
 }
 kSettingsScreen;
 

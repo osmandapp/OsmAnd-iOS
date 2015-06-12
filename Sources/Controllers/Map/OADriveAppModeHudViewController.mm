@@ -52,9 +52,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *positionLocalizedTitleLabel;
 @property (weak, nonatomic) IBOutlet UILabel *positionNativeTitleLabel;
 @property (weak, nonatomic) IBOutlet UIButton *mapModeButton;
-@property (weak, nonatomic) IBOutlet UIView *leftWidgetsContainer;
-@property (weak, nonatomic) IBOutlet UIImageView *leftWidgetsContainerBackground;
+
+@property (weak, nonatomic) IBOutlet UIView *currentSpeedWidget;
 @property (weak, nonatomic) IBOutlet UILabel *currentSpeedLabel;
+@property (weak, nonatomic) IBOutlet UIView *currentAltitudeWidget;
 @property (weak, nonatomic) IBOutlet UILabel *currentAltitudeLabel;
 
 @end
@@ -62,7 +63,11 @@
 @implementation OADriveAppModeHudViewController
 {
     OsmAndAppInstance _app;
+    OAAppSettings *_settings;
 
+    UIFont *_primaryFont;
+    UIFont *_unitsFont;
+    
     BOOL _iOS70plus;
 
     OAMapViewController* _mapViewController;
@@ -106,6 +111,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _settings = [OAAppSettings sharedManager];
 
     _iOS70plus = [OAUtilities iosVersionIsAtLeast:@"7.0"];
 
@@ -131,8 +137,6 @@
     OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
     interceptorView.delegate = self;
 
-    self.leftWidgetsContainerBackground.image = [_app.appearance hudViewBackgroundForStyle:OAHudViewStyleTopLeadingSideDock];
-
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
 #else
@@ -140,8 +144,35 @@
                                                                                                  action:@selector(onDebugButtonLongClicked:)];
     [_debugButton addGestureRecognizer:debugLongPress];
 #endif // !defined(OSMAND_IOS_DEV)
-}
     
+    // widgets
+    
+    _primaryFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:21];
+    _unitsFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:14];
+    
+    // drop shadow
+    [_currentSpeedWidget.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_currentSpeedWidget.layer setShadowOpacity:0.3];
+    [_currentSpeedWidget.layer setShadowRadius:2.0];
+    [_currentSpeedWidget.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    [_currentAltitudeWidget.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_currentAltitudeWidget.layer setShadowOpacity:0.3];
+    [_currentAltitudeWidget.layer setShadowRadius:2.0];
+    [_currentAltitudeWidget.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    CGFloat radius = 3.0;
+    UIColor *widgetBackgroundColor = [UIColor whiteColor];
+    _currentSpeedWidget.backgroundColor = [widgetBackgroundColor copy];
+    _currentSpeedWidget.layer.cornerRadius = radius;
+    _currentAltitudeWidget.backgroundColor = [widgetBackgroundColor copy];
+    _currentAltitudeWidget.layer.cornerRadius = radius;
+
+    _currentSpeedWidget.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+    _currentAltitudeWidget.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -193,13 +224,19 @@
     if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
         [self.view addSubview:_destinationViewController.view];
     
+    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
+
+    //widgets
     if (![self.view.subviews containsObject:self.widgetsView] && [[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
     {
-        _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
         [self.view addSubview:self.widgetsView];
     }
-
+    
+    _currentAltitudeWidget.hidden = !_settings.settingShowAltInDriveMode;
+    
+    [self updateWidgetsLayout:y + 5.0];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -252,6 +289,24 @@
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)updateWidgetsLayout:(CGFloat)y
+{
+    CGFloat x = DeviceScreenWidth - _currentSpeedWidget.bounds.size.width + 4.0;
+
+    if (_widgetsView && _widgetsView.superview)
+    {
+        _widgetsView.frame = CGRectMake(x, y, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        y += _widgetsView.bounds.size.height + 2.0;
+    }
+    
+    _currentSpeedWidget.frame = CGRectMake(x, y, _currentSpeedWidget.bounds.size.width, _currentSpeedWidget.bounds.size.height);
+    if (_settings.settingShowAltInDriveMode)
+    {
+        y += _currentSpeedWidget.bounds.size.height + 2.0;
+        _currentAltitudeWidget.frame = CGRectMake(x, y, _currentAltitudeWidget.bounds.size.width, _currentAltitudeWidget.bounds.size.height);
+    }
 }
 
 - (void)onDebugButtonLongClicked:(id)sender
@@ -311,19 +366,77 @@
 
 - (void)updateCurrentSpeedAndAltitude
 {
-#if defined(OSMAND_IOS_DEV)
-    if (_app.debugSettings.useRawSpeedAndAltitudeOnHUD)
-    {
-        self.currentSpeedLabel.text = [NSString stringWithFormat:@"(R) %.1f km/h", _lastCapturedLocation.speed * 3.6];
-        self.currentAltitudeLabel.text = [NSString stringWithFormat:@"(R) %d m", (int)_lastCapturedLocation.altitude];
+    [self updateSpeed];
+    if (_settings.settingShowAltInDriveMode)
+        [self updateAltitude];
+}
 
-        return;
-    }
-#endif // defined(OSMAND_IOS_DEV)
-
+- (void)updateSpeed
+{
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
-    self.currentSpeedLabel.text = [_app getFormattedSpeed:speed drive:YES];
-    self.currentAltitudeLabel.text = [_app getFormattedAlt:_lastCapturedLocation.altitude];
+
+    NSString *text = [_app getFormattedSpeed:speed drive:YES];
+
+#if defined(OSMAND_IOS_DEV)
+
+    if (_app.debugSettings.useRawSpeedAndAltitudeOnHUD)
+        text = [NSString stringWithFormat:@"%.1f km/h", _lastCapturedLocation.speed * 3.6];
+
+#endif // defined(OSMAND_IOS_DEV)
+    
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    NSUInteger spaceIndex = 0;
+    for (NSUInteger i = text.length - 1; i > 0; i--)
+        if ([text characterAtIndex:i] == ' ')
+        {
+            spaceIndex = i;
+            break;
+        }
+    
+    NSRange valueRange = NSMakeRange(0, spaceIndex);
+    NSRange unitRange = NSMakeRange(spaceIndex, text.length - spaceIndex);
+    
+    [string addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:valueRange];
+    
+    [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+    [string addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:unitRange];
+    [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+    
+    _currentSpeedLabel.attributedText = string;
+}
+
+- (void)updateAltitude
+{
+    NSString *text = [_app getFormattedAlt:_lastCapturedLocation.altitude];
+
+#if defined(OSMAND_IOS_DEV)
+    
+    if (_app.debugSettings.useRawSpeedAndAltitudeOnHUD)
+        text = [NSString stringWithFormat:@"%d m", (int)_lastCapturedLocation.altitude];
+    
+#endif // defined(OSMAND_IOS_DEV)
+    
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    NSUInteger spaceIndex = 0;
+    for (NSUInteger i = text.length - 1; i > 0; i--)
+        if ([text characterAtIndex:i] == ' ')
+        {
+            spaceIndex = i;
+            break;
+        }
+    
+    NSRange valueRange = NSMakeRange(0, spaceIndex);
+    NSRange unitRange = NSMakeRange(spaceIndex, text.length - spaceIndex);
+    
+    [string addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:valueRange];
+    
+    [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+    [string addAttribute:NSForegroundColorAttributeName value:[UIColor lightGrayColor] range:unitRange];
+    [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+    
+    _currentAltitudeLabel.attributedText = string;
 }
 
 - (void)updateCurrentPosition
@@ -607,8 +720,7 @@
             if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
                 _compassBox.frame = CGRectMake(x, y, size.width, size.height);
             
-            if (_widgetsView)
-                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+            [self updateWidgetsLayout:y + 5.0];
         }];
     }
     else
@@ -616,8 +728,7 @@
         if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
             _compassBox.frame = CGRectMake(x, y, size.width, size.height);
         
-        if (_widgetsView)
-            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        [self updateWidgetsLayout:y + 5.0];
     }
     
 }

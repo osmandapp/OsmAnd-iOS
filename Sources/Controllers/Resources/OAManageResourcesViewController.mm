@@ -1085,7 +1085,16 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     [resourceItems addObject:item];
                 }
             }
-            [results addObjectsFromArray:resourceItems];
+
+            if (resourceItems.count > 1)
+            {
+                if (![results containsObject:region])
+                    [results addObject:region];
+            }
+            else
+            {
+                [results addObjectsFromArray:resourceItems];
+            }
         }
         
         _searchResults = results;
@@ -1596,6 +1605,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                         break;
                     }
             }
+        } else {
+            for (UIView *view in cell.contentView.subviews)
+                if (view.tag == -1) {
+                    [view removeFromSuperview];
+                    break;
+                }            
         }
         
     }

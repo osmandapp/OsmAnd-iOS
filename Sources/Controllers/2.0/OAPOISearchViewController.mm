@@ -109,6 +109,8 @@ typedef enum
 
     BOOL _showCoordinates;
     NSArray *_foundCoords;
+    
+    BOOL _forceShowBottomLabel;
 }
 
 - (instancetype)init
@@ -171,9 +173,7 @@ typedef enum
     [self showSearchIcon];
     [self generateData];
     
-    if (_searchNearMapCenter)
-        _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
-
+    [self updateSearchNearMapCenterLabel];
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -188,6 +188,12 @@ typedef enum
     [self registerForKeyboardNotifications];
     
     [super viewWillAppear:animated];
+    
+    if (_searchNearMapCenter && (_topView.frame.size.height < kMapCenterSearchToolbarHeight))
+    {
+        _forceShowBottomLabel = YES;
+        [self.view setNeedsLayout];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -229,35 +235,58 @@ typedef enum
 
 -(void)viewWillLayoutSubviews
 {
-    if (_searchNearMapCenter)
-    {
-        CGRect frame = _topView.frame;
-        frame.size.height = kMapCenterSearchToolbarHeight;
-        _topView.frame = frame;
-        _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
-    }
+    if (_searchNearMapCenter && (self.searchString.length == 0 || _forceShowBottomLabel))
+        [self showSearchNearMapCenterLabel];
     else
-    {
-        CGRect frame = _topView.frame;
-        frame.size.height = 64.0;
-        _topView.frame = frame;
-        _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
-    }
+        [self hideSearchNearMapCenterLabel];
 }
 
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
 {
-    BOOL prevValue = _searchNearMapCenter;
     _searchNearMapCenter = searchNearMapCenter;
     
-    if (searchNearMapCenter)
-        _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
-
-    if (prevValue != _searchNearMapCenter && self.isViewLoaded)
+    [self updateSearchNearMapCenterLabel];
+    
+    if (self.isViewLoaded && [self needUpdateSearchNearMapCenterLabel])
     {
         _dataInvalidated = YES;
         [self.view setNeedsLayout];
     }
+}
+
+-(void)showSearchNearMapCenterLabel
+{
+    CGRect frame = _topView.frame;
+    frame.size.height = kMapCenterSearchToolbarHeight;
+    _topView.frame = frame;
+    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
+}
+
+-(void)hideSearchNearMapCenterLabel
+{
+    CGRect frame = _topView.frame;
+    frame.size.height = 64.0;
+    _topView.frame = frame;
+    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
+}
+
+-(void)updateSearchNearMapCenterLabel
+{
+    if (_searchNearMapCenter)
+        _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [[OsmAndApp instance] getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
+}
+
+-(BOOL)needUpdateSearchNearMapCenterLabel
+{
+    BOOL labelHidden = (_topView.frame.size.height < kMapCenterSearchToolbarHeight);
+    
+    BOOL res = NO;
+    if (_searchNearMapCenter)
+        res = (self.searchString.length == 0 && labelHidden) || (self.searchString.length > 0 && !labelHidden);
+    else
+        res = !labelHidden;
+    
+    return res;
 }
 
 -(void)showWaitingIndicator
@@ -1416,7 +1445,20 @@ typedef enum
         self.searchString = nil;
     }
     
-    [self generateData];
+    _forceShowBottomLabel = NO;
+    if (self.isViewLoaded && [self needUpdateSearchNearMapCenterLabel])
+    {
+        [self.view setNeedsLayout];
+        [UIView animateWithDuration:.25 animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            [self generateData];
+        }];
+    }
+    else
+    {
+        [self generateData];
+    }
 }
 
 - (void)goToPoint:(double)latitude longitude:(double)longitude

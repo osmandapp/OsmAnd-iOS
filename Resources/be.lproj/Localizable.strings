@@ -348,8 +348,8 @@
 "product_desc_wiki" = "Зьвесткі вікіпэдыі";
 "product_title_srtm" = "Ізалініі вышынь";
 "res_roads" = "Дарогі";
-"res_srtm" = "SRTM";
-"res_wiki" = "Вікі";
+"res_srtm" = "Ізалініі вышынь";
+"res_wiki" = "Вікіпэдыя";
 "product_desc_srtm" = "Паказ ізаліній вышынь";
 "select_language" = "Абраць мову";
 "language_short" = "Мова";
@@ -365,3 +365,6 @@
 "you_searching" = "Вы шукаеце";
 "from_location" = "адсюль";
 "show_alt_in_drive" = "Паказваць вышыню ў рэжыме кіраваньня";
+"res_hillshade" = "Рэльеф мясцовасьці";
+"purchase_get" = "Атрымаць";
+"srtm_disabled" = "Ізалініі вышынь адключаны";

@@ -1231,7 +1231,29 @@
     else
     {
         _imageView.image = _targetPoint.icon;
-        [_addressLabel setText:_targetPoint.title];
+        NSString *t;
+        if (_targetPoint.titleSecond)
+        {
+            t = [NSString stringWithFormat:@"%@ - %@", _targetPoint.title, _targetPoint.titleSecond];
+            CGFloat h = [OAUtilities calculateTextBounds:t width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
+            if (h > 41.0)
+            {
+                t = _targetPoint.title;
+            }
+            else if (h > 21.0)
+            {
+                t = [NSString stringWithFormat:@"%@\n%@", _targetPoint.title, _targetPoint.titleSecond];
+                h = [OAUtilities calculateTextBounds:t width:_addressLabel.bounds.size.width font:_addressLabel.font].height;
+                if (h > 41.0)
+                    t = _targetPoint.title;
+            }
+        }
+        else
+        {
+            t = _targetPoint.title;
+        }
+        
+        [_addressLabel setText:t];
         self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
         [_coordinateLabel setText:self.formattedLocation];
         [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];

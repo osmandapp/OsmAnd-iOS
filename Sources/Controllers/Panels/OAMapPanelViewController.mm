@@ -856,6 +856,7 @@
     OAPOIType *poiType = [params objectForKey:@"poiType"];
     NSString *objectType = [params objectForKey:@"objectType"];
     NSString *caption = [params objectForKey:@"caption"];
+    NSString *captionExt = [params objectForKey:@"captionExt"];
     NSString *buildingNumber = [params objectForKey:@"buildingNumber"];
     UIImage *icon = [params objectForKey:@"icon"];
     double lat = [[params objectForKey:@"lat"] floatValue];
@@ -1048,6 +1049,7 @@
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
+    targetPoint.titleSecond = captionExt;
     targetPoint.zoom = renderView.zoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;

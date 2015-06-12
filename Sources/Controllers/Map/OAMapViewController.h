@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) OAPOIType *poiType;
 @property (nonatomic) UIImage *icon;
 @property (nonatomic) NSString *caption;
+@property (nonatomic) NSString *captionExt;
 @property (nonatomic) NSString *buildingNumber;
 @property (nonatomic) OAMapSymbolType type;
 @property (nonatomic) NSInteger sortIndex;

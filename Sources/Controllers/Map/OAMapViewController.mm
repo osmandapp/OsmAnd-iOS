@@ -1345,6 +1345,7 @@
                     }
                 }
                 
+                /*
                 if (prefLang)
                 {
                     const QString lang = QString::fromNSString(prefLang);
@@ -1356,6 +1357,7 @@
                 {
                     symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
                 }
+                 */
                 
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
                 
@@ -1400,14 +1402,19 @@
                                 symbol.icon = [OANativeUtilities skBitmapToUIImage:*outIcon];
                         }
 
-                    std::shared_ptr<OsmAnd::MapSymbol> mapCaptionSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Caption);
-                    if (mapCaptionSymbol != nullptr)
-                        if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapCaptionSymbol))
-                        {
-                            NSString *s = rasterMapSymbol->content.toNSString();
-                            if (!symbol.buildingNumber || ![s isEqualToString:symbol.buildingNumber])
-                                symbol.caption = s;
-                        }
+                    if (symbolGroup->symbols.count() > 0)
+                    {
+                        for (const auto& sym : symbolGroup->symbols)
+                            if (sym->contentClass == OsmAnd::MapSymbol::ContentClass::Caption)
+                                if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(sym))
+                                {
+                                    NSString *s = rasterMapSymbol->content.toNSString();
+                                    if (symbol.caption)
+                                        symbol.captionExt = s;
+                                    if (!symbol.caption && (!symbol.buildingNumber || ![s isEqualToString:symbol.buildingNumber]))
+                                        symbol.caption = s;
+                                }
+                    }
                 }
             }
         }
@@ -1497,6 +1504,9 @@
         [userInfo setObject:@"waypoint" forKey:@"objectType"];
     
     [userInfo setObject:symbol.caption forKey:@"caption"];
+    if (symbol.captionExt)
+        [userInfo setObject:symbol.captionExt forKey:@"captionExt"];
+    
     [userInfo setObject:symbol.buildingNumber forKey:@"buildingNumber"];
     [userInfo setObject:[NSNumber numberWithDouble:symbol.location.latitude] forKey:@"lat"];
     [userInfo setObject:[NSNumber numberWithDouble:symbol.location.longitude] forKey:@"lon"];

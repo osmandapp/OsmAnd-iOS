@@ -349,8 +349,8 @@
 "product_title_srtm" = "Curvas de nível";
 "product_desc_srtm" = "Exibir curvas de nível";
 "res_roads" = "Vias";
-"res_wiki" = "Wiki";
-"res_srtm" = "Srtm";
+"res_wiki" = "Wikipédia";
+"res_srtm" = "Curvas de nível";
 "select_language" = "Escolher idioma";
 "language_short" = "Idioma";
 "open_url" = "Abrir página no navegador";
@@ -364,3 +364,4 @@
 "language" = "Idioma";
 "you_searching" = "Você está pesquisando";
 "from_location" = "longe";
+"res_hillshade" = "Sombras de relevo";

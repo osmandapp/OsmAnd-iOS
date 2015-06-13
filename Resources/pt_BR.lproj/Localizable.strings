@@ -365,3 +365,8 @@
 "you_searching" = "Você está pesquisando";
 "from_location" = "longe";
 "res_hillshade" = "Sombras de relevo";
+"rendering_value_default_name" = "Predefinido";
+"rendering_value_disabled_name" = "Desativado";
+"show_alt_in_drive" = "Mostrar altitude em modo de navegação";
+"purchase_get" = "Obter";
+"srtm_disabled" = "Curvas de nível desativadas";

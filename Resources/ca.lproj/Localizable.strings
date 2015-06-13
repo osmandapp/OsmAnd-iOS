@@ -349,8 +349,8 @@
 "enter_fav_name" = "Introducció del nom del preferit";
 "res_installing" = "Instal·lant...";
 "res_roads" = "Carreteres";
-"res_srtm" = "SRTM";
-"res_wiki" = "Wiki";
+"res_srtm" = "Corbes de nivell";
+"res_wiki" = "Viquipèdia";
 "select_language" = "Trieu l'idioma";
 "language_short" = "Idioma";
 "open_url" = "Obre la pàgina al navegador";
@@ -364,3 +364,7 @@
 "language" = "Llengua";
 "you_searching" = "Esteu cercant";
 "from_location" = "més enllà";
+"res_hillshade" = "Ombrejat del relleu";
+"show_alt_in_drive" = "Mostra l'altitud en el mode conducció";
+"purchase_get" = "Obteniu";
+"srtm_disabled" = "Corbes de nivell desactivades";

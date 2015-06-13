@@ -368,3 +368,5 @@
 "res_hillshade" = "Рэльеф мясцовасьці";
 "purchase_get" = "Атрымаць";
 "srtm_disabled" = "Ізалініі вышынь адключаны";
+"rendering_value_default_name" = "Па змоўчаньні";
+"rendering_value_disabled_name" = "Адключана";

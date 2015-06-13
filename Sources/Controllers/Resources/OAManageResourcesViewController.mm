@@ -888,7 +888,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 continue;
             ResourceItem *item = resourceItems[i];
             if ([[item.downloadTask key] isEqualToString:downloadTaskKey]) {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:(_displayBanner ? 1 : 0)]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_resourcesSection]];
                 break;
             }
         }

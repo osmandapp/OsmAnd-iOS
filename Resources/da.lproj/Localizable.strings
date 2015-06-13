@@ -368,3 +368,5 @@
 "res_hillshade" = "Relief skygger";
 "purchase_get" = "Hent";
 "srtm_disabled" = "Højdekurver deaktiveret";
+"rendering_value_default_name" = "Standard";
+"rendering_value_disabled_name" = "Deaktiveret";

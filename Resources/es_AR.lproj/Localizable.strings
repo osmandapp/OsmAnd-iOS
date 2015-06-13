@@ -363,6 +363,10 @@
 "not_selected" = "No seleccionado";
 "language" = "Idioma";
 "you_searching" = "Está buscando";
-"from_location" = "desde su ubicación";
+"from_location" = "desde lejos";
 "res_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
+"rendering_value_disabled_name" = "Desactivado";
+"rendering_value_default_name" = "Predeterminado";
+"purchase_get" = "Obtener";
+"srtm_disabled" = "Curvas de nivel desactivadas";

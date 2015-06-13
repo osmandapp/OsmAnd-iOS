@@ -368,3 +368,5 @@
 "res_hillshade" = "地形陰影";
 "purchase_get" = "取得";
 "srtm_disabled" = "等高線已停用";
+"rendering_value_default_name" = "預設";
+"rendering_value_disabled_name" = "已停用";

@@ -181,6 +181,7 @@
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
     
+    //[[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
     if (![[NSFileManager defaultManager] fileExistsAtPath:ocbfPathLib])
     {
         NSError *error = nil;

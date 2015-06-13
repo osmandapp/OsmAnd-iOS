@@ -275,7 +275,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     if (!nameStr)
     {
-        OALog(@"Resource %@ without name!", resource->id.toNSString());
+        //OALog(@"Resource %@ without name!", resource->id.toNSString());
         return nil;
     }
     

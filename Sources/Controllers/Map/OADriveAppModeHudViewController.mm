@@ -322,11 +322,13 @@
     if (_app.mapMode != OAMapModeFollow)
         return;
     
+    /*
     _fadeInTimer = [NSTimer scheduledTimerWithTimeInterval:3.0
                                                     target:self
                                                   selector:@selector(optionalControlsFadeInAnimation)
                                                   userInfo:nil
                                                    repeats:NO];
+     */
 }
 
 - (void)optionalControlsFadeInAnimation

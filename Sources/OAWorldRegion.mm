@@ -294,6 +294,15 @@
         while(itRegion.hasNext())
         {
             const auto& region = itRegion.next();
+            
+            if (region->boundary)
+            {
+                // Remove
+                processedRegions++;
+                itRegion.remove();
+                continue;
+            }
+            
             NSString* parentRegionId = region->parentRegionName.toNSString();
 
             // Try to find parent of this region

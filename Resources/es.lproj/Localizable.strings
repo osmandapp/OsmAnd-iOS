@@ -370,3 +370,5 @@
 "from_location" = "a mucha distancia";
 "res_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Mostrar altitud en modo conducir";
+"purchase_get" = "Obtener";
+"srtm_disabled" = "Curvas de nivel deshabilitado";

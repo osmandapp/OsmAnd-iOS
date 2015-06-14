@@ -368,3 +368,5 @@
 "show_alt_in_drive" = "Mostra l'altitud en el mode conducció";
 "purchase_get" = "Obteniu";
 "srtm_disabled" = "Corbes de nivell desactivades";
+"rendering_value_default_name" = "Per defecte";
+"rendering_value_disabled_name" = "Desactivat";

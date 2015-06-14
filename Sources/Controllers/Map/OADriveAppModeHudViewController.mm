@@ -639,6 +639,8 @@
     [_mapModeButton setBackgroundImage:backgroundImage forState:UIControlStateNormal];
     [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
     
+    _mapModeButton.hidden = (_app.mapMode != OAMapModeFree);
+    
 }
 
 - (IBAction)onOptionsMenuButtonClicked:(id)sender

@@ -349,8 +349,8 @@
 "product_title_srtm" = "Szintvonalak";
 "product_desc_srtm" = "Szintvonalak megjelenítése";
 "res_roads" = "Utak";
-"res_srtm" = "Srtm";
-"res_wiki" = "Wiki";
+"res_srtm" = "Szintvonalak";
+"res_wiki" = "Wikipédia";
 "select_language" = "Nyelv kiválasztása";
 "language_short" = "Nyelv";
 "open_url" = "Oldal megnyitása a böngészőben";
@@ -364,3 +364,9 @@
 "language" = "Nyelv";
 "you_searching" = "Ezt keresi:";
 "from_location" = "távol";
+"rendering_value_default_name" = "Alapértelmezett";
+"rendering_value_disabled_name" = "Letiltva";
+"res_hillshade" = "Domborzatárnyékolás";
+"show_alt_in_drive" = "Magasság megjelenítése vezetés módban";
+"purchase_get" = "Beszerzés";
+"srtm_disabled" = "Szintvonalak letiltva";

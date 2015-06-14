@@ -764,13 +764,6 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
-    if (_targetPoint.type == OATargetWpt)
-        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
-    else
-        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
-    
-    _buttonFavorite.enabled = (!self.customController || !self.customController.editing);
-    
     _infoPhoneImage.hidden = _targetPoint.phone == nil;
     _infoPhoneText.hidden = _targetPoint.phone == nil;
     
@@ -1276,17 +1269,7 @@
         _buttonMore.enabled = YES;
     }
     
-    if (_targetPoint.type == OATargetFavorite)
-        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
-    else if (_targetPoint.type == OATargetWpt)
-        [_buttonFavorite setTitle:OALocalizedString(@"shared_string_edit") forState:UIControlStateNormal];
-    else
-        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
-    
-    if (_targetPoint.type == OATargetWpt)
-        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
-    else
-        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
 }
 
 -(void)setMapViewInstance:(UIView*)mapView
@@ -1369,28 +1352,7 @@
     else
         locText = self.formattedLocation;
     
-    if (_targetPoint.type == OATargetFavorite || _targetPoint.type == OATargetWpt)
-    {
-        if (self.customController && [self.customController supportEditing])
-        {
-            [self.customController activateEditing];
-            _buttonFavorite.enabled = NO;
-            if (!_showFull)
-            {
-                [self showFullMenu];
-            }
-            else
-            {
-                if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
-                    [self showTopToolbar:YES];
-            }
-        }
-    }
-    else
-    {
-        [self.delegate targetPointAddFavorite];        
-    }
-    
+    [self.delegate targetPointAddFavorite];
 }
 
 - (IBAction)buttonShareClicked:(id)sender {

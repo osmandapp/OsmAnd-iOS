@@ -61,7 +61,7 @@
 
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
-    return isViewVisible && self.editing;
+    return isViewVisible;
 }
 
 - (BOOL)supportEditing
@@ -210,7 +210,10 @@
 
 - (IBAction)deletePressed:(id)sender
 {
-    [self deleteItem];
+    if (self.editing || ![self supportEditing])
+        [self deleteItem];
+    else
+        [self activateEditing];
 }
 
 - (id)initWithItem:(id)item
@@ -311,6 +314,11 @@
         self.buttonOK.hidden = YES;
         self.deleteButton.hidden = NO;
     }
+    
+    if (self.editing || ![self supportEditing])
+        [self.deleteButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
+    else
+        [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning

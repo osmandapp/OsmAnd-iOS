@@ -26,6 +26,8 @@
 #import "OALog.h"
 #import "OAOcbfHelper.h"
 #import "OABannerView.h"
+#import "OAUtilities.h"
+#import "OAInAppCell.h"
 
 #include "Localization.h"
 
@@ -1629,17 +1631,25 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         {
             cell.textLabel.textColor = [UIColor lightGrayColor];
             
-            UIView *itemGetView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 54.0, 26.0)];
-            itemGetView.layer.cornerRadius = 4;
-            itemGetView.layer.masksToBounds = YES;
-            itemGetView.layer.borderWidth = 0.8;
-            itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
-
-            UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(4.0, 0.0, 54.0 - 8.0, 26.0)];
+            UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
             labelGet.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13];
             labelGet.textAlignment = NSTextAlignmentCenter;
             labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
             labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
+
+            [labelGet sizeToFit];
+            CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, labelGet.bounds.size.width), MAX(kPriceMinTextHeight, labelGet.bounds.size.height));
+            CGRect priceFrame = labelGet.frame;
+            priceFrame.origin = CGPointMake(kPriceTextInset, 0.0);
+            priceFrame.size = priceSize;
+            labelGet.frame = priceFrame;
+            
+            UIView *itemGetView = [[UIView alloc] initWithFrame:CGRectMake(priceFrame.origin.x - kPriceTextInset, priceFrame.origin.y, priceFrame.size.width + kPriceTextInset * 2.0, priceFrame.size.height)];
+            itemGetView.layer.cornerRadius = 4;
+            itemGetView.layer.masksToBounds = YES;
+            itemGetView.layer.borderWidth = 0.8;
+            itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
+            
             [itemGetView addSubview:labelGet];
             
             cell.accessoryView = itemGetView;

@@ -8,11 +8,6 @@
 
 #import "OAInAppCell.h"
 
-#define kPriceTextInset 4.0
-#define kPriceMinTextWidth 46.0
-#define kPriceMinTextHeight 26.0
-#define kPriceRectBorder 15.0
-
 @implementation OAInAppCell
 
 - (void)awakeFromNib {

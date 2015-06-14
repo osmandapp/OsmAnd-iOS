@@ -416,7 +416,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _products = [NSArray arrayWithArray:arr];
     }
     
-    _completionHandler(YES);
+    if (_completionHandler)
+        _completionHandler(YES);
+    
     _completionHandler = nil;
     
 }
@@ -438,7 +440,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         _products = [NSArray arrayWithArray:arr];
     }
 
-    _completionHandler(NO);
+    if (_completionHandler)
+        _completionHandler(NO);
+    
     _completionHandler = nil;
     
 }

@@ -157,6 +157,15 @@ typedef enum
             
         }
         
+        CGFloat titleWidth = [OAUtilities calculateTextBounds:_titleView.text width:2000.0 font:_titleView.font].width;
+        CGFloat xCenter = small / 2.0 - titleWidth / 2.0;
+        CGFloat xRight = _backButton.frame.origin.x + _backButton.frame.size.width + 5.0;
+
+        if (xCenter < xRight)
+            _titleView.frame = CGRectMake(xRight, _titleView.frame.origin.y, small - xRight - 5.0, _titleView.frame.size.height);
+        else
+            _titleView.frame = CGRectMake(xCenter, _titleView.frame.origin.y, titleWidth, _titleView.frame.size.height);
+        
     } else {
         
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
@@ -181,8 +190,15 @@ typedef enum
             
         }
         
+        CGFloat titleWidth = [OAUtilities calculateTextBounds:_titleView.text width:2000.0 font:_titleView.font].width;
+        CGFloat xCenter = big / 2.0 - titleWidth / 2.0;
+        CGFloat xRight = _backButton.frame.origin.x + _backButton.frame.size.width + 5.0;
+        
+        if (xCenter < xRight)
+            _titleView.frame = CGRectMake(xRight, _titleView.frame.origin.y, big - xRight - 5.0, _titleView.frame.size.height);
+        else
+            _titleView.frame = CGRectMake(xCenter, _titleView.frame.origin.y, titleWidth, _titleView.frame.size.height);
     }
-    
 }
 
 - (void)applyLocalization

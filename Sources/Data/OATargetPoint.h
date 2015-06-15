@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) CLLocationCoordinate2D location;
 @property (nonatomic) NSString *title;
 @property (nonatomic) NSString *titleSecond;
+@property (nonatomic) NSString *titleAddress;
 
 @property (nonatomic) NSString *phone;
 @property (nonatomic) NSString *openingHours;

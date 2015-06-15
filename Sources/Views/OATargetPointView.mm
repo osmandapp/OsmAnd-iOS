@@ -53,7 +53,7 @@
 @property (weak, nonatomic) IBOutlet UIView *backView3;
 @property (weak, nonatomic) IBOutlet UIView *backView4;
 
-@property NSString* formattedLocation;
+@property NSString* addressStr;
 @property OAMapRendererView* mapView;
 @property UINavigationController* navController;
 @property UIView* parentView;
@@ -78,9 +78,12 @@
     CALayer *_horizontalLineInfo1;
     CALayer *_horizontalLineInfo2;
     CALayer *_horizontalLineInfo3;
+    CALayer *_horizontalLineInfo4;
     
     UIFont *_infoFont;
     
+    UIImageView *_infoCoordsImage;
+    UIButton *_infoCoordsText;
     UIImageView *_infoPhoneImage;
     UIButton *_infoPhoneText;
     UIImageView *_infoOpeningHoursImage;
@@ -102,6 +105,9 @@
 
     OATargetPointType _previousTargetType;
     UIImage *_previousTargetIcon;
+    
+    BOOL _coordsHidden;
+    NSString *_formattedCoords;
 }
 
 - (instancetype)init
@@ -151,6 +157,8 @@
     _horizontalLineInfo2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     _horizontalLineInfo3 = [CALayer layer];
     _horizontalLineInfo3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLineInfo4 = [CALayer layer];
+    _horizontalLineInfo4.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     _infoView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 100.0)];
     _infoView.backgroundColor = UIColorFromRGB(0xf2f2f2);
@@ -158,9 +166,14 @@
     [_infoView.layer addSublayer:_horizontalLineInfo1];
     [_infoView.layer addSublayer:_horizontalLineInfo2];
     [_infoView.layer addSublayer:_horizontalLineInfo3];
+    [_infoView.layer addSublayer:_horizontalLineInfo4];
     
     _infoFont = [UIFont fontWithName:@"AvenirNext-Medium" size:14.0];
     
+    _infoCoordsImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoCoordsImage.contentMode = UIViewContentModeCenter;
+    [_infoView addSubview:_infoCoordsImage];
+
     _infoPhoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_phone_number"]];
     _infoPhoneImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoPhoneImage];
@@ -177,6 +190,11 @@
     _infoDescImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoDescImage];
     
+    _infoCoordsText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoCoordsText];
+    _infoCoordsText.userInteractionEnabled = NO;
+    [_infoView addSubview:_infoCoordsText];
+
     _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoPhoneText];
     [_infoPhoneText addTarget:self action:@selector(callPhone) forControlEvents:UIControlEventTouchUpInside];
@@ -800,7 +818,7 @@
     {
         [_buttonDirection setTitle:OALocalizedString(@"ctx_mnu_direction") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
-        [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon"] forState:UIControlStateNormal];
+        [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
@@ -821,7 +839,7 @@
 
 - (BOOL)hasInfo
 {
-    return _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || self.customController;
+    return _coordsHidden || _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || self.customController;
 }
 
 - (void)applyTargetObjectChanges
@@ -1022,6 +1040,25 @@
     {
         CGFloat infoWidth = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
         
+        if (_coordsHidden)
+        {
+            CGSize s = [OAUtilities calculateTextBounds:_formattedCoords width:infoWidth - 55.0 font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoCoordsImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoCoordsText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoCoordsText setTitle:_formattedCoords forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo4.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo4.hidden = NO;
+        }
+        else
+        {
+            _horizontalLineInfo4.hidden = YES;
+        }
+        
         if (_targetPoint.phone)
         {
             CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:infoWidth - 55.0 font:_infoFont];
@@ -1172,7 +1209,12 @@
     }
     
     _addressLabel.frame = CGRectMake(textX, 3.0, width - textX - 40.0, 36.0);
-    _coordinateLabel.frame = CGRectMake(textX, 39.0, width - textX - 40.0, 21.0);
+
+    CGFloat clh = [OAUtilities calculateTextBounds:_coordinateLabel.text width:width - textX - 40.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:12.0]].height;
+    if (clh < 20)
+        _coordinateLabel.frame = CGRectMake(textX, 35.0, width - textX - 40.0, 30.0);
+    else
+        _coordinateLabel.frame = CGRectMake(textX, 35.0, width - textX - 40.0, 36.0);
     
     _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
     _buttonClose.frame = CGRectMake(width - 36.0, 0.0, 36.0, 36.0);
@@ -1258,9 +1300,7 @@
         }
         else
         {
-            self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
-            [_coordinateLabel setText:self.formattedLocation];
-            [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+            [self updateCoordinateLabel];
         }
     }
     else
@@ -1289,9 +1329,7 @@
         }
         
         [_addressLabel setText:t];
-        self.formattedLocation = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
-        [_coordinateLabel setText:self.formattedLocation];
-        [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+        [self updateCoordinateLabel];
     }
     
     if (_targetPoint.type == OATargetParking)
@@ -1312,6 +1350,24 @@
     }
     
     _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
+}
+
+- (void)updateCoordinateLabel
+{
+    _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
+
+    if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress])
+    {
+        _coordsHidden = YES;
+        self.addressStr = _targetPoint.titleAddress;
+    }
+    else
+    {
+        _coordsHidden = NO;
+        self.addressStr = _formattedCoords;
+    }
+    [_coordinateLabel setText:self.addressStr];
+    [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
 }
 
 -(void)setMapViewInstance:(UIView*)mapView
@@ -1392,7 +1448,7 @@
     if (self.isAddressFound)
         locText = self.targetPoint.title;
     else
-        locText = self.formattedLocation;
+        locText = self.addressStr;
     
     [self.delegate targetPointAddFavorite];
 }

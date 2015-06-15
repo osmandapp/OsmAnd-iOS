@@ -7,6 +7,7 @@
 //
 
 #import "OATargetMenuViewController.h"
+#import "OAUtilities.h"
 
 @interface OATargetMenuViewController ()
 
@@ -63,6 +64,20 @@
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
     return NO; // override
+}
+
+- (void)useGradient:(BOOL)gradient
+{
+    if (self.titleGradient && gradient)
+    {
+        self.titleGradient.hidden = NO;
+        self.navBar.backgroundColor = [UIColor clearColor];
+    }
+    else
+    {
+        self.titleGradient.hidden = YES;
+        self.navBar.backgroundColor = UIColorFromRGB(0xFF8F00);
+    }
 }
 
 - (BOOL)supportEditing

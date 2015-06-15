@@ -83,7 +83,7 @@
     
     [self setupView];
     [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.showCoords ? 1 : 0) inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
     [self.tableView endUpdates];
     if (self.delegate)
         [self.delegate contentHeightChanged:[self contentHeight]];
@@ -357,7 +357,7 @@
     CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGRect convertedFrameView = [self.contentView convertRect:self.contentView.bounds fromView:nil];
     
-    CGFloat minBottom = ABS(convertedFrameView.origin.y) + 44.0;
+    CGFloat minBottom = ABS(convertedFrameView.origin.y) + 44.0 + (self.showCoords ? 44.0 : 0.0);
     CGFloat keyboardTop = DeviceScreenHeight - keyboardFrame.size.height;
     
     BOOL needOffsetViews = minBottom > keyboardTop;
@@ -667,7 +667,7 @@
     if (!self.showCoords)
         index++;
     
-    if (index == 3) // description
+    if (index == 4) // description
         return _descHeight;
     else
         return 44.0;

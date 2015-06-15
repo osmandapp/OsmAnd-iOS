@@ -1524,15 +1524,27 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     cellTypeId = repositoryResourceCell;
                 }
                 
+                BOOL mapDownloaded = NO;
+                for (ResourceItem* it in [self getRegionMapItems])
+                {
+                    if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[LocalResourceItem class]] || [it isKindOfClass:[OutdatedResourceItem class]]))
+                    {
+                        mapDownloaded = YES;
+                        break;
+                    }
+                }
+                
                 if (item.resourceType == OsmAndResourceType::SrtmMapRegion
-                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
+                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
                 {
                     disabled = YES;
+                    item.disabled = YES;
                 }
                 if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
+                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && !mapDownloaded)))
                 {
                     disabled = YES;
+                    item.disabled = YES;
                 }
 
                 title = item.title;
@@ -1563,15 +1575,27 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = repositoryResourceCell;
             }
             
+            BOOL mapDownloaded = NO;
+            for (ResourceItem* it in [self getRegionMapItems])
+            {
+                if (it.resourceType == OsmAndResourceType::MapRegion && ([it isKindOfClass:[LocalResourceItem class]] || [it isKindOfClass:[OutdatedResourceItem class]]))
+                {
+                    mapDownloaded = YES;
+                    break;
+                }
+            }
+            
             if (item.resourceType == OsmAndResourceType::SrtmMapRegion
-                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
+                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
             {
                 disabled = YES;
+                item.disabled = YES;
             }
             if (item.resourceType == OsmAndResourceType::WikiMapRegion
-                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
+                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && !mapDownloaded)))
             {
                 disabled = YES;
+                item.disabled = YES;
             }
 
             title = item.title;

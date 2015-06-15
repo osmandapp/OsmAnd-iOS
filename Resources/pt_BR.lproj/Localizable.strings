@@ -370,5 +370,5 @@
 "show_alt_in_drive" = "Mostrar altitude em modo de navegação";
 "purchase_get" = "Obter";
 "srtm_disabled" = "Curvas de nível desativadas";
-"prch_wiki_info" = "prch_wiki_info";
-"prch_srtm_info" = "prch_srtm_info";
+"prch_wiki_info" = "Complemento Wikipédia ativa informações para mapas da Wikipédia que você tem direito, comprado ou baixado dentro do limite gratuito.";
+"prch_srtm_info" = "Complemento curvas de nível ativa curvas de nível para mapas que você tem direito, comprado ou baixado dentro do limite gratuito.";

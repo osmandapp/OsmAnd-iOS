@@ -13,4 +13,6 @@
 @property (nonatomic, assign) BOOL centerVertically;
 @property (nonatomic, assign) BOOL extraSpacing;
 
+- (void)applyVerticalLayout;
+
 @end

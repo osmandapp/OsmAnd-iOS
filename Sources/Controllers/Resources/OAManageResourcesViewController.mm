@@ -443,7 +443,21 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion
                                                                 thatContainsResource:QString([resourceId UTF8String])];
     
-    if (!match || ![match isInPurchasedArea])
+    const auto citRegionResources = _resourcesByRegions.constFind(match);
+    if (citRegionResources == _resourcesByRegions.cend())
+        return;
+    const auto& regionResources = *citRegionResources;
+    
+    OsmAndResourceType resourceType = OsmAndResourceType::Unknown;
+    
+    for (const auto& resource : regionResources.allResources)
+        if (resource->id == QString([resourceId UTF8String]))
+        {
+            resourceType = resource->type;
+            break;
+        }
+    
+    if ((!match || ![match isInPurchasedArea]) && resourceType == OsmAndResourceType::MapRegion)
         [OAIAPHelper decreaseFreeMapsCount];
 }
 
@@ -1510,11 +1524,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     cellTypeId = repositoryResourceCell;
                 }
                 
-                if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+                if (item.resourceType == OsmAndResourceType::SrtmMapRegion
+                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
                 {
                     disabled = YES;
                 }
-                if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+                if (item.resourceType == OsmAndResourceType::WikiMapRegion
+                    && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
                 {
                     disabled = YES;
                 }
@@ -1547,11 +1563,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = repositoryResourceCell;
             }
             
-            if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            if (item.resourceType == OsmAndResourceType::SrtmMapRegion
+                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
             {
                 disabled = YES;
             }
-            if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
+            if (item.resourceType == OsmAndResourceType::WikiMapRegion
+                && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki] || (![self.region isInPurchasedArea] && [OAIAPHelper freeMapsAvailable] <= 0)))
             {
                 disabled = YES;
             }
@@ -1630,29 +1648,36 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         else
         {
             cell.textLabel.textColor = [UIColor lightGrayColor];
-            
-            UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
-            labelGet.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13];
-            labelGet.textAlignment = NSTextAlignmentCenter;
-            labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
-            labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
-
-            [labelGet sizeToFit];
-            CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, labelGet.bounds.size.width), MAX(kPriceMinTextHeight, labelGet.bounds.size.height));
-            CGRect priceFrame = labelGet.frame;
-            priceFrame.origin = CGPointMake(kPriceTextInset, 0.0);
-            priceFrame.size = priceSize;
-            labelGet.frame = priceFrame;
-            
-            UIView *itemGetView = [[UIView alloc] initWithFrame:CGRectMake(priceFrame.origin.x - kPriceTextInset, priceFrame.origin.y, priceFrame.size.width + kPriceTextInset * 2.0, priceFrame.size.height)];
-            itemGetView.layer.cornerRadius = 4;
-            itemGetView.layer.masksToBounds = YES;
-            itemGetView.layer.borderWidth = 0.8;
-            itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
-            
-            [itemGetView addSubview:labelGet];
-            
-            cell.accessoryView = itemGetView;
+                
+            if (self.region && [self.region isInPurchasedArea])
+            {
+                UILabel *labelGet = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 300.0, 100.0)];
+                labelGet.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:13];
+                labelGet.textAlignment = NSTextAlignmentCenter;
+                labelGet.textColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f];
+                labelGet.text = [OALocalizedString(@"purchase_get") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                
+                [labelGet sizeToFit];
+                CGSize priceSize = CGSizeMake(MAX(kPriceMinTextWidth, labelGet.bounds.size.width), MAX(kPriceMinTextHeight, labelGet.bounds.size.height));
+                CGRect priceFrame = labelGet.frame;
+                priceFrame.origin = CGPointMake(kPriceTextInset, 0.0);
+                priceFrame.size = priceSize;
+                labelGet.frame = priceFrame;
+                
+                UIView *itemGetView = [[UIView alloc] initWithFrame:CGRectMake(priceFrame.origin.x - kPriceTextInset, priceFrame.origin.y, priceFrame.size.width + kPriceTextInset * 2.0, priceFrame.size.height)];
+                itemGetView.layer.cornerRadius = 4;
+                itemGetView.layer.masksToBounds = YES;
+                itemGetView.layer.borderWidth = 0.8;
+                itemGetView.layer.borderColor = [UIColor colorWithRed:0.992f green:0.561f blue:0.149f alpha:1.00f].CGColor;
+                
+                [itemGetView addSubview:labelGet];
+                
+                cell.accessoryView = itemGetView;
+            }
+            else
+            {
+                cell.accessoryView = nil;
+            }
         }
     }
     

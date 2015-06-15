@@ -11,7 +11,6 @@
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
-#import "OAGPXPointViewController.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 

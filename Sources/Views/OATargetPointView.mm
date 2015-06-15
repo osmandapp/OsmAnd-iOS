@@ -142,6 +142,9 @@
 {
     _iapHelper = [OAIAPHelper sharedInstance];
     
+    self.buttonDirection.imageView.clipsToBounds = NO;
+    self.buttonDirection.imageView.contentMode = UIViewContentModeCenter;
+
     _horizontalLineInfo1 = [CALayer layer];
     _horizontalLineInfo1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     _horizontalLineInfo2 = [CALayer layer];
@@ -267,9 +270,11 @@
 
 - (void)doLocationUpdate
 {
+    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
+        return;
+
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        /*
         // Obtain fresh location and heading
         OsmAndAppInstance app = [OsmAndApp instance];
         CLLocation* newLocation = app.locationServices.lastKnownLocation;
@@ -278,7 +283,8 @@
         (newLocation.speed >= 1 && newLocation.course >= 0.0f)
         ? newLocation.course
         : newHeading;
-        */
+        
+        [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
         
         if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
         {
@@ -288,8 +294,42 @@
                 [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
             }
         }
-        
     });
+}
+
+- (void)updateDirectionButton
+{
+    if (_targetPoint.type == OATargetParking || _targetPoint.type == OATargetDestination)
+    {
+        self.buttonDirection.imageView.transform = CGAffineTransformIdentity;
+    }
+    else
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        
+        [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
+    }
+}
+
+- (void)updateDirectionButton:(CLLocationCoordinate2D)coordinate newDirection:(CLLocationDirection)newDirection
+{
+    const auto distance = OsmAnd::Utilities::distance(coordinate.longitude,
+                                                      coordinate.latitude,
+                                                      _targetPoint.location.longitude, _targetPoint.location.latitude);
+    
+    NSString *distanceStr = [[OsmAndApp instance] getFormattedDistance:distance];
+    
+    CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude]];
+    CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+    
+    [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
+    self.buttonDirection.imageView.transform = CGAffineTransformMakeRotation(direction);
 }
 
 - (void)moveToolbar:(UIPanGestureRecognizer *)gesture
@@ -775,6 +815,8 @@
     
     _infoDescImage.hidden = _targetPoint.desc == nil;
     _infoDescText.hidden = _targetPoint.desc == nil;
+    
+    [self updateDirectionButton];
 }
 
 - (BOOL)hasInfo

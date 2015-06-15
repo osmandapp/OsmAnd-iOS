@@ -416,4 +416,5 @@
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "purchase_get" = "Get";
 "srtm_disabled" = "Contour lines disabled";
-
+"prch_wiki_info" = "prch_wiki_info";
+"prch_srtm_info" = "prch_srtm_info";

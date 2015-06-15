@@ -50,3 +50,5 @@
 "shared_string_add" = "Ajouter";
 "shared_string_and" = "et";
 "shared_string_edit" = "Modifier";
+"rendering_value_disabled_name" = "Désactivé";
+"rendering_value_default_name" = "Par défaut";

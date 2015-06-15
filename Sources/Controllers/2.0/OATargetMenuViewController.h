@@ -25,6 +25,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
+@property (weak, nonatomic) IBOutlet UIImageView *titleGradient;
 @property (weak, nonatomic) IBOutlet UIButton *buttonCancel;
 @property (weak, nonatomic) IBOutlet UIButton *buttonOK;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
@@ -42,6 +43,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL)hasTopToolbar;
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+
+- (void)useGradient:(BOOL)gradient;
 
 - (BOOL)supportEditing;
 - (void)activateEditing;

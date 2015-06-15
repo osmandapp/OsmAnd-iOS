@@ -550,12 +550,14 @@
 
     if ([self isLandscape])
     {
+        [self.customController useGradient:NO];
         CGRect f = self.customController.navBar.frame;
-        self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, kInfoViewLanscapeWidth, f.size.height);
+        self.customController.navBar.frame = CGRectMake(- kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
         topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
     }
     else
     {
+        [self.customController useGradient:YES];
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
         topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
@@ -621,7 +623,10 @@
     
     if ([self isLandscape])
     {
-        
+        _showFull = YES;
+        _hideButtons = NO;
+        frame.size.height = _fullHeight;
+        frame.origin.y = DeviceScreenHeight - _fullHeight;
     }
     else
     {
@@ -705,6 +710,7 @@
 
 - (void)prepareForRotation
 {
+    /*
     if (![self isLandscape] && [self hasInfo])
     {
         [self.parentView insertSubview:_infoView belowSubview:self];
@@ -713,6 +719,7 @@
     {
         [self insertSubview:_infoView atIndex:0];
     }
+     */
 }
 
 - (void)clearCustomControllerIfNeeded
@@ -739,37 +746,16 @@
     _hideButtons = NO;
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
-    if ([self isLandscape])
+    if (self.customController.contentView)
     {
-        if (self.customController)
-        {
-            [_infoView removeFromSuperview];
-            if (self.superview)
-                [self.parentView insertSubview:self.customController.contentView belowSubview:self];
-            else
-                [self.parentView addSubview:self.customController.contentView];
-        }
-        else
-        {
-            if (self.superview)
-                [self.parentView insertSubview:_infoView belowSubview:self];
-            else
-                [self.parentView addSubview:_infoView];
-        }
+        [_infoView removeFromSuperview];
+        [self insertSubview:self.customController.contentView atIndex:0];
     }
     else
     {
-        if (self.customController.contentView)
-        {
-            [_infoView removeFromSuperview];
-            [self insertSubview:self.customController.contentView atIndex:0];
-        }
-        else
-        {
-            [self insertSubview:_infoView atIndex:0];
-        }
+        [self insertSubview:_infoView atIndex:0];
     }
-        
+    
     if (_buttonsCount > 3)
     {
         NSInteger addonsCount = _iapHelper.functionalAddons.count;
@@ -822,6 +808,11 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
+    BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress]);
+    
+    _infoCoordsImage.hidden = !coordsHidden;
+    _infoCoordsText.hidden = !coordsHidden;
+
     _infoPhoneImage.hidden = _targetPoint.phone == nil;
     _infoPhoneText.hidden = _targetPoint.phone == nil;
     
@@ -871,7 +862,7 @@
 
     if (self.customController && [self.customController hasTopToolbar])
     {
-        if ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded)
+        if ([self.customController shouldShowToolbar:(_showFull || [self isLandscape])] || self.targetPoint.toolbarNeeded)
             [self showTopToolbar:YES];
     }
 
@@ -881,10 +872,8 @@
         if ([self isLandscape])
         {
             frame.origin.x = -self.bounds.size.width;
-            frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
+            frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? 44.0 : 0.0);
             self.frame = frame;
-
-            _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
 
             frame.origin.x = 0.0;
         }
@@ -900,8 +889,6 @@
         [UIView animateWithDuration:0.3 animations:^{
             
             self.frame = frame;
-            if ([self isLandscape])
-                _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
             
         } completion:^(BOOL finished) {
             if (onComplete)
@@ -911,11 +898,12 @@
     else
     {
         CGRect frame = self.frame;
-        frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
-        self.frame = frame;
-        
         if ([self isLandscape])
-            _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+            frame.origin.y = 20.0 - kOATargetPointTopPanTreshold;
+        else
+            frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
+        
+        self.frame = frame;
         
         if (onComplete)
             onComplete();
@@ -954,9 +942,6 @@
                 if (showingTopToolbar)
                     self.customController.navBar.frame = newTopToolbarFrame;
                 
-                if ([self isLandscape])
-                    _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
-                
             } completion:^(BOOL finished) {
                 
                 [_infoView removeFromSuperview];
@@ -975,8 +960,6 @@
         else
         {
             self.frame = frame;
-            if ([self isLandscape])
-                _infoView.frame = CGRectMake(-kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
             
             [_infoView removeFromSuperview];
             [self removeFromSuperview];
@@ -1008,10 +991,7 @@
 
 - (UIView *)bottomMostView
 {
-    if ([self isLandscape] && [self hasInfo])
-        return _infoView;
-    else
-        return self;
+    return self;
 }
 
 - (void)layoutSubviews
@@ -1034,7 +1014,7 @@
     else
         _topView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, kOATargetPointTopViewHeight);
     
-    CGFloat hf = (landscape ? 20.0 : 0.0);
+    CGFloat hf = 0.0;
     
     if (!self.customController)
     {
@@ -1145,7 +1125,7 @@
         CGRect f = self.customController.contentView.frame;
         if (landscape)
         {
-            f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] ? self.customController.navBar.bounds.size.height : 0.0);
+            f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 44.0 : 0.0) - 36.0;
         }
         else
         {
@@ -1172,8 +1152,16 @@
     }
     else
     {
-        frame.origin.y = DeviceScreenHeight - h;
-        frame.size.height = h;
+        if (landscape)
+        {
+            frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? 44.0 : 0.0);
+            frame.size.height = DeviceScreenHeight - (20.0 - kOATargetPointTopPanTreshold);
+        }
+        else
+        {
+            frame.origin.y = DeviceScreenHeight - h;
+            frame.size.height = h;
+        }
     }
 
     self.frame = frame;
@@ -1195,10 +1183,11 @@
     
     if (landscape)
     {
-        _infoView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, DeviceScreenHeight);
+        CGFloat y = _topView.frame.origin.y + _topView.frame.size.height;
+        _infoView.frame = CGRectMake(0.0, y, width, DeviceScreenHeight - y - 53.0);
         
-        if (self.customController)
-            self.customController.contentView.frame = CGRectMake(0.0, ([self.customController hasTopToolbar] ? self.customController.navBar.bounds.size.height : 0.0), kInfoViewLanscapeWidth, self.customController.contentView.frame.size.height);
+        if (self.customController.contentView)
+            self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
     }
     else
     {

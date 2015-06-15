@@ -27,6 +27,7 @@
 @property uint64_t sizePkg;
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion* worldRegion;
+@property BOOL disabled;
 @end
 
 #define RepositoryResourceItem public(RepositoryResourceItem)

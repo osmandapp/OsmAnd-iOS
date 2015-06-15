@@ -483,7 +483,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)offerDownloadAndInstallOf:(RepositoryResourceItem*)item
 {
-    if (![self checkIfDownloadEnabled:item.worldRegion])
+    if (item.disabled || (item.resourceType == OsmAndResourceType::MapRegion && ![self checkIfDownloadEnabled:item.worldRegion]))
         return;
 
     NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:item.resource->packageSize

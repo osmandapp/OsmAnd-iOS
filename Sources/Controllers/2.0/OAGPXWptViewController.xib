@@ -13,6 +13,7 @@
                 <outlet property="deleteButton" destination="rby-mP-gm3" id="QY7-64-zNB"/>
                 <outlet property="navBar" destination="DYe-Jh-ora" id="EYN-Qs-dXu"/>
                 <outlet property="tableView" destination="DZx-4x-CVq" id="fJh-a5-GyC"/>
+                <outlet property="titleGradient" destination="E2f-hD-ccN" id="52V-Rl-1Hc"/>
                 <outlet property="titleView" destination="JZf-W2-K45" id="Avy-IG-idZ"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -77,7 +78,7 @@
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="DZx-4x-CVq">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="DZx-4x-CVq">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>

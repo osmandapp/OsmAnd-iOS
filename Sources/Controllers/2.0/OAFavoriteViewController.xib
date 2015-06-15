@@ -13,6 +13,7 @@
                 <outlet property="deleteButton" destination="nxf-ZF-kTT" id="ScC-as-B5p"/>
                 <outlet property="navBar" destination="wtn-Ag-xrz" id="UhW-Bs-rFt"/>
                 <outlet property="tableView" destination="wE8-6H-ny1" id="SED-mj-rHT"/>
+                <outlet property="titleGradient" destination="4EU-ev-tMF" id="HRR-op-t3A"/>
                 <outlet property="titleView" destination="jcT-Ix-x7i" id="g4f-mJ-chT"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -77,7 +78,7 @@
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="wE8-6H-ny1">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="wE8-6H-ny1">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>

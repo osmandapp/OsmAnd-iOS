@@ -12,6 +12,7 @@
                 <outlet property="contentView" destination="EGB-Fj-Ffv" id="Okp-yM-JH0"/>
                 <outlet property="navBar" destination="KGn-rp-4w9" id="71s-fw-Jrs"/>
                 <outlet property="tableView" destination="6Wc-mZ-ohY" id="F58-tW-JaI"/>
+                <outlet property="titleGradient" destination="tSY-V6-9N3" id="f3o-RW-fLM"/>
                 <outlet property="titleView" destination="IeC-dD-h4z" id="MY8-6e-bn1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>

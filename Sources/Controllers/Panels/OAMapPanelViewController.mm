@@ -941,61 +941,10 @@
     if (targetPoint.type == OATargetLocation && poiType)
         targetPoint.type = OATargetPOI;
     
+    NSString *roadTitle = [self findRoadNameByLat:lat lon:lon];
+
     if (caption.length == 0 && targetPoint.type == OATargetLocation)
     {
-        std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
-        _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
-        
-        std::shared_ptr<const OsmAnd::Road> road;
-        
-        const OsmAnd::PointI position31(
-                                        OsmAnd::Utilities::get31TileNumberX(lon),
-                                        OsmAnd::Utilities::get31TileNumberY(lat));
-        
-        road = _roadLocator->findNearestRoad(position31,
-                                             kMaxRoadDistanceInMeters,
-                                             OsmAnd::RoutingDataLevel::Detailed,
-                                             [self]
-                                             (const std::shared_ptr<const OsmAnd::Road>& road)
-                                             {
-                                                 return road->containsTag(QString("highway")) && road->captions.count() > 0;
-                                             });
-        
-        NSString* localizedTitle;
-        NSString* nativeTitle;
-        NSString* roadTitle;
-        if (road)
-        {
-            NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-
-            //for (const auto& entry : OsmAnd::rangeOf(road->captions))
-            //    NSLog(@"%d=%@", entry.key(), entry.value().toNSString());
-
-            if (prefLang)
-            {
-                const auto mainLanguage = QString::fromNSString(prefLang);
-                const auto localizedName = road->getCaptionInLanguage(mainLanguage);
-                if (!localizedName.isNull())
-                    localizedTitle = localizedName.toNSString();
-            }
-            const auto nativeName = road->getCaptionInNativeLanguage();
-            if (!nativeName.isNull())
-                nativeTitle = nativeName.toNSString();
-        }
-        
-        if (localizedTitle)
-        {
-            roadTitle = localizedTitle;
-        }
-        else if (nativeTitle)
-        {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            if (settings.settingMapLanguageTranslit)
-                roadTitle = OsmAnd::ICU::transliterateToLatin(road->getCaptionInNativeLanguage()).toNSString();
-            else
-                roadTitle = nativeTitle;
-        }
-        
         if (!roadTitle || roadTitle.length == 0)
         {
             if (buildingNumber.length > 0)
@@ -1059,6 +1008,10 @@
     targetPoint.localizedNames = names;
     targetPoint.localizedContent = content;
     targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
+    if (desc.length > 0)
+        targetPoint.titleAddress = desc;
+    else
+        targetPoint.titleAddress = roadTitle;    
     
     [_targetMenuView setTargetPoint:targetPoint];
     
@@ -1066,6 +1019,64 @@
     
     if (centerMap)
         [self goToTargetPointDefault];
+}
+
+- (NSString *)findRoadNameByLat:(double)lat lon:(double)lon
+{
+    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
+    _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+    
+    std::shared_ptr<const OsmAnd::Road> road;
+    
+    const OsmAnd::PointI position31(
+                                    OsmAnd::Utilities::get31TileNumberX(lon),
+                                    OsmAnd::Utilities::get31TileNumberY(lat));
+    
+    road = _roadLocator->findNearestRoad(position31,
+                                         kMaxRoadDistanceInMeters,
+                                         OsmAnd::RoutingDataLevel::Detailed,
+                                         [self]
+                                         (const std::shared_ptr<const OsmAnd::Road>& road)
+                                         {
+                                             return road->containsTag(QString("highway")) && road->captions.count() > 0;
+                                         });
+    
+    NSString* localizedTitle;
+    NSString* nativeTitle;
+    NSString* roadTitle;
+    if (road)
+    {
+        NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        
+        //for (const auto& entry : OsmAnd::rangeOf(road->captions))
+        //    NSLog(@"%d=%@", entry.key(), entry.value().toNSString());
+        
+        if (prefLang)
+        {
+            const auto mainLanguage = QString::fromNSString(prefLang);
+            const auto localizedName = road->getCaptionInLanguage(mainLanguage);
+            if (!localizedName.isNull())
+                localizedTitle = localizedName.toNSString();
+        }
+        const auto nativeName = road->getCaptionInNativeLanguage();
+        if (!nativeName.isNull())
+            nativeTitle = nativeName.toNSString();
+    }
+    
+    if (localizedTitle)
+    {
+        roadTitle = localizedTitle;
+    }
+    else if (nativeTitle)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        if (settings.settingMapLanguageTranslit)
+            roadTitle = OsmAnd::ICU::transliterateToLatin(road->getCaptionInNativeLanguage()).toNSString();
+        else
+            roadTitle = nativeTitle;
+    }
+    
+    return roadTitle;
 }
 
 - (void)goToTargetPointDefault

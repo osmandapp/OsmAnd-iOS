@@ -35,6 +35,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
 
+@property (nonatomic, assign) BOOL showCoords;
+@property (nonatomic, copy) NSString* formattedCoords;
+
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
 - (BOOL)hasTopToolbar;

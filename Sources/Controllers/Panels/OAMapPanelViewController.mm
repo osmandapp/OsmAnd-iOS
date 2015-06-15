@@ -1794,6 +1794,7 @@
     targetPoint.zoom = renderView.zoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
+    targetPoint.titleAddress = [self findRoadNameByLat:destination.latitude lon:destination.longitude];
     
     [_targetMenuView setTargetPoint:targetPoint];
     

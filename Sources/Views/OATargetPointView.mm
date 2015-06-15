@@ -1294,14 +1294,9 @@
         _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         OADestination *d = _targetPoint.targetObj;
+        [self updateCoordinateLabel];
         if (d && d.carPickupDateEnabled)
-        {
             [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
-        }
-        else
-        {
-            [self updateCoordinateLabel];
-        }
     }
     else
     {
@@ -1366,6 +1361,13 @@
         _coordsHidden = NO;
         self.addressStr = _formattedCoords;
     }
+    
+    if (self.customController)
+    {
+        self.customController.showCoords = _coordsHidden;
+        self.customController.formattedCoords = _formattedCoords;
+    }
+    
     [_coordinateLabel setText:self.addressStr];
     [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
 }

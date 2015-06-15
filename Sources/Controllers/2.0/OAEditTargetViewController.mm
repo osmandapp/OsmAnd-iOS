@@ -16,6 +16,7 @@
 #import "OADefaultFavorite.h"
 #import "OARootViewController.h"
 #import "OAUtilities.h"
+#import "OAIconTextTableViewCell.h"
 #import <UIAlertView+Blocks.h>
 
 #import "OATextLineViewCell.h"
@@ -489,13 +490,14 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.editing)
-        return 4;
+        return 4 + (self.showCoords ? 1 : 0);
     else
-        return 3;
+        return 3 + (self.showCoords ? 1 : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierColorCell = @"OAColorViewCell";
     static NSString* const reusableIdentifierGroupCell = @"OAGroupViewCell";
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
@@ -504,10 +506,33 @@
     int index = indexPath.row;
     if (!self.editing)
         index++;
+    if (!self.showCoords)
+        index++;
+    
+    if (!self.editing && self.showCoords && index == 1)
+        index = 0;
     
     switch (index)
     {
         case 0:
+        {
+            OAIconTextTableViewCell* cell;
+            cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.arrowIconView.hidden = YES;
+                CGRect frame = CGRectMake(15.0, cell.textView.frame.origin.y, cell.textView.frame.size.width, cell.textView.frame.size.height);
+                cell.textView.frame = frame;
+            }
+            cell.textView.text = self.formattedCoords;
+            
+            return cell;
+        }
+        case 1:
         {
             OATextViewTableViewCell* cell;
             cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextViewCell];
@@ -532,7 +557,7 @@
                 return cell;
             }
         }
-        case 1:
+        case 2:
         {
             OAColorViewCell* cell;
             cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
@@ -553,7 +578,7 @@
             
             return cell;
         }
-        case 2:
+        case 3:
         {
             OAGroupViewCell* cell;
             cell = (OAGroupViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
@@ -573,7 +598,7 @@
             
             return cell;
         }
-        case 3:
+        case 4:
         {
             OATextMultiViewCell* cell;
             cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextMultiViewCell];
@@ -639,6 +664,8 @@
     int index = indexPath.row;
     if (!self.editing)
         index++;
+    if (!self.showCoords)
+        index++;
     
     if (index == 3) // description
         return _descHeight;
@@ -653,24 +680,30 @@
     int index = indexPath.row;
     if (!self.editing)
         index++;
+    if (!self.showCoords)
+        index++;
     
     switch (index)
     {
-        case 0: // name
+        case 0: // coords
         {
             break;
         }
-        case 1: // color
+        case 1: // name
+        {
+            break;
+        }
+        case 2: // color
         {
             [self changeColorClicked];
             break;
         }
-        case 2: // group
+        case 3: // group
         {
             [self changeGroupClicked];
             break;
         }
-        case 3: // description
+        case 4: // description
         {
             [self changeDescriptionClicked];
             break;

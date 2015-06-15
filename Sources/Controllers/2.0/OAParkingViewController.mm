@@ -15,6 +15,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OADestination.h"
+#import "OAIconTextTableViewCell.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -82,7 +83,7 @@
 
 - (CGFloat)contentHeight
 {
-    return (_timeLimitActive ? 44.0 * 3.0 + 162.0 : 44.0);
+    return (_timeLimitActive ? 44.0 * (3.0 + (self.showCoords ? 1.0 : 0.0)) + 162.0 : 44.0 + (self.showCoords ? 44.0 : 0.0));
 }
 
 - (void)applyLocalization
@@ -119,6 +120,18 @@
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
     return isViewVisible;
+}
+
+-(void)setShowCoords:(BOOL)showCoords
+{
+    BOOL _prev = self.showCoords;
+    if (_prev == showCoords)
+        return;
+    
+    [super setShowCoords:showCoords];
+    
+    //if (self.delegate)
+    //    [self.delegate contentHeightChanged:[self contentHeight]];
 }
 
 - (void)okPressed
@@ -191,20 +204,41 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (_timeLimitActive)
-        return 4;
+        return 4 + (self.showCoords ? 1 : 0);
     else
-        return 1;
+        return 1 + (self.showCoords ? 1 : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
     static NSString* const reusableIdentifierSwitch = @"OASwitchTableViewCell";
     static NSString* const reusableIdentifierTimePicker = @"OADateTimePickerTableViewCell";
     static NSString* const reusableIdentifierTime = @"OATimeTableViewCell";
     
-    switch (indexPath.row)
+    NSInteger index = indexPath.row;
+    if (!self.showCoords)
+        index++;
+    
+    switch (index)
     {
         case 0:
+        {
+            OAIconTextTableViewCell* cell;
+            cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.arrowIconView.hidden = YES;
+                [cell showImage:NO];
+            }
+            cell.textView.text = self.formattedCoords;
+            
+            return cell;
+        }
+        case 1:
         {
             OASwitchTableViewCell* cell;
             cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
@@ -221,7 +255,7 @@
             
             return cell;
         }
-        case 1:
+        case 2:
         {
             OATimeTableViewCell* cell;
             cell = (OATimeTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTime];
@@ -236,7 +270,7 @@
             
             return cell;
         }
-        case 2:
+        case 3:
         {
             OADateTimePickerTableViewCell* cell;
             cell = (OADateTimePickerTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTimePicker];
@@ -252,7 +286,7 @@
             
             return cell;
         }
-        case 3:
+        case 4:
         {
             OASwitchTableViewCell* cell;
             cell = (OASwitchTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierSwitch];
@@ -294,7 +328,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row == 2)
+    if (indexPath.row == 2 + (self.showCoords ? 1 : 0))
         return 162.0;
     else
         return 44.0;

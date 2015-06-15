@@ -298,12 +298,20 @@
 
         [self.tableView reloadData];
         
-        if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap]) {
+        if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap])
+        {
             [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
         }
-
-        if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical]) {
-            
+        else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Wiki])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+        }
+        else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Srtm])
+        {
+            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+        }
+        else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical])
+        {
             const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
             NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                        countStyle:NSByteCountFormatterCountStyleFile];

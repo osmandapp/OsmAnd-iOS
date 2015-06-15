@@ -370,3 +370,5 @@
 "srtm_disabled" = "等高線已停用";
 "rendering_value_default_name" = "預設";
 "rendering_value_disabled_name" = "已停用";
+"prch_wiki_info" = "prch_wiki_info";
+"prch_srtm_info" = "prch_srtm_info";

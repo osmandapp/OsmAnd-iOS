@@ -180,7 +180,7 @@
 "res_no_space_free" = "és necessari. Si us plau, allibereu espai.";
 "res_free_exp" = "Ja heu consumit totes les baixades gratuïtes. Si us plau, compreu un continent per baixar / actualitzar mapes.";
 "res_upd_avail_q" = "Hi ha una actualització disponible per a";
-"data_will_be_lost" = "Es perdran totes les dades descarregades.";
+"data_will_be_lost" = "Totes les dades baixades es perdran.";
 "res_details" = "Detalls";
 "res_type" = "Tipus";
 "res_unknown" = "Desconegut";
@@ -203,14 +203,14 @@
 "time_left" = "pendent";
 "time_overdue" = "consumit";
 "res_map_of_region" = "Mapa de la regió";
-"res_updates_no_space" = "No hi ha prou espai per instal·lar %d actualització(ons). En cal %@ . Si us plau, allibereu més espai.";
-"add_parking" = "Desar com a posició d'aparcament";
+"res_updates_no_space" = "No hi ha prou espai per instal·lar %d actualització(ons). Calen %@ . Si us plau, allibereu més espai.";
+"add_parking" = "Afegeix com a posició d'aparcament";
 "add_waypoint" = "Incorpora la fita a la traça";
 "pickup_car" = "Recollida del cotxe";
 "pickup_car_at" = "Recollida del cotxe en";
 "add_notification_calendar" = "Desa la notificació al calendari";
 "cannot_add_marker" = "No es pot desar l'aparcament";
-"cannot_add_marker_desc" = "Si us plau esborreu com a mínim una adreça i reintenteu-ho";
+"cannot_add_marker_desc" = "Esborreu com a mínim una adreça i torneu-ho a intentar";
 "cannot_add_destination" = "No es pot afegir l'adreça";
 // Units
 "units_km" = "km";
@@ -227,7 +227,7 @@
 "map_no_address" = "L'adreça encara no es coneix";
 // Import
 "import_title" = "Importa dades";
-"import_choose_type" = "Si us plau trieu què importar";
+"import_choose_type" = "Trieu què voleu importar";
 "import_favorite" = "Preferit";
 "import_failed" = "La importació ha fallat";
 "import_cannot" = "No es pot importar el fitxer especificat";
@@ -271,12 +271,12 @@
 "rendering_attr_showSurfaces_name" = "Mostra el tipus de superfície de la via";
 "rendering_attr_moreDetailed_name" = "Més detalls";
 "cannot_access_calendar" = "No es pot accedir al calendari";
-"reminder_not_set_text" = "El recordatori automàtic no s'ha desat donat que no es pot accedir al calendari";
+"reminder_not_set_text" = "El recordatori automàtic no s'ha desat perquè no s'ha pogut accedir al calendari";
 //inapps
 "product_title_nautical" = "Mapa nàutic";
 "product_desc_nautical" = "Mapa nàutic d'arreu el món";
 "product_title_parking" = "Posició d'aparcament";
-"product_desc_parking" = "Us permet memoritzar fàcilment quan es va aparcar el vehicle  i quant temps us queda si l'aparcament és limitat en el temps";
+"product_desc_parking" = "Us permet memoritzar fàcilment quan es va aparcar el vehicle i quant temps us queda si l'aparcament és per temps limitat";
 "product_title_skimap" = "Mapa d'esquí";
 "product_desc_skimap" = "Pistes d'esquí a totes les estacions d'esquí del món";
 "product_title_track_recording" = "Enregistrament de trajectes";
@@ -301,10 +301,10 @@
 "product_desc_asia" = "Mapa d'Àsia";
 "my_location" = "La vostra posició";
 "all_categories" = "Totes les categories";
-"get_unlimited_access" = "Obtingui accés il·limitat";
+"get_unlimited_access" = "Obtén accés il·limitat";
 "latitude" = "Latitud";
 "longitude" = "Longitud";
-"track_save_short_q" = "La traça és molt curta, segur que voleu desar?";
+"track_save_short_q" = "La traça és molt curta, segur que la voleu desar?";
 "add_as" = "Afegeix com a";
 "make_call" = "Truca";
 "track_rec_addon_q" = "Activeu el complement «Gravació del trajecte»  per enregistrar i desar les vostres traces";
@@ -330,34 +330,34 @@
 "prch_nau_q2_cell" = "La baixada requereix %@ per transmissió de dades.";
 "prch_nau_q2_wifi" = "La baixada requereix %@ per la xarxa WiFi.";
 "res_inst_avail_cell_q" = "La instal·lació de %@ implica baixar %@  de dades.";
-"res_inst_avail_wifi_q" = "La instal·lació de %@ implica descarregar %@ de dades amb la WIFI.";
+"res_inst_avail_wifi_q" = "La instal·lació de %@ implica baixar %@ de dades per la xarxa WiFi.";
 "res_cancel_upd_q" = "Esteu a punt d'aturar l'actualització %@.";
 "res_cancel_inst_q" = "Esteu a punt d'aturar la instal·lació %@.";
 "res_uninst_managed_q" = "Esteu a punt de desinstal·lar %@. Podeu tornar-ho a instal·lar més endavant, des el catàleg.";
-"res_uninst_unmanaged_q" = "Esteu a punt d'esborrar %@. No és al catàleg, per tant us convé assegurar-ne una còpia per si desprès cal.";
+"res_uninst_unmanaged_q" = "Esteu a punt d'esborrar %@. No és al catàleg, per tant us convé assegurar-ne una còpia per si desprès us cal.";
 // Map
-"map_inst_det_map_q" = "Instal·leu el mapa general detallat per obtenir més informació al voltant les vostres ubicacions.";
-"ctx_mnu_add_fav" = "Afegeix a preferits";
+"map_inst_det_map_q" = "Instal·leu el mapa general detallat per obtenir més informació sobre les vostres ubicacions.";
+"ctx_mnu_add_fav" = "Afegeix un preferit";
 // Help
 "help_quiz" = "Consulta";
 "product_title_wiki" = "Viquipèdia";
-"product_desc_wiki" = "Dades de Viquipèdia";
+"product_desc_wiki" = "Dades de la Viquipèdia";
 "product_title_srtm" = "Corbes de nivell";
 "product_desc_srtm" = "Mostra les corbes de nivell";
 "enter_description" = "Introduïu la descripció";
 "description" = "Descripció";
-"enter_fav_name" = "Introducció del nom del preferit";
-"res_installing" = "Instal·lant...";
+"enter_fav_name" = "Introduïu el nom del preferit";
+"res_installing" = "S'està instal·lant...";
 "res_roads" = "Carreteres";
 "res_srtm" = "Corbes de nivell";
 "res_wiki" = "Viquipèdia";
-"select_language" = "Trieu l'idioma";
-"language_short" = "Idioma";
+"select_language" = "Tria la llengua";
+"language_short" = "Llengua";
 "open_url" = "Obre la pàgina al navegador";
 "no_other_translations" = "No hi ha altres traduccions";
 "shared_string_edit" = "Edita";
 "wpt_remove_q" = "Elimina la fita?";
-"gpx_select_track" = "Seleccioneu la traça";
+"gpx_select_track" = "Selecciona una traça";
 "gpx_curr_new_track" = "Traça actual/nova";
 "enter_name" = "Introduïu el nom";
 "not_selected" = "No seleccionat";

@@ -264,9 +264,37 @@
         if (purchased)
         {
             if (disabled)
+            {
                 [[OAIAPHelper sharedInstance] enableProduct:identifier];
+                if ([identifier isEqualToString:kInAppId_Addon_SkiMap])
+                {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                    {
+                        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                        [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                    }
+                }
+                else if ([identifier isEqualToString:kInAppId_Addon_Wiki])
+                {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                    {
+                        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                        [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                    }
+                }
+                else if ([identifier isEqualToString:kInAppId_Addon_Srtm])
+                {
+                    if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                    {
+                        [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                        [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                    }
+                }
+            }
             else
+            {
                 [[OAIAPHelper sharedInstance] disableProduct:identifier];
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
@@ -300,15 +328,27 @@
         
         if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_SkiMap])
         {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
         }
         else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Wiki])
         {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
         }
         else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Srtm])
         {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
         }
         else if (!_restoringPurchases && [identifier isEqualToString:kInAppId_Addon_Nautical])
         {

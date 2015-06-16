@@ -370,3 +370,5 @@
 "srtm_disabled" = "Corbes de nivell desactivades";
 "rendering_value_default_name" = "Per defecte";
 "rendering_value_disabled_name" = "Desactivat";
+"prch_wiki_info" = "El complement Viquipèdia activa la informació de viquipèdia dels mapes que hàgiu titulat, comprat o baixat dins el límit gratuït.";
+"prch_srtm_info" = "El complement de Corbes de nivell activa aquesta opcio 3D per als mapes que hàgiu titulat, comprat o baixat dins el límit gratuït.";

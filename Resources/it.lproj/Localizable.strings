@@ -255,3 +255,5 @@
 "shared_string_or" = "o";
 "shared_string_add" = "Aggiungi";
 "shared_string_and" = "e";
+"rendering_value_default_name" = "Preimpostato";
+"rendering_value_disabled_name" = "Disabilitato";

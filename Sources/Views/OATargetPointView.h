@@ -44,7 +44,7 @@
 - (void)doInit:(BOOL)showFull;
 - (void)prepare;
 - (void)prepareNoInit;
-- (void)prepareForRotation;
+- (void)prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;
 
 - (void)showTopToolbar:(BOOL)animated;
 

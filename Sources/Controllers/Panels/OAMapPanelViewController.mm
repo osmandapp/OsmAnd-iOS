@@ -1532,7 +1532,7 @@
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
     if (self.targetMenuView.superview)
-        [self.targetMenuView prepareForRotation];
+        [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
 -(void)addParkingReminderToCalendar:(OADestination *)destination

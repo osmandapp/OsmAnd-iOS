@@ -1021,9 +1021,6 @@
 		846310061A8E463B005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310051A8E463B005B39F2 /* default.render.xml */; };
 		846310071A8E463B005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310051A8E463B005B39F2 /* default.render.xml */; };
 		846310081A8E463B005B39F2 /* default.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310051A8E463B005B39F2 /* default.render.xml */; };
-		8463100A1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */; };
-		8463100B1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */; };
-		8463100C1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */ = {isa = PBXBuildFile; fileRef = 846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */; };
 		8463101C1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101D1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101E1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
@@ -2556,7 +2553,6 @@
 		84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "Touring-view_(more-contrast-and-details).render.xml"; path = "../resources/rendering_styles/Touring-view_(more-contrast-and-details).render.xml"; sourceTree = "<group>"; };
 		84630FD41A8E197E005B39F2 /* UniRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = UniRS.render.xml; path = ../resources/rendering_styles/UniRS.render.xml; sourceTree = "<group>"; };
 		846310051A8E463B005B39F2 /* default.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.render.xml; path = ../resources/rendering_styles/default.render.xml; sourceTree = "<group>"; };
-		846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.map_styles_presets.xml; path = ../resources/rendering_styles/default.map_styles_presets.xml; sourceTree = "<group>"; };
 		8463101B1A8E8951005B39F2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
 		847041081B07850900594C72 /* ic_small_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_time.png; path = Resources/Icons/ic_small_time.png; sourceTree = "<group>"; };
 		847041091B07850900594C72 /* ic_small_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@2x.png"; path = "Resources/Icons/ic_small_time@2x.png"; sourceTree = "<group>"; };
@@ -3772,7 +3768,6 @@
 			children = (
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
-				846310091A8E46A6005B39F2 /* default.map_styles_presets.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
 				84630FCF1A8E197E005B39F2 /* LightRS.render.xml */,
 				84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */,
@@ -5071,7 +5066,6 @@
 				3AC639E61A2200E6001D5E57 /* icon_favorite_item_direction@2x.png in Resources */,
 				844499701AAA1FC000ACA20D /* ic_tabbar_addons_normal@3x.png in Resources */,
 				843E5D6C1AB341E000BE14BE /* menu_button_bg.png in Resources */,
-				8463100A1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */,
 				BB451DCE18D70B5B005FBE09 /* HUD_search_icon.png in Resources */,
 				BB451DC618D70B5B005FBE09 /* HUD_menu_narrowbutton.png in Resources */,
 				3ACA4AC31A0BA6BF00ECC792 /* OASettingsCell.xib in Resources */,
@@ -5618,7 +5612,6 @@
 				84BD08E31AB16174006DA3F7 /* HUD_zoom_out_button@3x.png in Resources */,
 				849E81A11AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
 				BBA6ACFC1940BD0A0066AF23 /* my_location_marker_icon.png in Resources */,
-				8463100B1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */,
 				84EE2DAE1AFBF840007C9A94 /* icon_info@3x.png in Resources */,
 				8434BAA91B149CE2003FD0FC /* HUD_compass_bg.png in Resources */,
 				844499981AAA1FFA00ACA20D /* img_app_purchase_1.png in Resources */,
@@ -5771,7 +5764,6 @@
 				3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */,
 				84185AE91AAA11B600F70328 /* ic_favorite_8.png in Resources */,
 				3AFEEE4E1A0E34FD00900A47 /* menu_direction_icon@2x.png in Resources */,
-				8463100C1A8E46A6005B39F2 /* default.map_styles_presets.xml in Resources */,
 				3AC639E81A2200E6001D5E57 /* icon_favorite_item_direction@2x.png in Resources */,
 				84EE2DE51AFD149F007C9A94 /* restore_purchase.png in Resources */,
 				84BD089F1AB16174006DA3F7 /* Btn-Play@3x.png in Resources */,

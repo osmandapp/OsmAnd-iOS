@@ -98,6 +98,7 @@
     CGFloat _fullInfoHeight;
     BOOL _hideButtons;
     BOOL _sliding;
+    BOOL _toolbarAnimating;
     CGPoint _topViewStartSlidingPos;
     CGPoint _buttonsViewStartSlidingPos;
     
@@ -541,6 +542,25 @@
     }
 }
 
+- (void)updateToolbarFrame:(BOOL)landscape
+{
+    if (_toolbarAnimating)
+        return;
+    
+    if (landscape)
+    {
+        [self.customController useGradient:NO];
+        CGRect f = self.customController.navBar.frame;
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+    }
+    else
+    {
+        [self.customController useGradient:YES];
+        CGRect f = self.customController.navBar.frame;
+        self.customController.navBar.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
+    }
+}
+
 - (void)showTopToolbar:(BOOL)animated
 {
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
@@ -569,9 +589,13 @@
     
     if (animated)
     {
+        _toolbarAnimating = YES;
+        
         [UIView animateWithDuration:.3 animations:^{
             
             self.customController.navBar.frame = topToolbatFrame;
+        } completion:^(BOOL finished) {
+            _toolbarAnimating = NO;
         }];
     }
     else
@@ -599,10 +623,12 @@
 
         if (animated)
         {
+            _toolbarAnimating = YES;
             [UIView animateWithDuration:.3 animations:^{
                 
                 self.customController.navBar.frame = newTopToolbarFrame;
             } completion:^(BOOL finished) {
+                _toolbarAnimating = NO;
                 self.customController.navBar.hidden = YES;
             }];
         }
@@ -708,18 +734,12 @@
     [self doLayoutSubviews];
 }
 
-- (void)prepareForRotation
+- (void)prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation
 {
-    /*
-    if (![self isLandscape] && [self hasInfo])
+    if ([self isLandscapeSupported] && UIInterfaceOrientationIsLandscape(toInterfaceOrientation))
     {
-        [self.parentView insertSubview:_infoView belowSubview:self];
+        [self showTopToolbar:NO];
     }
-    else
-    {
-        [self insertSubview:_infoView atIndex:0];
-    }
-     */
 }
 
 - (void)clearCustomControllerIfNeeded
@@ -851,9 +871,14 @@
     });
 }
 
+- (BOOL)isLandscapeSupported
+{
+    return UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
+}
+
 - (BOOL)isLandscape
 {
-    return DeviceScreenWidth > 470.0;
+    return DeviceScreenWidth > 470.0 && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone;
 }
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
@@ -1007,6 +1032,9 @@
     if (landscape)
         h = kOATargetPointViewHeightLandscape;
     
+    if (self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden)
+        [self updateToolbarFrame:landscape];
+
     _topImageView.hidden = (landscape || ![self hasInfo]);
     
     if (landscape)
@@ -1125,7 +1153,10 @@
         CGRect f = self.customController.contentView.frame;
         if (landscape)
         {
-            f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 44.0 : 0.0) - 36.0;
+            if (self.customController.editing)
+                f.size.height = MAX(DeviceScreenHeight - 53.0 - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 64.0 : 0.0), (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
+            else
+                f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 64.0 : 0.0) - kOATargetPointTopPanTreshold;
         }
         else
         {
@@ -1154,8 +1185,16 @@
     {
         if (landscape)
         {
-            frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? 44.0 : 0.0);
-            frame.size.height = DeviceScreenHeight - (20.0 - kOATargetPointTopPanTreshold);
+            if (self.customController && self.customController.editing)
+            {
+                frame.origin.y = DeviceScreenHeight - hf;
+                frame.size.height = hf;
+            }
+            else
+            {
+                frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? 44.0 : 0.0);
+                frame.size.height = DeviceScreenHeight - (20.0 - kOATargetPointTopPanTreshold);
+            }
         }
         else
         {
@@ -1385,6 +1424,8 @@
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
     
+    self.customController.showCoords = (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress]);
+
     if (self.superview)
     {
         [self doUpdateUI];

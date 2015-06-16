@@ -355,11 +355,11 @@
 - (void)keyboardWillShow:(NSNotification*)aNotification
 {
     CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGRect convertedFrameView = [self.contentView convertRect:self.contentView.bounds fromView:nil];
+    CGPoint convertedPoint = [self.contentView.superview convertPoint:self.contentView.frame.origin toView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
     
-    CGFloat minBottom = ABS(convertedFrameView.origin.y) + 44.0 + (self.showCoords ? 44.0 : 0.0);
+    CGFloat minBottom = ABS(convertedPoint.y) + 44.0 + (self.showCoords ? 44.0 : 0.0);
     CGFloat keyboardTop = DeviceScreenHeight - keyboardFrame.size.height;
-    
+
     BOOL needOffsetViews = minBottom > keyboardTop;
     
     if (needOffsetViews)

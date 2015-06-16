@@ -89,3 +89,6 @@
 "gpx_export" = "Eksportuj";
 "import_export" = "Importuj/Eksportuj";
 "gpx_import_title" = "Importuj trasę";
+"rendering_value_default_name" = "Domyślnie";
+"rendering_value_disabled_name" = "Wyłączony";
+"shared_string_edit" = "Edytuj";

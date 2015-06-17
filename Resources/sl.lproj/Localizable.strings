@@ -151,3 +151,5 @@
 "fav_select" = "Izbor prliljubljene";
 "shared_string_edit" = "Uredi";
 "rendering_value_default_name" = "Privzeto";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Barvanje poti po vrsti poti";
+"rendering_value_walkingRoutesOSMC_name" = "Barvanje poti po OSMC";

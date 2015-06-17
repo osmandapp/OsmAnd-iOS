@@ -370,3 +370,7 @@
 "show_alt_in_drive" = "Magasság megjelenítése vezetés módban";
 "purchase_get" = "Beszerzés";
 "srtm_disabled" = "Szintvonalak letiltva";
+"rendering_value_walkingRoutesOSMC_name" = "Színezés a jelzés színe szerint";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Színezés az útvonal besorolása szerint";
+"prch_wiki_info" = "A Wikipédia bővítmény Wikipédia információkat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";
+"prch_srtm_info" = "A szintvonalak bővítmény szintvonalakat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";

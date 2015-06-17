@@ -86,9 +86,9 @@
 
     NSMutableString *timeStr = [NSMutableString string];
     if (hours > 0)
-        [timeStr appendFormat:@"%d %@", hours, @"h"];
+        [timeStr appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
     if (minutes > 0)
-        [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, @"min"];
+        [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, OALocalizedString(@"units_min")];
     
     return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_close"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
 }

@@ -364,13 +364,13 @@
 "not_selected" = "Ikke markeret";
 "you_searching" = "Du søger";
 "from_location" = "bort fra";
-"show_alt_in_drive" = "Vis højde i køreilstand";
+"show_alt_in_drive" = "Vis højde i køretilstand";
 "res_hillshade" = "Relief skygger";
 "purchase_get" = "Hent";
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "rendering_value_default_name" = "Standard";
 "rendering_value_disabled_name" = "Deaktiveret";
-"prch_wiki_info" = "Wikipedia-modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
-"prch_srtm_info" = "Højdekurve modul giver højdekurver for kort der er købt eller hentet inden for den gratis grænse.";
+"prch_wiki_info" = "Wikipedia modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
+"prch_srtm_info" = "Højdekurve modul viser højdekurver på kort, der er købt eller hentet inden for den gratis grænse.";
 "rendering_value_walkingRoutesOSMC_name" = "Farvelægning ifølge OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Farvelægning ifølge ruteanvendelse";

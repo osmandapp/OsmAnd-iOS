@@ -374,3 +374,7 @@
 "prch_srtm_info" = "Højdekurve modul viser højdekurver på kort, der er købt eller hentet inden for den gratis grænse.";
 "rendering_value_walkingRoutesOSMC_name" = "Farvelægning ifølge OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Farvelægning ifølge ruteanvendelse";
+"time_open" = "Åben";
+"time_closed" = "Lukket";
+"time_will_close" = "Lukker om";
+"time_will_open" = "Åbner om";

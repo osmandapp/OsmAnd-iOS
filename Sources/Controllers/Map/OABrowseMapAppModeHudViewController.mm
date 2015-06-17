@@ -11,6 +11,7 @@
 #import "OAMapRulerView.h"
 #import "InfoWidgetsView.h"
 #import "OAIAPHelper.h"
+#import "OAMapStyleSettings.h"
 
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
@@ -87,6 +88,7 @@
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
+    OAAutoObserverProxy* _lastMapSourceChangeObserver;
     
     OAOverlayUnderlayView* _overlayUnderlayView;
     
@@ -143,6 +145,9 @@
     _locationServicesUpdateFirstTimeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesFirstTimeUpdate)
                                                                  andObserve:_app.locationServices.updateFirstTimeObserver];
+    _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(updateMapSettingsButton)
+                                                              andObserve:_app.data.lastMapSourceChangeObservable];
 
 }
 
@@ -187,6 +192,7 @@
     [self.view addConstraint:constraint];
     self.rulerLabel.hidden = true;
     
+    [self updateMapSettingsButton];
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
@@ -708,6 +714,29 @@
             
         }];
     }
+}
+
+- (void)updateMapSettingsButton
+{
+    dispatch_async(dispatch_get_main_queue(), ^{        
+        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+        switch (variantType)
+        {
+            case OAMapVariantCar:
+                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_car"] forState:UIControlStateNormal];
+                break;
+            case OAMapVariantPedestrian:
+                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_pedestrian"] forState:UIControlStateNormal];
+                break;
+            case OAMapVariantBicycle:
+                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_bike"] forState:UIControlStateNormal];
+                break;
+                
+            default:
+                [_mapSettingsButton setImage:[UIImage imageNamed:@"ic_mode_browsing"] forState:UIControlStateNormal];
+                break;
+        }
+    });
 }
 
 @end

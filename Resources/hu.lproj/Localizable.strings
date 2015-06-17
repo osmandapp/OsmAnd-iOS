@@ -374,3 +374,7 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Színezés az útvonal besorolása szerint";
 "prch_wiki_info" = "A Wikipédia bővítmény Wikipédia információkat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";
 "prch_srtm_info" = "A szintvonalak bővítmény szintvonalakat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";
+"time_open" = "Nyitva";
+"time_closed" = "Zárva";
+"time_will_close" = "Bezár ekkor:";
+"time_will_open" = "Kinyit ekkor:";

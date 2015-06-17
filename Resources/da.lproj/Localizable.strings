@@ -372,3 +372,5 @@
 "rendering_value_disabled_name" = "Deaktiveret";
 "prch_wiki_info" = "Wikipedia-modul tilføjer oplysninger fra Wikipedia for kort, som er købt eller hentet inden for den gratis grænse.";
 "prch_srtm_info" = "Højdekurve modul giver højdekurver for kort der er købt eller hentet inden for den gratis grænse.";
+"rendering_value_walkingRoutesOSMC_name" = "Farvelægning ifølge OSMC";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Farvelægning ifølge ruteanvendelse";

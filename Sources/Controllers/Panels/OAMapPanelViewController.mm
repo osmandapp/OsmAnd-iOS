@@ -1577,7 +1577,7 @@
     double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
     double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
     
-    [_mapViewController showContextPinMarker:lat longitude:lon];
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -1624,7 +1624,7 @@
     double lat = item.point.position.latitude;
     double lon = item.point.position.longitude;
     
-    [_mapViewController showContextPinMarker:lat longitude:lon];
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     if ([_mapViewController findWpt:item.point.position])
     {
@@ -1762,7 +1762,7 @@
 
 - (void)destinationViewMoveTo:(OADestination *)destination
 {
-    [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude];
+    [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 

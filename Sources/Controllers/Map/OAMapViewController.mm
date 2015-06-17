@@ -232,6 +232,9 @@
     BOOL _recTrackShowing;
     
     CLLocationCoordinate2D _centerLocationForMapArrows;
+    
+    UIImageView *_animatedPin;
+    CGFloat _latPin, _lonPin;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -1484,7 +1487,7 @@
 
 - (void)postTargetNotification:(OAMapSymbol *)symbol
 {
-    [self showContextPinMarker:symbol.location.latitude longitude:symbol.location.longitude];
+    [self showContextPinMarker:symbol.location.latitude longitude:symbol.location.longitude animated:YES];
     
     if (!symbol.caption)
         symbol.caption = @"";
@@ -1567,6 +1570,21 @@
     if (![self isViewLoaded])
         return;
     
+    if (_animatedPin)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+            
+            CGPoint targetPoint;
+            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
+            [mapView convert:&targetPositionI toScreen:&targetPoint];
+            
+            _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
+
+        });
+    }
+
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
     switch ([key unsignedIntegerValue])
@@ -1734,13 +1752,82 @@
     return mapView.currentPixelsToMetersScaleFactor ;
 }
 
-- (void)showContextPinMarker:(double)latitude longitude:(double)longitude
+- (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated
 {
-    const OsmAnd::LatLon latLon(latitude, longitude);
-    _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
-    _contextPinMarker->setIsHidden(false);
+    _contextPinMarker->setIsHidden(true);
+
+    if (!self.view.hidden && animated)
+    {
+        _latPin = latitude;
+        _lonPin = longitude;
+        
+        _animatedPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_map_pin"]];
+        
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        CGPoint targetPoint;
+        OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+        [mapView convert:&targetPositionI toScreen:&targetPoint];
+        
+        _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
+        
+        const CGFloat kDropCompressAmount = 0.1;
+        
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation.duration = 0.2;
+        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
+        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(0, -200, 0)];
+        animation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+        
+        CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation2.duration = 0.10;
+        animation2.beginTime = animation.duration;
+        animation2.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        animation2.toValue = [NSValue valueWithCATransform3D:CATransform3DScale(CATransform3DMakeTranslation(0, _animatedPin.layer.frame.size.height * kDropCompressAmount, 0), 1.0, 1.0 - kDropCompressAmount, 1.0)];
+        animation2.fillMode = kCAFillModeForwards;
+        
+        CABasicAnimation *animation3 = [CABasicAnimation animationWithKeyPath:@"transform"];
+        animation3.duration = 0.15;
+        animation3.beginTime = animation.duration + animation2.duration;
+        animation3.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+        animation3.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+        animation3.fillMode = kCAFillModeForwards;
+        
+        CAAnimationGroup *group = [CAAnimationGroup animation];
+        group.animations = [NSArray arrayWithObjects:animation, animation2, animation3, nil];
+        group.duration = animation.duration + animation2.duration + animation3.duration;
+        group.fillMode = kCAFillModeForwards;
+        
+        group.delegate = self;
+        
+        [_animatedPin.layer addAnimation:group forKey:nil];
+        [self.view addSubview:_animatedPin];
+    }
+    else
+    {
+        const OsmAnd::LatLon latLon(latitude, longitude);
+        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+        _contextPinMarker->setIsHidden(false);
+    }
 }
 
+-(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
+{
+    const OsmAnd::LatLon latLon(_latPin, _lonPin);
+    _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+    _contextPinMarker->setIsHidden(false);
+
+    [self performSelector:@selector(hideAnimatedPin) withObject:nil afterDelay:.3];
+}
+
+- (void) hideAnimatedPin
+{
+    if (_animatedPin)
+    {
+        [_animatedPin removeFromSuperview];
+        _animatedPin = nil;
+    }
+}
 
 - (void)hideContextPinMarker
 {

@@ -110,7 +110,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (BOOL)isMyLocationVisible;
 
-- (void)showContextPinMarker:(double)latitude longitude:(double)longitude;
+- (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void)hideContextPinMarker;
 
 - (void)postTargetNotification:(OAMapSymbol *)symbol;

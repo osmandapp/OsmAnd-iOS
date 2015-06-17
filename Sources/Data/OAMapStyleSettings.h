@@ -11,6 +11,24 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 
+#define OAMapVariantDefaultStr @"type_default"
+#define OAMapVariantCarStr @"type_car"
+#define OAMapVariantPedestrianStr @"type_pedestrian"
+#define OAMapVariantBicycleStr @"type_bicycle"
+
+#define OAMapAppModeDefault @"default"
+#define OAMapAppModeCar @"car"
+#define OAMapAppModePedestrian @"pedestrian"
+#define OAMapAppModeBicycle @"bicycle"
+
+typedef NS_ENUM(NSInteger, OAMapVariantType)
+{
+    OAMapVariantDefault = 0,
+    OAMapVariantCar,
+    OAMapVariantPedestrian,
+    OAMapVariantBicycle,
+};
+
 typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 {
     OABoolean,
@@ -57,5 +75,10 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 -(void) saveParameters;
 -(void) save:(OAMapStyleParameter *)parameter;
+
++ (OAMapVariantType)getVariantType:(NSString *) variantStr;
++ (NSString *)getVariantStr:(OAMapVariantType) variantType;
++ (NSString *)getAppModeByVariantType:(OAMapVariantType) variantType;
++ (NSString *)getAppModeByVariantTypeStr:(NSString *) variantStr;
 
 @end

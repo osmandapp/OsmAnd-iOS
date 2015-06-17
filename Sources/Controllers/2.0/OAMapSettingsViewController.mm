@@ -38,7 +38,6 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>

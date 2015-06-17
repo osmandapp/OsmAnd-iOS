@@ -39,7 +39,6 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/GeoInfoPresenter.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
@@ -2471,27 +2470,29 @@
             if (lastMapSource.variant != nil)
             {
                 OALog(@"Using '%@' variant of style '%@'", lastMapSource.variant, unresolvedMapStyle->name.toNSString());
-                const auto preset = _app.resourcesManager->mapStylesPresetsCollection->getPreset(unresolvedMapStyle->name, QString::fromNSString(lastMapSource.variant));
-                if (preset) {
-                    OAAppSettings *settings = [OAAppSettings sharedManager];
-                    QHash< QString, QString > newSettings(preset->attributes);
-                    if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)
-                        newSettings[QString::fromLatin1("nightMode")] = "true";
-                    
-                    // --- Apply Map Style Settings
-                    OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
-                    
-                    NSArray *params = styleSettings.getAllParameters;
-                    for (OAMapStyleParameter *param in params) {
-                        if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
-                            newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
-                    }
 
-                    if (!newSettings.isEmpty())
-                        _mapPresentationEnvironment->setSettings(newSettings);
+                OAAppSettings *settings = [OAAppSettings sharedManager];
+                QHash< QString, QString > newSettings;
+                
+                NSString *appMode = [OAMapStyleSettings getAppModeByVariantTypeStr:lastMapSource.variant];
+                newSettings[QString::fromLatin1("appMode")] = QString([appMode UTF8String]);
+                                
+                if(settings.settingAppMode == APPEARANCE_MODE_NIGHT)
+                    newSettings[QString::fromLatin1("nightMode")] = "true";
+                
+                // --- Apply Map Style Settings
+                OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
+                
+                NSArray *params = styleSettings.getAllParameters;
+                for (OAMapStyleParameter *param in params) {
+                    if (param.value.length > 0 && ![param.value isEqualToString:@"false"])
+                        newSettings[QString::fromNSString(param.name)] = QString::fromNSString(param.value);
                 }
+                
+                if (!newSettings.isEmpty())
+                    _mapPresentationEnvironment->setSettings(newSettings);
             }
-            
+        
 #if defined(OSMAND_IOS_DEV)
             switch (_visualMetricsMode)
             {

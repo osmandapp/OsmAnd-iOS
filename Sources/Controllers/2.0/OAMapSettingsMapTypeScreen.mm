@@ -7,6 +7,7 @@
 //
 
 #import "OAMapSettingsMapTypeScreen.h"
+#import "OAMapStyleSettings.h"
 #include "Localization.h"
 
 #include <QSet>
@@ -14,7 +15,6 @@
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 #include <OsmAndCore/Map/MapStylePreset.h>
-#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 
@@ -116,18 +116,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     // Collect all needed resources
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStylesResources;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > onlineTileSourcesResources;
-
-    /*
-    const auto builtinResources = app.resourcesManager->getBuiltInResources();
-    for(const auto& builtinResource : builtinResources)
-    {
-        //if (builtinResource->type == OsmAndResourceType::MapStyle)
-        //    mapStylesResources.push_back(builtinResource);
-        //else
-        //if (builtinResource->type == OsmAndResourceType::OnlineTileSources)
-        //    onlineTileSourcesResources.push_back(builtinResource);
-    }
-    */
     
     const auto localResources = app.resourcesManager->getLocalResources();
     for(const auto& localResource : localResources)
@@ -182,20 +170,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         item.mapSource = [app.data lastMapSourceByResourceId:resourceId];
         if (item.mapSource == nil)
         {
-            const auto presetsForMapStyle = app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
-            BOOL presetFound = NO;
-            for(const auto& preset : presetsForMapStyle) {
-                if ([preset->name.toNSString() isEqualToString:currVariant]) {
-                    presetFound = YES;
-                    break;
-                }
-            }
-            NSString* variant = nil;
-            if (presetFound)
-                variant = currVariant;
-            else if (presetsForMapStyle.count() > 0)
-                variant = presetsForMapStyle.first()->name.toNSString();
-            
+            OAMapVariantType variantType = [OAMapStyleSettings getVariantType:currVariant];
+            NSString* variant = [OAMapStyleSettings getVariantStr:variantType];            
             item.mapSource = [[OAMapSource alloc] initWithResource:resourceId
                                                         andVariant:variant];
         }

@@ -20,7 +20,6 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
-#include <OsmAndCore/Map/IMapStylesPresetsCollection.h>
 
 
 @implementation OAMapSettingsMainScreen {
@@ -69,31 +68,13 @@
     const auto resource = app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
     NSString* resourceId = resource->id.toNSString();
     
-    // Get the style
-    const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
-    const auto& presets = self.app.resourcesManager->mapStylesPresetsCollection->getCollectionFor(mapStyle->name);
+    OAMapVariantType selectedType = (OAMapVariantType)tag;
+    NSString *variant = [OAMapStyleSettings getVariantStr:selectedType];
     
-    OsmAnd::MapStylePreset::Type selectedType = [OAMapSettingsMainScreen tagToMapStyle:tag];
-    
-    BOOL foundPreset = NO;
-    for(const auto& preset : presets)
-    {
-        if (preset->type == selectedType) {
-            
-            OAMapSource* mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:preset->name.toNSString() name:name];
-            app.data.lastMapSource = mapSource;
-            
-            foundPreset = YES;
-            break;
-        }
-    }
-    
-    if (!foundPreset) {
-        [mapStylesCell setupMapTypeButtons:0];
-    }
+    mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
+    app.data.lastMapSource = mapSource;
     
     [self setupView];
-    
 }
 
 - (NSString *)getMapLangValueStr
@@ -152,8 +133,7 @@
     if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
         [section0 addObject:section0tracks];
     
-    OsmAnd::MapStylePreset::Type mapStyle = [OAMapSettingsMainScreen variantToMapStyle:app.data.lastMapSource.variant];
-    mapStyleIndex = [OAMapSettingsMainScreen mapStyleToTag:mapStyle];
+    mapStyleIndex = [OAMapStyleSettings getVariantType:app.data.lastMapSource.variant];
     
     NSArray *arrTop = @[@{@"groupName": OALocalizedString(@"map_settings_show"),
                           @"cells": section0
@@ -431,40 +411,5 @@
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
 }
 
-+(OsmAnd::MapStylePreset::Type)tagToMapStyle:(int)type {
-    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
-    if (type == 1) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Car;
-    } else if (type == 2) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
-    } else if (type == 3) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
-    }
-    return mapStyle;
-}
-
-+(OsmAnd::MapStylePreset::Type)variantToMapStyle:(NSString*)variant {
-    OsmAnd::MapStylePreset::Type mapStyle = OsmAnd::MapStylePreset::Type::General;
-    if ([variant isEqualToString:@"type_car"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Car;
-    } else if ([variant isEqualToString:@"type_pedestrian"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Pedestrian;
-    } else if ([variant isEqualToString:@"type_bicycle"]) {
-        mapStyle = OsmAnd::MapStylePreset::Type::Bicycle;
-    }
-    return mapStyle;
-}
-
-+(int)mapStyleToTag:(OsmAnd::MapStylePreset::Type)mapStyle {
-    int type = 0;
-    if (mapStyle == OsmAnd::MapStylePreset::Type::Car) {
-        type = 1;
-    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Pedestrian) {
-        type = 2;
-    } else if (mapStyle == OsmAnd::MapStylePreset::Type::Bicycle) {
-        type = 3;
-    }
-    return type;
-}
 
 @end

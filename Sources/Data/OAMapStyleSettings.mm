@@ -347,7 +347,7 @@
         if ([defaults objectForKey:name]) {
             p.value = [defaults valueForKey:name];
         } else {
-            p.value = p.defaultValue;
+            p.value = @"";
         }
     }
 }
@@ -368,6 +368,64 @@
     NSString *name = [NSString stringWithFormat:@"%@_%@_%@", parameter.mapStyleName, parameter.mapPresetName, parameter.name];
     [[NSUserDefaults standardUserDefaults] setValue:parameter.value forKey:name];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+}
+
++ (OAMapVariantType)getVariantType:(NSString *) variantStr
+{
+    OAMapVariantType mapVariantType = OAMapVariantDefault;
+    if ([variantStr isEqualToString:OAMapVariantCarStr])
+        mapVariantType = OAMapVariantCar;
+    else if ([variantStr isEqualToString:OAMapVariantPedestrianStr])
+        mapVariantType = OAMapVariantPedestrian;
+    else if ([variantStr isEqualToString:OAMapVariantBicycleStr])
+        mapVariantType = OAMapVariantBicycle;
+    
+    return mapVariantType;
+}
+
++ (NSString *)getVariantStr:(OAMapVariantType) variantType
+{
+    NSString *variant;
+    if (variantType == OAMapVariantCar)
+        variant = OAMapVariantCarStr;
+    else if (variantType == OAMapVariantPedestrian)
+        variant = OAMapVariantPedestrianStr;
+    else if (variantType == OAMapVariantBicycle)
+        variant = OAMapVariantBicycleStr;
+    else
+        variant = OAMapVariantDefaultStr;
+    
+    return variant;
+}
+
++ (NSString *)getAppModeByVariantType:(OAMapVariantType) variantType
+{
+    NSString *appMode;
+    if (variantType == OAMapVariantCar)
+        appMode = OAMapAppModeCar;
+    else if (variantType == OAMapVariantPedestrian)
+        appMode = OAMapAppModePedestrian;
+    else if (variantType == OAMapVariantBicycle)
+        appMode = OAMapAppModeBicycle;
+    else
+        appMode = OAMapAppModeDefault;
+    
+    return appMode;
+}
+
++ (NSString *)getAppModeByVariantTypeStr:(NSString *) variantStr
+{
+    NSString *appMode;
+    if ([variantStr isEqualToString:OAMapVariantCarStr])
+        appMode = OAMapAppModeCar;
+    else if ([variantStr isEqualToString:OAMapVariantPedestrianStr])
+        appMode = OAMapAppModePedestrian;
+    else if ([variantStr isEqualToString:OAMapVariantBicycleStr])
+        appMode = OAMapAppModeBicycle;
+    else
+        appMode = OAMapAppModeDefault;
+    
+    return appMode;
 }
 
 @end

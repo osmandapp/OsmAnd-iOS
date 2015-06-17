@@ -345,7 +345,7 @@
                                   },
                                   ctrl);
             
-            if (_limitCounter == _searchLimit && _radius < 5000.0)
+            if (_limitCounter == _searchLimit && _radius < 12000.0)
             {
                 *radiusIndex += 1;
                 _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;

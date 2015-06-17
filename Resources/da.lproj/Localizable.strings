@@ -370,3 +370,5 @@
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "rendering_value_default_name" = "Standard";
 "rendering_value_disabled_name" = "Deaktiveret";
+"prch_wiki_info" = "Wikipedia-modul tilføjer oplysninger fra Wikipedia for kort, som er erhvervet eller hentet inden for den frie grænse.";
+"prch_srtm_info" = "Højdekurve modul giver højdekurver for kort der er købt eller hentet inden for den gratis grænse.";

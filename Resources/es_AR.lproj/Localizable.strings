@@ -370,3 +370,7 @@
 "rendering_value_default_name" = "Predeterminado";
 "purchase_get" = "Obtener";
 "srtm_disabled" = "Curvas de nivel desactivadas";
+"rendering_value_walkingRoutesOSMC_name" = "Colorear según OSMC";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Colorear según alcance de ruta";
+"prch_wiki_info" = "El complemento de Wikipedia activa la información de Wikipedia para los mapas que tiene descargados o comprados con un límite libre.";
+"prch_srtm_info" = "El complemento de Curvas de nivel activa las curvas de nivel para los mapas que tiene comprados o descargados con un límite libre.";

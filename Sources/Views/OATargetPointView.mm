@@ -828,7 +828,7 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
-    BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress]);
+    BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
     
     _infoCoordsImage.hidden = !coordsHidden;
     _infoCoordsText.hidden = !coordsHidden;
@@ -1379,7 +1379,7 @@
 {
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
 
-    if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress])
+    if (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0)
     {
         _coordsHidden = YES;
         self.addressStr = _targetPoint.titleAddress;
@@ -1424,7 +1424,7 @@
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
     
-    self.customController.showCoords = (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title containsString:_targetPoint.titleAddress]);
+    self.customController.showCoords = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
 
     if (self.superview)
     {

@@ -101,11 +101,12 @@
         self.mapStyleName = unresolvedMapStyle->name.toNSString();
         self.mapPresetName = _app.data.lastMapSource.variant;
 
-        //[self buildParameters:self.mapStyleName];
-        [self buildParametersUnresolved:unresolvedMapStyle];
+        [self buildParameters:self.mapStyleName];
+        //[self buildParametersUnresolved:unresolvedMapStyle];
     }
 }
 
+/*
 -(void) buildParametersUnresolved:(const std::shared_ptr<OsmAnd::UnresolvedMapStyle>&)mapStyle
 {
     
@@ -203,6 +204,7 @@
     self.parameters = params;
     self.categories = categories;
 }
+*/
 
 -(void) buildParameters:(NSString *)styleName
 {
@@ -261,12 +263,17 @@
         {
             OAMapStyleParameterValue *val = [[OAMapStyleParameterValue alloc] init];
             val.name = v;
-            NSString *valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", v];
+            
+            NSString *valLocKey;
+            if (v.length == 0)
+                valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", p->getDefaultValueDescription().toNSString()];
+            else
+                valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", v];
+            
             NSString *valLocText = OALocalizedString(valLocKey);
             if ([valLocKey isEqualToString:valLocText])
                 valLocText = v;
-            if (v.length == 0)
-                valLocText = @"--";
+            
             val.title = valLocText;
             [valArr addObject:val];
         }
@@ -287,7 +294,7 @@
                 break;
                 
             default:
-                param.defaultValue = @"";
+                param.defaultValue = p->getDefaultValueDescription().toNSString();
                 break;
         }
 

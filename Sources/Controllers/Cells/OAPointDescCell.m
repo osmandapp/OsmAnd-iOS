@@ -9,6 +9,7 @@
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
 #import "OpeningHoursParser.h"
+#import "Localization.h"
 
 #include "java/util/Calendar.h"
 
@@ -40,6 +41,58 @@
     
 }
 
+- (NSString *)findOpeningHours
+{
+    const int intervalMinutes = 120; // 2 hours
+    const int arrLength = intervalMinutes / 5;
+    int minutesArr[arrLength];
+
+    int k = 0;
+    for (int i = 0; i < arrLength; i++)
+    {
+        minutesArr[i] = k;
+        k += 5;
+    }
+    
+    NetOsmandUtilOpeningHoursParser_OpeningHours *parser = [NetOsmandUtilOpeningHoursParser parseOpenedHoursWithNSString:_openingHoursView.text];
+    JavaUtilCalendar *cal = JavaUtilCalendar_getInstance();
+    jlong currentTime = [cal getTimeInMillis];
+    BOOL isOpenedNow = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+
+    jlong newTime = currentTime + intervalMinutes * 60 * 1000;
+    [cal setTimeInMillisWithLong:newTime];
+    BOOL isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+    if (isOpened == isOpenedNow)
+        return (isOpenedNow ? OALocalizedString(@"time_open") : OALocalizedString(@"time_closed"));
+
+    int imax = arrLength - 1;
+    int imin = 0;
+    int imid;
+    while (imax >= imin)
+    {
+        imid = (imin + imax) / 2;
+        
+        jlong newTime = currentTime + minutesArr[imid] * 60 * 1000;
+        [cal setTimeInMillisWithLong:newTime];
+        isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+        if (isOpened == isOpenedNow)
+            imin = imid + 1;
+        else
+            imax = imid - 1;
+    }
+    
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:minutesArr[imid] * 60 hours:&hours minutes:&minutes seconds:&seconds];
+
+    NSMutableString *timeStr = [NSMutableString string];
+    if (hours > 0)
+        [timeStr appendFormat:@"%d %@", hours, @"h"];
+    if (minutes > 0)
+        [timeStr appendFormat:@"%@%d %@", (timeStr.length > 0 ? @" " : @""), minutes, @"min"];
+    
+    return (isOpenedNow ? [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_close"), timeStr] : [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"time_will_open"), timeStr]);
+}
+
 - (void) updateOpeningTimeInfo
 {
     if (_openingHoursView.text.length == 0)
@@ -62,6 +115,7 @@
         _timeIcon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_time"] color:color];
         
         _openingHoursView.textColor = color;
+        _openingHoursView.text = [self findOpeningHours];
         
         _timeIcon.hidden = NO;
         _openingHoursView.hidden = NO;

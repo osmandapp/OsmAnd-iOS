@@ -374,3 +374,5 @@
 "prch_srtm_info" = "等高線外掛您有資格為地圖啟用等高線，購買或在免費的期限內下載。";
 "rendering_value_walkingRoutesOSMC_name" = "依據 OSMC 來著色";
 "rendering_value_walkingRoutesScopeOSMC_name" = "依據路線的有效範圍著色";
+"time_open" = "開啓";
+"time_closed" = "已關閉";

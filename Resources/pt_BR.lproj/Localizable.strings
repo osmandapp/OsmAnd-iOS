@@ -374,3 +374,7 @@
 "prch_srtm_info" = "Complemento curvas de nível ativa curvas de nível para mapas que você tem direito, comprado ou baixado dentro do limite gratuito.";
 "rendering_value_walkingRoutesOSMC_name" = "Colorir conforme OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colorir de acordo com o alcance de rota";
+"time_open" = "Aberto";
+"time_closed" = "Fechado";
+"time_will_close" = "Fechará em";
+"time_will_open" = "Abrirá em";

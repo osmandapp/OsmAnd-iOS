@@ -259,7 +259,7 @@ typedef enum
         
         CLLocationCoordinate2D latLon = self.wptItem.point.position;
 
-        [_mapViewController showContextPinMarker:latLon.latitude longitude:latLon.longitude];
+        [_mapViewController showContextPinMarker:latLon.latitude longitude:latLon.longitude animated:NO];
         
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                             object: self

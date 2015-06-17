@@ -1481,7 +1481,7 @@ typedef enum
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude];
+    [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
     
     CGPoint touchPoint = CGPointMake(self.view.bounds.size.width / 2.0, self.view.bounds.size.height / 2.0);
     touchPoint.x *= mapRendererView.contentScaleFactor;

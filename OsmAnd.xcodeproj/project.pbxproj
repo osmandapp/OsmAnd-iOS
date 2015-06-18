@@ -1363,12 +1363,6 @@
 		84BD09091AB16174006DA3F7 /* my_location_marker_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD08921AB16174006DA3F7 /* my_location_marker_icon@3x.png */; };
 		84BD090A1AB16174006DA3F7 /* my_location_marker_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD08921AB16174006DA3F7 /* my_location_marker_icon@3x.png */; };
 		84BD090B1AB16174006DA3F7 /* my_location_marker_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD08921AB16174006DA3F7 /* my_location_marker_icon@3x.png */; };
-		84BFC2201A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC21E1A960BDA00D807B4 /* OAGPXPointViewController.mm */; };
-		84BFC2211A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC21E1A960BDA00D807B4 /* OAGPXPointViewController.mm */; };
-		84BFC2221A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC21E1A960BDA00D807B4 /* OAGPXPointViewController.mm */; };
-		84BFC2231A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BFC21F1A960BDA00D807B4 /* OAGPXPointViewController.xib */; };
-		84BFC2241A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BFC21F1A960BDA00D807B4 /* OAGPXPointViewController.xib */; };
-		84BFC2251A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BFC21F1A960BDA00D807B4 /* OAGPXPointViewController.xib */; };
 		84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
 		84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
 		84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
@@ -2729,9 +2723,6 @@
 		84BD08901AB16174006DA3F7 /* my_course_marker_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_course_marker_icon@3x.png"; sourceTree = "<group>"; };
 		84BD08911AB16174006DA3F7 /* my_location_marker_heading_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_heading_icon@3x.png"; sourceTree = "<group>"; };
 		84BD08921AB16174006DA3F7 /* my_location_marker_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "my_location_marker_icon@3x.png"; sourceTree = "<group>"; };
-		84BFC21D1A960BDA00D807B4 /* OAGPXPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXPointViewController.h; path = Sources/Controllers/2.0/OAGPXPointViewController.h; sourceTree = "<group>"; };
-		84BFC21E1A960BDA00D807B4 /* OAGPXPointViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXPointViewController.mm; path = Sources/Controllers/2.0/OAGPXPointViewController.mm; sourceTree = "<group>"; };
-		84BFC21F1A960BDA00D807B4 /* OAGPXPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXPointViewController.xib; path = Sources/Controllers/2.0/OAGPXPointViewController.xib; sourceTree = "<group>"; };
 		84BFC2261A989C4600D807B4 /* OAMapSettingsMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsMainScreen.h; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.h; sourceTree = "<group>"; };
 		84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsMainScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.mm; sourceTree = "<group>"; };
 		84BFC22B1A98A31600D807B4 /* OAMapSettingsScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsScreen.h; path = Sources/Controllers/2.0/OAMapSettingsScreen.h; sourceTree = "<group>"; };
@@ -3227,9 +3218,6 @@
 				8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */,
 				8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */,
 				8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */,
-				84BFC21D1A960BDA00D807B4 /* OAGPXPointViewController.h */,
-				84BFC21E1A960BDA00D807B4 /* OAGPXPointViewController.mm */,
-				84BFC21F1A960BDA00D807B4 /* OAGPXPointViewController.xib */,
 				842BFC521A94935A008CF87B /* OAGPXPointListViewController.h */,
 				842BFC531A94935A008CF87B /* OAGPXPointListViewController.mm */,
 				842BFC541A94935A008CF87B /* OAGPXPointListViewController.xib */,
@@ -4875,7 +4863,6 @@
 				8432579B1A9DAE4100A7964E /* ic_arrow_up.png in Resources */,
 				BB451DD818D71121005FBE09 /* HUD_debug_button.png in Resources */,
 				84E2DB5C1AB720FA001A7FEC /* left_menu_icon_about@3x.png in Resources */,
-				84BFC2231A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */,
 				3ACA4AA41A0B881300ECC792 /* OASettingsViewController.xib in Resources */,
 				3AC40ACC19DDC663002FBC40 /* Btn-Play@2x.png in Resources */,
 				8441CB471B1370580033AC95 /* export_items@2x.png in Resources */,
@@ -5410,7 +5397,6 @@
 				BB451E6C18DCD224005FBE09 /* HUD_debug_button.png in Resources */,
 				84E2DB5D1AB720FA001A7FEC /* left_menu_icon_about@3x.png in Resources */,
 				84630FF81A8E197E005B39F2 /* UniRS.render.xml in Resources */,
-				84BFC2241A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */,
 				3AC639A11A1CEB1D001D5E57 /* OAIntroViewController.xib in Resources */,
 				8441CB481B1370580033AC95 /* export_items@2x.png in Resources */,
 				84C41DD91AB8600D0089EABB /* follow_map_mode_button@2x.png in Resources */,
@@ -6075,7 +6061,6 @@
 				842431F11AEFDD1900925821 /* ic_action_rec_start.png in Resources */,
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				843E5CE41AB341E000BE14BE /* icon_favorite_item_direction.png in Resources */,
-				84BFC2251A960BDA00D807B4 /* OAGPXPointViewController.xib in Resources */,
 				8420EEFC1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */,
 				3ACA4AC51A0BA79E00ECC792 /* OASettingsCell.xib in Resources */,
 				BBA3AFCB197FC4BB0039D991 /* HUD_right_narrowbutton_bg.png in Resources */,
@@ -6418,7 +6403,6 @@
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				849E813E1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
-				84BFC2201A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */,
 				BBA3AECB197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BB54F70E1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				3AC2D50719F0056300DC8556 /* OAAppSettings.m in Sources */,
@@ -6576,7 +6560,6 @@
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
 				849E813F1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
-				84BFC2211A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */,
 				BB451E2B18DCD224005FBE09 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BB54F70F1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				3AC2D50819F007DD00DC8556 /* OAAppSettings.m in Sources */,
@@ -6781,7 +6764,6 @@
 				8470412C1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
 				84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */,
-				84BFC2221A960BDA00D807B4 /* OAGPXPointViewController.mm in Sources */,
 				3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				BBA3AF59197FC4BB0039D991 /* OAWorldRegion.mm in Sources */,
 				3ACA4AA91A0B8BA000ECC792 /* OASettingsViewController.m in Sources */,

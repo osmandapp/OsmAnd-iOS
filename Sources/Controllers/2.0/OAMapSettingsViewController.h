@@ -35,9 +35,14 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIImageView *navbarBackgroundImg;
 
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (weak, nonatomic) IBOutlet UIImageView *pickerImg;
+
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic, assign) BOOL showFull;
 
 @property (nonatomic) OAMapSettingsViewController *parentVC;
 
@@ -48,6 +53,7 @@ typedef enum
 
 -(void)show:(UIViewController *)rootViewController parentViewController:(OAMapSettingsViewController *)parentViewController animated:(BOOL)animated;
 -(void)hide:(BOOL)hideAll animated:(BOOL)animated;
+-(void)hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration;
 
 -(instancetype)init;
 

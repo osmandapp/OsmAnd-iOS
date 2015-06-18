@@ -8,9 +8,11 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAMapSettingsViewController">
             <connections>
                 <outlet property="backButton" destination="0cK-pa-YrF" id="iF3-16-GWJ"/>
+                <outlet property="containerView" destination="RHg-TF-YPF" id="Wte-Vl-1pG"/>
                 <outlet property="navbarBackgroundImg" destination="a6h-0F-e9G" id="Arf-ij-fy6"/>
                 <outlet property="navbarBackgroundView" destination="DP3-1O-DVu" id="KTs-2u-gjK"/>
                 <outlet property="navbarView" destination="ykD-3k-wDP" id="pph-u7-QGP"/>
+                <outlet property="pickerImg" destination="eiQ-xy-mgJ" id="cn4-Gb-pL0"/>
                 <outlet property="tableView" destination="NX0-1L-pkh" id="p5r-YH-bYJ"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="mHM-Da-4K1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -21,14 +23,26 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" bounces="NO" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NX0-1L-pkh">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
+                <view contentMode="scaleToFill" id="RHg-TF-YPF">
+                    <rect key="frame" x="0.0" y="16" width="320" height="464"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
-                </tableView>
+                    <subviews>
+                        <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_poi_info_dots.png" id="eiQ-xy-mgJ">
+                            <rect key="frame" x="145" y="-8" width="30" height="10"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </imageView>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="NX0-1L-pkh">
+                            <rect key="frame" x="0.0" y="8" width="320" height="456"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
             </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="263" y="449"/>
+            <point key="canvasLocation" x="264" y="470"/>
         </view>
         <view contentMode="scaleToFill" id="DP3-1O-DVu">
             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
@@ -71,6 +85,7 @@
     </objects>
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
+        <image name="ic_poi_info_dots.png" width="26" height="8"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

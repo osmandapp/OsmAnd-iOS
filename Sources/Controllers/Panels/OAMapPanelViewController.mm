@@ -761,13 +761,18 @@
 
 -(void)closeMapSettings
 {
+    [self closeMapSettingsWithDuration:.3];
+}
+
+- (void)closeMapSettingsWithDuration:(CGFloat)duration
+{
     if (_mapSettings)
     {
         [self updateOverlayUnderlayView:[_browseMapViewController isOverlayUnderlayViewVisible]];
         
         OAMapSettingsViewController* lastMapSettingsCtrl = [self.childViewControllers lastObject];
         if (lastMapSettingsCtrl)
-            [lastMapSettingsCtrl hide:YES animated:YES];
+            [lastMapSettingsCtrl hide:YES animated:YES duration:duration];
         
         _mapSettings = nil;
         
@@ -866,6 +871,11 @@
     NSString *openingHours = [params objectForKey:@"openingHours"];
     NSString *url = [params objectForKey:@"url"];
     NSString *desc = [params objectForKey:@"desc"];
+
+    NSString *oper = [params objectForKey:@"oper"];
+    NSString *brand = [params objectForKey:@"brand"];
+    NSString *wheelchair = [params objectForKey:@"wheelchair"];
+    NSArray *fuelTags = [params objectForKey:@"fuelTags"];
 
     NSDictionary *names = [params objectForKey:@"names"];
     NSDictionary *content = [params objectForKey:@"content"];
@@ -1007,6 +1017,12 @@
     targetPoint.url = url;
     targetPoint.localizedNames = names;
     targetPoint.localizedContent = content;
+
+    targetPoint.oper = oper;
+    targetPoint.brand = brand;
+    targetPoint.wheelchair = wheelchair;
+    targetPoint.fuelTags = fuelTags;
+
     targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
     if (desc.length > 0)
         targetPoint.titleAddress = desc;

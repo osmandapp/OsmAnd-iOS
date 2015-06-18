@@ -378,3 +378,6 @@
 "time_closed" = "Fechado";
 "time_will_close" = "Fechará em";
 "time_will_open" = "Abrirá em";
+"menu_my_trips" = "Minhas Viagens";
+"menu_active_trips" = "Ativar";
+"menu_all_trips" = "Todas as Viagens";

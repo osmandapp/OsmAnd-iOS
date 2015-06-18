@@ -14,13 +14,14 @@
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UITableView *gpxTableView;
-@property (weak, nonatomic) IBOutlet UIButton *favoritesButtonView;
-@property (weak, nonatomic) IBOutlet UIButton *gpxButtonView;
+
+@property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *activeTripsButtonView;
+@property (weak, nonatomic) IBOutlet UIButton *allTripsButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
-- (IBAction)menuFavoriteClicked:(id)sender;
-- (IBAction)menuGPXClicked:(id)sender;
-
+- (instancetype)initWithActiveTrips;
+- (instancetype)initWithAllTrips;
 - (instancetype)initWithImportGPXItem:(NSURL*)url;
 
 @end

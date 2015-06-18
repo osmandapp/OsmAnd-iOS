@@ -32,12 +32,12 @@
 @implementation OAOutdatedResourcesViewController
 {
     OsmAndAppInstance _app;
-
     NSObject* _dataLock;
 
     QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource> > _outdatedResources;
-
     NSMutableArray* _resourcesItems;
+
+    CALayer *_horizontalLine;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -76,6 +76,16 @@
                                                                            target:self
                                                                            action:@selector(onUpdateAllBarButtonClicked)];
     self.navigationItem.rightBarButtonItem = refreshAllBarButton;
+    
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.toolbarView.layer addSublayer:_horizontalLine];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 -(IBAction)backButtonClicked:(id)sender;

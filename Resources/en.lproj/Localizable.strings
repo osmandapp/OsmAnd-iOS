@@ -224,6 +224,7 @@
 
 // Menu
 "menu_my_places" = "My Places";
+"menu_my_trips" = "My Trips";
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
 
@@ -425,4 +426,8 @@
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
+
+"menu_active_trips" = "Active";
+"menu_all_trips" = "All Trips";
+
 

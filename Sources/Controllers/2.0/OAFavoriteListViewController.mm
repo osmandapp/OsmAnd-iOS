@@ -11,7 +11,6 @@
 #import "OAIconTextTableViewCell.h"
 #import "OAFavoriteItem.h"
 #import "OAMapViewController.h"
-#import "OAGPXListViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -84,17 +83,14 @@ typedef enum
     EFavoriteAction _favAction;
     OAEditColorViewController *_colorController;
     OAEditGroupViewController *_groupController;
+
+    CALayer *_horizontalLine;
 }
 
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"favorite");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-        
-    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.favoritesButtonView];
-    [OAUtilities layoutComplexButton:self.gpxButtonView];
 }
 
 - (void)viewDidLoad {
@@ -112,7 +108,18 @@ typedef enum
     _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     [_menuHeaderView setTitle:OALocalizedString(@"import_export")];
     
-    //_editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+    _editToolbarView.hidden = YES;
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.editToolbarView.layer addSublayer:_horizontalLine];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 - (void)updateDistanceAndDirection
@@ -545,8 +552,9 @@ typedef enum
     
     if ([self.favoriteTableView isEditing])
     {
+        _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
+        _editToolbarView.hidden = NO;
         [UIView animateWithDuration:.3 animations:^{
-            _mainToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _mainToolbarView.bounds.size.height);
             _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _editToolbarView.bounds.size.height, DeviceScreenWidth, _editToolbarView.bounds.size.height);
             self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _editToolbarView.bounds.size.height);
         }];
@@ -558,13 +566,13 @@ typedef enum
     else
     {
         [UIView animateWithDuration:.3 animations:^{
-            _mainToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight - _mainToolbarView.bounds.size.height, DeviceScreenWidth, _mainToolbarView.bounds.size.height);
             _editToolbarView.frame = CGRectMake(0.0, DeviceScreenHeight + 1.0, DeviceScreenWidth, _editToolbarView.bounds.size.height);
-            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0 - _mainToolbarView.bounds.size.height);
+            self.favoriteTableView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+        } completion:^(BOOL finished) {
+            _editToolbarView.hidden = YES;
         }];
 
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
-
         [self.backButton setHidden:NO];
 
         if (self.directionButton.tag == 1)
@@ -575,8 +583,6 @@ typedef enum
         [self.directionButton setHidden:NO];
     
     }
-    
-    //[self.favoriteTableView reloadData];
 }
 
 - (IBAction)shareButtonClicked:(id)sender
@@ -615,14 +621,6 @@ typedef enum
     
     [self editButtonClicked:nil];
     [self generateData];
-}
-
-- (IBAction)menuFavoriteClicked:(id)sender {
-}
-
-- (IBAction)menuGPXClicked:(id)sender {
-    OAGPXListViewController* favController = [[OAGPXListViewController alloc] init];
-    [self.navigationController pushViewController:favController animated:NO];
 }
 
 - (IBAction)goRootScreen:(id)sender {
@@ -689,11 +687,6 @@ typedef enum
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 46.0;
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

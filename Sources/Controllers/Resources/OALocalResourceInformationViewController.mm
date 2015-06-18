@@ -30,6 +30,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 @implementation OALocalResourceInformationViewController
 {
+    CALayer *_horizontalLine;
 }
 
 -(void)applyLocalization
@@ -41,6 +42,21 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
+}
+
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.toolbarView.layer addSublayer:_horizontalLine];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 - (void)viewWillAppear:(BOOL)animated

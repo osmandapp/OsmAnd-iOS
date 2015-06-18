@@ -76,6 +76,13 @@
 @end
 
 @implementation OAMapSettingsViewController
+{
+    BOOL _sliding;
+    CGPoint _topViewStartSlidingPos;
+
+    UIPanGestureRecognizer *_panGesture;
+    CALayer *_horizontalLine;
+}
 
 @synthesize screenObj, customParam;
 
@@ -111,26 +118,157 @@
     
 }
 
+- (void)moveContent:(UIPanGestureRecognizer *)gesture
+{
+    if ([self isLeftSideLayout:self.interfaceOrientation])
+        return;
+    
+    CGPoint translatedPoint = [gesture translationInView:[OARootViewController instance].mapPanel.mapViewController.view];
+    CGPoint translatedVelocity = [gesture velocityInView:[OARootViewController instance].mapPanel.mapViewController.view];
+    
+    CGFloat h = kMapSettingsContentHeight;
+    
+    if ([gesture state] == UIGestureRecognizerStateBegan)
+    {
+        _sliding = YES;
+        _topViewStartSlidingPos = self.view.frame.origin;
+    }
+    
+    if ([gesture state] == UIGestureRecognizerStateChanged)
+    {
+        CGRect f = self.view.frame;
+        f.origin.y = _topViewStartSlidingPos.y + translatedPoint.y;
+        f.size.height = DeviceScreenHeight - f.origin.y;
+        if (f.size.height < 0)
+            f.size.height = 0;
+        
+        self.view.frame = f;
+    }
+    
+    if ([gesture state] == UIGestureRecognizerStateEnded ||
+        [gesture state] == UIGestureRecognizerStateCancelled ||
+        [gesture state] == UIGestureRecognizerStateFailed)
+    {
+        if (translatedVelocity.y < 200.0)
+            //if (self.frame.origin.y < (DeviceScreenHeight - h - 20.0))
+        {
+            CGRect frame = self.view.frame;
+            CGFloat fullHeight = DeviceScreenHeight - 64.0;
+            BOOL goFull = !self.showFull && frame.size.height < fullHeight;
+            self.showFull = YES;
+            frame.size.height = fullHeight;
+            frame.origin.y = DeviceScreenHeight - fullHeight;
+            
+            
+            [UIView animateWithDuration:.3 animations:^{
+                
+                self.view.frame = frame;
+                
+            } completion:^(BOOL finished) {
+                if (!goFull)
+                {
+                    _sliding = NO;
+                    [self.view setNeedsLayout];
+                }
+                
+            }];
+            
+            if (goFull)
+            {
+                _sliding = NO;
+                [self.view setNeedsLayout];
+            }
+        }
+        else
+        {
+            if ((self.showFull || translatedVelocity.y < 200.0) && self.view.frame.origin.y < kMapSettingsContentHeight * 0.8)
+            {
+                self.showFull = NO;
+                
+                CGRect frame = self.view.frame;
+                frame.origin.y = DeviceScreenHeight - h;
+                frame.size.height = h;
+                
+                CGFloat delta = self.view.frame.origin.y - frame.origin.y;
+                CGFloat duration = (delta > 0.0 ? .2 : fabs(delta / (translatedVelocity.y * 0.5)));
+                if (duration > .2)
+                    duration = .2;
+                if (duration < .1)
+                    duration = .1;
+                
+                
+                [UIView animateWithDuration:duration animations:^{
+                
+                    self.view.frame = frame;
+
+                } completion:^(BOOL finished) {
+                    _sliding = NO;
+                    [self.view setNeedsLayout];
+                }];
+                
+            }
+            else
+            {
+                CGFloat delta = self.view.frame.origin.y - DeviceScreenHeight;
+                CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
+                if (duration > .3)
+                    duration = .3;
+                
+                [[OARootViewController instance].mapPanel closeMapSettingsWithDuration:duration];
+            }
+        }
+    }
+}
+
 - (void)viewWillLayoutSubviews
 {
-    [self updateLayout:self.interfaceOrientation];
+    if (!_sliding)
+        [self updateLayout:self.interfaceOrientation];
+}
+
+- (BOOL)isLeftSideLayout:(UIInterfaceOrientation)interfaceOrientation
+{
+    return (UIInterfaceOrientationIsLandscape(interfaceOrientation) || UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
 }
 
 - (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
 {
+    if (!self.showFull && [self isLeftSideLayout:interfaceOrientation])
+        self.showFull = YES;
+    
     self.view.frame = [self contentViewFrame:interfaceOrientation];
     _navbarView.frame = [self navbarViewFrame:interfaceOrientation];
     _navbarBackgroundView.frame = [self navbarViewFrame:interfaceOrientation];
     
     [self updateNavbarBackground:interfaceOrientation];
+    
+    _horizontalLine.frame = CGRectMake(0.0, _tableView.frame.origin.y, self.view.frame.size.width, 0.5);
+    
+    if ([self isLeftSideLayout:interfaceOrientation])
+    {
+        _pickerImg.hidden = YES;
+        _horizontalLine.hidden = YES;
+        _containerView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
+        _tableView.frame = _containerView.frame;
+    }
+    else
+    {
+        _pickerImg.hidden = NO;
+        _horizontalLine.hidden = NO;
+        _containerView.frame = CGRectMake(0.0, 16.0, self.view.frame.size.width, self.view.frame.size.height - 16.0);
+        _tableView.frame = CGRectMake(0.0, 8.0, _containerView.frame.size.width, _containerView.frame.size.height - 8.0);
+    }
 }
 
 
 -(CGRect)contentViewFrame:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation) && UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
+    if (![self isLeftSideLayout:interfaceOrientation])
     {
-        return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsContentHeight, DeviceScreenWidth, kMapSettingsContentHeight);
+        if (self.showFull)
+            return CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - 64.0);
+        else
+            return CGRectMake(0.0, DeviceScreenHeight - kMapSettingsContentHeight, DeviceScreenWidth, kMapSettingsContentHeight);
     }
     else
     {
@@ -163,6 +301,7 @@
 -(void)show:(UIViewController *)rootViewController parentViewController:(OAMapSettingsViewController *)parentViewController animated:(BOOL)animated;
 {
     self.parentVC = parentViewController;
+    self.showFull = parentViewController.showFull;
     
     [rootViewController addChildViewController:self];
     [self willMoveToParentViewController:rootViewController];
@@ -253,6 +392,11 @@
 
 -(void)hide:(BOOL)hideAll animated:(BOOL)animated
 {
+    [self hide:hideAll animated:animated duration:.3];
+}
+
+-(void)hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration
+{
     CGRect parentFrame;
     CGRect parentNavbarFrame;
     if (_parentVC)
@@ -273,7 +417,7 @@
     
     if (animated)
     {
-        [UIView animateWithDuration:.3 animations:^{
+        [UIView animateWithDuration:duration animations:^{
 
             CGRect navbarFrame;
             CGRect contentFrame;
@@ -380,6 +524,10 @@
 {
     [super viewDidLoad];
 
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.containerView.layer addSublayer:_horizontalLine];
+
     _navbarBackgroundView.hidden = YES;
     [self updateNavbarBackground:self.interfaceOrientation];
     
@@ -389,11 +537,14 @@
         [_backButton removeFromSuperview];
     
     [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
-    [self.view.layer setShadowOpacity:0.8];
+    [self.view.layer setShadowOpacity:0.3];
     [self.view.layer setShadowRadius:3.0];
-    [self.view.layer setShadowOffset:CGSizeMake(-2.0, 2.0)];
+    [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     [self updateLayout:self.interfaceOrientation];
+    
+    _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveContent:)];
+    [self.view addGestureRecognizer:_panGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated

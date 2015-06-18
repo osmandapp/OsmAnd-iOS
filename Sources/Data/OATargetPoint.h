@@ -34,6 +34,11 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
 
+@property (nonatomic) NSString *oper;
+@property (nonatomic) NSString *brand;
+@property (nonatomic) NSString *wheelchair;
+@property (nonatomic) NSArray *fuelTags;
+
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 

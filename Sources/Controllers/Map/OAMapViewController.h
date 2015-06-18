@@ -62,6 +62,11 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSString *url;
 @property (nonatomic) NSString *desc;
 
+@property (nonatomic) NSString *oper;
+@property (nonatomic) NSString *brand;
+@property (nonatomic) NSString *wheelchair;
+@property (nonatomic) NSArray *fuelTags;
+
 @end
 
 

@@ -234,6 +234,8 @@
     CLLocationCoordinate2D _centerLocationForMapArrows;
     
     UIImageView *_animatedPin;
+    BOOL _animationDone;
+    int _animationDoneCounter;
     CGFloat _latPin, _lonPin;
 }
 
@@ -1328,6 +1330,8 @@
                         if (prefLang)
                             descFieldLoc = [@"description:" stringByAppendingString:prefLang];
                         
+                        NSMutableArray *fuelTagsArr = [NSMutableArray array];
+                        
                         const auto& decodedValues = amenity->getDecodedValues();
                         for (const auto& entry : OsmAnd::rangeOf(decodedValues))
                         {
@@ -1335,31 +1339,30 @@
 
                             if (entry.key() == QString("phone"))
                                 symbol.phone = entry.value().toNSString();
-                            if (entry.key() == QString("opening_hours"))
+                            else if (entry.key() == QString("operator"))
+                                symbol.oper = entry.value().toNSString();
+                            else if (entry.key() == QString("brand"))
+                                symbol.brand = entry.value().toNSString();
+                            else if (entry.key() == QString("wheelchair"))
+                                symbol.wheelchair = entry.value().toNSString();
+                            else if (entry.key() == QString("opening_hours"))
                                 symbol.openingHours = entry.value().toNSString();
-                            if (entry.key() == QString("website"))
+                            else if (entry.key() == QString("website"))
                                 symbol.url = entry.value().toNSString();
-                            if (entry.key().startsWith(QString("description")) && !symbol.desc)
+                            else if (entry.key().startsWith(QString("description")) && !symbol.desc)
                                 symbol.desc = entry.value().toNSString();
+                            else if (entry.key().startsWith(QString("fuel:")) && (entry.value() == QString("yes")))
+                            {
+                                [fuelTagsArr addObject:entry.key().right(entry.key().length() - 5).toNSString()];
+                            }
+                            
                             if (descFieldLoc && entry.key() == QString::fromNSString(descFieldLoc))
                                 symbol.desc = entry.value().toNSString();
                         }
+                        if (fuelTagsArr.count > 0)
+                            symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];
                     }
                 }
-                
-                /*
-                if (prefLang)
-                {
-                    const QString lang = QString::fromNSString(prefLang);
-                    symbol.caption = mapObject->getCaptionInLanguage(lang).toNSString();
-                    if (symbol.caption.length == 0)
-                        symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
-                }
-                else
-                {
-                    symbol.caption = mapObject->getCaptionInNativeLanguage().toNSString();
-                }
-                 */
                 
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
                 
@@ -1526,6 +1529,15 @@
     if (symbol.desc)
         [userInfo setObject:symbol.desc forKey:@"desc"];
 
+    if (symbol.oper)
+        [userInfo setObject:symbol.oper forKey:@"oper"];
+    if (symbol.brand)
+        [userInfo setObject:symbol.brand forKey:@"brand"];
+    if (symbol.wheelchair)
+        [userInfo setObject:symbol.wheelchair forKey:@"wheelchair"];
+    if (symbol.fuelTags)
+        [userInfo setObject:symbol.fuelTags forKey:@"fuelTags"];
+
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
                                                       userInfo:userInfo];
@@ -1620,6 +1632,18 @@
 
 - (void)onMapRendererFramePrepared
 {
+    if (_animatedPin && _animationDone && _animationDoneCounter == 0)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            //[self performSelector:@selector(hideAnimatedPin) withObject:nil afterDelay:.05];
+            [self hideAnimatedPin];
+        });
+    }
+    else if (_animatedPin && _animationDone)
+    {
+        _animationDoneCounter--;
+    }
+    
     [_framePreparedObservable notifyEvent];
 }
 
@@ -1758,15 +1782,21 @@
 
     if (!self.view.hidden && animated)
     {
+        _animationDone = NO;
+        _animationDoneCounter = 1;
+        
         _latPin = latitude;
         _lonPin = longitude;
         
+        const OsmAnd::LatLon latLon(_latPin, _lonPin);
+        _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+
         _animatedPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_map_pin"]];
         
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;
         
         CGPoint targetPoint;
-        OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latitude, longitude));
+        OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
         [mapView convert:&targetPositionI toScreen:&targetPoint];
         
         _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
@@ -1813,11 +1843,8 @@
 
 -(void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag
 {
-    const OsmAnd::LatLon latLon(_latPin, _lonPin);
-    _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
+    _animationDone = YES;
     _contextPinMarker->setIsHidden(false);
-
-    [self performSelector:@selector(hideAnimatedPin) withObject:nil afterDelay:.3];
 }
 
 - (void) hideAnimatedPin

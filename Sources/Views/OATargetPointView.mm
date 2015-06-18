@@ -90,6 +90,16 @@
     UIButton *_infoOpeningHoursText;
     UIImageView *_infoUrlImage;
     UIButton *_infoUrlText;
+
+    UIImageView *_infoOperatorImage;
+    UIButton *_infoOperatorText;
+    UIImageView *_infoBrandImage;
+    UIButton *_infoBrandText;
+    UIImageView *_infoWheelchairImage;
+    UIButton *_infoWheelchairText;
+    UIImageView *_infoFuelImage;
+    UIButton *_infoFuelText;
+
     UIImageView *_infoDescImage;
     UITextView *_infoDescText;
     
@@ -187,6 +197,24 @@
     _infoUrlImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoUrlImage];
 
+
+    _infoOperatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoOperatorImage.contentMode = UIViewContentModeCenter;
+    [_infoView addSubview:_infoOperatorImage];
+
+    _infoBrandImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoBrandImage.contentMode = UIViewContentModeCenter;
+    [_infoView addSubview:_infoBrandImage];
+
+    _infoWheelchairImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoWheelchairImage.contentMode = UIViewContentModeCenter;
+    [_infoView addSubview:_infoWheelchairImage];
+
+    _infoFuelImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoFuelImage.contentMode = UIViewContentModeCenter;
+    [_infoView addSubview:_infoFuelImage];
+
+    
     _infoDescImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_description"]];
     _infoDescImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoDescImage];
@@ -211,6 +239,28 @@
     _infoUrlText.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     [_infoUrlText addTarget:self action:@selector(callUrl) forControlEvents:UIControlEventTouchUpInside];
     [_infoView addSubview:_infoUrlText];
+    
+
+    _infoOperatorText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoOperatorText];
+    _infoOperatorText.userInteractionEnabled = NO;
+    [_infoView addSubview:_infoOperatorText];
+
+    _infoBrandText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoBrandText];
+    _infoBrandText.userInteractionEnabled = NO;
+    [_infoView addSubview:_infoBrandText];
+
+    _infoWheelchairText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoWheelchairText];
+    _infoWheelchairText.userInteractionEnabled = NO;
+    [_infoView addSubview:_infoWheelchairText];
+
+    _infoFuelText = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self setupInfoButton:_infoFuelText];
+    _infoFuelText.userInteractionEnabled = NO;
+    [_infoView addSubview:_infoFuelText];
+
     
     _infoDescText = [[UITextView alloc] init];
     _infoDescText.font = [_infoFont copy];
@@ -841,6 +891,20 @@
     
     _infoUrlImage.hidden = _targetPoint.url == nil;
     _infoUrlText.hidden = _targetPoint.url == nil;
+
+    
+    _infoOperatorImage.hidden = _targetPoint.oper == nil;
+    _infoOperatorText.hidden = _targetPoint.oper == nil;
+
+    _infoBrandImage.hidden = _targetPoint.brand == nil;
+    _infoBrandText.hidden = _targetPoint.brand == nil;
+
+    _infoWheelchairImage.hidden = _targetPoint.wheelchair == nil;
+    _infoWheelchairText.hidden = _targetPoint.wheelchair == nil;
+
+    _infoFuelImage.hidden = _targetPoint.fuelTags.count == 0;
+    _infoFuelText.hidden = _targetPoint.fuelTags.count == 0;
+
     
     _infoDescImage.hidden = _targetPoint.desc == nil;
     _infoDescText.hidden = _targetPoint.desc == nil;

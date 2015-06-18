@@ -376,3 +376,5 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "依據路線的有效範圍著色";
 "time_open" = "開啓";
 "time_closed" = "已關閉";
+"time_will_close" = "即將關閉";
+"time_will_open" = "即將開啓";

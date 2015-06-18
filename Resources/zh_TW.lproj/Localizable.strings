@@ -378,3 +378,6 @@
 "time_closed" = "已關閉";
 "time_will_close" = "即將關閉";
 "time_will_open" = "即將開啓";
+"menu_my_trips" = "我的旅程";
+"menu_active_trips" = "啟用";
+"menu_all_trips" = "全部的旅程";

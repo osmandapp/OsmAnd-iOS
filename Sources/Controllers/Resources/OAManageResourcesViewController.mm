@@ -127,6 +127,8 @@ struct RegionResources
     
     BOOL _srtmDisabled;
     BOOL _hasSrtm;
+
+    CALayer *_horizontalLine;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -190,6 +192,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.toolbarView.layer addSublayer:_horizontalLine];
 
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
@@ -311,8 +317,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
-    
-  
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration

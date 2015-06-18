@@ -37,6 +37,7 @@
     MBProgressHUD* _loadProductsProgressHUD;
     BOOL _restoringPurchases;
 
+    CALayer *_horizontalLine;
 }
 
 -(void)applyLocalization
@@ -65,6 +66,10 @@
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
 
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.toolbarView.layer addSublayer:_horizontalLine];
+
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
@@ -76,6 +81,12 @@
         [_toolbarView removeFromSuperview];
         _tableView.frame = CGRectMake(_tableView.frame.origin.x, _tableView.frame.origin.y, _tableView.frame.size.width, _tableView.frame.size.height + _toolbarView.frame.size.height);
     }
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 - (void)didReceiveMemoryWarning {

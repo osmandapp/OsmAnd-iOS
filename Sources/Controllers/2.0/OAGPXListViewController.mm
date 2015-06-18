@@ -9,7 +9,6 @@
 #import "OAGPXListViewController.h"
 #import "OAGPXItemViewController.h"
 #import "OAIconTextTableViewCell.h"
-#import "OAFavoriteListViewController.h"
 #import "OAMapViewController.h"
 
 #import "OAGPXTableViewCell.h"
@@ -39,6 +38,12 @@
 #define kAlertViewRemoveId -3
 #define kAlertViewShareId -4
 
+typedef enum
+{
+    kActiveTripsMode = 0,
+    kAllTripsMode
+    
+} kGpxListMode;
 
 typedef enum
 {
@@ -70,6 +75,8 @@ typedef enum
 
 @interface OAGPXListViewController ()
 {
+    kGpxListMode _viewMode;
+
     OsmAndAppInstance _app;
     NSURL *_importUrl;
     OAGPXDocument *_doc;
@@ -90,6 +97,12 @@ typedef enum
     UITableViewCell *_addonCell;
     OAAutoObserverProxy* _trackRecordingObserver;
     OASavingTrackHelper *_savingHelper;
+
+    NSInteger _recSectionIndex;
+    NSInteger _tripsSectionIndex;
+    NSInteger _menuSectionIndex;
+    
+    CALayer *_horizontalLine;
 }
 
 - (instancetype)init
@@ -97,15 +110,39 @@ typedef enum
     self = [super init];
     if (self)
     {
-        _app = [OsmAndApp instance];
-        _savingHelper = [OASavingTrackHelper sharedInstance];
+        _viewMode = kActiveTripsMode;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithActiveTrips;
+{
+    self = [super init];
+    if (self)
+    {
+        _viewMode = kActiveTripsMode;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype)initWithAllTrips;
+{
+    self = [super init];
+    if (self)
+    {
+        _viewMode = kAllTripsMode;
+        [self commonInit];
     }
     return self;
 }
 
 - (instancetype)initWithImportGPXItem:(NSURL*)url
 {
-    _app = [OsmAndApp instance];
+    _viewMode = kAllTripsMode;
+
+    [self commonInit];
     
     // Try to process gpx
     if ([url isFileURL])
@@ -145,6 +182,12 @@ typedef enum
         
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _app = [OsmAndApp instance];
+    _savingHelper = [OASavingTrackHelper sharedInstance];
 }
 
 -(void)doImport:(BOOL)doRefresh
@@ -214,19 +257,47 @@ typedef enum
 
 - (void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"tracks");
+    _titleView.text = OALocalizedString(@"menu_my_trips");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
-    [_favoritesButtonView setTitle:OALocalizedStringUp(@"favorites") forState:UIControlStateNormal];
-    [_gpxButtonView setTitle:OALocalizedStringUp(@"tracks") forState:UIControlStateNormal];
-    [OAUtilities layoutComplexButton:self.favoritesButtonView];
-    [OAUtilities layoutComplexButton:self.gpxButtonView];
+    [_activeTripsButtonView setTitle:OALocalizedStringUp(@"menu_active_trips") forState:UIControlStateNormal];
+    [_allTripsButtonView setTitle:OALocalizedStringUp(@"menu_all_trips") forState:UIControlStateNormal];
+
+    if (_viewMode == kActiveTripsMode)
+    {
+        [_activeTripsButtonView setImage:[UIImage imageNamed:@"icon_star_fill"] forState:UIControlStateNormal];
+        [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx"] forState:UIControlStateNormal];
+        
+        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xffb300) forState:UIControlStateNormal];
+        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xc8c8c8) forState:UIControlStateNormal];
+    }
+    else
+    {
+        [_activeTripsButtonView setImage:[UIImage imageNamed:@"icon_star"] forState:UIControlStateNormal];
+        [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx_fill"] forState:UIControlStateNormal];
+        
+        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xc8c8c8) forState:UIControlStateNormal];
+        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xffb300) forState:UIControlStateNormal];
+    }
+
+    [OAUtilities layoutComplexButton:self.activeTripsButtonView];
+    [OAUtilities layoutComplexButton:self.allTripsButtonView];
 }
 
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    [self.toolbarView.layer addSublayer:_horizontalLine];
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
 }
 
 -(void)viewWillAppear:(BOOL)animated {
@@ -268,20 +339,36 @@ typedef enum
     });
 }
 
--(void)generateData {
-    
+-(void)generateData
+{
     self.menuItems = [[NSArray alloc] init];
     
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-    self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
     
+    if (_viewMode == kActiveTripsMode)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        self.gpxList = [NSMutableArray array];
+        for (OAGPX *item in db.gpxList)
+        {
+            NSArray *visible = settings.mapSettingVisibleGpx;
+            if ([visible containsObject:item.gpxFileName])
+                [_gpxList addObject:item];
+        }
+    }
+    else
+    {
+        self.gpxList = [NSMutableArray arrayWithArray:db.gpxList];
+    }
     
-    // Sort items by date-time added desc
-    NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
-        return [obj2.importDate compare:obj1.importDate];
-    }];
-    [self.gpxList setArray:sortedArrayGroups];
-    
+    if (self.gpxList.count > 0)
+    {
+        // Sort items by date-time added desc
+        NSArray *sortedArrayGroups = [self.gpxList sortedArrayUsingComparator:^NSComparisonResult(OAGPX* obj1, OAGPX* obj2) {
+            return [obj2.importDate compare:obj1.importDate];
+        }];
+        [self.gpxList setArray:sortedArrayGroups];
+    }
     
     // Generate menu items
     GpxTableGroup* itemData = [[GpxTableGroup alloc] init];
@@ -292,8 +379,12 @@ typedef enum
                          @"action": @"onImportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
     
+    
+    _recSectionIndex = (_viewMode == kActiveTripsMode ? 0 : -1);
+    _tripsSectionIndex = (self.gpxList.count > 0 ? (_viewMode == kActiveTripsMode ? 1 : 0) : -1);
+    _menuSectionIndex = (_viewMode == kAllTripsMode ? _tripsSectionIndex + 1 : -1);
+    
     [self.gpxTableView reloadData];
-
 }
 
 -(void)setupView {
@@ -310,13 +401,22 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)menuFavoriteClicked:(id)sender {
-    OAFavoriteListViewController* favController = [[OAFavoriteListViewController alloc] init];
-    [self.navigationController pushViewController:favController animated:NO];
+- (IBAction)activeTripsClicked:(id)sender
+{
+    if (_viewMode == kAllTripsMode)
+    {
+        OAGPXListViewController* viewController = [[OAGPXListViewController alloc] initWithActiveTrips];
+        [self.navigationController pushViewController:viewController animated:NO];
+    }
 }
 
-- (IBAction)menuGPXClicked:(id)sender
+- (IBAction)allTripsClicked:(id)sender
 {
+    if (_viewMode == kActiveTripsMode)
+    {
+        OAGPXListViewController* viewController = [[OAGPXListViewController alloc] initWithAllTrips];
+        [self.navigationController pushViewController:viewController animated:NO];
+    }
 }
 
 - (IBAction)backButtonClicked:(id)sender
@@ -340,36 +440,69 @@ typedef enum
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.gpxList.count > 0)
-        return 3;
-    else
-        return 2;
+    switch (_viewMode)
+    {
+        case kActiveTripsMode:
+            return 1 + (self.gpxList.count > 0 ? 1 : 0);
+            
+        case kAllTripsMode:
+            return 1 + (self.gpxList.count > 0 ? 1 : 0);
+            
+        default:
+            break;
+    }
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == 0)
-        return OALocalizedString(@"track_recording");
-    else if (section == 1 && self.gpxList.count > 0)
-        return OALocalizedString(@"tracks");
+    switch (_viewMode)
+    {
+        case kActiveTripsMode:
+            if (section == 0)
+                return OALocalizedString(@"track_recording");
+            else
+                return OALocalizedString(@"tracks");
+            
+        case kAllTripsMode:
+            if (section == 0 && self.gpxList.count > 0)
+                return OALocalizedString(@"tracks");
+            else
+                return OALocalizedString(@"fav_import");
+            
+        default:
+            break;
+    }
     
-    return OALocalizedString(@"fav_import");
+    return @"";
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
-        return 1;
-    else if (section == 1 && self.gpxList.count > 0)
-        return [self.gpxList count];
+    switch (_viewMode)
+    {
+        case kActiveTripsMode:
+            if (section == 0)
+                return 1;
+            else if (self.gpxList.count > 0)
+                return [self.gpxList count];
+            
+        case kAllTripsMode:
+            if (section == 0 && self.gpxList.count > 0)
+                return [self.gpxList count];
+            else
+                return [self.menuItems count];
+            
+        default:
+            break;
+    }
     
-    return [self.menuItems count];
+    return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == _recSectionIndex)
     {
         if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
         {
@@ -424,7 +557,7 @@ typedef enum
             return _addonCell;
         }
     }
-    else if (indexPath.section == 1 && self.gpxList.count > 0)
+    else if (indexPath.section == _tripsSectionIndex)
     {
         static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
         
@@ -593,7 +726,7 @@ typedef enum
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0)
+    if (indexPath.section == _recSectionIndex)
     {
         if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
         {
@@ -610,7 +743,7 @@ typedef enum
             [self.navigationController pushViewController:purchasesViewController animated:YES];
         }
     }
-    else if (indexPath.section == 1 && self.gpxList.count > 0)
+    else if (indexPath.section == _tripsSectionIndex)
     {
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
         OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];

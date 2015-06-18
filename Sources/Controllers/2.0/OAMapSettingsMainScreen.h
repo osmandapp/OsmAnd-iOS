@@ -7,7 +7,6 @@
 //
 
 #import "OAMapSettingsScreen.h"
-#include <OsmAndCore/Map/MapStylePreset.h>
 
 @interface OAMapSettingsMainScreen : NSObject<OAMapSettingsScreen>
 

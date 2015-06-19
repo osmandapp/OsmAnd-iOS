@@ -55,15 +55,15 @@
 "gpx_points" = "Punt(s)";
 "gpx_export" = "Exporta";
 "import_export" = "Importa/exporta";
-"gpx_import_title" = "Importa un recorregut";
-"gpx_import_already_exists" = "El fitxer del recorregut indicat ja existeix a la llista. Trieu una acció.";
+"gpx_import_title" = "Importa un trajecte";
+"gpx_import_already_exists" = "El fitxer del trajecte indicat ja existeix a la llista. Trieu una acció.";
 "gpx_add_new" = "Afegeix un fitxer nou";
 "gpx_overwrite" = "Sobreescriu";
 "gpx_cannot_import" = "No s'ha pogut importar el fitxer GPX especificat";
 "gpx_export_title" = "Exporta un trajecte";
-"gpx_export_select_track" = "Seleccioneu la traça per exportar";
-"gpx_no_tracks" = "No hi ha traces";
-"gpx_remove" = "Voleu suprimir la traça?";
+"gpx_export_select_track" = "Seleccioneu el trajecte a exportar";
+"gpx_no_tracks" = "No hi ha trajectes";
+"gpx_remove" = "Voleu suprimir el trajecte?";
 "gpx_stat" = "Estadístiques";
 "gpx_route_time" = "Temps de ruta";
 "gpx_distance" = "Distància";
@@ -357,7 +357,7 @@
 "no_other_translations" = "No hi ha altres traduccions";
 "shared_string_edit" = "Edita";
 "wpt_remove_q" = "Elimina la fita?";
-"gpx_select_track" = "Selecciona una traça";
+"gpx_select_track" = "Selecciona un trajecte";
 "gpx_curr_new_track" = "Traça actual/nova";
 "enter_name" = "Introduïu el nom";
 "not_selected" = "No seleccionat";
@@ -382,3 +382,4 @@
 "menu_active_trips" = "Activa";
 "menu_all_trips" = "Tots els recorreguts";
 "my_favorites" = "Preferits";
+"record_trip" = "Enregistreu el vostre trajecte";

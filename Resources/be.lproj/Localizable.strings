@@ -121,17 +121,17 @@
 "fav_replace_all" = "Замяніць усё";
 "poi_max_radius_reached" = "Дасягнуты максімальны радыюс пошуку";
 "poi_search_near_center" = "Пошук выконваецца вакол цэнтра карты";
-"tracks" = "Трэкі";
+"tracks" = "Падарожжы";
 "gpx_points" = "Кропкі";
 "import_export" = "Імпарт/Экспарт";
-"gpx_import_title" = "Імпартаваць трэк";
+"gpx_import_title" = "Імпартаваць падарожжа";
 "gpx_add_new" = "Дадаць новы файл";
 "gpx_overwrite" = "Перазапісаць";
 "gpx_cannot_import" = "Немагчыма імпартаваць GPX файл";
-"gpx_export_title" = "Экспартаваць трэк";
-"gpx_export_select_track" = "Абярыце трэк для экспарту";
-"gpx_no_tracks" = "Няма трэкаў";
-"gpx_remove" = "Выдаліць трэк?";
+"gpx_export_title" = "Экспартаваць падарожжа";
+"gpx_export_select_track" = "Абярыце падарожжа для экспарту";
+"gpx_no_tracks" = "Няма падарожжаў";
+"gpx_remove" = "Выдаліць падарожжа?";
 "gpx_route_time" = "Час маршруту";
 "gpx_uphldownhl" = "Уздымы/Спускі";
 "gpx_distance" = "Адлегласьць";
@@ -192,7 +192,7 @@
 "fav_enter_new_name" = "Увядзіце імя для ўпадабанага";
 // POI
 "poi_insrease_radius" = "Павялічыць пошук да";
-"gpx_import_already_exists" = "Паказаны трэк ужо прысутнічае ў спісе. Калі ласка абярыце дзеянне.";
+"gpx_import_already_exists" = "Паказанае падарожжа ўжо прысутнічае ў спісе. Калі ласка абярыце дзеянне.";
 "gpx_import_desc" = "Вы можаце імпартаваць GPX файлы\n\nКаб падзяліцца GPX файлам вы можаце адкрыць яго ў Dropbox, Email ці ў іншай праграме - Выкарыстоўвайце функцыю Адкрыць У";
 "track_recording" = "Запіс трэка";
 "track_recording_name" = "Бягучы трэк";
@@ -357,7 +357,7 @@
 "no_other_translations" = "Няма іншых перакладаў";
 "shared_string_edit" = "Правіць";
 "wpt_remove_q" = "Выдаліць шляхавую кропку?";
-"gpx_select_track" = "Абраць сьлед";
+"gpx_select_track" = "Абраць сьлед/падарожжа";
 "gpx_curr_new_track" = "Бягучы/новы сьлед";
 "enter_name" = "Задаць назву";
 "not_selected" = "Ня выбрана";
@@ -374,3 +374,12 @@
 "prch_srtm_info" = "Модуль Ізаліній вышынь дадае ізалініі вышынь да мапаў, на якія вы маеце права, набытых або сьцягнутых у межах вольнага ліміту.";
 "rendering_value_walkingRoutesOSMC_name" = "Афарбоўка згодна OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Афарбоўка згодна з праглядам маршруту";
+"my_favorites" = "Мае ўлюбёныя";
+"record_trip" = "Запісваць ваша падарожжа";
+"menu_my_trips" = "Мае падарожжы";
+"time_open" = "Адчынена";
+"time_closed" = "Зачынена";
+"time_will_close" = "Зачыніцца праз";
+"time_will_open" = "Адчыніцца праз";
+"menu_active_trips" = "Актыўныя";
+"menu_all_trips" = "Усе падарожжы";

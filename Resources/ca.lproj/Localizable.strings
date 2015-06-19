@@ -48,19 +48,19 @@
 "poi_hide" = "Amaga";
 // My Places
 "favorites" = "Preferits";
-"tracks" = "Traces";
+"tracks" = "Trajectes";
 // GPX
 "gpx_point" = "Punt";
 "gpx_waypoints" = "Fites";
 "gpx_points" = "Punt(s)";
 "gpx_export" = "Exporta";
 "import_export" = "Importa/exporta";
-"gpx_import_title" = "Importa una traça";
-"gpx_import_already_exists" = "La traça especificada ja existeix a la llista. Trieu una acció.";
+"gpx_import_title" = "Importa un recorregut";
+"gpx_import_already_exists" = "El fitxer del recorregut indicat ja existeix a la llista. Trieu una acció.";
 "gpx_add_new" = "Afegeix un fitxer nou";
 "gpx_overwrite" = "Sobreescriu";
 "gpx_cannot_import" = "No s'ha pogut importar el fitxer GPX especificat";
-"gpx_export_title" = "Exporta una traça";
+"gpx_export_title" = "Exporta un trajecte";
 "gpx_export_select_track" = "Seleccioneu la traça per exportar";
 "gpx_no_tracks" = "No hi ha traces";
 "gpx_remove" = "Voleu suprimir la traça?";

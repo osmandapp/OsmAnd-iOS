@@ -1798,8 +1798,40 @@
         OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(latLon);
         [mapView convert:&targetPositionI toScreen:&targetPoint];
         
-        _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
+        _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height / 2.0, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
         
+        CAKeyframeAnimation *animation = [CAKeyframeAnimation
+                                          animationWithKeyPath:@"transform"];
+        
+        CATransform3D scale1 = CATransform3DMakeScale(0.5, 0.5, 1);
+        CATransform3D scale2 = CATransform3DMakeScale(1.2, 1.2, 1);
+        CATransform3D scale3 = CATransform3DMakeScale(0.9, 0.9, 1);
+        CATransform3D scale4 = CATransform3DMakeScale(1.0, 1.0, 1);
+        
+        NSArray *frameValues = [NSArray arrayWithObjects:
+                                [NSValue valueWithCATransform3D:scale1],
+                                [NSValue valueWithCATransform3D:scale2],
+                                [NSValue valueWithCATransform3D:scale3],
+                                [NSValue valueWithCATransform3D:scale4],
+                                nil];
+        [animation setValues:frameValues];
+        
+        NSArray *frameTimes = [NSArray arrayWithObjects:
+                               [NSNumber numberWithFloat:0.0],
+                               [NSNumber numberWithFloat:0.5],
+                               [NSNumber numberWithFloat:0.9],
+                               [NSNumber numberWithFloat:1.0],
+                               nil];
+        [animation setKeyTimes:frameTimes];
+        
+        animation.fillMode = kCAFillModeForwards;
+        animation.removedOnCompletion = NO;
+        animation.duration = .3;
+        animation.delegate = self;
+        _animatedPin.layer.anchorPoint = CGPointMake(0.5, 1.0);
+        [_animatedPin.layer addAnimation:animation forKey:@"popup"];
+        
+        /*
         const CGFloat kDropCompressAmount = 0.1;
         
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
@@ -1830,6 +1862,7 @@
         group.delegate = self;
         
         [_animatedPin.layer addAnimation:group forKey:nil];
+         */
         [self.view addSubview:_animatedPin];
     }
     else

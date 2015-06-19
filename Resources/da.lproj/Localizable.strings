@@ -35,7 +35,7 @@
 "poi_hide" = "Skjul";
 // My Places
 "favorites" = "Favoritter";
-"tracks" = "Spor";
+"tracks" = "Ture";
 // GPX
 "gpx_point" = "Punkt";
 "gpx_waypoints" = "Rutepunkter";
@@ -177,13 +177,13 @@
 "gpx_points" = "Punkter";
 "gpx_export" = "Eksporter";
 "import_export" = "Import/eksport";
-"gpx_import_title" = "Importer spor";
-"gpx_import_already_exists" = "Det angivne spor findes allerede  på listen. Vælg en handling.";
+"gpx_import_title" = "Importer tur";
+"gpx_import_already_exists" = "Dnt angivne tur findes allerede  på listen. Vælg en handling.";
 "gpx_add_new" = "Tilføj en ny fil";
-"gpx_export_title" = "Eksporter spor";
-"gpx_export_select_track" = "Vælg et spor til eksport";
-"gpx_no_tracks" = "Der er ingen spor";
-"gpx_remove" = "Fjern spor?";
+"gpx_export_title" = "Eksporter tur";
+"gpx_export_select_track" = "Vælg en tur for eksport";
+"gpx_no_tracks" = "Der er ingen ture";
+"gpx_remove" = "Fjern tur?";
 "gpx_distance" = "Afstand";
 "gpx_finish" = "Afslut";
 "gpx_avg_elev" = "Gennemsnitlig højde";
@@ -357,7 +357,7 @@
 "no_other_translations" = "Der er ingen andre oversættelser";
 "shared_string_edit" = "Rediger";
 "wpt_remove_q" = "Fjern rutepunkt?";
-"gpx_select_track" = "Vælg spor";
+"gpx_select_track" = "Vælg spor/tur";
 "gpx_curr_new_track" = "Aktuel/nyt spor";
 "enter_name" = "Indtast navn";
 "language" = "Sprog";
@@ -382,3 +382,4 @@
 "menu_active_trips" = "Aktiv";
 "menu_all_trips" = "Alle ture";
 "my_favorites" = "Favoritter";
+"record_trip" = "Optag tur";

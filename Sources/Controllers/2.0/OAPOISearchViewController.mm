@@ -176,7 +176,9 @@ typedef enum
     [self updateSearchNearMapCenterLabel];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated
+{
+    isDecelerating = NO;
     
     [self setupView];
     
@@ -1002,7 +1004,21 @@ typedef enum
 {
     NSString *t = (text ? text : @"");
     _textField.text = t;
-    [self generateData];
+    
+    _forceShowBottomLabel = NO;
+    if (self.isViewLoaded && [self needUpdateSearchNearMapCenterLabel])
+    {
+        [self.view setNeedsLayout];
+        [UIView animateWithDuration:.25 animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            [self generateData];
+        }];
+    }
+    else
+    {
+        [self generateData];
+    }
 }
 
 -(NSString *)currentScopeNameLoc
@@ -1423,6 +1439,14 @@ typedef enum
 {
     if (!_searchNearMapCenter)
         return;
+    
+    CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+
+    _poiInList = NO;
+    [_searchPoiArray removeAllObjects];
+    _searchRadiusIndex = 0;
+    self.myLocation = myLocation;
     
     [self setSearchNearMapCenter:NO];
     [UIView animateWithDuration:.25 animations:^{

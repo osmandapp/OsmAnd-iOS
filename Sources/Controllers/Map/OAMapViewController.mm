@@ -1803,9 +1803,9 @@
         const CGFloat kDropCompressAmount = 0.1;
         
         CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-        animation.duration = 0.2;
+        animation.duration = 0.1;
         animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(0, -200, 0)];
+        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(0, -100, 0)];
         animation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
         
         CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@"transform"];

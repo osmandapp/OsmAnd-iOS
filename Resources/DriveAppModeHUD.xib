@@ -92,7 +92,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="rKG-Qo-wm0" userLabel="zoomInButton">
                             <rect key="frame" x="0.0" y="0.0" width="51" height="51"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="HUD_zoom_in_button.png" backgroundImage="zoom_button_bg.png">
+                            <state key="normal" image="zoom_in_button.png" backgroundImage="zoom_button_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -102,7 +102,7 @@
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="vfK-Md-Vd2" userLabel="zoomOutButton">
                             <rect key="frame" x="0.0" y="60" width="51" height="51"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <state key="normal" image="HUD_zoom_out_button.png" backgroundImage="zoom_button_bg.png">
+                            <state key="normal" image="zoom_out_button.png" backgroundImage="zoom_button_bg.png">
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -204,8 +204,6 @@
         <image name="HUD_compass.png" width="18" height="18"/>
         <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="HUD_debug_button.png" width="25" height="25"/>
-        <image name="HUD_zoom_in_button.png" width="25" height="25"/>
-        <image name="HUD_zoom_out_button.png" width="25" height="25"/>
         <image name="bt_round_big.png" width="51" height="51"/>
         <image name="free_map_mode_button.png" width="22" height="22"/>
         <image name="ic_height.png" width="25" height="25"/>
@@ -213,6 +211,8 @@
         <image name="icon_drive_mode_cancel.png" width="51" height="51"/>
         <image name="menu_button.png" width="48" height="51"/>
         <image name="zoom_button_bg.png" width="51" height="51"/>
+        <image name="zoom_in_button.png" width="22" height="22"/>
+        <image name="zoom_out_button.png" width="22" height="22"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

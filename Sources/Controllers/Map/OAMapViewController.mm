@@ -1664,7 +1664,7 @@
     
     // Animate azimuth change to north
     mapView.animator->animateAzimuthTo(0.0f,
-                                       kQuickAnimationTime,
+                                       kQuickAnimationTime * 2.0,
                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                        kUserInteractionAnimationKey);
     mapView.animator->resume();

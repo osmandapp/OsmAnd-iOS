@@ -48,22 +48,22 @@
 "poi_hide" = "Elrejtés";
 // My Places
 "favorites" = "Kedvencek";
-"tracks" = "Nyomvonalak";
+"tracks" = "Utazások";
 // GPX
 "gpx_point" = "Pont";
 "gpx_waypoints" = "Útvonalpontok";
 "gpx_points" = "Pont(ok)";
 "gpx_export" = "Exportálás";
 "import_export" = "Importálás / exportálás";
-"gpx_import_title" = "Nyomvonal importálása";
-"gpx_import_already_exists" = "A megadott nyomvonalfájl már rajta van a listán. Válasszon műveletet.";
+"gpx_import_title" = "Utazás importálása";
+"gpx_import_already_exists" = "A megadott utazásfájl már rajta van a listán. Válasszon műveletet.";
 "gpx_add_new" = "Új fájl hozzáadása";
 "gpx_overwrite" = "Felülírás";
 "gpx_cannot_import" = "Nem importálható a megadott GPX-fájl";
-"gpx_export_title" = "Nyomvonal exportálása";
-"gpx_export_select_track" = "Válasszon nyomvonalat az exportáláshoz";
-"gpx_no_tracks" = "Nincsenek nyomvonalak";
-"gpx_remove" = "Nyomvonal eltávolítása?";
+"gpx_export_title" = "Utazás exportálása";
+"gpx_export_select_track" = "Válasszon utazást az exportáláshoz";
+"gpx_no_tracks" = "Nincsenek utazások";
+"gpx_remove" = "Utazás eltávolítása?";
 "gpx_stat" = "Statisztikák";
 "gpx_route_time" = "Menetidő";
 "gpx_uphldownhl" = "Hegynek fel / hegynek le";
@@ -357,7 +357,7 @@
 "no_other_translations" = "Nincsenek egyéb fordítások";
 "shared_string_edit" = "Szerkesztés";
 "wpt_remove_q" = "Útvonalpont eltávolítása?";
-"gpx_select_track" = "Nyomvonal kiválasztása";
+"gpx_select_track" = "Nyomvonal/utazás kiválasztása";
 "gpx_curr_new_track" = "Jelenlegi / új nyomvonal";
 "enter_name" = "Név megadása";
 "not_selected" = "Nincs kiválasztva";
@@ -378,3 +378,8 @@
 "time_closed" = "Zárva";
 "time_will_close" = "Bezár ekkor:";
 "time_will_open" = "Kinyit ekkor:";
+"my_favorites" = "Kedvenceim";
+"record_trip" = "Utazás rögzítése";
+"menu_my_trips" = "Utazásaim";
+"menu_active_trips" = "Aktív";
+"menu_all_trips" = "Minden utazás";

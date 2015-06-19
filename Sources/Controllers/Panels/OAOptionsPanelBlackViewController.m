@@ -19,7 +19,7 @@
 
 #import "OARootViewController.h"
 
-@interface OAOptionsPanelBlackViewController ()
+@interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
@@ -159,6 +159,8 @@
 {
     [super viewDidLoad];
 
+    self.navigationController.delegate = self;
+    
     [_menuButtonMaps setTitle:OALocalizedString(@"map_settings_map") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"my_favorites") forState:UIControlStateNormal];
     [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
@@ -168,7 +170,8 @@
     [_menuButtonHelp setTitle:OALocalizedString(@"menu_about") forState:UIControlStateNormal];
 }
 
--(void)viewWillAppear:(BOOL)animated {
+-(void)viewWillAppear:(BOOL)animated
+{
     
     UIColor *borderColor = [UIColor colorWithRed:70.0/255.0 green:70.0/255.0 blue:71.0/255.0 alpha:1];
     
@@ -194,47 +197,51 @@
     self.menuButtonHelp.layer.borderWidth = 0.5;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-- (IBAction)mapsButtonClicked:(id)sender {
+- (IBAction)mapsButtonClicked:(id)sender
+{
     [self.sidePanelController toggleLeftPanel:self];
     [[OARootViewController instance].mapPanel mapSettingsButtonClick:sender];
-    
-    //OAMapSettingsViewController* settingsViewController = [[OAMapSettingsViewController alloc] init];
-    //[self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
-- (IBAction)myDataButtonClicked:(id)sender {
+- (IBAction)myDataButtonClicked:(id)sender
+{
     OAFavoriteListViewController* settingsViewController = [[OAFavoriteListViewController alloc] init];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
-- (IBAction)myTripsButtonClicked:(id)sender {
+- (IBAction)myTripsButtonClicked:(id)sender
+{
     OAGPXListViewController* gpxViewController = [[OAGPXListViewController alloc] init];
     [self.navigationController pushViewController:gpxViewController animated:YES];
 }
 
-- (IBAction)settingsButtonClicked:(id)sender {
+- (IBAction)settingsButtonClicked:(id)sender
+{
     OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
-
-- (IBAction)mapsAndResourcesButtonClicked:(id)sender {
+- (IBAction)mapsAndResourcesButtonClicked:(id)sender
+{
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 
-- (IBAction)helpButtonClicked:(id)sender {
+- (IBAction)helpButtonClicked:(id)sender
+{
     // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2015\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
 }
 
-- (IBAction)quizButtonClicked:(id)sender {
+- (IBAction)quizButtonClicked:(id)sender
+{
     OAWebViewController* quizViewController = [[OAWebViewController alloc] initWithUrl:@"http://www.osmand.net/ios-poll.html"];
     [self.navigationController pushViewController:quizViewController animated:YES];
 }
@@ -244,8 +251,14 @@
     return UIStatusBarStyleLightContent;
 }
 
-- (BOOL)prefersStatusBarHidden {
+- (BOOL)prefersStatusBarHidden
+{
     return NO;
+}
+
+-(void)navigationController:(UINavigationController *)navigationController didShowViewController:(UIViewController *)viewController animated:(BOOL)animated
+{
+    [[OARootViewController instance] closeMenuAndPanelsAnimated:NO];
 }
 
 @end

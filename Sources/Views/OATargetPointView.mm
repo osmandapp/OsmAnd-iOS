@@ -79,6 +79,8 @@
     CALayer *_horizontalLineInfo2;
     CALayer *_horizontalLineInfo3;
     CALayer *_horizontalLineInfo4;
+    CALayer *_horizontalLineInfo5;
+    CALayer *_horizontalLineInfo6;
     
     UIFont *_infoFont;
     
@@ -170,6 +172,10 @@
     _horizontalLineInfo3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     _horizontalLineInfo4 = [CALayer layer];
     _horizontalLineInfo4.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLineInfo5 = [CALayer layer];
+    _horizontalLineInfo5.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLineInfo6 = [CALayer layer];
+    _horizontalLineInfo6.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     _infoView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 100.0)];
     _infoView.backgroundColor = UIColorFromRGB(0xf2f2f2);
@@ -178,6 +184,8 @@
     [_infoView.layer addSublayer:_horizontalLineInfo2];
     [_infoView.layer addSublayer:_horizontalLineInfo3];
     [_infoView.layer addSublayer:_horizontalLineInfo4];
+    [_infoView.layer addSublayer:_horizontalLineInfo5];
+    [_infoView.layer addSublayer:_horizontalLineInfo6];
     
     _infoFont = [UIFont fontWithName:@"AvenirNext-Medium" size:14.0];
     
@@ -1168,6 +1176,47 @@
         {
             _horizontalLineInfo2.hidden = YES;
         }
+        
+        
+        if (_targetPoint.oper)
+        {
+            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.oper width:infoWidth - 55.0 font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoOperatorImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoOperatorText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoOperatorText setTitle:_targetPoint.oper forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo5.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo5.hidden = NO;
+        }
+        else
+        {
+            _horizontalLineInfo5.hidden = YES;
+        }
+        
+        if (_targetPoint.brand)
+        {
+            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.brand width:infoWidth - 55.0 font:_infoFont];
+            CGFloat ih = MAX(44.0, s.height + 16.0);
+            
+            _infoBrandImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+            _infoBrandText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+            [_infoBrandText setTitle:_targetPoint.brand forState:UIControlStateNormal];
+            
+            hf += ih;
+            
+            _horizontalLineInfo6.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+            _horizontalLineInfo6.hidden = NO;
+        }
+        else
+        {
+            _horizontalLineInfo6.hidden = YES;
+        }
+        
+        
         
         if (_targetPoint.url)
         {

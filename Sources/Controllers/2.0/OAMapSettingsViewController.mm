@@ -532,9 +532,6 @@
     
     [self setupView];
     
-    if (_settingsScreen == EMapSettingsScreenMain)
-        [_backButton removeFromSuperview];
-    
     [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
     [self.view.layer setShadowOpacity:0.3];
     [self.view.layer setShadowRadius:3.0];
@@ -565,7 +562,10 @@
         _lastMapSourceChangeObserver = nil;
     }
     
-    [self hide:NO animated:YES];
+    if (_settingsScreen == EMapSettingsScreenMain)
+        [[OARootViewController instance].mapPanel closeMapSettings];
+    else
+        [self hide:NO animated:YES];
 }
 
 - (void)didReceiveMemoryWarning

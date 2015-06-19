@@ -465,7 +465,7 @@ typedef enum
             
         case kAllTripsMode:
             if (section == 0 && self.gpxList.count > 0)
-                return OALocalizedString(@"tracks");
+                return nil;
             else
                 return OALocalizedString(@"fav_import");
             
@@ -473,7 +473,7 @@ typedef enum
             break;
     }
     
-    return @"";
+    return nil;
 }
 
 
@@ -571,7 +571,7 @@ typedef enum
         
         if (cell) {
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-            [cell.textView setText:item.gpxTitle];
+            [cell.textView setText:[item.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
         }

@@ -224,7 +224,7 @@ typedef enum
     [self.mapButton addTarget:self action:@selector(goToGpx) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.mapButton];
 
-    self.titleView.text = self.gpx.gpxTitle;
+    self.titleView.text = [self.gpx.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
     
     if (self.showCurrentTrack)

@@ -159,8 +159,8 @@
 {
     [super viewDidLoad];
 
-    [_menuButtonMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
-    [_menuButtonMyData setTitle:OALocalizedString(@"favorite") forState:UIControlStateNormal];
+    [_menuButtonMaps setTitle:OALocalizedString(@"map_settings_map") forState:UIControlStateNormal];
+    [_menuButtonMyData setTitle:OALocalizedString(@"my_favorites") forState:UIControlStateNormal];
     [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];

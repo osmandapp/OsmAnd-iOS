@@ -583,7 +583,6 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
 #pragma mark -
 #pragma mark UIViewController
 
-/*
 - (BOOL)prefersStatusBarHidden
 {
     return [UIApplication sharedApplication].statusBarHidden;
@@ -591,9 +590,8 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
 
 -(UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
+    return UIStatusBarStyleLightContent;
 }
- */
 
 - (BOOL)shouldAutorotate
 {

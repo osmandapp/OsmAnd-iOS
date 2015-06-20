@@ -11,7 +11,7 @@
 @class OAGPX;
 @class OAGPXDocument;
 
-@interface OAGPXItemViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate>
+@interface OAGPXItemViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
 @property (nonatomic) OAGPX *gpx;
 

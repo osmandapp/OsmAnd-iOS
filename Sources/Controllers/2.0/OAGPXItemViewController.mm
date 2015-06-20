@@ -14,6 +14,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAGPXPointListViewController.h"
+#import "PXAlertView.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -95,6 +96,19 @@
     
     self.gpx = item;
     self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
+}
+
+
+- (void)cancelPressed
+{
+    if (self.delegate)
+        [self.delegate btnCancelPressed];
+}
+
+- (void)okPressed
+{
+    if (self.delegate)
+        [self.delegate btnOkPressed];
 }
 
 - (BOOL)supportFullScreen
@@ -191,7 +205,20 @@
 
 - (IBAction)threeDotsClicked:(id)sender
 {
-    //
+    [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:@[OALocalizedString(@"shared_string_remove"), OALocalizedString(@"gpx_export")]
+                        otherImages:@[@"track_clear_data.png", @"export_items.png"]
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 if (buttonIndex == 0)
+                                     [self deleteClicked:nil];
+                                 else
+                                     [self exportClicked:nil];
+                             }
+                         }];
 }
 
 - (IBAction)segmentClicked:(id)sender
@@ -215,14 +242,36 @@
     _exportController.delegate = self;
     _exportController.name = _gpx.gpxFileName;
     [_exportController presentOptionsMenuFromRect:CGRectZero
-                                           inView:self.view
+                                           inView:self.navController.view
                                          animated:YES];
 }
 
 - (IBAction)deleteClicked:(id)sender
 {
-    UIAlertView* removeAlert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_remove") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_no") otherButtonTitles:OALocalizedString(@"shared_string_yes"), nil];
-    [removeAlert show];
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_remove")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 dispatch_async(dispatch_get_main_queue(), ^{
+                                     
+                                     OAAppSettings *settings = [OAAppSettings sharedManager];
+                                     if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
+                                         [settings hideGpx:self.gpx.gpxFileName];
+                                         [_mapViewController hideTempGpxTrack];
+                                         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+                                     }
+                                     
+                                     [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+                                     [[OAGPXDatabase sharedDb] save];
+                                     
+                                     [self okPressed];
+                                 });
+                             }
+                         }];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate
@@ -242,19 +291,17 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     if (_startEndTimeExists)
-        return 3;
-    else
         return 2;
+    else
+        return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     switch (section) {
         case 0:
-            return OALocalizedString(@"gpx_stat");
-        case 1:
             if (_startEndTimeExists)
                 return OALocalizedString(@"gpx_route_time");
-        case 2:
+        case 1:
             return OALocalizedString(@"gpx_uphldownhl");
             
         default:
@@ -267,14 +314,9 @@
     
     switch (section) {
         case 0:
-            if (self.gpx.avgSpeed > 0)
-                return 3;
-            else
-                return 2;
-        case 1:
             if (_startEndTimeExists)
                 return 2;
-        case 2:
+        case 1:
             return 4;
             
         default:
@@ -286,52 +328,9 @@
     
     static NSString* const reusableIdentifierPoint = @"OAGPXDetailsTableViewCell";
 
-    switch (indexPath.section) {
-        case 0: // Statistics
-        {
-            OAGPXDetailsTableViewCell* cell;
-            cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
-                cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
-            }
-            
-            switch (indexPath.row) {
-                case 0: // Distance
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_distance")];
-                    [cell.descView setText:[_app getFormattedDistance:self.gpx.totalDistance]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                case 1: // Waypoints
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_waypoints")];
-                    [cell.descView setText:[NSString stringWithFormat:@"%d", self.gpx.wptPoints]];
-                    if (self.gpx.wptPoints > 0) {
-                        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-                        cell.iconView.hidden = NO;
-                    } else {
-                        cell.iconView.hidden = YES;
-                    }
-                    break;
-                }
-                case 2: // Avg Speed
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_average_speed")];
-                    [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                    
-                default:
-                    break;
-            }
-            
-            return cell;
-        }
-        case 1: // Route Time
+    switch (indexPath.section)
+    {
+        case 0: // Route Time
         if (_startEndTimeExists) {
             OAGPXDetailsTableViewCell* cell;
             cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
@@ -363,7 +362,7 @@
             
             return cell;
         }
-        case 2: // Uphills / Downhills
+        case 1: // Uphills / Downhills
         {
             static NSString* const reusableIdentifierPointElev = @"OAGPXElevationTableViewCell";
 
@@ -432,10 +431,7 @@
 
 - (NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 1 && self.gpx.wptPoints > 0)
-        return indexPath;
-    else
-        return nil;
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
@@ -453,35 +449,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Show Location Points
-    if (indexPath.section == 0 && indexPath.row == 1 && self.gpx.wptPoints > 0) {
-        [self showPointsClicked:nil];
-        [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    }
-}
-
-#pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != alertView.cancelButtonIndex) {
-        
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-            [settings hideGpx:self.gpx.gpxFileName];
-            [_mapViewController hideTempGpxTrack];
-            [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-        }
-
-        [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
-        [[OAGPXDatabase sharedDb] save];
-        
-        // todo
-        //[self.navigationController popViewControllerAnimated:YES];
-    }
 }
 
 @end

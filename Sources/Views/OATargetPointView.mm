@@ -19,6 +19,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
+#import "OAGPXDatabase.h"
 
 #import "OpeningHoursParser.h"
 #include "java/util/Calendar.h"
@@ -1574,8 +1575,54 @@
         self.customController.formattedCoords = _formattedCoords;
     }
     
-    [_coordinateLabel setText:self.addressStr];
-    [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    if (_targetPoint.type == OATargetGPX)
+    {
+        OAGPX *item = _targetPoint.targetObj;
+        
+        NSString *distanceStr = [[OsmAndApp instance] getFormattedDistance:item.totalDistance];
+        NSString *pointsStr = [NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+        NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
+
+        NSMutableAttributedString *string;
+        if (item.avgSpeed > 0)
+            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@  AVG %@", distanceStr, pointsStr, avgSpeedStr]];
+        else
+            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@", distanceStr, pointsStr]];
+
+
+        UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+        UIFont *fontAvg = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:12];
+
+        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+        if (item.avgSpeed > 0)
+        {
+            NSRange avgRange = NSMakeRange(distanceStr.length + pointsStr.length + 7, 3);
+            [string addAttribute:NSFontAttributeName value:fontAvg range:avgRange];
+        }
+
+        NSTextAttachment *distanceAttachment = [[NSTextAttachment alloc] init];
+        distanceAttachment.image = [UIImage imageNamed:@"ic_gpx_distance.png"];
+        NSTextAttachment *pointsAttachment = [[NSTextAttachment alloc] init];
+        pointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+        
+        NSAttributedString *distanceStringWithImage = [NSAttributedString attributedStringWithAttachment:distanceAttachment];
+        NSAttributedString *pointsStringWithImage = [NSAttributedString attributedStringWithAttachment:pointsAttachment];
+                
+        [string replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:distanceStringWithImage];
+        [string replaceCharactersInRange:NSMakeRange(distanceStr.length + 3, 1) withAttributedString:pointsStringWithImage];
+
+        [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+        [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(distanceStr.length + 3, 1)];
+        
+        
+        [_coordinateLabel setAttributedText:string];
+        [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    }
+    else
+    {
+        [_coordinateLabel setText:self.addressStr];
+        [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    }
 }
 
 -(void)setMapViewInstance:(UIView*)mapView

@@ -22,6 +22,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -459,7 +460,7 @@ typedef enum
     {
         case kActiveTripsMode:
             if (section == 0)
-                return OALocalizedString(@"track_recording");
+                return OALocalizedString(@"record_trip");
             else
                 return OALocalizedString(@"tracks");
             
@@ -571,7 +572,7 @@ typedef enum
         
         if (cell) {
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-            [cell.textView setText:[item.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "]];
+            [cell.textView setText:[item getNiceTitle]];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
         }
@@ -746,8 +747,14 @@ typedef enum
     else if (indexPath.section == _tripsSectionIndex)
     {
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+
+        /*
+        OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
         OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];
         [self.navigationController pushViewController:controller animated:YES];
+         */
     }
     else
     {

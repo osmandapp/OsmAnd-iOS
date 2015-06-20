@@ -56,6 +56,11 @@
     _contentView.backgroundColor = color;
 }
 
+- (BOOL)supportFullScreen
+{
+    return NO; // override
+}
+
 -(BOOL)hasTopToolbar
 {
     return NO; // override

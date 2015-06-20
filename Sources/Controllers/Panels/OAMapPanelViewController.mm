@@ -17,6 +17,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
+#import "OAGPXDatabase.h"
 
 #import <EventKit/EventKit.h>
 
@@ -61,6 +62,13 @@
 
 #define kMaxRoadDistanceInMeters 1000
 
+typedef enum
+{
+    EOATargetPoint = 0,
+    EOATargetBBOX,
+    
+} EOATargetMode;
+
 @interface OAMapPanelViewController () <OADestinationViewControllerProtocol, InfoWidgetsViewDelegate, OAParkingDelegate, OAWikiMenuDelegate, OAGPXWptViewControllerDelegate>
 
 @property (nonatomic) OABrowseMapAppModeHudViewController *browseMapViewController;
@@ -96,6 +104,8 @@
     NSString *_formattedTargetName;
     double _targetLatitude;
     double _targetLongitude;
+    double _targetZoom;
+    EOATargetMode _targetMode;
     
     OADestination *_targetDestination;
 
@@ -652,6 +662,28 @@
     renderView.elevationAngle = newElevationAngle;
 }
 
+- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+
+    float metersPerPixel = [_mapViewController calculateMapRuler];
+    
+    double distanceH = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.bottomRight.longitude, mapBounds.topLeft.latitude);
+    double distanceV = OsmAnd::Utilities::distance(mapBounds.topLeft.longitude, mapBounds.topLeft.latitude, mapBounds.topLeft.longitude, mapBounds.bottomRight.latitude);
+    
+    CGFloat newZoomH = distanceH / (mapSize.width * metersPerPixel);
+    CGFloat newZoomV = distanceV / (mapSize.height * metersPerPixel);
+    CGFloat newZoom = log2(MAX(newZoomH, newZoomV));
+    
+    CGFloat zoom = renderView.zoom - newZoom;
+    if (isnan(zoom))
+        zoom = renderView.zoom;
+    if (zoom > 22.0f)
+        zoom = 22.0f;
+    
+    return zoom;
+}
+
 - (void)doMapReuse:(UIViewController *)destinationViewController destinationView:(UIView *)destinationView
 {
     CGRect newFrame = CGRectMake(0, 0, destinationView.bounds.size.width, destinationView.bounds.size.height);
@@ -1001,8 +1033,10 @@
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
     }
     
+    _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
+    _targetZoom = 0.0;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -1356,15 +1390,14 @@
     Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
 
-    //[_mapViewController goToPosition:point animated:YES];
-    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : self.targetMenuView.frame.size.height) animated:YES];
+    [_mapViewController correctPosition:point originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : self.targetMenuView.frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
 
 }
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) animated:animated];
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
 }
 
 -(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
@@ -1451,7 +1484,6 @@
     }
     else if (_targetMenuView.targetPoint.type == OATargetWpt)
     {
-
         [self.targetMenuView doInit:showFullMenu];
             
         OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
@@ -1459,6 +1491,16 @@
         wptViewController.wptDelegate = self;
         wptViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:wptViewController];
+        
+        [self.targetMenuView prepareNoInit];
+    }
+    else if (_targetMenuView.targetPoint.type == OATargetGPX)
+    {
+        [self.targetMenuView doInit:showFullMenu];
+        
+        OAGPXItemViewController *gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+        gpxViewController.view.frame = self.view.frame;
+        [self.targetMenuView setCustomViewController:gpxViewController];
         
         [self.targetMenuView prepareNoInit];
     }
@@ -1478,8 +1520,8 @@
     [self.view addSubview:self.targetMenuView];
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) animated:YES];
-
+    [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    
     [self.targetMenuView show:YES onComplete:^{
         
         [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
@@ -1613,8 +1655,10 @@
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
+    _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
+    _targetZoom = 0.0;
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
@@ -1665,8 +1709,10 @@
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
+    _targetMode = EOATargetPoint;
     _targetLatitude = lat;
     _targetLongitude = lon;
+    _targetZoom = 0.0;
     
     targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
     targetPoint.title = _formattedTargetName;
@@ -1686,6 +1732,67 @@
         [self targetGoToPoint];
 }
 
+- (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
+{
+    _pushed = pushed;
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = [item getNiceTitle];
+    
+    UIImage *icon = [UIImage imageNamed:@"icon_gpx_fill"];
+    
+    targetPoint.type = OATargetGPX;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : kOATargetPointTopViewHeight + 160.0));
+    _targetZoom = [self getZoomForBounds:item.bounds mapSize:screenBBox];
+    _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
+    
+    if (_targetMode == EOATargetBBOX)
+    {
+        _targetLatitude = item.bounds.bottomRight.latitude;
+        _targetLongitude = item.bounds.topLeft.longitude;
+    }
+    else
+    {
+        _targetLatitude = item.bounds.center.latitude;
+        _targetLongitude = item.bounds.center.longitude;
+    }
+    
+    targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = YES;
+    targetPoint.targetObj = item;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.bounds.center.latitude, item.bounds.center.longitude))];
+    [_mapViewController goToPosition:targetPoint31
+                             andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
+                            animated:NO];
+    
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+    
+    OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
+    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+
+    [self showTargetPointMenu:YES showFullMenu:YES];
+    
+    //[self targetGoToPoint];
+}
 
 #pragma mark - OAParkingDelegate
 
@@ -1802,8 +1909,10 @@
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
+    _targetMode = EOATargetPoint;
     _targetLatitude = destination.latitude;
     _targetLongitude = destination.longitude;
+    _targetZoom = 0.0;
     
     targetPoint.location = CLLocationCoordinate2DMake(destination.latitude, destination.longitude);
     targetPoint.title = _formattedTargetName;

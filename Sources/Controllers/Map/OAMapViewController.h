@@ -22,6 +22,8 @@
 
 #define kCorrectionMinLeftSpace 40.0
 #define kCorrectionMinBottomSpace 40.0
+#define kCorrectionMinLeftSpaceBBox 20.0
+#define kCorrectionMinBottomSpaceBBox 20.0
 
 #if defined(OSMAND_IOS_DEV)
 typedef NS_ENUM(NSInteger, OAVisualMetricsMode)
@@ -109,6 +111,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
+             centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated;
 
 - (float)calculateMapRuler;

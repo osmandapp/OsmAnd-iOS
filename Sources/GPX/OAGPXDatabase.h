@@ -48,6 +48,8 @@
 @property (nonatomic) OAGpxWpt *locationStart;
 @property (nonatomic) OAGpxWpt *locationEnd;
 
+- (NSString *)getNiceTitle;
+
 @end
 
 @interface OAGPXDatabase : NSObject

@@ -14,6 +14,15 @@
 #define kDbName @"gpx.db"
 
 @implementation OAGPX
+
+- (NSString *)getNiceTitle
+{
+    if (self.gpxTitle)
+        return [self.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+
+    return self.gpxTitle;
+}
+
 @end
 
 

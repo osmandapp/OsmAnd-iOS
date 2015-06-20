@@ -14,6 +14,7 @@
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;
+@class OAGPX;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -43,5 +44,6 @@
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
 @end

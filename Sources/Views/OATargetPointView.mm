@@ -106,8 +106,14 @@
     UITextView *_infoDescText;
     
     BOOL _showFull;
+    BOOL _showFullScreen;
+    
+    CGFloat _frameTop;
+
     CGFloat _fullHeight;
+    CGFloat _fullScreenHeight;
     CGFloat _fullInfoHeight;
+    
     BOOL _hideButtons;
     BOOL _sliding;
     BOOL _toolbarAnimating;
@@ -420,6 +426,9 @@
     CGFloat h = kOATargetPointViewHeightPortrait;
     if ([self isLandscape])
         h = kOATargetPointViewHeightLandscape;
+    
+    if (_hideButtons)
+        h -= kOATargetPointButtonsViewHeight;
 
     if ([gesture state] == UIGestureRecognizerStateBegan)
     {
@@ -440,6 +449,10 @@
         else
         {
             f.origin.y = _topViewStartSlidingPos.y + translatedPoint.y;
+            
+            if (_showFullScreen && f.origin.y < _frameTop)
+                f.origin.y = _frameTop;
+            
             f.size.height = DeviceScreenHeight - f.origin.y;
             if (f.size.height < 0)
                 f.size.height = 0;
@@ -462,15 +475,13 @@
             }
         }
         
-        if (![self isLandscape] && [self hasInfo])
+        if (![self isLandscape] && [self hasInfo] && !_hideButtons)
         {
             CGFloat by = _buttonsViewStartSlidingPos.y - translatedPoint.y * 1.3;
             if (f.size.height < h && by <= _topView.frame.origin.y + _topView.frame.size.height)
                 _buttonsView.center = CGPointMake(_buttonsView.center.x, _topView.frame.origin.y + _topView.frame.size.height + _buttonsView.bounds.size.height / 2.0);
-            else //if (by < f.size.height - _buttonsView.bounds.size.height)
+            else
                 _buttonsView.center = CGPointMake(_buttonsView.center.x, f.size.height - _buttonsView.bounds.size.height / 2.0);
-            //else
-            //    _buttonsView.center = CGPointMake(_buttonsView.center.x, by + _buttonsView.bounds.size.height / 2.0);
         }
 
         self.frame = f;
@@ -488,13 +499,24 @@
             CGRect frame = self.frame;
 
             BOOL goFull = NO;
+            BOOL goFullScreen = NO;
             if ([self hasInfo])
             {
                 goFull = !_showFull && frame.size.height < _fullHeight;
+                goFullScreen = !_showFullScreen && frame.size.height > _fullHeight && self.customController && [self.customController supportFullScreen];
+                
                 _showFull = YES;
-                _hideButtons = NO;
-                frame.size.height = _fullHeight;
-                frame.origin.y = DeviceScreenHeight - _fullHeight;
+                if (goFullScreen)
+                {
+                    _showFullScreen = YES;
+                    frame.size.height = _fullScreenHeight;
+                    frame.origin.y = DeviceScreenHeight - _fullScreenHeight;
+                }
+                else if (!_showFullScreen)
+                {
+                    frame.size.height = _fullHeight;
+                    frame.origin.y = DeviceScreenHeight - _fullHeight;
+                }
                 
                 if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
                     [self showTopToolbar:YES];
@@ -502,7 +524,6 @@
             else
             {
                 _showFull = NO;
-                _hideButtons = NO;
                 frame.size.height = h;
                 frame.origin.y = DeviceScreenHeight - h;
 
@@ -531,12 +552,9 @@
 
             [UIView animateWithDuration:.3 animations:^{
                 self.frame = frame;
-                if (![self isLandscape])
+                if (![self isLandscape] && !_hideButtons)
                 {
-                    if (_hideButtons)
-                        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - frame.origin.y + 1.0, _buttonsView.bounds.size.width, _buttonsView.bounds.size.height);
-                    else
-                        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
+                    _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
                 }
             } completion:^(BOOL finished) {
                 if (!goFull)
@@ -559,12 +577,28 @@
         {
             if (_showFull || translatedVelocity.y < 200.0 || ![self preHide])
             {
-                _showFull = NO;
-                _hideButtons = NO;
-                
                 CGRect frame = self.frame;
-                frame.origin.y = DeviceScreenHeight - h;
-                frame.size.height = h;
+
+                if (_showFullScreen)
+                {
+                    _showFullScreen = NO;
+                    _showFull = (frame.size.height > _fullHeight);
+                }
+                else
+                {
+                    _showFull = NO;
+                }
+                
+                if (_showFull)
+                {
+                    frame.size.height = _fullHeight;
+                    frame.origin.y = DeviceScreenHeight - _fullHeight;
+                }
+                else
+                {
+                    frame.origin.y = DeviceScreenHeight - h;
+                    frame.size.height = h;
+                }
 
                 CGFloat delta = self.frame.origin.y - frame.origin.y;
                 CGFloat duration = (delta > 0.0 ? .2 : fabs(delta / (translatedVelocity.y * 0.5)));
@@ -577,9 +611,14 @@
                     [self hideTopToolbar:YES];
 
                 [UIView animateWithDuration:duration animations:^{
+                    
                     self.frame = frame;
-                    if (![self isLandscape])
-                        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, DeviceScreenWidth, 53.0);
+                    
+                    if (![self isLandscape] && !_hideButtons)
+                    {
+                        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
+                    }
+                    
                 } completion:^(BOOL finished) {
                     _sliding = NO;
                     [self setNeedsLayout];
@@ -708,14 +747,12 @@
     if ([self isLandscape])
     {
         _showFull = YES;
-        _hideButtons = NO;
         frame.size.height = _fullHeight;
         frame.origin.y = DeviceScreenHeight - _fullHeight;
     }
     else
     {
         _showFull = YES;
-        _hideButtons = NO;
         frame.size.height = _fullHeight;
         frame.origin.y = DeviceScreenHeight - _fullHeight;
     }
@@ -816,12 +853,15 @@
 - (void)doInit:(BOOL)showFull
 {
     _showFull = showFull;
+    _showFullScreen = NO;
     [self clearCustomControllerIfNeeded];
 }
 
 - (void)doUpdateUI
 {
-    _hideButtons = NO;
+    _hideButtons = (_targetPoint.type == OATargetGPX);
+    self.buttonsView.hidden =_hideButtons;
+    
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
     if (self.customController.contentView)
@@ -1104,6 +1144,9 @@
     if (landscape)
         h = kOATargetPointViewHeightLandscape;
     
+    if (_hideButtons)
+        h -= kOATargetPointButtonsViewHeight;
+    
     if (self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden)
         [self updateToolbarFrame:landscape];
 
@@ -1263,36 +1306,56 @@
     }
     else
     {
+        CGFloat chFull;
+        CGFloat chFullScreen;
+
         CGRect f = self.customController.contentView.frame;
         if (landscape)
         {
             if (self.customController.editing)
-                f.size.height = MAX(DeviceScreenHeight - 53.0 - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 64.0 : 0.0), (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
+                chFull = MAX(DeviceScreenHeight - (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight) - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? self.customController.navBar.bounds.size.height : 0.0), (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
             else
-                f.size.height = DeviceScreenHeight - kOATargetPointViewHeightLandscape - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? 64.0 : 0.0) - kOATargetPointTopPanTreshold;
+                chFull = DeviceScreenHeight - kOATargetPointViewHeightLandscape + (_hideButtons ? kOATargetPointButtonsViewHeight : 0.0) - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? self.customController.navBar.bounds.size.height : 0.0) - kOATargetPointTopPanTreshold;
+            
+            f.size.height = chFull;
         }
         else
         {
             if (self.customController.editing)
-                f.size.height = [self.customController contentHeight];
+                chFull = [self.customController contentHeight];
             else
-                f.size.height = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
+                chFull = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
+
+            chFullScreen = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height : 20.0) - kOATargetPointTopViewHeight;
+
+            if (_showFullScreen)
+                f.size.height = chFullScreen;
+            else
+                f.size.height = chFull;
         }
     
         self.customController.contentView.frame = f;
-        hf = f.size.height;
+        hf = chFull;
     }
     
     _fullInfoHeight = hf;
 
-    hf += _topView.frame.size.height + _buttonsView.frame.size.height + kOATargetPointTopPanTreshold;
+    hf += _topView.frame.size.height + (_hideButtons ? 0.0 : _buttonsView.frame.size.height) + kOATargetPointTopPanTreshold;
     
     CGRect frame = self.frame;
     frame.size.width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
     if (_showFull && !landscape)
     {
-        frame.origin.y = DeviceScreenHeight - hf;
-        frame.size.height = hf;
+        if (_showFullScreen)
+        {
+            frame.origin.y = (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0);
+            frame.size.height = DeviceScreenHeight - frame.origin.y;
+        }
+        else
+        {
+            frame.origin.y = DeviceScreenHeight - hf;
+            frame.size.height = hf;
+        }
     }
     else
     {
@@ -1305,7 +1368,7 @@
             }
             else
             {
-                frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? 44.0 : 0.0);
+                frame.origin.y = 20.0 - kOATargetPointTopPanTreshold + (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - 20.0 : 0.0);
                 frame.size.height = DeviceScreenHeight - (20.0 - kOATargetPointTopPanTreshold);
             }
         }
@@ -1318,7 +1381,9 @@
 
     self.frame = frame;
     
+    _frameTop = frame.origin.y;
     _fullHeight = hf;
+    _fullScreenHeight = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0);
     
     if (_imageView.image)
     {
@@ -1336,7 +1401,7 @@
     if (landscape)
     {
         CGFloat y = _topView.frame.origin.y + _topView.frame.size.height;
-        _infoView.frame = CGRectMake(0.0, y, width, DeviceScreenHeight - y - 53.0);
+        _infoView.frame = CGRectMake(0.0, y, width, DeviceScreenHeight - y - kOATargetPointButtonsViewHeight);
         
         if (self.customController.contentView)
             self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
@@ -1361,9 +1426,9 @@
     _buttonClose.frame = CGRectMake(width - 36.0, 0.0, 36.0, 36.0);
     
     if (_hideButtons)
-        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, width, 53.0);
+        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, width, kOATargetPointButtonsViewHeight);
     else
-        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - 53.0, width, 53.0);
+        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, width, kOATargetPointButtonsViewHeight);
     
     CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
     CGFloat x = 0.0;

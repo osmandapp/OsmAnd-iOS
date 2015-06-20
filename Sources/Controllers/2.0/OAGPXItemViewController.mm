@@ -26,14 +26,6 @@
 #include <OsmAndCore/Utilities.h>
 
 
-typedef enum
-{
-    kGpxItemActionNone = 0,
-    kGpxItemActionShowPoints = 1,
-    
-} EGpxItemAction;
-
-
 @interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate> {
 
     OsmAndAppInstance _app;
@@ -41,15 +33,10 @@ typedef enum
     
     OAMapViewController *_mapViewController;
     
-    EGpxItemAction _action;
-    BOOL _showTrackOnExit;
-    
     BOOL _startEndTimeExists;
-    BOOL _hideToolbar;
 }
 
 @property (nonatomic) OAGPXDocument *doc;
-@property (nonatomic) UIButton *mapButton;
 @property (strong, nonatomic) UIDocumentInteractionController* exportController;
 
 @end
@@ -96,9 +83,7 @@ typedef enum
         
         [self updateCurrentGPXData];
         
-        _showCurrentTrack = YES;
-        _hideToolbar = YES;
-        
+        _showCurrentTrack = YES;        
     }
     return self;
 }
@@ -112,133 +97,57 @@ typedef enum
     self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
 }
 
-- (void)viewWillLayoutSubviews
+- (BOOL)supportFullScreen
 {
-    [self updateLayout:self.interfaceOrientation];
+    return YES;
 }
 
-- (void)updateLayout:(UIInterfaceOrientation)interfaceOrientation
+-(BOOL)hasTopToolbar
 {
-    
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = self.view.bounds;
-    if (rect.size.width > rect.size.height) {
-        big = rect.size.width;
-        small = rect.size.height;
-    } else {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
-    
-    if (UIInterfaceOrientationIsPortrait(interfaceOrientation)) {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = big - topY - self.toolbarView.frame.size.height;
-            CGFloat mapWidth = small / 1.7;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = self.mapView.frame;
-            self.tableView.frame = CGRectMake(mapWidth, topY, small - mapWidth, big - self.toolbarView.frame.size.height - topY);
-            
-        } else {
-            
-            CGFloat topY = 64.0;
-            CGFloat mapWidth = small;
-            CGFloat mapHeight = 150.0;
-            CGFloat mapBottom = topY + mapHeight;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = self.mapView.frame;
-            self.tableView.frame = CGRectMake(0.0, mapBottom, small, big - self.toolbarView.frame.size.height - mapBottom);
-            
-        }
-        
-        CGFloat titleWidth = [OAUtilities calculateTextBounds:_titleView.text width:2000.0 font:_titleView.font].width;
-        CGFloat xCenter = small / 2.0 - titleWidth / 2.0;
-        CGFloat xRight = _backButton.frame.origin.x + _backButton.frame.size.width + 5.0;
+    return YES;
+}
 
-        if (xCenter < xRight)
-            _titleView.frame = CGRectMake(xRight, _titleView.frame.origin.y, small - xRight - 5.0, _titleView.frame.size.height);
-        else
-            _titleView.frame = CGRectMake(xCenter, _titleView.frame.origin.y, titleWidth, _titleView.frame.size.height);
-        
-    } else {
-        
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-            
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
-            CGFloat mapWidth = big / 1.5;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = self.mapView.frame;
-            self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
-            
-        } else {
-            
-            CGFloat topY = 64.0;
-            CGFloat mapHeight = small - topY - self.toolbarView.frame.size.height;
-            CGFloat mapWidth = big / 2.0;
-            
-            self.mapView.frame = CGRectMake(0.0, topY, mapWidth, mapHeight);
-            self.mapButton.frame = self.mapView.frame;
-            self.tableView.frame = CGRectMake(mapWidth, topY, big - mapWidth, small - self.toolbarView.frame.size.height - topY);
-            
-        }
-        
-        CGFloat titleWidth = [OAUtilities calculateTextBounds:_titleView.text width:2000.0 font:_titleView.font].width;
-        CGFloat xCenter = big / 2.0 - titleWidth / 2.0;
-        CGFloat xRight = _backButton.frame.origin.x + _backButton.frame.size.width + 5.0;
-        
-        if (xCenter < xRight)
-            _titleView.frame = CGRectMake(xRight, _titleView.frame.origin.y, big - xRight - 5.0, _titleView.frame.size.height);
-        else
-            _titleView.frame = CGRectMake(xCenter, _titleView.frame.origin.y, titleWidth, _titleView.frame.size.height);
+- (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
+{
+    return YES;
+}
+
+- (CGFloat)contentHeight
+{
+    CGFloat h = 0.0;
+    for (NSInteger i = 0; i < [_tableView numberOfSections]; i++)
+    {
+        h += 44.0;
+        h += [self.tableView numberOfRowsInSection:i] * 44.0;
     }
+    return MIN(160.0, h);
 }
 
 - (void)applyLocalization
 {
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [self.buttonCancel setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [self.buttonCancel setImage:[UIImage imageNamed:@"menu_icon_back"] forState:UIControlStateNormal];
+    [self.buttonCancel setTintColor:[UIColor whiteColor]];
+    self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
+    self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    
-    if (_hideToolbar)
-    {
-        self.toolbarView.frame = CGRectZero;
-        [self.toolbarView removeFromSuperview];
-    }
     
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
     dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
     
-    self.mapButton = [[UIButton alloc] initWithFrame:self.mapView.frame];
-    [self.mapButton setTitle:@"" forState:UIControlStateNormal];
-    [self.mapButton addTarget:self action:@selector(goToGpx) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.mapButton];
-
-    self.titleView.text = [self.gpx.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    self.titleView.text = [self.gpx getNiceTitle];
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
     
     if (self.showCurrentTrack)
     {
-        UIButton *refreshButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        refreshButton.frame = _deleteButton.frame;
-        refreshButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleBottomMargin;
-        [refreshButton setImage:[UIImage imageNamed:@"ic_update.png"] forState:UIControlStateNormal];
-        refreshButton.tintColor = [UIColor whiteColor];
-        [refreshButton addTarget:self action:@selector(refreshPressed) forControlEvents:UIControlEventTouchUpInside];
-        [self.topView addSubview:refreshButton];
-
-        [self.deleteButton removeFromSuperview];
-        [self.exportButton removeFromSuperview];
+        // todo
+        //[self.deleteButton removeFromSuperview];
+        //[self.exportButton removeFromSuperview];
     }
 }
 
@@ -248,63 +157,31 @@ typedef enum
     
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
-    if (_action != kGpxItemActionNone && _mapViewController.parentViewController == self) {
-        return;
-    }
+    // todo
+    //[[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
     
-    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    
-    if (_action == kGpxItemActionNone)
+    if (self.showCurrentTrack)
     {
-        if (self.showCurrentTrack)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_mapViewController hideTempGpxTrack];
-                [_mapViewController showRecGpxTrack];
-            });
-        }
-        else
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapViewController hideTempGpxTrack];
+            [_mapViewController showRecGpxTrack];
+        });
     }
     else
     {
-        _action = kGpxItemActionNone;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
+        });
     }
-
-    _showTrackOnExit = NO;
-
-}
-
-- (void)viewDidAppear:(BOOL)animated
-{
-    [super viewDidAppear:animated];
-    
-    if (_action != kGpxItemActionNone) {
-        _action = kGpxItemActionNone;
-        return;
-    }
-    
-    [[OARootViewController instance].mapPanel doMapReuse:self destinationView:self.mapView];
 }
 
 - (void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
     
-    if (_action != kGpxItemActionNone)
-        return;
-    
-    if (_showTrackOnExit) {
-     
-        [_mapViewController keepTempGpxTrackVisible];
-        
-        [[OARootViewController instance].mapPanel modifyMapAfterReuse:self.gpx.bounds azimuth:0.0 elevationAngle:90.0 animated:YES];
-
-    }
+    // todo
+    //if (_showTrackOnExit)
+    //    [_mapViewController keepTempGpxTrackVisible];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -312,21 +189,19 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
-- (void)updateMap
+- (IBAction)threeDotsClicked:(id)sender
 {
-    [[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
-    
-    if (self.showCurrentTrack)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_mapViewController showRecGpxTrack];
-        });
-    }
+    //
+}
+
+- (IBAction)segmentClicked:(id)sender
+{
+    //
 }
 
 - (IBAction)showPointsClicked:(id)sender
 {
-    _action = kGpxItemActionShowPoints;
+    // todo
     OAGPXPointListViewController* controller = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
     [self.navigationController pushViewController:controller animated:YES];
 }
@@ -342,13 +217,6 @@ typedef enum
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.view
                                          animated:YES];
-}
-
-- (void)refreshPressed
-{
-    [self updateCurrentGPXData];
-    [self updateMap];
-    [_tableView reloadData];
 }
 
 - (IBAction)deleteClicked:(id)sender
@@ -572,9 +440,23 @@ typedef enum
 
 #pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 44.0;
+}
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 32.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     // Show Location Points
     if (indexPath.section == 0 && indexPath.row == 1 && self.gpx.wptPoints > 0) {
         [self showPointsClicked:nil];
@@ -583,8 +465,8 @@ typedef enum
 }
 
 #pragma mark - UIAlertViewDelegate
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if (buttonIndex != alertView.cancelButtonIndex) {
         
         OAAppSettings *settings = [OAAppSettings sharedManager];
@@ -596,18 +478,10 @@ typedef enum
 
         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
         [[OAGPXDatabase sharedDb] save];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
-- (void)goToGpx
-{
-    OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:NO];
         
-    _showTrackOnExit = YES;
-    
-    [self.navigationController popToRootViewControllerAnimated:YES];
+        // todo
+        //[self.navigationController popViewControllerAnimated:YES];
+    }
 }
 
 @end

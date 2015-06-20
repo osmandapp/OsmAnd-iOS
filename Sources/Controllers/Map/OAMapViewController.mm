@@ -3058,12 +3058,23 @@
        originalCenter31:(Point31)originalCenter31
               leftInset:(CGFloat)leftInset
             bottomInset:(CGFloat)bottomInset
+             centerBBox:(BOOL)centerBBox
                animated:(BOOL)animated
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
-    CGFloat leftTargetInset = kCorrectionMinLeftSpace;
-    CGFloat bottomTargetInset = kCorrectionMinBottomSpace;
+    CGFloat leftTargetInset;
+    CGFloat bottomTargetInset;
+    if (centerBBox)
+    {
+        leftTargetInset = kCorrectionMinLeftSpaceBBox;
+        bottomTargetInset = kCorrectionMinBottomSpaceBBox;
+    }
+    else
+    {
+        leftTargetInset = kCorrectionMinLeftSpace;
+        bottomTargetInset = kCorrectionMinBottomSpace;
+    }
     
     OsmAnd::PointI originalCenterI = [OANativeUtilities convertFromPoint31:originalCenter31];
 

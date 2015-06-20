@@ -92,3 +92,5 @@
 "rendering_value_default_name" = "Domyślnie";
 "rendering_value_disabled_name" = "Wyłączony";
 "shared_string_edit" = "Edytuj";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Kolorowanie wg przeznaczenia trasy";
+"rendering_value_walkingRoutesOSMC_name" = "Kolorowanie wg zasad OSMC";

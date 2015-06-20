@@ -50,23 +50,23 @@
 "poi_hide" = "Ocultar";
 // My Places
 "favorites" = "Favoritos";
-"tracks" = "Trajetos";
+"tracks" = "Viagens";
 // GPX
 "gpx_point" = "Ponto";
 "gpx_waypoints" = "Pontos de parada";
 "gpx_points" = "Ponto(s)";
 "gpx_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar trajeto";
-"gpx_import_already_exists" = "O trajeto especificado já existe na lista. Por favor, escolha a ação.";
+"gpx_import_title" = "Importar viagem";
+"gpx_import_already_exists" = "A viagem especificada já existe na lista. Por favor, escolha a ação.";
 "gpx_add_new" = "Adicionar novo arquivo";
 "gpx_overwrite" = "Sobrescrever";
 "gpx_cannot_import" = "Não é possível importar arquivo GPX especificado";
-"gpx_export_title" = "Exportar trajeto";
-"gpx_export_select_track" = "Por favor selecione o trajeto para Exportar";
+"gpx_export_title" = "Exportar viagem";
+"gpx_export_select_track" = "Por favor selecione a viagem para Exportar";
 "gpx_import_desc" = "Você pode importar seus arquivos GPX (formato comum de dados GPS)\n\nPara compartilhar o arquivo GPX você pode abri-lo no Dropbox, E-mail ou qualquer outra fonte - use a função 'Abrir com'";
-"gpx_no_tracks" = "Não há trajetos";
-"gpx_remove" = "Apagar trajeto?";
+"gpx_no_tracks" = "Não há viagens";
+"gpx_remove" = "Apagar viagem?";
 "gpx_stat" = "Estatísticas";
 "gpx_route_time" = "Tempo de percurso";
 "gpx_uphldownhl" = "Subidas/Descidas";
@@ -357,7 +357,7 @@
 "no_other_translations" = "Não há outras traduções";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "Remover ponto de parada?";
-"gpx_select_track" = "Selecionar trajeto";
+"gpx_select_track" = "Selecionar trajeto/viagem";
 "gpx_curr_new_track" = "Trajeto atual/novo";
 "enter_name" = "Inserir nome";
 "not_selected" = "Nada selecionado";
@@ -382,3 +382,4 @@
 "menu_active_trips" = "Ativar";
 "menu_all_trips" = "Todas as Viagens";
 "my_favorites" = "Meus Favoritos";
+"record_trip" = "Gravar sua viagem";

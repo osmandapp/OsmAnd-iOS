@@ -382,3 +382,8 @@
 "time_closed" = "Chiuso";
 "time_open" = "Aperto";
 "prch_srtm_info" = "Il componente aggiuntivo Linee isocline aggiunge le linee di livello per le mappe che sono state scaricare gratuitamente o acquistate.";
+"rendering_value_walkingRoutesOSMC_name" = "Colorazione in accordo a OSMC";
+"sett_lang_trans" = "Translitterazione";
+"cannot_add_marker_desc" = "Si prega di rimuovere almeno una direzione e riprovare";
+"cannot_add_destination" = "Impossibile aggiungere una direzione";
+"product_desc_skimap" = "Piste da sci di tutte le stazioni sciistiche mondiali";

@@ -357,8 +357,8 @@
 "language_short" = "Idioma";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "¿Quitar punto de ruta?";
-"gpx_select_track" = "Elige traza/viaje";
-"gpx_curr_new_track" = "Traza actual/nueva";
+"gpx_select_track" = "Elige el viaje";
+"gpx_curr_new_track" = "Viaje actual";
 "enter_name" = "Ingrese nombre";
 "not_selected" = "No seleccionado";
 "language" = "Idioma";

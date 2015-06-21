@@ -1318,7 +1318,7 @@ typedef enum
         {
             NSMutableArray *images = [NSMutableArray array];
             for (int i = 0; i < names.count; i++)
-                [images addObject:@"add_waypoint_to_track"];
+                [images addObject:@"icon_gpx"];
             
             [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_select_track")
                                     message:nil

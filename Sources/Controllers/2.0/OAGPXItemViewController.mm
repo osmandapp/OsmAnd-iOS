@@ -13,7 +13,7 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
-#import "OAGPXPointListViewController.h"
+#import "OAGPXWptListViewController.h"
 #import "PXAlertView.h"
 
 #import "OAMapRendererView.h"
@@ -52,7 +52,7 @@ typedef enum
 @implementation OAGPXItemViewController
 {
     OASavingTrackHelper *_savingHelper;
-    OAGPXPointListViewController *_pointsController;
+    OAGPXWptListViewController *_waypointsController;
     BOOL _wasOpenedWaypointsView;
 }
 
@@ -109,7 +109,7 @@ typedef enum
     if (self.delegate)
         [self.delegate btnCancelPressed];
 
-    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
+    [self closePointsController];
 }
 
 - (void)okPressed
@@ -117,13 +117,13 @@ typedef enum
     if (self.delegate)
         [self.delegate btnOkPressed];
     
-    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
+    [self closePointsController];
 }
 
 - (BOOL)preHide
 {
     [_mapViewController keepTempGpxTrackVisible];
-    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
+    [self closePointsController];
     return YES;
 }
 
@@ -194,9 +194,34 @@ typedef enum
     self.buttonUpdate.frame = self.buttonMore.frame;
     self.buttonEdit.frame = self.buttonMore.frame;
     
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+
     [self applySegmentType];
 
-    [self.segmentView setEnabled:self.doc.locationMarks.count > 0 forSegmentAtIndex:1];
+    NSInteger wptCount = self.doc.locationMarks.count;
+    [self.segmentView setEnabled:wptCount > 0 forSegmentAtIndex:1];
+    if (wptCount > 0)
+    {
+        UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
+        badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
+        badgeLabel.text = [NSString stringWithFormat:@"%d", wptCount];
+        badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
+        badgeLabel.textAlignment = NSTextAlignmentCenter;
+        [badgeLabel sizeToFit];
+     
+        CGSize badgeSize = CGSizeMake(MAX(16.0, badgeLabel.bounds.size.width + 8.0), MAX(16.0, badgeLabel.bounds.size.height));
+        badgeLabel.frame = CGRectMake(0.0, 0.0, badgeSize.width, badgeSize.height);
+        CGRect badgeFrame = CGRectMake(self.segmentView.bounds.size.width - badgeSize.width + 6.0, -6.0, badgeSize.width, badgeSize.height);
+        UIView *badge = [[UIView alloc] initWithFrame:badgeFrame];
+        badge.layer.cornerRadius = 8.0;
+        badge.layer.backgroundColor = [UIColor whiteColor].CGColor;
+        badge.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+
+        [badge addSubview:badgeLabel];
+        
+        [self.segmentView addSubview:badge];
+    }
 
     if (self.showCurrentTrack)
     {
@@ -220,11 +245,11 @@ typedef enum
 
 - (void)closePointsController
 {
-    if (_pointsController)
+    if (_waypointsController)
     {
-        [_pointsController resetData];
-        [_pointsController doViewDisappear];
-        _pointsController = nil;
+        [_waypointsController resetData];
+        [_waypointsController doViewDisappear];
+        _waypointsController = nil;
     }
 }
 
@@ -234,10 +259,13 @@ typedef enum
     {
         case kSegmentStatistics:
         {
-            if (_pointsController)
+            [self.tableView bringSubviewToFront:self.contentView];
+
+            if (_waypointsController)
             {
-                [_pointsController resetData];
-                [_pointsController doViewDisappear];
+                [_waypointsController resetData];
+                [_waypointsController doViewDisappear];
+                [_waypointsController.tableView removeFromSuperview];
             }
             
             self.buttonSort.hidden = YES;
@@ -253,10 +281,6 @@ typedef enum
                 self.buttonUpdate.hidden = YES;
             }
             
-            self.tableView.dataSource = self;
-            self.tableView.delegate = self;
-            [self.tableView reloadData];
-            
             break;
         }
         case kSegmentWaypoints:
@@ -264,17 +288,14 @@ typedef enum
             self.buttonUpdate.hidden = YES;
             [self updateWaypointsButtons];
             
-            if (!_pointsController)
+            if (!_waypointsController)
             {
-                _pointsController = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
-                _pointsController.view.frame = self.view.frame;
+                _waypointsController = [[OAGPXWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
             }
 
-            self.tableView.dataSource = _pointsController;
-            self.tableView.delegate = _pointsController;
-            
-            [_pointsController doViewAppear];
-            [self.tableView reloadData];
+            _waypointsController.view.frame = self.tableView.frame;
+            [_waypointsController doViewAppear];
+            [self.contentView addSubview:_waypointsController.tableView];
 
             if (!_wasOpenedWaypointsView && self.delegate)
                 [self.delegate requestFullScreenMode];
@@ -292,8 +313,8 @@ typedef enum
 - (void)updateWaypointsButtons
 {
     self.buttonSort.hidden = self.editing;
-    self.buttonEdit.hidden = self.editing;
-    self.buttonMore.hidden = !self.editing;
+    self.buttonEdit.hidden = YES;//self.editing;
+    self.buttonMore.hidden = NO;//!self.editing;
 }
 
 - (IBAction)threeDotsClicked:(id)sender
@@ -330,11 +351,8 @@ typedef enum
 
 - (IBAction)sortClicked:(id)sender
 {
-    if (_pointsController)
-    {
-        [_pointsController doSortClick:self.buttonSort];
-        [self.tableView reloadData];
-    }
+    if (_waypointsController)
+        [_waypointsController doSortClick:self.buttonSort];
 }
 
 - (IBAction)editClicked:(id)sender
@@ -353,7 +371,6 @@ typedef enum
     _segmentType = newSegmentType;
         
     [self applySegmentType];
-    [self.tableView reloadData];
 }
 
 - (IBAction)exportClicked:(id)sender

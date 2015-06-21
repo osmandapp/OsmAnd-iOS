@@ -412,8 +412,9 @@
     CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_targetPoint.location.latitude longitude:_targetPoint.location.longitude]];
     CGFloat direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
     
-    [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
     self.buttonDirection.imageView.transform = CGAffineTransformMakeRotation(direction);
+    self.buttonDirection.titleLabel.text = distanceStr;
+    [self.buttonDirection setTitle:distanceStr forState:UIControlStateNormal];
 }
 
 - (void)moveToolbar:(UIPanGestureRecognizer *)gesture

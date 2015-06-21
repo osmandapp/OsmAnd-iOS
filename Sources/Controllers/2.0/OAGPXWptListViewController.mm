@@ -1,12 +1,12 @@
 //
-//  OAGPXPointListViewController.m
+//  OAGPXWptListViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 18/02/15.
+//  Created by Alexey Kulish on 21/06/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAGPXPointListViewController.h"
+#import "OAGPXWptListViewController.h"
 #import "OAPointTableViewCell.h"
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -21,7 +21,7 @@
 #include "Localization.h"
 
 
-@interface OAGPXPointListViewController ()
+@interface OAGPXWptListViewController ()
 {
     OsmAndAppInstance _app;
     BOOL isDecelerating;
@@ -34,7 +34,7 @@
 
 @end
 
-@implementation OAGPXPointListViewController
+@implementation OAGPXWptListViewController
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks
 {
@@ -42,6 +42,7 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        
         NSMutableArray *arr = [NSMutableArray array];
         for (OAGpxWpt *p in locationMarks) {
             OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
@@ -50,22 +51,12 @@
         }
         
         self.unsortedPoints = arr;
+        
+        isDecelerating = NO;
+        _sortingType = EPointsSortingTypeGrouped;
+        
     }
     return self;
-}
-
-- (void)applyLocalization
-{
-    _titleView.text = OALocalizedString(@"gpx_waypoints");
-    [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
-}
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    isDecelerating = NO;
-    
-    _sortingType = EPointsSortingTypeGrouped;
 }
 
 - (void)updateDistanceAndDirection
@@ -144,7 +135,6 @@
 
 -(void)generateData
 {
-
     NSMutableSet *groups = [NSMutableSet set];
     for (OAGpxWptItem *item in self.unsortedPoints)
         [groups addObject:(item.point.type ? item.point.type : @"")];
@@ -154,14 +144,14 @@
                                     {
                                         return [obj1 localizedCaseInsensitiveCompare:obj2];
                                     }] mutableCopy];
-        
+    
     NSArray *sortedArr = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem *obj1, OAGpxWptItem *obj2) {
         return [obj1.point.name localizedCaseInsensitiveCompare:obj2.point.name];
     }];
     
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     for (NSString *group in groupsArray)
-         [dict setObject:[NSMutableArray array] forKey:group];
+        [dict setObject:[NSMutableArray array] forKey:group];
     
     for (OAGpxWptItem *item in sortedArr)
     {
@@ -171,13 +161,13 @@
             arr = [dict objectForKey:group];
         else
             arr = [dict objectForKey:@""];
-
+        
         [arr addObject:item];
     }
     
     if (((NSMutableArray *)[dict objectForKey:@""]).count == 0)
         [groupsArray removeObjectAtIndex:0];
-
+    
     self.groups = [NSArray arrayWithArray:groupsArray];
     self.groupedPoints = [NSDictionary dictionaryWithDictionary:dict];
     
@@ -186,16 +176,7 @@
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
     
-}
-
--(void)setupView
-{
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [self.tableView reloadData];
 }
 
 - (void)resetData
@@ -224,14 +205,6 @@
         [self generateData];
     }
 }
-
-#pragma mark - Actions
-
-- (IBAction)sortBtnClicked:(id)sender
-{
-    [self doSortClick:self.sortButton];
-}
-
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -284,7 +257,7 @@
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-        
+    
     static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
     
     OAPointTableViewCell* cell;
@@ -302,7 +275,7 @@
         [cell.titleView setText:item.point.name];
         [cell.distanceView setText:item.distance];
         cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-
+        
         if (!cell.titleIcon.hidden) {
             cell.titleIcon.hidden = YES;
             CGRect f = cell.titleView.frame;
@@ -366,7 +339,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item = [self getWptItem:indexPath];
-    [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+    //[self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
     [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
 }
 

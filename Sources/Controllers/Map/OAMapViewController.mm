@@ -1581,20 +1581,19 @@
     if (![self isViewLoaded])
         return;
     
-    if (_animatedPin)
-    {
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-            
-            CGPoint targetPoint;
-            OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
-            [mapView convert:&targetPositionI toScreen:&targetPoint];
-            
-            _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
-
+            if (_animatedPin)
+            {
+                OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+                
+                CGPoint targetPoint;
+                OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
+                [mapView convert:&targetPositionI toScreen:&targetPoint];
+                
+                _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
+            }
         });
-    }
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
@@ -1634,7 +1633,6 @@
     if (_animatedPin && _animationDone && _animationDoneCounter == 0)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            //[self performSelector:@selector(hideAnimatedPin) withObject:nil afterDelay:.05];
             [self hideAnimatedPin];
         });
     }
@@ -1790,6 +1788,9 @@
         const OsmAnd::LatLon latLon(_latPin, _lonPin);
         _contextPinMarker->setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon));
 
+        if (_animatedPin)
+            [self hideAnimatedPin];
+        
         _animatedPin = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_map_pin"]];
         
         OAMapRendererView* mapView = (OAMapRendererView*)self.view;

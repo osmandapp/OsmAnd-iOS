@@ -1,12 +1,12 @@
 //
-//  OAGPXPointListViewController.h
+//  OAGPXWptListViewController.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 18/02/15.
+//  Created by Alexey Kulish on 21/06/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OASuperViewController.h"
+#import <UIKit/UIKit.h>
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
@@ -17,12 +17,7 @@ typedef enum
     
 } EPointsSortingType;
 
-@interface OAGPXPointListViewController : OASuperViewController<UITableViewDataSource, UITableViewDelegate, UIAlertViewDelegate, UIScrollViewDelegate>
-
-@property (weak, nonatomic) IBOutlet UILabel *titleView;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *sortButton;
-@property (weak, nonatomic) IBOutlet UIButton *backButton;
+@interface OAGPXWptListViewController : UITableViewController
 
 @property (assign, nonatomic) EPointsSortingType sortingType;
 

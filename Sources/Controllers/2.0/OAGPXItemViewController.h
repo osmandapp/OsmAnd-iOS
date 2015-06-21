@@ -17,11 +17,13 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
+@property (weak, nonatomic) IBOutlet UIButton *buttonMore;
+@property (weak, nonatomic) IBOutlet UIButton *buttonUpdate;
+@property (weak, nonatomic) IBOutlet UIButton *buttonEdit;
 
 @property (nonatomic, readonly) BOOL showCurrentTrack;
 
 - (id)initWithGPXItem:(OAGPX *)gpxItem;
 - (id)initWithCurrentGPXItem;
-- (id)initWithCurrentGPXItemNoToolbar;
 
 @end

@@ -2996,25 +2996,28 @@
     if (![self isViewLoaded])
         return;
 
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-    
-    CGFloat screensToFly = [self screensToFly:position31];
-
-    _app.mapMode = OAMapModeFree;
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
-
-    if (animated && screensToFly <= kScreensToFlyWithAnimation)
+    @synchronized(_rendererSync)
     {
-        mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
-                                          kQuickAnimationTime,
-                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                          kUserInteractionAnimationKey);
-        mapView.animator->resume();
-    }
-    else
-    {
-        [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        CGFloat screensToFly = [self screensToFly:position31];
+        
+        _app.mapMode = OAMapModeFree;
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
+        
+        if (animated && screensToFly <= kScreensToFlyWithAnimation)
+        {
+            mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+                                              kQuickAnimationTime,
+                                              OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                              kUserInteractionAnimationKey);
+            mapView.animator->resume();
+        }
+        else
+        {
+            [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+        }
     }
 }
 
@@ -3024,33 +3027,36 @@
 {
     if (![self isViewLoaded])
         return;
-
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    CGFloat z = [self normalizeZoom:zoom defaultZoom:mapView.zoom];
     
-    CGFloat screensToFly = [self screensToFly:position31];
-    
-    _app.mapMode = OAMapModeFree;
-    mapView.animator->pause();
-    mapView.animator->cancelAllAnimations();
-
-    if (animated && screensToFly <= kScreensToFlyWithAnimation)
+    @synchronized(_rendererSync)
     {
-        mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
-                                          kQuickAnimationTime,
-                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                          kUserInteractionAnimationKey);
-        mapView.animator->animateZoomTo(z,
-                                        kQuickAnimationTime,
-                                        OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                        kUserInteractionAnimationKey);
-        mapView.animator->resume();
-    }
-    else
-    {
-        [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
-        [mapView setZoom:z];
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        CGFloat z = [self normalizeZoom:zoom defaultZoom:mapView.zoom];
+        
+        CGFloat screensToFly = [self screensToFly:position31];
+        
+        _app.mapMode = OAMapModeFree;
+        mapView.animator->pause();
+        mapView.animator->cancelAllAnimations();
+        
+        if (animated && screensToFly <= kScreensToFlyWithAnimation)
+        {
+            mapView.animator->animateTargetTo([OANativeUtilities convertFromPoint31:position31],
+                                              kQuickAnimationTime,
+                                              OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                              kUserInteractionAnimationKey);
+            mapView.animator->animateZoomTo(z,
+                                            kQuickAnimationTime,
+                                            OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                            kUserInteractionAnimationKey);
+            mapView.animator->resume();
+        }
+        else
+        {
+            [mapView setTarget31:[OANativeUtilities convertFromPoint31:position31]];
+            [mapView setZoom:z];
+        }
     }
 }
 
@@ -3062,7 +3068,7 @@
                animated:(BOOL)animated
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
+    
     CGFloat leftTargetInset;
     CGFloat bottomTargetInset;
     if (centerBBox)
@@ -3077,15 +3083,15 @@
     }
     
     OsmAnd::PointI originalCenterI = [OANativeUtilities convertFromPoint31:originalCenter31];
-
+    
     CGPoint targetPoint;
     OsmAnd::PointI targetPositionI = [OANativeUtilities convertFromPoint31:targetPosition31];
     [mapView convert:&targetPositionI toScreen:&targetPoint];
-
+    
     OsmAnd::PointI newPositionI = mapView.target31;
     
     CGFloat targetY = DeviceScreenHeight - bottomInset - bottomTargetInset;
-
+    
     CGPoint minPoint = CGPointMake(DeviceScreenWidth / 2.0, targetY);
     minPoint.x *= mapView.contentScaleFactor;
     minPoint.y *= mapView.contentScaleFactor;
@@ -3105,10 +3111,9 @@
     newPositionI.x = mapView.target31.x + (-minLocation.x + targetPosition31.x);
     if (newPositionI.x > originalCenterI.x)
         newPositionI.x = originalCenterI.x;
-
+    
     Point31 newPosition31 = [OANativeUtilities convertFromPointI:newPositionI];
     [self goToPosition:newPosition31 animated:animated];
-
 }
 
 - (CGFloat)normalizeZoom:(CGFloat)zoom defaultZoom:(CGFloat)defaultZoom

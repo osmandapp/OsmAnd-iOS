@@ -100,4 +100,14 @@
     return YES; // override
 }
 
+- (BOOL)preHide
+{
+    return YES; // override
+}
+
+- (id)getTargetObj
+{
+    return nil; // override
+}
+
 @end

@@ -72,22 +72,22 @@
 "poi_hide" = "Ocultar";
 // My Places
 "favorites" = "Favoritos";
-"tracks" = "Trazas";
+"tracks" = "Viajes";
 // GPX
 "gpx_point" = "Punto";
 "gpx_waypoints" = "Puntos de ruta";
 "gpx_points" = "Punto(s)";
 "gpx_export" = "Exportar";
 "import_export" = "Importar/Exportar";
-"gpx_import_title" = "Importar traza";
+"gpx_import_title" = "Importar viaje";
 "shared_string_buy_for" = "por";
 "poi_search_near_center" = "Buscar cerca del centro del mapa";
-"gpx_import_already_exists" = "El archivo de traza indicada, ya existe. Elija una acción.";
+"gpx_import_already_exists" = "Ya existe el archivo del viaje indicado. Elija una acción.";
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
 "gpx_cannot_import" = "No se pudo importar archivo GPX indicado";
-"gpx_export_title" = "Exportar traza";
-"gpx_export_select_track" = "Elija traza a exportar";
+"gpx_export_title" = "Exportar viaje";
+"gpx_export_select_track" = "Elija el viaje a exportar";
 "gpx_import_desc" = "Puedes importar sus archivos GPX (formato de dato GPS común)\n\nPara compartir el archivo GPX, puedes abrir un archivo desde Dropbox, correo electrónico o cualquier otra fuente - Usar Abrir en la función";
 // Rendering categories
 "rendering_category_hide" = "Ocultar";
@@ -150,8 +150,8 @@
 "region_north_america" = "Norteamérica";
 "region_russia" = "Rusia";
 "region_south_america" = "Sudamérica";
-"gpx_no_tracks" = "Sin trazas";
-"gpx_remove" = "¿Quitar traza?";
+"gpx_no_tracks" = "Sin viajes";
+"gpx_remove" = "¿Quitar viaje?";
 "gpx_stat" = "Estadísticas";
 "gpx_route_time" = "Tiempo de ruta";
 "gpx_uphldownhl" = "Ascenso/Descenso";
@@ -357,7 +357,7 @@
 "language_short" = "Idioma";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "¿Quitar punto de ruta?";
-"gpx_select_track" = "Elige traza";
+"gpx_select_track" = "Elige traza/viaje";
 "gpx_curr_new_track" = "Traza actual/nueva";
 "enter_name" = "Ingrese nombre";
 "not_selected" = "No seleccionado";
@@ -378,3 +378,9 @@
 "time_closed" = "Cerrado";
 "time_will_close" = "Cerrará a las";
 "time_will_open" = "Abrirá a las";
+"shared_string_remove" = "Quitar";
+"my_favorites" = "Mis favoritos";
+"record_trip" = "Grabar viaje";
+"menu_my_trips" = "Mis viajes";
+"menu_active_trips" = "Activo";
+"menu_all_trips" = "Todos los viajes";

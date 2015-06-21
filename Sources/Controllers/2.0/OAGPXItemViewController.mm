@@ -52,6 +52,8 @@ typedef enum
 @implementation OAGPXItemViewController
 {
     OASavingTrackHelper *_savingHelper;
+    OAGPXPointListViewController *_pointsController;
+    BOOL _wasOpenedWaypointsView;
 }
 
 @synthesize editing = _editing;
@@ -95,6 +97,8 @@ typedef enum
     
     self.gpx = item;
     self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
+    
+    [self.segmentView setEnabled:self.doc.locationMarks.count > 0 forSegmentAtIndex:1];
 }
 
 
@@ -104,17 +108,22 @@ typedef enum
 
     if (self.delegate)
         [self.delegate btnCancelPressed];
+
+    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
 }
 
 - (void)okPressed
 {
     if (self.delegate)
         [self.delegate btnOkPressed];
+    
+    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
 }
 
 - (BOOL)preHide
 {
     [_mapViewController keepTempGpxTrackVisible];
+    [self performSelector:@selector(closePointsController) withObject:nil afterDelay:.5];
     return YES;
 }
 
@@ -186,7 +195,9 @@ typedef enum
     self.buttonEdit.frame = self.buttonMore.frame;
     
     [self applySegmentType];
-    
+
+    [self.segmentView setEnabled:self.doc.locationMarks.count > 0 forSegmentAtIndex:1];
+
     if (self.showCurrentTrack)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -207,12 +218,29 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+- (void)closePointsController
+{
+    if (_pointsController)
+    {
+        [_pointsController resetData];
+        [_pointsController doViewDisappear];
+        _pointsController = nil;
+    }
+}
+
 - (void)applySegmentType
 {
     switch (_segmentType)
     {
         case kSegmentStatistics:
         {
+            if (_pointsController)
+            {
+                [_pointsController resetData];
+                [_pointsController doViewDisappear];
+            }
+            
+            self.buttonSort.hidden = YES;
             self.buttonEdit.hidden = YES;
             if (self.showCurrentTrack)
             {
@@ -224,12 +252,35 @@ typedef enum
                 self.buttonMore.hidden = NO;
                 self.buttonUpdate.hidden = YES;
             }
+            
+            self.tableView.dataSource = self;
+            self.tableView.delegate = self;
+            [self.tableView reloadData];
+            
             break;
         }
         case kSegmentWaypoints:
         {
             self.buttonUpdate.hidden = YES;
             [self updateWaypointsButtons];
+            
+            if (!_pointsController)
+            {
+                _pointsController = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+                _pointsController.view.frame = self.view.frame;
+            }
+
+            self.tableView.dataSource = _pointsController;
+            self.tableView.delegate = _pointsController;
+            
+            [_pointsController doViewAppear];
+            [self.tableView reloadData];
+
+            if (!_wasOpenedWaypointsView && self.delegate)
+                [self.delegate requestFullScreenMode];
+            
+            _wasOpenedWaypointsView = YES;
+
             break;
         }
             
@@ -240,6 +291,7 @@ typedef enum
 
 - (void)updateWaypointsButtons
 {
+    self.buttonSort.hidden = self.editing;
     self.buttonEdit.hidden = self.editing;
     self.buttonMore.hidden = !self.editing;
 }
@@ -276,9 +328,19 @@ typedef enum
         [self.delegate contentChanged];
 }
 
+- (IBAction)sortClicked:(id)sender
+{
+    if (_pointsController)
+    {
+        [_pointsController doSortClick:self.buttonSort];
+        [self.tableView reloadData];
+    }
+}
+
 - (IBAction)editClicked:(id)sender
 {
-    //
+    _editing = !_editing;
+    [self updateWaypointsButtons];
 }
 
 - (IBAction)segmentClicked:(id)sender
@@ -291,13 +353,7 @@ typedef enum
     _segmentType = newSegmentType;
         
     [self applySegmentType];
-}
-
-- (IBAction)showPointsClicked:(id)sender
-{
-    // todo
-    OAGPXPointListViewController* controller = [[OAGPXPointListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
-    [self.navigationController pushViewController:controller animated:YES];
+    [self.tableView reloadData];
 }
 
 - (IBAction)exportClicked:(id)sender

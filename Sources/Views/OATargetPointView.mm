@@ -1818,6 +1818,18 @@
     }
 }
 
+- (void)requestFullScreenMode
+{
+    if (![self isLandscape])
+    {
+        _showFull = YES;
+        _showFullScreen = YES;
+        [UIView animateWithDuration:.3 animations:^{
+            [self doLayoutSubviews];
+        }];
+    }
+}
+
 - (void) btnOkPressed
 {
     _previousTargetType = _targetPoint.type;

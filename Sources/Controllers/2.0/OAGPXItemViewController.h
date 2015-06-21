@@ -19,6 +19,8 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
 @property (weak, nonatomic) IBOutlet UIButton *buttonMore;
 @property (weak, nonatomic) IBOutlet UIButton *buttonUpdate;
+
+@property (weak, nonatomic) IBOutlet UIButton *buttonSort;
 @property (weak, nonatomic) IBOutlet UIButton *buttonEdit;
 
 @property (nonatomic, readonly) BOOL showCurrentTrack;

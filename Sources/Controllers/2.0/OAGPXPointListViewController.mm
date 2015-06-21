@@ -21,19 +21,10 @@
 #include "Localization.h"
 
 
-typedef enum
+@interface OAGPXPointListViewController ()
 {
-    EPointsSortingTypeGrouped = 0,
-    EPointsSortingTypeDistance
-    
-} EPointsSortingType;
-
-@interface OAGPXPointListViewController () {
-    
     OsmAndAppInstance _app;
     BOOL isDecelerating;
-
-    EPointsSortingType sortingType;
 }
 
 @property (strong, nonatomic) NSArray* sortedDistPoints;
@@ -74,7 +65,7 @@ typedef enum
     
     isDecelerating = NO;
     
-    sortingType = EPointsSortingTypeGrouped;
+    _sortingType = EPointsSortingTypeGrouped;
 }
 
 - (void)updateDistanceAndDirection
@@ -109,7 +100,7 @@ typedef enum
         
     }];
     
-    if (sortingType == EPointsSortingTypeDistance && [self.unsortedPoints count] > 0) {
+    if (_sortingType == EPointsSortingTypeDistance && [self.unsortedPoints count] > 0) {
         self.sortedDistPoints = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem* obj1, OAGpxWptItem* obj2) {
             return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
         }];
@@ -134,26 +125,21 @@ typedef enum
     });
 }
 
--(void)viewWillAppear:(BOOL)animated {
-    
+- (void)doViewAppear
+{
     [self generateData];
-    [self setupView];
     
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:_app.locationServices.updateObserver];
-    [super viewWillAppear:animated];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void)doViewDisappear
 {
-    [super viewWillDisappear:animated];
-    
     if (self.locationServicesUpdateObserver) {
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
     }
-    
 }
 
 -(void)generateData
@@ -200,16 +186,10 @@ typedef enum
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
     
-    [self.tableView reloadData];
-    
 }
 
 -(void)setupView
 {
-    [self.tableView setDataSource:self];
-    [self.tableView setDelegate:self];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -218,20 +198,23 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
-#pragma mark - Actions
+- (void)resetData
+{
+    [self.tableView setEditing:NO];
+}
 
-- (IBAction)sortBtnClicked:(id)sender
+- (void)doSortClick:(UIButton *)button
 {
     if (![self.tableView isEditing]) {
         
-        switch (sortingType) {
+        switch (_sortingType) {
             case EPointsSortingTypeGrouped:
-                [self.sortButton setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
-                sortingType = EPointsSortingTypeDistance;
+                [button setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+                _sortingType = EPointsSortingTypeDistance;
                 break;
             case EPointsSortingTypeDistance:
-                [self.sortButton setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
-                sortingType = EPointsSortingTypeGrouped;
+                [button setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+                _sortingType = EPointsSortingTypeGrouped;
                 break;
                 
             default:
@@ -242,11 +225,18 @@ typedef enum
     }
 }
 
+#pragma mark - Actions
+
+- (IBAction)sortBtnClicked:(id)sender
+{
+    [self doSortClick:self.sortButton];
+}
+
 
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    switch (sortingType)
+    switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
             return self.groups.count;
@@ -261,7 +251,7 @@ typedef enum
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    switch (sortingType)
+    switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
         {
@@ -280,7 +270,7 @@ typedef enum
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    switch (sortingType)
+    switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
             return ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[section]]).count;
@@ -334,7 +324,7 @@ typedef enum
 -(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item;
-    switch (sortingType) {
+    switch (_sortingType) {
         case EPointsSortingTypeGrouped:
             item = ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[indexPath.section]])[indexPath.row];
             break;
@@ -380,6 +370,21 @@ typedef enum
     [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
 }
 
+#pragma mark - UITableViewDelegate
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 50.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 32.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
+}
 
 @end

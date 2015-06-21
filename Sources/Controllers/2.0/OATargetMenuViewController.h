@@ -16,9 +16,12 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void) contentHeightChanged:(CGFloat)newHeight;
 - (void) contentChanged;
+
 - (void) btnOkPressed;
 - (void) btnCancelPressed;
 - (void) btnDeletePressed;
+
+- (void) requestFullScreenMode;
 
 @end
 

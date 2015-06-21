@@ -861,7 +861,8 @@
 - (void)doUpdateUI
 {
     _hideButtons = (_targetPoint.type == OATargetGPX);
-    self.buttonsView.hidden =_hideButtons;
+    self.buttonsView.hidden = _hideButtons;
+    self.buttonClose.hidden = _hideButtons;
     
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
@@ -1121,8 +1122,8 @@
 
 - (BOOL)preHide
 {
-    if (self.customController && self.customController.wasEdited)
-        return [self.customController commitChangesAndExit];
+    if (self.customController)
+        return [self.customController preHide];
     else
         return YES;
 }
@@ -1788,7 +1789,8 @@
 
 - (IBAction)buttonShadowClicked:(id)sender
 {
-    [self.delegate targetGoToPoint];
+    if (_targetPoint.type != OATargetGPX)
+        [self.delegate targetGoToPoint];
 }
 
 - (IBAction)buttonCloseClicked:(id)sender
@@ -1805,6 +1807,15 @@
         [self doLayoutSubviews];
         [self.delegate targetViewSizeChanged:self.frame animated:YES];
     }];
+}
+
+- (void) contentChanged
+{
+    if (_targetPoint.type == OATargetGPX && self.customController)
+    {
+        _targetPoint.targetObj = [self.customController getTargetObj];
+        [self updateCoordinateLabel];
+    }
 }
 
 - (void) btnOkPressed

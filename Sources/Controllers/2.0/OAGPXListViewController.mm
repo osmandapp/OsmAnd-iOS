@@ -733,8 +733,8 @@ typedef enum
         {
             if ([_savingHelper hasData])
             {
-                OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-                [self.navigationController pushViewController:controller animated:YES];
+                [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
             }
         }
         else
@@ -749,12 +749,6 @@ typedef enum
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
         [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
         [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
-
-        /*
-        OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-        OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithGPXItem:item];
-        [self.navigationController pushViewController:controller animated:YES];
-         */
     }
     else
     {

@@ -26,6 +26,12 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+typedef enum
+{
+    kSegmentStatistics = 0,
+    kSegmentWaypoints
+    
+} OAGpxSegmentType;
 
 @interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate> {
 
@@ -35,6 +41,7 @@
     OAMapViewController *_mapViewController;
     
     BOOL _startEndTimeExists;
+    OAGpxSegmentType _segmentType;
 }
 
 @property (nonatomic) OAGPXDocument *doc;
@@ -47,11 +54,16 @@
     OASavingTrackHelper *_savingHelper;
 }
 
+@synthesize editing = _editing;
+@synthesize wasEdited = _wasEdited;
+@synthesize showingKeyboard = _showingKeyboard;
+
 - (id)initWithGPXItem:(OAGPX *)gpxItem
 {
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
+        _segmentType = kSegmentStatistics;
         self.gpx = gpxItem;
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
         self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
@@ -65,26 +77,13 @@
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
+        _segmentType = kSegmentStatistics;
         _savingHelper = [OASavingTrackHelper sharedInstance];
         
         [self updateCurrentGPXData];
         
         _showCurrentTrack = YES;
         
-    }
-    return self;
-}
-
-- (id)initWithCurrentGPXItemNoToolbar
-{
-    self = [super init];
-    if (self) {
-        _app = [OsmAndApp instance];
-        _savingHelper = [OASavingTrackHelper sharedInstance];
-        
-        [self updateCurrentGPXData];
-        
-        _showCurrentTrack = YES;        
     }
     return self;
 }
@@ -101,6 +100,8 @@
 
 - (void)cancelPressed
 {
+    [_mapViewController hideTempGpxTrack];
+
     if (self.delegate)
         [self.delegate btnCancelPressed];
 }
@@ -109,6 +110,23 @@
 {
     if (self.delegate)
         [self.delegate btnOkPressed];
+}
+
+- (BOOL)preHide
+{
+    [_mapViewController keepTempGpxTrackVisible];
+    return YES;
+}
+
+-(BOOL)supportEditing
+{
+    return YES;
+}
+
+- (void)activateEditing
+{
+    _editing = YES;
+    [self updateWaypointsButtons];
 }
 
 - (BOOL)supportFullScreen
@@ -124,6 +142,11 @@
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
     return YES;
+}
+
+- (id)getTargetObj
+{
+    return self.gpx;
 }
 
 - (CGFloat)contentHeight
@@ -150,6 +173,8 @@
 {
     [super viewDidLoad];
     
+    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+
     dateTimeFormatter = [[NSDateFormatter alloc] init];
     dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
     dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
@@ -157,22 +182,10 @@
     self.titleView.text = [self.gpx getNiceTitle];
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
     
-    if (self.showCurrentTrack)
-    {
-        // todo
-        //[self.deleteButton removeFromSuperview];
-        //[self.exportButton removeFromSuperview];
-    }
-}
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
+    self.buttonUpdate.frame = self.buttonMore.frame;
+    self.buttonEdit.frame = self.buttonMore.frame;
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
-    // todo
-    //[[OARootViewController instance].mapPanel prepareMapForReuse:self.mapView mapBounds:self.gpx.bounds newAzimuth:0.0 newElevationAngle:90.0 animated:NO];
+    [self applySegmentType];
     
     if (self.showCurrentTrack)
     {
@@ -189,18 +202,46 @@
     }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    
-    // todo
-    //if (_showTrackOnExit)
-    //    [_mapViewController keepTempGpxTrackVisible];
-}
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)applySegmentType
+{
+    switch (_segmentType)
+    {
+        case kSegmentStatistics:
+        {
+            self.buttonEdit.hidden = YES;
+            if (self.showCurrentTrack)
+            {
+                self.buttonMore.hidden = YES;
+                self.buttonUpdate.hidden = NO;
+            }
+            else
+            {
+                self.buttonMore.hidden = NO;
+                self.buttonUpdate.hidden = YES;
+            }
+            break;
+        }
+        case kSegmentWaypoints:
+        {
+            self.buttonUpdate.hidden = YES;
+            [self updateWaypointsButtons];
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (void)updateWaypointsButtons
+{
+    self.buttonEdit.hidden = self.editing;
+    self.buttonMore.hidden = !self.editing;
 }
 
 - (IBAction)threeDotsClicked:(id)sender
@@ -221,9 +262,35 @@
                          }];
 }
 
-- (IBAction)segmentClicked:(id)sender
+- (void)updateMap
+{
+    [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
+}
+
+- (IBAction)updateClicked:(id)sender
+{
+    [self updateCurrentGPXData];
+    [self updateMap];
+    [_tableView reloadData];
+    if (self.delegate)
+        [self.delegate contentChanged];
+}
+
+- (IBAction)editClicked:(id)sender
 {
     //
+}
+
+- (IBAction)segmentClicked:(id)sender
+{
+    OAGpxSegmentType newSegmentType = (OAGpxSegmentType)self.segmentView.selectedSegmentIndex;
+    if (_segmentType == newSegmentType)
+        return;
+    
+    _editing = NO;
+    _segmentType = newSegmentType;
+        
+    [self applySegmentType];
 }
 
 - (IBAction)showPointsClicked:(id)sender

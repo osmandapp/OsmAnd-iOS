@@ -398,6 +398,13 @@
     }
 }
 
+- (BOOL)preHide
+{
+    if (self.wasEdited)
+        return [self commitChangesAndExit];
+    return YES; 
+}
+
 - (NSString *) getNewItemName:(NSString *)name
 {
     NSString *newName;

@@ -250,8 +250,7 @@ typedef enum
                                                               }
                                                               case 1:
                                                               {
-                                                                  OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItemNoToolbar];
-                                                                  [self.navigationController pushViewController:controller animated:YES];
+                                                                  [self openTargetViewWithGPX:nil pushed:NO];
                                                                   break;
                                                               }
                                                               case 2:
@@ -309,8 +308,7 @@ typedef enum
                                              }
                                              case 1:
                                              {
-                                                 OAGPXItemViewController* controller = [[OAGPXItemViewController alloc] initWithCurrentGPXItemNoToolbar];
-                                                 [self.navigationController pushViewController:controller animated:YES];
+                                                 [self openTargetViewWithGPX:nil pushed:NO];
                                                  break;
                                              }
                                              case 2:
@@ -1498,7 +1496,17 @@ typedef enum
     {
         [self.targetMenuView doInit:showFullMenu];
         
-        OAGPXItemViewController *gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+        OAGPXItemViewController *gpxViewController;
+        if (self.targetMenuView.targetPoint.targetObj)
+        {
+            gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+        }
+        else
+        {
+            gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
+            self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
+        }
+        
         gpxViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:gpxViewController];
         
@@ -1736,6 +1744,14 @@ typedef enum
 {
     _pushed = pushed;
     
+    BOOL showCurrentTrack = NO;
+    if (item == nil)
+    {
+        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        item.gpxTitle = OALocalizedString(@"track_recording_name");
+        showCurrentTrack = YES;
+    }
+    
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
     CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
@@ -1753,6 +1769,26 @@ typedef enum
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     
+    [self displayGpxOnMap:item];
+
+    targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = YES;
+    if (!showCurrentTrack)
+        targetPoint.targetObj = item;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:YES];
+}
+
+- (void)displayGpxOnMap:(OAGPX *)item
+{
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+
     CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : kOATargetPointTopViewHeight + 160.0));
     _targetZoom = [self getZoomForBounds:item.bounds mapSize:screenBBox];
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
@@ -1768,16 +1804,6 @@ typedef enum
         _targetLongitude = item.bounds.center.longitude;
     }
     
-    targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
-    targetPoint.title = _formattedTargetName;
-    targetPoint.zoom = _targetZoom;
-    targetPoint.touchPoint = touchPoint;
-    targetPoint.icon = icon;
-    targetPoint.toolbarNeeded = YES;
-    targetPoint.targetObj = item;
-    
-    [_targetMenuView setTargetPoint:targetPoint];
-    
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.bounds.center.latitude, item.bounds.center.longitude))];
     [_mapViewController goToPosition:targetPoint31
                              andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
@@ -1788,10 +1814,14 @@ typedef enum
     
     OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-
-    [self showTargetPointMenu:YES showFullMenu:YES];
     
-    //[self targetGoToPoint];
+    if (self.targetMenuView.superview)
+    {
+        CGRect frame = self.targetMenuView.frame;
+        
+        Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+    }
 }
 
 #pragma mark - OAParkingDelegate

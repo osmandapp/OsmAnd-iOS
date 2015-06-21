@@ -46,4 +46,6 @@
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
+- (void)displayGpxOnMap:(OAGPX *)item;
+
 @end

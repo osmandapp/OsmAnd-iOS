@@ -15,6 +15,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @optional
 
 - (void) contentHeightChanged:(CGFloat)newHeight;
+- (void) contentChanged;
 - (void) btnOkPressed;
 - (void) btnCancelPressed;
 - (void) btnDeletePressed;
@@ -41,6 +42,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 
+- (id)getTargetObj;
+
 - (BOOL)supportFullScreen;
 - (BOOL)hasTopToolbar;
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
@@ -50,6 +53,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL)supportEditing;
 - (void)activateEditing;
 - (BOOL)commitChangesAndExit;
+- (BOOL)preHide;
 
 - (void)okPressed;
 - (void)cancelPressed;

@@ -302,7 +302,7 @@
 "product_desc_parking" = "如果停車受時間限制的話，當把車停放的時候，能讓您很容易的記住，還剩餘多少時間";
 "product_title_skimap" = "滑雪地圖";
 "product_desc_skimap" = "全世界所有滑雪勝地的滑雪坡";
-"product_title_track_recording" = "錄製旅程";
+"product_title_track_recording" = "旅程錄製";
 "product_title_africa" = "非洲";
 "product_desc_africa" = "非洲的地圖";
 "product_title_australia" = "澳洲";
@@ -382,5 +382,5 @@
 "menu_active_trips" = "啟用";
 "menu_all_trips" = "全部的旅程";
 "my_favorites" = "我的最愛";
-"record_trip" = "記錄您的旅程";
+"record_trip" = "錄製您的旅程";
 "shared_string_remove" = "移除";

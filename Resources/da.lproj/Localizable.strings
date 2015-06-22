@@ -386,3 +386,5 @@
 "shared_string_remove" = "Fjern";
 "total_time" = "Samlet tid";
 "moving_time" = "Tid i bevægelse";
+"gpx_distance_points" = "Afstand (punkter)";
+"gpx_max_speed" = "Max hastighed";

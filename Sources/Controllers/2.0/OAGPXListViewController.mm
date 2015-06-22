@@ -468,6 +468,18 @@ static OAGPXListViewController *parentController;
     [self.gpxTableView setEditing:YES animated:YES];
     _editActive = YES;
     [self updateButtons];
+    
+    [self.gpxTableView beginUpdates];
+    for (NSInteger i = 0; i < self.gpxList.count; i++)
+    {
+        OAGPX *gpx = self.gpxList[i];
+        if ([_visible containsObject:gpx.gpxFileName])
+        {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:_tripsSectionIndex];
+            [self.gpxTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        }
+    }
+    [self.gpxTableView endUpdates];
 }
 
 - (IBAction)checkButtonClick:(id)sender
@@ -483,15 +495,21 @@ static OAGPXListViewController *parentController;
 
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
+    NSMutableArray *gpxArr = [NSMutableArray arrayWithArray:self.gpxList];
+    
     for (NSIndexPath *indexPath in selectedRows)
     {
         OAGPX* gpx = [self.gpxList objectAtIndex:indexPath.row];
         if (_viewMode == kActiveTripsMode)
-            [settings hideGpx:gpx.gpxFileName];
+            [gpxArr removeObject:gpx];
         else
             [settings showGpx:gpx.gpxFileName];
     }
 
+    if (_viewMode == kActiveTripsMode)
+        for (OAGPX *gpx in gpxArr)
+            [settings hideGpx:gpx.gpxFileName];
+    
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
     [self.gpxTableView setEditing:NO animated:YES];

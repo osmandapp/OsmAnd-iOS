@@ -386,3 +386,5 @@
 "shared_string_remove" = "Esborra";
 "total_time" = "Temps total";
 "moving_time" = "Temps en moviment";
+"gpx_distance_points" = "Distància (punts)";
+"gpx_max_speed" = "Velocitat màxima";

@@ -357,8 +357,8 @@
 "no_other_translations" = "Não há outras traduções";
 "shared_string_edit" = "Editar";
 "wpt_remove_q" = "Remover ponto de parada?";
-"gpx_select_track" = "Selecionar trajeto/viagem";
-"gpx_curr_new_track" = "Trajeto atual/novo";
+"gpx_select_track" = "Selecionar viagem";
+"gpx_curr_new_track" = "Viagem atual";
 "enter_name" = "Inserir nome";
 "not_selected" = "Nada selecionado";
 "language" = "Idioma";
@@ -384,3 +384,7 @@
 "my_favorites" = "Meus Favoritos";
 "record_trip" = "Gravar sua viagem";
 "shared_string_remove" = "Apagar";
+"gpx_distance_points" = "Distância (pontos)";
+"gpx_max_speed" = "Velocidade máxima";
+"total_time" = "Tempo total";
+"moving_time" = "Tempo em movimentação";

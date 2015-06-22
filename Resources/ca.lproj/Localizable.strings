@@ -358,7 +358,7 @@
 "shared_string_edit" = "Edita";
 "wpt_remove_q" = "Elimina la fita?";
 "gpx_select_track" = "Selecciona un trajecte";
-"gpx_curr_new_track" = "Traça actual/nova";
+"gpx_curr_new_track" = "Trajecte actual";
 "enter_name" = "Introduïu el nom";
 "not_selected" = "No seleccionat";
 "language" = "Llengua";
@@ -383,3 +383,4 @@
 "menu_all_trips" = "Tots els recorreguts";
 "my_favorites" = "Preferits";
 "record_trip" = "Enregistreu el vostre trajecte";
+"shared_string_remove" = "Esborra";

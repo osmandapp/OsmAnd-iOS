@@ -357,8 +357,8 @@
 "no_other_translations" = "Nincsenek egyéb fordítások";
 "shared_string_edit" = "Szerkesztés";
 "wpt_remove_q" = "Útvonalpont eltávolítása?";
-"gpx_select_track" = "Nyomvonal/utazás kiválasztása";
-"gpx_curr_new_track" = "Jelenlegi / új nyomvonal";
+"gpx_select_track" = "Utazás kiválasztása";
+"gpx_curr_new_track" = "Jelenlegi utazás";
 "enter_name" = "Név megadása";
 "not_selected" = "Nincs kiválasztva";
 "language" = "Nyelv";

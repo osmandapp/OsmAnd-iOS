@@ -262,6 +262,25 @@
         [self offerDownloadAndUpdateMultiple:resourcesToUpdate];
 }
 
+- (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
+{
+    switch (type) {
+        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
+            return OALocalizedString(@"map_settings_map");
+        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
+            return OALocalizedString(@"res_srtm");
+        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
+            return OALocalizedString(@"res_wiki");
+        case OsmAnd::ResourcesManager::ResourceType::RoadMapRegion:
+            return OALocalizedString(@"res_roads");
+        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
+            return OALocalizedString(@"res_hillshade");
+            
+        default:
+            return OALocalizedString(@"res_unknown");
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -363,7 +382,10 @@
     // Fill cell content
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
-        cell.detailTextLabel.text = subtitle;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", subtitle, [self resourceTypeLocalized:item.resourceType]];
+    
+    //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]
+    
     if ([cellTypeId isEqualToString:downloadingResourceCell])
     {
         FFCircularProgressView* progressView = (FFCircularProgressView*)cell.accessoryView;

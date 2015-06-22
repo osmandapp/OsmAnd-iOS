@@ -279,7 +279,7 @@ static OAGPXListViewController *parentController;
 
     if (_viewMode == kActiveTripsMode)
     {
-        [_activeTripsButtonView setImage:[UIImage imageNamed:@"icon_star_fill"] forState:UIControlStateNormal];
+        [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_selected"] forState:UIControlStateNormal];
         [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx"] forState:UIControlStateNormal];
         
         [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xffb300) forState:UIControlStateNormal];
@@ -287,7 +287,7 @@ static OAGPXListViewController *parentController;
     }
     else
     {
-        [_activeTripsButtonView setImage:[UIImage imageNamed:@"icon_star"] forState:UIControlStateNormal];
+        [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_normal"] forState:UIControlStateNormal];
         [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx_fill"] forState:UIControlStateNormal];
         
         [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xc8c8c8) forState:UIControlStateNormal];

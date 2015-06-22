@@ -1595,7 +1595,9 @@
     {
         OAGPX *item = _targetPoint.targetObj;
         
-        NSString *distanceStr = [[OsmAndApp instance] getFormattedDistance:item.totalDistance];
+        NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:item.totalDistance] mutableCopy];
+        if (item.points > 0)
+            [distanceStr appendFormat:@" (%d)", item.points];
         NSString *pointsStr = [NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
 

@@ -55,6 +55,11 @@
     OASavingTrackHelper *_savingHelper;
     OAGPXWptListViewController *_waypointsController;
     BOOL _wasOpenedWaypointsView;
+    
+    NSInteger _sectionsCount;
+    NSInteger _statSectionIndex;
+    NSInteger _timeSectionIndex;
+    NSInteger _uphillsSectionIndex;
 }
 
 @synthesize editing = _editing;
@@ -211,6 +216,22 @@
     
     self.titleView.text = [self.gpx getNiceTitle];
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
+    
+    if (_startEndTimeExists)
+    {
+        _sectionsCount = 3;
+        _statSectionIndex = 0;
+        _timeSectionIndex = 1;
+        _uphillsSectionIndex = 2;
+    }
+    else
+    {
+        _sectionsCount = 2;
+        _statSectionIndex = 0;
+        _timeSectionIndex = -1;
+        _uphillsSectionIndex = 1;
+    }
+
     
     self.buttonUpdate.frame = self.buttonMore.frame;
     self.buttonEdit.frame = self.buttonMore.frame;
@@ -476,154 +497,189 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (_startEndTimeExists)
-        return 2;
-    else
-        return 1;
+    return _sectionsCount;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    switch (section)
-    {
-        case 0:
-            if (_startEndTimeExists)
-                return OALocalizedString(@"gpx_route_time");
-        case 1:
-            return OALocalizedString(@"gpx_uphldownhl");
-            
-        default:
-            return @"";
-    }
+    if (section == _statSectionIndex)
+        return OALocalizedString(@"gpx_stat");
+    else if (section == _timeSectionIndex)
+        return OALocalizedString(@"gpx_route_time");
+    else if (section == _uphillsSectionIndex)
+        return OALocalizedString(@"gpx_uphldownhl");
+    else
+        return @"";
 }
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    switch (section)
-    {
-        case 0:
-            if (_startEndTimeExists)
-                return 4;
-        case 1:
-            return 4;
-            
-        default:
-            return 0;
-    }
+    if (section == _statSectionIndex)
+        return 4;
+    else if (section == _timeSectionIndex)
+        return 4;
+    else if (section == _uphillsSectionIndex)
+        return 4;
+    else
+        return 0;
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     static NSString* const reusableIdentifierPoint = @"OAGPXDetailsTableViewCell";
 
-    switch (indexPath.section)
+    if (indexPath.section == _statSectionIndex)
     {
-        case 0: // Route Time
-        if (_startEndTimeExists)
+        OAGPXDetailsTableViewCell* cell;
+        cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
         {
-            OAGPXDetailsTableViewCell* cell;
-            cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
-                cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
-            }
-            
-            switch (indexPath.row)
-            {
-                case 0: // Start Time
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_start")];
-                    [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                case 1: // Finish Time
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_finish")];
-                    [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                case 2: // Total Time
-                {
-                    [cell.textView setText:OALocalizedString(@"total_time")];
-                    [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                case 3: // Moving Time
-                {
-                    [cell.textView setText:OALocalizedString(@"moving_time")];
-                    [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
-                    cell.iconView.hidden = YES;
-                    break;
-                }
-                    
-                default:
-                    break;
-            }
-            
-            return cell;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
+            cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
         }
-        case 1: // Uphills / Downhills
+        
+        switch (indexPath.row)
         {
-            static NSString* const reusableIdentifierPointElev = @"OAGPXElevationTableViewCell";
-
-            OAGPXElevationTableViewCell* cell;
-            cell = (OAGPXElevationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPointElev];
-            if (cell == nil)
+            case 0: // Distance (points)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXElevationCell" owner:self options:nil];
-                cell = (OAGPXElevationTableViewCell *)[nib objectAtIndex:0];
+                NSMutableString *distanceStr = [[_app getFormattedDistance:self.gpx.totalDistance] mutableCopy];
+                if (self.gpx.points > 0)
+                    [distanceStr appendFormat:@" (%d)", self.gpx.points];
+                
+                [cell.textView setText:OALocalizedString(@"gpx_distance_points")];
+                [cell.descView setText:distanceStr];
+                cell.iconView.hidden = YES;
+                break;
             }
-            
-            switch (indexPath.row) {
-                case 0: // Avg Elevation
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_avg_elev")];
-                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.avgElevation]];
-                    cell.showArrows = NO;
-                    cell.showUpDown = NO;
-                    break;
-                }
-                case 1: // Elevation Range
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_elev_range")];
-                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.minElevation]];
-                    [cell.elev2View setText:[_app getFormattedAlt:self.gpx.maxElevation]];
-                    cell.showArrows = NO;
-                    cell.showUpDown = YES;
-                    break;
-                }
-                case 2: // Up/Down
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_updown")];
-                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
-                    [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
-                    cell.showArrows = YES;
-                    cell.showUpDown = YES;
-                    break;
-                }
-                case 3: // Uphills Total
-                {
-                    [cell.textView setText:OALocalizedString(@"gpx_uphills_total")];
-                    [cell.elev1View setText:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation]];
-                    cell.showArrows = NO;
-                    cell.showUpDown = NO;
-                    break;
-                }
-                    
-                default:
-                    break;
+            case 1: // Waypoints
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_waypoints")];
+                [cell.descView setText:[NSString stringWithFormat:@"%d", self.gpx.wptPoints]];
+                cell.iconView.hidden = YES;
+                break;
             }
-            
-            return cell;
+            case 2: // Average speed
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_average_speed")];
+                [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+            case 3: // Max speed
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_max_speed")];
+                [cell.descView setText:[_app getFormattedSpeed:self.gpx.maxSpeed]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+                
+            default:
+                break;
         }
-            
-        default:
-            break;
+        
+        return cell;
+    }
+    else if (indexPath.section == _timeSectionIndex)
+    {
+        OAGPXDetailsTableViewCell* cell;
+        cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXDetailCell" owner:self options:nil];
+            cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        switch (indexPath.row)
+        {
+            case 0: // Start Time
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_start")];
+                [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+            case 1: // Finish Time
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_finish")];
+                [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+            case 2: // Total Time
+            {
+                [cell.textView setText:OALocalizedString(@"total_time")];
+                [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+            case 3: // Moving Time
+            {
+                [cell.textView setText:OALocalizedString(@"moving_time")];
+                [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
+                cell.iconView.hidden = YES;
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+        return cell;
+    }
+    else if (indexPath.section == _uphillsSectionIndex)
+    {
+        static NSString* const reusableIdentifierPointElev = @"OAGPXElevationTableViewCell";
+        
+        OAGPXElevationTableViewCell* cell;
+        cell = (OAGPXElevationTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPointElev];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXElevationCell" owner:self options:nil];
+            cell = (OAGPXElevationTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        switch (indexPath.row) {
+            case 0: // Avg Elevation
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_avg_elev")];
+                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.avgElevation]];
+                cell.showArrows = NO;
+                cell.showUpDown = NO;
+                break;
+            }
+            case 1: // Elevation Range
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_elev_range")];
+                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.minElevation]];
+                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.maxElevation]];
+                cell.showArrows = NO;
+                cell.showUpDown = YES;
+                break;
+            }
+            case 2: // Up/Down
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_updown")];
+                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.diffElevationDown]];
+                [cell.elev2View setText:[_app getFormattedAlt:self.gpx.diffElevationUp]];
+                cell.showArrows = YES;
+                cell.showUpDown = YES;
+                break;
+            }
+            case 3: // Uphills Total
+            {
+                [cell.textView setText:OALocalizedString(@"gpx_uphills_total")];
+                [cell.elev1View setText:[_app getFormattedAlt:self.gpx.maxElevation - self.gpx.minElevation]];
+                cell.showArrows = NO;
+                cell.showUpDown = NO;
+                break;
+            }
+                
+            default:
+                break;
+        }
+        
+        return cell;
     }
     
     return nil;

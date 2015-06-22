@@ -111,6 +111,9 @@
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
 
+"gpx_distance_points" = "Distance (points)";
+"gpx_max_speed" = "Max speed";
+
 // Map settings
 "m_style_overview" = "Overview";
 "m_style_car" = "Car";

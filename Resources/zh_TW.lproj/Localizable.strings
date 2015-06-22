@@ -357,8 +357,8 @@
 "no_other_translations" = "沒有其他翻譯";
 "shared_string_edit" = "編輯";
 "wpt_remove_q" = "移除航點嗎？";
-"gpx_select_track" = "選擇軌跡/旅程";
-"gpx_curr_new_track" = "目前的/新的軌跡";
+"gpx_select_track" = "選擇旅程";
+"gpx_curr_new_track" = "目前的旅程";
 "enter_name" = "輸入名稱";
 "not_selected" = "未選取";
 "language" = "語言";

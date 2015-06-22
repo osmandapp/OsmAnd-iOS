@@ -384,3 +384,5 @@
 "my_favorites" = "Preferits";
 "record_trip" = "Enregistreu el vostre trajecte";
 "shared_string_remove" = "Esborra";
+"total_time" = "Temps total";
+"moving_time" = "Temps en moviment";

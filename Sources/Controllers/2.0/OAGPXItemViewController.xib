@@ -15,6 +15,7 @@
                 <outlet property="contentView" destination="Orv-fJ-hDk" id="b6j-Qz-K9r"/>
                 <outlet property="navBar" destination="3Q5-Yo-3z3" id="bwt-Jz-hvy"/>
                 <outlet property="segmentView" destination="0xk-SG-AAJ" id="Mt3-Ui-DSx"/>
+                <outlet property="segmentViewContainer" destination="e1K-MJ-y4j" id="gHQ-iP-RD5"/>
                 <outlet property="tableView" destination="dJu-L7-Tpo" id="Zmx-pt-70I"/>
                 <outlet property="titleView" destination="a3M-58-gDX" id="G4K-t3-d6N"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -89,18 +90,25 @@
                                 <action selector="editClicked:" destination="-1" eventType="touchUpInside" id="a08-Vl-EGD"/>
                             </connections>
                         </button>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="0xk-SG-AAJ">
-                            <rect key="frame" x="44" y="63" width="232" height="29"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="Statistics"/>
-                                <segment title="Waypoints"/>
-                            </segments>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <connections>
-                                <action selector="segmentClicked:" destination="-1" eventType="valueChanged" id="hj2-2V-jyd"/>
-                            </connections>
-                        </segmentedControl>
+                        <view contentMode="scaleToFill" id="e1K-MJ-y4j">
+                            <rect key="frame" x="40" y="60" width="240" height="35"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="0xk-SG-AAJ">
+                                    <rect key="frame" x="4" y="3" width="232" height="29"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <segments>
+                                        <segment title="Statistics"/>
+                                        <segment title="Waypoints"/>
+                                    </segments>
+                                    <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <connections>
+                                        <action selector="segmentClicked:" destination="-1" eventType="valueChanged" id="hj2-2V-jyd"/>
+                                    </connections>
+                                </segmentedControl>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>

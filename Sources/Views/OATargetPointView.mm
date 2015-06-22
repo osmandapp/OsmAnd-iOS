@@ -59,7 +59,6 @@
 @property UINavigationController* navController;
 @property UIView* parentView;
 
-@property OATargetMenuViewController* customController;
 @property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 
 @end
@@ -107,7 +106,6 @@
     UITextView *_infoDescText;
     
     BOOL _showFull;
-    BOOL _showFullScreen;
     
     CGFloat _frameTop;
 
@@ -847,7 +845,7 @@
         [self.customController.navBar removeFromSuperview];
         [self.customController.contentView removeFromSuperview];
         self.customController.delegate = nil;
-        self.customController = nil;
+        _customController = nil;
         [self.navController setNeedsStatusBarAppearanceUpdate];
     }
 }
@@ -856,6 +854,13 @@
 {
     _showFull = showFull;
     _showFullScreen = NO;
+    [self clearCustomControllerIfNeeded];
+}
+
+- (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen
+{
+    _showFull = showFull;
+    _showFullScreen = showFullScreen;
     [self clearCustomControllerIfNeeded];
 }
 
@@ -1646,7 +1651,7 @@
 {
     [self clearCustomControllerIfNeeded];
 
-    self.customController = customController;
+    _customController = customController;
     self.customController.delegate = self;
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];

@@ -433,4 +433,6 @@
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
 
+"total_time" = "Total time";
+"moving_time" = "Moving time";
 

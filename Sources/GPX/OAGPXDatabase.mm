@@ -10,6 +10,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDocument.h"
 
 #define kDbName @"gpx.db"
 
@@ -141,6 +142,9 @@
     for (OAGPX *item in gpxList) {
         if ([item.gpxFileName isEqualToString:fileName]) {
             item.wptPoints = pointsCount;
+            NSString *path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:item.gpxFileName];
+            OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+            item.bounds = doc.bounds;
             return YES;
         }
     }

@@ -190,11 +190,9 @@
         
         switch (_sortingType) {
             case EPointsSortingTypeGrouped:
-                [button setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
                 _sortingType = EPointsSortingTypeDistance;
                 break;
             case EPointsSortingTypeDistance:
-                [button setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
                 _sortingType = EPointsSortingTypeGrouped;
                 break;
                 
@@ -202,7 +200,24 @@
                 break;
         }
         
+        [self updateSortButton:button];
+        
         [self generateData];
+    }
+}
+
+- (void)updateSortButton:(UIButton *)button
+{
+    switch (_sortingType) {
+        case EPointsSortingTypeGrouped:
+            [button setImage:[UIImage imageNamed:@"icon_direction"] forState:UIControlStateNormal];
+            break;
+        case EPointsSortingTypeDistance:
+            [button setImage:[UIImage imageNamed:@"icon_direction_active"] forState:UIControlStateNormal];
+            break;
+            
+        default:
+            break;
     }
 }
 
@@ -340,7 +355,7 @@
 {
     OAGpxWptItem* item = [self getWptItem:indexPath];
     //[self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
-    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
+    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
 }
 
 #pragma mark - UITableViewDelegate

@@ -448,6 +448,40 @@
     return formatter;
 }
 
+-(NSString*) getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat
+{
+    int hours, minutes, seconds;
+    [OAUtilities getHMS:timeInterval hours:&hours minutes:&minutes seconds:&seconds];
+    
+    NSMutableString *time = [NSMutableString string];
+    if (shortFormat)
+    {
+        if (hours > 0)
+            [time appendFormat:@"%02d:", hours];
+        
+        [time appendFormat:@"%02d:", minutes];
+        [time appendFormat:@"%02d", seconds];
+    }
+    else
+    {
+        if (hours > 0)
+            [time appendFormat:@"%d %@", hours, OALocalizedString(@"units_hour")];
+        if (minutes > 0)
+        {
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", minutes, OALocalizedString(@"units_min")];
+        }
+        if (minutes == 0 && hours == 0)
+        {
+            if (time.length > 0)
+                [time appendString:@" "];
+            [time appendFormat:@"%d %@", seconds, OALocalizedString(@"units_sec")];
+        }
+    }
+    return time;
+}
+
 -(NSString*) getFormattedDistance:(float) meters
 {
     OAAppSettings* settings = [OAAppSettings sharedManager];

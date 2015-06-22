@@ -13,7 +13,6 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
-#import "OAGPXWptListViewController.h"
 #import "PXAlertView.h"
 
 #import "OAMapRendererView.h"
@@ -26,12 +25,10 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-typedef enum
-{
-    kSegmentStatistics = 0,
-    kSegmentWaypoints
-    
-} OAGpxSegmentType;
+
+@implementation OAGPXItemViewControllerState
+@end
+
 
 @interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate> {
 
@@ -41,7 +38,11 @@ typedef enum
     OAMapViewController *_mapViewController;
     
     BOOL _startEndTimeExists;
+    
     OAGpxSegmentType _segmentType;
+    EPointsSortingType _sortingType;
+    CGFloat _scrollPos;
+    BOOL _wasInit;
 }
 
 @property (nonatomic) OAGPXDocument *doc;
@@ -65,7 +66,26 @@ typedef enum
     self = [super init];
     if (self) {
         _app = [OsmAndApp instance];
+        _wasInit = NO;
+        _scrollPos = 0.0;
         _segmentType = kSegmentStatistics;
+        _sortingType = EPointsSortingTypeGrouped;
+        self.gpx = gpxItem;
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+        self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+    }
+    return self;
+}
+
+- (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXItemViewControllerState *)ctrlState
+{
+    self = [super init];
+    if (self) {
+        _app = [OsmAndApp instance];
+        _wasInit = NO;
+        _segmentType = ctrlState.segmentType;
+        _sortingType = ctrlState.sortType;
+        _scrollPos = ctrlState.scrollPos;
         self.gpx = gpxItem;
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
         self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
@@ -197,6 +217,7 @@ typedef enum
     _tableView.dataSource = self;
     _tableView.delegate = self;
 
+    [self.segmentView setSelectedSegmentIndex:_segmentType];
     [self applySegmentType];
 
     NSInteger wptCount = self.doc.locationMarks.count;
@@ -209,18 +230,18 @@ typedef enum
         badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
         badgeLabel.textAlignment = NSTextAlignmentCenter;
         [badgeLabel sizeToFit];
-     
+        
         CGSize badgeSize = CGSizeMake(MAX(16.0, badgeLabel.bounds.size.width + 8.0), MAX(16.0, badgeLabel.bounds.size.height));
         badgeLabel.frame = CGRectMake(0.0, 0.0, badgeSize.width, badgeSize.height);
-        CGRect badgeFrame = CGRectMake(self.segmentView.bounds.size.width - badgeSize.width + 6.0, -6.0, badgeSize.width, badgeSize.height);
+        CGRect badgeFrame = CGRectMake(self.segmentView.bounds.size.width - badgeSize.width + 10.0, -4.0, badgeSize.width, badgeSize.height);
         UIView *badge = [[UIView alloc] initWithFrame:badgeFrame];
         badge.layer.cornerRadius = 8.0;
         badge.layer.backgroundColor = [UIColor whiteColor].CGColor;
-        badge.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-
+        //badge.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
+        
         [badge addSubview:badgeLabel];
         
-        [self.segmentView addSubview:badge];
+        [self.segmentViewContainer addSubview:badge];
     }
 
     if (self.showCurrentTrack)
@@ -243,6 +264,16 @@ typedef enum
     // Dispose of any resources that can be recreated.
 }
 
+- (OAGPXItemViewControllerState *) getCurrentState
+{
+    OAGPXItemViewControllerState *state = [[OAGPXItemViewControllerState alloc] init];
+    state.segmentType = _segmentType;
+    state.scrollPos = (_segmentType == kSegmentStatistics ? self.tableView.contentOffset.y : _waypointsController.tableView.contentOffset.y);
+    state.sortType = _sortingType;
+    
+    return state;
+}
+
 - (void)closePointsController
 {
     if (_waypointsController)
@@ -261,6 +292,9 @@ typedef enum
         {
             [self.tableView bringSubviewToFront:self.contentView];
 
+            if (!_wasInit && _scrollPos != 0.0)
+                [self.tableView setContentOffset:CGPointMake(0.0, _scrollPos)];
+            
             if (_waypointsController)
             {
                 [_waypointsController resetData];
@@ -291,11 +325,16 @@ typedef enum
             if (!_waypointsController)
             {
                 _waypointsController = [[OAGPXWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+                _waypointsController.sortingType = _sortingType;
+                [_waypointsController updateSortButton:self.buttonSort];
             }
 
             _waypointsController.view.frame = self.tableView.frame;
             [_waypointsController doViewAppear];
             [self.contentView addSubview:_waypointsController.tableView];
+
+            if (!_wasInit && _scrollPos != 0.0)
+                [_waypointsController.tableView setContentOffset:CGPointMake(0.0, _scrollPos)];
 
             if (!_wasOpenedWaypointsView && self.delegate)
                 [self.delegate requestFullScreenMode];
@@ -308,6 +347,8 @@ typedef enum
         default:
             break;
     }
+    
+    _wasInit = YES;
 }
 
 - (void)updateWaypointsButtons
@@ -323,7 +364,7 @@ typedef enum
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_cancel")
                         otherTitles:@[OALocalizedString(@"shared_string_remove"), OALocalizedString(@"gpx_export")]
-                        otherImages:@[@"track_clear_data.png", @"export_items.png"]
+                        otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
                              {
@@ -352,7 +393,10 @@ typedef enum
 - (IBAction)sortClicked:(id)sender
 {
     if (_waypointsController)
+    {
         [_waypointsController doSortClick:self.buttonSort];
+        _sortingType = _waypointsController.sortingType;
+    }
 }
 
 - (IBAction)editClicked:(id)sender
@@ -429,15 +473,18 @@ typedef enum
 }
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     if (_startEndTimeExists)
         return 2;
     else
         return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    switch (section) {
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section)
+    {
         case 0:
             if (_startEndTimeExists)
                 return OALocalizedString(@"gpx_route_time");
@@ -450,12 +497,13 @@ typedef enum
 }
 
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    
-    switch (section) {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    switch (section)
+    {
         case 0:
             if (_startEndTimeExists)
-                return 2;
+                return 4;
         case 1:
             return 4;
             
@@ -471,7 +519,8 @@ typedef enum
     switch (indexPath.section)
     {
         case 0: // Route Time
-        if (_startEndTimeExists) {
+        if (_startEndTimeExists)
+        {
             OAGPXDetailsTableViewCell* cell;
             cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
             if (cell == nil)
@@ -480,18 +529,33 @@ typedef enum
                 cell = (OAGPXDetailsTableViewCell *)[nib objectAtIndex:0];
             }
             
-            switch (indexPath.row) {
-                case 0: // Distance
+            switch (indexPath.row)
+            {
+                case 0: // Start Time
                 {
                     [cell.textView setText:OALocalizedString(@"gpx_start")];
                     [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.startTime]]];
                     cell.iconView.hidden = YES;
                     break;
                 }
-                case 1: // Avg Speed
+                case 1: // Finish Time
                 {
                     [cell.textView setText:OALocalizedString(@"gpx_finish")];
                     [cell.descView setText:[dateTimeFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:self.gpx.endTime]]];
+                    cell.iconView.hidden = YES;
+                    break;
+                }
+                case 2: // Total Time
+                {
+                    [cell.textView setText:OALocalizedString(@"total_time")];
+                    [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeSpan shortFormat:NO]];
+                    cell.iconView.hidden = YES;
+                    break;
+                }
+                case 3: // Moving Time
+                {
+                    [cell.textView setText:OALocalizedString(@"moving_time")];
+                    [cell.descView setText:[_app getFormattedTimeInterval:self.gpx.timeMoving shortFormat:NO]];
                     cell.iconView.hidden = YES;
                     break;
                 }
@@ -565,7 +629,8 @@ typedef enum
 }
 
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     return NO;
 }
 

@@ -29,6 +29,9 @@
 @property (nonatomic) OATargetPoint *targetPoint;
 @property (nonatomic, assign) BOOL isAddressFound;
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
+@property (nonatomic) OATargetMenuViewController* customController;
+
+@property (nonatomic, readonly) BOOL showFullScreen;
 
 -(void)setMapViewInstance:(UIView *)mapView;
 -(void)setNavigationController:(UINavigationController *)controller;
@@ -43,6 +46,7 @@
 - (BOOL)hasInfo;
 
 - (void)doInit:(BOOL)showFull;
+- (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen;
 - (void)prepare;
 - (void)prepareNoInit;
 - (void)prepareForRotation:(UIInterfaceOrientation)toInterfaceOrientation;

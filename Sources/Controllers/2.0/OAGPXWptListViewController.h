@@ -26,6 +26,7 @@ typedef enum
 
 - (void)resetData;
 - (void)doSortClick:(UIButton *)button;
+- (void)updateSortButton:(UIButton *)button;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;

@@ -41,7 +41,7 @@
 "poi_hide" = "Скрыть";
 // My Places
 "favorites" = "Избранное";
-"tracks" = "Треки";
+"tracks" = "Поездки";
 // GPX
 "gpx_point" = "Точка";
 "gpx_waypoints" = "Путевые точки";
@@ -49,7 +49,7 @@
 "gpx_points_b" = "точки";
 "gpx_export" = "Экспорт";
 "gpx_import_export" = "Импорт/Экспорт";
-"gpx_import_title" = "Импортировать трек";
+"gpx_import_title" = "Импорт поездки";
 "shared_string_ok" = "ОК";
 "OsmAnd Maps" = "OsmAnd Карты";
 // Shared Strings
@@ -59,10 +59,10 @@
 "gpx_add_new" = "Добавить новый файл";
 "gpx_overwrite" = "Перезаписать";
 "gpx_cannot_import" = "Невозможно импортировать GPX файл";
-"gpx_export_title" = "Экспортировать трек";
-"gpx_export_select_track" = "Выберите трек для экспорта";
-"gpx_no_tracks" = "Нет треков";
-"gpx_remove" = "Удалить трек?";
+"gpx_export_title" = "Экспорт поездки";
+"gpx_export_select_track" = "Выберите поездку для экспорта";
+"gpx_no_tracks" = "Нет поездок";
+"gpx_remove" = "Удалить поездку?";
 "gpx_stat" = "Статистика";
 "gpx_route_time" = "Время маршрута";
 "gpx_uphldownhl" = "Подъемы/Спуски";
@@ -208,7 +208,7 @@
 "region_south_america" = "Южная Америка";
 // Help
 "help_quiz" = "Опрос";
-"gpx_import_already_exists" = "Указанный трек уже присутствует в списке. Пожалуйста выберите действие.";
+"gpx_import_already_exists" = "Указанная поездка уже присутствует в списке. Пожалуйста выберите действие.";
 "groups" = "Группы";
 "import_export" = "Импорт/Экспорт";
 "gpx_import_desc" = "Вы можете импортировать GPX файлы \n\nЧтобы поделиться GPX файлом вы можете открыть его в Dropbox, Email или в другой программе - Используйте функцию Открыть В";
@@ -387,8 +387,8 @@
 "open_url" = "Открыть в браузере";
 "no_other_translations" = "Нет других переводов";
 "wpt_remove_q" = "Удалить точку?";
-"gpx_select_track" = "Выберите трек";
-"gpx_curr_new_track" = "Текущий/новый трек";
+"gpx_select_track" = "Выберите поездку";
+"gpx_curr_new_track" = "Текущая поездка";
 "enter_name" = "Введите имя";
 "not_selected" = "Не выбрано";
 "language" = "Язык";
@@ -403,3 +403,13 @@
 "time_closed" = "Закрыто";
 "time_will_close" = "Закроется через";
 "time_will_open" = "Откроется через";
+"shared_string_remove" = "Удалить";
+"my_favorites" = "Избранное";
+"record_trip" = "Записать поездку";
+"gpx_distance_points" = "Расстояние (точки)";
+"gpx_max_speed" = "Макс. скорость";
+"menu_my_trips" = "Поездки";
+"menu_active_trips" = "Активные";
+"menu_all_trips" = "Все поездки";
+"total_time" = "Общее время";
+"moving_time" = "Время в движении";

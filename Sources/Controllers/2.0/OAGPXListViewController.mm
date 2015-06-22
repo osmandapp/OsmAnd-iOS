@@ -106,6 +106,7 @@ typedef enum
     CALayer *_horizontalLine;
     
     BOOL _editActive;
+    NSArray *_visible;
 }
 
 static OAGPXListViewController *parentController;
@@ -378,15 +379,14 @@ static OAGPXListViewController *parentController;
     self.menuItems = [[NSArray alloc] init];
     
     OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+    _visible = [OAAppSettings sharedManager].mapSettingVisibleGpx;
     
     if (_viewMode == kActiveTripsMode)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
         self.gpxList = [NSMutableArray array];
         for (OAGPX *item in db.gpxList)
         {
-            NSArray *visible = settings.mapSettingVisibleGpx;
-            if ([visible containsObject:item.gpxFileName])
+            if ([_visible containsObject:item.gpxFileName])
                 [_gpxList addObject:item];
         }
     }
@@ -648,11 +648,19 @@ static OAGPXListViewController *parentController;
             cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
             [cell.textView setText:[item getNiceTitle]];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
             [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_pointer.png"]];
+            
+            if (_viewMode == kAllTripsMode && [_visible containsObject:item.gpxFileName])
+                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            else
+                [cell.iconView setImage:nil];
         }
         
         return cell;

@@ -384,3 +384,7 @@
 "menu_active_trips" = "Актыўныя";
 "menu_all_trips" = "Усе падарожжы";
 "shared_string_remove" = "Выдаліць";
+"gpx_distance_points" = "Даўжыня (кропак)";
+"gpx_max_speed" = "Макс. хуткасьць";
+"total_time" = "Агульны час";
+"moving_time" = "Час руху";

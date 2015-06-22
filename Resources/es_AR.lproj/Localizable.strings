@@ -384,3 +384,7 @@
 "menu_my_trips" = "Mis viajes";
 "menu_active_trips" = "Activo";
 "menu_all_trips" = "Todos los viajes";
+"gpx_distance_points" = "Distancia (puntos)";
+"gpx_max_speed" = "Velocidad máxima";
+"total_time" = "Tiempo total";
+"moving_time" = "Tiempo moviéndose";

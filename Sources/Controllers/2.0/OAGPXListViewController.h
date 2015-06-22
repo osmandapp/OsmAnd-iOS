@@ -24,4 +24,6 @@
 - (instancetype)initWithAllTrips;
 - (instancetype)initWithImportGPXItem:(NSURL*)url;
 
++ (BOOL)popToParent;
+
 @end

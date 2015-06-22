@@ -32,5 +32,6 @@
 
 @property NSTimeInterval lastUpdate;
 
++ (BOOL)popToParent;
 
 @end

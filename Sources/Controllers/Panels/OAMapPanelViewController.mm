@@ -43,6 +43,8 @@
 #import "OAGPXWptViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
+#import "OAGPXListViewController.h"
+#import "OAFavoriteListViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -214,7 +216,7 @@ typedef enum
     if (_pushed)
     {
         _pushed = NO;
-        [[OARootViewController instance] restoreCenterPanel:self];
+        //[[OARootViewController instance] restoreCenterPanel:self];
     }
 }
 
@@ -1586,9 +1588,9 @@ typedef enum
             _pushed = NO;
             _parentTargetObj = nil;
             _gpxItemViewControllerState = nil;
-            
-            [[OARootViewController instance] restoreCenterPanel:self];
-            [[OARootViewController instance] closeMenuAndPanelsAnimated:NO];
+
+            //[[OARootViewController instance] restoreCenterPanel:self];
+            //[[OARootViewController instance] closeMenuAndPanelsAnimated:NO];
             [self.navigationController popToRootViewControllerAnimated:NO];
         }
         
@@ -1613,7 +1615,16 @@ typedef enum
     [self destroyShadowButton];
     
     if (!_parentTargetObj)
-        [self.navigationController popViewControllerAnimated:YES];
+    {
+        BOOL popped = NO;
+        if (self.targetMenuView.targetPoint.type == OATargetGPX)
+            popped = [OAGPXListViewController popToParent];
+        else if (self.targetMenuView.targetPoint.type == OATargetFavorite)
+            popped = [OAFavoriteListViewController popToParent];
+
+        if (!popped)
+            [self.navigationController popViewControllerAnimated:YES];
+    }
     
     OATargetPointType targetType = self.targetMenuView.targetPoint.type;
     
@@ -1818,6 +1829,8 @@ typedef enum
         showCurrentTrack = YES;
     }
     
+    [_mapViewController hideContextPinMarker];
+
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
     CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);

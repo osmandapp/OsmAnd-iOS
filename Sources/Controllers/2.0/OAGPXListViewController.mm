@@ -106,6 +106,19 @@ typedef enum
     CALayer *_horizontalLine;
 }
 
+static OAGPXListViewController *parentController;
+
++ (BOOL)popToParent
+{
+    if (!parentController)
+        return NO;
+    
+    [OAGPXListViewController doPop];
+    
+    return YES;
+}
+
+
 - (instancetype)init
 {
     self = [super init];
@@ -517,7 +530,7 @@ typedef enum
             {
                 [_recCell.textView setText:OALocalizedString(@"track_recording_name")];
                 
-                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+                _recCell.descriptionPointsView.text = [NSString stringWithFormat:@"%d %@", _savingHelper.points, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
                 _recCell.descriptionDistanceView.text = [_app getFormattedDistance:_savingHelper.distance];
                 
                 [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -574,7 +587,7 @@ typedef enum
             OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
             [cell.textView setText:[item getNiceTitle]];
             [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
-            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
+            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
         }
         
         return cell;
@@ -733,7 +746,7 @@ typedef enum
         {
             if ([_savingHelper hasData])
             {
-                [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+                [self doPush];
                 [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
             }
         }
@@ -747,7 +760,7 @@ typedef enum
     else if (indexPath.section == _tripsSectionIndex)
     {
         OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
     }
     else
@@ -760,5 +773,30 @@ typedef enum
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+- (void)doPush
+{    
+    parentController = self;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.4;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromRight; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
+}
+
++ (void)doPop
+{
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.4;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionReveal; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromLeft; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
+    [[OARootViewController instance].navigationController pushViewController:parentController animated:NO];
+
+    parentController = nil;
+}
 
 @end

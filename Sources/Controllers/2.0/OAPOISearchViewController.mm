@@ -1498,7 +1498,7 @@ typedef enum
 - (void)goToPoint:(OAPOI *)poi
 {
     OARootViewController* rootViewController = [OARootViewController instance];
-    [rootViewController closeMenuAndPanelsAnimated:YES];
+    //[rootViewController closeMenuAndPanelsAnimated:YES];
     
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;

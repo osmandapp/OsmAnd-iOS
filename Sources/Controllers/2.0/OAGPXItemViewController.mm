@@ -143,6 +143,7 @@
 - (BOOL)preHide
 {
     [_mapViewController keepTempGpxTrackVisible];
+    [_mapViewController hideTempGpxTrack];
     [self closePointsController];
     return YES;
 }

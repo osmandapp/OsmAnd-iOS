@@ -681,7 +681,7 @@
 - (IBAction)onActionsMenuButtonClicked:(id)sender
 {
     _app.appMode = OAAppModeBrowseMap;
-    [[OARootViewController instance] closeMenuAndPanelsAnimated:YES];
+    //[[OARootViewController instance] closeMenuAndPanelsAnimated:YES];
 
     //[self.sidePanelController showRightPanelAnimated:YES];
 }

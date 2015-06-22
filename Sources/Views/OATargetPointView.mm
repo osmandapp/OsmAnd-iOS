@@ -211,11 +211,11 @@
     [_infoView addSubview:_infoUrlImage];
 
 
-    _infoOperatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoOperatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_operator"]];
     _infoOperatorImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoOperatorImage];
 
-    _infoBrandImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
+    _infoBrandImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_operator"]];
     _infoBrandImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoBrandImage];
 
@@ -1090,7 +1090,7 @@
             } completion:^(BOOL finished) {
                 
                 [_infoView removeFromSuperview];
-                if (finished)
+                //if (finished)
                     [self removeFromSuperview];
             
                 [self clearCustomControllerIfNeeded];
@@ -1250,17 +1250,26 @@
         
         if (_targetPoint.brand)
         {
-            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.brand width:infoWidth - 55.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, s.height + 16.0);
-            
-            _infoBrandImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoBrandText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoBrandText setTitle:_targetPoint.brand forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo6.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo6.hidden = NO;
+            if (!_targetPoint.oper || ![_targetPoint.oper isEqualToString:_targetPoint.brand])
+            {
+                CGSize s = [OAUtilities calculateTextBounds:_targetPoint.brand width:infoWidth - 55.0 font:_infoFont];
+                CGFloat ih = MAX(44.0, s.height + 16.0);
+                
+                _infoBrandImage.frame = CGRectMake(0.0, hf, 50.0, ih);
+                _infoBrandText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
+                [_infoBrandText setTitle:_targetPoint.brand forState:UIControlStateNormal];
+                
+                hf += ih;
+                
+                _horizontalLineInfo6.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
+                _horizontalLineInfo6.hidden = NO;
+            }
+            else
+            {
+                _infoBrandImage.hidden = YES;
+                _infoBrandText.hidden = YES;
+                _horizontalLineInfo6.hidden = YES;
+            }
         }
         else
         {
@@ -1587,12 +1596,12 @@
         OAGPX *item = _targetPoint.targetObj;
         
         NSString *distanceStr = [[OsmAndApp instance] getFormattedDistance:item.totalDistance];
-        NSString *pointsStr = [NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_points") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+        NSString *pointsStr = [NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
         NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
 
         NSMutableAttributedString *string;
         if (item.avgSpeed > 0)
-            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@  AVG %@", distanceStr, pointsStr, avgSpeedStr]];
+            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@     %@", distanceStr, pointsStr, avgSpeedStr]];
         else
             string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@", distanceStr, pointsStr]];
 
@@ -1611,15 +1620,28 @@
         distanceAttachment.image = [UIImage imageNamed:@"ic_gpx_distance.png"];
         NSTextAttachment *pointsAttachment = [[NSTextAttachment alloc] init];
         pointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+        NSTextAttachment *avgSpeedAttachment;
+        if (item.avgSpeed > 0)
+        {
+            avgSpeedAttachment = [[NSTextAttachment alloc] init];
+            avgSpeedAttachment.image = [UIImage imageNamed:@"ic_average_speed.png"];
+        }
         
         NSAttributedString *distanceStringWithImage = [NSAttributedString attributedStringWithAttachment:distanceAttachment];
         NSAttributedString *pointsStringWithImage = [NSAttributedString attributedStringWithAttachment:pointsAttachment];
-                
+        NSAttributedString *avgSpeedStringWithImage;
+        if (item.avgSpeed > 0)
+            avgSpeedStringWithImage = [NSAttributedString attributedStringWithAttachment:avgSpeedAttachment];
+        
         [string replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:distanceStringWithImage];
         [string replaceCharactersInRange:NSMakeRange(distanceStr.length + 3, 1) withAttributedString:pointsStringWithImage];
+        if (item.avgSpeed > 0)
+            [string replaceCharactersInRange:NSMakeRange(distanceStr.length + pointsStr.length + 7, 1) withAttributedString:avgSpeedStringWithImage];
 
         [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
         [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(distanceStr.length + 3, 1)];
+        if (item.avgSpeed > 0)
+            [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(distanceStr.length + pointsStr.length + 7, 1)];
         
         
         [_coordinateLabel setAttributedText:string];

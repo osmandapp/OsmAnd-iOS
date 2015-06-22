@@ -87,6 +87,18 @@ typedef enum
     CALayer *_horizontalLine;
 }
 
+static OAFavoriteListViewController *parentController;
+
++ (BOOL)popToParent
+{
+    if (!parentController)
+        return NO;
+    
+    [OAFavoriteListViewController doPop];
+    
+    return YES;
+}
+
 - (void)applyLocalization
 {
     _titleView.text = OALocalizedString(@"my_favorites");
@@ -902,7 +914,7 @@ typedef enum
     
     if (indexPath.section == 0) {
         OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
-        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
 
     } else {
@@ -921,7 +933,7 @@ typedef enum
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
         OAFavoriteItem* item = [groupData.groupItems objectAtIndex:indexPath.row];
-        [self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
+        [self doPush];
         [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item pushed:YES];
         
     } else {
@@ -930,6 +942,32 @@ typedef enum
         [self performSelector:action];
         [self.favoriteTableView deselectRowAtIndexPath:indexPath animated:YES];
     }
+}
+
+- (void)doPush
+{
+    parentController = self;
+    
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.4;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionPush; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromRight; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
+}
+
++ (void)doPop
+{
+    CATransition* transition = [CATransition animation];
+    transition.duration = 0.4;
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+    transition.type = kCATransitionReveal; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
+    transition.subtype = kCATransitionFromLeft; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
+    [[OARootViewController instance].navigationController pushViewController:parentController animated:NO];
+    
+    parentController = nil;
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

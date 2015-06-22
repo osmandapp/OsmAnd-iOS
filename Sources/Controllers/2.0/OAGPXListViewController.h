@@ -20,6 +20,10 @@
 @property (weak, nonatomic) IBOutlet UIButton *allTripsButtonView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 
+@property (weak, nonatomic) IBOutlet UIButton *cancelButton;
+@property (weak, nonatomic) IBOutlet UIButton *checkButton;
+@property (weak, nonatomic) IBOutlet UIButton *mapButton;
+
 - (instancetype)initWithActiveTrips;
 - (instancetype)initWithAllTrips;
 - (instancetype)initWithImportGPXItem:(NSURL*)url;

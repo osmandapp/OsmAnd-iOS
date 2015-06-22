@@ -104,6 +104,8 @@ typedef enum
     NSInteger _menuSectionIndex;
     
     CALayer *_horizontalLine;
+    
+    BOOL _editActive;
 }
 
 static OAGPXListViewController *parentController;
@@ -305,6 +307,12 @@ static OAGPXListViewController *parentController;
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.toolbarView.layer addSublayer:_horizontalLine];
+    
+    _editActive = NO;
+    
+    self.cancelButton.frame = self.backButton.frame;
+    self.mapButton.frame = self.checkButton.frame;
+    [self updateButtons];
 }
 
 -(void)viewWillLayoutSubviews
@@ -332,6 +340,18 @@ static OAGPXListViewController *parentController;
     
     [_trackRecordingObserver detach];
     _trackRecordingObserver = nil;
+}
+
+- (void) updateButtons
+{
+    self.backButton.hidden = _editActive;
+    self.cancelButton.hidden = !_editActive;
+    self.mapButton.hidden = _editActive;
+    self.checkButton.hidden = !_editActive;
+    if (_editActive)
+        [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
+    else
+        [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)onTrackRecordingChanged
@@ -441,6 +461,51 @@ static OAGPXListViewController *parentController;
 - (IBAction)goRootScreen:(id)sender
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
+}
+
+- (IBAction)mapButtonClick:(id)sender
+{
+    [self.gpxTableView setEditing:YES animated:YES];
+    _editActive = YES;
+    [self updateButtons];
+}
+
+- (IBAction)checkButtonClick:(id)sender
+{
+    NSArray *selectedRows = [self.gpxTableView indexPathsForSelectedRows];
+    if ([selectedRows count] == 0)
+    {
+        [self.gpxTableView setEditing:NO animated:YES];
+        _editActive = NO;
+        [self updateButtons];
+        return;
+    }
+
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    
+    for (NSIndexPath *indexPath in selectedRows)
+    {
+        OAGPX* gpx = [self.gpxList objectAtIndex:indexPath.row];
+        if (_viewMode == kActiveTripsMode)
+            [settings hideGpx:gpx.gpxFileName];
+        else
+            [settings showGpx:gpx.gpxFileName];
+    }
+
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
+    [self.gpxTableView setEditing:NO animated:YES];
+    _editActive = NO;
+    [self updateButtons];
+
+    [self generateData];
+}
+
+- (IBAction)cancelButtonClick:(id)sender
+{
+    [self.gpxTableView setEditing:NO animated:YES];
+    _editActive = NO;
+    [self updateButtons];
 }
 
 - (void)onImportClicked
@@ -614,8 +679,26 @@ static OAGPXListViewController *parentController;
     }
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    return NO;
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    switch (_viewMode)
+    {
+        case kActiveTripsMode:
+            if (indexPath.section == 0)
+                return NO;
+            else if (self.gpxList.count > 0)
+                return YES;
+            
+        case kAllTripsMode:
+            if (indexPath.section == 0 && self.gpxList.count > 0)
+                return YES;
+            else
+                return NO;
+            
+        default:
+            return NO;
+            break;
+    }
 }
 
 - (void)startStopRecPressed
@@ -740,6 +823,9 @@ static OAGPXListViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if ([self.gpxTableView isEditing])
+        return;
+    
     if (indexPath.section == _recSectionIndex)
     {
         if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])

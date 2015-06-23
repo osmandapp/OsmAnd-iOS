@@ -388,3 +388,5 @@
 "moving_time" = "Tid i bevægelse";
 "gpx_distance_points" = "Afstand (punkter)";
 "gpx_max_speed" = "Max hastighed";
+"gpx_speed" = "Hastighed";
+"rendering_attr_hikingRoutesOSMC_name" = "Vandresymbol overlejring";

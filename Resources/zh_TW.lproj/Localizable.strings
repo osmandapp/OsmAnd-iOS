@@ -388,3 +388,5 @@
 "moving_time" = "移動時間";
 "gpx_distance_points" = "距離 (標點)";
 "gpx_max_speed" = "最高速度";
+"gpx_speed" = "速度";
+"rendering_attr_hikingRoutesOSMC_name" = "徒步符號層";

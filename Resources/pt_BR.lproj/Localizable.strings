@@ -388,3 +388,5 @@
 "gpx_max_speed" = "Velocidade máxima";
 "total_time" = "Tempo total";
 "moving_time" = "Tempo em movimentação";
+"gpx_speed" = "Velocidade";
+"rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";

@@ -113,6 +113,7 @@
 
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
+"gpx_speed" = "Speed";
 
 // Map settings
 "m_style_overview" = "Overview";

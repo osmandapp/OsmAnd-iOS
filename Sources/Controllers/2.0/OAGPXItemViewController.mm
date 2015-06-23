@@ -57,7 +57,7 @@
     BOOL _wasOpenedWaypointsView;
     
     NSInteger _sectionsCount;
-    NSInteger _statSectionIndex;
+    NSInteger _speedSectionIndex;
     NSInteger _timeSectionIndex;
     NSInteger _uphillsSectionIndex;
 }
@@ -223,16 +223,18 @@
     if (_startEndTimeExists)
     {
         _sectionsCount = 3;
-        _statSectionIndex = 0;
-        _timeSectionIndex = 1;
-        _uphillsSectionIndex = 2;
+        NSInteger nextSectionIndex = 0;
+        _speedSectionIndex = (self.gpx.avgSpeed > 0 && self.gpx.maxSpeed > 0 ? nextSectionIndex++ : -1);
+        _timeSectionIndex = nextSectionIndex++;
+        _uphillsSectionIndex = nextSectionIndex;
     }
     else
     {
         _sectionsCount = 2;
-        _statSectionIndex = 0;
+        NSInteger nextSectionIndex = 0;
+        _speedSectionIndex = (self.gpx.avgSpeed > 0 && self.gpx.maxSpeed > 0 ? nextSectionIndex++ : -1);
         _timeSectionIndex = -1;
-        _uphillsSectionIndex = 1;
+        _uphillsSectionIndex = nextSectionIndex;
     }
 
     
@@ -505,8 +507,8 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == _statSectionIndex)
-        return OALocalizedString(@"gpx_stat");
+    if (section == _speedSectionIndex)
+        return OALocalizedString(@"gpx_speed");
     else if (section == _timeSectionIndex)
         return OALocalizedString(@"gpx_route_time");
     else if (section == _uphillsSectionIndex)
@@ -518,8 +520,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == _statSectionIndex)
-        return 4;
+    if (section == _speedSectionIndex)
+        return 2;
     else if (section == _timeSectionIndex)
         return 4;
     else if (section == _uphillsSectionIndex)
@@ -532,7 +534,7 @@
 {
     static NSString* const reusableIdentifierPoint = @"OAGPXDetailsTableViewCell";
 
-    if (indexPath.section == _statSectionIndex)
+    if (indexPath.section == _speedSectionIndex)
     {
         OAGPXDetailsTableViewCell* cell;
         cell = (OAGPXDetailsTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
@@ -544,32 +546,14 @@
         
         switch (indexPath.row)
         {
-            case 0: // Distance (points)
-            {
-                NSMutableString *distanceStr = [[_app getFormattedDistance:self.gpx.totalDistance] mutableCopy];
-                if (self.gpx.points > 0)
-                    [distanceStr appendFormat:@" (%d)", self.gpx.points];
-                
-                [cell.textView setText:OALocalizedString(@"gpx_distance_points")];
-                [cell.descView setText:distanceStr];
-                cell.iconView.hidden = YES;
-                break;
-            }
-            case 1: // Waypoints
-            {
-                [cell.textView setText:OALocalizedString(@"gpx_waypoints")];
-                [cell.descView setText:[NSString stringWithFormat:@"%d", self.gpx.wptPoints]];
-                cell.iconView.hidden = YES;
-                break;
-            }
-            case 2: // Average speed
+            case 0: // Average speed
             {
                 [cell.textView setText:OALocalizedString(@"gpx_average_speed")];
                 [cell.descView setText:[_app getFormattedSpeed:self.gpx.avgSpeed]];
                 cell.iconView.hidden = YES;
                 break;
             }
-            case 3: // Max speed
+            case 1: // Max speed
             {
                 [cell.textView setText:OALocalizedString(@"gpx_max_speed")];
                 [cell.descView setText:[_app getFormattedSpeed:self.gpx.maxSpeed]];

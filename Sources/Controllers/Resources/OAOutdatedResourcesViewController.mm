@@ -334,7 +334,6 @@
 
     NSString* cellTypeId = nil;
     NSString* title = nil;
-    NSString* subtitle = nil;
 
     ResourceItem* item = (ResourceItem*)[_resourcesItems objectAtIndex:indexPath.row];
     if (item.downloadTask != nil)
@@ -343,8 +342,6 @@
         cellTypeId = outdatedResourceCell;
 
     title = item.title;
-    if (item.worldRegion.superregion != nil)
-        subtitle = item.worldRegion.superregion.name;
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
@@ -382,7 +379,12 @@
     // Fill cell content
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", subtitle, [self resourceTypeLocalized:item.resourceType]];
+    {
+        if (item.sizePkg > 0)
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        else
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
+    }
     
     //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]
     

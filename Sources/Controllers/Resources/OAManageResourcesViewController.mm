@@ -756,7 +756,10 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
-        item.size = resource->size;
+
+        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+        item.size = resourceInRepository->size;
+        item.sizePkg = resourceInRepository->packageSize;
         
         if (item.title != nil) {
             if (match == self.region)

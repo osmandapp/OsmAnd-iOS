@@ -384,3 +384,8 @@
 "menu_active_trips" = "Aktív";
 "menu_all_trips" = "Minden utazás";
 "shared_string_remove" = "Eltávolítás";
+"gpx_distance_points" = "Távolság (pont)";
+"gpx_max_speed" = "Legnagyobb sebesség";
+"gpx_speed" = "Sebesség";
+"total_time" = "Teljes idő";
+"moving_time" = "Mozgási idő";

@@ -13,7 +13,6 @@ typedef enum
     kSettingsScreenGeneral = 0,
     kSettingsScreenAppMode,
     kSettingsScreenMetricSystem,
-    kSettingsScreenZoomButton,
     kSettingsScreenGeoCoords,
     kSettingsScreenRecInterval,
     kSettingsScreenShowAltInDrive,

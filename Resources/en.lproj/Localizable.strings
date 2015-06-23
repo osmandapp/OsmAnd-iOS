@@ -333,7 +333,7 @@
 "rendering_attr_streetLighting_name" = "Street lighting";
 "rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
-"rendering_attr_osmcTraces_name" = "Hiking symbol overlay";
+"rendering_attr_hikingRoutesOSMC_name" = "Hiking symbol overlay";
 "rendering_attr_showCycleRoutes_name" = "Show cycle routes";
 "rendering_attr_hideBuildings_name" = "Hide buildings";
 "rendering_attr_noPolygons_name" = "Hide polygons";

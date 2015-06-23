@@ -54,7 +54,6 @@
         case kSettingsScreenGeneral:
         {
             NSString* metricSystemValue = settings.settingMetricSystem == 0 ? OALocalizedString(@"sett_km") : OALocalizedString(@"sett_ml");
-            NSString* zoomButtonValue = settings.settingShowZoomButton ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
             NSString* geoFormatValue = settings.settingGeoFormat == 0 ? OALocalizedString(@"sett_deg") : OALocalizedString(@"sett_deg_min");
             NSString* showAltValue = settings.settingShowAltInDriveMode ? OALocalizedString(@"sett_show") : OALocalizedString(@"sett_notshow");
             NSString *recIntervalValue = [settings getFormattedTrackInterval:settings.mapSettingSaveTrackIntervalGlobal];
@@ -63,7 +62,6 @@
             {
                 self.data = @[
                               @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
-                              @{@"name": OALocalizedString(@"sett_zoom"), @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"}
                               ];
@@ -72,7 +70,6 @@
             {
                 self.data = @[
                               @{@"name": OALocalizedString(@"sett_units"), @"value": metricSystemValue, @"img": @"menu_cell_pointer.png"},
-                              @{@"name": OALocalizedString(@"sett_zoom"), @"value": zoomButtonValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"sett_loc_fmt"), @"value": geoFormatValue, @"img": @"menu_cell_pointer.png"},
                               @{@"name": OALocalizedString(@"show_alt_in_drive"), @"value": showAltValue, @"img": @"menu_cell_pointer.png"                              },
                               @{@"name": OALocalizedString(@"rec_interval"), @"value": recIntervalValue, @"img": @"menu_cell_pointer.png"}
@@ -85,14 +82,6 @@
             _titleView.text = OALocalizedString(@"sett_units");
             self.data = @[@{@"name": OALocalizedString(@"sett_km"), @"value": @"", @"img": settings.settingMetricSystem == 0 ? @"menu_cell_selected.png" : @""},
                           @{@"name": OALocalizedString(@"sett_ml"), @"value": @"", @"img": settings.settingMetricSystem == 1 ? @"menu_cell_selected.png" : @""}
-                          ];
-            break;
-        }
-        case kSettingsScreenZoomButton:
-        {
-            _titleView.text = OALocalizedString(@"sett_zoom");
-            self.data = @[@{@"name": OALocalizedString(@"sett_show"), @"value": @"", @"img": settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""},
-                          @{@"name": OALocalizedString(@"sett_notshow"), @"value": @"", @"img": !settings.settingShowZoomButton ? @"menu_cell_selected.png" : @""}
                           ];
             break;
         }
@@ -187,9 +176,6 @@
         case kSettingsScreenMetricSystem:
             [self selectSettingMetricSystem:indexPath.row];
             break;
-        case kSettingsScreenZoomButton:
-            [self selectSettingZoomButton:indexPath.row];
-            break;
         case kSettingsScreenGeoCoords:
             [self selectSettingGeoCode:indexPath.row];
             break;
@@ -217,23 +203,17 @@
         }
         case 1:
         {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenZoomButton];
+            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
             [self.navigationController pushViewController:settingsViewController animated:YES];
             break;
         }
         case 2:
         {
-            OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeoCoords];
-            [self.navigationController pushViewController:settingsViewController animated:YES];
-            break;
-        }
-        case 3:
-        {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenShowAltInDrive];
             [self.navigationController pushViewController:settingsViewController animated:YES];
             break;
         }
-        case 4:
+        case 3:
         {
             OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenRecInterval];
             [self.navigationController pushViewController:settingsViewController animated:YES];
@@ -248,12 +228,6 @@
 -(void)selectSettingMetricSystem:(NSInteger)index
 {
     [[OAAppSettings sharedManager] setSettingMetricSystem:index];
-    [self backButtonClicked:nil];
-}
-
--(void)selectSettingZoomButton:(NSInteger)index
-{
-    [[OAAppSettings sharedManager] setSettingShowZoomButton:index == 0];
     [self backButtonClicked:nil];
 }
 

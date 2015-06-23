@@ -388,3 +388,5 @@
 "gpx_max_speed" = "Макс. хуткасьць";
 "total_time" = "Агульны час";
 "moving_time" = "Час руху";
+"gpx_speed" = "Хуткасьць";
+"rendering_attr_hikingRoutesOSMC_name" = "Накладаньне знакаў пешага турызму";

@@ -276,6 +276,7 @@ static OAGPXListViewController *parentController;
 {
     _titleView.text = OALocalizedString(@"menu_my_trips");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     
     [_activeTripsButtonView setTitle:OALocalizedStringUp(@"menu_active_trips") forState:UIControlStateNormal];
     [_allTripsButtonView setTitle:OALocalizedStringUp(@"menu_all_trips") forState:UIControlStateNormal];
@@ -349,10 +350,6 @@ static OAGPXListViewController *parentController;
     self.cancelButton.hidden = !_editActive;
     self.mapButton.hidden = _editActive;
     self.checkButton.hidden = !_editActive;
-    if (_editActive)
-        [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    else
-        [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
 }
 
 - (void)onTrackRecordingChanged
@@ -418,7 +415,7 @@ static OAGPXListViewController *parentController;
     _tripsSectionIndex = (self.gpxList.count > 0 ? (_viewMode == kActiveTripsMode ? 1 : 0) : -1);
     _menuSectionIndex = (_viewMode == kAllTripsMode ? _tripsSectionIndex + 1 : -1);
     
-    [self.gpxTableView reloadData];
+    //[self.gpxTableView reloadData];
 }
 
 -(void)setupView {
@@ -479,44 +476,93 @@ static OAGPXListViewController *parentController;
             [self.gpxTableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
         }
     }
+    
+    if (_viewMode == kActiveTripsMode && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    {
+        [self.gpxTableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    
     [self.gpxTableView endUpdates];
 }
 
 - (IBAction)checkButtonClick:(id)sender
 {
     NSArray *selectedRows = [self.gpxTableView indexPathsForSelectedRows];
-    if ([selectedRows count] == 0)
-    {
-        [self.gpxTableView setEditing:NO animated:YES];
-        _editActive = NO;
-        [self updateButtons];
-        return;
-    }
-
+ 
     OAAppSettings *settings = [OAAppSettings sharedManager];
     
-    NSMutableArray *gpxArr = [NSMutableArray arrayWithArray:self.gpxList];
+    NSMutableArray *gpxArrHide = [NSMutableArray arrayWithArray:self.gpxList];
+    NSMutableArray *gpxArrNew = [NSMutableArray array];
+    NSMutableArray *indexes = [NSMutableArray array];
+    
+    BOOL currentTripSelected = NO;
     
     for (NSIndexPath *indexPath in selectedRows)
     {
+        if (indexPath.section == _recSectionIndex)
+            currentTripSelected = YES;
+        
+        if (indexPath.section != _tripsSectionIndex)
+            continue;
+        
         OAGPX* gpx = [self.gpxList objectAtIndex:indexPath.row];
-        if (_viewMode == kActiveTripsMode)
-            [gpxArr removeObject:gpx];
-        else
-            [settings showGpx:gpx.gpxFileName];
+        [gpxArrHide removeObject:gpx];
+        [gpxArrNew addObject:gpx];
     }
 
     if (_viewMode == kActiveTripsMode)
-        for (OAGPX *gpx in gpxArr)
+    {
+        settings.mapSettingShowRecordingTrack = currentTripSelected;
+        
+        for (OAGPX *gpx in gpxArrHide)
+        {
             [settings hideGpx:gpx.gpxFileName];
+
+            for (NSInteger i = 0; i < self.gpxList.count; i++)
+            {
+                OAGPX *g = self.gpxList[i];
+                if (g == gpx)
+                    [indexes addObject:[NSIndexPath indexPathForRow:i inSection:1]];
+            }
+        }
+            
+        self.gpxList = gpxArrNew;
+    }
+    else
+    {
+        for (OAGPX *gpx in gpxArrHide)
+            [settings hideGpx:gpx.gpxFileName];
+        for (OAGPX *gpx in gpxArrNew)
+            [settings showGpx:gpx.gpxFileName];
+    }
     
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    
+    _visible = [OAAppSettings sharedManager].mapSettingVisibleGpx;
 
     [self.gpxTableView setEditing:NO animated:YES];
     _editActive = NO;
     [self updateButtons];
 
     [self generateData];
+
+    [self.gpxTableView beginUpdates];
+    
+    if (_viewMode == kAllTripsMode)
+    {
+        NSArray *visibleRows = [self.gpxTableView indexPathsForVisibleRows];
+        [self.gpxTableView reloadRowsAtIndexPaths:visibleRows withRowAnimation:UITableViewRowAnimationAutomatic];
+    }
+    else if (indexes.count > 0)
+    {
+        if (self.gpxList.count == 0)
+            [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        else
+            [self.gpxTableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
+    }
+    
+    [self.gpxTableView endUpdates];
+    
 }
 
 - (IBAction)cancelButtonClick:(id)sender
@@ -619,8 +665,6 @@ static OAGPXListViewController *parentController;
                 [_recCell.btnStartStopRec addTarget:self action:@selector(startStopRecPressed) forControlEvents:UIControlEventTouchUpInside];
                 [_recCell.btnSaveGpx addTarget:self action:@selector(saveGpxPressed) forControlEvents:UIControlEventTouchUpInside];
                 
-                _recCell.selectionStyle = ([_savingHelper hasData] ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone);
-                
                 [self updateRecImg];
                 [self updateRecBtn];
             }
@@ -711,7 +755,7 @@ static OAGPXListViewController *parentController;
     {
         case kActiveTripsMode:
             if (indexPath.section == 0)
-                return NO;
+                return YES;
             else if (self.gpxList.count > 0)
                 return YES;
             
@@ -729,6 +773,9 @@ static OAGPXListViewController *parentController;
 
 - (void)startStopRecPressed
 {
+    if ([self.gpxTableView isEditing])
+        return;
+    
     OAAppSettings *settings = [OAAppSettings sharedManager];
     BOOL recOn = settings.mapSettingTrackRecording;
     if (recOn)
@@ -795,6 +842,9 @@ static OAGPXListViewController *parentController;
 
 - (void)saveGpxPressed
 {
+    if ([self.gpxTableView isEditing])
+        return;
+
     if ([_savingHelper hasDataToSave] && _savingHelper.distance < 10.0)
     {
         [PXAlertView showAlertWithTitle:OALocalizedString(@"track_save_short_q")

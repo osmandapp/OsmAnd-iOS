@@ -1599,30 +1599,28 @@
         NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:item.totalDistance] mutableCopy];
         if (item.points > 0)
             [distanceStr appendFormat:@" (%d)", item.points];
-        NSString *pointsStr = [NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]];
+        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:item.timeMoving shortFormat:NO];
         NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
 
-        NSMutableAttributedString *string;
+        NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", distanceStr]];
+        NSMutableAttributedString *stringTimeMoving;
+        if (item.timeMoving > 0)
+            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+        NSMutableAttributedString *stringAvgSpeed;
         if (item.avgSpeed > 0)
-            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@     %@", distanceStr, pointsStr, avgSpeedStr]];
-        else
-            string = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@   %@", distanceStr, pointsStr]];
+             stringAvgSpeed =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", avgSpeedStr]];
 
 
         UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
-        UIFont *fontAvg = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:12];
-
-        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
-        if (item.avgSpeed > 0)
-        {
-            NSRange avgRange = NSMakeRange(distanceStr.length + pointsStr.length + 7, 3);
-            [string addAttribute:NSFontAttributeName value:fontAvg range:avgRange];
-        }
 
         NSTextAttachment *distanceAttachment = [[NSTextAttachment alloc] init];
         distanceAttachment.image = [UIImage imageNamed:@"ic_gpx_distance.png"];
-        NSTextAttachment *pointsAttachment = [[NSTextAttachment alloc] init];
-        pointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+        NSTextAttachment *timeMovingAttachment;
+        if (item.timeMoving > 0)
+        {
+            timeMovingAttachment = [[NSTextAttachment alloc] init];
+            timeMovingAttachment.image = [UIImage imageNamed:@"ic_travel_time.png"];
+        }
         NSTextAttachment *avgSpeedAttachment;
         if (item.avgSpeed > 0)
         {
@@ -1631,22 +1629,35 @@
         }
         
         NSAttributedString *distanceStringWithImage = [NSAttributedString attributedStringWithAttachment:distanceAttachment];
-        NSAttributedString *pointsStringWithImage = [NSAttributedString attributedStringWithAttachment:pointsAttachment];
+        NSAttributedString *timeMovingStringWithImage;
+        if (item.timeMoving > 0)
+            timeMovingStringWithImage = [NSAttributedString attributedStringWithAttachment:timeMovingAttachment];
         NSAttributedString *avgSpeedStringWithImage;
         if (item.avgSpeed > 0)
             avgSpeedStringWithImage = [NSAttributedString attributedStringWithAttachment:avgSpeedAttachment];
         
-        [string replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:distanceStringWithImage];
-        [string replaceCharactersInRange:NSMakeRange(distanceStr.length + 3, 1) withAttributedString:pointsStringWithImage];
+        [stringDistance replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:distanceStringWithImage];
+        [stringDistance addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+        if (item.timeMoving > 0)
+        {
+            [stringTimeMoving replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:timeMovingStringWithImage];
+            [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+        }
         if (item.avgSpeed > 0)
-            [string replaceCharactersInRange:NSMakeRange(distanceStr.length + pointsStr.length + 7, 1) withAttributedString:avgSpeedStringWithImage];
+        {
+            [stringAvgSpeed replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:avgSpeedStringWithImage];
+            [stringAvgSpeed addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+        }
+        
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
+        [string appendAttributedString:stringDistance];
+        if (stringTimeMoving)
+            [string appendAttributedString:stringTimeMoving];
+        if (stringAvgSpeed)
+            [string appendAttributedString:stringAvgSpeed];
 
-        [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
-        [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(distanceStr.length + 3, 1)];
-        if (item.avgSpeed > 0)
-            [string addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(distanceStr.length + pointsStr.length + 7, 1)];
-        
-        
+        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+
         [_coordinateLabel setAttributedText:string];
         [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
     }

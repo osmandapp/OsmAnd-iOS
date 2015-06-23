@@ -794,7 +794,15 @@
 
 - (BOOL) isPointAccurateForRouting:(CLLocation *)loc
 {
-    return loc != nil && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3.0 / 2.0);
+    BOOL res = loc != nil && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3.0 / 2.0);
+    if (res)
+    {
+        CLLocationDistance dist = OsmAnd::Utilities::distance(loc.coordinate.longitude, loc.coordinate.latitude, lastPoint.longitude, lastPoint.latitude);
+        NSTimeInterval timeInt = [[NSDate date] timeIntervalSince1970] - lastTimeUpdated;
+        res = (dist > 4.0 || timeInt > 60.0);
+    }
+
+    return res;
 }
 
 - (void) runSyncBlock:(void (^)(void))block

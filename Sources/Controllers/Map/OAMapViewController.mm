@@ -1365,10 +1365,14 @@
                 
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
                 
-                for (const auto& ruleId : mapObject->attributeIds) {
+                for (const auto& ruleId : mapObject->attributeIds)
+                {
                     const auto& rule = *mapObject->attributeMapping->decodeMap.getRef(ruleId);
                     if (rule.tag == QString("addr:housenumber"))
+                    {
                         symbol.buildingNumber = mapObject->captions.value(ruleId).toNSString();
+                        continue;
+                    }
                     
                     //NSLog(@"%@=%@", rule.tag.toNSString(), rule.value.toNSString());
 

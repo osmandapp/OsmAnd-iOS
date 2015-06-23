@@ -389,3 +389,4 @@
 "gpx_speed" = "Sebesség";
 "total_time" = "Teljes idő";
 "moving_time" = "Mozgási idő";
+"rendering_attr_hikingRoutesOSMC_name" = "Turistajelzések rátét";

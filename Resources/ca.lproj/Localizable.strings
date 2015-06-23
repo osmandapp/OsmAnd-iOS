@@ -388,3 +388,5 @@
 "moving_time" = "Temps en moviment";
 "gpx_distance_points" = "Distància (punts)";
 "gpx_max_speed" = "Velocitat màxima";
+"gpx_speed" = "Velocitat";
+"rendering_attr_hikingRoutesOSMC_name" = "Superposa la simbologia de senderisme";

@@ -135,6 +135,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
 - (void)removeDestinationPin:(UIColor *)color;
 
+- (void)updateMyLocationCourseProvider;
+
 @property(readonly) CGFloat displayDensityFactor;
 
 @property(readonly) OAObservable* framePreparedObservable;

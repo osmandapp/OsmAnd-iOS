@@ -166,7 +166,7 @@
         favSection = 1;
         favRow = 0;
         
-        styleSettings = [[OAMapStyleSettings alloc] init];
+        styleSettings = [OAMapStyleSettings sharedInstance];
         
         NSArray *categories = [styleSettings getAllCategories];
         NSArray *topLevelParams = [styleSettings getParameters:@""];

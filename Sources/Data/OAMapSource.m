@@ -83,6 +83,11 @@
            && ([_variant isEqualToString:other.variant] || (_variant == other.variant)) ;
 }
 
+-(NSUInteger)hash
+{
+    return [_resourceId hash] + [_variant hash];
+}
+
 #pragma mark - NSCoding
 
 #define kResourceId @"resource"

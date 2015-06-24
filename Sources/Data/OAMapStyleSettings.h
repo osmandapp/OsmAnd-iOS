@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger, OAMapStyleValueDataType)
 
 -(instancetype)initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName;
 
++ (OAMapStyleSettings *)sharedInstance;
 
 -(NSArray *) getAllParameters;
 -(OAMapStyleParameter *) getParameter:(NSString *)name;

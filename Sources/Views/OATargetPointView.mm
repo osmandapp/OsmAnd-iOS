@@ -29,8 +29,33 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
+@interface OATargetPointZoomView ()
 
-@interface OATargetPointView() <OATargetMenuViewControllerDelegate>
+@property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
+@property (weak, nonatomic) IBOutlet UIButton *buttonZoomOut;
+
+@end
+
+@implementation OATargetPointZoomView
+
+#pragma mark - Actions
+
+- (IBAction)buttonZoomInClicked:(id)sender
+{
+    if (self.delegate)
+        [self.delegate zoomInPressed];
+}
+
+- (IBAction)buttonZoomOutClicked:(id)sender
+{
+    if (self.delegate)
+        [self.delegate zoomOutPressed];
+}
+
+@end
+
+
+@interface OATargetPointView() <OATargetMenuViewControllerDelegate, OATargetPointZoomViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
@@ -53,6 +78,8 @@
 @property (weak, nonatomic) IBOutlet UIView *backView2;
 @property (weak, nonatomic) IBOutlet UIView *backView3;
 @property (weak, nonatomic) IBOutlet UIView *backView4;
+
+@property (nonatomic) OATargetPointZoomView *zoomView;
 
 @property NSString* addressStr;
 @property OAMapRendererView* mapView;
@@ -131,25 +158,41 @@
 - (instancetype)init
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    if ([bundle count])
+    
+    for (UIView *v in bundle)
     {
-        self = [bundle firstObject];
-        if (self) {
-        }
+        if ([v isKindOfClass:[OATargetPointView class]])
+            self = (OATargetPointView *)v;
+        else if ([v isKindOfClass:[OATargetPointZoomView class]])
+            self.zoomView = (OATargetPointZoomView *)v;
     }
+    
+    if (self && self.zoomView)
+        self.zoomView.delegate = self;
+    
     return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
-    if ([bundle count])
+    
+    for (UIView *v in bundle)
     {
-        self = [bundle firstObject];
-        if (self) {
-            self.frame = frame;
-        }
+        if ([v isKindOfClass:[OATargetPointView class]])
+            self = (OATargetPointView *)v;
+        else if ([v isKindOfClass:[OATargetPointZoomView class]])
+            self.zoomView = (OATargetPointZoomView *)v;
     }
+
+    if (self && self.zoomView)
+        self.zoomView.delegate = self;
+
+    if (self)
+    {
+        self.frame = frame;
+    }
+    
     return self;
 }
 
@@ -935,6 +978,9 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
+    if (_targetPoint.type != OATargetGPX)
+        [self.zoomView removeFromSuperview];
+    
     BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
     
     _infoCoordsImage.hidden = !coordsHidden;
@@ -1012,6 +1058,12 @@
             [self showTopToolbar:YES];
     }
 
+    if (_targetPoint.type == OATargetGPX)
+    {
+        self.zoomView.alpha = 0.0;
+        [self.parentView addSubview:self.zoomView];
+    }
+
     if (animated)
     {
         CGRect frame = self.frame;
@@ -1035,6 +1087,8 @@
         [UIView animateWithDuration:0.3 animations:^{
             
             self.frame = frame;
+            if (self.zoomView.superview)
+                _zoomView.alpha = 1.0;
             
         } completion:^(BOOL finished) {
             if (onComplete)
@@ -1050,6 +1104,8 @@
             frame.origin.y = DeviceScreenHeight - self.bounds.size.height;
         
         self.frame = frame;
+        if (self.zoomView.superview)
+            _zoomView.alpha = 1.0;
         
         if (onComplete)
             onComplete();
@@ -1085,14 +1141,17 @@
                 
                 self.frame = frame;
                 
+                if (self.zoomView.superview)
+                    _zoomView.alpha = 0.0;
+
                 if (showingTopToolbar)
                     self.customController.navBar.frame = newTopToolbarFrame;
                 
             } completion:^(BOOL finished) {
                 
                 [_infoView removeFromSuperview];
-                //if (finished)
-                    [self removeFromSuperview];
+                [self.zoomView removeFromSuperview];
+                [self removeFromSuperview];
             
                 [self clearCustomControllerIfNeeded];
                 [self restoreTargetType];
@@ -1107,7 +1166,11 @@
         {
             self.frame = frame;
             
+            if (self.zoomView.superview)
+                _zoomView.alpha = 0.0;
+
             [_infoView removeFromSuperview];
+            [self.zoomView removeFromSuperview];
             [self removeFromSuperview];
             
             [self clearCustomControllerIfNeeded];
@@ -1398,6 +1461,14 @@
     }
 
     self.frame = frame;
+    
+    if (_zoomView.superview)
+    {
+        if (landscape)
+            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, DeviceScreenHeight / 2.0);
+        else
+            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, frame.origin.y - (frame.origin.y - self.customController.navBar.frame.size.height) / 2.0);
+    }
     
     _frameTop = frame.origin.y;
     _fullHeight = hf;
@@ -1742,6 +1813,7 @@
 }
 
 #pragma mark - Actions
+
 - (IBAction)buttonFavoriteClicked:(id)sender {
     
     NSString *locText;
@@ -1887,6 +1959,20 @@
 - (void) btnDeletePressed
 {
     [self.delegate targetHide];
+}
+
+#pragma mark - OATargetPointZoomViewDelegate
+
+- (void) zoomInPressed
+{
+    if (self.delegate)
+        [self.delegate targetZoomIn];
+}
+
+- (void) zoomOutPressed
+{
+    if (self.delegate)
+        [self.delegate targetZoomOut];
 }
 
 @end

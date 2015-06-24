@@ -24,6 +24,19 @@
 
 @protocol OATargetPointViewDelegate;
 
+@protocol OATargetPointZoomViewDelegate <NSObject>
+
+-(void)zoomInPressed;
+-(void)zoomOutPressed;
+
+@end
+
+@interface OATargetPointZoomView : UIView
+
+@property (weak, nonatomic) id<OATargetPointZoomViewDelegate> delegate;
+
+@end
+
 @interface OATargetPointView : UIView
 
 @property (nonatomic) OATargetPoint *targetPoint;
@@ -77,5 +90,8 @@
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
 -(void)targetSetTopControlsVisible:(BOOL)visible;
+
+-(void)targetZoomIn;
+-(void)targetZoomOut;
 
 @end

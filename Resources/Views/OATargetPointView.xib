@@ -199,14 +199,51 @@
             </connections>
             <point key="canvasLocation" x="633" y="374.5"/>
         </view>
+        <view contentMode="scaleToFill" id="8pl-hk-8t0" customClass="OATargetPointZoomView">
+            <rect key="frame" x="0.0" y="0.0" width="78" height="122"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="k8E-3N-Ha3" userLabel="Zoom IN">
+                    <rect key="frame" x="18" y="16" width="41" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="zoom_in_button.png" backgroundImage="HUD_compass_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonZoomInClicked:" destination="8pl-hk-8t0" eventType="touchUpInside" id="om0-vp-sBc"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Smd-lZ-hl5" userLabel="Zoom OUT">
+                    <rect key="frame" x="18" y="65" width="41" height="41"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="zoom_out_button.png" backgroundImage="HUD_compass_bg.png">
+                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                    </state>
+                    <connections>
+                        <action selector="buttonZoomOutClicked:" destination="8pl-hk-8t0" eventType="touchUpInside" id="5YY-Li-7WW"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="buttonZoomIn" destination="k8E-3N-Ha3" id="bUf-6H-aBU"/>
+                <outlet property="buttonZoomOut" destination="Smd-lZ-hl5" id="OAQ-QX-02z"/>
+            </connections>
+            <point key="canvasLocation" x="709" y="597"/>
+        </view>
     </objects>
     <resources>
+        <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="ic_close.png" width="10" height="10"/>
         <image name="ic_poi_info_dots.png" width="26" height="8"/>
         <image name="menu_direction_icon.png" width="22" height="22"/>
         <image name="menu_share_icon.png" width="22" height="22"/>
         <image name="menu_star_icon.png" width="22" height="22"/>
         <image name="three_dots.png" width="22" height="22"/>
+        <image name="zoom_in_button.png" width="22" height="22"/>
+        <image name="zoom_out_button.png" width="22" height="22"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <simulatedStatusBarMetrics key="statusBar"/>

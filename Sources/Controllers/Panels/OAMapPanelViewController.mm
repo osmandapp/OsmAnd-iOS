@@ -1212,6 +1212,17 @@ typedef enum
 
 #pragma mark - OATargetPointViewDelegate
 
+- (void)targetZoomIn
+{
+    [_mapViewController animatedZoomIn];
+}
+
+- (void)targetZoomOut
+{
+    [_mapViewController animatedZoomOut];
+    [_mapViewController calculateMapRuler];
+}
+
 -(void)targetPointAddFavorite
 {
     OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];

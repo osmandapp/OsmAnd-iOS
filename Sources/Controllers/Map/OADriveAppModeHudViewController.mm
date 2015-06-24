@@ -40,6 +40,7 @@
 
 @interface OADriveAppModeHudViewController () <OAUserInteractionInterceptorProtocol>
 
+@property (weak, nonatomic) IBOutlet UIView *currentPositionContainer;
 @property (weak, nonatomic) IBOutlet UIView *compassBox;
 @property (weak, nonatomic) IBOutlet UIButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
@@ -739,10 +740,68 @@
 
 - (void)showTopControls
 {
+    if (_compassBox.alpha == 0.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _currentPositionContainer.alpha = 1.0;
+            
+            _compassBox.alpha = 1.0;
+            _widgetsView.alpha = 1.0;
+            _currentSpeedWidget.alpha = 1.0;
+            _currentAltitudeWidget.alpha = 1.0;
+            _destinationViewController.view.alpha = 1.0;
+            
+        }];
+    }
 }
 
 - (void)hideTopControls
 {
+    if (_compassBox.alpha == 1.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _currentPositionContainer.alpha = 0.0;
+            
+            _compassBox.alpha = 0.0;
+            _widgetsView.alpha = 0.0;
+            _currentSpeedWidget.alpha = 0.0;
+            _currentAltitudeWidget.alpha = 0.0;
+            _destinationViewController.view.alpha = 0.0;
+            
+        }];
+    }
+}
+
+- (void)showBottomControls
+{
+    if (_optionsMenuButton.alpha == 0.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _optionsMenuButton.alpha = 1.0;
+            _zoomButtons.alpha = 1.0;
+            _mapModeButton.alpha = 1.0;
+            _actionsMenuButton.alpha = 1.0;
+            
+        }];
+    }
+}
+
+- (void)hideBottomControls
+{
+    if (_optionsMenuButton.alpha == 1.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _optionsMenuButton.alpha = 0.0;
+            _zoomButtons.alpha = 0.0;
+            _mapModeButton.alpha = 0.0;
+            _actionsMenuButton.alpha = 0.0;
+            
+        }];
+    }
 }
 
 @end

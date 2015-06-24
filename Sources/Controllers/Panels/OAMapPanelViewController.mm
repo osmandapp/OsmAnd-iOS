@@ -1210,6 +1210,30 @@ typedef enum
     }
 }
 
+- (void)showBottomControls
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController showBottomControls];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController showBottomControls];
+}
+
+- (void)hideBottomControls
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController hideBottomControls];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController hideBottomControls];
+}
+
+-(void)setBottomControlsVisible:(BOOL)visible
+{
+    if (visible)
+        [self showBottomControls];
+    else
+        [self hideBottomControls];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void)targetZoomIn
@@ -1421,6 +1445,9 @@ typedef enum
 
 -(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
+    if (_mapSettings)
+        [self closeMapSettings];
+    
     if (saveMapState)
         [self saveMapStateNoRestore];
     
@@ -1569,6 +1596,11 @@ typedef enum
 -(void)targetSetTopControlsVisible:(BOOL)visible
 {
     [self setTopControlsVisible:visible];
+}
+
+-(void)targetSetBottomControlsVisible:(BOOL)visible
+{
+    [self setBottomControlsVisible:visible];
 }
 
 -(void)hideTargetPointMenu

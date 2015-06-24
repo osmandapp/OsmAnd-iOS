@@ -530,6 +530,8 @@
 
         self.frame = f;
         
+        [self updateZoomViewFrame];
+        
         [self.delegate targetViewSizeChanged:f animated:NO];
     }
     
@@ -596,6 +598,7 @@
 
             [UIView animateWithDuration:.3 animations:^{
                 self.frame = frame;
+                [self updateZoomViewFrame];
                 if (![self isLandscape] && !_hideButtons)
                 {
                     _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
@@ -657,7 +660,8 @@
                 [UIView animateWithDuration:duration animations:^{
                     
                     self.frame = frame;
-                    
+                    [self updateZoomViewFrame];
+
                     if (![self isLandscape] && !_hideButtons)
                     {
                         _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
@@ -1050,6 +1054,8 @@
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
+    [self.delegate targetSetBottomControlsVisible:NO];
+    
     [self applyTargetPoint];
 
     if (self.customController && [self.customController hasTopToolbar])
@@ -1116,6 +1122,8 @@
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
+    [self.delegate targetSetBottomControlsVisible:YES];
+
     if (self.superview)
     {
         CGRect frame = self.frame;
@@ -1201,6 +1209,19 @@
 - (UIView *)bottomMostView
 {
     return self;
+}
+
+- (void)updateZoomViewFrame
+{
+    if (_zoomView.superview)
+    {
+        if ([self isLandscape])
+            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, DeviceScreenHeight / 2.0);
+        else
+            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, self.frame.origin.y - (self.frame.origin.y - self.customController.navBar.frame.size.height) / 2.0);
+        
+        _zoomView.alpha = (!_showFullScreen || [self isLandscape] ? 1.0 : 0.0);
+    }
 }
 
 - (void)layoutSubviews
@@ -1462,13 +1483,7 @@
 
     self.frame = frame;
     
-    if (_zoomView.superview)
-    {
-        if (landscape)
-            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, DeviceScreenHeight / 2.0);
-        else
-            _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, frame.origin.y - (frame.origin.y - self.customController.navBar.frame.size.height) / 2.0);
-    }
+    [self updateZoomViewFrame];
     
     _frameTop = frame.origin.y;
     _fullHeight = hf;

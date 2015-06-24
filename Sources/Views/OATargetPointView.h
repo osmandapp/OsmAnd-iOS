@@ -90,6 +90,7 @@
 -(void)targetGoToPoint;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
 -(void)targetSetTopControlsVisible:(BOOL)visible;
+-(void)targetSetBottomControlsVisible:(BOOL)visible;
 
 -(void)targetZoomIn;
 -(void)targetZoomOut;

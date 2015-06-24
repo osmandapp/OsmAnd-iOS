@@ -13,6 +13,7 @@
                 <outlet property="compassImage" destination="Ykf-s1-V3b" id="Sft-4a-W0l"/>
                 <outlet property="currentAltitudeLabel" destination="nsx-ol-cin" id="InK-mU-a7k"/>
                 <outlet property="currentAltitudeWidget" destination="kcM-Uz-KRl" id="Q0f-xd-vUc"/>
+                <outlet property="currentPositionContainer" destination="b09-3W-vxD" id="U9h-h2-EGS"/>
                 <outlet property="currentSpeedLabel" destination="7zY-7m-aJk" id="gOI-Mb-T6x"/>
                 <outlet property="currentSpeedWidget" destination="n7M-8R-EZ9" id="cD7-lO-GbG"/>
                 <outlet property="debugButton" destination="BiQ-TS-B8N" id="9pk-35-oiy"/>

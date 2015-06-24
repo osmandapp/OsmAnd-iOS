@@ -716,6 +716,36 @@
     }
 }
 
+- (void)showBottomControls
+{
+    if (_optionsMenuButton.alpha == 0.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _optionsMenuButton.alpha = 1.0;
+            _zoomButtonsView.alpha = 1.0;
+            _mapModeButton.alpha = 1.0;
+            _driveModeButton.alpha = 1.0;
+            
+        }];
+    }
+}
+
+- (void)hideBottomControls
+{
+    if (_optionsMenuButton.alpha == 1.0)
+    {
+        [UIView animateWithDuration:.3 animations:^{
+            
+            _optionsMenuButton.alpha = 0.0;
+            _zoomButtonsView.alpha = 0.0;
+            _mapModeButton.alpha = 0.0;
+            _driveModeButton.alpha = 0.0;
+            
+        }];
+    }
+}
+
 - (void)updateMapSettingsButton
 {
     dispatch_async(dispatch_get_main_queue(), ^{

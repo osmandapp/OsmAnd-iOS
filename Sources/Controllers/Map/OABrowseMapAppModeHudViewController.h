@@ -23,5 +23,7 @@
 
 - (void)showTopControls;
 - (void)hideTopControls;
+- (void)showBottomControls;
+- (void)hideBottomControls;
 
 @end

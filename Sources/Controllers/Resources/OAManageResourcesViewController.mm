@@ -967,25 +967,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     return nil;
 }
 
-- (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
-{
-    switch (type) {
-        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            return OALocalizedString(@"map_settings_map");
-        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
-            return OALocalizedString(@"res_srtm");
-        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
-            return OALocalizedString(@"res_wiki");
-        case OsmAnd::ResourcesManager::ResourceType::RoadMapRegion:
-            return OALocalizedString(@"res_roads");
-        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
-            return OALocalizedString(@"res_hillshade");
-            
-        default:
-            return OALocalizedString(@"res_unknown");
-    }
-}
-
 - (NSString *)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
               withRegionName:(BOOL)includeRegionName
 {
@@ -1555,14 +1536,17 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     item.disabled = YES;
                 }
 
-                title = item.title;
+                if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
+                    title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+                else
+                    title = item.title;
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
                 else if (_size > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
                 else
-                    subtitle = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
+                    subtitle = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
             }
         }
         else if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
@@ -1606,14 +1590,17 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 item.disabled = YES;
             }
 
-            title = item.title;
+            if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
+                title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+            else
+                title = item.title;
             
             if (_sizePkg > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             else if (_size > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
             else
-                subtitle = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
+                subtitle = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
         }
     }
 

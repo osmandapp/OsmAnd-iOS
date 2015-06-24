@@ -262,25 +262,6 @@
         [self offerDownloadAndUpdateMultiple:resourcesToUpdate];
 }
 
-- (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type
-{
-    switch (type) {
-        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            return OALocalizedString(@"map_settings_map");
-        case OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion:
-            return OALocalizedString(@"res_srtm");
-        case OsmAnd::ResourcesManager::ResourceType::WikiMapRegion:
-            return OALocalizedString(@"res_wiki");
-        case OsmAnd::ResourcesManager::ResourceType::RoadMapRegion:
-            return OALocalizedString(@"res_roads");
-        case OsmAnd::ResourcesManager::ResourceType::HillshadeRegion:
-            return OALocalizedString(@"res_hillshade");
-            
-        default:
-            return OALocalizedString(@"res_unknown");
-    }
-}
-
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -341,7 +322,10 @@
     else if ([item isKindOfClass:[OutdatedResourceItem class]])
         cellTypeId = outdatedResourceCell;
 
-    title = item.title;
+    if (item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
+        title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+    else
+        title = item.title;
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];
@@ -381,9 +365,9 @@
     if (cell.detailTextLabel != nil)
     {
         if (item.sizePkg > 0)
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         else
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [self resourceTypeLocalized:item.resourceType]];
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
     }
     
     //[NSString stringWithFormat:@"%@  •  %@", [self resourceTypeLocalized:item.resourceType]

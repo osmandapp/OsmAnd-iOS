@@ -54,6 +54,8 @@
 
 @property BOOL dataInvalidated;
 
++ (NSString *)resourceTypeLocalized:(OsmAnd::ResourcesManager::ResourceType)type;
+
 - (void)updateTableLayout;
 - (void)updateContent;
 - (void)refreshContent:(BOOL)update;

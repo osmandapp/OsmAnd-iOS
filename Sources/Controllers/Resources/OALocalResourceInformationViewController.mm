@@ -115,16 +115,7 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
     // Type
     [tKeys addObject:OALocalizedString(@"res_type")];
-    switch (localResource->type)
-    {
-        case OsmAnd::ResourcesManager::ResourceType::MapRegion:
-            [tValues addObject:OALocalizedString(@"map_settings_map")];
-            break;
-
-        default:
-            [tValues addObject:OALocalizedString(@"res_unknown")];
-            break;
-    }
+    [tValues addObject:[OAResourcesBaseViewController resourceTypeLocalized:localResource->type]];
 
     // Size
     [tKeys addObject:OALocalizedString(@"res_size")];

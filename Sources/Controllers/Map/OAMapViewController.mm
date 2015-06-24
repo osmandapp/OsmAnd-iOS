@@ -1710,7 +1710,7 @@
                 OsmAnd::PointI targetPositionI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_latPin, _lonPin));
                 [mapView convert:&targetPositionI toScreen:&targetPoint];
                 
-                _animatedPin.frame = CGRectMake(targetPoint.x - _animatedPin.bounds.size.width / 2.0, targetPoint.y - _animatedPin.bounds.size.height, _animatedPin.bounds.size.width, _animatedPin.bounds.size.height);
+                _animatedPin.center = CGPointMake(targetPoint.x, targetPoint.y);
             }
         });
 

@@ -375,3 +375,4 @@
 "rendering_value_disabled_name" = "Desactivado";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colorear según ámbito de la ruta";
 "rendering_value_walkingRoutesOSMC_name" = "Colorear según OSMC";
+"rendering_value_default_name" = "Predefinido";

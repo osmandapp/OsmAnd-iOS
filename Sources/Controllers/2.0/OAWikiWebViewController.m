@@ -9,6 +9,7 @@
 #import "OAWikiWebViewController.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OAUtilities.h"
 
 @interface OAWikiWebViewController () <UIActionSheetDelegate>
 
@@ -54,7 +55,8 @@
     _theLocal = [NSLocale localeWithLocaleIdentifier:_localIdentifier];
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.bottomView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.bottomView.layer addSublayer:_horizontalLine];
     
     _contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];

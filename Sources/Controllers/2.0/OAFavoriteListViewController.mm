@@ -123,7 +123,8 @@ static OAFavoriteListViewController *parentController;
     _editToolbarView.hidden = YES;
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.editToolbarView.layer addSublayer:_horizontalLine];
 }
 

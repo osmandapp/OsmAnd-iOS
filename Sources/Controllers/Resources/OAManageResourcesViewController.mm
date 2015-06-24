@@ -194,7 +194,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [super viewDidLoad];
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
 
     _numberFormatter = [[NSNumberFormatter alloc] init];

@@ -87,6 +87,9 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OASettingsCell" owner:self options:nil];
         cell = (OASettingsTableViewCell *)[nib objectAtIndex:0];
+        CGRect f = cell.textView.frame;
+        cell.textView.frame = CGRectMake(f.origin.x, f.origin.y, cell.bounds.size.width - f.origin.x * 2.0 - 30.0, f.size.height);
+        [cell.descriptionView removeFromSuperview];
     }
     
     if (cell) {
@@ -94,7 +97,6 @@
         OAMapStyleParameterValue *value = parameter.possibleValues[indexPath.row];
         
         [cell.textView setText: value.title];
-        [cell.descriptionView setText: @""];
         
         if ([parameter.value isEqualToString:value.name])
             [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];

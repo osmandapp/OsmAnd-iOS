@@ -25,8 +25,7 @@
     for (OAMapStyleParameterValue *val in self.possibleValues)
         if ([val.name isEqualToString:self.value])
         {
-            res = val.title;
-            break;
+            return val.title;
         }
 
     res = self.value;
@@ -102,109 +101,8 @@
         self.mapPresetName = _app.data.lastMapSource.variant;
 
         [self buildParameters:self.mapStyleName];
-        //[self buildParametersUnresolved:unresolvedMapStyle];
     }
 }
-
-/*
--(void) buildParametersUnresolved:(const std::shared_ptr<OsmAnd::UnresolvedMapStyle>&)mapStyle
-{
-    
-    const auto& parameters = mapStyle->parameters;
-    
-    NSMutableDictionary *categories = [NSMutableDictionary dictionary];
-    NSMutableArray *params = [NSMutableArray array];
-    
-    for(const auto& p : OsmAnd::constOf(parameters))
-    {
-        NSString *name = p->name.toNSString();
-        
-        //NSLog(@"name = %@ title = %@ decs = %@ category = %@", name, p->title.toNSString(), p->description.toNSString(), p->category.toNSString());
-        
-        if ([name isEqualToString:@"appMode"] ||
-            [name isEqualToString:@"transportStops"] ||
-            //[name isEqualToString:@"publicTransportMode"] ||
-            //[name isEqualToString:@"tramTrainRoutes"] ||
-            //[name isEqualToString:@"subwayMode"] ||
-            //p->getCategory().isEmpty() ||
-            [name isEqualToString:@"engine_v1"])
-            
-            continue;
-        
-        NSString *attrLocKey = [NSString stringWithFormat:@"rendering_attr_%@_name", name];
-        NSString *attrLocText = OALocalizedString(attrLocKey);
-        if ([attrLocKey isEqualToString:attrLocText])
-            attrLocText = p->title.toNSString();
-        
-        OAMapStyleParameter *param = [[OAMapStyleParameter alloc] init];
-        param.mapStyleName = self.mapStyleName;
-        param.mapPresetName = self.mapPresetName;
-        param.name = name;
-        param.title = attrLocText;
-        param.category = p->category.toNSString();
-        
-        if (param.category.length > 0)
-        {
-            NSString *categoryLocKey = [NSString stringWithFormat:@"rendering_category_%@", param.category];
-            NSString *categoryLocText = OALocalizedString(categoryLocKey);
-            if ([categoryLocKey isEqualToString:categoryLocText])
-                categoryLocText = [param.category capitalizedString];
-            
-            [categories setObject:categoryLocText forKey:param.category];
-        }
-        
-        NSMutableSet *values = [NSMutableSet set];
-        [values addObject:@""];
-        for (const auto& val : p->possibleValues)
-            [values addObject:val.toNSString()];
-        
-        NSMutableArray *valArr = [NSMutableArray array];
-        for (NSString *v in [values allObjects])
-        {
-            OAMapStyleParameterValue *val = [[OAMapStyleParameterValue alloc] init];
-            val.name = v;
-
-            NSString *valLocKey;
-            if (v.length == 0)
-                valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", p->defaultValueDescription.toNSString()];
-            else
-                valLocKey = [NSString stringWithFormat:@"rendering_value_%@_name", v];
-
-            NSString *valLocText = OALocalizedString(valLocKey);
-            if ([valLocKey isEqualToString:valLocText])
-                valLocText = v;
-            val.title = valLocText;
-            [valArr addObject:val];
-        }
-        
-        param.possibleValues = [valArr sortedArrayUsingComparator:^NSComparisonResult(OAMapStyleParameterValue *obj1, OAMapStyleParameterValue *obj2) {
-            if (obj1.name.length == 0 && obj2.name.length > 0)
-                return NSOrderedAscending;
-            if (obj1.name.length > 0 && obj2.name.length == 0)
-                return NSOrderedDescending;
-            return [[obj1.title lowercaseString] compare:[obj2.title lowercaseString]];
-        }];
-        
-        param.dataType = (OAMapStyleValueDataType)p->dataType;
-        switch (param.dataType)
-        {
-            case OABoolean:
-                param.defaultValue = @"false";
-                break;
-                
-            default:
-                param.defaultValue = p->defaultValueDescription.toNSString();
-                break;
-        }
-        
-        [params addObject:param];
-        
-    }
-    
-    self.parameters = params;
-    self.categories = categories;
-}
-*/
 
 -(void) buildParameters:(NSString *)styleName
 {

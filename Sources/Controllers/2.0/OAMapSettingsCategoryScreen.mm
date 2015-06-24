@@ -62,7 +62,7 @@
 
 - (void)setupView
 {
-    styleSettings = [[OAMapStyleSettings alloc] init];
+    styleSettings = [OAMapStyleSettings sharedInstance];
     parameters = [styleSettings getParameters:categoryName];
     title = [styleSettings getCategoryTitle:categoryName];
     

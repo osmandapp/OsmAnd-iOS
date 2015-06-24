@@ -2846,7 +2846,8 @@
                     newSettings[QString::fromLatin1("nightMode")] = "true";
                 
                 // --- Apply Map Style Settings
-                OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
+                //OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
+                OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 
                 NSArray *params = styleSettings.getAllParameters;
                 for (OAMapStyleParameter *param in params) {

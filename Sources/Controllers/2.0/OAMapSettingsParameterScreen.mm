@@ -60,7 +60,7 @@
 
 - (void)setupView
 {
-    styleSettings = [[OAMapStyleSettings alloc] init];
+    styleSettings = [OAMapStyleSettings sharedInstance];
     parameter = [styleSettings getParameter:parameterName];
     title = parameter.title;
 }

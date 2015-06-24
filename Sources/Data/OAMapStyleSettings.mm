@@ -50,7 +50,30 @@
 
 @end
 
+@interface OAMapStyleSettings ()
+
+@property (nonatomic) OAMapSource* lastMapSource;
+
+@end
+
 @implementation OAMapStyleSettings
+
++ (OAMapStyleSettings*) sharedInstance
+{
+    static OAMapStyleSettings *_sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[OAMapStyleSettings alloc] init];
+    });
+    
+    if (![[OsmAndApp instance].data.lastMapSource isEqual:_sharedInstance.lastMapSource])
+    {
+        [_sharedInstance buildParameters];
+        [_sharedInstance loadParameters];
+    }
+    
+    return _sharedInstance;
+}
 
 - (instancetype)init
 {
@@ -101,6 +124,8 @@
         self.mapPresetName = _app.data.lastMapSource.variant;
 
         [self buildParameters:self.mapStyleName];
+        
+        self.lastMapSource = [lastMapSource copy];
     }
 }
 

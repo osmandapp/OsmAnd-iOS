@@ -27,6 +27,7 @@
 #import "OAIAPHelper.h"
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
+#import "OAMapStyleSettings.h"
 
 #include <algorithm>
 
@@ -300,6 +301,8 @@
     _appearanceChangeObservable = [[OAObservable alloc] init];
     if ([OAUtilities iosVersionIsAtLeast:@"7.0"])
         QElement.appearance = [[OAQFlatAppearance alloc] init];
+    
+    [OAMapStyleSettings sharedInstance];
     
     // Init track recorder
     [OASavingTrackHelper sharedInstance];

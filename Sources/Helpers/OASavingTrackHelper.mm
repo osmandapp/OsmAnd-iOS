@@ -320,6 +320,7 @@
     [currentTrack.locationMarks removeAllObjects];
     [currentTrack.tracks removeAllObjects];
     [currentTrack initBounds];
+    [currentTrack updateDocName];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     
     [self prepareCurrentTrackForRecording];
@@ -362,6 +363,17 @@
         
         [self clearData];
     });
+}
+
+- (BOOL) saveCurrentTrack:(NSString *)fileName
+{
+    BOOL __block res = NO;
+    
+    dispatch_sync(syncQueue, ^{
+        res = [currentTrack saveTo:fileName];
+    });
+    
+    return res;
 }
 
 - (NSDictionary *) collectRecordedData:(BOOL)fillCurrentTrack

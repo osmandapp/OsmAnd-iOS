@@ -354,8 +354,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item = [self getWptItem:indexPath];
-    //[self.navigationController pushViewController:[OARootViewController instance].mapPanel animated:YES];
-    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
+    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
 }
 
 #pragma mark - UITableViewDelegate

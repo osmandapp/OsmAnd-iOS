@@ -30,6 +30,7 @@
 - (void) clearData;
 - (void) saveDataToGpx;
 - (void) startNewSegment;
+- (BOOL) saveCurrentTrack:(NSString *)fileName;
 
 - (BOOL) saveIfNeeded;
 

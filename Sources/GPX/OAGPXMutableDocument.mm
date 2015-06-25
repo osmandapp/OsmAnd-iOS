@@ -30,6 +30,7 @@
         document.reset(new OsmAnd::GpxDocument());
         
         [self initBounds];
+        [self updateDocName];
     }
     return self;
 }
@@ -37,6 +38,17 @@
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument
 {
     return document;
+}
+
+- (void) updateDocName
+{
+    NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+    [fmt setDateFormat:@"yyyy-MM-dd"];
+    
+    NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
+    [simpleFormat setDateFormat:@"HH-mm_EEE"];
+    
+    self.metadata.name = [NSString stringWithFormat:@"%@_%@", [fmt stringFromDate:[NSDate date]], [simpleFormat stringFromDate:[NSDate date]]];
 }
 
 - (void) updateDocAndMetadata

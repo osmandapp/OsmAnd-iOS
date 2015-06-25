@@ -27,6 +27,7 @@ typedef enum
 @property (nonatomic, assign) BOOL showFullScreen;
 @property (nonatomic, assign) CGFloat scrollPos;
 @property (nonatomic, assign) EPointsSortingType sortType;
+@property (nonatomic, assign) BOOL showCurrentTrack;
 
 @end
 
@@ -50,6 +51,7 @@ typedef enum
 - (id)initWithGPXItem:(OAGPX *)gpxItem;
 - (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXItemViewControllerState *)ctrlState;
 - (id)initWithCurrentGPXItem;
+- (id)initWithCurrentGPXItem:(OAGPXItemViewControllerState *)ctrlState;
 
 - (OAGPXItemViewControllerState *) getCurrentState;
 

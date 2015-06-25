@@ -13,6 +13,7 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "OAGPXMutableDocument.h"
 #import "PXAlertView.h"
 
 #import "OAMapRendererView.h"
@@ -60,6 +61,10 @@
     NSInteger _speedSectionIndex;
     NSInteger _timeSectionIndex;
     NSInteger _uphillsSectionIndex;
+    
+    NSString *_exportFileName;
+    NSString *_exportFilePath;
+
 }
 
 @synthesize editing = _editing;
@@ -69,7 +74,8 @@
 - (id)initWithGPXItem:(OAGPX *)gpxItem
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         _wasInit = NO;
         _scrollPos = 0.0;
@@ -85,7 +91,8 @@
 - (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXItemViewControllerState *)ctrlState
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         _wasInit = NO;
         _segmentType = ctrlState.segmentType;
@@ -94,7 +101,6 @@
         self.gpx = gpxItem;
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
         self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
-        
     }
     return self;
 }
@@ -102,7 +108,8 @@
 - (id)initWithCurrentGPXItem
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _app = [OsmAndApp instance];
         _segmentType = kSegmentStatistics;
         _savingHelper = [OASavingTrackHelper sharedInstance];
@@ -110,7 +117,26 @@
         [self updateCurrentGPXData];
         
         _showCurrentTrack = YES;
+    }
+    return self;
+}
+
+- (id)initWithCurrentGPXItem:(OAGPXItemViewControllerState *)ctrlState
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
         
+        _segmentType = ctrlState.segmentType;
+        _sortingType = ctrlState.sortType;
+        _scrollPos = ctrlState.scrollPos;
+
+        _savingHelper = [OASavingTrackHelper sharedInstance];
+        
+        [self updateCurrentGPXData];
+        
+        _showCurrentTrack = YES;
     }
     return self;
 }
@@ -238,7 +264,7 @@
     }
 
     
-    self.buttonUpdate.frame = self.buttonMore.frame;
+    self.buttonUpdate.frame = self.buttonSort.frame;
     self.buttonEdit.frame = self.buttonMore.frame;
     
     _tableView.dataSource = self;
@@ -333,7 +359,7 @@
             self.buttonEdit.hidden = YES;
             if (self.showCurrentTrack)
             {
-                self.buttonMore.hidden = YES;
+                self.buttonMore.hidden = NO;
                 self.buttonUpdate.hidden = NO;
             }
             else
@@ -390,7 +416,7 @@
     [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:@[OALocalizedString(@"shared_string_remove"), OALocalizedString(@"gpx_export")]
+                        otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
                         otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
@@ -446,12 +472,30 @@
 
 - (IBAction)exportClicked:(id)sender
 {
+    if (_showCurrentTrack)
+    {
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        [fmt setDateFormat:@"yyyy-MM-dd"];
+
+        NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
+        [simpleFormat setDateFormat:@"HH-mm_EEE"];
+        
+        _exportFileName = [NSString stringWithFormat:@"%@_%@", [fmt stringFromDate:[NSDate date]], [simpleFormat stringFromDate:[NSDate date]]];
+        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx", NSTemporaryDirectory(), _exportFileName];
+
+        [_savingHelper saveCurrentTrack:_exportFilePath];
+    }
+    else
+    {
+        _exportFileName = _gpx.gpxFileName;
+        _exportFilePath = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
+    }
     
-    NSURL* gpxUrl = [NSURL fileURLWithPath:[_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName]];
+    NSURL* gpxUrl = [NSURL fileURLWithPath:_exportFilePath];
     _exportController = [UIDocumentInteractionController interactionControllerWithURL:gpxUrl];
     _exportController.UTI = @"net.osmand.gpx";
     _exportController.delegate = self;
-    _exportController.name = _gpx.gpxFileName;
+    _exportController.name = _exportFileName;
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.navController.view
                                          animated:YES];
@@ -459,7 +503,7 @@
 
 - (IBAction)deleteClicked:(id)sender
 {
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_remove")
+    [PXAlertView showAlertWithTitle:(self.showCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove"))
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_no")
                          otherTitle:OALocalizedString(@"shared_string_yes")
@@ -470,14 +514,27 @@
                                  dispatch_async(dispatch_get_main_queue(), ^{
                                      
                                      OAAppSettings *settings = [OAAppSettings sharedManager];
-                                     if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
-                                         [settings hideGpx:self.gpx.gpxFileName];
-                                         [_mapViewController hideTempGpxTrack];
-                                         [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-                                     }
                                      
-                                     [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
-                                     [[OAGPXDatabase sharedDb] save];
+                                     if (self.showCurrentTrack)
+                                     {
+                                         settings.mapSettingTrackRecording = NO;
+                                         [[OASavingTrackHelper sharedInstance] clearData];
+                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                             [_mapViewController hideRecGpxTrack];
+                                             //[_widgetsView updateGpxRec];
+                                         });
+                                     }
+                                     else
+                                     {
+                                         if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
+                                             [settings hideGpx:self.gpx.gpxFileName];
+                                             [_mapViewController hideTempGpxTrack];
+                                             [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+                                         }
+                                         
+                                         [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+                                         [[OAGPXDatabase sharedDb] save];
+                                     }
                                      
                                      [self okPressed];
                                  });
@@ -497,6 +554,15 @@
 {
     if (controller == _exportController)
         _exportController = nil;
+}
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller didEndSendingToApplication:(NSString *)application
+{
+    if (_showCurrentTrack && _exportFilePath)
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:_exportFilePath error:nil];
+        _exportFilePath = nil;
+    }
 }
 
 #pragma mark - UITableViewDataSource

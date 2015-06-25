@@ -1550,7 +1550,10 @@ typedef enum
         {
             if (_gpxItemViewControllerState)
             {
-                gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:_gpxItemViewControllerState];
+                if (_gpxItemViewControllerState.showCurrentTrack)
+                    gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:_gpxItemViewControllerState];
+                else
+                    gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:_gpxItemViewControllerState];
             }
             else
             {
@@ -1783,11 +1786,12 @@ typedef enum
 
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
 {
-    if (_pushed && self.targetMenuView.superview && self.targetMenuView.targetPoint.type == OATargetGPX)
+    if (pushed && self.targetMenuView.superview && self.targetMenuView.targetPoint.type == OATargetGPX)
     {
         _parentTargetObj = self.targetMenuView.targetPoint.targetObj;
         _gpxItemViewControllerState = [((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState];
         _gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
+        _gpxItemViewControllerState.showCurrentTrack = (!_parentTargetObj || ((OAGPX *)_parentTargetObj).gpxFileName.length == 0);
     }
     else
     {

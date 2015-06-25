@@ -20,6 +20,7 @@
 
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 
+- (void) updateDocName;
 - (void) updateDocAndMetadata;
 - (void) addWpt:(OAGpxWpt *)w;
 - (void) addTrack:(OAGpxTrk *)t;

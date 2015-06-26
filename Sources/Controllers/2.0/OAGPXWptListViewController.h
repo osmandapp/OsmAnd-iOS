@@ -20,13 +20,17 @@ typedef enum
 @interface OAGPXWptListViewController : UITableViewController
 
 @property (assign, nonatomic) EPointsSortingType sortingType;
+@property (nonatomic) NSArray *allGroups;
 
 - (void)doViewAppear;
 - (void)doViewDisappear;
 
+- (void)generateData;
 - (void)resetData;
 - (void)doSortClick:(UIButton *)button;
 - (void)updateSortButton:(UIButton *)button;
+
+- (NSArray *)getSelectedItems;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
@@ -34,5 +38,6 @@ typedef enum
 @property NSTimeInterval lastUpdate;
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks;
+- (void)setPoints:(NSArray *)locationMarks;
 
 @end

@@ -137,6 +137,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (void)updateMyLocationCourseProvider;
 
+- (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
+- (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+
 @property(readonly) CGFloat displayDensityFactor;
 
 @property(readonly) OAObservable* framePreparedObservable;

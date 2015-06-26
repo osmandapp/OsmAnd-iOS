@@ -390,3 +390,7 @@
 "gpx_max_speed" = "最高速度";
 "gpx_speed" = "速度";
 "rendering_attr_hikingRoutesOSMC_name" = "徒步符號層";
+"change_group" = "更改群組";
+"change_color" = "更改顏色";
+"wpt_select" = "請選擇航點";
+"gpx_remove_wpts_q" = "您想要移除所選的航點嗎？";

@@ -20,7 +20,7 @@
     {
         //self.backgroundColor = [UIColor redColor];
         _checkmark = [UIButton buttonWithType:UIButtonTypeCustom];
-        _checkmark.frame = CGRectMake(0.0, 14.0, 30.0, 30.0);
+        _checkmark.frame = CGRectMake(0.0, 12.0 + (frame.size.height - 10.0) / 2.0 - 15.0, 30.0, 30.0);
         [_checkmark setImage:[UIImage imageNamed:@"selection_unchecked"] forState:UIControlStateNormal];
         [_checkmark setImage:[UIImage imageNamed:@"selection_checked"] forState:UIControlStateSelected];
         [_checkmark addTarget:self action:@selector(checkPress:) forControlEvents:UIControlEventTouchUpInside];
@@ -38,7 +38,7 @@
     return self;
 }
 
-- (void)setTitle:(NSString *)title
+- (void)setTitleText:(NSString *)title
 {
     _title.text = [title uppercaseStringWithLocale:[NSLocale currentLocale]];
 }

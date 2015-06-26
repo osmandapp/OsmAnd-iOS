@@ -13,6 +13,7 @@
 #import "OAGpxWptItem.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMultiselectableHeaderView.h"
 
 #import "OsmAndApp.h"
 
@@ -21,7 +22,7 @@
 #include "Localization.h"
 
 
-@interface OAGPXWptListViewController ()
+@interface OAGPXWptListViewController () <OAMultiselectableHeaderDelegate>
 {
     OsmAndAppInstance _app;
     BOOL isDecelerating;
@@ -35,6 +36,10 @@
 @end
 
 @implementation OAGPXWptListViewController
+{
+    OAMultiselectableHeaderView *_sortedHeaderView;
+    NSArray *_unsortedHeaderViews;
+}
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks
 {
@@ -140,6 +145,10 @@
 
 -(void)generateData
 {
+    _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 32.0)];
+    _sortedHeaderView.delegate = self;
+    [_sortedHeaderView setTitleText:[NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_points"), self.unsortedPoints.count]];
+
     NSMutableSet *groups = [NSMutableSet set];
     for (OAGpxWptItem *item in self.unsortedPoints)
         [groups addObject:(item.point.type ? item.point.type : @"")];
@@ -177,6 +186,18 @@
     self.sortedDistPoints = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem* obj1, OAGpxWptItem* obj2) {
         return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
     }];
+    
+    NSMutableArray *headerViews = [NSMutableArray array];
+    int i = 0;
+    for (NSString *groupName in groupsArray)
+    {
+        OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 32.0)];
+        [headerView setTitleText:(groupName.length == 0 ? OALocalizedString(@"fav_no_group") : groupName)];
+        headerView.section = i++;
+        headerView.delegate = self;
+        [headerViews addObject:headerView];
+    }
+    _unsortedHeaderViews = [NSArray arrayWithArray:headerViews];
     
     [self.tableView reloadData];
 }
@@ -376,12 +397,42 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 32.0;
+    return 40.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
     return 0.01;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (self.sortingType == EPointsSortingTypeDistance)
+        return _sortedHeaderView;
+    else
+        return _unsortedHeaderViews[section];
+}
+
+#pragma mark - OAMultiselectableHeaderDelegate
+
+-(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+{
+    OAMultiselectableHeaderView *headerView = (OAMultiselectableHeaderView *)sender;
+    NSInteger section = headerView.section;
+    NSInteger rowsCount = [self.tableView numberOfRowsInSection:section];
+    
+    [self.tableView beginUpdates];
+    if (value)
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+    }
+    else
+    {
+        for (int i = 0; i < rowsCount; i++)
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+    }
+    [self.tableView endUpdates];
 }
 
 @end

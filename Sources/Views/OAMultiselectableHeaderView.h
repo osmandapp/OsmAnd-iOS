@@ -24,6 +24,6 @@
 @property (nonatomic, weak) id<OAMultiselectableHeaderDelegate> delegate;
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
-- (void)setTitle:(NSString *)title;
+- (void)setTitleText:(NSString *)title;
 
 @end

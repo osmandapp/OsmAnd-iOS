@@ -115,10 +115,10 @@ static OAFavoriteListViewController *parentController;
     
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
-    [_sortedHeaderView setTitle:OALocalizedString(@"favorites")];
+    [_sortedHeaderView setTitleText:OALocalizedString(@"favorites")];
     
     _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-    [_menuHeaderView setTitle:OALocalizedString(@"import_export")];
+    [_menuHeaderView setTitleText:OALocalizedString(@"import_export")];
     
     _editToolbarView.hidden = YES;
 
@@ -340,7 +340,7 @@ static OAFavoriteListViewController *parentController;
     for (FavoriteTableGroup *group in self.groupsAndFavorites)
     {
         OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-        [headerView setTitle:group.groupName];
+        [headerView setTitleText:group.groupName];
         headerView.section = i++;
         headerView.delegate = self;
         [headerViews addObject:headerView];
@@ -360,7 +360,7 @@ static OAFavoriteListViewController *parentController;
     [self.groupsAndFavorites addObject:itemData];
 
     OAMultiselectableHeaderView *headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
-    [headerView setTitle:OALocalizedString(@"import_export")];
+    [headerView setTitleText:OALocalizedString(@"import_export")];
     headerView.editable = NO;
     [headerViews addObject:headerView];
 
@@ -700,6 +700,11 @@ static OAFavoriteListViewController *parentController;
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 46.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

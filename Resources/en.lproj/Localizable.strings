@@ -439,4 +439,8 @@
 
 "total_time" = "Total time";
 "moving_time" = "Moving time";
+"change_group" = "Change group";
+"change_color" = "Change color";
+"wpt_select" = "Please select waypoints";
+"gpx_remove_wpts_q" = "Do you want to remove seleted waypoints?";
 

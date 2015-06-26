@@ -43,20 +43,25 @@
     {
         _app = [OsmAndApp instance];
         
-        NSMutableArray *arr = [NSMutableArray array];
-        for (OAGpxWpt *p in locationMarks) {
-            OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-            item.point = p;
-            [arr addObject:item];
-        }
-        
-        self.unsortedPoints = arr;
+        [self setPoints:locationMarks];
         
         isDecelerating = NO;
         _sortingType = EPointsSortingTypeGrouped;
         
     }
     return self;
+}
+
+- (void)setPoints:(NSArray *)locationMarks
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (OAGpxWpt *p in locationMarks) {
+        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
+        item.point = p;
+        [arr addObject:item];
+    }
+    
+    self.unsortedPoints = arr;
 }
 
 - (void)updateDistanceAndDirection
@@ -164,9 +169,6 @@
         
         [arr addObject:item];
     }
-    
-    if (((NSMutableArray *)[dict objectForKey:@""]).count == 0)
-        [groupsArray removeObjectAtIndex:0];
     
     self.groups = [NSArray arrayWithArray:groupsArray];
     self.groupedPoints = [NSDictionary dictionaryWithDictionary:dict];
@@ -304,11 +306,6 @@
     
 }
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return NO;
-}
-
 -(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item;
@@ -324,6 +321,16 @@
             break;
     }
     return item;
+}
+
+- (NSArray *)getSelectedItems
+{
+    NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
+    NSMutableArray *arr = [NSMutableArray array];
+    for (NSIndexPath *indexPath in indexPaths)
+        [arr addObject:[self getWptItem:indexPath]];
+
+    return [NSArray arrayWithArray:arr];
 }
 
 #pragma mark -
@@ -353,6 +360,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.tableView.editing)
+        return;
+    
     OAGpxWptItem* item = [self getWptItem:indexPath];
     [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
 }

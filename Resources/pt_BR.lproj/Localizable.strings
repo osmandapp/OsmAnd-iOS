@@ -390,3 +390,7 @@
 "moving_time" = "Tempo em movimentação";
 "gpx_speed" = "Velocidade";
 "rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";
+"change_group" = "Alterar grupo";
+"change_color" = "Alterar cor";
+"wpt_select" = "Por favor, selecione pontos de parada";
+"gpx_remove_wpts_q" = "Você quer apagar ponto de parada selecionado?";

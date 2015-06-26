@@ -390,3 +390,7 @@
 "total_time" = "Teljes idő";
 "moving_time" = "Mozgási idő";
 "rendering_attr_hikingRoutesOSMC_name" = "Turistajelzések rátét";
+"change_group" = "Csoport módosítása";
+"change_color" = "Szín módosítása";
+"wpt_select" = "Válasszon útvonalpontokat";
+"gpx_remove_wpts_q" = "El szeretné távolítani a kijelölt útvonalpontokat?";

@@ -774,9 +774,9 @@
     }
 }
 
-- (void)showBottomControls
+- (void)showBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 0.0)
+    if (_optionsMenuButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 63.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
@@ -784,14 +784,18 @@
             _zoomButtons.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
             _actionsMenuButton.alpha = 1.0;
-            
+
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _actionsMenuButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _actionsMenuButton.bounds.size.width, _actionsMenuButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 63.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtons.frame = CGRectMake(DeviceScreenWidth - 63.0, DeviceScreenHeight - 123.0 - menuHeight, _zoomButtons.bounds.size.width, _zoomButtons.bounds.size.height);
         }];
     }
 }
 
-- (void)hideBottomControls
+- (void)hideBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 1.0)
+    if (_optionsMenuButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 63.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
@@ -800,6 +804,10 @@
             _mapModeButton.alpha = 0.0;
             _actionsMenuButton.alpha = 0.0;
             
+            _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
+            _actionsMenuButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _actionsMenuButton.bounds.size.width, _actionsMenuButton.bounds.size.height);
+            _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 63.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
+            _zoomButtons.frame = CGRectMake(DeviceScreenWidth - 63.0, DeviceScreenHeight - 123.0 - menuHeight, _zoomButtons.bounds.size.width, _zoomButtons.bounds.size.height);
         }];
     }
 }

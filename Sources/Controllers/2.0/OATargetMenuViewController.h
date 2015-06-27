@@ -51,6 +51,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (id)getTargetObj;
 
+- (BOOL)supportMapInteraction;
 - (BOOL)supportFullScreen;
 - (BOOL)hasTopToolbar;
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;

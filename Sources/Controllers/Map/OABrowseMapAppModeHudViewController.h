@@ -23,7 +23,7 @@
 
 - (void)showTopControls;
 - (void)hideTopControls;
-- (void)showBottomControls;
-- (void)hideBottomControls;
+- (void)showBottomControls:(CGFloat)menuHeight;
+- (void)hideBottomControls:(CGFloat)menuHeight;
 
 @end

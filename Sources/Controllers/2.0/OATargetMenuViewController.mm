@@ -60,6 +60,11 @@
     _contentView.backgroundColor = color;
 }
 
+- (BOOL)supportMapInteraction
+{
+    return NO; // override
+}
+
 - (BOOL)supportFullScreen
 {
     return NO; // override

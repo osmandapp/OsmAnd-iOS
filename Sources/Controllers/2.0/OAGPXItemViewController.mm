@@ -203,6 +203,11 @@
     [self updateWaypointsButtons];
 }
 
+- (BOOL)supportMapInteraction
+{
+    return YES;
+}
+
 - (BOOL)supportFullScreen
 {
     return YES;
@@ -215,7 +220,7 @@
 
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
-    return YES;
+    return isViewVisible;
 }
 
 - (id)getTargetObj

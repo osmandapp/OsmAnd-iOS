@@ -1060,10 +1060,10 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:NO];
-    
-    if (centerMap)
-        [self goToTargetPointDefault];
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        if (centerMap)
+            [self goToTargetPointDefault];
+    }];
 }
 
 - (NSString *)findRoadNameByLat:(double)lat lon:(double)lon
@@ -1203,28 +1203,28 @@ typedef enum
     }
 }
 
-- (void)showBottomControls
+- (void)showBottomControls:(CGFloat)menuHeight
 {
     if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController showBottomControls];
+        [self.browseMapViewController showBottomControls:menuHeight];
     else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController showBottomControls];
+        [self.driveModeViewController showBottomControls:menuHeight];
 }
 
-- (void)hideBottomControls
+- (void)hideBottomControls:(CGFloat)menuHeight
 {
     if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController hideBottomControls];
+        [self.browseMapViewController hideBottomControls:menuHeight];
     else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController hideBottomControls];
+        [self.driveModeViewController hideBottomControls:menuHeight];
 }
 
--(void)setBottomControlsVisible:(BOOL)visible
+-(void)setBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
 {
     if (visible)
-        [self showBottomControls];
+        [self showBottomControls:menuHeight];
     else
-        [self hideBottomControls];
+        [self hideBottomControls:menuHeight];
 }
 
 - (void)storeActiveTargetViewControllerState
@@ -1269,6 +1269,18 @@ typedef enum
 }
 
 #pragma mark - OATargetPointViewDelegate
+
+- (void)targetViewEnableMapInteraction
+{
+    if (self.shadowButton)
+        self.shadowButton.hidden = YES;
+}
+
+- (void)targetViewDisableMapInteraction
+{
+    if (self.shadowButton)
+        self.shadowButton.hidden = NO;
+}
 
 - (void)targetZoomIn
 {
@@ -1480,16 +1492,25 @@ typedef enum
 
 -(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
+    [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:nil];
+}
+
+-(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu onComplete:(void (^)(void))onComplete
+{
     if (_activeTargetActive)
     {
         [self storeActiveTargetViewControllerState];
         _activeTargetActive = NO;
         BOOL activeTargetChildPushed = _activeTargetChildPushed;
         _activeTargetChildPushed = NO;
+        
         [self hideTargetPointMenu:.1 onComplete:^{
-            [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu];
+            
+            [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
-        }];
+            
+        } ignoreMapState:YES];
+        
         return;
     }
     
@@ -1638,6 +1659,9 @@ typedef enum
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
     
+    if (onComplete)
+        onComplete();
+    
     [self.targetMenuView show:YES onComplete:^{
         
         [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
@@ -1650,9 +1674,9 @@ typedef enum
     [self setTopControlsVisible:visible];
 }
 
--(void)targetSetBottomControlsVisible:(BOOL)visible
+-(void)targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight
 {
-    [self setBottomControlsVisible:visible];
+    [self setBottomControlsVisible:visible menuHeight:menuHeight];
 }
 
 -(void)hideTargetPointMenu
@@ -1667,13 +1691,21 @@ typedef enum
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
+    [self hideTargetPointMenu:animationDuration onComplete:onComplete ignoreMapState:NO];
+}
+
+-(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete ignoreMapState:(BOOL)ignoreMapState
+{
     if (![self.targetMenuView preHide])
         return;
     
-    if (_mapStateSaved)
-        [self restoreMapAfterReuseAnimated];
-    
-    _mapStateSaved = NO;
+    if (!ignoreMapState)
+    {
+        if (_mapStateSaved)
+            [self restoreMapAfterReuseAnimated];
+        
+        _mapStateSaved = NO;
+    }
     
     [self destroyShadowButton];
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
@@ -1685,8 +1717,10 @@ typedef enum
                 [self resetActiveTargetMenu];
                 _activeTargetChildPushed = NO;
             }
-            //else
-            //    [self restoreActiveTargetMenu];
+            else if (self.targetMenuView.targetPoint.type == _activeTargetType)
+            {
+                [self restoreActiveTargetMenu];
+            }
         }
         
         if (onComplete)
@@ -1821,12 +1855,12 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:YES];
-
-    if (pushed)
-        [self goToTargetPointDefault];
-    else
-        [self targetGoToPoint];
+    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+        if (pushed)
+            [self goToTargetPointDefault];
+        else
+            [self targetGoToPoint];
+    }];
 }
 
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
@@ -1877,12 +1911,13 @@ typedef enum
     if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
         _activeTargetChildPushed = YES;
 
-    [self showTargetPointMenu:YES showFullMenu:YES];
+    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+        if (pushed)
+            [self goToTargetPointDefault];
+        else
+            [self targetGoToPoint];
+    }];
 
-    if (pushed)
-        [self goToTargetPointDefault];
-    else
-        [self targetGoToPoint];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
@@ -1921,7 +1956,7 @@ typedef enum
     targetPoint.zoom = _targetZoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
-    targetPoint.toolbarNeeded = YES;
+    targetPoint.toolbarNeeded = NO;
     if (!showCurrentTrack)
         targetPoint.targetObj = item;
     
@@ -2103,12 +2138,12 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:NO];
-    
-    OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
-    Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [_mapViewController goToPosition:point animated:YES];
-    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
+        Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+        [_mapViewController goToPosition:point animated:YES];
+        _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    }];
 }
 
 @end

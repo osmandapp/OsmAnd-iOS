@@ -566,6 +566,12 @@
                 
                 if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
                     [self showTopToolbar:YES];
+                
+                if (_showFull && self.customController && [self.customController supportMapInteraction])
+                {
+                    [self.delegate targetViewDisableMapInteraction];
+                    [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
+                }
             }
             else
             {
@@ -575,6 +581,12 @@
 
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
+
+                if (!_showFull && self.customController && [self.customController supportMapInteraction])
+                {
+                    [self.delegate targetViewEnableMapInteraction];
+                    [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
+                }
             }
             
             if (self.customController)
@@ -656,6 +668,12 @@
                 
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
+                
+                if (!_showFull && self.customController && [self.customController supportMapInteraction])
+                {
+                    [self.delegate targetViewEnableMapInteraction];
+                    [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
+                }
 
                 [UIView animateWithDuration:duration animations:^{
                     
@@ -673,7 +691,6 @@
                 }];
                 
                 [self.delegate targetViewSizeChanged:frame animated:YES];
-
             }
             else
             {
@@ -681,6 +698,7 @@
                 CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
                 if (duration > .3)
                     duration = .3;
+                
                 [self.delegate targetHideMenu:duration backButtonClicked:NO];
             }
         }
@@ -1054,7 +1072,7 @@
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    [self.delegate targetSetBottomControlsVisible:NO];
+    [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
     
     [self applyTargetPoint];
 
@@ -1122,7 +1140,7 @@
 
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
-    [self.delegate targetSetBottomControlsVisible:YES];
+    [self.delegate targetSetBottomControlsVisible:YES menuHeight:0];
 
     if (self.superview)
     {
@@ -1220,7 +1238,12 @@
         else
             _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, self.frame.origin.y - (self.frame.origin.y - self.customController.navBar.frame.size.height) / 2.0);
         
-        _zoomView.alpha = (!_showFullScreen || [self isLandscape] ? 1.0 : 0.0);
+        BOOL showZoomView = (!_showFullScreen || [self isLandscape]);
+        if (showZoomView && [self.customController supportMapInteraction])
+            showZoomView = _showFull;
+         
+        _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
+        
     }
 }
 

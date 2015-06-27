@@ -390,3 +390,7 @@
 "gpx_max_speed" = "Velocitat màxima";
 "gpx_speed" = "Velocitat";
 "rendering_attr_hikingRoutesOSMC_name" = "Superposa la simbologia de senderisme";
+"change_group" = "Canvia el grup";
+"change_color" = "Canvia el color";
+"wpt_select" = "Seleccioneu les fites";
+"gpx_remove_wpts_q" = "Voleu treure les fites seleccionades?";

@@ -119,9 +119,12 @@ typedef enum
     UIStatusBarStyle _customStatusBarStyle;
     
     BOOL _mapStateSaved;
-    BOOL _pushed;
-    id _parentTargetObj;
-    OAGPXItemViewControllerState *_gpxItemViewControllerState;
+    
+    BOOL _activeTargetActive;
+    OATargetPointType _activeTargetType;
+    id _activeTargetObj;
+    id _activeViewControllerState;
+    BOOL _activeTargetChildPushed;
 }
 
 - (instancetype)init
@@ -208,16 +211,6 @@ typedef enum
 
     if ([_mapViewController parentViewController] != self)
         [self doMapRestore];
-}
-
--(void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-    if (_pushed)
-    {
-        _pushed = NO;
-        //[[OARootViewController instance] restoreCenterPanel:self];
-    }
 }
 
 - (void)viewWillLayoutSubviews
@@ -1234,6 +1227,47 @@ typedef enum
         [self hideBottomControls];
 }
 
+- (void)storeActiveTargetViewControllerState
+{
+    switch (_activeTargetType)
+    {
+        case OATargetGPX:
+        {
+            OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
+            gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            
+            _activeViewControllerState = gpxItemViewControllerState;
+            break;
+        }
+            
+        default:
+            break;
+    }
+}
+
+- (void)restoreActiveTargetMenu
+{
+    switch (_activeTargetType)
+    {
+        case OATargetGPX:
+            [_mapViewController hideContextPinMarker];
+            [self openTargetViewWithGPX:_activeTargetObj pushed:YES];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)resetActiveTargetMenu
+{
+    _activeTargetActive = NO;
+    _activeTargetObj = nil;
+    _activeTargetType = OATargetNone;
+    _activeViewControllerState = nil;
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void)targetZoomIn
@@ -1417,8 +1451,9 @@ typedef enum
 {
     if (backButtonClicked)
     {
-        if (_pushed && self.targetMenuView.targetPoint.type == OATargetWpt)
+        if (_activeTargetObj && !_activeTargetActive)
             animationDuration = .1;
+        
         [self hideTargetPointMenuAndPopup:animationDuration];
     }
     else
@@ -1445,6 +1480,19 @@ typedef enum
 
 -(void)showTargetPointMenu:(BOOL)saveMapState showFullMenu:(BOOL)showFullMenu
 {
+    if (_activeTargetActive)
+    {
+        [self storeActiveTargetViewControllerState];
+        _activeTargetActive = NO;
+        BOOL activeTargetChildPushed = _activeTargetChildPushed;
+        _activeTargetChildPushed = NO;
+        [self hideTargetPointMenu:.1 onComplete:^{
+            [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu];
+            _activeTargetChildPushed = activeTargetChildPushed;
+        }];
+        return;
+    }
+    
     if (_mapSettings)
         [self closeMapSettings];
     
@@ -1542,18 +1590,19 @@ typedef enum
     }
     else if (_targetMenuView.targetPoint.type == OATargetGPX)
     {
-        BOOL showFullScreen = (_gpxItemViewControllerState && _gpxItemViewControllerState.showFullScreen);
+        OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
+        BOOL showFullScreen = (state && state.showFullScreen);
         [self.targetMenuView doInit:showFullMenu showFullScreen:showFullScreen];
         
         OAGPXItemViewController *gpxViewController;
         if (self.targetMenuView.targetPoint.targetObj)
         {
-            if (_gpxItemViewControllerState)
+            if (state)
             {
-                if (_gpxItemViewControllerState.showCurrentTrack)
-                    gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:_gpxItemViewControllerState];
+                if (state.showCurrentTrack)
+                    gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
                 else
-                    gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:_gpxItemViewControllerState];
+                    gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:state];
             }
             else
             {
@@ -1629,15 +1678,15 @@ typedef enum
     [self destroyShadowButton];
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
-        if (_pushed)
+        if (_activeTargetObj)
         {
-            _pushed = NO;
-            _parentTargetObj = nil;
-            _gpxItemViewControllerState = nil;
-
-            //[[OARootViewController instance] restoreCenterPanel:self];
-            //[[OARootViewController instance] closeMenuAndPanelsAnimated:NO];
-            [self.navigationController popToRootViewControllerAnimated:NO];
+            if (_activeTargetActive || _activeTargetChildPushed)
+            {
+                [self resetActiveTargetMenu];
+                _activeTargetChildPushed = NO;
+            }
+            //else
+            //    [self restoreActiveTargetMenu];
         }
         
         if (onComplete)
@@ -1660,7 +1709,7 @@ typedef enum
     
     [self destroyShadowButton];
     
-    if (!_parentTargetObj)
+    if (!_activeTargetObj || _activeTargetActive)
     {
         BOOL popped = NO;
         if (self.targetMenuView.targetPoint.type == OATargetGPX)
@@ -1672,20 +1721,18 @@ typedef enum
             [self.navigationController popViewControllerAnimated:YES];
     }
     
-    OATargetPointType targetType = self.targetMenuView.targetPoint.type;
-    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
-        if (_parentTargetObj)
+        if (_activeTargetObj)
         {
-            if (targetType == OATargetWpt)
-            {
-                [_mapViewController hideContextPinMarker];
-                [self openTargetViewWithGPX:_parentTargetObj pushed:YES];
-                _parentTargetObj = nil;
-                _gpxItemViewControllerState = nil;
-            }
+            if (_activeTargetActive)
+                [self resetActiveTargetMenu];
+            else
+                [self restoreActiveTargetMenu];
+
+            _activeTargetChildPushed = NO;
         }
+        
     }];
     
     [self showTopControls];
@@ -1737,8 +1784,6 @@ typedef enum
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
-    _pushed = pushed;
-    
     double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
     double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
     
@@ -1786,19 +1831,6 @@ typedef enum
 
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
 {
-    if (pushed && self.targetMenuView.superview && self.targetMenuView.targetPoint.type == OATargetGPX)
-    {
-        _parentTargetObj = self.targetMenuView.targetPoint.targetObj;
-        _gpxItemViewControllerState = [((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState];
-        _gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
-        _gpxItemViewControllerState.showCurrentTrack = (!_parentTargetObj || ((OAGPX *)_parentTargetObj).gpxFileName.length == 0);
-    }
-    else
-    {
-        _parentTargetObj = nil;
-        _gpxItemViewControllerState = nil;
-    }
-    
     double lat = item.point.position.latitude;
     double lon = item.point.position.longitude;
     
@@ -1842,32 +1874,19 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    if (_parentTargetObj)
-    {
-        _pushed = NO;
-        [self hideTargetPointMenu:.1 onComplete:^{
+    if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
+        _activeTargetChildPushed = YES;
 
-            _pushed = YES;
-            [self showTargetPointMenu:YES showFullMenu:YES];
-            [self goToTargetPointDefault];
-        }];
-    }
+    [self showTargetPointMenu:YES showFullMenu:YES];
+
+    if (pushed)
+        [self goToTargetPointDefault];
     else
-    {
-        _pushed = pushed;
-        [self showTargetPointMenu:YES showFullMenu:YES];
-        
-        if (pushed)
-            [self goToTargetPointDefault];
-        else
-            [self targetGoToPoint];
-    }
+        [self targetGoToPoint];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
 {
-    _pushed = pushed;
-    
     BOOL showCurrentTrack = NO;
     if (item == nil)
     {
@@ -1906,9 +1925,14 @@ typedef enum
     if (!showCurrentTrack)
         targetPoint.targetObj = item;
     
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:YES];
+    
+    _activeTargetActive = YES;
 }
 
 - (void)displayGpxOnMap:(OAGPX *)item

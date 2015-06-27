@@ -21,7 +21,7 @@ typedef enum
 @class OAGPXDocument;
 
 
-@interface OAGPXItemViewControllerState : NSObject
+@interface OAGPXItemViewControllerState : OATargetMenuViewControllerState
 
 @property (nonatomic, assign) OAGpxSegmentType segmentType;
 @property (nonatomic, assign) BOOL showFullScreen;
@@ -52,7 +52,5 @@ typedef enum
 - (id)initWithGPXItem:(OAGPX *)gpxItem ctrlState:(OAGPXItemViewControllerState *)ctrlState;
 - (id)initWithCurrentGPXItem;
 - (id)initWithCurrentGPXItem:(OAGPXItemViewControllerState *)ctrlState;
-
-- (OAGPXItemViewControllerState *) getCurrentState;
 
 @end

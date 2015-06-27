@@ -9,6 +9,10 @@
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
 
+@implementation OATargetMenuViewControllerState
+
+@end
+
 @interface OATargetMenuViewController ()
 
 @end
@@ -106,6 +110,11 @@
 }
 
 - (id)getTargetObj
+{
+    return nil; // override
+}
+
+- (OATargetMenuViewControllerState *)getCurrentState
 {
     return nil; // override
 }

@@ -540,7 +540,7 @@
     [self updateLayout:self.interfaceOrientation];
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveContent:)];
-    [self.view addGestureRecognizer:_panGesture];
+    [self.pickerView addGestureRecognizer:_panGesture];
 }
 
 - (void)viewWillAppear:(BOOL)animated

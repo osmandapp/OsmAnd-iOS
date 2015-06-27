@@ -25,6 +25,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @end
 
+@interface OATargetMenuViewControllerState : NSObject
+
+@end
+
 @interface OATargetMenuViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
@@ -63,6 +67,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (CGFloat)contentHeight;
 - (void)setContentBackgroundColor:(UIColor *)color;
+
+- (OATargetMenuViewControllerState *)getCurrentState;
 
 @end
 

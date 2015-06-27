@@ -338,7 +338,7 @@
     [self.segmentViewContainer addSubview:_badge];
 }
 
-- (OAGPXItemViewControllerState *) getCurrentState
+- (OATargetMenuViewControllerState *) getCurrentState
 {
     OAGPXItemViewControllerState *state = [[OAGPXItemViewControllerState alloc] init];
     state.segmentType = _segmentType;

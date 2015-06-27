@@ -13,6 +13,7 @@
                 <outlet property="navbarBackgroundView" destination="DP3-1O-DVu" id="KTs-2u-gjK"/>
                 <outlet property="navbarView" destination="ykD-3k-wDP" id="pph-u7-QGP"/>
                 <outlet property="pickerImg" destination="eiQ-xy-mgJ" id="cn4-Gb-pL0"/>
+                <outlet property="pickerView" destination="uH6-ND-gSt" id="zcg-Rh-7mf"/>
                 <outlet property="tableView" destination="NX0-1L-pkh" id="p5r-YH-bYJ"/>
                 <outlet property="titleView" destination="ouI-Rn-ohE" id="mHM-Da-4K1"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -38,6 +39,11 @@
                         </tableView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="uH6-ND-gSt">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="24"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>

@@ -11,6 +11,7 @@
 
 typedef NS_ENUM(NSInteger, OATargetPointType)
 {
+    OATargetNone = -1,
     OATargetLocation = 0,
     OATargetPOI,
     OATargetDestination,

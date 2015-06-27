@@ -35,6 +35,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *navbarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIImageView *navbarBackgroundImg;
 
+@property (weak, nonatomic) IBOutlet UIView *pickerView;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UIImageView *pickerImg;
 

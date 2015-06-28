@@ -1267,6 +1267,8 @@ typedef enum
     _activeTargetObj = nil;
     _activeTargetType = OATargetNone;
     _activeViewControllerState = nil;
+
+    _targetMenuView.activeTargetType = _activeTargetType;
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -1380,6 +1382,14 @@ typedef enum
     // Ask for track where to add waypoint
     if (names.count > 0)
     {
+        if (_activeTargetType == OATargetGPX && _activeTargetObj)
+        {
+            OAGPX *gpx = (OAGPX *)_activeTargetObj;
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
+            [self targetPointAddWaypoint:path];
+            return;
+        }
+        
         [names insertObject:OALocalizedString(@"gpx_curr_new_track") atIndex:0];
         [paths insertObject:@"" atIndex:0];
     
@@ -1969,6 +1979,7 @@ typedef enum
     _activeTargetType = targetPoint.type;
     _activeTargetObj = targetPoint.targetObj;
     
+    _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:YES];

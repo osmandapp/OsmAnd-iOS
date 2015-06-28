@@ -44,6 +44,8 @@
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
 @property (nonatomic) OATargetMenuViewController* customController;
 
+@property (nonatomic, assign) OATargetPointType activeTargetType;
+
 @property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
 

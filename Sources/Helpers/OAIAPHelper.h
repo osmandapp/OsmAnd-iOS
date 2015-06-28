@@ -70,6 +70,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @property (nonatomic, readonly) NSString *titleWide;
 @property (nonatomic, readonly) NSString *imageName;
 @property (nonatomic, assign) NSInteger sortIndex;
+@property (nonatomic, assign) NSInteger tag;
 
 -(instancetype)initWithAddonId:(NSString *)addonId titleShort:(NSString *)titleShort titleWide:(NSString *)titleWide imageName:(NSString *)imageName;
 

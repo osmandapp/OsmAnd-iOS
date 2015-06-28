@@ -1005,6 +1005,17 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
+    if (self.activeTargetType == OATargetGPX)
+    {
+        [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
+        [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
+    }
+    else
+    {
+        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
+        [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+    }
+    
     if (_targetPoint.type != OATargetGPX)
         [self.zoomView removeFromSuperview];
     
@@ -1693,7 +1704,10 @@
         _buttonMore.enabled = YES;
     }
     
-    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
+    if (self.activeTargetType == OATargetGPX)
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
+    else
+        _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
 }
 
 - (void)updateCoordinateLabel
@@ -1866,10 +1880,8 @@
     }
 }
 
-#pragma mark - Actions
-
-- (IBAction)buttonFavoriteClicked:(id)sender {
-    
+- (void)addFavorite
+{
     NSString *locText;
     if (self.isAddressFound)
         locText = self.targetPoint.title;
@@ -1877,6 +1889,16 @@
         locText = self.addressStr;
     
     [self.delegate targetPointAddFavorite];
+}
+
+#pragma mark - Actions
+
+- (IBAction)buttonFavoriteClicked:(id)sender
+{
+    if (self.activeTargetType == OATargetGPX)
+        [self.delegate targetPointAddWaypoint];
+    else
+        [self addFavorite];
 }
 
 - (IBAction)buttonShareClicked:(id)sender {
@@ -1916,6 +1938,8 @@
         NSMutableArray *titles = [NSMutableArray array];
         NSMutableArray *images = [NSMutableArray array];
         
+        NSInteger tag = 0;
+        
         for (OAFunctionalAddon *addon in functionalAddons)
         {
             if (_targetPoint.type == OATargetParking && [addon.addonId isEqualToString:kId_Addon_Parking_Set])
@@ -1923,8 +1947,20 @@
             if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
                 continue;
 
+            if (self.activeTargetType == OATargetGPX && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+                continue;
+            
             [titles addObject:addon.titleWide];
             [images addObject:addon.imageName];
+            addon.tag = tag++;
+        }
+
+        NSInteger addFavActionTag = -1;
+        if (self.activeTargetType == OATargetGPX && _targetPoint.type != OATargetFavorite)
+        {
+            [titles addObject:OALocalizedString(@"ctx_mnu_add_fav")];
+            [images addObject:@"menu_star_icon"];
+            addFavActionTag = tag++;
         }
         
         [PXAlertView showAlertWithTitle:OALocalizedString(@"other_options")
@@ -1934,8 +1970,9 @@
                             otherImages:images
                              completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                  if (!cancelled)
+                                 {
                                      for (OAFunctionalAddon *addon in functionalAddons)
-                                         if (addon.sortIndex == buttonIndex)
+                                         if (addon.tag == buttonIndex)
                                          {
                                              if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
                                                  [self.delegate targetPointAddWaypoint];
@@ -1943,6 +1980,11 @@
                                                  [self.delegate targetPointParking];
                                              break;
                                          }
+                                     if (addFavActionTag == buttonIndex)
+                                     {
+                                         [self addFavorite];
+                                     }
+                                 }
                              }];
     }
     else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])

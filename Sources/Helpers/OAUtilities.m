@@ -342,10 +342,15 @@
 
 + (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination
 {
-    long a = (long)round(source * pow(10.0, digits));
-    long b = (long)round(destination * pow(10.0, digits));
+    double ap = source * pow(10.0, digits);
+    double bp = destination * pow(10.0, digits);
     
-    return a == b;
+    long a = (long)round(ap);
+    long b = (long)round(bp);
+    long af = (long)floor(ap);
+    long bf = (long)floor(bp);
+    
+    return a == b || af == bf;
 }
 
 @end

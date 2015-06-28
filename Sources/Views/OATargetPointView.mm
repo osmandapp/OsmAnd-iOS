@@ -1999,8 +1999,14 @@
 
 - (IBAction)buttonShadowClicked:(id)sender
 {
-    if (_targetPoint.type != OATargetGPX)
+    if (_targetPoint.type == OATargetGPX)
+    {
+        [self.delegate targetGoToGPX];
+    }
+    else
+    {
         [self.delegate targetGoToPoint];
+    }
 }
 
 - (IBAction)buttonCloseClicked:(id)sender

@@ -660,6 +660,9 @@ typedef enum
 - (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    if (mapBounds.topLeft.latitude == DBL_MAX)
+        return renderView.zoom;
 
     float metersPerPixel = [_mapViewController calculateMapRuler];
     
@@ -1495,6 +1498,11 @@ typedef enum
 
 }
 
+-(void)targetGoToGPX
+{
+    [self displayGpxOnMap:_activeTargetObj];
+}
+
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -1965,9 +1973,25 @@ typedef enum
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     
-    [self displayGpxOnMap:item];
-
-    targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    BOOL newGpx = NO;
+    
+    if (_activeTargetType != OATargetGPX)
+        [self displayGpxOnMap:item];
+    
+    if (item.bounds.center.latitude == DBL_MAX)
+    {
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        _targetLatitude = latLon.latitude;
+        _targetLongitude = latLon.longitude;
+        
+        newGpx = YES;
+    }
+    else
+    {
+        targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    }
+    
     targetPoint.title = _formattedTargetName;
     targetPoint.zoom = _targetZoom;
     targetPoint.touchPoint = touchPoint;
@@ -1982,13 +2006,16 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:YES];
+    [self showTargetPointMenu:YES showFullMenu:!newGpx];
     
     _activeTargetActive = YES;
 }
 
 - (void)displayGpxOnMap:(OAGPX *)item
 {
+    if (item.bounds.topLeft.latitude == DBL_MAX)
+        return;
+    
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 
     CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : kOATargetPointTopViewHeight + 160.0));

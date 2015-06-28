@@ -394,3 +394,4 @@
 "change_color" = "Szín módosítása";
 "wpt_select" = "Válasszon útvonalpontokat";
 "gpx_remove_wpts_q" = "El szeretné távolítani a kijelölt útvonalpontokat?";
+"create_new_trip" = "Új utazás létrehozása";

@@ -44,6 +44,7 @@
 @property (strong, nonatomic) id<OATargetPointViewDelegate> delegate;
 @property (nonatomic) OATargetMenuViewController* customController;
 
+@property (nonatomic, readonly) BOOL showFull;
 @property (nonatomic, readonly) BOOL showFullScreen;
 
 -(void)setMapViewInstance:(UIView *)mapView;

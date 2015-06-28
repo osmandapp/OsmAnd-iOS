@@ -24,6 +24,7 @@ typedef enum
 @interface OAGPXItemViewControllerState : OATargetMenuViewControllerState
 
 @property (nonatomic, assign) OAGpxSegmentType segmentType;
+@property (nonatomic, assign) BOOL showFull;
 @property (nonatomic, assign) BOOL showFullScreen;
 @property (nonatomic, assign) CGFloat scrollPos;
 @property (nonatomic, assign) EPointsSortingType sortType;

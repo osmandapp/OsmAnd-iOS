@@ -132,8 +132,6 @@
     UIImageView *_infoDescImage;
     UITextView *_infoDescText;
     
-    BOOL _showFull;
-    
     CGFloat _frameTop;
 
     CGFloat _fullHeight;
@@ -611,6 +609,7 @@
             [UIView animateWithDuration:.3 animations:^{
                 self.frame = frame;
                 [self updateZoomViewFrame];
+                [self updateButtonClose];
                 if (![self isLandscape] && !_hideButtons)
                 {
                     _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
@@ -679,6 +678,7 @@
                     
                     self.frame = frame;
                     [self updateZoomViewFrame];
+                    [self updateButtonClose];
 
                     if (![self isLandscape] && !_hideButtons)
                     {
@@ -930,11 +930,16 @@
     [self clearCustomControllerIfNeeded];
 }
 
+- (void)updateButtonClose
+{
+    _buttonClose.alpha = (_hideButtons && _showFull ? 0.0 : 1.0);
+}
+
 - (void)doUpdateUI
 {
     _hideButtons = (_targetPoint.type == OATargetGPX);
     self.buttonsView.hidden = _hideButtons;
-    self.buttonClose.hidden = _hideButtons;
+    [self updateButtonClose];
     
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
@@ -1072,7 +1077,10 @@
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
+    if (!_showFull && self.customController && [self.customController supportMapInteraction])
+        [self.delegate targetSetBottomControlsVisible:YES menuHeight:self.frame.size.height];
+    else
+        [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
     
     [self applyTargetPoint];
 
@@ -1117,6 +1125,9 @@
         } completion:^(BOOL finished) {
             if (onComplete)
                 onComplete();
+            
+            if (!_showFull && self.customController && [self.customController supportMapInteraction])
+                [self.delegate targetViewEnableMapInteraction];
         }];
     }
     else
@@ -1133,6 +1144,9 @@
         
         if (onComplete)
             onComplete();
+
+        if (!_showFull && self.customController && [self.customController supportMapInteraction])
+            [self.delegate targetViewEnableMapInteraction];
     }
 
     [self startLocationUpdate];
@@ -1267,6 +1281,8 @@
         [self updateToolbarFrame:landscape];
 
     _topImageView.hidden = (landscape || ![self hasInfo]);
+
+    [self updateButtonClose];
     
     if (landscape)
         _topView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, kOATargetPointTopViewHeight);

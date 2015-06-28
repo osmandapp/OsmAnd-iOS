@@ -1234,6 +1234,7 @@ typedef enum
         case OATargetGPX:
         {
             OAGPXItemViewControllerState *gpxItemViewControllerState = (OAGPXItemViewControllerState *)([((OAGPXItemViewController *)self.targetMenuView.customController) getCurrentState]);
+            gpxItemViewControllerState.showFull = self.targetMenuView.showFull;
             gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
             gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
             
@@ -1509,7 +1510,7 @@ typedef enum
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
-        } ignoreMapState:YES];
+        } hideActiveTarget:YES];
         
         return;
     }
@@ -1612,8 +1613,9 @@ typedef enum
     else if (_targetMenuView.targetPoint.type == OATargetGPX)
     {
         OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
+        BOOL showFull = (state && state.showFull) || (!state && showFullMenu);
         BOOL showFullScreen = (state && state.showFullScreen);
-        [self.targetMenuView doInit:showFullMenu showFullScreen:showFullScreen];
+        [self.targetMenuView doInit:showFull showFullScreen:showFullScreen];
         
         OAGPXItemViewController *gpxViewController;
         if (self.targetMenuView.targetPoint.targetObj)
@@ -1691,15 +1693,15 @@ typedef enum
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
-    [self hideTargetPointMenu:animationDuration onComplete:onComplete ignoreMapState:NO];
+    [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete ignoreMapState:(BOOL)ignoreMapState
+-(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget
 {
     if (![self.targetMenuView preHide])
         return;
     
-    if (!ignoreMapState)
+    if (!hideActiveTarget)
     {
         if (_mapStateSaved)
             [self restoreMapAfterReuseAnimated];
@@ -1708,6 +1710,10 @@ typedef enum
     }
     
     [self destroyShadowButton];
+    
+    if (_activeTargetObj && !_activeTargetActive && !_activeTargetChildPushed && !hideActiveTarget && animationDuration > .1)
+        animationDuration = .1;
+    
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
         if (_activeTargetObj)
@@ -1717,7 +1723,7 @@ typedef enum
                 [self resetActiveTargetMenu];
                 _activeTargetChildPushed = NO;
             }
-            else if (self.targetMenuView.targetPoint.type == _activeTargetType)
+            else if (!hideActiveTarget)
             {
                 [self restoreActiveTargetMenu];
             }

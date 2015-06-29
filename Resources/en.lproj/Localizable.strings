@@ -445,4 +445,5 @@
 "gpx_remove_wpts_q" = "Do you want to remove seleted waypoints?";
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
+"select_wpt_on_map" = "Select point on map to add to the trip";
 

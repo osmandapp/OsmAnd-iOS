@@ -396,3 +396,4 @@
 "gpx_remove_wpts_q" = "Fjern valgte rutepunkter?";
 "create_new_trip" = "Opret ny tur";
 "editing_waypoints" = "Rediger rutepunkter";
+"select_wpt_on_map" = "Vælg punkt på kortet til at føje til turen";

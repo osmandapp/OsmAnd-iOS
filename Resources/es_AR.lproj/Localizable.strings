@@ -390,3 +390,10 @@
 "moving_time" = "Tiempo moviéndose";
 "gpx_speed" = "Velocidad";
 "rendering_attr_hikingRoutesOSMC_name" = "Superponer símbolo de senderismo";
+"change_group" = "Cambiar grupo";
+"change_color" = "Cambiar color";
+"wpt_select" = "Elige los puntos de rutas";
+"gpx_remove_wpts_q" = "¿Quitar los puntos de ruta elegidos?";
+"create_new_trip" = "Crear viaje nuevo";
+"editing_waypoints" = "Editando puntos de ruta";
+"select_wpt_on_map" = "Elige en el mapa, el punto para añadir al viaje";

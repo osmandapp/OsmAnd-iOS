@@ -990,6 +990,8 @@ static OAGPXListViewController *parentController;
                 item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
                 [[OAGPXDatabase sharedDb] save];
                 
+                item.newGpx = YES;
+                
                 [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
                 [[_app updateGpxTracksOnMapObservable] notifyEvent];
             }
@@ -1035,7 +1037,7 @@ static OAGPXListViewController *parentController;
     transition.subtype = kCATransitionFromLeft; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
     [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
     [[OARootViewController instance].navigationController pushViewController:parentController animated:NO];
-
+    
     parentController = nil;
 }
 

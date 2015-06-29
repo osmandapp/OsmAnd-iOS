@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
+#import "Localization.h"
 
 #define kDbName @"gpx.db"
 
@@ -18,6 +19,9 @@
 
 - (NSString *)getNiceTitle
 {
+    if (self.newGpx)
+        return OALocalizedString(@"create_new_trip");
+
     if (self.gpxTitle)
         return [self.gpxTitle stringByReplacingOccurrencesOfString:@"_" withString:@" "];
 

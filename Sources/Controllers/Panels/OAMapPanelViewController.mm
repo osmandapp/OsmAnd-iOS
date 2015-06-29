@@ -18,6 +18,7 @@
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
 #import "OAGPXDatabase.h"
+#import <UIViewController+JASidePanel.h>
 
 #import <EventKit/EventKit.h>
 
@@ -179,6 +180,8 @@ typedef enum
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
 
+    [self resetActiveTargetMenu];
+    
     _widgetsView = [[InfoWidgetsView alloc] init];
     _widgetsView.delegate = self;
     
@@ -807,6 +810,8 @@ typedef enum
         _mapSettings = nil;
         
         [self destroyShadowButton];
+
+        self.sidePanelController.recognizesPanGesture = (self.targetMenuView.superview == nil);
     }
 }
 
@@ -829,6 +834,8 @@ typedef enum
     [_mapSettings show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
+
+    self.sidePanelController.recognizesPanGesture = NO;
 }
 
 - (void)searchButtonClick:(id)sender
@@ -1266,6 +1273,9 @@ typedef enum
 
 - (void)resetActiveTargetMenu
 {
+    if (_activeTargetType == OATargetGPX && _activeTargetObj)
+        ((OAGPX *)_activeTargetObj).newGpx = NO;
+    
     _activeTargetActive = NO;
     _activeTargetObj = nil;
     _activeTargetType = OATargetNone;
@@ -1385,11 +1395,18 @@ typedef enum
     // Ask for track where to add waypoint
     if (names.count > 0)
     {
-        if (_activeTargetType == OATargetGPX && _activeTargetObj)
+        if (_activeTargetType == OATargetGPX)
         {
-            OAGPX *gpx = (OAGPX *)_activeTargetObj;
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
-            [self targetPointAddWaypoint:path];
+            if (_activeTargetObj)
+            {
+                OAGPX *gpx = (OAGPX *)_activeTargetObj;
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
+                [self targetPointAddWaypoint:path];
+            }
+            else
+            {
+                [self targetPointAddWaypoint:nil];
+            }
             return;
         }
         
@@ -1477,7 +1494,7 @@ typedef enum
 {
     if (backButtonClicked)
     {
-        if (_activeTargetObj && !_activeTargetActive)
+        if (_activeTargetType != OATargetNone && !_activeTargetActive)
             animationDuration = .1;
         
         [self hideTargetPointMenuAndPopup:animationDuration];
@@ -1500,7 +1517,10 @@ typedef enum
 
 -(void)targetGoToGPX
 {
-    [self displayGpxOnMap:_activeTargetObj];
+    if (_activeTargetObj)
+        [self displayGpxOnMap:_activeTargetObj];
+    else
+        [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
@@ -1682,10 +1702,13 @@ typedef enum
     if (onComplete)
         onComplete();
     
+    self.sidePanelController.recognizesPanGesture = NO;
+
     [self.targetMenuView show:YES onComplete:^{
         
         [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
         
+        self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
 
@@ -1729,12 +1752,12 @@ typedef enum
     
     [self destroyShadowButton];
     
-    if (_activeTargetObj && !_activeTargetActive && !_activeTargetChildPushed && !hideActiveTarget && animationDuration > .1)
+    if (_activeTargetType != OATargetNone && !_activeTargetActive && !_activeTargetChildPushed && !hideActiveTarget && animationDuration > .1)
         animationDuration = .1;
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
-        if (_activeTargetObj)
+        if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive || _activeTargetChildPushed)
             {
@@ -1756,10 +1779,14 @@ typedef enum
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 
+    self.sidePanelController.recognizesPanGesture = YES;
 }
 
 -(void)hideTargetPointMenuAndPopup:(CGFloat)animationDuration
 {
+    if (![self.targetMenuView preHide])
+        return;
+
     if (_mapStateSaved)
         [self restoreMapAfterReuseAnimated];
     
@@ -1767,13 +1794,19 @@ typedef enum
     
     [self destroyShadowButton];
     
-    if (!_activeTargetObj || _activeTargetActive)
+    if (_activeTargetType == OATargetNone || _activeTargetActive)
     {
         BOOL popped = NO;
         if (self.targetMenuView.targetPoint.type == OATargetGPX)
+        {
+            if (_activeTargetType == OATargetGPX && _activeTargetObj)
+                ((OAGPX *)_activeTargetObj).newGpx = NO;
             popped = [OAGPXListViewController popToParent];
+        }
         else if (self.targetMenuView.targetPoint.type == OATargetFavorite)
+        {
             popped = [OAFavoriteListViewController popToParent];
+        }
 
         if (!popped)
             [self.navigationController popViewControllerAnimated:YES];
@@ -1781,7 +1814,7 @@ typedef enum
     
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{
         
-        if (_activeTargetObj)
+        if (_activeTargetType != OATargetNone)
         {
             if (_activeTargetActive)
                 [self resetActiveTargetMenu];
@@ -1797,6 +1830,7 @@ typedef enum
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
+    self.sidePanelController.recognizesPanGesture = YES;
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -1976,8 +2010,6 @@ typedef enum
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     
-    BOOL newGpx = NO;
-    
     if (_activeTargetType != OATargetGPX)
         [self displayGpxOnMap:item];
     
@@ -1987,8 +2019,6 @@ typedef enum
         targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
         _targetLatitude = latLon.latitude;
         _targetLongitude = latLon.longitude;
-        
-        newGpx = YES;
     }
     else
     {
@@ -2009,7 +2039,7 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:!newGpx];
+    [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
     
     _activeTargetActive = YES;
 }
@@ -2052,7 +2082,7 @@ typedef enum
         CGRect frame = self.targetMenuView.frame;
         
         Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
-        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:YES];
+        [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : frame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:NO];
     }
 }
 

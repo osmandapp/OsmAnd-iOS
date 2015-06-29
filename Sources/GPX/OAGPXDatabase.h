@@ -21,6 +21,7 @@
 @property (nonatomic) NSDate *importDate;
 
 @property (nonatomic) OAGpxBounds bounds;
+@property (nonatomic, assign) BOOL newGpx;
 
 
 // Statistics

@@ -157,8 +157,6 @@
     
     self.gpx = item;
     self.doc = (OAGPXDocument*)_savingHelper.currentTrack;
-    
-    [self.segmentView setEnabled:self.doc.locationMarks.count > 0 forSegmentAtIndex:1];
 }
 
 - (void)loadDoc
@@ -299,10 +297,7 @@
     [self.segmentView setSelectedSegmentIndex:_segmentType];
     [self applySegmentType];
     
-    NSInteger wptCount = self.doc.locationMarks.count;
-    [self.segmentView setEnabled:wptCount > 0 forSegmentAtIndex:1];
-    if (wptCount > 0)
-        [self addBadge];
+    [self addBadge];
 
     if (self.showCurrentTrack)
     {
@@ -346,7 +341,7 @@
     [badgeLabel sizeToFit];
     
     CGSize badgeSize = CGSizeMake(MAX(16.0, badgeLabel.bounds.size.width + 8.0), MAX(16.0, badgeLabel.bounds.size.height));
-    badgeLabel.frame = CGRectMake(0.0, 0.0, badgeSize.width, badgeSize.height);
+    badgeLabel.frame = CGRectMake(.5, .5, badgeSize.width, badgeSize.height);
     CGRect badgeFrame = CGRectMake(self.segmentView.bounds.size.width - badgeSize.width + 10.0, -4.0, badgeSize.width, badgeSize.height);
     _badge = [[UIView alloc] initWithFrame:badgeFrame];
     _badge.layer.cornerRadius = 8.0;

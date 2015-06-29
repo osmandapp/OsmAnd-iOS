@@ -47,6 +47,12 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *buttonSort;
 @property (weak, nonatomic) IBOutlet UIButton *buttonEdit;
 
+@property (weak, nonatomic) IBOutlet UIView *editToolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *exportButton;
+@property (weak, nonatomic) IBOutlet UIButton *groupButton;
+@property (weak, nonatomic) IBOutlet UIButton *colorButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+
 @property (nonatomic, readonly) BOOL showCurrentTrack;
 
 - (id)initWithGPXItem:(OAGPX *)gpxItem;

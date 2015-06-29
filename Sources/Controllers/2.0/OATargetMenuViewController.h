@@ -58,6 +58,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (void)useGradient:(BOOL)gradient;
 
+- (BOOL)disablePanWhileEditing;
 - (BOOL)supportEditing;
 - (void)activateEditing;
 - (BOOL)commitChangesAndExit;

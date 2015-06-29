@@ -75,6 +75,7 @@
     OAEditColorViewController *_colorController;
     
     UIView *_badge;
+    CALayer *_horizontalLine;
 }
 
 @synthesize editing = _editing;
@@ -192,6 +193,11 @@
     return YES;
 }
 
+-(BOOL)disablePanWhileEditing
+{
+    return YES;
+}
+
 -(BOOL)supportEditing
 {
     return YES;
@@ -288,9 +294,11 @@
     _tableView.dataSource = self;
     _tableView.delegate = self;
 
+    [self updateEditingMode:NO animated:NO];
+
     [self.segmentView setSelectedSegmentIndex:_segmentType];
     [self applySegmentType];
-
+    
     NSInteger wptCount = self.doc.locationMarks.count;
     [self.segmentView setEnabled:wptCount > 0 forSegmentAtIndex:1];
     if (wptCount > 0)
@@ -309,6 +317,12 @@
             [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
         });
     }
+    
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    [self.editToolbarView.layer addSublayer:_horizontalLine];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -372,6 +386,7 @@
             _editing = NO;
             
             [self.tableView bringSubviewToFront:self.contentView];
+            self.tableView.hidden = NO;
 
             if (!_wasInit && _scrollPos != 0.0)
                 [self.tableView setContentOffset:CGPointMake(0.0, _scrollPos)];
@@ -415,6 +430,8 @@
             [_waypointsController doViewAppear];
             [self.contentView addSubview:_waypointsController.tableView];
 
+            self.tableView.hidden = YES;
+            
             if (!_wasInit && _scrollPos != 0.0)
                 [_waypointsController.tableView setContentOffset:CGPointMake(0.0, _scrollPos)];
 
@@ -435,9 +452,16 @@
 
 - (void)updateWaypointsButtons
 {
+    self.buttonCancel.hidden = self.editing;
     self.buttonSort.hidden = self.editing;
-    self.buttonEdit.hidden = self.editing;
-    self.buttonMore.hidden = !self.editing;
+    self.buttonMore.hidden = YES;
+
+    self.buttonEdit.hidden = NO;
+    if (self.editing)
+        [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
+    else
+        [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+
 }
 
 - (NSArray *)readGroups
@@ -471,37 +495,6 @@
                                              [self deleteClicked:nil];
                                          else
                                              [self exportClicked:nil];
-                                     }
-                                 }];
-            break;
-        }
-        case kSegmentWaypoints:
-        {
-            [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:@[OALocalizedString(@"change_group"), OALocalizedString(@"change_color"), OALocalizedString(@"shared_string_remove"), OALocalizedString(@"gpx_export")]
-                                otherImages:@[@"move_items.png", @"change_item_color.png", @"track_clear_data.png", @"ic_dialog_export.png"]
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled)
-                                     {
-                                         switch (buttonIndex) {
-                                             case 0:
-                                                 [self changeGroup];
-                                                 break;
-                                             case 1:
-                                                 [self changeColor];
-                                                 break;
-                                             case 2:
-                                                 [self deleteWaypoints];
-                                                 break;
-                                             case 3:
-                                                 [self exportWaypoints];
-                                                 break;
-                                                 
-                                             default:
-                                                 break;
-                                         }
                                      }
                                  }];
             break;
@@ -640,8 +633,43 @@
 - (IBAction)editClicked:(id)sender
 {
     _editing = !_editing;
-    [_waypointsController setEditing:self.editing animated:YES];
+    [self updateEditingMode:self.editing animated:YES];
+}
+
+- (void)updateEditingMode:(BOOL)value animated:(BOOL)animated
+{
+    [_waypointsController setEditing:value animated:YES];
     [self updateWaypointsButtons];
+    
+    if (value)
+        self.titleView.text = OALocalizedString(@"editing_waypoints");
+    else
+        self.titleView.text = [self.gpx getNiceTitle];
+    
+    if (value)
+    {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
+
+        CGSize cs = self.contentView.bounds.size;
+        CGRect f = self.editToolbarView.frame;
+        f.origin.y = cs.height - f.size.height;
+        
+        [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
+            self.editToolbarView.frame = f;
+            _waypointsController.tableView.frame = CGRectMake(0.0, 0.0, cs.width, cs.height - f.size.height);
+        }];
+    }
+    else
+    {
+        CGSize cs = self.contentView.bounds.size;
+        CGRect f = self.editToolbarView.frame;
+        f.origin.y = cs.height + 1.0;
+        
+        [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
+            self.editToolbarView.frame = f;
+            _waypointsController.tableView.frame = self.contentView.bounds;
+        }];
+    }
 }
 
 - (IBAction)segmentClicked:(id)sender
@@ -651,6 +679,8 @@
         return;
     
     _editing = NO;
+    [self updateEditingMode:self.editing animated:NO];
+
     _segmentType = newSegmentType;
         
     [self applySegmentType];
@@ -726,6 +756,27 @@
                                  });
                              }
                          }];
+}
+
+
+- (IBAction)waypointsExportClicked:(id)sender
+{
+    [self exportWaypoints];
+}
+
+- (IBAction)waypointsGroupClicked:(id)sender
+{
+    [self changeGroup];
+}
+
+- (IBAction)waypointsColorClicked:(id)sender
+{
+    [self changeColor];
+}
+
+- (IBAction)waypointsDeleteClicked:(id)sender
+{
+    [self deleteWaypoints];
 }
 
 #pragma mark - UIDocumentInteractionControllerDelegate

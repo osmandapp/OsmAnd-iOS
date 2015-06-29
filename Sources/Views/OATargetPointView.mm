@@ -462,6 +462,9 @@
     if ([self isLandscape] || (self.customController && self.customController.showingKeyboard))
         return;
     
+    if (self.customController && self.customController.editing && [self.customController disablePanWhileEditing])
+        return;
+    
     CGPoint translatedPoint = [gesture translationInView:self.superview];
     CGPoint translatedVelocity = [gesture velocityInView:self.superview];
     

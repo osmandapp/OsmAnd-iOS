@@ -94,6 +94,11 @@
     }
 }
 
+- (BOOL)disablePanWhileEditing
+{
+    return NO; // override
+}
+
 - (BOOL)supportEditing
 {
     return NO; // override

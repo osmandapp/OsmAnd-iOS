@@ -286,7 +286,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
         
         [self setupGestures];
         
-        [self setTapToDismissEnabled:NO];
+        [self setTapToDismissEnabled:YES];
         [self setAllButtonsTextColor:[UIColor darkGrayColor]];
         [self setTitleColor:[UIColor blackColor]];
         [self setMessageColor:[UIColor blackColor]];

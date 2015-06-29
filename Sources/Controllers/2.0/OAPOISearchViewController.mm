@@ -21,6 +21,8 @@
 #import "OAIconTextDescCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAUtilities.h"
+#import "OAPOIFavType.h"
+#import "OAFavoriteItem.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -31,6 +33,7 @@
 #import "Localization.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/IFavoriteLocation.h>
 
 #define kMaxTypeRows 5
 #define kMapCenterSearchToolbarHeight 108.0
@@ -447,7 +450,8 @@ typedef enum
 }
 
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
@@ -463,8 +467,8 @@ typedef enum
         [_currentScopePoiTypeName isEqualToString:_coreFoundScopePoiTypeName] : _coreFoundScopePoiTypeName == nil);
 }
 
--(void)generateData {
-    
+-(void)generateData
+{
     [self acquireCurrentScope];
     
     if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
@@ -971,11 +975,19 @@ typedef enum
     if ([obj isKindOfClass:[OAPOI class]])
     {
         OAPOI* item = obj;
-        NSString *name = item.nameLocalized;
-        if (!name)
-            name = item.type.nameLocalized;
-        
-        [self goToPoint:item];
+        if ([item.type isKindOfClass:[OAPOIFavType class]])
+        {
+            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.nameLocalized icon:[item icon] pushed:NO];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
+        else
+        {
+            NSString *name = item.nameLocalized;
+            if (!name)
+                name = item.type.nameLocalized;
+            
+            [self goToPoint:item];
+        }
     }
     else if ([obj isKindOfClass:[OAPOIType class]])
     {
@@ -1497,9 +1509,6 @@ typedef enum
 
 - (void)goToPoint:(OAPOI *)poi
 {
-    OARootViewController* rootViewController = [OARootViewController instance];
-    //[rootViewController closeMenuAndPanelsAnimated:YES];
-    
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
@@ -1645,6 +1654,35 @@ typedef enum
             [_searchPoiArray setArray:sortedArray];
         }
 
+        // add favorites to array
+        if (_currentScope == EPOIScopeUndefined)
+        {
+            NSString *keyword = [[self firstToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+            const auto allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
+            
+            // create favorite groups
+            for(const auto& favorite : allFavorites)
+            {
+                OAPOI *poi = [[OAPOI alloc] init];
+                poi.name = favorite->getTitle().toNSString();
+                poi.nameLocalized = favorite->getTitle().toNSString();
+                OsmAnd::LatLon latLon = favorite->getLatLon();
+                poi.latitude = latLon.latitude;
+                poi.longitude = latLon.longitude;
+                
+                OAPOIFavType *favType = [[OAPOIFavType alloc] init];
+                favType.name = OALocalizedString(@"favorite");
+                favType.nameLocalized = OALocalizedString(@"favorite");
+                poi.type = favType;
+                
+                if (keyword.length == 0 || [self beginWith:keyword text:poi.nameLocalized] || [self beginWithAfterSpace:keyword text:poi.nameLocalized] || [self beginWith:keyword text:poi.name] || [self beginWithAfterSpace:keyword text:poi.name])
+                {
+                    [_searchPoiArray insertObject:poi atIndex:0];
+                }
+            }
+        }
+        
         _coreFoundScope = _currentScope;
         _coreFoundScopeCategoryName = _currentScopeCategoryName;
         _coreFoundScopeFilterName = _currentScopeFilterName;

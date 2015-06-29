@@ -1842,9 +1842,18 @@ typedef enum
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
-    double lon = OsmAnd::Utilities::get31LongitudeX(item.favorite->getPosition31().x);
-    double lat = OsmAnd::Utilities::get31LatitudeY(item.favorite->getPosition31().y);
-    
+    OsmAnd::LatLon latLon = item.favorite->getLatLon();
+    NSString *caption = item.favorite->getTitle().toNSString();
+
+    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    UIImage *icon = [UIImage imageNamed:favCol.iconName];
+
+    [self openTargetViewWithFavorite:latLon.latitude longitude:latLon.longitude caption:caption icon:icon pushed:pushed];
+}
+
+- (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed
+{
     [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
@@ -1854,12 +1863,6 @@ typedef enum
     touchPoint.y *= renderView.contentScaleFactor;
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
-    
-    NSString *caption = item.favorite->getTitle().toNSString();
-    
-    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
-    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-    UIImage *icon = [UIImage imageNamed:favCol.iconName];
     
     targetPoint.type = OATargetFavorite;
     

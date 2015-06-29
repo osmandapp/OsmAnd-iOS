@@ -10,6 +10,12 @@
 
 @implementation OAPOI
 
+-(void)setType:(OAPOIType *)type
+{
+    _type = type;
+    _type.parent = self;
+}
+
 - (UIImage *)icon
 {
     if (_type)

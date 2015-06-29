@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class OAPOI;
+
 @interface OAPOIType : NSObject<NSCopying>
 
 @property (nonatomic) NSString *name;
@@ -26,6 +28,8 @@
 @property (nonatomic) NSString *filterLocalized;
 
 @property (nonatomic) BOOL reference;
+
+@property (weak, nonatomic) OAPOI *parent;
 
 - (UIImage *)icon;
 - (UIImage *)mapIcon;

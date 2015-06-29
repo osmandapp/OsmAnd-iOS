@@ -460,6 +460,17 @@ static OAGPXListViewController *parentController;
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
+- (void)updateRecButtonsAnimated
+{
+    [UIView animateWithDuration:.3 animations:^{
+        if (_recCell)
+        {
+            [self updateRecImg];
+            [self updateRecBtn];
+        }
+    }];
+}
+
 - (IBAction)mapButtonClick:(id)sender
 {
     [self.gpxTableView setEditing:YES animated:YES];
@@ -483,6 +494,8 @@ static OAGPXListViewController *parentController;
     }
     
     [self.gpxTableView endUpdates];
+    
+    [self updateRecButtonsAnimated];
 }
 
 - (IBAction)checkButtonClick:(id)sender
@@ -538,6 +551,8 @@ static OAGPXListViewController *parentController;
     
     [[_app updateGpxTracksOnMapObservable] notifyEvent];
     
+    NSInteger tripsSectionIndex = _tripsSectionIndex;
+    
     _visible = [OAAppSettings sharedManager].mapSettingVisibleGpx;
 
     [self.gpxTableView setEditing:NO animated:YES];
@@ -555,14 +570,15 @@ static OAGPXListViewController *parentController;
     }
     else if (indexes.count > 0)
     {
-        if (self.gpxList.count == 0)
-            [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:1] withRowAnimation:UITableViewRowAnimationFade];
+        if (self.gpxList.count == 0 && _viewMode == kAllTripsMode)
+            [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:tripsSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
         else
             [self.gpxTableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
     }
     
     [self.gpxTableView endUpdates];
-    
+
+    [self updateRecButtonsAnimated];
 }
 
 - (IBAction)cancelButtonClick:(id)sender
@@ -570,6 +586,7 @@ static OAGPXListViewController *parentController;
     [self.gpxTableView setEditing:NO animated:YES];
     _editActive = NO;
     [self updateButtons];
+    [self updateRecButtonsAnimated];
 }
 
 - (void)onImportClicked
@@ -771,6 +788,11 @@ static OAGPXListViewController *parentController;
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    return [self canEditRowAtIndexPath:indexPath];
+}
+
+-(BOOL)canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
     switch (_viewMode)
     {
         case kActiveTripsMode:
@@ -853,11 +875,13 @@ static OAGPXListViewController *parentController;
         _recCell.btnStartStopRec.tintColor = [UIColor redColor];
     }
     
+    _recCell.btnStartStopRec.alpha = ([self.gpxTableView isEditing] ? 0.0 : 1.0);
 }
 
 - (void)updateRecBtn
 {
     _recCell.btnSaveGpx.enabled = [_savingHelper hasData];
+    _recCell.btnSaveGpx.alpha = ([self.gpxTableView isEditing] ? 0.0 : 1.0);
 }
 
 - (void)saveGpxPressed
@@ -919,76 +943,74 @@ static OAGPXListViewController *parentController;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ([self.gpxTableView isEditing])
+    if (![self.gpxTableView isEditing])
     {
-        [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        return;
+        if (indexPath.section == _recSectionIndex)
+        {
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
+            {
+                if ([_savingHelper hasData])
+                {
+                    [self doPush];
+                    [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
+                }
+            }
+            else
+            {
+                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+                purchasesViewController.openFromCustomPlace = YES;
+                [self.navigationController pushViewController:purchasesViewController animated:YES];
+            }
+        }
+        else if (indexPath.section == _tripsSectionIndex)
+        {
+            OAGPX* item;
+            if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
+            {
+                OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+                NSString *fileName = [doc.metadata.name stringByAppendingPathExtension:@"gpx"];
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+                
+                NSFileManager *fileMan = [NSFileManager defaultManager];
+                if ([fileMan fileExistsAtPath:path])
+                {
+                    NSString *ext = [fileName pathExtension];
+                    NSString *newName;
+                    for (int i = 1; i < 100000; i++) {
+                        newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
+                        if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
+                            break;
+                    }
+                    path = newName;
+                }
+                
+                [doc saveTo:path];
+                
+                OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+                item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+                [[OAGPXDatabase sharedDb] save];
+                
+                [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
+                [[_app updateGpxTracksOnMapObservable] notifyEvent];
+            }
+            else
+            {
+                item = [self.gpxList objectAtIndex:indexPath.row];
+            }
+            
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        }
+        else
+        {
+            NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
+            SEL action = NSSelectorFromString([item objectForKey:@"action"]);
+            [self performSelector:action];
+        }
     }
     
-    if (indexPath.section == _recSectionIndex)
-    {
-        if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
-        {
-            if ([_savingHelper hasData])
-            {
-                [self doPush];
-                [[OARootViewController instance].mapPanel openTargetViewWithGPX:nil pushed:YES];
-            }
-        }
-        else
-        {
-            OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-            purchasesViewController.openFromCustomPlace = YES;
-            [self.navigationController pushViewController:purchasesViewController animated:YES];
-        }
-    }
-    else if (indexPath.section == _tripsSectionIndex)
-    {
-        OAGPX* item;
-        if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
-        {
-            OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-            NSString *fileName = [doc.metadata.name stringByAppendingPathExtension:@"gpx"];
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-            
-            NSFileManager *fileMan = [NSFileManager defaultManager];
-            if ([fileMan fileExistsAtPath:path])
-            {
-                NSString *ext = [fileName pathExtension];
-                NSString *newName;
-                for (int i = 1; i < 100000; i++) {
-                    newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                    if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
-                        break;
-                }
-                path = newName;
-            }
-            
-            [doc saveTo:path];
-            
-            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-            item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
-            [[OAGPXDatabase sharedDb] save];
-            
-            [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-        }
-        else
-        {
-            item = [self.gpxList objectAtIndex:indexPath.row];
-        }
-        
-        [self doPush];
-        [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
-    }
-    else
-    {
-        NSDictionary* item = [self.menuItems objectAtIndex:indexPath.row];
-        SEL action = NSSelectorFromString([item objectForKey:@"action"]);
-        [self performSelector:action];
-    }
-
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (![self.gpxTableView isEditing] || ![self canEditRowAtIndexPath:indexPath])
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (void)doPush

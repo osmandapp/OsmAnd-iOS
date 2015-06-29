@@ -278,20 +278,23 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         [_pTypes addObject:_currentPOIType];
         
         // Category
-        OAPOICategory *key;
-        for (OAPOICategory *k in _pCategories.allKeys)
-            if ([k.name isEqualToString:_currentPOICategory.name])
-                key = k;
-        
-        if (!key)
+        if (_currentPOICategory)
         {
-            NSMutableArray *p = [NSMutableArray arrayWithObject:_currentPOIType];
-            [_pCategories setObject:p forKey:_currentPOICategory];
-        }
-        else
-        {
-            NSMutableArray *p = [_pCategories objectForKey:key];
-            [p addObject:_currentPOIType];
+            OAPOICategory *key;
+            for (OAPOICategory *k in _pCategories.allKeys)
+                if ([k.name isEqualToString:_currentPOICategory.name])
+                    key = k;
+            
+            if (!key)
+            {
+                NSMutableArray *p = [NSMutableArray arrayWithObject:_currentPOIType];
+                [_pCategories setObject:p forKey:_currentPOICategory];
+            }
+            else
+            {
+                NSMutableArray *p = [_pCategories objectForKey:key];
+                [p addObject:_currentPOIType];
+            }
         }
         
         // Filter

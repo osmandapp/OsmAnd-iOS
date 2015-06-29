@@ -396,3 +396,4 @@
 "gpx_remove_wpts_q" = "Voleu treure les fites seleccionades?";
 "create_new_trip" = "Crea un nou trajecte";
 "editing_waypoints" = "Edició de fites";
+"select_wpt_on_map" = "Seleccioneu un punt en el mapa per afegir-lo al trajecte";

@@ -394,3 +394,5 @@
 "change_color" = "更改顏色";
 "wpt_select" = "請選擇航點";
 "gpx_remove_wpts_q" = "您想要移除所選的航點嗎？";
+"create_new_trip" = "建立新的旅程";
+"editing_waypoints" = "編輯航點";

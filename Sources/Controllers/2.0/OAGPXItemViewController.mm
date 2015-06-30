@@ -393,7 +393,6 @@
         {
             _editing = NO;
             
-            [self.tableView bringSubviewToFront:self.contentView];
             self.tableView.hidden = NO;
 
             if (!_wasInit && _scrollPos != 0.0)
@@ -403,7 +402,7 @@
             {
                 [_waypointsController resetData];
                 [_waypointsController doViewDisappear];
-                [_waypointsController.tableView removeFromSuperview];
+                [_waypointsController.view removeFromSuperview];
             }
             
             self.buttonSort.hidden = YES;
@@ -437,7 +436,7 @@
 
             _waypointsController.view.frame = self.tableView.frame;
             [_waypointsController doViewAppear];
-            [self.contentView addSubview:_waypointsController.tableView];
+            [self.contentView addSubview:_waypointsController.view];
 
             self.tableView.hidden = YES;
             
@@ -671,7 +670,7 @@
         
         [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
             self.editToolbarView.frame = f;
-            _waypointsController.tableView.frame = CGRectMake(0.0, 0.0, cs.width, cs.height - f.size.height);
+            _waypointsController.view.frame = CGRectMake(0.0, 0.0, cs.width, cs.height - f.size.height);
         }];
     }
     else
@@ -682,7 +681,7 @@
         
         [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
             self.editToolbarView.frame = f;
-            _waypointsController.tableView.frame = self.contentView.bounds;
+            _waypointsController.view.frame = self.contentView.bounds;
         }];
     }
 }

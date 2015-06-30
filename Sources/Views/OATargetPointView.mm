@@ -2054,6 +2054,10 @@
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateCoordinateLabel];
+
+        OAGPX *item = _targetPoint.targetObj;
+        if (!item.newGpx)
+            self.addressLabel.text = item.gpxTitle;
     }
 }
 

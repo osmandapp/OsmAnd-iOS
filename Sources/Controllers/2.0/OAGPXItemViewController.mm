@@ -35,7 +35,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate, UIAlertViewDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -494,20 +494,53 @@
     {
         case kSegmentStatistics:
         {
-            [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
-                                    message:nil
-                                cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
-                                otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
-                                 completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                     if (!cancelled)
-                                     {
-                                         if (buttonIndex == 0)
-                                             [self deleteClicked:nil];
-                                         else
-                                             [self exportClicked:nil];
-                                     }
-                                 }];
+            if (self.gpx.newGpx || self. showCurrentTrack)
+                [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
+                                        message:nil
+                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                    otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
+                                    otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
+                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                         if (!cancelled)
+                                         {
+                                             switch (buttonIndex) {
+                                                 case 0:
+                                                     [self deleteClicked:nil];
+                                                     break;
+                                                 case 1:
+                                                     [self exportClicked:nil];
+                                                     break;
+                                                     
+                                                 default:
+                                                     break;
+                                             }
+                                         }
+                                     }];
+            else
+                [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
+                                        message:nil
+                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
+                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png"]
+                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                         if (!cancelled)
+                                         {
+                                             switch (buttonIndex) {
+                                                 case 0:
+                                                     [self renameTrip];
+                                                     break;
+                                                 case 1:
+                                                     [self deleteClicked:nil];
+                                                     break;
+                                                 case 2:
+                                                     [self exportClicked:nil];
+                                                     break;
+                                                     
+                                                 default:
+                                                     break;
+                                             }
+                                         }
+                                     }];
             break;
         }
             
@@ -729,6 +762,14 @@
     [_exportController presentOptionsMenuFromRect:CGRectZero
                                            inView:self.navController.view
                                          animated:YES];
+}
+
+- (void)renameTrip
+{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"gpx_rename_q") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", self.gpx.gpxTitle) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert textFieldAtIndex:0].text = self.gpx.gpxTitle;
+    [alert show];
 }
 
 - (IBAction)deleteClicked:(id)sender
@@ -1085,6 +1126,64 @@
 {
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        NSString* newName = [alertView textFieldAtIndex:0].text;
+        if (newName.length > 0)
+        {
+            self.gpx.gpxTitle = newName;
+            [[OAGPXDatabase sharedDb] save];
+            
+            OAGpxMetadata *metadata;
+            if (self.doc.metadata)
+            {
+                metadata = (OAGpxMetadata *)self.doc.metadata;
+            }
+            else
+            {
+                metadata = [[OAGpxMetadata alloc] init];
+                long time = 0;
+                if (self.doc.locationMarks.count > 0)
+                {
+                    time = ((OAGpxWpt *)self.doc.locationMarks[0]).time;
+                }
+                if (self.doc.tracks.count > 0)
+                {
+                    OAGpxTrk *track = self.doc.tracks[0];
+                    if (track.segments.count > 0)
+                    {
+                        OAGpxTrkSeg *seg = track.segments[0];
+                        if (seg.points.count > 0)
+                        {
+                            OAGpxTrkPt *p = seg.points[0];
+                            if (time > p.time)
+                                time = p.time;
+                        }
+                    }
+                }
+                
+                if (time == 0)
+                    metadata.time = (long)[[NSDate date] timeIntervalSince1970];
+                else
+                    metadata.time = time;
+            }
+            
+            metadata.name = newName;
+            
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+            [_mapViewController updateMetadata:metadata docPath:path];
+            
+            self.titleView.text = newName;
+            if (self.delegate)
+                [self.delegate contentChanged];
+        }
+    }
 }
 
 @end

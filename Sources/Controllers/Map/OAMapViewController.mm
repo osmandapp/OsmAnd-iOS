@@ -3946,6 +3946,52 @@
     return found;
 }
 
+- (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath
+{
+    if (!metadata)
+        return NO;
+    
+    for (int i = 0; i < _geoInfoDocsGpxPaths.count; i++)
+    {
+        if ([_geoInfoDocsGpxPaths[i] isEqualToString:docPath])
+        {
+            auto docGeoInfo = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_geoInfoDocsGpx[i]);
+            auto doc = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(docGeoInfo);
+            
+            OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
+            std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
+            
+            if (m == nullptr)
+            {
+                m.reset(new OsmAnd::GpxDocument::GpxMetadata());
+                doc->metadata = m;
+            }
+            
+            [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+
+            doc->saveTo(QString::fromNSString(docPath));
+            
+            return YES;
+        }
+    }
+    
+    if (!_geoInfoDocsGpxTemp.isEmpty())
+    {
+        const auto& doc = std::dynamic_pointer_cast<const OsmAnd::GpxDocument>(_geoInfoDocsGpxTemp.first());
+        
+        OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata> *_meta = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxMetadata>*)&doc->metadata;
+        const std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata> m = _meta->shared_ptr();
+        
+        [OAGPXDocument fillMetadata:m usingMetadata:metadata];
+        
+        doc->saveTo(QString::fromNSString(docPath));
+        
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath
 {
     if (items.count == 0)

@@ -461,6 +461,22 @@
     }
 }
 
++ (void)fillMetadata:(std::shared_ptr<OsmAnd::GpxDocument::GpxMetadata>)meta usingMetadata:(OAGpxMetadata *)m
+{
+    meta->name = QString::fromNSString(m.name);
+    meta->description = QString::fromNSString(m.desc);
+    meta->timestamp = QDateTime::fromTime_t(m.time);
+    
+    [self fillLinks:meta->links linkArray:m.links];
+    
+    std::shared_ptr<OsmAnd::GpxDocument::GpxExtensions> extensions;
+    extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
+    if (m.extraData)
+        [self fillExtensions:extensions ext:(OAGpxExtensions *)m.extraData];
+    meta->extraData = extensions;
+    extensions = nullptr;
+}
+
 + (void)fillWpt:(std::shared_ptr<OsmAnd::GpxDocument::GpxWpt>)wpt usingWpt:(OAGpxWpt *)w
 {
     wpt->position.latitude = w.position.latitude;
@@ -542,19 +558,8 @@
 
     metadata.reset(new OsmAnd::GpxDocument::GpxMetadata());
     if (self.metadata)
-    {
-        metadata->name = QString::fromNSString(_metadata.name);
-        metadata->description = QString::fromNSString(_metadata.desc);
-        metadata->timestamp = QDateTime::fromTime_t(_metadata.time);
+        [OAGPXDocument fillMetadata:metadata usingMetadata:(OAGpxMetadata *)self.metadata];
 
-        [OAGPXDocument fillLinks:metadata->links linkArray:_metadata.links];
-        
-        extensions.reset(new OsmAnd::GpxDocument::GpxExtensions());
-        if (_metadata.extraData)
-            [OAGPXDocument fillExtensions:extensions ext:(OAGpxExtensions *)_metadata.extraData];
-        metadata->extraData = extensions;
-        extensions = nullptr;
-    }
     document->metadata = metadata;
     metadata = nullptr;
 

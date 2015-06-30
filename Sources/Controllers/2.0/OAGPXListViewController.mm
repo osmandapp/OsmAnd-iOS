@@ -247,7 +247,7 @@ static OAGPXListViewController *parentController;
                 NSFileManager *fileMan = [NSFileManager defaultManager];
                 NSString *ext = [_importUrl.path pathExtension];
                 NSString *newName;
-                for (int i = 1; i < 100000; i++) {
+                for (int i = 2; i < 100000; i++) {
                     newName = [[NSString stringWithFormat:@"%@_%d", [[_importUrl.path lastPathComponent] stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
                     if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
                         break;
@@ -968,7 +968,11 @@ static OAGPXListViewController *parentController;
             if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
             {
                 OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-                NSString *fileName = [doc.metadata.name stringByAppendingPathExtension:@"gpx"];
+
+                NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+                [fmt setDateFormat:@"yyyy-MM-dd"];
+
+                NSString *fileName = [NSString stringWithFormat:@"Trip_%@.gpx", [fmt stringFromDate:[NSDate date]]];
                 NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
                 
                 NSFileManager *fileMan = [NSFileManager defaultManager];
@@ -976,12 +980,12 @@ static OAGPXListViewController *parentController;
                 {
                     NSString *ext = [fileName pathExtension];
                     NSString *newName;
-                    for (int i = 1; i < 100000; i++) {
+                    for (int i = 2; i < 100000; i++) {
                         newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                        if (![fileMan fileExistsAtPath:[_app.gpxPath stringByAppendingPathComponent:newName]])
+                        path = [_app.gpxPath stringByAppendingPathComponent:newName];
+                        if (![fileMan fileExistsAtPath:path])
                             break;
                     }
-                    path = newName;
                 }
                 
                 [doc saveTo:path];

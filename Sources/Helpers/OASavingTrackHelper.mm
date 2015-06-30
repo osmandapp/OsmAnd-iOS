@@ -320,7 +320,6 @@
     [currentTrack.locationMarks removeAllObjects];
     [currentTrack.tracks removeAllObjects];
     [currentTrack initBounds];
-    [currentTrack updateDocName];
     currentTrack.modifiedTime = (long)[[NSDate date] timeIntervalSince1970];
     
     [self prepareCurrentTrackForRecording];

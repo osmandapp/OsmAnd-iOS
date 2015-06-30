@@ -399,6 +399,11 @@ typedef enum
         [_widgetsView updateGpxRec];
     });
     
+    if (_activeTargetActive && _activeTargetType == OATargetGPX && !_activeTargetObj)
+    {
+        [self targetHideMenu:.3 backButtonClicked:NO];
+    }
+    
     if (askForRec)
     {
         [PXAlertView showAlertWithTitle:OALocalizedString(@"track_continue_rec_q")

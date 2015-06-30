@@ -73,6 +73,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 
 @class OAGpxWpt;
+@class OAGpxMetadata;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -139,6 +140,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
+- (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
 
 @property(readonly) CGFloat displayDensityFactor;
 

@@ -446,4 +446,6 @@
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";
+"gpx_rename_q" = "Rename trip";
+"gpx_enter_new_name" = "Please enter new name for the trip";
 

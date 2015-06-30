@@ -638,6 +638,9 @@
         }
         else
         {
+            if (!_showFull && self.customController && [self.customController supportMapInteraction])
+                return;
+
             if (_showFull || translatedVelocity.y < 200.0 || ![self preHide])
             {
                 CGRect frame = self.frame;
@@ -699,9 +702,6 @@
             }
             else
             {
-                if (!_showFull && self.customController && [self.customController supportMapInteraction])
-                    return;
-                
                 CGFloat delta = self.frame.origin.y - DeviceScreenHeight;
                 CGFloat duration = (delta > 0.0 ? .3 : fabs(delta / translatedVelocity.y));
                 if (duration > .3)

@@ -2004,6 +2004,7 @@
 {
     if (_animatedPin)
     {
+        [_animatedPin.layer removeAllAnimations];
         [_animatedPin removeFromSuperview];
         _animatedPin = nil;
     }

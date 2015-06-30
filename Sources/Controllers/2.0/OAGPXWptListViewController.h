@@ -17,6 +17,14 @@ typedef enum
     
 } EPointsSortingType;
 
+@protocol OAGPXWptListViewControllerDelegate <NSObject>
+
+@optional
+- (void) callGpxEditMode;
+
+@end
+
+
 @interface OAGPXWptListViewController : UITableViewController
 
 @property (assign, nonatomic) EPointsSortingType sortingType;
@@ -36,6 +44,8 @@ typedef enum
 @property CGFloat azimuthDirection;
 
 @property NSTimeInterval lastUpdate;
+
+@property (weak, nonatomic) id<OAGPXWptListViewControllerDelegate> delegate;
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks;
 - (void)setPoints:(NSArray *)locationMarks;

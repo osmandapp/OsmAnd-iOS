@@ -1484,6 +1484,11 @@ typedef enum
 
 }
 
+-(void)targetHideContextPinMarker
+{
+    [_mapViewController hideContextPinMarker];
+}
+
 -(void)targetHide
 {
     [_mapViewController hideContextPinMarker];

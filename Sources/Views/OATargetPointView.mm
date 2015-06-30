@@ -2057,6 +2057,35 @@
     }
 }
 
+- (void) requestHeaderOnlyMode;
+{
+    if (![self isLandscape])
+    {
+        _showFull = NO;
+        _showFullScreen = NO;
+
+        CGFloat h = kOATargetPointViewHeightPortrait;
+        if ([self isLandscape])
+            h = kOATargetPointViewHeightLandscape;
+        
+        if (_hideButtons)
+            h -= kOATargetPointButtonsViewHeight;
+
+        if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
+            [self hideTopToolbar:YES];
+        
+        if (!_showFull && self.customController && [self.customController supportMapInteraction])
+        {
+            [self.delegate targetViewEnableMapInteraction];
+            [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
+        }
+        
+        [UIView animateWithDuration:.3 animations:^{
+            [self doLayoutSubviews];
+        }];
+    }
+}
+
 - (void)requestFullScreenMode
 {
     if (![self isLandscape])
@@ -2083,7 +2112,8 @@
 
 - (void) btnDeletePressed
 {
-    [self.delegate targetHide];
+    [self.delegate targetHideContextPinMarker];
+    [self.delegate targetHideMenu:.3 backButtonClicked:YES];
 }
 
 #pragma mark - OATargetPointZoomViewDelegate

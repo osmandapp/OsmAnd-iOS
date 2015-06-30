@@ -35,7 +35,7 @@
 @end
 
 
-@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate> {
+@interface OAGPXItemViewController ()<UIDocumentInteractionControllerDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, OAGPXWptListViewControllerDelegate> {
 
     OsmAndAppInstance _app;
     NSDateFormatter *dateTimeFormatter;
@@ -296,7 +296,7 @@
 
     [self.segmentView setSelectedSegmentIndex:_segmentType];
     [self applySegmentType];
-    
+    [self resetSortModeIfNeeded];
     [self addBadge];
 
     if (self.showCurrentTrack)
@@ -350,6 +350,19 @@
     [_badge addSubview:badgeLabel];
     
     [self.segmentViewContainer addSubview:_badge];
+}
+
+- (void)resetSortModeIfNeeded
+{
+    if (self.doc.locationMarks.count == 0)
+    {
+        _sortingType = EPointsSortingTypeGrouped;
+        if (_waypointsController)
+        {
+            _waypointsController.sortingType = _sortingType;
+            [_waypointsController updateSortButton:self.buttonSort];
+        }
+    }
 }
 
 - (OATargetMenuViewControllerState *) getCurrentState
@@ -416,6 +429,7 @@
             if (!_waypointsController)
             {
                 _waypointsController = [[OAGPXWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+                _waypointsController.delegate = self;
                 _waypointsController.sortingType = _sortingType;
                 [_waypointsController updateSortButton:self.buttonSort];
                 _waypointsController.allGroups = [self readGroups];
@@ -457,6 +471,9 @@
     else
         [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
 
+    NSInteger wptCount = self.doc.locationMarks.count;
+    self.buttonSort.enabled = wptCount;
+    self.buttonEdit.enabled = wptCount;
 }
 
 - (NSArray *)readGroups
@@ -567,7 +584,10 @@
                                  [_waypointsController setPoints:self.doc.locationMarks];
                                  [_waypointsController generateData];
                                  [self addBadge];
+                                 [self resetSortModeIfNeeded];
                                  [self editClicked:nil];
+                                 if (self.delegate)
+                                     [self.delegate contentChanged];
                              }
                          }];
 }
@@ -1058,6 +1078,14 @@
     
     [_waypointsController generateData];
     [self editClicked:nil];
+}
+
+#pragma mark - OAGPXWptListViewControllerDelegate
+
+-(void)callGpxEditMode
+{
+    if (self.delegate)
+        [self.delegate requestHeaderOnlyMode];
 }
 
 @end

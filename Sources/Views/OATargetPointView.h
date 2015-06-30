@@ -88,6 +88,7 @@
 -(void)targetPointParking;
 -(void)targetPointAddWaypoint;
 
+-(void)targetHideContextPinMarker;
 -(void)targetHide;
 -(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
 -(void)targetGoToPoint;

@@ -14,6 +14,7 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAMultiselectableHeaderView.h"
+#import "OAIconTextTableViewCell.h"
 
 #import "OsmAndApp.h"
 
@@ -121,7 +122,8 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         
         NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
-        [self.tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
+        if (visibleIndexPaths.count > 0)
+            [self.tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
         
     });
 }
@@ -247,6 +249,9 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
+    if (self.unsortedPoints.count == 0)
+        return 1;
+    
     switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
@@ -262,12 +267,22 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
+    if (self.unsortedPoints.count == 0)
+        return nil;
+
     switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
         {
-            NSString *group = self.groups[section];
-            return (group.length == 0 ? OALocalizedString(@"fav_no_group") : group);
+            if (self.groups.count > section)
+            {
+                NSString *group = self.groups[section];
+                return (group.length == 0 ? OALocalizedString(@"fav_no_group") : group);
+            }
+            else
+            {
+                return nil;
+            }
         }
         case EPointsSortingTypeDistance:
         {
@@ -281,6 +296,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.unsortedPoints.count == 0)
+        return 1;
+
     switch (_sortingType)
     {
         case EPointsSortingTypeGrouped:
@@ -294,37 +312,58 @@
     }
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-    static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
-    
-    OAPointTableViewCell* cell;
-    cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-    if (cell == nil)
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (self.unsortedPoints.count == 0)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
-        cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
-    }
-    
-    if (cell) {
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
         
-        OAGpxWptItem* item = [self getWptItem:indexPath];
-        
-        [cell.titleView setText:item.point.name];
-        [cell.distanceView setText:item.distance];
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-        
-        if (!cell.titleIcon.hidden) {
-            cell.titleIcon.hidden = YES;
-            CGRect f = cell.titleView.frame;
-            cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
-            cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
-            cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         }
+        
+        if (cell) {
+            [cell.textView setText:OALocalizedString(@"add_waypoint")];
+            [cell.iconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
+        }
+        return cell;
+    }
+    else
+    {
+        static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
+        
+        OAPointTableViewCell* cell;
+        cell = (OAPointTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointCell" owner:self options:nil];
+            cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell) {
+            
+            OAGpxWptItem* item = [self getWptItem:indexPath];
+            
+            [cell.titleView setText:item.point.name];
+            [cell.distanceView setText:item.distance];
+            cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+            
+            if (!cell.titleIcon.hidden) {
+                cell.titleIcon.hidden = YES;
+                CGRect f = cell.titleView.frame;
+                cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
+                cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
+                cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
+            }
+        }
+        return cell;
     }
     
-    return cell;
-    
+    return nil;
 }
 
 -(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
@@ -381,6 +420,13 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (self.unsortedPoints.count == 0)
+    {
+        if (self.delegate)
+            [self.delegate callGpxEditMode];
+        return;
+    }
+
     if (self.tableView.editing)
         return;
     
@@ -397,7 +443,10 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 40.0;
+    if (self.unsortedPoints.count == 0)
+        return 0.01;
+    else
+        return 40.0;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
@@ -407,10 +456,15 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    if (self.unsortedPoints.count == 0)
+        return nil;
+
     if (self.sortingType == EPointsSortingTypeDistance)
         return _sortedHeaderView;
-    else
+    else if (_unsortedHeaderViews.count > section)
         return _unsortedHeaderViews[section];
+    else
+        return nil;
 }
 
 #pragma mark - OAMultiselectableHeaderDelegate

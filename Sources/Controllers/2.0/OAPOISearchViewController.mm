@@ -1355,7 +1355,10 @@ typedef enum
     {
         NSMutableArray *typesStrictArray = [NSMutableArray array];
         NSMutableArray *typesOthersArray = [NSMutableArray array];
-        for (OAPOIType *poi in searchableContent) {
+        for (OAPOIType *poi in searchableContent)
+        {
+            if ((!poi.category && !poi.filter) || poi.mapOnly)
+                continue;
             
             if (_currentScopeCategoryName && ![poi.category isEqualToString:_currentScopeCategoryName])
                 continue;

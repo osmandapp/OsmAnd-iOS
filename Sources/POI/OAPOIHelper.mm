@@ -474,6 +474,9 @@
     }
     poi.type = type;
     
+    if (type.mapOnly)
+        return;
+    
     if (poi.name.length == 0)
         poi.name = type.name;
     if (poi.nameLocalized.length == 0)

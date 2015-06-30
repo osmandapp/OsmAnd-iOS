@@ -27,7 +27,8 @@
 @property (nonatomic) NSString *filterLocalizedEN;
 @property (nonatomic) NSString *filterLocalized;
 
-@property (nonatomic) BOOL reference;
+@property (nonatomic, assign) BOOL reference;
+@property (nonatomic, assign) BOOL mapOnly;
 
 @property (weak, nonatomic) OAPOI *parent;
 

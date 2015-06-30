@@ -155,6 +155,8 @@ static const char *kValueAttributeName = "value";
 static NSUInteger kValueAttributeNameLength = 6;
 static const char *kTopAttributeName = "top";
 static NSUInteger kTopAttributeNameLength = 4;
+static const char *kMapAttributeName = "map";
+static NSUInteger kMapAttributeNameLength = 4;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -274,7 +276,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                        encoding:NSUTF8StringEncoding];
                 _currentPOIType.value = value;
             }            
+            else if (0 == strncmp((const char*)attributes[i].localname, kMapAttributeName,
+                                  kMapAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                _currentPOIType.mapOnly = [[value lowercaseString] isEqualToString:@"true"];
+            }
         }
+        
         [_pTypes addObject:_currentPOIType];
         
         // Category

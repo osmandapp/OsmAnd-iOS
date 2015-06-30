@@ -396,3 +396,4 @@
 "gpx_remove_wpts_q" = "您想要移除所選的航點嗎？";
 "create_new_trip" = "建立新的旅程";
 "editing_waypoints" = "編輯航點";
+"select_wpt_on_map" = "在地圖上選取標點以增加到旅程";

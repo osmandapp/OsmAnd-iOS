@@ -399,3 +399,4 @@
 "select_wpt_on_map" = "Válasszon egy pontot a térképen az utazáshoz való hozzáadáshoz";
 "gpx_rename_q" = "Utazás átnevezése";
 "gpx_enter_new_name" = "Adjon meg egy új nevet az utazáshoz";
+"gpx_route" = "Út";

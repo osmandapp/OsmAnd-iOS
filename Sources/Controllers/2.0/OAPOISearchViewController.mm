@@ -886,14 +886,14 @@ typedef enum
 {
     if (!decelerate) {
         isDecelerating = NO;
-        [self refreshVisibleRows];
+        //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     isDecelerating = NO;
-    [self refreshVisibleRows];
+    //[self refreshVisibleRows];
 }
 
 #pragma mark - UITableViewDelegate

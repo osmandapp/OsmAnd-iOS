@@ -72,6 +72,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
 @property (weak, nonatomic) IBOutlet UIButton *buttonClose;
+@property (weak, nonatomic) IBOutlet UIButton *buttonRight;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet UIView *backView1;
@@ -369,7 +370,7 @@
                                                                       });
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
-    [self addGestureRecognizer:_panGesture];
+    //[self addGestureRecognizer:_panGesture];
 
 }
 
@@ -924,11 +925,25 @@
     }
 }
 
+- (void)updateUIOnInit
+{
+    if (_targetPoint.type == OATargetGPX)
+    {
+        OAGPX *item = _targetPoint.targetObj;
+        _buttonRight.hidden = (item.newGpx || !item);
+    }
+    else
+    {
+        _buttonRight.hidden = YES;
+    }
+}
+
 - (void)doInit:(BOOL)showFull
 {
     _showFull = showFull;
     _showFullScreen = NO;
     [self clearCustomControllerIfNeeded];
+    [self updateUIOnInit];
 }
 
 - (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen
@@ -936,6 +951,7 @@
     _showFull = showFull;
     _showFullScreen = showFullScreen;
     [self clearCustomControllerIfNeeded];
+    [self updateUIOnInit];
 }
 
 - (void)updateButtonClose
@@ -945,7 +961,7 @@
 
 - (void)doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute);
     self.buttonsView.hidden = _hideButtons;
     [self updateButtonClose];
     
@@ -1115,6 +1131,18 @@
         [self.parentView addSubview:self.zoomView];
     }
 
+    if (_targetPoint.type == OATargetGPXRoute)
+    {
+        if ([self.gestureRecognizers containsObject:_panGesture])
+            [self removeGestureRecognizer:_panGesture];
+    }
+    else
+    {
+        if (![self.gestureRecognizers containsObject:_panGesture])
+            [self addGestureRecognizer:_panGesture];
+    }
+
+    
     if (animated)
     {
         CGRect frame = self.frame;
@@ -2035,6 +2063,12 @@
 - (IBAction)buttonCloseClicked:(id)sender
 {
     [self.delegate targetHide];
+}
+
+- (IBAction)buttonRightClicked:(id)sender
+{
+    if (_targetPoint.type == OATargetGPX)
+        [self.delegate targetGoToGPXRoute];
 }
 
 #pragma mark

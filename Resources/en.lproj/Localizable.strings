@@ -84,6 +84,7 @@
 
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
+"gpx_route" = "Route";
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "gpx_distance" = "Distance";

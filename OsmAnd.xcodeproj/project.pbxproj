@@ -221,6 +221,12 @@
 		3AFEEEA01A13722500900A47 /* OAMapSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */; };
 		3AFEEEA11A13722500900A47 /* OAMapSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */; };
 		7EFF1178FEBF4FCAB9DDFFCC /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 90FA13E852C14245A4ED3E9D /* libPods.a */; };
+		840ED47B1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */; };
+		840ED47C1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */; };
+		840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */; };
+		840ED47E1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
+		840ED47F1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
+		840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
 		841222251B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
 		841222261B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
 		841222271B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
@@ -443,6 +449,12 @@
 		8420C1CF1B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1C81B42F2AC004EDAE6 /* ic_dialog_rename@3x.png */; };
 		8420C1D01B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1C81B42F2AC004EDAE6 /* ic_dialog_rename@3x.png */; };
 		8420C1D11B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1C81B42F2AC004EDAE6 /* ic_dialog_rename@3x.png */; };
+		8420C1D51B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */; };
+		8420C1D61B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */; };
+		8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */; };
+		8420C1D81B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1D41B43D6B4004EDAE6 /* OAGPXRouteViewController.xib */; };
+		8420C1D91B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1D41B43D6B4004EDAE6 /* OAGPXRouteViewController.xib */; };
+		8420C1DA1B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420C1D41B43D6B4004EDAE6 /* OAGPXRouteViewController.xib */; };
 		8420EEF71B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.m */; };
 		8420EEF81B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.m */; };
 		8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.m */; };
@@ -2396,6 +2408,9 @@
 		3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapSettingsViewController.xib; path = Sources/Controllers/2.0/OAMapSettingsViewController.xib; sourceTree = "<group>"; };
 		46E6A59CC7494826B3DC682B /* libPods-dev.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-dev.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		73DA1702B63C7592558F9675 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		840ED4781B44184900A7E58A /* OAGPXRouteWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXRouteWptListViewController.h; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.h; sourceTree = "<group>"; };
+		840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXRouteWptListViewController.mm; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.mm; sourceTree = "<group>"; };
+		840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXRouteWptListViewController.xib; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.xib; sourceTree = "<group>"; };
 		841222221B395D2C00F80F9E /* ic_travel_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_travel_time.png; path = Resources/Icons/ic_travel_time.png; sourceTree = "<group>"; };
 		841222231B395D2C00F80F9E /* ic_travel_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_travel_time@2x.png"; path = "Resources/Icons/ic_travel_time@2x.png"; sourceTree = "<group>"; };
 		841222241B395D2C00F80F9E /* ic_travel_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_travel_time@3x.png"; path = "Resources/Icons/ic_travel_time@3x.png"; sourceTree = "<group>"; };
@@ -2478,6 +2493,9 @@
 		8420C1C61B42F2AC004EDAE6 /* ic_dialog_rename.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_dialog_rename.png; path = Resources/Icons/ic_dialog_rename.png; sourceTree = "<group>"; };
 		8420C1C71B42F2AC004EDAE6 /* ic_dialog_rename@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_rename@2x.png"; path = "Resources/Icons/ic_dialog_rename@2x.png"; sourceTree = "<group>"; };
 		8420C1C81B42F2AC004EDAE6 /* ic_dialog_rename@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_rename@3x.png"; path = "Resources/Icons/ic_dialog_rename@3x.png"; sourceTree = "<group>"; };
+		8420C1D21B43D6B4004EDAE6 /* OAGPXRouteViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXRouteViewController.h; path = Sources/Controllers/2.0/OAGPXRouteViewController.h; sourceTree = "<group>"; };
+		8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXRouteViewController.mm; path = Sources/Controllers/2.0/OAGPXRouteViewController.mm; sourceTree = "<group>"; };
+		8420C1D41B43D6B4004EDAE6 /* OAGPXRouteViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXRouteViewController.xib; path = Sources/Controllers/2.0/OAGPXRouteViewController.xib; sourceTree = "<group>"; };
 		8420EEF41B1EE7C000797AC4 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditDescriptionViewController.h; path = Sources/Controllers/2.0/OAEditDescriptionViewController.h; sourceTree = "<group>"; };
 		8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAEditDescriptionViewController.m; path = Sources/Controllers/2.0/OAEditDescriptionViewController.m; sourceTree = "<group>"; };
 		8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAEditDescriptionViewController.xib; path = Sources/Controllers/2.0/OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
@@ -3388,6 +3406,12 @@
 				84B4FD611A91D4B800A147BA /* OAGPXItemViewController.h */,
 				84B4FD621A91D4B800A147BA /* OAGPXItemViewController.mm */,
 				84B4FD631A91D4B800A147BA /* OAGPXItemViewController.xib */,
+				840ED4781B44184900A7E58A /* OAGPXRouteWptListViewController.h */,
+				840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */,
+				840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */,
+				8420C1D21B43D6B4004EDAE6 /* OAGPXRouteViewController.h */,
+				8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */,
+				8420C1D41B43D6B4004EDAE6 /* OAGPXRouteViewController.xib */,
 			);
 			name = GPX;
 			sourceTree = "<group>";
@@ -5146,6 +5170,7 @@
 				8454DA5B1B31774F00E5A5C5 /* ic_mode_pedestrian@3x.png in Resources */,
 				84755A781B34640C005B95C1 /* my_location_marker_icon.png in Resources */,
 				843E5D0C1AB341E000BE14BE /* left_menu_icon_map.png in Resources */,
+				840ED47E1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */,
 				84185AF61AAA124D00F70328 /* ic_height@2x.png in Resources */,
 				84185A641AA8ADFF00F70328 /* ic_map_pin.png in Resources */,
 				8420C1CF1B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */,
@@ -5198,6 +5223,7 @@
 				8412224C1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				849E81941AFA5D6700549953 /* btn_map_type_icon_view.png in Resources */,
 				8441CB4A1B1370580033AC95 /* export_items@3x.png in Resources */,
+				8420C1D81B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */,
 				848D170F1B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */,
 				8A70772A1A84F0F9005E019B /* OptionsPanel.xib in Resources */,
 				8AF2197F1A7FAE400091071B /* OAPointCell.xib in Resources */,
@@ -5718,6 +5744,7 @@
 				8454DA5C1B31774F00E5A5C5 /* ic_mode_pedestrian@3x.png in Resources */,
 				84755A791B34640C005B95C1 /* my_location_marker_icon.png in Resources */,
 				84BD08B91AB16174006DA3F7 /* HUD_debug_actions_button@3x.png in Resources */,
+				840ED47F1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */,
 				843E5D0D1AB341E000BE14BE /* left_menu_icon_map.png in Resources */,
 				84185AF71AAA124D00F70328 /* ic_height@2x.png in Resources */,
 				8420C1D01B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */,
@@ -5770,6 +5797,7 @@
 				8412224D1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				849E81951AFA5D6700549953 /* btn_map_type_icon_view.png in Resources */,
 				8441CB4B1B1370580033AC95 /* export_items@3x.png in Resources */,
+				8420C1D91B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */,
 				84CC52551AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				848D17101B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */,
 				BB451E7818DCD224005FBE09 /* HUD_menu_narrowbutton@2x.png in Resources */,
@@ -6187,6 +6215,7 @@
 				8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */,
 				84E1DEC41B0DFDE9002A6946 /* bt_round_big_blue.png in Resources */,
 				84E2DB5B1AB720FA001A7FEC /* left_menu_icon_about@2x.png in Resources */,
+				8420C1DA1B43D6B4004EDAE6 /* OAGPXRouteViewController.xib in Resources */,
 				843257F01A9F807400A7964E /* ic_speed@2x.png in Resources */,
 				84EE2DA01AFBB6D2007C9A94 /* track_clear_data@2x.png in Resources */,
 				84E1DECA1B0DFDE9002A6946 /* bt_round_big_blue@3x.png in Resources */,
@@ -6407,6 +6436,7 @@
 				BB27270119CB38D7007C5613 /* fonts in Resources */,
 				8434BAAA1B149CE2003FD0FC /* HUD_compass_bg.png in Resources */,
 				843257DB1A9F65A400A7964E /* ic_mark_star@3x.png in Resources */,
+				840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */,
 				841222721B39CC5200F80F9E /* my_location_marker_heading_icon2@2x.png in Resources */,
 				84EE2DB81AFCC4F5007C9A94 /* bt_bought_addon_disabled@2x.png in Resources */,
 				84185ADD1AAA11B600F70328 /* ic_favorite_6@3x.png in Resources */,
@@ -6751,6 +6781,7 @@
 				BB32C0431925FB43007999A0 /* OATableViewCell.m in Sources */,
 				849E81301AFA146E00549953 /* OATimeTableViewCell.m in Sources */,
 				848D17151B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
+				840ED47B1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				84D81EF41AA37075001098FD /* OADestinationCell.mm in Sources */,
 				8424326B1AF22B9700925821 /* OAGPXMutableDocument.mm in Sources */,
 				BBA3B0221988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
@@ -6804,6 +6835,7 @@
 				84BFC2371A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
 				84387B381ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
+				8420C1D51B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
 				3AFEEE671A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4019F43004003F1D42 /* OAMapRulerView.m in Sources */,
@@ -6909,6 +6941,7 @@
 				BBA3B0231988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
 				849E81311AFA146E00549953 /* OATimeTableViewCell.m in Sources */,
 				848D17161B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
+				840ED47C1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				84D81EF51AA37075001098FD /* OADestinationCell.mm in Sources */,
 				8424326C1AF22B9700925821 /* OAGPXMutableDocument.mm in Sources */,
 				BBA3AED5197500DE0039D991 /* OABrowseMapAppModeHudViewController.mm in Sources */,
@@ -6962,6 +6995,7 @@
 				84BFC2381A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BBA3AED7197500DE0039D991 /* OAMapViewController.mm in Sources */,
 				84387B391ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
+				8420C1D61B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
 				3AFEEE681A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4119F4F53D003F1D42 /* OAMapRulerView.m in Sources */,
@@ -7012,6 +7046,7 @@
 				3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
+				8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				8417A67B1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				3A8314881A07ECCF00473C38 /* OATargetPointView.mm in Sources */,
 				84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */,
@@ -7025,6 +7060,7 @@
 				84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
 				84EE2DFE1AFE580B007C9A94 /* OAIconTextExTableViewCell.m in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
+				840ED47D1B44184900A7E58A /* OAGPXRouteWptListViewController.mm in Sources */,
 				3AFEEE171A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */,
 				BBA3AF43197FC4BB0039D991 /* OsmAndApp.mm in Sources */,

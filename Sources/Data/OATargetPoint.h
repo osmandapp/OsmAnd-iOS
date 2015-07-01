@@ -20,6 +20,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetWiki,
     OATargetWpt,
     OATargetGPX,
+    OATargetGPXRoute,
 };
 
 @interface OATargetPoint : NSObject

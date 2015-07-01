@@ -137,17 +137,25 @@ static OAFavoriteListViewController *parentController;
 
 - (void)updateDistanceAndDirection
 {
+    [self updateDistanceAndDirection:NO];
+}
+
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+{
     if ([self.favoriteTableView isEditing])
         return;
 
-    
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
         return;
     self.lastUpdate = [[NSDate date] timeIntervalSince1970];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;
+    
+    if (!newLocation)
+        return;
+    
     CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
     CLLocationDirection newDirection =
     (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
@@ -192,10 +200,45 @@ static OAFavoriteListViewController *parentController;
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        [self.favoriteTableView beginUpdates];
         NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
-        [self.favoriteTableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
-        //[self.favoriteTableView reloadData];
+        for (NSIndexPath *i in visibleIndexPaths)
+        {
+            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:i];
+            if ([cell isKindOfClass:[OAPointTableViewCell class]])
+            {
+                OAFavoriteItem* item;
+                if (self.directionButton.tag == 1)
+                {
+                    if (i.section == 0)
+                        item = [self.sortedFavoriteItems objectAtIndex:i.row];
+                }
+                else
+                {
+                    FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:i.section];
+                    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
+                        item = [groupData.groupItems objectAtIndex:i.row];
+                }
+
+                if (item)
+                {
+                    OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
+
+                    [c.titleView setText:item.favorite->getTitle().toNSString()];
+                    UIColor* color = [UIColor colorWithRed:item.favorite->getColor().r/255.0 green:item.favorite->getColor().g/255.0 blue:item.favorite->getColor().b/255.0 alpha:1.0];
+                    
+                    OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+                    c.titleIcon.image = favCol.icon;
+                    
+                    [c.distanceView setText:item.distance];
+                    c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+                }
+            }
+        }
+        [self.favoriteTableView endUpdates];
+
+        //NSArray *visibleIndexPaths = [self.favoriteTableView indexPathsForVisibleRows];
+        //[self.favoriteTableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
         
     });
 }
@@ -215,6 +258,7 @@ static OAFavoriteListViewController *parentController;
     
     [self generateData];
     [self setupView];
+    [self updateDistanceAndDirection:YES];
     
     OsmAndAppInstance app = [OsmAndApp instance];
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -403,6 +447,7 @@ static OAFavoriteListViewController *parentController;
             self.sortingType = 0;
         }
         [self generateData];
+        [self updateDistanceAndDirection:YES];
     }
 }
 
@@ -744,9 +789,10 @@ static OAFavoriteListViewController *parentController;
     return [self getUnsortedcellForRowAtIndexPath:indexPath];
 }
 
--(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        
+-(UITableViewCell*)getSortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0)
+    {
         static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
 
         OAPointTableViewCell* cell;
@@ -757,8 +803,8 @@ static OAFavoriteListViewController *parentController;
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            
+        if (cell)
+        {
             OAFavoriteItem* item = [self.sortedFavoriteItems objectAtIndex:indexPath.row];
             [cell.titleView setText:item.favorite->getTitle().toNSString()];
 
@@ -773,8 +819,9 @@ static OAFavoriteListViewController *parentController;
 
         return cell;
         
-    } else {
-        
+    }
+    else
+    {
         OAIconTextTableViewCell* cell;
         cell = (OAIconTextTableViewCell *)[self.favoriteTableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
         if (cell == nil)
@@ -793,12 +840,12 @@ static OAFavoriteListViewController *parentController;
 }
 
 
-- (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
+- (UITableViewCell*)getUnsortedcellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     FavoriteTableGroup* groupData = [self.groupsAndFavorites objectAtIndex:indexPath.section];
     
-    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped) {
-
+    if (groupData.type == kFavoriteCellTypeGrouped || groupData.type == kFavoriteCellTypeUngrouped)
+    {
         static NSString* const reusableIdentifierPoint = @"OAPointTableViewCell";
         
         OAPointTableViewCell* cell;
@@ -894,14 +941,14 @@ static OAFavoriteListViewController *parentController;
 {
     if (!decelerate) {
         isDecelerating = NO;
-        [self refreshVisibleRows];
+        //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     isDecelerating = NO;
-    [self refreshVisibleRows];
+    //[self refreshVisibleRows];
 }
 
 #pragma mark - UITableViewDelegate

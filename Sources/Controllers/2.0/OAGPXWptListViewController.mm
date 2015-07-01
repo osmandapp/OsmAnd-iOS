@@ -72,10 +72,15 @@
 
 - (void)updateDistanceAndDirection
 {
+    [self updateDistanceAndDirection:NO];
+}
+
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+{
     if ([self.tableView isEditing])
         return;
     
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
         return;
     
     self.lastUpdate = [[NSDate date] timeIntervalSince1970];
@@ -121,17 +126,32 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        [self.tableView beginUpdates];
         NSArray *visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
-        if (visibleIndexPaths.count > 0)
-            [self.tableView reloadRowsAtIndexPaths:visibleIndexPaths withRowAnimation:UITableViewRowAnimationNone];
-        
+        for (NSIndexPath *i in visibleIndexPaths)
+        {
+            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
+            if ([cell isKindOfClass:[OAPointTableViewCell class]])
+            {
+                OAGpxWptItem* item = [self getWptItem:i];
+                if (item)
+                {
+                    OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
+                    [c.titleView setText:item.point.name];
+                    [c.distanceView setText:item.distance];
+                    c.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+                }
+            }
+        }
+        [self.tableView endUpdates];
     });
 }
 
 - (void)doViewAppear
 {
     [self generateData];
-    
+    [self updateDistanceAndDirection:YES];
+
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:_app.locationServices.updateObserver];
@@ -406,14 +426,14 @@
 {
     if (!decelerate) {
         isDecelerating = NO;
-        [self refreshVisibleRows];
+        //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     isDecelerating = NO;
-    [self refreshVisibleRows];
+    //[self refreshVisibleRows];
 }
 
 #pragma mark - UITableViewDelegate

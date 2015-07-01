@@ -93,6 +93,7 @@
 -(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
 -(void)targetGoToPoint;
 -(void)targetGoToGPX;
+-(void)targetGoToGPXRoute;
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated;
 -(void)targetSetTopControlsVisible:(BOOL)visible;
 -(void)targetSetBottomControlsVisible:(BOOL)visible menuHeight:(CGFloat)menuHeight;

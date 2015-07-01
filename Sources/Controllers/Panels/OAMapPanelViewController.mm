@@ -17,6 +17,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
+#import "OAGPXRouteViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 
@@ -1533,6 +1534,14 @@ typedef enum
         [self displayGpxOnMap:[[OASavingTrackHelper sharedInstance] getCurrentGPX]];
 }
 
+-(void)targetGoToGPXRoute
+{
+    id targetObj = _activeTargetObj;
+    [self hideTargetPointMenu:.1 onComplete:^{
+        [self openTargetViewWithGPXRoute:targetObj pushed:NO];
+    }];
+}
+
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -1686,6 +1695,17 @@ typedef enum
             self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
         }
         
+        gpxViewController.view.frame = self.view.frame;
+        [self.targetMenuView setCustomViewController:gpxViewController];
+        
+        [self.targetMenuView prepareNoInit];
+    }
+    else if (_targetMenuView.targetPoint.type == OATargetGPXRoute)
+    {
+        [self.targetMenuView doInit:NO showFullScreen:NO];
+        
+        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+
         gpxViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:gpxViewController];
         
@@ -2052,6 +2072,54 @@ typedef enum
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
     
     _activeTargetActive = YES;
+}
+
+
+- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed
+{
+    [_mapViewController hideContextPinMarker];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = [item getNiceTitle];
+    
+    UIImage *icon = [UIImage imageNamed:@"icon_info"];
+    
+    targetPoint.type = OATargetGPXRoute;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    
+    [self displayGpxOnMap:item];
+    
+    if (item.bounds.center.latitude == DBL_MAX)
+    {
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        _targetLatitude = latLon.latitude;
+        _targetLongitude = latLon.longitude;
+    }
+    else
+    {
+        targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    }
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = NO;
+    targetPoint.targetObj = item;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
 }
 
 - (void)displayGpxOnMap:(OAGPX *)item

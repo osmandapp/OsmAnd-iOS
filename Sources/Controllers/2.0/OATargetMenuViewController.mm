@@ -65,7 +65,17 @@
     return NO; // override
 }
 
+- (BOOL)supportFullMenu
+{
+    return YES; // override
+}
+
 - (BOOL)supportFullScreen
+{
+    return NO; // override
+}
+
+-(BOOL)fullScreenWithoutHeader
 {
     return NO; // override
 }

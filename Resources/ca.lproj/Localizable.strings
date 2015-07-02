@@ -397,3 +397,6 @@
 "create_new_trip" = "Crea un nou trajecte";
 "editing_waypoints" = "Edició de fites";
 "select_wpt_on_map" = "Seleccioneu un punt en el mapa per afegir-lo al trajecte";
+"gpx_route" = "Ruta";
+"gpx_rename_q" = "Canvia el nom del trajecte";
+"gpx_enter_new_name" = "Introduïu un nom nou per al trajecte";

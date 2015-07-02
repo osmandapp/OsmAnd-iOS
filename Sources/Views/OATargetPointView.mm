@@ -1079,7 +1079,7 @@
 
 - (BOOL)hasInfo
 {
-    return _coordsHidden || _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || self.customController;
+    return _coordsHidden || _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || (self.customController && [self.customController contentHeight] > 0.0);
 }
 
 - (void)applyTargetObjectChanges
@@ -1517,9 +1517,15 @@
             chFullScreen = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height : 20.0) - kOATargetPointTopViewHeight;
 
             if (_showFullScreen)
+            {
                 f.size.height = chFullScreen;
+                if (self.customController && [self.customController fullScreenWithoutHeader])
+                    f.size.height += kOATargetPointTopViewHeight;
+            }
             else
+            {
                 f.size.height = chFull;
+            }
         }
     
         self.customController.contentView.frame = f;
@@ -1537,6 +1543,10 @@
         if (_showFullScreen)
         {
             frame.origin.y = (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0);
+            
+            if (self.customController && [self.customController fullScreenWithoutHeader])
+                frame.origin.y -= kOATargetPointTopViewHeight;
+            
             frame.size.height = DeviceScreenHeight - frame.origin.y;
         }
         else

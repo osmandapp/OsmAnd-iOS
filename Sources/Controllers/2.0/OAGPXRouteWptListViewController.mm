@@ -141,6 +141,7 @@
 -(void)viewDidLoad
 {
     [super viewDidLoad];
+    
 }
 
 - (void)doViewAppear
@@ -148,7 +149,7 @@
     [self generateData];
     [self updateDistanceAndDirection:YES];
     
-    [self.tableView setEditing:YES];
+    [self setEditing:YES];
 
     
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -159,7 +160,7 @@
 
 - (void)doViewDisappear
 {
-    [self.tableView setEditing:NO];
+    [self setEditing:NO];
 
     if (self.locationServicesUpdateObserver) {
         [self.locationServicesUpdateObserver detach];
@@ -219,6 +220,16 @@
         return @"Active";
     else if (section == _sectionIndexInActive)
         return @"Inactive";
+    else
+        return nil;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+    if (section == _sectionIndexActive)
+        return @"Waypoints which are not visited yet on the route";
+    else if (section == _sectionIndexInActive)
+        return @"Waypoints which have been visited or marked as visited manually";
     else
         return nil;
 }
@@ -285,7 +296,7 @@
 {
     OAGpxWptItem* item = [self getWptItem:sourceIndexPath];
     [[self getWptArray:sourceIndexPath] removeObjectAtIndex:sourceIndexPath.row];
-    [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];    
+    [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];
 }
 
 // The following example restricts rows to relocation in their own group and prevents moves to the last row of a group (which is reserved for the add-item placeholder).
@@ -357,9 +368,9 @@
     if ([self getWptArray:indexPath].count == 0)
         return UITableViewCellEditingStyleNone;
 
-    if (indexPath.section == _sectionIndexActive)
+    if (indexPath.section == _sectionIndexActive && tableView.editing)
         return UITableViewCellEditingStyleDelete;
-    else if (indexPath.section == _sectionIndexInActive)
+    else if (indexPath.section == _sectionIndexInActive && tableView.editing)
         return UITableViewCellEditingStyleInsert;
     else
         return UITableViewCellEditingStyleNone;
@@ -394,6 +405,36 @@
     // todo
 }
 
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OAGpxWptItem* item = [self getWptItem:indexPath];
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        [tableView beginUpdates];
+        NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexInActive];
+        
+        [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
+        [self.inactivePoints insertObject:item atIndex:0];
+        
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [tableView insertRowsAtIndexPaths:@[destination] withRowAnimation:UITableViewRowAnimationAutomatic];
+        //[tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
+        [tableView endUpdates];
+        
+    }
+    else if (editingStyle == UITableViewCellEditingStyleInsert)
+    {
+        [tableView beginUpdates];
+        NSIndexPath *destination = [NSIndexPath indexPathForRow:self.activePoints.count inSection:_sectionIndexActive];
+
+        [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
+        [self.activePoints addObject:item];
+
+        [tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
+        [tableView endUpdates];
+    }
+}
+
 #pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -406,9 +447,5 @@
     return 40.0;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return 0.01;
-}
 
 @end

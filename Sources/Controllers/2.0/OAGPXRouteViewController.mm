@@ -133,19 +133,10 @@
 
 - (CGFloat)contentHeight
 {
-    /*
-    if (_waypointsController)
-    {
-        CGFloat h = 0.0;
-        for (NSInteger i = 0; i < [_waypointsController.tableView numberOfSections]; i++)
-        {
-            h += 44.0;
-            h += [_waypointsController.tableView numberOfRowsInSection:i] * 44.0;
-        }
-        return MIN(160.0, h);
-    }
-     */
-    return 160.0;
+    if (_segmentType == kSegmentRoute)
+        return 0.0;
+    else
+        return 160.0;
 }
 
 - (void)applyLocalization

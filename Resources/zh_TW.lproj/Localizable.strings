@@ -399,3 +399,4 @@
 "select_wpt_on_map" = "在地圖上選取標點以增加到旅程";
 "gpx_rename_q" = "重新命名旅程";
 "gpx_enter_new_name" = "請輸入新的旅程名稱";
+"gpx_route" = "導航路線";

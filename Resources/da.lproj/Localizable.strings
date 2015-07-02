@@ -399,3 +399,4 @@
 "select_wpt_on_map" = "Vælg et punkt på kortet for at føje det til turen";
 "gpx_rename_q" = "Omdøb tur";
 "gpx_enter_new_name" = "Indtast nyt navn til turen";
+"gpx_route" = "Rute";

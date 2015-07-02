@@ -399,3 +399,4 @@
 "select_wpt_on_map" = "Elige en el mapa, el punto para añadir al viaje";
 "gpx_rename_q" = "Renombrar viaje";
 "gpx_enter_new_name" = "Escriba el nuevo nombre del viaje";
+"gpx_route" = "Ruta";

@@ -27,16 +27,71 @@
 @end
 @implementation OATrackSegment
 @end
+
 @implementation OALocationMark
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.elevation = NAN;
+    }
+    return self;
+}
+
 @end
+
 @implementation OAExtraData
 @end
 
 @implementation OAGpxWpt
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.satellitesUsedForFixCalculation = -1;
+        self.dgpsStationId = -1;
+        self.speed = NAN;
+        self.magneticVariation = NAN;
+        self.geoidHeight = NAN;
+        self.fixType = Unknown;
+        self.horizontalDilutionOfPrecision = NAN;
+        self.verticalDilutionOfPrecision = NAN;
+        self.positionDilutionOfPrecision = NAN;
+        self.ageOfGpsData = NAN;
+    }
+    return self;
+}
+
 @end
+
 @implementation OAGpxTrk
 @end
+
 @implementation OAGpxTrkPt
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        self.satellitesUsedForFixCalculation = -1;
+        self.dgpsStationId = -1;
+        self.speed = NAN;
+        self.magneticVariation = NAN;
+        self.geoidHeight = NAN;
+        self.fixType = Unknown;
+        self.horizontalDilutionOfPrecision = NAN;
+        self.verticalDilutionOfPrecision = NAN;
+        self.positionDilutionOfPrecision = NAN;
+        self.ageOfGpsData = NAN;
+    }
+    return self;
+}
+
 @end
 
 @implementation OAGpxTrkSeg

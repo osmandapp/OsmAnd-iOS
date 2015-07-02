@@ -373,10 +373,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     }
     else
     {
-        if (self.region.superregion == _app.worldRegion)
-            regionId = self.region.regionId;
-        else
-            regionId = self.region.superregion.regionId;
+        OAWorldRegion *region = self.region;
+        while (region.superregion != _app.worldRegion)
+            region = region.superregion;
+            
+        if (region)
+            regionId = region.regionId;
         
         if ([regionId isEqualToString:OsmAnd::WorldRegions::AfricaRegionId.toNSString()])
         {

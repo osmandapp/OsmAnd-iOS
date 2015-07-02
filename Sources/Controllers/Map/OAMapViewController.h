@@ -74,6 +74,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @class OAGpxWpt;
 @class OAGpxMetadata;
+@class OAGPXRouteDocument;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
@@ -91,6 +92,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
 
+- (void)setDocFileRoute:(NSString *)fileName;
+- (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
 
 - (BOOL)findWpt:(CLLocationCoordinate2D)location;
 - (BOOL)deleteFoundWpt;
@@ -125,6 +128,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)postTargetNotification:(OAMapSymbol *)symbol;
 
 - (void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+
+- (void)showRouteGpxTrack;
+- (void)hideRouteGpxTrack;
 
 - (void)showTempGpxTrack:(NSString *)fileName;
 - (void)hideTempGpxTrack;

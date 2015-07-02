@@ -144,6 +144,8 @@ typedef enum
 @property (nonatomic) double ageOfGpsData;
 @property (nonatomic) int dgpsStationId;
 
+- (void)fillWithWpt:(OAGpxWpt *)gpxWpt;
+
 @end
 
 @interface OAGpxTrkPt : OATrackPoint

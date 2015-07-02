@@ -27,6 +27,8 @@
 #import "OASavingTrackHelper.h"
 #import "OAGpxWptItem.h"
 
+#import "OAGPXRouteDocument.h"
+
 #import "OAGPXRouteWptListViewController.h"
 
 #include <OsmAndCore.h>
@@ -34,7 +36,7 @@
 
 @interface OAGPXRouteViewController ()
 
-@property (nonatomic) OAGPXDocument *doc;
+@property (nonatomic) OAGPXRouteDocument *doc;
 
 @end
 
@@ -72,12 +74,12 @@
 - (void)loadDoc
 {
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-    self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
+    self.doc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
 }
 
 - (void)cancelPressed
 {
-    [_mapViewController hideTempGpxTrack];
+    [_mapViewController hideRouteGpxTrack];
     
     if (self.delegate)
         [self.delegate btnCancelPressed];
@@ -95,8 +97,8 @@
 
 - (BOOL)preHide
 {
-    [_mapViewController keepTempGpxTrackVisible];
-    [_mapViewController hideTempGpxTrack];
+    //[_mapViewController keepTempGpxTrackVisible];
+    [_mapViewController hideRouteGpxTrack];
     [self closePointsController];
     return YES;
 }
@@ -175,8 +177,13 @@
 
     [self addBadge];
     
+    [self.doc buildRouteTrack];
+    [_mapViewController setGeoInfoDocsGpxRoute:self.doc];
+    [_mapViewController setDocFileRoute:self.gpx.gpxFileName];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
+        [_mapViewController showRouteGpxTrack];
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     });
 }
 

@@ -26,6 +26,7 @@
 #import "OAPOIHelper.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
+#import "OAGPXRouteDocument.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAFavoriteItem.h"
@@ -95,7 +96,8 @@
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
-#define kGpxLayerId 10
+#define kGpxLayerId 9
+#define kGpxRouteLayerId 10
 #define kGpxTempLayerId 11
 #define kGpxRecLayerId 12
 #define kOverlayLayerId 3
@@ -140,18 +142,31 @@
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
     
     NSString *_gpxDocFileTemp;
+    NSString *_gpxDocFileRoute;
     NSArray *_geoInfoDocsGpxPaths;
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpx;
-    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxTemp;
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenter;
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterTemp;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpx;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxTemp;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProvider;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderTemp;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpx;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxTemp;
 
+    // Active gpx
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpx;
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenter;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpx;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProvider;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpx;
+
+    // Route gpx
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxRoute;
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterRoute;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxRoute;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderRoute;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxRoute;
+
+    // Temp gpx
+    QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxTemp;
+    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterTemp;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxTemp;
+    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderTemp;
+    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxTemp;
+    
+    // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxRec;
     std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterRec;
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxRec;
@@ -837,6 +852,17 @@
         }
     
     [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kLastMapUsedTime];
+}
+
+- (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc
+{
+    _geoInfoDocsGpxRoute.clear();
+    _geoInfoDocsGpxRoute.append([doc getDocument]);
+}
+
+- (void)setDocFileRoute:(NSString *)fileName
+{
+    _gpxDocFileRoute = fileName;
 }
 
 - (void)setupMapArrowsLocation
@@ -2734,20 +2760,28 @@
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProvider];
         _mapObjectsSymbolsProvider.reset();
 
-        // Reset GPX
+        // Reset active GPX
         if (_mapObjectsSymbolsProviderGpx)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         _mapObjectsSymbolsProviderGpx.reset();
 
+        // Reset temp gpx
         if (_mapObjectsSymbolsProviderGpxTemp)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
         _mapObjectsSymbolsProviderGpxTemp.reset();
 
+        // Reset route gpx
+        if (_mapObjectsSymbolsProviderGpxRoute)
+            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
+        _mapObjectsSymbolsProviderGpxRoute.reset();
+
+        // Reset currently recording gpx
         if (_mapObjectsSymbolsProviderGpxRec)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
 
         [mapView resetProviderFor:kGpxLayerId];
+        [mapView resetProviderFor:kGpxRouteLayerId];
         [mapView resetProviderFor:kGpxTempLayerId];
         [mapView resetProviderFor:kGpxRecLayerId];
 
@@ -2756,13 +2790,18 @@
 
         _gpxPrimitivesProvider.reset();
         _gpxPrimitivesProviderTemp.reset();
+        _gpxPrimitivesProviderRoute.reset();
         _gpxPrimitivesProviderRec.reset();
         
         _gpxPresenterTemp.reset();
+        _gpxPresenterRoute.reset();
         _gpxPresenterRec.reset();
         _gpxPresenter.reset();
+
         if (!_gpxDocFileTemp)
             _geoInfoDocsGpxTemp.clear();
+        if (!_gpxDocFileRoute)
+            _geoInfoDocsGpxRoute.clear();
 
         _geoInfoDocsGpxRec.clear();
         
@@ -2848,7 +2887,6 @@
                     newSettings[QString::fromLatin1("nightMode")] = "true";
                 
                 // --- Apply Map Style Settings
-                //OAMapStyleSettings *styleSettings = [[OAMapStyleSettings alloc] initWithStyleName:unresolvedMapStyle->name.toNSString() mapPresetName:lastMapSource.variant];
                 OAMapStyleSettings *styleSettings = [OAMapStyleSettings sharedInstance];
                 
                 NSArray *params = styleSettings.getAllParameters;
@@ -2986,6 +3024,9 @@
             
         }
         
+        if (_gpxDocFileRoute)
+            [self showRouteGpxTrack];
+
         if (_gpxDocFileTemp)
             [self showTempGpxTrack:_gpxDocFileTemp];
         else if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
@@ -3360,6 +3401,54 @@
     }
 }
 
+- (void)showRouteGpxTrack
+{
+    @synchronized(_rendererSync)
+    {
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        if (_mapObjectsSymbolsProviderGpxRoute)
+            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
+        _mapObjectsSymbolsProviderGpxRoute.reset();
+        [rendererView resetProviderFor:kGpxRouteLayerId];
+        
+        _gpxPresenterRoute.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxRoute));
+        
+        if (_gpxPresenterRoute) {
+            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
+            _gpxPrimitivesProviderRoute.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRoute->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
+            
+            _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRoute, false));
+            [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRouteLayerId];
+            
+            _mapObjectsSymbolsProviderGpxRoute.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRoute, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
+            [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
+        }
+    }
+}
+
+- (void)hideRouteGpxTrack
+{
+    @synchronized(_rendererSync)
+    {
+        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        
+        if (_mapObjectsSymbolsProviderGpxRoute)
+            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
+        _mapObjectsSymbolsProviderGpxRoute.reset();
+        
+        [rendererView resetProviderFor:kGpxRouteLayerId];
+        
+        _gpxPrimitivesProviderRoute.reset();
+        _geoInfoDocsGpxRoute.clear();
+        _gpxPresenterRoute.reset();
+        
+        _gpxDocFileRoute = nil;
+        
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+}
+
 - (void)showTempGpxTrack:(NSString *)fileName
 {
     if (_recTrackShowing)
@@ -3534,6 +3623,9 @@
     OAAppSettings *settings = [OAAppSettings sharedManager];
     for (NSString *fileName in settings.mapSettingVisibleGpx)
     {
+        if (_gpxDocFileRoute && [fileName isEqualToString:_gpxDocFileRoute])
+            continue;
+        
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:path])
         {
@@ -4081,6 +4173,9 @@
 {
     @synchronized(_rendererSync)
     {
+        if (_geoInfoDocsGpx.isEmpty())
+            return;
+        
         OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
         
         if (_mapObjectsSymbolsProviderGpx)

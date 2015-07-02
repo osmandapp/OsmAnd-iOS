@@ -17,7 +17,6 @@ typedef enum
 
 
 @class OAGPX;
-@class OAGPXDocument;
 
 @interface OAGPXRouteViewController : OATargetMenuViewController
 

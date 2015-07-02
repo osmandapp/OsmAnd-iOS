@@ -66,6 +66,32 @@
     return self;
 }
 
+- (void)fillWithWpt:(OAGpxWpt *)gpxWpt
+{
+    self.position = gpxWpt.position;
+    self.name = gpxWpt.name;
+    self.desc = gpxWpt.desc;
+    self.elevation = gpxWpt.elevation;
+    self.time = gpxWpt.time;
+    self.comment = gpxWpt.comment;
+    self.type = gpxWpt.type;
+    
+    self.magneticVariation = gpxWpt.magneticVariation;
+    self.geoidHeight = gpxWpt.geoidHeight;
+    self.source = gpxWpt.source;
+    self.symbol = gpxWpt.symbol;
+    self.fixType = gpxWpt.fixType;
+    self.satellitesUsedForFixCalculation = gpxWpt.satellitesUsedForFixCalculation;
+    self.horizontalDilutionOfPrecision = gpxWpt.horizontalDilutionOfPrecision;
+    self.verticalDilutionOfPrecision = gpxWpt.verticalDilutionOfPrecision;
+    self.positionDilutionOfPrecision = gpxWpt.positionDilutionOfPrecision;
+    self.ageOfGpsData = gpxWpt.ageOfGpsData;
+    self.dgpsStationId = gpxWpt.dgpsStationId;
+    
+    self.links = gpxWpt.links;
+    self.extraData = gpxWpt.extraData;
+}
+
 @end
 
 @implementation OAGpxTrk

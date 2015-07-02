@@ -227,6 +227,12 @@
 		840ED47E1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
 		840ED47F1B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
 		840ED4801B44184900A7E58A /* OAGPXRouteWptListViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */; };
+		840ED4841B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */; };
+		840ED4851B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */; };
+		840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */; };
+		840ED4891B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */; };
+		840ED48A1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */; };
+		840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */ = {isa = PBXBuildFile; fileRef = 840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */; };
 		841222251B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
 		841222261B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
 		841222271B395D2C00F80F9E /* ic_travel_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 841222221B395D2C00F80F9E /* ic_travel_time.png */; };
@@ -2411,6 +2417,10 @@
 		840ED4781B44184900A7E58A /* OAGPXRouteWptListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXRouteWptListViewController.h; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.h; sourceTree = "<group>"; };
 		840ED4791B44184900A7E58A /* OAGPXRouteWptListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXRouteWptListViewController.mm; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.mm; sourceTree = "<group>"; };
 		840ED47A1B44184900A7E58A /* OAGPXRouteWptListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXRouteWptListViewController.xib; path = Sources/Controllers/2.0/OAGPXRouteWptListViewController.xib; sourceTree = "<group>"; };
+		840ED4821B456A8700A7E58A /* OAGPXRouteDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXRouteDocument.h; sourceTree = "<group>"; };
+		840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXRouteDocument.mm; sourceTree = "<group>"; };
+		840ED4871B457B6A00A7E58A /* OAGpxRoutePoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGpxRoutePoint.h; sourceTree = "<group>"; };
+		840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGpxRoutePoint.mm; sourceTree = "<group>"; };
 		841222221B395D2C00F80F9E /* ic_travel_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_travel_time.png; path = Resources/Icons/ic_travel_time.png; sourceTree = "<group>"; };
 		841222231B395D2C00F80F9E /* ic_travel_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_travel_time@2x.png"; path = "Resources/Icons/ic_travel_time@2x.png"; sourceTree = "<group>"; };
 		841222241B395D2C00F80F9E /* ic_travel_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_travel_time@3x.png"; path = "Resources/Icons/ic_travel_time@3x.png"; sourceTree = "<group>"; };
@@ -4021,6 +4031,17 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		840ED4811B45686600A7E58A /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				840ED4871B457B6A00A7E58A /* OAGpxRoutePoint.h */,
+				840ED4881B457B6A00A7E58A /* OAGpxRoutePoint.mm */,
+				840ED4821B456A8700A7E58A /* OAGPXRouteDocument.h */,
+				840ED4831B456A8700A7E58A /* OAGPXRouteDocument.mm */,
+			);
+			name = Routing;
+			sourceTree = "<group>";
+		};
 		8417A6751B25C1D100EA1D17 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
@@ -4075,6 +4096,7 @@
 		84770A011A8CF2B200585175 /* GPX */ = {
 			isa = PBXGroup;
 			children = (
+				840ED4811B45686600A7E58A /* Routing */,
 				84B4FD521A90F74800A147BA /* OAGPXDocumentPrimitives.h */,
 				84B4FD531A90F74800A147BA /* OAGPXDocumentPrimitives.mm */,
 				84770A021A8CF91D00585175 /* OAGPXDocument.h */,
@@ -6708,6 +6730,7 @@
 				3AFEEE7E1A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				BBE1D2A7190D186F00D90F0A /* main.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
+				840ED4841B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84185A7D1AA99ABE00F70328 /* OAIAPHelper.m in Sources */,
 				3A02BFB51A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				84147A431B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
@@ -6744,6 +6767,7 @@
 				84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8417A6791B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				84B4FD751A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
+				840ED4891B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				84E4417A1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171D1B1C47B200A656F4 /* OAButton.m in Sources */,
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
@@ -6868,6 +6892,7 @@
 				3AFEEE7F1A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				BBE1D2A8190D186F00D90F0A /* main.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
+				840ED4851B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84185A7E1AA99ABE00F70328 /* OAIAPHelper.m in Sources */,
 				3A02BFB61A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				84147A441B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
@@ -6904,6 +6929,7 @@
 				84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,
 				8417A67A1B25C28000EA1D17 /* OAEditColorViewController.m in Sources */,
 				84B4FD761A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
+				840ED48A1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				84E4417B1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171E1B1C47B200A656F4 /* OAButton.m in Sources */,
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
@@ -7054,6 +7080,7 @@
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
+				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
@@ -7128,6 +7155,7 @@
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,
 				843E5C381AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
+				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,

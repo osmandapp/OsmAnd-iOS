@@ -20,6 +20,8 @@
 
 #import "OAPurchasesViewController.h"
 
+#include <OsmAndCore/WorldRegions.h>
+
 @interface OAOutdatedResourcesViewController () <UITableViewDelegate, UITableViewDataSource>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -323,10 +325,18 @@
     else if ([item isKindOfClass:[OutdatedResourceItem class]])
         cellTypeId = outdatedResourceCell;
 
-    if (item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
-        title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+    if (item.worldRegion && item.worldRegion.superregion)
+    {
+        NSString *countryName = [self.class getCountryName:item];
+        if (countryName)
+            title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
+        else
+            title = item.title;
+    }
     else
+    {
         title = item.title;
+    }
 
     // Obtain reusable cell or create one
     UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:cellTypeId];

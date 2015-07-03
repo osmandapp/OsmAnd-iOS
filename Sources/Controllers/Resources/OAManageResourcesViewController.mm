@@ -1539,10 +1539,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                     item.disabled = YES;
                 }
 
-                if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
-                    title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+                if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
+                {
+                    NSString *countryName = [self.class getCountryName:item];
+                    if (countryName)
+                        title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
+                    else
+                        title = item.title;
+                }
                 else
+                {
                     title = item.title;
+                }
                 
                 if (_sizePkg > 0)
                     subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -1593,10 +1601,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 item.disabled = YES;
             }
 
-            if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion && item.worldRegion.superregion.superregion != _app.worldRegion)
-                title = [NSString stringWithFormat:@"%@ %@", item.worldRegion.superregion.name, item.title];
+            if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
+            {
+                NSString *countryName = [self.class getCountryName:item];
+                if (countryName)
+                    title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
+                else
+                    title = item.title;
+            }
             else
+            {
                 title = item.title;
+            }
             
             if (_sizePkg > 0)
                 subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];

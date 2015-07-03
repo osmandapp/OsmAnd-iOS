@@ -31,11 +31,13 @@
 
 #define mapSettingSaveTrackIntervalApprovedKey @"mapSettingSaveTrackIntervalApprovedKey"
 
-
 #define settingMapLanguageKey @"settingMapLanguageKey"
 #define settingPrefMapLanguageKey @"settingPrefMapLanguageKey"
 #define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
 #define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
+
+#define settingMapSettingRouteFileNameKey @"settingMapSettingRouteFileNameKey"
+
 
 @interface OAAppSettings : NSObject
 
@@ -81,6 +83,8 @@
 @property (assign, nonatomic) BOOL mapSettingSaveTrackIntervalApproved;
 
 @property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
+
+@property (nonatomic) NSString* mapSettingRouteFileName;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

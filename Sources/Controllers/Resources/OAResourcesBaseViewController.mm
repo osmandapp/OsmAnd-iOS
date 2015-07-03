@@ -24,6 +24,7 @@
 #import "OAPurchasesViewController.h"
 
 #include "Localization.h"
+#include <OsmAndCore/WorldRegions.h>
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -918,6 +919,27 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void) updateTableLayout
 {
+}
+
++ (NSString *)getCountryName:(ResourceItem *)item
+{
+    NSString *countryName;
+    
+    OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
+    OAWorldRegion *region = item.worldRegion;
+    
+    if (region.superregion)
+    {
+        while (region.superregion != worldRegion)
+            region = region.superregion;
+        
+        if ([region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
+            countryName = region.name;
+        else if (item.worldRegion.superregion.superregion != worldRegion)
+            countryName = item.worldRegion.superregion.name;
+    }
+    
+    return countryName;
 }
 
 #pragma mark - OADownloadProgressViewDelegate

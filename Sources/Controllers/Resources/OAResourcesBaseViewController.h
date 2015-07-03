@@ -102,5 +102,6 @@
 
 + (OAWorldRegion*)findRegionOrAnySubregionOf:(OAWorldRegion*)region
                         thatContainsResource:(const QString&)resourceId;
++ (NSString *)getCountryName:(ResourceItem *)item;
 
 @end

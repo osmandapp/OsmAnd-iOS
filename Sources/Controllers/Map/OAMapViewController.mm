@@ -63,6 +63,7 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 
 #include <OsmAndCore/QKeyValueIterator.h>
 
@@ -1479,31 +1480,31 @@
                         NSMutableArray *fuelTagsArr = [NSMutableArray array];
                         
                         const auto& decodedValues = amenity->getDecodedValues();
-                        for (const auto& entry : OsmAnd::rangeOf(decodedValues))
+                        for (const auto& entry : decodedValues)
                         {
                             //NSLog(@"%@=%@", entry.key().toNSString(), entry.value().toNSString());
 
-                            if (entry.key() == QString("phone"))
-                                symbol.phone = entry.value().toNSString();
-                            else if (entry.key() == QString("operator"))
-                                symbol.oper = entry.value().toNSString();
-                            else if (entry.key() == QString("brand"))
-                                symbol.brand = entry.value().toNSString();
-                            else if (entry.key() == QString("wheelchair"))
-                                symbol.wheelchair = entry.value().toNSString();
-                            else if (entry.key() == QString("opening_hours"))
-                                symbol.openingHours = entry.value().toNSString();
-                            else if (entry.key() == QString("website"))
-                                symbol.url = entry.value().toNSString();
-                            else if (entry.key().startsWith(QString("description")) && !symbol.desc)
-                                symbol.desc = entry.value().toNSString();
-                            else if (entry.key().startsWith(QString("fuel:")) && (entry.value() == QString("yes")))
+                            if (entry.declaration->tagName == QString("phone"))
+                                symbol.phone = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName == QString("operator"))
+                                symbol.oper = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName == QString("brand"))
+                                symbol.brand = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName == QString("wheelchair"))
+                                symbol.wheelchair = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName == QString("opening_hours"))
+                                symbol.openingHours = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName == QString("website"))
+                                symbol.url = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
+                                symbol.desc = entry.value.toString().toNSString();
+                            else if (entry.declaration->tagName.startsWith(QString("fuel:")) && (entry.value.toString() == QString("yes")))
                             {
-                                [fuelTagsArr addObject:entry.key().right(entry.key().length() - 5).toNSString()];
+                                [fuelTagsArr addObject:entry.declaration->tagName.right(entry.declaration->tagName.length() - 5).toNSString()];
                             }
                             
-                            if (descFieldLoc && entry.key() == QString::fromNSString(descFieldLoc))
-                                symbol.desc = entry.value().toNSString();
+                            if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+                                symbol.desc = entry.value.toString().toNSString();
                         }
                         if (fuelTagsArr.count > 0)
                             symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];

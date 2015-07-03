@@ -19,6 +19,7 @@
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/Amenity.h>
@@ -408,42 +409,41 @@
         descFieldLoc = [@"description:" stringByAppendingString:_prefLang];
 
     const auto& decodedValues = amenity->getDecodedValues();
-    for(const auto& entry : OsmAnd::rangeOf(decodedValues))
+    for(const auto& entry : decodedValues)
     {
-        NSString *s = entry.value().toNSString();
         //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 50 ? [s substringToIndex:50] : s));
 
-        if (entry.key().startsWith(QString("content")))
+        if (entry.declaration->tagName.startsWith(QString("content")))
         {
-            NSString *key = entry.key().toNSString();
+            NSString *key = entry.declaration->tagName.toNSString();
             NSString *loc;
             if (key.length > 8)
                 loc = [[key substringFromIndex:8] lowercaseString];
             else
                 loc = @"";
             
-            [content setObject:s forKey:loc];
+            [content setObject:entry.value.toString().toNSString() forKey:loc];
         }
 
         
         // phone, website, description
-        if (entry.key() == QString("opening_hours"))
+        if (entry.declaration->tagName == QString("opening_hours"))
         {
             poi.hasOpeningHours = YES;
-            poi.openingHours = entry.value().toNSString();
+            poi.openingHours = entry.value.toString().toNSString();
         }
         
         if (_prefLang && !poi.nameLocalized)
         {
             const QString langTag = QString("name:").append(QString::fromNSString(_prefLang));
-            if (entry.key() == langTag)
-                poi.nameLocalized = entry.value().toNSString();
+            if (entry.declaration->tagName == langTag)
+                poi.nameLocalized = entry.value.toString().toNSString();
         }
         
-        if (entry.key().startsWith(QString("description")) && !poi.desc)
-            poi.desc = entry.value().toNSString();
-        if (descFieldLoc && entry.key() == QString::fromNSString(descFieldLoc))
-            poi.desc = entry.value().toNSString();
+        if (entry.declaration->tagName.startsWith(QString("description")) && !poi.desc)
+            poi.desc = entry.value.toString().toNSString();
+        if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+            poi.desc = entry.value.toString().toNSString();
     }
     
     poi.localizedContent = [NSDictionary dictionaryWithDictionary:content];
@@ -460,8 +460,8 @@
     
     //NSLog(@"id=%ld poi.name=%@ lat=%f lon=%f", (long)(amenity->id), poi.name, poi.latitude, poi.longitude);
     
-    NSString *category = catList.keys().first().toNSString();
-    NSString *subCategory = catList.value(catList.keys().first()).first().toNSString();
+    NSString *category = catList.first().category.toNSString();
+    NSString *subCategory = catList.first().subcategory.toNSString();
     
     OAPOIType *type = [self getPoiTypeByCategory:category name:subCategory];
     if (!type)

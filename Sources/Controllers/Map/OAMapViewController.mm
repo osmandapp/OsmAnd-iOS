@@ -224,6 +224,7 @@
     OAAutoObserverProxy* _mapSettingsChangeObserver;
     OAAutoObserverProxy* _updateGpxTracksObserver;
     OAAutoObserverProxy* _updateRecTrackObserver;
+    OAAutoObserverProxy* _updateRouteTrackObserver;
     
     OAAutoObserverProxy* _locationServicesStatusObserver;
     OAAutoObserverProxy* _locationServicesUpdateObserver;
@@ -351,6 +352,10 @@
     _updateRecTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                          withHandler:@selector(onUpdateRecTrack)
                                                           andObserve:_app.updateRecTrackOnMapObservable];
+
+    _updateRouteTrackObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onUpdateRouteTrack)
+                                                         andObserve:_app.updateRouteTrackOnMapObservable];
 
     _locationServicesStatusObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                 withHandler:@selector(onLocationServicesStatusChanged)
@@ -2648,6 +2653,19 @@
             if (_recTrackShowing)
                 [self hideRecGpxTrack];
         }
+    });
+}
+
+- (void)onUpdateRouteTrack
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        [self showRouteGpxTrack];
     });
 }
 

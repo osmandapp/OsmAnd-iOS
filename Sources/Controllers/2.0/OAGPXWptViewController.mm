@@ -112,7 +112,8 @@
 {
     if (self.savedColorIndex != -1)
         [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kWptDefaultColorKey];
-    [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kWptDefaultGroupKey];
+    if (self.savedGroupName)
+        [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kWptDefaultGroupKey];
     
     [super okPressed];
 }
@@ -175,14 +176,14 @@
 
 - (NSString *)getItemGroup
 {
-    return self.wpt.point.type;
+    return (self.wpt.point.type ? self.wpt.point.type : @"");
 }
 
 - (void)setItemGroup:(NSString *)groupName
 {
     self.wpt.point.type = groupName;
     
-    if (![self.wpt.groups containsObject:groupName])
+    if (![self.wpt.groups containsObject:groupName] && groupName.length > 0)
         self.wpt.groups = [self.wpt.groups arrayByAddingObject:groupName];
 }
 

@@ -68,6 +68,8 @@
 
 - (void)fillWithWpt:(OAGpxWpt *)gpxWpt
 {
+    self.wpt = gpxWpt.wpt;
+    
     self.position = gpxWpt.position;
     self.name = gpxWpt.name;
     self.desc = gpxWpt.desc;

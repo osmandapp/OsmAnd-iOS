@@ -10,9 +10,16 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
+@protocol OAGPXRouteWptListViewControllerDelegate <NSObject>
+
+- (void)routePointsChanged;
+
+@end
+
 @interface OAGPXRouteWptListViewController : UITableViewController
 
 @property (nonatomic) NSArray *allGroups;
+@property (weak, nonatomic) id<OAGPXRouteWptListViewControllerDelegate> delegate;
 
 - (void)doViewAppear;
 - (void)doViewDisappear;

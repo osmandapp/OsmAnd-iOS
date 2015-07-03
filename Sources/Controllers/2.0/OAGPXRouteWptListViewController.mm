@@ -15,6 +15,7 @@
 #import "OARootViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAGpxRoutePoint.h"
 
 #import "OsmAndApp.h"
 
@@ -295,8 +296,22 @@
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
     OAGpxWptItem* item = [self getWptItem:sourceIndexPath];
+    OAGpxRoutePoint *rp = (OAGpxRoutePoint *)item.point;
+
     [[self getWptArray:sourceIndexPath] removeObjectAtIndex:sourceIndexPath.row];
     [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];
+
+    if (destinationIndexPath.section == _sectionIndexActive)
+    {
+        rp.disabled = NO;
+        rp.visited = NO;
+    }
+    else if (destinationIndexPath.section == _sectionIndexInActive)
+    {
+        rp.disabled = YES;
+    }
+    
+    [self updatePointsArray];
 }
 
 // The following example restricts rows to relocation in their own group and prevents moves to the last row of a group (which is reserved for the add-item placeholder).
@@ -408,6 +423,8 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGpxWptItem* item = [self getWptItem:indexPath];
+    OAGpxRoutePoint *rp = (OAGpxRoutePoint *)item.point;
+
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
         [tableView beginUpdates];
@@ -420,7 +437,7 @@
         [tableView insertRowsAtIndexPaths:@[destination] withRowAnimation:UITableViewRowAnimationAutomatic];
         //[tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
         [tableView endUpdates];
-        
+    
     }
     else if (editingStyle == UITableViewCellEditingStyleInsert)
     {
@@ -432,7 +449,33 @@
 
         [tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
         [tableView endUpdates];
+
+        rp.visited = NO;
     }
+    
+    [self updatePointsArray];
+}
+
+- (void)updatePointsArray
+{
+    int i = 0;
+    for (OAGpxWptItem *wptItem in self.activePoints)
+    {
+        OAGpxRoutePoint *rp = (OAGpxRoutePoint *)wptItem.point;
+        rp.index = i++;
+        rp.disabled = NO;
+        [rp applyRouteInfo];
+    }
+    for (OAGpxWptItem *wptItem in self.inactivePoints)
+    {
+        OAGpxRoutePoint *rp = (OAGpxRoutePoint *)wptItem.point;
+        rp.index = i++;
+        rp.disabled = YES;
+        [rp applyRouteInfo];
+    }
+    
+    if (self.delegate)
+        [self.delegate routePointsChanged];
 }
 
 #pragma mark - UITableViewDelegate

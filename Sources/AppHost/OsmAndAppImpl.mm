@@ -76,6 +76,7 @@
 @synthesize mapSettingsChangeObservable = _mapSettingsChangeObservable;
 @synthesize updateGpxTracksOnMapObservable = _updateGpxTracksOnMapObservable;
 @synthesize updateRecTrackOnMapObservable = _updateRecTrackOnMapObservable;
+@synthesize updateRouteTrackOnMapObservable = _updateRouteTrackOnMapObservable;
 @synthesize trackStartStopRecObservable = _trackStartStopRecObservable;
 @synthesize addonsSwitchObservable = _addonsSwitchObservable;
 
@@ -275,6 +276,7 @@
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];
     _updateRecTrackOnMapObservable = [[OAObservable alloc] init];
+    _updateRouteTrackOnMapObservable = [[OAObservable alloc] init];
     _addonsSwitchObservable = [[OAObservable alloc] init];
  
     _trackRecordingObservable = [[OAObservable alloc] init];

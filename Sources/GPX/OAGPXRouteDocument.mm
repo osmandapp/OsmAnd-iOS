@@ -88,6 +88,9 @@
     NSMutableArray *points = [NSMutableArray array];
     for (OAGpxRoutePoint *rp in rps)
     {
+        if (rp.disabled || rp.visited)
+            continue;
+        
         OAGpxTrkPt *p = [[OAGpxTrkPt alloc] init];
         p.position = rp.position;
         [points addObject:p];
@@ -100,8 +103,17 @@
     [self.class fillTrack:trk usingTrack:track];
     track.trk = trk;
     
-    if (!document->tracks.contains(track.trk))
-        document->tracks.append(track.trk);
+    for (auto& t : document->tracks)
+    {
+        if (t->name == QString("routeHelperTrack"))
+        {
+            t = trk;
+            document->tracks.removeOne(t);
+            break;
+        }
+    }
+    
+    document->tracks.append(trk);
 }
 
 

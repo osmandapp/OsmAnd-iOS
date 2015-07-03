@@ -413,23 +413,12 @@
                     if (sqlite3_column_text(statement, 3) != nil)
                         wpt.name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
                     
-                    NSString *color;
                     if (sqlite3_column_text(statement, 4) != nil)
-                        color = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
+                        wpt.color = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 4)];
                     if (sqlite3_column_text(statement, 5) != nil)
-                        wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
+                        wpt.type = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 5)];
                     if (sqlite3_column_text(statement, 6) != nil)
-                        wpt.desc = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 3)];
-                    
-                    if (color)
-                    {
-                        OAGpxExtensions *ext = [[OAGpxExtensions alloc] init];
-                        OAGpxExtension *e = [[OAGpxExtension alloc] init];
-                        e.name = @"color";
-                        e.value = color;
-                        ext.extensions = @[e];
-                        wpt.extraData = ext;
-                    }
+                        wpt.desc = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 6)];
                     
                     NSString *date = [fmt stringFromDate:[NSDate dateWithTimeIntervalSince1970:wpt.time]];
                     
@@ -711,17 +700,20 @@
         
         if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=?, %@=?, %@=? WHERE %@=%f, %@=%f, %@=%ld", POINT_NAME, POINT_COL_DESC, POINT_COL_DESCRIPTION, POINT_COL_COLOR, POINT_COL_GROUP, POINT_COL_LAT, lat, POINT_COL_LON, lon, POINT_COL_DATE, time];
+            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=?, %@=?, %@=? WHERE %@=%f AND %@=%f AND %@=%ld", POINT_NAME, POINT_COL_DESC, POINT_COL_DESCRIPTION, POINT_COL_COLOR, POINT_COL_GROUP, POINT_COL_LAT, lat, POINT_COL_LON, lon, POINT_COL_DATE, time];
             
             const char *update_stmt = [query UTF8String];
             
             sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_text(statement, 1, [desc UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 2, [name UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 3, [color UTF8String], -1, SQLITE_TRANSIENT);
-            sqlite3_bind_text(statement, 4, [group UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 1, [(desc ? desc : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 2, [(name ? name : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 3, [(color ? color : @"") UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 4, [(group ? group : @"") UTF8String], -1, SQLITE_TRANSIENT);
             
-            sqlite3_step(statement);
+            int res = sqlite3_step(statement);
+            if (res != SQLITE_OK && res != SQLITE_DONE)
+                NSLog(@"doUpdatePointsLat failed: sqlite3_step=%d", res);
+
             sqlite3_finalize(statement);
             
             sqlite3_close(tracksDB);

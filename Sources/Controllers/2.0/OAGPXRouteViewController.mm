@@ -34,7 +34,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
-@interface OAGPXRouteViewController ()
+@interface OAGPXRouteViewController () <OAGPXRouteWptListViewControllerDelegate>
 
 @property (nonatomic) OAGPXRouteDocument *doc;
 
@@ -98,7 +98,7 @@
 - (BOOL)preHide
 {
     //[_mapViewController keepTempGpxTrackVisible];
-    [_mapViewController hideRouteGpxTrack];
+    //[_mapViewController hideRouteGpxTrack];
     [self closePointsController];
     return YES;
 }
@@ -166,6 +166,7 @@
     self.titleView.text = [self.gpx getNiceTitle];
     
     _waypointsController = [[OAGPXRouteWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+    _waypointsController.delegate = self;
     _waypointsController.allGroups = [self readGroups];
     
     _waypointsController.view.frame = self.view.frame;
@@ -285,6 +286,16 @@
     _segmentType = newSegmentType;
     
     [self applySegmentType];
+}
+
+#pragma mark - OAGPXRouteWptListViewControllerDelegate
+
+-(void)routePointsChanged
+{
+    [self.doc buildRouteTrack];
+    //[_mapViewController setGeoInfoDocsGpxRoute:self.doc];
+    //[[_app updateRouteTrackOnMapObservable] notifyEvent];
+    [_mapViewController showRouteGpxTrack];
 }
 
 @end

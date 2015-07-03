@@ -324,6 +324,7 @@ typedef enum
                                                                           {
                                                                               [_recHelper clearData];
                                                                               dispatch_async(dispatch_get_main_queue(), ^{
+                                                                                  [_mapViewController hideContextPinMarker];
                                                                                   [_mapViewController hideRecGpxTrack];
                                                                                   [_widgetsView updateGpxRec];
                                                                               });
@@ -397,6 +398,7 @@ typedef enum
     if ([_recHelper hasDataToSave])
         [_recHelper saveDataToGpx];
     dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapViewController hideContextPinMarker];
         [_widgetsView updateGpxRec];
     });
     

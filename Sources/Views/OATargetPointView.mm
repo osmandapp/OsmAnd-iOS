@@ -1040,7 +1040,7 @@
         [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
     }
     
-    if (_targetPoint.type != OATargetGPX)
+    if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
         [self.zoomView removeFromSuperview];
     
     BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
@@ -1125,7 +1125,7 @@
             [self showTopToolbar:YES];
     }
 
-    if (_targetPoint.type == OATargetGPX)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
     {
         self.zoomView.alpha = 0.0;
         [self.parentView addSubview:self.zoomView];

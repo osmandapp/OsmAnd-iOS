@@ -120,7 +120,8 @@
 {
     if (self.savedColorIndex != -1)
         [[NSUserDefaults standardUserDefaults] setInteger:self.savedColorIndex forKey:kFavoriteDefaultColorKey];
-    [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kFavoriteDefaultGroupKey];
+    if (self.savedGroupName)
+        [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kFavoriteDefaultGroupKey];
     
     [super okPressed];
 }

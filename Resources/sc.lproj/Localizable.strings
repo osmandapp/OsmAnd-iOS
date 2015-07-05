@@ -186,3 +186,4 @@
 "prch_nau_q1" = "Ativa s’istile \"Nàuticu\" in sas Impostaduras mapa e installa sa mapa marina de base.";
 "prch_nau_q2_cell" = "S’iscarrigamentu durat %@ cun sa cunnessione mòbile.";
 "incur_high_charges" = "Custu diat pòdere cajonare gastos mannos.";
+"rendering_attr_hikingRoutesOSMC_name" = "Istratu sìmbulos escursionisticos";

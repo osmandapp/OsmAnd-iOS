@@ -38,3 +38,7 @@
 "rendering_attr_noPolygons_name" = "Приховати полігони";
 "rendering_attr_contourLines_name" = "Відображати контурні лінії";
 "favorite" = "Закладки";
+"rendering_value_disabled_name" = "Вимкнено";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Розмальовування відповідно до області маршруту";
+"rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно до OSMC";
+"shared_string_delete" = "Видалити";

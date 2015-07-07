@@ -71,18 +71,18 @@
 "poi_hide" = "Skrij";
 // My Places
 "favorites" = "Priljubljene";
-"tracks" = "Sledi";
+"tracks" = "Potovanja";
 // GPX
 "gpx_point" = "Točka";
 "gpx_waypoints" = "Vmesne točke";
 "gpx_points" = "Točke";
 "gpx_export" = "Izvozi";
 "import_export" = "Uvoz/Izvoz";
-"gpx_import_title" = "Uvozi sled";
+"gpx_import_title" = "Uvozi pot potovanja";
 "gpx_add_new" = "Dodaj novo datoteko";
 "gpx_overwrite" = "Prepiši";
-"gpx_no_tracks" = "";
-"gpx_remove" = "Ali želite odstraniti sled?";
+"gpx_no_tracks" = "Ni shranjenih poti potovanj";
+"gpx_remove" = "Ali želite odstraniti pot potovanja?";
 "gpx_stat" = "Statistika";
 "gpx_route_time" = "Čas poti";
 "gpx_distance" = "Razdalja";
@@ -92,8 +92,8 @@
 "fav_export_select" = "Izbor priljubljenih točk za izvoz";
 "fav_exists" = "Priljubljena točka z imenom \"%@\" že obstaja";
 "gpx_cannot_import" = "Ni mogoče uvoziti določene datoteke GPX";
-"gpx_export_title" = "Izvozi sled";
-"gpx_export_select_track" = "Izbor sledi za izvoz";
+"gpx_export_title" = "Izvozi pot potovanja";
+"gpx_export_select_track" = "Izbor poti za izvoz";
 "gpx_start" = "Začni beleženje";
 "gpx_finish" = "Končaj beleženje";
 "gpx_avg_elev" = "Povprečna višina";
@@ -154,3 +154,29 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Barvanje poti po vrsti poti";
 "rendering_value_walkingRoutesOSMC_name" = "Barvanje poti po OSMC";
 "rendering_value_disabled_name" = "Onemogočeno";
+"rendering_attr_hikingRoutesOSMC_name" = "Prekrivna plast s simboli za pohodništvo";
+"shared_string_remove" = "Odstrani";
+"my_favorites" = "Priljubljene";
+"poi_max_radius_reached" = "Dosežen je največji radij iskanja";
+"gpx_import_already_exists" = "Določena datoteka poti potovanja na seznamu že obstaja. Kaj želite storiti?";
+"gpx_route" = "Pot";
+"track_stop_rec" = "Zaustavi beleženje";
+"track_save" = "Shrani trenutno sled";
+"track_continue_rec" = "Nadaljuj z beleženjem poti";
+"track_start_rec" = "Začni z beleženjem poti";
+"track_interval_remember" = "Zapomni si izbiro";
+"track_clear" = "Počisti trenutno sled";
+"track_clear_q" = "Ali želite počistiti trenutno sled?";
+"gpx_distance_points" = "Razdalja (točke)";
+"gpx_max_speed" = "Največja hitrost";
+"gpx_speed" = "Hitrost";
+"map_settings_day" = "Dnevni";
+"map_settings_night" = "Nočni";
+"map_settings_offline" = "Slog prikaza zemljevida";
+// HUD
+"hud_heading" = "Naslov";
+"sett_lang_show_local" = "Pokaži krajevna imena";
+"sett_lang_show_trans" = "Omogoči prečkrkovanje imen";
+"res_updates_avail" = "Na voljo so posodobitve";
+"res_deleting" = "Poteka brisanje ...";
+"res_update_no_space" = "Ni dovolj prostora za posodobitve";

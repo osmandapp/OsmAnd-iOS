@@ -85,7 +85,7 @@
 "product_title_centralamerica" = "Цэнтральная Амэрыка";
 "product_title_europe" = "Эўропа";
 "product_title_northamerica" = "Паўночная Амэрыка";
-"product_title_russia" = "Расейская Фэдэрацыя";
+"product_title_russia" = "РФ";
 "product_title_asia" = "Азія";
 "res_updates_avail" = "Ёсьць абнаўленьні";
 "res_wsea_map" = "Навігацыйныя знакі ўсяго сьвету";
@@ -178,7 +178,7 @@
 "region_central_america" = "Цэнтральная Амерыка";
 "region_europe" = "Еўропа";
 "region_north_america" = "Паўночная Амерыка";
-"region_russia" = "Расея";
+"region_russia" = "РФ";
 "region_south_america" = "Паўднёвая Амерыка";
 // Help
 "help_quiz" = "Апытанне";
@@ -313,7 +313,7 @@
 "product_desc_centralamerica" = "Карта Цэнтральнай Амерыкі";
 "product_desc_europe" = "Карта Еўропы";
 "product_desc_northamerica" = "Карта Паўночнай Амерыкі";
-"product_desc_russia" = "Карта Расеі";
+"product_desc_russia" = "Мапа РФ";
 "product_title_southamerica" = "Паўднёвая Амерыка";
 "product_desc_southamerica" = "Карта Паўднёвай Амерыкі";
 "product_title_allworld" = "Карты ўсяго свету";

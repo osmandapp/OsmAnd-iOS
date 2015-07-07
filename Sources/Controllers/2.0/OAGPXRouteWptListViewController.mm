@@ -10,12 +10,14 @@
 #import "OAPointTableViewCell.h"
 #import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAGpxWptItem.h"
+#import "OAGpxRouteWptItem.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OAIconTextTableViewCell.h"
 #import "OAGpxRoutePoint.h"
+#import "OAGPXRouteDocument.h"
+#import "OAGPXRouter.h"
 
 #import "OsmAndApp.h"
 
@@ -24,90 +26,35 @@
 #include "Localization.h"
 
 
-@interface OAGPXRouteWptListViewController ()
-{
-    OsmAndAppInstance _app;
-    BOOL isDecelerating;
-}
-
-@property (strong, nonatomic) NSArray* locationPoints;
-@property (strong, nonatomic) NSMutableArray* activePoints;
-@property (strong, nonatomic) NSMutableArray* inactivePoints;
-@property (strong, nonatomic) NSArray* groups;
-
-@end
-
 @implementation OAGPXRouteWptListViewController
 {
+    OsmAndAppInstance _app;
+    OAGPXRouter *_gpxRouter;
+
     NSInteger _sectionsCount;
     NSInteger _sectionIndexActive;
     NSInteger _sectionIndexInActive;
+    
+    OAAutoObserverProxy *_locationUpdateObserver;
+    
+    BOOL isDecelerating;
 }
 
-- (id)initWithLocationMarks:(NSArray *)locationMarks
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
-        
-        [self setPoints:locationMarks];
+        _gpxRouter = [OAGPXRouter sharedInstance];
         
         isDecelerating = NO;
     }
     return self;
 }
 
-- (void)setPoints:(NSArray *)locationMarks
-{
-    NSMutableArray *arr = [NSMutableArray array];
-    for (OAGpxWpt *p in locationMarks) {
-        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
-        item.point = p;
-        [arr addObject:item];
-    }
-    
-    self.locationPoints = arr;
-}
-
 - (void)updateDistanceAndDirection
 {
-    [self updateDistanceAndDirection:NO];
-}
-
-- (void)updateDistanceAndDirection:(BOOL)forceUpdate
-{
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
-        return;
-    
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    // Obtain fresh location and heading
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
-    
-    [self.locationPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
-        OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
-        const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
-        const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
-        
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          wptLon, wptLat);
-        
-        itemData.distance = [_app getFormattedDistance:distance];
-        itemData.distanceMeters = distance;
-        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
-        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        
-    }];
-    
     if (isDecelerating)
         return;
     
@@ -125,7 +72,7 @@
             UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:i];
             if ([cell isKindOfClass:[OAPointTableViewCell class]])
             {
-                OAGpxWptItem* item = [self getWptItem:i];
+                OAGpxRouteWptItem* item = [self getWptItem:i];
                 if (item)
                 {
                     OAPointTableViewCell *c = (OAPointTableViewCell *)cell;
@@ -139,33 +86,25 @@
     });
 }
 
--(void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-}
-
 - (void)doViewAppear
 {
     [self generateData];
-    [self updateDistanceAndDirection:YES];
     
     [self setEditing:YES];
 
-    
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:_app.locationServices.updateObserver];
-    
+                                                                     andObserve:_gpxRouter.locationUpdatedObservable];
 }
 
 - (void)doViewDisappear
 {
     [self setEditing:NO];
 
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationUpdateObserver)
+    {
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
     }
 }
 
@@ -177,9 +116,6 @@
     _sectionIndexActive = index++;
     _sectionIndexInActive = index;
     
-    self.activePoints = [NSMutableArray arrayWithArray:self.locationPoints];
-    self.inactivePoints = [NSMutableArray array];
-    
     [self.tableView reloadData];
 }
 
@@ -190,12 +126,12 @@
 
 #pragma mark - UITableViewDataSource
 
--(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
+-(OAGpxRouteWptItem *)getWptItem:(NSIndexPath *)indexPath
 {
     if (indexPath.section == _sectionIndexActive)
-        return self.activePoints[indexPath.row];
+        return _gpxRouter.routeDoc.activePoints[indexPath.row];
     else if (indexPath.section == _sectionIndexInActive)
-        return self.inactivePoints[indexPath.row];
+        return _gpxRouter.routeDoc.inactivePoints[indexPath.row];
     else
         return nil;
 }
@@ -203,9 +139,9 @@
 -(NSMutableArray *)getWptArray:(NSIndexPath *)indexPath
 {
     if (indexPath.section == _sectionIndexActive)
-        return self.activePoints;
+        return _gpxRouter.routeDoc.activePoints;
     else if (indexPath.section == _sectionIndexInActive)
-        return self.inactivePoints;
+        return _gpxRouter.routeDoc.inactivePoints;
     else
         return nil;
 }
@@ -238,9 +174,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == _sectionIndexActive)
-        return self.activePoints.count;
+        return _gpxRouter.routeDoc.activePoints.count;
     else if (section == _sectionIndexInActive)
-        return self.inactivePoints.count;
+        return _gpxRouter.routeDoc.inactivePoints.count;
     else
         return 0;
 }
@@ -260,7 +196,7 @@
     
     if (cell)
     {
-        OAGpxWptItem* item = [self getWptItem:indexPath];
+        OAGpxRouteWptItem* item = [self getWptItem:indexPath];
         
         [cell.titleView setText:item.point.name];
         [cell.distanceView setText:item.distance];
@@ -295,20 +231,19 @@
 
 -(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
 {
-    OAGpxWptItem* item = [self getWptItem:sourceIndexPath];
-    OAGpxRoutePoint *rp = (OAGpxRoutePoint *)item.point;
+    OAGpxRouteWptItem* item = [self getWptItem:sourceIndexPath];
 
     [[self getWptArray:sourceIndexPath] removeObjectAtIndex:sourceIndexPath.row];
     [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];
 
     if (destinationIndexPath.section == _sectionIndexActive)
     {
-        rp.disabled = NO;
-        rp.visited = NO;
+        item.point.disabled = NO;
+        item.point.visited = NO;
     }
     else if (destinationIndexPath.section == _sectionIndexInActive)
     {
-        rp.disabled = YES;
+        item.point.disabled = YES;
     }
     
     [self updatePointsArray];
@@ -416,14 +351,13 @@
     if (self.tableView.editing)
         return;
     
-    //OAGpxWptItem* item = [self getWptItem:indexPath];
+    //OAGpxRouteWptItem* item = [self getWptItem:indexPath];
     // todo
 }
 
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    OAGpxWptItem* item = [self getWptItem:indexPath];
-    OAGpxRoutePoint *rp = (OAGpxRoutePoint *)item.point;
+    OAGpxRouteWptItem* item = [self getWptItem:indexPath];
 
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
@@ -431,7 +365,7 @@
         NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexInActive];
         
         [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
-        [self.inactivePoints insertObject:item atIndex:0];
+        [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
         
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
         [tableView insertRowsAtIndexPaths:@[destination] withRowAnimation:UITableViewRowAnimationAutomatic];
@@ -442,15 +376,15 @@
     else if (editingStyle == UITableViewCellEditingStyleInsert)
     {
         [tableView beginUpdates];
-        NSIndexPath *destination = [NSIndexPath indexPathForRow:self.activePoints.count inSection:_sectionIndexActive];
+        NSIndexPath *destination = [NSIndexPath indexPathForRow:_gpxRouter.routeDoc.activePoints.count inSection:_sectionIndexActive];
 
         [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
-        [self.activePoints addObject:item];
+        [_gpxRouter.routeDoc.activePoints addObject:item];
 
         [tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
         [tableView endUpdates];
 
-        rp.visited = NO;
+        item.point.visited = NO;
     }
     
     [self updatePointsArray];
@@ -459,20 +393,20 @@
 - (void)updatePointsArray
 {
     int i = 0;
-    for (OAGpxWptItem *wptItem in self.activePoints)
+    for (OAGpxRouteWptItem *item in _gpxRouter.routeDoc.activePoints)
     {
-        OAGpxRoutePoint *rp = (OAGpxRoutePoint *)wptItem.point;
-        rp.index = i++;
-        rp.disabled = NO;
-        [rp applyRouteInfo];
+        item.point.index = i++;
+        item.point.disabled = NO;
+        [item.point applyRouteInfo];
     }
-    for (OAGpxWptItem *wptItem in self.inactivePoints)
+    for (OAGpxRouteWptItem *item in _gpxRouter.routeDoc.inactivePoints)
     {
-        OAGpxRoutePoint *rp = (OAGpxRoutePoint *)wptItem.point;
-        rp.index = i++;
-        rp.disabled = YES;
-        [rp applyRouteInfo];
+        item.point.index = i++;
+        item.point.disabled = YES;
+        [item.point applyRouteInfo];
     }
+    
+    [_gpxRouter.routeDoc updateDistances];
     
     if (self.delegate)
         [self.delegate routePointsChanged];

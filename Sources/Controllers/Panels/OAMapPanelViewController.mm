@@ -47,6 +47,7 @@
 #import "OAUtilities.h"
 #import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
+#import "OAGPXRouter.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1538,10 +1539,7 @@ typedef enum
 
 -(void)targetGoToGPXRoute
 {
-    id targetObj = _activeTargetObj;
-    [self hideTargetPointMenu:.1 onComplete:^{
-        [self openTargetViewWithGPXRoute:targetObj pushed:NO];
-    }];
+    [self openTargetViewWithGPXRoute:_activeTargetObj pushed:YES];
 }
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
@@ -1706,7 +1704,7 @@ typedef enum
     {
         [self.targetMenuView doInit:NO showFullScreen:NO];
         
-        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] init];
 
         gpxViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:gpxViewController];
@@ -2091,14 +2089,14 @@ typedef enum
     
     NSString *caption = [item getNiceTitle];
     
-    UIImage *icon = [UIImage imageNamed:@"icon_info"];
+    UIImage *icon = [UIImage imageNamed:@"icon_gpx_fill"];
     
     targetPoint.type = OATargetGPXRoute;
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     
-    [self displayGpxOnMap:item];
+    //[self displayGpxOnMap:item];
     
     if (item.bounds.center.latitude == DBL_MAX)
     {
@@ -2121,7 +2119,14 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
+    if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
+        _activeTargetChildPushed = YES;
+
+    [[OAGPXRouter sharedInstance] setRouteWithGpx:item];
+    
+    [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
+        [self displayGpxOnMap:item];
+    }];
 }
 
 - (void)displayGpxOnMap:(OAGPX *)item

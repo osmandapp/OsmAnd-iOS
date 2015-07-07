@@ -12,8 +12,16 @@
 
 @interface OAGPXRouteDocument : OAGPXDocument
 
+@property (strong, nonatomic) NSArray* locationPoints;
+@property (strong, nonatomic) NSMutableArray* activePoints;
+@property (strong, nonatomic) NSMutableArray* inactivePoints;
+@property (strong, nonatomic) NSArray* groups;
+
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 
 - (void)buildRouteTrack;
+
+- (void)updateDistances;
+- (void)updateDirections:(CLLocationDirection)newDirection myLocation:(CLLocationCoordinate2D)myLocation;
 
 @end

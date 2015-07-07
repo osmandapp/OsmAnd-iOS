@@ -15,4 +15,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIImageView *arrowIconView;
 
+-(void)showImage:(BOOL)show;
+
 @end

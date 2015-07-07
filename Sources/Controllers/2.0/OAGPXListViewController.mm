@@ -13,6 +13,7 @@
 
 #import "OAGPXTableViewCell.h"
 #import "OAGPXRecTableViewCell.h"
+#import "OAIconTextDescCell.h"
 
 #import "OsmAndApp.h"
 #import "OsmAndCore/GpxDocument.h"
@@ -101,6 +102,7 @@ typedef enum
     OASavingTrackHelper *_savingHelper;
 
     NSInteger _recSectionIndex;
+    NSInteger _routeSectionIndex;
     NSInteger _tripsSectionIndex;
     NSInteger _menuSectionIndex;
     
@@ -108,6 +110,8 @@ typedef enum
     
     BOOL _editActive;
     NSArray *_visible;
+    BOOL _isRouteActive;
+    OAGPX* _routeItem;
 }
 
 static OAGPXListViewController *parentController;
@@ -412,8 +416,16 @@ static OAGPXListViewController *parentController;
                          @"action": @"onImportClicked"}];
     itemData.groupItems = [[NSMutableArray alloc] initWithArray:self.menuItems];
     
+    NSString *routeFileName = [[OAAppSettings sharedManager] mapSettingActiveRouteFileName];
+    _isRouteActive = (routeFileName != nil);
+    if (_isRouteActive)
+        _routeItem = [db getGPXItem:routeFileName];
+    else
+        _routeItem = nil;
+    
     NSInteger index = 0;
     _recSectionIndex = (_viewMode == kActiveTripsMode ? index++ : -1);
+    _routeSectionIndex = ((_viewMode == kActiveTripsMode && _isRouteActive) ? index++ : -1);
     _tripsSectionIndex = (_viewMode == kActiveTripsMode ? index++ : (self.gpxList.count > 0 ? index++ : -1));
     _menuSectionIndex = (_viewMode == kAllTripsMode ? index : -1);
 }
@@ -603,7 +615,7 @@ static OAGPXListViewController *parentController;
     switch (_viewMode)
     {
         case kActiveTripsMode:
-            return 2;
+            return 2 + (_isRouteActive ? 1 : 0);
             
         case kAllTripsMode:
             return 1 + (self.gpxList.count > 0 ? 1 : 0);
@@ -618,15 +630,17 @@ static OAGPXListViewController *parentController;
     switch (_viewMode)
     {
         case kActiveTripsMode:
-            if (section == 0)
+            if (section == _recSectionIndex)
                 return OALocalizedString(@"record_trip");
-            else
+            else if (section == _routeSectionIndex)
+                return OALocalizedString(@"gpx_route");
+            else if (section == _tripsSectionIndex)
                 return OALocalizedString(@"tracks");
             
         case kAllTripsMode:
-            if (section == 0 && self.gpxList.count > 0)
+            if (section == _tripsSectionIndex)
                 return nil;
-            else
+            else if (section == _menuSectionIndex)
                 return OALocalizedString(@"fav_import");
             
         default:
@@ -642,15 +656,17 @@ static OAGPXListViewController *parentController;
     switch (_viewMode)
     {
         case kActiveTripsMode:
-            if (section == 0)
+            if (section == _recSectionIndex)
                 return 1;
-            else
+            else if (section == _routeSectionIndex)
+                return 1;
+            else if (section == _tripsSectionIndex)
                 return [self.gpxList count] + 1;
             
         case kAllTripsMode:
-            if (section == 0 && self.gpxList.count > 0)
+            if (section == _tripsSectionIndex)
                 return [self.gpxList count];
-            else
+            else if (section == _menuSectionIndex)
                 return [self.menuItems count];
             
         default:
@@ -715,9 +731,111 @@ static OAGPXListViewController *parentController;
             return _addonCell;
         }
     }
+    else if (indexPath.section == _routeSectionIndex)
+    {
+        static NSString* const reusableIdentifierPoint = @"OAIconTextDescCell";
+        
+        OAIconTextDescCell* cell;
+        cell = (OAIconTextDescCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell) {
+            
+            CGRect f = cell.textView.frame;
+            f.origin.y = 8.0;
+            cell.textView.frame = f;
+            
+            [cell showImage:NO];
+            //[cell.iconView setImage: [UIImage imageNamed:@"icon_gpx_fill"]];
+            
+            NSString *desc;
+            /*
+            NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
+            UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+
+            NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:item.totalDistance] mutableCopy];
+            if (item.points > 0)
+                [distanceStr appendFormat:@" (%d)", item.points];
+            NSString *waypointsStr = [NSString stringWithFormat:@"%d", item.wptPoints];
+            NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:item.timeMoving shortFormat:NO];
+            NSString *avgSpeedStr = [[OsmAndApp instance] getFormattedSpeed:item.avgSpeed];
+            
+            NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", distanceStr]];
+            NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", waypointsStr]];
+            NSMutableAttributedString *stringTimeMoving;
+            if (item.timeMoving > 0)
+                stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+            NSMutableAttributedString *stringAvgSpeed;
+            if (item.avgSpeed > 0)
+                stringAvgSpeed =[[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", avgSpeedStr]];
+            
+            NSTextAttachment *distanceAttachment = [[NSTextAttachment alloc] init];
+            distanceAttachment.image = [UIImage imageNamed:@"ic_gpx_distance.png"];
+            
+            NSTextAttachment *waypointsAttachment = [[NSTextAttachment alloc] init];
+            waypointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+            
+            NSTextAttachment *timeMovingAttachment;
+            if (item.timeMoving > 0)
+            {
+                timeMovingAttachment = [[NSTextAttachment alloc] init];
+                timeMovingAttachment.image = [UIImage imageNamed:@"ic_travel_time.png"];
+            }
+            NSTextAttachment *avgSpeedAttachment;
+            if (item.avgSpeed > 0)
+            {
+                avgSpeedAttachment = [[NSTextAttachment alloc] init];
+                avgSpeedAttachment.image = [UIImage imageNamed:@"ic_average_speed.png"];
+            }
+            
+            NSAttributedString *distanceStringWithImage = [NSAttributedString attributedStringWithAttachment:distanceAttachment];
+            NSAttributedString *waypointsStringWithImage = [NSAttributedString attributedStringWithAttachment:waypointsAttachment];
+            NSAttributedString *timeMovingStringWithImage;
+            if (item.timeMoving > 0)
+                timeMovingStringWithImage = [NSAttributedString attributedStringWithAttachment:timeMovingAttachment];
+            NSAttributedString *avgSpeedStringWithImage;
+            if (item.avgSpeed > 0)
+                avgSpeedStringWithImage = [NSAttributedString attributedStringWithAttachment:avgSpeedAttachment];
+            
+            [stringDistance replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:distanceStringWithImage];
+            [stringDistance addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+            [stringWaypoints replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:waypointsStringWithImage];
+            [stringWaypoints addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+            if (item.timeMoving > 0)
+            {
+                [stringTimeMoving replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:timeMovingStringWithImage];
+                [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+            }
+            if (item.avgSpeed > 0)
+            {
+                [stringAvgSpeed replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:avgSpeedStringWithImage];
+                [stringAvgSpeed addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+            }
+            
+            [string appendAttributedString:stringDistance];
+            [string appendAttributedString:stringWaypoints];
+            if (stringTimeMoving)
+                [string appendAttributedString:stringTimeMoving];
+            if (stringAvgSpeed)
+                [string appendAttributedString:stringAvgSpeed];
+
+            [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+            [_coordinateLabel setAttributedText:string];
+            [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+             */
+            
+            [cell.textView setText:[_routeItem getNiceTitle]];
+            [cell.descView setText:desc];
+        }
+        return cell;
+    }
     else if (indexPath.section == _tripsSectionIndex)
     {
-        if (_viewMode == kActiveTripsMode && indexPath.section == 1 && indexPath.row == self.gpxList.count)
+        if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
         {
             static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
             
@@ -797,6 +915,8 @@ static OAGPXListViewController *parentController;
     {
         case kActiveTripsMode:
             if (indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
+                return NO;
+            else if (indexPath.section == _routeSectionIndex)
                 return NO;
             else
                 return YES;
@@ -961,6 +1081,11 @@ static OAGPXListViewController *parentController;
                 purchasesViewController.openFromCustomPlace = YES;
                 [self.navigationController pushViewController:purchasesViewController animated:YES];
             }
+        }
+        else if (indexPath.section == _routeSectionIndex)
+        {
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPXRoute:_routeItem pushed:YES];
         }
         else if (indexPath.section == _tripsSectionIndex)
         {

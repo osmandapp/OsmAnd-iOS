@@ -927,7 +927,7 @@
 
 - (void)updateUIOnInit
 {
-    if (_targetPoint.type == OATargetGPX)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
     {
         OAGPX *item = _targetPoint.targetObj;
         _buttonRight.hidden = (item.newGpx || !item);
@@ -956,7 +956,7 @@
 
 - (void)updateButtonClose
 {
-    _buttonClose.alpha = (_hideButtons && _showFull ? 0.0 : 1.0);
+    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) ? 0.0 : 1.0);
 }
 
 - (void)doUpdateUI
@@ -2060,7 +2060,10 @@
 
 - (IBAction)buttonShadowClicked:(id)sender
 {
-    if (_targetPoint.type == OATargetGPX)
+    if (_showFullScreen)
+        return;
+    
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
     {
         [self.delegate targetGoToGPX];
     }

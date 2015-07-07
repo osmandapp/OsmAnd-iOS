@@ -117,6 +117,16 @@
     return gpx;
 }
 
+-(OAGPX *)getGPXItem:(NSString *)fileName
+{
+    for (OAGPX *item in gpxList) {
+        if ([item.gpxFileName isEqualToString:fileName]) {
+            return item;
+        }
+    }
+    return nil;
+}
+
 -(void)removeGpxItem:(NSString *)fileName
 {
     NSMutableArray *arr = [NSMutableArray arrayWithArray:gpxList];

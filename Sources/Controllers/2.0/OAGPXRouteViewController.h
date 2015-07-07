@@ -16,16 +16,10 @@ typedef enum
 } OAGpxRouteSegmentType;
 
 
-@class OAGPX;
-
 @interface OAGPXRouteViewController : OATargetMenuViewController
-
-@property (nonatomic) OAGPX *gpx;
 
 @property (weak, nonatomic) IBOutlet UIView *segmentViewContainer;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
 
-
-- (id)initWithGPXItem:(OAGPX *)gpxItem;
 
 @end

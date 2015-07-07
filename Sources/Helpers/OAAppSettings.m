@@ -66,6 +66,8 @@
 
         _mapSettingShowRecordingTrack = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingShowRecordingTrackKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingShowRecordingTrackKey] : NO;
         _mapSettingSaveTrackIntervalApproved = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingSaveTrackIntervalApprovedKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingSaveTrackIntervalApprovedKey] : NO;
+        _mapSettingActiveRouteFileName = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFileNameKey];
+
     }
     return self;
 }
@@ -191,6 +193,12 @@
 {
     _mapSettingSaveTrackIntervalApproved = mapSettingSaveTrackIntervalApproved;
     [[NSUserDefaults standardUserDefaults] setBool:_mapSettingSaveTrackIntervalApproved forKey:mapSettingSaveTrackIntervalApprovedKey];
+}
+
+-(void)setMapSettingActiveRouteFileName:(NSString *)mapSettingActiveRouteFileName
+{
+    _mapSettingActiveRouteFileName = mapSettingActiveRouteFileName;
+    [[NSUserDefaults standardUserDefaults] setObject:_mapSettingActiveRouteFileName forKey:mapSettingActiveRouteFileNameKey];
 }
 
 -(void)showGpx:(NSString *)fileName

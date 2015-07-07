@@ -39,8 +39,6 @@
 
 @property(readonly) OADownloadsManager* downloadsManager;
 
-@property(readonly) id<UIAlertViewDelegate> commonResponder;
-
 @property(readonly) OAObservable* localResourcesChangedObservable;
 @property(readonly) OAObservable* resourcesRepositoryUpdatedObservable;
 
@@ -67,7 +65,6 @@
 
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
-@property(readonly) NSString* gpxStorageFilename;
 
 - (void)saveFavoritesToPermamentStorage;
 - (void)updateScreenTurnOffSetting;

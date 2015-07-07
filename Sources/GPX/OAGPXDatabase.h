@@ -61,6 +61,7 @@
 
 -(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
 -(OAGPX *)addGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds analysis:(OAGPXTrackAnalysis *)analysis;
+-(OAGPX *)getGPXItem:(NSString *)fileName;
 -(void)removeGpxItem:(NSString *)fileName;
 -(BOOL)containsGPXItem:(NSString *)fileName;
 -(BOOL)updateGPXItemPointsCount:(NSString *)fileName pointsCount:(int)pointsCount;

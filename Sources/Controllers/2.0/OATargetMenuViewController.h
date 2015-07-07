@@ -61,6 +61,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 
 - (void)useGradient:(BOOL)gradient;
+- (UIColor *)getNavBarColor;
 
 - (BOOL)disablePanWhileEditing;
 - (BOOL)supportEditing;

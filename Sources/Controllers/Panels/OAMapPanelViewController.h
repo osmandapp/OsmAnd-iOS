@@ -46,6 +46,7 @@
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed;
 
 - (void)displayGpxOnMap:(OAGPX *)item;
 

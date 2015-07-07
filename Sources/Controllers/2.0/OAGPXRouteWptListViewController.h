@@ -10,6 +10,8 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
+@class OAGPXRouteDocument;
+
 @protocol OAGPXRouteWptListViewControllerDelegate <NSObject>
 
 - (void)routePointsChanged;
@@ -26,13 +28,5 @@
 
 - (void)generateData;
 - (void)resetData;
-
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-@property CGFloat azimuthDirection;
-
-@property NSTimeInterval lastUpdate;
-
-- (id)initWithLocationMarks:(NSArray *)locationMarks;
-- (void)setPoints:(NSArray *)locationMarks;
 
 @end

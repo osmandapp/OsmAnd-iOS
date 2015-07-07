@@ -32,6 +32,7 @@
 #import "OAFavoriteItem.h"
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
+#import "OAGPXRouter.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -125,6 +126,10 @@
     OAAutoObserverProxy* _underlayAlphaChangeObserver;
 
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
+
+    OAAutoObserverProxy* _gpxRouteDefinedObserver;
+    OAAutoObserverProxy* _gpxRouteCanceledObserver;
+    OAAutoObserverProxy* _gpxRouteChangedObserver;
 
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
@@ -275,6 +280,8 @@
     BOOL _animationDone;
     int _animationDoneCounter;
     CGFloat _latPin, _lonPin;
+    
+    OAGPXRouter *_gpxRouter;
 }
 
 - (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -294,6 +301,8 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
+    _gpxRouter = [OAGPXRouter sharedInstance];
+    
     _firstAppear = YES;
 
     _rendererSync = [[NSObject alloc] init];
@@ -314,7 +323,17 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
-    
+
+    _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onGpxRouteDefined)
+                                                              andObserve:_gpxRouter.routeDefinedObservable];
+    _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onGpxRouteCanceled)
+                                                              andObserve:_gpxRouter.routeCanceledObservable];
+    _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                          withHandler:@selector(onGpxRouteChanged)
+                                                           andObserve:_gpxRouter.routeChangedObservable];
+
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -2724,6 +2743,42 @@
     });
 }
 
+- (void)onGpxRouteDefined
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
+            [_gpxRouter.routeDoc buildRouteTrack];
+            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self showRouteGpxTrack];
+                [self refreshGpxTracks];
+            });
+        });
+    });
+}
+
+- (void)onGpxRouteCanceled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self hideRouteGpxTrack];
+    });
+}
+
+- (void)onGpxRouteChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self showRouteGpxTrack];
+    });
+}
 
 #pragma mark - UIAlertViewDelegate
 
@@ -3050,6 +3105,15 @@
             [self showTempGpxTrack:_gpxDocFileTemp];
         else if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
             [self showRecGpxTrack];
+        
+        if (_gpxRouter.gpx && !_gpxDocFileRoute)
+        {
+            [_gpxRouter.routeDoc buildRouteTrack];
+            [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
+            [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
+            
+            [self showRouteGpxTrack];
+        }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self buildGpxInfoDocList];

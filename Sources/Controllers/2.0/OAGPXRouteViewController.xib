@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAGPXRouteViewController">
             <connections>
                 <outlet property="buttonCancel" destination="c6W-4y-yaJ" id="dL3-wD-bGP"/>
-                <outlet property="buttonOK" destination="OOC-2e-LWi" id="lYn-lm-q4p"/>
                 <outlet property="contentView" destination="kgx-dD-GoS" id="eM8-jA-Gm2"/>
                 <outlet property="navBar" destination="R9k-z2-bd5" id="Nhd-tv-Wbc"/>
                 <outlet property="segmentView" destination="lHY-EK-G0j" id="1oI-B8-ivP"/>
@@ -33,28 +32,16 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="c6W-4y-yaJ">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="c6W-4y-yaJ">
                             <rect key="frame" x="4" y="20" width="70" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <inset key="titleEdgeInsets" minX="12" minY="0.0" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="-12" minY="0.0" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="Back" image="menu_icon_back.png">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
+                            <state key="normal" title="Back" image="menu_icon_back.png"/>
                             <connections>
                                 <action selector="buttonCancelPressed:" destination="-1" eventType="touchUpInside" id="NhE-gK-yAU"/>
-                            </connections>
-                        </button>
-                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="OOC-2e-LWi" userLabel="GO">
-                            <rect key="frame" x="276" y="20" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <state key="normal" title="GO"/>
-                            <connections>
-                                <action selector="buttonOKPressed:" destination="-1" eventType="touchUpInside" id="pmI-dw-o59"/>
                             </connections>
                         </button>
                         <view contentMode="scaleToFill" id="RDn-MW-vJp">
@@ -77,7 +64,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" red="0.047058823529411764" green="0.29803921568627451" blue="0.49019607843137253" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="kgx-dD-GoS">
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>

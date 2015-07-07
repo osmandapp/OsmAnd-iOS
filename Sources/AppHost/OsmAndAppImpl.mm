@@ -28,6 +28,7 @@
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
+#import "OAGPXRouter.h"
 
 #include <algorithm>
 
@@ -308,6 +309,9 @@
     
     // Init track recorder
     [OASavingTrackHelper sharedInstance];
+    
+    // Init gpx router
+    [OAGPXRouter sharedInstance];
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     

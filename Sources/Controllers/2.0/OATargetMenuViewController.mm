@@ -100,8 +100,13 @@
     else
     {
         self.titleGradient.hidden = YES;
-        self.navBar.backgroundColor = UIColorFromRGB(0xFF8F00);
+        self.navBar.backgroundColor = [self getNavBarColor];
     }
+}
+
+- (UIColor *)getNavBarColor
+{
+    return UIColorFromRGB(0xFF8F00);
 }
 
 - (BOOL)disablePanWhileEditing

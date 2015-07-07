@@ -19,15 +19,16 @@
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
 
-#import "OAMapRendererView.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"
 #import "OAGpxWptItem.h"
+#import "OAAppSettings.h"
 
 #import "OAGPXRouteDocument.h"
+#import "OAGPXRouter.h"
 
 #import "OAGPXRouteWptListViewController.h"
 
@@ -36,8 +37,6 @@
 
 @interface OAGPXRouteViewController () <OAGPXRouteWptListViewControllerDelegate>
 
-@property (nonatomic) OAGPXRouteDocument *doc;
-
 @end
 
 @implementation OAGPXRouteViewController
@@ -45,9 +44,8 @@
     OAGPXRouteWptListViewController *_waypointsController;
     
     OsmAndAppInstance _app;
+    OAGPXRouter *_gpxRouter;
     NSDateFormatter *_dateTimeFormatter;
-    
-    OAMapViewController *_mapViewController;
     
     OAGpxRouteSegmentType _segmentType;
     CGFloat _scrollPos;
@@ -56,30 +54,24 @@
     UIView *_badge;
 }
 
-- (id)initWithGPXItem:(OAGPX *)gpxItem
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
         _app = [OsmAndApp instance];
+        _gpxRouter = [OAGPXRouter sharedInstance];
+        
         _wasInit = NO;
         _scrollPos = 0.0;
         _segmentType = kSegmentRoute;
-        self.gpx = gpxItem;
-        [self loadDoc];
     }
     return self;
 }
 
-- (void)loadDoc
-{
-    NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-    self.doc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
-}
-
 - (void)cancelPressed
 {
-    [_mapViewController hideRouteGpxTrack];
+    [_gpxRouter cancelRoute];
     
     if (self.delegate)
         [self.delegate btnCancelPressed];
@@ -97,8 +89,6 @@
 
 - (BOOL)preHide
 {
-    //[_mapViewController keepTempGpxTrackVisible];
-    //[_mapViewController hideRouteGpxTrack];
     [self closePointsController];
     return YES;
 }
@@ -113,11 +103,6 @@
     return _segmentType == kSegmentRouteWaypoints;
 }
 
-- (BOOL)fullScreenWithoutHeader
-{
-    return YES;
-}
-
 -(BOOL)hasTopToolbar
 {
     return YES;
@@ -130,7 +115,7 @@
 
 - (id)getTargetObj
 {
-    return self.gpx;
+    return _gpxRouter.gpx;
 }
 
 - (CGFloat)contentHeight
@@ -139,6 +124,11 @@
         return 0.0;
     else
         return 160.0;
+}
+
+-(UIColor *)getNavBarColor
+{
+    return UIColorFromRGB(0x0C4C7D);
 }
 
 - (void)applyLocalization
@@ -157,15 +147,13 @@
 {
     [super viewDidLoad];
     
-    _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-    
     _dateTimeFormatter = [[NSDateFormatter alloc] init];
     _dateTimeFormatter.dateStyle = NSDateFormatterShortStyle;
     _dateTimeFormatter.timeStyle = NSDateFormatterMediumStyle;
     
-    self.titleView.text = [self.gpx getNiceTitle];
+    self.titleView.text = [_gpxRouter.gpx getNiceTitle];
     
-    _waypointsController = [[OAGPXRouteWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+    _waypointsController = [[OAGPXRouteWptListViewController alloc] init];
     _waypointsController.delegate = self;
     _waypointsController.allGroups = [self readGroups];
     
@@ -177,15 +165,6 @@
     [self applySegmentType];
 
     [self addBadge];
-    
-    [self.doc buildRouteTrack];
-    [_mapViewController setGeoInfoDocsGpxRoute:self.doc];
-    [_mapViewController setDocFileRoute:self.gpx.gpxFileName];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_mapViewController showRouteGpxTrack];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
-    });
 }
 
 - (void)didReceiveMemoryWarning {
@@ -203,8 +182,8 @@
     
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
     badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
-    badgeLabel.text = [NSString stringWithFormat:@"%d", self.doc.locationMarks.count];
-    badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
+    badgeLabel.text = [NSString stringWithFormat:@"%d", _gpxRouter.routeDoc.locationMarks.count];
+    badgeLabel.textColor = [self getNavBarColor];
     badgeLabel.textAlignment = NSTextAlignmentCenter;
     [badgeLabel sizeToFit];
     
@@ -264,7 +243,7 @@
 - (NSArray *)readGroups
 {
     NSMutableSet *groups = [NSMutableSet set];
-    for (OAGpxWpt *wptItem in self.doc.locationMarks)
+    for (OAGpxWpt *wptItem in _gpxRouter.routeDoc.locationMarks)
     {
         if (wptItem.type.length > 0)
             [groups addObject:wptItem.type];
@@ -274,7 +253,7 @@
 
 - (void)updateMap
 {
-    [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
+    [[OARootViewController instance].mapPanel displayGpxOnMap:_gpxRouter.gpx];
 }
 
 - (IBAction)segmentClicked:(id)sender
@@ -292,10 +271,8 @@
 
 -(void)routePointsChanged
 {
-    [self.doc buildRouteTrack];
-    //[_mapViewController setGeoInfoDocsGpxRoute:self.doc];
-    //[[_app updateRouteTrackOnMapObservable] notifyEvent];
-    [_mapViewController showRouteGpxTrack];
+    [_gpxRouter.routeDoc buildRouteTrack];
+    [_gpxRouter.routeChangedObservable notifyEvent];
 }
 
 @end

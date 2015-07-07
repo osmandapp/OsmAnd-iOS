@@ -26,6 +26,5 @@
 
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::ResourcesManager> resourcesManager;
 @property(nonatomic, readonly) std::shared_ptr<OsmAnd::FavoriteLocationsGpxCollection> favoritesCollection;
-@property(nonatomic) std::shared_ptr<OsmAnd::GpxDocument> gpxCollection;
 
 @end

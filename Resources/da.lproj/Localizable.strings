@@ -400,3 +400,4 @@
 "gpx_rename_q" = "Omdøb tur";
 "gpx_enter_new_name" = "Indtast nyt navn til turen";
 "gpx_route" = "Rute";
+"gpx_cancel_route_q" = "Annuller ruten?";

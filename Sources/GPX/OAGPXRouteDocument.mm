@@ -180,23 +180,27 @@
 
 - (void)updateDistances
 {
+    double tDistance = 0.0;
+    
     OAGpxRouteWptItem* prevItemData;
     for (OAGpxRouteWptItem* itemData in self.activePoints)
     {
-        if (!prevItemData)
+        if (prevItemData)
         {
-            prevItemData = itemData;
-            continue;
+            const auto distance = OsmAnd::Utilities::distance(itemData.point.position.longitude,
+                                                              itemData.point.position.latitude,
+                                                              prevItemData.point.position.longitude, prevItemData.point.position.latitude);
+            
+            itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
+            itemData.distanceMeters = distance;
+            itemData.direction = 0.0;
+            
+            tDistance += distance;
         }
-        
-        const auto distance = OsmAnd::Utilities::distance(itemData.point.position.longitude,
-                                                          itemData.point.position.latitude,
-                                                          prevItemData.point.position.longitude, prevItemData.point.position.latitude);
-        
-        itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
-        itemData.distanceMeters = distance;
-        itemData.direction = 0.0;
+        prevItemData = itemData;
     }
+    
+    _totalDistance = tDistance;
 }
 
 - (void)updateDirections:(CLLocationDirection)newDirection myLocation:(CLLocationCoordinate2D)myLocation

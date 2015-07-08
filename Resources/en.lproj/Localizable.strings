@@ -450,3 +450,5 @@
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
 
+"gpx_cancel_route_q" = "Do you want to cancel this route?";
+

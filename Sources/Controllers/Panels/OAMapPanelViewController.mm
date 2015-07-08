@@ -1826,16 +1826,26 @@ typedef enum
     
     if (_activeTargetType == OATargetNone || _activeTargetActive)
     {
-        BOOL popped = NO;
-        if (self.targetMenuView.targetPoint.type == OATargetGPX)
+        BOOL popped;
+        switch (self.targetMenuView.targetPoint.type)
         {
-            if (_activeTargetType == OATargetGPX && _activeTargetObj)
-                ((OAGPX *)_activeTargetObj).newGpx = NO;
-            popped = [OAGPXListViewController popToParent];
-        }
-        else if (self.targetMenuView.targetPoint.type == OATargetFavorite)
-        {
-            popped = [OAFavoriteListViewController popToParent];
+            case OATargetGPX:
+                if (_activeTargetType == OATargetGPX && _activeTargetObj)
+                    ((OAGPX *)_activeTargetObj).newGpx = NO;
+                popped = [OAGPXListViewController popToParent];
+                break;
+                
+            case OATargetGPXRoute:
+                popped = [OAGPXListViewController popToParent];
+                break;
+                
+            case OATargetFavorite:
+                popped = [OAFavoriteListViewController popToParent];
+                break;
+
+            default:
+                popped = NO;
+                break;
         }
 
         if (!popped)

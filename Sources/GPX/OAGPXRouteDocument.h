@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSMutableArray* inactivePoints;
 @property (strong, nonatomic) NSArray* groups;
 
+@property (readonly, nonatomic) double totalDistance;
+
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 
 - (void)buildRouteTrack;

@@ -20,6 +20,8 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXRouter.h"
+#import "OAGPXRouteDocument.h"
 
 #import "OpeningHoursParser.h"
 #include "java/util/Calendar.h"
@@ -1097,6 +1099,7 @@
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
             _imageView.image = _targetPoint.icon;
         }
+        
     });
 }
 
@@ -1704,6 +1707,13 @@
         if (d && d.carPickupDateEnabled)
             [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
     }
+    else if (_targetPoint.type == OATargetGPXRoute)
+    {
+        _imageView.image = _targetPoint.icon;
+        double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
+        self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
+        [self updateCoordinateLabel];
+    }
     else
     {
         _imageView.image = _targetPoint.icon;
@@ -1858,6 +1868,74 @@
         }
         
         [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+        [_coordinateLabel setAttributedText:string];
+        [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+    }
+    else if (_targetPoint.type == OATargetGPXRoute)
+    {
+        int wptCount = [OAGPXRouter sharedInstance].gpx.wptPoints;
+        NSTimeInterval tripDuration = [[OAGPXRouter sharedInstance] getRouteDuration];
+        
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
+        UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+        
+        NSString *waypointsStr = [NSString stringWithFormat:@"%d %@", wptCount, OALocalizedString(@"gpx_waypoints")];
+        NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:tripDuration shortFormat:NO];
+        
+        NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", waypointsStr]];
+        NSMutableAttributedString *stringTimeMoving;
+        if (tripDuration > 0)
+            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+        
+        NSTextAttachment *waypointsAttachment = [[NSTextAttachment alloc] init];
+        waypointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+        
+        NSTextAttachment *timeMovingAttachment;
+        if (tripDuration > 0)
+        {
+            NSString *imageName;
+            OAMapVariantType variantType = [OAMapStyleSettings getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
+            switch (variantType)
+            {
+                case OAMapVariantDefault:
+                case OAMapVariantPedestrian:
+                    imageName = @"ic_trip_pedestrian";
+                    break;
+                case OAMapVariantBicycle:
+                    imageName = @"ic_trip_bike";
+                    break;
+                case OAMapVariantCar:
+                    imageName = @"ic_trip_car";
+                    break;
+                    
+                default:
+                    imageName = @"ic_trip_pedestrian";
+                    break;
+            }
+            
+            timeMovingAttachment = [[NSTextAttachment alloc] init];
+            timeMovingAttachment.image = [UIImage imageNamed:imageName];
+        }
+        
+        NSAttributedString *waypointsStringWithImage = [NSAttributedString attributedStringWithAttachment:waypointsAttachment];
+        NSAttributedString *timeMovingStringWithImage;
+        if (tripDuration > 0)
+            timeMovingStringWithImage = [NSAttributedString attributedStringWithAttachment:timeMovingAttachment];
+        
+        [stringWaypoints replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:waypointsStringWithImage];
+        [stringWaypoints addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+        if (tripDuration > 0)
+        {
+            [stringTimeMoving replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:timeMovingStringWithImage];
+            [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+        }
+        
+        [string appendAttributedString:stringWaypoints];
+        if (stringTimeMoving)
+            [string appendAttributedString:stringTimeMoving];
+        
+        [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+
         [_coordinateLabel setAttributedText:string];
         [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
     }
@@ -2097,14 +2175,20 @@
 
 - (void) contentChanged
 {
-    if (_targetPoint.type == OATargetGPX && self.customController)
+    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateCoordinateLabel];
 
         OAGPX *item = _targetPoint.targetObj;
         if (!item.newGpx)
-            self.addressLabel.text = item.gpxTitle;
+            self.addressLabel.text = [item getNiceTitle];
+        
+        if (_targetPoint.type == OATargetGPXRoute)
+        {
+            double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
+            self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
+        }
     }
 }
 

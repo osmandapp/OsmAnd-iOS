@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAObservable.h"
+#import "OAMapStyleSettings.h"
 
 @class OAGPXRouteDocument;
 @class OAGPX;
@@ -26,5 +27,8 @@
 
 - (void)setRouteWithGpx:(OAGPX *)gpx;
 - (void)cancelRoute;
+
+- (NSTimeInterval)getRouteDuration;
+- (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType;
 
 @end

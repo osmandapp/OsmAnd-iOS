@@ -8,6 +8,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAGPXRouteViewController">
             <connections>
                 <outlet property="buttonCancel" destination="c6W-4y-yaJ" id="dL3-wD-bGP"/>
+                <outlet property="buttonOK" destination="Gma-9e-YpX" id="BeZ-40-FyA"/>
                 <outlet property="contentView" destination="kgx-dD-GoS" id="eM8-jA-Gm2"/>
                 <outlet property="navBar" destination="R9k-z2-bd5" id="Nhd-tv-Wbc"/>
                 <outlet property="segmentView" destination="lHY-EK-G0j" id="1oI-B8-ivP"/>
@@ -44,6 +45,15 @@
                                 <action selector="buttonCancelPressed:" destination="-1" eventType="touchUpInside" id="NhE-gK-yAU"/>
                             </connections>
                         </button>
+                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Gma-9e-YpX">
+                            <rect key="frame" x="276" y="20" width="44" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" image="ic_close.png"/>
+                            <connections>
+                                <action selector="buttonOKPressed:" destination="-1" eventType="touchUpInside" id="Vsz-xp-GuZ"/>
+                            </connections>
+                        </button>
                         <view contentMode="scaleToFill" id="RDn-MW-vJp">
                             <rect key="frame" x="40" y="60" width="240" height="35"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -78,6 +88,7 @@
         </view>
     </objects>
     <resources>
+        <image name="ic_close.png" width="10" height="10"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

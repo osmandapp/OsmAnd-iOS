@@ -18,6 +18,7 @@
 #import "OAEditGroupViewController.h"
 #import "OAEditColorViewController.h"
 #import "OADefaultFavorite.h"
+#import "OAGPXRouter.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -161,6 +162,10 @@
 
 - (void)loadDoc
 {
+    OAGPXRouter *gpxRouter = [OAGPXRouter sharedInstance];
+    if (gpxRouter.gpx && [gpxRouter.gpx.gpxFileName isEqualToString:self.gpx.gpxFileName])
+        [gpxRouter cancelRoute];
+    
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
     self.doc = [[OAGPXDocument alloc] initWithGpxFile:path];
 }

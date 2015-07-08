@@ -13,6 +13,18 @@
 #import "OAGPXDatabase.h"
 #import "OAAutoObserverProxy.h"
 
+/*
+ - default       3 km/h
+ - pedestrian    3 km/h
+ - car          40 km/h
+ - bicycle      12 km/h
+ */
+
+const double kKmhToMps = 1.0/3.6;
+const double kMotionSpeedDefault = 3.0 * kKmhToMps;
+const double kMotionSpeedPedestrian = 3.0 * kKmhToMps;
+const double kMotionSpeedBicycle = 12.0 * kKmhToMps;
+const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 @implementation OAGPXRouter
 {
@@ -49,6 +61,8 @@
         NSString *activeRouteFileName = [[OAAppSettings sharedManager] mapSettingActiveRouteFileName];
         if (activeRouteFileName)
         {
+            _gpx = [[OAGPXDatabase sharedDb] getGPXItem:activeRouteFileName];
+
             NSString *path = [_app.gpxPath stringByAppendingPathComponent:activeRouteFileName];
             self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
         }
@@ -78,7 +92,8 @@
 
 - (void)cancelRoute
 {
-    self.routeDoc = nil;
+    _routeDoc = nil;
+    _gpx = nil;
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:nil];
 
     [self.routeCanceledObservable notifyEvent];
@@ -125,6 +140,31 @@
         [self.routeDoc updateDirections:newDirection myLocation:newLocation.coordinate];
         [self.locationUpdatedObservable notifyEvent];
     });
+}
+
+- (NSTimeInterval)getRouteDuration
+{
+    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+    return [self getRouteDuration:variantType];
+}
+
+- (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType
+{
+    double distance = self.routeDoc.totalDistance;
+    switch (mapVariantType)
+    {
+        case OAMapVariantDefault:
+            return distance / kMotionSpeedDefault;
+        case OAMapVariantPedestrian:
+            return distance / kMotionSpeedPedestrian;
+        case OAMapVariantBicycle:
+            return distance / kMotionSpeedBicycle;
+        case OAMapVariantCar:
+            return distance / kMotionSpeedCar;
+            
+        default:
+            return -1.0;
+    }
 }
 
 @end

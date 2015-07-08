@@ -70,9 +70,7 @@
 }
 
 - (void)cancelPressed
-{
-    [_gpxRouter cancelRoute];
-    
+{    
     if (self.delegate)
         [self.delegate btnCancelPressed];
     
@@ -81,10 +79,22 @@
 
 - (void)okPressed
 {
-    if (self.delegate)
-        [self.delegate btnOkPressed];
-    
-    [self closePointsController];
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_cancel_route_q")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 [_gpxRouter cancelRoute];
+                                 
+                                 if (self.delegate)
+                                     [self.delegate btnOkPressed];
+                                 
+                                 [self closePointsController];
+                             }
+                         }];
 }
 
 - (BOOL)preHide
@@ -273,6 +283,9 @@
 {
     [_gpxRouter.routeDoc buildRouteTrack];
     [_gpxRouter.routeChangedObservable notifyEvent];
+
+    if (self.delegate)
+        [self.delegate contentChanged];
 }
 
 @end

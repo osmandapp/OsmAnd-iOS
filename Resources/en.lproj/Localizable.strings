@@ -452,4 +452,5 @@
 
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
+"gpx_trip_groups" = "Trip groups";
 

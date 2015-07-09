@@ -138,7 +138,7 @@
 
 -(UIColor *)getNavBarColor
 {
-    return UIColorFromRGB(0x0C4C7D);
+    return UIColorFromRGB(0x044b7f);
 }
 
 - (void)applyLocalization

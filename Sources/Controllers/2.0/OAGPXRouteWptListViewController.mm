@@ -18,6 +18,9 @@
 #import "OAGPXRouteDocument.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteWaypointTableViewCell.h"
+#import "OAIconTextTableViewCell.h"
+#import "MGSwipeButton.h"
+#import "MGSwipeTableCell.h"
 
 #import "OsmAndApp.h"
 
@@ -25,6 +28,9 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
+@interface OAGPXRouteWptListViewController () <MGSwipeTableCellDelegate, UIActionSheetDelegate>
+
+@end
 
 @implementation OAGPXRouteWptListViewController
 {
@@ -40,6 +46,9 @@
     
     BOOL isDecelerating;
     BOOL isMoving;
+    
+    NSIndexPath *indexPathForSwipingCell;
+    NSIndexPath *_activeIndexPath;
 }
 
 - (instancetype)init
@@ -58,7 +67,7 @@
 
 - (void)updateDistanceAndDirection
 {
-    if (isDecelerating || isMoving)
+    if (isDecelerating || isMoving || indexPathForSwipingCell)
         return;
     
     [self refreshFirstWaypointRow];
@@ -165,8 +174,17 @@
     _sectionsCount = 2;
     
     NSInteger index = 0;
-    _sectionIndexGroups = -1;
-    //_sectionIndexGroups = index++;
+    
+    if (_gpxRouter.routeDoc.groups.count == 0)
+    {
+        _sectionIndexGroups = -1;
+    }
+    else
+    {
+        _sectionIndexGroups = index++;
+        _sectionsCount++;
+    }
+    
     _sectionIndexActive = index++;
     _sectionIndexInactive = index;
     
@@ -223,6 +241,54 @@
     [cell hideVDots:(indexPath.section == _sectionIndexInactive || isMoving)];
 }
 
+- (void)moveToInactive:(OAGpxRouteWptItem *)item
+{
+    [CATransaction begin];
+    
+    [CATransaction setCompletionBlock:^{
+        [self refreshVisibleRows];
+        [_gpxRouter updateDistanceAndDirection:YES];
+    }];
+    
+    [self.tableView beginUpdates];
+    NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexInactive];
+    
+    [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
+    [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
+    
+    [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
+    [self.tableView endUpdates];
+    
+    [CATransaction commit];
+    
+    [self updatePointsArray];
+}
+
+- (void)moveToActive:(OAGpxRouteWptItem *)item
+{
+    [CATransaction begin];
+    
+    [CATransaction setCompletionBlock:^{
+        [self refreshVisibleRows];
+        [_gpxRouter updateDistanceAndDirection:YES];
+    }];
+    
+    [self.tableView beginUpdates];
+    NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexActive];
+    
+    [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
+    [_gpxRouter.routeDoc.activePoints insertObject:item atIndex:0];
+    
+    [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
+    [self.tableView endUpdates];
+    
+    item.point.visited = NO;
+    
+    [CATransaction commit];
+    
+    [self updatePointsArray];
+}
+
 #pragma mark - UITableViewDataSource
 
 -(OAGpxRouteWptItem *)getWptItem:(NSIndexPath *)indexPath
@@ -252,7 +318,9 @@
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == _sectionIndexActive)
+    if (section == _sectionIndexGroups)
+        return OALocalizedString(@"gpx_trip_groups");
+    else if (section == _sectionIndexActive)
         return OALocalizedString(@"gpx_waypoints");
     else if (section == _sectionIndexInactive)
         return OALocalizedString(@"gpx_deactivated");
@@ -263,7 +331,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == _sectionIndexActive)
+    if (section == _sectionIndexGroups)
+        return 1;
+    else if (section == _sectionIndexActive)
         return _gpxRouter.routeDoc.activePoints.count;
     else if (section == _sectionIndexInactive)
         return _gpxRouter.routeDoc.inactivePoints.count;
@@ -275,7 +345,34 @@
 {
     if (indexPath.section == _sectionIndexGroups)
     {
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
         
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            CGRect f = cell.textView.frame;
+            f.size.height = cell.contentView.bounds.size.height;
+            f.origin.y = 0.0;
+            cell.textView.frame = f;
+            cell.textView.numberOfLines = 2;
+        }
+        
+        if (cell)
+        {
+            cell.iconView.image = [UIImage imageNamed:@"ic_group"];
+            NSMutableString *groupsStr = [NSMutableString string];
+            for (NSString *name in _gpxRouter.routeDoc.groups)
+            {
+                if (groupsStr.length > 0)
+                    [groupsStr appendString:@", "];
+                [groupsStr appendString:name];
+            }
+            cell.textView.text = groupsStr;
+        }
+        return cell;
     }
     else
     {
@@ -291,6 +388,8 @@
         
         if (cell)
         {
+            cell.delegate = self;
+            cell.allowsSwipeWhenEditing = YES;
             OAGpxRouteWptItem* item = [self getWptItem:indexPath];            
             [self updateWaypointCell:cell item:item indexPath:indexPath];
         }
@@ -302,6 +401,9 @@
 
 -(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == _sectionIndexGroups)
+        return NO;
+    
     if ([self getWptArray:indexPath].count < 1 || (indexPath.section == _sectionIndexActive && indexPath.row == 0))
         return NO;
     
@@ -310,6 +412,9 @@
 
 -(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == _sectionIndexGroups)
+        return NO;
+
     if ([self getWptArray:indexPath].count < 1 || (indexPath.section == _sectionIndexActive && indexPath.row == 0))
         return NO;
     
@@ -336,27 +441,30 @@
     [self updatePointsArray];
 }
 
-// The following example restricts rows to relocation in their own group and prevents moves to the last row of a group (which is reserved for the add-item placeholder).
-
 -(NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
 {
-    /*
-    NSDictionary *section = [data objectAtIndex:sourceIndexPath.section];
-    NSUInteger sectionCount = [[section valueForKey:@"content"] count];
-    if (sourceIndexPath.section != proposedDestinationIndexPath.section) {
-        NSUInteger rowInSourceSection =
-        (sourceIndexPath.section > proposedDestinationIndexPath.section) ?
-        0 : sectionCount - 1;
-        return [NSIndexPath indexPathForRow:rowInSourceSection inSection:sourceIndexPath.section];
-    } else if (proposedDestinationIndexPath.row >= sectionCount) {
-        return [NSIndexPath indexPathForRow:sectionCount - 1 inSection:sourceIndexPath.section];
-    }
-    */
+    if (proposedDestinationIndexPath.section == _sectionIndexGroups)
+        return [NSIndexPath indexPathForRow:0 inSection:_sectionIndexActive];
+    
     // Allow the proposed destination.
     return proposedDestinationIndexPath;
 }
 
 
+#pragma mark - UIActionSheetDelegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != actionSheet.cancelButtonIndex)
+    {
+        OAGpxRouteWptItem* item = [self getWptItem:_activeIndexPath];
+        
+        if (buttonIndex == actionSheet.destructiveButtonIndex)
+            [self moveToInactive:item];
+        else
+            [self moveToActive:item];
+    }
+}
 
 #pragma mark -
 #pragma mark Deferred image loading (UIScrollViewDelegate)
@@ -371,14 +479,12 @@
 {
     if (!decelerate) {
         isDecelerating = NO;
-        //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
     isDecelerating = NO;
-    //[self refreshVisibleRows];
 }
 
 #pragma mark - UITableViewDelegate
@@ -406,13 +512,11 @@
     return UITableViewCellEditingStyleNone;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return @"To inactive";
-}
-
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == _sectionIndexGroups)
+        return nil;
+
     if ([self getWptArray:indexPath].count == 0)
         return nil;
     
@@ -428,46 +532,17 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.tableView.editing)
-        return;
-    
-    //OAGpxRouteWptItem* item = [self getWptItem:indexPath];
-    // todo
-}
-
--(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    OAGpxRouteWptItem* item = [self getWptItem:indexPath];
-
-    if (editingStyle == UITableViewCellEditingStyleDelete)
+    if (indexPath.section == _sectionIndexGroups)
     {
-        [tableView beginUpdates];
-        NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexInactive];
-        
-        [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
-        [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
-        
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        [tableView insertRowsAtIndexPaths:@[destination] withRowAnimation:UITableViewRowAnimationAutomatic];
-        //[tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
-        [tableView endUpdates];
-    
+        // todo
     }
-    else if (editingStyle == UITableViewCellEditingStyleInsert)
+    else
     {
-        [tableView beginUpdates];
-        NSIndexPath *destination = [NSIndexPath indexPathForRow:_gpxRouter.routeDoc.activePoints.count inSection:_sectionIndexActive];
-
-        [[self getWptArray:indexPath] removeObjectAtIndex:indexPath.row];
-        [_gpxRouter.routeDoc.activePoints addObject:item];
-
-        [tableView moveRowAtIndexPath:indexPath toIndexPath:destination];
-        [tableView endUpdates];
-
-        item.point.visited = NO;
+        _activeIndexPath = [indexPath copy];
+        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:(indexPath.section == _sectionIndexActive ? @"Deactivate" : nil) otherButtonTitles:@"Move on first place", nil];
+        sheet.delegate = self;
+        [sheet showInView:self.view];
     }
-    
-    [self updatePointsArray];
 }
 
 - (void)updatePointsArray
@@ -504,5 +579,77 @@
     return 40.0;
 }
 
+#pragma mark Swipe Delegate
+
+-(BOOL) swipeTableCell:(MGSwipeTableCell*) cell canSwipe:(MGSwipeDirection) direction;
+{
+    return YES;
+}
+
+-(NSArray*) swipeTableCell:(MGSwipeTableCell*) cell swipeButtonsForDirection:(MGSwipeDirection)direction
+             swipeSettings:(MGSwipeSettings*) swipeSettings expansionSettings:(MGSwipeExpansionSettings*) expansionSettings
+{
+    swipeSettings.transition = MGSwipeTransitionDrag;
+    expansionSettings.buttonIndex = 0;
+    
+    if (direction == MGSwipeDirectionRightToLeft)
+    {
+        //expansionSettings.fillOnTrigger = YES;
+        //expansionSettings.threshold = 1.1;
+        
+        CGFloat padding = 15;
+
+        NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+        
+        MGSwipeButton *deactivate = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        {
+            indexPathForSwipingCell = nil;
+            NSIndexPath * indexPath = [self.tableView indexPathForCell:sender];
+            _activeIndexPath = [indexPath copy];
+            OAGpxRouteWptItem* item = [self getWptItem:indexPath];
+            [self moveToInactive:item];
+            
+            return YES; //don't autohide to improve delete animation
+        }];
+        
+        MGSwipeButton *driveTo = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_direction"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        {
+            indexPathForSwipingCell = nil;
+            NSIndexPath * indexPath = [self.tableView indexPathForCell:sender];
+            _activeIndexPath = [indexPath copy];
+            OAGpxRouteWptItem* item = [self getWptItem:indexPath];
+            [self moveToActive:item];
+            
+            return YES;
+        }];
+
+        if (indexPath.section == _sectionIndexActive)
+            return @[deactivate, driveTo];
+        else
+            return @[driveTo];
+    }
+    
+    return nil;
+    
+}
+
+-(void) swipeTableCell:(MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState)state gestureIsActive:(BOOL)gestureIsActive
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
+    if (gestureIsActive || state != MGSwipeStateNone)
+    {
+        indexPathForSwipingCell = indexPath;
+        cell.showsReorderControl = NO;
+    }
+    else if ([indexPath isEqual:indexPathForSwipingCell])
+    {
+        indexPathForSwipingCell = nil;
+        cell.showsReorderControl = YES;
+    }
+    else
+    {
+        cell.showsReorderControl = YES;
+    }
+}
 
 @end

@@ -175,7 +175,10 @@
         if (item.type.length > 0)
             [groups addObject:item.type];
     }
-    return [groups allObjects];
+
+    return [[groups allObjects] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 localizedCompare:obj2];
+    }];
 }
 
 - (void)updateDistances

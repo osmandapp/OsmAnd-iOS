@@ -31,4 +31,6 @@
 - (NSTimeInterval)getRouteDuration;
 - (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType;
 
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate;
+
 @end

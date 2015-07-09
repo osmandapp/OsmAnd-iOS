@@ -401,3 +401,5 @@
 "gpx_enter_new_name" = "Adjon meg egy új nevet az utazáshoz";
 "gpx_route" = "Út";
 "gpx_cancel_route_q" = "Meg szeretné szakítani ezt az utat?";
+"gpx_deactivated" = "Kikapcsolva";
+"gpx_trip_groups" = "Utazás csoportok";

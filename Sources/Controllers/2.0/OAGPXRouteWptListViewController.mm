@@ -217,7 +217,7 @@
             [cell hideDescIcon:NO];
             
             cell.topVDotsVisible = NO;
-            cell.bottomVDotsVisible = YES;
+            cell.bottomVDotsVisible = [self getWptArray:indexPath].count > 1;
         }
         else
         {
@@ -608,8 +608,12 @@
             _activeIndexPath = [indexPath copy];
             OAGpxRouteWptItem* item = [self getWptItem:indexPath];
             [self moveToInactive:item];
-            
-            return YES; //don't autohide to improve delete animation
+
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [cell refreshButtons:YES];
+            });
+            return YES;
         }];
         
         MGSwipeButton *driveTo = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_direction"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
@@ -619,7 +623,11 @@
             _activeIndexPath = [indexPath copy];
             OAGpxRouteWptItem* item = [self getWptItem:indexPath];
             [self moveToActive:item];
-            
+
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [cell refreshButtons:YES];
+            });
             return YES;
         }];
 

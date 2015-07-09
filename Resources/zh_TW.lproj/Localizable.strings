@@ -401,3 +401,4 @@
 "gpx_enter_new_name" = "請輸入新的旅程名稱";
 "gpx_route" = "導航路線";
 "gpx_cancel_route_q" = "您想要取消這條路線嗎？";
+"gpx_deactivated" = "已停用";

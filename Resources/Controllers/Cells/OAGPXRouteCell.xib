@@ -40,9 +40,6 @@
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
                         <color key="tintColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <state key="normal" image="ic_close.png"/>
-                        <connections>
-                            <action selector="closeButtonClicked:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="JhE-JX-QtR"/>
-                        </connections>
                     </button>
                 </subviews>
             </tableViewCellContentView>

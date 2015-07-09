@@ -795,6 +795,7 @@ static OAGPXListViewController *parentController;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXRouteCell" owner:self options:nil];
             cell = (OAGPXRouteTableViewCell *)[nib objectAtIndex:0];
+            [cell.closeButton addTarget:self action:@selector(cancelRoutePressed) forControlEvents:UIControlEventTouchUpInside];
         }
         
         if (cell) {
@@ -908,6 +909,21 @@ static OAGPXListViewController *parentController;
             return NO;
             break;
     }
+}
+
+- (void)cancelRoutePressed
+{
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_cancel_route_q")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 [[OAGPXRouter sharedInstance] cancelRoute];
+                             }
+                         }];
 }
 
 - (void)startStopRecPressed

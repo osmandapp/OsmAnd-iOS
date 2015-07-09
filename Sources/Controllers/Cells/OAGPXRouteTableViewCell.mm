@@ -8,9 +8,7 @@
 
 #import "OAGPXRouteTableViewCell.h"
 #import "OsmAndApp.h"
-#import "PXAlertView.h"
 #import "Localization.h"
-#import "OAGPXRouter.h"
 #import "OAMapStyleSettings.h"
 
 @implementation OAGPXRouteTableViewCell
@@ -23,21 +21,6 @@
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
-}
-
-- (IBAction)closeButtonClicked:(id)sender
-{
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_cancel_route_q")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_no")
-                         otherTitle:OALocalizedString(@"shared_string_yes")
-                         otherImage:nil
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                             {
-                                 [[OAGPXRouter sharedInstance] cancelRoute];
-                             }
-                         }];
 }
 
 - (void) setDistance:(double)distance wptCount:(NSInteger)wptCount tripDuration:(NSTimeInterval)tripDuration

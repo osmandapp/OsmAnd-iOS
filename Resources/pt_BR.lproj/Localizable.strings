@@ -401,3 +401,4 @@
 "gpx_enter_new_name" = "Por favor, insira novo nome para a viagem";
 "gpx_route" = "Rota";
 "gpx_cancel_route_q" = "Você quer cancelar esta rota?";
+"gpx_deactivated" = "Desativado";

@@ -400,3 +400,4 @@
 "gpx_route" = "Ruta";
 "gpx_rename_q" = "Canvia el nom del trajecte";
 "gpx_enter_new_name" = "Introduïu un nom nou per al trajecte";
+"gpx_cancel_route_q" = "Voleu cancel·lar aquesta ruta?";

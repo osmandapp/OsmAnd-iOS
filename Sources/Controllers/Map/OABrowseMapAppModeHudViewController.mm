@@ -520,7 +520,10 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
+    if (_app.data.destinations.count == 0)
+        return UIStatusBarStyleDefault;
+    else
+        return UIStatusBarStyleLightContent;
 }
 
 -(void)updateDestinationViewLayout:(BOOL)animated
@@ -553,8 +556,8 @@
             if (_app.data.destinations.count == 0)
                 _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
             else
-                _statusBarView.backgroundColor = UIColorFromRGB(0xebebeb);
-            
+                _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
+            [self setNeedsStatusBarAppearanceUpdate];
         }];
     }
     else
@@ -574,8 +577,8 @@
         if (_app.data.destinations.count == 0)
             _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         else
-            _statusBarView.backgroundColor = UIColorFromRGB(0xebebeb);
-
+            _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
+        [self setNeedsStatusBarAppearanceUpdate];
     }
 
 }

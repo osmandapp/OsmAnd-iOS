@@ -10,10 +10,18 @@
 #import "OADestination.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
+#import "OAUtilities.h"
 
-@implementation OAMultiDestinationCell {
+@implementation OAMultiDestinationCell
+{
     
     BOOL _editButtonActive;
+
+    UIFont *_primaryFont;
+    UIFont *_unitsFont;
+    
+    UIColor *_primaryColor;
+    UIColor *_unitsColor;
 }
 
 @synthesize destinations = _destinations;
@@ -336,33 +344,40 @@
 
 - (void)buildUI
 {
-    if (!self.contentView) {
+    if (!self.contentView)
+    {
         self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 50.0)];
-        _contentView.backgroundColor = [UIColor colorWithRed:0.937f green:0.937f blue:0.937f alpha:1.00f];
+        _contentView.backgroundColor = UIColorFromRGB(0x044b7f);
         _contentView.opaque = YES;
     }
-    if (!self.directionsView) {
+    
+    if (!self.directionsView)
+    {
         self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 279.0, 50.0)];
-        _directionsView.backgroundColor = [UIColor whiteColor];
+        _directionsView.backgroundColor = UIColorFromRGB(0x044b7f);
         _directionsView.opaque = YES;
         [_contentView addSubview:self.directionsView];
     }
     
-    if (!self.btnClose && kOADestinationEditModeEnabled) {
+    if (!self.btnClose && kOADestinationEditModeEnabled)
+    {
         self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
-        _btnClose.backgroundColor = [UIColor whiteColor];
+        _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
         _btnClose.opaque = YES;
         [_btnClose setTitle:@"" forState:UIControlStateNormal];
-        [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
+        if (kOADestinationEditModeGlobal)
+            [_btnClose addTarget:self action:@selector(openDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
+        else
+            [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
+
         [_contentView addSubview:self.btnClose];
     }
     
-    if (!self.colorView) {
+    if (!self.colorView)
+    {
         self.colorView = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
-        _colorView.layer.cornerRadius = _colorView.bounds.size.width / 2.0;
-        _colorView.layer.masksToBounds = YES;
+        _colorView.backgroundColor = [UIColor clearColor];
         self.compassImage = [[UIImageView alloc] initWithFrame:_colorView.bounds];
-        [_compassImage setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
         _compassImage.contentMode = UIViewContentModeCenter;
         [_colorView addSubview:self.compassImage];
         [_directionsView addSubview:self.colorView];
@@ -375,7 +390,8 @@
         _editButton1.tag = 0;
     }
     
-    if (!self.markerView) {
+    if (!self.markerView)
+    {
         self.markerView = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
         self.markerView.backgroundColor = [UIColor whiteColor];
         self.markerView.layer.cornerRadius = self.markerView.bounds.size.width / 2.0;
@@ -385,41 +401,43 @@
         [self.markerView addSubview:self.markerImage];
     }
     
-    if (!self.distanceLabel) {
+    if (!self.distanceLabel)
+    {
         self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-        _distanceLabel.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
+        _distanceLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:18.0];
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
-        _distanceLabel.textColor = [UIColor colorWithRed:0.369f green:0.510f blue:0.918f alpha:1.00f];
+        _distanceLabel.textColor = UIColorFromRGB(0xffffff);
         _distanceLabel.minimumScaleFactor = 0.7;
         [_directionsView addSubview:_distanceLabel];
     }
     
-    if (!self.infoLabel) {
+    if (!self.infoLabel)
+    {
         self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-        _infoLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:13.0];
+        _infoLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
         _infoLabel.textAlignment = NSTextAlignmentRight;
-        _infoLabel.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+        _infoLabel.textColor = UIColorFromRGB(0x8ea2b9);
         _infoLabel.minimumScaleFactor = 0.7;
         [_directionsView addSubview:_infoLabel];
     }
     
-    if (!self.descLabel) {
+    if (!self.descLabel)
+    {
         self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-        _descLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+        _descLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
         _descLabel.textAlignment = NSTextAlignmentLeft;
-        _descLabel.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+        _descLabel.textColor = UIColorFromRGB(0x8ea2b9);
         //_descLabel.minimumScaleFactor = 0.7;
         [_directionsView addSubview:_descLabel];
     }
     
-    if (_destinations.count > 1) {
-        
-        if (!self.colorView2) {
+    if (_destinations.count > 1)
+    {
+        if (!self.colorView2)
+        {
             self.colorView2 = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
-            _colorView2.layer.cornerRadius = _colorView2.bounds.size.width / 2.0;
-            _colorView2.layer.masksToBounds = YES;
+            _colorView2.backgroundColor = [UIColor clearColor];
             self.compassImage2 = [[UIImageView alloc] initWithFrame:_colorView.bounds];
-            [_compassImage2 setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
             _compassImage2.contentMode = UIViewContentModeCenter;
             [_colorView2 addSubview:self.compassImage2];
             [_directionsView addSubview:self.colorView2];
@@ -432,7 +450,8 @@
             _editButton2.tag = 1;
         }
         
-        if (!self.markerView2) {
+        if (!self.markerView2)
+        {
             self.markerView2 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
             self.markerView2.backgroundColor = [UIColor whiteColor];
             self.markerView2.layer.cornerRadius = self.markerView2.bounds.size.width / 2.0;
@@ -442,41 +461,43 @@
             [self.markerView2 addSubview:self.markerImage2];
         }
         
-        if (!self.distanceLabel2) {
+        if (!self.distanceLabel2)
+        {
             self.distanceLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-            _distanceLabel2.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
+            _distanceLabel2.font = [UIFont fontWithName:@"AvenirNext-Bold" size:18.0];
             _distanceLabel2.textAlignment = NSTextAlignmentLeft;
-            _distanceLabel2.textColor = [UIColor colorWithRed:0.369f green:0.510f blue:0.918f alpha:1.00f];
+            _distanceLabel2.textColor = UIColorFromRGB(0xffffff);
             _distanceLabel2.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_distanceLabel2];
         }
         
-        if (!self.infoLabel2) {
+        if (!self.infoLabel2)
+        {
             self.infoLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-            _infoLabel2.font = [UIFont fontWithName:@"AvenirNext-Medium" size:13.0];
+            _infoLabel2.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _infoLabel2.textAlignment = NSTextAlignmentRight;
-            _infoLabel2.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+            _infoLabel2.textColor = UIColorFromRGB(0x8ea2b9);
             _infoLabel2.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_infoLabel2];
         }
         
-        if (!self.descLabel2) {
+        if (!self.descLabel2)
+        {
             self.descLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-            _descLabel2.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+            _descLabel2.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _descLabel2.textAlignment = NSTextAlignmentLeft;
-            _descLabel2.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+            _descLabel2.textColor = UIColorFromRGB(0x8ea2b9);
             //_descLabel2.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_descLabel2];
         }
     }
     
-    if (_destinations.count > 2) {
+    if (_destinations.count > 2)
+    {
         if (!self.colorView3) {
             self.colorView3 = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
-            _colorView3.layer.cornerRadius = _colorView3.bounds.size.width / 2.0;
-            _colorView3.layer.masksToBounds = YES;
+            _colorView3.backgroundColor = [UIColor clearColor];
             self.compassImage3 = [[UIImageView alloc] initWithFrame:_colorView.bounds];
-            [_compassImage3 setImage:[UIImage imageNamed:@"ic_destination_arrow_small"]];
             _compassImage3.contentMode = UIViewContentModeCenter;
             [_colorView3 addSubview:self.compassImage3];
             [_directionsView addSubview:self.colorView3];
@@ -489,7 +510,8 @@
             _editButton3.tag = 2;
         }
         
-        if (!self.markerView3) {
+        if (!self.markerView3)
+        {
             self.markerView3 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
             self.markerView3.backgroundColor = [UIColor whiteColor];
             self.markerView3.layer.cornerRadius = self.markerView3.bounds.size.width / 2.0;
@@ -499,29 +521,32 @@
             [self.markerView3 addSubview:self.markerImage3];
         }
 
-        if (!self.distanceLabel3) {
+        if (!self.distanceLabel3)
+        {
             self.distanceLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0, 21.0)];
-            _distanceLabel3.font = [UIFont fontWithName:@"AvenirNext-DemiBold" size:16.0];
+            _distanceLabel3.font = [UIFont fontWithName:@"AvenirNext-Bold" size:18.0];
             _distanceLabel3.textAlignment = NSTextAlignmentLeft;
-            _distanceLabel3.textColor = [UIColor colorWithRed:0.369f green:0.510f blue:0.918f alpha:1.00f];
+            _distanceLabel3.textColor = UIColorFromRGB(0xffffff);
             _distanceLabel3.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_distanceLabel3];
         }
         
-        if (!self.infoLabel3) {
+        if (!self.infoLabel3)
+        {
             self.infoLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0 + _distanceLabel3.frame.size.width, 7.0, self.infoLabelWidth, 21.0)];
-            _infoLabel3.font = [UIFont fontWithName:@"AvenirNext-Medium" size:13.0];
+            _infoLabel3.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _infoLabel3.textAlignment = NSTextAlignmentRight;
-            _infoLabel3.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+            _infoLabel3.textColor = UIColorFromRGB(0x8ea2b9);
             _infoLabel3.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_infoLabel3];
         }
         
-        if (!self.descLabel3) {
+        if (!self.descLabel3)
+        {
             self.descLabel3 = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-            _descLabel3.font = [UIFont fontWithName:@"AvenirNext-Regular" size:13.0];
+            _descLabel3.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _descLabel3.textAlignment = NSTextAlignmentLeft;
-            _descLabel3.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+            _descLabel3.textColor = UIColorFromRGB(0x8ea2b9);
             //_descLabel3.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_descLabel3];
         }
@@ -610,13 +635,39 @@
 
 }
 
+- (void)updateDistanceLabel:(UILabel *)label destination:(OADestination *)destination
+{
+    NSString *text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text];
+    
+    NSUInteger spaceIndex = 0;
+    for (NSUInteger i = text.length - 1; i > 0; i--)
+        if ([text characterAtIndex:i] == ' ')
+        {
+            spaceIndex = i;
+            break;
+        }
+    
+    NSRange valueRange = NSMakeRange(0, spaceIndex);
+    NSRange unitRange = NSMakeRange(spaceIndex, text.length - spaceIndex);
+    
+    [string addAttribute:NSForegroundColorAttributeName value:self.primaryColor range:valueRange];
+    [string addAttribute:NSFontAttributeName value:self.primaryFont range:valueRange];
+    [string addAttribute:NSForegroundColorAttributeName value:self.unitsColor range:unitRange];
+    [string addAttribute:NSFontAttributeName value:self.unitsFont range:unitRange];
+    
+    label.attributedText = string;
+}
+
 - (void)reloadData
 {
-    for (int i = 0; i < _destinations.count; i++) {
+    for (int i = 0; i < _destinations.count; i++)
+    {
         OADestination *destination = _destinations[i];
-        switch (i) {
+        switch (i)
+        {
             case 0:
-                self.colorView.backgroundColor = destination.color;
+                self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
                 if (_editModeActive) {
                     _compassImage.alpha = 0.0;
                     [_colorView addSubview:self.editButton1];
@@ -646,11 +697,12 @@
                     self.descLabel.text = destination.desc;
                 }
                 
-                self.distanceLabel.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel destination:destination];
+
                 break;
                 
             case 1:
-                self.colorView2.backgroundColor = destination.color;
+                self.compassImage2.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
                 if (_editModeActive) {
                     _compassImage2.alpha = 0.0;
                     [_colorView2 addSubview:self.editButton2];
@@ -679,11 +731,12 @@
                     self.descLabel2.lineBreakMode = NSLineBreakByTruncatingTail;
                     self.descLabel2.text = destination.desc;
                 }
-                self.distanceLabel2.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel2 destination:destination];
+
                 break;
                 
             case 2:
-                self.colorView3.backgroundColor = destination.color;
+                self.compassImage3.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
                 if (_editModeActive) {
                     _compassImage3.alpha = 0.0;
                     [_colorView3 addSubview:self.editButton3];
@@ -712,7 +765,8 @@
                     self.descLabel3.lineBreakMode = NSLineBreakByTruncatingTail;
                     self.descLabel3.text = destination.desc;
                 }
-                self.distanceLabel3.text = [destination distanceStr:self.currentLocation.latitude longitude:self.currentLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel3 destination:destination];
+
                 break;
                 
             default:
@@ -721,7 +775,7 @@
     }
     
     if (!_editModeActive) {
-        if (_destinations.count > 1) {
+        if (_destinations.count > 1 || kOADestinationEditModeGlobal) {
             [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
             _editButtonActive = YES;
             
@@ -765,17 +819,17 @@
         {
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
-                self.distanceLabel.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel destination:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
-                self.distanceLabel2.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel2 destination:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
-                self.distanceLabel3.text = [destination distanceStr:myLocation.latitude longitude:myLocation.longitude];
+                [self updateDistanceLabel:self.distanceLabel3 destination:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
                 break;
                 
@@ -814,6 +868,11 @@
     UIButton *btn = (UIButton *)sender;
     if (_delegate && _destinations.count > btn.tag)
         [_delegate btnCloseClicked:self destination:_destinations[btn.tag]];    
+}
+
+- (void)openDestinationsView:(id)sender
+{
+    
 }
 
 

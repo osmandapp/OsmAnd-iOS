@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define kOADestinationEditModeEnabled NO
+#define kOADestinationEditModeEnabled YES
+#define kOADestinationEditModeGlobal YES
 
 @class OADestination;
 
@@ -43,9 +44,17 @@
 @property (nonatomic, assign) BOOL mapCenterArrow;
 @property (nonatomic, assign) CGFloat infoLabelWidth;
 
+@property (nonatomic, assign) NSInteger destinationIndex;
+
+@property (nonatomic) UIFont *primaryFont;
+@property (nonatomic) UIFont *unitsFont;
+@property (nonatomic) UIColor *primaryColor;
+@property (nonatomic) UIColor *unitsColor;
+
+
 + (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText;
 
-- (instancetype)initWithDestination:(OADestination *)destination;
+- (instancetype)initWithDestination:(OADestination *)destination destinationIndex:(NSInteger)destinationIndex;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;

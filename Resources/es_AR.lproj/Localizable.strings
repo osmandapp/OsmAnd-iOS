@@ -367,7 +367,7 @@
 "res_hillshade" = "Sombreado";
 "show_alt_in_drive" = "Ver altitud en modo conducción";
 "rendering_value_disabled_name" = "Desactivado";
-"rendering_value_default_name" = "Predeterminado";
+"rendering_value_default_name" = "Predefinido";
 "purchase_get" = "Obtener";
 "srtm_disabled" = "Curvas de nivel desactivadas";
 "rendering_value_walkingRoutesOSMC_name" = "Colorear según OSMC";

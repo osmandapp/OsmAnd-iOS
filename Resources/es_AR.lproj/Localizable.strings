@@ -401,3 +401,6 @@
 "gpx_enter_new_name" = "Escriba el nuevo nombre del viaje";
 "gpx_route" = "Ruta";
 "gpx_cancel_route_q" = "¿Desea cancelar esta ruta?";
+"gpx_deactivated" = "Desactivado";
+"gpx_trip_groups" = "Grupos de viajes";
+"gpx_group_select" = "Grupo elegido";

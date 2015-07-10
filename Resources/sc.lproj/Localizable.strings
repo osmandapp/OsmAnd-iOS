@@ -401,3 +401,6 @@
 "gpx_enter_new_name" = "Pro piaghere inserta unu nùmene nou pro su biàgiu";
 "res_type" = "Casta";
 "gpx_cancel_route_q" = "Boles burrare cust’àndala?";
+"gpx_deactivated" = "Disativadu";
+"gpx_trip_groups" = "Grupos biàgiu";
+"gpx_group_select" = "Ischerta grupu";

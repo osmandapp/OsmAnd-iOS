@@ -156,7 +156,7 @@ typedef enum
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selection_unchecked"]];
             break;
         case kSelectedHalf:
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selection_helfchecked"]];
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selection_disabled"]];
             break;
         case kSelectedAll:
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"selection_checked"]];

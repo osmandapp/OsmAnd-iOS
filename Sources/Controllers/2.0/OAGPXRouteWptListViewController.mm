@@ -149,6 +149,30 @@
     });
 }
 
+- (void)refreshSwipeButtons
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        //[self.tableView beginUpdates];
+        
+        [_gpxRouter.routeDoc.activePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem* item, NSUInteger idx, BOOL *stop) {
+            
+            NSIndexPath *i = [NSIndexPath indexPathForRow:idx inSection:_sectionIndexActive];
+            OAGPXRouteWaypointTableViewCell *cell = (OAGPXRouteWaypointTableViewCell *)[self.tableView cellForRowAtIndexPath:i];
+            [cell refreshButtons:YES];
+        }];
+        
+        [_gpxRouter.routeDoc.inactivePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem* item, NSUInteger idx, BOOL *stop) {
+            
+            NSIndexPath *i = [NSIndexPath indexPathForRow:idx inSection:_sectionIndexInactive];
+            OAGPXRouteWaypointTableViewCell *cell = (OAGPXRouteWaypointTableViewCell *)[self.tableView cellForRowAtIndexPath:i];
+            [cell refreshButtons:YES];
+        }];
+        
+        //[self.tableView endUpdates];
+    });
+}
+
 - (void)doViewAppear
 {
     [self generateData];
@@ -198,6 +222,20 @@
     //
 }
 
+- (void)callFirstPointMenu
+{
+    _activeIndexPath = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexActive];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Deactivate" otherButtonTitles:@"Sort waypoints", nil];
+    sheet.delegate = self;
+    sheet.tag = 0;
+    [sheet showInView:self.view];
+}
+
+- (void)doSort
+{
+    // todo sort
+}
+
 - (void)updateWaypointCell:(OAGPXRouteWaypointTableViewCell *)cell item:(OAGpxRouteWptItem *)item indexPath:(NSIndexPath *)indexPath
 {
     cell.separatorInset = UIEdgeInsetsMake(0.0, cell.titleLabel.frame.origin.x, 0.0, 0.0);
@@ -208,6 +246,8 @@
     else
         [cell.descLabel setText:item.distance];
     
+    [cell.rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    
     if (indexPath.section == _sectionIndexActive)
     {
         if (indexPath.row == 0)
@@ -215,7 +255,10 @@
             cell.leftIcon.image = [UIImage imageNamed:@"ic_trip_directions"];
             cell.leftIcon.transform = CGAffineTransformMakeRotation(item.direction);
             cell.descIcon.image = [UIImage imageNamed:@"ic_trip_location"];
+            
             [cell hideRightButton:NO];
+            [cell.rightButton addTarget:self action:@selector(callFirstPointMenu) forControlEvents:UIControlEventTouchUpInside];
+            
             [cell hideDescIcon:NO];
             
             cell.topVDotsVisible = NO;
@@ -249,6 +292,7 @@
     
     [CATransaction setCompletionBlock:^{
         [self refreshVisibleRows];
+        [self refreshSwipeButtons];
         [_gpxRouter updateDistanceAndDirection:YES];
     }];
     
@@ -275,6 +319,7 @@
     
     [CATransaction setCompletionBlock:^{
         [self refreshVisibleRows];
+        [self refreshSwipeButtons];
         [_gpxRouter updateDistanceAndDirection:YES];
     }];
     
@@ -449,6 +494,8 @@
         item.point.disabled = YES;
     }
     
+    [self refreshSwipeButtons];
+    
     [self updatePointsArray];
 }
 
@@ -471,9 +518,16 @@
         OAGpxRouteWptItem* item = [self getWptItem:_activeIndexPath];
         
         if (buttonIndex == actionSheet.destructiveButtonIndex)
+        {
             [self moveToInactive:item];
+        }
         else
-            [self moveToActive:item];
+        {
+            if (actionSheet.tag == 0)
+                [self doSort];
+            else
+                [self moveToActive:item];
+        }
     }
 }
 
@@ -551,10 +605,18 @@
     }
     else
     {
-        _activeIndexPath = [indexPath copy];
-        UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:(indexPath.section == _sectionIndexActive ? @"Deactivate" : nil) otherButtonTitles:@"Move on first place", nil];
-        sheet.delegate = self;
-        [sheet showInView:self.view];
+        if (indexPath.section == _sectionIndexActive && indexPath.row == 0)
+        {
+            [self callFirstPointMenu];
+        }
+        else
+        {
+            _activeIndexPath = [indexPath copy];
+            UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:(indexPath.section == _sectionIndexActive ? @"Deactivate" : nil) otherButtonTitles:@"Move on first place", nil];
+            sheet.delegate = self;
+            sheet.tag = 1;
+            [sheet showInView:self.view];
+        }
     }
 }
 
@@ -622,10 +684,6 @@
             OAGpxRouteWptItem* item = [self getWptItem:indexPath];
             [self moveToInactive:item];
 
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [cell refreshButtons:YES];
-            });
             return YES;
         }];
         
@@ -637,17 +695,22 @@
             OAGpxRouteWptItem* item = [self getWptItem:indexPath];
             [self moveToActive:item];
 
-            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
-            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [cell refreshButtons:YES];
-            });
             return YES;
         }];
 
-        if (indexPath.section == _sectionIndexActive)
-            return @[deactivate, driveTo];
-        else
+        MGSwipeButton *sort = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_sort"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+                               {
+                                   [self doSort];
+
+                                   return YES;
+                               }];
+
+        if (indexPath.section == _sectionIndexInactive)
             return @[driveTo];
+        if (indexPath.section == _sectionIndexActive && indexPath.row == 0)
+            return @[deactivate, sort];
+        else
+            return @[deactivate, driveTo];
     }
     
     return nil;

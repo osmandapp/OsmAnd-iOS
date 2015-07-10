@@ -403,3 +403,4 @@
 "gpx_cancel_route_q" = "Você quer cancelar esta rota?";
 "gpx_deactivated" = "Desativado";
 "gpx_trip_groups" = "Grupos de viagem";
+"gpx_group_select" = "Selecionar grupo";

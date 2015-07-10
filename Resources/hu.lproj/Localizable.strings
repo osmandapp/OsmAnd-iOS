@@ -403,3 +403,4 @@
 "gpx_cancel_route_q" = "Meg szeretné szakítani ezt az utat?";
 "gpx_deactivated" = "Kikapcsolva";
 "gpx_trip_groups" = "Utazás csoportok";
+"gpx_group_select" = "Csoportos kijelölés";

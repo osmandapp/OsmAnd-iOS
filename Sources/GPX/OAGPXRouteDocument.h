@@ -17,6 +17,8 @@
 @property (strong, nonatomic) NSMutableArray* inactivePoints;
 @property (strong, nonatomic) NSArray* groups;
 
+@property (strong, nonatomic) NSObject *syncObj;
+
 @property (readonly, nonatomic) double totalDistance;
 
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
@@ -25,5 +27,10 @@
 
 - (void)updateDistances;
 - (void)updateDirections:(CLLocationDirection)newDirection myLocation:(CLLocationCoordinate2D)myLocation;
+
+- (NSArray *)getWaypointsByGroup:(NSString *)groupName activeOnly:(BOOL)activeOnly;
+
+- (void)includeGroupToRouting:(NSString *)groupName;
+- (void)excludeGroupFromRouting:(NSString *)groupName;
 
 @end

@@ -22,6 +22,8 @@
 
 - (BOOL) loadFrom:(NSString *)filename
 {
+    _syncObj = [[NSObject alloc] init];
+    
     document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
     return [self fetch:document];
 }
@@ -153,18 +155,26 @@
     
     self.locationPoints = arr;
     
-    self.activePoints = [NSMutableArray array];
-    self.inactivePoints = [NSMutableArray array];
-    
-    for (OAGpxRouteWptItem* item in self.locationPoints)
-    {
-        if (item.point.disabled || item.point.visited)
-            [self.inactivePoints addObject:item];
-        else
-            [self.activePoints addObject:item];
-    }
+    [self buildActiveInactive];
     
     [self updateDistances];
+}
+
+- (void)buildActiveInactive
+{
+    @synchronized(self.syncObj)
+    {
+        self.activePoints = [NSMutableArray array];
+        self.inactivePoints = [NSMutableArray array];
+        
+        for (OAGpxRouteWptItem* item in self.locationPoints)
+        {
+            if (item.point.disabled || item.point.visited)
+                [self.inactivePoints addObject:item];
+            else
+                [self.activePoints addObject:item];
+        }
+    }
 }
 
 - (NSArray *)readGroups
@@ -183,51 +193,112 @@
 
 - (void)updateDistances
 {
-    double tDistance = 0.0;
-    
-    OAGpxRouteWptItem* prevItemData;
-    for (OAGpxRouteWptItem* itemData in self.activePoints)
+    @synchronized(self.syncObj)
     {
-        if (prevItemData)
+        double tDistance = 0.0;
+        
+        OAGpxRouteWptItem* prevItemData;
+        for (OAGpxRouteWptItem* itemData in self.activePoints)
         {
-            const auto distance = OsmAnd::Utilities::distance(itemData.point.position.longitude,
-                                                              itemData.point.position.latitude,
-                                                              prevItemData.point.position.longitude, prevItemData.point.position.latitude);
-            
-            itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
-            itemData.distanceMeters = distance;
-            itemData.direction = 0.0;
-            
-            tDistance += distance;
+            if (prevItemData)
+            {
+                const auto distance = OsmAnd::Utilities::distance(itemData.point.position.longitude,
+                                                                  itemData.point.position.latitude,
+                                                                  prevItemData.point.position.longitude, prevItemData.point.position.latitude);
+                
+                itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
+                itemData.distanceMeters = distance;
+                itemData.direction = 0.0;
+                
+                tDistance += distance;
+            }
+            prevItemData = itemData;
         }
-        prevItemData = itemData;
+        
+        _totalDistance = tDistance;
     }
-    
-    _totalDistance = tDistance;
 }
 
 - (void)updateDirections:(CLLocationDirection)newDirection myLocation:(CLLocationCoordinate2D)myLocation
 {
-    [self.locationPoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem* itemData, NSUInteger idx, BOOL *stop)
-     {
-         if (![self.activePoints containsObject:itemData] || (self.activePoints.count > 0 && self.activePoints[0] == itemData))
+    @synchronized(self.syncObj)
+    {
+        [self.locationPoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem* itemData, NSUInteger idx, BOOL *stop)
          {
-             OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
-             const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-             const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
-             const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+             if (![self.activePoints containsObject:itemData] || (self.activePoints.count > 0 && self.activePoints[0] == itemData))
+             {
+                 OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+                 const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+                 const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+                 const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+                 
+                 const auto distance = OsmAnd::Utilities::distance(myLocation.longitude,
+                                                                   myLocation.latitude,
+                                                                   wptLon, wptLat);
+                 
+                 itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
+                 itemData.distanceMeters = distance;
+                 CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
+                 itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+             }
              
-             const auto distance = OsmAnd::Utilities::distance(myLocation.longitude,
-                                                               myLocation.latitude,
-                                                               wptLon, wptLat);
-             
-             itemData.distance = [[OsmAndApp instance] getFormattedDistance:distance];
-             itemData.distanceMeters = distance;
-             CGFloat itemDirection = [[OsmAndApp instance].locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
-             itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-         }
-         
-     }];
+         }];
+    }
+}
+
+- (NSArray *)getWaypointsByGroup:(NSString *)groupName activeOnly:(BOOL)activeOnly
+{
+    @synchronized(self.syncObj)
+    {
+        NSMutableArray *res = [NSMutableArray array];
+        
+        NSArray *source;
+        if (activeOnly)
+            source = self.activePoints;
+        else
+            source = self.locationPoints;
+        
+        for (OAGpxRouteWptItem* item in source)
+        {
+            if ([item.point.type isEqualToString:groupName])
+                [res addObject:item];
+        }
+        
+        return [NSArray arrayWithArray:res];
+    }
+}
+
+- (void)includeGroupToRouting:(NSString *)groupName
+{
+    @synchronized(self.syncObj)
+    {
+        for (OAGpxRouteWptItem* item in self.locationPoints)
+        {
+            if ([item.point.type isEqualToString:groupName])
+            {
+                item.point.disabled = NO;
+                item.point.visited = NO;
+            }
+        }
+    }
+    
+    [self buildActiveInactive];
+}
+
+- (void)excludeGroupFromRouting:(NSString *)groupName
+{
+    @synchronized(self.syncObj)
+    {
+        for (OAGpxRouteWptItem* item in self.locationPoints)
+        {
+            if ([item.point.type isEqualToString:groupName])
+            {
+                item.point.disabled = YES;
+            }
+        }
+    }
+
+    [self buildActiveInactive];
 }
 
 @end

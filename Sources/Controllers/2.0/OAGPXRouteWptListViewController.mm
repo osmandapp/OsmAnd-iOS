@@ -21,6 +21,8 @@
 #import "OAIconTextTableViewCell.h"
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
+#import "OAGPXRouteGroupsViewController.h"
+#import "OARootViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -28,7 +30,7 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-@interface OAGPXRouteWptListViewController () <MGSwipeTableCellDelegate, UIActionSheetDelegate>
+@interface OAGPXRouteWptListViewController () <MGSwipeTableCellDelegate, UIActionSheetDelegate, OAGPXRouteGroupsViewControllerDelegate>
 
 @end
 
@@ -253,8 +255,11 @@
     [self.tableView beginUpdates];
     NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexInactive];
     
-    [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
-    [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
+    @synchronized(_gpxRouter.routeDoc.syncObj)
+    {
+        [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
+        [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
+    }
     
     [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
     [self.tableView endUpdates];
@@ -276,8 +281,11 @@
     [self.tableView beginUpdates];
     NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexActive];
     
-    [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
-    [_gpxRouter.routeDoc.activePoints insertObject:item atIndex:0];
+    @synchronized(_gpxRouter.routeDoc.syncObj)
+    {
+        [[self getWptArray:_activeIndexPath] removeObjectAtIndex:_activeIndexPath.row];
+        [_gpxRouter.routeDoc.activePoints insertObject:item atIndex:0];
+    }
     
     [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
     [self.tableView endUpdates];
@@ -425,8 +433,11 @@
 {
     OAGpxRouteWptItem* item = [self getWptItem:sourceIndexPath];
 
-    [[self getWptArray:sourceIndexPath] removeObjectAtIndex:sourceIndexPath.row];
-    [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];
+    @synchronized(_gpxRouter.routeDoc.syncObj)
+    {
+        [[self getWptArray:sourceIndexPath] removeObjectAtIndex:sourceIndexPath.row];
+        [[self getWptArray:destinationIndexPath] insertObject:item atIndex:destinationIndexPath.row];
+    }
 
     if (destinationIndexPath.section == _sectionIndexActive)
     {
@@ -515,7 +526,7 @@
 -(NSIndexPath *)tableView:(UITableView *)tableView willSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == _sectionIndexGroups)
-        return nil;
+        return indexPath;
 
     if ([self getWptArray:indexPath].count == 0)
         return nil;
@@ -534,7 +545,9 @@
     
     if (indexPath.section == _sectionIndexGroups)
     {
-        // todo
+        OAGPXRouteGroupsViewController *groupsController = [[OAGPXRouteGroupsViewController alloc] init];
+        groupsController.delegate = self;
+        [[OARootViewController instance].navigationController pushViewController:groupsController animated:YES];
     }
     else
     {
@@ -658,6 +671,17 @@
     {
         cell.showsReorderControl = YES;
     }
+}
+
+#pragma mark - OAGPXRouteGroupsViewControllerDelegate
+
+-(void)routeGroupsChanged
+{
+    [self updatePointsArray];
+
+    [self generateData];
+    
+    [_gpxRouter updateDistanceAndDirection:YES];
 }
 
 @end

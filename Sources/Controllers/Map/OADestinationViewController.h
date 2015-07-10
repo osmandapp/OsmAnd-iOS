@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "OADestinationCell.h"
 
-#define kOADestinationsSingleLineOnly YES
+#define kOADestinationsSingleLineOnly NO
 
 @class OADestination;
 

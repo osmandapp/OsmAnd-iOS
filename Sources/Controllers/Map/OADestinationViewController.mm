@@ -87,9 +87,10 @@
             [self.view addSubview:_multiCell.contentView];
         }
         
+        NSInteger index = 0;
         for (OADestination *destination in _app.data.destinations)
         {
-            OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+            OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:index++];
             [cell updateDirections:location direction:direction];
             cell.delegate = self;
             [_destinationCells addObject:cell];
@@ -479,7 +480,7 @@
     }
     [_multiCell updateDirections:location direction:direction];
     
-    OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination];
+    OADestinationCell *cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:_app.data.destinations.count - 1];
     [cell updateDirections:location direction:direction];
     cell.delegate = self;
     if (!_singleLineMode)

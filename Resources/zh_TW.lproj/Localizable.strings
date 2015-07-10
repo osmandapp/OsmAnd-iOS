@@ -403,3 +403,4 @@
 "gpx_cancel_route_q" = "您想要取消這條路線嗎？";
 "gpx_deactivated" = "已停用";
 "gpx_trip_groups" = "旅程群組";
+"gpx_group_select" = "群組選擇";

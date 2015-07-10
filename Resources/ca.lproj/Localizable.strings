@@ -403,3 +403,4 @@
 "gpx_cancel_route_q" = "Voleu cancel·lar aquesta ruta?";
 "gpx_deactivated" = "Desactivat";
 "gpx_trip_groups" = "Agrupacions de trajectes";
+"gpx_group_select" = "Selecciona grup";

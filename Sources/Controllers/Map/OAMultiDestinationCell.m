@@ -68,276 +68,276 @@
     if (_destinations.count == 3 && dirViewWidth / 3.0 < 140.0)
         h += 20.0;
         
-        CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
-        
-        _contentView.frame = newFrame;
-        _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h - 0.0);
+    CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     
-        if (kOADestinationEditModeEnabled)
-            _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
-        
-        switch (_destinations.count) {
-            case 1:
+    _contentView.frame = newFrame;
+    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h - 0.0);
+    
+    if (kOADestinationEditModeEnabled)
+        _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
+    
+    switch (_destinations.count) {
+        case 1:
+        {
+            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
+            
+            _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
+            _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
+            _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0 - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+            _distanceLabel.textAlignment = NSTextAlignmentLeft;
+            _infoLabel.frame = CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+            _infoLabel.textAlignment = NSTextAlignmentRight;
+            _infoLabel.hidden = !isParking;
+            _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
+            _descLabel.hidden = NO;
+            
+            if (_colorView2)
+                _colorView2.hidden = YES;
+            if (_markerView2)
+                _markerView2.hidden = YES;
+            if (_distanceLabel2)
+                _distanceLabel2.hidden = YES;
+            if (_infoLabel2)
+                _infoLabel2.hidden = YES;
+            if (_descLabel2)
+                _descLabel2.hidden = YES;
+            
+            if (_colorView3)
+                _colorView3.hidden = YES;
+            if (_markerView3)
+                _markerView3.hidden = YES;
+            if (_distanceLabel3)
+                _distanceLabel3.hidden = YES;
+            if (_infoLabel3)
+                _infoLabel3.hidden = YES;
+            if (_descLabel3)
+                _descLabel3.hidden = YES;
+            
+            break;
+        }
+        case 2:
+        {
+            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
+            BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled;
+            
+            _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
+            _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
+            CGFloat textWidth = dirViewWidth / 2.0 - 62.0;
+            if (textWidth > 60.0 + self.infoLabelWidth && isParking)
             {
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
-
-                _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
-                _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0 - (isParking ? self.infoLabelWidth : 0.0), 21.0);
-                _distanceLabel.textAlignment = NSTextAlignmentLeft;
-                _infoLabel.frame = CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+                _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - self.infoLabelWidth, 21.0);
+                _infoLabel.frame = CGRectMake(55.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
                 _infoLabel.textAlignment = NSTextAlignmentRight;
-                _infoLabel.hidden = !isParking;
-                _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
+                _infoLabel.hidden = NO;
+                _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
                 _descLabel.hidden = NO;
-                
-                if (_colorView2)
-                    _colorView2.hidden = YES;
-                if (_markerView2)
-                    _markerView2.hidden = YES;
-                if (_distanceLabel2)
-                    _distanceLabel2.hidden = YES;
-                if (_infoLabel2)
-                    _infoLabel2.hidden = YES;
-                if (_descLabel2)
-                    _descLabel2.hidden = YES;
-                
-                if (_colorView3)
-                    _colorView3.hidden = YES;
-                if (_markerView3)
-                    _markerView3.hidden = YES;
-                if (_distanceLabel3)
-                    _distanceLabel3.hidden = YES;
-                if (_infoLabel3)
-                    _infoLabel3.hidden = YES;
-                if (_descLabel3)
-                    _descLabel3.hidden = YES;
-                
-                break;
             }
-            case 2:
+            else if (textWidth > 80.0)
             {
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
-                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled;
-
-                _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
-                _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                CGFloat textWidth = newFrame.size.width / 2.0 - 62.0;
-                if (textWidth > 60.0 + self.infoLabelWidth && isParking)
+                _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth, 21.0);
+                if (isParking)
                 {
-                    _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - self.infoLabelWidth, 21.0);
-                    _infoLabel.frame = CGRectMake(55.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                    _infoLabel.textAlignment = NSTextAlignmentRight;
+                    _infoLabel.frame = CGRectMake(55.0, 24.0, self.infoLabelWidth, 21.0);
+                    _infoLabel.textAlignment = NSTextAlignmentLeft;
                     _infoLabel.hidden = NO;
-                    _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
-                    _descLabel.hidden = NO;
-                }
-                else if (textWidth > 80.0)
-                {
-                    _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth, 21.0);
-                    if (isParking)
-                    {
-                        _infoLabel.frame = CGRectMake(55.0, 24.0, self.infoLabelWidth, 21.0);
-                        _infoLabel.textAlignment = NSTextAlignmentLeft;
-                        _infoLabel.hidden = NO;
-                        _descLabel.hidden = YES;
-                    }
-                    else
-                    {
-                        _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
-                        _infoLabel.hidden = YES;
-                        _descLabel.hidden = NO;
-                    }
+                    _descLabel.hidden = YES;
                 }
                 else
                 {
-                    _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
+                    _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
                     _infoLabel.hidden = YES;
-                    _descLabel.hidden = YES;
+                    _descLabel.hidden = NO;
                 }
+            }
+            else
+            {
+                _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
+                _infoLabel.hidden = YES;
+                _descLabel.hidden = YES;
+            }
+            _distanceLabel.textAlignment = NSTextAlignmentLeft;
+            
+            _colorView2.frame = CGRectMake(dirViewWidth / 2.0, 5.0, 40.0, 40.0);
+            _colorView2.hidden = NO;
+            _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+            _markerView2.hidden = NO;
+            
+            if (textWidth > 60.0 + self.infoLabelWidth && isParking2)
+            {
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth - self.infoLabelWidth, 21.0);
+                _distanceLabel2.hidden = NO;
+                _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+                _infoLabel2.textAlignment = NSTextAlignmentRight;
+                _infoLabel2.hidden = NO;
+                _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
+                _descLabel2.hidden = NO;
+            }
+            else if (textWidth > 80.0)
+            {
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
+                _distanceLabel2.hidden = NO;
+                if (isParking2)
+                {
+                    _infoLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, self.infoLabelWidth, 21.0);
+                    _infoLabel2.textAlignment = NSTextAlignmentLeft;
+                    _infoLabel2.hidden = NO;
+                    _descLabel2.hidden = YES;
+                }
+                else
+                {
+                    _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
+                    _infoLabel2.hidden = YES;
+                    _descLabel2.hidden = NO;
+                }
+            }
+            else
+            {
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
+                _distanceLabel2.hidden = NO;
+                _infoLabel2.hidden = YES;
+                _descLabel2.hidden = YES;
+            }
+            _distanceLabel2.textAlignment = NSTextAlignmentLeft;
+            
+            if (_colorView3)
+                _colorView3.hidden = YES;
+            if (_markerView3)
+                _markerView3.hidden = YES;
+            if (_distanceLabel3)
+                _distanceLabel3.hidden = YES;
+            if (_infoLabel3)
+                _infoLabel3.hidden = YES;
+            if (_descLabel3)
+                _descLabel3.hidden = YES;
+            
+            break;
+        }
+        case 3:
+        {
+            CGFloat width = _directionsView.bounds.size.width / 3.0;
+            
+            BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled && width > 260.0;
+            BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled && width > 260.0;
+            BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && ((OADestination *)self.destinations[2]).carPickupDateEnabled && width > 260.0;
+            
+            if (width >= 160) {
+                CGFloat textWidth = width - 60.0;
+                _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
+                _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
+                _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+                _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
                 _distanceLabel.textAlignment = NSTextAlignmentLeft;
+                _descLabel.hidden = NO;
                 
-                _colorView2.frame = CGRectMake(newFrame.size.width / 2.0, 5.0, 40.0, 40.0);
+                if (isParking) {
+                    _infoLabel.frame = CGRectMake(55.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+                    _infoLabel.hidden = NO;
+                } else {
+                    _infoLabel.hidden = YES;
+                }
+                
+                _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
                 _colorView2.hidden = NO;
                 _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
                 _markerView2.hidden = NO;
-                
-                if (textWidth > 60.0 + self.infoLabelWidth && isParking2)
-                {
-                    _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth - self.infoLabelWidth, 21.0);
-                    _distanceLabel2.hidden = NO;
-                    _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                    _infoLabel2.textAlignment = NSTextAlignmentRight;
-                    _infoLabel2.hidden = NO;
-                    _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                    _descLabel2.hidden = NO;
-                }
-                else if (textWidth > 80.0)
-                {
-                    _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth, 21.0);
-                    _distanceLabel2.hidden = NO;
-                    if (isParking2)
-                    {
-                        _infoLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, self.infoLabelWidth, 21.0);
-                        _infoLabel2.textAlignment = NSTextAlignmentLeft;
-                        _infoLabel2.hidden = NO;
-                        _descLabel2.hidden = YES;
-                    }
-                    else
-                    {
-                        _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                        _infoLabel2.hidden = YES;
-                        _descLabel2.hidden = NO;
-                    }
-                }
-                else
-                {
-                    _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                    _distanceLabel2.hidden = NO;
-                    _infoLabel2.hidden = YES;
-                    _descLabel2.hidden = YES;
-                }
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth - (isParking2 ? self.infoLabelWidth : 0.0), 21.0);
                 _distanceLabel2.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
+                _descLabel2.hidden = NO;
                 
-                if (_colorView3)
-                    _colorView3.hidden = YES;
-                if (_markerView3)
-                    _markerView3.hidden = YES;
-                if (_distanceLabel3)
-                    _distanceLabel3.hidden = YES;
-                if (_infoLabel3)
+                if (isParking2) {
+                    _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+                    _infoLabel2.hidden = NO;
+                } else {
+                    _infoLabel2.hidden = YES;
+                }
+                
+                _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
+                _colorView3.hidden = NO;
+                _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView3.hidden = NO;
+                _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth - (isParking3 ? self.infoLabelWidth : 0.0), 21.0);
+                _distanceLabel3.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel3.hidden = NO;
+                _descLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
+                _descLabel3.hidden = NO;
+                
+                if (isParking3) {
+                    _infoLabel3.frame = CGRectMake(_distanceLabel3.frame.origin.x + _distanceLabel3.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+                    _infoLabel3.hidden = NO;
+                } else {
                     _infoLabel3.hidden = YES;
-                if (_descLabel3)
-                    _descLabel3.hidden = YES;
+                }
                 
-                break;
             }
-            case 3:
+            else if (width >= 140)
             {
-                CGFloat width = _directionsView.bounds.size.width / 3.0;
-
-                BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled && width > 260.0;
-                BOOL isParking2 = ((OADestination *)self.destinations[1]).parking && ((OADestination *)self.destinations[1]).carPickupDateEnabled && width > 260.0;
-                BOOL isParking3 = ((OADestination *)self.destinations[2]).parking && ((OADestination *)self.destinations[2]).carPickupDateEnabled && width > 260.0;
-
-                if (width >= 160) {
-                    CGFloat textWidth = width - 60.0;
-                    _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
-                    _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                    _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - (isParking ? self.infoLabelWidth : 0.0), 21.0);
-                    _descLabel.frame = CGRectMake(55.0, 24.0, textWidth, 21.0);
-                    _distanceLabel.textAlignment = NSTextAlignmentLeft;
-                    _descLabel.hidden = NO;
-                    
-                    if (isParking) {
-                        _infoLabel.frame = CGRectMake(55.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                        _infoLabel.hidden = NO;
-                    } else {
-                        _infoLabel.hidden = YES;
-                    }
-                    
-                    _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
-                    _colorView2.hidden = NO;
-                    _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView2.hidden = NO;
-                    _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 7.0, textWidth - (isParking2 ? self.infoLabelWidth : 0.0), 21.0);
-                    _distanceLabel2.textAlignment = NSTextAlignmentLeft;
-                    _distanceLabel2.hidden = NO;
-                    _descLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                    _descLabel2.hidden = NO;
-                    
-                    if (isParking2) {
-                        _infoLabel2.frame = CGRectMake(_distanceLabel2.frame.origin.x + _distanceLabel2.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                        _infoLabel2.hidden = NO;
-                    } else {
-                        _infoLabel2.hidden = YES;
-                    }
-
-                    _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
-                    _colorView3.hidden = NO;
-                    _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView3.hidden = NO;
-                    _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 7.0, textWidth - (isParking3 ? self.infoLabelWidth : 0.0), 21.0);
-                    _distanceLabel3.textAlignment = NSTextAlignmentLeft;
-                    _distanceLabel3.hidden = NO;
-                    _descLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 24.0, textWidth, 21.0);
-                    _descLabel3.hidden = NO;
-                    
-                    if (isParking3) {
-                        _infoLabel3.frame = CGRectMake(_distanceLabel3.frame.origin.x + _distanceLabel3.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
-                        _infoLabel3.hidden = NO;
-                    } else {
-                        _infoLabel3.hidden = YES;
-                    }
-
-                }
-                else if (width >= 140)
-                {
-                    CGFloat textWidth = width - 60.0;
-                    _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
-                    _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                    _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
-                    _distanceLabel.textAlignment = NSTextAlignmentLeft;
-                    _descLabel.hidden = YES;
-                    _infoLabel.hidden = YES;
-                    
-                    _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
-                    _colorView2.hidden = NO;
-                    _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView2.hidden = NO;
-                    _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                    _distanceLabel2.textAlignment = NSTextAlignmentLeft;
-                    _distanceLabel2.hidden = NO;
-                    _descLabel2.hidden = YES;
-                    _infoLabel2.hidden = YES;
-                    
-                    _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
-                    _colorView3.hidden = NO;
-                    _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView3.hidden = NO;
-                    _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
-                    _distanceLabel3.textAlignment = NSTextAlignmentLeft;
-                    _distanceLabel3.hidden = NO;
-                    _descLabel3.hidden = YES;
-                    _infoLabel3.hidden = YES;
-                    
-                }
-                else
-                {
-                    CGFloat textWidth = 70.0;
-                    _colorView.frame = CGRectMake(width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-                    _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-                    _distanceLabel.frame = CGRectMake(width / 2.0 - 35.0, 48.0, textWidth, 21.0);
-                    _distanceLabel.textAlignment = NSTextAlignmentCenter;
-                    _descLabel.hidden = YES;
-                    _infoLabel.hidden = YES;
-                    
-                    _colorView2.frame = CGRectMake(width + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-                    _colorView2.hidden = NO;
-                    _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView2.hidden = NO;
-                    _distanceLabel2.frame = CGRectMake(width + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
-                    _distanceLabel2.textAlignment = NSTextAlignmentCenter;
-                    _distanceLabel2.hidden = NO;
-                    _descLabel2.hidden = YES;
-                    _infoLabel2.hidden = YES;
-
-                    _colorView3.frame = CGRectMake(width * 2.0 + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
-                    _colorView3.hidden = NO;
-                    _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
-                    _markerView3.hidden = NO;
-                    _distanceLabel3.frame = CGRectMake(width * 2.0 + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
-                    _distanceLabel3.textAlignment = NSTextAlignmentCenter;
-                    _distanceLabel3.hidden = NO;
-                    _descLabel3.hidden = YES;
-                    _infoLabel3.hidden = YES;
-                }
+                CGFloat textWidth = width - 60.0;
+                _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
+                _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
+                _distanceLabel.frame = CGRectMake(55.0, 15.0, textWidth, 21.0);
+                _distanceLabel.textAlignment = NSTextAlignmentLeft;
+                _descLabel.hidden = YES;
+                _infoLabel.hidden = YES;
                 
-                break;
+                _colorView2.frame = CGRectMake(width, 5.0, 40.0, 40.0);
+                _colorView2.hidden = NO;
+                _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView2.hidden = NO;
+                _distanceLabel2.frame = CGRectMake(_colorView2.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
+                _distanceLabel2.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.hidden = YES;
+                _infoLabel2.hidden = YES;
+                
+                _colorView3.frame = CGRectMake(width * 2.0, 5.0, 40.0, 40.0);
+                _colorView3.hidden = NO;
+                _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView3.hidden = NO;
+                _distanceLabel3.frame = CGRectMake(_colorView3.frame.origin.x + 50.0, 15.0, textWidth, 21.0);
+                _distanceLabel3.textAlignment = NSTextAlignmentLeft;
+                _distanceLabel3.hidden = NO;
+                _descLabel3.hidden = YES;
+                _infoLabel3.hidden = YES;
+                
             }
-            default:
-                break;
+            else
+            {
+                CGFloat textWidth = 70.0;
+                _colorView.frame = CGRectMake(width / 2.0 - 20.0, 5.0, 40.0, 40.0);
+                _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
+                _distanceLabel.frame = CGRectMake(width / 2.0 - 35.0, 48.0, textWidth, 21.0);
+                _distanceLabel.textAlignment = NSTextAlignmentCenter;
+                _descLabel.hidden = YES;
+                _infoLabel.hidden = YES;
+                
+                _colorView2.frame = CGRectMake(width + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
+                _colorView2.hidden = NO;
+                _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView2.hidden = NO;
+                _distanceLabel2.frame = CGRectMake(width + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
+                _distanceLabel2.textAlignment = NSTextAlignmentCenter;
+                _distanceLabel2.hidden = NO;
+                _descLabel2.hidden = YES;
+                _infoLabel2.hidden = YES;
+                
+                _colorView3.frame = CGRectMake(width * 2.0 + width / 2.0 - 20.0, 5.0, 40.0, 40.0);
+                _colorView3.hidden = NO;
+                _markerView3.frame = CGRectMake(_colorView3.frame.origin.x + 27.0, _colorView3.frame.origin.y + 27.0, 14.0, 14.0);
+                _markerView3.hidden = NO;
+                _distanceLabel3.frame = CGRectMake(width * 2.0 + width / 2.0 - 35.0, 48.0, textWidth, 21.0);
+                _distanceLabel3.textAlignment = NSTextAlignmentCenter;
+                _distanceLabel3.hidden = NO;
+                _descLabel3.hidden = YES;
+                _infoLabel3.hidden = YES;
+            }
+            
+            break;
         }
+        default:
+            break;
+    }
     
 }
 
@@ -361,16 +361,29 @@
     
     if (!self.btnClose && kOADestinationEditModeEnabled)
     {
-        self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
-        _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
-        _btnClose.opaque = YES;
-        [_btnClose setTitle:@"" forState:UIControlStateNormal];
-        if (kOADestinationEditModeGlobal)
+        if (kOADestinationEditModeGlobal && self.destinationIndex == 0)
+        {
+            self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
+            _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
+            _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnClose.opaque = YES;
+            _btnClose.tintColor = UIColorFromRGB(0x5081a6);
+            [_btnClose setTitle:@"" forState:UIControlStateNormal];
+            [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
             [_btnClose addTarget:self action:@selector(openDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
-        else
+        }
+        else if (!kOADestinationEditModeGlobal)
+        {
+            self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
+            _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnClose.opaque = YES;
+            [_btnClose setTitle:@"" forState:UIControlStateNormal];
+            [_btnClose setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
             [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
-
-        [_contentView addSubview:self.btnClose];
+        }
+        
+        if (self.btnClose)
+            [_contentView addSubview:self.btnClose];
     }
     
     if (!self.colorView)
@@ -393,9 +406,9 @@
     if (!self.markerView)
     {
         self.markerView = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
-        self.markerView.backgroundColor = [UIColor whiteColor];
-        self.markerView.layer.cornerRadius = self.markerView.bounds.size.width / 2.0;
-        self.markerView.layer.masksToBounds = YES;
+        self.markerView.backgroundColor = [UIColor clearColor];
+        //self.markerView.layer.cornerRadius = self.markerView.bounds.size.width / 2.0;
+        //self.markerView.layer.masksToBounds = YES;
         self.markerImage = [[UIImageView alloc] initWithFrame:self.markerView.bounds];
         self.markerImage.contentMode = UIViewContentModeCenter;
         [self.markerView addSubview:self.markerImage];
@@ -453,9 +466,9 @@
         if (!self.markerView2)
         {
             self.markerView2 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
-            self.markerView2.backgroundColor = [UIColor whiteColor];
-            self.markerView2.layer.cornerRadius = self.markerView2.bounds.size.width / 2.0;
-            self.markerView2.layer.masksToBounds = YES;
+            self.markerView2.backgroundColor = [UIColor clearColor];
+            //self.markerView2.layer.cornerRadius = self.markerView2.bounds.size.width / 2.0;
+            //self.markerView2.layer.masksToBounds = YES;
             self.markerImage2 = [[UIImageView alloc] initWithFrame:self.markerView2.bounds];
             self.markerImage2.contentMode = UIViewContentModeCenter;
             [self.markerView2 addSubview:self.markerImage2];
@@ -513,9 +526,9 @@
         if (!self.markerView3)
         {
             self.markerView3 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
-            self.markerView3.backgroundColor = [UIColor whiteColor];
-            self.markerView3.layer.cornerRadius = self.markerView3.bounds.size.width / 2.0;
-            self.markerView3.layer.masksToBounds = YES;
+            self.markerView3.backgroundColor = [UIColor clearColor];
+            //self.markerView3.layer.cornerRadius = self.markerView3.bounds.size.width / 2.0;
+            //self.markerView3.layer.masksToBounds = YES;
             self.markerImage3 = [[UIImageView alloc] initWithFrame:self.markerView3.bounds];
             self.markerImage3.contentMode = UIViewContentModeCenter;
             [self.markerView3 addSubview:self.markerImage3];

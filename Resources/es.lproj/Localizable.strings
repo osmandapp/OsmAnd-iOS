@@ -7,7 +7,7 @@
 "rendering_value_highContrastRoads_name" = "Carreteras en alto contraste";
 "rendering_attr_OSMMapperAssistant_name" = "Asistente mapeador OSM";
 "rendering_attr_roadStyle_name" = "Estilo de carretera";
-"rendering_value_orange_name" = "Anaranjado";
+"rendering_value_orange_name" = "Naranja";
 "rendering_value_germanRoadAtlas_name" = "Atlas alemán de carreteras";
 "rendering_category_routes" = "Rutas";
 "rendering_category_details" = "Detalles";

@@ -334,3 +334,5 @@
 "track_save_short_q" = "Track ist zu kurz, willst Du ihn speichern?";
 "add_as" = "ergänzen als";
 "make_call" = "Mache einen Anruf";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Routenfarbe gemäß Routenscope";
+"rendering_value_walkingRoutesOSMC_name" = "Routenfarbe gemäß OSMC";

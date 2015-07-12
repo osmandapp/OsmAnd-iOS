@@ -42,3 +42,30 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Розмальовування відповідно до області маршруту";
 "rendering_value_walkingRoutesOSMC_name" = "Розмальовування відповідно до OSMC";
 "shared_string_delete" = "Видалити";
+"OsmAnd Maps" = "Мапи OsmAnd";
+// Shared Strings
+"shared_string_back" = "Назад";
+"shared_string_done" = "Готово";
+"shared_string_update" = "Оновити";
+"shared_string_install" = "Встановити";
+"shared_string_uninstall" = "Вилучити";
+"shared_string_remove" = "Вилучити";
+"shared_string_buy" = "Придбати";
+"shared_string_buy_for" = "для";
+// HUD
+"hud_heading" = "Напрямок";
+"hud_no_movement" = "Немає руху";
+// Favorites
+"fav_color" = "Колір";
+"fav_colors" = "Кольори";
+"fav_name" = "Назва";
+"fav_group" = "Група";
+"groups" = "Групи";
+"my_favorites" = "Мої Закладки";
+"fav_no_group" = "Без групи";
+"fav_remove_q" = "Вилучити із закладок?";
+"fav_import" = "Імпорт";
+"fav_import_title" = "Імпортувати закладки";
+"fav_export_title" = "Експортувати закладки";
+"fav_select_remove" = "Оберіть закладки для вилучення";
+"fav_export_select" = "Виберіть закладки для експорту";

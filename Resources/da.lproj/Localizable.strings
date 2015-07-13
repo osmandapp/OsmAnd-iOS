@@ -404,3 +404,5 @@
 "gpx_deactivated" = "Deaktiveret";
 "gpx_trip_groups" = "Turgrupper";
 "gpx_group_select" = "Vælg gruppe";
+"show_all" = "Vis alle";
+"directions" = "Rutevejledning";

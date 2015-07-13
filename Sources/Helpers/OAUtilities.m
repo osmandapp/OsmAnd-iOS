@@ -353,4 +353,30 @@
     return a == b || af == bf;
 }
 
++ (void)roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius
+{    
+    if (tl || tr || bl || br)
+    {
+        UIRectCorner corner = 0;
+
+        if (tl)
+            corner = corner | UIRectCornerTopLeft;
+
+        if (tr)
+            corner = corner | UIRectCornerTopRight;
+
+        if (bl)
+            corner = corner | UIRectCornerBottomLeft;
+
+        if (br)
+            corner = corner | UIRectCornerBottomRight;
+
+        UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:view.bounds byRoundingCorners:corner cornerRadii:CGSizeMake(radius, radius)];
+        CAShapeLayer *maskLayer = [CAShapeLayer layer];
+        maskLayer.frame = view.bounds;
+        maskLayer.path = maskPath.CGPath;
+        view.layer.mask = maskLayer;
+    }
+}
+
 @end

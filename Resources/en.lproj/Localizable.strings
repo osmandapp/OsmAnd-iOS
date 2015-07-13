@@ -454,4 +454,6 @@
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Trip groups";
 "gpx_group_select" = "Group Select";
+"show_all" = "Show all";
+"directions" = "Directions";
 

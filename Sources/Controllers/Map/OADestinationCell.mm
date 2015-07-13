@@ -115,7 +115,7 @@
             _btnClose.tintColor = UIColorFromRGB(0x5081a6);
             [_btnClose setTitle:@"" forState:UIControlStateNormal];
             [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(openDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
         }
         else if (!kOADestinationEditModeGlobal)
         {
@@ -223,10 +223,10 @@
     [self updateMapCenterArrow:mapCenterArrow];
 }
 
-+ (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText
++ (NSString *)parkingTimeStr:(OADestination *)destination shortText:(BOOL)shortText
 {
     if (!destination.carPickupDate)
-        return;
+        return nil;
     
     NSTimeInterval timeInterval = [destination.carPickupDate timeIntervalSinceNow];
     int hours, minutes, seconds;
@@ -250,20 +250,33 @@
     
     if (timeInterval > 0.0)
     {
-        label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
         if (!shortText)
-            label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_left")];
         else
-            label.text = [NSString stringWithFormat:@"%@", time];
+            return [NSString stringWithFormat:@"%@", time];
     }
     else
     {
-        label.textColor = [UIColor redColor];
         if (!shortText)
-            label.text = [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
+            return [NSString stringWithFormat:@"%@ %@", time, OALocalizedString(@"time_overdue")];
         else
-            label.text = [NSString stringWithFormat:@"%@", time];
+            return [NSString stringWithFormat:@"%@", time];
     }
+}
+
++ (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText
+{
+    if (!destination.carPickupDate)
+        return;
+    
+    NSTimeInterval timeInterval = [destination.carPickupDate timeIntervalSinceNow];
+    
+    label.text = [self.class parkingTimeStr:destination shortText:shortText];
+    
+    if (timeInterval > 0.0)
+        label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
+    else
+        label.textColor = [UIColor redColor];
 }
 
 - (void)reloadData
@@ -358,13 +371,16 @@
 
 - (void)closeDestination:(id)sender
 {
-    if (_delegate)
-        [_delegate btnCloseClicked:self destination:_destinations[0]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.delegate)
+            [_delegate btnCloseClicked:self destination:_destinations[0]];
+    });
 }
 
-- (void)openDestinationsView:(id)sender
+- (void)openHideDestinationsView:(id)sender
 {
-    
+    if (self.delegate)
+        [_delegate openHideDestinationCardsView:sender];
 }
 
 @end

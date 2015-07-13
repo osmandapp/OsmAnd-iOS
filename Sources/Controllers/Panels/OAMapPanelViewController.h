@@ -11,10 +11,12 @@
 #import "OAMapViewController.h"
 #import "OACommonTypes.h"
 #import "OATargetPointView.h"
+#import "OAGPXRouteViewController.h"
 
 @class OAFavoriteItem;
 @class OAGpxWptItem;
 @class OAGPX;
+@class OADestination;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -33,6 +35,9 @@
 
 - (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
+- (void)openHideDestinationCardsView;
+- (void)removeDestination:(OADestination *)destination;
+
 - (void)closeMapSettings;
 - (void)closeMapSettingsWithDuration:(CGFloat)duration;
 
@@ -46,7 +51,11 @@
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
+
+- (void)openTargetViewWithGPXRoute:(BOOL)pushed;
+- (void)openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 
 - (void)displayGpxOnMap:(OAGPX *)item;
 

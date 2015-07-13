@@ -51,5 +51,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) int zoom;
 
 @property (nonatomic) BOOL toolbarNeeded;
+@property (nonatomic) NSInteger segmentIndex;
 
 @end

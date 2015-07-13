@@ -22,7 +22,6 @@
 #import "MGSwipeButton.h"
 #import "MGSwipeTableCell.h"
 #import "OAGPXRouteGroupsViewController.h"
-#import "OARootViewController.h"
 
 #import "OsmAndApp.h"
 
@@ -225,7 +224,8 @@
 - (void)callFirstPointMenu
 {
     _activeIndexPath = [NSIndexPath indexPathForRow:0 inSection:_sectionIndexActive];
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Deactivate" otherButtonTitles:@"Sort waypoints", nil];
+    OAGpxRouteWptItem* item = [self getWptItem:_activeIndexPath];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:@"Deactivate" otherButtonTitles:@"Sort waypoints", nil];
     sheet.delegate = self;
     sheet.tag = 0;
     [sheet showInView:self.view];
@@ -241,10 +241,20 @@
     cell.separatorInset = UIEdgeInsetsMake(0.0, cell.titleLabel.frame.origin.x, 0.0, 0.0);
     
     [cell.titleLabel setText:item.point.name];
+
+    NSMutableString *desc = [NSMutableString string];
+    if (item.distance.length > 0)
+    {
+        [desc appendString:item.distance];
+    }
     if (item.point.type.length > 0)
-        [cell.descLabel setText:[NSString stringWithFormat:@"%@, %@", item.distance, item.point.type]];
-    else
-        [cell.descLabel setText:item.distance];
+    {
+        if (desc.length > 0)
+            [desc appendString:@", "];
+        [desc appendString:item.point.type];
+    }
+    
+    [cell.descLabel setText:desc];
     
     [cell.rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     
@@ -612,7 +622,8 @@
         else
         {
             _activeIndexPath = [indexPath copy];
-            UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:@"Actions" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:(indexPath.section == _sectionIndexActive ? @"Deactivate" : nil) otherButtonTitles:@"Move on first place", nil];
+            OAGpxRouteWptItem* item = [self getWptItem:indexPath];
+            UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:(indexPath.section == _sectionIndexActive ? @"Deactivate" : nil) otherButtonTitles:@"Move on first place", nil];
             sheet.delegate = self;
             sheet.tag = 1;
             [sheet showInView:self.view];
@@ -670,7 +681,7 @@
     if (direction == MGSwipeDirectionRightToLeft)
     {
         //expansionSettings.fillOnTrigger = YES;
-        //expansionSettings.threshold = 1.1;
+        expansionSettings.threshold = 10.0;
         
         CGFloat padding = 15;
 

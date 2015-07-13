@@ -21,4 +21,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIView *segmentViewContainer;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
 
+- (instancetype)initWithSegmentType:(OAGpxRouteSegmentType)segmentType;
+
 @end

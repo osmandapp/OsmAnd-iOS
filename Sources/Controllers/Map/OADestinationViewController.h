@@ -19,6 +19,7 @@
 - (void)destinationViewLayoutDidChange:(BOOL)animated;
 - (void)destinationViewMoveTo:(OADestination *)destination;
 - (void)destinationRemoved:(OADestination *)destination;
+- (void)openHideDestinationCardsView;
 
 @end
 

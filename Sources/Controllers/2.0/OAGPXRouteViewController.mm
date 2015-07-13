@@ -69,6 +69,21 @@
     return self;
 }
 
+- (instancetype)initWithSegmentType:(OAGpxRouteSegmentType)segmentType
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _gpxRouter = [OAGPXRouter sharedInstance];
+        
+        _wasInit = NO;
+        _scrollPos = 0.0;
+        _segmentType = segmentType;
+    }
+    return self;
+}
+
 - (void)cancelPressed
 {    
     if (self.delegate)

@@ -18,6 +18,7 @@
 @optional
 
 - (void)btnCloseClicked:(id)sender destination:(OADestination *)destination;
+- (void)openHideDestinationCardsView:(id)sender;
 
 @end
 
@@ -52,6 +53,7 @@
 @property (nonatomic) UIColor *unitsColor;
 
 
++ (NSString *)parkingTimeStr:(OADestination *)destination shortText:(BOOL)shortText;
 + (void)setParkingTimerStr:(OADestination *)destination label:(UILabel *)label shortText:(BOOL)shortText;
 
 - (instancetype)initWithDestination:(OADestination *)destination destinationIndex:(NSInteger)destinationIndex;
@@ -63,5 +65,7 @@
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 
 - (OADestination *)destinationByPoint:(CGPoint)point;
+
+- (void)openDestinationsView:(id)sender;
 
 @end

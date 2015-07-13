@@ -17,9 +17,9 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
-#import "OAGPXRouteViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
+#import "OADestinationCardsViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -1293,6 +1293,13 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
 }
 
+- (void)removeDestination:(OADestination *)destination
+{
+    [_destinationViewController btnCloseClicked:nil destination:destination];
+    _targetDestination = nil;
+    [_mapViewController hideContextPinMarker];
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void)targetViewEnableMapInteraction
@@ -1340,9 +1347,9 @@ typedef enum
 {
     if (_targetDestination)
     {
-        [_destinationViewController btnCloseClicked:nil destination:_targetDestination];
-        _targetDestination = nil;
-        [_mapViewController hideContextPinMarker];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self removeDestination:_targetDestination];
+        });
     }
     else
     {
@@ -1368,21 +1375,11 @@ typedef enum
 
 - (void)targetPointParking
 {
-    if (![_destinationViewController isPlaceForParking])
-    {
-        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_add_marker") message:OALocalizedString(@"cannot_add_marker_desc") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil
-          ] show];
-     
-        [self hideTargetPointMenu];
-    }
-    else
-    {
-        OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
-        parking.parkingDelegate = self;
-        parking.view.frame = self.view.frame;
-        [self.targetMenuView setCustomViewController:parking];
-        [self.targetMenuView updateTargetPointType:OATargetParking];
-    }
+    OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
+    parking.parkingDelegate = self;
+    parking.view.frame = self.view.frame;
+    [self.targetMenuView setCustomViewController:parking];
+    [self.targetMenuView updateTargetPointType:OATargetParking];
 }
 
 - (void)targetPointAddWaypoint
@@ -1702,9 +1699,13 @@ typedef enum
     }
     else if (_targetMenuView.targetPoint.type == OATargetGPXRoute)
     {
-        [self.targetMenuView doInit:NO showFullScreen:NO];
+        OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)_targetMenuView.targetPoint.segmentIndex;
+        if (segmentType == kSegmentRouteWaypoints)
+            [self.targetMenuView doInit:YES showFullScreen:YES];
+        else
+            [self.targetMenuView doInit:NO showFullScreen:NO];
         
-        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] init];
+        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
 
         gpxViewController.view.frame = self.view.frame;
         [self.targetMenuView setCustomViewController:gpxViewController];
@@ -2084,10 +2085,28 @@ typedef enum
     _activeTargetActive = YES;
 }
 
+- (void)openTargetViewWithGPXRoute:(BOOL)pushed
+{
+    [self openTargetViewWithGPXRoute:nil pushed:pushed segmentType:kSegmentRoute];
+}
+
+- (void)openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
+{
+    [self openTargetViewWithGPXRoute:nil pushed:pushed segmentType:segmentType];
+}
 
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed
 {
+    [self openTargetViewWithGPXRoute:item pushed:pushed segmentType:kSegmentRoute];
+}
+
+- (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
+{
     [_mapViewController hideContextPinMarker];
+ 
+    BOOL useCurrentRoute = (item == nil);
+    if (useCurrentRoute)
+        item = [OAGPXRouter sharedInstance].gpx;
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -2126,13 +2145,15 @@ typedef enum
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = NO;
     targetPoint.targetObj = item;
+    targetPoint.segmentIndex = segmentType;
     
     [_targetMenuView setTargetPoint:targetPoint];
     
     if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
         _activeTargetChildPushed = YES;
 
-    [[OAGPXRouter sharedInstance] setRouteWithGpx:item];
+    if (!useCurrentRoute)
+        [[OAGPXRouter sharedInstance] setRouteWithGpx:item];
     
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
         [self displayGpxOnMap:item];
@@ -2172,7 +2193,7 @@ typedef enum
     OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
     
-    if (self.targetMenuView.superview)
+    if (self.targetMenuView.superview && !self.targetMenuView.showFullScreen)
     {
         CGRect frame = self.targetMenuView.frame;
         
@@ -2255,6 +2276,33 @@ typedef enum
 - (void)destinationRemoved:(OADestination *)destination
 {
     [_mapViewController removeDestinationPin:destination.color];
+}
+
+- (void)openHideDestinationCardsView
+{
+    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+    
+    if (!cardsController.view.superview)
+    {
+        cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+        [_hudViewController.view addSubview:cardsController.view];
+        [cardsController doViewAppear];
+        
+        [UIView animateWithDuration:.25 animations:^{
+            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.size.height + 20.0, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+        }];
+    }
+    else
+    {
+        [UIView animateWithDuration:.25 animations:^{
+            cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+            
+        } completion:^(BOOL finished) {
+            
+            [cardsController doViewDisappear];
+            [cardsController.view removeFromSuperview];
+        }];
+    }
 }
 
 -(void)destinationViewLayoutDidChange:(BOOL)animated

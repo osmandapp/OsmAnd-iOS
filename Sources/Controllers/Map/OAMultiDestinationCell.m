@@ -855,7 +855,8 @@
 
 - (void)closeDestination:(id)sender
 {
-    if (_editModeActive) {
+    if (_editModeActive)
+    {
         _editModeActive = NO;
         [UIView animateWithDuration:.2 animations:^{
             [self hideEditButtons];
@@ -864,15 +865,20 @@
         return;
     }
     
-    if (_editButtonActive) {
+    if (_editButtonActive)
+    {
         _editModeActive = YES;
         [UIView animateWithDuration:.2 animations:^{
             [self reloadData];
         }];
         
-    } else {
-        if (_delegate)
-            [_delegate btnCloseClicked:self destination:_destinations[0]];
+    }
+    else
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (_delegate)
+                [_delegate btnCloseClicked:self destination:_destinations[0]];
+        });
     }
 }
 
@@ -880,12 +886,11 @@
 {
     UIButton *btn = (UIButton *)sender;
     if (_delegate && _destinations.count > btn.tag)
-        [_delegate btnCloseClicked:self destination:_destinations[btn.tag]];    
-}
-
-- (void)openDestinationsView:(id)sender
-{
-    
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_delegate btnCloseClicked:self destination:_destinations[btn.tag]];
+        });
+    }
 }
 
 

@@ -267,78 +267,81 @@
 
 - (void)btnCloseClicked:(id)sender destination:(OADestination *)destination
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    if (destination.parking)
+        [self removeParkingReminderFromCalendar:destination];
+    
+    if ([_app.data.destinations containsObject:destination]) {
         
-        if (destination.parking)
-            [self removeParkingReminderFromCalendar:destination];
+        [_usedColors removeObject:destination.color];
+        [_app.data.destinations removeObject:destination];
         
-        if ([_app.data.destinations containsObject:destination]) {
+        if (self.delegate)
+            [_delegate destinationRemoved:destination];
+        
+        // process single cells
+        OADestinationCell *cell;
+        for (OADestinationCell *c in _destinationCells)
+            if ([c.destinations containsObject:destination]) {
+                cell = c;
+                break;
+            }
+        
+        if (cell) {
             
-            [_usedColors removeObject:destination.color];
-            [_app.data.destinations removeObject:destination];
-            
-            if (_delegate)
-                [_delegate destinationRemoved:destination];
-            
-            // process single cells
-            OADestinationCell *cell;
-            for (OADestinationCell *c in _destinationCells)
-                if ([c.destinations containsObject:destination]) {
-                    cell = c;
-                    break;
+            [_destinationCells removeObject:cell];
+            [UIView animateWithDuration:.2 animations:^{
+                cell.contentView.alpha = 0.0;
+                
+            } completion:^(BOOL finished) {
+                [self updateFrame:YES];
+                [cell.contentView removeFromSuperview];
+                if (_app.data.destinations.count == 0) {
+                    [self.view removeFromSuperview];
+                    [self stopLocationUpdate];
                 }
+            }];
             
-            if (cell) {
-                
-                [_destinationCells removeObject:cell];
-                [UIView animateWithDuration:.2 animations:^{
-                    cell.contentView.alpha = 0.0;
-                    
-                } completion:^(BOOL finished) {
-                    [self updateFrame:YES];
-                    [cell.contentView removeFromSuperview];
-                    if (_app.data.destinations.count == 0) {
-                        [self.view removeFromSuperview];
-                        [self stopLocationUpdate];
-                    }
-                }];
-                
-            }
-            
-            // process multi cell
-            BOOL isCellEmpty = NO;
-            
-            if (_multiCell.destinations.count > 0) {
-                NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
-                [arr removeObject:destination];
-                [UIView animateWithDuration:.2 animations:^{
-                    _multiCell.destinations = [NSArray arrayWithArray:arr];
-                }];
-            } else {
-                isCellEmpty = YES;
-                _multiCell.destinations = nil;
-            }
-            
-            if (isCellEmpty) {
-                [UIView animateWithDuration:.2 animations:^{
-                    _multiCell.contentView.alpha = 0.0;
-                    
-                } completion:^(BOOL finished) {
-                    
-                    if (_multiCell.editModeActive)
-                        [_multiCell exitEditMode];
-
-                    [self updateFrame:YES];
-                    [_multiCell.contentView removeFromSuperview];
-                    _multiCell = nil;
-                    if (_app.data.destinations.count == 0) {
-                        [self.view removeFromSuperview];
-                        [self stopLocationUpdate];
-                    }
-                }];
-            }
         }
-    });
+        
+        // process multi cell
+        BOOL isCellEmpty = NO;
+        
+        if (_multiCell.destinations.count > 0) {
+            NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
+            [arr removeObject:destination];
+            [UIView animateWithDuration:.2 animations:^{
+                _multiCell.destinations = [NSArray arrayWithArray:arr];
+            }];
+        } else {
+            isCellEmpty = YES;
+            _multiCell.destinations = nil;
+        }
+        
+        if (isCellEmpty) {
+            [UIView animateWithDuration:.2 animations:^{
+                _multiCell.contentView.alpha = 0.0;
+                
+            } completion:^(BOOL finished) {
+                
+                if (_multiCell.editModeActive)
+                    [_multiCell exitEditMode];
+                
+                [self updateFrame:YES];
+                [_multiCell.contentView removeFromSuperview];
+                _multiCell = nil;
+                if (_app.data.destinations.count == 0) {
+                    [self.view removeFromSuperview];
+                    [self stopLocationUpdate];
+                }
+            }];
+        }
+    }
+}
+
+- (void)openHideDestinationCardsView:(id)sender
+{
+    if (self.delegate)
+        [_delegate openHideDestinationCardsView];
 }
 
 - (void)removeDestination:(OADestination *)destination
@@ -400,45 +403,15 @@
     }
 }
 
-- (BOOL)isPlaceForParking
-{
-    BOOL isTherePlaceForParking = _app.data.destinations.count < 3;
-    if (!isTherePlaceForParking)
-    {
-        for (OADestination *dest in _app.data.destinations)
-            if (dest.parking)
-            {
-                isTherePlaceForParking = YES;
-                break;
-            }
-    }
-    return isTherePlaceForParking;
-}
-
 - (UIColor *) addDestination:(OADestination *)destination
 {
-    BOOL isTherePlaceForParking = _app.data.destinations.count < 3;
-    if (!isTherePlaceForParking)
-    {
-        for (OADestination *dest in _app.data.destinations)
-            if (dest.parking)
-            {
-                isTherePlaceForParking = YES;
-                break;
-            }
-    }
-
-    if (destination.parking)
-    {
-        if (!isTherePlaceForParking)
-        {
-            return nil;
-        }
-    }
-    else if (_app.data.destinations.count >= 3)
-    {
+    int destinationsCount = 0;
+    for (OADestination *dest in _app.data.destinations)
+        if (!dest.parking)
+            destinationsCount++;
+    
+    if (destinationsCount >= 3)
         return nil;
-    }
 
     if (destination.parking)
     {

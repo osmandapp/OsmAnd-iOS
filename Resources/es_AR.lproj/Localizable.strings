@@ -404,3 +404,5 @@
 "gpx_deactivated" = "Desactivado";
 "gpx_trip_groups" = "Grupos de viajes";
 "gpx_group_select" = "Grupo elegido";
+"show_all" = "Mostrar todo";
+"directions" = "Indicaciones";

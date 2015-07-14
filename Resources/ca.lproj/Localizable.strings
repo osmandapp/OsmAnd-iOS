@@ -404,3 +404,5 @@
 "gpx_deactivated" = "Desactivat";
 "gpx_trip_groups" = "Agrupacions de trajectes";
 "gpx_group_select" = "Selecciona grup";
+"show_all" = "Mostra tot";
+"directions" = "Direccions";

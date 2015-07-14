@@ -36,6 +36,7 @@
 @property(readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
 @property (nonatomic) NSMutableArray *destinations;
+@property(readonly) OAObservable* destinationsChangeObservable;
 
 + (OAAppData*)defaults;
 

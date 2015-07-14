@@ -29,8 +29,6 @@
 @property (nonatomic, assign) CGFloat top;
 @property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
 
-- (NSArray *)allDestinations;
-
 - (void)startLocationUpdate;
 - (void)stopLocationUpdate;
 
@@ -41,7 +39,6 @@
 - (void) doLocationUpdate;
 
 - (void)updateDestinationsUsingMapCenter;
-- (BOOL)isPlaceForParking;
 
 - (void)removeParkingReminderFromCalendar:(OADestination *)destination;
 

@@ -12,6 +12,10 @@
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OAAutoObserverProxy.h"
+#import "OADestination.h"
+#import "OAGpxRouteWptItem.h"
+#import "OADestinationsHelper.h"
+#import "OAUtilities.h"
 
 /*
  - default       3 km/h
@@ -65,6 +69,9 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
             NSString *path = [_app.gpxPath stringByAppendingPathComponent:activeRouteFileName];
             self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
+
+            [self refreshDestinations];
+            [[OADestinationsHelper instance] refreshTopDestinations];
         }
     }
     return self;
@@ -78,6 +85,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:gpx.gpxFileName];
     
+    [self refreshDestinations];
     [self.routeDefinedObservable notifyEvent];
 }
 
@@ -96,6 +104,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     _gpx = nil;
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:nil];
 
+    [self refreshDestinations];
     [self.routeCanceledObservable notifyEvent];
 }
 
@@ -165,6 +174,34 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         default:
             return -1.0;
     }
+}
+
+- (void)refreshDestinations
+{
+    NSMutableArray *destinations = [NSMutableArray array];
+    
+    if (self.routeDoc)
+    {
+        [self.routeDoc.activePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop)
+         {
+             OADestination *destination = [[OADestination alloc] initWithDesc:item.point.name latitude:item.point.position.latitude longitude:item.point.position.longitude];
+             
+             destination.color = [OAUtilities colorFromString:item.point.color];
+             destination.routePoint = YES;
+             destination.routePointIndex = idx;
+             
+             [destinations addObject:destination];
+             
+             if (destinations.count == 2)
+                 *stop = YES;
+         }];
+    }
+    
+    for (OADestination *destination in _app.data.destinations)
+        if (!destination.routePoint)
+            [destinations addObject:destination];
+
+    _app.data.destinations = destinations;
 }
 
 @end

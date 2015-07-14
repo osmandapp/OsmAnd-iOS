@@ -877,7 +877,7 @@
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (_delegate)
-                [_delegate btnCloseClicked:self destination:_destinations[0]];
+                [_delegate removeDestination:_destinations[0]];
         });
     }
 }
@@ -888,7 +888,7 @@
     if (_delegate && _destinations.count > btn.tag)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [_delegate btnCloseClicked:self destination:_destinations[btn.tag]];
+            [_delegate removeDestination:_destinations[btn.tag]];
         });
     }
 }

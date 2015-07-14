@@ -648,7 +648,8 @@
     }
     
     [_gpxRouter.routeDoc updateDistances];
-    
+    [_gpxRouter refreshDestinations];
+
     if (self.delegate)
         [self.delegate routePointsChanged];
 }

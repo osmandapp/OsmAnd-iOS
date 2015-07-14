@@ -4404,16 +4404,14 @@
     .buildAndAddToCollection(_destinationPinMarkersCollection);
 }
 
-- (void)removeDestinationPin:(UIColor *)color
+- (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
 {
-    CGFloat r,g,b,a;
-    [color getRed:&r green:&g blue:&b alpha:&a];
-    OsmAnd::FColorRGB col(r, g, b);
-
     for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
     {
-        const OsmAnd::FColorRGB mCol = marker->accuracyCircleBaseColor;
-        if (col == mCol) {
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
+        if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:latitude] &&
+            [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:longitude])
+        {
             _destinationPinMarkersCollection->removeMarker(marker);
             break;
         }

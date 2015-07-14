@@ -18,6 +18,7 @@
 #import "OAGPXRouteCardController.h"
 #import "OADirectionsCardController.h"
 #import "OARootViewController.h"
+#import "OADestinationsHelper.h"
 
 #import "OsmAndApp.h"
 #import "OAGPXRouter.h"
@@ -153,6 +154,9 @@
 
 - (void)doViewAppear
 {
+    indexPathForSwipingCell = nil;
+    isDecelerating = NO;
+    
     [self generateData];
 
     for (OADestinationCardBaseController *cardController in _sections)
@@ -185,7 +189,7 @@
         [sections addObject:gpxRouteCardController];
     }
 
-    if (_app.data.destinations.count > 0)
+    if ([[OADestinationsHelper instance] pureDestinationsCount] > 0)
     {
         OADirectionsCardController *directionsCardController = [[OADirectionsCardController alloc] initWithSection:index++ tableView:self.tableView];
         directionsCardController.delegate = self;

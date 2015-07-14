@@ -71,6 +71,7 @@
     self.wpt = gpxWpt.wpt;
     
     self.position = gpxWpt.position;
+    self.color = gpxWpt.color;
     self.name = gpxWpt.name;
     self.desc = gpxWpt.desc;
     self.elevation = gpxWpt.elevation;

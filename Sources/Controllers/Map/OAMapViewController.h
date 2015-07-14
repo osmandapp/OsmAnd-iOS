@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)hideRecGpxTrack;
 
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
-- (void)removeDestinationPin:(UIColor *)color;
+- (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
 
 - (void)updateMyLocationCourseProvider;
 

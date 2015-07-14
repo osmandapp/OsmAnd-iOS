@@ -21,7 +21,13 @@
 @property (nonatomic) NSDate *carPickupDate;
 @property (nonatomic) NSString *eventIdentifier;
 
+@property (nonatomic) BOOL showOnTop;
+
+@property (nonatomic) BOOL routePoint;
+@property (nonatomic) NSInteger routePointIndex;
+
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
+- (double) distance:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;
 
 @end

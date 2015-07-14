@@ -26,6 +26,7 @@
 #import "Localization.h"
 #import "InfoWidgetsView.h"
 #import "OAIAPHelper.h"
+#import "OADestinationsHelper.h"
 
 #import "OADestinationViewController.h"
 #import "OADestination.h"
@@ -222,7 +223,7 @@
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
     
-    if (![self.view.subviews containsObject:_destinationViewController.view] && [_destinationViewController allDestinations].count > 0)
+    if (![self.view.subviews containsObject:_destinationViewController.view] && [OADestinationsHelper instance].topDestinations.count > 0)
         [self.view addSubview:_destinationViewController.view];
     
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;

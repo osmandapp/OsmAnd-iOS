@@ -327,12 +327,10 @@
     }
     
     [_gpxRouter.routeDoc updateDistances];
+    [_gpxRouter refreshDestinations];
 
     [_gpxRouter.routeDoc buildRouteTrack];
     [_gpxRouter.routeChangedObservable notifyEvent];
-
-    // refresh top toobar
-    // todo
 }
 
 #pragma mark - UIActionSheetDelegate

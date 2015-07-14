@@ -48,6 +48,7 @@
 #import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OAGPXRouter.h"
+#import "OADestinationsHelper.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -431,7 +432,8 @@ typedef enum
         _destinationViewController.delegate = self;
 
         for (OADestination *destination in _app.data.destinations)
-            [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+            if (!destination.routePoint)
+                [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
 
     }
     
@@ -960,7 +962,7 @@ typedef enum
     {
         for (OADestination *destination in _app.data.destinations)
         {
-            if (destination.latitude == lat && destination.longitude == lon)
+            if (destination.latitude == lat && destination.longitude == lon && !destination.routePoint)
             {
                 caption = destination.desc;
                 icon = [UIImage imageNamed:destination.markerResourceName];
@@ -1295,7 +1297,7 @@ typedef enum
 
 - (void)removeDestination:(OADestination *)destination
 {
-    [_destinationViewController btnCloseClicked:nil destination:destination];
+    [_destinationViewController removeDestination:destination];
     _targetDestination = nil;
     [_mapViewController hideContextPinMarker];
 }
@@ -2275,7 +2277,7 @@ typedef enum
 
 - (void)destinationRemoved:(OADestination *)destination
 {
-    [_mapViewController removeDestinationPin:destination.color];
+    [_mapViewController removeDestinationPin:destination.latitude longitude:destination.longitude];
 }
 
 - (void)openHideDestinationCardsView
@@ -2289,7 +2291,7 @@ typedef enum
         [cardsController doViewAppear];
         
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.size.height + 20.0, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
         }];
     }
     else
@@ -2314,7 +2316,14 @@ typedef enum
     } else if ([_hudViewController isKindOfClass:[OADriveAppModeHudViewController class]]) {
         OADriveAppModeHudViewController *drive = (OADriveAppModeHudViewController *)_hudViewController;
         [drive updateDestinationViewLayout:animated];
-        
+    }
+    
+    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+    if (cardsController.view.superview && [OADestinationsHelper instance].topDestinations.count > 0)
+    {
+        [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
+            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+        }];
     }
 }
 

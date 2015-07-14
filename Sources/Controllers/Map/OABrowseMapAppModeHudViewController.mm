@@ -30,6 +30,7 @@
 #import "OADestinationCell.h"
 #import "OANativeUtilities.h"
 #import "OAUtilities.h"
+#import "OADestinationsHelper.h"
 
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
@@ -207,7 +208,7 @@
     _destinationViewController.top = 20.0;
     
     if (![self.view.subviews containsObject:_destinationViewController.view] &&
-        [_destinationViewController allDestinations].count > 0)
+        [OADestinationsHelper instance].topDestinations.count > 0)
         [self.view addSubview:_destinationViewController.view];
 
     //IOS-222
@@ -520,7 +521,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if (_app.data.destinations.count == 0)
+    if ([OADestinationsHelper instance].topDestinations.count == 0)
         return UIStatusBarStyleDefault;
     else
         return UIStatusBarStyleLightContent;
@@ -553,7 +554,7 @@
             if (_downloadView)
                 _downloadView.frame = [self getDownloadViewFrame];
             
-            if (_app.data.destinations.count == 0)
+            if ([OADestinationsHelper instance].topDestinations.count == 0)
                 _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
             else
                 _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
@@ -574,7 +575,7 @@
         if (_downloadView)
             _downloadView.frame = [self getDownloadViewFrame];
 
-        if (_app.data.destinations.count == 0)
+        if ([OADestinationsHelper instance].topDestinations.count == 0)
             _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         else
             _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);

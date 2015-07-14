@@ -17,7 +17,7 @@
 @protocol OADestinatioCellProtocol <NSObject>
 @optional
 
-- (void)btnCloseClicked:(id)sender destination:(OADestination *)destination;
+- (void)removeDestination:(OADestination *)destination;
 - (void)openHideDestinationCardsView:(id)sender;
 
 @end
@@ -65,7 +65,5 @@
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 
 - (OADestination *)destinationByPoint:(CGPoint)point;
-
-- (void)openDestinationsView:(id)sender;
 
 @end

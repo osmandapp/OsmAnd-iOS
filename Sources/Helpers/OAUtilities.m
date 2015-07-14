@@ -340,6 +340,13 @@
     return UIColorFromRGBA(rgba);
 }
 
++ (BOOL)areColorsEqual:(UIColor *)color1 color2:(UIColor *)color2
+{
+    NSString *col1Str = [self.class colorToString:color1];
+    NSString *col2Str = [self.class colorToString:color2];
+    return [col1Str isEqualToString:col2Str];
+}
+
 + (BOOL)doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination
 {
     double ap = source * pow(10.0, digits);

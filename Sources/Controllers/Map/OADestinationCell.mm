@@ -187,7 +187,8 @@
 - (void)setDestinations:(NSArray *)destinations
 {
     _destinations = destinations;
-    if (_destinations) {
+    if (_destinations)
+    {
         [self buildUI];
         [self reloadData];
         [self updateLayout:_contentView.frame];
@@ -373,7 +374,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (self.delegate)
-            [_delegate btnCloseClicked:self destination:_destinations[0]];
+            [_delegate removeDestination:_destinations[0]];
     });
 }
 

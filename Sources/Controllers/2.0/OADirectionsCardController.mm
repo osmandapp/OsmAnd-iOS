@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OADestinationCell.h"
 #import "OARootViewController.h"
+#import "OADestinationsHelper.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -63,9 +64,12 @@
     
     for (OADestination *destination in _app.data.destinations)
     {
-        OADestinationItem *item = [[OADestinationItem alloc] init];
-        item.destination = destination;
-        [_items addObject:item];
+        if (!destination.routePoint)
+        {
+            OADestinationItem *item = [[OADestinationItem alloc] init];
+            item.destination = destination;
+            [_items addObject:item];
+        }
     }
 }
 
@@ -143,7 +147,7 @@
     }
     else
     {
-        dirCell.leftIcon.image = [UIImage imageNamed:destItem.destination.markerResourceName];
+        dirCell.leftIcon.image = [UIImage imageNamed:[destItem.destination.markerResourceName stringByAppendingString:@"_small"]];
         [dirCell.titleLabel setText:destItem.destination.desc];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
         [dirCell.descLabel setText:destItem.distanceStr];
@@ -260,7 +264,7 @@
 
 - (void)showDirection:(OADestinationItem *)item
 {
-    //
+    [[OADestinationsHelper instance] showDestinationOnTop:item.destination];
 }
 
 - (void)updateDirections

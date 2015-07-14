@@ -404,3 +404,5 @@
 "gpx_deactivated" = "已停用";
 "gpx_trip_groups" = "旅程群組";
 "gpx_group_select" = "群組選擇";
+"show_all" = "全部顯示";
+"directions" = "導引";

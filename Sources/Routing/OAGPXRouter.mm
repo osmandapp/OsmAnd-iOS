@@ -35,6 +35,9 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     OsmAndAppInstance _app;
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     NSTimeInterval _lastUpdate;
+    BOOL _isModified;
+    
+    OAAutoObserverProxy *_routeChangedObserver;
 }
 
 + (OAGPXRouter *)sharedInstance
@@ -55,6 +58,7 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     {
         _app = [OsmAndApp instance];
         _lastUpdate = 0.0;
+        _isModified = NO;
         
         _locationUpdatedObservable = [[OAObservable alloc] init];
         _routeDefinedObservable = [[OAObservable alloc] init];
@@ -72,6 +76,10 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         }
         
         [self refreshDestinations];
+        
+        _routeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onRouteChanged)
+                                                              andObserve:self.routeChangedObservable];
     }
     return self;
 }
@@ -117,6 +125,22 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
         [_routeDoc saveTo:path];
     }
+}
+
+- (void)saveRouteIfModified
+{
+    if (_isModified)
+    {
+        _isModified = NO;
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[OAGPXRouter sharedInstance] saveRoute];
+        });
+    }
+}
+
+- (void)onRouteChanged
+{
+    _isModified = YES;
 }
 
 - (void)startLocationObserver

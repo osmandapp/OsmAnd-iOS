@@ -181,7 +181,7 @@
 - (void)doViewDisappear
 {
     for (OADestinationCardBaseController *cardController in _sections)
-        [cardController onDisappear];
+        [cardController onDisappear];    
 }
 
 -(void)generateData

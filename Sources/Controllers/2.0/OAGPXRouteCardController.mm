@@ -182,6 +182,9 @@
         [_locationUpdateObserver detach];
         _locationUpdateObserver = nil;
     }
+    
+    if (_gpxRouter.routeDoc)
+        [_gpxRouter saveRouteIfModified];
 }
 
 - (NSArray *)getSwipeButtons:(NSInteger)row

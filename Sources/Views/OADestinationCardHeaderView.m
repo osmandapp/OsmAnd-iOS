@@ -21,7 +21,7 @@ static const CGFloat border = 14.0;
     if (self)
     {
         self.backgroundColor = [UIColor clearColor];
-
+        
         _containerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, topInset, frame.size.width, frame.size.height - topInset)];
         _containerView.backgroundColor = [UIColor whiteColor];
         _containerView.autoresizingMask = UIViewAutoresizingFlexibleWidth;

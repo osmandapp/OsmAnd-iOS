@@ -18,5 +18,6 @@
 - (instancetype)initWithWpt:(OAGpxWpt *)gpxWpt;
 
 - (void)applyRouteInfo;
+- (void)clearRouteInfo;
 
 @end

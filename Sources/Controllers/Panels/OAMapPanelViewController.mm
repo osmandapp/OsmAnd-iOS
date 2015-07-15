@@ -2287,6 +2287,9 @@ typedef enum
     if (!cardsController.view.superview)
     {
         cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+
+        [_hudViewController addChildViewController:cardsController];
+        
         [_hudViewController.view addSubview:cardsController.view];
         [cardsController doViewAppear];
         
@@ -2303,6 +2306,7 @@ typedef enum
             
             [cardsController doViewDisappear];
             [cardsController.view removeFromSuperview];
+            [cardsController removeFromParentViewController];
         }];
     }
 }
@@ -2319,7 +2323,7 @@ typedef enum
     }
     
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    if (cardsController.view.superview && [OADestinationsHelper instance].topDestinations.count > 0)
+    if (cardsController.view.superview && [OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
             cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
@@ -2368,10 +2372,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
-        OsmAnd::LatLon latLon(destination.latitude, destination.longitude);
-        Point31 point = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-        [_mapViewController goToPosition:point animated:YES];
-        _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+        [self targetGoToPoint];
     }];
 }
 

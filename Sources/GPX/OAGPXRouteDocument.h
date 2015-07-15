@@ -24,6 +24,7 @@
 - (const std::shared_ptr<OsmAnd::GpxDocument>&) getDocument;
 
 - (void)buildRouteTrack;
+- (void)clearRouteTrack;
 
 - (void)updateDistances;
 - (void)updateDirections:(CLLocationDirection)newDirection myLocation:(CLLocationCoordinate2D)myLocation;
@@ -32,5 +33,7 @@
 
 - (void)includeGroupToRouting:(NSString *)groupName;
 - (void)excludeGroupFromRouting:(NSString *)groupName;
+
+- (BOOL) clearAndSaveTo:(NSString *)filename;
 
 @end

@@ -12,13 +12,17 @@
 
 @interface OADestinationsHelper : NSObject
 
-@property (nonatomic, readonly) NSArray* topDestinations;
+@property (nonatomic, readonly) NSMutableArray *sortedDestinations;
 
 + (OADestinationsHelper *)instance;
 
-- (void)refreshTopDestinations;
-- (NSInteger)pureDestinationsCount;
+- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints;
 
-- (void)showDestinationOnTop:(OADestination *)destination;
+- (void)addDestination:(OADestination *)destination;
+- (void)removeDestination:(OADestination *)destination;
+- (void)moveDestinationOnTop:(OADestination *)destination;
+- (void)moveRoutePointOnTop:(NSInteger)pointIndex;
+
+- (NSInteger)pureDestinationsCount;
 
 @end

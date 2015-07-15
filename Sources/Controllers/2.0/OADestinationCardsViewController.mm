@@ -152,6 +152,21 @@
     //self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
 }
 
+-(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
+{
+    /*
+    CGFloat w = DeviceScreenHeight;
+    
+    [UIView animateWithDuration:duration animations:^{
+    
+        for (OADestinationCardHeaderView *cardHeaderView in _headerViews)
+        {
+            cardHeaderView.frame = CGRectMake(0.0, 0.0, w - 16.0, 50.0);
+        }
+    }];
+     */
+}
+
 - (void)doViewAppear
 {
     indexPathForSwipingCell = nil;

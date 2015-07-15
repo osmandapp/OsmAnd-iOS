@@ -58,6 +58,16 @@
 {
     for (OAGpxRoutePoint *rp in self.locationMarks)
         [rp applyRouteInfo];
+    
+    return document->saveTo(QString::fromNSString(filename));
+}
+
+- (BOOL) clearAndSaveTo:(NSString *)filename
+{
+    [self clearRouteTrack];
+    
+    for (OAGpxRoutePoint *rp in self.locationMarks)
+        [rp clearRouteInfo];
 
     return document->saveTo(QString::fromNSString(filename));
 }
@@ -131,6 +141,29 @@
     document->tracks.append(trk);
 }
 
+- (void)clearRouteTrack
+{
+    NSMutableArray *tracks = (NSMutableArray *)self.tracks;
+    
+    for (OAGpxTrk *t in tracks)
+    {
+        if ([t.name isEqualToString:@"routeHelperTrack"])
+        {
+            [tracks removeObject:t];
+            break;
+        }
+    }
+    
+    for (auto& t : document->tracks)
+    {
+        if (t->name == QString("routeHelperTrack"))
+        {
+            document->tracks.removeOne(t);
+            break;
+        }
+    }
+}
+
 - (void)loadData
 {
     self.groups = [self readGroups];
@@ -145,15 +178,13 @@
     self.locationPoints = [NSMutableArray arrayWithArray:
                            [arr sortedArrayUsingComparator:^NSComparisonResult(OAGpxRouteWptItem *item1, OAGpxRouteWptItem *item2)
                             {
-                                if (item1.point.index > item2.point.index)
+                                if (item2.point.index > item1.point.index)
                                     return NSOrderedAscending;
-                                else if (item1.point.index < item2.point.index)
+                                else if (item2.point.index < item1.point.index)
                                     return NSOrderedDescending;
                                 else
                                     return NSOrderedSame;
                             }]];
-    
-    self.locationPoints = arr;
     
     [self buildActiveInactive];
     

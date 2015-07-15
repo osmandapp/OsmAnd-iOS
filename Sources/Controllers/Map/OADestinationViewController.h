@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "OADestinationCell.h"
 
-#define kOADestinationsSingleLineOnly NO
-
 @class OADestination;
 
 @protocol OADestinationViewControllerProtocol

@@ -90,7 +90,7 @@
 {
     [super viewDidLoad];
     
-    if ([OADestinationsHelper instance].topDestinations.count > 0)
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [self refreshCells];
     }
@@ -98,7 +98,6 @@
 
 - (void)onDestinationsChanged
 {
-    [[OADestinationsHelper instance] refreshTopDestinations];
     dispatch_async(dispatch_get_main_queue(), ^{
         [self refreshCells];
     });
@@ -108,26 +107,26 @@
 {
     [self clean];
 
-    if ([OADestinationsHelper instance].topDestinations.count == 0)
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0)
         return;
 
     CLLocationCoordinate2D location;
     CLLocationDirection direction;
     [self obtainCurrentLocationDirection:&location direction:&direction];
 
-    NSArray *destinations = [OADestinationsHelper instance].topDestinations;
+    NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
     
-    NSInteger firstCellDestinationIndex = (destinations.count >= 1 ? [destinations[0] integerValue] : -1);
-    NSInteger secondCellDestinationIndex = (destinations.count >= 2 ? [destinations[1] integerValue] : -1);
+    OADestination *firstCellDestination = (destinations.count >= 1 ? destinations[0] : nil);
+    OADestination *secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
     
-    if (firstCellDestinationIndex >= 0)
+    if (firstCellDestination)
     {
-        OADestination *destination = _app.data.destinations[firstCellDestinationIndex];
+        OADestination *destination = firstCellDestination;
 
         OADestinationCell *cell;
         if (_destinationCells.count == 0)
         {
-            cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:firstCellDestinationIndex];
+            cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:0];
             cell.delegate = self;
             [_destinationCells addObject:cell];
             [self.view insertSubview:cell.contentView atIndex:0];
@@ -141,14 +140,14 @@
         [cell updateDirections:location direction:direction];
     }
     
-    if (secondCellDestinationIndex >= 0)
+    if (secondCellDestination)
     {
-        OADestination *destination = _app.data.destinations[secondCellDestinationIndex];
+        OADestination *destination = secondCellDestination;
         
         OADestinationCell *cell;
         if (_destinationCells.count == 1)
         {
-            cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:secondCellDestinationIndex];
+            cell = [[OADestinationCell alloc] initWithDestination:destination destinationIndex:1];
             cell.delegate = self;
             [_destinationCells addObject:cell];
             [self.view insertSubview:cell.contentView atIndex:0];
@@ -164,18 +163,21 @@
     
     if (!_multiCell)
     {
-        self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:_app.data.destinations];
+        self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:[NSArray arrayWithArray:destinations]];
         _multiCell.delegate = self;
         [self.view addSubview:_multiCell.contentView];
     }
+    else
+    {
+        _multiCell.destinations = [NSArray arrayWithArray:destinations];
+    }
     
     [_multiCell updateDirections:location direction:direction];
-    //[_multiCell refreshViews];
 }
 
 - (void)clean
 {
-    NSInteger destinationsCount = [OADestinationsHelper instance].topDestinations.count;
+    NSInteger destinationsCount = [OADestinationsHelper instance].sortedDestinations.count;
     
     while (_destinationCells.count > destinationsCount)
     {
@@ -229,35 +231,21 @@
 
 - (void)updateFrame:(BOOL)animated
 {
-    CGFloat big;
-    CGFloat small;
-    
-    CGRect rect = [UIScreen mainScreen].bounds;
-    if (rect.size.width > rect.size.height) {
-        big = rect.size.width;
-        small = rect.size.height;
-    } else {
-        big = rect.size.height;
-        small = rect.size.width;
-    }
-    
+
     CGRect frame;
     
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && _singleLineOnly)
-        big = small;
+    NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);
     
-    NSInteger destinationsCount = [OADestinationsHelper instance].topDestinations.count;
-    
-    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation) && !_singleLineOnly)
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
-        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad || kOADestinationsSingleLineOnly)
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         {
             _singleLineMode = YES;
             CGFloat h = 50.0;
             if (destinationsCount == 0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, _top, small, h);
+            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -266,12 +254,11 @@
         }
         else
         {
-           
             _singleLineMode = NO;
             CGFloat h = 50.0 * destinationsCount + destinationsCount - 1.0;
             if (h < 0.0)
                 h = 0.0;
-            frame = CGRectMake(0.0, _top, small, h);
+            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
 
             if (_multiCell) {
                 _multiCell.contentView.hidden = YES;
@@ -281,7 +268,6 @@
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = NO;
         }
-        
     }
     else
     {
@@ -292,7 +278,7 @@
             if (destinationsCount == 0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, _top, big, h);
+            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -306,7 +292,7 @@
             if (destinationsCount == 0)
                 h = 0.0;
             
-            frame = CGRectMake(0.0, _top, big, h);
+            frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
             if (_multiCell)
                 _multiCell.contentView.hidden = NO;
@@ -325,19 +311,23 @@
 {
     CGFloat width = self.view.bounds.size.width;
     
-    if (_singleLineMode) {
-        if (_multiCell) {
+    if (_singleLineMode)
+    {
+        if (_multiCell)
+        {
             CGRect frame = CGRectMake(0.0, 0.0, width, 50.0);
             [_multiCell updateLayout:frame];
-            //_multiCell.contentView.hidden = NO;
         }
-    } else {
+    }
+    else
+    {
         int i = 0;
-        for (OADestinationCell *cell in _destinationCells) {
+        for (OADestinationCell *cell in _destinationCells)
+        {
             cell.drawSplitLine = i > 0;
             CGRect frame = CGRectMake(0.0, 50.0 * i + i - (cell.drawSplitLine ? 1 : 0), width, 50.0 + (cell.drawSplitLine ? 1 : 0));
             [cell updateLayout:frame];
-            //cell.contentView.hidden = NO;
+
             i++;
         }
     }
@@ -370,15 +360,16 @@
     
     if ([_app.data.destinations containsObject:destination])
     {
-        [_app.data.destinations removeObject:destination];
-        
+        [[OADestinationsHelper instance] removeDestination:destination];
+
         if (_delegate)
             [_delegate destinationRemoved:destination];
         
         // process single cells
         OADestinationCell *cell;
         for (OADestinationCell *c in _destinationCells)
-            if ([c.destinations containsObject:destination]) {
+            if ([c.destinations containsObject:destination])
+            {
                 cell = c;
                 break;
             }
@@ -392,11 +383,9 @@
         // process multi cell
         BOOL isCellEmpty = NO;
         
-        if (_multiCell.destinations.count > 1)
+        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
         {
-            NSMutableArray *arr = [NSMutableArray arrayWithArray:_multiCell.destinations];
-            [arr removeObject:destination];
-            _multiCell.destinations = [NSArray arrayWithArray:arr];
+            _multiCell.destinations = [NSArray arrayWithArray:[OADestinationsHelper instance].sortedDestinations];
         }
         else
         {
@@ -412,11 +401,9 @@
             [self updateFrame:YES];
             [_multiCell.contentView removeFromSuperview];
             _multiCell = nil;
-            if ([OADestinationsHelper instance].topDestinations.count == 0)
-            {
-                [self.view removeFromSuperview];
-                [self stopLocationUpdate];
-            }
+
+            [self.view removeFromSuperview];
+            [self stopLocationUpdate];
         }
     }
 }
@@ -437,7 +424,8 @@
     CLLocationDirection direction;
     [self obtainCurrentLocationDirection:&location direction:&direction];
 
-    [_app.data.destinations addObject:destination];
+    [[OADestinationsHelper instance] addDestination:destination];
+    
     if (destination.parking)
     {
         destination.color = _parkingColor;
@@ -450,16 +438,18 @@
         destination.markerResourceName = _markerNames[colorIndex];
     }
 
+    NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
+
     if (!_multiCell)
     {
-        self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:@[destination]];
+        self.multiCell = [[OAMultiDestinationCell alloc] initWithDestinations:[NSArray arrayWithArray:destinations]];
         _multiCell.delegate = self;
 
         [self.view addSubview:_multiCell.contentView];
     }
     else
     {
-        _multiCell.destinations = [NSArray arrayWithArray:_app.data.destinations];
+        _multiCell.destinations = [NSArray arrayWithArray:destinations];
     }
     [_multiCell updateDirections:location direction:direction];
     
@@ -587,7 +577,7 @@
 
 - (void)startLocationUpdate
 {
-    if ([OADestinationsHelper instance].topDestinations.count == 0 || self.locationServicesUpdateObserver)
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || self.locationServicesUpdateObserver)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];

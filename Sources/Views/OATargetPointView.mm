@@ -2159,7 +2159,16 @@
 - (IBAction)buttonRightClicked:(id)sender
 {
     if (_targetPoint.type == OATargetGPX)
+    {
         [self.delegate targetGoToGPXRoute];
+    }
+    else if (_targetPoint.type == OATargetGPXRoute)
+    {
+        [self.delegate targetHide];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [[OAGPXRouter sharedInstance] saveRoute];
+        });
+    }
 }
 
 #pragma mark

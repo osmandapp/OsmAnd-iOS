@@ -31,19 +31,19 @@
         {
             if ([e.name isEqualToString:@"routeInfo"])
             {
-                id visitedStr = [e.attributes objectForKey:@"visited"];
-                id visitedTimeStr = [e.attributes objectForKey:@"visitedTime"];
-                id disabledStr = [e.attributes objectForKey:@"disabled"];
-                id indexStr = [e.attributes objectForKey:@"index"];
+                NSString *visitedStr = [e.attributes objectForKey:@"visited"];
+                NSString *visitedTimeStr = [e.attributes objectForKey:@"visitedTime"];
+                NSString *disabledStr = [e.attributes objectForKey:@"disabled"];
+                NSString *indexStr = [e.attributes objectForKey:@"index"];
                 
                 if (visitedStr)
                     self.visited = [visitedStr boolValue];
                 if (visitedTimeStr)
-                    self.visitedTime = [visitedStr longValue];
+                    self.visitedTime = (long)[visitedTimeStr longLongValue];
                 if (disabledStr)
-                    self.disabled = [visitedStr boolValue];
+                    self.disabled = [disabledStr boolValue];
                 if (indexStr)
-                    self.index = [visitedStr intValue];
+                    self.index = [indexStr intValue];
             }
         }
     }
@@ -52,10 +52,10 @@
 - (void)applyRouteInfo
 {
     NSMutableDictionary *attrs = [NSMutableDictionary dictionary];
-    [attrs setValue:[NSNumber numberWithBool:self.visited] forKey:@"visited"];
-    [attrs setValue:[NSNumber numberWithLong:self.visitedTime] forKey:@"visitedTime"];
-    [attrs setValue:[NSNumber numberWithBool:self.disabled] forKey:@"disabled"];
-    [attrs setValue:[NSNumber numberWithInt:self.index] forKey:@"index"];
+    [attrs setValue:[NSString stringWithFormat:@"%d", self.visited] forKey:@"visited"];
+    [attrs setValue:[NSString stringWithFormat:@"%ld", self.visitedTime] forKey:@"visitedTime"];
+    [attrs setValue:[NSString stringWithFormat:@"%d", self.disabled] forKey:@"disabled"];
+    [attrs setValue:[NSString stringWithFormat:@"%d", self.index] forKey:@"index"];
     
     BOOL found = NO;
     if (self.extraData)
@@ -84,12 +84,34 @@
         e.attributes = [NSDictionary dictionaryWithDictionary:attrs];
         
         if (exts.extensions)
-            [exts.extensions arrayByAddingObjectsFromArray:@[e]];
+            exts.extensions = [exts.extensions arrayByAddingObjectsFromArray:@[e]];
         else
             exts.extensions = @[e];
     }
     
     [OAGPXDocument fillWpt:self.wpt usingWpt:self];
+}
+
+- (void)clearRouteInfo
+{
+    if (self.extraData)
+    {
+        OAGpxExtensions *exts = (OAGpxExtensions *)self.extraData;
+
+        NSMutableArray *newArray = [NSMutableArray arrayWithArray:exts.extensions];
+        
+        for (OAGpxExtension *e in newArray)
+        {
+            if ([e.name isEqualToString:@"routeInfo"])
+            {
+                [newArray removeObject:e];
+                break;
+            }
+        }
+        exts.extensions = [NSArray arrayWithArray:newArray];
+        
+        [OAGPXDocument fillWpt:self.wpt usingWpt:self];
+    }
 }
 
 @end

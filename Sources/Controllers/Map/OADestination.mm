@@ -7,8 +7,8 @@
 //
 
 #import "OADestination.h"
-
 #import "OsmAndApp.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -23,6 +23,7 @@
         self.desc = desc;
         self.latitude = latitude;
         self.longitude = longitude;
+        self.index = 0;
     }
     return self;
 }
@@ -39,6 +40,20 @@
     return [[OsmAndApp instance] getFormattedDistance:[self distance:latitude longitude:longitude]];
 }
 
+-(BOOL)isEqual:(id)object
+{
+    if (![object isKindOfClass:[OADestination class]])
+        return NO;
+    
+    OADestination *obj = (OADestination *)object;
+    return [obj.desc isEqualToString:self.desc] && [OAUtilities doublesEqualUpToDigits:5 source:obj.latitude destination:self.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:obj.longitude destination:self.longitude] && obj.routePoint == self.routePoint;
+}
+
+-(NSUInteger)hash
+{
+    return [self.desc hash] + self.longitude * 10000 + self.latitude * 10000 + (self.routePoint ? 1 : 0);
+}
+
 #pragma mark - NSCoding
 
 #define kDestinationDesc @"destination_desc"
@@ -46,7 +61,7 @@
 #define kDestinationLatitude @"destination_latitude"
 #define kDestinationLongitude @"destination_longitude"
 #define kDestinationMarkerName @"destination_marker_name"
-#define kDestinationShowOnTopName @"destination_show_on_top"
+#define kDestinationIndexName @"destination_index"
 
 #define kDestinationParking @"destination_parking"
 #define kDestinationParkingCarPickupDateEnabled @"destination_car_pickup_date_enabled"
@@ -54,6 +69,7 @@
 #define kDestinationParkingEventId @"destination_event_id"
 
 #define kDestinationRoutePointName @"destination_route_point"
+#define kDestinationRouteTargetPointName @"destination_route_target_point"
 #define kDestinationRoutePointIndexName @"destination_route_point_index"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
@@ -67,8 +83,9 @@
     [aCoder encodeObject:[NSNumber numberWithBool:_carPickupDateEnabled] forKey:kDestinationParkingCarPickupDateEnabled];
     [aCoder encodeObject:_carPickupDate forKey:kDestinationParkingCarPickupDate];
     [aCoder encodeObject:_eventIdentifier forKey:kDestinationParkingEventId];
-    [aCoder encodeObject:[NSNumber numberWithBool:_showOnTop] forKey:kDestinationShowOnTopName];
+    [aCoder encodeObject:[NSNumber numberWithInteger:_index] forKey:kDestinationIndexName];
     [aCoder encodeObject:[NSNumber numberWithBool:_routePoint] forKey:kDestinationRoutePointName];
+    [aCoder encodeObject:[NSNumber numberWithBool:_routeTargetPoint] forKey:kDestinationRouteTargetPointName];
     [aCoder encodeObject:[NSNumber numberWithInteger:_routePointIndex] forKey:kDestinationRoutePointIndexName];
 }
 
@@ -85,9 +102,10 @@
         _carPickupDateEnabled = [[aDecoder decodeObjectForKey:kDestinationParkingCarPickupDateEnabled] boolValue];
         _carPickupDate = [aDecoder decodeObjectForKey:kDestinationParkingCarPickupDate];
         _eventIdentifier = [aDecoder decodeObjectForKey:kDestinationParkingEventId];
-        _showOnTop = [[aDecoder decodeObjectForKey:kDestinationShowOnTopName] boolValue];
-        _routePoint = [[aDecoder decodeObjectForKey:kDestinationShowOnTopName] boolValue];
-        _routePointIndex = [[aDecoder decodeObjectForKey:kDestinationShowOnTopName] integerValue];
+        _index = [[aDecoder decodeObjectForKey:kDestinationIndexName] integerValue];
+        _routePoint = [[aDecoder decodeObjectForKey:kDestinationRoutePointName] boolValue];
+        _routeTargetPoint = [[aDecoder decodeObjectForKey:kDestinationRouteTargetPointName] boolValue];
+        _routePointIndex = [[aDecoder decodeObjectForKey:kDestinationRoutePointIndexName] integerValue];
     }
     return self;
 }

@@ -9,6 +9,9 @@
 #import "OADestinationsHelper.h"
 #import "OsmAndApp.h"
 #import "OADestination.h"
+#import "OAGpxRouteWptItem.h"
+#import "OAUtilities.h"
+
 
 @implementation OADestinationsHelper
 {
@@ -16,7 +19,7 @@
     OsmAndAppInstance _app;
 }
 
-@synthesize topDestinations = _topDestinations;
+@synthesize sortedDestinations = _sortedDestinations;
 
 + (OADestinationsHelper *)instance
 {
@@ -35,96 +38,187 @@
     {
         _app = [OsmAndApp instance];
         _syncObj = [[NSObject alloc] init];
-        [self refreshTopDestinations];
+        
+        _sortedDestinations = [NSMutableArray array];
+        
+        [self initSortedDestinations];
     }
     return self;
 }
 
--(NSArray *)topDestinations
+-(NSMutableArray *)sortedDestinations
 {
     @synchronized(_syncObj)
     {
-        return _topDestinations;
+        return _sortedDestinations;
     }
 }
 
-- (void)refreshTopDestinations
+- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints
 {
     @synchronized(_syncObj)
     {
-        OADestination *first;
-        OADestination *second;
-        NSInteger firstIndex = -1;
-        NSInteger secondIndex = -1;
+        NSMutableArray *routeDestinations = [NSMutableArray array];
         
-        NSInteger index = 0;
-        for (OADestination *destination in _app.data.destinations)
+        if (routePoints)
         {
-            if (!first || (!first.routePoint && destination.routePoint) || (!first.routePoint && !destination.routePoint && destination.showOnTop))
+            [routePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop)
+            {                
+                OADestination *destination = [[OADestination alloc] initWithDesc:item.point.name latitude:item.point.position.latitude longitude:item.point.position.longitude];
+                
+                destination.routePoint = YES;
+                
+                NSUInteger objIndex = [_app.data.destinations indexOfObject:destination];
+                if (objIndex != NSNotFound)
+                    destination = _app.data.destinations[objIndex];
+                
+                destination.routePointIndex = idx;
+                destination.routeTargetPoint = (item == [routePoints firstObject]);
+
+                if (item.point.color)
+                    destination.color = [OAUtilities colorFromString:item.point.color];
+                else
+                    destination.color = [UIColor whiteColor];
+                
+                [routeDestinations addObject:destination];
+            }];
+        }
+        
+        NSMutableArray *destinationsToRemove = [NSMutableArray array];
+        for (OADestination *destination in _app.data.destinations)
+            if (destination.routePoint && ![routeDestinations containsObject:destination])
+                [destinationsToRemove addObject:destination];
+
+        for (OADestination *destination in destinationsToRemove)
+        {
+            [_app.data.destinations removeObject:destination];
+            [self.sortedDestinations removeObject:destination];
+        }
+        
+        for (OADestination *destination in routeDestinations)
+        {
+            if (![_app.data.destinations containsObject:destination])
             {
-                if (!first.routePoint && !destination.routePoint && destination.showOnTop)
-                {
-                    second = first;
-                    secondIndex = firstIndex;
-                }
-                first = destination;
-                firstIndex = index;
+                [_app.data.destinations addObject:destination];
+                [self.sortedDestinations addObject:destination];
             }
-            else if (!second || (second.routePoint && !destination.routePoint) || (!destination.routePoint && destination.showOnTop))
-            {
-                second = destination;
-                secondIndex = index;
-            }
-            
-            index++;
         }
 
-        if (firstIndex == -1)
+        [self.sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
         {
-            _topDestinations = @[];
-            return;
-        }
-        else if (secondIndex == -1)
+            if (destination.routePoint && destination.routeTargetPoint && idx > 0)
+            {
+                OADestination *firstDestination = [self.sortedDestinations firstObject];
+                if (firstDestination.routePoint)
+                {
+                    [self.sortedDestinations removeObject:firstDestination];
+                    [self.sortedDestinations addObject:firstDestination];
+                }
+                [self.sortedDestinations removeObject:destination];
+                [self.sortedDestinations insertObject:destination atIndex:0];
+
+                *stop = YES;
+            }
+        }];
+     
+        [self refreshDestinationIndexes];
+    }
+}
+
+- (void)refreshDestinationIndexes
+{
+    @synchronized(_syncObj)
+    {
+        [self.sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
         {
-            _topDestinations = @[[NSNumber numberWithInteger:firstIndex]];
-            return;
-        }
-        
-        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-        if (newLocation)
+            NSUInteger index = [_app.data.destinations indexOfObject:destination];
+            ((OADestination *)_app.data.destinations[index]).index = idx;
+        }];
+    }
+}
+
+- (void)initSortedDestinations
+{
+    @synchronized(_syncObj)
+    {
+        NSArray *array = [_app.data.destinations sortedArrayUsingComparator:^NSComparisonResult(OADestination *destination1, OADestination *destination2)
         {
-            double distanceToFirst = [first distance:newLocation.coordinate.latitude longitude:newLocation.coordinate.longitude];
-            double distanceToSecond = [second distance:newLocation.coordinate.latitude longitude:newLocation.coordinate.longitude];
-            
-            if (distanceToSecond < distanceToFirst && distanceToFirst <= 20.0)
-                _topDestinations = @[[NSNumber numberWithInteger:secondIndex], [NSNumber numberWithInteger:firstIndex]];
+            if (destination2.index > destination1.index)
+                return NSOrderedAscending;
+            else if (destination2.index < destination1.index)
+                return NSOrderedDescending;
             else
-                _topDestinations = @[[NSNumber numberWithInteger:firstIndex], [NSNumber numberWithInteger:secondIndex]];
-        }
-        else
-        {
-            _topDestinations = @[[NSNumber numberWithInteger:firstIndex], [NSNumber numberWithInteger:secondIndex]];
-        }
+                return NSOrderedSame;
+        }];
+        
+        [self.sortedDestinations addObjectsFromArray:array];
+        
+        [self refreshDestinationIndexes];
     }
 }
 
 - (NSInteger)pureDestinationsCount
 {
     NSInteger res = 0;
-    for (OADestination *destination in _app.data.destinations)
+    for (OADestination *destination in self.sortedDestinations)
         if (!destination.routePoint)
             res++;
 
     return res;
 }
 
-- (void)showDestinationOnTop:(OADestination *)destination
+- (void)moveRoutePointOnTop:(NSInteger)pointIndex
 {
-    for (OADestination *d in _app.data.destinations)
-        if (!d.routePoint)
-            d.showOnTop = NO;
+    for (OADestination *destination in self.sortedDestinations)
+    {
+        if (destination.routePoint && destination.routePointIndex == pointIndex)
+        {
+            [self moveDestinationOnTop:destination];
+            break;
+        }
+    }
+}
+
+- (void)moveDestinationOnTop:(OADestination *)destination
+{
+    @synchronized(_syncObj)
+    {
+        NSUInteger newIndex = 0;
+        OADestination *firstDestination = [self.sortedDestinations firstObject];
+        if (firstDestination.routePoint && firstDestination.routeTargetPoint)
+            newIndex = 1;
+        
+        [self.sortedDestinations removeObject:destination];
+        [self.sortedDestinations insertObject:destination atIndex:newIndex];
+        
+        [self refreshDestinationIndexes];
+    }
     
-    destination.showOnTop = YES;
+    [_app.data.destinationsChangeObservable notifyEvent];
+}
+
+- (void)addDestination:(OADestination *)destination
+{
+    @synchronized(_syncObj)
+    {
+        [_app.data.destinations addObject:destination];
+        [self.sortedDestinations addObject:destination];
+        
+        [self refreshDestinationIndexes];
+    }
+    
+    [_app.data.destinationsChangeObservable notifyEvent];
+}
+
+- (void)removeDestination:(OADestination *)destination
+{
+    @synchronized(_syncObj)
+    {
+        [_app.data.destinations removeObject:destination];
+        [self.sortedDestinations removeObject:destination];
+        
+        [self refreshDestinationIndexes];
+    }
     
     [_app.data.destinationsChangeObservable notifyEvent];
 }

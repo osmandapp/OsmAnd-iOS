@@ -16,6 +16,7 @@
 #import "OAGpxRouteWptItem.h"
 #import "OAGPXRouteWaypointTableViewCell.h"
 #import "OARootViewController.h"
+#import "OADestinationsHelper.h"
 
 @interface OAGPXRouteCardController () <UIActionSheetDelegate>
 
@@ -232,7 +233,7 @@
 {
     _activeIndexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
     OAGpxRouteWptItem* item = [self getItem:row];
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Move on first place", @"Mark visited", nil];
+    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Move on first place", @"Mark visited", @"Move on top", nil];
     if (self.delegate)
         [self.delegate showActiveSheet:sheet];
 }
@@ -347,10 +348,20 @@
         }
         else
         {
-            if (buttonIndex == 0)
-                [self moveToActive:item];
-            else
-                [self moveToInactive:item];
+            switch (buttonIndex) {
+                case 0:
+                    [self moveToActive:item];
+                    break;
+                case 1:
+                    [self moveToInactive:item];
+                    break;
+                case 2:
+                    [[OADestinationsHelper instance] moveRoutePointOnTop:_activeIndexPath.row];
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

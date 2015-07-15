@@ -14,7 +14,6 @@
 
 @implementation OAMultiDestinationCell
 {
-    
     BOOL _editButtonActive;
 
     UIFont *_primaryFont;
@@ -39,7 +38,8 @@
 - (instancetype)initWithDestinations:(NSArray *)destinations
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.destinations = destinations;
     }
     return self;
@@ -50,9 +50,9 @@
     if (_editModeActive)
         return nil;
     
-    CGFloat width = _directionsView.bounds.size.width / _destinations.count;
+    CGFloat width = _directionsView.bounds.size.width / [self destinationsCount];
     
-    for (int i = 0; i < _destinations.count; i++) {
+    for (int i = 0; i < [self destinationsCount]; i++) {
         CGRect clickableFrame = CGRectMake(width * i, 0.0, width, _directionsView.bounds.size.height);
         if (CGRectContainsPoint(clickableFrame, point))
             return _destinations[i];
@@ -61,11 +61,16 @@
     return nil;
 }
 
+- (NSInteger)destinationsCount
+{
+    return MIN(2, _destinations.count);
+}
+
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;
     CGFloat dirViewWidth = frame.size.width - (kOADestinationEditModeEnabled ? 41.0 : 0.0);
-    if (_destinations.count == 3 && dirViewWidth / 3.0 < 140.0)
+    if ([self destinationsCount] == 3 && dirViewWidth / 3.0 < 140.0)
         h += 20.0;
         
     CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
@@ -76,7 +81,8 @@
     if (kOADestinationEditModeEnabled)
         _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
     
-    switch (_destinations.count) {
+    switch ([self destinationsCount])
+    {
         case 1:
         {
             BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
@@ -370,7 +376,7 @@
             _btnClose.tintColor = UIColorFromRGB(0x5081a6);
             [_btnClose setTitle:@"" forState:UIControlStateNormal];
             [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(openDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
+            [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
         }
         else if (!kOADestinationEditModeGlobal)
         {
@@ -444,7 +450,7 @@
         [_directionsView addSubview:_descLabel];
     }
     
-    if (_destinations.count > 1)
+    if ([self destinationsCount] > 1)
     {
         if (!self.colorView2)
         {
@@ -505,7 +511,7 @@
         }
     }
     
-    if (_destinations.count > 2)
+    if ([self destinationsCount] > 2)
     {
         if (!self.colorView3) {
             self.colorView3 = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
@@ -571,7 +577,7 @@
 {
     _destinations = destinations;
 
-    if (_destinations.count == 0 && _editModeActive)
+    if ([self destinationsCount] == 0 && _editModeActive)
         [self exitEditMode];
 
     if (_destinations) {
@@ -583,7 +589,7 @@
 
 - (void)updateMapCenterArrow:(BOOL)arrow
 {
-    for (int i = 0; i < _destinations.count; i++) {
+    for (int i = 0; i < [self destinationsCount]; i++) {
         OADestination *destination = _destinations[i];
         switch (i) {
             case 0:
@@ -674,7 +680,7 @@
 
 - (void)reloadData
 {
-    for (int i = 0; i < _destinations.count; i++)
+    for (int i = 0; i < [self destinationsCount]; i++)
     {
         OADestination *destination = _destinations[i];
         switch (i)
@@ -788,7 +794,7 @@
     }
     
     if (!_editModeActive) {
-        if (_destinations.count > 1 || kOADestinationEditModeGlobal) {
+        if ([self destinationsCount] > 1 || kOADestinationEditModeGlobal) {
             [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
             _editButtonActive = YES;
             
@@ -825,7 +831,7 @@
     self.currentLocation = myLocation;
     self.currentDirection = direction;
 
-    for (int i = 0; i < _destinations.count; i++)
+    for (int i = 0; i < [self destinationsCount]; i++)
     {
         OADestination *destination = _destinations[i];
         switch (i)
@@ -885,7 +891,7 @@
 - (void)closeDestinationEdit:(id)sender
 {
     UIButton *btn = (UIButton *)sender;
-    if (_delegate && _destinations.count > btn.tag)
+    if (_delegate && [self destinationsCount] > btn.tag)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [_delegate removeDestination:_destinations[btn.tag]];
@@ -893,6 +899,11 @@
     }
 }
 
+- (void)openHideDestinationsView:(id)sender
+{
+    if (self.delegate)
+        [_delegate openHideDestinationCardsView:sender];
+}
 
 @end
 

@@ -27,6 +27,7 @@
 
 - (void)setRouteWithGpx:(OAGPX *)gpx;
 - (void)cancelRoute;
+- (void)saveRoute;
 
 - (NSTimeInterval)getRouteDuration;
 - (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType;

@@ -428,6 +428,8 @@
     // Favorites
     [self saveFavoritesToPermamentStorage];
 
+    // GPX Route
+    [[OAGPXRouter sharedInstance] saveRoute];
 }
 
 - (void)saveFavoritesToPermamentStorage

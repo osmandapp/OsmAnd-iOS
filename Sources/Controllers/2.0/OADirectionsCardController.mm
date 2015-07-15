@@ -156,11 +156,17 @@
 
 - (void)updateDistanceAndDirection
 {
+    [self updateDistanceAndDirection:NO];
+}
+
+- (void)updateDistanceAndDirection:(BOOL)forceUpdate
+{
     if ([self isDecelerating] || [self isSwiping])
         return;
 
-    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3)
+    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
         return;
+    
     _lastUpdate = [[NSDate date] timeIntervalSince1970];
 
     // Obtain fresh location and heading
@@ -193,6 +199,7 @@
 - (void)onAppear
 {
     [self generateData];
+    [self updateDistanceAndDirection:YES];
     
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(updateDistanceAndDirection)
@@ -264,7 +271,7 @@
 
 - (void)showDirection:(OADestinationItem *)item
 {
-    [[OADestinationsHelper instance] showDestinationOnTop:item.destination];
+    [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
 }
 
 - (void)updateDirections

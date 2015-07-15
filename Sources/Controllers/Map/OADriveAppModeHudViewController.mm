@@ -223,7 +223,7 @@
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
     
-    if (![self.view.subviews containsObject:_destinationViewController.view] && [OADestinationsHelper instance].topDestinations.count > 0)
+    if (![self.view.subviews containsObject:_destinationViewController.view] && [OADestinationsHelper instance].sortedDestinations.count > 0)
         [self.view addSubview:_destinationViewController.view];
     
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;

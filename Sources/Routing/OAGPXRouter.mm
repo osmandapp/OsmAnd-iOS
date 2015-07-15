@@ -69,10 +69,9 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
             NSString *path = [_app.gpxPath stringByAppendingPathComponent:activeRouteFileName];
             self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
-
-            [self refreshDestinations];
-            [[OADestinationsHelper instance] refreshTopDestinations];
         }
+        
+        [self refreshDestinations];
     }
     return self;
 }
@@ -100,12 +99,24 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 - (void)cancelRoute
 {
+    NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
+    [_routeDoc clearAndSaveTo:path];
+    
     _routeDoc = nil;
     _gpx = nil;
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:nil];
 
     [self refreshDestinations];
     [self.routeCanceledObservable notifyEvent];
+}
+
+- (void)saveRoute
+{
+    if (_gpx && _routeDoc)
+    {
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
+        [_routeDoc saveTo:path];
+    }
 }
 
 - (void)startLocationObserver
@@ -178,30 +189,8 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 - (void)refreshDestinations
 {
-    NSMutableArray *destinations = [NSMutableArray array];
-    
-    if (self.routeDoc)
-    {
-        [self.routeDoc.activePoints enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop)
-         {
-             OADestination *destination = [[OADestination alloc] initWithDesc:item.point.name latitude:item.point.position.latitude longitude:item.point.position.longitude];
-             
-             destination.color = [OAUtilities colorFromString:item.point.color];
-             destination.routePoint = YES;
-             destination.routePointIndex = idx;
-             
-             [destinations addObject:destination];
-             
-             if (destinations.count == 2)
-                 *stop = YES;
-         }];
-    }
-    
-    for (OADestination *destination in _app.data.destinations)
-        if (!destination.routePoint)
-            [destinations addObject:destination];
-
-    _app.data.destinations = destinations;
+    NSArray *array = (self.routeDoc ? self.routeDoc.activePoints : nil);
+    [[OADestinationsHelper instance] updateRoutePointsWithinDestinations:array];
 }
 
 @end

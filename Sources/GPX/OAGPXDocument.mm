@@ -449,7 +449,8 @@
 {
     extension->name = QString::fromNSString(e.name);
     extension->value = QString::fromNSString(e.value);
-    for (NSString *key in e.attributes.allKeys) {
+    for (NSString *key in e.attributes.allKeys)
+    {
         extension->attributes[QString::fromNSString(key)] = QString::fromNSString(e.attributes[key]);
     }
     for (OAGpxExtension *es in e.subextensions)

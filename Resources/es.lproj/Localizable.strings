@@ -391,7 +391,7 @@
 "time_closed" = "Cerrado";
 "time_will_close" = "Cerrará a las";
 "time_will_open" = "Abrirá a las";
-"menu_active_trips" = "Activado";
+"menu_active_trips" = "Activo";
 "menu_all_trips" = "Todos los viajes";
 "total_time" = "Tiempo total";
 "moving_time" = "Tiempo moviéndose";

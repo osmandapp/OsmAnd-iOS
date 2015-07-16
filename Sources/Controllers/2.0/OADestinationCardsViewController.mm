@@ -167,8 +167,10 @@
      */
 }
 
-- (void)doViewAppear
+- (void)doViewWillAppear
 {
+    _isHiding = NO;
+
     indexPathForSwipingCell = nil;
     isDecelerating = NO;
     
@@ -178,10 +180,17 @@
         [cardController onAppear];
 }
 
-- (void)doViewDisappear
+- (void)doViewDisappeared
 {
+    _isHiding = NO;
+    
     for (OADestinationCardBaseController *cardController in _sections)
-        [cardController onDisappear];    
+        [cardController onDisappear];
+}
+
+-(void)doViewWillDisappear
+{
+    _isHiding = YES;
 }
 
 -(void)generateData
@@ -383,10 +392,6 @@
     return indexPathForSwipingCell != nil;
 }
 
-- (void)hide
-{
-    
-}
 
 -(void)cardRemoved:(NSInteger)section
 {

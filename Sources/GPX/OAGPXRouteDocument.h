@@ -8,7 +8,8 @@
 
 #import "OAGPXDocument.h"
 
-
+@class OAGpxWpt;
+@class OAGpxRoutePoint;
 
 @interface OAGPXRouteDocument : OAGPXDocument
 
@@ -35,5 +36,8 @@
 - (void)excludeGroupFromRouting:(NSString *)groupName;
 
 - (BOOL) clearAndSaveTo:(NSString *)filename;
+
+- (OAGpxRoutePoint *)addRoutePoint:(OAGpxWpt *)wpt;
+- (void)removeRoutePoint:(OAGpxWpt *)wpt;
 
 @end

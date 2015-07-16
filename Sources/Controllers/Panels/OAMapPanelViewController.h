@@ -50,12 +50,14 @@
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
 
 - (void)openTargetViewWithGPXRoute:(BOOL)pushed;
 - (void)openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
+- (void)openTargetViewWithDestination:(OADestination *)destination;
 
 - (void)displayGpxOnMap:(OAGPX *)item;
 

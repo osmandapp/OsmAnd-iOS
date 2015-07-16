@@ -16,6 +16,11 @@
     self = [super init];
     if (self)
     {
+        self.visited = NO;
+        self.visitedTime = 0;
+        self.disabled = NO;
+        self.index = 0;
+        
         [self fillWithWpt:gpxWpt];
         [self readRouteInfo];
     }

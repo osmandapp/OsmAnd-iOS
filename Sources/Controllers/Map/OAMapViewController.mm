@@ -33,6 +33,7 @@
 #import "OAUtilities.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXRouter.h"
+#import "OAGpxRoutePoint.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -497,7 +498,7 @@
 
     locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilder.setBaseOrder(206000);
+    locationAndCourseMarkerBuilder.setBaseOrder(-206000);
     locationAndCourseMarkerBuilder.setIsHidden(true);
     _myLocationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(_myLocationMainIconKey,
@@ -519,7 +520,7 @@
     
     locationAndCourseMarkerBuilderPedestrian.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderPedestrian.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderPedestrian.setBaseOrder(206001);
+    locationAndCourseMarkerBuilderPedestrian.setBaseOrder(-206001);
     locationAndCourseMarkerBuilderPedestrian.setIsHidden(true);
     _myLocationMainIconKeyPedestrian = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderPedestrian.addOnMapSurfaceIcon(_myLocationMainIconKeyPedestrian,
@@ -541,7 +542,7 @@
     
     locationAndCourseMarkerBuilderBicycle.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderBicycle.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderBicycle.setBaseOrder(206002);
+    locationAndCourseMarkerBuilderBicycle.setBaseOrder(-206002);
     locationAndCourseMarkerBuilderBicycle.setIsHidden(true);
     _myLocationMainIconKeyBicycle = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderBicycle.addOnMapSurfaceIcon(_myLocationMainIconKeyBicycle,
@@ -563,7 +564,7 @@
     
     locationAndCourseMarkerBuilderCar.setIsAccuracyCircleSupported(true);
     locationAndCourseMarkerBuilderCar.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
-    locationAndCourseMarkerBuilderCar.setBaseOrder(206003);
+    locationAndCourseMarkerBuilderCar.setBaseOrder(-206003);
     locationAndCourseMarkerBuilderCar.setIsHidden(true);
     _myLocationMainIconKeyCar = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(0);
     locationAndCourseMarkerBuilderCar.addOnMapSurfaceIcon(_myLocationMainIconKeyCar,
@@ -584,7 +585,7 @@
     _contextPinMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     _contextPinMarker = OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(210000)
+        .setBaseOrder(-210000)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
         .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
@@ -634,7 +635,7 @@
         
         OsmAnd::MapMarkerBuilder()
         .setIsAccuracyCircleSupported(false)
-        .setBaseOrder(205000)
+        .setBaseOrder(-205000)
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
@@ -3828,6 +3829,39 @@
         }
     }
 
+    if (!_geoInfoDocsGpxRoute.isEmpty())
+    {
+        const auto& doc = _geoInfoDocsGpxRoute.first();
+        
+        for (auto& loc : doc->locationMarks)
+        {
+            if (!loc->type.isEmpty())
+                [groups addObject:loc->type.toNSString()];
+            
+            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            {
+                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
+                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
+                
+                OAGpxWpt *wptItem = [OAGPXRouteDocument fetchWpt:w];
+                wptItem.wpt = w;
+                
+                self.foundWpt = wptItem;
+                
+                self.foundWptDocPath = _gpxDocFileRoute;
+                
+                found = YES;
+            }
+        }
+        
+        if (found)
+        {
+            self.foundWptGroups = [groups allObjects];
+            return YES;
+        }
+    }
+    
     return NO;
 }
 
@@ -3846,6 +3880,21 @@
         [[_app trackRecordingObservable] notifyEvent];
         
         return YES;
+    }
+    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
+    {
+        auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_geoInfoDocsGpxRoute.first());
+        auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+        
+        gpx->locationMarks.removeOne(_foundWpt.wpt);
+
+        [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+        [[OAGPXDatabase sharedDb] save];
+        
+        [[OAGPXRouter sharedInstance].routeDoc removeRoutePoint:self.foundWpt];
+        [[OAGPXRouter sharedInstance] saveRouteIfModified];
+        
+        [self hideContextPinMarker];
     }
     else
     {
@@ -3900,6 +3949,11 @@
         [[_app trackRecordingObservable] notifyEvent];
         
         return YES;
+    }
+    else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
+    {
+        [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
+        [[OAGPXRouter sharedInstance] saveRouteIfModified];
     }
     else
     {
@@ -4037,6 +4091,41 @@
             return YES;
         }
         
+        if ([_gpxDocFileRoute isEqualToString:[gpxFileName lastPathComponent]])
+        {
+            auto doc = std::const_pointer_cast<OsmAnd::GeoInfoDocument>(_geoInfoDocsGpxRoute.first());
+            auto gpx = std::dynamic_pointer_cast<OsmAnd::GpxDocument>(doc);
+            
+            std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> p;
+            p.reset(new OsmAnd::GpxDocument::GpxWpt());
+            wpt.wpt = p;
+
+            OAGpxRoutePoint *rp = [[OAGPXRouter sharedInstance].routeDoc addRoutePoint:wpt];
+            
+            gpx->locationMarks.append(p);
+            
+            self.foundWpt = rp;
+            self.foundWptDocPath = gpxFileName;
+            
+            [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:gpx->locationMarks.count()];
+            [[OAGPXDatabase sharedDb] save];
+            
+            NSMutableSet *groups = [NSMutableSet set];
+            for (auto& loc : gpx->locationMarks)
+            {
+                if (!loc->type.isEmpty())
+                    [groups addObject:loc->type.toNSString()];
+            }
+            
+            self.foundWptGroups = [groups allObjects];
+            
+            // update map
+            dispatch_async(dispatch_get_main_queue(), ^{
+                //[self initRendererWithGpxTracks];
+            });
+            
+            return YES;
+        }
     }
     
     return YES;
@@ -4397,7 +4486,7 @@
 
     OsmAnd::MapMarkerBuilder()
     .setIsAccuracyCircleSupported(false)
-    .setBaseOrder(207000)
+    .setBaseOrder(-207000)
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

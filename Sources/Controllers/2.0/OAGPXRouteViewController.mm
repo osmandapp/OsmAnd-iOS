@@ -296,9 +296,6 @@
 
 -(void)routePointsChanged
 {
-    [_gpxRouter.routeDoc buildRouteTrack];
-    [_gpxRouter.routeChangedObservable notifyEvent];
-
     if (self.delegate)
         [self.delegate contentChanged];
 }

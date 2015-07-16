@@ -10,6 +10,8 @@
 #import "OAGpxRoutePoint.h"
 #import "OAGpxRouteWptItem.h"
 #import "OsmAndApp.h"
+#import "OAGPXRouter.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/GeoInfoDocument.h>
 #include <OsmAndCore/GpxDocument.h>
@@ -18,11 +20,14 @@
 @implementation OAGPXRouteDocument
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
+    
+    int _lastIndex;
 }
 
 - (BOOL) loadFrom:(NSString *)filename
 {
     _syncObj = [[NSObject alloc] init];
+    _lastIndex = 0;
     
     document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
     return [self fetch:document];
@@ -186,8 +191,10 @@
                                     return NSOrderedSame;
                             }]];
     
-    [self buildActiveInactive];
+    if (self.locationPoints.count > 0)
+        _lastIndex = ((OAGpxRouteWptItem *)self.locationPoints[0]).point.index + 1;
     
+    [self buildActiveInactive];
     [self updateDistances];
 }
 
@@ -330,6 +337,66 @@
     }
 
     [self buildActiveInactive];
+}
+
+- (OAGpxRoutePoint *)addRoutePoint:(OAGpxWpt *)wpt
+{
+    OAGpxRoutePoint *p = [[OAGpxRoutePoint alloc] initWithWpt:wpt];
+    
+    p.index = _lastIndex++;
+    [p applyRouteInfo];
+    
+    @synchronized(self.syncObj)
+    {
+        self.locationMarks = [self.locationMarks arrayByAddingObject:p];
+        self.groups = [self readGroups];
+        
+        OAGpxRouteWptItem *item = [[OAGpxRouteWptItem alloc] init];
+        item.point = p;
+        self.locationPoints = [self.locationPoints arrayByAddingObject:item];
+    }
+    
+    [self buildActiveInactive];
+
+    [[OAGPXRouter sharedInstance] refreshRoute];
+    [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
+
+    return p;
+}
+
+- (void)removeRoutePoint:(OAGpxWpt *)wpt
+{
+    @synchronized(self.syncObj)
+    {
+        NSMutableArray *points = [NSMutableArray arrayWithArray:self.locationPoints];
+        for (OAGpxRouteWptItem *item in points)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:item.point.position.latitude destination:wpt.position.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:item.point.position.longitude destination:wpt.position.longitude])
+            {
+                [points removeObject:item];
+                break;
+            }
+        }
+        self.locationPoints = points;
+        
+        NSMutableArray *marks = [NSMutableArray arrayWithArray:self.locationMarks];
+        for (OAGpxRoutePoint *item in marks)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:item.position.latitude destination:wpt.position.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:item.position.longitude destination:wpt.position.longitude])
+            {
+                [marks removeObject:item];
+                break;
+            }
+        }
+        self.locationMarks = marks;
+    }
+    
+    [self buildActiveInactive];
+    
+    [[OAGPXRouter sharedInstance] refreshRoute];
+    [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
 }
 
 @end

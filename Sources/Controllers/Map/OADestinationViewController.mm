@@ -231,7 +231,6 @@
 
 - (void)updateFrame:(BOOL)animated
 {
-
     CGRect frame;
     
     NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);

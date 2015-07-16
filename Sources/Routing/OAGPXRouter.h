@@ -29,6 +29,7 @@
 - (void)cancelRoute;
 - (void)saveRoute;
 - (void)saveRouteIfModified;
+- (void)refreshRoute;
 
 - (NSTimeInterval)getRouteDuration;
 - (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType;

@@ -16,6 +16,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAMapViewController.h"
+#import "OAGpxRoutePoint.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -116,6 +117,11 @@
         [[NSUserDefaults standardUserDefaults] setObject:self.savedGroupName forKey:kWptDefaultGroupKey];
     
     [super okPressed];
+}
+
+-(BOOL)supportEditing
+{
+    return ![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
 }
 
 -(void)deleteItem

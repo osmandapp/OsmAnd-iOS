@@ -106,7 +106,10 @@
 - (void)didSelectRow:(NSInteger)row
 {
     OADestinationItem* item = [self getItem:row];
-    [self showDirection:item];
+    [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
+    
+    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel openTargetViewWithDestination:item.destination];
 }
 
 - (id)getItem:(NSInteger)row
@@ -267,11 +270,6 @@
     [self.tableView endUpdates];
     
     [CATransaction commit];
-}
-
-- (void)showDirection:(OADestinationItem *)item
-{
-    [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
 }
 
 - (void)updateDirections

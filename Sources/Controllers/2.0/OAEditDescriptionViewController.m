@@ -17,15 +17,17 @@
 {
     CGFloat _keyboardHeight;
     BOOL _isNew;
+    BOOL _readOnly;
 }
 
--(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew
+-(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew readOnly:(BOOL)readOnly
 {
     self = [super init];
     if (self)
     {
         self.desc = desc;
         _isNew = isNew;
+        _readOnly = readOnly;
         _keyboardHeight = 0.0;
     }
     return self;
@@ -80,6 +82,8 @@
 -(void)setupView
 {
     _textView.textContainerInset = UIEdgeInsetsMake(5,5,5,5);
+    _saveButton.hidden = _readOnly;
+    _textView.editable = !_readOnly;
 }
 
 // keyboard notifications register+process

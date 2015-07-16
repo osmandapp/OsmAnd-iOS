@@ -1018,9 +1018,9 @@
     
     if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking)
     {
-        [_buttonDirection setTitle:OALocalizedString(@"shared_string_delete") forState:UIControlStateNormal];
+        [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-        [_buttonDirection setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
+        [_buttonDirection setImage:[UIImage imageNamed:@"ic_trip_removepoint"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:[UIColor redColor]];
     }
     else
@@ -1873,7 +1873,7 @@
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
-        int wptCount = [OAGPXRouter sharedInstance].gpx.wptPoints;
+        int wptCount = [OAGPXRouter sharedInstance].routeDoc.activePoints.count;
         NSTimeInterval tripDuration = [[OAGPXRouter sharedInstance] getRouteDuration];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];

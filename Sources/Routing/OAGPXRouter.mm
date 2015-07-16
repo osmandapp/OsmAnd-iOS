@@ -38,6 +38,8 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     BOOL _isModified;
     
     OAAutoObserverProxy *_routeChangedObserver;
+    
+    NSObject *_saveSynchObj;
 }
 
 + (OAGPXRouter *)sharedInstance
@@ -56,6 +58,8 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     self = [super init];
     if (self)
     {
+        _saveSynchObj = [[NSObject alloc] init];
+        
         _app = [OsmAndApp instance];
         _lastUpdate = 0.0;
         _isModified = NO;
@@ -120,10 +124,14 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 - (void)saveRoute
 {
-    if (_gpx && _routeDoc)
+    @synchronized(_saveSynchObj)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
-        [_routeDoc saveTo:path];
+        if (_gpx && _routeDoc)
+        {
+            _isModified = NO;
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:_gpx.gpxFileName];
+            [_routeDoc saveTo:path];
+        }
     }
 }
 
@@ -131,9 +139,8 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 {
     if (_isModified)
     {
-        _isModified = NO;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[OAGPXRouter sharedInstance] saveRoute];
+            [self saveRoute];
         });
     }
 }
@@ -215,6 +222,13 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 {
     NSArray *array = (self.routeDoc ? self.routeDoc.activePoints : nil);
     [[OADestinationsHelper instance] updateRoutePointsWithinDestinations:array];
+}
+
+- (void)refreshRoute
+{
+    [self.routeDoc updateDistances];
+    [self refreshDestinations];
+    [self.routeDoc buildRouteTrack];
 }
 
 @end

@@ -647,8 +647,8 @@
         [item.point applyRouteInfo];
     }
     
-    [_gpxRouter.routeDoc updateDistances];
-    [_gpxRouter refreshDestinations];
+    [_gpxRouter refreshRoute];
+    [_gpxRouter.routeChangedObservable notifyEvent];
 
     if (self.delegate)
         [self.delegate routePointsChanged];
@@ -688,7 +688,7 @@
 
         NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
         
-        MGSwipeButton *deactivate = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_removepoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        MGSwipeButton *deactivate = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_visitedpoint"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
         {
             indexPathForSwipingCell = nil;
             NSIndexPath * indexPath = [self.tableView indexPathForCell:sender];

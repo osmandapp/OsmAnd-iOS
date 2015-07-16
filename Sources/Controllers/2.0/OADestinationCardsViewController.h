@@ -12,9 +12,12 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (nonatomic, readonly) BOOL isHiding;
+
 + (OADestinationCardsViewController *)sharedInstance;
 
-- (void)doViewAppear;
-- (void)doViewDisappear;
+- (void)doViewWillAppear;
+- (void)doViewDisappeared;
+- (void)doViewWillDisappear;
 
 @end

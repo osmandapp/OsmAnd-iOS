@@ -313,10 +313,10 @@
         self.buttonCancel.titleEdgeInsets = UIEdgeInsetsMake(0.0, 12.0, 0.0, 0.0);
         self.buttonCancel.imageEdgeInsets = UIEdgeInsetsMake(0.0, -12.0, 0.0, 0.0);
         self.buttonOK.hidden = YES;
-        self.deleteButton.hidden = NO;
+        self.deleteButton.hidden = ![self supportEditing];
     }
     
-    if (self.editing || ![self supportEditing])
+    if (self.editing)
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_remove"] forState:UIControlStateNormal];
     else
         [self.deleteButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
@@ -476,7 +476,7 @@
 
 - (void)changeDescriptionClicked
 {
-    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem];
+    _editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:self.desc isNew:self.newItem readOnly:![self supportEditing]];
     _editDescController.delegate = self;
     [self.navController pushViewController:_editDescController animated:YES];
 }
@@ -497,9 +497,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.editing)
-        return 4 + (self.showCoords ? 1 : 0);
+        return 4 + (self.showCoords ? 1 : 0) - (![self supportEditing] && self.desc.length == 0 ? 1 : 0);
     else
-        return 3 + (self.showCoords ? 1 : 0);
+        return 3 + (self.showCoords ? 1 : 0) - (![self supportEditing] && self.desc.length == 0 ? 1 : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -702,12 +702,14 @@
         }
         case 2: // color
         {
-            [self changeColorClicked];
+            if ([self supportEditing])
+                [self changeColorClicked];
             break;
         }
         case 3: // group
         {
-            [self changeGroupClicked];
+            if ([self supportEditing])
+                [self changeGroupClicked];
             break;
         }
         case 4: // description

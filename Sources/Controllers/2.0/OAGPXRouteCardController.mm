@@ -18,9 +18,6 @@
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
 
-@interface OAGPXRouteCardController () <UIActionSheetDelegate>
-
-@end
 
 @implementation OAGPXRouteCardController
 {
@@ -91,10 +88,13 @@
 
 - (void)didSelectRow:(NSInteger)row
 {
-    if (row == 0)
-        [self callFirstPointMenu];
-    else
-        [self callPointMenu:row];
+    if (row > 0)
+        [[OADestinationsHelper instance] moveRoutePointOnTop:row];
+
+    OAGpxRouteWptItem* item = [self getItem:row];
+    
+    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO showFullMenu:NO];
 }
 
 - (id)getItem:(NSInteger)row
@@ -136,9 +136,7 @@
         routeCell.leftIcon.transform = CGAffineTransformMakeRotation(routeItem.direction);
         routeCell.descIcon.image = [UIImage imageNamed:@"ic_trip_location"];
         
-        [routeCell hideRightButton:NO];
-        [routeCell.rightButton addTarget:self action:@selector(callFirstPointMenu) forControlEvents:UIControlEventTouchUpInside];
-        
+        [routeCell hideRightButton:YES];        
         [routeCell hideDescIcon:NO];
         
         routeCell.topVDotsVisible = NO;
@@ -221,24 +219,6 @@
         return @[visit];
     else
         return @[visit, driveTo];
-}
-
-- (void)callFirstPointMenu
-{
-    _activeIndexPath = [NSIndexPath indexPathForRow:0 inSection:self.section];
-    OAGpxRouteWptItem* item = [self getItem:0];
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Mark visited", nil];
-    if (self.delegate)
-        [self.delegate showActiveSheet:sheet];
-}
-
-- (void)callPointMenu:(NSInteger)row
-{
-    _activeIndexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
-    OAGpxRouteWptItem* item = [self getItem:row];
-    UIActionSheet * sheet = [[UIActionSheet alloc] initWithTitle:item.point.name delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Move on first place", @"Mark visited", @"Move on top", nil];
-    if (self.delegate)
-        [self.delegate showActiveSheet:sheet];
 }
 
 - (void)moveToInactive:(OAGpxRouteWptItem *)item
@@ -330,43 +310,8 @@
         [item.point applyRouteInfo];
     }
     
-    [_gpxRouter.routeDoc updateDistances];
-    [_gpxRouter refreshDestinations];
-
-    [_gpxRouter.routeDoc buildRouteTrack];
+    [_gpxRouter refreshRoute];
     [_gpxRouter.routeChangedObservable notifyEvent];
-}
-
-#pragma mark - UIActionSheetDelegate
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex != actionSheet.cancelButtonIndex)
-    {
-        OAGpxRouteWptItem* item = [self getItem:_activeIndexPath.row];
-        
-        if (_activeIndexPath.row == 0)
-        {
-            [self moveToInactive:item];
-        }
-        else
-        {
-            switch (buttonIndex) {
-                case 0:
-                    [self moveToActive:item];
-                    break;
-                case 1:
-                    [self moveToInactive:item];
-                    break;
-                case 2:
-                    [[OADestinationsHelper instance] moveRoutePointOnTop:_activeIndexPath.row];
-                    break;
-
-                default:
-                    break;
-            }
-        }
-    }
 }
 
 @end

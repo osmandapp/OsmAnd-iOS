@@ -207,6 +207,8 @@ typedef enum
         _mapNeedsRestore = NO;
         [self restoreMapAfterReuse];
     }
+    
+    self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -822,7 +824,7 @@ typedef enum
         
         [self destroyShadowButton];
 
-        self.sidePanelController.recognizesPanGesture = (self.targetMenuView.superview == nil);
+        self.sidePanelController.recognizesPanGesture = NO; //YES;
     }
 }
 
@@ -994,6 +996,7 @@ typedef enum
         UIColor* color = item.color;
         OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
         icon = [UIImage imageNamed:favCol.iconName];
+        caption = item.point.name;
     }
     
     if (targetPoint.type == OATargetLocation && poiType)
@@ -1812,7 +1815,7 @@ typedef enum
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
 
-    self.sidePanelController.recognizesPanGesture = YES;
+    self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
 -(void)hideTargetPointMenuAndPopup:(CGFloat)animationDuration
@@ -1873,7 +1876,7 @@ typedef enum
     _customStatusBarStyleNeeded = NO;
     [self setNeedsStatusBarAppearanceUpdate];
     
-    self.sidePanelController.recognizesPanGesture = YES;
+    self.sidePanelController.recognizesPanGesture = NO; //YES;
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -1969,6 +1972,11 @@ typedef enum
 
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
 {
+    [self openTargetViewWithWpt:item pushed:pushed showFullMenu:YES];
+}
+
+- (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
+{
     double lat = item.point.position.latitude;
     double lon = item.point.position.longitude;
     
@@ -2015,7 +2023,7 @@ typedef enum
     if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
         _activeTargetChildPushed = YES;
 
-    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+    [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
         if (pushed)
             [self goToTargetPointDefault];
         else
@@ -2162,6 +2170,11 @@ typedef enum
     }];
 }
 
+- (void)openTargetViewWithDestination:(OADestination *)destination
+{
+    [self destinationViewMoveTo:destination];
+}
+
 - (void)displayGpxOnMap:(OAGPX *)item
 {
     if (item.bounds.topLeft.latitude == DBL_MAX)
@@ -2291,7 +2304,7 @@ typedef enum
         [_hudViewController addChildViewController:cardsController];
         
         [_hudViewController.view addSubview:cardsController.view];
-        [cardsController doViewAppear];
+        [cardsController doViewWillAppear];
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
@@ -2299,12 +2312,14 @@ typedef enum
     }
     else
     {
+        [cardsController doViewWillDisappear];
+
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
             
         } completion:^(BOOL finished) {
             
-            [cardsController doViewDisappear];
+            [cardsController doViewDisappeared];
             [cardsController.view removeFromSuperview];
             [cardsController removeFromParentViewController];
         }];
@@ -2323,7 +2338,7 @@ typedef enum
     }
     
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
-    if (cardsController.view.superview && [OADestinationsHelper instance].sortedDestinations.count > 0)
+    if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
             cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
@@ -2333,6 +2348,15 @@ typedef enum
 
 - (void)destinationViewMoveTo:(OADestination *)destination
 {
+    if (destination.routePoint &&
+        [_mapViewController findWpt:CLLocationCoordinate2DMake(destination.latitude, destination.longitude)])
+    {
+        OAGpxWptItem *item = [[OAGpxWptItem alloc] init];
+        item.point = _mapViewController.foundWpt;
+        [self openTargetViewWithWpt:item pushed:NO showFullMenu:NO];
+        return;
+    }
+
     [_mapViewController showContextPinMarker:destination.latitude longitude:destination.longitude animated:YES];
 
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;

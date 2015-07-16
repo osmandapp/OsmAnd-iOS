@@ -24,8 +24,6 @@
 - (BOOL)isDecelerating;
 - (BOOL)isSwiping;
 
-- (void)hide;
-
 @end
 
 @interface OADestinationCardBaseController : NSObject

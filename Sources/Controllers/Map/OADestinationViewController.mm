@@ -63,19 +63,22 @@
         
         self.parkingColor = UIColorFromRGB(0x4A69EC);
 
-        self.colors = @[UIColorFromRGB(0x008596),
-                        UIColorFromRGB(0xEBA033),
-                        UIColorFromRGB(0x8ABD5F)];
-        self.markerNames = @[@"ic_destination_pin_2", @"ic_destination_pin_1", @"ic_destination_pin_3"];
+        self.colors = @[UIColorFromRGB(0xff9207),
+                        UIColorFromRGB(0x00bcd4),
+                        UIColorFromRGB(0x7fbd4d),
+                        UIColorFromRGB(0xff444a),
+                        UIColorFromRGB(0xcddc39)];
+        
+        self.markerNames = @[@"ic_destination_pin_1", @"ic_destination_pin_2", @"ic_destination_pin_3", @"ic_destination_pin_4", @"ic_destination_pin_5"];
         
         _gpxRouteDefinedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onDestinationsChanged)
+                                                             withHandler:@selector(onRouteDefined)
                                                               andObserve:[OAGPXRouter sharedInstance].routeDefinedObservable];
         _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onDestinationsChanged)
                                                               andObserve:[OAGPXRouter sharedInstance].routeChangedObservable];
         _gpxRouteCanceledObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onDestinationsChanged)
+                                                             withHandler:@selector(onRouteCanceled)
                                                               andObserve:[OAGPXRouter sharedInstance].routeCanceledObservable];
 
         _destinationsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -94,6 +97,26 @@
     {
         [self refreshCells];
     }
+}
+
+- (void)onRouteDefined
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self refreshCells];
+
+        if (self.delegate)
+            [self.delegate destinationsAdded];
+    });
+}
+
+- (void)onRouteCanceled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self refreshCells];
+        [self updateFrame:YES];
+    });
 }
 
 - (void)onDestinationsChanged
@@ -186,10 +209,10 @@
         [_destinationCells removeLastObject];
     }
     
-    if (destinationsCount == 0 && self.view.superview)
+    if (destinationsCount == 0)
     {
-        [self.view removeFromSuperview];
         [self stopLocationUpdate];
+        [self.view removeFromSuperview];
     }
 }
 
@@ -254,16 +277,19 @@
         else
         {
             _singleLineMode = NO;
-            CGFloat h = 50.0 * destinationsCount + destinationsCount - 1.0;
+            CGFloat h = 0.0;
+
+            if (destinationsCount > 0)
+                h = 50.0 + 35.0 * (destinationsCount - 1.0);
+
             if (h < 0.0)
                 h = 0.0;
+            
             frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
 
-            if (_multiCell) {
+            if (_multiCell)
                 _multiCell.contentView.hidden = YES;
-                if (_multiCell.editModeActive)
-                    [_multiCell exitEditMode];
-            }
+
             for (OADestinationCell *cell in _destinationCells)
                 cell.contentView.hidden = NO;
         }
@@ -321,12 +347,17 @@
     else
     {
         int i = 0;
+        CGFloat y = 0.0;
+        
         for (OADestinationCell *cell in _destinationCells)
         {
-            cell.drawSplitLine = i > 0;
-            CGRect frame = CGRectMake(0.0, 50.0 * i + i - (cell.drawSplitLine ? 1 : 0), width, 50.0 + (cell.drawSplitLine ? 1 : 0));
+            CGFloat h = (i == 0 ? 50.0 : 35.0);
+            
+            CGRect frame = CGRectMake(0.0, y, width, h);
             [cell updateLayout:frame];
 
+            y += h;
+            
             i++;
         }
     }
@@ -349,6 +380,18 @@
             OALog(@"%@", [error localizedDescription]);
         else
             destination.eventIdentifier = nil;
+    }
+}
+
+-(void)markAsVisited:(OADestination *)destination
+{
+    if (!destination.routePoint)
+    {
+        [self removeDestination:destination];
+    }
+    else
+    {
+        
     }
 }
 
@@ -394,9 +437,6 @@
         
         if (isCellEmpty)
         {
-            if (_multiCell.editModeActive)
-                [_multiCell exitEditMode];
-            
             [self updateFrame:YES];
             [_multiCell.contentView removeFromSuperview];
             _multiCell = nil;
@@ -453,6 +493,9 @@
     [_multiCell updateDirections:location direction:direction];
     
     [self onDestinationsChanged];
+    
+    if (self.delegate)
+        [self.delegate destinationsAdded];
     
     [self startLocationUpdate];
     
@@ -616,6 +659,16 @@
         if (destination)
             [_delegate destinationViewMoveTo:destination];
     }
+}
+
+
+- (void)updateCloseButton
+{
+    for (OADestinationCell *c in _destinationCells)
+        [c updateCloseButton];
+    
+    if (_multiCell)
+        [_multiCell updateCloseButton];
 }
 
 @end

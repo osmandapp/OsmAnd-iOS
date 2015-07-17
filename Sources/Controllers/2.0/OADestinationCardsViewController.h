@@ -12,6 +12,7 @@
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+@property (nonatomic, readonly) BOOL isVisible;
 @property (nonatomic, readonly) BOOL isHiding;
 
 + (OADestinationCardsViewController *)sharedInstance;

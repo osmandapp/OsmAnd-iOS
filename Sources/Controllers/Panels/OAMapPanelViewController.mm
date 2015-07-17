@@ -1359,10 +1359,8 @@ typedef enum
     else
     {
         OADestination *destination = [[OADestination alloc] initWithDesc:_formattedTargetName latitude:_targetLatitude longitude:_targetLongitude];
-        if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
-            [_hudViewController.view addSubview:_destinationViewController.view];
+
         UIColor *color = [_destinationViewController addDestination:destination];
-        
         if (color)
         {
             [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
@@ -2230,9 +2228,6 @@ typedef enum
     else
         destination.carPickupDate = nil;
     
-    if (![_hudViewController.view.subviews containsObject:_destinationViewController.view])
-        [_hudViewController.view addSubview:_destinationViewController.view];
-    
     UIColor *color = [_destinationViewController addDestination:destination];
     if (color)
     {
@@ -2288,6 +2283,14 @@ typedef enum
 
 #pragma mark - OADestinationViewControllerProtocol
 
+- (void)destinationsAdded
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController showDestinations];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController showDestinations];
+}
+
 - (void)destinationRemoved:(OADestination *)destination
 {
     [_mapViewController removeDestinationPin:destination.latitude longitude:destination.longitude];
@@ -2297,25 +2300,32 @@ typedef enum
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
+    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+    CGFloat h = DeviceScreenHeight - _destinationViewController.view.frame.size.height;
+
     if (!cardsController.view.superview)
     {
-        cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+        cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
 
         [_hudViewController addChildViewController:cardsController];
         
-        [_hudViewController.view addSubview:cardsController.view];
+        [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         [cardsController doViewWillAppear];
         
+        [self.destinationViewController updateCloseButton];
+
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+            cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
         }];
     }
     else
     {
         [cardsController doViewWillDisappear];
-
+        
+        [self.destinationViewController updateCloseButton];
+        
         [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, DeviceScreenHeight, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+            cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
             
         } completion:^(BOOL finished) {
             

@@ -10,10 +10,6 @@
 
 @interface OAMultiDestinationCell : OADestinationCell
 
-@property (nonatomic) UIButton *editButton1;
-@property (nonatomic) UIButton *editButton2;
-@property (nonatomic) UIButton *editButton3;
-
 @property (nonatomic) UIView *colorView2;
 @property (nonatomic) UIImageView *compassImage2;
 @property (nonatomic) UIView *markerView2;
@@ -30,15 +26,11 @@
 @property (nonatomic) UILabel *descLabel3;
 @property (nonatomic) UILabel *infoLabel3;
 
-@property (nonatomic, readonly) BOOL editModeActive;
-
 - (instancetype)initWithDestinations:(NSArray *)destinations;
 
 - (void)updateLayout:(CGRect)frame;
 - (void)reloadData;
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
-
--(void)exitEditMode;
 
 @end
 

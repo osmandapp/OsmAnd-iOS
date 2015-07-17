@@ -26,6 +26,8 @@
 
 @end
 
+@class OADestinationCardHeaderView;
+
 @interface OADestinationCardBaseController : NSObject
 
 @property (nonatomic, readonly) UITableView *tableView;
@@ -33,14 +35,11 @@
 @property (nonatomic, readonly) NSInteger section;
 @property (nonatomic, weak) id<OADestinationCardBaseControllerDelegate> delegate;
 @property (nonatomic, readonly) NSIndexPath *activeIndexPath;
+@property (nonatomic, readonly) OADestinationCardHeaderView *cardHeaderView;
 
 - (instancetype)initWithSection:(NSInteger)section tableView:(UITableView *)tableView;
 
 - (void)generateData;
-
-- (NSString *)headerTitle;
-- (NSString *)headerButtonName;
-- (void)headerButtonPressed;
 
 - (NSInteger)rowsCount;
 - (UITableViewCell *)cellForRow:(NSInteger)row;
@@ -53,8 +52,6 @@
 
 - (void)onAppear;
 - (void)onDisappear;
-
-- (void)setupHeaderButtonTarget:(UIButton *)rightButton;
 
 - (void)refreshSwipeButtons;
 - (void)refreshFirstRow;

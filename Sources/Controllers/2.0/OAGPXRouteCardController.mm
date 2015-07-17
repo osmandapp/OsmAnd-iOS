@@ -17,6 +17,7 @@
 #import "OAGPXRouteWaypointTableViewCell.h"
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
+#import "OAGPXRouteCardHeaderView.h"
 
 
 @implementation OAGPXRouteCardController
@@ -24,17 +25,28 @@
     OAGPXRouter *_gpxRouter;
     
     OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_gpxRouteChangedObserver;
+    
+    BOOL _isAnimating;
 
 }
 
 @synthesize activeIndexPath = _activeIndexPath;
+@synthesize cardHeaderView = _cardHeaderView;
 
 - (instancetype)initWithSection:(NSInteger)section tableView:(UITableView *)tableView
 {
     self = [super initWithSection:section tableView:tableView];
     if (self)
     {
+        _isAnimating = NO;
+        
         _gpxRouter = [OAGPXRouter sharedInstance];
+
+        _cardHeaderView = [[OAGPXRouteCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 60.0)];
+        _cardHeaderView.title.text = [OALocalizedString(@"gpx_route") uppercaseStringWithLocale:[NSLocale currentLocale]];
+        [_cardHeaderView setRightButtonTitle:[OALocalizedString(@"shared_string_modify") uppercaseStringWithLocale:[NSLocale currentLocale]]];
+        [_cardHeaderView.rightButton addTarget:self action:@selector(headerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -42,16 +54,6 @@
 - (void)generateData
 {
     //
-}
-
-- (NSString *)headerTitle
-{
-    return [OALocalizedString(@"gpx_waypoints") uppercaseStringWithLocale:[NSLocale currentLocale]];
-}
-
-- (NSString *)headerButtonName
-{
-    return [OALocalizedString(@"show_all") uppercaseStringWithLocale:[NSLocale currentLocale]];
 }
 
 - (void)headerButtonPressed
@@ -158,16 +160,28 @@
 
 - (void)updateDistanceAndDirection
 {
-    if ([self isDecelerating] || [self isSwiping])
+    if ([self isDecelerating] || [self isSwiping] || _isAnimating)
         return;
     
     [self refreshFirstRow];
+}
+
+- (void)onGpxRouteChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [((OAGPXRouteCardHeaderView *)self.cardHeaderView) updateStatistics];
+    });
 }
 
 - (void)onAppear
 {
     [self generateData];
     
+    _gpxRouteChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onGpxRouteChanged)
+                                                          andObserve:[OAGPXRouter sharedInstance].routeChangedObservable];
+
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(updateDistanceAndDirection)
                                                          andObserve:_gpxRouter.locationUpdatedObservable];
@@ -179,6 +193,12 @@
     {
         [_locationUpdateObserver detach];
         _locationUpdateObserver = nil;
+    }
+    
+    if (_gpxRouteChangedObserver)
+    {
+        [_gpxRouteChangedObserver detach];
+        _gpxRouteChangedObserver = nil;
     }
     
     if (_gpxRouter.routeDoc)
@@ -223,6 +243,8 @@
 
 - (void)moveToInactive:(OAGpxRouteWptItem *)item
 {
+    _isAnimating = YES;
+    
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
@@ -233,6 +255,8 @@
             [self refreshSwipeButtons];
             [_gpxRouter updateDistanceAndDirection:YES];
         }
+        
+        _isAnimating = NO;
         
     }];
     
@@ -268,12 +292,17 @@
 
 - (void)moveToActive:(OAGpxRouteWptItem *)item
 {
+    _isAnimating = YES;
+    
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
+        
         [self refreshVisibleRows];
         [self refreshSwipeButtons];
         [_gpxRouter updateDistanceAndDirection:YES];
+        
+        _isAnimating = NO;
     }];
     
     [self.tableView beginUpdates];

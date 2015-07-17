@@ -14,8 +14,6 @@
 
 @implementation OAMultiDestinationCell
 {
-    BOOL _editButtonActive;
-
     UIFont *_primaryFont;
     UIFont *_unitsFont;
     
@@ -47,9 +45,6 @@
 
 - (OADestination *)destinationByPoint:(CGPoint)point
 {
-    if (_editModeActive)
-        return nil;
-    
     CGFloat width = _directionsView.bounds.size.width / [self destinationsCount];
     
     for (int i = 0; i < [self destinationsCount]; i++) {
@@ -69,7 +64,7 @@
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - (kOADestinationEditModeEnabled ? 41.0 : 0.0);
+    CGFloat dirViewWidth = frame.size.width - 41.0;
     if ([self destinationsCount] == 3 && dirViewWidth / 3.0 < 140.0)
         h += 20.0;
         
@@ -78,8 +73,7 @@
     _contentView.frame = newFrame;
     _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h - 0.0);
     
-    if (kOADestinationEditModeEnabled)
-        _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
+    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
     
     switch ([self destinationsCount])
     {
@@ -365,9 +359,9 @@
         [_contentView addSubview:self.directionsView];
     }
     
-    if (!self.btnClose && kOADestinationEditModeEnabled)
+    if (!self.btnClose)
     {
-        if (kOADestinationEditModeGlobal && self.destinationIndex == 0)
+        if (self.destinationIndex == 0)
         {
             self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
             _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
@@ -377,15 +371,6 @@
             [_btnClose setTitle:@"" forState:UIControlStateNormal];
             [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
             [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if (!kOADestinationEditModeGlobal)
-        {
-            self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
-            _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
-            _btnClose.opaque = YES;
-            [_btnClose setTitle:@"" forState:UIControlStateNormal];
-            [_btnClose setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
         }
         
         if (self.btnClose)
@@ -400,13 +385,6 @@
         _compassImage.contentMode = UIViewContentModeCenter;
         [_colorView addSubview:self.compassImage];
         [_directionsView addSubview:self.colorView];
-        
-        self.editButton1 = [UIButton buttonWithType:UIButtonTypeSystem];
-        _editButton1.frame = _colorView.bounds;
-        [_editButton1 addTarget:self action:@selector(closeDestinationEdit:) forControlEvents:UIControlEventTouchUpInside];
-        [_editButton1 setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-        _editButton1.tintColor = [UIColor whiteColor];
-        _editButton1.tag = 0;
     }
     
     if (!self.markerView)
@@ -460,13 +438,6 @@
             _compassImage2.contentMode = UIViewContentModeCenter;
             [_colorView2 addSubview:self.compassImage2];
             [_directionsView addSubview:self.colorView2];
-
-            self.editButton2 = [UIButton buttonWithType:UIButtonTypeSystem];
-            _editButton2.frame = _colorView2.bounds;
-            [_editButton2 addTarget:self action:@selector(closeDestinationEdit:) forControlEvents:UIControlEventTouchUpInside];
-            [_editButton2 setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-            _editButton2.tintColor = [UIColor whiteColor];
-            _editButton2.tag = 1;
         }
         
         if (!self.markerView2)
@@ -520,13 +491,6 @@
             _compassImage3.contentMode = UIViewContentModeCenter;
             [_colorView3 addSubview:self.compassImage3];
             [_directionsView addSubview:self.colorView3];
-
-            self.editButton3 = [UIButton buttonWithType:UIButtonTypeSystem];
-            _editButton3.frame = _colorView3.bounds;
-            [_editButton3 addTarget:self action:@selector(closeDestinationEdit:) forControlEvents:UIControlEventTouchUpInside];
-            [_editButton3 setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-            _editButton3.tintColor = [UIColor whiteColor];
-            _editButton3.tag = 2;
         }
         
         if (!self.markerView3)
@@ -576,9 +540,6 @@
 - (void)setDestinations:(NSArray *)destinations
 {
     _destinations = destinations;
-
-    if ([self destinationsCount] == 0 && _editModeActive)
-        [self exitEditMode];
 
     if (_destinations) {
         [self buildUI];
@@ -687,13 +648,9 @@
         {
             case 0:
                 self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
-                if (_editModeActive) {
-                    _compassImage.alpha = 0.0;
-                    [_colorView addSubview:self.editButton1];
-                } else {
-                    _compassImage.alpha = 1.0;
-                    [self updateDirection:destination imageView:self.compassImage];
-                }
+                _compassImage.alpha = 1.0;
+                [self updateDirection:destination imageView:self.compassImage];
+                
                 if (destination.parking)
                 {
                     [self.markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
@@ -722,13 +679,10 @@
                 
             case 1:
                 self.compassImage2.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
-                if (_editModeActive) {
-                    _compassImage2.alpha = 0.0;
-                    [_colorView2 addSubview:self.editButton2];
-                } else {
-                    _compassImage2.alpha = 1.0;
-                    [self updateDirection:destination imageView:self.compassImage2];
-                }
+
+                _compassImage2.alpha = 1.0;
+                [self updateDirection:destination imageView:self.compassImage2];
+                
                 if (destination.parking)
                 {
                     [self.markerImage2 setImage:[UIImage imageNamed:@"destination_parking_place"]];
@@ -756,13 +710,10 @@
                 
             case 2:
                 self.compassImage3.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
-                if (_editModeActive) {
-                    _compassImage3.alpha = 0.0;
-                    [_colorView3 addSubview:self.editButton3];
-                } else {
-                    _compassImage3.alpha = 1.0;
-                    [self updateDirection:destination imageView:self.compassImage3];
-                }
+
+                _compassImage3.alpha = 1.0;
+                [self updateDirection:destination imageView:self.compassImage3];
+                
                 if (destination.parking)
                 {
                     [self.markerImage3 setImage:[UIImage imageNamed:@"destination_parking_place"]];
@@ -793,37 +744,7 @@
         }
     }
     
-    if (!_editModeActive) {
-        if ([self destinationsCount] > 1 || kOADestinationEditModeGlobal) {
-            [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
-            _editButtonActive = YES;
-            
-        } else {
-            [_btnClose setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-            _editButtonActive = NO;
-        }
-    }
-
-}
-
--(void)exitEditMode
-{
-    _editModeActive = NO;
-    [self hideEditButtons];
-
-    _compassImage.alpha = 1.0;
-    _compassImage2.alpha = 1.0;
-    _compassImage3.alpha = 1.0;
-}
-
--(void)hideEditButtons
-{
-    if (_editButton1)
-        [_editButton1 removeFromSuperview];
-    if (_editButton2)
-        [_editButton2 removeFromSuperview];
-    if (_editButton3)
-        [_editButton3 removeFromSuperview];
+    [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
 }
 
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
@@ -861,43 +782,12 @@
 
 - (void)closeDestination:(id)sender
 {
-    if (_editModeActive)
-    {
-        _editModeActive = NO;
-        [UIView animateWithDuration:.2 animations:^{
-            [self hideEditButtons];
-            [self reloadData];
-        }];
-        return;
-    }
-    
-    if (_editButtonActive)
-    {
-        _editModeActive = YES;
-        [UIView animateWithDuration:.2 animations:^{
-            [self reloadData];
-        }];
-        
-    }
-    else
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (_delegate)
-                [_delegate removeDestination:_destinations[0]];
-        });
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_delegate)
+            [_delegate removeDestination:_destinations[0]];
+    });
 }
 
-- (void)closeDestinationEdit:(id)sender
-{
-    UIButton *btn = (UIButton *)sender;
-    if (_delegate && [self destinationsCount] > btn.tag)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_delegate removeDestination:_destinations[btn.tag]];
-        });
-    }
-}
 
 - (void)openHideDestinationsView:(id)sender
 {

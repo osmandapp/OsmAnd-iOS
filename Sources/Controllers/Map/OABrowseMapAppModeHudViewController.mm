@@ -207,10 +207,8 @@
     _destinationViewController.singleLineOnly = NO;
     _destinationViewController.top = 20.0;
     
-    if (![self.view.subviews containsObject:_destinationViewController.view] &&
-        [OADestinationsHelper instance].sortedDestinations.count > 0)
-        [self.view addSubview:_destinationViewController.view];
-
+    [self showDestinations];
+    
     //IOS-222
     if ([[NSUserDefaults standardUserDefaults] objectForKey:kUDLastMapModePositionTrack] && !_driveModeActive)
     {
@@ -223,7 +221,11 @@
     {
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, 25.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.view addSubview:self.widgetsView];
+        
+        if (_destinationViewController && _destinationViewController.view.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+        else
+            [self.view addSubview:self.widgetsView];
     }
     
     _driveModeActive = NO;
@@ -525,6 +527,19 @@
         return UIStatusBarStyleDefault;
     else
         return UIStatusBarStyleLightContent;
+}
+
+- (void)showDestinations
+{
+    if (![self.view.subviews containsObject:_destinationViewController.view] &&
+        [OADestinationsHelper instance].sortedDestinations.count > 0)
+    {
+        [self.view addSubview:_destinationViewController.view];
+        [self.view insertSubview:self.statusBarView aboveSubview:_destinationViewController.view];
+        
+        if (self.widgetsView && self.widgetsView.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+    }
 }
 
 -(void)updateDestinationViewLayout:(BOOL)animated

@@ -17,6 +17,7 @@
 #import "OADestinationCell.h"
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
+#import "OADestinationCardHeaderView.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -42,9 +43,12 @@
     NSMutableArray *_items;
     
     NSTimeInterval _lastUpdate;
+    
+    BOOL _isAnimating;
 }
 
 @synthesize activeIndexPath = _activeIndexPath;
+@synthesize cardHeaderView = _cardHeaderView;
 
 - (instancetype)initWithSection:(NSInteger)section tableView:(UITableView *)tableView
 {
@@ -52,6 +56,12 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        _isAnimating = NO;
+        
+        _cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)];
+        _cardHeaderView.title.text = [OALocalizedString(@"directions") uppercaseStringWithLocale:[NSLocale currentLocale]];
+        [_cardHeaderView.rightButton removeFromSuperview];
+        
         _items = [NSMutableArray array];
         [self generateData];
     }
@@ -71,11 +81,6 @@
             [_items addObject:item];
         }
     }
-}
-
-- (NSString *)headerTitle
-{
-    return [OALocalizedString(@"directions") uppercaseStringWithLocale:[NSLocale currentLocale]];
 }
 
 - (NSInteger)rowsCount
@@ -129,7 +134,7 @@
     
     if (destItem.destination.parking)
     {
-        dirCell.leftIcon.image = [UIImage imageNamed:destItem.destination.markerResourceName];
+        dirCell.leftIcon.image = [UIImage imageNamed:@"ic_parking_pin_small"];
         [dirCell.titleLabel setText:destItem.destination.desc];
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(destItem.direction);
         
@@ -164,7 +169,7 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self isDecelerating] || [self isSwiping])
+    if ([self isDecelerating] || [self isSwiping] || _isAnimating)
         return;
 
     if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
@@ -240,6 +245,8 @@
 
 - (void)removeDirection:(OADestinationItem *)item
 {
+    _isAnimating = YES;
+    
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
@@ -249,6 +256,8 @@
             [self refreshVisibleRows];
             [self refreshSwipeButtons];
         }
+        
+        _isAnimating = NO;
     }];
     
     [self.tableView beginUpdates];

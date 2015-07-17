@@ -50,6 +50,8 @@
     
     NSIndexPath *indexPathForSwipingCell;
     NSIndexPath *_activeIndexPath;
+    
+    BOOL _isAnimating;
 }
 
 - (instancetype)init
@@ -58,6 +60,7 @@
     if (self)
     {
         _app = [OsmAndApp instance];
+        _isAnimating = NO;
         _gpxRouter = [OAGPXRouter sharedInstance];
         
         isDecelerating = NO;
@@ -68,7 +71,7 @@
 
 - (void)updateDistanceAndDirection
 {
-    if (isDecelerating || isMoving || indexPathForSwipingCell)
+    if (isDecelerating || isMoving || indexPathForSwipingCell || _isAnimating)
         return;
     
     [self refreshFirstWaypointRow];
@@ -298,11 +301,17 @@
 
 - (void)moveToInactive:(OAGpxRouteWptItem *)item
 {
+    _isAnimating = YES;
+    
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
+        
         [self refreshVisibleRows];
         [self refreshSwipeButtons];
+
+        _isAnimating = NO;
+
         [_gpxRouter updateDistanceAndDirection:YES];
     }];
     
@@ -325,11 +334,17 @@
 
 - (void)moveToActive:(OAGpxRouteWptItem *)item
 {
+    _isAnimating = YES;
+
     [CATransaction begin];
     
     [CATransaction setCompletionBlock:^{
+        
         [self refreshVisibleRows];
         [self refreshSwipeButtons];
+        
+        _isAnimating = NO;
+        
         [_gpxRouter updateDistanceAndDirection:YES];
     }];
     

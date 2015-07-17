@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+static const CGFloat DESTINATION_CARD_TOP_INSET = 9.0;
+static const CGFloat DESTINATION_CARD_BORDER = 14.0;
+
 @interface OADestinationCardHeaderView : UIView
 
 @property (nonatomic) UIView *containerView;

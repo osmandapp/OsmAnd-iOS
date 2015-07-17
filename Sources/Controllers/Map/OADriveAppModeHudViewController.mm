@@ -223,8 +223,7 @@
                                                                 withHandler:@selector(onLocationServicesUpdate)
                                                                  andObserve:_app.locationServices.updateObserver];
     
-    if (![self.view.subviews containsObject:_destinationViewController.view] && [OADestinationsHelper instance].sortedDestinations.count > 0)
-        [self.view addSubview:_destinationViewController.view];
+    [self showDestinations];
     
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
 
@@ -233,7 +232,11 @@
     {
         _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 5.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
         _widgetsView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin;
-        [self.view addSubview:self.widgetsView];
+
+        if (_destinationViewController && _destinationViewController.view.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+        else
+            [self.view addSubview:self.widgetsView];
     }
     
     _currentAltitudeWidget.hidden = !_settings.settingShowAltInDriveMode;
@@ -713,6 +716,18 @@
 #endif // defined(OSMAND_IOS_DEV)
 }
 
+- (void)showDestinations
+{
+    if (![self.view.subviews containsObject:_destinationViewController.view] &&
+        [OADestinationsHelper instance].sortedDestinations.count > 0)
+    {
+        [self.view addSubview:_destinationViewController.view];
+        [self.view insertSubview:self.currentPositionContainer aboveSubview:_destinationViewController.view];
+        
+        if (self.widgetsView && self.widgetsView.superview)
+            [self.view insertSubview:self.widgetsView belowSubview:_destinationViewController.view];
+    }
+}
 
 - (void)updateDestinationViewLayout:(BOOL)animated
 {

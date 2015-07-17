@@ -16,6 +16,7 @@
 
 - (void)destinationViewLayoutDidChange:(BOOL)animated;
 - (void)destinationViewMoveTo:(OADestination *)destination;
+- (void)destinationsAdded;
 - (void)destinationRemoved:(OADestination *)destination;
 - (void)openHideDestinationCardsView;
 
@@ -37,6 +38,7 @@
 - (void) doLocationUpdate;
 
 - (void)updateDestinationsUsingMapCenter;
+- (void)updateCloseButton;
 
 - (void)removeParkingReminderFromCalendar:(OADestination *)destination;
 

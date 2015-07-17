@@ -9,14 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-#define kOADestinationEditModeEnabled YES
-#define kOADestinationEditModeGlobal YES
 
 @class OADestination;
 
 @protocol OADestinatioCellProtocol <NSObject>
 @optional
 
+- (void)markAsVisited:(OADestination *)destination;
 - (void)removeDestination:(OADestination *)destination;
 - (void)openHideDestinationCardsView:(id)sender;
 
@@ -25,6 +24,7 @@
 @interface OADestinationCell : NSObject
 
 @property (nonatomic) UIView *directionsView;
+@property (nonatomic) UIButton *btnOK;
 @property (nonatomic) UIButton *btnClose;
 @property (nonatomic) UIView *colorView;
 @property (nonatomic) UIImageView *compassImage;
@@ -37,7 +37,6 @@
 @property (nonatomic) UIView *contentView;
 @property (nonatomic) NSArray *destinations;
 @property (weak, nonatomic) id<OADestinatioCellProtocol> delegate;
-@property (nonatomic, assign) BOOL drawSplitLine;
 
 @property (nonatomic, assign) CLLocationCoordinate2D currentLocation;
 @property (nonatomic, assign) CLLocationDirection currentDirection;
@@ -45,12 +44,16 @@
 @property (nonatomic, assign) BOOL mapCenterArrow;
 @property (nonatomic, assign) CGFloat infoLabelWidth;
 
+@property (nonatomic, assign) BOOL buttonOkVisible;
+
 @property (nonatomic, assign) NSInteger destinationIndex;
 
 @property (nonatomic) UIFont *primaryFont;
 @property (nonatomic) UIFont *unitsFont;
+@property (nonatomic) UIFont *descFont;
 @property (nonatomic) UIColor *primaryColor;
 @property (nonatomic) UIColor *unitsColor;
+@property (nonatomic) UIColor *descColor;
 
 
 + (NSString *)parkingTimeStr:(OADestination *)destination shortText:(BOOL)shortText;
@@ -63,6 +66,8 @@
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction;
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
+
+- (void)updateCloseButton;
 
 - (OADestination *)destinationByPoint:(CGPoint)point;
 

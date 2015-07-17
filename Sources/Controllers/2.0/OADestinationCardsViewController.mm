@@ -37,7 +37,6 @@
     OsmAndAppInstance _app;
     
     NSArray *_sections;
-    NSArray *_headerViews;
 
     BOOL isDecelerating;
     
@@ -62,6 +61,7 @@
         _app = [OsmAndApp instance];
         
         isDecelerating = NO;
+        _isVisible = NO;
     }
     return self;
 }
@@ -170,6 +170,7 @@
 - (void)doViewWillAppear
 {
     _isHiding = NO;
+    _isVisible = YES;
 
     indexPathForSwipingCell = nil;
     isDecelerating = NO;
@@ -191,6 +192,7 @@
 -(void)doViewWillDisappear
 {
     _isHiding = YES;
+    _isVisible = NO;
 }
 
 -(void)generateData
@@ -222,29 +224,6 @@
 
     _sections = [NSArray arrayWithArray:sections];
 
-    
-    // Build cards headers
-    
-    NSMutableArray *headers = [NSMutableArray array];
-    for (OADestinationCardBaseController* cardController in _sections)
-    {
-        OADestinationCardHeaderView *cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.frame.size.width, 50.0)];
-        if ([cardController headerTitle])
-        {
-            cardHeaderView.title.text = [cardController headerTitle];
-            [cardHeaderView setRightButtonTitle:[cardController headerButtonName]];
-            [cardController setupHeaderButtonTarget:cardHeaderView.rightButton];
-        }
-        else
-        {
-            [cardHeaderView.rightButton removeFromSuperview];
-        }
-        
-        [headers addObject:cardHeaderView];
-    }
-    
-    _headerViews = [NSArray arrayWithArray:headers];
-
     if (reload)
         [self.tableView reloadData];
 }
@@ -259,7 +238,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return _headerViews[section];
+    return [[self getCardController:section] cardHeaderView];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -322,7 +301,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 50.0;
+    return [[self getCardController:section] cardHeaderView].bounds.size.height;
 }
 
 #pragma mark Swipe Delegate

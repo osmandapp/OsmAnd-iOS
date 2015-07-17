@@ -26,20 +26,6 @@
     
 }
 
-- (NSString *)headerTitle
-{
-    return nil;
-}
-
-- (NSString *)headerButtonName
-{
-    return nil;
-}
-- (void)headerButtonPressed
-{
-    
-}
-
 - (NSInteger)rowsCount
 {
     return 0;
@@ -77,12 +63,6 @@
 - (void)onDisappear
 {
     
-}
-
-- (void)setupHeaderButtonTarget:(UIButton *)rightButton
-{
-    [rightButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [rightButton addTarget:self action:@selector(headerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)refreshSwipeButtons;

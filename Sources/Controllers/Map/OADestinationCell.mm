@@ -11,16 +11,22 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OADestinationCardsViewController.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
 
 @implementation OADestinationCell
+{
+    BOOL _firstRow;
+    CGFloat _height;
+}
 
 -(instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
@@ -29,9 +35,19 @@
 - (instancetype)initWithDestination:(OADestination *)destination destinationIndex:(NSInteger)destinationIndex
 {
     self = [super init];
-    if (self) {
-        [self commonInit];
+    if (self)
+    {
         _destinationIndex = destinationIndex;
+        
+        _firstRow = _destinationIndex == 0;
+        
+        if (_firstRow)
+            _height = 50.0;
+        else
+            _height = 35.0;
+
+        [self commonInit];
+
         self.destinations = @[destination];
     }
     return self;
@@ -41,11 +57,24 @@
 {
     _infoLabelWidth = 100.0;
     
-    _primaryFont = [UIFont fontWithName:@"AvenirNext-Bold" size:18];
-    _unitsFont = [UIFont fontWithName:@"AvenirNext-Medium" size:15];
+    if (_firstRow)
+    {
+        _primaryFont = [UIFont fontWithName:@"AvenirNext-Bold" size:18];
+        _unitsFont = [UIFont fontWithName:@"AvenirNext-Medium" size:15];
+        _descFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _descColor = UIColorFromRGB(0x8ea2b9);
+    }
+    else
+    {
+        _primaryFont = [UIFont fontWithName:@"AvenirNext-Bold" size:15];
+        _unitsFont = [UIFont fontWithName:@"AvenirNext-Medium" size:13];
+        _descFont = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _descColor = UIColorFromRGB(0x6C95B1);
+    }
     
     _primaryColor = UIColorFromRGB(0xffffff);
     _unitsColor = UIColorFromRGB(0xffffff);
+    
 }
 
 - (OADestination *)destinationByPoint:(CGPoint)point
@@ -58,82 +87,95 @@
 
 - (void)updateLayout:(CGRect)frame
 {
-    BOOL isParking = (self.destinations.count > 0) && ((OADestination *)self.destinations[0]).parking;
-    
+    CGFloat rightMargin = (_firstRow || self.buttonOkVisible ? 40.0 : 0.0) + (self.buttonOkVisible ? 40.0 : 0.0);
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - (kOADestinationEditModeEnabled ? 41.0 : 0.0);
-    if (_destinations.count == 3 && dirViewWidth / 3.0 < 140.0)
-        h += 20.0;
+    CGFloat dirViewWidth = frame.size.width - rightMargin;
 
     CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     
     _contentView.frame = newFrame;
-    _directionsView.frame = CGRectMake(0.0, (_drawSplitLine ? 1.0 : 0.0), dirViewWidth, h - (_drawSplitLine ? 1.0 : 0.0));
-    if (kOADestinationEditModeEnabled)
-        _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, (_drawSplitLine ? 1.0 : 0.0), 40.0, h - (_drawSplitLine ? 1.0 : 0.0));
+    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h);
     
-    _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
-    _markerView.frame = CGRectMake(32.0, 32.0, 14.0, 14.0);
-    _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0 - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+    if (_firstRow)
+        _btnClose.frame = CGRectMake(frame.size.width - 40.0, 0.0, 40.0, h);
+
+    if (self.buttonOkVisible)
+    {
+        _btnOK.frame = CGRectMake(frame.size.width - rightMargin, 0.0, 40.0, h);
+        _btnOK.hidden = NO;
+    }
+    else
+    {
+        _btnOK.hidden = YES;
+    }
+    
+    _colorView.frame = CGRectMake(5.0, 0.0, 40.0, h);
+    _markerView.frame = CGRectMake(32.0, h - 18.0, 14.0, 14.0);
+    
+    _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0, 21.0);
     _distanceLabel.textAlignment = NSTextAlignmentLeft;
+    
     _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
-    _descLabel.hidden = NO;
-    _infoLabel.frame = CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
+    _descLabel.hidden = !_firstRow;
+    
+    _infoLabel.frame = CGRectMake(frame.size.width - self.infoLabelWidth - rightMargin - 8.0, 7.0, self.infoLabelWidth, 21.0);
 }
 
 
 - (void)buildUI
 {
     UIColor *backgroundColor;
-    if (self.destinationIndex == 0)
+    if (_firstRow)
         backgroundColor = UIColorFromRGB(0x044b7f);
     else
         backgroundColor = UIColorFromRGB(0x03416e);
     
     if (!self.contentView)
     {
-        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 50.0)];
+        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, _height)];
         _contentView.backgroundColor = backgroundColor;
         _contentView.opaque = YES;
     }
     if (!self.directionsView)
     {
-        self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 279.0, 50.0)];
+        self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth - 41.0, _height)];
         _directionsView.backgroundColor = backgroundColor;
         _directionsView.opaque = YES;
         [_contentView addSubview:self.directionsView];
     }
     
-    if (!self.btnClose && kOADestinationEditModeEnabled)
+    if (!self.btnClose && _firstRow)
     {
-        if (kOADestinationEditModeGlobal && self.destinationIndex == 0)
-        {
-            self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
-            _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
-            _btnClose.backgroundColor = backgroundColor;
-            _btnClose.opaque = YES;
-            _btnClose.tintColor = UIColorFromRGB(0x5081a6);
-            [_btnClose setTitle:@"" forState:UIControlStateNormal];
-            [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
-        }
-        else if (!kOADestinationEditModeGlobal)
-        {
-            self.btnClose = [[UIButton alloc] initWithFrame:CGRectMake(280.0, 0.0, 40.0, 50.0)];
-            _btnClose.backgroundColor = backgroundColor;
-            _btnClose.opaque = YES;
-            [_btnClose setTitle:@"" forState:UIControlStateNormal];
-            [_btnClose setImage:[UIImage imageNamed:@"ic_close"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(closeDestination:) forControlEvents:UIControlEventTouchUpInside];
-        }
+        self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
+        _btnClose.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, _height);
+        _btnClose.backgroundColor = backgroundColor;
+        _btnClose.opaque = YES;
+        _btnClose.tintColor = UIColorFromRGB(0x5081a6);
+        [_btnClose setTitle:@"" forState:UIControlStateNormal];
+        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
+        [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
         
         if (self.btnClose)
             [_contentView addSubview:self.btnClose];
     }
     
+    if (!self.btnOK)
+    {
+        self.btnOK = [UIButton buttonWithType:UIButtonTypeSystem];
+        _btnOK.frame = CGRectMake(DeviceScreenWidth - 40.0 - (self.btnClose ? 40.0 : 0.0), 0.0, 40.0, _height);
+        _btnOK.backgroundColor = backgroundColor;
+        _btnOK.opaque = YES;
+        _btnOK.tintColor = UIColorFromRGB(0xffffff);
+        [_btnOK setTitle:@"" forState:UIControlStateNormal];
+        [_btnOK setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+        [_btnOK addTarget:self action:@selector(buttonOKClicked) forControlEvents:UIControlEventTouchUpInside];
+        _btnOK.hidden = YES;
+        [_contentView addSubview:self.btnOK];
+    }
+    
     if (!self.colorView)
     {
-        self.colorView = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
+        self.colorView = [[UIView alloc] initWithFrame:CGRectMake(5.0, 0.0, 40.0, _height)];
         self.colorView.backgroundColor = [UIColor clearColor];
         self.compassImage = [[UIImageView alloc] initWithFrame:_colorView.bounds];
         _compassImage.contentMode = UIViewContentModeCenter;
@@ -145,8 +187,6 @@
     {
         self.markerView = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
         _markerView.backgroundColor = [UIColor clearColor];
-        //_markerView.layer.cornerRadius = _markerView.bounds.size.width / 2.0;
-        //_markerView.layer.masksToBounds = YES;
         self.markerImage = [[UIImageView alloc] initWithFrame:_markerView.bounds];
         _markerImage.contentMode = UIViewContentModeCenter;
         [_markerView addSubview:self.markerImage];
@@ -155,9 +195,9 @@
     if (!self.distanceLabel)
     {
         self.distanceLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 7.0, 211.0 - self.infoLabelWidth, 21.0)];
-        _distanceLabel.font = [UIFont fontWithName:@"AvenirNext-Bold" size:18.0];
+        _distanceLabel.font = _primaryFont;
         _distanceLabel.textAlignment = NSTextAlignmentLeft;
-        _distanceLabel.textColor = UIColorFromRGB(0xffffff);
+        _distanceLabel.textColor = _primaryColor;
         _distanceLabel.minimumScaleFactor = 0.7;
         [_directionsView addSubview:_distanceLabel];
     }
@@ -175,10 +215,9 @@
     if (!self.descLabel)
     {
         self.descLabel = [[UILabel alloc] initWithFrame:CGRectMake(60.0, 24.0, 211.0, 21.0)];
-        _descLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
+        _descLabel.font = _descFont;
         _descLabel.textAlignment = NSTextAlignmentLeft;
-        _descLabel.textColor = UIColorFromRGB(0x8ea2b9);
-        //_descLabel.minimumScaleFactor = 0.7;
+        _descLabel.textColor = _descColor;
         [_directionsView addSubview:_descLabel];
     }
     
@@ -272,7 +311,7 @@
     
     NSTimeInterval timeInterval = [destination.carPickupDate timeIntervalSinceNow];
     
-    label.text = [self.class parkingTimeStr:destination shortText:shortText];
+    label.text = [OADestinationCell parkingTimeStr:destination shortText:shortText];
     
     if (timeInterval > 0.0)
         label.textColor = [UIColor colorWithRed:0.678f green:0.678f blue:0.678f alpha:1.00f];
@@ -284,23 +323,31 @@
 {
     for (int i = 0; i < _destinations.count; i++) {
         OADestination *destination = _destinations[i];
-        switch (i) {
+        switch (i)
+        {
             case 0:
-                self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
                 
+                if (_firstRow)
+                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow"] color:destination.color];
+                else
+                    self.compassImage.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_destination_arrow_small"] color:destination.color];
+                
+                [self updateMapCenterArrow:self.mapCenterArrow];
+
                 if (destination.parking)
                 {
-                    [_markerImage setImage:[UIImage imageNamed:@"destination_parking_place"]];
                     if (!_markerView.superview)
                         [_directionsView addSubview:self.markerView];
                 }
 
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:destination];
+                [self updateOkButton:destination];
+                
                 if (destination.parking && destination.carPickupDate)
                 {
                     [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
-                    self.infoLabel.hidden = NO;
+                    self.infoLabel.hidden = !_firstRow;
                 }
                 else
                 {
@@ -316,26 +363,62 @@
     }
 }
 
+- (void)updateOkButton:(OADestination *)destination
+{
+    double distance = OsmAnd::Utilities::distance(self.currentLocation.longitude, self.currentLocation.latitude, destination.longitude, destination.latitude);
+    self.buttonOkVisible = distance < 20.0;
+}
+
 - (void)updateDistanceLabel:(OADestination *)destination
 {
     NSString *text = [destination distanceStr:_currentLocation.latitude longitude:_currentLocation.longitude];
+    if (!_firstRow)
+    {
+        if (destination.parking && destination.carPickupDate)
+        {
+            text = [text stringByAppendingString:[NSString stringWithFormat:@" — %@ (%@)", OALocalizedString(@"parking"), [OADestinationCell parkingTimeStr:destination shortText:YES]]];
+        }
+        else
+        {
+            text = [text stringByAppendingString:[NSString stringWithFormat:@" — %@", destination.desc]];
+        }
+    }
+
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:text];
     
-    NSUInteger spaceIndex = 0;
-    for (NSUInteger i = text.length - 1; i > 0; i--)
+    
+    NSUInteger spaceIndex1 = 0;
+    NSUInteger spaceIndex2 = 0;
+    for (NSUInteger i = 0; i < text.length; i++)
         if ([text characterAtIndex:i] == ' ')
         {
-            spaceIndex = i;
-            break;
+            if (spaceIndex1 == 0)
+            {
+                spaceIndex1 = i;
+                if (_firstRow)
+                    break;
+            }
+            else if (spaceIndex2 == 0)
+            {
+                spaceIndex2 = i;
+            }
+            else
+                break;
         }
     
-    NSRange valueRange = NSMakeRange(0, spaceIndex);
-    NSRange unitRange = NSMakeRange(spaceIndex, text.length - spaceIndex);
+    NSRange valueRange = NSMakeRange(0, spaceIndex1);
+    NSRange unitRange = NSMakeRange(spaceIndex1, text.length - spaceIndex1);
+    NSRange descRange = NSMakeRange(spaceIndex2, text.length - spaceIndex2);
     
     [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
     [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
     [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
     [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+    if (spaceIndex2 > 0)
+    {
+        [string addAttribute:NSForegroundColorAttributeName value:_descColor range:descRange];
+        [string addAttribute:NSFontAttributeName value:_descFont range:descRange];
+    }
     
     self.distanceLabel.attributedText = string;
 }
@@ -351,15 +434,29 @@
         switch (i)
         {
             case 0:
+            {
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:destination];
+                [self updateOkButton:destination];
+                
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
+            }
                 
             default:
                 break;
         }
     }
+}
+
+
+-(void)setButtonOkVisible:(BOOL)buttonOkVisible
+{
+    if (_buttonOkVisible == buttonOkVisible)
+        return;
+    
+    _buttonOkVisible = buttonOkVisible;
+    [self updateLayout:_contentView.frame];
 }
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView
@@ -382,6 +479,31 @@
 {
     if (self.delegate)
         [_delegate openHideDestinationCardsView:sender];
+}
+
+- (void)updateCloseButton
+{
+    if (!self.btnClose)
+        return;
+    
+    BOOL cardsVisible = [OADestinationCardsViewController sharedInstance].isVisible;
+    
+    if (!cardsVisible)
+    {
+        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
+        _btnClose.tintColor = UIColorFromRGB(0x5081a6);
+    }
+    else
+    {
+        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_close"] forState:UIControlStateNormal];
+        _btnClose.tintColor = UIColorFromRGB(0xffffff);
+    }
+}
+
+- (void)buttonOKClicked
+{
+    if (self.delegate)
+        [self.delegate markAsVisited:_destinations[0]];
 }
 
 @end

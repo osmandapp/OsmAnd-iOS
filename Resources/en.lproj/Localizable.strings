@@ -21,6 +21,7 @@
 "shared_string_or" = "or";
 "shared_string_and" = "and";
 "shared_string_edit" = "Edit";
+"shared_string_modify" = "Modify";
 
 
 // HUD
@@ -457,4 +458,6 @@
 "gpx_group_select" = "Group Select";
 "show_all" = "Show all";
 "directions" = "Directions";
+"parking" = "Parking";
+
 

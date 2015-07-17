@@ -38,6 +38,7 @@
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
+    _destinationRemoveObservable = [[OAObservable alloc] init];
 }
 
 - (void)safeInit
@@ -115,6 +116,7 @@
 @synthesize underlayMapSourceChangeObservable = _underlayMapSourceChangeObservable;
 @synthesize underlayAlphaChangeObservable = _underlayAlphaChangeObservable;
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
+@synthesize destinationRemoveObservable = _destinationRemoveObservable;
 
 @synthesize overlayMapSource = _overlayMapSource;
 

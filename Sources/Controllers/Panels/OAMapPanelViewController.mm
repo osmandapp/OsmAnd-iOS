@@ -97,6 +97,7 @@ typedef enum
 
     OAAutoObserverProxy* _appModeObserver;
     OAAutoObserverProxy* _addonsSwitchObserver;
+    OAAutoObserverProxy* _destinationRemoveObserver;
 
     BOOL _hudInvalidated;
     
@@ -154,6 +155,10 @@ typedef enum
     _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                       withHandler:@selector(onAddonsSwitch:withKey:andValue:)
                                                        andObserve:_app.addonsSwitchObservable];
+
+    _destinationRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onDestinationRemove:withKey:)
+                                                            andObserve:_app.data.destinationRemoveObservable];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
@@ -1298,11 +1303,14 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
 }
 
-- (void)removeDestination:(OADestination *)destination
+- (void)onDestinationRemove:(id)observable withKey:(id)key
 {
-    [_destinationViewController removeDestination:destination];
-    _targetDestination = nil;
-    [_mapViewController hideContextPinMarker];
+    OADestination *destination = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _targetDestination = nil;
+        [_mapViewController hideContextPinMarker];
+        [_mapViewController removeDestinationPin:destination.latitude longitude:destination.longitude];
+    });
 }
 
 #pragma mark - OATargetPointViewDelegate
@@ -1353,7 +1361,7 @@ typedef enum
     if (_targetDestination)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self removeDestination:_targetDestination];
+            [[OADestinationsHelper instance] removeDestination:_targetDestination];
         });
     }
     else
@@ -1883,41 +1891,6 @@ typedef enum
         [self.targetMenuView prepareForRotation:toInterfaceOrientation];
 }
 
--(void)addParkingReminderToCalendar:(OADestination *)destination
-{
-    EKEventStore *eventStore = [[EKEventStore alloc] init];
-    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (error)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else if (!granted)
-            {
-                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-            }
-            else
-            {
-                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
-                event.title = OALocalizedString(@"pickup_car");
-                
-                event.startDate = destination.carPickupDate;
-                event.endDate = destination.carPickupDate;
-                
-                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
-                
-                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
-                NSError *err;
-                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
-                if (err)
-                    [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                else
-                    destination.eventIdentifier = [event.eventIdentifier copy];
-            }
-        });
-    }];
-}
-
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
     OsmAnd::LatLon latLon = item.favorite->getLatLon();
@@ -2232,8 +2205,10 @@ typedef enum
     if (color)
     {
         [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
+        
         if (sender.timeLimitActive && sender.addToCalActive)
-            [self addParkingReminderToCalendar:destination];
+            [OADestinationsHelper addParkingReminderToCalendar:destination];
+        
         [_mapViewController hideContextPinMarker];
         [self hideTargetPointMenu];
     }
@@ -2253,9 +2228,10 @@ typedef enum
         parking.carPickupDate = nil;
     
     if (parking.eventIdentifier)
-        [_destinationViewController removeParkingReminderFromCalendar:parking];
+        [OADestinationsHelper removeParkingReminderFromCalendar:parking];
+    
     if (sender.timeLimitActive && sender.addToCalActive)
-        [self addParkingReminderToCalendar:parking];
+        [OADestinationsHelper addParkingReminderToCalendar:parking];
     
     [_destinationViewController updateDestinations];
     [self hideTargetPointMenu];
@@ -2291,10 +2267,7 @@ typedef enum
         [self.driveModeViewController showDestinations];
 }
 
-- (void)destinationRemoved:(OADestination *)destination
-{
-    [_mapViewController removeDestinationPin:destination.latitude longitude:destination.longitude];
-}
+UIView *shade;
 
 - (void)openHideDestinationCardsView
 {
@@ -2309,6 +2282,12 @@ typedef enum
 
         [_hudViewController addChildViewController:cardsController];
         
+        shade = [[UIView alloc] initWithFrame:self.view.frame];
+        shade.backgroundColor = UIColorFromRGBA(0x00000060);
+        shade.alpha = 0.0;
+        
+        [_hudViewController.view insertSubview:shade belowSubview:_destinationViewController.view];
+        
         [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         [cardsController doViewWillAppear];
         
@@ -2316,6 +2295,7 @@ typedef enum
 
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
+            shade.alpha = 1.0;
         }];
     }
     else
@@ -2326,8 +2306,12 @@ typedef enum
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+            shade.alpha = 0.0;
             
         } completion:^(BOOL finished) {
+            
+            [shade removeFromSuperview];
+            shade = nil;
             
             [cardsController doViewDisappeared];
             [cardsController.view removeFromSuperview];

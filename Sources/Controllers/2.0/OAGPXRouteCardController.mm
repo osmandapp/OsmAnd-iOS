@@ -249,15 +249,14 @@
     
     [CATransaction setCompletionBlock:^{
 
+        _isAnimating = NO;
+
         if (_gpxRouter.routeDoc.activePoints.count > 0)
         {
             [self refreshVisibleRows];
             [self refreshSwipeButtons];
             [_gpxRouter updateDistanceAndDirection:YES];
         }
-        
-        _isAnimating = NO;
-        
     }];
     
     [self.tableView beginUpdates];
@@ -300,9 +299,11 @@
         
         [self refreshVisibleRows];
         [self refreshSwipeButtons];
-        [_gpxRouter updateDistanceAndDirection:YES];
         
         _isAnimating = NO;
+
+        [_gpxRouter updateDistanceAndDirection:YES];
+        
     }];
     
     [self.tableView beginUpdates];

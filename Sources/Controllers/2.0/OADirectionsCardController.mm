@@ -39,6 +39,7 @@
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_destinationRemoveObserver;
     
     NSMutableArray *_items;
     
@@ -212,10 +213,21 @@
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(updateDistanceAndDirection)
                                                          andObserve:_app.locationServices.updateObserver];
+    
+    _destinationRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onDestinationRemove:withKey:)
+                                                            andObserve:_app.data.destinationRemoveObservable];
+
 }
 
 - (void)onDisappear
 {
+    if (_destinationRemoveObserver)
+    {
+        [_destinationRemoveObserver detach];
+        _destinationRemoveObserver = nil;
+    }
+
     if (_locationUpdateObserver)
     {
         [_locationUpdateObserver detach];
@@ -235,7 +247,7 @@
                                      NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
                                      _activeIndexPath = [indexPath copy];
                                      OADestinationItem* item = [self getItem:row];
-                                     [self removeDirection:item];
+                                     [self remove:item];
                                      
                                      return YES;
                                  }];
@@ -243,7 +255,29 @@
     return @[deactivate];
 }
 
-- (void)removeDirection:(OADestinationItem *)item
+- (void)onDestinationRemove:(id)observable withKey:(id)key
+{
+    OADestination *destination = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_items enumerateObjectsUsingBlock:^(OADestinationItem *item, NSUInteger idx, BOOL *stop)
+        {
+            if ([item.destination isEqual:destination])
+            {
+                _activeIndexPath = [NSIndexPath indexPathForRow:idx inSection:self.section];
+                [self doRemoveDirection:item];
+                *stop = YES;
+            }
+        }];
+    });
+}
+
+- (void)remove:(OADestinationItem *)item
+{
+    [[OADestinationsHelper instance] removeDestination:item.destination];
+}
+
+- (void)doRemoveDirection:(OADestinationItem *)item
 {
     _isAnimating = YES;
     
@@ -262,8 +296,6 @@
     
     [self.tableView beginUpdates];
 
-    [[OARootViewController instance].mapPanel removeDestination:item.destination];
-    
     [_items removeObject:item];
     
     if (_items.count == 0)

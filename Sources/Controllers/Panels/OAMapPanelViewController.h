@@ -36,7 +36,6 @@
 - (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
 - (void)openHideDestinationCardsView;
-- (void)removeDestination:(OADestination *)destination;
 
 - (void)closeMapSettings;
 - (void)closeMapSettingsWithDuration:(CGFloat)duration;

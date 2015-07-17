@@ -11,6 +11,10 @@
 #import "OADestination.h"
 #import "OAGpxRouteWptItem.h"
 #import "OAUtilities.h"
+#import "OALog.h"
+#import "Localization.h"
+
+#import <EventKit/EventKit.h>
 
 
 @implementation OADestinationsHelper
@@ -214,13 +218,65 @@
 {
     @synchronized(_syncObj)
     {
+        if (destination.parking)
+            [OADestinationsHelper removeParkingReminderFromCalendar:destination];
+
         [_app.data.destinations removeObject:destination];
         [self.sortedDestinations removeObject:destination];
         
         [self refreshDestinationIndexes];
     }
     
-    [_app.data.destinationsChangeObservable notifyEvent];
+    [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+}
+
++ (void)addParkingReminderToCalendar:(OADestination *)destination
+{
+    EKEventStore *eventStore = [[EKEventStore alloc] init];
+    [eventStore requestAccessToEntityType:EKEntityTypeEvent completion:^(BOOL granted, NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (error)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else if (!granted)
+            {
+                [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"cannot_access_calendar") message:OALocalizedString(@"reminder_not_set_text") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+            }
+            else
+            {
+                EKEvent *event = [EKEvent eventWithEventStore:eventStore];
+                event.title = OALocalizedString(@"pickup_car");
+                
+                event.startDate = destination.carPickupDate;
+                event.endDate = destination.carPickupDate;
+                
+                [event addAlarm:[EKAlarm alarmWithRelativeOffset:-60.0 * 5.0]];
+                
+                [event setCalendar:[eventStore defaultCalendarForNewEvents]];
+                NSError *err;
+                [eventStore saveEvent:event span:EKSpanThisEvent error:&err];
+                if (err)
+                    [[[UIAlertView alloc] initWithTitle:nil message:error.localizedDescription delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                else
+                    destination.eventIdentifier = [event.eventIdentifier copy];
+            }
+        });
+    }];
+}
+
++ (void)removeParkingReminderFromCalendar:(OADestination *)destination
+{
+    if (destination.eventIdentifier)
+    {
+        EKEventStore *eventStore = [[EKEventStore alloc] init];
+        EKEvent *event = [eventStore eventWithIdentifier:destination.eventIdentifier];
+        NSError *error;
+        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
+            OALog(@"%@", [error localizedDescription]);
+        else
+            destination.eventIdentifier = nil;
+    }
 }
 
 @end

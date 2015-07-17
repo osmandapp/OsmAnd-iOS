@@ -37,6 +37,7 @@
 
 @property (nonatomic) NSMutableArray *destinations;
 @property(readonly) OAObservable* destinationsChangeObservable;
+@property(readonly) OAObservable* destinationRemoveObservable;
 
 + (OAAppData*)defaults;
 

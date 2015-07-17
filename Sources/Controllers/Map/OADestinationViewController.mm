@@ -18,7 +18,6 @@
 #import "OAGPXRouter.h"
 #import "OADestinationCardsViewController.h"
 
-#import <EventKit/EventKit.h>
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -32,8 +31,6 @@
 @property (nonatomic) NSArray *colors;
 @property (nonatomic) NSArray *markerNames;
 
-@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-@property (nonatomic) OAAutoObserverProxy* destinationsChangeObserver;
 
 @end
 
@@ -46,9 +43,14 @@
     CLLocationCoordinate2D _location;
     CLLocationDirection _direction;
 
+    OAAutoObserverProxy* _locationServicesUpdateObserver;
+
     OAAutoObserverProxy* _gpxRouteDefinedObserver;
     OAAutoObserverProxy* _gpxRouteChangedObserver;
     OAAutoObserverProxy* _gpxRouteCanceledObserver;
+
+    OAAutoObserverProxy* _destinationsChangeObserver;
+    OAAutoObserverProxy* _destinationRemoveObserver;
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -84,6 +86,10 @@
         _destinationsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onDestinationsChanged)
                                                               andObserve:_app.data.destinationsChangeObservable];
+
+        _destinationRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDestinationRemove:withKey:)
+                                                                 andObserve:_app.data.destinationRemoveObservable];
         
     }
     return self;
@@ -123,6 +129,14 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self refreshCells];
+    });
+}
+
+- (void)onDestinationRemove:(id)observable withKey:(id)key
+{
+    OADestination *destination = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self doRemoveDestination:destination];
     });
 }
 
@@ -369,25 +383,11 @@
         [_delegate openHideDestinationCardsView];
 }
 
-- (void)removeParkingReminderFromCalendar:(OADestination *)destination
-{
-    if (destination.eventIdentifier)
-    {
-        EKEventStore *eventStore = [[EKEventStore alloc] init];
-        EKEvent *event = [eventStore eventWithIdentifier:destination.eventIdentifier];
-        NSError *error;
-        if (![eventStore removeEvent:event span:EKSpanFutureEvents error:&error])
-            OALog(@"%@", [error localizedDescription]);
-        else
-            destination.eventIdentifier = nil;
-    }
-}
-
 -(void)markAsVisited:(OADestination *)destination
 {
     if (!destination.routePoint)
     {
-        [self removeDestination:destination];
+        [[OADestinationsHelper instance] removeDestination:destination];
     }
     else
     {
@@ -395,55 +395,44 @@
     }
 }
 
-- (void)removeDestination:(OADestination *)destination
+- (void)doRemoveDestination:(OADestination *)destination
 {
-    if (destination.parking)
-        [self removeParkingReminderFromCalendar:destination];
+    // process single cells
+    OADestinationCell *cell;
+    for (OADestinationCell *c in _destinationCells)
+        if ([c.destinations containsObject:destination])
+        {
+            cell = c;
+            break;
+        }
     
-    if ([_app.data.destinations containsObject:destination])
+    if (cell)
     {
-        [[OADestinationsHelper instance] removeDestination:destination];
-
-        if (_delegate)
-            [_delegate destinationRemoved:destination];
+        [self onDestinationsChanged];
+        [self updateFrame:YES];
+    }
+    
+    // process multi cell
+    BOOL isCellEmpty = NO;
+    
+    if ([OADestinationsHelper instance].sortedDestinations.count > 0)
+    {
+        _multiCell.destinations = [NSArray arrayWithArray:[OADestinationsHelper instance].sortedDestinations];
+    }
+    else
+    {
+        isCellEmpty = YES;
+        _multiCell.destinations = nil;
+    }
+    
+    if (isCellEmpty)
+    {
+        [self updateFrame:YES];
+        [_multiCell.contentView removeFromSuperview];
+        _multiCell = nil;
         
-        // process single cells
-        OADestinationCell *cell;
-        for (OADestinationCell *c in _destinationCells)
-            if ([c.destinations containsObject:destination])
-            {
-                cell = c;
-                break;
-            }
-        
-        if (cell)
-        {
-            [self onDestinationsChanged];
-            [self updateFrame:YES];
-        }
-        
-        // process multi cell
-        BOOL isCellEmpty = NO;
-        
-        if ([OADestinationsHelper instance].sortedDestinations.count > 0)
-        {
-            _multiCell.destinations = [NSArray arrayWithArray:[OADestinationsHelper instance].sortedDestinations];
-        }
-        else
-        {
-            isCellEmpty = YES;
-            _multiCell.destinations = nil;
-        }
-        
-        if (isCellEmpty)
-        {
-            [self updateFrame:YES];
-            [_multiCell.contentView removeFromSuperview];
-            _multiCell = nil;
-
-            [self.view removeFromSuperview];
-            [self stopLocationUpdate];
-        }
+        [self.view removeFromSuperview];
+        [self stopLocationUpdate];
     }
 }
 
@@ -454,7 +443,8 @@
         for (OADestination *dest in _app.data.destinations)
             if (dest.parking)
             {
-                [self removeDestination:dest];
+                [[OADestinationsHelper instance] removeDestination:dest];
+                //[self removeDestination:dest];
                 break;
             }
     }
@@ -619,20 +609,22 @@
 
 - (void)startLocationUpdate
 {
-    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || self.locationServicesUpdateObserver)
+    if ([OADestinationsHelper instance].sortedDestinations.count == 0 || _locationServicesUpdateObserver)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+    
+    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(doLocationUpdate)
                                                                      andObserve:app.locationServices.updateObserver];
 }
 
 - (void)stopLocationUpdate
 {
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationServicesUpdateObserver)
+    {
+        [_locationServicesUpdateObserver detach];
+        _locationServicesUpdateObserver = nil;
     }
 }
 

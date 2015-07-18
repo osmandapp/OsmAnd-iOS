@@ -388,3 +388,4 @@
 "cannot_add_destination" = "Impossibile aggiungere una direzione";
 "product_desc_skimap" = "Piste da sci di tutte le stazioni sciistiche mondiali";
 "rendering_attr_hikingRoutesOSMC_name" = "Strato simboli escursionistici";
+"shared_string_dismiss" = "Abbandona";

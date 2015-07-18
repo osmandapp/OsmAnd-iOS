@@ -130,6 +130,9 @@ typedef enum
     id _activeTargetObj;
     id _activeViewControllerState;
     BOOL _activeTargetChildPushed;
+    
+    UIView *_shadeView;
+
 }
 
 - (instancetype)init
@@ -1313,6 +1316,26 @@ typedef enum
     });
 }
 
+- (void)createShade
+{
+    if (_shadeView)
+    {
+        [_shadeView removeFromSuperview];
+        _shadeView = nil;
+    }
+    
+    _shadeView = [[UIView alloc] initWithFrame:self.view.frame];
+    _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
+    _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _shadeView.alpha = 0.0;
+}
+
+- (void)removeShade
+{
+    [_shadeView removeFromSuperview];
+    _shadeView = nil;
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void)targetViewEnableMapInteraction
@@ -2267,8 +2290,6 @@ typedef enum
         [self.driveModeViewController showDestinations];
 }
 
-UIView *shade;
-
 - (void)openHideDestinationCardsView
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
@@ -2282,11 +2303,9 @@ UIView *shade;
 
         [_hudViewController addChildViewController:cardsController];
         
-        shade = [[UIView alloc] initWithFrame:self.view.frame];
-        shade.backgroundColor = UIColorFromRGBA(0x00000060);
-        shade.alpha = 0.0;
+        [self createShade];
         
-        [_hudViewController.view insertSubview:shade belowSubview:_destinationViewController.view];
+        [_hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
         
         [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         [cardsController doViewWillAppear];
@@ -2295,7 +2314,7 @@ UIView *shade;
 
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
-            shade.alpha = 1.0;
+            _shadeView.alpha = 1.0;
         }];
     }
     else
@@ -2306,12 +2325,11 @@ UIView *shade;
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
-            shade.alpha = 0.0;
+            _shadeView.alpha = 0.0;
             
         } completion:^(BOOL finished) {
             
-            [shade removeFromSuperview];
-            shade = nil;
+            [self removeShade];
             
             [cardsController doViewDisappeared];
             [cardsController.view removeFromSuperview];

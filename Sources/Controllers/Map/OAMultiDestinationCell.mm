@@ -12,6 +12,9 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 
+#import <OsmAndCore.h>
+#import <OsmAndCore/Utilities.h>
+
 @implementation OAMultiDestinationCell
 {
     UIFont *_primaryFont;
@@ -32,6 +35,7 @@
 @synthesize infoLabel = _infoLabel;
 @synthesize compassImage = _compassImage;
 @synthesize delegate = _delegate;
+@synthesize btnOK = _btnOK;
 
 - (instancetype)initWithDestinations:(NSArray *)destinations
 {
@@ -64,32 +68,47 @@
 - (void)updateLayout:(CGRect)frame
 {
     CGFloat h = frame.size.height;
-    CGFloat dirViewWidth = frame.size.width - 41.0;
-    if ([self destinationsCount] == 3 && dirViewWidth / 3.0 < 140.0)
-        h += 20.0;
+    CGFloat dirViewWidth = frame.size.width - 40.0;
         
     CGRect newFrame = CGRectMake(frame.origin.x, frame.origin.y, frame.size.width, h);
     
     _contentView.frame = newFrame;
-    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h - 0.0);
+    _directionsView.frame = CGRectMake(0.0, 0.0, dirViewWidth, h);
     
-    _btnClose.frame = CGRectMake(_directionsView.frame.size.width + 1, 0.0, 40.0, h - 0.0);
+    _btnClose.frame = CGRectMake(_directionsView.frame.size.width, 0.0, 40.0, h);
     
     switch ([self destinationsCount])
     {
         case 1:
         {
             BOOL isParking = ((OADestination *)self.destinations[0]).parking && ((OADestination *)self.destinations[0]).carPickupDateEnabled;
-            
+
+            CGFloat textWidth = _directionsView.frame.size.width - 68.0 - (self.buttonOkVisible ? 40.0 : 0.0);
+
             _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
             _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-            _distanceLabel.frame = CGRectMake(60.0, 7.0, _directionsView.frame.size.width - 68.0 - (isParking ? self.infoLabelWidth : 0.0), 21.0);
+            _distanceLabel.frame = CGRectMake(60.0, 7.0, textWidth - (isParking ? self.infoLabelWidth : 0.0), 21.0);
             _distanceLabel.textAlignment = NSTextAlignmentLeft;
             _infoLabel.frame = CGRectMake(60.0 + _distanceLabel.frame.size.width, 7.0, self.infoLabelWidth, 21.0);
             _infoLabel.textAlignment = NSTextAlignmentRight;
             _infoLabel.hidden = !isParking;
-            _descLabel.frame = CGRectMake(60.0, 24.0, _directionsView.frame.size.width - 68.0, 21.0);
+            _descLabel.frame = CGRectMake(60.0, 24.0, textWidth, 21.0);
             _descLabel.hidden = NO;
+            
+            if (self.buttonOkVisible)
+            {
+                self.btnOK.frame = CGRectMake(dirViewWidth - 40.0, 0.0, 40.0, h);
+                self.btnOK.hidden = NO;
+            }
+            else
+            {
+                self.btnOK.hidden = YES;
+            }
+
+            if (_btnOK2)
+                _btnOK2.hidden = YES;
+            if (_btnOK3)
+                _btnOK3.hidden = YES;
             
             if (_colorView2)
                 _colorView2.hidden = YES;
@@ -122,7 +141,7 @@
             
             _colorView.frame = CGRectMake(5.0, 5.0, 40.0, 40.0);
             _markerView.frame = CGRectMake(_colorView.frame.origin.x + 27.0, _colorView.frame.origin.y + 27.0, 14.0, 14.0);
-            CGFloat textWidth = dirViewWidth / 2.0 - 62.0;
+            CGFloat textWidth = dirViewWidth / 2.0 - 62.0 - (self.buttonOkVisible ? 40.0 : 0.0);
             if (textWidth > 60.0 + self.infoLabelWidth && isParking)
             {
                 _distanceLabel.frame = CGRectMake(55.0, 7.0, textWidth - self.infoLabelWidth, 21.0);
@@ -157,6 +176,18 @@
             }
             _distanceLabel.textAlignment = NSTextAlignmentLeft;
             
+            if (self.buttonOkVisible)
+            {
+                self.btnOK.frame = CGRectMake(55.0 + textWidth, 0.0, 40.0, h);
+                self.btnOK.hidden = NO;
+            }
+            else
+            {
+                self.btnOK.hidden = YES;
+            }
+            
+            textWidth = dirViewWidth / 2.0 - 62.0 - (self.buttonOkVisible2 ? 40.0 : 0.0);
+
             _colorView2.frame = CGRectMake(dirViewWidth / 2.0, 5.0, 40.0, 40.0);
             _colorView2.hidden = NO;
             _markerView2.frame = CGRectMake(_colorView2.frame.origin.x + 27.0, _colorView2.frame.origin.y + 27.0, 14.0, 14.0);
@@ -199,6 +230,18 @@
             }
             _distanceLabel2.textAlignment = NSTextAlignmentLeft;
             
+            if (self.buttonOkVisible2)
+            {
+                self.btnOK2.frame = CGRectMake(_colorView2.frame.origin.x + 62.0 + textWidth, 0.0, 40.0, h);
+                self.btnOK2.hidden = NO;
+            }
+            else
+            {
+                self.btnOK2.hidden = YES;
+            }
+            
+            if (_btnOK3)
+                _btnOK3.hidden = YES;
             if (_colorView3)
                 _colorView3.hidden = YES;
             if (_markerView3)
@@ -346,14 +389,14 @@
 {
     if (!self.contentView)
     {
-        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 50.0)];
+        self.contentView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 50.0)];
         _contentView.backgroundColor = UIColorFromRGB(0x044b7f);
         _contentView.opaque = YES;
     }
     
     if (!self.directionsView)
     {
-        self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 279.0, 50.0)];
+        self.directionsView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth - 41.0, 50.0)];
         _directionsView.backgroundColor = UIColorFromRGB(0x044b7f);
         _directionsView.opaque = YES;
         [_contentView addSubview:self.directionsView];
@@ -361,20 +404,31 @@
     
     if (!self.btnClose)
     {
-        if (self.destinationIndex == 0)
-        {
-            self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
-            _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
-            _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
-            _btnClose.opaque = YES;
-            _btnClose.tintColor = UIColorFromRGB(0x5081a6);
-            [_btnClose setTitle:@"" forState:UIControlStateNormal];
-            [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
-            [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
-        }
+        self.btnClose = [UIButton buttonWithType:UIButtonTypeSystem];
+        _btnClose.frame = CGRectMake(280.0, 0.0, 40.0, 50.0);
+        _btnClose.backgroundColor = UIColorFromRGB(0x044b7f);
+        _btnClose.opaque = YES;
+        _btnClose.tintColor = UIColorFromRGB(0x5081a6);
+        [_btnClose setTitle:@"" forState:UIControlStateNormal];
+        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
+        [_btnClose addTarget:self action:@selector(openHideDestinationsView:) forControlEvents:UIControlEventTouchUpInside];
         
-        if (self.btnClose)
-            [_contentView addSubview:self.btnClose];
+        [_contentView addSubview:self.btnClose];
+    }
+    
+    if (!self.btnOK)
+    {
+        self.btnOK = [UIButton buttonWithType:UIButtonTypeSystem];
+        _btnOK.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
+        _btnOK.backgroundColor = UIColorFromRGB(0x044b7f);
+        _btnOK.opaque = YES;
+        _btnOK.tintColor = UIColorFromRGB(0xffffff);
+        [_btnOK setTitle:@"" forState:UIControlStateNormal];
+        [_btnOK setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+        [_btnOK addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
+        _btnOK.tag = 0;
+        _btnOK.hidden = YES;
+        [_contentView addSubview:self.btnOK];
     }
     
     if (!self.colorView)
@@ -391,8 +445,6 @@
     {
         self.markerView = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
         self.markerView.backgroundColor = [UIColor clearColor];
-        //self.markerView.layer.cornerRadius = self.markerView.bounds.size.width / 2.0;
-        //self.markerView.layer.masksToBounds = YES;
         self.markerImage = [[UIImageView alloc] initWithFrame:self.markerView.bounds];
         self.markerImage.contentMode = UIViewContentModeCenter;
         [self.markerView addSubview:self.markerImage];
@@ -424,12 +476,26 @@
         _descLabel.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
         _descLabel.textAlignment = NSTextAlignmentLeft;
         _descLabel.textColor = UIColorFromRGB(0x8ea2b9);
-        //_descLabel.minimumScaleFactor = 0.7;
         [_directionsView addSubview:_descLabel];
     }
     
     if ([self destinationsCount] > 1)
     {
+        if (!self.btnOK2)
+        {
+            self.btnOK2 = [UIButton buttonWithType:UIButtonTypeSystem];
+            _btnOK2.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
+            _btnOK2.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnOK2.opaque = YES;
+            _btnOK2.tintColor = UIColorFromRGB(0xffffff);
+            [_btnOK2 setTitle:@"" forState:UIControlStateNormal];
+            [_btnOK2 setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [_btnOK2 addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
+            _btnOK2.tag = 1;
+            _btnOK2.hidden = YES;
+            [_contentView addSubview:self.btnOK2];
+        }
+        
         if (!self.colorView2)
         {
             self.colorView2 = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
@@ -444,8 +510,6 @@
         {
             self.markerView2 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
             self.markerView2.backgroundColor = [UIColor clearColor];
-            //self.markerView2.layer.cornerRadius = self.markerView2.bounds.size.width / 2.0;
-            //self.markerView2.layer.masksToBounds = YES;
             self.markerImage2 = [[UIImageView alloc] initWithFrame:self.markerView2.bounds];
             self.markerImage2.contentMode = UIViewContentModeCenter;
             [self.markerView2 addSubview:self.markerImage2];
@@ -477,13 +541,27 @@
             _descLabel2.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _descLabel2.textAlignment = NSTextAlignmentLeft;
             _descLabel2.textColor = UIColorFromRGB(0x8ea2b9);
-            //_descLabel2.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_descLabel2];
         }
     }
     
     if ([self destinationsCount] > 2)
     {
+        if (!self.btnOK3)
+        {
+            self.btnOK3 = [UIButton buttonWithType:UIButtonTypeSystem];
+            _btnOK3.frame = CGRectMake(DeviceScreenWidth - 40.0, 0.0, 40.0, 50.0);
+            _btnOK3.backgroundColor = UIColorFromRGB(0x044b7f);
+            _btnOK3.opaque = YES;
+            _btnOK3.tintColor = UIColorFromRGB(0xffffff);
+            [_btnOK3 setTitle:@"" forState:UIControlStateNormal];
+            [_btnOK3 setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [_btnOK3 addTarget:self action:@selector(buttonOkClicked:) forControlEvents:UIControlEventTouchUpInside];
+            _btnOK3.tag = 2;
+            _btnOK3.hidden = YES;
+            [_contentView addSubview:self.btnOK3];
+        }
+        
         if (!self.colorView3) {
             self.colorView3 = [[UIView alloc] initWithFrame:CGRectMake(5.0, 5.0, 40.0, 40.0)];
             _colorView3.backgroundColor = [UIColor clearColor];
@@ -497,8 +575,6 @@
         {
             self.markerView3 = [[UIView alloc] initWithFrame:CGRectMake(32.0, 32.0, 14.0, 14.0)];
             self.markerView3.backgroundColor = [UIColor clearColor];
-            //self.markerView3.layer.cornerRadius = self.markerView3.bounds.size.width / 2.0;
-            //self.markerView3.layer.masksToBounds = YES;
             self.markerImage3 = [[UIImageView alloc] initWithFrame:self.markerView3.bounds];
             self.markerImage3.contentMode = UIViewContentModeCenter;
             [self.markerView3 addSubview:self.markerImage3];
@@ -530,7 +606,6 @@
             _descLabel3.font = [UIFont fontWithName:@"AvenirNextCondensed-DemiBold" size:15.0];
             _descLabel3.textAlignment = NSTextAlignmentLeft;
             _descLabel3.textColor = UIColorFromRGB(0x8ea2b9);
-            //_descLabel3.minimumScaleFactor = 0.7;
             [_directionsView addSubview:_descLabel3];
         }
     }
@@ -743,8 +818,6 @@
                 break;
         }
     }
-    
-    [_btnClose setImage:[UIImage imageNamed:@"three_dots"] forState:UIControlStateNormal];
 }
 
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
@@ -760,16 +833,19 @@
             case 0:
                 [self updateDirection:destination imageView:self.compassImage];
                 [self updateDistanceLabel:self.distanceLabel destination:destination];
+                [self updateOkButton:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel shortText:YES];
                 break;
             case 1:
                 [self updateDirection:destination imageView:self.compassImage2];
                 [self updateDistanceLabel:self.distanceLabel2 destination:destination];
+                [self updateOkButton2:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel2 shortText:YES];
                 break;
             case 2:
                 [self updateDirection:destination imageView:self.compassImage3];
                 [self updateDistanceLabel:self.distanceLabel3 destination:destination];
+                [self updateOkButton3:destination];
                 [OADestinationCell setParkingTimerStr:destination label:self.infoLabel3 shortText:YES];
                 break;
                 
@@ -779,6 +855,49 @@
     }
 }
 
+-(void)setButtonOkVisible2:(BOOL)buttonOkVisible
+{
+    if (_buttonOkVisible2 == buttonOkVisible)
+        return;
+    
+    _buttonOkVisible2 = buttonOkVisible;
+    [self updateLayout:_contentView.frame];
+}
+
+-(void)setButtonOkVisible3:(BOOL)buttonOkVisible
+{
+    if (_buttonOkVisible3 == buttonOkVisible)
+        return;
+    
+    _buttonOkVisible3 = buttonOkVisible;
+    [self updateLayout:_contentView.frame];
+}
+
+- (void)updateOkButton2:(OADestination *)destination
+{
+    if (!self.mapCenterArrow)
+    {
+        double distance = OsmAnd::Utilities::distance(self.currentLocation.longitude, self.currentLocation.latitude, destination.longitude, destination.latitude);
+        self.buttonOkVisible2 = distance < 20.0;
+    }
+}
+
+- (void)updateOkButton3:(OADestination *)destination
+{
+    if (!self.mapCenterArrow)
+    {
+        double distance = OsmAnd::Utilities::distance(self.currentLocation.longitude, self.currentLocation.latitude, destination.longitude, destination.latitude);
+        self.buttonOkVisible3 = distance < 20.0;
+    }
+}
+
+- (void)buttonOkClicked:(id)sender
+{
+    UIButton *btn = sender;
+    
+    if (self.delegate)
+        [self.delegate markAsVisited:_destinations[btn.tag]];
+}
 
 - (void)closeDestination:(id)sender
 {

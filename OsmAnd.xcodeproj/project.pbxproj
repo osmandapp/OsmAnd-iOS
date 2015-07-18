@@ -1765,9 +1765,9 @@
 		84C41E7E1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
 		84C41E7F1ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
 		84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */; };
-		84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
-		84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
-		84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.m */; };
+		84CC52481AA58503000063CF /* OAMultiDestinationCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */; };
+		84CC52491AA58503000063CF /* OAMultiDestinationCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */; };
+		84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */; };
 		84CC524C1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
 		84CC524D1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
 		84CC524E1AA5A539000063CF /* nautical.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524B1AA5A539000063CF /* nautical.render.xml */; };
@@ -3348,7 +3348,7 @@
 		84C41E7C1ABAC38D0089EABB /* OAPhrasesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPhrasesParser.h; sourceTree = "<group>"; };
 		84C41E7D1ABAC38D0089EABB /* OAPhrasesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPhrasesParser.m; sourceTree = "<group>"; };
 		84CC52461AA58503000063CF /* OAMultiDestinationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMultiDestinationCell.h; path = Controllers/Map/OAMultiDestinationCell.h; sourceTree = "<group>"; };
-		84CC52471AA58503000063CF /* OAMultiDestinationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAMultiDestinationCell.m; path = Controllers/Map/OAMultiDestinationCell.m; sourceTree = "<group>"; };
+		84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMultiDestinationCell.mm; path = Controllers/Map/OAMultiDestinationCell.mm; sourceTree = "<group>"; };
 		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
 		84CC524F1AA5DD55000063CF /* three_dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = three_dots.png; path = Resources/Icons/three_dots.png; sourceTree = "<group>"; };
 		84CC52501AA5DD55000063CF /* three_dots@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@2x.png"; path = "Resources/Icons/three_dots@2x.png"; sourceTree = "<group>"; };
@@ -4749,7 +4749,7 @@
 				84D81EF21AA37075001098FD /* OADestinationCell.h */,
 				84D81EF31AA37075001098FD /* OADestinationCell.mm */,
 				84CC52461AA58503000063CF /* OAMultiDestinationCell.h */,
-				84CC52471AA58503000063CF /* OAMultiDestinationCell.m */,
+				84CC52471AA58503000063CF /* OAMultiDestinationCell.mm */,
 				84D81EF71AA370E9001098FD /* OADestination.h */,
 				84D81EF81AA370E9001098FD /* OADestination.mm */,
 			);
@@ -7787,7 +7787,7 @@
 				BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */,
 				3AFEEE151A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BBAD5BAA1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
-				84CC52481AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
+				84CC52481AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				84F9894A1B53AABF009C443C /* OADirectionsCardController.mm in Sources */,
 				BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				8424316D1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
@@ -7964,7 +7964,7 @@
 				84BFC24B1A9B732800D807B4 /* OAMapSettingsSettingScreen.mm in Sources */,
 				3AFEEE161A0CF07400900A47 /* OAFavoriteListViewController.mm in Sources */,
 				BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */,
-				84CC52491AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
+				84CC52491AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				84F9894B1B53AABF009C443C /* OADirectionsCardController.mm in Sources */,
 				BBA3B00619864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				8424316E1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
@@ -8047,7 +8047,7 @@
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
-				84CC524A1AA58503000063CF /* OAMultiDestinationCell.m in Sources */,
+				84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
 				84F3A93F1B4EC3C900D16EBC /* MGSwipeTableCell.m in Sources */,
 				84EE2DFE1AFE580B007C9A94 /* OAIconTextExTableViewCell.m in Sources */,
 				84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */,

@@ -67,6 +67,7 @@
 
 - (void)updateDirection:(OADestination *)destination imageView:(UIImageView *)imageView;
 
+- (void)updateOkButton:(OADestination *)destination;
 - (void)updateCloseButton;
 
 - (OADestination *)destinationByPoint:(CGPoint)point;

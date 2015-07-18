@@ -493,13 +493,13 @@
     
     if (!cardsVisible)
     {
-        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
-        _btnClose.tintColor = UIColorFromRGB(0x5081a6);
+        [self.btnClose setImage:[UIImage imageNamed:@"ic_arrow_open"] forState:UIControlStateNormal];
+        self.btnClose.tintColor = UIColorFromRGB(0x5081a6);
     }
     else
     {
-        [_btnClose setImage:[UIImage imageNamed:@"ic_arrow_close"] forState:UIControlStateNormal];
-        _btnClose.tintColor = UIColorFromRGB(0xffffff);
+        [self.btnClose setImage:[UIImage imageNamed:@"ic_arrow_close"] forState:UIControlStateNormal];
+        self.btnClose.tintColor = UIColorFromRGB(0xffffff);
     }
 }
 

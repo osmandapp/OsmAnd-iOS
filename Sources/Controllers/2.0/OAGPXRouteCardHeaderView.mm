@@ -124,4 +124,14 @@
 
 }
 
+- (void)setRightButtonTitle:(NSString *)title
+{
+    CGFloat w = [OAUtilities calculateTextBounds:title width:1000.0 font:self.rightButton.titleLabel.font].width + DESTINATION_CARD_BORDER * 2.0;
+    self.rightButton.frame = CGRectMake(self.containerView.frame.size.width - w, self.rightButton.frame.origin.y, w, self.rightButton.frame.size.height);
+    [self.rightButton setTitle:title forState:UIControlStateNormal];
+    self.rightButton.hidden = NO;
+    
+    self.title.frame = CGRectMake(DESTINATION_CARD_BORDER, 0.0, self.rightButton.frame.origin.x - DESTINATION_CARD_BORDER * 2.0, 34.0);
+}
+
 @end

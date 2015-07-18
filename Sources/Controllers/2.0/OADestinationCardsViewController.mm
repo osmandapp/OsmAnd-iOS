@@ -154,17 +154,9 @@
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
 {
-    /*
-    CGFloat w = DeviceScreenHeight;
+    [super willRotateToInterfaceOrientation:toInterfaceOrientation duration:duration];
     
-    [UIView animateWithDuration:duration animations:^{
-    
-        for (OADestinationCardHeaderView *cardHeaderView in _headerViews)
-        {
-            cardHeaderView.frame = CGRectMake(0.0, 0.0, w - 16.0, 50.0);
-        }
-    }];
-     */
+    [self.tableView reloadData];
 }
 
 - (void)doViewWillAppear
@@ -249,9 +241,14 @@
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row == [[self getCardController:indexPath.section] rowsCount] - 1)
+    {
         [OAUtilities roundCornersOnView:cell onTopLeft:NO topRight:NO bottomLeft:YES bottomRight:YES radius:4.0];
+        NSLog(@"w = %f", tableView.bounds.size.width);
+    }
     else
+    {
         cell.layer.mask = nil;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

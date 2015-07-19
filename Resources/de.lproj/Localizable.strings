@@ -336,3 +336,5 @@
 "make_call" = "Mache einen Anruf";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Routenfarbe gemäß Routenscope";
 "rendering_value_walkingRoutesOSMC_name" = "Routenfarbe gemäß OSMC";
+"shared_string_edit" = "Bearbeiten";
+"rendering_value_default_name" = "Standard";

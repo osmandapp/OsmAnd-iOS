@@ -96,7 +96,7 @@
         for (OADestination *destination in destinationsToRemove)
         {
             [_app.data.destinations removeObject:destination];
-            [self.sortedDestinations removeObject:destination];
+            [_sortedDestinations removeObject:destination];
         }
         
         for (OADestination *destination in routeDestinations)
@@ -104,22 +104,22 @@
             if (![_app.data.destinations containsObject:destination])
             {
                 [_app.data.destinations addObject:destination];
-                [self.sortedDestinations addObject:destination];
+                [_sortedDestinations addObject:destination];
             }
         }
 
-        [self.sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
+        [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
         {
             if (destination.routePoint && destination.routeTargetPoint && idx > 0)
             {
-                OADestination *firstDestination = [self.sortedDestinations firstObject];
+                OADestination *firstDestination = [_sortedDestinations firstObject];
                 if (firstDestination.routePoint)
                 {
-                    [self.sortedDestinations removeObject:firstDestination];
-                    [self.sortedDestinations addObject:firstDestination];
+                    [_sortedDestinations removeObject:firstDestination];
+                    [_sortedDestinations addObject:firstDestination];
                 }
-                [self.sortedDestinations removeObject:destination];
-                [self.sortedDestinations insertObject:destination atIndex:0];
+                [_sortedDestinations removeObject:destination];
+                [_sortedDestinations insertObject:destination atIndex:0];
 
                 *stop = YES;
             }
@@ -133,7 +133,7 @@
 {
     @synchronized(_syncObj)
     {
-        [self.sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
+        [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
         {
             NSUInteger index = [_app.data.destinations indexOfObject:destination];
             ((OADestination *)_app.data.destinations[index]).index = idx;
@@ -155,7 +155,10 @@
                 return NSOrderedSame;
         }];
         
-        [self.sortedDestinations addObjectsFromArray:array];
+        
+        for (OADestination *destination in array)
+            if (!destination.hidden)
+                [_sortedDestinations addObject:destination];
         
         [self refreshDestinationIndexes];
     }
@@ -188,12 +191,12 @@
     @synchronized(_syncObj)
     {
         NSUInteger newIndex = 0;
-        OADestination *firstDestination = [self.sortedDestinations firstObject];
+        OADestination *firstDestination = [_sortedDestinations firstObject];
         if (firstDestination.routePoint && firstDestination.routeTargetPoint)
             newIndex = 1;
         
-        [self.sortedDestinations removeObject:destination];
-        [self.sortedDestinations insertObject:destination atIndex:newIndex];
+        [_sortedDestinations removeObject:destination];
+        [_sortedDestinations insertObject:destination atIndex:newIndex];
         
         [self refreshDestinationIndexes];
     }
@@ -206,7 +209,7 @@
     @synchronized(_syncObj)
     {
         [_app.data.destinations addObject:destination];
-        [self.sortedDestinations addObject:destination];
+        [_sortedDestinations addObject:destination];
         
         [self refreshDestinationIndexes];
     }
@@ -222,7 +225,37 @@
             [OADestinationsHelper removeParkingReminderFromCalendar:destination];
 
         [_app.data.destinations removeObject:destination];
-        [self.sortedDestinations removeObject:destination];
+        [_sortedDestinations removeObject:destination];
+        
+        [self refreshDestinationIndexes];
+    }
+    
+    [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+}
+
+- (void)showOnMap:(OADestination *)destination
+{
+    destination.hidden = NO;
+    [_app.data.destinationShowObservable notifyEventWithKey:destination];
+
+    @synchronized(_syncObj)
+    {
+        [_sortedDestinations addObject:destination];
+        
+        [self refreshDestinationIndexes];
+    }
+    
+    [_app.data.destinationsChangeObservable notifyEvent];
+}
+
+- (void)hideOnMap:(OADestination *)destination
+{
+    destination.hidden = YES;
+    [_app.data.destinationHideObservable notifyEventWithKey:destination];
+    
+    @synchronized(_syncObj)
+    {
+        [_sortedDestinations removeObject:destination];
         
         [self refreshDestinationIndexes];
     }

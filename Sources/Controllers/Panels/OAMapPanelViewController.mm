@@ -442,7 +442,7 @@ typedef enum
         _destinationViewController.delegate = self;
 
         for (OADestination *destination in _app.data.destinations)
-            if (!destination.routePoint)
+            if (!destination.routePoint && !destination.hidden)
                 [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
 
     }

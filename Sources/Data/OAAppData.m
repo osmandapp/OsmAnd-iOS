@@ -39,6 +39,8 @@
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
     _destinationRemoveObservable = [[OAObservable alloc] init];
+    _destinationShowObservable = [[OAObservable alloc] init];
+    _destinationHideObservable = [[OAObservable alloc] init];
 }
 
 - (void)safeInit

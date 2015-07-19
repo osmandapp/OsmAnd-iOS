@@ -714,7 +714,7 @@
             return YES;
         }];
         
-        MGSwipeButton *driveTo = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_trip_direction"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
+        MGSwipeButton *driveTo = [MGSwipeButton buttonWithTitle:@"" icon:[UIImage imageNamed:@"ic_waypoint_up"] backgroundColor:UIColorFromRGB(0xF0F0F5) padding:padding callback:^BOOL(MGSwipeTableCell *sender)
         {
             indexPathForSwipingCell = nil;
             NSIndexPath * indexPath = [self.tableView indexPathForCell:sender];

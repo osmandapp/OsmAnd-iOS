@@ -27,6 +27,8 @@
 @property (nonatomic) BOOL routeTargetPoint;
 @property (nonatomic) NSInteger routePointIndex;
 
+@property (nonatomic) BOOL hidden;
+
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (double) distance:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;

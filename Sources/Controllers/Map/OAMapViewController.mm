@@ -34,6 +34,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXRouter.h"
 #import "OAGpxRoutePoint.h"
+#import "OADestination.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -243,7 +244,10 @@
     OAAutoObserverProxy* _trackRecordingObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
-    
+
+    OAAutoObserverProxy* _destinationShowObserver;
+    OAAutoObserverProxy* _destinationHideObserver;
+
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
 
@@ -407,6 +411,14 @@
     _framePreparedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onMapRendererFramePrepared)];
 
+    _destinationShowObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onDestinationShow:withKey:)
+                                                              andObserve:_app.data.destinationShowObservable];
+    _destinationHideObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onDestinationHide:withKey:)
+                                                              andObserve:_app.data.destinationHideObservable];
+
+    
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidEnterBackground:)
@@ -1816,6 +1828,48 @@
     }
     
     [_framePreparedObservable notifyEvent];
+}
+
+- (void)onDestinationShow:(id)observer withKey:(id)key
+{
+    OADestination *destination = key;
+    
+    if (destination)
+    {
+        BOOL exists = NO;
+        for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
+        {
+            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
+            if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:destination.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:destination.longitude])
+            {
+                exists = YES;
+                break;
+            }
+        }
+        
+        if (!exists)
+            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude];
+    }
+}
+
+- (void)onDestinationHide:(id)observer withKey:(id)key
+{
+    OADestination *destination = key;
+    
+    if (destination)
+    {
+        for (const auto &marker : _destinationPinMarkersCollection->getMarkers())
+        {
+            OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(marker->getPosition());
+            if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:destination.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:destination.longitude])
+            {
+                _destinationPinMarkersCollection->removeMarker(marker);
+                break;
+            }
+        }
+    }
 }
 
 - (void)animatedAlignAzimuthToNorth

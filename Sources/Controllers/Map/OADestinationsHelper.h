@@ -25,6 +25,9 @@
 
 - (NSInteger)pureDestinationsCount;
 
+- (void)showOnMap:(OADestination *)destination;
+- (void)hideOnMap:(OADestination *)destination;
+
 + (void)addParkingReminderToCalendar:(OADestination *)destination;
 + (void)removeParkingReminderFromCalendar:(OADestination *)destination;
 

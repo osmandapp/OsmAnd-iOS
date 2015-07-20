@@ -409,3 +409,5 @@
 "shared_string_dismiss" = "解除";
 "shared_string_modify" = "修改";
 "parking" = "停車場";
+"est_travel_time" = "估算行程時間";
+"pedestrian" = "步行";

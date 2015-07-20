@@ -37,6 +37,7 @@
 #define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
 
 #define mapSettingActiveRouteFileNameKey @"mapSettingActiveRouteFileNameKey"
+#define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
 
 
 @interface OAAppSettings : NSObject
@@ -85,6 +86,7 @@
 @property (assign, nonatomic) BOOL mapSettingShowRecordingTrack;
 
 @property (nonatomic) NSString* mapSettingActiveRouteFileName;
+@property (nonatomic) int mapSettingActiveRouteVariantType;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

@@ -72,26 +72,7 @@
     NSTextAttachment *timeMovingAttachment;
     if (tripDuration > 0)
     {
-        NSString *imageName;
-        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
-        switch (variantType)
-        {
-            case OAMapVariantDefault:
-            case OAMapVariantPedestrian:
-                imageName = @"ic_trip_pedestrian";
-                break;
-            case OAMapVariantBicycle:
-                imageName = @"ic_trip_bike";
-                break;
-            case OAMapVariantCar:
-                imageName = @"ic_trip_car";
-                break;
-                
-            default:
-                imageName = @"ic_trip_pedestrian";
-                break;
-        }
-        
+        NSString *imageName = [[OAGPXRouter sharedInstance] getRouteVariantTypeSmallIconName];
         timeMovingAttachment = [[NSTextAttachment alloc] init];
         timeMovingAttachment.image = [UIImage imageNamed:imageName];
     }

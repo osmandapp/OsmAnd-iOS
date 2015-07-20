@@ -64,6 +64,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *topImageView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imageView;
+@property (weak, nonatomic) IBOutlet UIButton *buttonLeft;
 @property (weak, nonatomic) IBOutlet UILabel *addressLabel;
 @property (weak, nonatomic) IBOutlet UILabel *coordinateLabel;
 
@@ -877,6 +878,7 @@
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_cancel")
                         otherTitles:parsedPhones
+                          otherDesc:nil
                         otherImages:images
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
@@ -1047,6 +1049,18 @@
     
     BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
     
+    if (_targetPoint.type == OATargetGPXRoute)
+    {
+        [self updateLeftButton];
+        _buttonLeft.hidden = NO;
+        _imageView.hidden = YES;
+    }
+    else
+    {
+        _buttonLeft.hidden = YES;
+        _imageView.hidden = NO;
+    }
+    
     _infoCoordsImage.hidden = !coordsHidden;
     _infoCoordsText.hidden = !coordsHidden;
 
@@ -1077,6 +1091,14 @@
     _infoDescText.hidden = _targetPoint.desc == nil;
     
     [self updateDirectionButton];
+}
+
+- (void)updateLeftButton
+{
+    if (_targetPoint.type == OATargetGPXRoute)
+    {
+        [_buttonLeft setImage:[UIImage imageNamed:[[OAGPXRouter sharedInstance] getRouteVariantTypeIconName]] forState:UIControlStateNormal];
+    }
 }
 
 - (BOOL)hasInfo
@@ -1597,7 +1619,7 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     
     CGFloat width = self.frame.size.width;
     
@@ -1625,7 +1647,11 @@
     else
         _coordinateLabel.frame = CGRectMake(textX, 35.0, width - textX - 40.0, 36.0);
     
-    _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
+    if (!_buttonLeft.hidden)
+        _buttonShadow.frame = CGRectMake(_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
+    else
+        _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
+    
     _buttonClose.frame = CGRectMake(width - 36.0, 0.0, 36.0, 36.0);
     
     if (_hideButtons)
@@ -1893,26 +1919,7 @@
         NSTextAttachment *timeMovingAttachment;
         if (tripDuration > 0)
         {
-            NSString *imageName;
-            OAMapVariantType variantType = [OAMapStyleSettings getVariantType:[OsmAndApp instance].data.lastMapSource.variant];
-            switch (variantType)
-            {
-                case OAMapVariantDefault:
-                case OAMapVariantPedestrian:
-                    imageName = @"ic_trip_pedestrian";
-                    break;
-                case OAMapVariantBicycle:
-                    imageName = @"ic_trip_bike";
-                    break;
-                case OAMapVariantCar:
-                    imageName = @"ic_trip_car";
-                    break;
-                    
-                default:
-                    imageName = @"ic_trip_pedestrian";
-                    break;
-            }
-            
+            NSString *imageName = [[OAGPXRouter sharedInstance] getRouteVariantTypeSmallIconName];
             timeMovingAttachment = [[NSTextAttachment alloc] init];
             timeMovingAttachment.image = [UIImage imageNamed:imageName];
         }
@@ -2106,6 +2113,7 @@
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_cancel")
                             otherTitles:titles
+                              otherDesc:nil
                             otherImages:images
                              completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                  if (!cancelled)
@@ -2156,6 +2164,59 @@
     [self.delegate targetHide];
 }
 
+- (IBAction)buttonLeftClicked:(id)sender
+{
+    if (_targetPoint.type == OATargetGPXRoute)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        OAGPXRouter *router = [OAGPXRouter sharedInstance];
+        
+        [PXAlertView showAlertWithTitle:OALocalizedString(@"est_travel_time")
+                                message:nil
+                            cancelTitle:OALocalizedString(@"shared_string_cancel")
+                            otherTitles:@[OALocalizedString(@"pedestrian"), OALocalizedString(@"pedestrian"), OALocalizedString(@"m_style_bicycle"), OALocalizedString(@"m_style_car")]
+                              otherDesc:@[[app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantPedestrianSlow] drive:YES],
+                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantPedestrian] drive:YES],
+                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantBicycle] drive:YES],
+                                          [app getFormattedSpeed:[router getMovementSpeed:OAGPXRouteVariantCar] drive:YES]]
+                            otherImages:@[@"ic_mode_pedestrian.png", @"ic_mode_pedestrian.png", @"ic_mode_bike.png", @"ic_mode_car.png"]
+                             completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                                 if (!cancelled)
+                                 {
+                                     switch (buttonIndex)
+                                     {
+                                         case 0:
+                                         {
+                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantPedestrianSlow;
+                                             break;
+                                         }
+                                         case 1:
+                                         {
+                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantPedestrian;
+                                             break;
+                                         }
+                                         case 2:
+                                         {
+                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantBicycle;
+                                             break;
+                                         }
+                                         case 3:
+                                         {
+                                             [OAGPXRouter sharedInstance].routeVariantType = OAGPXRouteVariantCar;
+                                             break;
+                                         }
+                                         default:
+                                             break;
+                                     }
+                                     
+                                     dispatch_async(dispatch_get_main_queue(), ^{
+                                         [self contentChanged];
+                                     });
+                                 }
+                             }];
+    }
+}
+
 - (IBAction)buttonRightClicked:(id)sender
 {
     if (_targetPoint.type == OATargetGPX)
@@ -2184,6 +2245,9 @@
 
 - (void) contentChanged
 {
+    if (!_buttonLeft.hidden)
+        [self updateLeftButton];
+    
     if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];

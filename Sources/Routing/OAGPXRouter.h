@@ -8,7 +8,14 @@
 
 #import <Foundation/Foundation.h>
 #import "OAObservable.h"
-#import "OAMapStyleSettings.h"
+
+typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
+{
+    OAGPXRouteVariantPedestrianSlow = 0,
+    OAGPXRouteVariantPedestrian,
+    OAGPXRouteVariantBicycle,
+    OAGPXRouteVariantCar,
+};
 
 @class OAGPXRouteDocument;
 @class OAGPX;
@@ -23,6 +30,8 @@
 @property (readonly) OAObservable* routeCanceledObservable;
 @property (readonly) OAObservable* routeChangedObservable;
 
+@property (nonatomic, assign) OAGPXRouteVariantType routeVariantType;
+
 + (OAGPXRouter *)sharedInstance;
 
 - (void)setRouteWithGpx:(OAGPX *)gpx;
@@ -32,9 +41,15 @@
 - (void)refreshRoute;
 
 - (NSTimeInterval)getRouteDuration;
-- (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType;
+- (NSTimeInterval)getRouteDuration:(OAGPXRouteVariantType)routeVariantType;
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate;
 - (void)refreshDestinations;
+
+- (NSString *)getRouteVariantTypeIconName;
+- (NSString *)getRouteVariantTypeSmallIconName;
+
+- (CGFloat)getMovementSpeed;
+- (CGFloat)getMovementSpeed:(OAGPXRouteVariantType)routeVariantType;
 
 @end

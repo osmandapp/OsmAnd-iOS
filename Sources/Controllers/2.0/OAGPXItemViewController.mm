@@ -504,6 +504,7 @@
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
+                                      otherDesc:nil
                                     otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
@@ -526,6 +527,7 @@
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
+                                      otherDesc:nil
                                     otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
@@ -598,6 +600,7 @@
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_no")
                          otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
                          otherImage:nil
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
@@ -783,6 +786,7 @@
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_no")
                          otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
                          otherImage:nil
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)

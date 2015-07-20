@@ -16,18 +16,19 @@
 #import "OAGpxRouteWptItem.h"
 #import "OADestinationsHelper.h"
 #import "OAUtilities.h"
+#import "OAMapStyleSettings.h"
 
 /*
- - default       3 km/h
- - pedestrian    3 km/h
- - car          40 km/h
- - bicycle      12 km/h
+ - pedestrian slow       3 km/h
+ - pedestrian            5 km/h
+ - bicycle              15 km/h
+ - car                  40 km/h
  */
 
 const double kKmhToMps = 1.0/3.6;
-const double kMotionSpeedDefault = 3.0 * kKmhToMps;
-const double kMotionSpeedPedestrian = 3.0 * kKmhToMps;
-const double kMotionSpeedBicycle = 12.0 * kKmhToMps;
+const double kMotionSpeedPedestrianSlow = 3.0 * kKmhToMps;
+const double kMotionSpeedPedestrian = 5.0 * kKmhToMps;
+const double kMotionSpeedBicycle = 15.0 * kKmhToMps;
 const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 @implementation OAGPXRouter
@@ -95,6 +96,24 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
     self.routeDoc = [[OAGPXRouteDocument alloc] initWithGpxFile:path];
     [[OAAppSettings sharedManager] setMapSettingActiveRouteFileName:gpx.gpxFileName];
+    
+    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+    switch (variantType)
+    {
+        case OAMapVariantCar:
+            self.routeVariantType = OAGPXRouteVariantCar;
+            break;
+        case OAMapVariantPedestrian:
+            self.routeVariantType = OAGPXRouteVariantPedestrian;
+            break;
+        case OAMapVariantBicycle:
+            self.routeVariantType = OAGPXRouteVariantBicycle;
+            break;
+            
+        default:
+            self.routeVariantType = OAGPXRouteVariantPedestrian;
+            break;
+    }
     
     [self refreshDestinations];
     [self.routeDefinedObservable notifyEvent];
@@ -193,24 +212,33 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     });
 }
 
-- (NSTimeInterval)getRouteDuration
+-(OAGPXRouteVariantType)routeVariantType
 {
-    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
-    return [self getRouteDuration:variantType];
+    return (OAGPXRouteVariantType)[OAAppSettings sharedManager].mapSettingActiveRouteVariantType;
 }
 
-- (NSTimeInterval)getRouteDuration:(OAMapVariantType)mapVariantType
+-(void)setRouteVariantType:(OAGPXRouteVariantType)routeVariantType
+{
+    [OAAppSettings sharedManager].mapSettingActiveRouteVariantType = routeVariantType;
+}
+
+- (NSTimeInterval)getRouteDuration
+{
+    return [self getRouteDuration:self.routeVariantType];
+}
+
+- (NSTimeInterval)getRouteDuration:(OAGPXRouteVariantType)routeVariantType
 {
     double distance = self.routeDoc.totalDistance;
-    switch (mapVariantType)
+    switch (routeVariantType)
     {
-        case OAMapVariantDefault:
-            return distance / kMotionSpeedDefault;
-        case OAMapVariantPedestrian:
+        case OAGPXRouteVariantPedestrianSlow:
+            return distance / kMotionSpeedPedestrianSlow;
+        case OAGPXRouteVariantPedestrian:
             return distance / kMotionSpeedPedestrian;
-        case OAMapVariantBicycle:
+        case OAGPXRouteVariantBicycle:
             return distance / kMotionSpeedBicycle;
-        case OAMapVariantCar:
+        case OAGPXRouteVariantCar:
             return distance / kMotionSpeedCar;
             
         default:
@@ -229,6 +257,70 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     [self.routeDoc updateDistances];
     [self refreshDestinations];
     [self.routeDoc buildRouteTrack];
+}
+
+- (NSString *)getRouteVariantTypeIconName
+{
+    switch (self.routeVariantType)
+    {
+        case OAGPXRouteVariantPedestrian:
+        case OAGPXRouteVariantPedestrianSlow:
+            return @"ic_mode_pedestrian";
+
+        case OAGPXRouteVariantBicycle:
+            return @"ic_mode_bike";
+
+        case OAGPXRouteVariantCar:
+            return @"ic_mode_car";
+            
+        default:
+            return @"ic_mode_pedestrian";
+    }
+}
+
+- (NSString *)getRouteVariantTypeSmallIconName
+{
+    switch (self.routeVariantType)
+    {
+        case OAGPXRouteVariantPedestrian:
+        case OAGPXRouteVariantPedestrianSlow:
+            return @"ic_trip_pedestrian";
+
+        case OAGPXRouteVariantBicycle:
+            return @"ic_trip_bike";
+
+        case OAGPXRouteVariantCar:
+            return @"ic_trip_car";
+            
+        default:
+            return @"ic_trip_pedestrian";
+    }
+}
+
+- (CGFloat)getMovementSpeed
+{
+    return [self getMovementSpeed:self.routeVariantType];
+}
+
+- (CGFloat)getMovementSpeed:(OAGPXRouteVariantType)routeVariantType
+{
+    switch (routeVariantType)
+    {
+        case OAGPXRouteVariantPedestrianSlow:
+            return kMotionSpeedPedestrianSlow;
+
+        case OAGPXRouteVariantPedestrian:
+            return kMotionSpeedPedestrian;
+            
+        case OAGPXRouteVariantBicycle:
+            return kMotionSpeedBicycle;
+            
+        case OAGPXRouteVariantCar:
+            return kMotionSpeedCar;
+            
+        default:
+            return kMotionSpeedPedestrian;
+    }
 }
 
 @end

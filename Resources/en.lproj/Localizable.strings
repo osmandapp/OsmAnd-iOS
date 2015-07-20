@@ -460,4 +460,6 @@
 "directions" = "Directions";
 "parking" = "Parking";
 
+"est_travel_time" = "Estimate travel time";
+"pedestrian" = "Pedestrian";
 

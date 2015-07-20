@@ -917,6 +917,7 @@ static OAGPXListViewController *parentController;
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_no")
                          otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
                          otherImage:nil
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
@@ -948,6 +949,7 @@ static OAGPXListViewController *parentController;
                                     message:nil
                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
                                  otherTitle:OALocalizedString(@"shared_string_ok")
+                                  otherDesc:nil
                                  otherImage:nil
                                 contentView:view
                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
@@ -1008,6 +1010,7 @@ static OAGPXListViewController *parentController;
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_no")
                              otherTitle:OALocalizedString(@"shared_string_yes")
+                              otherDesc:nil
                              otherImage:nil
                              completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                  if (!cancelled) {
@@ -1040,6 +1043,7 @@ static OAGPXListViewController *parentController;
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_no")
                              otherTitle:OALocalizedString(@"shared_string_yes")
+                              otherDesc:nil
                              otherImage:nil
                              completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                  if (!cancelled) {

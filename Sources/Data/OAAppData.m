@@ -201,7 +201,7 @@
 
     // Set offline maps as default map source
     defaults.lastMapSource = [[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                        andVariant:@"type_general"];
+                                                        andVariant:@"type_default"];
 
     return defaults;
 }

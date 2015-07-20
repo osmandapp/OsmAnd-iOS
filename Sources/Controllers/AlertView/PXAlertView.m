@@ -66,6 +66,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
             message:(NSString *)message
         cancelTitle:(NSString *)cancelTitle
          otherTitle:(NSString *)otherTitle
+          otherDesc:(NSString *)otherDesc
          otherImage:(NSString *)otherImage
  buttonsShouldStack:(BOOL)shouldstack
         contentView:(UIView *)contentView
@@ -75,6 +76,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                        message:message
                    cancelTitle:cancelTitle
                    otherTitles:(otherTitle) ? @[ otherTitle ] : nil
+                     otherDesc:(otherDesc) ? @[ otherDesc ] : nil
                    otherImages:(otherImage) ? @[ otherImage ] : nil
             buttonsShouldStack:(BOOL)shouldstack
                    contentView:contentView
@@ -85,6 +87,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
             message:(NSString *)message
         cancelTitle:(NSString *)cancelTitle
         otherTitles:(NSArray *)otherTitles
+          otherDesc:(NSArray *)otherDesc
         otherImages:(NSArray *)otherImages
  buttonsShouldStack:(BOOL)shouldstack
         contentView:(UIView *)contentView
@@ -246,30 +249,38 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
             if (otherTitles && [otherTitles count] > 0) {
                 for (int i = 0; i < otherTitles.count; i++) {
                     id otherTitle = otherTitles[i];
+                    id desc = nil;
+                    if (otherDesc.count > 0)
+                        desc = otherDesc[i];
+                    
                     NSParameterAssert([otherTitle isKindOfClass:[NSString class]]);
                     NSString *imageName;
                     if (i < otherImages.count)
                         imageName = otherImages[i];
-                    [self addButtonWithTitle:(NSString *)otherTitle cmdButton:NO cancelButton:NO imageName:imageName];
+                    [self addButtonWithTitle:(NSString *)otherTitle cmdButton:NO cancelButton:NO imageName:imageName desc:desc];
                 }
             }
             
             if (cancelTitle)
-                [self addButtonWithTitle:cancelTitle cmdButton:YES cancelButton:YES imageName:nil];
+                [self addButtonWithTitle:cancelTitle cmdButton:YES cancelButton:YES imageName:nil desc:nil];
         }
         else
         {
             if (cancelTitle)
-                [self addButtonWithTitle:cancelTitle cmdButton:YES cancelButton:YES imageName:nil];
+                [self addButtonWithTitle:cancelTitle cmdButton:YES cancelButton:YES imageName:nil desc:nil];
             
             if (otherTitles && [otherTitles count] > 0) {
                 for (int i = 0; i < otherTitles.count; i++) {
                     id otherTitle = otherTitles[i];
+                    id desc = nil;
+                    if (otherDesc.count > 0)
+                        desc = otherDesc[i];
+
                     NSParameterAssert([otherTitle isKindOfClass:[NSString class]]);
                     NSString *imageName;
                     if (i < otherImages.count)
                         imageName = otherImages[i];
-                    [self addButtonWithTitle:(NSString *)otherTitle cmdButton:YES cancelButton:NO imageName:imageName];
+                    [self addButtonWithTitle:(NSString *)otherTitle cmdButton:YES cancelButton:NO imageName:imageName desc:desc];
                 }
             }
         }
@@ -645,6 +656,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                               otherTitle:nil
+                                               otherDesc:nil
                                               otherImage:nil
                                       buttonsShouldStack:NO
                                              contentView:nil
@@ -657,6 +669,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                         otherDesc:(NSString *)otherDesc
                         otherImage:(NSString *)otherImage
                         completion:(PXAlertViewCompletionBlock)completion
 {
@@ -664,6 +677,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                               otherTitle:otherTitle
+                                               otherDesc:otherDesc
                                               otherImage:otherImage
                                       buttonsShouldStack:NO
                                              contentView:nil
@@ -676,6 +690,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                         otherDesc:(NSString *)otherDesc
                         otherImage:(NSString *)otherImage
                 buttonsShouldStack:(BOOL)shouldStack
                         completion:(PXAlertViewCompletionBlock)completion
@@ -684,6 +699,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                               otherTitle:otherTitle
+                                               otherDesc:otherDesc
                                               otherImage:otherImage
                                       buttonsShouldStack:shouldStack
                                              contentView:nil
@@ -696,6 +712,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                        otherTitles:(NSArray *)otherTitles
+                         otherDesc:(NSArray *)otherDesc
                        otherImages:(NSArray *)otherImages
                         completion:(PXAlertViewCompletionBlock)completion
 {
@@ -703,6 +720,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                              otherTitles:otherTitles
+                                               otherDesc:otherDesc
                                              otherImages:otherImages
                                       buttonsShouldStack:YES
                                              contentView:nil
@@ -715,6 +733,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                         otherDesc:(NSString *)otherDesc
                         otherImage:(NSString *)otherImage
                        contentView:(UIView *)view
                         completion:(PXAlertViewCompletionBlock)completion
@@ -723,6 +742,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                               otherTitle:otherTitle
+                                               otherDesc:otherDesc
                                               otherImage:otherImage
                                       buttonsShouldStack:NO
                                              contentView:view
@@ -735,6 +755,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                         otherTitle:(NSString *)otherTitle
+                         otherDesc:(NSString *)otherDesc
                         otherImage:(NSString *)otherImage
                 buttonsShouldStack:(BOOL)shouldStack
                        contentView:(UIView *)view
@@ -744,6 +765,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                               otherTitle:otherTitle
+                                               otherDesc:otherDesc
                                               otherImage:otherImage
                                       buttonsShouldStack:shouldStack
                                              contentView:view
@@ -757,6 +779,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                            message:(NSString *)message
                        cancelTitle:(NSString *)cancelTitle
                        otherTitles:(NSArray *)otherTitles
+                         otherDesc:(NSArray *)otherDesc
                        otherImages:(NSArray *)otherImages
                        contentView:(UIView *)view
                         completion:(PXAlertViewCompletionBlock)completion
@@ -765,6 +788,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
                                                  message:message
                                              cancelTitle:cancelTitle
                                              otherTitles:otherTitles
+                                               otherDesc:otherDesc
                                              otherImages:otherImages
                                       buttonsShouldStack:NO
                                              contentView:view
@@ -773,7 +797,7 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
     return alertView;
 }
 
-- (NSInteger)addButtonWithTitle:(NSString *)title cmdButton:(BOOL)cmdButton cancelButton:(BOOL)cancelButton imageName:(NSString *)imageName
+- (NSInteger)addButtonWithTitle:(NSString *)title cmdButton:(BOOL)cmdButton cancelButton:(BOOL)cancelButton imageName:(NSString *)imageName desc:(NSString *)desc
 {
     UIButton *button = [self genericButton:cmdButton imageName:imageName];
     if (cmdButton)
@@ -814,6 +838,21 @@ static const CGFloat AlertViewVerticalEdgeMinMargin = 25;
     }
     
     [self.alertView addSubview:button];
+    
+    if (desc)
+    {
+        CGRect f = button.bounds;
+        f.size.width -= 10.0;
+        UILabel *descLabel = [[UILabel alloc] initWithFrame:f];
+        descLabel.userInteractionEnabled = NO;
+        descLabel.backgroundColor = [UIColor clearColor];
+        descLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+        descLabel.textColor = [UIColor grayColor];
+        descLabel.textAlignment = NSTextAlignmentRight;
+        descLabel.text = desc;
+        [button addSubview:descLabel];
+    }
+    
     self.buttons = (self.buttons) ? [self.buttons arrayByAddingObject:button] : @[ button ];
     return [self.buttons count] - 1;
 }

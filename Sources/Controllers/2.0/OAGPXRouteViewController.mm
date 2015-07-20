@@ -98,6 +98,7 @@
                             message:nil
                         cancelTitle:OALocalizedString(@"shared_string_no")
                          otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
                          otherImage:nil
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)

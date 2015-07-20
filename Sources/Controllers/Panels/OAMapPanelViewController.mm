@@ -252,6 +252,7 @@ typedef enum
                                                      message:nil
                                                  cancelTitle:OALocalizedString(@"shared_string_cancel")
                                                  otherTitles:@[ OALocalizedString(@"track_stop_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_new_segment"), OALocalizedString(@"track_save") ]
+                                                   otherDesc:nil
                                                  otherImages:@[@"track_recording_stop.png", @"icon_info.png", @"track_new_segement.png" , @"track_save.png"]
                                                   completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                       if (!cancelled) {
@@ -279,6 +280,7 @@ typedef enum
                                                                                               message:nil
                                                                                           cancelTitle:OALocalizedString(@"shared_string_no")
                                                                                            otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                                            otherDesc:nil
                                                                                            otherImage:nil
                                                                                            completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                                                                if (!cancelled) {
@@ -309,6 +311,7 @@ typedef enum
                                     message:nil
                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
                                  otherTitles:@[OALocalizedString(@"track_continue_rec"), OALocalizedString(@"show_info"), OALocalizedString(@"track_clear"), OALocalizedString(@"track_save")]
+                                  otherDesc:nil
                                 otherImages:@[@"ic_action_rec_start.png", @"icon_info.png", @"track_clear_data.png", @"track_save.png"]
                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                      if (!cancelled) {
@@ -330,6 +333,7 @@ typedef enum
                                                                          message:nil
                                                                      cancelTitle:OALocalizedString(@"shared_string_no")
                                                                       otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                       otherDesc:nil
                                                                       otherImage:nil
                                                                       completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                                           if (!cancelled)
@@ -352,6 +356,7 @@ typedef enum
                                                                              message:nil
                                                                          cancelTitle:OALocalizedString(@"shared_string_no")
                                                                           otherTitle:OALocalizedString(@"shared_string_yes")
+                                                                           otherDesc:nil
                                                                           otherImage:nil
                                                                           completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                                                               if (!cancelled) {
@@ -382,6 +387,7 @@ typedef enum
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                      otherTitle:OALocalizedString(@"shared_string_ok")
+                                      otherDesc:nil
                                      otherImage:nil
                                     contentView:view
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
@@ -425,6 +431,7 @@ typedef enum
                                 message:nil
                             cancelTitle:OALocalizedString(@"shared_string_no")
                              otherTitle:OALocalizedString(@"shared_string_yes")
+                              otherDesc:nil
                              otherImage:nil
                              completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                  if (!cancelled) {
@@ -1480,6 +1487,7 @@ typedef enum
                                     message:nil
                                 cancelTitle:OALocalizedString(@"shared_string_cancel")
                                 otherTitles:names
+                                  otherDesc:nil
                                 otherImages:images
                                  completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                      if (!cancelled)
@@ -2122,14 +2130,12 @@ typedef enum
     
     NSString *caption = [item getNiceTitle];
     
-    UIImage *icon = [UIImage imageNamed:@"icon_gpx_fill"];
+    UIImage *icon = [UIImage imageNamed:@"ic_route_modebg.jpg"];
     
     targetPoint.type = OATargetGPXRoute;
     
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
-    
-    //[self displayGpxOnMap:item];
     
     if (item.bounds.center.latitude == DBL_MAX)
     {
@@ -2201,6 +2207,7 @@ typedef enum
     
     OsmAnd::LatLon latLon(item.bounds.center.latitude, item.bounds.center.longitude);
     _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    _mainMapZoom = _targetZoom;
     
     if (self.targetMenuView.superview && !self.targetMenuView.showFullScreen)
     {

@@ -24,6 +24,7 @@
 #import "OAGPXRouteGroupsViewController.h"
 
 #import "OsmAndApp.h"
+#import <MBProgressHUD.h>
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -236,7 +237,38 @@
 
 - (void)doSort
 {
-    // todo sort
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+        MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+        progressHUD.removeFromSuperViewOnHide = YES;
+        progressHUD.labelText = [OALocalizedString(@"sorting") stringByAppendingString:@"..."];
+        [topView addSubview:progressHUD];
+        
+        [progressHUD showAnimated:YES whileExecutingBlock:^{
+            
+            [_gpxRouter sortRoute];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                int i = 0;
+                for (OAGpxRouteWptItem *item in _gpxRouter.routeDoc.activePoints)
+                {
+                    item.point.index = i++;
+                    [item.point applyRouteInfo];
+                }
+                
+                [_gpxRouter refreshRoute];
+                [_gpxRouter.routeChangedObservable notifyEvent];
+                
+                if (self.delegate)
+                    [self.delegate routePointsChanged];
+                
+                [self.tableView reloadData];
+            });
+        }];
+    });
+    
 }
 
 - (void)updateWaypointCell:(OAGPXRouteWaypointTableViewCell *)cell item:(OAGpxRouteWptItem *)item indexPath:(NSIndexPath *)indexPath

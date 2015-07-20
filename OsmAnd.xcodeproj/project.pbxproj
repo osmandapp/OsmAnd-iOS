@@ -1336,6 +1336,9 @@
 		845E065D1B5CEC2200DFC2A7 /* ic_route_modebg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E06561B5CEC2200DFC2A7 /* ic_route_modebg@3x.png */; };
 		845E065E1B5CEC2200DFC2A7 /* ic_route_modebg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E06561B5CEC2200DFC2A7 /* ic_route_modebg@3x.png */; };
 		845E065F1B5CEC2200DFC2A7 /* ic_route_modebg@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 845E06561B5CEC2200DFC2A7 /* ic_route_modebg@3x.png */; };
+		845E06621B5D274600DFC2A7 /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = 845E06611B5D274600DFC2A7 /* OATspAnt.m */; };
+		845E06631B5D274600DFC2A7 /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = 845E06611B5D274600DFC2A7 /* OATspAnt.m */; };
+		845E06641B5D274600DFC2A7 /* OATspAnt.m in Sources */ = {isa = PBXBuildFile; fileRef = 845E06611B5D274600DFC2A7 /* OATspAnt.m */; };
 		84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
 		84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
 		84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
@@ -3163,6 +3166,8 @@
 		845E06541B5CEC2200DFC2A7 /* ic_route_modebg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_route_modebg.png; path = Resources/Icons/ic_route_modebg.png; sourceTree = "<group>"; };
 		845E06551B5CEC2200DFC2A7 /* ic_route_modebg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_route_modebg@2x.png"; path = "Resources/Icons/ic_route_modebg@2x.png"; sourceTree = "<group>"; };
 		845E06561B5CEC2200DFC2A7 /* ic_route_modebg@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_route_modebg@3x.png"; path = "Resources/Icons/ic_route_modebg@3x.png"; sourceTree = "<group>"; };
+		845E06601B5D274600DFC2A7 /* OATspAnt.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OATspAnt.h; sourceTree = "<group>"; };
+		845E06611B5D274600DFC2A7 /* OATspAnt.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OATspAnt.m; sourceTree = "<group>"; };
 		84630FBE1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXTrackAnalysis.h; sourceTree = "<group>"; };
 		84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXTrackAnalysis.mm; sourceTree = "<group>"; };
 		84630FCF1A8E197E005B39F2 /* LightRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = LightRS.render.xml; path = ../resources/rendering_styles/LightRS.render.xml; sourceTree = "<group>"; };
@@ -4775,6 +4780,8 @@
 			children = (
 				84F3A8861B4C44D300D16EBC /* OAGPXRouter.h */,
 				84F3A8871B4C44D300D16EBC /* OAGPXRouter.mm */,
+				845E06601B5D274600DFC2A7 /* OATspAnt.h */,
+				845E06611B5D274600DFC2A7 /* OATspAnt.m */,
 			);
 			path = Routing;
 			sourceTree = "<group>";
@@ -7802,6 +7809,7 @@
 				3AC639B91A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84BFC2371A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BB0EA14A17C60AF9007B572D /* OARootViewController.m in Sources */,
+				845E06621B5D274600DFC2A7 /* OATspAnt.m in Sources */,
 				84387B381ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				8420C1D51B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				BB451EC018E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -7979,6 +7987,7 @@
 				3AC639BA1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84BFC2381A9B1A5900D807B4 /* OAMapSettingsCategoryScreen.mm in Sources */,
 				BBA3AED7197500DE0039D991 /* OAMapViewController.mm in Sources */,
+				845E06631B5D274600DFC2A7 /* OATspAnt.m in Sources */,
 				84387B391ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
 				8420C1D61B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
 				BB451EC118E1E590005FBE09 /* OAAppData.m in Sources */,
@@ -8083,6 +8092,7 @@
 				848D17251B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				BBA3AF4C197FC4BB0039D991 /* OATableViewCell.m in Sources */,
 				BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
+				845E06641B5D274600DFC2A7 /* OATspAnt.m in Sources */,
 				848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */,
 				848D17581B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				84BFC2341A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,

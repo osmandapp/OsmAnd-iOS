@@ -52,4 +52,6 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 - (CGFloat)getMovementSpeed;
 - (CGFloat)getMovementSpeed:(OAGPXRouteVariantType)routeVariantType;
 
+- (void)sortRoute;
+
 @end

@@ -409,3 +409,5 @@
 "shared_string_dismiss" = "Afvis";
 "shared_string_modify" = "Ændre";
 "parking" = "Parkering";
+"est_travel_time" = "Anslået rejsetid";
+"pedestrian" = "Fodgænger";

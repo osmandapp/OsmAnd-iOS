@@ -338,53 +338,18 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     CLLocation *start = [[CLLocation alloc] initWithLatitude:startItem.point.position.latitude longitude:startItem.point.position.longitude];
     CLLocation *end = [[CLLocation alloc] initWithLatitude:endItem.point.position.latitude longitude:endItem.point.position.longitude];
     NSMutableArray *l = [NSMutableArray array];
-    for (OAGpxRouteWptItem *item in _routeDoc.activePoints)
+    for (OAGpxRouteWptItem *item in otherItems)
         [l addObject:[[CLLocation alloc] initWithLatitude:item.point.position.latitude longitude:item.point.position.longitude]];
-    
-    int mixedOrder[l.count];
-    for (int i = 0; i < l.count; i++)
-        mixedOrder[i] = i;
     
     OATspAnt *t = [[OATspAnt alloc] init];
     [t readGraph:l start:start end:end];
     NSArray *ans = [t solve];
-    
-    double s = 0;
-    int order[ans.count];
-    double dist[ans.count];
-    order[0] = 0;
-    for (int k = 1; k < ans.count; k++)
+    for (int k = 0; k < ans.count; k++)
     {
-        int ansK = [((NSNumber *)ans[k]) intValue];
-        int ansKp = [((NSNumber *)ans[k - 1]) intValue];
-        
-        if(k == ans.count - 1)
-        {
-            int p = mixedOrder[ansKp - 1];
-            dist[k] = [end distanceFromLocation:l[p]];
-            order[k] = ansK;
-        }
-        else
-        {
-            int c = mixedOrder[ansK - 1];
-            order[k] = c + 1;
-            if (k == 1)
-            {
-                dist[k] = [start distanceFromLocation:l[c]];
-            }
-            else
-            {
-                int p = mixedOrder[ansKp - 1];
-                dist[k] = [((CLLocation *)l[p]) distanceFromLocation:l[c]];
-            }
-        }
-        s += dist[k];
+        int ansK = [ans[k] intValue];
+        ((OAGpxRouteWptItem *)_routeDoc.activePoints[ansK]).point.index = k;
     }
     
-    int i = 0;
-    for (OAGpxRouteWptItem *item in _routeDoc.activePoints)
-        item.point.index = order[i++];
-
     [_routeDoc.activePoints sortUsingComparator:^NSComparisonResult(OAGpxRouteWptItem *item1, OAGpxRouteWptItem *item2) {
         if (item2.point.index > item1.point.index)
             return NSOrderedAscending;
@@ -393,20 +358,6 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         else
             return NSOrderedSame;
     }];
-    
-    NSMutableString *log = [NSMutableString string];
-    [log appendString:@"Result order: "];
-    for (int i = 0; i < ans.count; i++)
-        [log appendFormat:@"%d ", order[i]];
-
-    NSLog(@"%@", log);
-
-    log = [NSMutableString string];
-    [log appendString:@"Result dist: "];
-    for (int i = 1; i < ans.count - 1; i++)
-        [log appendFormat:@"%f ", dist[i]];
-
-    NSLog(@"%@", log);
 }
 
 @end

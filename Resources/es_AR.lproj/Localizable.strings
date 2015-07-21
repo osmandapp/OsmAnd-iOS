@@ -406,3 +406,9 @@
 "gpx_group_select" = "Grupo elegido";
 "show_all" = "Mostrar todo";
 "directions" = "Indicaciones";
+"shared_string_dismiss" = "Descartar";
+"shared_string_modify" = "Modificar";
+"parking" = "Estacionamiento";
+"est_travel_time" = "Tiempo de viaje estimado";
+"pedestrian" = "Peatón";
+"sorting" = "Ordenar";

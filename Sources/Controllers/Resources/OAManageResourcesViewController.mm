@@ -537,7 +537,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         RegionResources regionResources;
         RegionResources regionResPrevious;
 
-        if (!doInit) {
+        if (!doInit)
+        {
             const auto citRegionResources = _resourcesByRegions.constFind(region);
             if (citRegionResources != _resourcesByRegions.cend())
                 regionResources = *citRegionResources;
@@ -545,11 +546,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
         if (!doInit) {
 
-            for (const auto& resource : regionResources.outdatedResources) {
+            for (const auto& resource : regionResources.outdatedResources)
+            {
                 regionResPrevious.outdatedResources.insert(resource->id, resource);
                 regionResources.allResources.remove(resource->id);
             }
-            for (const auto& resource : regionResources.localResources) {
+            for (const auto& resource : regionResources.localResources)
+            {
                 regionResPrevious.localResources.insert(resource->id, resource);
                 regionResources.allResources.remove(resource->id);
             }
@@ -579,7 +582,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 regionResources.localResources.insert(resource->id, resource);
         }
         
-        if (doInit) {
+        if (doInit)
+        {
+            NSMutableArray *typesArray = [NSMutableArray array];
             for (const auto& resource : _resourcesInRepository)
             {
                 if (!resource->id.startsWith(downloadsIdPrefix))
@@ -588,19 +593,42 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 //if ([resource->id.toNSString() rangeOfString:@"alaska"].location != NSNotFound)
                 //    OALog(@"resId=%@, downloadPrefix=%@", resource->id.toNSString(), downloadsIdPrefix.toNSString());
 
+                switch (resource->type)
+                {
+                    case OsmAndResourceType::MapRegion:
+                    case OsmAndResourceType::SrtmMapRegion:
+                    case OsmAndResourceType::WikiMapRegion:
+                        [typesArray addObject:[NSNumber numberWithInt:(int)resource->type]];
+                        break;
+                        
+                    default:
+                        break;
+                }
+                
                 if (!regionResources.allResources.contains(resource->id))
                     regionResources.allResources.insert(resource->id, resource);
+                
                 regionResources.repositoryResources.insert(resource->id, resource);
             }
-        } else {
+            
+            region.resourceTypes = [typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
+                if ([num2 intValue] > [num1 intValue])
+                    return NSOrderedAscending;
+                else if ([num2 intValue] < [num1 intValue])
+                    return NSOrderedDescending;
+                else
+                    return NSOrderedSame;
+            }];
+        }
+        else
+        {
             for (const auto& resource : regionResPrevious.outdatedResources)
-                if (!regionResources.allResources.contains(resource->id)) {
+                if (!regionResources.allResources.contains(resource->id))
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
-                }
+
             for (const auto& resource : regionResPrevious.localResources)
-                if (!regionResources.allResources.contains(resource->id)) {
+                if (!regionResources.allResources.contains(resource->id))
                     regionResources.allResources.insert(resource->id, _resourcesInRepository.value(resource->id));
-                }
         }
         
         _resourcesByRegions.insert(region, regionResources);
@@ -1419,10 +1447,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     return path;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+/*
+ -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 44.0;
 }
+*/
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -1501,12 +1531,27 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 cellTypeId = subregionCell;
                 title = item.name;
                 if (item.superregion != nil)
-                    subtitle = item.superregion.name;
-                
-            } else {
-                
+                {
+                    if (item.resourceTypes.count > 0)
+                    {
+                        NSMutableString *str = [NSMutableString string];
+                        for (NSNumber *typeNum in item.resourceTypes)
+                        {
+                            if (str.length > 0)
+                                [str appendString:@", "];
+                            [str appendString:[OAResourcesBaseViewController resourceTypeLocalized:(OsmAndResourceType)[typeNum intValue]]];
+                        }
+                        subtitle = str;
+                    }
+                    else
+                    {
+                        subtitle = item.superregion.name;
+                    }
+                }
+            }
+            else
+            {
                 ResourceItem* item = (ResourceItem*)item_;
-                uint64_t _size = item.size;
                 uint64_t _sizePkg = item.sizePkg;
                 
                 if (item.downloadTask != nil)
@@ -1556,9 +1601,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 }
                 
                 if (_sizePkg > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
-                else if (_size > 0)
-                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
                 else
                     subtitle = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
             }
@@ -1568,7 +1611,6 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             item_ = [[self getRegionMapItems] objectAtIndex:indexPath.row];
 
             ResourceItem* item = (ResourceItem*)item_;
-            uint64_t _size = item.size;
             uint64_t _sizePkg = item.sizePkg;
             
             if (item.downloadTask != nil)
@@ -1612,17 +1654,19 @@ static NSMutableArray* _searchableWorldwideRegionItems;
                 else
                     title = item.title;
             }
+            else if (self.region != _app.worldRegion)
+            {
+                title = [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType];
+            }
             else
             {
                 title = item.title;
             }
             
             if (_sizePkg > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@ / %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
-            else if (_size > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_size countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             else
-                subtitle = [NSString stringWithFormat:@"%@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType]];
+                subtitle = @"";
         }
     }
 

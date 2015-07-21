@@ -18,6 +18,8 @@
 @property(readonly) NSString* name;
 @property(readonly) NSArray* allNames;
 
+@property(nonatomic) NSArray *resourceTypes;
+
 // Hierarchy:
 @property(readonly, weak) OAWorldRegion* superregion;
 @property(readonly) NSArray* subregions;

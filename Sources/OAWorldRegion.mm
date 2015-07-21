@@ -129,6 +129,7 @@
 @synthesize superregion = _superregion;
 @synthesize subregions = _subregions;
 @synthesize flattenedSubregions = _flattenedSubregions;
+@synthesize resourceTypes = _resourceTypes;
 
 - (NSString*)name
 {

@@ -48,6 +48,10 @@
         _regionId = _worldRegion->fullRegionName.toNSString();
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
+        
+        //if ([_regionId rangeOfString:@"alaska"].location != NSNotFound)
+        //    OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@", _regionId, _downloadsIdPrefix, _nativeName);
+        
         [self setLocalizedNamesFrom:region->localizedNames];
         
         if (!_localizedName && _nativeName.length == 0)

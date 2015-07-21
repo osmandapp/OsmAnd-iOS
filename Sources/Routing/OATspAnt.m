@@ -26,7 +26,7 @@ static double pr = 0.01;
 
 // Reasonable number of iterations
 // - results typically settle down by 500
-static int maxIterations = 2000;
+static int maxIterations = 500;
 
 // Ant class. Maintains tour and tabu information.
 @interface OAAnt : NSObject
@@ -354,7 +354,8 @@ double bitsToDouble(uint64_t bitPattern)
     }
     for (OAAnt *a in ants)
     {
-        if ([a tourLength] < bestTourLength) {
+        if ([a tourLength] < bestTourLength)
+        {
             bestTourLength = [a tourLength];
             bestTour = [a.tour mutableCopy];
         }
@@ -382,7 +383,8 @@ double bitsToDouble(uint64_t bitPattern)
     int iteration = 0;
     // run for maxIterations
     // preserve best tour
-    while (iteration < maxIterations) {
+    while (iteration < maxIterations)
+    {
         [self setupAnts];
         [self moveAnts];
         [self updateTrails];

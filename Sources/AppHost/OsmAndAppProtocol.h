@@ -49,6 +49,8 @@
 @property(nonatomic) OAMapMode prevMapMode;
 @property(readonly) OAObservable* mapModeObservable;
 
+- (void)loadWorldRegions;
+
 - (void)saveDataToPermamentStorage;
 
 - (double)calculateRoundedDist:(double) baseMetersDist;

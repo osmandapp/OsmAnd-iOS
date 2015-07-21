@@ -532,7 +532,7 @@ static NSMutableArray* _searchableWorldwideRegionItems;
             [_searchableWorldwideRegionItems addObject:region];
         
         const auto regionId = QString::fromNSString(region.regionId);
-        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix);
+        const auto downloadsIdPrefix = QString::fromNSString(region.downloadsIdPrefix).toLower();
         
         RegionResources regionResources;
         RegionResources regionResPrevious;
@@ -582,11 +582,12 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         if (doInit) {
             for (const auto& resource : _resourcesInRepository)
             {
-                //NSLog(@"resId=%@, downloadPrefix=%@", resource->id.toNSString(), downloadsIdPrefix.toNSString());
-                
                 if (!resource->id.startsWith(downloadsIdPrefix))
                     continue;
                 
+                //if ([resource->id.toNSString() rangeOfString:@"alaska"].location != NSNotFound)
+                //    OALog(@"resId=%@, downloadPrefix=%@", resource->id.toNSString(), downloadsIdPrefix.toNSString());
+
                 if (!regionResources.allResources.contains(resource->id))
                     regionResources.allResources.insert(resource->id, resource);
                 regionResources.repositoryResources.insert(resource->id, resource);
@@ -1142,6 +1143,8 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [_refreshRepositoryProgressHUD showAnimated:YES
                             whileExecutingBlock:^{
                                 [OAOcbfHelper downloadOcbfIfUpdated];
+                                [_app loadWorldRegions];
+                                self.region = _app.worldRegion;                                
                                 _app.resourcesManager->updateRepository();
                             }
                                 completionBlock:^{

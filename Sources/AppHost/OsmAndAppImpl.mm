@@ -263,8 +263,7 @@
     }
     
     // Load world regions
-    NSString* worldRegionsFilename = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
-    _worldRegion = [OAWorldRegion loadFrom:worldRegionsFilename];
+    [self loadWorldRegions];
     
     [OAManageResourcesViewController prepareData];
     
@@ -329,6 +328,12 @@
     */
     
     return YES;
+}
+
+- (void)loadWorldRegions
+{
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    _worldRegion = [OAWorldRegion loadFrom:ocbfPathLib];
 }
 
 - (void)applyExcludedFromBackup:(NSString *)localPath

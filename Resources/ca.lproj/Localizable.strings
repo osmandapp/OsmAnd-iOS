@@ -409,3 +409,6 @@
 "shared_string_dismiss" = "Descarta";
 "shared_string_modify" = "Modifica";
 "parking" = "Aparcament";
+"est_travel_time" = "Durada estimada del trajecte";
+"pedestrian" = "Vianant";
+"sorting" = "Classificant";

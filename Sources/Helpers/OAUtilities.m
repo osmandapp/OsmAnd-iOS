@@ -61,7 +61,7 @@
     //  below the image
     CGSize imageSize = button.imageView.image.size;
     button.titleEdgeInsets = UIEdgeInsetsMake(
-                                              0.0, - imageSize.width, - (imageSize.height + spacing), 0.0);
+                                              0.0, - imageSize.width, - (imageSize.height), 0.0);
     
     // raise the image and push it right so it appears centered
     //  above the text

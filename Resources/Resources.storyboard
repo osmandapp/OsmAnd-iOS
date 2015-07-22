@@ -72,7 +72,7 @@
                                 <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" id="1LP-5L-xCP" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="320" height="355"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="366"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <searchBar key="tableHeaderView" contentMode="redraw" id="8s0-2h-M0v">
@@ -199,32 +199,32 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="xZm-qX-Rbq">
-                                <rect key="frame" x="0.0" y="419" width="320" height="61"/>
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="zlr-Vo-anF">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="zlr-Vo-anF">
                                         <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
                                         <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="1" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="0.5607843137254902" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarMapsClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="P2P-HS-mYh"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="MQA-Ui-rQr">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MQA-Ui-rQr">
                                         <rect key="frame" x="162" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarPurchasesClicked:" destination="Lhe-yk-sVD" eventType="touchUpInside" id="jh4-aY-ul2"/>
@@ -314,7 +314,7 @@
                                 <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" id="vN3-1c-cfU" userLabel="tableView">
-                                <rect key="frame" x="0.0" y="64" width="320" height="355"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="366"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <connections>
@@ -323,32 +323,32 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="d4h-lq-AnZ">
-                                <rect key="frame" x="0.0" y="419" width="320" height="61"/>
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="1eq-9l-zUI">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1eq-9l-zUI">
                                         <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
                                         <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="1" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarMapsClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="z1N-Lb-GzF"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4We-Xn-5pF">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="4We-Xn-5pF">
                                         <rect key="frame" x="162" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarPurchasesClicked:" destination="w8S-Nb-zGN" eventType="touchUpInside" id="IFN-P5-OOb"/>
@@ -425,7 +425,7 @@
                                 <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="50" sectionHeaderHeight="10" sectionFooterHeight="10" id="wyu-Yw-ISw">
-                                <rect key="frame" x="0.0" y="64" width="320" height="355"/>
+                                <rect key="frame" x="0.0" y="64" width="320" height="366"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -464,32 +464,32 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" id="Hct-yH-a0T">
-                                <rect key="frame" x="0.0" y="419" width="320" height="61"/>
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="p2T-4g-Lw7">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="p2T-4g-Lw7">
                                         <rect key="frame" x="0.0" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
                                         <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="MAPS" image="ic_tabbar_maps_active.png">
-                                            <color key="titleColor" red="1" green="0.70196078429999997" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarMapsClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="zgp-F9-p7R"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Kxo-08-WBh">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Kxo-08-WBh">
                                         <rect key="frame" x="162" y="0.0" width="158" height="61"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                                        <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
                                         <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
                                         <state key="normal" title="PURCHASES" image="ic_tabbar_addons_normal.png">
-                                            <color key="titleColor" red="0.7843137255" green="0.7843137255" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                            <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="btnToolbarPurchasesClicked:" destination="huq-qE-lWI" eventType="touchUpInside" id="Z59-6f-UaR"/>

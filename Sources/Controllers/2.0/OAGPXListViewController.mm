@@ -287,24 +287,28 @@ static OAGPXListViewController *parentController;
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_cancelButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
     
-    [_activeTripsButtonView setTitle:OALocalizedStringUp(@"menu_active_trips") forState:UIControlStateNormal];
-    [_allTripsButtonView setTitle:OALocalizedStringUp(@"menu_all_trips") forState:UIControlStateNormal];
+    [_activeTripsButtonView setTitle:OALocalizedString(@"menu_active_trips") forState:UIControlStateNormal];
+    [_allTripsButtonView setTitle:OALocalizedString(@"menu_all_trips") forState:UIControlStateNormal];
 
     if (_viewMode == kActiveTripsMode)
     {
         [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_selected"] forState:UIControlStateNormal];
         [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx"] forState:UIControlStateNormal];
+        [_activeTripsButtonView setTintColor:UIColorFromRGB(0xff8f00)];
+        [_allTripsButtonView setTintColor:UIColorFromRGB(0x727272)];
         
-        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xffb300) forState:UIControlStateNormal];
-        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xc8c8c8) forState:UIControlStateNormal];
+        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xff8f00) forState:UIControlStateNormal];
+        [_allTripsButtonView setTitleColor:UIColorFromRGB(0x727272) forState:UIControlStateNormal];
     }
     else
     {
         [_activeTripsButtonView setImage:[UIImage imageNamed:@"ic_tabbar_active_trip_normal"] forState:UIControlStateNormal];
         [_allTripsButtonView setImage:[UIImage imageNamed:@"icon_gpx_fill"] forState:UIControlStateNormal];
+        [_activeTripsButtonView setTintColor:UIColorFromRGB(0x727272)];
+        [_allTripsButtonView setTintColor:UIColorFromRGB(0xff8f00)];
         
-        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0xc8c8c8) forState:UIControlStateNormal];
-        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xffb300) forState:UIControlStateNormal];
+        [_activeTripsButtonView setTitleColor:UIColorFromRGB(0x727272) forState:UIControlStateNormal];
+        [_allTripsButtonView setTitleColor:UIColorFromRGB(0xff8f00) forState:UIControlStateNormal];
     }
 
     [OAUtilities layoutComplexButton:self.activeTripsButtonView];

@@ -122,8 +122,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 -(void)applyLocalization
 {
-    [_btnToolbarMaps setTitle:OALocalizedStringUp(@"maps") forState:UIControlStateNormal];
-    [_btnToolbarPurchases setTitle:OALocalizedStringUp(@"purchases") forState:UIControlStateNormal];
+    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];

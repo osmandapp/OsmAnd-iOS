@@ -32,6 +32,7 @@
 #include "Localization.h"
 
 #import "OAPurchasesViewController.h"
+#import "OAPluginsViewController.h"
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 
@@ -138,6 +139,7 @@ static QHash< OAWorldRegion* __weak, RegionResources > _resourcesByRegions;
 
 static NSMutableArray* _searchableWorldwideRegionItems;
 
+static BOOL _lackOfResources;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
@@ -297,13 +299,18 @@ static NSMutableArray* _searchableWorldwideRegionItems;
     [super viewDidAppear:animated];
 
     // If there's no repository available and there's internet connection, just update it
+    /*
     if (!_app.resourcesManager->isRepositoryAvailable() &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) {
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
         [self updateRepository];
-    } else {
+    }
+    else
+    {
+     */
         if (self.openFromSplash)
             [self onSearchBtnClicked:nil];
-    }
+    //}
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -487,8 +494,9 @@ static NSMutableArray* _searchableWorldwideRegionItems;
         if (_doDataUpdateReload)
             _resourcesByRegions.clear();
         
-        if (_doDataUpdate || _resourcesByRegions.count() == 0)
+        if (_doDataUpdate || _resourcesByRegions.count() == 0 || _lackOfResources)
             [OAManageResourcesViewController prepareData];
+
         [self collectSubregionsDataAndItems];
         [self collectResourcesDataAndItems];
 
@@ -499,7 +507,15 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 + (void)prepareData
 {
+    _lackOfResources = NO;
+    
     OsmAndAppInstance app = [OsmAndApp instance];
+    
+    if (!app.resourcesManager->isRepositoryAvailable())
+    {
+        _lackOfResources = YES;
+        return;
+    }
     
     // Obtain all resources separately
     _resourcesInRepository = app.resourcesManager->getResourcesInRepository();
@@ -2142,6 +2158,13 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 - (IBAction)btnToolbarMapsClicked:(id)sender
 {
+}
+
+- (IBAction)btnToolbarPluginsClicked:(id)sender
+{
+    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+    pluginsViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:pluginsViewController animated:NO];
 }
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender

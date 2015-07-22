@@ -19,6 +19,7 @@
 #include "Localization.h"
 
 #import "OAPurchasesViewController.h"
+#import "OAPluginsViewController.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -457,6 +458,13 @@
 
 - (IBAction)btnToolbarMapsClicked:(id)sender
 {
+}
+
+- (IBAction)btnToolbarPluginsClicked:(id)sender
+{
+    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+    pluginsViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:pluginsViewController animated:NO];
 }
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender

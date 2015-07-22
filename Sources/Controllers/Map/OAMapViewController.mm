@@ -793,44 +793,46 @@
     
     
     // IOS-208
-    
-    int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
-    [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    
-    BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
-    const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-    if (!mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) ) {
+    if (_app.resourcesManager->isRepositoryAvailable())
+    {
+        int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
+        [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
+        [[NSUserDefaults standardUserDefaults] synchronize];
         
-        const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
-        NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                                   countStyle:NSByteCountFormatterCountStyleFile];
-        
-        NSMutableString* message = [[NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_q"),
-                                     stringifiedSize] mutableCopy];
-        
-        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-        {
-            [message appendString:@"\n\n"];
-            [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"),
-                       stringifiedSize]];
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"incur_high_charges")];
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"proceed_q")];
+        BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
+        const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
+        if (!mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) ) {
+            
+            const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
+            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                       countStyle:NSByteCountFormatterCountStyleFile];
+            
+            NSMutableString* message = [[NSString stringWithFormat:OALocalizedString(@"map_inst_det_map_q"),
+                                         stringifiedSize] mutableCopy];
+            
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+            {
+                [message appendString:@"\n\n"];
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"),
+                                       stringifiedSize]];
+                [message appendString:@" "];
+                [message appendString:OALocalizedString(@"incur_high_charges")];
+                [message appendString:@" "];
+                [message appendString:OALocalizedString(@"proceed_q")];
+            }
+            else
+            {
+                [message appendString:@"\n\n"];
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"),
+                                       stringifiedSize]];
+                [message appendString:@" "];
+                [message appendString:OALocalizedString(@"proceed_q")];
+            }
+            
+            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), OALocalizedString(@"map_remind"), nil];
+            mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
+            [mapDownloadAlert show];
         }
-        else
-        {
-            [message appendString:@"\n\n"];
-            [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"),
-                                   stringifiedSize]];
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"proceed_q")];
-        }
-        
-        UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), OALocalizedString(@"map_remind"), nil];
-        mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
-        [mapDownloadAlert show];
     }
 }
 

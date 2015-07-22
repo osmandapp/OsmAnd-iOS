@@ -180,20 +180,6 @@
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
     
-    // Copy regions.ocbf to Library/Resources if needed
-    NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
-    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
-    
-    //[[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:ocbfPathLib])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] copyItemAtPath:ocbfPathBundle toPath:ocbfPathLib error:&error];
-        if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
-    }
-    [self applyExcludedFromBackup:ocbfPathLib];
-    
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
@@ -230,6 +216,20 @@
         }
     }
     
+    // Copy regions.ocbf to Library/Resources if needed
+    NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
+    NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    
+    //[[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
+    if (![[NSFileManager defaultManager] fileExistsAtPath:ocbfPathLib])
+    {
+        NSError *error = nil;
+        [[NSFileManager defaultManager] copyItemAtPath:ocbfPathBundle toPath:ocbfPathLib error:&error];
+        if (error)
+            NSLog(@"Error copying file: %@ to %@ - %@", ocbfPathBundle, ocbfPathLib, [error localizedDescription]);
+    }
+    [self applyExcludedFromBackup:ocbfPathLib];
+    
     // Load favorites
     _favoritesCollectionChangedObservable = [[OAObservable alloc] init];
     _favoriteChangedObservable = [[OAObservable alloc] init];
@@ -261,10 +261,9 @@
             self.resourcesManager->updateRepository();
         });
     }
-    
+
     // Load world regions
     [self loadWorldRegions];
-    
     [OAManageResourcesViewController prepareData];
     
     [OAPOIHelper sharedInstance];

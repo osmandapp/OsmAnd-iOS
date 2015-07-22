@@ -12,6 +12,7 @@
 #include "Localization.h"
 #import "OALocalResourceInfoCell.h"
 #import "OAPurchasesViewController.h"
+#import "OAPluginsViewController.h"
 #import "OAUtilities.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
@@ -39,8 +40,10 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     
     [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
     [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
     [OAUtilities layoutComplexButton:self.btnToolbarMaps];
+    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
@@ -188,6 +191,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
 - (IBAction)btnToolbarMapsClicked:(id)sender
 {
+}
+
+- (IBAction)btnToolbarPluginsClicked:(id)sender
+{
+    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+    pluginsViewController.openFromSplash = _openFromSplash;
+    [self.navigationController pushViewController:pluginsViewController animated:NO];
 }
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender

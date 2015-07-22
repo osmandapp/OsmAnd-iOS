@@ -90,6 +90,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 @end
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
+
+@property (nonatomic, readonly) NSSet * productIdentifiersInApps;
+
 @end
 
 @implementation OAIAPHelper
@@ -137,6 +140,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     static dispatch_once_t once;
     static OAIAPHelper * sharedInstance;
     dispatch_once(&once, ^{
+        
         NSSet * productIdentifiers = [NSSet setWithObjects:
                                       kInAppId_Region_Africa,
                                       kInAppId_Region_Russia,
@@ -186,6 +190,19 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             nil];
 }
 
++(NSArray *)inAppsAddonsPurchased
+{
+    OAIAPHelper *helper = [OAIAPHelper sharedInstance];
+    NSArray *inappAddons = [OAIAPHelper inAppsAddons];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    for (NSString *identifier in helper.productIdentifiersInApps)
+        if ([helper productPurchasedIgnoreDisable:identifier] && [inappAddons containsObject:identifier])
+            [array addObject:identifier];
+    
+    return [NSArray arrayWithArray:array];
+}
+
 -(BOOL)productsLoaded
 {
     return _products.count > 0;
@@ -220,25 +237,52 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return [productIdentifier stringByAppendingString:@"_disabled"];
 }
 
-- (id)initWithProductIdentifiers:(NSSet *)productIdentifiers {
-    
-    if ((self = [super init])) {
+- (id)initWithProductIdentifiers:(NSSet *)productIdentifiers
+{
+    if ((self = [super init]))
+    {
+        _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking];
+
+        NSMutableArray *freeProds = [NSMutableArray array];
+        for (NSString *prodId in _freePluginsList)
+        {
+            OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+            [freeProds addObject:p];
+        }
         
+        _products = [NSArray arrayWithArray:freeProds];
+
         // Store product identifiers
         _productIdentifiers = productIdentifiers;
+        NSMutableSet *productIdInApps = [NSMutableSet set];
+        for (NSString *identifier in productIdentifiers)
+            if (![_freePluginsList containsObject:identifier])
+                [productIdInApps addObject:identifier];
+
+        _productIdentifiersInApps = [NSSet setWithSet:productIdInApps];
         
         _purchasedProductIdentifiers = [NSMutableSet set];
         _disabledProductIdentifiers = [NSMutableSet set];
         
         // Check for previously purchased products
-        for (NSString * productIdentifier in _productIdentifiers) {
+        for (NSString * productIdentifier in _productIdentifiers)
+        {
+            if (![self productPurchasedIgnoreDisable:productIdentifier] && [self.freePluginsList containsObject:productIdentifier])
+            {
+                [_purchasedProductIdentifiers addObject:productIdentifier];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
+                [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
+                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:productIdentifier]];
+                [[NSUserDefaults standardUserDefaults] synchronize];
+            }
+            
 #if !defined(OSMAND_IOS_DEV)
             BOOL productPurchased = [[NSUserDefaults standardUserDefaults] boolForKey:productIdentifier];
 #else
             BOOL productPurchased = YES;
 #endif            
-            if (productPurchased) {
-                
+            if (productPurchased)
+            {
                 BOOL productDisabled = [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId:productIdentifier]];
                 if (productDisabled)
                     [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
@@ -265,7 +309,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
 
     _completionHandler = [completionHandler copy];
-    _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:_productIdentifiers];
+    _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:_productIdentifiersInApps];
     _productsRequest.delegate = self;
     [_productsRequest start];
 }
@@ -303,9 +347,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 - (void)buildFunctionalAddonsArray
 {
-    //[_purchasedProductIdentifiers addObject:kInAppId_Addon_Parking];
-    //[_purchasedProductIdentifiers addObject:kInAppId_Addon_TrackRecording];
-
     NSMutableArray *arr = [NSMutableArray array];
 
     if ([self productPurchased:kInAppId_Addon_Parking])
@@ -384,15 +425,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
               skProduct.price.floatValue);
         OAProduct *p = [[OAProduct alloc] initWithSkProduct:skProduct];
         [arr addObject:p];
-        
-        if (p.price.floatValue == 0.0 && ![self productPurchasedIgnoreDisable:p.productIdentifier])
-        {
-            [_purchasedProductIdentifiers addObject:p.productIdentifier];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:p.productIdentifier];
-            [_disabledProductIdentifiers addObject:[self getDisabledId:p.productIdentifier]];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:p.productIdentifier]];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
     }
     
     if (_products.count == 0)
@@ -537,5 +569,24 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     
     [[SKPaymentQueue defaultQueue] restoreCompletedTransactions];
 }
+
++(NSString *)productIconName:(NSString *)productIdentifier
+{
+    if ([productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+        return @"ic_plugin_nautical";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Parking])
+        return @"ic_plugin_parking";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_SkiMap])
+        return @"ic_plugin_skimap";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+        return @"ic_plugin_contourlines";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
+        return @"ic_plugin_tracrecording";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+        return @"ic_plugin_wikipedia";
+    else
+        return nil;
+}
+
 
 @end

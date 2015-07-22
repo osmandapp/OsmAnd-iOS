@@ -56,7 +56,6 @@
 
 #define kFreeMapsAvailableTotal 5
 
-
 UIKIT_EXTERN NSString *const OAIAPProductPurchasedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductPurchaseFailedNotification;
 UIKIT_EXTERN NSString *const OAIAPProductsRestoredNotification;
@@ -100,6 +99,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 @property (nonatomic, readonly) BOOL isAnyMapPurchased;
 
+@property (nonatomic, readonly) NSArray *freePluginsList;
 @property (nonatomic, readonly) NSArray *functionalAddons;
 @property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
 
@@ -117,6 +117,10 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 +(NSArray *)inAppsMaps;
 +(NSArray *)inAppsAddons;
++(NSArray *)inAppsAddonsPurchased;
+
++(NSString *)productIconName:(NSString *)productIdentifier;
+
 -(OAProduct *)product:(NSString *)productIdentifier;
 -(int)productIndex:(NSString *)productIdentifier;
 -(BOOL)productsLoaded;

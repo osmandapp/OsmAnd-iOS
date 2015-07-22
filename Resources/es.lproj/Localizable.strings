@@ -411,3 +411,9 @@
 "show_all" = "Mostrar todo";
 "directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
+"shared_string_modify" = "Modificar";
+"parking" = "Aparcamiento";
+"est_travel_time" = "Tiempo de viaje estimado";
+"pedestrian" = "Peatonal";
+"sorting" = "Ordenar";
+"plugins" = "Complementos";

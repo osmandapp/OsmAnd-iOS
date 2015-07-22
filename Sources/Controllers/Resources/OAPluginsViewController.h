@@ -1,14 +1,14 @@
 //
-//  OAPurchasesViewController.h
+//  OAPluginsViewController.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 06/03/15.
+//  Created by Alexey Kulish on 22/07/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
 #import "OASuperViewController.h"
 
-@interface OAPurchasesViewController : OASuperViewController
+@interface OAPluginsViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
 @property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;

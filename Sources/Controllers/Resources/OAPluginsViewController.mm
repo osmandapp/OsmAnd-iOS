@@ -1,25 +1,25 @@
 //
-//  OAPurchasesViewController.m
+//  OAPluginsViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 06/03/15.
+//  Created by Alexey Kulish on 22/07/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import "OAPurchasesViewController.h"
+#import "OAPluginsViewController.h"
 #import "OAIAPHelper.h"
 #import "OAInAppCell.h"
 #import <StoreKit/StoreKit.h>
 #import "OALog.h"
 #import "OAResourcesBaseViewController.h"
-#import "OAPluginsViewController.h"
+#import "OAPurchasesViewController.h"
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OAUtilities.h"
 #import <Reachability.h>
 
 
-@interface OAPurchasesViewController ()<UITableViewDelegate, UITableViewDataSource>
+@interface OAPluginsViewController ()<UITableViewDelegate, UITableViewDataSource, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
@@ -28,26 +28,19 @@
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;
 
-@property (weak, nonatomic) IBOutlet UIButton *btnRestorePurchases;
-
 @end
 
-@implementation OAPurchasesViewController
+@implementation OAPluginsViewController
 {
     NSNumberFormatter *_numberFormatter;
     MBProgressHUD* _loadProductsProgressHUD;
-    BOOL _restoringPurchases;
-
-    CALayer *_horizontalLine;
-    NSArray *_addonsPurchased;
     
-    NSInteger _pluginsSection;
-    NSInteger _mapsSection;
+    CALayer *_horizontalLine;
 }
 
 -(void)applyLocalization
 {
-    _titleView.text = OALocalizedString(@"purchases");
+    _titleView.text = OALocalizedString(@"plugins");
     [_backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     
@@ -59,19 +52,10 @@
     [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-
-    _addonsPurchased = [OAIAPHelper inAppsAddonsPurchased];
-    NSInteger index = 0;
-    if (_addonsPurchased.count > 0)
-        _pluginsSection = index++;
-    else
-        _pluginsSection = -1;
+- (void)viewDidLoad {
     
-    _mapsSection = index;
-
+    [super viewDidLoad];
+    
     _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     //_loadProductsProgressHUD.dimBackground = YES;
     _loadProductsProgressHUD.minShowTime = .5f;
@@ -81,12 +65,12 @@
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-
+    
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
     self.toolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
     [self.toolbarView.layer addSublayer:_horizontalLine];
-
+    
     if (self.openFromSplash)
     {
         self.backButton.hidden = YES;
@@ -118,9 +102,9 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-
-    if (![[OAIAPHelper sharedInstance] productsLoaded])
-    {
+    
+    if (![[OAIAPHelper sharedInstance] productsLoaded]) {
+        
         [_loadProductsProgressHUD show:YES];
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -142,8 +126,7 @@
     }
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
+- (void)viewWillDisappear:(BOOL)animated {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -151,27 +134,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [OAIAPHelper sharedInstance].productsLoaded ? (_pluginsSection >=0 ? 2 : 1) : 0;
+    return [OAIAPHelper sharedInstance].productsLoaded ? 1 : 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == _pluginsSection)
-        return [_addonsPurchased count];
-    else if (section == _mapsSection)
-        return [[OAIAPHelper inAppsMaps] count];
-    else
-        return 0;
+    return [[OAIAPHelper inAppsAddons] count];
 }
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (section == _pluginsSection)
-        return OALocalizedString(@"plugins");
-    else if (section == _mapsSection)
-        return OALocalizedString(@"maps");
-    else
-        return @"";
+    return @"";
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -186,34 +159,21 @@
         cell = (OAInAppCell *)[nib objectAtIndex:0];
     }
     
-    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];
-    
-    if (cell) {
-        
+    if (cell)
+    {
         NSString *identifier;
         NSString *title;
         NSString *desc;
         NSString *price;
         UIImage *imgTitle;
-        
-        if (indexPath.section == _pluginsSection)
-        {
-            identifier = _addonsPurchased[indexPath.row];
-            imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
-            if (!imgTitle)
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
-            cell.imgIconBackground.hidden = NO;
-            cell.imgPrice.hidden = YES;
-            
-        }
-        else if (indexPath.section == _mapsSection)
-        {
-            identifier = [OAIAPHelper inAppsMaps][indexPath.row];
-            imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
-            cell.imgIconBackground.hidden = YES;
-            cell.imgPrice.hidden = NO;
-        }
-        
+
+        identifier = [OAIAPHelper inAppsAddons][indexPath.row];
+        imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
+        if (!imgTitle)
+            imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+
+        cell.imgIconBackground.hidden = NO;
+
         OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
         if (product)
         {
@@ -229,7 +189,7 @@
                 price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
             }
         }
-
+        
         [cell.imgIcon setImage:imgTitle];
         [cell.lbTitle setText:title];
         [cell.lbDescription setText:desc];
@@ -238,10 +198,7 @@
         BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
         BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
         
-        if (indexPath.section == _mapsSection)
-            [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
-        else
-            [cell setPurchased:purchased disabled:disabled];
+        [cell setPurchased:purchased disabled:disabled];
     }
     
     return cell;
@@ -252,32 +209,58 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *identifier;
-    if (indexPath.section == _pluginsSection)
-        identifier = _addonsPurchased[indexPath.row];
-    else if (indexPath.section == _mapsSection)
-        identifier = [OAIAPHelper inAppsMaps][indexPath.row];
+    NSString *identifier = [OAIAPHelper inAppsAddons][indexPath.row];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
-    BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];
     
-    if (indexPath.section == _mapsSection)
+    BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
+    BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+    
+    if (purchased)
     {
-        if (purchased || allWorldMapsPurchased)
-            return;
-    }
-    else if (indexPath.section == _pluginsSection)
-    {
+        if (disabled)
+        {
+            [[OAIAPHelper sharedInstance] enableProduct:identifier];
+            if ([identifier isEqualToString:kInAppId_Addon_SkiMap])
+            {
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                }
+            }
+            else if ([identifier isEqualToString:kInAppId_Addon_Wiki])
+            {
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                }
+            }
+            else if ([identifier isEqualToString:kInAppId_Addon_Srtm])
+            {
+                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+                {
+                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+                }
+            }
+        }
+        else
+        {
+            [[OAIAPHelper sharedInstance] disableProduct:identifier];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        });
         return;
     }
     
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
-
+    
     if (product)
     {
-        _restoringPurchases = NO;
         [_loadProductsProgressHUD show:YES];
         
         [[OAIAPHelper sharedInstance] buyProduct:product];
@@ -285,29 +268,79 @@
     
 }
 
-- (void)productPurchased:(NSNotification *)notification
-{
+- (void)productPurchased:(NSNotification *)notification {
+    
+    NSString * identifier = notification.object;
     dispatch_async(dispatch_get_main_queue(), ^{
-
-        if (!_restoringPurchases)
-            [_loadProductsProgressHUD hide:YES];
-
+        
+        [_loadProductsProgressHUD hide:YES];
+        
         [self.tableView reloadData];
+        
+        if ([identifier isEqualToString:kInAppId_Addon_SkiMap])
+        {
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
+        }
+        else if ([identifier isEqualToString:kInAppId_Addon_Wiki])
+        {
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
+        }
+        else if ([identifier isEqualToString:kInAppId_Addon_Srtm])
+        {
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
+            {
+                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
+                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
+            }
+        }
+        else if ([identifier isEqualToString:kInAppId_Addon_Nautical])
+        {
+            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                       countStyle:NSByteCountFormatterCountStyleFile];
+            
+            NSMutableString* message = [OALocalizedString(@"prch_nau_q1") mutableCopy];
+            [message appendString:@"\n\n"];
+            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+            {
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
+                [message appendString:@" "];
+                [message appendString:OALocalizedString(@"incur_high_charges")];
+            }
+            else
+            {
+                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
+            }
+            
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"prch_nau_q3")];
+            [message appendString:@" "];
+            [message appendString:OALocalizedString(@"proceed_q")];
+            
+            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
+            mapDownloadAlert.tag = 100;
+            [mapDownloadAlert show];
+        }
         
     });
 }
 
 - (void)productPurchaseFailed:(NSNotification *)notification
 {
-    if (_restoringPurchases)
-        return;
-    
     NSString * identifier = notification.object;
     OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [_loadProductsProgressHUD hide:YES];
-
+        
         if (product) {
             NSString *text = [NSString stringWithFormat:OALocalizedString(@"prch_failed"), product.localizedTitle];
             
@@ -321,10 +354,10 @@
 {
     NSNumber *errorsCountObj = notification.object;
     int errorsCount = errorsCountObj.intValue;
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         [_loadProductsProgressHUD hide:YES];
-
+        
         if (errorsCount > 0) {
             NSString *text = [NSString stringWithFormat:@"%d %@", errorsCount, OALocalizedString(@"prch_items_failed")];
             
@@ -333,17 +366,6 @@
         }
     });
     
-}
-
-- (IBAction)btnRestorePurchasesClicked:(id)sender
-{
-    if (![[OAIAPHelper sharedInstance] productsLoaded])
-        return;
-    
-    _restoringPurchases = YES;
-    [_loadProductsProgressHUD show:YES];
-    
-    [[OAIAPHelper sharedInstance] restoreCompletedTransactions];
 }
 
 -(void)backButtonClicked:(id)sender
@@ -359,26 +381,23 @@
     [self.navigationController popViewControllerAnimated:NO];
 }
 
-- (IBAction)btnToolbarPluginsClicked:(id)sender
-{
-    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
-    pluginsViewController.openFromSplash = _openFromSplash;
-    
-    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
-    [controllers removeObject:self];
-    [controllers addObject:pluginsViewController];
-    [self.navigationController setViewControllers:controllers];
-}
-
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
+    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+    purchasesViewController.openFromSplash = _openFromSplash;
+
+    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [controllers removeObject:self];
+    [controllers addObject:purchasesViewController];
+    [self.navigationController setViewControllers:controllers];
 }
 
 #pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex) {
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{    
+    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
+    {
         // Download map
         const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
         NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap

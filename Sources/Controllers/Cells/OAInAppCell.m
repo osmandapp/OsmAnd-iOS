@@ -12,6 +12,9 @@
 
 - (void)awakeFromNib {
 
+    self.imgIconBackground.layer.cornerRadius = 3;
+    self.imgIconBackground.layer.masksToBounds = YES;
+
     self.imgPrice.layer.cornerRadius = 4;
     self.imgPrice.layer.masksToBounds = YES;
 }

@@ -19,6 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;
 @property (weak, nonatomic) IBOutlet UILabel *lbPrice;
 
+@property (weak, nonatomic) IBOutlet UIView *imgIconBackground;
 @property (weak, nonatomic) IBOutlet UIImageView *imgIcon;
 @property (weak, nonatomic) IBOutlet UIImageView *imgPrice;
 

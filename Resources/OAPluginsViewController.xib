@@ -5,18 +5,17 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPurchasesViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPluginsViewController">
             <connections>
-                <outlet property="backButton" destination="H9o-Md-CF4" id="xlu-qa-hd4"/>
-                <outlet property="btnRestorePurchases" destination="YzU-F8-VnX" id="gZE-Mp-KuA"/>
-                <outlet property="btnToolbarMaps" destination="2wz-7h-uOJ" id="6n2-oM-Ehw"/>
-                <outlet property="btnToolbarPlugins" destination="7EP-HW-o5e" id="TGo-eS-yWl"/>
-                <outlet property="btnToolbarPurchases" destination="afA-Kc-Aw8" id="gVl-XV-fAe"/>
-                <outlet property="doneButton" destination="4r6-Hs-k4U" id="gFZ-IW-oq6"/>
-                <outlet property="tableView" destination="P4b-42-BBD" id="L2l-2y-Zab"/>
-                <outlet property="titlePanelView" destination="j8U-NB-60c" id="Ywm-HG-sZB"/>
-                <outlet property="titleView" destination="LqJ-Hj-D99" id="kfL-4w-3ZE"/>
-                <outlet property="toolbarView" destination="auI-hx-O5x" id="8Gv-4Z-u66"/>
+                <outlet property="backButton" destination="BAC-nf-5KY" id="Jgh-44-4MZ"/>
+                <outlet property="btnToolbarMaps" destination="M4a-05-tY6" id="P5i-ek-zZa"/>
+                <outlet property="btnToolbarPlugins" destination="qsW-LD-UgM" id="sOa-mw-9Nv"/>
+                <outlet property="btnToolbarPurchases" destination="GDi-wT-hEB" id="fmW-NN-xLc"/>
+                <outlet property="doneButton" destination="Q3l-QU-34C" id="EOV-NO-Sgw"/>
+                <outlet property="tableView" destination="UUI-wK-dhS" id="BaH-qR-nox"/>
+                <outlet property="titlePanelView" destination="Glf-6V-O84" id="UdS-fW-1l7"/>
+                <outlet property="titleView" destination="xS7-jG-Grq" id="aJL-ob-zhR"/>
+                <outlet property="toolbarView" destination="NPV-Jy-jKV" id="Gm3-5Y-nx0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -25,11 +24,23 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="j8U-NB-60c">
+                <view contentMode="scaleToFill" id="Glf-6V-O84">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="H9o-Md-CF4">
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Q3l-QU-34C">
+                            <rect key="frame" x="4" y="20" width="70" height="47"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
+                            <state key="normal" title="Done">
+                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                            </state>
+                            <connections>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Odi-yA-29I"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="BAC-nf-5KY">
                             <rect key="frame" x="4" y="20" width="70" height="47"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
@@ -40,54 +51,33 @@
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Opq-D7-ZdW"/>
+                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="8Hl-Xh-AmB"/>
                             </connections>
                         </button>
-                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="4r6-Hs-k4U">
-                            <rect key="frame" x="4" y="20" width="70" height="47"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="14"/>
-                            <state key="normal" title="Done">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                            </state>
-                            <connections>
-                                <action selector="backButtonClicked:" destination="-1" eventType="touchUpInside" id="Q8h-w2-cJz"/>
-                            </connections>
-                        </button>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Purchases" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LqJ-Hj-D99">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Plugins" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xS7-jG-Grq" userLabel="Plugins">
                             <rect key="frame" x="76" y="31" width="168" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YzU-F8-VnX">
-                            <rect key="frame" x="274" y="26" width="38" height="34"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <state key="normal" image="ic_update.png"/>
-                            <connections>
-                                <action selector="btnRestorePurchasesClicked:" destination="-1" eventType="touchUpInside" id="9hm-OQ-Hx1"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="75" sectionHeaderHeight="10" sectionFooterHeight="10" id="P4b-42-BBD" userLabel="tableView">
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="75" sectionHeaderHeight="10" sectionFooterHeight="10" id="UUI-wK-dhS" userLabel="tableView">
                     <rect key="frame" x="0.0" y="64" width="320" height="366"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                     <connections>
-                        <outlet property="dataSource" destination="-1" id="SzD-F0-ARZ"/>
-                        <outlet property="delegate" destination="-1" id="Kjs-hX-cna"/>
+                        <outlet property="dataSource" destination="-1" id="alQ-A0-utX"/>
+                        <outlet property="delegate" destination="-1" id="dEr-xV-OBJ"/>
                     </connections>
                 </tableView>
-                <view contentMode="scaleToFill" id="auI-hx-O5x">
+                <view contentMode="scaleToFill" id="NPV-Jy-jKV">
                     <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2wz-7h-uOJ" userLabel="Maps">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="M4a-05-tY6" userLabel="Maps">
                             <rect key="frame" x="0.0" y="0.0" width="106" height="61"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
@@ -98,35 +88,32 @@
                                 <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="btnToolbarMapsClicked:" destination="-1" eventType="touchUpInside" id="e0S-ON-RbZ"/>
+                                <action selector="btnToolbarMapsClicked:" destination="-1" eventType="touchUpInside" id="q1x-c5-fch"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="7EP-HW-o5e" userLabel="Plugins">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qsW-LD-UgM" userLabel="Plugins">
                             <rect key="frame" x="107" y="0.0" width="106" height="61"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
-                            <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" red="1" green="0.5607843137254902" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
                             <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="MAPS" image="ic_tabbar_addons_normal.png">
-                                <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="MAPS" image="ic_tabbar_addons_active.png">
+                                <color key="titleColor" red="1" green="0.5607843137254902" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
-                            <connections>
-                                <action selector="btnToolbarPluginsClicked:" destination="-1" eventType="touchUpInside" id="5d4-dc-jcU"/>
-                            </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="afA-Kc-Aw8" userLabel="Purchases">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GDi-wT-hEB" userLabel="Purchases">
                             <rect key="frame" x="214" y="0.0" width="106" height="61"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
-                            <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="tintColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
                             <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
-                            <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_selected.png">
-                                <color key="titleColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_normal.png">
+                                <color key="titleColor" red="0.44705882352941173" green="0.44705882352941173" blue="0.44705882352941173" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
                             <connections>
-                                <action selector="btnToolbarPurchasesClicked:" destination="-1" eventType="touchUpInside" id="UrY-xf-QkF"/>
+                                <action selector="btnToolbarPurchasesClicked:" destination="-1" eventType="touchUpInside" id="7jF-nx-ohz"/>
                             </connections>
                         </button>
                     </subviews>
@@ -135,14 +122,13 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="207" y="260"/>
+            <point key="canvasLocation" x="221" y="281"/>
         </view>
     </objects>
     <resources>
-        <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
+        <image name="ic_tabbar_addons_active.png" width="25" height="25"/>
         <image name="ic_tabbar_maps_normal.png" width="25" height="25"/>
-        <image name="ic_tabbar_purchases_selected.png" width="25" height="25"/>
-        <image name="ic_update.png" width="25" height="25"/>
+        <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

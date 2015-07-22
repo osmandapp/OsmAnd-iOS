@@ -411,3 +411,5 @@
 "parking" = "Estacionamento";
 "est_travel_time" = "Tempo estimado de viagem";
 "pedestrian" = "A pé";
+"sorting" = "Ordenar";
+"plugins" = "Complementos";

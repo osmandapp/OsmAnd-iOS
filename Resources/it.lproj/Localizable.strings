@@ -255,7 +255,7 @@
 "shared_string_or" = "o";
 "shared_string_add" = "Aggiungi";
 "shared_string_and" = "e";
-"rendering_value_default_name" = "Preimpostato";
+"rendering_value_default_name" = "Predefinito";
 "rendering_value_disabled_name" = "Disabilitato";
 "shared_string_edit" = "Modifica";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colorazione in base al tipo di percorso";
@@ -382,7 +382,7 @@
 "time_closed" = "Chiuso";
 "time_open" = "Aperto";
 "prch_srtm_info" = "Il componente aggiuntivo Linee isocline aggiunge le linee di livello per le mappe che sono state scaricare gratuitamente o acquistate.";
-"rendering_value_walkingRoutesOSMC_name" = "Colorazione in accordo a OSMC";
+"rendering_value_walkingRoutesOSMC_name" = "Colorazione in base a OSMC";
 "sett_lang_trans" = "Translitterazione";
 "cannot_add_marker_desc" = "Si prega di rimuovere almeno una direzione e riprovare";
 "cannot_add_destination" = "Impossibile aggiungere una direzione";

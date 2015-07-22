@@ -409,3 +409,6 @@
 "shared_string_dismiss" = "Bezárás";
 "shared_string_modify" = "Módosítás";
 "parking" = "Parkolás";
+"est_travel_time" = "Utazási idő becslése";
+"pedestrian" = "Gyalogos";
+"sorting" = "Rendezés";

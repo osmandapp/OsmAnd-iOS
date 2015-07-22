@@ -412,3 +412,4 @@
 "est_travel_time" = "Durada estimada del trajecte";
 "pedestrian" = "Vianant";
 "sorting" = "Classificant";
+"plugins" = "Gestor de connectors";

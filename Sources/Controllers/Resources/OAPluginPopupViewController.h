@@ -21,5 +21,7 @@
 - (void)hide;
 
 + (void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase;
++ (void)askForPlugin:(NSString *)productIdentifier;
++ (void)askForWorldMap;
 
 @end

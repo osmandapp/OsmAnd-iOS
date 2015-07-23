@@ -38,7 +38,11 @@
     _btnPrice.frame = priceFrame;
 
     CGRect titleFrame = _lbTitle.frame;
-    _lbTitle.frame = CGRectMake(74.0, 18.0, _btnPrice.frame.origin.x - titleFrame.origin.x - 8.0, titleFrame.size.height);
+    CGFloat titleY = 18.0;
+    if (_lbDescription.text.length == 0)
+        titleY = 26.0;
+    
+    _lbTitle.frame = CGRectMake(74.0, titleY, _btnPrice.frame.origin.x - titleFrame.origin.x - 8.0, titleFrame.size.height);
 
     CGRect descFrame = _lbDescription.frame;
     _lbDescription.frame = CGRectMake(75.0, 36.0, _btnPrice.frame.origin.x - descFrame.origin.x - 8.0, descFrame.size.height);

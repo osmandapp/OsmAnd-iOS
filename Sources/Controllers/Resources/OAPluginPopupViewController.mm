@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAResourcesBaseViewController.h"
+#import "OAPluginsViewController.h"
 
 @interface OAPluginPopupViewController ()
 
@@ -88,16 +89,6 @@
     self.view.frame = f;
 }
 
-
-/*
- NSURL *htmlString = [[NSBundle mainBundle]  URLForResource: @"string"     withExtension:@"html"];
- NSAttributedString *stringWithHTMLAttributes = [[NSAttributedString alloc] initWithFileURL:htmlString
- options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType}
- documentAttributes:nil
- error:nil];
- textView.attributedText = stringWithHTMLAttributes;
- */
-
 - (void)show
 {
     [self doLayout];
@@ -147,13 +138,105 @@
     [self hide];
 }
 
++ (void)askForWorldMap
+{
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+    
+    NSString *title;
+    NSString *descText;
+    NSString *okButtonName;
+    NSString *cancelButtonName;
+    
+    title = OALocalizedString(@"res_wmap");
+    descText = OALocalizedString(@"all_world_popup_desc");
+    cancelButtonName = OALocalizedString(@"shared_string_later");
+    
+    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+    okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+
+    [popup.okButton addTarget:popup action:@selector(downloadWorldMap) forControlEvents:UIControlEventTouchUpInside];
+    [popup.cancelButton addTarget:popup action:@selector(cancelDownloadWorldMap) forControlEvents:UIControlEventTouchUpInside];
+
+    UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+    
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.titleLabel.text = title;
+    
+    NSString *styledText = [self.class styledHTMLwithHTML:descText];
+    popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+    
+    [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+    [popup.cancelButton setTitle:cancelButtonName forState:UIControlStateNormal];
+    
+    [top addChildViewController:popup];
+    [popup show];
+}
+
++ (void)askForPlugin:(NSString *)productIdentifier
+{
+    BOOL needShow = NO;
+
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+    
+    NSString *title;
+    NSString *descText;
+    NSString *okButtonName;
+    NSString *cancelButtonName;
+
+    if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+    {
+        needShow = YES;
+        
+        title = OALocalizedString(@"turn_on_plugin");
+        descText = OALocalizedString(@"plugin_popup_wiki_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    {
+        needShow = YES;
+        
+        title = OALocalizedString(@"turn_on_plugin");
+        descText = OALocalizedString(@"plugin_popup_srtm_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    if (needShow)
+    {
+        NSString *iconName = [OAIAPHelper productIconName:productIdentifier];
+        
+        UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+        
+        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.titleLabel.text = title;
+        
+        NSString *styledText = [self.class styledHTMLwithHTML:descText];
+        popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+        
+        [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+        [popup.cancelButton setTitle:cancelButtonName forState:UIControlStateNormal];
+        
+        [top addChildViewController:popup];
+        [popup show];
+    }
+}
+
 + (void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase
 {
     BOOL needShow = NO;
     
     OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
     popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
-
+    
     NSString *title;
     NSString *descText;
     NSString *okButtonName;
@@ -161,69 +244,66 @@
     
     if ([productIdentifier isEqualToString:kInAppId_Addon_SkiMap])
     {
-        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        //{
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        {
             needShow = YES;
-
+            
             title = OALocalizedString(@"plugin_popup_ski_title");
             descText = OALocalizedString(@"plugin_popup_ski_desc");
             okButtonName = OALocalizedString(@"open_map_settings");
             cancelButtonName = OALocalizedString(@"shared_string_cancel");
-
-        [popup.okButton addTarget:popup action:@selector(openMapSettings) forControlEvents:UIControlEventTouchUpInside];
-        //}
+            
+            [popup.okButton addTarget:popup action:@selector(openMapSettings) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
     {
-        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        //{
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        {
             needShow = YES;
-        
-        title = OALocalizedString(@"plugin_popup_wiki_title");
-        descText = OALocalizedString(@"plugin_popup_wiki_desc");
-        okButtonName = OALocalizedString(@"go_to_downloads");
-        cancelButtonName = OALocalizedString(@"shared_string_later");
-        
-        [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
-        
-        //}
+            
+            title = OALocalizedString(@"plugin_popup_wiki_title");
+            descText = OALocalizedString(@"plugin_popup_wiki_desc");
+            okButtonName = OALocalizedString(@"go_to_downloads");
+            cancelButtonName = OALocalizedString(@"shared_string_later");
+            
+            [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
     {
-        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        //{
+        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        {
             needShow = YES;
-        
-        title = OALocalizedString(@"plugin_popup_srtm_title");
-        descText = OALocalizedString(@"plugin_popup_srtm_desc");
-        okButtonName = OALocalizedString(@"go_to_downloads");
-        cancelButtonName = OALocalizedString(@"shared_string_later");
-
-        [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
-
-        //}
+            
+            title = OALocalizedString(@"plugin_popup_srtm_title");
+            descText = OALocalizedString(@"plugin_popup_srtm_desc");
+            okButtonName = OALocalizedString(@"go_to_downloads");
+            cancelButtonName = OALocalizedString(@"shared_string_later");
+            
+            [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     
-    if (!afterPurchase)
+    if (afterPurchase)
     {
         if ([productIdentifier isEqualToString:kInAppId_Addon_Nautical])
         {
-            //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-            //{
-            needShow = YES;
-
-            title = OALocalizedString(@"plugin_popup_nautical_title");
-            descText = OALocalizedString(@"plugin_popup_nautical_desc");
-            cancelButtonName = OALocalizedString(@"shared_string_later");
-            
-            [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
-            
-            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                                       countStyle:NSByteCountFormatterCountStyleFile];
-           okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
-
-            //}
+            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+            {
+                needShow = YES;
+                
+                title = OALocalizedString(@"plugin_popup_nautical_title");
+                descText = OALocalizedString(@"plugin_popup_nautical_desc");
+                cancelButtonName = OALocalizedString(@"shared_string_later");
+                
+                [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
+                
+                const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+                NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                           countStyle:NSByteCountFormatterCountStyleFile];
+                okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+            }
         }
     }
     
@@ -261,6 +341,13 @@
     return [[NSAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:NULL error:NULL];
 }
 
+- (void)goToPlugins
+{
+    OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+    [self.navigationController pushViewController:pluginsViewController animated:NO];
+    [self hide];
+}
+
 - (void)openMapSettings
 {
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
@@ -272,6 +359,23 @@
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:NO];
+}
+
+- (void)downloadWorldMap
+{
+    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
+    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                           inRegion:[OsmAndApp instance].worldRegion
+                                                     withRegionName:YES];
+    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+    
+    [self hide];
+}
+
+- (void)cancelDownloadWorldMap
+{
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];
+    [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (void)downloadNautical

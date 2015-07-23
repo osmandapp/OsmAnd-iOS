@@ -43,6 +43,7 @@
     
     NSInteger _pluginsSection;
     NSInteger _mapsSection;
+    NSInteger _restoreSection;
 }
 
 -(void)applyLocalization
@@ -70,7 +71,8 @@
     else
         _pluginsSection = -1;
     
-    _mapsSection = index;
+    _mapsSection = index++;
+    _restoreSection = index;
 
     _loadProductsProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     //_loadProductsProgressHUD.dimBackground = YES;
@@ -151,7 +153,7 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [OAIAPHelper sharedInstance].productsLoaded ? (_pluginsSection >=0 ? 2 : 1) : 0;
+    return [OAIAPHelper sharedInstance].productsLoaded ? (_pluginsSection >=0 ? 3 : 2) : 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -160,6 +162,8 @@
         return [_addonsPurchased count];
     else if (section == _mapsSection)
         return [[OAIAPHelper inAppsMaps] count];
+    else if (section == _restoreSection)
+        return 1;
     else
         return 0;
 }
@@ -170,6 +174,8 @@
         return OALocalizedString(@"plugins");
     else if (section == _mapsSection)
         return OALocalizedString(@"maps");
+    else if (section == _restoreSection)
+        return OALocalizedString(@"restore");
     else
         return @"";
 }
@@ -204,6 +210,7 @@
             imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
             if (!imgTitle)
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+            cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xF0F0F0).CGColor;            
             cell.imgIconBackground.hidden = NO;
             cell.btnPrice.hidden = YES;
             
@@ -214,6 +221,15 @@
             imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
             cell.imgIconBackground.hidden = YES;
             cell.btnPrice.hidden = NO;
+        }
+        else if (indexPath.section == _restoreSection)
+        {
+            identifier = nil;
+            imgTitle = [UIImage imageNamed:@"ic_restore_purchase"];
+            title = OALocalizedString(@"restore_all_purchases");
+            cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xff8f00).CGColor;
+            cell.imgIconBackground.hidden = NO;
+            cell.btnPrice.hidden = YES;
         }
         
         OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
@@ -242,7 +258,7 @@
         
         if (indexPath.section == _mapsSection)
             [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
-        else
+        else  if (indexPath.section == _pluginsSection)
             [cell setPurchased:purchased disabled:disabled];
     }
     
@@ -261,6 +277,12 @@
         identifier = [OAIAPHelper inAppsMaps][indexPath.row];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == _restoreSection)
+    {
+        [self btnRestorePurchasesClicked:nil];
+        return;
+    }
 
     BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
     BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];

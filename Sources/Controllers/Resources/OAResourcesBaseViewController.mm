@@ -21,7 +21,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
-#import "OAPurchasesViewController.h"
+#import "OAPluginPopupViewController.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -769,13 +769,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             
             if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
             {
-                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-                [self.navigationController pushViewController:purchasesViewController animated:NO];
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             }
             else if (item.resourceType == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
             {
-                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-                [self.navigationController pushViewController:purchasesViewController animated:NO];
+                [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             }
             else
             {

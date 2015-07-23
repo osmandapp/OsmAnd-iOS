@@ -35,6 +35,7 @@
 #import "OAGPXRouter.h"
 #import "OAGpxRoutePoint.h"
 #import "OADestination.h"
+#import "OAPluginPopupViewController.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -801,8 +802,11 @@
         
         BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
         const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-        if (!mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) ) {
+        if (!mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) )
+        {
+            [OAPluginPopupViewController askForWorldMap];
             
+            /*
             const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
             NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
                                                                        countStyle:NSByteCountFormatterCountStyleFile];
@@ -832,6 +836,7 @@
             UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), OALocalizedString(@"map_remind"), nil];
             mapDownloadAlert.tag = kUIAlertViewMapDownloadTag;
             [mapDownloadAlert show];
+             */
         }
     }
 }
@@ -2839,6 +2844,7 @@
     });
 }
 
+/*
 #pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -2858,9 +2864,8 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
     }
-    
 }
-
+*/
 
 - (void)updateCurrentMapSource
 {

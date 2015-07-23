@@ -477,11 +477,17 @@
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
 "plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
+"plugin_popup_wiki_ask" = "To download Wikipedia data you need to activate plugin: <b>Wikipedia</b>";
 "plugin_popup_srtm_title" = "Download contour lines";
 "plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
+"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 
 "go_to_downloads" = "Go to downloads";
+"turn_on_plugin" = "Turn on plugin";
 
+"all_world_popup_desc" = "Download World base map to see state names, borders and other information";
+"restore" = "Restore";
+"restore_all_purchases" = "Restore all purchases";
 

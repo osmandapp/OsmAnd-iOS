@@ -8,7 +8,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPurchasesViewController">
             <connections>
                 <outlet property="backButton" destination="H9o-Md-CF4" id="xlu-qa-hd4"/>
-                <outlet property="btnRestorePurchases" destination="YzU-F8-VnX" id="gZE-Mp-KuA"/>
                 <outlet property="btnToolbarMaps" destination="2wz-7h-uOJ" id="6n2-oM-Ehw"/>
                 <outlet property="btnToolbarPlugins" destination="7EP-HW-o5e" id="TGo-eS-yWl"/>
                 <outlet property="btnToolbarPurchases" destination="afA-Kc-Aw8" id="gVl-XV-fAe"/>
@@ -62,15 +61,6 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="YzU-F8-VnX">
-                            <rect key="frame" x="274" y="26" width="38" height="34"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            <state key="normal" image="ic_update.png"/>
-                            <connections>
-                                <action selector="btnRestorePurchasesClicked:" destination="-1" eventType="touchUpInside" id="9hm-OQ-Hx1"/>
-                            </connections>
-                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
@@ -142,7 +132,6 @@
         <image name="ic_tabbar_addons_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_maps_normal.png" width="25" height="25"/>
         <image name="ic_tabbar_purchases_selected.png" width="25" height="25"/>
-        <image name="ic_update.png" width="25" height="25"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

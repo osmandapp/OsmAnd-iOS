@@ -428,3 +428,11 @@
 "plugin_popup_srtm_title" = "Baixar curvas de nível";
 "plugin_popup_srtm_desc" = "Para usar o recurso Curvas de nível, primeiro baixe as curvas de nível de uma região";
 "plugin_popup_nautical_title" = "Baixar mapas náuticos";
+"plugin_popup_nautical_desc" = "Primeiro baixe mapas náuticos.\nEntão vá para as <b>Configurações de mapa</b> > <b>Tipo do mapa</b> e ative o estilo <b>Náutico</b>";
+"go_to_downloads" = "Ir para transferências";
+"plugin_popup_wiki_ask" = "Para baixar dados Wikipédia, você precisa ativar o plugin: <b>Wikipédia</b>";
+"plugin_popup_srtm_ask" = "Para baixar Curvas de nível, você precisa ativar o complemento: <b>Curvas de nível</b>";
+"turn_on_plugin" = "Ativar complemento";
+"all_world_popup_desc" = "Baixar Mapa base mundial para ver nomes de estados, fronteiras e outras informações";
+"restore" = "Restaurar";
+"restore_all_purchases" = "Restaurar todas as compras";

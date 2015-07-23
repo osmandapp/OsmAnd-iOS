@@ -430,3 +430,9 @@
 "product_desc_ext_track_recording" = "Optage dine ture og gemme dem manuelt ved hjælp af OsmAnd tur optagelse plugin. Eksportere din rejse som en gpx fil, dele det eller endda bruge den til at bidrage til OpenStreetMap projektet.  Et praktisk værktøj for løbere, vandrere og alle interesserede i optagelse deres ture.";
 "product_desc_ext_wiki" = "Få oplysninger om interessepunkter fra Wikipedia. Det er din lomme offline guide - kun aktiverer Wikipedia plugin og nyde artikler om objekterne omkring dig.";
 "product_desc_ext_srtm" = "Dette plugin giver højdekurver og hillshade, som kan vises i OsmAnd offline maps. Højdekurver indeholder oplysninger om højder af området, mens hillshade er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af dette plugin.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar topografi Mission) og ASTER (Advanced Spaceborne termiske Emission og refleksion Radiometer), en billeddannelse instrument ombord Terra, flagskib satellit af NASA'S Earth Observation System. ASTER er en kooperativ indsats mellem NASA, Japans Ministeriet for økonomi, handel og industri (Pernille), og Japan rumbaserede systemer (J-spacesystems).";
+"plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
+"plugin_popup_srtm_ask" = "For at hente højdekurver, aktiver udvidelsen: <b>Højdekurver</b>";
+"turn_on_plugin" = "Aktiver udvidelse";
+"all_world_popup_desc" = "Hent verden basiskort for at se statsnavne, grænser og andre oplysninger";
+"restore" = "Gendan";
+"restore_all_purchases" = "Gendan alle køb";

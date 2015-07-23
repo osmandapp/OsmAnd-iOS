@@ -190,6 +190,8 @@
     
     if (cell) {
         
+        cell.btnPrice.userInteractionEnabled = NO;
+        
         NSString *identifier;
         NSString *title;
         NSString *desc;
@@ -203,7 +205,7 @@
             if (!imgTitle)
                 imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
             cell.imgIconBackground.hidden = NO;
-            cell.imgPrice.hidden = YES;
+            cell.btnPrice.hidden = YES;
             
         }
         else if (indexPath.section == _mapsSection)
@@ -211,7 +213,7 @@
             identifier = [OAIAPHelper inAppsMaps][indexPath.row];
             imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
             cell.imgIconBackground.hidden = YES;
-            cell.imgPrice.hidden = NO;
+            cell.btnPrice.hidden = NO;
         }
         
         OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
@@ -233,7 +235,7 @@
         [cell.imgIcon setImage:imgTitle];
         [cell.lbTitle setText:title];
         [cell.lbDescription setText:desc];
-        [cell.lbPrice setText:price];
+        [cell.btnPrice setTitle:price forState:UIControlStateNormal];
         
         BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
         BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];

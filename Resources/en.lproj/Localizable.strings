@@ -22,6 +22,7 @@
 "shared_string_and" = "and";
 "shared_string_edit" = "Edit";
 "shared_string_modify" = "Modify";
+"shared_string_later" = "Later";
 
 
 // HUD
@@ -175,7 +176,6 @@
 
 // Purchases
 "prch_addons" = "Addons";
-"prch_ski_q" = "Please turn on the \"Ski map\" style in the Map Settings";
 
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Dowloading requires %@ over cellular network.";
@@ -363,12 +363,16 @@
 //inapps
 "product_title_nautical" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
+"product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
+"product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
+"product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "product_title_track_recording" = "Trip recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
+"product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
 "product_title_australia" = "Australia";
@@ -390,8 +394,10 @@
 
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
+"product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "product_title_srtm" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
+"product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 
 "my_location" = "My Location";
 "all_categories" = "All categories";
@@ -463,5 +469,19 @@
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
+
 "plugins" = "Plugins";
+"open_map_settings" = "Open Map Settings";
+
+"plugin_popup_ski_title" = "Turn on Ski map style";
+"plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
+"plugin_popup_wiki_title" = "Download Wikipedia";
+"plugin_popup_wiki_desc" = "To start using Wikipedia plugin, please download Wikipedia data of an region first";
+"plugin_popup_srtm_title" = "Download contour lines";
+"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
+"plugin_popup_nautical_title" = "Download Nautical maps";
+"plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
+
+"go_to_downloads" = "Go to downloads";
+
 

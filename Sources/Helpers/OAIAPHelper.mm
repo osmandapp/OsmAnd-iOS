@@ -68,6 +68,10 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     _price = [skProduct.price copy];
     _priceLocale = [skProduct.priceLocale copy];
     
+    NSString *postfix = [[_productIdentifier componentsSeparatedByString:@"."] lastObject];
+    NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
+    _localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
+
     _skProductRef = skProduct;
 }
 
@@ -81,9 +85,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         NSString *postfix = [[productIdentifier componentsSeparatedByString:@"."] lastObject];
         NSString *locTitleId = [@"product_title_" stringByAppendingString:postfix];
         NSString *locDescriptionId = [@"product_desc_" stringByAppendingString:postfix];
+        NSString *locDescriptionExtId = [@"product_desc_ext_" stringByAppendingString:postfix];
         
         _localizedTitle = OALocalizedString(locTitleId);
         _localizedDescription = OALocalizedString(locDescriptionId);
+        _localizedDescriptionExt = OALocalizedString(locDescriptionExtId);
     }
     return self;
 }
@@ -606,84 +612,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     else
         return nil;
 }
-
-+(void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase
-{
-    if ([productIdentifier isEqualToString:kInAppId_Addon_SkiMap])
-    {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-            [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]];
-        }
-    }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
-    {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-            [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]];
-        }
-    }
-    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
-    {
-        if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
-        {
-            [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-            [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]];
-        }
-    }
-    
-    if (afterPurchase)
-    {
-        if ([productIdentifier isEqualToString:kInAppId_Addon_Nautical])
-        {
-            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                                       countStyle:NSByteCountFormatterCountStyleFile];
-            
-            NSMutableString* message = [OALocalizedString(@"prch_nau_q1") mutableCopy];
-            [message appendString:@"\n\n"];
-            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-            {
-                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
-                [message appendString:@" "];
-                [message appendString:OALocalizedString(@"incur_high_charges")];
-            }
-            else
-            {
-                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
-            }
-            
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"prch_nau_q3")];
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"proceed_q")];
-            
-            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
-            mapDownloadAlert.tag = 100;
-            [mapDownloadAlert show];
-        }
-    }
-}
-
-/*
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
-    {
-        // Download map
-        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                               inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES];
-        
-        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-    }
-}
-*/
 
 
 @end

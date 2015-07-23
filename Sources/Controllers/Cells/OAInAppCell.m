@@ -66,7 +66,7 @@
             self.btnPrice.layer.borderWidth = 0.0;
             self.btnPrice.backgroundColor = UIColorFromRGB(0xff8f00);
             self.btnPrice.tintColor = [UIColor whiteColor];
-            [self.btnPrice setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
         }
         else
         {
@@ -74,7 +74,7 @@
             self.btnPrice.layer.borderColor = UIColorFromRGB(0xff8f00).CGColor;
             self.btnPrice.backgroundColor = [UIColor clearColor];
             self.btnPrice.tintColor = UIColorFromRGB(0xff8f00);
-            [self.btnPrice setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
         }
     }
     else

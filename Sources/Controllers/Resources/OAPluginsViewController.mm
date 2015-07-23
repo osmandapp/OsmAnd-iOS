@@ -17,6 +17,7 @@
 #include "Localization.h"
 #import "OAUtilities.h"
 #import "OAPluginDetailsViewController.h"
+#import "OAPluginPopupViewController.h"
 #import <Reachability.h>
 
 
@@ -125,6 +126,8 @@
             }];
         });
     }
+    
+    [self.tableView reloadData];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -218,6 +221,8 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:identifier];
+    pluginDetails.openFromSplash = self.openFromSplash;
+    pluginDetails.openFromCustomPlace = self.openFromCustomPlace;
     [self.navigationController pushViewController:pluginDetails animated:YES];
 }
 
@@ -236,7 +241,7 @@
         if (disabled)
         {
             [[OAIAPHelper sharedInstance] enableProduct:identifier];
-            [OAIAPHelper showProductAlert:identifier afterPurchase:NO];
+            [OAPluginPopupViewController showProductAlert:identifier afterPurchase:NO];
         }
         else
         {
@@ -268,7 +273,7 @@
         
         [self.tableView reloadData];
         
-        [OAIAPHelper showProductAlert:identifier afterPurchase:YES];
+        [OAPluginPopupViewController showProductAlert:identifier afterPurchase:YES];
         
     });
 }

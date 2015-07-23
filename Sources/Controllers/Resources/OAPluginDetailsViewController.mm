@@ -10,6 +10,8 @@
 #import "OAUtilities.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAPluginPopupViewController.h"
+#import "OAPurchasesViewController.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -26,6 +28,7 @@
     NSNumberFormatter *_numberFormatter;
 
     CALayer *_horizontalLineDesc;
+    CALayer *_horizontalLine;
 }
 
 - (instancetype)initWithProductId:(NSString *)productId
@@ -41,6 +44,13 @@
 - (void)applyLocalization
 {
     self.descLabel.text = OALocalizedStringUp(@"description");
+
+    [_btnToolbarMaps setTitle:OALocalizedString(@"maps") forState:UIControlStateNormal];
+    [_btnToolbarPlugins setTitle:OALocalizedString(@"plugins") forState:UIControlStateNormal];
+    [_btnToolbarPurchases setTitle:OALocalizedString(@"purchases") forState:UIControlStateNormal];
+    [OAUtilities layoutComplexButton:self.btnToolbarMaps];
+    [OAUtilities layoutComplexButton:self.btnToolbarPlugins];
+    [OAUtilities layoutComplexButton:self.btnToolbarPurchases];
 }
 
 - (void)viewDidLoad
@@ -56,6 +66,11 @@
     _numberFormatter = [[NSNumberFormatter alloc] init];
     [_numberFormatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
     [_numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.bottomToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    [self.bottomToolbarView.layer addSublayer:_horizontalLine];
 
     _horizontalLineDesc = [CALayer layer];
     _horizontalLineDesc.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
@@ -112,6 +127,7 @@
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
     _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, DeviceScreenWidth - 30.0, 0.5);
 }
 
@@ -125,7 +141,7 @@
     if (product)
     {
         title = product.localizedTitle;
-        desc = product.localizedDescription;
+        desc = product.localizedDescriptionExt;
         if (product.price)
         {
             [_numberFormatter setLocale:product.priceLocale];
@@ -152,7 +168,7 @@
             self.priceButton.layer.borderWidth = 0.0;
             self.priceButton.backgroundColor = UIColorFromRGB(0xff8f00);
             self.priceButton.tintColor = [UIColor whiteColor];
-            [self.priceButton setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
         }
         else
         {
@@ -160,7 +176,7 @@
             self.priceButton.layer.borderColor = UIColorFromRGB(0xff8f00).CGColor;
             self.priceButton.backgroundColor = [UIColor clearColor];
             self.priceButton.tintColor = UIColorFromRGB(0xff8f00);
-            [self.priceButton setImage:[UIImage imageNamed:@"ic_trip_visitedpoint"] forState:UIControlStateNormal];
+            [self.priceButton setImage:[UIImage imageNamed:@"ic_checkmark_big_enable"] forState:UIControlStateNormal];
         }
     }
     else
@@ -189,7 +205,7 @@
         if (disabled)
         {
             [[OAIAPHelper sharedInstance] enableProduct:_productId];
-            [OAIAPHelper showProductAlert:_productId afterPurchase:NO];
+            [OAPluginPopupViewController showProductAlert:_productId afterPurchase:NO];
         }
         else
         {
@@ -217,7 +233,7 @@
         
         [self updatePurchaseButton];
 
-        [OAIAPHelper showProductAlert:_productId afterPurchase:YES];
+        [OAPluginPopupViewController showProductAlert:_productId afterPurchase:YES];
 
     });
 }
@@ -237,6 +253,26 @@
             [alert show];
         }
     });
+}
+
+- (IBAction)btnToolbarMapsClicked:(id)sender
+{
+    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [controllers removeLastObject];
+    [controllers removeLastObject];
+    [self.navigationController setViewControllers:controllers];
+}
+
+- (IBAction)btnToolbarPurchasesClicked:(id)sender
+{
+    OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
+    purchasesViewController.openFromSplash = self.openFromSplash;
+    
+    NSMutableArray *controllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
+    [controllers removeLastObject];
+    [controllers removeLastObject];
+    [controllers addObject:purchasesViewController];
+    [self.navigationController setViewControllers:controllers];
 }
 
 @end

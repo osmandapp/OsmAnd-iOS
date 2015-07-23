@@ -1,0 +1,339 @@
+//
+//  OAPluginPopupViewController.m
+//  OsmAnd
+//
+//  Created by Alexey Kulish on 23/07/15.
+//  Copyright (c) 2015 OsmAnd. All rights reserved.
+//
+
+#import "OAPluginPopupViewController.h"
+#import "OAUtilities.h"
+#import "OAIAPHelper.h"
+#import "OARootViewController.h"
+#import "Localization.h"
+#import "OsmAndApp.h"
+#import "OAResourcesBaseViewController.h"
+
+@interface OAPluginPopupViewController ()
+
+@end
+
+@implementation OAPluginPopupViewController
+{
+    UIView *_shadeView;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+
+    // drop shadow
+    [self.view.layer setShadowColor:[UIColor blackColor].CGColor];
+    [self.view.layer setShadowOpacity:0.3];
+    [self.view.layer setShadowRadius:3.0];
+    [self.view.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    self.okButton.layer.cornerRadius = 4;
+    self.okButton.layer.masksToBounds = YES;
+
+    self.cancelButton.layer.cornerRadius = 4;
+    self.cancelButton.layer.masksToBounds = YES;
+    self.cancelButton.layer.borderWidth = 0.8;
+    self.cancelButton.layer.borderColor = UIColorFromRGB(0x4caf50).CGColor;
+}
+
+- (void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+-(void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    [self doLayout];
+}
+
+- (void)doLayout
+{
+    CGFloat w = self.view.frame.size.width;
+    
+    CGRect titleFrame = CGRectMake(50.0, 14.0, w - 50.0 - 40.0, 1000.0);
+    titleFrame.size.height = [OAUtilities calculateTextBounds:self.titleLabel.text width:titleFrame.size.width font:self.titleLabel.font].height;
+    self.titleLabel.frame = titleFrame;
+    
+    CGRect descFrame = CGRectMake(46.0, titleFrame.origin.y + titleFrame.size.height - 5.0, w - 50.0 - 15.0, 1000.0);
+    descFrame.size.height = [self.descTextView.attributedText boundingRectWithSize:descFrame.size options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil].size.height + self.descTextView.textContainerInset.top + self.descTextView.textContainerInset.bottom;
+    self.descTextView.frame = descFrame;
+    
+    CGFloat okWidth = MAX(80.0, [OAUtilities calculateTextBounds:self.okButton.titleLabel.text width:1000.0 font:self.okButton.titleLabel.font].width + 30.0);
+    CGFloat cancelWidth = MAX(80.0, [OAUtilities calculateTextBounds:self.cancelButton.titleLabel.text width:1000.0 font:self.cancelButton.titleLabel.font].width + 30.0);
+    
+    BOOL buttonsSingleLine = (w - 50.0 - 10.0 - okWidth - cancelWidth - 15.0) >= 10.0;
+    if (buttonsSingleLine)
+    {
+        //okWidth = w - 50.0 - 15.0 - cancelWidth - 15.0;
+        self.okButton.frame = CGRectMake(50.0, descFrame.origin.y + descFrame.size.height + 5.0, okWidth, 35.0);
+        self.cancelButton.frame = CGRectMake(50.0 + okWidth + 10.0, descFrame.origin.y + descFrame.size.height + 5.0, cancelWidth, 35.0);
+    }
+    else
+    {
+        self.okButton.frame = CGRectMake(50.0, descFrame.origin.y + descFrame.size.height + 5.0, okWidth, 35.0);
+        self.cancelButton.frame = CGRectMake(50.0, self.okButton.frame.origin.y + self.okButton.frame.size.height + 10.0, cancelWidth, 35.0);
+    }
+    
+    CGRect f = self.view.frame;
+    f.size.height = self.cancelButton.frame.origin.y + self.cancelButton.frame.size.height + 15.0;
+    self.view.frame = f;
+}
+
+
+/*
+ NSURL *htmlString = [[NSBundle mainBundle]  URLForResource: @"string"     withExtension:@"html"];
+ NSAttributedString *stringWithHTMLAttributes = [[NSAttributedString alloc] initWithFileURL:htmlString
+ options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType}
+ documentAttributes:nil
+ error:nil];
+ textView.attributedText = stringWithHTMLAttributes;
+ */
+
+- (void)show
+{
+    [self doLayout];
+    
+    _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
+    _shadeView.backgroundColor = UIColorFromRGBA(0x00000060);
+    _shadeView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _shadeView.alpha = 0.0;
+    [_shadeView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hide)]];
+    
+    [self.parentViewController.view addSubview:_shadeView];
+    
+    CGRect f = self.view.frame;
+    f.origin.y = DeviceScreenHeight;
+    self.view.frame = f;
+    [self.parentViewController.view addSubview:self.view];
+    
+    f.origin.y = DeviceScreenHeight - self.view.frame.size.height;
+    
+    [UIView animateWithDuration:.25 animations:^{
+
+        _shadeView.alpha = 1.0;
+        self.view.frame = f;
+        
+    }];
+}
+
+- (void)hide
+{
+    CGRect f = self.view.frame;
+    f.origin.y = DeviceScreenHeight;
+    [UIView animateWithDuration:.25 animations:^{
+        
+        _shadeView.alpha = 0.0;
+        self.view.frame = f;
+        
+    } completion:^(BOOL finished) {
+        [self.view removeFromSuperview];
+        [_shadeView removeFromSuperview];
+        _shadeView = nil;
+        [self removeFromParentViewController];
+    }];
+}
+
+- (IBAction)closePressed:(id)sender
+{
+    [self hide];
+}
+
++ (void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase
+{
+    BOOL needShow = NO;
+    
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+
+    NSString *title;
+    NSString *descText;
+    NSString *okButtonName;
+    NSString *cancelButtonName;
+    
+    if ([productIdentifier isEqualToString:kInAppId_Addon_SkiMap])
+    {
+        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        //{
+            needShow = YES;
+
+            title = OALocalizedString(@"plugin_popup_ski_title");
+            descText = OALocalizedString(@"plugin_popup_ski_desc");
+            okButtonName = OALocalizedString(@"open_map_settings");
+            cancelButtonName = OALocalizedString(@"shared_string_cancel");
+
+        [popup.okButton addTarget:popup action:@selector(openMapSettings) forControlEvents:UIControlEventTouchUpInside];
+        //}
+    }
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+    {
+        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        //{
+            needShow = YES;
+        
+        title = OALocalizedString(@"plugin_popup_wiki_title");
+        descText = OALocalizedString(@"plugin_popup_wiki_desc");
+        okButtonName = OALocalizedString(@"go_to_downloads");
+        cancelButtonName = OALocalizedString(@"shared_string_later");
+        
+        [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
+        
+        //}
+    }
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
+    {
+        //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+        //{
+            needShow = YES;
+        
+        title = OALocalizedString(@"plugin_popup_srtm_title");
+        descText = OALocalizedString(@"plugin_popup_srtm_desc");
+        okButtonName = OALocalizedString(@"go_to_downloads");
+        cancelButtonName = OALocalizedString(@"shared_string_later");
+
+        [popup.okButton addTarget:popup action:@selector(goToDownloads) forControlEvents:UIControlEventTouchUpInside];
+
+        //}
+    }
+    
+    if (!afterPurchase)
+    {
+        if ([productIdentifier isEqualToString:kInAppId_Addon_Nautical])
+        {
+            //if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]] == nil)
+            //{
+            needShow = YES;
+
+            title = OALocalizedString(@"plugin_popup_nautical_title");
+            descText = OALocalizedString(@"plugin_popup_nautical_desc");
+            cancelButtonName = OALocalizedString(@"shared_string_later");
+            
+            [popup.okButton addTarget:popup action:@selector(downloadNautical) forControlEvents:UIControlEventTouchUpInside];
+            
+            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                                       countStyle:NSByteCountFormatterCountStyleFile];
+           okButtonName = [NSString stringWithFormat:@"%@ (%@)", OALocalizedString(@"download"), stringifiedSize];
+
+            //}
+        }
+    }
+    
+    if (needShow)
+    {
+        NSString *iconName = [OAIAPHelper productIconName:productIdentifier];
+
+        UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+        
+        popup.icon.image = [UIImage imageNamed:iconName];
+        popup.titleLabel.text = title;
+        
+        NSString *styledText = [self.class styledHTMLwithHTML:descText];
+        popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+        
+        [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+        [popup.cancelButton setTitle:cancelButtonName forState:UIControlStateNormal];
+        
+        [top addChildViewController:popup];
+        [popup show];
+    }
+
+}
+
++ (NSString *)styledHTMLwithHTML:(NSString *)HTML
+{
+    NSString *style = @"<meta charset=\"UTF-8\"><style> body { font-family: 'AvenirNext-Medium'; font-size: 12px; color:#727272} b {font-family: 'AvenirNext-DemiBold'; font-size: 12px; color:#727272 }</style>";
+    
+    return [NSString stringWithFormat:@"%@%@", style, HTML];
+}
+
++ (NSAttributedString *)attributedStringWithHTML:(NSString *)HTML
+{
+    NSDictionary *options = @{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType };
+    return [[NSAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:NULL error:NULL];
+}
+
+- (void)openMapSettings
+{
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
+    [[OARootViewController instance].mapPanel mapSettingsButtonClick:nil];
+}
+
+- (void)goToDownloads
+{
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
+    OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
+    [[OARootViewController instance].navigationController pushViewController:resourcesViewController animated:NO];
+}
+
+- (void)downloadNautical
+{
+    // Download map
+    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+    NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                           inRegion:[OsmAndApp instance].worldRegion
+                                                     withRegionName:YES];
+    
+    [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+    
+    [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
+    
+    /*
+    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
+                                                               countStyle:NSByteCountFormatterCountStyleFile];
+    
+    NSMutableString* message = [NSMutableString string];
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
+    {
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
+        [message appendString:@" "];
+        [message appendString:OALocalizedString(@"incur_high_charges")];
+    }
+    else
+    {
+        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
+    }
+    
+    [message appendString:@" "];
+    [message appendString:OALocalizedString(@"prch_nau_q3")];
+    [message appendString:@" "];
+    [message appendString:OALocalizedString(@"proceed_q")];
+    
+    UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
+    mapDownloadAlert.tag = 100;
+    [mapDownloadAlert show];
+     */
+}
+
+/*
+ #pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self hide];
+
+    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
+    {
+        // Download map
+        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
+        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
+                                                               inRegion:[OsmAndApp instance].worldRegion
+                                                         withRegionName:YES];
+        
+        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
+
+        [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
+    }
+}
+*/
+
+@end

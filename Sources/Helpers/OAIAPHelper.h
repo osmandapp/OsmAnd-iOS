@@ -78,6 +78,7 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 @interface OAProduct : NSObject
 
 @property (nonatomic, readonly) NSString *localizedDescription;
+@property (nonatomic, readonly) NSString *localizedDescriptionExt;
 @property (nonatomic, readonly) NSString *localizedTitle;
 @property (nonatomic, readonly) NSDecimalNumber *price;
 @property (nonatomic, readonly) NSLocale *priceLocale;
@@ -128,6 +129,5 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 
 +(NSString *)productIconName:(NSString *)productIdentifier;
 +(NSString *)productScreenshotName:(NSString *)productIdentifier;
-+(void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase;
 
 @end

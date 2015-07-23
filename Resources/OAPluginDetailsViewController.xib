@@ -8,6 +8,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPluginDetailsViewController">
             <connections>
                 <outlet property="backButton" destination="cIJ-2h-P0q" id="Jgf-jr-AmX"/>
+                <outlet property="bottomToolbarView" destination="Oak-UR-t6w" id="F3a-nz-MRn"/>
+                <outlet property="btnToolbarMaps" destination="GIj-ae-fVr" id="y6x-Pc-tRs"/>
+                <outlet property="btnToolbarPlugins" destination="UWD-H9-ano" id="nKr-iT-miN"/>
+                <outlet property="btnToolbarPurchases" destination="Fa0-NB-ttG" id="cVe-K0-VMZ"/>
                 <outlet property="descLabel" destination="jYf-Nz-ubj" id="9Sp-3M-IOk"/>
                 <outlet property="descTextView" destination="nkq-Xw-j8P" id="xjF-Wh-uVM"/>
                 <outlet property="detailsView" destination="gdU-bL-CTA" id="3GQ-gh-6xd"/>
@@ -15,7 +19,7 @@
                 <outlet property="priceButton" destination="03d-WZ-fQI" id="cBD-bc-Bms"/>
                 <outlet property="screenshot" destination="Ntm-hv-3id" id="dAZ-zX-txu"/>
                 <outlet property="titleLabel" destination="lEO-9O-xqv" id="Uvi-PA-8wt"/>
-                <outlet property="toolbarView" destination="Xh4-Ib-HQD" id="MV3-hd-Rue"/>
+                <outlet property="toolbarView" destination="Xh4-Ib-HQD" id="2JN-pF-VX0"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -24,7 +28,7 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_plugin_nautical.jpg" id="Ntm-hv-3id">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="Ntm-hv-3id">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="220"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                 </imageView>
@@ -59,7 +63,7 @@
                     </subviews>
                 </view>
                 <view contentMode="scaleToFill" id="gdU-bL-CTA">
-                    <rect key="frame" x="0.0" y="220" width="320" height="260"/>
+                    <rect key="frame" x="0.0" y="220" width="320" height="210"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_plugin_nautical.png" id="Wae-rj-He9">
@@ -86,8 +90,8 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" id="nkq-Xw-j8P">
-                            <rect key="frame" x="10" y="105" width="300" height="147"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <rect key="frame" x="10" y="105" width="300" height="90"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <mutableString key="text">Duis eget dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="15"/>
@@ -95,6 +99,52 @@
                         </textView>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" id="Oak-UR-t6w">
+                    <rect key="frame" x="0.0" y="430" width="320" height="50"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="GIj-ae-fVr" userLabel="Maps">
+                            <rect key="frame" x="0.0" y="0.0" width="106" height="61"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                            <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
+                            <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="MAPS" image="ic_tabbar_maps_normal.png">
+                                <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnToolbarMapsClicked:" destination="-1" eventType="touchUpInside" id="mbX-BN-yJ5"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="UWD-H9-ano" userLabel="Plugins">
+                            <rect key="frame" x="107" y="0.0" width="106" height="61"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                            <color key="tintColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <inset key="titleEdgeInsets" minX="-25" minY="36" maxX="0.0" maxY="-6"/>
+                            <inset key="imageEdgeInsets" minX="33" minY="-11" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="MAPS" image="ic_tabbar_addons_active.png">
+                                <color key="titleColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Fa0-NB-ttG" userLabel="Purchases">
+                            <rect key="frame" x="214" y="0.0" width="106" height="61"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
+                            <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="10"/>
+                            <color key="tintColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <inset key="titleEdgeInsets" minX="-22" minY="38" maxX="0.0" maxY="0.0"/>
+                            <inset key="imageEdgeInsets" minX="68" minY="-11" maxX="0.0" maxY="0.0"/>
+                            <state key="normal" title="PURCHASES" image="ic_tabbar_purchases_normal.png">
+                                <color key="titleColor" red="0.44705882349999998" green="0.44705882349999998" blue="0.44705882349999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </state>
+                            <connections>
+                                <action selector="btnToolbarPurchasesClicked:" destination="-1" eventType="touchUpInside" id="0mO-XE-dKq"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" red="0.96862745100000003" green="0.96862745100000003" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -105,7 +155,9 @@
     <resources>
         <image name="bg_title.png" width="320" height="64"/>
         <image name="ic_plugin_nautical.png" width="25" height="25"/>
-        <image name="img_plugin_nautical.jpg" width="960" height="660"/>
+        <image name="ic_tabbar_addons_active.png" width="25" height="25"/>
+        <image name="ic_tabbar_maps_normal.png" width="25" height="25"/>
+        <image name="ic_tabbar_purchases_normal.png" width="25" height="25"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

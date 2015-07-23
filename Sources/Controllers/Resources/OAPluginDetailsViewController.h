@@ -22,8 +22,16 @@
 @property (weak, nonatomic) IBOutlet UILabel *descLabel;
 @property (weak, nonatomic) IBOutlet UITextView *descTextView;
 
+@property (weak, nonatomic) IBOutlet UIView *bottomToolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarMaps;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPlugins;
+@property (weak, nonatomic) IBOutlet UIButton *btnToolbarPurchases;
+
 @property (nonatomic, readonly) NSString *productId;
 
 - (instancetype)initWithProductId:(NSString *)productId;
+
+@property (nonatomic, assign) BOOL openFromSplash;
+@property (nonatomic, assign) BOOL openFromCustomPlace;
 
 @end

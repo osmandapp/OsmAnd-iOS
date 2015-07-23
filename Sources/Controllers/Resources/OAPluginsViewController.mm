@@ -16,6 +16,7 @@
 #import "OsmAndApp.h"
 #include "Localization.h"
 #import "OAUtilities.h"
+#import "OAPluginDetailsViewController.h"
 #import <Reachability.h>
 
 
@@ -161,6 +162,10 @@
     
     if (cell)
     {
+        [cell.btnPrice removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+        cell.btnPrice.tag = indexPath.row;
+        [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
+        
         NSString *identifier;
         NSString *title;
         NSString *desc;
@@ -193,7 +198,7 @@
         [cell.imgIcon setImage:imgTitle];
         [cell.lbTitle setText:title];
         [cell.lbDescription setText:desc];
-        [cell.lbPrice setText:price];
+        [cell.btnPrice setTitle:price forState:UIControlStateNormal];
         
         BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
         BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
@@ -206,13 +211,23 @@
 
 #pragma mark - UITableViewDelegate
 
-
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString *identifier = [OAIAPHelper inAppsAddons][indexPath.row];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
+    OAPluginDetailsViewController *pluginDetails = [[OAPluginDetailsViewController alloc] initWithProductId:identifier];
+    [self.navigationController pushViewController:pluginDetails animated:YES];
+}
+
+- (IBAction)buttonPurchaseClicked:(id)sender
+{
+    UIButton *btn = sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:btn.tag inSection:0];
+    
+    NSString *identifier = [OAIAPHelper inAppsAddons][indexPath.row];
+
     BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
     BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
     
@@ -221,30 +236,7 @@
         if (disabled)
         {
             [[OAIAPHelper sharedInstance] enableProduct:identifier];
-            if ([identifier isEqualToString:kInAppId_Addon_SkiMap])
-            {
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-                {
-                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-                }
-            }
-            else if ([identifier isEqualToString:kInAppId_Addon_Wiki])
-            {
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-                {
-                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-                }
-            }
-            else if ([identifier isEqualToString:kInAppId_Addon_Srtm])
-            {
-                if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-                {
-                    [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                    [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-                }
-            }
+            [OAIAPHelper showProductAlert:identifier afterPurchase:NO];
         }
         else
         {
@@ -265,7 +257,6 @@
         
         [[OAIAPHelper sharedInstance] buyProduct:product];
     }
-    
 }
 
 - (void)productPurchased:(NSNotification *)notification {
@@ -277,58 +268,7 @@
         
         [self.tableView reloadData];
         
-        if ([identifier isEqualToString:kInAppId_Addon_SkiMap])
-        {
-            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-            {
-                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_ski_q") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-            }
-        }
-        else if ([identifier isEqualToString:kInAppId_Addon_Wiki])
-        {
-            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-            {
-                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_wiki_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-            }
-        }
-        else if ([identifier isEqualToString:kInAppId_Addon_Srtm])
-        {
-            if ([[NSUserDefaults standardUserDefaults] objectForKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]] == nil)
-            {
-                [[[UIAlertView alloc] initWithTitle:nil message:OALocalizedString(@"prch_srtm_info") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles: nil] show];
-                [[NSUserDefaults standardUserDefaults] setObject:@"yes" forKey:[NSString stringWithFormat:@"%@_alert_showed", identifier]];
-            }
-        }
-        else if ([identifier isEqualToString:kInAppId_Addon_Nautical])
-        {
-            const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-            NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                                       countStyle:NSByteCountFormatterCountStyleFile];
-            
-            NSMutableString* message = [OALocalizedString(@"prch_nau_q1") mutableCopy];
-            [message appendString:@"\n\n"];
-            if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-            {
-                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
-                [message appendString:@" "];
-                [message appendString:OALocalizedString(@"incur_high_charges")];
-            }
-            else
-            {
-                [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
-            }
-            
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"prch_nau_q3")];
-            [message appendString:@" "];
-            [message appendString:OALocalizedString(@"proceed_q")];
-            
-            UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
-            mapDownloadAlert.tag = 100;
-            [mapDownloadAlert show];
-        }
+        [OAIAPHelper showProductAlert:identifier afterPurchase:YES];
         
     });
 }
@@ -392,20 +332,5 @@
     [self.navigationController setViewControllers:controllers];
 }
 
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{    
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
-    {
-        // Download map
-        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                               inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES];
-        
-        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-    }
-}
 
 @end

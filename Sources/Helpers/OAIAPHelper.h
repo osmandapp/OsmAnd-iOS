@@ -119,13 +119,15 @@ typedef void (^RequestProductsCompletionHandler)(BOOL success);
 +(NSArray *)inAppsAddons;
 +(NSArray *)inAppsAddonsPurchased;
 
-+(NSString *)productIconName:(NSString *)productIdentifier;
-
 -(OAProduct *)product:(NSString *)productIdentifier;
 -(int)productIndex:(NSString *)productIdentifier;
 -(BOOL)productsLoaded;
 
 +(int)freeMapsAvailable;
 +(void)decreaseFreeMapsCount;
+
++(NSString *)productIconName:(NSString *)productIdentifier;
++(NSString *)productScreenshotName:(NSString *)productIdentifier;
++(void)showProductAlert:(NSString *)productIdentifier afterPurchase:(BOOL)afterPurchase;
 
 @end

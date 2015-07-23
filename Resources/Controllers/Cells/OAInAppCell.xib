@@ -37,32 +37,29 @@
                         <rect key="frame" x="13" y="13" width="50" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="$2.99" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" id="8Zc-I5-osy">
-                        <rect key="frame" x="256" y="25" width="46" height="26"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="13"/>
-                        <color key="textColor" red="0.99215686274509807" green="0.5607843137254902" blue="0.14901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bt_buy_addon.png" id="2CE-Zs-oRf">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="2Q3-oI-xox">
                         <rect key="frame" x="252" y="25" width="54" height="26"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </imageView>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="13"/>
+                        <state key="normal" title="$2.99">
+                            <color key="titleColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                        </state>
+                    </button>
                 </subviews>
             </tableViewCellContentView>
             <connections>
+                <outlet property="btnPrice" destination="2Q3-oI-xox" id="coS-ii-sRb"/>
                 <outlet property="imgIcon" destination="mSp-hr-KOI" id="Ron-BZ-mVd"/>
                 <outlet property="imgIconBackground" destination="pxS-n0-KIc" id="Cvx-6L-5oN"/>
-                <outlet property="imgPrice" destination="2CE-Zs-oRf" id="Xwk-g2-fYK"/>
                 <outlet property="lbDescription" destination="KEC-jF-poM" id="s4t-dS-aEQ"/>
-                <outlet property="lbPrice" destination="8Zc-I5-osy" id="J2a-vI-kvY"/>
                 <outlet property="lbTitle" destination="tZN-Uz-mL9" id="0u5-pR-0D1"/>
             </connections>
             <point key="canvasLocation" x="227" y="282.5"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="bt_buy_addon.png" width="54" height="26"/>
         <image name="img_app_purchase_2.png" width="45" height="45"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

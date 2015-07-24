@@ -127,8 +127,38 @@
 -(void)viewWillLayoutSubviews
 {
     [super viewWillLayoutSubviews];
+    
+    CGFloat w;
+
+    if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
+    {
+        w = DeviceScreenWidth;
+        _screenshot.frame = CGRectMake(0.0, 0.0, w, 220.0);
+        
+        _detailsView.frame = CGRectMake(0.0, _screenshot.frame.size.height, w, DeviceScreenHeight - _screenshot.frame.size.height - _bottomToolbarView.frame.size.height);
+    }
+    else
+    {
+        w = DeviceScreenWidth / 2.0;
+        
+        _screenshot.frame = CGRectMake(0.0, 0.0, w, DeviceScreenHeight - _bottomToolbarView.frame.size.height);
+        
+        _detailsView.frame = CGRectMake(w, 0.0, DeviceScreenWidth - w, DeviceScreenHeight - _bottomToolbarView.frame.size.height);
+        
+    }
+
+    _toolbarView.frame = CGRectMake(0.0, 0.0, w, _toolbarView.frame.size.height);
+    _titleLabel.frame = CGRectMake(50.0, _titleLabel.frame.origin.y, w - 100.0, _titleLabel.frame.size.height);
+    _gradient.frame = _toolbarView.bounds;
+
+    _priceButton.frame = CGRectMake(_detailsView.frame.size.width - _priceButton.frame.size.width - 15.0, 15.0, _priceButton.frame.size.width, _priceButton.frame.size.height);
+
+    _descLabel.frame = CGRectMake(15.0, 85.0, w - 30.0, _descLabel.frame.size.height);
+    _descTextView.frame = CGRectMake(10.0, 105.0, w - 20.0, _detailsView.frame.size.height - 120.0);
+    
+    _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, _detailsView.frame.size.width - 30.0, 0.5);
     _horizontalLine.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 0.5);
-    _horizontalLineDesc.frame = CGRectMake(15.0, 70.0, DeviceScreenWidth - 30.0, 0.5);
+
 }
 
 - (void)updatePurchaseButton
@@ -190,7 +220,7 @@
     [self.priceButton sizeToFit];
     CGSize priceSize = CGSizeMake(MAX(kPriceButtonMinTextWidth, self.priceButton.bounds.size.width + (!purchased ? kPriceButtonTextInset * 2.0 : 0.0)), kPriceButtonMinTextHeight);
     CGRect priceFrame = self.priceButton.frame;
-    priceFrame.origin = CGPointMake(DeviceScreenWidth - priceSize.width - kPriceButtonRectBorder, 15.0);
+    priceFrame.origin = CGPointMake(_detailsView.frame.size.width - priceSize.width - kPriceButtonRectBorder, 15.0);
     priceFrame.size = priceSize;
     self.priceButton.frame = priceFrame;
 }

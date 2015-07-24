@@ -13,6 +13,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *screenshot;
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;
+@property (weak, nonatomic) IBOutlet UIImageView *gradient;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
 @property (weak, nonatomic) IBOutlet UILabel *titleLabel;
 

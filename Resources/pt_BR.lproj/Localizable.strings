@@ -436,3 +436,5 @@
 "all_world_popup_desc" = "Baixar Mapa base mundial para ver nomes de estados, fronteiras e outras informações";
 "restore" = "Restaurar";
 "restore_all_purchases" = "Restaurar todas as compras";
+"product_title_trip_planning" = "Planejamento de viagem";
+"plugin_popup_trip_planning_ask" = "Para começar a planejar a viagem, você precisa ativar o complemento: <b>Planejamento de viagem</b>";

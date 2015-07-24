@@ -20,6 +20,7 @@
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
+#import "OAPluginPopupViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -2114,6 +2115,12 @@ typedef enum
 
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType
 {
+    if (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TripPlanning])
+    {
+        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_TripPlanning];
+        return;
+    }
+
     [_mapViewController hideContextPinMarker];
  
     BOOL useCurrentRoute = (item == nil);

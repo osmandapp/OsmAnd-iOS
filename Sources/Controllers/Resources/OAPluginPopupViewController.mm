@@ -209,6 +209,17 @@
         
         [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
     }
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
+    {
+        needShow = YES;
+        
+        title = OALocalizedString(@"turn_on_plugin");
+        descText = OALocalizedString(@"plugin_popup_trip_planning_ask");
+        okButtonName = OALocalizedString(@"plugins");
+        cancelButtonName = OALocalizedString(@"shared_string_cancel");
+        
+        [popup.okButton addTarget:popup action:@selector(goToPlugins) forControlEvents:UIControlEventTouchUpInside];
+    }
     
     if (needShow)
     {
@@ -309,6 +320,8 @@
     
     if (needShow)
     {
+        [[NSUserDefaults standardUserDefaults] setObject:@"OK" forKey:[NSString stringWithFormat:@"%@_alert_showed", productIdentifier]];
+        
         NSString *iconName = [OAIAPHelper productIconName:productIdentifier];
 
         UIViewController *top = [OARootViewController instance].navigationController.topViewController;

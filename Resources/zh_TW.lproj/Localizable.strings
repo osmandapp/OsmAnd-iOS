@@ -430,3 +430,6 @@
 "restore" = "恢復";
 "restore_all_purchases" = "恢復所有購買";
 "all_world_popup_desc" = "下載全球底圖，可以看到國家名稱、邊界和其它資訊";
+"plugin_popup_trip_planning_ask" = "要開始計畫旅程，您需要啟動外掛元件： <b>旅程計畫</b>";
+"product_desc_ext_wiki" = "取得關於維基百科興趣點的資訊。這是您的口袋離線指南 - 只要啟用維基百科的外掛元件，和享用在您目標周圍的文章。";
+"product_desc_ext_parking" = "OsmAnd 停車外掛元件提醒您的停車位置。這是一個 OsmAnd 地圖和導航應用程式的外掛元件。\n選擇時間獨立的提醒（只是在地圖上的標記）或在時間屆滿時，時限報警（也包括在地圖上的標記）。若要使用該外掛元件，在外掛元件的選單中啟用它。";

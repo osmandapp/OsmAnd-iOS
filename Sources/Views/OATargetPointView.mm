@@ -960,7 +960,7 @@
 
 - (void)updateButtonClose
 {
-    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) ? 0.0 : 1.0);
+    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) || (!_buttonRight.hidden) ? 0.0 : 1.0);
 }
 
 - (void)doUpdateUI

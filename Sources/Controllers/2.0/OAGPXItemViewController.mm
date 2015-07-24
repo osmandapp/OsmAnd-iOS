@@ -77,6 +77,8 @@
     
     UIView *_badge;
     CALayer *_horizontalLine;
+    
+    UIView *_headerView;
 }
 
 @synthesize editing = _editing;
@@ -245,6 +247,10 @@
         h += 44.0;
         h += [self.tableView numberOfRowsInSection:i] * 44.0;
     }
+    
+    if (_sectionsCount == 0)
+        h = _headerView.bounds.size.height;
+    
     return MIN(160.0, h);
 }
 
@@ -273,23 +279,35 @@
     self.titleView.text = [self.gpx getNiceTitle];
     _startEndTimeExists = self.gpx.startTime > 0 && self.gpx.endTime > 0;
     
+    BOOL uphillsDataExists = (self.gpx.avgElevation != 0.0 || self.gpx.minElevation != 0.0 || self.gpx.maxElevation != 0.0 || self.gpx.diffElevationDown != 0.0 || self.gpx.diffElevationUp != 0.0);
+    
+    NSInteger nextSectionIndex = 0;
     if (_startEndTimeExists)
     {
-        _sectionsCount = 3;
-        NSInteger nextSectionIndex = 0;
         _speedSectionIndex = (self.gpx.avgSpeed > 0 && self.gpx.maxSpeed > 0 ? nextSectionIndex++ : -1);
         _timeSectionIndex = nextSectionIndex++;
-        _uphillsSectionIndex = nextSectionIndex;
+        _uphillsSectionIndex = (uphillsDataExists ? nextSectionIndex++ : -1);
     }
     else
     {
-        _sectionsCount = 2;
-        NSInteger nextSectionIndex = 0;
         _speedSectionIndex = (self.gpx.avgSpeed > 0 && self.gpx.maxSpeed > 0 ? nextSectionIndex++ : -1);
         _timeSectionIndex = -1;
-        _uphillsSectionIndex = nextSectionIndex;
+        _uphillsSectionIndex = (uphillsDataExists ? nextSectionIndex++ : -1);
     }
+    _sectionsCount = nextSectionIndex;
 
+    if (_sectionsCount == 0)
+    {
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.frame.size.width, 100.0)];
+        UILabel *headerLabel = [[UILabel alloc] initWithFrame:_headerView.bounds];
+        headerLabel.textAlignment = NSTextAlignmentCenter;
+        headerLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:19.0];
+        headerLabel.text = OALocalizedString(@"no_statistics");
+        headerLabel.textColor = [UIColor lightGrayColor];
+        headerLabel.numberOfLines = 3;
+        [_headerView addSubview:headerLabel];
+        [_tableView setTableHeaderView:_headerView];
+    }
     
     self.buttonUpdate.frame = self.buttonSort.frame;
     self.buttonEdit.frame = self.buttonMore.frame;

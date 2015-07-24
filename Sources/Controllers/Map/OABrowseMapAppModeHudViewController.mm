@@ -173,7 +173,7 @@
         _driveModeButton.hidden = YES;
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
-    _compassBox.alpha = (_mapViewController.mapRendererView.azimuth == 0.0 ? 0.0 : 1.0);
+    _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
     
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
@@ -455,11 +455,11 @@
             [_destinationViewController updateDestinationsUsingMapCenter];
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
         
-        if ((_compassBox.alpha == 0.0 && [value floatValue] != 0.0) ||
+        if ((_compassBox.alpha == 0.0 && [value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0) ||
             (_compassBox.alpha == 1.0 && [value floatValue] == 0.0))
         {
             [UIView animateWithDuration:.25 animations:^{
-                _compassBox.alpha = ([value floatValue] == 0.0 ? 0.0 : 1.0);
+                _compassBox.alpha = ([value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
             }];
         }
     });
@@ -707,14 +707,14 @@
 
 - (void)showTopControls
 {
-    if (_compassBox.alpha == 0.0)
+    if (_mapSettingsButton.alpha == 0.0)
     {
         [UIView animateWithDuration:.3 animations:^{
            
             _statusBarView.alpha = 1.0;
             
-            _compassBox.alpha = 1.0;
             _mapSettingsButton.alpha = 1.0;
+            _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
             _searchButton.alpha = 1.0;
             
             _downloadView.alpha = 1.0;
@@ -727,7 +727,7 @@
 
 - (void)hideTopControls
 {
-    if (_compassBox.alpha == 1.0)
+    if (_mapSettingsButton.alpha == 1.0)
     {
         [UIView animateWithDuration:.3 animations:^{
             

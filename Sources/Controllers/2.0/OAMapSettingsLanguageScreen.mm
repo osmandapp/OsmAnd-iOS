@@ -101,6 +101,16 @@
     if (settings.settingPrefMapLanguage == nil)
     {
         newValue = 0;
+        
+        if (settings.settingMapLanguageShowLocal && settings.settingMapLanguageTranslit)
+        {
+            newValue = 5;
+        }
+        else if (settings.settingMapLanguageTranslit)
+        {
+            newValue = 6;
+        }
+        
     }
     else if (settings.settingMapLanguageShowLocal && settings.settingMapLanguageTranslit)
     {
@@ -132,7 +142,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return (_prefLangId ? 3 : 1);
+    return 3;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -176,6 +186,17 @@
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView setOn:settings.settingMapLanguageShowLocal];
                 [cell.switchView addTarget:self action:@selector(showLocalChanged:) forControlEvents:UIControlEventValueChanged];
+                
+                if (!_prefLangId && !settings.settingMapLanguageTranslit)
+                {
+                    cell.textView.textColor = [UIColor lightGrayColor];
+                    cell.switchView.enabled = NO;
+                }
+                else
+                {
+                    cell.textView.textColor = [UIColor blackColor];
+                    cell.switchView.enabled = YES;
+                }
             }
             else
             {
@@ -184,6 +205,9 @@
                 [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
                 [cell.switchView setOn:settings.settingMapLanguageTranslit];
                 [cell.switchView addTarget:self action:@selector(showTranslitChanged:) forControlEvents:UIControlEventValueChanged];
+
+                cell.textView.textColor = [UIColor blackColor];
+                cell.switchView.enabled = YES;
             }
             
         }
@@ -209,7 +233,10 @@
     settings.settingMapLanguageTranslit = sw.isOn;
 
     dispatch_async(dispatch_get_main_queue(), ^{
+        
         [self updateMapLanguageSetting];
+        
+        [self.tblView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:1 inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     });
 }
 

@@ -93,6 +93,7 @@
 #define kRotateVelocityAbsLimitInDegrees 400.0f
 #define kMapModePositionTrackingDefaultZoom 16.0f
 #define kMapModePositionTrackingDefaultElevationAngle 90.0f
+#define kGoToMyLocationZoom 15.0f
 #define kMapModeFollowDefaultZoom 18.0f
 #define kMapModeFollowDefaultElevationAngle kElevationMinAngle
 #define kQuickAnimationTime 0.1f
@@ -1997,7 +1998,9 @@
 
 }
 
--(float)calculateMapRuler {
+
+-(float)calculateMapRuler
+{
     if (![self isViewLoaded])
         return 0.0f;
 
@@ -2309,10 +2312,17 @@
                                                           kQuickAnimationTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                           kUserInteractionAnimationKey);
+                        if (mapView.zoom < 15.0)
+                            mapView.animator->animateZoomTo(kGoToMyLocationZoom,
+                                                          kQuickAnimationTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                                          kUserInteractionAnimationKey);
                     }
                     else
                     {
                         [mapView setTarget31:newTarget31];
+                        if (mapView.zoom < 15.0)
+                            [mapView setZoom:kGoToMyLocationZoom];
                     }
                 }
 
@@ -2996,6 +3006,9 @@
             NSString *langId = [[NSLocale preferredLanguages] firstObject];
             if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
                 langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&
+                     [[OAAppSettings sharedManager] settingMapLanguageTranslit])
+                langId = @"en";
             
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,
                                                                                      self.displayDensityFactor,
@@ -3145,6 +3158,9 @@
             NSString *langId = [[NSLocale preferredLanguages] firstObject];
             if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
                 langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&
+                     [[OAAppSettings sharedManager] settingMapLanguageTranslit])
+                langId = @"en";
             
             
             _mapPresentationEnvironment.reset(new OsmAnd::MapPresentationEnvironment(resolvedMapStyle,

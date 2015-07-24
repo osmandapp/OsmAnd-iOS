@@ -594,7 +594,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
         return @"ic_plugin_wikipedia";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
-        return @"ic_plugin_tracrecording";
+        return @"ic_plugin_trip_planning";
     else
         return nil;
 }

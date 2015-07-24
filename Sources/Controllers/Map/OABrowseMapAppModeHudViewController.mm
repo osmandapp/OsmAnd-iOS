@@ -324,6 +324,7 @@
                 newMode = OAMapModeFollow;
             else
                 newMode = OAMapModePositionTrack;
+                
             break;
             
         case OAMapModePositionTrack:

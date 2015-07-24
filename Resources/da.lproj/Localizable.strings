@@ -436,3 +436,5 @@
 "all_world_popup_desc" = "Hent verden basiskort for at se statsnavne, grænser og andre oplysninger";
 "restore" = "Gendan";
 "restore_all_purchases" = "Gendan alle køb";
+"product_title_trip_planning" = "Turplanlægning";
+"plugin_popup_trip_planning_ask" = "For at begynde at planlægge turen, aktiver udvidelseb: <b> Turplanlægning</b>";

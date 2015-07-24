@@ -58,14 +58,27 @@
     
     NSMutableArray *arr = [NSMutableArray array];
     
-    [arr addObject:@{@"name": OALocalizedString(@"not_selected"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")}];
-    
     for (NSString *lang in settings.mapLanguages)
     {
         BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
         NSString *langName = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang] capitalizedStringWithLocale:[NSLocale currentLocale]];
+        if (!langName)
+            langName = lang;
+        
         [arr addObject:@{@"name": langName, @"value": lang, @"img": (isSelected ? @"menu_cell_selected.png" : @"")}];
     }
+    
+    [arr sortUsingComparator:^NSComparisonResult(NSDictionary *dict1, NSDictionary *dict2) {
+        return [[dict1 valueForKey:@"name"] localizedCompare:[dict2 valueForKey:@"name"]];
+    }];
+    
+    [arr insertObject:@{@"name": OALocalizedString(@"not_selected"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")} atIndex:0];
+
+    NSString *lang = @"en";
+    BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
+    NSString *langName = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang] capitalizedStringWithLocale:[NSLocale currentLocale]];
+    [arr insertObject:@{@"name": langName, @"value": lang, @"img": (isSelected ? @"menu_cell_selected.png" : @"")} atIndex:1];
+
     _data = [NSArray arrayWithArray:arr];
 }
 
@@ -169,7 +182,7 @@
     if (index == 0)
         [settings setSettingPrefMapLanguage:nil];
     else
-        [settings setSettingPrefMapLanguage:settings.mapLanguages[index - 1]];
+        [settings setSettingPrefMapLanguage:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
 
     [self updateMapLanguageSetting];
 

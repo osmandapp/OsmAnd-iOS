@@ -32,7 +32,7 @@
 #include "Localization.h"
 #import "OAUtilities.h"
 #import "PXAlertView.h"
-#import "OAPurchasesViewController.h"
+#import "OAPluginsViewController.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
 
@@ -106,6 +106,7 @@ typedef enum
     NSInteger _recSectionIndex;
     NSInteger _routeSectionIndex;
     NSInteger _tripsSectionIndex;
+    NSInteger _createTripSectionIndex;
     NSInteger _menuSectionIndex;
     
     CALayer *_horizontalLine;
@@ -484,7 +485,8 @@ static OAGPXListViewController *parentController;
     NSInteger index = 0;
     _recSectionIndex = (_viewMode == kActiveTripsMode ? index++ : -1);
     _routeSectionIndex = ((_viewMode == kActiveTripsMode && _isRouteActive) ? index++ : -1);
-    _tripsSectionIndex = (_viewMode == kActiveTripsMode ? index++ : (self.gpxList.count > 0 ? index++ : -1));
+    _tripsSectionIndex = (self.gpxList.count > 0 ? index++ : -1);
+    _createTripSectionIndex = (_viewMode == kActiveTripsMode ? index++ : -1);
     _menuSectionIndex = (_viewMode == kAllTripsMode ? index : -1);
 }
 
@@ -640,7 +642,7 @@ static OAGPXListViewController *parentController;
     }
     else if (indexes.count > 0)
     {
-        if (self.gpxList.count == 0 && _viewMode == kAllTripsMode)
+        if (self.gpxList.count == 0)
             [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:tripsSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
         else
             [self.gpxTableView deleteRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationFade];
@@ -673,7 +675,7 @@ static OAGPXListViewController *parentController;
     switch (_viewMode)
     {
         case kActiveTripsMode:
-            return 2 + (_isRouteActive ? 1 : 0);
+            return 2 + (_isRouteActive ? 1 : 0) + (self.gpxList.count > 0 ? 1 : 0);
             
         case kAllTripsMode:
             return 1 + (self.gpxList.count > 0 ? 1 : 0);
@@ -694,6 +696,8 @@ static OAGPXListViewController *parentController;
                 return OALocalizedString(@"gpx_route");
             else if (section == _tripsSectionIndex)
                 return OALocalizedString(@"tracks");
+            else if (section == _createTripSectionIndex)
+                return OALocalizedString(@"create_new_trip");
             
         case kAllTripsMode:
             if (section == _tripsSectionIndex)
@@ -719,7 +723,9 @@ static OAGPXListViewController *parentController;
             else if (section == _routeSectionIndex)
                 return 1;
             else if (section == _tripsSectionIndex)
-                return [self.gpxList count] + 1;
+                return [self.gpxList count];
+            else if (section == _createTripSectionIndex)
+                return 1;
             
         case kAllTripsMode:
             if (section == _tripsSectionIndex)
@@ -817,52 +823,49 @@ static OAGPXListViewController *parentController;
     }
     else if (indexPath.section == _tripsSectionIndex)
     {
-        if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
+        static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
+        
+        OAGPXTableViewCell* cell;
+        cell = (OAGPXTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
         {
-            static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
-            
-            OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-            }
-            
-            if (cell) {
-                [cell.textView setText:OALocalizedString(@"create_new_trip")];
-                [cell.iconView setImage: [UIImage imageNamed:@"icon_info"]];
-            }
-            return cell;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];
+            cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
         }
-        else
+        
+        if (cell)
         {
-            static NSString* const reusableIdentifierPoint = @"OAGPXTableViewCell";
+            OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
+            [cell.textView setText:[item getNiceTitle]];
+            [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
+            [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
             
-            OAGPXTableViewCell* cell;
-            cell = (OAGPXTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAGPXCell" owner:self options:nil];
-                cell = (OAGPXTableViewCell *)[nib objectAtIndex:0];
-            }
+            cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_pointer.png"]];
             
-            if (cell)
-            {
-                OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
-                [cell.textView setText:[item getNiceTitle]];
-                [cell.descriptionDistanceView setText:[_app getFormattedDistance:item.totalDistance]];
-                [cell.descriptionPointsView setText:[NSString stringWithFormat:@"%d %@", item.wptPoints, [OALocalizedString(@"gpx_waypoints") lowercaseStringWithLocale:[NSLocale currentLocale]]]];
-                
-                cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_pointer.png"]];
-                
-                if (_viewMode == kAllTripsMode && [_visible containsObject:item.gpxFileName])
-                    [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-                else
-                    [cell.iconView setImage:nil];
-            }
-            return cell;
+            if (_viewMode == kAllTripsMode && [_visible containsObject:item.gpxFileName])
+                [cell.iconView setImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
+            else
+                [cell.iconView setImage:nil];
         }
+        return cell;
+    }
+    else if (indexPath.section == _createTripSectionIndex)
+    {
+        static NSString* const reusableIdentifierPoint = @"OAIconTextTableViewCell";
+        
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[self.gpxTableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell) {
+            [cell.textView setText:OALocalizedString(@"create_new_trip")];
+            [cell.iconView setImage: [UIImage imageNamed:@"icon_info"]];
+        }
+        return cell;
     }
     else
     {
@@ -896,9 +899,11 @@ static OAGPXListViewController *parentController;
     switch (_viewMode)
     {
         case kActiveTripsMode:
-            if (indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
+            if (indexPath.section == _createTripSectionIndex)
                 return NO;
             else if (indexPath.section == _routeSectionIndex)
+                return NO;
+            else if (indexPath.section == _recSectionIndex && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_TrackRecording])
                 return NO;
             else
                 return YES;
@@ -1078,9 +1083,9 @@ static OAGPXListViewController *parentController;
             }
             else
             {
-                OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
-                purchasesViewController.openFromCustomPlace = YES;
-                [self.navigationController pushViewController:purchasesViewController animated:YES];
+                OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
+                pluginsViewController.openFromCustomPlace = YES;
+                [self.navigationController pushViewController:pluginsViewController animated:YES];
             }
         }
         else if (indexPath.section == _routeSectionIndex)
@@ -1090,46 +1095,44 @@ static OAGPXListViewController *parentController;
         }
         else if (indexPath.section == _tripsSectionIndex)
         {
-            OAGPX* item;
-            if (_viewMode == kActiveTripsMode && indexPath.section == _tripsSectionIndex && indexPath.row == self.gpxList.count)
+            OAGPX* item = [self.gpxList objectAtIndex:indexPath.row];
+            [self doPush];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+        }
+        else if (indexPath.section == _createTripSectionIndex)
+        {
+            OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
+            
+            NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+            [fmt setDateFormat:@"yyyy-MM-dd"];
+            
+            NSString *fileName = [NSString stringWithFormat:@"Trip_%@.gpx", [fmt stringFromDate:[NSDate date]]];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+            
+            NSFileManager *fileMan = [NSFileManager defaultManager];
+            if ([fileMan fileExistsAtPath:path])
             {
-                OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-
-                NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-                [fmt setDateFormat:@"yyyy-MM-dd"];
-
-                NSString *fileName = [NSString stringWithFormat:@"Trip_%@.gpx", [fmt stringFromDate:[NSDate date]]];
-                NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-                
-                NSFileManager *fileMan = [NSFileManager defaultManager];
-                if ([fileMan fileExistsAtPath:path])
-                {
-                    NSString *ext = [fileName pathExtension];
-                    NSString *newName;
-                    for (int i = 2; i < 100000; i++) {
-                        newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
-                        path = [_app.gpxPath stringByAppendingPathComponent:newName];
-                        if (![fileMan fileExistsAtPath:path])
-                            break;
-                    }
+                NSString *ext = [fileName pathExtension];
+                NSString *newName;
+                for (int i = 2; i < 100000; i++) {
+                    newName = [[NSString stringWithFormat:@"%@_(%d)", [fileName stringByDeletingPathExtension], i] stringByAppendingPathExtension:ext];
+                    path = [_app.gpxPath stringByAppendingPathComponent:newName];
+                    if (![fileMan fileExistsAtPath:path])
+                        break;
                 }
-                
-                [doc saveTo:path];
-                
-                OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
-                item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
-                [[OAGPXDatabase sharedDb] save];
-                
-                item.newGpx = YES;
-                
-                [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
-                [[_app updateGpxTracksOnMapObservable] notifyEvent];
-            }
-            else
-            {
-                item = [self.gpxList objectAtIndex:indexPath.row];
             }
             
+            [doc saveTo:path];
+            
+            OAGPXTrackAnalysis *analysis = [doc getAnalysis:0];
+            OAGPX* item = [[OAGPXDatabase sharedDb] addGpxItem:[path lastPathComponent] title:doc.metadata.name desc:doc.metadata.desc bounds:doc.bounds analysis:analysis];
+            [[OAGPXDatabase sharedDb] save];
+            
+            item.newGpx = YES;
+            
+            [[OAAppSettings sharedManager] showGpx:[path lastPathComponent]];
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+
             [self doPush];
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
         }

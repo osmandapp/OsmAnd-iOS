@@ -505,7 +505,9 @@
         }
     }
 
-
+    // prevents single tap to fire together with double tap
+    [_grSymbolContextMenu requireGestureRecognizerToFail:_grZoomIn];
+    
     // Create location and course markers
     _myMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
     OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;

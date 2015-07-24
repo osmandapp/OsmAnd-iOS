@@ -173,8 +173,9 @@
         _driveModeButton.hidden = YES;
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
+    _compassBox.alpha = (_mapViewController.mapRendererView.azimuth == 0.0 ? 0.0 : 1.0);
+    
     _zoomInButton.enabled = [_mapViewController canZoomIn];
-
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     // IOS-218
@@ -453,6 +454,14 @@
         if ([OAAppSettings sharedManager].settingMapArrows == MAP_ARROWS_MAP_CENTER)
             [_destinationViewController updateDestinationsUsingMapCenter];
         _compassImage.transform = CGAffineTransformMakeRotation(-[value floatValue] / 180.0f * M_PI);
+        
+        if ((_compassBox.alpha == 0.0 && [value floatValue] != 0.0) ||
+            (_compassBox.alpha == 1.0 && [value floatValue] == 0.0))
+        {
+            [UIView animateWithDuration:.25 animations:^{
+                _compassBox.alpha = ([value floatValue] == 0.0 ? 0.0 : 1.0);
+            }];
+        }
     });
 }
 
@@ -558,9 +567,9 @@
     {
         [UIView animateWithDuration:.2 animations:^{
             
-            if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+            if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
             {
-                _compassBox.frame = CGRectMake(x, y + 7.0, size.width, size.height);
+                _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
                 _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
                 _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
             }
@@ -579,9 +588,9 @@
     }
     else
     {
-        if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+        if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
         {
-            _compassBox.frame = CGRectMake(x, y + 7.0, size.width, size.height);
+            _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
             _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
             _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
         }

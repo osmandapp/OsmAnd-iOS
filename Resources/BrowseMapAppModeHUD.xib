@@ -45,7 +45,7 @@
                     <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                 </view>
                 <view contentMode="scaleToFill" id="zKf-ZI-4L4" userLabel="compassBox">
-                    <rect key="frame" x="7" y="27" width="41" height="41"/>
+                    <rect key="frame" x="7" y="72" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="duk-mu-8Hu" userLabel="compassButton">
@@ -66,7 +66,7 @@
                     </subviews>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Ezz-bP-gmB" userLabel="mapSettingsButton">
-                    <rect key="frame" x="52" y="27" width="41" height="41"/>
+                    <rect key="frame" x="7" y="27" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" red="0.31372549019607843" green="0.31372549019607843" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="HUD_configure_map.png" backgroundImage="HUD_compass_bg.png"/>
@@ -132,7 +132,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="gMm-Ly-WJo" userLabel="searchButton">
-                    <rect key="frame" x="97" y="27" width="41" height="41"/>
+                    <rect key="frame" x="52" y="27" width="41" height="41"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" image="search_icon.png" backgroundImage="HUD_compass_bg.png"/>

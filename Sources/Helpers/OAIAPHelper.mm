@@ -164,6 +164,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                       kInAppId_Addon_Parking,
                                       kInAppId_Addon_Wiki,
                                       kInAppId_Addon_Srtm,
+                                      kInAppId_Addon_TripPlanning,
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
@@ -194,6 +195,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Addon_Parking,
             kInAppId_Addon_Wiki,
             kInAppId_Addon_Srtm,
+            kInAppId_Addon_TripPlanning,
             nil];
 }
 
@@ -248,7 +250,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 {
     if ((self = [super init]))
     {
-        _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking];
+        _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking, kInAppId_Addon_TripPlanning];
 
         NSMutableArray *freeProds = [NSMutableArray array];
         for (NSString *prodId in _freePluginsList)
@@ -591,6 +593,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         return @"ic_plugin_tracrecording";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
         return @"ic_plugin_wikipedia";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
+        return @"ic_plugin_tracrecording";
     else
         return nil;
 }
@@ -608,6 +612,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
         return @"";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
+        return @"";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
         return @"";
     else
         return nil;

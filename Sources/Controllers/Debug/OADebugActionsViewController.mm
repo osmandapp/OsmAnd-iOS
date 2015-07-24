@@ -14,6 +14,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAIAPHelper.h"
+
 #include "Localization.h"
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
 
@@ -90,6 +92,19 @@
     QButtonElement* backButtonElement = [[QButtonElement alloc] initWithTitle:OALocalizedString(@"Close")];
     backButtonElement.controllerAction = NSStringFromSelector(@selector(onBackButtonClicked));
     [headerSection addElement:backButtonElement];
+
+    QSection* popupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Popup notifications")];
+    [rootElement addSection:popupsSection];
+
+    // reset world map popup
+    QButtonElement* resetWorldMapPopupButtonElement = [[QButtonElement alloc] initWithTitle:@"Reset World map popup"];
+    resetWorldMapPopupButtonElement.controllerAction = NSStringFromSelector(@selector(onResetWorldMapPopupClicked));
+    [popupsSection addElement:resetWorldMapPopupButtonElement];
+
+    // reset popups
+    QButtonElement* resetPluginsPopupsButtonElement = [[QButtonElement alloc] initWithTitle:@"Reset plugins popups"];
+    resetPluginsPopupsButtonElement.controllerAction = NSStringFromSelector(@selector(onResetPopupsButtonClicked));
+    [popupsSection addElement:resetPluginsPopupsButtonElement];
 
     // Renderer section
     QSection* rendererSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Renderer")];
@@ -429,6 +444,18 @@
 - (void)onBackButtonClicked
 {
     [self popToPreviousRootElement];
+}
+
+- (void)onResetPopupsButtonClicked
+{
+    for (NSString *productId in [OAIAPHelper inAppsAddons])
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:[NSString stringWithFormat:@"%@_alert_showed", productId]];
+}
+
+- (void)onResetWorldMapPopupClicked
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kShowMapIterator];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kMapDownloadStopReminding];
 }
 
 - (void)onForcedRenderingSettingChanged

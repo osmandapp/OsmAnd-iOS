@@ -27,6 +27,7 @@
 #define kInAppId_Addon_Parking @"net.osmand.inapp.addon.parking"
 #define kInAppId_Addon_Wiki @"net.osmand.inapp.addon.wiki"
 #define kInAppId_Addon_Srtm @"net.osmand.inapp.addon.srtm"
+#define kInAppId_Addon_TripPlanning @"net.osmand.inapp.addon.trip_planning"
 
 #else
 
@@ -47,6 +48,7 @@
 #define kInAppId_Addon_Parking @"net.osmand.maps.inapp.addon.parking"
 #define kInAppId_Addon_Wiki @"net.osmand.maps.inapp.addon.wiki"
 #define kInAppId_Addon_Srtm @"net.osmand.maps.inapp.addon.srtm"
+#define kInAppId_Addon_TripPlanning @"net.osmand.maps.inapp.addon.trip_planning"
 
 #endif
 

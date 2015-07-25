@@ -164,6 +164,8 @@
     OALog(@"GPX path: %@", _gpxPath);
     OALog(@"Cache path: %@", _cachePath);
 
+    [OAUtilities clearTmpDirectory];
+    
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
 

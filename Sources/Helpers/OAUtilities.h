@@ -25,6 +25,8 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (BOOL)iosVersionIsAtLeast:(NSString*)testVersion;
 + (BOOL)iosVersionIsExactly:(NSString*)testVersion;
 
++ (void)clearTmpDirectory;
+
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
 + (NSString *)drawablePostfix;
 + (void)layoutComplexButton:(UIButton*)button;

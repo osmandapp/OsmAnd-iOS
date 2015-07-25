@@ -35,6 +35,14 @@
     return newImage;
 }
 
++ (void)clearTmpDirectory
+{
+    NSArray* tmpDirectory = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+    for (NSString *file in tmpDirectory) {
+        [[NSFileManager defaultManager] removeItemAtPath:[NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file] error:NULL];
+    }
+}
+
 + (NSString *)drawablePostfix
 {
     int scale = (int)[UIScreen mainScreen].scale;

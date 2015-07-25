@@ -26,12 +26,17 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
     OAAutoObserverProxy* _downloadTaskProgressObserver;
 
     MBProgressHUD* _progressHUD;
+    
+    NSObject *_sync;
 }
 
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        _sync = [[NSObject alloc] init];
+        
         _app = [OsmAndApp instance];
 
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -71,91 +76,94 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
 
 -(void)processResource:(id<OADownloadTask>)task
 {
-    NSString* localPath = task.targetPath;
-    NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
-    const auto& resourceId = QString::fromNSString(nsResourceId);
-    const auto& filePath = QString::fromNSString(localPath);
-    bool success = false;
-    
-    OALog(@"Going to install/update of %@", nsResourceId);
-    // Try to install only in case of successful download
-    if (task.error == nil)
+    @synchronized(_sync)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (!_progressHUD)
-            {
-                UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
-                _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
-                _progressHUD.removeFromSuperViewOnHide = YES;
-                _progressHUD.labelText = OALocalizedString(@"res_installing");
-                [topView addSubview:_progressHUD];
-                
-                [_progressHUD show:YES];
-            }
-        });
-
-        // Install or update given resource
-        success = _app.resourcesManager->updateFromFile(resourceId, filePath);
-        if (!success)
+        NSString* localPath = task.targetPath;
+        NSString* nsResourceId = [task.key substringFromIndex:[@"resource:" length]];
+        const auto& resourceId = QString::fromNSString(nsResourceId);
+        const auto& filePath = QString::fromNSString(localPath);
+        bool success = false;
+        
+        OALog(@"Going to install/update of %@", nsResourceId);
+        // Try to install only in case of successful download
+        if (task.error == nil)
         {
-            success = _app.resourcesManager->installFromRepository(resourceId, filePath);
-            if (success)
-            {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
+            dispatch_async(dispatch_get_main_queue(), ^{
                 
-                // Set NSURLIsExcludedFromBackupKey for installed resource
-                if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
+                if (!_progressHUD)
                 {
-                    NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
-                    BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
-                    OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
+                    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+                    _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+                    _progressHUD.removeFromSuperViewOnHide = YES;
+                    _progressHUD.labelText = OALocalizedString(@"res_installing");
+                    [topView addSubview:_progressHUD];
+                    
+                    [_progressHUD show:YES];
+                }
+            });
+            
+            // Install or update given resource
+            success = _app.resourcesManager->updateFromFile(resourceId, filePath);
+            if (!success)
+            {
+                success = _app.resourcesManager->installFromRepository(resourceId, filePath);
+                if (success)
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstalledNotification object:nsResourceId userInfo:nil];
+                    
+                    // Set NSURLIsExcludedFromBackupKey for installed resource
+                    if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
+                    {
+                        NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
+                        BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
+                        OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
+                    }
+                    else
+                    {
+                        OALog(@"Cannot find installed resource %@", nsResourceId);
+                    }
                 }
                 else
                 {
-                    OALog(@"Cannot find installed resource %@", nsResourceId);
+                    task.installResourceRetry++;
+                    if (task.installResourceRetry < 20)
+                    {
+                        OALog(@"installResourceRetry = %d", task.installResourceRetry);
+                        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
+                        dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
+                            [self processResource:task];
+                        });
+                        return;
+                    }
                 }
             }
-            else
-            {
-                task.installResourceRetry++;
-                if (task.installResourceRetry < 20)
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (_progressHUD)
                 {
-                    OALog(@"installResourceRetry = %d", task.installResourceRetry);
-                    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC);
-                    dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
-                        [self processResource:task];
-                    });
-                    return;
+                    [_progressHUD hide:YES];
+                    _progressHUD = nil;
                 }
-            }
+            });
         }
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (_progressHUD)
-            {
-                [_progressHUD hide:YES];
-                _progressHUD = nil;
-            }
-        });
-    }
-    
-    // Remove downloaded file anyways
-    [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
-                                               error:nil];
-    
-    OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
-    
-    // Start next resource download task if such exists
-    if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
-    {
-        id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
-        [nextTask resume];
-    }
-    else
-    {
-        [_app updateScreenTurnOffSetting];
+        // Remove downloaded file anyways
+        [[NSFileManager defaultManager] removeItemAtPath:task.targetPath
+                                                   error:nil];
+        
+        OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
+        
+        // Start next resource download task if such exists
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        {
+            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            [nextTask resume];
+        }
+        else
+        {
+            [_app updateScreenTurnOffSetting];
+        }
     }
 }
 

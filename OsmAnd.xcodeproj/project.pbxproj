@@ -2697,9 +2697,6 @@
 		BBA3B01119878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
 		BBA3B01219878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
 		BBA3B01319878ADD0039D991 /* OADownloadsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */; };
-		BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
-		BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
-		BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */; };
 		BBA3B01719878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
 		BBA3B01819878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
 		BBA3B01919878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */; };
@@ -3889,8 +3886,6 @@
 		BBA3B00919878ADD0039D991 /* OADownloadsManager_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsManager_Private.h; path = DownloadsManager/OADownloadsManager_Private.h; sourceTree = "<group>"; };
 		BBA3B00A19878ADD0039D991 /* OADownloadsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadsManager.h; path = DownloadsManager/OADownloadsManager.h; sourceTree = "<group>"; };
 		BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadsManager.m; path = DownloadsManager/OADownloadsManager.m; sourceTree = "<group>"; };
-		BBA3B00C19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask_AFDownloadRequestOperation.h; path = DownloadsManager/OADownloadTask_AFDownloadRequestOperation.h; sourceTree = "<group>"; };
-		BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadTask_AFDownloadRequestOperation.m; path = DownloadsManager/OADownloadTask_AFDownloadRequestOperation.m; sourceTree = "<group>"; };
 		BBA3B00E19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask_AFURLSessionManager.h; path = DownloadsManager/OADownloadTask_AFURLSessionManager.h; sourceTree = "<group>"; };
 		BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OADownloadTask_AFURLSessionManager.m; path = DownloadsManager/OADownloadTask_AFURLSessionManager.m; sourceTree = "<group>"; };
 		BBA3B01019878ADD0039D991 /* OADownloadTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADownloadTask.h; path = DownloadsManager/OADownloadTask.h; sourceTree = "<group>"; };
@@ -5573,8 +5568,6 @@
 				BBA3B00919878ADD0039D991 /* OADownloadsManager_Private.h */,
 				BBA3B00A19878ADD0039D991 /* OADownloadsManager.h */,
 				BBA3B00B19878ADD0039D991 /* OADownloadsManager.m */,
-				BBA3B00C19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.h */,
-				BBA3B00D19878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m */,
 				BBA3B00E19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.h */,
 				BBA3B00F19878ADD0039D991 /* OADownloadTask_AFURLSessionManager.m */,
 				BBA3B01019878ADD0039D991 /* OADownloadTask.h */,
@@ -8097,7 +8090,6 @@
 				84BFC2451A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				84C41E751AB9EE580089EABB /* OAPOIParser.m in Sources */,
 				843E5C361AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,
-				BBA3B01419878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				84D81EF91AA370E9001098FD /* OADestination.mm in Sources */,
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				8A70772F1A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
@@ -8278,7 +8270,6 @@
 				84BFC2461A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				84C41E761AB9EE580089EABB /* OAPOIParser.m in Sources */,
 				843E5C371AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,
-				BBA3B01519878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				84D81EFA1AA370E9001098FD /* OADestination.mm in Sources */,
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				8A7077301A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
@@ -8563,7 +8554,6 @@
 				842432681AF0BC0300925821 /* OASavingTrackHelper.mm in Sources */,
 				BBA3AF5D197FC4BB0039D991 /* OAAppData.m in Sources */,
 				8440560B1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
-				BBA3B01619878ADD0039D991 /* OADownloadTask_AFDownloadRequestOperation.m in Sources */,
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,

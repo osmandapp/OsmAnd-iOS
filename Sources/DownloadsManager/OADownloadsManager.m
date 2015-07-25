@@ -10,10 +10,6 @@
 
 #import <CocoaSecurity.h>
 
-// For iOS [6.0, 7.0)
-#import "OADownloadTask_AFDownloadRequestOperation.h"
-
-// For iOS 7.0+
 #import <AFURLSessionManager.h>
 #import "OADownloadTask_AFURLSessionManager.h"
 
@@ -53,20 +49,25 @@
 
 - (void)commonInit
 {
-    // Check what backend should be used
-    const BOOL isSupported_NSURLSession =
-        (NSClassFromString(@"NSURLSession") != nil) &&
-        [OAUtilities iosVersionIsAtLeast:@"7.0"];
-    if (!isSupported_NSURLSession)
-        _sessionManager = nil;
+    NSURLSessionConfiguration* sessionConfiguration;
+    
+    /*
+    if ([OAUtilities iosVersionIsAtLeast:@"8.0"])
+    {
+        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
+    }
     else
     {
-        NSURLSessionConfiguration* sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:
-                                                           [[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
-        sessionConfiguration.allowsCellularAccess = YES;
-
-        _sessionManager = [[AFURLSessionManager alloc] initWithSessionConfiguration:sessionConfiguration];
+        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
     }
+    */
+    
+    sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    
+    sessionConfiguration.allowsCellularAccess = YES;
+    sessionConfiguration.HTTPMaximumConnectionsPerHost = 1;
+    
+    _sessionManager = [[AFURLSessionManager alloc] initWithSessionConfiguration:sessionConfiguration];
 
     _tasksSync = [[NSObject alloc] init];
     _tasks = [[NSMutableDictionary alloc] init];
@@ -341,40 +342,28 @@
         free(pcsFilename);
     }
 
-    // Create task itself
-    if (_sessionManager != nil)
+    NSData* resumeData = [self findResumeDataForRequest:request];
+    
+    if (resumeData != nil)
     {
-        NSData* resumeData = [self findResumeDataForRequest:request];
-
-        if (resumeData != nil)
-        {
-            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
-                                                                      withOwner:self
-                                                                     andRequest:request
-                                                                  andResumeData:resumeData
-                                                                  andTargetPath:targetPath
-                                                                         andKey:key
-                                                                        andName:name];
-        }
-        else
-        {
-            task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
-                                                                      withOwner:self
-                                                                     andRequest:request
-                                                                  andTargetPath:targetPath
-                                                                         andKey:key
-                                                                        andName:name];
-        }
+        task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                  withOwner:self
+                                                                 andRequest:request
+                                                              andResumeData:resumeData
+                                                              andTargetPath:targetPath
+                                                                     andKey:key
+                                                                    andName:name];
     }
     else
     {
-        task = [[OADownloadTask_AFDownloadRequestOperation alloc] initWithOwner:self
-                                                                     andRequest:request
-                                                                  andTargetPath:targetPath
-                                                                         andKey:key
-                                                                        andName:name];
+        task = [[OADownloadTask_AFURLSessionManager alloc] initUsingManager:_sessionManager
+                                                                  withOwner:self
+                                                                 andRequest:request
+                                                              andTargetPath:targetPath
+                                                                     andKey:key
+                                                                    andName:name];
     }
-
+    
     // Add task to collection
     @synchronized(_tasksSync)
     {

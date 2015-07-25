@@ -154,9 +154,13 @@
             andStoredAt:(NSURL*)targetPath
               withError:(NSError*)error
 {
-    [_owner notifyTaskDeactivated:self];
+    //NSLog(@"onCompletedWith response=%@ targetPath=%@ error=%d (%@)", response, targetPath, error.code, error.description);
 
-    _targetPath = targetPath.path;
+    [_owner notifyTaskDeactivated:self];
+    
+    if (targetPath)
+        _targetPath = targetPath.path;
+    
     _error = error;
 
     OADownloadsManager* owner = _owner;

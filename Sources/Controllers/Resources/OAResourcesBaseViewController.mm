@@ -556,7 +556,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self updateContent];
     
     // Resume task only if it's other resource download tasks are not running
-    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil) {
+    if ([_app.downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
+    {
         [task resume];
         [self showDownloadViewForTask:task];
     }

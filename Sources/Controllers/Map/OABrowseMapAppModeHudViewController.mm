@@ -612,7 +612,7 @@
 - (CGRect)getDownloadViewFrame
 {
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
-    return CGRectMake(146.0, y + 12.0, DeviceScreenWidth - 156.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
+    return CGRectMake(106.0, y + 12.0, DeviceScreenWidth - 116.0 - (_widgetsView ? _widgetsView.bounds.size.width - 4.0 : 0), 28.0);
 }
 
 #pragma mark - debug

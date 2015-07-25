@@ -146,6 +146,8 @@
 
         if ([name isEqualToString:@"appMode"] ||
             [name isEqualToString:@"transportStops"] ||
+            [name isEqualToString:@"currentTrackColor"] ||
+            [name isEqualToString:@"currentTrackWidth"] ||
             //[name isEqualToString:@"publicTransportMode"] ||
             //[name isEqualToString:@"tramTrainRoutes"] ||
             //[name isEqualToString:@"subwayMode"] ||

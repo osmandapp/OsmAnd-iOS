@@ -433,3 +433,9 @@
 "plugin_popup_trip_planning_ask" = "要開始計畫旅程，您需要啟動外掛元件： <b>旅程計畫</b>";
 "product_desc_ext_wiki" = "取得關於維基百科興趣點的資訊。這是您的口袋離線指南 - 只要啟用維基百科的外掛元件，和享用在您目標周圍的文章。";
 "product_desc_ext_parking" = "OsmAnd 停車外掛元件提醒您的停車位置。這是一個 OsmAnd 地圖和導航應用程式的外掛元件。\n選擇一個非時間的提醒（只是在地圖上標記）或在時間屆滿時的時限報警（也包括在地圖上的標記）。若要使用該外掛元件，在外掛元件的選單中啟用它。";
+"product_desc_ext_nautical" = "OsmAnd 航海圖是一個 OsmAnd 地圖和導航應用程式的外掛元件。它是海洋、海域、沿海區域和江河的詳細圖解表示。這些圖表可以包含各種資訊，如航行航線、航行燈、危險區域，何處允許或不允許航行或碼頭等。\n\n使用說明：強烈建議下載航海底圖，不要只看地圖而不關心這詳盡的地圖存在。要打開航海圖，點擊地圖按鈕，設定地圖類型為航海。\n\n注意︰所有專業船員們，在他們的船隻上必要有官方的航海圖。\n\nOsmAnd 航海圖基本上是來自於 OpenSeaMap 專案的資料。雖然目前 OpenSeaMap 圖表，無法與官方航海圖並駕齊驅，但是可以用來給消遣休閒的船員們定方位或航路規劃。";
+"product_desc_ext_skimap" = "OsmAnd 滑雪地圖是一個為 OsmAnd 地圖與導航應用程式的外掛元件，設計給冬季運動時所在地點的導航。它提供了滑雪道、滑雪纜車標誌，甚至是彩色的路線指示，每個滑道的錯綜度等相關的資訊。您得到關於滑雪滑道本身以及周遭基礎設施的資訊。\n\n使用說明：在 OsmAnd 應用程式中啟用該外掛元件，點擊地圖按鈕並設定地圖類型為滑雪地圖。";
+"product_desc_ext_track_recording" = "手動使用 OsmAnd 旅程記錄外掛元件，記錄您的旅程並將其儲存。匯出您的旅程為 GPX 檔案，將它分享甚或用它來向 OpenStreetMap 專案作出貢獻。跑步、徒步旅行和任何有興趣記錄他們旅程的人，的一個便利工具。";
+"product_title_trip_planning" = "旅程計畫";
+"no_statistics" = "沒有統計資料";
+"product_desc_ext_srtm" = "這個外掛元件提供了等高線層和山體陰影層，它可以顯示在 OsmAnd 的離線地圖。等高線提供了該地區高度的相關資訊，而山體陰影則具體呈現出它們。使用這個外掛元件可看到山峰名稱和看到山峰和地勢的具體特徵。\n\n全球圖資（在北緯 70 度至南緯 70 度之間）的量測基礎在於 SRTM (Shuttle Radar Topography Mission)和 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)，安裝在美國太空總署地球觀測系統的旗艦衛星 Terra 上的遙測儀器，ASTER 是美國太空總署、日本經濟產業省(METI)、日本太空系統 (J-spacesystems)之間的通力合作產物。";

@@ -365,7 +365,7 @@
 "you_searching" = "Du søger";
 "from_location" = "bort fra";
 "show_alt_in_drive" = "Vis højde i køretilstand";
-"res_hillshade" = "Relief skygger";
+"res_hillshade" = "Reliefskygger";
 "purchase_get" = "Hent";
 "srtm_disabled" = "Højdekurver er deaktiveret";
 "rendering_value_default_name" = "Standard";
@@ -429,7 +429,7 @@
 "product_desc_ext_skimap" = "OsmAnd Skikort er en udvidelse til OsmAnd designet til at navigere på vintersport steder. Det giver oplysninger om skipister, skilift markører og endda farvede linjer med angivelse af hvert spor kompleksitet. Du få info om skispor selv såvel som de omgivende infrastrukturer.\n\nBrugsanvisning: Aktivere udvidelsen i OsmAnd, tryk på kort-knappen og sæt korttype Skikort.";
 "product_desc_ext_track_recording" = "Optage dine ture og gemme dem manuelt ved hjælp af OsmAnd tur optagelse udvidelsen. Eksportere din rejse som en gpx fil, dele det eller endda bruge den til at bidrage til OpenStreetMap projektet.  Et praktisk værktøj for løbere, vandrere og alle interesserede i optagelse deres ture.";
 "product_desc_ext_wiki" = "Få oplysninger om interessepunkter fra Wikipedia. Det er din lomme offline guide - aktiver Wikipedia udvidelsen og nyd artikler om stederne omkring dig.";
-"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og hillshade, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens hillshade er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission og Refleksion Radiometer), en billeddannelse instrument ombord Terra, flagskib satellit af NASA'S Earth Observation System. ASTER er en kooperativ indsats mellem NASA, Japans Ministry of Economy, Trade and Industry(METI), og Japan rumbaserede systemer (J-spacesystems).";
+"product_desc_ext_srtm" = "Udvidelsen giver højdekurver og reliefoverlejring, som kan vises i OsmAnd offline kort. Højdekurver indeholder oplysninger om højder af området, mens reliefoverlejring er deres visualisering. Se navnene på bjergtoppe og specifikke egenskaber i terræn ved hjælp af udvidelsen.\n\nDe globale data (mellem 70 grader nord og 70 grader syd) er baseret på målinger af SRTM (Shuttle Radar Topografi Mission) og ASTER (Advanced Spaceborne Thermal Emission og Refleksion Radiometer), en billeddannelse instrument ombord Terra, flagskib satellit af NASA'S Earth Observation System. ASTER er en kooperativ indsats mellem NASA, Japans Ministry of Economy, Trade and Industry(METI), og Japan rumbaserede systemer (J-spacesystems).";
 "plugin_popup_wiki_ask" = "For at hente Wikipedia data, aktiver udvidelsen: <b>Wikipedia</b>";
 "plugin_popup_srtm_ask" = "For at hente højdekurver, aktiver udvidelsen: <b>Højdekurver</b>";
 "turn_on_plugin" = "Aktiver udvidelse";

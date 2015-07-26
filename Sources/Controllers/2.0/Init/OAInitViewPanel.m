@@ -29,7 +29,11 @@
     [_nextButton setTitle:OALocalizedStringUp(@"intro_next") forState:UIControlStateNormal];
     _countryName.placeholder = OALocalizedString(@"intro_placeholder");
 
+    self.countryName.delegate = self;
     [self.parentIntroductionView setEnabled:NO];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
+    [self addGestureRecognizer:tap];
     
     return self;
 }
@@ -43,14 +47,16 @@
 #pragma mark - Interaction Methods
 //Override them if you want them!
 
--(void)panelDidAppear{
-    NSLog(@"Panel Did Appear");
+-(void)panelDidAppear
+{
+    /*
     //You can use a MYIntroductionPanel subclass to create custom events and transitions for your introduction view
     self.countryName.delegate = self;
     [self.parentIntroductionView setEnabled:NO];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap:)];
     [self addGestureRecognizer:tap];
+     */
 
 }
 
@@ -60,22 +66,22 @@
 }
 
 
--(void)panelDidDisappear{
-    NSLog(@"Panel Did Disappear");
-    
+-(void)panelDidDisappear
+{
 }
 
 #pragma mark Outlets
 
-- (IBAction)nextButtonClicked:(id)sender {
-    if (self.parentIntroductionView.CurrentPanelIndex == 1) 
+- (IBAction)nextButtonClicked:(id)sender
+{
+    if (self.parentIntroductionView.CurrentPanelIndex == 0)
         [self.parentIntroductionView.delegate introduction:self.parentIntroductionView didFinishWithType:MYFinishTypeSkipButton];
     else
         [self.parentIntroductionView changeToPanelAtIndex:self.parentIntroductionView.CurrentPanelIndex+1];
 }
 
-- (IBAction)countryNameChanged:(id)sender {
-    
+- (IBAction)countryNameChanged:(id)sender
+{
 }
 
 @end

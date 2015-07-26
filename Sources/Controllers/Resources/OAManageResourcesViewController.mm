@@ -2026,7 +2026,7 @@ static BOOL _lackOfResources;
 
     [self setNeedsStatusBarAppearanceUpdate];
 
-    CGFloat h = self.view.bounds.size.height - 64.0 - 61.0;
+    CGFloat h = self.view.bounds.size.height - 50.0 - 61.0;
     if (self.downloadView && self.downloadView.superview)
         h -= self.downloadView.bounds.size.height;
 

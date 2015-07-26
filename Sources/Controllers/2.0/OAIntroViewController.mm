@@ -49,9 +49,10 @@
     [panel2.countryName setLeftView: searchImage];
     [panel2.countryName setLeftViewMode:UITextFieldViewModeAlways];
     panel2.countryName.layer.cornerRadius = 5;
-    panel2.countryName.delegate = self;
+    //panel2.countryName.delegate = self;
     
-    NSArray *panels = @[panel1, panel2];
+    //NSArray *panels = @[panel1, panel2];
+    NSArray *panels = @[panel2];
     //Create the introduction view and set its delegate
     MYBlurIntroductionView *introductionView = [[MYBlurIntroductionView alloc] initWithFrame:CGRectMake(0, 0, DeviceScreenWidth, DeviceScreenHeight)];
     [introductionView buildIntroductionWithPanels:panels];
@@ -59,6 +60,7 @@
     introductionView.delegate = self;
     [introductionView.RightSkipButton setTitle:@"" forState:UIControlStateNormal];
     introductionView.RightSkipButton = nil;
+    [introductionView setEnabled:NO];
     
     //Add the introduction to your view
     [self.view addSubview:introductionView];

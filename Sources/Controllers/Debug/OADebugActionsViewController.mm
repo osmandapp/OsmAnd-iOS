@@ -93,8 +93,13 @@
     backButtonElement.controllerAction = NSStringFromSelector(@selector(onBackButtonClicked));
     [headerSection addElement:backButtonElement];
 
-    QSection* popupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Popup notifications")];
+    QSection* popupsSection = [[QSection alloc] initWithTitle:OALocalizedString(@"Reset")];
     [rootElement addSection:popupsSection];
+
+    // show first start screen
+    QButtonElement* showFirstStartScreenButtonElement = [[QButtonElement alloc] initWithTitle:@"Show First start screen"];
+    showFirstStartScreenButtonElement.controllerAction = NSStringFromSelector(@selector(onShowFirstStartScreenClicked));
+    [popupsSection addElement:showFirstStartScreenButtonElement];
 
     // reset world map popup
     QButtonElement* resetWorldMapPopupButtonElement = [[QButtonElement alloc] initWithTitle:@"Reset World map popup"];
@@ -444,6 +449,11 @@
 - (void)onBackButtonClicked
 {
     [self popToPreviousRootElement];
+}
+
+- (void)onShowFirstStartScreenClicked
+{
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kAppExecCounter];
 }
 
 - (void)onResetPopupsButtonClicked

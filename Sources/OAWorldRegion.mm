@@ -8,11 +8,13 @@
 
 #import "OAWorldRegion.h"
 
+#include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Data/MapObject.h>
 #include <OsmAndCore/Data/BinaryMapObject.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
+#include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
 
 #import "Localization.h"
@@ -49,6 +51,12 @@
         _downloadsIdPrefix = [_worldRegion->downloadName.toNSString() stringByAppendingString:@"."];
         _nativeName = _worldRegion->nativeName.toNSString();
         
+        OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
+        OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
+        
+        _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
+        _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
+
         //if ([_regionId rangeOfString:@"alaska"].location != NSNotFound)
         //    OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@", _regionId, _downloadsIdPrefix, _nativeName);
         

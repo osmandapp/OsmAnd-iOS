@@ -14,10 +14,13 @@
 #import "OsmAndApp.h"
 #import "OAResourcesBaseViewController.h"
 #import "OAPluginsViewController.h"
+#import "OAWorldRegion.h"
 
 static NSMutableArray *activePopups;
 
 @interface OAPluginPopupViewController ()
+
+@property (nonatomic) OAWorldRegion *worldRegion;
 
 @end
 
@@ -169,6 +172,52 @@ static NSMutableArray *activePopups;
 - (IBAction)closePressed:(id)sender
 {
     [self hide];
+}
+
++ (void)showRegionOnMap:(OAWorldRegion *)region
+{
+    [self hideRegionOnMap];
+    
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeShowRegionOnMap];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+ 
+    popup.worldRegion = region;
+    
+    NSString *title;
+    NSString *descText;
+    NSString *okButtonName;
+    NSString *cancelButtonName;
+    
+    title = OALocalizedString(@"show_region_on_map_title");
+    descText = [NSString stringWithFormat:OALocalizedString(@"show_region_on_map_desc"), region.name];
+    cancelButtonName = OALocalizedString(@"shared_string_later");
+    okButtonName = OALocalizedString(@"show_region_on_map_go");
+    
+    [popup.okButton addTarget:popup action:@selector(showOnMap) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+    
+    popup.icon.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_tabbar_maps_normal"] color:UIColorFromRGB(0x4caf50)];
+    popup.titleLabel.text = title;
+    
+    NSString *styledText = [self.class styledHTMLwithHTML:descText];
+    popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+    
+    [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+    [popup.cancelButton setTitle:cancelButtonName forState:UIControlStateNormal];
+    
+    [top addChildViewController:popup];
+    [popup show];
+}
+
++ (void)hideRegionOnMap
+{
+    for (OAPluginPopupViewController *popup in activePopups)
+        if (popup.pluginPopupType == OAPluginPopupTypeShowRegionOnMap)
+        {
+            [popup hide];
+            break;
+        }
 }
 
 + (void)askForWorldMap
@@ -425,6 +474,17 @@ static NSMutableArray *activePopups;
 {
     NSDictionary *options = @{ NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType };
     return [[NSAttributedString alloc] initWithData:[HTML dataUsingEncoding:NSUTF8StringEncoding] options:options documentAttributes:NULL error:NULL];
+}
+
+- (void)showOnMap
+{
+    if (self.worldRegion)
+    {
+        [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
+        [[OARootViewController instance].mapPanel displayAreaOnMap:_worldRegion.bboxTopLeft bottomRight:_worldRegion.bboxBottomRight zoom:7.0];
+    }
+    
+    [self hide];
 }
 
 - (void)goToPlugins

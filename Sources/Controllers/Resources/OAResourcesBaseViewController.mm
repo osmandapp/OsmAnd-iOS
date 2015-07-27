@@ -177,7 +177,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     self.downloadView.delegate = self;
     [self validateDownloadViewForTask:task];
     
-    [self.view addSubview:self.downloadView];
+    [self.view insertSubview:self.downloadView aboveSubview:[self getTableView]];
     
     // Constraints
     NSLayoutConstraint* constraint = [NSLayoutConstraint constraintWithItem:self.downloadView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.toolbarView attribute:NSLayoutAttributeTop multiplier:1.0f constant:0.f];
@@ -741,6 +741,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
                                          animated:YES];
     */
+}
+
+- (UITableView *)getTableView
+{
+    return nil;
 }
 
 - (void)onItemClicked:(id)senderItem

@@ -672,7 +672,7 @@
             frame.size.width = _downloadView.frame.size.width - 16.0;
             _downloadView.titleView.frame = frame;
             
-            [self.view addSubview:self.downloadView];
+            [self.view insertSubview:self.downloadView aboveSubview:self.searchButton];
         }
         
         if (![_downloadView.titleView.text isEqualToString:task.name])

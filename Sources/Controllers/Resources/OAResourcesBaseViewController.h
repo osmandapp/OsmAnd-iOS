@@ -96,6 +96,8 @@
 
 - (void)showDetailsOf:(LocalResourceItem*)item;
 
+- (UITableView *)getTableView;
+
 - (id<OADownloadTask>)getDownloadTaskFor:(NSString*)resourceId;
 
 @property(readonly) NSComparator resourceItemsComparator;

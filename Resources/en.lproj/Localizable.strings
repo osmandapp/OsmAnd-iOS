@@ -505,4 +505,6 @@
 
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
-
+"show_region_on_map_title" = "Map downloaded";
+"show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
+"show_region_on_map_go" = "Go to the map";

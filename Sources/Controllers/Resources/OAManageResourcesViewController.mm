@@ -1267,6 +1267,11 @@ static BOOL _lackOfResources;
                                 }];
 }
 
+- (UITableView *)getTableView
+{
+    return self.tableView;
+}
+
 - (void)showDetailsOf:(LocalResourceItem*)item
 {
     /*

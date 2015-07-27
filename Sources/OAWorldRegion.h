@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <CoreLocation/CoreLocation.h>
 
 @interface OAWorldRegion : NSObject
 
@@ -17,6 +18,9 @@
 @property(readonly) NSString* localizedName;
 @property(readonly) NSString* name;
 @property(readonly) NSArray* allNames;
+
+@property(readonly) CLLocationCoordinate2D bboxTopLeft;
+@property(readonly) CLLocationCoordinate2D bboxBottomRight;
 
 @property(nonatomic) NSArray *resourceTypes;
 

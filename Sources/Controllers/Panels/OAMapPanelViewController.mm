@@ -2225,6 +2225,39 @@ typedef enum
     }
 }
 
+- (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom
+{
+    OAGpxBounds bounds;
+    bounds.topLeft = topLeft;
+    bounds.bottomRight = bottomRight;
+    bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
+    bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
+    
+    if (bounds.topLeft.latitude == DBL_MAX)
+        return;
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth, DeviceScreenHeight);
+    _targetZoom = (zoom <= 0 ? [self getZoomForBounds:bounds mapSize:screenBBox] : zoom);
+    _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
+    
+    _targetLatitude = bounds.bottomRight.latitude;
+    _targetLongitude = bounds.topLeft.longitude;
+    
+    Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bounds.center.latitude, bounds.center.longitude))];
+    [_mapViewController goToPosition:targetPoint31
+                             andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
+                            animated:NO];
+    
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+    
+    OsmAnd::LatLon latLon(bounds.center.latitude, bounds.center.longitude);
+    _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+    _mainMapZoom = _targetZoom;
+}
+
 #pragma mark - OAParkingDelegate
 
 - (void)addParking:(OAParkingViewController *)sender

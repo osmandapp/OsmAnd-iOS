@@ -15,7 +15,10 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
     OAPluginPopupTypePlugin,
     OAPluginPopupTypeWorldMap,
     OAPluginPopupTypeNoInternet,
+    OAPluginPopupTypeShowRegionOnMap,
 };
+
+@class OAWorldRegion;
 
 @interface OAPluginPopupViewController : OASuperViewController
 
@@ -39,5 +42,7 @@ typedef NS_ENUM(NSInteger, OAPluginPopupType)
 
 + (void)showNoInternetConnectionFirst;
 + (void)hideNoInternetConnection;
+
++ (void)showRegionOnMap:(OAWorldRegion *)region;
 
 @end

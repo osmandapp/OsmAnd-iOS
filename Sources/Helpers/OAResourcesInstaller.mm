@@ -14,6 +14,7 @@
 #import "OALog.h"
 #import <MBProgressHUD.h>
 #import "Localization.h"
+#import "OAPluginPopupViewController.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
 
@@ -117,6 +118,28 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
                         NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
                         BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
                         OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());
+
+                        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion || resource->type == OsmAnd::ResourcesManager::ResourceType::SrtmMapRegion)
+                        {
+                            OAWorldRegion *foundRegion;
+                            for (OAWorldRegion *region in _app.worldRegion.flattenedSubregions)
+                            {
+                                if (resource->id.startsWith(QString::fromNSString(region.downloadsIdPrefix)))
+                                {
+                                    foundRegion = region;
+                                    break;
+                                }
+                            }
+                            
+                            //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
+
+                            if (foundRegion && foundRegion.superregion)
+                            {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    [OAPluginPopupViewController showRegionOnMap:foundRegion];
+                                });
+                            }
+                        }
                     }
                     else
                     {

@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAPluginPopupViewController.h"
 #import "OAPurchasesViewController.h"
+#import <Reachability.h>
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -97,19 +98,18 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     
-    if (![[OAIAPHelper sharedInstance] productsLoaded])
+    if (![[OAIAPHelper sharedInstance] productsLoaded] &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
     {
         [_loadProductsProgressHUD show:YES];
         
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
             
-            [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-                
-                [self updatePurchaseButton];
-                
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updatePurchaseButton];                
                 [_loadProductsProgressHUD hide:YES];
-            }];
-        });
+            });
+        }];
     }
 }
 

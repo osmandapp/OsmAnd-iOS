@@ -15,6 +15,8 @@
 #import "OAResourcesBaseViewController.h"
 #import "OAPluginsViewController.h"
 
+static NSMutableArray *activePopups;
+
 @interface OAPluginPopupViewController ()
 
 @end
@@ -22,6 +24,19 @@
 @implementation OAPluginPopupViewController
 {
     UIView *_shadeView;
+}
+
+- (instancetype)initWithType:(OAPluginPopupType)popupType
+{
+    self = [super init];
+    if (self)
+    {
+        if (!activePopups)
+            activePopups = [NSMutableArray array];
+
+        _pluginPopupType = popupType;
+    }
+    return self;
 }
 
 - (void)viewDidLoad
@@ -71,12 +86,23 @@
     CGFloat okWidth = MAX(80.0, [OAUtilities calculateTextBounds:self.okButton.titleLabel.text width:1000.0 font:self.okButton.titleLabel.font].width + 30.0);
     CGFloat cancelWidth = MAX(80.0, [OAUtilities calculateTextBounds:self.cancelButton.titleLabel.text width:1000.0 font:self.cancelButton.titleLabel.font].width + 30.0);
     
+    if (self.cancelButton.hidden)
+        cancelWidth = 0.0;
+    
     BOOL buttonsSingleLine = (w - 50.0 - 10.0 - okWidth - cancelWidth - 15.0) >= 10.0;
     if (buttonsSingleLine)
     {
-        //okWidth = w - 50.0 - 15.0 - cancelWidth - 15.0;
-        self.okButton.frame = CGRectMake(50.0, descFrame.origin.y + descFrame.size.height + 5.0, okWidth, 35.0);
-        self.cancelButton.frame = CGRectMake(50.0 + okWidth + 10.0, descFrame.origin.y + descFrame.size.height + 5.0, cancelWidth, 35.0);
+        if (self.cancelButton.hidden)
+        {
+            if (okWidth < 120.0)
+                okWidth = 120.0;
+            self.okButton.frame = CGRectMake(w / 2.0 - okWidth / 2.0, descFrame.origin.y + descFrame.size.height + 5.0, okWidth, 35.0);
+        }
+        else
+        {
+            self.okButton.frame = CGRectMake(50.0, descFrame.origin.y + descFrame.size.height + 5.0, okWidth, 35.0);
+            self.cancelButton.frame = CGRectMake(50.0 + okWidth + 10.0, descFrame.origin.y + descFrame.size.height + 5.0, cancelWidth, 35.0);
+        }
     }
     else
     {
@@ -85,12 +111,17 @@
     }
     
     CGRect f = self.view.frame;
-    f.size.height = self.cancelButton.frame.origin.y + self.cancelButton.frame.size.height + 15.0;
+    if (self.cancelButton.hidden)
+        f.size.height = self.okButton.frame.origin.y + self.okButton.frame.size.height + 15.0;
+    else
+        f.size.height = self.cancelButton.frame.origin.y + self.cancelButton.frame.size.height + 15.0;
     self.view.frame = f;
 }
 
 - (void)show
 {
+    [activePopups addObject:self];
+    
     [self doLayout];
     
     _shadeView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight)];
@@ -130,6 +161,8 @@
         [_shadeView removeFromSuperview];
         _shadeView = nil;
         [self removeFromParentViewController];
+        
+        [activePopups removeObject:self];
     }];
 }
 
@@ -140,7 +173,7 @@
 
 + (void)askForWorldMap
 {
-    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeWorldMap];
     popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
     
     NSString *title;
@@ -175,11 +208,51 @@
     [popup show];
 }
 
++ (void)showNoInternetConnectionFirst
+{
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeNoInternet];
+    popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
+    
+    NSString *title;
+    NSString *descText;
+    NSString *okButtonName;
+    
+    title = OALocalizedString(@"no_internet_avail");
+    descText = OALocalizedString(@"no_internet_avail_desc_first");
+    okButtonName = OALocalizedString(@"shared_string_ok");
+    
+    [popup.okButton addTarget:popup action:@selector(closePressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIViewController *top = [OARootViewController instance].navigationController.topViewController;
+    
+    popup.icon.image = [UIImage imageNamed:@"ic_popup_no_internet"];
+    popup.titleLabel.text = title;
+    
+    NSString *styledText = [self.class styledHTMLwithHTML:descText];
+    popup.descTextView.attributedText = [self.class attributedStringWithHTML:styledText];
+    
+    [popup.okButton setTitle:okButtonName forState:UIControlStateNormal];
+    popup.cancelButton.hidden = YES;
+    
+    [top addChildViewController:popup];
+    [popup show];
+}
+
++ (void)hideNoInternetConnection
+{
+    for (OAPluginPopupViewController *popup in activePopups)
+        if (popup.pluginPopupType == OAPluginPopupTypeNoInternet)
+        {
+            [popup hide];
+            break;
+        }
+}
+
 + (void)askForPlugin:(NSString *)productIdentifier
 {
     BOOL needShow = NO;
 
-    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypePlugin];
     popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
     
     NSString *title;
@@ -245,7 +318,7 @@
 {
     BOOL needShow = NO;
     
-    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] init];
+    OAPluginPopupViewController *popup = [[OAPluginPopupViewController alloc] initWithType:OAPluginPopupTypeProduct];
     popup.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, 200.0);
     
     NSString *title;
@@ -383,6 +456,8 @@
     [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
     
     [self hide];
+    
+    [[OsmAndApp instance].resourcesRepositoryUpdatedObservable notifyEventWithKey:nil];
 }
 
 - (void)cancelDownloadWorldMap

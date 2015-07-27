@@ -28,6 +28,7 @@
 #import "OABannerView.h"
 #import "OAUtilities.h"
 #import "OAInAppCell.h"
+#import "OAPluginPopupViewController.h"
 
 #include "Localization.h"
 
@@ -107,7 +108,6 @@ struct RegionResources
     uint64_t _totalInstalledSize;
 
     MBProgressHUD* _refreshRepositoryProgressHUD;
-    UIBarButtonItem* _refreshRepositoryBarButton;
     
     BOOL _isSearching;
     BOOL _doNotSearch;
@@ -130,6 +130,9 @@ struct RegionResources
     BOOL _hasSrtm;
 
     CALayer *_horizontalLine;
+    
+    BOOL _viewAppeared;
+    BOOL _repositoryUpdating;
 }
 
 static QHash< QString, std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository> > _resourcesInRepository;
@@ -169,6 +172,8 @@ static BOOL _lackOfResources;
         
         _arrFmt = [[TTTArrayFormatter alloc] init];
         _arrFmt.usesSerialDelimiter = NO;
+        
+        _viewAppeared = NO;
 
     }
     return self;
@@ -292,25 +297,48 @@ static BOOL _lackOfResources;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    if (![[OAIAPHelper sharedInstance] productsLoaded])
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self loadProducts];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
-    // If there's no repository available and there's internet connection, just update it
-    /*
-    if (!_app.resourcesManager->isRepositoryAvailable() &&
-        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    
+    if (!_viewAppeared)
     {
-        [self updateRepository];
-    }
-    else
-    {
-     */
-        if (self.openFromSplash)
+        // If there's no repository available and there's internet connection, just update it
+        if (!_app.resourcesManager->isRepositoryAvailable())
+        {
+            if (!_app.isRepositoryUpdating &&
+                [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            {
+                [self updateRepository];
+            }
+            else if (self.region == _app.worldRegion &&
+                     [Reachability reachabilityForInternetConnection].currentReachabilityStatus == NotReachable)
+            {
+                // show no internet popup
+                [OAPluginPopupViewController showNoInternetConnectionFirst];
+                
+            } else if (_app.isRepositoryUpdating)
+            {
+                _repositoryUpdating = YES;
+                _updateButton.enabled = NO;
+                [_refreshRepositoryProgressHUD show:YES];
+            }
+        }
+        else if (self.openFromSplash)
+        {
             [self onSearchBtnClicked:nil];
-    //}
+        }
+    }
+    _viewAppeared = YES;
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -338,6 +366,34 @@ static BOOL _lackOfResources;
             [self.tableView endUpdates];
         }];
     }
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification
+{
+    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        // hide no internet popup
+        [OAPluginPopupViewController hideNoInternetConnection];
+        
+        if (![[OAIAPHelper sharedInstance] productsLoaded])
+            [self loadProducts];
+
+        if (!_app.resourcesManager->isRepositoryAvailable() && !_app.isRepositoryUpdating)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateRepository];
+            });
+    }
+}
+
+- (void)loadProducts
+{
+    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+        
+        if (success)
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateFreeDownloadsBanner];
+            });
+    }];
 }
 
 - (void)updateBannerDimensions:(CGFloat)width
@@ -449,6 +505,7 @@ static BOOL _lackOfResources;
     _bannerView.desc = desc;
     _bannerView.buttonTitle = buttonTitle;
 
+    [_bannerView setNeedsLayout];
     [_bannerView setNeedsDisplay];
 }
 
@@ -485,6 +542,18 @@ static BOOL _lackOfResources;
     
     if (_displayBanner)
         [self updateFreeDownloadsBanner];
+    
+    if (_repositoryUpdating)
+    {
+        _repositoryUpdating = NO;
+        _updateButton.enabled = YES;
+
+        [_refreshRepositoryProgressHUD hide:YES];
+        if (self.openFromSplash)
+        {
+            [self onSearchBtnClicked:nil];
+        }
+    }
 }
 
 - (void)obtainDataAndItems
@@ -1183,16 +1252,16 @@ static BOOL _lackOfResources;
 - (void)updateRepository
 {
     _doDataUpdateReload = YES;
-    _refreshRepositoryBarButton.enabled = NO;
+    _updateButton.enabled = NO;
     [_refreshRepositoryProgressHUD showAnimated:YES
                             whileExecutingBlock:^{
                                 [OAOcbfHelper downloadOcbfIfUpdated];
                                 [_app loadWorldRegions];
                                 self.region = _app.worldRegion;                                
-                                _app.resourcesManager->updateRepository();
+                                [_app startRepositoryUpdateAsync:NO];
                             }
                                 completionBlock:^{
-                                    _refreshRepositoryBarButton.enabled = YES;
+                                    _updateButton.enabled = YES;
                                     if (self.openFromSplash)
                                         [self onSearchBtnClicked:nil];
                                 }];
@@ -2044,6 +2113,24 @@ static BOOL _lackOfResources;
                          if (_displayBanner)
                              [self.tableView reloadData];
                      }];
+    
+    if (self.openFromSplash && _app.resourcesManager->isRepositoryAvailable())
+    {
+        int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
+        if (showMapIterator == 0 || true)
+        {
+            [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            NSString *key = [@"resource:" stringByAppendingString:_app.resourcesManager->getResourceInRepository(kWorldBasemapKey)->id.toNSString()];
+            BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
+            
+            const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
+            if (!worldMap && !_isWorldMapDownloading)
+                [OAPluginPopupViewController askForWorldMap];
+        }
+    }
+    
 }
 
 #pragma mark - Navigation

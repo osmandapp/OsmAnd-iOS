@@ -503,4 +503,6 @@
 
 "no_statistics" = "No statistics";
 
+"no_internet_avail" = "No internet available";
+"no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 

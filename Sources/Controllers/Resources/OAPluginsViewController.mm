@@ -105,14 +105,40 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
     
-    if (![[OAIAPHelper sharedInstance] productsLoaded]) {
-        
-        [_loadProductsProgressHUD show:YES];
+    if (![[OAIAPHelper sharedInstance] productsLoaded])
+    {
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self loadProducts];
+        else
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    }
+    
+    [self.tableView reloadData];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification
+{
+    if (![[OAIAPHelper sharedInstance] productsLoaded] &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [self loadProducts];
+    }
+}
+
+- (void)loadProducts
+{
+    [_loadProductsProgressHUD show:YES];
+    
+    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-                
+            if (success)
+            {
                 [self.tableView reloadData];
                 CATransition *animation = [CATransition animation];
                 [animation setType:kCATransitionPush];
@@ -121,24 +147,18 @@
                 [animation setFillMode:kCAFillModeBoth];
                 [animation setDuration:.3];
                 [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-                
-                [_loadProductsProgressHUD hide:YES];
-            }];
+            }
+            
+            [_loadProductsProgressHUD hide:YES];
         });
-    }
-    
-    [self.tableView reloadData];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [OAIAPHelper sharedInstance].productsLoaded ? 1 : 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

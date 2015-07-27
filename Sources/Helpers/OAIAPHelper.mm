@@ -94,6 +94,21 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     return self;
 }
 
+-(BOOL)isEqual:(id)object
+{
+    if ([object isKindOfClass:[OAProduct class]])
+    {
+        OAProduct *p = (OAProduct *)object;
+        return [p.productIdentifier isEqualToString:self.productIdentifier];
+    }
+    return NO;
+}
+
+-(NSUInteger)hash
+{
+    return [self.productIdentifier hash];
+}
+
 @end
 
 @interface OAIAPHelper () <SKProductsRequestDelegate, SKPaymentTransactionObserver>
@@ -115,6 +130,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
     BOOL _restoringPurchases;
     NSInteger _transactionErrors;
+    
+    BOOL _wasAddedToQueue;
+    BOOL _wasProductListFetched;
 }
 
 +(int)freeMapsAvailable
@@ -214,7 +232,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 
 -(BOOL)productsLoaded
 {
-    return _products.count > 0;
+    return _wasProductListFetched;
 }
 
 -(OAProduct *)product:(NSString *)productIdentifier
@@ -250,6 +268,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 {
     if ((self = [super init]))
     {
+        _wasProductListFetched = NO;
+        
         _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking, kInAppId_Addon_TripPlanning];
 
         NSMutableArray *freeProds = [NSMutableArray array];
@@ -315,7 +335,11 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 - (void)requestProductsWithCompletionHandler:(RequestProductsCompletionHandler)completionHandler
 {
     // Add self as transaction observer
-    [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    if (!_wasAddedToQueue)
+    {
+        _wasAddedToQueue = YES;
+        [[SKPaymentQueue defaultQueue] addTransactionObserver:self];
+    }
 
     _completionHandler = [completionHandler copy];
     _productsRequest = [[SKProductsRequest alloc] initWithProductIdentifiers:_productIdentifiersInApps];
@@ -462,6 +486,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     
     _completionHandler = nil;
     
+    _wasProductListFetched = YES;
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error{
@@ -469,17 +494,15 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     OALog(@"Failed to load list of products.");
     _productsRequest = nil;
     
-    if (_products.count == 0)
+    NSMutableArray *arr = [NSMutableArray arrayWithArray:_products];
+    for (NSString *prodId in _productIdentifiers)
     {
-        NSMutableArray *arr = [NSMutableArray array];
-        for (NSString *prodId in _productIdentifiers)
-        {
-            OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+        OAProduct *p = [[OAProduct alloc] initWithproductIdentifier:prodId];
+        if (![arr containsObject:p])
             [arr addObject:p];
-        }
-        
-        _products = [NSArray arrayWithArray:arr];
     }
+    
+    _products = [NSArray arrayWithArray:arr];
 
     if (_completionHandler)
         _completionHandler(NO);

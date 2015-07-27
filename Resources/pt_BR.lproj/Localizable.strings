@@ -439,3 +439,5 @@
 "product_title_trip_planning" = "Planejamento de viagem";
 "plugin_popup_trip_planning_ask" = "Para começar a planejar a viagem, você precisa ativar o complemento: <b>Planejamento de viagem</b>";
 "no_statistics" = "Sem estatísticas";
+"no_internet_avail" = "Internet indisponível";
+"no_internet_avail_desc_first" = "Por favor, ligue a conexão de dados para baixa a lista de mapas";

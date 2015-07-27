@@ -166,13 +166,13 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 }
 
 #pragma mark - IOS-178 Add download view
--(void)showDownloadViewForTask:(id<OADownloadTask>)task {
-    
+-(void)showDownloadViewForTask:(id<OADownloadTask>)task
+{
     if (self.downloadView && self.downloadView.superview)
         [self.downloadView removeFromSuperview];
     
     self.downloadView = [[OADownloadProgressView alloc] initWithFrame:CGRectMake(0, DeviceScreenHeight - kOADownloadProgressViewHeight, DeviceScreenWidth, kOADownloadProgressViewHeight)];
-    [self.downloadView setTaskName: [[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0] stringByReplacingOccurrencesOfString:@"resource:" withString:@""] ];
+    [self.downloadView setTaskName:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
     self.downloadView.translatesAutoresizingMaskIntoConstraints = NO;
     self.downloadView.delegate = self;
     [self validateDownloadViewForTask:task];
@@ -194,9 +194,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
 }
 
--(void) validateDownloadViewForTask:(id<OADownloadTask>)task {
+-(void) validateDownloadViewForTask:(id<OADownloadTask>)task
+{
     [self.downloadView setProgress:task.progressCompleted];
     [self.downloadView setTitle:task.name];
+    [self.downloadView setTaskName:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
     if (task.state == OADownloadTaskStatePaused)
         [self.downloadView setButtonStateResume];
     else

@@ -91,6 +91,10 @@
 
 @property(readonly) OAObservable* trackRecordingObservable;
 
+@property(readonly) BOOL isRepositoryUpdating;
+
+- (void)startRepositoryUpdateAsync:(BOOL)async;
+
 #if defined(OSMAND_IOS_DEV)
 @property(readonly) OADebugSettings* debugSettings;
 #endif // defined(OSMAND_IOS_DEV)

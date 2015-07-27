@@ -60,6 +60,8 @@
     introductionView.delegate = self;
     [introductionView.RightSkipButton setTitle:@"" forState:UIControlStateNormal];
     introductionView.RightSkipButton = nil;
+
+    introductionView.PageControl.hidden = YES;
     [introductionView setEnabled:NO];
     
     //Add the introduction to your view

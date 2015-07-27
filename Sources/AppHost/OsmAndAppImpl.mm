@@ -82,6 +82,7 @@
 @synthesize addonsSwitchObservable = _addonsSwitchObservable;
 
 @synthesize trackRecordingObservable = _trackRecordingObservable;
+@synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize debugSettings = _debugSettings;
@@ -258,10 +259,9 @@
     // Load resources list
     
     // If there's no repository available and there's internet connection, just update it
-    if (!self.resourcesManager->isRepositoryAvailable() && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable) {
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
-            self.resourcesManager->updateRepository();
-        });
+    if (!self.resourcesManager->isRepositoryAvailable() && [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [self startRepositoryUpdateAsync:YES];
     }
 
     // Load world regions
@@ -315,6 +315,8 @@
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     
+    [[Reachability reachabilityForInternetConnection] startNotifier];
+
     /*
     NSLog(@"<52.33 44.5> = <%@>", [OAUtilities splitCoordinates:@"52.33 44.5"]);
     NSLog(@"<52.33,44.5> = <%@>", [OAUtilities splitCoordinates:@"52.33,44.5"]);
@@ -329,6 +331,28 @@
     */
     
     return YES;
+}
+
+- (void)startRepositoryUpdateAsync:(BOOL)async
+{
+    _isRepositoryUpdating = YES;
+    
+    if (async)
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+            
+            self.resourcesManager->updateRepository();
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                _isRepositoryUpdating = NO;
+            });
+        });
+    }
+    else
+    {
+        self.resourcesManager->updateRepository();
+        _isRepositoryUpdating = NO;
+    }
 }
 
 - (void)loadWorldRegions

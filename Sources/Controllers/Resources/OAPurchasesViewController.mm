@@ -123,24 +123,10 @@
 
     if (![[OAIAPHelper sharedInstance] productsLoaded])
     {
-        [_loadProductsProgressHUD show:YES];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
-                
-                [self.tableView reloadData];
-                CATransition *animation = [CATransition animation];
-                [animation setType:kCATransitionPush];
-                [animation setSubtype:kCATransitionFromBottom];
-                [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
-                [animation setFillMode:kCAFillModeBoth];
-                [animation setDuration:.3];
-                [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
-                
-                [_loadProductsProgressHUD hide:YES];
-            }];
-        });
+        if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+            [self loadProducts];
+        else
+            [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     }
 }
 
@@ -149,11 +135,44 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (void)reachabilityChanged:(NSNotification *)notification
+{
+    if (![[OAIAPHelper sharedInstance] productsLoaded] &&
+        [Reachability reachabilityForInternetConnection].currentReachabilityStatus != NotReachable)
+    {
+        [self loadProducts];
+    }
+}
+
+- (void)loadProducts
+{
+    [_loadProductsProgressHUD show:YES];
+    
+    [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success)
+            {
+                [self.tableView reloadData];
+                CATransition *animation = [CATransition animation];
+                [animation setType:kCATransitionPush];
+                [animation setSubtype:kCATransitionFromBottom];
+                [animation setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut]];
+                [animation setFillMode:kCAFillModeBoth];
+                [animation setDuration:.3];
+                [[self.tableView layer] addAnimation:animation forKey:@"UITableViewReloadDataAnimationKey"];
+            }
+            
+            [_loadProductsProgressHUD hide:YES];
+        });
+    }];
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [OAIAPHelper sharedInstance].productsLoaded ? (_pluginsSection >=0 ? 3 : 2) : 0;
+    return (_pluginsSection >=0 ? 3 : 2);
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

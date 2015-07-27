@@ -633,9 +633,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
         return @"img_plugin_contourlines.jpg";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TrackRecording])
-        return @"";
+        return @"img_plugin_trip_recording.jpg";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Wiki])
-        return @"";
+        return @"img_plugin_wikipedia.jpg";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
         return @"img_plugin_trip_planning.jpg";
     else

@@ -2117,7 +2117,7 @@ static BOOL _lackOfResources;
     if (self.openFromSplash && _app.resourcesManager->isRepositoryAvailable())
     {
         int showMapIterator = (int)[[NSUserDefaults standardUserDefaults] integerForKey:kShowMapIterator];
-        if (showMapIterator == 0 || true)
+        if (showMapIterator == 0)
         {
             [[NSUserDefaults standardUserDefaults] setInteger:++showMapIterator forKey:kShowMapIterator];
             [[NSUserDefaults standardUserDefaults] synchronize];
@@ -2130,7 +2130,6 @@ static BOOL _lackOfResources;
                 [OAPluginPopupViewController askForWorldMap];
         }
     }
-    
 }
 
 #pragma mark - Navigation

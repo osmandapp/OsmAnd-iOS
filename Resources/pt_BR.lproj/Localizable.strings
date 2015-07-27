@@ -441,3 +441,6 @@
 "no_statistics" = "Sem estatísticas";
 "no_internet_avail" = "Internet indisponível";
 "no_internet_avail_desc_first" = "Por favor, ligue a conexão de dados para baixa a lista de mapas";
+"show_region_on_map_title" = "Mapa baixado";
+"show_region_on_map_desc" = "Mapa de %@ foi baixado. Vá para o mapa para começar a usá-lo.";
+"show_region_on_map_go" = "Vá para o mapa";

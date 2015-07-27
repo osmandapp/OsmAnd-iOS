@@ -95,3 +95,4 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Kolorowanie wg przeznaczenia trasy";
 "rendering_value_walkingRoutesOSMC_name" = "Kolorowanie wg zasad OSMC";
 "rendering_attr_hikingRoutesOSMC_name" = "Symbol nakładki wędrówek";
+"shared_string_dismiss" = "Odrzuć";

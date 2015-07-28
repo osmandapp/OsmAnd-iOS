@@ -1370,6 +1370,7 @@
 - (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues descFieldLoc:(NSString *)descFieldLoc
 {
     NSMutableArray *fuelTagsArr = [NSMutableArray array];
+    NSMutableDictionary *content = [NSMutableDictionary dictionary];
 
     for (const auto& entry : decodedValues)
     {
@@ -1385,6 +1386,17 @@
             symbol.openingHours = entry.value.toString().toNSString();
         else if (entry.declaration->tagName == QString("website"))
             symbol.url = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName.startsWith(QString("content")))
+        {
+            NSString *key = entry.declaration->tagName.toNSString();
+            NSString *loc;
+            if (key.length > 8)
+                loc = [[key substringFromIndex:8] lowercaseString];
+            else
+                loc = @"";
+            
+            [content setObject:entry.value.toString().toNSString() forKey:loc];
+        }
         else if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
             symbol.desc = entry.value.toString().toNSString();
         else if (entry.declaration->tagName.startsWith(QString("fuel:")) && (entry.value.toString() == QString("yes")))
@@ -1397,6 +1409,8 @@
     }
     if (fuelTagsArr.count > 0)
         symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];
+    
+    symbol.localizedContent = [NSDictionary dictionaryWithDictionary:content];
 }
 
 - (void)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
@@ -1541,14 +1555,34 @@
 
                 if (symbol.poiType)
                 {
-                    symbol.type = OAMapSymbolPOI;
                     symbol.icon = [symbol.poiType mapIcon];
+                    if ([symbol.poiType.name isEqualToString:@"wiki_place"])
+                        symbol.type = OAMapSymbolWiki;
+                    else
+                        symbol.type = OAMapSymbolPOI;
                 }
                 else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
                 {
                     symbol.type = OAMapSymbolWpt;
                 }
 
+                symbol.caption = amenity->nativeName.toNSString();
+
+                NSMutableDictionary *names = [NSMutableDictionary dictionary];
+                const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+                for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                {
+                    if (lang != QString::null && entry.key() == lang)
+                        symbol.caption = entry.value().toNSString();
+                    
+                    [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+                }
+                
+                if (![names objectForKey:@""])
+                    [names setObject:amenity->nativeName.toNSString() forKey:@""];
+                
+                symbol.localizedNames = [NSDictionary dictionaryWithDictionary:names];
+                
                 const auto decodedValues = amenity->getDecodedValues();
                 [self processSymbolFields:symbol decodedValues:decodedValues descFieldLoc:descFieldLoc];
             }
@@ -1600,9 +1634,16 @@
                 }
                 
                 if (symbol.poiType)
-                    symbol.type = OAMapSymbolPOI;
+                {
+                    if ([symbol.poiType.name isEqualToString:@"wiki_place"])
+                        symbol.type = OAMapSymbolWiki;
+                    else
+                        symbol.type = OAMapSymbolPOI;
+                }
                 else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                {
                     symbol.type = OAMapSymbolWpt;
+                }
                 
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
                 if (symbolGroup != nullptr)
@@ -1717,7 +1758,9 @@
         [userInfo setObject:@"destination" forKey:@"objectType"];
     else if (symbol.type == OAMapSymbolWpt)
         [userInfo setObject:@"waypoint" forKey:@"objectType"];
-    
+    else if (symbol.type == OAMapSymbolWiki)
+        [userInfo setObject:@"wiki" forKey:@"objectType"];
+
     [userInfo setObject:symbol.caption forKey:@"caption"];
     if (symbol.captionExt)
         [userInfo setObject:symbol.captionExt forKey:@"captionExt"];
@@ -1747,6 +1790,10 @@
         [userInfo setObject:symbol.wheelchair forKey:@"wheelchair"];
     if (symbol.fuelTags)
         [userInfo setObject:symbol.fuelTags forKey:@"fuelTags"];
+    if (symbol.localizedNames)
+        [userInfo setObject:symbol.localizedNames forKey:@"names"];
+    if (symbol.localizedContent)
+        [userInfo setObject:symbol.localizedContent forKey:@"content"];
 
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
@@ -3188,7 +3235,7 @@
                 if (categoriesFilter.count() > 0)
                     _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
                 else
-                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
 
                 [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
             }

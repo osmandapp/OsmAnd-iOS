@@ -45,6 +45,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolPOI,
     OAMapSymbolLocation,
     OAMapSymbolWpt,
+    OAMapSymbolWiki,
 };
 
 @interface OAMapSymbol : NSObject
@@ -68,6 +69,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSString *brand;
 @property (nonatomic) NSString *wheelchair;
 @property (nonatomic) NSArray *fuelTags;
+
+@property (nonatomic) NSDictionary *localizedNames;
+@property (nonatomic) NSDictionary *localizedContent;
 
 @end
 

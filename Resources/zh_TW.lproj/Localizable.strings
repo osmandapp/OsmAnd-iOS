@@ -441,3 +441,6 @@
 "product_desc_ext_srtm" = "這個外掛元件提供了等高線層和山體陰影層，它可以顯示在 OsmAnd 的離線地圖。等高線提供了該地區高度的相關資訊，而山體陰影則具體呈現出它們。使用這個外掛元件可看到山峰名稱和看到山峰和地勢的具體特徵。\n\n全球圖資（在北緯 70 度至南緯 70 度之間）的量測基礎在於 SRTM (Shuttle Radar Topography Mission)和 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)，安裝在美國太空總署地球觀測系統的旗艦衛星 Terra 上的遙測儀器，ASTER 是美國太空總署、日本經濟產業省(METI)、日本太空系統 (J-spacesystems)之間的通力合作產物。";
 "no_internet_avail" = "無網路可用";
 "no_internet_avail_desc_first" = "請開啟網路連線以下載地圖清單";
+"show_region_on_map_title" = "地圖已下載";
+"show_region_on_map_desc" = "已下載 %@ 地圖。 轉到地圖開始使用。";
+"show_region_on_map_go" = "轉到地圖";

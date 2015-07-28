@@ -95,18 +95,13 @@
     if (self.titleGradient && gradient)
     {
         self.titleGradient.hidden = NO;
-        self.navBar.backgroundColor = [UIColor clearColor];
+        self.navBarBackground.hidden = YES;
     }
     else
     {
         self.titleGradient.hidden = YES;
-        self.navBar.backgroundColor = [self getNavBarColor];
+        self.navBarBackground.hidden = NO;
     }
-}
-
-- (UIColor *)getNavBarColor
-{
-    return UIColorFromRGB(0xFF8F00);
 }
 
 - (BOOL)disablePanWhileEditing

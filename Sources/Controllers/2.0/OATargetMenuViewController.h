@@ -33,6 +33,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @interface OATargetMenuViewController : OASuperViewController
 
 @property (weak, nonatomic) IBOutlet UIView *navBar;
+@property (weak, nonatomic) IBOutlet UIView *navBarBackground;
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleGradient;
 @property (weak, nonatomic) IBOutlet UIButton *buttonCancel;
@@ -61,7 +62,6 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 
 - (void)useGradient:(BOOL)gradient;
-- (UIColor *)getNavBarColor;
 
 - (BOOL)disablePanWhileEditing;
 - (BOOL)supportEditing;

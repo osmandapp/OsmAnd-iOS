@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7702" systemVersion="14D136" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7701"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAParkingViewController">
@@ -11,6 +11,7 @@
                 <outlet property="buttonOK" destination="MJK-qc-RFq" id="nUe-Le-o7v"/>
                 <outlet property="contentView" destination="EGB-Fj-Ffv" id="Okp-yM-JH0"/>
                 <outlet property="navBar" destination="KGn-rp-4w9" id="71s-fw-Jrs"/>
+                <outlet property="navBarBackground" destination="9Me-Lr-QrJ" id="mN4-5G-ykC"/>
                 <outlet property="tableView" destination="6Wc-mZ-ohY" id="F58-tW-JaI"/>
                 <outlet property="titleGradient" destination="tSY-V6-9N3" id="f3o-RW-fLM"/>
                 <outlet property="titleView" destination="IeC-dD-h4z" id="MY8-6e-bn1"/>
@@ -26,6 +27,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
+                        <view contentMode="scaleToFill" id="9Me-Lr-QrJ">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_title.png" id="tSY-V6-9N3">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>

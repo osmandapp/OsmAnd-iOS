@@ -19,6 +19,7 @@
                 <outlet property="exportButton" destination="6mT-L1-Khb" id="hdc-0n-yXz"/>
                 <outlet property="groupButton" destination="isH-FI-3s3" id="eGD-qE-ld8"/>
                 <outlet property="navBar" destination="3Q5-Yo-3z3" id="bwt-Jz-hvy"/>
+                <outlet property="navBarBackground" destination="FjW-vz-12E" id="wYG-aC-WCX"/>
                 <outlet property="segmentView" destination="0xk-SG-AAJ" id="Mt3-Ui-DSx"/>
                 <outlet property="segmentViewContainer" destination="e1K-MJ-y4j" id="gHQ-iP-RD5"/>
                 <outlet property="tableView" destination="dJu-L7-Tpo" id="Zmx-pt-70I"/>
@@ -35,6 +36,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
+                        <view contentMode="scaleToFill" id="FjW-vz-12E">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Track Name" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumScaleFactor="0.80000000000000027" id="a3M-58-gDX">
                             <rect key="frame" x="77" y="19" width="166" height="43"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -115,7 +121,6 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
                 <view contentMode="scaleToFill" id="Orv-fJ-hDk">
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>

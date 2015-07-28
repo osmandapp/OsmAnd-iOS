@@ -10,6 +10,7 @@
                 <outlet property="buttonCancel" destination="HvU-vJ-fjc" id="m4f-j3-8As"/>
                 <outlet property="buttonOK" destination="RBm-mx-ijc" id="eT2-Oi-kh9"/>
                 <outlet property="navBar" destination="CcD-lA-ssS" id="Kj1-0K-NCG"/>
+                <outlet property="navBarBackground" destination="Jvt-qi-1Bs" id="oFl-oc-Fev"/>
                 <outlet property="titleView" destination="vCc-1d-gPT" id="mLE-UC-QuG"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
@@ -23,6 +24,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                     <subviews>
+                        <view contentMode="scaleToFill" id="Jvt-qi-1Bs">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vCc-1d-gPT">
                             <rect key="frame" x="77" y="29" width="166" height="24"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -53,10 +59,8 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
             <point key="canvasLocation" x="364" y="289"/>
         </view>

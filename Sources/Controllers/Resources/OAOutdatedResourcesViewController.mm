@@ -97,6 +97,11 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (UITableView *)getTableView
+{
+    return self.tableView;
+}
+
 - (void)updateContent
 {
     [self obtainDataAndItems];

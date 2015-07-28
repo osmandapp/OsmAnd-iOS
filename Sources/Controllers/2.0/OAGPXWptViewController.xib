@@ -12,6 +12,7 @@
                 <outlet property="contentView" destination="OfJ-m3-rEX" id="Qis-Y5-hRN"/>
                 <outlet property="deleteButton" destination="rby-mP-gm3" id="QY7-64-zNB"/>
                 <outlet property="navBar" destination="DYe-Jh-ora" id="EYN-Qs-dXu"/>
+                <outlet property="navBarBackground" destination="Blx-0G-Jp8" id="SkY-4R-Ko8"/>
                 <outlet property="tableView" destination="DZx-4x-CVq" id="fJh-a5-GyC"/>
                 <outlet property="titleGradient" destination="E2f-hD-ccN" id="52V-Rl-1Hc"/>
                 <outlet property="titleView" destination="JZf-W2-K45" id="Avy-IG-idZ"/>
@@ -27,6 +28,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
+                        <view contentMode="scaleToFill" id="Blx-0G-Jp8">
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <color key="backgroundColor" red="1" green="0.56078431370000004" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bg_title.png" id="E2f-hD-ccN">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="64"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>

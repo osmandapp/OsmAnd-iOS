@@ -296,20 +296,12 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         // Check for previously purchased products
         for (NSString * productIdentifier in _productIdentifiers)
         {
-            if (![self productPurchasedIgnoreDisable:productIdentifier] && [self.freePluginsList containsObject:productIdentifier])
-            {
-                [_purchasedProductIdentifiers addObject:productIdentifier];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
-                [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
-                [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:productIdentifier]];
-                [[NSUserDefaults standardUserDefaults] synchronize];
-            }
-            
 #if !defined(OSMAND_IOS_DEV)
             BOOL productPurchased = [[NSUserDefaults standardUserDefaults] boolForKey:productIdentifier];
 #else
             BOOL productPurchased = YES;
-#endif            
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
+#endif
             if (productPurchased)
             {
                 BOOL productDisabled = [[NSUserDefaults standardUserDefaults] boolForKey:[self getDisabledId:productIdentifier]];
@@ -321,9 +313,20 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                 
                 [_purchasedProductIdentifiers addObject:productIdentifier];
                 OALog(@"Previously purchased: %@", productIdentifier);
-                
-            } else {
+            }
+            else
+            {
                 OALog(@"Not purchased: %@", productIdentifier);
+
+                if (![self productPurchasedIgnoreDisable:productIdentifier] &&
+                     [self.freePluginsList containsObject:productIdentifier])
+                {
+                    [_purchasedProductIdentifiers addObject:productIdentifier];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
+                    [_disabledProductIdentifiers addObject:[self getDisabledId:productIdentifier]];
+                    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:[self getDisabledId:productIdentifier]];
+                    [[NSUserDefaults standardUserDefaults] synchronize];
+                }
             }
         }
         [self buildFunctionalAddonsArray];

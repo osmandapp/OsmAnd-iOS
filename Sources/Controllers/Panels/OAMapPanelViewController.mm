@@ -1404,6 +1404,7 @@ typedef enum
         {
             [_mapViewController addDestinationPin:destination.markerResourceName color:destination.color latitude:_targetLatitude longitude:_targetLongitude];
             [_mapViewController hideContextPinMarker];
+            [[OADestinationsHelper instance] moveDestinationOnTop:destination];
         }
         else
         {

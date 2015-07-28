@@ -444,7 +444,6 @@
             if (dest.parking)
             {
                 [[OADestinationsHelper instance] removeDestination:dest];
-                //[self removeDestination:dest];
                 break;
             }
     }

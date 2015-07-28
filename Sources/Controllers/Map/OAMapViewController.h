@@ -139,6 +139,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)showRecGpxTrack;
 - (void)hideRecGpxTrack;
 
+- (void)showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
+- (void)hidePoi;
+
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;
 - (void)removeDestinationPin:(double)latitude longitude:(double)longitude;
 

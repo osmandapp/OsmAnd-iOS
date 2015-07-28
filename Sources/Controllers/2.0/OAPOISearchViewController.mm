@@ -469,6 +469,10 @@ typedef enum
 
 -(void)generateData
 {
+    // hide poi
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    [mapVC hidePoi];
+    
     [self acquireCurrentScope];
     
     if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
@@ -616,19 +620,56 @@ typedef enum
 
 
 #pragma mark - UITableViewDataSource
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return _dataArray.count + _dataPoiArray.count + (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) + (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0) + (_showCoordinates ? 1 : 0);
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return _dataArray.count +
+        _dataPoiArray.count +
+        (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) +
+        (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0) +
+        (_poiInList && _dataPoiArray.count > 0 ? 1 : 0) +
+        (_showCoordinates ? 1 : 0);
 }
 
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
     NSInteger row = indexPath.row;
 
+    if (_poiInList && _dataPoiArray.count > 0)
+    {
+        if (row == 0)
+        {
+            OAIconTextTableViewCell* cell;
+            cell = (OAIconTextTableViewCell *)[self.tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            }
+            
+            if (cell)
+            {
+                CGRect f = cell.textView.frame;
+                f.origin.y = 14.0;
+                cell.textView.frame = f;
+                
+                [cell.textView setText:OALocalizedString(@"map_settings_show")];
+                [cell.iconView setImage: nil];
+            }
+            return cell;
+        }
+        else
+        {
+            row--;
+        }
+    }
+    
     if (_showCoordinates)
     {
         if (row == 0)
@@ -930,6 +971,23 @@ typedef enum
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     int row = indexPath.row;
+
+    if (_poiInList && _dataPoiArray.count > 0)
+    {
+        if (row == 0)
+        {
+            OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+            NSString *str = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            return;
+        }
+        else
+        {
+            row--;
+        }
+    }
+    
     if (_showCoordinates)
     {
         if (row == 0)

@@ -37,6 +37,8 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 
+#include "OACoreResourcesAmenityIconProvider.h"
+
 #include <OpenGLES/ES2/gl.h>
 
 #include <QtMath>
@@ -62,6 +64,7 @@
 #include <OsmAndCore/Map/OnPathRasterMapSymbol.h>
 #include <OsmAndCore/Map/IOnSurfaceMapSymbol.h>
 #include <OsmAndCore/Map/MapSymbolsGroup.h>
+#include <OsmAndCore/Map/AmenitySymbolsProvider.h>
 
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
@@ -137,7 +140,16 @@
 
     NSObject* _rendererSync;
     BOOL _mapSourceInvalidated;
-    
+
+    // show poi on map
+    BOOL _showPoiOnMap;
+    NSString *_poiCategoryName;
+    NSString *_poiFilterName;
+    NSString *_poiTypeName;
+    NSString *_poiKeyword;
+    NSString *_prefLang;
+    std::shared_ptr<OsmAnd::AmenitySymbolsProvider> _amenitySymbolsProvider;
+
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
 
@@ -1355,6 +1367,38 @@
     [self pointContextMenuGestureDetected:recognizer];
 }
 
+- (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues descFieldLoc:(NSString *)descFieldLoc
+{
+    NSMutableArray *fuelTagsArr = [NSMutableArray array];
+
+    for (const auto& entry : decodedValues)
+    {
+        if (entry.declaration->tagName == QString("phone"))
+            symbol.phone = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName == QString("operator"))
+            symbol.oper = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName == QString("brand"))
+            symbol.brand = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName == QString("wheelchair"))
+            symbol.wheelchair = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName == QString("opening_hours"))
+            symbol.openingHours = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName == QString("website"))
+            symbol.url = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
+            symbol.desc = entry.value.toString().toNSString();
+        else if (entry.declaration->tagName.startsWith(QString("fuel:")) && (entry.value.toString() == QString("yes")))
+        {
+            [fuelTagsArr addObject:entry.declaration->tagName.right(entry.declaration->tagName.length() - 5).toNSString()];
+        }
+        
+        if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+            symbol.desc = entry.value.toString().toNSString();
+    }
+    if (fuelTagsArr.count > 0)
+        symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];
+}
+
 - (void)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
@@ -1421,8 +1465,8 @@
     BOOL doSkip = NO;
 
     const auto& symbolInfos = [mapView getSymbolsIn:area strict:NO];
-    for (const auto symbolInfo : symbolInfos) {
-        
+    for (const auto symbolInfo : symbolInfos)
+    {
         doSkip = NO;
                 
         OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
@@ -1474,7 +1518,42 @@
         {
             OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup* objSymbolGroup = dynamic_cast<OsmAnd::MapObjectsSymbolsProvider::MapObjectSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
             
-            if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr) {
+            OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup* amenitySymbolGroup = dynamic_cast<OsmAnd::AmenitySymbolsProvider::AmenitySymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
+            
+            OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
+
+            if (amenitySymbolGroup != nullptr)
+            {
+                const auto amenity = amenitySymbolGroup->amenity;
+
+                NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+                NSString *descFieldLoc;
+                if (prefLang)
+                    descFieldLoc = [@"description:" stringByAppendingString:prefLang];
+                
+                const auto& decodedCategories = amenity->getDecodedCategories();
+                if (!decodedCategories.isEmpty())
+                {
+                    const auto& entry = decodedCategories.first();
+                    if (!symbol.poiType)
+                        symbol.poiType = [poiHelper getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
+                }
+
+                if (symbol.poiType)
+                {
+                    symbol.type = OAMapSymbolPOI;
+                    symbol.icon = [symbol.poiType mapIcon];
+                }
+                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                {
+                    symbol.type = OAMapSymbolWpt;
+                }
+
+                const auto decodedValues = amenity->getDecodedValues();
+                [self processSymbolFields:symbol decodedValues:decodedValues descFieldLoc:descFieldLoc];
+            }
+            else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
+            {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
                 
                 NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
@@ -1488,41 +1567,10 @@
                         if (prefLang)
                             descFieldLoc = [@"description:" stringByAppendingString:prefLang];
                         
-                        NSMutableArray *fuelTagsArr = [NSMutableArray array];
-                        
                         const auto& decodedValues = amenity->getDecodedValues();
-                        for (const auto& entry : decodedValues)
-                        {
-                            //NSLog(@"%@=%@", entry.key().toNSString(), entry.value().toNSString());
-
-                            if (entry.declaration->tagName == QString("phone"))
-                                symbol.phone = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName == QString("operator"))
-                                symbol.oper = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName == QString("brand"))
-                                symbol.brand = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName == QString("wheelchair"))
-                                symbol.wheelchair = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName == QString("opening_hours"))
-                                symbol.openingHours = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName == QString("website"))
-                                symbol.url = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
-                                symbol.desc = entry.value.toString().toNSString();
-                            else if (entry.declaration->tagName.startsWith(QString("fuel:")) && (entry.value.toString() == QString("yes")))
-                            {
-                                [fuelTagsArr addObject:entry.declaration->tagName.right(entry.declaration->tagName.length() - 5).toNSString()];
-                            }
-                            
-                            if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
-                                symbol.desc = entry.value.toString().toNSString();
-                        }
-                        if (fuelTagsArr.count > 0)
-                            symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];
+                        [self processSymbolFields:symbol decodedValues:decodedValues descFieldLoc:descFieldLoc];
                     }
                 }
-                
-                OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
                 
                 for (const auto& ruleId : mapObject->attributeIds)
                 {
@@ -2408,7 +2456,9 @@
             return;
         }
         
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -2682,7 +2732,9 @@
             return;
         }
         
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -2758,8 +2810,10 @@
             return;
         }
 
-        [self updateMyLocationCourseProvider];
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateMyLocationCourseProvider];
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -2771,7 +2825,9 @@
             return;
         }
         
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -2784,7 +2840,9 @@
             return;
         }
         
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -2898,6 +2956,12 @@
         if (_mapObjectsSymbolsProviderGpxRec)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
         _mapObjectsSymbolsProviderGpxRec.reset();
+
+        if (_amenitySymbolsProvider)
+        {
+            [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+            _amenitySymbolsProvider.reset();
+        }
 
         [mapView resetProviderFor:kGpxLayerId];
         [mapView resetProviderFor:kGpxRouteLayerId];
@@ -3057,6 +3121,78 @@
             [mapView setProvider:_rasterMapProvider
                         forLayer:0];
 
+            if (_showPoiOnMap)
+            {
+                auto categoriesFilter = QHash<QString, QStringList>();
+                if (_poiCategoryName && _poiTypeName) {
+                    categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList(QString::fromNSString(_poiTypeName)));
+                } else if (_poiCategoryName) {
+                    categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
+                }
+                
+                OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter = ([self]
+                                                (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
+                                                {
+                                                    bool res = false;
+                                                    
+                                                    if (_poiFilterName)
+                                                    {
+                                                        NSString *category;
+                                                        NSString *type;
+                                                        const auto& decodedCategories = amenity->getDecodedCategories();
+                                                        if (!decodedCategories.isEmpty())
+                                                        {
+                                                            const auto& entry = decodedCategories.first();
+                                                            category = entry.category.toNSString();
+                                                            type = entry.subcategory.toNSString();
+                                                        }
+                                                        
+                                                        if (category && type)
+                                                        {
+                                                            OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
+                                                            if (poiType && [poiType.filter isEqualToString:_poiFilterName])
+                                                                res = true;
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        res = true;
+                                                    }
+                                                    
+                                                    if (res && _poiKeyword)
+                                                    {
+                                                        NSString *name = amenity->nativeName.toNSString();
+
+                                                        NSString *nameLocalized;
+                                                        const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+                                                        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                                                        {
+                                                            if (lang != QString::null && entry.key() == lang)
+                                                                nameLocalized = entry.value().toNSString();
+                                                        }
+                                                        
+                                                        if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
+                                                        {
+                                                            res = true;
+                                                        }
+                                                        else
+                                                        {
+                                                            res = false;
+                                                        }
+
+                                                    }
+                                                    
+                                                    return res;
+                                                });
+                
+                if (categoriesFilter.count() > 0)
+                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+                else
+                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+
+                [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+            }
+
 #if defined(OSMAND_IOS_DEV)
             if (!_hideStaticSymbols)
             {
@@ -3182,6 +3318,52 @@
         if (_app.data.underlayMapSource)
             [self doUpdateUnderlay];
     }
+}
+
+- (void)showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword
+{
+    _showPoiOnMap = YES;
+    _poiCategoryName = category;
+    _poiFilterName = filter;
+    _poiTypeName = type;
+    _poiKeyword = keyword;
+    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self updateCurrentMapSource];
+    });
+}
+
+- (void)hidePoi
+{
+    if (!_showPoiOnMap)
+        return;
+    
+    _showPoiOnMap = NO;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self updateCurrentMapSource];
+    });
+}
+
+- (BOOL)beginWithOrAfterSpace:(NSString *)str text:(NSString *)text
+{
+    return [self beginWith:str text:text] || [self beginWithAfterSpace:str text:text];
+}
+
+- (BOOL)beginWith:(NSString *)str text:(NSString *)text
+{
+    return [[text lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
+}
+
+- (BOOL)beginWithAfterSpace:(NSString *)str text:(NSString *)text
+{
+    NSRange r = [text rangeOfString:@" "];
+    if (r.length == 0 || r.location + 1 >= text.length)
+        return NO;
+    
+    NSString *s = [text substringFromIndex:r.location + 1];
+    return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
 }
 
 - (void)doUpdateOverlay
@@ -4464,7 +4646,9 @@
             return;
         }
 
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -4483,7 +4667,9 @@
             return;
         }
 
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -4502,7 +4688,9 @@
             return;
         }
 
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 
@@ -4518,7 +4706,9 @@
             return;
         }
 
-        [self updateCurrentMapSource];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 

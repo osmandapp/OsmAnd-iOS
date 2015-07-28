@@ -1819,6 +1819,9 @@
 		84BD09001AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
 		84BD09011AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
 		84BD09021AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
+		84BFA3151B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
+		84BFA3161B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
+		84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		84BFC2281A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
 		84BFC2291A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
 		84BFC22A1A989C4600D807B4 /* OAMapSettingsMainScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */; };
@@ -3526,6 +3529,8 @@
 		84BD088D1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_my_data_icon@3x.png"; sourceTree = "<group>"; };
 		84BD088E1AB16174006DA3F7 /* menu_item_settings_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_settings_icon@3x.png"; sourceTree = "<group>"; };
 		84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@3x.png"; sourceTree = "<group>"; };
+		84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACoreResourcesAmenityIconProvider.h; path = Core/OACoreResourcesAmenityIconProvider.h; sourceTree = "<group>"; };
+		84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACoreResourcesAmenityIconProvider.mm; path = Core/OACoreResourcesAmenityIconProvider.mm; sourceTree = "<group>"; };
 		84BFC2261A989C4600D807B4 /* OAMapSettingsMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsMainScreen.h; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.h; sourceTree = "<group>"; };
 		84BFC2271A989C4600D807B4 /* OAMapSettingsMainScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsMainScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.mm; sourceTree = "<group>"; };
 		84BFC22B1A98A31600D807B4 /* OAMapSettingsScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsScreen.h; path = Sources/Controllers/2.0/OAMapSettingsScreen.h; sourceTree = "<group>"; };
@@ -5645,6 +5650,8 @@
 			children = (
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
+				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
+				84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -8112,6 +8119,7 @@
 				3AFEEE7E1A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				84F3A93A1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				845E05D41B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
+				84BFA3151B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				BBE1D2A7190D186F00D90F0A /* main.m in Sources */,
 				BB32C03F1925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				840ED4841B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
@@ -8292,6 +8300,7 @@
 				3AFEEE7F1A0E64DC00900A47 /* OAFavoriteItem.mm in Sources */,
 				84F3A93B1B4EC3C900D16EBC /* MGSwipeButton.m in Sources */,
 				845E05D51B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
+				84BFA3161B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				BBE1D2A8190D186F00D90F0A /* main.m in Sources */,
 				BB32C0401925FAC7007999A0 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				840ED4851B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
@@ -8570,6 +8579,7 @@
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				3AFEEE691A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				BB54F70419890A4100AB40D1 /* OAHUDButton.m in Sources */,
+				84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,

@@ -10,9 +10,16 @@
 
 #include <OsmAndCore/ICoreResourcesProvider.h>
 #include <OsmAndCore/Data/Amenity.h>
+#include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/SkiaUtilities.h>
+#include <SkCGUtils.h>
+#include <SkBitmap.h>
 
 #import <Foundation/Foundation.h>
+#import "OALog.h"
+#import "OAPOIHelper.h"
+#import "OAPOIType.h"
+#import "OAUtilities.h"
 
 OACoreResourcesAmenityIconProvider::OACoreResourcesAmenityIconProvider(
                                                                        const std::shared_ptr<const OsmAnd::ICoreResourcesProvider>& coreResourcesProvider_ /*= getCoreResourcesProvider()*/,
@@ -34,28 +41,30 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
                                                                       const bool largeIcon /*= false*/) const
 {
     const auto& decodedCategories = amenity->getDecodedCategories();
-    
-    const auto& iconPath = QLatin1String("map/icons/");
-    const QLatin1String iconExtension(".png");
-    
     for (const auto& decodedCategory : constOf(decodedCategories))
     {
-        auto icon = coreResourcesProvider->getResourceAsBitmap(
-                                                               iconPath + decodedCategory.subcategory + iconExtension,
-                                                               displayDensityFactor);
-        auto iconBackground = coreResourcesProvider->getResourceAsBitmap(
-                                                               "map/shields/white_orange_poi_shield.png",
-                                                               displayDensityFactor);
-
-        if (!icon)
-        {
-            icon = coreResourcesProvider->getResourceAsBitmap(
-                                                              iconPath + "" + iconExtension, //TODO: resolve poi_type in category by it's subcat and get tag/name
-                                                              displayDensityFactor);
-        }
-        if (!icon)
+        NSString *category = decodedCategory.category.toNSString();
+        NSString *subcategory = decodedCategory.subcategory.toNSString();
+        
+        OAPOIType *type = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:subcategory];
+        
+        if (!type)
             continue;
         
+        UIImage *origIcon = [type mapIcon];
+        if (!origIcon)
+            continue;
+
+        UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
+        
+        auto icon = std::make_shared<SkBitmap>();
+        bool res = SkCreateBitmapFromCGImage(icon.get(), tintedIcon.CGImage);
+        if (!res)
+            continue;
+
+        auto iconBackground = coreResourcesProvider->getResourceAsBitmap(
+                                                                         "map/shields/white_orange_poi_shield.png",
+                                                                         displayDensityFactor);
         if (iconBackground)
         {
             QList< std::shared_ptr<const SkBitmap>> icons;

@@ -444,3 +444,4 @@
 "show_region_on_map_title" = "Kort hentet";
 "show_region_on_map_desc" = "Kort over %@ er hentet. Gå til kortet for at begynde at bruge det.";
 "show_region_on_map_go" = "Gå til kortet";
+"map_settings_hillshade" = "Reliefskygge";

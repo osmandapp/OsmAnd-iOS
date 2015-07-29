@@ -24,15 +24,18 @@
 
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image
 {
-    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-    CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
-    
-    UIGraphicsBeginImageContextWithOptions(newSize, NO, scaleFactor);
-    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
-    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return newImage;
+    @autoreleasepool
+    {
+        CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+        CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
+        
+        UIGraphicsBeginImageContextWithOptions(newSize, NO, scaleFactor);
+        [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+        UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        return newImage;
+    }
 }
 
 + (void)clearTmpDirectory
@@ -264,33 +267,36 @@
 
 + (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color
 {
-    // begin a new image context, to draw our colored image onto with the right scale
-    UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
-    
-    // get a reference to that context we created
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    // set the fill color
-    [color setFill];
-    
-    // translate/flip the graphics context (for transforming from CG* coords to UI* coords
-    CGContextTranslateCTM(context, 0, source.size.height);
-    CGContextScaleCTM(context, 1.0, -1.0);
-    
-    CGContextSetBlendMode(context, kCGBlendModeNormal);
-    CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
-    CGContextDrawImage(context, rect, source.CGImage);
-    
-    CGContextClipToMask(context, rect, source.CGImage);
-    CGContextAddRect(context, rect);
-    CGContextDrawPath(context,kCGPathFill);
-    
-    // generate a new UIImage from the graphics context we drew onto
-    UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    //return the color-burned image
-    return coloredImg;
+    @autoreleasepool
+    {
+        // begin a new image context, to draw our colored image onto with the right scale
+        UIGraphicsBeginImageContextWithOptions(source.size, NO, [UIScreen mainScreen].scale);
+        
+        // get a reference to that context we created
+        CGContextRef context = UIGraphicsGetCurrentContext();
+        
+        // set the fill color
+        [color setFill];
+        
+        // translate/flip the graphics context (for transforming from CG* coords to UI* coords
+        CGContextTranslateCTM(context, 0, source.size.height);
+        CGContextScaleCTM(context, 1.0, -1.0);
+        
+        CGContextSetBlendMode(context, kCGBlendModeNormal);
+        CGRect rect = CGRectMake(0, 0, source.size.width, source.size.height);
+        CGContextDrawImage(context, rect, source.CGImage);
+        
+        CGContextClipToMask(context, rect, source.CGImage);
+        CGContextAddRect(context, rect);
+        CGContextDrawPath(context,kCGPathFill);
+        
+        // generate a new UIImage from the graphics context we drew onto
+        UIImage *coloredImg = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        //return the color-burned image
+        return coloredImg;
+    }
 }
 
 + (NSString *)colorToString:(UIColor *)color

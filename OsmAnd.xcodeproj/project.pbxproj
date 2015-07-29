@@ -2089,6 +2089,9 @@
 		84E442231AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
 		84E442241AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
 		84E442251AF8A07500F87542 /* track_save@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441B01AF8A07500F87542 /* track_save@3x.png */; };
+		84EB6BFA1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */; };
+		84EB6BFB1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */; };
+		84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */; };
 		84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
 		84EE2D961AFB8FA1007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
 		84EE2D971AFB8FAF007C9A94 /* EventKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84EE2D941AFB8F91007C9A94 /* EventKit.framework */; };
@@ -3642,6 +3645,8 @@
 		84E441AE1AF8A07500F87542 /* track_save.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = track_save.png; path = Resources/Icons/track_save.png; sourceTree = "<group>"; };
 		84E441AF1AF8A07500F87542 /* track_save@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@2x.png"; path = "Resources/Icons/track_save@2x.png"; sourceTree = "<group>"; };
 		84E441B01AF8A07500F87542 /* track_save@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_save@3x.png"; path = "Resources/Icons/track_save@3x.png"; sourceTree = "<group>"; };
+		84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHillshadeMapLayerProvider.h; path = Core/OAHillshadeMapLayerProvider.h; sourceTree = "<group>"; };
+		84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHillshadeMapLayerProvider.mm; path = Core/OAHillshadeMapLayerProvider.mm; sourceTree = "<group>"; };
 		84EE2D941AFB8F91007C9A94 /* EventKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = EventKit.framework; path = System/Library/Frameworks/EventKit.framework; sourceTree = SDKROOT; };
 		84EE2D981AFBB6D2007C9A94 /* track_clear_data.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = track_clear_data.png; path = Resources/Icons/track_clear_data.png; sourceTree = "<group>"; };
 		84EE2D991AFBB6D2007C9A94 /* track_clear_data@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "track_clear_data@2x.png"; path = "Resources/Icons/track_clear_data@2x.png"; sourceTree = "<group>"; };
@@ -5652,6 +5657,8 @@
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
 				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
 				84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */,
+				84EB6BF81B68D5C8006D230F /* OAHillshadeMapLayerProvider.h */,
+				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -8242,6 +8249,7 @@
 				84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				3AFEEE961A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BB63335717C4E3DE00903AB1 /* OAUserInteractionPassThroughView.m in Sources */,
+				84EB6BFA1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
 				3AC40AC419DDC476002FBC40 /* OADownloadProgressView.m in Sources */,
 				844499B41AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				3AC6399C1A1CE1FC001D5E57 /* OAIntroViewController.mm in Sources */,
@@ -8423,6 +8431,7 @@
 				84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				3AFEEE971A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				BBAD5BAB1927D7F90043590F /* UITableViewCell+getTableView.m in Sources */,
+				84EB6BFB1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
 				3AC40AC519DDC582002FBC40 /* OADownloadProgressView.m in Sources */,
 				844499B51AAD7CDB00ACA20D /* OAInAppCell.m in Sources */,
 				3AC639A31A1CEB20001D5E57 /* OAIntroViewController.mm in Sources */,
@@ -8562,6 +8571,7 @@
 				84F3A88A1B4C44D300D16EBC /* OAGPXRouter.mm in Sources */,
 				8A7077311A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				BB54F7151989144400AB40D1 /* OANighttimeAppearance.m in Sources */,
+				84EB6BFC1B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm in Sources */,
 				84F3A8981B4D1C0200D16EBC /* OAGPXRouteTableViewCell.mm in Sources */,
 				BB54F70B198913E000AB40D1 /* OAAppearance.m in Sources */,
 				BBA3AF50197FC4BB0039D991 /* OAMapSource.m in Sources */,

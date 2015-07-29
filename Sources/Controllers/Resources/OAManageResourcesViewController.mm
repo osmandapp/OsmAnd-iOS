@@ -683,6 +683,8 @@ static BOOL _lackOfResources;
                     case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::SrtmMapRegion:
                     case OsmAndResourceType::WikiMapRegion:
+                    case OsmAndResourceType::HillshadeRegion:
+                        
                         [typesArray addObject:[NSNumber numberWithInt:(int)resource->type]];
                         break;
                         
@@ -1664,7 +1666,7 @@ static BOOL _lackOfResources;
                     }
                 }
                 
-                if (item.resourceType == OsmAndResourceType::SrtmMapRegion
+                if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
                     && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
                 {
                     disabled = YES;
@@ -1723,7 +1725,7 @@ static BOOL _lackOfResources;
                 }
             }
             
-            if (item.resourceType == OsmAndResourceType::SrtmMapRegion
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion)
                 && (![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm] || (![self.region isInPurchasedArea] && !mapDownloaded)))
             {
                 disabled = YES;

@@ -36,8 +36,10 @@
 #import "OAGpxRoutePoint.h"
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
+#import "OAIAPHelper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
+#include "OAHillshadeMapLayerProvider.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -104,13 +106,15 @@
 #define kScreensToFlyWithAnimation 4.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
+#define kHillshadeOpacity 1.0f
 
 #define kGpxLayerId 9
 #define kGpxRouteLayerId 10
 #define kGpxTempLayerId 11
 #define kGpxRecLayerId 12
-#define kOverlayLayerId 3
-#define kUnderlayLayerId -3
+#define kOverlayLayerId 5
+#define kUnderlayLayerId -5
+#define kHillshadeLayerId 4
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
@@ -131,6 +135,8 @@
     OAAutoObserverProxy* _underlayMapSourceChangeObserver;
     OAAutoObserverProxy* _overlayAlphaChangeObserver;
     OAAutoObserverProxy* _underlayAlphaChangeObserver;
+
+    OAAutoObserverProxy* _hillshadeChangeObserver;
 
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 
@@ -153,6 +159,7 @@
     // Current provider of raster map
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProvider;
 
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _hillshadeMapProvider;
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterOverlayMapProvider;
     std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterUnderlayMapProvider;
 
@@ -326,6 +333,9 @@
 
     _rendererSync = [[NSObject alloc] init];
 
+    _hillshadeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                withHandler:@selector(onHillshadeLayerChanged)
+                                                                 andObserve:_app.data.hillshadeChangeObservable];
     _overlayMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onOverlayLayerChanged)
                                                               andObserve:_app.data.overlayMapSourceChangeObservable];
@@ -2972,6 +2982,8 @@
         // Release previously-used resources (if any)
         _rasterMapProvider.reset();
 
+        _hillshadeMapProvider.reset();
+
         _rasterOverlayMapProvider.reset();
         _rasterUnderlayMapProvider.reset();
 
@@ -3015,6 +3027,7 @@
         [mapView resetProviderFor:kGpxTempLayerId];
         [mapView resetProviderFor:kGpxRecLayerId];
 
+        [mapView resetProviderFor:kHillshadeLayerId];
         [mapView resetProviderFor:kOverlayLayerId];
         [mapView resetProviderFor:kUnderlayLayerId];
 
@@ -3359,6 +3372,9 @@
         });
         
         
+        if (_app.data.hillshade)
+            [self doUpdateHillshade];
+
         if (_app.data.overlayMapSource)
             [self doUpdateOverlay];
         
@@ -3411,6 +3427,21 @@
     
     NSString *s = [text substringFromIndex:r.location + 1];
     return [[s lowercaseStringWithLocale:[NSLocale currentLocale]] hasPrefix:[str lowercaseStringWithLocale:[NSLocale currentLocale]]];
+}
+
+- (void)doUpdateHillshade
+{
+    if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+    {
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        _hillshadeMapProvider = std::make_shared<OAHillshadeMapLayerProvider>();
+        [mapView setProvider:_hillshadeMapProvider forLayer:kHillshadeLayerId];
+        
+        OsmAnd::MapLayerConfiguration config;
+        config.setOpacityFactor(kHillshadeOpacity);
+        [mapView setMapLayerConfiguration:kHillshadeLayerId configuration:config forcedUpdate:NO];
+    }
 }
 
 - (void)doUpdateOverlay
@@ -3513,11 +3544,34 @@
     });
 }
 
+- (void)onHillshadeLayerChanged
+{
+    [self updateHillshadeLayer];
+}
+
+- (void)updateHillshadeLayer
+{
+    if (![self isViewLoaded])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        if (_app.data.hillshade)
+        {
+            [self doUpdateHillshade];
+            
+        } else {
+            [mapView resetProviderFor:kHillshadeLayerId];
+            _hillshadeMapProvider.reset();
+        }
+    }
+}
+
 - (void)onOverlayLayerChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateOverlayLayer];
-    });
+    [self updateOverlayLayer];
 }
 
 - (void)updateOverlayLayer
@@ -3529,10 +3583,12 @@
     
     @synchronized(_rendererSync)
     {
-        if (_app.data.overlayMapSource) {
+        if (_app.data.overlayMapSource)
+        {
             [self doUpdateOverlay];
-            
-        } else {
+        }
+        else
+        {
             [mapView resetProviderFor:kOverlayLayerId];
             _rasterOverlayMapProvider.reset();
         }
@@ -3560,9 +3616,7 @@
 
 - (void)onUnderlayLayerChanged
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateUnderlayLayer];
-    });
+    [self updateUnderlayLayer];
 }
 
 - (void)updateUnderlayLayer
@@ -3574,10 +3628,12 @@
     
     @synchronized(_rendererSync)
     {
-        if (_app.data.underlayMapSource) {
+        if (_app.data.underlayMapSource)
+        {
             [self doUpdateUnderlay];
-            
-        } else {
+        }
+        else
+        {
             OsmAnd::MapLayerConfiguration config;
             config.setOpacityFactor(_app.data.underlayAlpha);
             [mapView setMapLayerConfiguration:1.0 configuration:config forcedUpdate:NO];

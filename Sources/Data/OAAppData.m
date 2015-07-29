@@ -36,6 +36,7 @@
     _overlayAlphaChangeObservable = [[OAObservable alloc] init];
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
+    _hillshadeChangeObservable = [[OAObservable alloc] init];
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
     _destinationRemoveObservable = [[OAObservable alloc] init];
@@ -119,6 +120,7 @@
 @synthesize underlayAlphaChangeObservable = _underlayAlphaChangeObservable;
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
+@synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
 
 @synthesize overlayMapSource = _overlayMapSource;
 
@@ -179,6 +181,25 @@
     }
 }
 
+@synthesize hillshade = _hillshade;
+
+- (BOOL)hillshade
+{
+    @synchronized(_lock)
+    {
+        return _hillshade;
+    }
+}
+
+- (void)setHillshade:(BOOL)hillshade
+{
+    @synchronized(_lock)
+    {
+        _hillshade = hillshade;
+        [_hillshadeChangeObservable notifyEventWithKey:self andValue:[NSNumber numberWithBool:_hillshade]];
+    }
+}
+
 @synthesize mapLastViewedState = _mapLastViewedState;
 @synthesize mapLayersConfiguration = _mapLayersConfiguration;
 
@@ -219,6 +240,8 @@
 #define kOverlayAlpha @"overlay_alpha"
 #define kUnderlayAlpha @"underlay_alpha"
 
+#define kHillshade @"hillshade"
+
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
     [aCoder encodeObject:_lastMapSource forKey:kLastMapSource];
@@ -231,6 +254,8 @@
     [aCoder encodeObject:_underlayMapSource forKey:kUnderlayMapSource];
     [aCoder encodeObject:[NSNumber numberWithDouble:_overlayAlpha] forKey:kOverlayAlpha];
     [aCoder encodeObject:[NSNumber numberWithDouble:_underlayAlpha] forKey:kUnderlayAlpha];
+
+    [aCoder encodeObject:[NSNumber numberWithBool:_hillshade] forKey:kHillshade];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -248,6 +273,8 @@
         _underlayMapSource = [aDecoder decodeObjectForKey:kUnderlayMapSource];
         _overlayAlpha = [[aDecoder decodeObjectForKey:kOverlayAlpha] doubleValue];
         _underlayAlpha = [[aDecoder decodeObjectForKey:kUnderlayAlpha] doubleValue];
+
+        _hillshade = [[aDecoder decodeObjectForKey:kHillshade] boolValue];
 
         [self safeInit];
     }

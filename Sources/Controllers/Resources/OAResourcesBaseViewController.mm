@@ -251,8 +251,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         //case OsmAndResourceType::RoadMapRegion:
         case OsmAndResourceType::SrtmMapRegion:
         case OsmAndResourceType::WikiMapRegion:
-        //case OsmAndResourceType::HillshadeRegion:
-
+        case OsmAndResourceType::HillshadeRegion:
+            
             if ([region.subregions count] > 0)
             {
                 if (!includeRegionName || region == nil)
@@ -775,7 +775,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             RepositoryResourceItem* item = (RepositoryResourceItem*)item_;
             
-            if (item.resourceType == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+            if ((item.resourceType == OsmAndResourceType::SrtmMapRegion || item.resourceType == OsmAndResourceType::HillshadeRegion) && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
             {
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
             }

@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import "OASavingTrackHelper.h"
 #import "OAAppSettings.h"
+#import "OAIAPHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -195,19 +196,27 @@
     }
 
     
-    NSArray *arrOverlayUnderlay = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
-                                      @"cells": @[
-                                              @{@"name": OALocalizedString(@"map_settings_over"),
-                                                @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : OALocalizedString(@"map_settings_none"),
-                                                @"type": @"OASettingsCell"},
-                                              @{@"name": OALocalizedString(@"map_settings_under"),
-                                                @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : OALocalizedString(@"map_settings_none"),
-                                                @"type": @"OASettingsCell"}
-                                              ]
-                                      }
-                                    ];
+    NSMutableArray *arrOverlayUnderlay = [NSMutableArray array];
+    
+    if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+    {
+        [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_hillshade"),
+                                    @"value": @"",
+                                    @"type": @"OASwitchCell"}];
+    }
+    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
+                                    @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : OALocalizedString(@"map_settings_none"),
+                                    @"type": @"OASettingsCell"}];
+    [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
+                                    @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : OALocalizedString(@"map_settings_none"),
+                                    @"type": @"OASettingsCell"}];
 
-    tableData = [tableData arrayByAddingObjectsFromArray:arrOverlayUnderlay];
+    NSArray *arrOverlayUnderlaySection = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),
+                                             @"cells": arrOverlayUnderlay,
+                                             }
+                                           ];
+
+    tableData = [tableData arrayByAddingObjectsFromArray:arrOverlayUnderlaySection];
 
     NSString *languageValue = [self getMapLangValueStr];
     NSArray *arrayLanguage = @[@{@"groupName" : OALocalizedString(@"language"),
@@ -303,6 +312,11 @@
                 [cell.switchView setOn:settings.mapSettingShowFavorites];
                 [cell.switchView addTarget:self action:@selector(showFavoriteChanged:) forControlEvents:UIControlEventValueChanged];
             }
+            else // hillshade
+            {
+                [cell.switchView setOn:[OsmAndApp instance].data.hillshade];
+                [cell.switchView addTarget:self action:@selector(hillshadeChanged:) forControlEvents:UIControlEventValueChanged];
+            }
             
         }
         outCell = cell;
@@ -311,12 +325,18 @@
     return outCell;
 }
 
+- (void)hillshadeChanged:(id)sender
+{
+    UISwitch *switchView = (UISwitch*)sender;
+    if (switchView)
+        [[OsmAndApp instance].data setHillshade:switchView.isOn];
+}
+
 - (void)showFavoriteChanged:(id)sender
 {
     UISwitch *switchView = (UISwitch*)sender;
-    if (switchView) {
+    if (switchView)
         [settings setMapSettingShowFavorites:switchView.isOn];
-    }
 }
 
 #pragma mark - UITableViewDelegate
@@ -385,12 +405,14 @@
         }
         case 3:
         {
-            if (indexPath.row == 0) {
+            NSInteger index = 0;
+            if ([[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
+                index++;
+            
+            if (indexPath.row == index)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenOverlay];
-                
-            } else {
+            else if (indexPath.row == index + 1)
                 mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenUnderlay];
-            }
             
             break;
         }

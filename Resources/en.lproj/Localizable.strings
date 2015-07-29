@@ -140,6 +140,7 @@
 "map_settings_online" = "Online maps";
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
+"map_settings_hillshade" = "Hillshade";
 
 // Intro
 "intro_skip" = "Skip";

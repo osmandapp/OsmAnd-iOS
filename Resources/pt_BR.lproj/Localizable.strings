@@ -444,3 +444,4 @@
 "show_region_on_map_title" = "Mapa baixado";
 "show_region_on_map_desc" = "Mapa de %@ foi baixado. Vá para o mapa para começar a usá-lo.";
 "show_region_on_map_go" = "Vá para o mapa";
+"map_settings_hillshade" = "Sombra de relevo";

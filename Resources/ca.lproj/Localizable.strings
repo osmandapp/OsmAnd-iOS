@@ -439,3 +439,8 @@
 "plugin_popup_nautical_desc" = "Primer baixeu els mapes nàutics.\nDesprès aneu a la <b>Configuració del mapa</b> <b>Tipus de mapa</b> i activeu l'estil <b>Nàutic</b>";
 "plugin_popup_trip_planning_ask" = "Per començar a planificar el trajecte cal activar el connector: <b>Planificació de trajectes</b>";
 "no_statistics" = "No hi ha estadístiques";
+"no_internet_avail" = "No hi ha connexió a internet disponible";
+"no_internet_avail_desc_first" = "Connecteu-vos a internet per baixar la llista de mapes";
+"show_region_on_map_title" = "Mapa baixat";
+"show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
+"show_region_on_map_go" = "Ves al mapa";

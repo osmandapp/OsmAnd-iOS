@@ -444,3 +444,4 @@
 "show_region_on_map_title" = "Mapa baixat";
 "show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
 "show_region_on_map_go" = "Ves al mapa";
+"map_settings_hillshade" = "Ombrejat del relleu";

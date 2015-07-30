@@ -444,3 +444,4 @@
 "show_region_on_map_title" = "地圖已下載";
 "show_region_on_map_desc" = "已下載 %@ 地圖。 轉到地圖開始使用。";
 "show_region_on_map_go" = "轉到地圖";
+"map_settings_hillshade" = "地形陰影";

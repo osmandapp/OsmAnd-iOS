@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 UIKIT_EXTERN NSString *const OAResourceInstalledNotification;
+UIKIT_EXTERN NSString *const OAResourceInstallationFailedNotification;
 
 @interface OAResourcesInstaller : NSObject
 

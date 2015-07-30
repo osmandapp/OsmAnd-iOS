@@ -17,6 +17,7 @@
 #import "OAPluginPopupViewController.h"
 
 NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotification";
+NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallationFailedNotification";
 
 
 @implementation OAResourcesInstaller
@@ -176,6 +177,9 @@ NSString *const OAResourceInstalledNotification = @"OAResourceInstalledNotificat
                                                    error:nil];
         
         OALog(@"Install/update of %@ %@", nsResourceId, success ? @"successful" : @"failed");
+        
+        if (!success)
+            [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstallationFailedNotification object:nsResourceId userInfo:nil];
         
         // Start next resource download task if such exists
         if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)

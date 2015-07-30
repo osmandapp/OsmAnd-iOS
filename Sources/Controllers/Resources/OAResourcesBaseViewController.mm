@@ -118,6 +118,30 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return self;
 }
 
+-(void)dealloc
+{
+    if (_downloadTaskProgressObserver)
+    {
+        [_downloadTaskProgressObserver detach];
+        _downloadTaskProgressObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_repositoryUpdatedObserver)
+    {
+        [_repositoryUpdatedObserver detach];
+        _repositoryUpdatedObserver = nil;
+    }
+}
+
 @synthesize resourceItemsComparator = _resourceItemsComparator;
 
 -(void)applyLocalization

@@ -15,6 +15,7 @@
 @implementation OADownloadTask_AFURLSessionManager
 {
     OADownloadsManager* __weak _owner;
+    NSProgress* _progress;
 }
 
 - (instancetype)initUsingManager:(AFURLSessionManager*)manager
@@ -41,7 +42,9 @@
                                completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
                                    [self onCompletedWith:response andStoredAt:filePath withError:error];
                                }];
-        [progress addObserver:self
+        
+        _progress = progress;
+        [_progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
                       options:NSKeyValueObservingOptionInitial
                       context:nil];
@@ -94,7 +97,8 @@
 
         _task = task;
 
-        [progress addObserver:self
+        _progress = progress;
+        [_progress addObserver:self
                    forKeyPath:NSStringFromSelector(@selector(fractionCompleted))
                       options:NSKeyValueObservingOptionInitial
                       context:nil];
@@ -117,6 +121,8 @@
 
 - (void)deinit
 {
+    if (_progress)
+        [_progress removeObserver:self forKeyPath:NSStringFromSelector(@selector(fractionCompleted))];
 }
 
 @synthesize task = _task;

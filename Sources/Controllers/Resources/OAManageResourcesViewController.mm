@@ -295,6 +295,7 @@ static BOOL _lackOfResources;
     [self.tableView reloadData];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstalled:) name:OAResourceInstalledNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
@@ -509,8 +510,8 @@ static BOOL _lackOfResources;
     [_bannerView setNeedsDisplay];
 }
 
-- (void)resourceInstalled:(NSNotification *)notification {
-    
+- (void)resourceInstalled:(NSNotification *)notification
+{
     NSString * resourceId = notification.object;
     OAWorldRegion* match = [OAResourcesBaseViewController findRegionOrAnySubregionOf:_app.worldRegion
                                                                 thatContainsResource:QString([resourceId UTF8String])];
@@ -531,6 +532,13 @@ static BOOL _lackOfResources;
     
     if ((!match || ![match isInPurchasedArea]) && resourceType == OsmAndResourceType::MapRegion)
         [OAIAPHelper decreaseFreeMapsCount];
+}
+
+- (void)resourceInstallationFailed:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateContent];
+    });
 }
 
 - (void)updateContent

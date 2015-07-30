@@ -136,7 +136,8 @@
         [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
         {
             NSUInteger index = [_app.data.destinations indexOfObject:destination];
-            ((OADestination *)_app.data.destinations[index]).index = idx;
+            if (index != NSNotFound)
+                ((OADestination *)_app.data.destinations[index]).index = idx;
         }];
     }
 }

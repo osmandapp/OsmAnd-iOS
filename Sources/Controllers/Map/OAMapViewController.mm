@@ -2388,7 +2388,7 @@
                                                           kQuickAnimationTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                           kUserInteractionAnimationKey);
-                        if (mapView.zoom < 15.0)
+                        if (mapView.zoom < kGoToMyLocationZoom)
                             mapView.animator->animateZoomTo(kGoToMyLocationZoom,
                                                           kQuickAnimationTime,
                                                           OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
@@ -2397,7 +2397,7 @@
                     else
                     {
                         [mapView setTarget31:newTarget31];
-                        if (mapView.zoom < 15.0)
+                        if (mapView.zoom < kGoToMyLocationZoom)
                             [mapView setZoom:kGoToMyLocationZoom];
                     }
                 }

@@ -902,7 +902,9 @@ static BOOL _lackOfResources;
     // Local Resources
     _totalInstalledSize = 0;
     for (const auto& resource : _localResources)
-    {        
+    {
+        //NSLog(@"=== %@", resource->id.toNSString());
+        
         OAWorldRegion* match = [OAManageResourcesViewController findRegionOrAnySubregionOf:self.region
                                                                       thatContainsResource:resource->id];
         

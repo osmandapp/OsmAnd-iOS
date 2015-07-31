@@ -238,7 +238,7 @@
 - (BOOL)exists:(int)x y:(int)y zoom:(int)zoom
 {
     BOOL __block res = NO;
-    long time = [[NSDate date] timeIntervalSince1970] * 1000;
+    long long time = [[NSDate date] timeIntervalSince1970] * 1000.0;
     
     int z = [self getFileZoom:zoom];
     
@@ -263,8 +263,8 @@
         }
     });
     
-    if (!res)
-        NSLog(@"Checking tile existance x = %d y = %d z = %d for %ld ms", x, y, zoom, (long)([[NSDate date] timeIntervalSince1970] * 1000 - time));
+    //if (!res)
+    //    NSLog(@"Checking tile existance x = %d y = %d z = %d for %lld ms", x, y, zoom, (long long)([[NSDate date] timeIntervalSince1970] * 1000.0 - time));
     
     return res;
 }
@@ -292,7 +292,7 @@
 - (NSData* )getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
 {
     NSData* __block res;
-    long ts = [[NSDate date] timeIntervalSince1970] * 1000;
+    long long ts = [[NSDate date] timeIntervalSince1970] * 1000.0;
 
     dispatch_sync(_dbQueue, ^{
         
@@ -327,8 +327,8 @@
         }
     });
     
-    if (!res)
-        NSLog(@"Load tile %d %d %d for %ld ms", x, y, zoom, (long)([[NSDate date] timeIntervalSince1970] * 1000 - ts));
+    //if (!res)
+    //    NSLog(@"Load tile %d %d %d for %lld ms", x, y, zoom, (long long)([[NSDate date] timeIntervalSince1970] * 1000.0 - ts));
 
     return res;
 }
@@ -451,7 +451,7 @@
 
             sqlite3_bind_blob(statement, 5, [data bytes], data.length, SQLITE_TRANSIENT);
             if (_timeSupported)
-                sqlite3_bind_int64(statement, 6, (int64_t)([[NSDate date] timeIntervalSince1970] * 1000));
+                sqlite3_bind_int64(statement, 6, (int64_t)([[NSDate date] timeIntervalSince1970] * 1000.0));
             
             sqlite3_step(statement);
             sqlite3_finalize(statement);

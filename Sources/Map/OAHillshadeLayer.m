@@ -127,7 +127,7 @@ const static int ZOOM_BOUNDARY = 15;
                     
                     sqlite3_prepare_v2(db, update_stmt, -1, &statement, NULL);
                     sqlite3_bind_text(statement, 1, [filename UTF8String], -1, SQLITE_TRANSIENT);
-                    sqlite3_bind_int(statement, 2, [[fileModified objectForKey:filename] intValue]);
+                    sqlite3_bind_int64(statement, 2, [[fileModified objectForKey:filename] longLongValue]);
                     sqlite3_bind_int(statement, 3, (int)rt.left);
                     sqlite3_bind_int(statement, 4, (int) rt.right);
                     sqlite3_bind_int(statement, 5, (int)rt.top);
@@ -164,10 +164,10 @@ const static int ZOOM_BOUNDARY = 15;
                 NSString *filename;
                 if (sqlite3_column_text(statement, 0) != nil)
                     filename = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
-                long lastModified = (long)sqlite3_column_int(statement, 1);
+                long long lastModified = (long long)sqlite3_column_int64(statement, 1);
                 NSNumber *read = [fileModified objectForKey:filename];
                 
-                if([rs objectForKey:filename] && read && lastModified == [read longValue])
+                if([rs objectForKey:filename] && read && lastModified == [read longLongValue])
                 {
                     int left = sqlite3_column_int(statement, 2);
                     int right = sqlite3_column_int(statement, 3);
@@ -199,13 +199,13 @@ const static int ZOOM_BOUNDARY = 15;
             if (!error)
             {
                 NSString *fileName = [f lastPathComponent];
-                NSString *ext = [f pathExtension];
-                if([ext isEqualToString:@"sqlitedb"] &&
-                   [[[fileName substringToIndex:9] lowercaseString] isEqualToString:@"hillshade"])
+                NSString *ext = [[f pathExtension] lowercaseString];
+                NSString *type = [[[f stringByDeletingPathExtension] pathExtension] lowercaseString];
+                if([ext isEqualToString:@"sqlitedb"] && [type isEqualToString:@"hillshade"])
                 {
                     OASQLiteTileSource *ts = [[OASQLiteTileSource alloc] initWithFilePath:f];
                     [rs setObject:ts forKey:fileName];
-                    [fileModified setObject:[NSNumber numberWithInt:[fileDate timeIntervalSince1970] * 1000] forKey:fileName];
+                    [fileModified setObject:[NSNumber numberWithLongLong:[fileDate timeIntervalSince1970] * 1000.0] forKey:fileName];
                 }
             }
         }

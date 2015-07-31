@@ -632,7 +632,7 @@ typedef enum
         _dataPoiArray.count +
         (_currentScope != EPOIScopeUndefined && _searchRadiusIndex <= _searchRadiusIndexMax ? 1 : 0) +
         (_currentScope == EPOIScopeUndefined && _showTopList ? 1 : 0) +
-        (_poiInList && _dataPoiArray.count > 0 ? 1 : 0) +
+        (_poiInList && _dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined ? 1 : 0) +
         (_showCoordinates ? 1 : 0);
 }
 
@@ -641,7 +641,7 @@ typedef enum
 {
     NSInteger row = indexPath.row;
 
-    if (_poiInList && _dataPoiArray.count > 0)
+    if (_poiInList && _dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined)
     {
         if (row == 0)
         {
@@ -655,12 +655,16 @@ typedef enum
             
             if (cell)
             {
+                cell.contentView.backgroundColor = UIColorFromRGB(0xe6870b);
+                cell.arrowIconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"menu_cell_pointer.png"] color:[UIColor whiteColor]];
+                cell.iconView.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"waypoint_map_disable.png"] color:[UIColor whiteColor]];
+                
                 CGRect f = cell.textView.frame;
                 f.origin.y = 14.0;
                 cell.textView.frame = f;
                 
                 [cell.textView setText:OALocalizedString(@"map_settings_show")];
-                [cell.iconView setImage: nil];
+                [cell.textView setTextColor:[UIColor whiteColor]];
             }
             return cell;
         }
@@ -742,6 +746,10 @@ typedef enum
             
             if (cell)
             {
+                cell.contentView.backgroundColor = [UIColor whiteColor];
+                cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
+                [cell.textView setTextColor:[UIColor blackColor]];
+
                 CGRect f = cell.textView.frame;
                 f.origin.y = 14.0;
                 cell.textView.frame = f;
@@ -896,6 +904,10 @@ typedef enum
         
         if (cell)
         {
+            cell.contentView.backgroundColor = [UIColor whiteColor];
+            cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
+            [cell.textView setTextColor:[UIColor blackColor]];
+
             OAPOICategory* item = obj;
             
             CGRect f = cell.textView.frame;
@@ -972,7 +984,7 @@ typedef enum
     
     int row = indexPath.row;
 
-    if (_poiInList && _dataPoiArray.count > 0)
+    if (_poiInList && _dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined)
     {
         if (row == 0)
         {

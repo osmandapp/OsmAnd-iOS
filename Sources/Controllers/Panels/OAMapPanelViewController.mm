@@ -601,7 +601,7 @@ typedef enum
     }
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
     {
-        [_app.data.lastMapSourceChangeObservable notifyEvent];
+        [_app.data.mapLayerChangeObservable notifyEvent];
     }
 }
 

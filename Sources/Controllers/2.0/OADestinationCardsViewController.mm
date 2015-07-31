@@ -28,7 +28,7 @@
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 
-@interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate>
+@interface OADestinationCardsViewController () <MGSwipeTableCellDelegate, OADestinationCardBaseControllerDelegate, UIGestureRecognizerDelegate>
 
 @end
 
@@ -150,6 +150,11 @@
     [super viewDidLoad];
     
     //self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
+    
+    UITapGestureRecognizer *tapRec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapOutsideCells)];
+    tapRec.delegate = self;
+    
+    [self.tableView addGestureRecognizer:tapRec];
 }
 
 -(void)willRotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation duration:(NSTimeInterval)duration
@@ -220,6 +225,10 @@
         [self.tableView reloadData];
 }
 
+- (void)tapOutsideCells
+{
+    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -289,6 +298,11 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     return 50.0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 0.01;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -371,6 +385,14 @@
     
     if (_sections.count == 0)
         [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+}
+
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    return [touch.view isKindOfClass:[UITableView class]];
 }
 
 @end

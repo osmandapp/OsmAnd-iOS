@@ -300,7 +300,7 @@
         {
             if (zoom <= _maxZoom)
             {
-                BOOL queryTime = (*timeHolder && _timeSupported);
+                BOOL queryTime = (timeHolder && _timeSupported);
 
                 NSString *querySQL = [NSString stringWithFormat:@"SELECT image%@  FROM tiles WHERE x = %d AND y = %d AND z = %d", (queryTime ? @", time" : @""), x, y, [self getFileZoom:zoom]];
                 sqlite3_stmt *statement;

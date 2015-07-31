@@ -29,6 +29,9 @@
 
 @property (nonatomic) BOOL hillshade;
 @property(readonly) OAObservable* hillshadeChangeObservable;
+@property(readonly) OAObservable* hillshadeResourcesChangeObservable;
+
+@property(readonly) OAObservable* mapLayerChangeObservable;
 
 @property(readonly) OAObservable* lastMapSourceChangeObservable;
 - (OAMapSource*)lastMapSourceByResourceId:(NSString*)resourceId;

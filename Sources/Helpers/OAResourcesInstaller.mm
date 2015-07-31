@@ -116,6 +116,9 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                     // Set NSURLIsExcludedFromBackupKey for installed resource
                     if (const auto resource = std::dynamic_pointer_cast<const OsmAnd::ResourcesManager::LocalResource>(_app.resourcesManager->getResource(resourceId)))
                     {
+                        if([[localPath pathExtension] isEqualToString:@"sqlitedb"] &&
+                           [[[localPath substringToIndex:9] lowercaseString] isEqualToString:@"hillshade"])                        [_app.data.hillshadeResourcesChangeObservable notifyEvent];
+                        
                         NSURL *url = [NSURL fileURLWithPath:resource->localPath.toNSString()];
                         BOOL res = [url setResourceValue:@(YES) forKey:NSURLIsExcludedFromBackupKey error:nil];
                         OALog(@"Set (%@) NSURLIsExcludedFromBackupKey for %@", (res ? @"OK" : @"FAILED"), resource->localPath.toNSString());

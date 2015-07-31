@@ -29,6 +29,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAGPXRouter.h"
+#import "OAHillshadeLayer.h"
 
 #include <algorithm>
 
@@ -312,6 +313,8 @@
     
     // Init gpx router
     [OAGPXRouter sharedInstance];
+    
+    [OAHillshadeLayer sharedInstance];
     
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     

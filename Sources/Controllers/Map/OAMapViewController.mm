@@ -137,6 +137,7 @@
     OAAutoObserverProxy* _underlayAlphaChangeObserver;
 
     OAAutoObserverProxy* _hillshadeChangeObserver;
+    OAAutoObserverProxy* _mapLayerChangeObserver;
 
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
 
@@ -348,6 +349,10 @@
     _underlayAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onUnderlayLayerAlphaChanged)
                                                               andObserve:_app.data.underlayAlphaChangeObservable];
+
+    _mapLayerChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onMapLayerChanged)
+                                                              andObserve:_app.data.mapLayerChangeObservable];
 
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
@@ -2856,6 +2861,21 @@
     
     if (!self.minimap)
         [self showRecGpxTrack];
+}
+
+- (void)onMapLayerChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _mapSourceInvalidated = YES;
+            return;
+        }
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
+    });
 }
 
 - (void)onLastMapSourceChanged

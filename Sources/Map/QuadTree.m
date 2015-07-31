@@ -95,7 +95,7 @@
 
 - (void)queryNode:(QuadRect *)box result:(NSMutableArray *)result node:(Node *)node
 {
-    if (node)
+    if (node && [node isKindOfClass:[Node class]])
     {
         if ([QuadRect intersects:box b:node.bounds])
         {

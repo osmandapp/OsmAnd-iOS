@@ -37,6 +37,8 @@
     _underlayMapSourceChangeObservable = [[OAObservable alloc] init];
     _underlayAlphaChangeObservable = [[OAObservable alloc] init];
     _hillshadeChangeObservable = [[OAObservable alloc] init];
+    _hillshadeResourcesChangeObservable = [[OAObservable alloc] init];
+    _mapLayerChangeObservable = [[OAObservable alloc] init];
 
     _destinationsChangeObservable = [[OAObservable alloc] init];
     _destinationRemoveObservable = [[OAObservable alloc] init];
@@ -121,6 +123,8 @@
 @synthesize destinationsChangeObservable = _destinationsChangeObservable;
 @synthesize destinationRemoveObservable = _destinationRemoveObservable;
 @synthesize hillshadeChangeObservable = _hillshadeChangeObservable;
+@synthesize hillshadeResourcesChangeObservable = _hillshadeResourcesChangeObservable;
+@synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 
 @synthesize overlayMapSource = _overlayMapSource;
 

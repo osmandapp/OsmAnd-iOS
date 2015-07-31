@@ -238,7 +238,7 @@
 - (BOOL)exists:(int)x y:(int)y zoom:(int)zoom
 {
     BOOL __block res = NO;
-    long long time = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    //long long time = [[NSDate date] timeIntervalSince1970] * 1000.0;
     
     int z = [self getFileZoom:zoom];
     
@@ -292,7 +292,7 @@
 - (NSData* )getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder
 {
     NSData* __block res;
-    long long ts = [[NSDate date] timeIntervalSince1970] * 1000.0;
+    //long long ts = [[NSDate date] timeIntervalSince1970] * 1000.0;
 
     dispatch_sync(_dbQueue, ^{
         

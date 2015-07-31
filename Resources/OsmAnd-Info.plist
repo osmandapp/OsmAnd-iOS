@@ -20,6 +20,29 @@
 				<string>net.osmand.gpx</string>
 			</array>
 		</dict>
+        <dict>
+            <key>CFBundleTypeName</key>
+            <string>Map Creator SQLite Database</string>
+            <key>CFBundleTypeIconFiles</key>
+            <array/>
+            <key>CFBundleTypeExtensions</key>
+            <array>
+                <string>sqlitedb</string>
+            </array>
+            <key>CFBundleTypeMIMETypes</key>
+            <array>
+                <string>application/x-sqlite3</string>
+                <string>application/octet-stream</string>
+            </array>
+            <key>LSHandlerRank</key>
+            <string>Alternate</string>
+            <key>LSItemContentTypes</key>
+            <array>
+                <string>net.osmand.sqlitedb</string>
+            </array>
+            <key>NSPersistentStoreTypeKey</key>
+            <string>SQLite</string>
+        </dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -113,6 +136,29 @@
 				<string>application/gpx+xml</string>
 			</dict>
 		</dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>net.osmand.sqlitedb</string>
+            <key>UTTypeDescription</key>
+            <string>Map Creator SQLite Database</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.database</string>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sqlitedb</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/x-sqlite3</string>
+                    <string>application/octet-stream</string>
+                </array>
+            </dict>
+        </dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
@@ -136,6 +182,29 @@
 				<string>application/gpx+xml</string>
 			</dict>
 		</dict>
+        <dict>
+            <key>UTTypeIdentifier</key>
+            <string>net.osmand.sqlitedb</string>
+            <key>UTTypeDescription</key>
+            <string>Map Creator SQLite Database</string>
+            <key>UTTypeConformsTo</key>
+            <array>
+                <string>public.database</string>
+                <string>public.data</string>
+            </array>
+            <key>UTTypeTagSpecification</key>
+            <dict>
+                <key>public.filename-extension</key>
+                <array>
+                    <string>sqlitedb</string>
+                </array>
+                <key>public.mime-type</key>
+                <array>
+                    <string>application/x-sqlite3</string>
+                    <string>application/octet-stream</string>
+                </array>
+            </dict>
+        </dict>
 	</array>
 </dict>
 </plist>

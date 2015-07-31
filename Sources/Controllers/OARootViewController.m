@@ -20,6 +20,7 @@
 #import "OANavigationController.h"
 #import "OAOptionsPanelBlackViewController.h"
 #import "OAGPXListViewController.h"
+#import "OAMapCreatorHelper.h"
 
 #import "Localization.h"
 
@@ -277,81 +278,112 @@
      */
 }
 
+- (void)sqliteDbImportedAlert
+{
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file has been imported. Open Map Settings and activate it via Overlay/Underlay" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+}
+
+- (void)sqliteDbImportFailedAlert
+{
+    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file import failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
+}
+
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
+    NSString *path = url.path;
+    NSString *fileName = [url.path lastPathComponent];
+    NSString *ext = [[path pathExtension] lowercaseString];
     
-    [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
-                                message:OALocalizedString(@"import_choose_type")
-                       cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
-                                                             action:^{
-                                                             }]
-                       otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"import_favorite")
-                                                             action:^{
-                                                                 
-                                                                 UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-                                                                 if (incomingURLViewController == nil)
-                                                                     return;
-                                                                 
-                                                                 if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
-                                                                 {
-                                                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                                                         
-                                                                         [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
-                                                                                                              
-                                                                     });
+    if ([ext isEqualToString:@"sqlitedb"])
+    {
+        NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];
+        if (newFileName)
+        {
+            [[[UIAlertView alloc] initWithTitle:@"" message:@"File already exists"
+                cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
+                                    action:^{
+                                    }]
+                otherButtonItems:[RIButtonItem itemWithLabel:@"Replace"
+                                    action:^{
+                                        [self sqliteDbImportedAlert];
+                                    }],
+                                 [RIButtonItem itemWithLabel:@"Add new"
+                                    action:^{
+                                        [self sqliteDbImportedAlert];
+                                    }],
+                nil] show];
+        }
+        else
+        {
+            if ([[OAMapCreatorHelper sharedInstance] installFile:path])
+                [self sqliteDbImportedAlert];
+            else
+                [self sqliteDbImportFailedAlert];
+        }
+        
+        [self.navigationController popToRootViewControllerAnimated:NO];
+
+        return YES;
+    }
+    else
+    {
+        [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title")
+                                    message:OALocalizedString(@"import_choose_type")
+                           cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
+                                                                 action:^{
+                                                                 }]
+                           otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"import_favorite")
+                                                                 action:^{
                                                                      
-                                                                     incomingURLViewController = nil;
-                                                                     return;
-                                                                 }
-
-                                                                 [self closeMenuAndPanelsAnimated:NO];
-                                                                 
-                                                                 // Open incoming-URL view controller as menu
-                                                                 [self openMenu:incomingURLViewController
-                                                                       fromRect:CGRectZero
-                                                                         inView:self.view
-                                                                       ofParent:self
-                                                                       animated:YES];
-                                                                 
-                                                             }],
-      
-                       [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
-                                                             action:^{
-                                                                 
-                                                                 UIViewController* incomingURLViewController = [[OAGPXListViewController alloc] initWithImportGPXItem:url];
-                                                                 if (incomingURLViewController == nil)
-                                                                     return;
-                                                                 
-                                                                 [self closeMenuAndPanelsAnimated:NO];
-                                                                 
-                                                                 // Open incoming-URL view controller as menu
-                                                                 [self openMenu:incomingURLViewController
-                                                                       fromRect:CGRectZero
-                                                                         inView:self.view
-                                                                       ofParent:self
-                                                                       animated:YES];
-                                                                 
-                                                             }],
-      
-                        nil] show];
-    
-
-    /*
-    UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
-    if (incomingURLViewController == nil)
-        return NO;
-
-    [self closeMenuAndPanelsAnimated:NO];
-
-    // Open incoming-URL view controller as menu
-    [self openMenu:incomingURLViewController
-          fromRect:CGRectZero
-            inView:self.view
-          ofParent:self
-          animated:YES];
-    */
-    
-    return YES;
+                                                                     UIViewController* incomingURLViewController = [[OAFavoriteImportViewController alloc] initFor:url];
+                                                                     if (incomingURLViewController == nil)
+                                                                         return;
+                                                                     
+                                                                     if (((OAFavoriteImportViewController *)incomingURLViewController).handled == NO)
+                                                                     {
+                                                                         dispatch_async(dispatch_get_main_queue(), ^{
+                                                                             
+                                                                             [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_failed") message:OALocalizedString(@"import_cannot") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil] show];
+                                                                             
+                                                                         });
+                                                                         
+                                                                         incomingURLViewController = nil;
+                                                                         return;
+                                                                     }
+                                                                     
+                                                                     [self closeMenuAndPanelsAnimated:NO];
+                                                                     
+                                                                     // Open incoming-URL view controller as menu
+                                                                     [self openMenu:incomingURLViewController
+                                                                           fromRect:CGRectZero
+                                                                             inView:self.view
+                                                                           ofParent:self
+                                                                           animated:YES];
+                                                                     
+                                                                 }],
+          
+          [RIButtonItem itemWithLabel:OALocalizedString(@"import_gpx")
+                               action:^{
+                                   
+                                   UIViewController* incomingURLViewController = [[OAGPXListViewController alloc] initWithImportGPXItem:url];
+                                   if (incomingURLViewController == nil)
+                                       return;
+                                   
+                                   [self closeMenuAndPanelsAnimated:NO];
+                                   
+                                   // Open incoming-URL view controller as menu
+                                   [self openMenu:incomingURLViewController
+                                         fromRect:CGRectZero
+                                           inView:self.view
+                                         ofParent:self
+                                         animated:YES];
+                                   
+                               }],
+          
+          nil] show];
+        
+        return YES;
+    }
 }
 
 - (void)showNoInternetAlert

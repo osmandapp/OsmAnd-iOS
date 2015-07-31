@@ -10,6 +10,13 @@
 
 @interface OAMapCreatorHelper : NSObject
 
+@property (nonatomic, readonly) NSString *filesDir;
+@property (nonatomic, readonly) NSArray *files;
+
 + (OAMapCreatorHelper *)sharedInstance;
+
+- (BOOL)installFile:(NSString *)filePath;
+- (void)removeFile:(NSString *)fileName;
+- (NSString *)getNewNameIfExists:(NSString *)fileName;
 
 @end

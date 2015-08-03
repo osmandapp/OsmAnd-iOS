@@ -85,7 +85,7 @@
     if (prefLangId)
         prefLang = [[[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:prefLangId] capitalizedStringWithLocale:[NSLocale currentLocale]];
     else
-        prefLang = OALocalizedString(@"not_selected");
+        prefLang = OALocalizedString(@"local_names");
     
     NSString* languageValue;
     switch (settings.settingMapLanguage)

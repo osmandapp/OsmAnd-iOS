@@ -72,7 +72,7 @@
         return [[dict1 valueForKey:@"name"] localizedCompare:[dict2 valueForKey:@"name"]];
     }];
     
-    [arr insertObject:@{@"name": OALocalizedString(@"not_selected"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")} atIndex:0];
+    [arr insertObject:@{@"name": OALocalizedString(@"local_names"), @"value": @"", @"img": (prefLang == nil ? @"menu_cell_selected.png" : @"")} atIndex:0];
 
     NSString *lang = @"en";
     BOOL isSelected = (prefLang && [prefLang isEqualToString:lang]);
@@ -180,9 +180,14 @@
 {
     int index = indexPath.row;
     if (index == 0)
+    {
         [settings setSettingPrefMapLanguage:nil];
+        settings.settingMapLanguageShowLocal = NO;
+    }
     else
+    {
         [settings setSettingPrefMapLanguage:[[_data objectAtIndex:indexPath.row] objectForKey:@"value"]];
+    }
 
     [self updateMapLanguageSetting];
 

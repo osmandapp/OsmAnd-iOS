@@ -30,6 +30,7 @@ public:
     
     virtual std::shared_ptr<SkBitmap> getIcon(
                                               const std::shared_ptr<const OsmAnd::Amenity>& amenity,
+                                              const OsmAnd::ZoomLevel zoomLevel,
                                               const bool largeIcon = false) const Q_DECL_OVERRIDE;
 };
 

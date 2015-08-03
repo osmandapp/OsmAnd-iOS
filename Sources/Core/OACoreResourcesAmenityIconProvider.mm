@@ -38,6 +38,7 @@ OACoreResourcesAmenityIconProvider::~OACoreResourcesAmenityIconProvider()
 
 std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
                                                                       const std::shared_ptr<const OsmAnd::Amenity>& amenity,
+                                                                      const OsmAnd::ZoomLevel zoomLevel,
                                                                       const bool largeIcon /*= false*/) const
 {
     @autoreleasepool

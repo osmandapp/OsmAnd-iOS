@@ -37,7 +37,7 @@ end
 #  - 'libPods.a' needs $(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 #  - Force architectures to '$(ARCHS_STANDARD)'
 #  - Build all architectures for Pods
-post_install do |installer_representation|
+post_install do |installer|
     workDir = Dir.pwd
 
     # CocoaPods pre-0.34
@@ -58,7 +58,8 @@ post_install do |installer_representation|
         adjustConfigFile("#{workDir}/Pods/Target Support Files/Pods-dev/Pods-dev.release.xcconfig")
     end
 
-    installer_representation.project.targets.each do |target|
+    #installer.project.targets.each do |target|
+    installer.pods_project.targets.each do |target|
         target.build_configurations.each do |configuration|
             configuration.build_settings['ARCHS'] = '$(ARCHS_STANDARD)'
             configuration.build_settings['ONLY_ACTIVE_ARCH'] = 'NO'

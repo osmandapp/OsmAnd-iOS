@@ -445,3 +445,7 @@
 "show_region_on_map_desc" = "Mapa de %@ foi baixado. Vá para o mapa para começar a usá-lo.";
 "show_region_on_map_go" = "Vá para o mapa";
 "map_settings_hillshade" = "Sombra de relevo";
+"sqlitedb_import_already_exists" = "O arquivo sqlitedb especificado já existe. Por favor, escolha a ação.";
+"map_creator" = "Criador de mapa";
+"local_names" = "Nomes locais";
+"sqlitedb_import_title" = "Importar arquivo de criador de mapa";

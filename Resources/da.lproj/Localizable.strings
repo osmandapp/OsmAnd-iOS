@@ -445,3 +445,6 @@
 "show_region_on_map_desc" = "Kort over %@ er hentet. Gå til kortet for at begynde at bruge det.";
 "show_region_on_map_go" = "Gå til kortet";
 "map_settings_hillshade" = "Reliefskygge";
+"sqlitedb_import_title" = "Importer Map Creator fil";
+"sqlitedb_import_already_exists" = "Den angivne sqlitedb-fil findes allerede. Vælg handling.";
+"map_creator" = "Map Creator";

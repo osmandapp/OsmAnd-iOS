@@ -82,6 +82,26 @@
             [_items addObject:item];
         }
     }
+    
+    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+    if (!newLocation)
+        return;
+
+    [_items sortUsingComparator:^NSComparisonResult(OADestinationItem *obj1, OADestinationItem *obj2) {
+        
+        const auto distance1 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                          newLocation.coordinate.latitude,
+                                                          obj1.destination.longitude, obj1.destination.latitude);
+        const auto distance2 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                           newLocation.coordinate.latitude,
+                                                           obj2.destination.longitude, obj2.destination.latitude);
+        if (distance2 > distance1)
+            return NSOrderedAscending;
+        else if (distance2 < distance1)
+            return NSOrderedDescending;
+        else
+            return NSOrderedSame;
+    }];
 }
 
 - (NSInteger)rowsCount

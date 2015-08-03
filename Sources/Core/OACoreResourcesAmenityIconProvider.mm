@@ -43,6 +43,15 @@ std::shared_ptr<SkBitmap> OACoreResourcesAmenityIconProvider::getIcon(
 {
     @autoreleasepool
     {
+        
+        if (zoomLevel <= OsmAnd::ZoomLevel13)
+        {
+            auto iconBackground = coreResourcesProvider->getResourceAsBitmap(
+                                                                             "map/shields/white_orange_poi_shield.png",
+                                                                             displayDensityFactor);
+            return OsmAnd::SkiaUtilities::scaleBitmap(iconBackground, 0.5f, 0.5f);
+        }
+        
         const auto& decodedCategories = amenity->getDecodedCategories();
         for (const auto& decodedCategory : constOf(decodedCategories))
         {

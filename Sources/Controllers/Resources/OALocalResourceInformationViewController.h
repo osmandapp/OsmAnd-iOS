@@ -36,5 +36,6 @@
 - (void)initWithLocalResourceId:(NSString*)resourceId;
 - (void)initWithLocalResourceId:(NSString*)resourceId
                               forRegion:(OAWorldRegion*)region;
+- (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
 
 @end

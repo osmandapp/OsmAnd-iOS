@@ -29,6 +29,7 @@
 #import "OAUtilities.h"
 #import "OAInAppCell.h"
 #import "OAPluginPopupViewController.h"
+#import "OAMapCreatorHelper.h"
 
 #include "Localization.h"
 
@@ -97,9 +98,11 @@ struct RegionResources
     NSArray* _regionsWithOutdatedResources;
 
     NSInteger _localResourcesSection;
+    NSInteger _localSqliteSection;
     NSInteger _resourcesSection;
     NSMutableArray* _allResourceItems;
     NSMutableArray* _localResourceItems;
+    NSMutableArray* _localSqliteItems;
 
     NSString* _lastSearchString;
     NSInteger _lastSearchScope;
@@ -162,6 +165,7 @@ static BOOL _lackOfResources;
 
         _allResourceItems = [NSMutableArray array];
         _localResourceItems = [NSMutableArray array];
+        _localSqliteItems = [NSMutableArray array];
 
         _regionMapItems = [NSMutableArray array];
         _localRegionMapItems = [NSMutableArray array];
@@ -864,6 +868,23 @@ static BOOL _lackOfResources;
     [_allResourceItems sortUsingComparator:self.resourceItemsComparator];
     [_regionMapItems sortUsingComparator:self.resourceItemsComparator];
     
+    // Map Creator sqlitedb files
+    [_localSqliteItems removeAllObjects];
+    NSString *sqliteFilesPath = [[OAMapCreatorHelper sharedInstance] filesDir];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files)
+    {
+        SqliteDbResourceItem *item = [[SqliteDbResourceItem alloc] init];
+        item.title = [[fileName stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        item.fileName = fileName;
+        item.path = [sqliteFilesPath stringByAppendingPathComponent:fileName];
+        item.size = [[[NSFileManager defaultManager] attributesOfItemAtPath:item.path error:nil] fileSize];
+        [_localSqliteItems addObject:item];
+    }
+    
+    [_localSqliteItems sortUsingComparator:^NSComparisonResult(SqliteDbResourceItem *obj1, SqliteDbResourceItem *obj2) {
+        return [obj1.title caseInsensitiveCompare:obj2.title];
+    }];
+    
     // Outdated Resources
     [_localResourceItems removeAllObjects];
     [_outdatedResourceItems removeAllObjects];
@@ -983,7 +1004,7 @@ static BOOL _lackOfResources;
         else
             _outdatedResourcesSection = -1;
 
-        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0) && self.region == _app.worldRegion)
+        if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
         else
             _localResourcesSection = -1;
@@ -998,6 +1019,11 @@ static BOOL _lackOfResources;
         else
             _resourcesSection = -1;
 
+        if (_localSqliteItems.count > 0)
+            _localSqliteSection = _lastUnusedSectionIndex++;
+        else
+            _localSqliteSection = -1;
+        
         // Configure search scope
         self.searchDisplayController.searchBar.scopeButtonTitles = nil;
         self.searchDisplayController.searchBar.placeholder = OALocalizedString(@"res_search_world");
@@ -1372,7 +1398,7 @@ static BOOL _lackOfResources;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] ? 1 : 0);
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0);
 
     NSInteger sectionsCount = 0;
 
@@ -1405,6 +1431,8 @@ static BOOL _lackOfResources;
         return 1;
     if (section == _regionMapSection)
         return [[self getRegionMapItems] count];
+    if (section == _localSqliteSection)
+        return _localSqliteItems.count;
 
     return 0;
 }
@@ -1416,12 +1444,14 @@ static BOOL _lackOfResources;
 
     if (self.region.superregion == nil)
     {
-        if (_currentScope == kLocalResourcesScope) {
+        if (_currentScope == kLocalResourcesScope)
+        {
             if (section == _regionMapSection)
                 return OALocalizedString(@"res_world_map");
+            else if (section == _localSqliteSection)
+                return OALocalizedString(@"map_creator");
             else
                 return OALocalizedString(@"res_mapsres");
-
         }
         
         if (section == _outdatedResourcesSection)
@@ -1432,6 +1462,7 @@ static BOOL _lackOfResources;
             return OALocalizedString(@"res_installed");
         if (section == _regionMapSection)
             return OALocalizedString(@"res_world_map");
+        
         return nil;
     }
 
@@ -1620,7 +1651,7 @@ static BOOL _lackOfResources;
             cellTypeId = installedResourcesSubmenuCell;
             title = OALocalizedString(@"res_installed");
             
-            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)_localResourceItems.count + _localRegionMapItems.count, OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count, OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -1769,6 +1800,14 @@ static BOOL _lackOfResources;
                 subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = @"";
+        }
+        else if (indexPath.section == _localSqliteSection)
+        {
+            SqliteDbResourceItem *item = [_localSqliteItems objectAtIndex:indexPath.row];
+            cellTypeId = localResourceCell;
+            
+            title = item.title;
+            subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
         }
     }
 
@@ -1948,20 +1987,26 @@ static BOOL _lackOfResources;
 
 #pragma mark - UITableViewDelegate
 
+-(id)getItemByIndexPath:(NSIndexPath *)indexPath
+{
+    id item;
+    if (indexPath.section == _resourcesSection)
+        item = [[self getResourceItems] objectAtIndex:indexPath.row];
+    else if (indexPath.section == _regionMapSection)
+        item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
+    else if (indexPath.section == _localSqliteSection)
+        item = [_localSqliteItems objectAtIndex:indexPath.row];
+    
+    return item;
+}
+
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    id item = nil;
+    id item;
     if (tableView == self.searchDisplayController.searchResultsTableView)
-    {
         item = [_searchResults objectAtIndex:indexPath.row];
-    }
     else if (tableView == self.tableView)
-    {
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [[self getResourceItems] objectAtIndex:indexPath.row];
-        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-            item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
-    }
+        item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
         return;
@@ -1973,16 +2018,12 @@ static BOOL _lackOfResources;
 {
     id item = nil;
     if (tableView == self.searchDisplayController.searchResultsTableView) {
-        if (_searchResults.count > 0) {
+        if (_searchResults.count > 0)
             item = [_searchResults objectAtIndex:indexPath.row];
-        }
     }
-    else if (tableView == self.tableView) {
-        
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [[self getResourceItems] objectAtIndex:indexPath.row];
-        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-            item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
+    else if (tableView == self.tableView)
+    {
+        item = [self getItemByIndexPath:indexPath];
     }
 
     if (item != nil)
@@ -1997,12 +2038,7 @@ static BOOL _lackOfResources;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
-    {
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [[self getResourceItems] objectAtIndex:indexPath.row];
-        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-            item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
-    }
+        item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
         return NO;
@@ -2019,12 +2055,7 @@ static BOOL _lackOfResources;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
-    {
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [[self getResourceItems] objectAtIndex:indexPath.row];
-        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-            item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
-    }
+        item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
         return UITableViewCellEditingStyleNone;
@@ -2041,12 +2072,7 @@ static BOOL _lackOfResources;
     if (tableView == self.searchDisplayController.searchResultsTableView)
         item = [_searchResults objectAtIndex:indexPath.row];
     else if (tableView == self.tableView)
-    {
-        if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
-            item = [[self getResourceItems] objectAtIndex:indexPath.row];
-        if (indexPath.section == _regionMapSection && _regionMapSection >= 0)
-            item = [[self getRegionMapItems] objectAtIndex:indexPath.row];
-    }
+        item = [self getItemByIndexPath:indexPath];
 
     if (item == nil)
         return;
@@ -2230,28 +2256,40 @@ static BOOL _lackOfResources;
         
         LocalResourceItem* item = nil;
         if (tableView == self.searchDisplayController.searchResultsTableView)
+        {
             item = [_searchResults objectAtIndex:cellPath.row];
+        }
         else if (tableView == self.tableView)
         {
             if (cellPath.section == _resourcesSection && _resourcesSection >= 0)
                 item = [[self getResourceItems] objectAtIndex:cellPath.row];
             if (cellPath.section == _regionMapSection && _regionMapSection >= 0)
                 item = [[self getRegionMapItems] objectAtIndex:cellPath.row];
+            if (cellPath.section == _localSqliteSection)
+                item = [_localSqliteItems objectAtIndex:cellPath.row];
         }
 
-        if (item) {
-            
-            if (item.worldRegion) {
+        if (item)
+        {
+            if (item.worldRegion)
                 resourceInfoViewController.regionTitle = item.worldRegion.name;
-            } else if (self.region.name) {
+            else if (self.region.name)
                 resourceInfoViewController.regionTitle = self.region.name;
-            } else {
+            else
                 resourceInfoViewController.regionTitle = item.title;
-            }
             
-            NSString* resourceId = item.resourceId.toNSString();
-            [resourceInfoViewController initWithLocalResourceId:resourceId];
+            if ([item isKindOfClass:[SqliteDbResourceItem class]])
+            {
+                [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
+                return;
+            }
+            else
+            {
+                NSString* resourceId = item.resourceId.toNSString();
+                [resourceInfoViewController initWithLocalResourceId:resourceId];
+            }
         }
+        
         resourceInfoViewController.localItem = item;
 
     }

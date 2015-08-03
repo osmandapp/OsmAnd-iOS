@@ -22,6 +22,7 @@
 #import "OAIAPHelper.h"
 #import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
+#import "OAMapCreatorHelper.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -49,6 +50,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @implementation OutdatedResourceItem
 @end
 
+@implementation SqliteDbResourceItem
+@end
+
 @interface OAResourcesBaseViewController ()
 
 
@@ -62,6 +66,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+
+    OAAutoObserverProxy* _sqlitedbResourcesChangedObserver;
 
     MBProgressHUD* _deleteResourceProgressHUD;
     
@@ -87,6 +93,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         _repositoryUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onRepositoryUpdated:withKey:)
                                                                 andObserve:_app.resourcesRepositoryUpdatedObservable];
+
+        _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onSqlitedbResourcesChanged:withKey:)
+                                                                    andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
 
         _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
             NSString *str1;
@@ -703,21 +713,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     BOOL isInstalled = (item.worldRegion != nil);
     
     NSMutableString* message;
+    NSString *title;
+    
+    if ([item isKindOfClass:[SqliteDbResourceItem class]])
+        title = ((SqliteDbResourceItem *)item).title;
+    else
+        title = [self.class titleOfResource:item.resource
+                                   inRegion:item.worldRegion
+                             withRegionName:YES];
     if (isInstalled)
     {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"),
-                                    [self.class titleOfResource:item.resource
-                                                       inRegion:item.worldRegion
-                                                 withRegionName:YES]] mutableCopy];
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"), title] mutableCopy];
         [message appendString:@" "];
         [message appendString:OALocalizedString(@"proceed_q")];
     }
     else
     {
-        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"),
-                                    [self.class titleOfResource:item.resource
-                                                       inRegion:item.worldRegion
-                                                 withRegionName:YES]] mutableCopy];
+        message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_unmanaged_q"), title] mutableCopy];
         [message appendString:@" "];
         [message appendString:OALocalizedString(@"proceed_q")];
     }
@@ -741,14 +753,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [[[[UIApplication sharedApplication] windows] lastObject] addSubview:_deleteResourceProgressHUD];
     [_deleteResourceProgressHUD showAnimated:YES
                          whileExecutingBlock:^{
-                             const auto success = _app.resourcesManager->uninstallResource(item.resourceId);
-                             if (!success)
+                             
+                             if ([item isKindOfClass:[SqliteDbResourceItem class]])
                              {
-                                 OALog(@"Failed to uninstall resource %@ from %@",
-                                       item.resourceId.toNSString(),
-                                       item.resource->localPath.toNSString());
-                             } else if (block) {
-                                 block();
+                                 SqliteDbResourceItem *sqliteItem = (SqliteDbResourceItem *)item;
+                                 [[OAMapCreatorHelper sharedInstance] removeFile:sqliteItem.fileName];
+                                 
+                                 if (block)
+                                     block();
+                             }
+                             else
+                             {
+                                 const auto success = _app.resourcesManager->uninstallResource(item.resourceId);
+                                 if (!success)
+                                 {
+                                     OALog(@"Failed to uninstall resource %@ from %@",
+                                           item.resourceId.toNSString(),
+                                           item.resource->localPath.toNSString());
+                                 } else if (block) {
+                                     block();
+                                 }
                              }
                          }];
 }
@@ -848,6 +872,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             return;
         }
 
+        [self updateContent];
+    });
+}
+
+- (void)onSqlitedbResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!self.isViewLoaded || self.view.window == nil)
+        {
+            _dataInvalidated = YES;
+            return;
+        }
+        
         [self updateContent];
     });
 }

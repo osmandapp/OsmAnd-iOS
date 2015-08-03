@@ -414,7 +414,7 @@
 "sorting" = "Ordenar";
 "plugins" = "Complementos";
 "shared_string_later" = "Luego";
-"product_desc_ext_parking" = "El complemento de estacionamiento de OsmAnd, le recuerda la ubicación donde estacionó. Este complemento sirve para la aplicación OsmAnd Mapas y Navegación.\nElija un recordatorio de tiempo ilimitado o limitado con notificación de expiración, ambos con sólo un marcador en el mapa. Para usarlo, active el complemento en el menú.";
+"product_desc_ext_parking" = "El complemento de estacionamiento de OsmAnd, le recuerda la ubicación donde estacionó. Este complemento sirve para la aplicación OsmAnd Mapas y Navegación.\nElija un recordatorio de tiempo ilimitado o limitado con notificación de expiración, ambos con sólo un marcador en el mapa. Para usarlo, activelo en el menú de Complementos.";
 "product_desc_ext_skimap" = "El complemento de Mapas de esquí para OsmAnd, está diseñado para navegar en lugares deportivos invernales. Provee información sobre pistas de esquí, elevadores de esquí e incluso líneas coloreadas indicando la complejidad de la pista. Tienes información sobre las pistas de esquí como la infraestructura circundante.\n\nIntroducciones de uso: Active el complemento en la aplicación OsmAnd, pulse el botón del mapa y establezca el tipo de mapa al de esquí.";
 "open_map_settings" = "Abrir ajustes del mapa";
 "plugin_popup_ski_title" = "Activar estilo del mapa a esquí";

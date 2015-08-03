@@ -1619,7 +1619,7 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    CGFloat textX = (_imageView.image ? 40.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 40.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     
     CGFloat width = self.frame.size.width;
     
@@ -1905,13 +1905,13 @@
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
         UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
         
-        NSString *waypointsStr = [NSString stringWithFormat:@"%d %@", wptCount, OALocalizedString(@"gpx_waypoints")];
+        NSString *waypointsStr = [NSString stringWithFormat:@"%d", wptCount];
         NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:tripDuration shortFormat:NO];
         
         NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", waypointsStr]];
         NSMutableAttributedString *stringTimeMoving;
         if (tripDuration > 0)
-            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"    %@", timeMovingStr]];
+            stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"   %@", timeMovingStr]];
         
         NSTextAttachment *waypointsAttachment = [[NSTextAttachment alloc] init];
         waypointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
@@ -1933,8 +1933,8 @@
         [stringWaypoints addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
         if (tripDuration > 0)
         {
-            [stringTimeMoving replaceCharactersInRange:NSMakeRange(2, 1) withAttributedString:timeMovingStringWithImage];
-            [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(2, 1)];
+            [stringTimeMoving replaceCharactersInRange:NSMakeRange(1, 1) withAttributedString:timeMovingStringWithImage];
+            [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(1, 1)];
         }
         
         [string appendAttributedString:stringWaypoints];

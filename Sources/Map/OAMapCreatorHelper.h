@@ -7,15 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAObservable.h"
 
 @interface OAMapCreatorHelper : NSObject
 
 @property (nonatomic, readonly) NSString *filesDir;
 @property (nonatomic, readonly) NSArray *files;
 
+@property(readonly) OAObservable *sqlitedbResourcesChangedObservable;
+
 + (OAMapCreatorHelper *)sharedInstance;
 
-- (BOOL)installFile:(NSString *)filePath;
+- (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName;
 - (void)removeFile:(NSString *)fileName;
 - (NSString *)getNewNameIfExists:(NSString *)fileName;
 

@@ -445,3 +445,6 @@
 "show_region_on_map_desc" = "已下載 %@ 地圖。 轉到地圖開始使用。";
 "show_region_on_map_go" = "轉到地圖";
 "map_settings_hillshade" = "地形陰影";
+"sqlitedb_import_title" = "匯入地圖，建立檔案";
+"sqlitedb_import_already_exists" = "已有指定的 sqlitedb 檔案存在。請選擇操作。";
+"map_creator" = "建立地圖";

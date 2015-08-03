@@ -204,11 +204,24 @@
                                     @"value": @"",
                                     @"type": @"OASwitchCell"}];
     }
+    NSString *overlayMapSourceName;
+    if ([app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
+        overlayMapSourceName = [[app.data.overlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    else
+        overlayMapSourceName = app.data.overlayMapSource.name;
+    
     [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_over"),
-                                    @"value": (app.data.overlayMapSource != nil) ? app.data.overlayMapSource.name : OALocalizedString(@"map_settings_none"),
+                                    @"value": (app.data.overlayMapSource != nil) ? overlayMapSourceName : OALocalizedString(@"map_settings_none"),
                                     @"type": @"OASettingsCell"}];
+
+    NSString *underlayMapSourceName;
+    if ([app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
+        underlayMapSourceName = [[app.data.underlayMapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    else
+        underlayMapSourceName = app.data.underlayMapSource.name;
+
     [arrOverlayUnderlay addObject:@{@"name": OALocalizedString(@"map_settings_under"),
-                                    @"value": (app.data.underlayMapSource != nil) ? app.data.underlayMapSource.name : OALocalizedString(@"map_settings_none"),
+                                    @"value": (app.data.underlayMapSource != nil) ? underlayMapSourceName : OALocalizedString(@"map_settings_none"),
                                     @"type": @"OASettingsCell"}];
 
     NSArray *arrOverlayUnderlaySection = @[@{@"groupName": OALocalizedString(@"map_settings_overunder"),

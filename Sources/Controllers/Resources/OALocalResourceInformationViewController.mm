@@ -14,6 +14,7 @@
 #import "OAPurchasesViewController.h"
 #import "OAPluginsViewController.h"
 #import "OAUtilities.h"
+#import "OAMapCreatorHelper.h"
 
 typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
 
@@ -88,6 +89,43 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [self.navigationController popViewControllerAnimated:YES];
         });
     }];
+}
+
+- (void)initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item;
+{
+    self.localItem = item;
+    
+    NSMutableArray *tKeys = [NSMutableArray array];
+    NSMutableArray *tValues = [NSMutableArray array];
+    
+    // Type
+    [tKeys addObject:OALocalizedString(@"res_type")];
+    [tValues addObject:OALocalizedString(@"map_creator")];
+    
+    // Size
+    [tKeys addObject:OALocalizedString(@"res_size")];
+    [tValues addObject:[NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
+    
+    // Timestamp
+    NSError *error;
+    NSURL *fileUrl = [NSURL fileURLWithPath:item.path];
+    NSDate *d;
+    [fileUrl getResourceValue:&d forKey:NSURLCreationDateKey error:&error];
+    if (!error)
+    {
+        [tKeys addObject:OALocalizedString(@"res_created_on")];
+        
+        if (!formatter) {
+            formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterShortStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+        }
+        
+        [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
+    }
+    
+    tableKeys = tKeys;
+    tableValues = tValues;
 }
 
 - (void)initWithLocalResourceId:(NSString*)resourceId

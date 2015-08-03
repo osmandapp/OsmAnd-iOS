@@ -37,9 +37,11 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAMapCreatorHelper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
+#include "OASQLiteTileSourceMapLayerProvider.h"
 
 #include <OpenGLES/ES2/gl.h>
 
@@ -3467,22 +3469,40 @@
 - (void)doUpdateOverlay
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
-    const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-    if (mapSourceResource) {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-        OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+    
+    if ([_app.data.overlayMapSource.name isEqualToString:@"sqlitedb"])
+    {
+        NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.overlayMapSource.resourceId];
         
-        const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
-        if (onlineMapTileProvider) {
-            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-            _rasterOverlayMapProvider = onlineMapTileProvider;
-            [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+        const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
+
+        _rasterOverlayMapProvider = sqliteTileSourceMapProvider;
+        [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+        
+        OsmAnd::MapLayerConfiguration config;
+        config.setOpacityFactor(_app.data.overlayAlpha);
+        [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+    }
+    else
+    {
+        const auto resourceId = QString::fromNSString(_app.data.overlayMapSource.resourceId);
+        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+        if (mapSourceResource)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+            OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
             
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(_app.data.overlayAlpha);
-            [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
+            if (onlineMapTileProvider)
+            {
+                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                _rasterOverlayMapProvider = onlineMapTileProvider;
+                [mapView setProvider:_rasterOverlayMapProvider forLayer:kOverlayLayerId];
+                
+                OsmAnd::MapLayerConfiguration config;
+                config.setOpacityFactor(_app.data.overlayAlpha);
+                [mapView setMapLayerConfiguration:kOverlayLayerId configuration:config forcedUpdate:NO];
+            }
         }
     }
 }
@@ -3490,22 +3510,39 @@
 - (void)doUpdateUnderlay
 {
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
-    const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
-    if (mapSourceResource) {
-        const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
-        OALog(@"Underlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
+    
+    if ([_app.data.underlayMapSource.name isEqualToString:@"sqlitedb"])
+    {
+        NSString *path = [[OAMapCreatorHelper sharedInstance].filesDir stringByAppendingPathComponent:_app.data.underlayMapSource.resourceId];
         
-        const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
-        if (onlineMapTileProvider) {
-            onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
-            _rasterUnderlayMapProvider = onlineMapTileProvider;
-            [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+        const auto sqliteTileSourceMapProvider = std::make_shared<OASQLiteTileSourceMapLayerProvider>(QString::fromNSString(path));
+        
+        _rasterUnderlayMapProvider = sqliteTileSourceMapProvider;
+        [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+        
+        OsmAnd::MapLayerConfiguration config;
+        config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
+        [mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
+    }
+    else
+    {    const auto resourceId = QString::fromNSString(_app.data.underlayMapSource.resourceId);
+        const auto mapSourceResource = _app.resourcesManager->getResource(resourceId);
+        if (mapSourceResource)
+        {
+            const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
+            OALog(@"Underlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
             
-            OsmAnd::MapLayerConfiguration config;
-            config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
-            [mapView setMapLayerConfiguration:0 configuration:config forcedUpdate:NO];
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
+            if (onlineMapTileProvider)
+            {
+                onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
+                _rasterUnderlayMapProvider = onlineMapTileProvider;
+                [mapView setProvider:_rasterUnderlayMapProvider forLayer:kUnderlayLayerId];
+                
+                OsmAnd::MapLayerConfiguration config;
+                config.setOpacityFactor(1.0 - _app.data.underlayAlpha);
+                [mapView setMapLayerConfiguration:kUnderlayLayerId configuration:config forcedUpdate:NO];
+            }
         }
     }
 }

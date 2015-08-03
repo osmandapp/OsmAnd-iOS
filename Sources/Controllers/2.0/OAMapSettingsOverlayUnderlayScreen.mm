@@ -11,6 +11,7 @@
 #import "OASliderCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapCreatorHelper.h"
 
 #include <QSet>
 
@@ -36,6 +37,12 @@
 @property std::shared_ptr<const OsmAnd::IOnlineTileSources::Source> onlineTileSource;
 @end
 @implementation Item_OnlineTileSource
+@end
+
+#define Item_SqliteDbTileSource _(Item_SqliteDbTileSource)
+@interface Item_SqliteDbTileSource : Item
+@end
+@implementation Item_SqliteDbTileSource
 @end
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
@@ -156,6 +163,21 @@ typedef enum
     
     [_onlineMapSources setArray:arr];
 
+    
+    NSMutableArray *sqlitedbArr = [NSMutableArray array];
+    for (NSString *fileName in [OAMapCreatorHelper sharedInstance].files)
+    {
+        Item_SqliteDbTileSource* item = [[Item_SqliteDbTileSource alloc] init];
+        item.mapSource = [[OAMapSource alloc] initWithResource:fileName andVariant:@"" name:@"sqlitedb"];
+        
+        [sqlitedbArr addObject:item];
+    }
+    
+    [sqlitedbArr sortUsingComparator:^NSComparisonResult(Item_SqliteDbTileSource *obj1, Item_SqliteDbTileSource *obj2) {
+        return [obj1.mapSource.resourceId caseInsensitiveCompare:obj2.mapSource.resourceId];
+    }];
+    
+    [_onlineMapSources addObjectsFromArray:sqlitedbArr];
 }
 
 
@@ -201,8 +223,8 @@ typedef enum
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
-        
+    if (indexPath.section == 1)
+    {
         static NSString* const mapSourceItemCell = @"mapSourceItemCell";
         
         // Get content for cell and it's type id
@@ -210,20 +232,27 @@ typedef enum
         NSString* description = nil;
         Item* someItem = nil;
         
-        if (indexPath.row > 0) {
+        if (indexPath.row > 0)
+        {
             someItem = [_onlineMapSources objectAtIndex:indexPath.row - 1];
             
-            if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+            if ([someItem isKindOfClass:[Item_OnlineTileSource class]])
             {
-                Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
-                
-                caption = item.mapSource.name;
-                description = nil;
-#if defined(OSMAND_IOS_DEV)
-                description = item.resource->id.toNSString();
-#endif // defined(OSMAND_IOS_DEV)
+                if (someItem.resource->type == OsmAndResourceType::OnlineTileSources)
+                {
+                    Item_OnlineTileSource* item = (Item_OnlineTileSource*)someItem;
+                    caption = item.mapSource.name;
+                    description = nil;
+                }
             }
-        } else {
+            else if ([someItem isKindOfClass:[Item_SqliteDbTileSource class]])
+            {
+                caption = [[someItem.mapSource.resourceId stringByDeletingPathExtension] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+                description = nil;
+            }
+        }
+        else
+        {
             caption = OALocalizedString(@"map_settings_none");
         }
         
@@ -242,16 +271,15 @@ typedef enum
         else
             mapSource = app.data.underlayMapSource;
 
-        if ((indexPath.row == 0 && mapSource == nil) || [mapSource isEqual:someItem.mapSource]) {
+        if ((indexPath.row == 0 && mapSource == nil) || [mapSource isEqual:someItem.mapSource])
             cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"menu_cell_selected.png"]];
-        } else {
+        else
             cell.accessoryView = nil;
-        }
         
         return cell;
-        
-    } else {
-        
+    }
+    else
+    {
         static NSString* const identifierCell = @"OASliderCell";
         OASliderCell* cell = [tableView dequeueReusableCellWithIdentifier:identifierCell];
         if (cell == nil)
@@ -261,7 +289,8 @@ typedef enum
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         }
         
-        if (cell) {
+        if (cell)
+        {
             if (_mapSettingType == EMapSettingOverlay)
                 cell.sliderView.value = app.data.overlayAlpha;
             else
@@ -272,14 +301,13 @@ typedef enum
     }
 }
 
-- (void)sliderValueChanged:(id)sender {
-    
+- (void)sliderValueChanged:(id)sender
+{
     UISlider *slider = sender;
     if (_mapSettingType == EMapSettingOverlay)
         app.data.overlayAlpha = slider.value;
     else
         app.data.underlayAlpha = slider.value;
-    
 }
 
 #pragma mark - UITableViewDelegate
@@ -291,15 +319,18 @@ typedef enum
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
-        
-        if (indexPath.row > 0) {
+    if (indexPath.section == 1)
+    {
+        if (indexPath.row > 0)
+        {
             Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
             if (_mapSettingType == EMapSettingOverlay)
                 app.data.overlayMapSource = item.mapSource;
             else
                 app.data.underlayMapSource = item.mapSource;
-        } else {
+        }
+        else
+        {
             if (_mapSettingType == EMapSettingOverlay)
                 app.data.overlayMapSource = nil;
             else

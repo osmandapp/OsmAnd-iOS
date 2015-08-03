@@ -44,6 +44,12 @@
 @interface OutdatedResourceItem : LocalResourceItem
 @end
 
+#define SqliteDbResourceItem public(SqliteDbResourceItem)
+@interface SqliteDbResourceItem : LocalResourceItem
+@property NSString* path;
+@property NSString* fileName;
+@end
+
 @interface OAResourcesBaseViewController : OASuperViewController<OADownloadProgressViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *toolbarView;

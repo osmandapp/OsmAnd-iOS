@@ -26,6 +26,8 @@
     self = [super init];
     if (self)
     {
+        _sqlitedbResourcesChangedObservable = [[OAObservable alloc] init];
+
         _filesDir = [NSHomeDirectory() stringByAppendingString:@"/Library/MapCreator"];
         
         BOOL isDir = YES;
@@ -36,24 +38,44 @@
         NSArray *files = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:_filesDir error:nil];
         if (files)
             for (NSString *file in files)
-                [filesArray addObject:file];
+                if ([[file pathExtension] caseInsensitiveCompare:@"sqlitedb"] == NSOrderedSame)
+                    [filesArray addObject:file];
         
         _files = [NSArray arrayWithArray:filesArray];
     }
     return self;
 }
 
-- (BOOL)installFile:(NSString *)filePath
+- (BOOL)installFile:(NSString *)filePath newFileName:(NSString *)newFileName
 {
-    NSString *path = [self.filesDir stringByAppendingPathComponent:[filePath lastPathComponent]];
+    NSString *fileName;
+    if (newFileName)
+        fileName = newFileName;
+    else
+        fileName = [filePath lastPathComponent];
+    
+    if ([self.files containsObject:fileName])
+        [self removeFile:fileName];
+
+    NSString *path = [self.filesDir stringByAppendingPathComponent:fileName];
     NSError *error;
     [[NSFileManager defaultManager] moveItemAtPath:filePath toPath:path error:&error];
     if (error)
         OALog(@"Failed installation MapCreator db file: %@", filePath);
     else
-        [_files arrayByAddingObject:[filePath lastPathComponent]];
+        _files = [_files arrayByAddingObject:fileName];
     
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    
+    if (error)
+    {
+        return NO;
+    }
+    else
+    {
+        [_sqlitedbResourcesChangedObservable notifyEvent];
+        return YES;
+    }
     
     return (error == nil);
 }
@@ -67,6 +89,8 @@
     NSMutableArray *arr = [NSMutableArray arrayWithArray:self.files];
     [arr removeObject:fileName];
     _files = [NSArray arrayWithArray:arr];
+
+    [_sqlitedbResourcesChangedObservable notifyEvent];
 }
 
 - (NSString *)getNewNameIfExists:(NSString *)fileName

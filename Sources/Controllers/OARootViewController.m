@@ -288,6 +288,14 @@
     [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"import_title") message:@"Map Creator file import failed" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil] show];
 }
 
+- (void)installSqliteDbFile:(NSString *)path newFileName:(NSString *)newFileName
+{
+    if ([[OAMapCreatorHelper sharedInstance] installFile:path newFileName:newFileName])
+        [self sqliteDbImportedAlert];
+    else
+        [self sqliteDbImportFailedAlert];
+}
+
 - (BOOL)handleIncomingURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
 {
     NSString *path = url.path;
@@ -299,26 +307,23 @@
         NSString *newFileName = [[OAMapCreatorHelper sharedInstance] getNewNameIfExists:fileName];
         if (newFileName)
         {
-            [[[UIAlertView alloc] initWithTitle:@"" message:@"File already exists"
+            [[[UIAlertView alloc] initWithTitle:OALocalizedString(@"sqlitedb_import_title") message:OALocalizedString(@"sqlitedb_import_already_exists")
                 cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")
                                     action:^{
                                     }]
-                otherButtonItems:[RIButtonItem itemWithLabel:@"Replace"
+                otherButtonItems:[RIButtonItem itemWithLabel:OALocalizedString(@"fav_replace")
                                     action:^{
-                                        [self sqliteDbImportedAlert];
+                                        [self installSqliteDbFile:path newFileName:nil];
                                     }],
-                                 [RIButtonItem itemWithLabel:@"Add new"
+                                 [RIButtonItem itemWithLabel:OALocalizedString(@"gpx_add_new")
                                     action:^{
-                                        [self sqliteDbImportedAlert];
+                                        [self installSqliteDbFile:path newFileName:newFileName];
                                     }],
                 nil] show];
         }
         else
         {
-            if ([[OAMapCreatorHelper sharedInstance] installFile:path])
-                [self sqliteDbImportedAlert];
-            else
-                [self sqliteDbImportFailedAlert];
+            [self installSqliteDbFile:path newFileName:nil];
         }
         
         [self.navigationController popToRootViewControllerAnimated:NO];

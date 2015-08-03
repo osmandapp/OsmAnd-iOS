@@ -1,30 +1,30 @@
 //
-//  OAHillshadeMapLayerProvider.h
+//  OASQLiteTileSourceMapLayerProvider.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 29/07/15.
+//  Created by Alexey Kulish on 03/08/15.
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
-
 #include <CoreFoundation/CoreFoundation.h>
 #include <objc/objc.h>
-
 #include <OsmAndCore/Map/ImageMapLayerProvider.h>
+#import "OASQLiteTileSource.h"
 
-class OAHillshadeMapLayerProvider : public OsmAnd::ImageMapLayerProvider
+class OASQLiteTileSourceMapLayerProvider : public OsmAnd::ImageMapLayerProvider
 {
-
 private:
 protected:
 public:
-    OAHillshadeMapLayerProvider();
-    virtual ~OAHillshadeMapLayerProvider();
+    OASQLiteTileSourceMapLayerProvider(const QString& fileName);
+    virtual ~OASQLiteTileSourceMapLayerProvider();
+    
+    OASQLiteTileSource *ts;
     
     virtual QByteArray obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request);
     virtual void obtainImageAsync(
-                          const OsmAnd::IMapTiledDataProvider::Request& request,
-                          const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
-
+                                  const OsmAnd::IMapTiledDataProvider::Request& request,
+                                  const OsmAnd::ImageMapLayerProvider::AsyncImage* asyncImage);
+    
     virtual OsmAnd::AlphaChannelPresence getAlphaChannelPresence() const;
     virtual OsmAnd::MapStubStyle getDesiredStubsStyle() const;
     
@@ -33,8 +33,7 @@ public:
     
     virtual bool supportsNaturalObtainData() const;
     virtual bool supportsNaturalObtainDataAsync() const;
-
+    
     virtual OsmAnd::ZoomLevel getMinZoom() const;
     virtual OsmAnd::ZoomLevel getMaxZoom() const;
-
 };

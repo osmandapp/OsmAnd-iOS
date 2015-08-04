@@ -246,6 +246,7 @@
     if ([self isLeftSideLayout:interfaceOrientation])
     {
         _pickerImg.hidden = YES;
+        _pickerView.hidden = YES;
         _horizontalLine.hidden = YES;
         _containerView.frame = CGRectMake(0.0, 0.0, self.view.frame.size.width, self.view.frame.size.height);
         _tableView.frame = _containerView.frame;
@@ -253,6 +254,7 @@
     else
     {
         _pickerImg.hidden = NO;
+        _pickerView.hidden = NO;
         _horizontalLine.hidden = NO;
         _containerView.frame = CGRectMake(0.0, 16.0, self.view.frame.size.width, self.view.frame.size.height - 16.0);
         _tableView.frame = CGRectMake(0.0, 8.0, _containerView.frame.size.width, _containerView.frame.size.height - 8.0);

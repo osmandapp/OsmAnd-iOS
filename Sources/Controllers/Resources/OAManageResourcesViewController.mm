@@ -991,38 +991,37 @@ static BOOL _lackOfResources;
     @synchronized(_dataLock)
     {
         _lastUnusedSectionIndex = 0;
-
+        _regionMapSection = -1;
+        _bannerSection = -1;
+        _outdatedResourcesSection = -1;
+        _localResourcesSection = -1;
+        _resourcesSection = -1;
+        _localSqliteSection = -1;
+        
         if (_displayBanner)
             _bannerSection = _lastUnusedSectionIndex++;
-        else
-            _bannerSection = -1;
-        
         
         // Updates always go first
         if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
             _outdatedResourcesSection = _lastUnusedSectionIndex++;
-        else
-            _outdatedResourcesSection = -1;
 
         if (_currentScope == kAllResourcesScope && ([_localResourceItems count] > 0 || [_localRegionMapItems count] > 0 || _localSqliteItems.count > 0) && self.region == _app.worldRegion)
             _localResourcesSection = _lastUnusedSectionIndex++;
-        else
-            _localResourcesSection = -1;
 
-        if ([[self getRegionMapItems] count] > 0)
-            _regionMapSection = _lastUnusedSectionIndex++;
-        else
-            _regionMapSection = -1;
+        if (self.region && self.region != _app.worldRegion && _currentScope == kAllResourcesScope)
+        {
+            if ([[self getRegionMapItems] count] > 0)
+                _regionMapSection = _lastUnusedSectionIndex++;
+        }
 
         if ([[self getResourceItems] count] > 0)
             _resourcesSection = _lastUnusedSectionIndex++;
-        else
-            _resourcesSection = -1;
 
+        if (_regionMapSection == -1 && [[self getRegionMapItems] count] > 0)
+            _regionMapSection = _lastUnusedSectionIndex++;
+        
         if (_localSqliteItems.count > 0)
             _localSqliteSection = _lastUnusedSectionIndex++;
-        else
-            _localSqliteSection = -1;
         
         // Configure search scope
         self.searchDisplayController.searchBar.scopeButtonTitles = nil;

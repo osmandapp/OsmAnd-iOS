@@ -466,6 +466,7 @@
 {
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kShowMapIterator];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kMapDownloadStopReminding];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kMapDownloadReminderStoppedDate];
 }
 
 - (void)onForcedRenderingSettingChanged

@@ -523,6 +523,7 @@ static NSMutableArray *activePopups;
 - (void)cancelDownloadWorldMap
 {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];
+    [[NSUserDefaults standardUserDefaults] setDouble:[[NSDate date] timeIntervalSince1970] forKey:kMapDownloadReminderStoppedDate];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 

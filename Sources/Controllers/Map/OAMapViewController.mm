@@ -836,8 +836,12 @@
         BOOL _isWorldMapDownloading = [_app.downloadsManager.keysOfDownloadTasks containsObject:key];
 
         BOOL mapDownloadStopReminding = [[NSUserDefaults standardUserDefaults] boolForKey:kMapDownloadStopReminding];
+        double mapDownloadReminderDelta = [[NSDate date] timeIntervalSince1970] - [[NSUserDefaults standardUserDefaults] doubleForKey:kMapDownloadReminderStoppedDate];
         const auto worldMap = _app.resourcesManager->getLocalResource(kWorldBasemapKey);
-        if (!_isWorldMapDownloading && !mapDownloadStopReminding && !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0) )
+        if (!_isWorldMapDownloading &&
+            (!mapDownloadStopReminding || mapDownloadReminderDelta > 60.0 * 60.0 * 24.0 * 8.0) &&
+            !worldMap && (showMapIterator == 1 || showMapIterator % 6 == 0))
+            
             [OAPluginPopupViewController askForWorldMap];
     }
 }
@@ -2961,29 +2965,6 @@
         [self showRouteGpxTrack];
     });
 }
-
-/*
-#pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    
-    if (alertView.tag == kUIAlertViewMapDownloadTag) {
-        if (buttonIndex == 1) {
-            // Download map
-            const auto repositoryMap = _app.resourcesManager->getResourceInRepository(kWorldBasemapKey);
-            NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                inRegion:[OsmAndApp instance].worldRegion
-                                          withRegionName:YES];
-            ;
-            [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-            
-        } else if (buttonIndex == alertView.cancelButtonIndex) {
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kMapDownloadStopReminding];
-            [[NSUserDefaults standardUserDefaults] synchronize];
-        }
-    }
-}
-*/
 
 - (void)updateCurrentMapSource
 {

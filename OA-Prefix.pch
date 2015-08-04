@@ -25,6 +25,7 @@
 #define kAppExecCounter @"kAppExecCounter"
 #define kShowMapIterator @"kShowMapIterator"
 #define kMapDownloadStopReminding @"kMapDownloadStopReminding"
+#define kMapDownloadReminderStoppedDate @"kMapDownloadReminderStoppedDate"
 #define kUIAlertViewMapDownloadTag 99
 
 #define kUDLastMapModePositionTrack @"kUDLastMapModePositionTrack"

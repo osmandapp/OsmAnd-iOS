@@ -481,7 +481,11 @@ static NSMutableArray *activePopups;
     if (self.worldRegion)
     {
         [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
-        [[OARootViewController instance].mapPanel displayAreaOnMap:_worldRegion.bboxTopLeft bottomRight:_worldRegion.bboxBottomRight zoom:7.0];
+        
+        if (![[OARootViewController instance].mapPanel goToMyLocationIfInArea:_worldRegion.bboxTopLeft bottomRight:_worldRegion.bboxBottomRight])
+        {
+            [[OARootViewController instance].mapPanel displayAreaOnMap:_worldRegion.bboxTopLeft bottomRight:_worldRegion.bboxBottomRight zoom:7.0];
+        }
     }
     
     [self hide];

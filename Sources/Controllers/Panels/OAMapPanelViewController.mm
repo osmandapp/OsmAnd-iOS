@@ -2230,6 +2230,51 @@ typedef enum
     }
 }
 
+- (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight
+{
+    BOOL res = NO;
+    
+    CLLocation *myLoc = _app.locationServices.lastKnownLocation;
+    if (myLoc && topLeft.latitude != DBL_MAX)
+    {
+        CLLocationCoordinate2D my = myLoc.coordinate;
+
+        OsmAnd::PointI myI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(my.latitude, my.longitude));
+        OsmAnd::PointI topLeftI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLeft.latitude, topLeft.longitude));
+        OsmAnd::PointI bottomRightI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomRight.latitude, bottomRight.longitude));
+        
+        if (topLeftI.x < myI.x &&
+            topLeftI.y < myI.y &&
+            bottomRightI.x > myI.x &&
+            bottomRightI.y > myI.y)
+        {
+            OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+            
+            _targetZoom = kDefaultFavoriteZoom;
+            _targetMode = EOATargetPoint;
+            
+            _targetLatitude = my.latitude;
+            _targetLongitude = my.longitude;
+            
+            Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(my.latitude, my.longitude))];
+            [_mapViewController goToPosition:targetPoint31
+                                     andZoom:(_targetMode == EOATargetBBOX ? _targetZoom : kDefaultFavoriteZoomOnShow)
+                                    animated:NO];
+            
+            renderView.azimuth = 0.0;
+            renderView.elevationAngle = 90.0;
+            
+            OsmAnd::LatLon latLon(my.latitude, my.longitude);
+            _mainMapTarget31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            _mainMapZoom = _targetZoom;
+            
+            res = YES;
+        }
+    }
+    
+    return res;
+}
+
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom
 {
     OAGpxBounds bounds;

@@ -512,7 +512,7 @@ static NSMutableArray *activePopups;
     const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldBasemapKey);
     NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
                                                            inRegion:[OsmAndApp instance].worldRegion
-                                                     withRegionName:YES];
+                                                     withRegionName:YES withResourceType:NO];
     [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
     
     [self hide];
@@ -533,60 +533,12 @@ static NSMutableArray *activePopups;
     const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
     NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
                                                            inRegion:[OsmAndApp instance].worldRegion
-                                                     withRegionName:YES];
+                                                     withRegionName:YES withResourceType:NO];
     
     [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
     
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
-    
-    /*
-    const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-    NSString* stringifiedSize = [NSByteCountFormatter stringFromByteCount:repositoryMap->packageSize
-                                                               countStyle:NSByteCountFormatterCountStyleFile];
-    
-    NSMutableString* message = [NSMutableString string];
-    if ([Reachability reachabilityForInternetConnection].currentReachabilityStatus == ReachableViaWWAN)
-    {
-        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_cell"), stringifiedSize]];
-        [message appendString:@" "];
-        [message appendString:OALocalizedString(@"incur_high_charges")];
-    }
-    else
-    {
-        [message appendString:[NSString stringWithFormat:OALocalizedString(@"prch_nau_q2_wifi"), stringifiedSize]];
-    }
-    
-    [message appendString:@" "];
-    [message appendString:OALocalizedString(@"prch_nau_q3")];
-    [message appendString:@" "];
-    [message appendString:OALocalizedString(@"proceed_q")];
-    
-    UIAlertView *mapDownloadAlert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"download") message:message delegate:self  cancelButtonTitle:OALocalizedString(@"nothanks") otherButtonTitles:OALocalizedString(@"download_now"), nil];
-    mapDownloadAlert.tag = 100;
-    [mapDownloadAlert show];
-     */
 }
 
-/*
- #pragma mark - UIAlertViewDelegate
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    [self hide];
-
-    if (alertView.tag == 100 && buttonIndex != alertView.cancelButtonIndex)
-    {
-        // Download map
-        const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
-        NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
-                                                               inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES];
-        
-        [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
-
-        [[OARootViewController instance].navigationController popToRootViewControllerAnimated:YES];
-    }
-}
-*/
 
 @end

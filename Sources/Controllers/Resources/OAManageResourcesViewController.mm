@@ -783,7 +783,8 @@ static BOOL _lackOfResources;
                 item.resourceType = resource->type;
                 item.title = [self.class titleOfResource:resource_
                                                 inRegion:region
-                                          withRegionName:YES];
+                                          withRegionName:YES
+                                        withResourceType:NO];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                 item.worldRegion = region;
@@ -803,7 +804,8 @@ static BOOL _lackOfResources;
                 item.resourceType = resource->type;
                 item.title = [self.class titleOfResource:resource_
                                                 inRegion:region
-                                          withRegionName:YES];
+                                          withRegionName:YES
+                                        withResourceType:NO];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                 item.size = resource->size;
@@ -821,7 +823,8 @@ static BOOL _lackOfResources;
             item.resourceType = resource->type;
             item.title = [self.class titleOfResource:resource_
                                             inRegion:region
-                                      withRegionName:YES];
+                                      withRegionName:YES
+                                    withResourceType:NO];
             item.resource = resource;
             item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
             item.size = resource->size;
@@ -903,7 +906,8 @@ static BOOL _lackOfResources;
         item.resourceType = resource->type;
         item.title = [self.class titleOfResource:resource
                                   inRegion:match
-                            withRegionName:YES];
+                            withRegionName:YES
+                          withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
@@ -941,7 +945,8 @@ static BOOL _lackOfResources;
         if (match)
             item.title = [self.class titleOfResource:resource
                                         inRegion:match
-                                  withRegionName:YES];
+                                  withRegionName:YES
+                                withResourceType:NO];
         else
             item.title = resource->id.toNSString();
             
@@ -1129,7 +1134,8 @@ static BOOL _lackOfResources;
 {
     return [self.class titleOfResource:resource
                         inRegion:self.region
-                  withRegionName:includeRegionName];
+                  withRegionName:includeRegionName
+                withResourceType:NO];
 }
 
 - (void)updateSearchResults
@@ -1222,7 +1228,8 @@ static BOOL _lackOfResources;
                         item.resourceType = resource->type;
                         item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
-                                            withRegionName:YES];
+                                            withRegionName:YES
+                                          withResourceType:NO];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
@@ -1243,7 +1250,8 @@ static BOOL _lackOfResources;
                         item.resourceType = resource->type;
                         item.title = [self.class titleOfResource:resource_
                                                   inRegion:region
-                                            withRegionName:YES];
+                                            withRegionName:YES
+                                          withResourceType:NO];
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
@@ -1263,7 +1271,8 @@ static BOOL _lackOfResources;
                     item.resourceType = resource->type;
                     item.title = [self.class titleOfResource:resource_
                                               inRegion:region
-                                        withRegionName:YES];
+                                        withRegionName:YES
+                                      withResourceType:NO];
                     item.resource = resource;
                     item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                     item.worldRegion = region;
@@ -1776,6 +1785,8 @@ static BOOL _lackOfResources;
                 item.disabled = YES;
             }
 
+            subtitle = @"";
+
             if (_currentScope == kLocalResourcesScope && item.worldRegion && item.worldRegion.superregion)
             {
                 NSString *countryName = [self.class getCountryName:item];
@@ -1783,20 +1794,25 @@ static BOOL _lackOfResources;
                     title = [NSString stringWithFormat:@"%@ - %@", countryName, item.title];
                 else
                     title = item.title;
+                
+                if (_sizePkg > 0)
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+
             }
             else if (self.region != _app.worldRegion)
             {
                 title = [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType];
+
+                if (_sizePkg > 0)
+                    subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             }
             else
             {
                 title = item.title;
+                
+                if (_sizePkg > 0)
+                    subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             }
-            
-            if (_sizePkg > 0)
-                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-            else
-                subtitle = @"";
         }
         else if (indexPath.section == _localSqliteSection)
         {

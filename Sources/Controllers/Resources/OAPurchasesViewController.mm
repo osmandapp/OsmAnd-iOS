@@ -426,7 +426,7 @@
         const auto repositoryMap = [OsmAndApp instance].resourcesManager->getResourceInRepository(kWorldSeamarksKey);
         NSString* name = [OAResourcesBaseViewController titleOfResource:repositoryMap
                                                                inRegion:[OsmAndApp instance].worldRegion
-                                                         withRegionName:YES];
+                                                         withRegionName:YES withResourceType:NO];
         
         [OAResourcesBaseViewController startBackgroundDownloadOf:repositoryMap resourceName:name];
     }

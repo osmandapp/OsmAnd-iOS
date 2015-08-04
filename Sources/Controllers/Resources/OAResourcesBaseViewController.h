@@ -70,7 +70,8 @@
 
 + (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
-              withRegionName:(BOOL)includeRegionName;
+              withRegionName:(BOOL)includeRegionName
+            withResourceType:(BOOL)includeResourceType;
 
 - (void)onItemClicked:(id)senderItem;
 

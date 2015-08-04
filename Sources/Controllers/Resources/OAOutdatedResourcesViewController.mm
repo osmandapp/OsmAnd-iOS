@@ -154,7 +154,8 @@
         item.resourceId = resource->id;
         item.title = [self.class titleOfResource:resource
                                   inRegion:match
-                            withRegionName:YES];
+                            withRegionName:YES
+                          withResourceType:NO];
         item.resource = resource;
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
@@ -230,7 +231,7 @@
                                                                  {
                                                                      const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
                                                                      
-                                                                     NSString* resourceName = [OAResourcesBaseViewController titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES];
+                                                                     NSString* resourceName = [OAResourcesBaseViewController titleOfResource:item.resource inRegion:item.worldRegion withRegionName:YES withResourceType:YES];
 
                                                                      [self startDownloadOf:resourceInRepository resourceName:resourceName];
                                                                  }

@@ -256,6 +256,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 + (NSString*)titleOfResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::Resource>&)resource
                     inRegion:(OAWorldRegion*)region
               withRegionName:(BOOL)includeRegionName
+            withResourceType:(BOOL)includeResourceType
 {
     if (region == [OsmAndApp instance].worldRegion)
     {
@@ -307,16 +308,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             nameStr = nil;
     }
     
-    //if (resource->type == OsmAndResourceType::WikiMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Wiki])
-    //    nameStr = nil;
-    //if (resource->type == OsmAndResourceType::SrtmMapRegion && ![[OAIAPHelper sharedInstance] productPurchased:kInAppId_Addon_Srtm])
-    //    nameStr = nil;
-    
     if (!nameStr)
-    {
-        //OALog(@"Resource %@ without name!", resource->id.toNSString());
         return nil;
-    }
+    
+    if (includeResourceType)
+        nameStr = [nameStr stringByAppendingString:[NSString stringWithFormat:@" - %@", [OAResourcesBaseViewController resourceTypeLocalized:resource->type]]];
     
     return nameStr;
 }
@@ -355,7 +351,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [self verifySpaceAvailableDownloadAndUnpackResource:item.resource
                                                   withResourceName:[self.class titleOfResource:item.resource
                                                                                 inRegion:item.worldRegion
-                                                                          withRegionName:YES]
+                                                                          withRegionName:YES
+                                                                        withResourceType:YES]
                                                           asUpdate:isUpdate];
     }
     else if ([item_ isKindOfClass:[LocalResourceItem class]])
@@ -367,7 +364,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         return [self verifySpaceAvailableDownloadAndUnpackResource:resource
                                                   withResourceName:[self.class titleOfResource:item.resource
                                                                                 inRegion:item.worldRegion
-                                                                          withRegionName:YES]
+                                                                          withRegionName:YES
+                                                                        withResourceType:YES]
                                                           asUpdate:isUpdate];
     }
     
@@ -473,7 +471,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSString* resourceName = [self.class titleOfResource:item.resource
                                           inRegion:item.worldRegion
-                                    withRegionName:YES];
+                                    withRegionName:YES
+                                  withResourceType:YES];
 
     if (![self verifySpaceAvailableDownloadAndUnpackResource:resourceInRepository
                                             withResourceName:resourceName
@@ -530,7 +529,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSString* resourceName = [self.class titleOfResource:item.resource
                                           inRegion:item.worldRegion
-                                    withRegionName:YES];
+                                    withRegionName:YES
+                                  withResourceType:YES];
 
     if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
                                             withResourceName:resourceName
@@ -583,7 +583,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     NSString* name = [self.class titleOfResource:item.resource
                                         inRegion:item.worldRegion
-                                  withRegionName:YES];
+                                  withRegionName:YES
+                                withResourceType:YES];
     
     id<OADownloadTask> task = [_app.downloadsManager downloadTaskWithRequest:request
                                                                       andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()]
@@ -672,7 +673,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_upd_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]] mutableCopy];
+                                           withRegionName:YES
+                                         withResourceType:YES]] mutableCopy];
         [message appendString:@" "];
         [message appendString:OALocalizedString(@"data_will_be_lost")];
         [message appendString:@" "];
@@ -683,7 +685,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         message = [[NSString stringWithFormat:OALocalizedString(@"res_cancel_inst_q"),
                                     [self.class titleOfResource:resource
                                                  inRegion:item_.worldRegion
-                                           withRegionName:YES]] mutableCopy];
+                                           withRegionName:YES
+                                         withResourceType:YES]] mutableCopy];
         [message appendString:@" "];
         [message appendString:OALocalizedString(@"data_will_be_lost")];
         [message appendString:@" "];
@@ -720,7 +723,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else
         title = [self.class titleOfResource:item.resource
                                    inRegion:item.worldRegion
-                             withRegionName:YES];
+                             withRegionName:YES
+                           withResourceType:YES];
     if (isInstalled)
     {
         message = [[NSString stringWithFormat:OALocalizedString(@"res_uninst_managed_q"), title] mutableCopy];

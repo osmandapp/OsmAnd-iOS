@@ -445,3 +445,7 @@
 "show_region_on_map_desc" = "El mapa de %@ ja s'ha baixat. Aneu al mapa per començar a utilitzar-lo.";
 "show_region_on_map_go" = "Ves al mapa";
 "map_settings_hillshade" = "Ombrejat del relleu";
+"sqlitedb_import_title" = "Importa fitxer del creador de mapes";
+"sqlitedb_import_already_exists" = "El fitxer sqlitedb indicat ja existeix. Trieu una acció.";
+"map_creator" = "Creador de mapes";
+"local_names" = "Denominacions locals";

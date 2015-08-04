@@ -786,9 +786,12 @@ static BOOL _lackOfResources;
                                           withRegionName:YES];
                 item.resource = resource;
                 item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
-                item.size = resource->size;
                 item.worldRegion = region;
-                
+
+                const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+                item.size = resourceInRepository->size;
+                item.sizePkg = resourceInRepository->packageSize;
+
                 if (item.title == nil)
                     continue;
             }
@@ -1224,6 +1227,10 @@ static BOOL _lackOfResources;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
 
+                        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+                        item.size = resourceInRepository->size;
+                        item.sizePkg = resourceInRepository->packageSize;
+
                         if (item.title == nil)
                             continue;
 
@@ -1240,6 +1247,8 @@ static BOOL _lackOfResources;
                         item.resource = resource;
                         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                         item.worldRegion = region;
+
+                        item.size = resource->size;
 
                         if (item.title == nil)
                             continue;
@@ -1258,7 +1267,9 @@ static BOOL _lackOfResources;
                     item.resource = resource;
                     item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
                     item.worldRegion = region;
-                    
+                    item.size = resource->size;
+                    item.sizePkg = resource->packageSize;
+
                     if (item.title == nil)
                         continue;
 
@@ -1673,7 +1684,10 @@ static BOOL _lackOfResources;
                 else if ([item isKindOfClass:[OutdatedResourceItem class]])
                     cellTypeId = outdatedResourceCell;
                 else if ([item isKindOfClass:[LocalResourceItem class]])
+                {
                     cellTypeId = localResourceCell;
+                    _sizePkg = item.size;
+                }
                 else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
                     cellTypeId = repositoryResourceCell;
                 }
@@ -1780,7 +1794,7 @@ static BOOL _lackOfResources;
             }
             
             if (_sizePkg > 0)
-                subtitle = [NSString stringWithFormat:@"%@", [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+                subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourcesBaseViewController resourceTypeLocalized:item.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
             else
                 subtitle = @"";
         }
@@ -2035,9 +2049,16 @@ static BOOL _lackOfResources;
     if (item)
     {
         if ([item isKindOfClass:[OutdatedResourceItem class]])
-            [self showDetailsOf:item];
+        {
+            if (((OutdatedResourceItem *)item).downloadTask != nil)
+                [self onItemClicked:item];
+            else
+                [self showDetailsOf:item];
+        }
         else if (![item isKindOfClass:[LocalResourceItem class]])
+        {
             [self onItemClicked:item];
+        }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:true];

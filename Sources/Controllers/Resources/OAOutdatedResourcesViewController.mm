@@ -159,6 +159,10 @@
         item.downloadTask = [self getDownloadTaskFor:resource->id.toNSString()];
         item.worldRegion = match;
 
+        const auto resourceInRepository = _app.resourcesManager->getResourceInRepository(item.resourceId);
+        item.size = resourceInRepository->size;
+        item.sizePkg = resourceInRepository->packageSize;
+
         if (item.title == nil)
             continue;
 

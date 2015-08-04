@@ -784,11 +784,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)showDetailsOf:(LocalResourceItem*)item
 {
-    /*
-    NSString* resourceId = item.resourceId.toNSString();
-    [self.navigationController pushViewController:[[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId]
-                                         animated:YES];
-    */
 }
 
 - (UITableView *)getTableView
@@ -798,7 +793,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)onItemClicked:(id)senderItem
 {
-    //OAWorldRegion* reg = self.region;
     if ([senderItem isKindOfClass:[ResourceItem class]])
     {
         ResourceItem* item_ = (ResourceItem*)senderItem;
@@ -810,14 +804,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         else if ([item_ isKindOfClass:[OutdatedResourceItem class]])
         {
             OutdatedResourceItem* item = (OutdatedResourceItem*)item_;
-
             [self offerDownloadAndUpdateOf:item];
         }
         else if ([item_ isKindOfClass:[LocalResourceItem class]])
         {
-            //LocalResourceItem* item = (LocalResourceItem*)item_;
-
-            //[self showDetailsOf:item];
+            LocalResourceItem* item = (LocalResourceItem*)item_;
+            [self showDetailsOf:item];
         }
         else if ([item_ isKindOfClass:[RepositoryResourceItem class]])
         {

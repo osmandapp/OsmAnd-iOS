@@ -1311,25 +1311,7 @@ static BOOL _lackOfResources;
 
 - (void)showDetailsOf:(LocalResourceItem*)item
 {
-    /*
-    NSString* resourceId = item.resourceId.toNSString();
-    UIViewController* detailsViewController = nil;
-    if (self.searchDisplayController.isActive)
-    {
-        //NOTE: What a freaky way to do this...
-        self.navigationItem.backBarButtonItem = _searchBackButton;
-        detailsViewController = [[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId
-                                                                                                forRegion:item.worldRegion];
-    }
-    else
-    {
-        self.navigationItem.backBarButtonItem = nil;
-        detailsViewController = [[OALocalResourceInformationViewController alloc] initWithLocalResourceId:resourceId];
-    }
-
-    [self.navigationController pushViewController:detailsViewController
-                                         animated:YES];
-     */
+    [self performSegueWithIdentifier:kOpenDetailsSegue sender:item];
 }
 
 - (IBAction)onDoneClicked:(id)sender
@@ -1821,8 +1803,13 @@ static BOOL _lackOfResources;
             cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
             cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc setImage:iconImage forState:UIControlStateNormal];
+            [btnAcc sizeToFit];
+            [cell setAccessoryView:btnAcc];
         }
         else if ([cellTypeId isEqualToString:repositoryResourceCell])
         {
@@ -1831,8 +1818,13 @@ static BOOL _lackOfResources;
             cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
             cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
             cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc setImage:iconImage forState:UIControlStateNormal];
+            [btnAcc sizeToFit];
+            [cell setAccessoryView:btnAcc];
         }
         else if ([cellTypeId isEqualToString:downloadingResourceCell])
         {
@@ -1868,7 +1860,11 @@ static BOOL _lackOfResources;
         {
             cell.textLabel.textColor = [UIColor blackColor];
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
-            cell.accessoryView = [[UIImageView alloc] initWithImage:[iconImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
+            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
+            [btnAcc setImage:iconImage forState:UIControlStateNormal];
+            [btnAcc sizeToFit];
+            [cell setAccessoryView:btnAcc];
         }
         else
         {
@@ -1984,6 +1980,15 @@ static BOOL _lackOfResources;
     return cell;
 }
 
+- (void) accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
+{
+    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:self.tableView]];
+    if (!indexPath)
+        return;
+    
+    [self.tableView.delegate tableView: self.tableView accessoryButtonTappedForRowWithIndexPath: indexPath];
+}
+
 #pragma mark - UITableViewDelegate
 
 -(id)getItemByIndexPath:(NSIndexPath *)indexPath
@@ -2025,9 +2030,14 @@ static BOOL _lackOfResources;
         item = [self getItemByIndexPath:indexPath];
     }
 
-    if (item != nil)
-        [self onItemClicked:item];
-
+    if (item)
+    {
+        if ([item isKindOfClass:[OutdatedResourceItem class]])
+            [self showDetailsOf:item];
+        else if (![item isKindOfClass:[LocalResourceItem class]])
+            [self onItemClicked:item];
+    }
+    
     [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
@@ -2201,6 +2211,38 @@ static BOOL _lackOfResources;
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    if ([segue.identifier isEqualToString:kOpenDetailsSegue] && [sender isKindOfClass:[LocalResourceItem class]])
+    {
+        OALocalResourceInformationViewController* resourceInfoViewController = [segue destinationViewController];
+        resourceInfoViewController.openFromSplash = _openFromSplash;
+        resourceInfoViewController.baseController = self;
+        
+        LocalResourceItem* item = sender;
+        if (item)
+        {
+            if (item.worldRegion)
+                resourceInfoViewController.regionTitle = item.worldRegion.name;
+            else if (self.region.name)
+                resourceInfoViewController.regionTitle = self.region.name;
+            else
+                resourceInfoViewController.regionTitle = item.title;
+            
+            if ([item isKindOfClass:[SqliteDbResourceItem class]])
+            {
+                [resourceInfoViewController initWithLocalSqliteDbItem:(SqliteDbResourceItem *)item];
+                return;
+            }
+            else
+            {
+                NSString* resourceId = item.resourceId.toNSString();
+                [resourceInfoViewController initWithLocalResourceId:resourceId];
+            }
+        }
+        
+        resourceInfoViewController.localItem = item;
+        return;
+    }
+
     if (![sender isKindOfClass:[UITableViewCell class]])
         return;
 

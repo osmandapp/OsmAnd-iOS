@@ -166,7 +166,6 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
     if (installedResource)
     {
         // Timestamp
-        [tKeys addObject:OALocalizedString(@"res_created_on")];
         NSDate *d = [NSDate dateWithTimeIntervalSince1970:installedResource->timestamp / 1000];
         
         if (!formatter) {
@@ -174,8 +173,13 @@ typedef OsmAnd::ResourcesManager::LocalResource OsmAndLocalResource;
             [formatter setDateStyle:NSDateFormatterShortStyle];
             [formatter setTimeStyle:NSDateFormatterShortStyle];
         }
-        
-        [tValues addObject:[NSString stringWithFormat:@"%@", [formatter stringFromDate:d]]];
+
+        NSString *dateStr = [formatter stringFromDate:d];
+        if (dateStr.length > 0)
+        {
+            [tKeys addObject:OALocalizedString(@"res_created_on")];
+            [tValues addObject:[NSString stringWithFormat:@"%@", dateStr]];
+        }
     }
     
     tableKeys = tKeys;

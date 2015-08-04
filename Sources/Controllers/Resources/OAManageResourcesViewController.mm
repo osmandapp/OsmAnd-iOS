@@ -1732,10 +1732,12 @@ static BOOL _lackOfResources;
             else if ([item isKindOfClass:[OutdatedResourceItem class]])
                 cellTypeId = outdatedResourceCell;
             else if ([item isKindOfClass:[LocalResourceItem class]])
+            {
                 cellTypeId = localResourceCell;
-            else if ([item isKindOfClass:[RepositoryResourceItem class]]) {
-                cellTypeId = repositoryResourceCell;
+                _sizePkg = item.size;
             }
+            else if ([item isKindOfClass:[RepositoryResourceItem class]])
+                cellTypeId = repositoryResourceCell;
             
             BOOL mapDownloaded = NO;
             for (ResourceItem* it in [self getRegionMapItems])
@@ -1802,7 +1804,7 @@ static BOOL _lackOfResources;
                                           reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
             cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
             
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_update_icon.png"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1817,7 +1819,7 @@ static BOOL _lackOfResources;
                                           reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
             cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             UIImage* iconImage = [UIImage imageNamed:@"menu_item_install_icon.png"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -1833,7 +1835,7 @@ static BOOL _lackOfResources;
 
             cell.textLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:17.0];
             cell.detailTextLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:12.0];
-            cell.detailTextLabel.textColor = [UIColor darkGrayColor];
+            cell.detailTextLabel.textColor = UIColorFromRGB(0x929292);
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];

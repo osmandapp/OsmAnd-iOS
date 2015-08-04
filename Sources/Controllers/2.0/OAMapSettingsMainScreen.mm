@@ -74,8 +74,6 @@
     
     mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
     app.data.lastMapSource = mapSource;
-    
-    [self setupView];
 }
 
 - (NSString *)getMapLangValueStr

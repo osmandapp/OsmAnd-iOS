@@ -27,8 +27,12 @@
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_gpxRouteChangedObserver;
     
-    BOOL _isAnimating;
+    OAAutoObserverProxy *_routePointDeactivatedObserver;
+    OAAutoObserverProxy *_routePointActivatedObserver;
 
+    BOOL _isAnimating;
+    
+    NSMutableArray *_items;
 }
 
 @synthesize activeIndexPath = _activeIndexPath;
@@ -47,13 +51,15 @@
         _cardHeaderView.title.text = [OALocalizedString(@"gpx_route") uppercaseStringWithLocale:[NSLocale currentLocale]];
         [_cardHeaderView setRightButtonTitle:[OALocalizedString(@"shared_string_modify") uppercaseStringWithLocale:[NSLocale currentLocale]]];
         [_cardHeaderView.rightButton addTarget:self action:@selector(headerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+        
+        [self generateData];
     }
     return self;
 }
 
 - (void)generateData
 {
-    //
+    _items = [NSMutableArray arrayWithArray:_gpxRouter.routeDoc.activePoints];
 }
 
 - (void)headerButtonPressed
@@ -64,7 +70,7 @@
 
 - (NSInteger)rowsCount
 {
-    return (_gpxRouter.routeDoc.activePoints.count > 3 ? 3 : _gpxRouter.routeDoc.activePoints.count);
+    return (_items.count > 3 ? 3 : _items.count);
 }
 
 - (UITableViewCell *)cellForRow:(NSInteger)row
@@ -101,8 +107,8 @@
 
 - (id)getItem:(NSInteger)row
 {
-    if (row < _gpxRouter.routeDoc.activePoints.count)
-        return _gpxRouter.routeDoc.activePoints[row];
+    if (row < _items.count)
+        return _items[row];
     else
         return nil;
 }
@@ -142,7 +148,7 @@
         [routeCell hideDescIcon:NO];
         
         routeCell.topVDotsVisible = NO;
-        routeCell.bottomVDotsVisible = _gpxRouter.routeDoc.activePoints.count > 1;
+        routeCell.bottomVDotsVisible = _items.count > 1;
     }
     else
     {
@@ -152,7 +158,7 @@
         [routeCell hideDescIcon:YES];
         
         routeCell.topVDotsVisible = YES;
-        routeCell.bottomVDotsVisible = row < _gpxRouter.routeDoc.activePoints.count - 1;
+        routeCell.bottomVDotsVisible = row < _items.count - 1;
     }
 
     [routeCell hideVDots:NO];
@@ -185,6 +191,13 @@
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(updateDistanceAndDirection)
                                                          andObserve:_gpxRouter.locationUpdatedObservable];
+    
+    _routePointDeactivatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onDeactivation:withKey:)
+                                                         andObserve:_gpxRouter.routePointDeactivatedObservable];
+    _routePointActivatedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onActivation:withKey:)
+                                                                andObserve:_gpxRouter.routePointActivatedObservable];
 }
 
 - (void)onDisappear
@@ -195,6 +208,18 @@
         _locationUpdateObserver = nil;
     }
     
+    if (_routePointDeactivatedObserver)
+    {
+        [_routePointDeactivatedObserver detach];
+        _routePointDeactivatedObserver = nil;
+    }
+
+    if (_routePointActivatedObserver)
+    {
+        [_routePointActivatedObserver detach];
+        _routePointActivatedObserver = nil;
+    }
+
     if (_gpxRouteChangedObserver)
     {
         [_gpxRouteChangedObserver detach];
@@ -217,7 +242,7 @@
                                      NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
                                      _activeIndexPath = [indexPath copy];
                                      OAGpxRouteWptItem* item = [self getItem:row];
-                                     [self moveToInactive:item];
+                                     [self deactivate:item];
                                      
                                      return YES;
                                  }];
@@ -230,7 +255,7 @@
                                   NSIndexPath * indexPath = [NSIndexPath indexPathForRow:row inSection:self.section];
                                   _activeIndexPath = [indexPath copy];
                                   OAGpxRouteWptItem* item = [self getItem:row];
-                                  [self moveToActive:item];
+                                  [self activate:item];
                                   
                                   return YES;
                               }];
@@ -241,7 +266,28 @@
         return @[visit, driveTo];
 }
 
-- (void)moveToInactive:(OAGpxRouteWptItem *)item
+- (void)deactivate:(OAGpxRouteWptItem *)item
+{
+    [_gpxRouter.routeDoc moveToInactive:item];
+}
+
+- (void)onDeactivation:(id)observable withKey:(id)key
+{
+    OAGpxRouteWptItem *_item = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_items enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop) {
+            if (_item == item)
+            {
+                _activeIndexPath = [NSIndexPath indexPathForRow:idx inSection:self.section];
+                [self doDeactivate:_item];
+                *stop = YES;
+            }
+        }];
+    });
+}
+
+- (void)doDeactivate:(OAGpxRouteWptItem *)item
 {
     _isAnimating = YES;
     
@@ -251,23 +297,21 @@
 
         _isAnimating = NO;
 
-        if (_gpxRouter.routeDoc.activePoints.count > 0)
+        if (_items.count > 0)
         {
             [self refreshVisibleRows];
             [self refreshSwipeButtons];
             [_gpxRouter updateDistanceAndDirection:YES];
+            
+            [self.tableView reloadData];
         }
     }];
     
     [self.tableView beginUpdates];
     
-    @synchronized(_gpxRouter.routeDoc.syncObj)
-    {
-        [_gpxRouter.routeDoc.activePoints removeObjectAtIndex:_activeIndexPath.row];
-        [_gpxRouter.routeDoc.inactivePoints insertObject:item atIndex:0];
-    }
+    [_items removeObject:item];
     
-    if (_gpxRouter.routeDoc.activePoints.count == 0)
+    if (_items.count == 0)
     {
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:self.section] withRowAnimation:UITableViewRowAnimationLeft];
         [self removeCard];
@@ -276,20 +320,39 @@
     {
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
         
-        if (_gpxRouter.routeDoc.activePoints.count > 2)
+        if (_items.count > 2)
             [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
     }
     
     [self.tableView endUpdates];
     
-    item.point.visited = YES;
-
     [CATransaction commit];
     
-    [self updatePointsArray];
+    [_gpxRouter.routeDoc updatePointsArray];
 }
 
-- (void)moveToActive:(OAGpxRouteWptItem *)item
+- (void)activate:(OAGpxRouteWptItem *)item
+{
+    [_gpxRouter.routeDoc moveToActive:item];
+}
+
+- (void)onActivation:(id)observable withKey:(id)key
+{
+    OAGpxRouteWptItem *_item = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [_items enumerateObjectsUsingBlock:^(OAGpxRouteWptItem *item, NSUInteger idx, BOOL *stop) {
+            if (_item == item)
+            {
+                _activeIndexPath = [NSIndexPath indexPathForRow:idx inSection:self.section];
+                *stop = YES;
+            }
+        }];
+        [self doActivate:_item];
+    });
+}
+
+- (void)doActivate:(OAGpxRouteWptItem *)item
 {
     _isAnimating = YES;
     
@@ -303,45 +366,25 @@
         _isAnimating = NO;
 
         [_gpxRouter updateDistanceAndDirection:YES];
-        
+
+        [self.tableView reloadData];
     }];
     
     [self.tableView beginUpdates];
     NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:self.section];
     
-    @synchronized(_gpxRouter.routeDoc.syncObj)
-    {
-        [_gpxRouter.routeDoc.activePoints removeObjectAtIndex:_activeIndexPath.row];
-        [_gpxRouter.routeDoc.activePoints insertObject:item atIndex:0];
-    }
+    [_items insertObject:item atIndex:0];
     
-    [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
+    if (_activeIndexPath)
+        [self.tableView moveRowAtIndexPath:_activeIndexPath toIndexPath:destination];
+    else
+        [self.tableView insertRowsAtIndexPaths:@[destination] withRowAnimation:UITableViewRowAnimationBottom];
+    
     [self.tableView endUpdates];
-    
-    item.point.visited = NO;
-    
+        
     [CATransaction commit];
     
-    [self updatePointsArray];
-}
-
-
-- (void)updatePointsArray
-{
-    int i = 0;
-    for (OAGpxRouteWptItem *item in _gpxRouter.routeDoc.activePoints)
-    {
-        item.point.index = i++;
-        [item.point applyRouteInfo];
-    }
-    for (OAGpxRouteWptItem *item in _gpxRouter.routeDoc.inactivePoints)
-    {
-        item.point.index = i++;
-        [item.point applyRouteInfo];
-    }
-    
-    [_gpxRouter refreshRoute];
-    [_gpxRouter.routeChangedObservable notifyEvent];
+    [_gpxRouter.routeDoc updatePointsArray];
 }
 
 @end

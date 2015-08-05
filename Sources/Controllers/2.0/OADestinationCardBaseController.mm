@@ -26,6 +26,11 @@
     
 }
 
+- (void)updateSectionNumber:(NSInteger)section
+{
+    _section = section;
+}
+
 - (NSInteger)rowsCount
 {
     return 0;

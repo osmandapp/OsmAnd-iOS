@@ -194,6 +194,7 @@
 
 -(void)generateData
 {
+    _sections = nil;
     [self generateData:YES];
 }
 
@@ -207,14 +208,38 @@
     
     if ([OAGPXRouter sharedInstance].routeDoc && [OAGPXRouter sharedInstance].routeDoc.activePoints.count > 0)
     {
-        OAGPXRouteCardController *gpxRouteCardController = [[OAGPXRouteCardController alloc] initWithSection:index++ tableView:self.tableView];
+        OAGPXRouteCardController *gpxRouteCardController;
+        for (OADestinationCardBaseController *card in _sections)
+            if ([card isKindOfClass:[OAGPXRouteCardController class]])
+            {
+                gpxRouteCardController = (OAGPXRouteCardController *)card;
+                break;
+            }
+
+        if (!gpxRouteCardController)
+            gpxRouteCardController = [[OAGPXRouteCardController alloc] initWithSection:index++ tableView:self.tableView];
+        else
+            [gpxRouteCardController updateSectionNumber:index++];
+        
         gpxRouteCardController.delegate = self;
         [sections addObject:gpxRouteCardController];
     }
 
     if ([[OADestinationsHelper instance] pureDestinationsCount] > 0)
     {
-        OADirectionsCardController *directionsCardController = [[OADirectionsCardController alloc] initWithSection:index++ tableView:self.tableView];
+        OADirectionsCardController *directionsCardController;
+        for (OADestinationCardBaseController *card in _sections)
+            if ([card isKindOfClass:[OADirectionsCardController class]])
+            {
+                directionsCardController = (OADirectionsCardController *)card;
+                break;
+            }
+        
+        if (!directionsCardController)
+            directionsCardController = [[OADirectionsCardController alloc] initWithSection:index++ tableView:self.tableView];
+        else
+            [directionsCardController updateSectionNumber:index++];
+
         directionsCardController.delegate = self;
         [sections addObject:directionsCardController];
     }

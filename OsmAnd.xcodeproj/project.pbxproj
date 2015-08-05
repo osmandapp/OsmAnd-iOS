@@ -302,6 +302,18 @@
 		84147A461B25E0EA0091E57F /* OAEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84147A421B25E0EA0091E57F /* OAEditTargetViewController.xib */; };
 		84147A471B25E0EA0091E57F /* OAEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84147A421B25E0EA0091E57F /* OAEditTargetViewController.xib */; };
 		84147A481B25E0EA0091E57F /* OAEditTargetViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84147A421B25E0EA0091E57F /* OAEditTargetViewController.xib */; };
+		841766301B7215F2002A08CB /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417662F1B7215F2002A08CB /* OAHistoryDB.m */; };
+		841766311B7215F2002A08CB /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417662F1B7215F2002A08CB /* OAHistoryDB.m */; };
+		841766321B7215F2002A08CB /* OAHistoryDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417662F1B7215F2002A08CB /* OAHistoryDB.m */; };
+		841766351B721604002A08CB /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
+		841766361B721604002A08CB /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
+		841766371B721604002A08CB /* OAHistoryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766341B721604002A08CB /* OAHistoryHelper.m */; };
+		8417663A1B721E58002A08CB /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766391B721E58002A08CB /* NSData+CRC32.m */; };
+		8417663B1B721E58002A08CB /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766391B721E58002A08CB /* NSData+CRC32.m */; };
+		8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */ = {isa = PBXBuildFile; fileRef = 841766391B721E58002A08CB /* NSData+CRC32.m */; };
+		8417663F1B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
+		841766401B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
+		841766411B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
 		8417A66F1B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6701B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
@@ -2973,6 +2985,14 @@
 		84147A401B25E0EA0091E57F /* OAEditTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditTargetViewController.h; path = Sources/Controllers/2.0/OAEditTargetViewController.h; sourceTree = "<group>"; };
 		84147A411B25E0EA0091E57F /* OAEditTargetViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAEditTargetViewController.mm; path = Sources/Controllers/2.0/OAEditTargetViewController.mm; sourceTree = "<group>"; };
 		84147A421B25E0EA0091E57F /* OAEditTargetViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAEditTargetViewController.xib; path = Sources/Controllers/2.0/OAEditTargetViewController.xib; sourceTree = "<group>"; };
+		8417662E1B7215F2002A08CB /* OAHistoryDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryDB.h; sourceTree = "<group>"; };
+		8417662F1B7215F2002A08CB /* OAHistoryDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryDB.m; sourceTree = "<group>"; };
+		841766331B721604002A08CB /* OAHistoryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryHelper.h; sourceTree = "<group>"; };
+		841766341B721604002A08CB /* OAHistoryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryHelper.m; sourceTree = "<group>"; };
+		841766381B721E58002A08CB /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSData+CRC32.h"; path = "Helpers/NSData+CRC32.h"; sourceTree = "<group>"; };
+		841766391B721E58002A08CB /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+CRC32.m"; path = "Helpers/NSData+CRC32.m"; sourceTree = "<group>"; };
+		8417663D1B722396002A08CB /* OAHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryItem.h; sourceTree = "<group>"; };
+		8417663E1B722396002A08CB /* OAHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryItem.m; sourceTree = "<group>"; };
 		8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXWptViewController.h; path = Sources/Controllers/2.0/OAGPXWptViewController.h; sourceTree = "<group>"; };
 		8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXWptViewController.mm; path = Sources/Controllers/2.0/OAGPXWptViewController.mm; sourceTree = "<group>"; };
 		8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXWptViewController.xib; path = Sources/Controllers/2.0/OAGPXWptViewController.xib; sourceTree = "<group>"; };
@@ -4899,6 +4919,19 @@
 			name = Routing;
 			sourceTree = "<group>";
 		};
+		8417662D1B7215E6002A08CB /* History */ = {
+			isa = PBXGroup;
+			children = (
+				8417663D1B722396002A08CB /* OAHistoryItem.h */,
+				8417663E1B722396002A08CB /* OAHistoryItem.m */,
+				8417662E1B7215F2002A08CB /* OAHistoryDB.h */,
+				8417662F1B7215F2002A08CB /* OAHistoryDB.m */,
+				841766331B721604002A08CB /* OAHistoryHelper.h */,
+				841766341B721604002A08CB /* OAHistoryHelper.m */,
+			);
+			path = History;
+			sourceTree = "<group>";
+		};
 		8417A6751B25C1D100EA1D17 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
@@ -5320,6 +5353,7 @@
 		BB098CFA1793F7FD00423944 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8417662D1B7215E6002A08CB /* History */,
 				848A3EA91B6A13EE0016F6F4 /* Map */,
 				84F3A9341B4EC3C900D16EBC /* ThirdPart */,
 				84F3A8851B4C44C000D16EBC /* Routing */,
@@ -5684,6 +5718,8 @@
 		BBAD5B97192733820043590F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				841766381B721E58002A08CB /* NSData+CRC32.h */,
+				841766391B721E58002A08CB /* NSData+CRC32.m */,
 				842432641AF0BC0300925821 /* OASavingTrackHelper.h */,
 				842432651AF0BC0300925821 /* OASavingTrackHelper.mm */,
 				84185A7B1AA99ABE00F70328 /* OAIAPHelper.h */,
@@ -8205,6 +8241,7 @@
 				840ED4841B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84185A7D1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				3A02BFB51A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
+				8417663A1B721E58002A08CB /* NSData+CRC32.m in Sources */,
 				84147A431B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				BB451EAF18E19376005FBE09 /* OAMapViewState.m in Sources */,
 				84387B2A1ABB36A600504DA7 /* OAPOI.m in Sources */,
@@ -8266,12 +8303,14 @@
 				BBE1D2AD190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB818E1938F005FBE09 /* OALocationServices.m in Sources */,
 				8470412A1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
+				841766301B7215F2002A08CB /* OAHistoryDB.m in Sources */,
 				842431C41AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84387B251ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				3A2D893C1A2DBC2900511A5C /* OAAutocompleteManager.mm in Sources */,
 				BBA3AE92196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BBA3AECD197500B60039D991 /* OADebugHudViewController.mm in Sources */,
 				3AFEEE5E1A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
+				841766351B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				3ACA4AB31A0B93CE00ECC792 /* OASettingsTableViewCell.m in Sources */,
 				848D17231B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				84EE2DEE1AFD2D58007C9A94 /* OABannerView.m in Sources */,
@@ -8341,6 +8380,7 @@
 				BBA3B00519864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				BBE1D2B3190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				8441CB6A1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
+				8417663F1B722396002A08CB /* OAHistoryItem.m in Sources */,
 				84E441821AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				8431E7631B3715A00063C9AF /* OAGPXWptListViewController.mm in Sources */,
 				848A3EB21B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
@@ -8394,6 +8434,7 @@
 				840ED4851B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84185A7E1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				3A02BFB61A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
+				8417663B1B721E58002A08CB /* NSData+CRC32.m in Sources */,
 				84147A441B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				BB451EB018E19376005FBE09 /* OAMapViewState.m in Sources */,
 				84387B2B1ABB36A600504DA7 /* OAPOI.m in Sources */,
@@ -8455,12 +8496,14 @@
 				BBE1D2AE190D186F00D90F0A /* OsmAndApp.mm in Sources */,
 				BB451EB918E1938F005FBE09 /* OALocationServices.m in Sources */,
 				8470412B1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
+				841766311B7215F2002A08CB /* OAHistoryDB.m in Sources */,
 				842431C51AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
 				84387B261ABB369700504DA7 /* OAPOICategory.m in Sources */,
 				BBA3AE93196C3B3B0039D991 /* OAMapLayersConfiguration.m in Sources */,
 				BB32C0441925FB43007999A0 /* OATableViewCell.m in Sources */,
 				3AFEEE5F1A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				3ACA4AB41A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
+				841766361B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				3A8314871A07ECCE00473C38 /* OATargetPointView.mm in Sources */,
 				848D17241B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				84EE2DEF1AFD2D58007C9A94 /* OABannerView.m in Sources */,
@@ -8530,6 +8573,7 @@
 				BBE1D2B4190D18B000D90F0A /* OAWorldRegion.mm in Sources */,
 				BB451E3318DCD224005FBE09 /* UIViewController+OARootViewController.m in Sources */,
 				8441CB6B1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
+				841766401B722396002A08CB /* OAHistoryItem.m in Sources */,
 				84E441831AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				8431E7641B3715A00063C9AF /* OAGPXWptListViewController.mm in Sources */,
 				848A3EB31B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
@@ -8575,6 +8619,7 @@
 			files = (
 				84B4FD851A92179600A147BA /* OAGPXDetailsTableViewCell.m in Sources */,
 				BBA3AF35197FC4BB0039D991 /* main.m in Sources */,
+				841766371B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				BBA3AF37197FC4BB0039D991 /* OATableViewCellWithClickableAccessoryView.m in Sources */,
 				84B4FDA11A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84D81EFB1AA370E9001098FD /* OADestination.mm in Sources */,
@@ -8609,6 +8654,7 @@
 				84C41E721AB962420089EABB /* OAPOIHelper.mm in Sources */,
 				BBA3AF3C197FC4BB0039D991 /* OATableViewCellWithButton.m in Sources */,
 				84C41E6D1AB962350089EABB /* OAPOIType.m in Sources */,
+				8417663C1B721E58002A08CB /* NSData+CRC32.m in Sources */,
 				BBA3AF3D197FC4BB0039D991 /* OADefaultFavorite.m in Sources */,
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
@@ -8684,6 +8730,7 @@
 				84D81EF61AA37075001098FD /* OADestinationCell.mm in Sources */,
 				84BFC2471A9B671F00D807B4 /* OAMapSettingsParameterScreen.mm in Sources */,
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
+				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
@@ -8734,6 +8781,7 @@
 				BBA3AF62197FC4BB0039D991 /* OALocalResourceInformationViewController.mm in Sources */,
 				845E06E81B6001CA00DFC2A7 /* OAPluginDetailsViewController.mm in Sources */,
 				84B4FD771A91E08600A147BA /* OAGPXTableViewCell.m in Sources */,
+				841766321B7215F2002A08CB /* OAHistoryDB.m in Sources */,
 				BBA3AF63197FC4BB0039D991 /* OATableViewCellWithSwitch.m in Sources */,
 				848A3ED31B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm in Sources */,
 				3AC09BCD1A2783ED002698FE /* OAWebViewController.m in Sources */,

@@ -70,7 +70,10 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         _routeDefinedObservable = [[OAObservable alloc] init];
         _routeCanceledObservable = [[OAObservable alloc] init];
         _routeChangedObservable = [[OAObservable alloc] init];
-
+        
+        _routePointDeactivatedObservable = [[OAObservable alloc] init];
+        _routePointActivatedObservable = [[OAObservable alloc] init];
+ 
         // Init active route
         NSString *activeRouteFileName = [[OAAppSettings sharedManager] mapSettingActiveRouteFileName];
         if (activeRouteFileName)

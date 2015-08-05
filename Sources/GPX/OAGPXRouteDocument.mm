@@ -399,4 +399,53 @@
     [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
 }
 
+- (void)moveToInactiveByIndex:(NSInteger)index
+{
+    if (index < self.activePoints.count)
+    {
+        OAGpxRouteWptItem *item = self.activePoints[index];
+        [self moveToInactive:item];
+    }
+}
+
+- (void)moveToInactive:(OAGpxRouteWptItem *)item
+{
+    @synchronized(self.syncObj)
+    {
+        [self.activePoints removeObject:item];
+        [self.inactivePoints insertObject:item atIndex:0];
+        item.point.visited = YES;
+    }
+    [[OAGPXRouter sharedInstance].routePointDeactivatedObservable notifyEventWithKey:item];
+}
+
+- (void)moveToActive:(OAGpxRouteWptItem *)item
+{
+    @synchronized(self.syncObj)
+    {
+        [self.inactivePoints removeObject:item];
+        [self.activePoints insertObject:item atIndex:0];
+        item.point.visited = NO;
+    }
+    [[OAGPXRouter sharedInstance].routePointActivatedObservable notifyEventWithKey:item];
+}
+
+- (void)updatePointsArray
+{
+    int i = 0;
+    for (OAGpxRouteWptItem *item in self.activePoints)
+    {
+        item.point.index = i++;
+        [item.point applyRouteInfo];
+    }
+    for (OAGpxRouteWptItem *item in self.inactivePoints)
+    {
+        item.point.index = i++;
+        [item.point applyRouteInfo];
+    }
+    
+    [[OAGPXRouter sharedInstance] refreshRoute];
+    [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
+}
+
 @end

@@ -29,6 +29,8 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 @property (readonly) OAObservable* routeDefinedObservable;
 @property (readonly) OAObservable* routeCanceledObservable;
 @property (readonly) OAObservable* routeChangedObservable;
+@property (readonly) OAObservable* routePointDeactivatedObservable;
+@property (readonly) OAObservable* routePointActivatedObservable;
 
 @property (nonatomic, assign) OAGPXRouteVariantType routeVariantType;
 

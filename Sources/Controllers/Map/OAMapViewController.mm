@@ -1864,8 +1864,6 @@
             
             if (_animatedPin)
             {
-                [_animatedPin.layer removeAllAnimations];
-
                 OAMapRendererView* mapView = (OAMapRendererView*)self.view;
                 
                 CGPoint targetPoint;

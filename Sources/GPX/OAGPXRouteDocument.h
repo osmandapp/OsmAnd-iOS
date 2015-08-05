@@ -10,6 +10,7 @@
 
 @class OAGpxWpt;
 @class OAGpxRoutePoint;
+@class OAGpxRouteWptItem;
 
 @interface OAGPXRouteDocument : OAGPXDocument
 
@@ -39,5 +40,11 @@
 
 - (OAGpxRoutePoint *)addRoutePoint:(OAGpxWpt *)wpt;
 - (void)removeRoutePoint:(OAGpxWpt *)wpt;
+
+- (void)moveToInactiveByIndex:(NSInteger)index;
+- (void)moveToInactive:(OAGpxRouteWptItem *)item;
+- (void)moveToActive:(OAGpxRouteWptItem *)item;
+
+- (void)updatePointsArray;
 
 @end

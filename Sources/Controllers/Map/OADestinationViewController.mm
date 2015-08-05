@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OADestinationsHelper.h"
 #import "OAGPXRouter.h"
+#import "OAGPXRouteDocument.h"
 #import "OADestinationCardsViewController.h"
 
 
@@ -391,7 +392,8 @@
     }
     else
     {
-        
+        [[OAGPXRouter sharedInstance].routeDoc moveToInactiveByIndex:destination.routePointIndex];
+        [[OAGPXRouter sharedInstance].routeDoc updatePointsArray];
     }
 }
 

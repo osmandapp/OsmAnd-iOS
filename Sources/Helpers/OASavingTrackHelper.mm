@@ -76,7 +76,7 @@
     if (self)
     {
         _app = [OsmAndApp instance];
-        syncQueue = dispatch_queue_create("syncQueue", DISPATCH_QUEUE_SERIAL);
+        syncQueue = dispatch_queue_create("sth_syncQueue", DISPATCH_QUEUE_SERIAL);
 
         [self createDb];
         
@@ -115,7 +115,7 @@
 
 - (void)createDb
 {
-    dbQueue = dispatch_queue_create("dbQueue", DISPATCH_QUEUE_SERIAL);
+    dbQueue = dispatch_queue_create("sth_dbQueue", DISPATCH_QUEUE_SERIAL);
     
     NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/TracksDatabase"];
     databasePath = [dir stringByAppendingString:@"/tracks.db"];
@@ -129,7 +129,6 @@
         NSFileManager *filemgr = [NSFileManager defaultManager];
         const char *dbpath = [databasePath UTF8String];
         
-        //[filemgr removeItemAtPath:databasePath error:nil];
         if ([filemgr fileExistsAtPath: databasePath ] == NO)
         {
             if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)

@@ -345,6 +345,8 @@
             [self refreshSwipeButtons];
         }
         
+        [self.tableView reloadData];
+        
         _isAnimating = NO;
     }];
     

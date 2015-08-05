@@ -40,6 +40,7 @@
 - (instancetype)initWithSection:(NSInteger)section tableView:(UITableView *)tableView;
 
 - (void)generateData;
+- (void)updateSectionNumber:(NSInteger)section;
 
 - (NSInteger)rowsCount;
 - (UITableViewCell *)cellForRow:(NSInteger)row;

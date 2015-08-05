@@ -314,6 +314,9 @@
 		8417663F1B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
 		841766401B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
 		841766411B722396002A08CB /* OAHistoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417663E1B722396002A08CB /* OAHistoryItem.m */; };
+		841766441B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
+		841766451B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
+		841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
 		8417A66F1B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6701B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
@@ -2993,6 +2996,8 @@
 		841766391B721E58002A08CB /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+CRC32.m"; path = "Helpers/NSData+CRC32.m"; sourceTree = "<group>"; };
 		8417663D1B722396002A08CB /* OAHistoryItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAHistoryItem.h; sourceTree = "<group>"; };
 		8417663E1B722396002A08CB /* OAHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryItem.m; sourceTree = "<group>"; };
+		841766421B72942A002A08CB /* OAHistoryCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHistoryCardController.h; path = Sources/Controllers/2.0/OAHistoryCardController.h; sourceTree = "<group>"; };
+		841766431B72942A002A08CB /* OAHistoryCardController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHistoryCardController.mm; path = Sources/Controllers/2.0/OAHistoryCardController.mm; sourceTree = "<group>"; };
 		8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXWptViewController.h; path = Sources/Controllers/2.0/OAGPXWptViewController.h; sourceTree = "<group>"; };
 		8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXWptViewController.mm; path = Sources/Controllers/2.0/OAGPXWptViewController.mm; sourceTree = "<group>"; };
 		8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXWptViewController.xib; path = Sources/Controllers/2.0/OAGPXWptViewController.xib; sourceTree = "<group>"; };
@@ -5273,6 +5278,8 @@
 				84F989441B5157A0009C443C /* OAGPXRouteCardController.mm */,
 				84F989481B53AABF009C443C /* OADirectionsCardController.h */,
 				84F989491B53AABF009C443C /* OADirectionsCardController.mm */,
+				841766421B72942A002A08CB /* OAHistoryCardController.h */,
+				841766431B72942A002A08CB /* OAHistoryCardController.mm */,
 			);
 			name = DestinationCards;
 			sourceTree = "<group>";
@@ -8296,6 +8303,7 @@
 				845E06E61B6001CA00DFC2A7 /* OAPluginDetailsViewController.mm in Sources */,
 				BBBE454F1856544000F1C144 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				84B0AE241AC69D33005E1F78 /* OATargetPoint.m in Sources */,
+				841766441B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				BBA6AD011940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				845E05D91B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				848D173D1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
@@ -8489,6 +8497,7 @@
 				845E06E71B6001CA00DFC2A7 /* OAPluginDetailsViewController.mm in Sources */,
 				BBA3AECC197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				84B0AE251AC69D33005E1F78 /* OATargetPoint.m in Sources */,
+				841766451B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				BBA6AD021940C0A80066AF23 /* OANativeUtilities.mm in Sources */,
 				845E05DA1B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				848D173E1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
@@ -8732,6 +8741,7 @@
 				84185A7A1AA8BC6200F70328 /* OASliderCell.m in Sources */,
 				841766411B722396002A08CB /* OAHistoryItem.m in Sources */,
 				84C41E801ABAC38D0089EABB /* OAPhrasesParser.m in Sources */,
+				841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */,
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				8470412C1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,

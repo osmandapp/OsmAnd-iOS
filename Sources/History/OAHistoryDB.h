@@ -11,11 +11,12 @@
 
 @interface OAHistoryDB : NSObject
 
-- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name address:(NSString *)address type:(OAHistoryType)type;
+- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type;
 
 - (void)deletePoint:(int64_t)id;
 
 - (NSArray *)getPoints:(NSString *)selectPostfix limit:(int)limit;
 - (NSArray *)getSearchHistoryPoints:(int)count;
+- (NSArray *)getPointsHavingKnownType:(int)count;
 
 @end

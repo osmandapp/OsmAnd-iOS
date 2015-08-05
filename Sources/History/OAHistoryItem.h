@@ -13,7 +13,6 @@
 typedef NS_ENUM(NSInteger, OAHistoryType)
 {
     OAHistoryTypeUnknown = -1,
-    OAHistoryTypeFavorite,
     OAHistoryTypeDirection,
     OAHistoryTypeParking,
     OAHistoryTypeRouteWpt,
@@ -27,7 +26,6 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 
 @property (nonatomic) NSDate *date;
 @property (nonatomic) NSString *name;
-@property (nonatomic) NSString *address;
 
 @property (nonatomic) OAHistoryType hType;
 

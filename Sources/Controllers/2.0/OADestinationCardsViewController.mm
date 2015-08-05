@@ -19,6 +19,8 @@
 #import "OADirectionsCardController.h"
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
+#import "OAHistoryCardController.h"
+#import "OAHistoryHelper.h"
 
 #import "OsmAndApp.h"
 #import "OAGPXRouter.h"
@@ -244,6 +246,25 @@
         [sections addObject:directionsCardController];
     }
 
+    if ([[OAHistoryHelper sharedInstance] getPointsHavingKnownType:1].count > 0)
+    {
+        OAHistoryCardController *historyCardController;
+        for (OADestinationCardBaseController *card in _sections)
+            if ([card isKindOfClass:[OAHistoryCardController class]])
+            {
+                historyCardController = (OAHistoryCardController *)card;
+                break;
+            }
+        
+        if (!historyCardController)
+            historyCardController = [[OAHistoryCardController alloc] initWithSection:index++ tableView:self.tableView];
+        else
+            [historyCardController updateSectionNumber:index++];
+        
+        historyCardController.delegate = self;
+        [sections addObject:historyCardController];
+    }
+    
     _sections = [NSArray arrayWithArray:sections];
 
     if (reload)

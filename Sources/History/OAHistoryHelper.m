@@ -36,7 +36,7 @@
 
 - (void)addPoint:(OAHistoryItem *)item
 {
-    [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name address:item.address type:item.hType];
+    [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType];
 }
 
 - (void)deletePoint:(OAHistoryItem *)item
@@ -59,5 +59,9 @@
     return [_db getSearchHistoryPoints:count];
 }
 
+- (NSArray *)getPointsHavingKnownType:(int)count
+{
+    return [_db getPointsHavingKnownType:count];
+}
 
 @end

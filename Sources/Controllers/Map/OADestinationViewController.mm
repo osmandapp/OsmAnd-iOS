@@ -18,7 +18,8 @@
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
 #import "OADestinationCardsViewController.h"
-
+#import "OAHistoryHelper.h"
+#import "OAHistoryItem.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -384,8 +385,26 @@
         [_delegate openHideDestinationCardsView];
 }
 
+- (void)addHistoryItem:(OADestination *)destination
+{
+    OAHistoryItem *h = [[OAHistoryItem alloc] init];
+    h.name = destination.desc;
+    h.latitude = destination.latitude;
+    h.longitude = destination.longitude;
+    h.date = [NSDate date];
+    
+    if (!destination.routePoint)
+        h.hType = (destination.parking ?  OAHistoryTypeParking : OAHistoryTypeDirection);
+    else
+        h.hType = OAHistoryTypeRouteWpt;
+    
+    [[OAHistoryHelper sharedInstance] addPoint:h];
+}
+
 -(void)markAsVisited:(OADestination *)destination
 {
+    [self addHistoryItem:destination];
+    
     if (!destination.routePoint)
     {
         [[OADestinationsHelper instance] removeDestination:destination];
@@ -487,6 +506,8 @@
     
     if (self.delegate)
         [self.delegate destinationsAdded];
+    
+    [self addHistoryItem:destination];
     
     [self startLocationUpdate];
     

@@ -23,6 +23,8 @@
 #import "OAUtilities.h"
 #import "OAPOIFavType.h"
 #import "OAFavoriteItem.h"
+#import "OAHistoryItem.h"
+#import "OAHistoryHelper.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -618,6 +620,16 @@ typedef enum
 {
 }
 
+- (void)addHistoryItem:(OAPOI *)poi
+{
+    OAHistoryItem *h = [[OAHistoryItem alloc] init];
+    h.name = poi.desc;
+    h.latitude = poi.latitude;
+    h.longitude = poi.longitude;
+    h.date = [NSDate date];
+    
+    [[OAHistoryHelper sharedInstance] addPoint:h];
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -1045,6 +1057,7 @@ typedef enum
     if ([obj isKindOfClass:[OAPOI class]])
     {
         OAPOI* item = obj;
+        
         if ([item.type isKindOfClass:[OAPOIFavType class]])
         {
             [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.nameLocalized icon:[item icon] pushed:NO];
@@ -1052,6 +1065,8 @@ typedef enum
         }
         else
         {
+            [self addHistoryItem:item];
+
             NSString *name = item.nameLocalized;
             if (!name)
                 name = item.type.nameLocalized;

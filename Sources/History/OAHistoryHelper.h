@@ -19,5 +19,6 @@
 - (NSArray *)getAllPoints;
 - (NSArray *)getLastPointsWithLimit:(int)count;
 - (NSArray *)getSearchHistoryPoints:(int)count;
+- (NSArray *)getPointsHavingKnownType:(int)count;
 
 @end

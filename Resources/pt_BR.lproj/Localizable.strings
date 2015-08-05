@@ -449,3 +449,4 @@
 "map_creator" = "Criador de mapa";
 "local_names" = "Nomes locais";
 "sqlitedb_import_title" = "Importar arquivo de criador de mapa";
+"history" = "Histórico";

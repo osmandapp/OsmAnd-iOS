@@ -53,6 +53,7 @@
 @interface OAMapStyleSettings ()
 
 @property (nonatomic) OAMapSource* lastMapSource;
+@property (nonatomic) NSObject *syncObj;
 
 @end
 
@@ -66,19 +67,23 @@
         _sharedInstance = [[OAMapStyleSettings alloc] init];
     });
     
-    if (![[OsmAndApp instance].data.lastMapSource isEqual:_sharedInstance.lastMapSource])
+    @synchronized (_sharedInstance.syncObj)
     {
-        [_sharedInstance buildParameters];
-        [_sharedInstance loadParameters];
+        if (![[OsmAndApp instance].data.lastMapSource isEqual:_sharedInstance.lastMapSource])
+        {
+            [_sharedInstance buildParameters];
+            [_sharedInstance loadParameters];
+        }
     }
-    
     return _sharedInstance;
 }
 
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        _syncObj = [[NSObject alloc] init];
         [self buildParameters];
         [self loadParameters];
     }
@@ -88,7 +93,9 @@
 -(instancetype)initWithStyleName:(NSString *)mapStyleName mapPresetName:(NSString *)mapPresetName
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
+        _syncObj = [[NSObject alloc] init];
         self.mapStyleName = mapStyleName;
         self.mapPresetName = mapPresetName;
         [self buildParameters:mapStyleName];
@@ -131,7 +138,6 @@
 
 -(void) buildParameters:(NSString *)styleName
 {
-    
     const auto& resolvedMapStyle = [OsmAndApp instance].resourcesManager->mapStylesCollection->getResolvedStyleByName(QString::fromNSString(styleName));
     const auto& parameters = resolvedMapStyle->getParameters();
     

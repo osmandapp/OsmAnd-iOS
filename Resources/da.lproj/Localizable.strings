@@ -449,3 +449,8 @@
 "sqlitedb_import_already_exists" = "Den angivne sqlitedb-fil findes allerede. Vælg handling.";
 "map_creator" = "Map Creator";
 "local_names" = "Lokale navne";
+"history" = "Historik";
+"today" = "I dag";
+"yesterday" = "I går";
+"hist_select_remove" = "Vælg oversigtsemner for at fjerne";
+"hist_remove_q" = "Fjern oversigtsemner?";

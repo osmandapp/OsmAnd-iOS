@@ -450,3 +450,7 @@
 "local_names" = "Nomes locais";
 "sqlitedb_import_title" = "Importar arquivo de criador de mapa";
 "history" = "Histórico";
+"today" = "Hoje";
+"yesterday" = "Ontem";
+"hist_select_remove" = "Por favor, selecione itens do histórico para apagar";
+"hist_remove_q" = "Você quer apagar itens do histórico?";

@@ -449,3 +449,4 @@
 "sqlitedb_import_already_exists" = "已有指定的 sqlitedb 檔案存在。請選擇操作。";
 "map_creator" = "建立地圖";
 "local_names" = "本地名稱";
+"history" = "履歷";

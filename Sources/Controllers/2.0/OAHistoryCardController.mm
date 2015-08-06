@@ -19,8 +19,13 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationCardHeaderView.h"
+#import "OAMapRendererView.h"
+#import "OANativeUtilities.h"
+#import "OADefaultFavorite.h"
 
 #import <OsmAndCore/Utilities.h>
+
+#define HISTORY_CARD_ROWS 4
 
 @interface OAHistoryCardItem : NSObject
 
@@ -40,7 +45,8 @@
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy *_locationUpdateObserver;
-    
+    OAAutoObserverProxy *_historyPointRemoveObserver;
+
     NSMutableArray *_items;
     
     NSTimeInterval _lastUpdate;
@@ -73,7 +79,7 @@
 {
     [_items removeAllObjects];
 
-    NSArray *arr = [[OAHistoryHelper sharedInstance] getPointsHavingKnownType:3];
+    NSArray *arr = [[OAHistoryHelper sharedInstance] getPointsHavingKnownType:HISTORY_CARD_ROWS];
     
     for (OAHistoryItem *item in arr)
     {
@@ -130,11 +136,41 @@
 
 - (void)didSelectRow:(NSInteger)row
 {
-    OAHistoryCardItem* item = [self getItem:row];
-    //[[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
+    OAHistoryCardItem* cardItem = [self getItem:row];
     
     [[OARootViewController instance].mapPanel openHideDestinationCardsView];
-    //[[OARootViewController instance].mapPanel openTargetViewWithDestination:item.destination];
+    [self goToPoint:cardItem];
+}
+
+- (void)goToPoint:(OAHistoryCardItem *)cardItem
+{
+    const OsmAnd::LatLon latLon(cardItem.item.latitude, cardItem.item.longitude);
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
+    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
+    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
+    [mapVC showContextPinMarker:cardItem.item.latitude longitude:cardItem.item.longitude animated:NO];
+    
+    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
+    touchPoint.x *= mapRendererView.contentScaleFactor;
+    touchPoint.y *= mapRendererView.contentScaleFactor;
+    
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    
+    [userInfo setObject:@"yes" forKey:@"centerMap"];
+    [userInfo setObject:cardItem.item.name forKey:@"caption"];
+    [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
+    [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
+    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
+    
+    UIImage *icon = (cardItem.item.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
+    if (icon)
+        [userInfo setObject:icon forKey:@"icon"];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                        object:self
+                                                      userInfo:userInfo];    
 }
 
 - (id)getItem:(NSInteger)row
@@ -182,7 +218,7 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self isDecelerating] || [self isSwiping] || _isAnimating)
+    if (([self isDecelerating] || [self isSwiping] || _isAnimating) && !forceUpdate)
         return;
     
     if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
@@ -226,23 +262,18 @@
                                                         withHandler:@selector(updateDistanceAndDirection)
                                                          andObserve:_app.locationServices.updateObserver];
     
-    /*
-    _destinationRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                           withHandler:@selector(onDestinationRemove:withKey:)
-                                                            andObserve:_app.data.destinationRemoveObservable];
-     */
-    
+    _historyPointRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onPointRemove:withKey:)
+                                                            andObserve:[OAHistoryHelper sharedInstance].historyPointRemoveObservable];
 }
 
 - (void)onDisappear
 {
-    /*
-    if (_destinationRemoveObserver)
+    if (_historyPointRemoveObserver)
     {
-        [_destinationRemoveObserver detach];
-        _destinationRemoveObserver = nil;
+        [_historyPointRemoveObserver detach];
+        _historyPointRemoveObserver = nil;
     }
-     */
     
     if (_locationUpdateObserver)
     {
@@ -271,7 +302,7 @@
     return @[remove];
 }
 
-- (void)onDestinationRemove:(id)observable withKey:(id)key
+- (void)onPointRemove:(id)observable withKey:(id)key
 {
     OAHistoryItem *item = key;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -281,7 +312,7 @@
              if ([cardItem.item isEqual:item])
              {
                  _activeIndexPath = [NSIndexPath indexPathForRow:idx inSection:self.section];
-                 [self doRemoveDirection:item];
+                 [self doRemovePoint:item];
                  *stop = YES;
              }
          }];
@@ -290,10 +321,10 @@
 
 - (void)remove:(OAHistoryCardItem *)cardItem
 {
-    //[[OADestinationsHelper instance] removeDestination:item.destination];
+    [[OAHistoryHelper sharedInstance] removePoint:cardItem.item];
 }
 
-- (void)doRemoveDirection:(OAHistoryItem *)item
+- (void)doRemovePoint:(OAHistoryItem *)item
 {
     _isAnimating = YES;
     
@@ -303,7 +334,7 @@
         
         if (_items.count > 0)
         {
-            [self refreshVisibleRows];
+            [self updateDistanceAndDirection:YES];
             [self refreshSwipeButtons];
         }
         
@@ -316,6 +347,8 @@
     
     [_items removeObject:item];
     
+    [self generateData];
+    
     if (_items.count == 0)
     {
         [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:self.section] withRowAnimation:UITableViewRowAnimationLeft];
@@ -324,6 +357,9 @@
     else
     {
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
+        
+        if (_items.count >= HISTORY_CARD_ROWS)
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
     }
     
     [self.tableView endUpdates];

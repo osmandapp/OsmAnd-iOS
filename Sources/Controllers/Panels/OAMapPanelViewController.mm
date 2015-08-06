@@ -2392,7 +2392,7 @@ typedef enum
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
-    CGFloat h = DeviceScreenHeight - _destinationViewController.view.frame.size.height;
+    CGFloat h = DeviceScreenHeight - y;
 
     if (!cardsController.view.superview)
     {

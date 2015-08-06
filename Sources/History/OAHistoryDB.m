@@ -12,7 +12,6 @@
 #import "NSData+CRC32.h"
 
 #define TABLE_NAME @"history"
-#define POINT_COL_ID @"id"
 #define POINT_COL_HASH @"fhash"
 #define POINT_COL_TIME @"ftime"
 #define POINT_COL_LAT @"flat"
@@ -60,7 +59,7 @@
             if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
             {
                 char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ ROWID, %@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer)", TABLE_NAME, POINT_COL_ID, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE] UTF8String];
+                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE] UTF8String];
                 
                 if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
@@ -137,7 +136,7 @@
     });
 }
 
-- (void)deletePoint:(int64_t)id
+- (void)deletePoint:(int64_t)hId
 {
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
@@ -146,12 +145,12 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE id=?", TABLE_NAME];
+            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE ROWID=?", TABLE_NAME];
             
             const char *update_stmt = [query UTF8String];
             
             sqlite3_prepare_v2(historyDB, update_stmt, -1, &statement, NULL);
-            sqlite3_bind_int64(statement, 1, id);
+            sqlite3_bind_int64(statement, 1, hId);
             sqlite3_step(statement);
             sqlite3_finalize(statement);
             
@@ -171,7 +170,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT %@, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_ID, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, TABLE_NAME]];
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, TABLE_NAME]];
             
             if (selectPostfix)
                 [querySQL appendFormat:@" %@", selectPostfix];

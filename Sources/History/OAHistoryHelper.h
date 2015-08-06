@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 #import "OAHistoryItem.h"
+#import "OAObservable.h"
 
 @interface OAHistoryHelper : NSObject
+
+@property (readonly) OAObservable* historyPointRemoveObservable;
 
 + (OAHistoryHelper*)sharedInstance;
 
 - (void)addPoint:(OAHistoryItem *)item;
-- (void)deletePoint:(OAHistoryItem *)item;
+- (void)removePoint:(OAHistoryItem *)item;
 
 - (NSArray *)getAllPoints;
 - (NSArray *)getLastPointsWithLimit:(int)count;

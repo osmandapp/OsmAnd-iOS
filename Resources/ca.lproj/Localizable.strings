@@ -449,3 +449,4 @@
 "sqlitedb_import_already_exists" = "El fitxer sqlitedb indicat ja existeix. Trieu una acció.";
 "map_creator" = "Creador de mapes";
 "local_names" = "Denominacions locals";
+"history" = "Històric";

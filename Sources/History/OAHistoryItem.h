@@ -29,4 +29,6 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 
 @property (nonatomic) OAHistoryType hType;
 
+- (UIImage *)icon;
+
 @end

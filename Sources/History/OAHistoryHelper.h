@@ -13,11 +13,13 @@
 @interface OAHistoryHelper : NSObject
 
 @property (readonly) OAObservable* historyPointRemoveObservable;
+@property (readonly) OAObservable* historyPointsRemoveObservable;
 
 + (OAHistoryHelper*)sharedInstance;
 
 - (void)addPoint:(OAHistoryItem *)item;
 - (void)removePoint:(OAHistoryItem *)item;
+- (void)removePoints:(NSArray *)items;
 
 - (NSArray *)getAllPoints;
 - (NSArray *)getLastPointsWithLimit:(int)count;

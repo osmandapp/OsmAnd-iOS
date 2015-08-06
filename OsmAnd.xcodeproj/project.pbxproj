@@ -317,6 +317,12 @@
 		841766441B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
 		841766451B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
 		841766461B72942A002A08CB /* OAHistoryCardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766431B72942A002A08CB /* OAHistoryCardController.mm */; };
+		8417664A1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766481B7355DD002A08CB /* OAHistoryViewController.mm */; };
+		8417664B1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766481B7355DD002A08CB /* OAHistoryViewController.mm */; };
+		8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841766481B7355DD002A08CB /* OAHistoryViewController.mm */; };
+		8417664D1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841766491B7355DD002A08CB /* OAHistoryViewController.xib */; };
+		8417664E1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841766491B7355DD002A08CB /* OAHistoryViewController.xib */; };
+		8417664F1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 841766491B7355DD002A08CB /* OAHistoryViewController.xib */; };
 		8417A66F1B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6701B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
 		8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */; };
@@ -1975,6 +1981,9 @@
 		84CC52541AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
 		84CC52551AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
 		84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC52501AA5DD55000063CF /* three_dots@2x.png */; };
+		84CCE7F71B73C2230059A82A /* OAPOIHistoryType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CCE7F61B73C2230059A82A /* OAPOIHistoryType.mm */; };
+		84CCE7F81B73C2230059A82A /* OAPOIHistoryType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CCE7F61B73C2230059A82A /* OAPOIHistoryType.mm */; };
+		84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84CCE7F61B73C2230059A82A /* OAPOIHistoryType.mm */; };
 		84D81EE01AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
 		84D81EE11AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
 		84D81EE21AA30404001098FD /* ic_destination_arrow_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */; };
@@ -2998,6 +3007,9 @@
 		8417663E1B722396002A08CB /* OAHistoryItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAHistoryItem.m; sourceTree = "<group>"; };
 		841766421B72942A002A08CB /* OAHistoryCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHistoryCardController.h; path = Sources/Controllers/2.0/OAHistoryCardController.h; sourceTree = "<group>"; };
 		841766431B72942A002A08CB /* OAHistoryCardController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHistoryCardController.mm; path = Sources/Controllers/2.0/OAHistoryCardController.mm; sourceTree = "<group>"; };
+		841766471B7355DD002A08CB /* OAHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAHistoryViewController.h; path = Sources/Controllers/2.0/OAHistoryViewController.h; sourceTree = "<group>"; };
+		841766481B7355DD002A08CB /* OAHistoryViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAHistoryViewController.mm; path = Sources/Controllers/2.0/OAHistoryViewController.mm; sourceTree = "<group>"; };
+		841766491B7355DD002A08CB /* OAHistoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAHistoryViewController.xib; path = Sources/Controllers/2.0/OAHistoryViewController.xib; sourceTree = "<group>"; };
 		8417A66C1B2596D600EA1D17 /* OAGPXWptViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXWptViewController.h; path = Sources/Controllers/2.0/OAGPXWptViewController.h; sourceTree = "<group>"; };
 		8417A66D1B2596D600EA1D17 /* OAGPXWptViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXWptViewController.mm; path = Sources/Controllers/2.0/OAGPXWptViewController.mm; sourceTree = "<group>"; };
 		8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXWptViewController.xib; path = Sources/Controllers/2.0/OAGPXWptViewController.xib; sourceTree = "<group>"; };
@@ -3648,6 +3660,8 @@
 		84CC524B1AA5A539000063CF /* nautical.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = nautical.render.xml; path = ../resources/rendering_styles/nautical.render.xml; sourceTree = "<group>"; };
 		84CC524F1AA5DD55000063CF /* three_dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = three_dots.png; path = Resources/Icons/three_dots.png; sourceTree = "<group>"; };
 		84CC52501AA5DD55000063CF /* three_dots@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "three_dots@2x.png"; path = "Resources/Icons/three_dots@2x.png"; sourceTree = "<group>"; };
+		84CCE7F51B73C2230059A82A /* OAPOIHistoryType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIHistoryType.h; sourceTree = "<group>"; };
+		84CCE7F61B73C2230059A82A /* OAPOIHistoryType.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOIHistoryType.mm; sourceTree = "<group>"; };
 		84D81EDD1AA30404001098FD /* ic_destination_arrow_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_destination_arrow_small.png; path = Resources/Icons/ic_destination_arrow_small.png; sourceTree = "<group>"; };
 		84D81EDE1AA30404001098FD /* ic_destination_arrow_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@2x.png"; path = "Resources/Icons/ic_destination_arrow_small@2x.png"; sourceTree = "<group>"; };
 		84D81EDF1AA30404001098FD /* ic_destination_arrow_small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_arrow_small@3x.png"; path = "Resources/Icons/ic_destination_arrow_small@3x.png"; sourceTree = "<group>"; };
@@ -4226,6 +4240,7 @@
 		3ACA4A931A0A0CAB00ECC792 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				841766501B7355F6002A08CB /* History */,
 				84F9892A1B5101D3009C443C /* DestinationCards */,
 				84F989281B510180009C443C /* Intro */,
 				84F989271B510172009C443C /* Others */,
@@ -4937,6 +4952,16 @@
 			path = History;
 			sourceTree = "<group>";
 		};
+		841766501B7355F6002A08CB /* History */ = {
+			isa = PBXGroup;
+			children = (
+				841766471B7355DD002A08CB /* OAHistoryViewController.h */,
+				841766481B7355DD002A08CB /* OAHistoryViewController.mm */,
+				841766491B7355DD002A08CB /* OAHistoryViewController.xib */,
+			);
+			name = History;
+			sourceTree = "<group>";
+		};
 		8417A6751B25C1D100EA1D17 /* Editors */ = {
 			isa = PBXGroup;
 			children = (
@@ -5129,6 +5154,8 @@
 				84C41E6A1AB962350089EABB /* OAPOIType.m */,
 				8420C1C11B411C81004EDAE6 /* OAPOIFavType.h */,
 				8420C1C21B411C81004EDAE6 /* OAPOIFavType.mm */,
+				84CCE7F51B73C2230059A82A /* OAPOIHistoryType.h */,
+				84CCE7F61B73C2230059A82A /* OAPOIHistoryType.mm */,
 				84C41E6E1AB962420089EABB /* OAPOIHelper.h */,
 				84C41E6F1AB962420089EABB /* OAPOIHelper.mm */,
 				84C41E731AB9EE580089EABB /* OAPOIParser.h */,
@@ -6481,6 +6508,7 @@
 				843E5CB51AB341E000BE14BE /* favorite_import_icon@3x.png in Resources */,
 				3A02BFBD1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */,
 				BB451DC318D70B5B005FBE09 /* HUD_menu_button@2x.png in Resources */,
+				8417664D1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */,
 				843E5CFD1AB341E000BE14BE /* icon_remove@3x.png in Resources */,
 				3AFEEE401A0E34FD00900A47 /* left_menu_icon_star@2x.png in Resources */,
 				8431E7A81B386CEC0063C9AF /* ic_tabbar_active_trip_selected.png in Resources */,
@@ -7204,6 +7232,7 @@
 				843E5CB61AB341E000BE14BE /* favorite_import_icon@3x.png in Resources */,
 				BB451E8218DCD224005FBE09 /* HUD_menu_button@2x.png in Resources */,
 				3AFEEE411A0E34FD00900A47 /* left_menu_icon_star@2x.png in Resources */,
+				8417664E1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */,
 				843E5CFE1AB341E000BE14BE /* icon_remove@3x.png in Resources */,
 				84BD08A41AB16174006DA3F7 /* drive_mode_button@3x.png in Resources */,
 				8431E7A91B386CEC0063C9AF /* ic_tabbar_active_trip_selected.png in Resources */,
@@ -7438,6 +7467,7 @@
 				8412226F1B39CC5200F80F9E /* my_location_marker_heading_icon2.png in Resources */,
 				84B4FD8E1A9222C700A147BA /* OAGPXElevationCell.xib in Resources */,
 				3AFEEE3C1A0E34FD00900A47 /* left_menu_icon_quiz@2x.png in Resources */,
+				8417664F1B7355DD002A08CB /* OAHistoryViewController.xib in Resources */,
 				848D171A1B188D9700A656F4 /* OAParkingViewController.xib in Resources */,
 				BBA3AF85197FC4BB0039D991 /* DriveAppModeHUD.xib in Resources */,
 				8458BB8E1B0F1E7A00738132 /* ic_website@3x.png in Resources */,
@@ -8267,6 +8297,7 @@
 				BBA3AE8A196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				8A70772F1A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84C0FB1B1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
+				8417664A1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				848D17561B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				8417A6821B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				84E441771AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
@@ -8291,6 +8322,7 @@
 				BB451F1918EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				BBA3B01D1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BBA3AEB819710E1E0039D991 /* OADefaultFavorite.m in Sources */,
+				84CCE7F71B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				849E813E1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
 				BBA3AECB197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
@@ -8461,6 +8493,7 @@
 				BB451F1A18EB3F0C005FBE09 /* OATableViewCellWithButton.m in Sources */,
 				8A7077301A86C0A3005E019B /* OALocalResourceInfoCell.m in Sources */,
 				84C0FB1C1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */,
+				8417664B1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				848D17571B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				8417A6831B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				84E441781AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
@@ -8485,6 +8518,7 @@
 				BBA3AE8B196BDF150039D991 /* OAQStringPickerElement.m in Sources */,
 				BBA3B01E1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				BB451E2A18DCD224005FBE09 /* OAObservable.m in Sources */,
+				84CCE7F81B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				849E813F1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* CoreResourcesFromBundleProvider.mm in Sources */,
@@ -8668,6 +8702,7 @@
 				840ED4861B456A8700A7E58A /* OAGPXRouteDocument.mm in Sources */,
 				84F989471B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
 				BBA3AF3E197FC4BB0039D991 /* OAObservable.m in Sources */,
+				84CCE7F91B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				BBA3AF40197FC4BB0039D991 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BBA3AF41197FC4BB0039D991 /* OANativeUtilities.mm in Sources */,
 				84CC524A1AA58503000063CF /* OAMultiDestinationCell.mm in Sources */,
@@ -8783,6 +8818,7 @@
 				84147A451B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
+				8417664C1B7355DD002A08CB /* OAHistoryViewController.mm in Sources */,
 				84B4FD561A90F74800A147BA /* OAGPXDocumentPrimitives.mm in Sources */,
 				848A3EB91B6A6C2F0016F6F4 /* OAHillshadeTileSource.m in Sources */,
 				84B4FD601A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,

@@ -31,6 +31,7 @@
     {
         _db = [[OAHistoryDB alloc] init];
         _historyPointRemoveObservable = [[OAObservable alloc] init];
+        _historyPointsRemoveObservable = [[OAObservable alloc] init];
     }
     return self;
 }
@@ -44,6 +45,14 @@
 {
     [_db deletePoint:item.hId];
     [_historyPointRemoveObservable notifyEventWithKey:item];
+}
+
+- (void)removePoints:(NSArray *)items
+{
+    for (OAHistoryItem *item in items)
+        [_db deletePoint:item.hId];
+    
+    [_historyPointsRemoveObservable notifyEventWithKey:items];
 }
 
 - (NSArray *)getAllPoints

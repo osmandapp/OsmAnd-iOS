@@ -166,22 +166,26 @@
     [self.tableView reloadData];
 }
 
-- (void)doViewWillAppear
+-(void)viewWillAppear:(BOOL)animated
 {
+    [super viewWillAppear:animated];
+    
     _isHiding = NO;
     _isVisible = YES;
-
+    
     indexPathForSwipingCell = nil;
     isDecelerating = NO;
     
     [self generateData];
-
+    
     for (OADestinationCardBaseController *cardController in _sections)
         [cardController onAppear];
 }
 
-- (void)doViewDisappeared
+-(void)viewDidDisappear:(BOOL)animated
 {
+    [super viewDidDisappear:animated];
+
     _isHiding = NO;
     
     for (OADestinationCardBaseController *cardController in _sections)
@@ -273,7 +277,7 @@
 
 - (void)tapOutsideCells
 {
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 
 #pragma mark - UITableViewDataSource
@@ -430,7 +434,7 @@
     [self generateData:NO];
     
     if (_sections.count == 0)
-        [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+        [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 
 

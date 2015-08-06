@@ -17,8 +17,6 @@
 
 + (OADestinationCardsViewController *)sharedInstance;
 
-- (void)doViewWillAppear;
-- (void)doViewDisappeared;
 - (void)doViewWillDisappear;
 
 @end

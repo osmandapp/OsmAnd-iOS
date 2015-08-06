@@ -10,4 +10,19 @@
 
 @implementation OAHistoryItem
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _hType = OAHistoryTypeUnknown;
+    }
+    return self;
+}
+
+-(UIImage *)icon
+{
+    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
+}
+
 @end

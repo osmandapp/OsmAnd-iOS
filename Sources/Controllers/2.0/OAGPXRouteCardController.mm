@@ -64,7 +64,7 @@
 
 - (void)headerButtonPressed
 {
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithGPXRoute:NO segmentType:kSegmentRouteWaypoints];
 }
 
@@ -101,7 +101,7 @@
 
     OAGpxRouteWptItem* item = [self getItem:row];
     
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO showFullMenu:NO];
 }
 

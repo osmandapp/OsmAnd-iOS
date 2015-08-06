@@ -17,6 +17,7 @@
 @class OAGpxWptItem;
 @class OAGPX;
 @class OADestination;
+@class OAHistoryItem;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -35,6 +36,9 @@
 
 - (void)modifyMapAfterReuse:(OAGpxBounds)mapBounds azimuth:(float)azimuth elevationAngle:(float)elevationAngle animated:(BOOL)animated;
 
+- (void)openDestinationCardsView;
+- (void)hideDestinationCardsView;
+- (void)hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void)openHideDestinationCardsView;
 
 - (void)closeMapSettings;
@@ -48,6 +52,9 @@
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;
+- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
+
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;

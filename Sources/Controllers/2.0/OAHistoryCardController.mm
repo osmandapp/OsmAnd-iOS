@@ -19,9 +19,9 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 #import "OADestinationCardHeaderView.h"
-#import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
+#import "OAHistoryViewController.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -67,7 +67,8 @@
         
         _cardHeaderView = [[OADestinationCardHeaderView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 50.0)];
         _cardHeaderView.title.text = [OALocalizedString(@"history") uppercaseStringWithLocale:[NSLocale currentLocale]];
-        [_cardHeaderView.rightButton removeFromSuperview];
+        [_cardHeaderView setRightButtonTitle:[OALocalizedString(@"show_all") uppercaseStringWithLocale:[NSLocale currentLocale]]];
+        [_cardHeaderView.rightButton addTarget:self action:@selector(headerButtonPressed) forControlEvents:UIControlEventTouchUpInside];
         
         _items = [NSMutableArray array];
         [self generateData];
@@ -87,26 +88,6 @@
         cardItem.item = item;
         [_items addObject:cardItem];
     }
-    
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    [_items sortUsingComparator:^NSComparisonResult(OAHistoryCardItem *obj1, OAHistoryCardItem *obj2) {
-        
-        const auto distance1 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                           newLocation.coordinate.latitude,
-                                                           obj1.item.longitude, obj1.item.latitude);
-        const auto distance2 = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                           newLocation.coordinate.latitude,
-                                                           obj2.item.longitude, obj2.item.latitude);
-        if (distance2 > distance1)
-            return NSOrderedAscending;
-        else if (distance2 < distance1)
-            return NSOrderedDescending;
-        else
-            return NSOrderedSame;
-    }];
 }
 
 - (NSInteger)rowsCount
@@ -138,39 +119,8 @@
 {
     OAHistoryCardItem* cardItem = [self getItem:row];
     
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
-    [self goToPoint:cardItem];
-}
-
-- (void)goToPoint:(OAHistoryCardItem *)cardItem
-{
-    const OsmAnd::LatLon latLon(cardItem.item.latitude, cardItem.item.longitude);
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
-    Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
-    [mapVC goToPosition:pos andZoom:kDefaultFavoriteZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:cardItem.item.latitude longitude:cardItem.item.longitude animated:NO];
-    
-    CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
-    touchPoint.x *= mapRendererView.contentScaleFactor;
-    touchPoint.y *= mapRendererView.contentScaleFactor;
-    
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    
-    [userInfo setObject:@"yes" forKey:@"centerMap"];
-    [userInfo setObject:cardItem.item.name forKey:@"caption"];
-    [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
-    [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
-    
-    UIImage *icon = (cardItem.item.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
-    if (icon)
-        [userInfo setObject:icon forKey:@"icon"];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object:self
-                                                      userInfo:userInfo];    
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
+    [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:cardItem.item pushed:NO];
 }
 
 - (id)getItem:(NSInteger)row
@@ -209,6 +159,12 @@
         dirCell.descIcon.transform = CGAffineTransformMakeRotation(cardItem.direction);
         [dirCell.descLabel setText:cardItem.distanceStr];
     }
+}
+
+- (void)headerButtonPressed
+{
+    OAHistoryViewController *history = [[OAHistoryViewController alloc] init];
+    [[OARootViewController instance].navigationController pushViewController:history animated:YES];
 }
 
 - (void)updateDistanceAndDirection

@@ -134,7 +134,7 @@
     OADestinationItem* item = [self getItem:row];
     [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
     
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:item.destination];
 }
 
@@ -300,13 +300,13 @@
 - (void)showOnMap:(OADestination *)destination
 {
     [[OADestinationsHelper instance] showOnMap:destination];
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 
 - (void)hideOnMap:(OADestination *)destination
 {
     [[OADestinationsHelper instance] hideOnMap:destination];
-    [[OARootViewController instance].mapPanel openHideDestinationCardsView];
+    [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 
 - (void)onDestinationRemove:(id)observable withKey:(id)key

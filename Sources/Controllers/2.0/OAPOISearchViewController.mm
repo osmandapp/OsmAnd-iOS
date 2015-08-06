@@ -25,6 +25,7 @@
 #import "OAFavoriteItem.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
+#import "OAPOIHistoryType.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -623,7 +624,7 @@ typedef enum
 - (void)addHistoryItem:(OAPOI *)poi
 {
     OAHistoryItem *h = [[OAHistoryItem alloc] init];
-    h.name = poi.desc;
+    h.name = poi.nameLocalized;
     h.latitude = poi.latitude;
     h.longitude = poi.longitude;
     h.date = [NSDate date];
@@ -1763,6 +1764,27 @@ typedef enum
                 favType.name = OALocalizedString(@"favorite");
                 favType.nameLocalized = OALocalizedString(@"favorite");
                 poi.type = favType;
+                
+                if (keyword.length == 0 || [self beginWith:keyword text:poi.nameLocalized] || [self beginWithAfterSpace:keyword text:poi.nameLocalized] || [self beginWith:keyword text:poi.name] || [self beginWithAfterSpace:keyword text:poi.name])
+                {
+                    [_searchPoiArray insertObject:poi atIndex:0];
+                }
+            }
+            
+            // create history groups
+            for(OAHistoryItem *item in [[OAHistoryHelper sharedInstance] getSearchHistoryPoints:0])
+            {
+                OAPOI *poi = [[OAPOI alloc] init];
+                poi.name = item.name;
+                poi.nameLocalized = item.name;
+                poi.latitude = item.latitude;
+                poi.longitude = item.longitude;
+                
+                OAPOIHistoryType *historyType = [[OAPOIHistoryType alloc] init];
+                historyType.name = OALocalizedString(@"history");
+                historyType.nameLocalized = OALocalizedString(@"history");
+                historyType.hType = item.hType;
+                poi.type = historyType;
                 
                 if (keyword.length == 0 || [self beginWith:keyword text:poi.nameLocalized] || [self beginWithAfterSpace:keyword text:poi.nameLocalized] || [self beginWith:keyword text:poi.name] || [self beginWithAfterSpace:keyword text:poi.name])
                 {

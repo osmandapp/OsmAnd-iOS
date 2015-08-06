@@ -50,6 +50,7 @@
 #import "OAFavoriteListViewController.h"
 #import "OAGPXRouter.h"
 #import "OADestinationsHelper.h"
+#import "OAHistoryItem.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1978,6 +1979,57 @@ typedef enum
     }];
 }
 
+- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed
+{
+    [self openTargetViewWithHistoryItem:item pushed:pushed showFullMenu:YES];
+}
+
+- (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
+{
+    double lat = item.latitude;
+    double lon = item.longitude;
+    
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = item.name;    
+    UIImage *icon = [item icon];
+    
+    targetPoint.type = OATargetLocation;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = [self findRoadNameByLat:lat lon:lon];
+    _targetMode = EOATargetPoint;
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    _targetZoom = 0.0;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = caption;
+    targetPoint.titleAddress = _formattedTargetName;
+    targetPoint.zoom = renderView.zoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = pushed;
+    targetPoint.targetObj = item;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
+        if (pushed)
+            [self goToTargetPointDefault];
+        else
+            [self targetGoToPoint];
+    }];
+}
+
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed
 {
     [self openTargetViewWithWpt:item pushed:pushed showFullMenu:YES];
@@ -2387,17 +2439,17 @@ typedef enum
         [self.driveModeViewController showDestinations];
 }
 
-- (void)openHideDestinationCardsView
+- (void)openDestinationCardsView
 {
     OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
     
-    CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
-    CGFloat h = DeviceScreenHeight - y;
-
     if (!cardsController.view.superview)
     {
+        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat h = DeviceScreenHeight - y;
+    
         cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
-
+        
         [_hudViewController addChildViewController:cardsController];
         
         [self createShade];
@@ -2405,34 +2457,62 @@ typedef enum
         [_hudViewController.view insertSubview:_shadeView belowSubview:_destinationViewController.view];
         
         [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
-        [cardsController doViewWillAppear];
         
         [self.destinationViewController updateCloseButton];
-
+        
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);
             _shadeView.alpha = 1.0;
         }];
     }
-    else
+}
+
+- (void)hideDestinationCardsView
+{
+    [self hideDestinationCardsViewAnimated:YES];
+}
+
+- (void)hideDestinationCardsViewAnimated:(BOOL)animated
+{
+    OADestinationCardsViewController *cardsController = [OADestinationCardsViewController sharedInstance];
+    if (cardsController.view.superview)
     {
+        CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
+        CGFloat h = DeviceScreenHeight - y;
+    
         [cardsController doViewWillDisappear];
         
         [self.destinationViewController updateCloseButton];
         
-        [UIView animateWithDuration:.25 animations:^{
-            cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
-            _shadeView.alpha = 0.0;
-            
-        } completion:^(BOOL finished) {
-            
+        if (animated)
+        {
+            [UIView animateWithDuration:.25 animations:^{
+                cardsController.view.frame = CGRectMake(0.0, y - h, DeviceScreenWidth, h);
+                _shadeView.alpha = 0.0;
+                
+            } completion:^(BOOL finished) {
+                
+                [self removeShade];
+                
+                [cardsController.view removeFromSuperview];
+                [cardsController removeFromParentViewController];
+            }];
+        }
+        else
+        {
             [self removeShade];
-            
-            [cardsController doViewDisappeared];
             [cardsController.view removeFromSuperview];
             [cardsController removeFromParentViewController];
-        }];
+        }
     }
+}
+
+- (void)openHideDestinationCardsView
+{
+    if (![OADestinationCardsViewController sharedInstance].view.superview)
+        [self openDestinationCardsView];
+    else
+        [self hideDestinationCardsView];
 }
 
 -(void)destinationViewLayoutDidChange:(BOOL)animated

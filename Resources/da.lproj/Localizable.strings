@@ -452,5 +452,5 @@
 "history" = "Historik";
 "today" = "I dag";
 "yesterday" = "I går";
-"hist_select_remove" = "Vælg oversigtsemner for at fjerne";
-"hist_remove_q" = "Fjern oversigtsemner?";
+"hist_select_remove" = "Vælg histoirikemner til at fjerne";
+"hist_remove_q" = "Fjern historikemner?";

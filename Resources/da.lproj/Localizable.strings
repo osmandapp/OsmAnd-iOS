@@ -456,3 +456,5 @@
 "hist_remove_q" = "Fjern historikemner?";
 "gpx_edit_mode" = "Redigeringstilstand";
 "go_to_map" = "Gå til kortet";
+"offline_maps" = "Offlinekort";
+"download_map" = "Hent kort";

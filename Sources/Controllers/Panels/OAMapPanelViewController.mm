@@ -942,7 +942,9 @@ typedef enum
     UIImage *icon = [params objectForKey:@"icon"];
     double lat = [[params objectForKey:@"lat"] floatValue];
     double lon = [[params objectForKey:@"lon"] floatValue];
-    
+
+    BOOL isPlace = ([params objectForKey:@"place"] != nil);
+
     NSString *phone = [params objectForKey:@"phone"];
     NSString *openingHours = [params objectForKey:@"openingHours"];
     NSString *url = [params objectForKey:@"url"];
@@ -1028,7 +1030,9 @@ typedef enum
     if (targetPoint.type == OATargetLocation && poiType)
         targetPoint.type = OATargetPOI;
     
-    NSString *roadTitle = [self findRoadNameByLat:lat lon:lon];
+    NSString *roadTitle;
+    if (!isPlace)
+        roadTitle = [self findRoadNameByLat:lat lon:lon];
 
     if (caption.length == 0 && targetPoint.type == OATargetLocation)
     {

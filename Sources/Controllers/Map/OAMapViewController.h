@@ -70,6 +70,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSString *wheelchair;
 @property (nonatomic) NSArray *fuelTags;
 
+@property (nonatomic) BOOL isPlace;
+
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 

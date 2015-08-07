@@ -1638,20 +1638,17 @@
                     
                     //NSLog(@"%@=%@", rule.tag.toNSString(), rule.value.toNSString());
 
-                    if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))
-                    {
-                        doSkip = YES;
-                        break;
-                    }
-                    if (rule.tag == QString("contour"))
-                    {
-                        doSkip = YES;
-                        break;
-                    }
+                    if (rule.tag == QString("place"))
+                        symbol.isPlace = YES;
                     
+                    if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))
+                        doSkip = YES;
+
+                    if (rule.tag == QString("contour"))
+                        doSkip = YES;
+
                     if (!symbol.poiType)
                         symbol.poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
-                    
                 }
                 
                 if (symbol.poiType)
@@ -1773,6 +1770,9 @@
     if (symbol.poiType)
         [userInfo setObject:symbol.poiType forKey:@"poiType"];
     
+    if (symbol.isPlace)
+        [userInfo setObject:@"yes" forKey:@"place"];
+
     if (symbol.type == OAMapSymbolFavorite)
         [userInfo setObject:@"favorite" forKey:@"objectType"];
     else if (symbol.type == OAMapSymbolDestination)

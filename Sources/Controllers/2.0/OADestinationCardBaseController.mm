@@ -21,6 +21,11 @@
     return self;
 }
 
+-(void)dealloc
+{
+    [self onDisappear];
+}
+
 - (void)generateData
 {
     

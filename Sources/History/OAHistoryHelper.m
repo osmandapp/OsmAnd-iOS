@@ -30,6 +30,7 @@
     if (self)
     {
         _db = [[OAHistoryDB alloc] init];
+        _historyPointAddObservable = [[OAObservable alloc] init];
         _historyPointRemoveObservable = [[OAObservable alloc] init];
         _historyPointsRemoveObservable = [[OAObservable alloc] init];
     }
@@ -39,6 +40,7 @@
 - (void)addPoint:(OAHistoryItem *)item
 {
     [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType];
+    [_historyPointAddObservable notifyEventWithKey:item];
 }
 
 - (void)removePoint:(OAHistoryItem *)item

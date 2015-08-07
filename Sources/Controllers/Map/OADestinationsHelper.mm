@@ -13,6 +13,8 @@
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"
+#import "OAHistoryItem.h"
+#import "OAHistoryHelper.h"
 
 #import <EventKit/EventKit.h>
 
@@ -262,6 +264,22 @@
     }
     
     [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+}
+
+- (void)addHistoryItem:(OADestination *)destination
+{
+    OAHistoryItem *h = [[OAHistoryItem alloc] init];
+    h.name = destination.desc;
+    h.latitude = destination.latitude;
+    h.longitude = destination.longitude;
+    h.date = [NSDate date];
+    
+    if (!destination.routePoint)
+        h.hType = (destination.parking ?  OAHistoryTypeParking : OAHistoryTypeDirection);
+    else
+        h.hType = OAHistoryTypeRouteWpt;
+    
+    [[OAHistoryHelper sharedInstance] addPoint:h];
 }
 
 + (void)addParkingReminderToCalendar:(OADestination *)destination

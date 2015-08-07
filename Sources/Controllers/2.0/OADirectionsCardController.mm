@@ -328,6 +328,7 @@
 
 - (void)remove:(OADestinationItem *)item
 {
+    [[OADestinationsHelper instance] addHistoryItem:item.destination];
     [[OADestinationsHelper instance] removeDestination:item.destination];
 }
 
@@ -355,14 +356,9 @@
     [_items removeObject:item];
     
     if (_items.count == 0)
-    {
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:self.section] withRowAnimation:UITableViewRowAnimationLeft];
         [self removeCard];
-    }
     else
-    {
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
-    }
     
     [self.tableView endUpdates];
     

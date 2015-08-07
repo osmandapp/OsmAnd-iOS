@@ -1397,6 +1397,7 @@ typedef enum
     if (_targetDestination)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
+            [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
             [[OADestinationsHelper instance] removeDestination:_targetDestination];
         });
     }

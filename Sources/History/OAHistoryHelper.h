@@ -12,6 +12,7 @@
 
 @interface OAHistoryHelper : NSObject
 
+@property (readonly) OAObservable* historyPointAddObservable;
 @property (readonly) OAObservable* historyPointRemoveObservable;
 @property (readonly) OAObservable* historyPointsRemoveObservable;
 

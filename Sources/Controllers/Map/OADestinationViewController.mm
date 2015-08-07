@@ -131,6 +131,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self refreshCells];
+        [self updateFrame:YES];
     });
 }
 
@@ -385,25 +386,9 @@
         [_delegate openHideDestinationCardsView];
 }
 
-- (void)addHistoryItem:(OADestination *)destination
-{
-    OAHistoryItem *h = [[OAHistoryItem alloc] init];
-    h.name = destination.desc;
-    h.latitude = destination.latitude;
-    h.longitude = destination.longitude;
-    h.date = [NSDate date];
-    
-    if (!destination.routePoint)
-        h.hType = (destination.parking ?  OAHistoryTypeParking : OAHistoryTypeDirection);
-    else
-        h.hType = OAHistoryTypeRouteWpt;
-    
-    [[OAHistoryHelper sharedInstance] addPoint:h];
-}
-
 -(void)markAsVisited:(OADestination *)destination
 {
-    [self addHistoryItem:destination];
+    [[OADestinationsHelper instance] addHistoryItem:destination];
     
     if (!destination.routePoint)
     {
@@ -506,8 +491,6 @@
     
     if (self.delegate)
         [self.delegate destinationsAdded];
-    
-    [self addHistoryItem:destination];
     
     [self startLocationUpdate];
     

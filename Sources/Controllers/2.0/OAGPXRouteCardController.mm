@@ -313,7 +313,6 @@
     
     if (_items.count == 0)
     {
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:self.section] withRowAnimation:UITableViewRowAnimationLeft];
         [self removeCard];
     }
     else

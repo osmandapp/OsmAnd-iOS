@@ -28,6 +28,8 @@
 - (void)showOnMap:(OADestination *)destination;
 - (void)hideOnMap:(OADestination *)destination;
 
+- (void)addHistoryItem:(OADestination *)destination;
+
 + (void)addParkingReminderToCalendar:(OADestination *)destination;
 + (void)removeParkingReminderFromCalendar:(OADestination *)destination;
 

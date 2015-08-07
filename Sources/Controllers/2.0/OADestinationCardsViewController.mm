@@ -25,6 +25,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
+#import "OAAutoObserverProxy.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -41,8 +42,9 @@
     NSArray *_sections;
 
     BOOL isDecelerating;
-    
     NSIndexPath *indexPathForSwipingCell;
+    
+    OAAutoObserverProxy *_historyPointAddObserver;
 }
 
 + (OADestinationCardsViewController *)sharedInstance
@@ -178,24 +180,71 @@
     
     [self generateData];
     
-    for (OADestinationCardBaseController *cardController in _sections)
-        [cardController onAppear];
+    _historyPointAddObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onHistoryPointAdded:withKey:)
+                                                          andObserve:[OAHistoryHelper sharedInstance].historyPointAddObservable];
+
 }
 
 -(void)viewDidDisappear:(BOOL)animated
 {
     [super viewDidDisappear:animated];
 
+    if (_historyPointAddObserver)
+    {
+        [_historyPointAddObserver detach];
+        _historyPointAddObserver = nil;
+    }
+
     _isHiding = NO;
     
-    for (OADestinationCardBaseController *cardController in _sections)
-        [cardController onDisappear];
+    [self deactivateCards];
 }
 
 -(void)doViewWillDisappear
 {
     _isHiding = YES;
     _isVisible = NO;
+}
+
+- (void)onHistoryPointAdded:(id)observable withKey:(id)key
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        BOOL hasHistoryCard = NO;
+        for (OADestinationCardBaseController *cardCtrl in _sections)
+        {
+            if ([cardCtrl isKindOfClass:[OAHistoryCardController class]])
+            {
+                hasHistoryCard = YES;
+                break;
+            }
+        }
+        
+        if (!hasHistoryCard)
+        {
+            [self generateData:YES];
+
+            /*
+            [self.tableView beginUpdates];
+            [self.tableView insertSections:[NSIndexSet indexSetWithIndex:_sections.count - 1] withRowAnimation:UITableViewRowAnimationBottom];
+            [self.tableView endUpdates];
+            */
+        }
+        
+    });
+}
+
+- (void)activateCards
+{
+    for (OADestinationCardBaseController *cardCtrl in _sections)
+        [cardCtrl onAppear];
+}
+
+- (void)deactivateCards
+{
+    for (OADestinationCardBaseController *cardCtrl in _sections)
+        [cardCtrl onDisappear];
 }
 
 -(void)generateData
@@ -209,6 +258,8 @@
     NSInteger index = 0;
     
     NSMutableArray *sections = [NSMutableArray array];
+    
+    [self deactivateCards];
     
     // Add cards
     
@@ -271,6 +322,8 @@
     
     _sections = [NSArray arrayWithArray:sections];
 
+    [self activateCards];
+    
     if (reload)
         [self.tableView reloadData];
 }
@@ -430,10 +483,15 @@
 
 -(void)cardRemoved:(NSInteger)section
 {
-    [[self getCardController:section] onDisappear];
-    [self generateData:NO];
+    [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationLeft];
     
-    if (_sections.count == 0)
+    NSInteger sectionsCount = _sections.count;
+    [self generateData:NO];
+
+    if (_sections.count >= sectionsCount)
+        [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_sections.count - 1, ABS(_sections.count - sectionsCount) + 1)] withRowAnimation:UITableViewRowAnimationBottom];
+    
+    if (_sections.count == 0 || [_sections[0] isKindOfClass:[OAHistoryCardController class]])
         [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 

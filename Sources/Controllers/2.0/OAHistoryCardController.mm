@@ -45,6 +45,8 @@
 {
     OsmAndAppInstance _app;
     OAAutoObserverProxy *_locationUpdateObserver;
+
+    OAAutoObserverProxy *_historyPointAddObserver;
     OAAutoObserverProxy *_historyPointRemoveObserver;
 
     NSMutableArray *_items;
@@ -218,6 +220,10 @@
                                                         withHandler:@selector(updateDistanceAndDirection)
                                                          andObserve:_app.locationServices.updateObserver];
     
+    _historyPointAddObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onPointAdd:withKey:)
+                                                             andObserve:[OAHistoryHelper sharedInstance].historyPointAddObservable];
+
     _historyPointRemoveObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onPointRemove:withKey:)
                                                             andObserve:[OAHistoryHelper sharedInstance].historyPointRemoveObservable];
@@ -225,6 +231,12 @@
 
 - (void)onDisappear
 {
+    if (_historyPointAddObserver)
+    {
+        [_historyPointAddObserver detach];
+        _historyPointAddObserver = nil;
+    }
+
     if (_historyPointRemoveObserver)
     {
         [_historyPointRemoveObserver detach];
@@ -258,6 +270,11 @@
     return @[remove];
 }
 
+- (void)remove:(OAHistoryCardItem *)cardItem
+{
+    [[OAHistoryHelper sharedInstance] removePoint:cardItem.item];
+}
+
 - (void)onPointRemove:(id)observable withKey:(id)key
 {
     OAHistoryItem *item = key;
@@ -273,11 +290,6 @@
              }
          }];
     });
-}
-
-- (void)remove:(OAHistoryCardItem *)cardItem
-{
-    [[OAHistoryHelper sharedInstance] removePoint:cardItem.item];
 }
 
 - (void)doRemovePoint:(OAHistoryItem *)item
@@ -301,13 +313,10 @@
     
     [self.tableView beginUpdates];
     
-    [_items removeObject:item];
-    
     [self generateData];
     
     if (_items.count == 0)
     {
-        [self.tableView deleteSections:[NSIndexSet indexSetWithIndex:self.section] withRowAnimation:UITableViewRowAnimationLeft];
         [self removeCard];
     }
     else
@@ -315,8 +324,52 @@
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
         
         if (_items.count >= HISTORY_CARD_ROWS)
-            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:HISTORY_CARD_ROWS - 1 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
     }
+    
+    [self.tableView endUpdates];
+    
+    [CATransaction commit];
+}
+
+- (void)onPointAdd:(id)observable withKey:(id)key
+{
+    OAHistoryItem *item = key;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self doAddPoint:item];
+    });
+}
+
+- (void)doAddPoint:(OAHistoryItem *)item
+{
+    _isAnimating = YES;
+    
+    [CATransaction begin];
+    
+    [CATransaction setCompletionBlock:^{
+        
+        if (_items.count > 0)
+        {
+            [self updateDistanceAndDirection:YES];
+            [self refreshSwipeButtons];
+        }
+        
+        [self.tableView reloadData];
+        
+        _isAnimating = NO;
+    }];
+    
+    [self.tableView beginUpdates];
+    
+    BOOL fullCard = (_items.count >= HISTORY_CARD_ROWS);
+    
+    [self generateData];
+    
+    if (fullCard)
+        [self.tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:HISTORY_CARD_ROWS - 1 inSection:self.section]] withRowAnimation:UITableViewRowAnimationFade];
+
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:self.section]] withRowAnimation:UITableViewRowAnimationBottom];
     
     [self.tableView endUpdates];
     

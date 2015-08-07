@@ -24,6 +24,8 @@
 "shared_string_modify" = "Modify";
 "shared_string_later" = "Later";
 
+"offline_maps" = "Offline Maps";
+"download_map" = "Download map";
 
 // HUD
 "hud_heading" = "Heading";

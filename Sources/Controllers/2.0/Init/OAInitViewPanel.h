@@ -13,9 +13,9 @@
 }
 
 @property (weak, nonatomic) IBOutlet UIButton *nextButton;
-@property (weak, nonatomic) IBOutlet UILabel *labelView;
-@property (weak, nonatomic) IBOutlet UILabel *descriptionView;
 @property (weak, nonatomic) IBOutlet UITextField *countryName;
+@property (weak, nonatomic) IBOutlet UILabel *downloadMapLabel;
+@property (weak, nonatomic) IBOutlet UILabel *offlineMapsLabel;
 
 - (IBAction)nextButtonClicked:(id)sender;
 - (id)initWithFrame:(CGRect)frame nibNamed:(NSString *)nibName;

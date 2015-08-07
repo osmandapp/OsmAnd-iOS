@@ -24,8 +24,8 @@
 {
     self = [super initWithFrame:frame nibNamed:nibName];
     
-    _labelView.text = OALocalizedString(@"intro_welcome");
-    _descriptionView.text = OALocalizedString(@"intro_promo");
+    _offlineMapsLabel.text = OALocalizedString(@"offline_maps");
+    _downloadMapLabel.text = [OALocalizedString(@"download_map") uppercaseStringWithLocale:[NSLocale currentLocale]];
     [_nextButton setTitle:OALocalizedStringUp(@"intro_next") forState:UIControlStateNormal];
     _countryName.placeholder = OALocalizedString(@"intro_placeholder");
 

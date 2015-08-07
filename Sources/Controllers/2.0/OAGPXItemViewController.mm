@@ -527,7 +527,7 @@
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"go_to_map")]
                                       otherDesc:nil
-                                    otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png", @"waypoint_map_disable.png"]
+                                    otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_map.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -556,7 +556,7 @@
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"gpx_edit_mode"), OALocalizedString(@"go_to_map")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_rename.png", @"waypoint_map_disable.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_dialog_map.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -592,7 +592,7 @@
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
                                     otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"go_to_map")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"waypoint_map_disable.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_map.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {

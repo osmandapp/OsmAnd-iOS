@@ -454,3 +454,5 @@
 "yesterday" = "Ahir";
 "hist_select_remove" = "Seleccioneu els elements històrics a suprimir";
 "hist_remove_q" = "Voleu suprimir els elements històrics?";
+"gpx_edit_mode" = "Mode edició";
+"go_to_map" = "Ves al mapa";

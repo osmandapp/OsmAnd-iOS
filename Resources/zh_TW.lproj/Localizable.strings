@@ -454,3 +454,5 @@
 "yesterday" = "昨天";
 "hist_select_remove" = "請選擇要移除的履歷項目";
 "hist_remove_q" = "您想要移除履歷項目嗎？";
+"gpx_edit_mode" = "編輯模式";
+"go_to_map" = "轉至地圖";

@@ -450,3 +450,7 @@
 "map_creator" = "建立地圖";
 "local_names" = "本地名稱";
 "history" = "履歷";
+"today" = "今天";
+"yesterday" = "昨天";
+"hist_select_remove" = "請選擇要移除的履歷項目";
+"hist_remove_q" = "您想要移除履歷項目嗎？";

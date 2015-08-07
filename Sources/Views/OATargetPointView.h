@@ -37,7 +37,7 @@
 
 @end
 
-@interface OATargetPointView : UIView
+@interface OATargetPointView : UIView<OATargetMenuViewControllerDelegate>
 
 @property (nonatomic) OATargetPoint *targetPoint;
 @property (nonatomic, assign) BOOL isAddressFound;

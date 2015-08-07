@@ -24,6 +24,9 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) requestHeaderOnlyMode;
 - (void) requestFullScreenMode;
 
+- (BOOL)isInFullMode;
+- (BOOL)isInFullScreenMode;
+
 @end
 
 @interface OATargetMenuViewControllerState : NSObject

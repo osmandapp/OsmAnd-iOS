@@ -57,7 +57,7 @@
 @end
 
 
-@interface OATargetPointView() <OATargetMenuViewControllerDelegate, OATargetPointZoomViewDelegate>
+@interface OATargetPointView() <OATargetPointZoomViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
@@ -992,10 +992,19 @@
         else if (addonsCount == 1)
         {
             OAFunctionalAddon *addon = _iapHelper.singleAddon;
-            NSString *title = addon.titleShort;
-            NSString *imageName = addon.imageName;
-            [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
-            [self.buttonMore setTitle:title forState:UIControlStateNormal];
+            
+            if (self.activeTargetType == OATargetGPX && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+            {
+                [self.buttonMore setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
+                [self.buttonMore setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
+            }
+            else
+            {
+                NSString *title = addon.titleShort;
+                NSString *imageName = addon.imageName;
+                [self.buttonMore setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+                [self.buttonMore setTitle:title forState:UIControlStateNormal];
+            }
         }
     }
     else
@@ -1775,12 +1784,14 @@
         if (parkingAddonSingle)
             _buttonMore.enabled = NO;
     }
+    /*
     else if (_targetPoint.type == OATargetWpt)
     {
         BOOL trackRecAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint];
         if (trackRecAddonSingle)
             _buttonMore.enabled = NO;
     }
+    */
     else
     {
         _buttonMore.enabled = YES;
@@ -2136,7 +2147,10 @@
     }
     else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
     {
-        [self.delegate targetPointAddWaypoint];
+        if (self.activeTargetType == OATargetGPX)
+            [self addFavorite];
+        else
+            [self.delegate targetPointAddWaypoint];
     }
     else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_Parking_Set])
     {
@@ -2304,6 +2318,16 @@
             [self doLayoutSubviews];
         }];
     }
+}
+
+- (BOOL)isInFullMode
+{
+    return _showFull;
+}
+
+- (BOOL)isInFullScreenMode
+{
+    return _showFullScreen;
 }
 
 - (void) btnOkPressed

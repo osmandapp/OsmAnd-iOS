@@ -454,3 +454,5 @@
 "yesterday" = "I går";
 "hist_select_remove" = "Vælg histoirikemner til at fjerne";
 "hist_remove_q" = "Fjern historikemner?";
+"gpx_edit_mode" = "Redigeringstilstand";
+"go_to_map" = "Gå til kortet";

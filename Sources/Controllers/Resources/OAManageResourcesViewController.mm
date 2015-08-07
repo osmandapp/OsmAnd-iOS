@@ -682,18 +682,20 @@ static BOOL _lackOfResources;
         if (doInit)
         {
             NSMutableArray *typesArray = [NSMutableArray array];
+            BOOL hasSrtm = NO;
             for (const auto& resource : _resourcesInRepository)
             {
                 if (!resource->id.startsWith(downloadsIdPrefix))
                     continue;
                 
-                //if ([resource->id.toNSString() rangeOfString:@"alaska"].location != NSNotFound)
-                //    OALog(@"resId=%@, downloadPrefix=%@", resource->id.toNSString(), downloadsIdPrefix.toNSString());
+                //if ([resource->id.toNSString() rangeOfString:@"brazil"].location != NSNotFound)
+                //     OALog(@"region=%@, resId=%@, downloadPrefix=%@", region.name,  resource->id.toNSString(), downloadsIdPrefix.toNSString());
 
                 switch (resource->type)
                 {
-                    case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::SrtmMapRegion:
+                        hasSrtm = YES;
+                    case OsmAndResourceType::MapRegion:
                     case OsmAndResourceType::WikiMapRegion:
                     case OsmAndResourceType::HillshadeRegion:
                         
@@ -708,6 +710,22 @@ static BOOL _lackOfResources;
                     regionResources.allResources.insert(resource->id, resource);
                 
                 regionResources.repositoryResources.insert(resource->id, resource);
+            }
+            
+            if (region.superregion && hasSrtm && region.superregion.superregion != app.worldRegion)
+            {
+                if (![region.superregion.resourceTypes containsObject:[NSNumber numberWithInt:(int)OsmAndResourceType::SrtmMapRegion]])
+                {
+                    region.superregion.resourceTypes = [region.superregion.resourceTypes arrayByAddingObject:[NSNumber numberWithInt:(int)OsmAndResourceType::SrtmMapRegion]];
+                    region.superregion.resourceTypes = [region.superregion.resourceTypes sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {
+                        if ([num2 intValue] > [num1 intValue])
+                            return NSOrderedAscending;
+                        else if ([num2 intValue] < [num1 intValue])
+                            return NSOrderedDescending;
+                        else
+                            return NSOrderedSame;
+                    }];
+                }
             }
             
             region.resourceTypes = [typesArray sortedArrayUsingComparator:^NSComparisonResult(NSNumber *num1, NSNumber *num2) {

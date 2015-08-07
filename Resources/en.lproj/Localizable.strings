@@ -519,4 +519,6 @@
 "yesterday" = "Yesterday";
 "hist_select_remove" = "Please select history items to remove";
 "hist_remove_q" = "Do you want to remove history items?";
+"gpx_edit_mode" = "Edit mode";
+"go_to_map" = "Go to Map";
 

@@ -65,6 +65,7 @@
 - (void)openTargetViewWithGPXRoute:(OAGPX *)item pushed:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;
 - (void)openTargetViewWithDestination:(OADestination *)destination;
 
+- (BOOL)hasGpxActiveTargetType;
 - (void)displayGpxOnMap:(OAGPX *)item;
 - (void)displayAreaOnMap:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight zoom:(float)zoom;
 - (BOOL)goToMyLocationIfInArea:(CLLocationCoordinate2D)topLeft bottomRight:(CLLocationCoordinate2D)bottomRight;

@@ -217,8 +217,15 @@
 
 - (IBAction)myTripsButtonClicked:(id)sender
 {
-    OAGPXListViewController* gpxViewController = [[OAGPXListViewController alloc] init];
-    [self.navigationController pushViewController:gpxViewController animated:YES];
+    if ([[OARootViewController instance].mapPanel hasGpxActiveTargetType])
+    {
+        [self.sidePanelController toggleLeftPanel:self];
+    }
+    else
+    {
+        OAGPXListViewController* gpxViewController = [[OAGPXListViewController alloc] init];
+        [self.navigationController pushViewController:gpxViewController animated:YES];
+    }
 }
 
 - (IBAction)settingsButtonClicked:(id)sender

@@ -451,7 +451,7 @@
         return;
     
     OAGpxWptItem* item = [self getWptItem:indexPath];
-    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:YES];
+    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
 }
 
 #pragma mark - UITableViewDelegate

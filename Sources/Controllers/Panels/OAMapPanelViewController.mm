@@ -549,6 +549,11 @@ typedef enum
     return _hudViewController.preferredStatusBarStyle;
 }
 
+- (BOOL)hasGpxActiveTargetType
+{
+    return _activeTargetType == OATargetGPX;
+}
+
 - (void)onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1614,7 +1619,7 @@ typedef enum
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
-        } hideActiveTarget:YES];
+        } hideActiveTarget:YES shadowButtonAction:NO];
         
         return;
     }
@@ -1787,10 +1792,15 @@ typedef enum
 
     [self.targetMenuView show:YES onComplete:^{
         
-        [self createShadowButton:@selector(hideTargetPointMenu) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
+        [self createShadowButton:@selector(hideTargetPointMenuByShadow) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
         
         self.sidePanelController.recognizesPanGesture = NO;
     }];
+}
+
+- (void)hideTargetPointMenuByShadow
+{
+    [self hideTargetPointMenu:.3 onComplete:nil hideActiveTarget:NO shadowButtonAction:YES];
 }
 
 -(void)targetSetTopControlsVisible:(BOOL)visible
@@ -1815,11 +1825,17 @@ typedef enum
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
-    [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO];
+    [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO shadowButtonAction:NO];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget
+-(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget shadowButtonAction:(BOOL)shadowButtonAction
 {
+    if (shadowButtonAction && self.targetMenuView.targetPoint.type == OATargetGPX)
+    {
+        [self.targetMenuView requestHeaderOnlyMode];
+        return;
+    }
+    
     if (![self.targetMenuView preHide])
         return;
     

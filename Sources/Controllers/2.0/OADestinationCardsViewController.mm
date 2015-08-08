@@ -500,7 +500,9 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
 {
-    return [touch.view isKindOfClass:[UITableView class]];
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[[self getCardController:_sections.count - 1] rowsCount] - 1 inSection:_sections.count - 1];
+    CGRect rect = [self.tableView convertRect:[self.tableView rectForRowAtIndexPath:indexPath] toView:[self.tableView superview]];
+    return [touch locationInView:self.tableView].y > rect.origin.y + rect.size.height; //[touch.view isKindOfClass:[UITableView class]];
 }
 
 @end

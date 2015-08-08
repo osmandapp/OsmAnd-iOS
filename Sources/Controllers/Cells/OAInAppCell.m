@@ -87,6 +87,7 @@
         self.btnPrice.layer.borderColor = UIColorFromRGB(0xff8f00).CGColor;
         self.btnPrice.backgroundColor = [UIColor clearColor];
         self.btnPrice.tintColor = UIColorFromRGB(0xff8f00);
+        [self.btnPrice setImage:nil forState:UIControlStateNormal];
     }
 }
 

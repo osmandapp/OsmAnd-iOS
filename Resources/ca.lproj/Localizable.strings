@@ -456,3 +456,5 @@
 "hist_remove_q" = "Voleu suprimir els elements històrics?";
 "gpx_edit_mode" = "Mode edició";
 "go_to_map" = "Ves al mapa";
+"offline_maps" = "Mapes fora de línia";
+"download_map" = "Baixa el mapa";

@@ -456,3 +456,5 @@
 "hist_remove_q" = "您想要移除履歷項目嗎？";
 "gpx_edit_mode" = "編輯模式";
 "go_to_map" = "轉至地圖";
+"offline_maps" = "離線地圖";
+"download_map" = "下載地圖";

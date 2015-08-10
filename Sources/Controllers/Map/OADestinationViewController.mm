@@ -213,6 +213,8 @@
     }
     
     [_multiCell updateDirections:location direction:direction];
+    
+    [self startLocationUpdate];
 }
 
 - (void)clean

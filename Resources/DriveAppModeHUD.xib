@@ -165,7 +165,7 @@
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="tI7-jm-O6m" userLabel="mapModeButton">
                     <rect key="frame" x="192" y="499" width="61" height="68"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                    <inset key="imageEdgeInsets" minX="1" minY="-7" maxX="0.0" maxY="0.0"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="-7" maxX="0.0" maxY="0.0"/>
                     <state key="normal" image="free_map_mode_button.png" backgroundImage="bt_round_big.png">
                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                     </state>

@@ -2563,7 +2563,7 @@ typedef enum
     if (cardsController.view.superview && !cardsController.isHiding && [OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [UIView animateWithDuration:(animated ? .25 : 0.0) animations:^{
-            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.size.height);
+            cardsController.view.frame = CGRectMake(0.0, _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height, DeviceScreenWidth, DeviceScreenHeight - _destinationViewController.view.frame.origin.y - _destinationViewController.view.frame.size.height);
         }];
     }
 }

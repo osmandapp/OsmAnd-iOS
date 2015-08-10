@@ -321,19 +321,6 @@
     [[OAIAPHelper sharedInstance] requestProductsWithCompletionHandler:^(BOOL success) {}];
     
     [[Reachability reachabilityForInternetConnection] startNotifier];
-
-    /*
-    NSLog(@"<52.33 44.5> = <%@>", [OAUtilities splitCoordinates:@"52.33 44.5"]);
-    NSLog(@"<52.33,44.5> = <%@>", [OAUtilities splitCoordinates:@"52.33,44.5"]);
-    NSLog(@"<3'4 4'3> = <%@>", [OAUtilities splitCoordinates:@"3'4 4'3"]);
-
-    NSLog(@"<http://www.openstreetmap.org/?mlat=52.45821912536027&mlon=4.538834095001221#map=15/52.4585/4.5422&layers=N> = <%@>", [OAUtilities splitCoordinates:@"http://www.openstreetmap.org/?mlat=52.45821912536027&mlon=4.538834095001221#map=15/52.4585/4.5422&layers=N"]);
-    NSLog(@"<http://www.openstreetmap.org/#map=15/52.4585/4.5422&layers=N> = <%@>", [OAUtilities splitCoordinates:@"http://www.openstreetmap.org/#map=15/52.4585/4.5422&layers=N"]);
-    NSLog(@"<15s > = <%@>", [OAUtilities splitCoordinates:@"15s "]);
-    NSLog(@"<15s 45w> = <%@>", [OAUtilities splitCoordinates:@"15s 45w"]);
-    NSLog(@"<15'43'42'3s45w> = <%@>", [OAUtilities splitCoordinates:@"15'43'42'3s45w"]);
-    NSLog(@"<BLABLA 15'43'42'3s45'4e> = <%@>", [OAUtilities splitCoordinates:@"BLABLA 15'43'42'3s45'4e"]);
-    */
     
     return YES;
 }

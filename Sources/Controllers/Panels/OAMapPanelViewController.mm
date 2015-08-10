@@ -1105,8 +1105,8 @@ typedef enum
     targetPoint.brand = brand;
     targetPoint.wheelchair = wheelchair;
     targetPoint.fuelTags = fuelTags;
-
-    targetPoint.desc = desc;//@"When Export is started, you may see error message: \"Check if you have enough free space on the device and is OsmAnd DVR has to access Camera Roll\". Please check the phone settings: \"Settings\" ➞ \"Privacy\" ➞ \"Photos\" ➞ «OsmAnd DVR» (This setting must be enabled). Also check the free space in the device's memory. To successfully copy / move the video to the Camera Roll, free space must be two times bigger than the size of the exported video at least. For example, if the size of the video is 200 MB, then for successful export you need to have 400 MB free.";
+    targetPoint.desc = desc;
+    
     if (desc.length > 0)
         targetPoint.titleAddress = desc;
     else
@@ -1385,11 +1385,15 @@ typedef enum
 
 -(void)targetPointAddFavorite
 {
+    if ([_mapViewController hasFavoriteAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
+        return;
+    
     OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithLocation:self.targetMenuView.targetPoint.location andTitle:self.targetMenuView.targetPoint.title];
     
     UIColor* color = [UIColor colorWithRed:favoriteViewController.favorite.favorite->getColor().r/255.0 green:favoriteViewController.favorite.favorite->getColor().g/255.0 blue:favoriteViewController.favorite.favorite->getColor().b/255.0 alpha:1.0];
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
     self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
+    self.targetMenuView.targetPoint.type = OATargetFavorite;
     
     [favoriteViewController activateEditing];
     favoriteViewController.view.frame = self.view.frame;
@@ -1405,6 +1409,9 @@ typedef enum
 {
     if (_targetDestination)
     {
+        if (self.targetMenuView.targetPoint.type != OATargetDestination)
+            return;
+
         dispatch_async(dispatch_get_main_queue(), ^{
             [[OADestinationsHelper instance] addHistoryItem:_targetDestination];
             [[OADestinationsHelper instance] removeDestination:_targetDestination];
@@ -1442,6 +1449,9 @@ typedef enum
 
 - (void)targetPointAddWaypoint
 {
+    if ([_mapViewController hasWptAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
+        return;
+    
     NSMutableArray *names = [NSMutableArray array];
     NSMutableArray *paths = [NSMutableArray array];
     
@@ -1539,6 +1549,8 @@ typedef enum
 
     UIColor* color = wptViewController.wpt.color;
     OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+    
+    self.targetMenuView.targetPoint.type = OATargetWpt;
     self.targetMenuView.targetPoint.icon = [UIImage imageNamed:favCol.iconName];
     self.targetMenuView.targetPoint.targetObj = wptViewController.wpt;
     

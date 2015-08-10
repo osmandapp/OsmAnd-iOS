@@ -101,6 +101,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)setDocFileRoute:(NSString *)fileName;
 - (void)setGeoInfoDocsGpxRoute:(OAGPXRouteDocument *)doc;
 
+- (BOOL)hasFavoriteAt:(CLLocationCoordinate2D)location;
+- (BOOL)hasWptAt:(CLLocationCoordinate2D)location;
+
 - (BOOL)findWpt:(CLLocationCoordinate2D)location;
 - (BOOL)deleteFoundWpt;
 - (BOOL)saveFoundWpt;

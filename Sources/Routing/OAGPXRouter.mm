@@ -252,14 +252,24 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 
 - (void)refreshDestinations
 {
+    [self refreshDestinations:NO];
+}
+
+- (void)refreshDestinations:(BOOL)rebuildPointsOrder
+{
     NSArray *array = (self.routeDoc ? self.routeDoc.activePoints : nil);
-    [[OADestinationsHelper instance] updateRoutePointsWithinDestinations:array];
+    [[OADestinationsHelper instance] updateRoutePointsWithinDestinations:array rebuildPointsOrder:rebuildPointsOrder];
 }
 
 - (void)refreshRoute
 {
+    [self refreshRoute:NO];
+}
+
+- (void)refreshRoute:(BOOL)rebuildPointsOrder
+{
     [self.routeDoc updateDistances];
-    [self refreshDestinations];
+    [self refreshDestinations:rebuildPointsOrder];
     [self.routeDoc buildRouteTrack];
 }
 

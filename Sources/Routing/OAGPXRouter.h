@@ -40,13 +40,16 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 - (void)cancelRoute;
 - (void)saveRoute;
 - (void)saveRouteIfModified;
+
 - (void)refreshRoute;
+- (void)refreshRoute:(BOOL)rebuildPointsOrder;
 
 - (NSTimeInterval)getRouteDuration;
 - (NSTimeInterval)getRouteDuration:(OAGPXRouteVariantType)routeVariantType;
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate;
 - (void)refreshDestinations;
+- (void)refreshDestinations:(BOOL)rebuildPointsOrder;
 
 - (NSString *)getRouteVariantTypeIconName;
 - (NSString *)getRouteVariantTypeSmallIconName;

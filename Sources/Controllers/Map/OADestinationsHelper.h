@@ -16,7 +16,7 @@
 
 + (OADestinationsHelper *)instance;
 
-- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints;
+- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder;
 
 - (void)addDestination:(OADestination *)destination;
 - (void)removeDestination:(OADestination *)destination;

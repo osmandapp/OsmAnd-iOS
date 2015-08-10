@@ -398,12 +398,17 @@ static OAGPXListViewController *parentController;
         
         if (_viewMode == kActiveTripsMode && _routeSectionIndex > -1)
         {
+            NSInteger prevTripsSectionIndex = _tripsSectionIndex;
             NSInteger prevRouteSectionIndex = _routeSectionIndex;
             NSString *routeFileName = _routeItem.gpxFileName;
             
             [self generateData];
             [self.gpxTableView beginUpdates];
+
             [self.gpxTableView deleteSections:[NSIndexSet indexSetWithIndex:prevRouteSectionIndex] withRowAnimation:UITableViewRowAnimationFade];
+            
+            if (prevTripsSectionIndex < 0 && _tripsSectionIndex >= 0)
+                [self.gpxTableView insertSections:[NSIndexSet indexSetWithIndex:_tripsSectionIndex] withRowAnimation:UITableViewRowAnimationRight];
 
             [self.gpxList enumerateObjectsUsingBlock:^(OAGPX *item, NSUInteger idx, BOOL *stop)
             {

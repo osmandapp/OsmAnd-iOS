@@ -529,6 +529,9 @@
         _waitingForAuthorization = NO;
     }
     
+    if (!locations || ![locations lastObject])
+        return;
+    
     BOOL wasLocationUnknown = (_lastLocation == nil);
     
     _lastLocation = [locations lastObject];

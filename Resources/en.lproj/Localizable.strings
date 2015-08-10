@@ -381,8 +381,8 @@
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
 
 "product_title_trip_planning" = "Trip planning";
-//"product_desc_trip_planning" = "Activates the functionality for planning your trip";
-//"product_desc_ext_trip_planning" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
+"product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
+"product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
 
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";

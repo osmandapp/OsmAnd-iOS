@@ -46,5 +46,6 @@
 - (void)moveToActive:(OAGpxRouteWptItem *)item;
 
 - (void)updatePointsArray;
+- (void)updatePointsArray:(BOOL)rebuildPointsOrder;
 
 @end

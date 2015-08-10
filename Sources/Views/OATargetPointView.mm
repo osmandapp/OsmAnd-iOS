@@ -1784,14 +1784,6 @@
         if (parkingAddonSingle)
             _buttonMore.enabled = NO;
     }
-    /*
-    else if (_targetPoint.type == OATargetWpt)
-    {
-        BOOL trackRecAddonSingle = _iapHelper.functionalAddons.count == 1 && [_iapHelper.singleAddon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint];
-        if (trackRecAddonSingle)
-            _buttonMore.enabled = NO;
-    }
-    */
     else
     {
         _buttonMore.enabled = YES;
@@ -2052,6 +2044,15 @@
 
 - (IBAction)buttonFavoriteClicked:(id)sender
 {
+    /*
+    if (self.targetPoint.type == OATargetWpt || self.targetPoint.type == OATargetFavorite)
+    {
+        [self showFullMenu];
+        [self.customController activateEditing];
+        return;
+    }
+     */
+    
     if (self.activeTargetType == OATargetGPX)
         [self.delegate targetPointAddWaypoint];
     else

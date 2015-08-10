@@ -4095,6 +4095,93 @@
     _geoInfoDocsGpxPaths = [NSArray arrayWithArray:paths];
 }
 
+- (BOOL)hasFavoriteAt:(CLLocationCoordinate2D)location
+{
+    for (const auto& fav : _favoritesMarkersCollection->getMarkers())
+    {
+        double lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
+        double lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
+        if ([OAUtilities doublesEqualUpToDigits:5 source:lat destination:location.latitude] &&
+            [OAUtilities doublesEqualUpToDigits:5 source:lon destination:location.longitude])
+        {
+            return YES;
+        }
+    }
+
+    return NO;
+}
+
+- (BOOL)hasWptAt:(CLLocationCoordinate2D)location
+{
+    OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
+    
+    BOOL found = NO;
+    
+    for (OAGpxWpt *wptItem in helper.currentTrack.locationMarks)
+    {
+        if ([OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.latitude destination:location.latitude] &&
+            [OAUtilities doublesEqualUpToDigits:5 source:wptItem.position.longitude destination:location.longitude])
+        {
+            found = YES;
+        }
+    }
+    
+    if (found)
+        return YES;
+    
+    int i = 0;
+    for (const auto& doc : _geoInfoDocsGpx)
+    {
+        for (auto& loc : doc->locationMarks)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            {
+                found = YES;
+            }
+        }
+        
+        if (found)
+            return YES;
+        
+        i++;
+    }
+    
+    if (!_geoInfoDocsGpxTemp.isEmpty())
+    {
+        const auto& doc = _geoInfoDocsGpxTemp.first();
+        
+        for (auto& loc : doc->locationMarks)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            {
+                found = YES;
+            }
+        }
+        
+        if (found)
+            return YES;
+    }
+    
+    if (!_geoInfoDocsGpxRoute.isEmpty())
+    {
+        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
+        {
+            if ([OAUtilities doublesEqualUpToDigits:5 source:point.position.latitude destination:location.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:point.position.longitude destination:location.longitude])
+            {
+                found = YES;
+            }
+        }
+        
+        if (found)
+            return YES;
+    }
+    
+    return NO;
+}
+
 - (BOOL)findWpt:(CLLocationCoordinate2D)location
 {
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
@@ -4239,6 +4326,8 @@
         // update map
         [[_app trackRecordingObservable] notifyEvent];
         
+        [self hideContextPinMarker];
+        
         return YES;
     }
     else if ([_gpxDocFileRoute isEqualToString:[self.foundWptDocPath lastPathComponent]])
@@ -4287,6 +4376,8 @@
                     [self initRendererWithGpxTracks];
                 });
                 
+                [self hideContextPinMarker];
+
                 return YES;
             }
         }

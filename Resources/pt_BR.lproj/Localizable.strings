@@ -454,3 +454,9 @@
 "yesterday" = "Ontem";
 "hist_select_remove" = "Por favor, selecione itens do histórico para apagar";
 "hist_remove_q" = "Você quer apagar itens do histórico?";
+"offline_maps" = "Mapas off-line";
+"download_map" = "Baixar mapa";
+"product_desc_trip_planning" = "Planeje sua viagem, adicione pontos de parada, meça a distância para o seu destino usando este complemento";
+"product_desc_ext_trip_planning" = "Complemento de planejamento de viagem permite que você crie sua viagem no mapa, salve, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planejamento de viagem preliminar ao invés de rota por endereço.";
+"gpx_edit_mode" = "Modo edição";
+"go_to_map" = "Ir para o mapa";

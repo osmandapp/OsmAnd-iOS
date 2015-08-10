@@ -132,6 +132,10 @@
 - (void)didSelectRow:(NSInteger)row
 {
     OADestinationItem* item = [self getItem:row];
+    
+    if (item.destination.hidden)
+        [[OADestinationsHelper instance] showOnMap:item.destination];
+ 
     [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
     
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
@@ -355,7 +359,7 @@
 
     [_items removeObject:item];
     
-    if (_items.count == 0)
+    if (![self hasActiveItems])
         [self removeCard];
     else
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
@@ -365,10 +369,16 @@
     [CATransaction commit];
 }
 
-- (void)updateDirections
+- (BOOL)hasActiveItems
 {
-    // refresh top toobar
-    // todo
+    int count = _items.count;
+    for (OADestinationItem *item in _items)
+    {
+        if (item.destination.hidden)
+            count--;
+    }
+    
+    return count > 0;
 }
 
 @end

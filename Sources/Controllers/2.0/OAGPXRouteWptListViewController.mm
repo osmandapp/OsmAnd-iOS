@@ -258,7 +258,7 @@
                     [item.point applyRouteInfo];
                 }
                 
-                [_gpxRouter refreshRoute];
+                [_gpxRouter refreshRoute:YES];
                 [_gpxRouter.routeChangedObservable notifyEvent];
                 
                 if (self.delegate)
@@ -694,7 +694,7 @@
         [item.point applyRouteInfo];
     }
     
-    [_gpxRouter refreshRoute];
+    [_gpxRouter refreshRoute:YES];
     [_gpxRouter.routeChangedObservable notifyEvent];
 
     if (self.delegate)

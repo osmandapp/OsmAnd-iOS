@@ -4200,24 +4200,15 @@
 
     if (!_geoInfoDocsGpxRoute.isEmpty())
     {
-        const auto& doc = _geoInfoDocsGpxRoute.first();
-        
-        for (auto& loc : doc->locationMarks)
+        for (OAGpxRoutePoint *point in _gpxRouter.routeDoc.locationMarks)
         {
-            if (!loc->type.isEmpty())
-                [groups addObject:loc->type.toNSString()];
-            
-            if ([OAUtilities doublesEqualUpToDigits:5 source:loc->position.latitude destination:location.latitude] &&
-                [OAUtilities doublesEqualUpToDigits:5 source:loc->position.longitude destination:location.longitude])
+            if (point.type.length > 0)
+                [groups addObject:point.type];
+
+            if ([OAUtilities doublesEqualUpToDigits:5 source:point.position.latitude destination:location.latitude] &&
+                [OAUtilities doublesEqualUpToDigits:5 source:point.position.longitude destination:location.longitude])
             {
-                OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt> *_wpt = (OsmAnd::Ref<OsmAnd::GpxDocument::GpxWpt>*)&loc;
-                const std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w = _wpt->shared_ptr();
-                
-                OAGpxWpt *wptItem = [OAGPXRouteDocument fetchWpt:w];
-                wptItem.wpt = w;
-                
-                self.foundWpt = wptItem;
-                
+                self.foundWpt = point;
                 self.foundWptDocPath = _gpxDocFileRoute;
                 
                 found = YES;

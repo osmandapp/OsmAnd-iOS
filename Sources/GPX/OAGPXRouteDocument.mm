@@ -423,7 +423,7 @@
 {
     @synchronized(self.syncObj)
     {
-        [self.inactivePoints removeObject:item];
+        [self.activePoints removeObject:item];
         [self.activePoints insertObject:item atIndex:0];
         item.point.visited = NO;
     }
@@ -431,6 +431,11 @@
 }
 
 - (void)updatePointsArray
+{
+    [self updatePointsArray:NO];
+}
+
+- (void)updatePointsArray:(BOOL)rebuildPointsOrder
 {
     int i = 0;
     for (OAGpxRouteWptItem *item in self.activePoints)
@@ -444,7 +449,7 @@
         [item.point applyRouteInfo];
     }
     
-    [[OAGPXRouter sharedInstance] refreshRoute];
+    [[OAGPXRouter sharedInstance] refreshRoute:rebuildPointsOrder];
     [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
 }
 

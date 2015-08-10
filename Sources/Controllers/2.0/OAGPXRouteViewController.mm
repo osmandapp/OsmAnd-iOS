@@ -103,12 +103,12 @@
                          completion:^(BOOL cancelled, NSInteger buttonIndex) {
                              if (!cancelled)
                              {
-                                 [_gpxRouter cancelRoute];
+                                 [self closePointsController];
                                  
                                  if (self.delegate)
                                      [self.delegate btnOkPressed];
                                  
-                                 [self closePointsController];
+                                 [_gpxRouter cancelRoute];
                              }
                          }];
 }

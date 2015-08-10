@@ -18,6 +18,8 @@
 #import "OARootViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAGPXRouteCardHeaderView.h"
+#import "OAHistoryItem.h"
+#import "OAHistoryHelper.h"
 
 
 @implementation OAGPXRouteCardController
@@ -266,8 +268,21 @@
         return @[visit, driveTo];
 }
 
+- (void)addHistoryItem:(OAGpxRouteWptItem *)item
+{
+    OAHistoryItem *h = [[OAHistoryItem alloc] init];
+    h.name = item.point.name;
+    h.latitude = item.point.position.latitude;
+    h.longitude = item.point.position.longitude;
+    h.date = [NSDate date];
+    h.hType = OAHistoryTypeRouteWpt;
+    
+    [[OAHistoryHelper sharedInstance] addPoint:h];
+}
+
 - (void)deactivate:(OAGpxRouteWptItem *)item
 {
+    [self addHistoryItem:item];
     [_gpxRouter.routeDoc moveToInactive:item];
 }
 
@@ -372,6 +387,7 @@
     [self.tableView beginUpdates];
     NSIndexPath *destination = [NSIndexPath indexPathForRow:0 inSection:self.section];
     
+    [_items removeObject:item];
     [_items insertObject:item atIndex:0];
     
     if (_activeIndexPath)
@@ -383,7 +399,7 @@
         
     [CATransaction commit];
     
-    [_gpxRouter.routeDoc updatePointsArray];
+    [_gpxRouter.routeDoc updatePointsArray:YES];
 }
 
 @end

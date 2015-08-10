@@ -60,7 +60,7 @@
     }
 }
 
-- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints
+- (void)updateRoutePointsWithinDestinations:(NSArray *)routePoints rebuildPointsOrder:(BOOL)rebuildPointsOrder
 {
     @synchronized(_syncObj)
     {
@@ -75,7 +75,7 @@
                 destination.routePoint = YES;
                 
                 NSUInteger objIndex = [_app.data.destinations indexOfObject:destination];
-                if (objIndex != NSNotFound)
+                if (objIndex != NSNotFound && !rebuildPointsOrder)
                     destination = _app.data.destinations[objIndex];
                 
                 destination.routePointIndex = idx;
@@ -90,43 +90,62 @@
             }];
         }
         
+        BOOL isSecondDestinationRoute = (_sortedDestinations.count > 1 && ((OADestination *)_sortedDestinations[1]).routePoint);
+
         NSMutableArray *destinationsToRemove = [NSMutableArray array];
         for (OADestination *destination in _app.data.destinations)
-            if (destination.routePoint && ![routeDestinations containsObject:destination])
+            if (destination.routePoint && (![routeDestinations containsObject:destination] || rebuildPointsOrder))
                 [destinationsToRemove addObject:destination];
-
+        
         for (OADestination *destination in destinationsToRemove)
         {
             [_app.data.destinations removeObject:destination];
             [_sortedDestinations removeObject:destination];
         }
         
-        for (OADestination *destination in routeDestinations)
+        if (rebuildPointsOrder)
         {
-            if (![_app.data.destinations containsObject:destination])
-            {
+            [routeDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop) {
+                
                 [_app.data.destinations addObject:destination];
-                [_sortedDestinations addObject:destination];
-            }
+
+                if (idx == 0)
+                    [_sortedDestinations insertObject:destination atIndex:0];
+                else if (idx == 1 && isSecondDestinationRoute)
+                    [_sortedDestinations insertObject:destination atIndex:1];
+                else
+                    [_sortedDestinations addObject:destination];
+            }];
         }
-
-        [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
+        else
         {
-            if (destination.routePoint && destination.routeTargetPoint && idx > 0)
+            for (OADestination *destination in routeDestinations)
             {
-                OADestination *firstDestination = [_sortedDestinations firstObject];
-                if (firstDestination.routePoint)
+                if (![_app.data.destinations containsObject:destination])
                 {
-                    [_sortedDestinations removeObject:firstDestination];
-                    [_sortedDestinations addObject:firstDestination];
+                    [_app.data.destinations addObject:destination];
+                    [_sortedDestinations addObject:destination];
                 }
-                [_sortedDestinations removeObject:destination];
-                [_sortedDestinations insertObject:destination atIndex:0];
-
-                *stop = YES;
             }
-        }];
-     
+            
+            [_sortedDestinations enumerateObjectsUsingBlock:^(OADestination *destination, NSUInteger idx, BOOL *stop)
+             {
+                 if (destination.routePoint && destination.routeTargetPoint && idx > 0)
+                 {
+                     OADestination *firstDestination = [_sortedDestinations firstObject];
+                     if (firstDestination.routePoint)
+                     {
+                         [_sortedDestinations removeObject:firstDestination];
+                         [_sortedDestinations addObject:firstDestination];
+                     }
+                     [_sortedDestinations removeObject:destination];
+                     [_sortedDestinations insertObject:destination atIndex:0];
+                     
+                     *stop = YES;
+                 }
+             }];
+        }
+        
         [self refreshDestinationIndexes];
     }
 }

@@ -445,3 +445,16 @@
 "show_region_on_map_title" = "Mapa descargado";
 "show_region_on_map_desc" = "El mapa de %@ fue descargado. Vaya al mapa para usarlo.";
 "show_region_on_map_go" = "Ir al mapa";
+"offline_maps" = "Mapas sin conexión";
+"download_map" = "Mapa descargado";
+"sqlitedb_import_title" = "Importar archivo creador de mapa";
+"sqlitedb_import_already_exists" = "El archivo sqlitedb elegido ya existe. Elija una acción.";
+"map_creator" = "Creador de mapa";
+"local_names" = "Nombres locales";
+"history" = "Historial";
+"today" = "Hoy";
+"yesterday" = "Ayer";
+"hist_select_remove" = "Elija elementos del historial a quitar";
+"hist_remove_q" = "¿Quiere quitar los elementos del historial?";
+"gpx_edit_mode" = "Modo edición";
+"go_to_map" = "Ir al mapa";

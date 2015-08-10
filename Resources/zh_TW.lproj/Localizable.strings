@@ -458,3 +458,5 @@
 "go_to_map" = "轉至地圖";
 "offline_maps" = "離線地圖";
 "download_map" = "下載地圖";
+"product_desc_trip_planning" = "使用這個外掛元件，計劃您的旅程、增加航點、測量目的地的距離";
+"product_desc_ext_trip_planning" = "旅程規劃外掛元件可以讓您在地圖上建立您的旅程、儲存它、測量連接兩點之間的直線距離等。建立了初步的行程規劃，而非完全的路線建構。";

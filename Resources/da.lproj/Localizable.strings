@@ -458,3 +458,5 @@
 "go_to_map" = "Gå til kortet";
 "offline_maps" = "Offlinekort";
 "download_map" = "Hent kort";
+"product_desc_trip_planning" = "Planlæg turen, tilføj rutepunkter, mål afstanden til destinationen ved hjælp af denne udvidelse";
+"product_desc_ext_trip_planning" = "Tur planlægningsudvidelse muliggør oprettelse af turen på kortet, gemme den, måle afstanden mellem punkter forbundet med lige linjer mv. Lavet til foreløbig tur planlægning snarere end mere grundig rute bygning.";

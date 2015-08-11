@@ -452,11 +452,11 @@
 "history" = "Historik";
 "today" = "I dag";
 "yesterday" = "I går";
-"hist_select_remove" = "Vælg histoirikemner til at fjerne";
+"hist_select_remove" = "Vælg histoirikemner der skal fjernes";
 "hist_remove_q" = "Fjern historikemner?";
 "gpx_edit_mode" = "Redigeringstilstand";
 "go_to_map" = "Gå til kortet";
 "offline_maps" = "Offlinekort";
 "download_map" = "Hent kort";
 "product_desc_trip_planning" = "Planlæg turen, tilføj rutepunkter, mål afstanden til destinationen ved hjælp af denne udvidelse";
-"product_desc_ext_trip_planning" = "Tur planlægningsudvidelse muliggør oprettelse af turen på kortet, gemme den, måle afstanden mellem punkter forbundet med lige linjer mv. Lavet til foreløbig tur planlægning snarere end mere grundig rute bygning.";
+"product_desc_ext_trip_planning" = "Tur planlægningsudvidelse muliggør oprettelse af turen på kortet, gemme den, måle afstanden mellem punkter forbundet med lige linjer mv. Lavet til foreløbig tur planlægning snarere end en mere grundig rute planlægning.";

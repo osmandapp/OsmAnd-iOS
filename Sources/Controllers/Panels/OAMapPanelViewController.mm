@@ -831,6 +831,11 @@ typedef enum
     
 }
 
+- (void)hideContextMenu
+{
+    [self targetHideMenu:.3 backButtonClicked:NO];
+}
+
 -(void)closeMapSettings
 {
     [self closeMapSettingsWithDuration:.3];
@@ -962,6 +967,16 @@ typedef enum
     
     CGPoint touchPoint = CGPointMake([[params objectForKey:@"touchPoint.x"] floatValue], [[params objectForKey:@"touchPoint.y"] floatValue]);
     
+    // while we are in view GPX mode - waypoints can be pressed only
+    if (_activeTargetType == OATargetGPX && ![objectType isEqualToString:@"waypoint"])
+    {
+        [_mapViewController hideContextPinMarker];
+        return;
+    }
+
+    // show context marker on map
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:YES];
+
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
 
     _targetDestination = nil;
@@ -1257,6 +1272,22 @@ typedef enum
     }
 }
 
+- (void)enterContextMenuMode
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController enterContextMenuMode];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController enterContextMenuMode];
+}
+
+- (void)restoreFromContextMenuMode
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController restoreFromContextMenuMode];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController restoreFromContextMenuMode];
+}
+
 - (void)showBottomControls:(CGFloat)menuHeight
 {
     if (_hudViewController == self.browseMapViewController)
@@ -1326,6 +1357,8 @@ typedef enum
     _activeViewControllerState = nil;
 
     _targetMenuView.activeTargetType = _activeTargetType;
+    
+    [self restoreFromContextMenuMode];
 }
 
 - (void)onDestinationRemove:(id)observable withKey:(id)key
@@ -2184,6 +2217,8 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
+    
+    [self enterContextMenuMode];
     
     _activeTargetActive = YES;
 }

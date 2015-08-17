@@ -1758,9 +1758,7 @@
 }
 
 - (void)postTargetNotification:(OAMapSymbol *)symbol
-{
-    [self showContextPinMarker:symbol.location.latitude longitude:symbol.location.longitude animated:YES];
-    
+{    
     if (!symbol.caption)
         symbol.caption = @"";
     if (!symbol.buildingNumber)

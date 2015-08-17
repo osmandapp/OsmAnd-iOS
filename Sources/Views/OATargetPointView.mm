@@ -501,7 +501,7 @@
             
             if (_showFullScreen && f.origin.y < _frameTop)
                 f.origin.y = _frameTop;
-            else if (!_showFull && self.customController && [self.customController supportMapInteraction] && f.origin.y > DeviceScreenHeight - h)
+            else if (!_showFullScreen && self.customController && [self.customController supportMapInteraction] && f.origin.y > DeviceScreenHeight - h)
                 f.origin.y = DeviceScreenHeight - h;
             
             f.size.height = DeviceScreenHeight - f.origin.y;
@@ -574,11 +574,7 @@
                 if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
                     [self showTopToolbar:YES];
                 
-                if (_showFull && self.customController && [self.customController supportMapInteraction])
-                {
-                    [self.delegate targetViewDisableMapInteraction];
-                    [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
-                }
+                [self applyMapInteraction:_fullHeight];
             }
             else
             {
@@ -589,11 +585,7 @@
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
 
-                if (!_showFull && self.customController && [self.customController supportMapInteraction])
-                {
-                    [self.delegate targetViewEnableMapInteraction];
-                    [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
-                }
+                [self applyMapInteraction:h];
             }
             
             if (self.customController)
@@ -680,12 +672,8 @@
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
                 
-                if (!_showFull && self.customController && [self.customController supportMapInteraction])
-                {
-                    [self.delegate targetViewEnableMapInteraction];
-                    [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
-                }
-
+                [self applyMapInteraction:(_showFull ? _fullHeight : h)];
+                
                 [UIView animateWithDuration:duration animations:^{
                     
                     self.frame = frame;
@@ -722,15 +710,16 @@
     if (_toolbarAnimating)
         return;
     
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && !landscape;
+    [self.customController useGradient:useGradient];
+    
     if (landscape)
     {
-        [self.customController useGradient:NO];
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
     }
     else
     {
-        [self.customController useGradient:YES];
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
     }
@@ -741,18 +730,19 @@
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
         return;
 
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && ![self isLandscape];
+    [self.customController useGradient:useGradient];
+
     CGRect topToolbatFrame;
 
     if ([self isLandscape])
     {
-        [self.customController useGradient:NO];
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(- kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
         topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
     }
     else
     {
-        [self.customController useGradient:YES];
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
         topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
@@ -1146,10 +1136,7 @@
 
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete
 {
-    if (!_showFull && self.customController && [self.customController supportMapInteraction])
-        [self.delegate targetSetBottomControlsVisible:YES menuHeight:self.frame.size.height];
-    else
-        [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
+    [self applyMapInteraction:self.frame.size.height];
     
     [self applyTargetPoint];
 
@@ -1207,7 +1194,7 @@
             if (onComplete)
                 onComplete();
             
-            if (!_showFull && self.customController && [self.customController supportMapInteraction])
+            if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
                 [self.delegate targetViewEnableMapInteraction];
         }];
     }
@@ -1226,7 +1213,7 @@
         if (onComplete)
             onComplete();
 
-        if (!_showFull && self.customController && [self.customController supportMapInteraction])
+        if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
             [self.delegate targetViewEnableMapInteraction];
     }
 
@@ -1333,10 +1320,7 @@
         else
             _zoomView.center = CGPointMake(DeviceScreenWidth - _zoomView.bounds.size.width / 2.0, self.frame.origin.y - (self.frame.origin.y - self.customController.navBar.frame.size.height) / 2.0);
         
-        BOOL showZoomView = (!_showFullScreen || [self isLandscape]);
-        if (showZoomView && [self.customController supportMapInteraction])
-            showZoomView = _showFull;
-         
+        BOOL showZoomView = (!_showFullScreen || [self isLandscape]) && ![self.customController supportMapInteraction];
         _zoomView.alpha = (showZoomView ? 1.0 : 0.0);
         
     }
@@ -2247,6 +2231,20 @@
     }
 }
 
+- (void)applyMapInteraction:(CGFloat)height
+{
+    if (!_showFullScreen && self.customController && [self.customController supportMapInteraction])
+    {
+        [self.delegate targetViewEnableMapInteraction];
+        [self.delegate targetSetBottomControlsVisible:YES menuHeight:height];
+    }
+    else
+    {
+        [self.delegate targetViewDisableMapInteraction];
+        [self.delegate targetSetBottomControlsVisible:NO menuHeight:0];
+    }
+}
+
 #pragma mark
 #pragma mark - OATargetMenuViewControllerDelegate
 
@@ -2297,11 +2295,7 @@
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
             [self hideTopToolbar:YES];
         
-        if (!_showFull && self.customController && [self.customController supportMapInteraction])
-        {
-            [self.delegate targetViewEnableMapInteraction];
-            [self.delegate targetSetBottomControlsVisible:YES menuHeight:h];
-        }
+        [self applyMapInteraction:h];
         
         [UIView animateWithDuration:.3 animations:^{
             [self doLayoutSubviews];

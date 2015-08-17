@@ -16,6 +16,11 @@
 @property (nonatomic) OADestinationViewController *destinationViewController;
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
+@property (nonatomic, assign) BOOL contextMenuMode;
+
+- (void)enterContextMenuMode;
+- (void)restoreFromContextMenuMode;
+
 - (void)showDestinations;
 - (void)updateDestinationViewLayout:(BOOL)animated;
 

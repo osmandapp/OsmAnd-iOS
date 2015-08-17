@@ -41,6 +41,8 @@
 - (void)hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void)openHideDestinationCardsView;
 
+- (void)hideContextMenu;
+
 - (void)closeMapSettings;
 - (void)closeMapSettingsWithDuration:(CGFloat)duration;
 

@@ -317,6 +317,12 @@
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
+    if (self.contextMenuMode)
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        return;
+    }
+    
     OAMapMode newMode = _app.mapMode;
     switch (_app.mapMode)
     {
@@ -369,6 +375,13 @@
 
 - (void)updateMapModeButton
 {
+    if (self.contextMenuMode)
+    {
+        [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
+        [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
+        return;
+    }
+    
     UIImage* modeImage = nil;
     switch (_app.mapMode)
     {
@@ -747,11 +760,11 @@
 
 - (void)showBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_driveModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
-            _optionsMenuButton.alpha = 1.0;
+            _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             _zoomButtonsView.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
             _driveModeButton.alpha = 1.0;
@@ -766,7 +779,7 @@
 
 - (void)hideBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_driveModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
@@ -804,6 +817,32 @@
                 break;
         }
     });
+}
+
+- (void)enterContextMenuMode
+{
+    if (!self.contextMenuMode)
+    {
+        self.contextMenuMode = YES;
+        [self updateMapModeButton];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _optionsMenuButton.alpha = 0.0;
+        }];
+    }
+}
+
+- (void)restoreFromContextMenuMode
+{
+    if (self.contextMenuMode)
+    {
+        self.contextMenuMode = NO;
+        [self updateMapModeButton];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _optionsMenuButton.alpha = 1.0;
+        }];
+    }
 }
 
 @end

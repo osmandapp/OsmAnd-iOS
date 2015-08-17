@@ -604,6 +604,13 @@
 
 - (void)updateMapModeButton
 {
+    if (self.contextMenuMode)
+    {
+        [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
+        [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
+        return;
+    }
+    
     UIImage* modeImage = nil;
     switch (_app.mapMode)
     {
@@ -703,6 +710,12 @@
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
+    if (self.contextMenuMode)
+    {
+        [[OARootViewController instance].mapPanel hideContextMenu];
+        return;
+    }
+
     if (_app.mapMode != OAMapModeFollow)
     {
         _app.mapMode = OAMapModeFollow;
@@ -806,10 +819,10 @@
     {
         [UIView animateWithDuration:.3 animations:^{
             
-            _optionsMenuButton.alpha = 1.0;
+            _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             _zoomButtons.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
-            _actionsMenuButton.alpha = 1.0;
+            _actionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
 
             _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
             _actionsMenuButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _actionsMenuButton.bounds.size.width, _actionsMenuButton.bounds.size.height);
@@ -837,5 +850,34 @@
         }];
     }
 }
+
+- (void)enterContextMenuMode
+{
+    if (!self.contextMenuMode)
+    {
+        self.contextMenuMode = YES;
+        [self updateMapModeButton];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _optionsMenuButton.alpha = 0.0;
+            _actionsMenuButton.alpha = 0.0;
+        }];
+    }
+}
+
+- (void)restoreFromContextMenuMode
+{
+    if (self.contextMenuMode)
+    {
+        self.contextMenuMode = NO;
+        [self updateMapModeButton];
+        
+        [UIView animateWithDuration:.3 animations:^{
+            _optionsMenuButton.alpha = 1.0;
+            _actionsMenuButton.alpha = 1.0;
+        }];
+    }
+}
+
 
 @end

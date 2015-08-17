@@ -525,9 +525,9 @@
                 [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                    otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"go_to_map")]
+                                    otherTitles:@[(self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export")]
                                       otherDesc:nil
-                                    otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_map.png"]
+                                    otherImages:@[@"track_clear_data.png", @"ic_dialog_export.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -538,45 +538,6 @@
                                                      break;
                                                  case 1:
                                                      [self exportClicked:nil];
-                                                     break;
-                                                 case 2:
-                                                     [self goToMap];
-                                                     break;
-                                                     
-                                                 default:
-                                                     break;
-                                             }
-                                         }
-                                     }];
-            }
-            else if (self.delegate && [self.delegate isInFullMode])
-            {
-                [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
-                                        message:nil
-                                    cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"gpx_edit_mode"), OALocalizedString(@"go_to_map")]
-                                      otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png", @"ic_dialog_map.png"]
-                                     completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                                         if (!cancelled)
-                                         {
-                                             switch (buttonIndex)
-                                             {
-                                                 case 0:
-                                                     [self renameTrip];
-                                                     break;
-                                                 case 1:
-                                                     [self deleteClicked:nil];
-                                                     break;
-                                                 case 2:
-                                                     [self exportClicked:nil];
-                                                     break;
-                                                 case 3:
-                                                     if (self.delegate)
-                                                         [self.delegate requestHeaderOnlyMode];
-                                                     break;
-                                                 case 4:
-                                                     [self goToMap];
                                                      break;
                                                      
                                                  default:
@@ -590,9 +551,9 @@
                 [PXAlertView showAlertWithTitle:[self.gpx getNiceTitle]
                                         message:nil
                                     cancelTitle:OALocalizedString(@"shared_string_cancel")
-                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"go_to_map")]
+                                    otherTitles:@[OALocalizedString(@"fav_rename"), (self.showCurrentTrack ? OALocalizedString(@"track_clear") : OALocalizedString(@"shared_string_remove")), OALocalizedString(@"gpx_export"), OALocalizedString(@"gpx_edit_mode")]
                                       otherDesc:nil
-                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_map.png"]
+                                    otherImages:@[@"ic_dialog_rename.png", @"track_clear_data.png", @"ic_dialog_export.png", @"ic_dialog_edit.png"]
                                      completion:^(BOOL cancelled, NSInteger buttonIndex) {
                                          if (!cancelled)
                                          {
@@ -608,7 +569,7 @@
                                                      [self exportClicked:nil];
                                                      break;
                                                  case 3:
-                                                     [self goToMap];
+                                                     // enter edit mode
                                                      break;
                                                      
                                                  default:

@@ -145,7 +145,7 @@
 "map_settings_transp" = "透明度";
 "map_settings_avail_lay" = "可用的圖層";
 // Intro
-"intro_skip" = "略過";
+"intro_skip" = "跳過";
 "intro_download" = "下載\n地圖";
 "intro_next" = "下一頁";
 "intro_welcome" = "歡迎使用\nOsmAnd";

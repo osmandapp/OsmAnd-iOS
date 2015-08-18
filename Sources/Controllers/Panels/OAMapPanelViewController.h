@@ -60,6 +60,7 @@
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed;
+- (void)openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed;
 
 - (void)openTargetViewWithGPXRoute:(BOOL)pushed;
 - (void)openTargetViewWithGPXRoute:(BOOL)pushed segmentType:(OAGpxRouteSegmentType)segmentType;

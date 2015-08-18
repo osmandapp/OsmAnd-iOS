@@ -24,6 +24,8 @@
 - (void)showDestinations;
 - (void)updateDestinationViewLayout:(BOOL)animated;
 
+- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
+
 - (void)showTopControls;
 - (void)hideTopControls;
 - (void)showBottomControls:(CGFloat)menuHeight;

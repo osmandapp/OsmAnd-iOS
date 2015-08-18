@@ -60,6 +60,11 @@
     _contentView.backgroundColor = color;
 }
 
+- (BOOL)showTopControls
+{
+    return NO;
+}
+
 - (BOOL)supportMapInteraction
 {
     return NO; // override

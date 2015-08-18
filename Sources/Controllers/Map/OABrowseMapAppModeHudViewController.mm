@@ -622,6 +622,54 @@
 
 }
 
+- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
+{
+    CGFloat x = _compassBox.frame.origin.x;
+    CGSize size = _compassBox.frame.size;
+    CGFloat msX = _mapSettingsButton.frame.origin.x;
+    CGSize msSize = _mapSettingsButton.frame.size;
+    CGFloat sX = _searchButton.frame.origin.x;
+    CGSize sSize = _searchButton.frame.size;
+    
+    CGFloat y = toolbarHeight + 1.0;
+    
+    if (animated)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            
+            if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
+            {
+                _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
+                _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
+                _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
+            }
+            
+            if (_widgetsView)
+                _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+            if (_downloadView)
+                _downloadView.frame = [self getDownloadViewFrame];
+            
+            _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+        }];
+    }
+    else
+    {
+        if (!CGRectEqualToRect(_mapSettingsButton.frame, CGRectMake(x, y, size.width, size.height)))
+        {
+            _compassBox.frame = CGRectMake(x, y + 7.0 + 45.0, size.width, size.height);
+            _mapSettingsButton.frame = CGRectMake(msX, y + 7.0, msSize.width, msSize.height);
+            _searchButton.frame = CGRectMake(sX, y + 7.0, sSize.width, sSize.height);
+        }
+        
+        if (_widgetsView)
+            _widgetsView.frame = CGRectMake(DeviceScreenWidth - _widgetsView.bounds.size.width + 4.0, y + 10.0, _widgetsView.bounds.size.width, _widgetsView.bounds.size.height);
+        if (_downloadView)
+            _downloadView.frame = [self getDownloadViewFrame];
+
+        _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
+    }
+}
+
 - (CGRect)getDownloadViewFrame
 {
     CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height + 1.0;
@@ -720,19 +768,20 @@
 
 - (void)showTopControls
 {
-    if (_mapSettingsButton.alpha == 0.0)
+    if (_widgetsView.alpha == 0.0)
     {
         [UIView animateWithDuration:.3 animations:^{
-           
-            _statusBarView.alpha = 1.0;
             
+            CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
+            
+            _statusBarView.alpha = 1.0;
             _mapSettingsButton.alpha = 1.0;
             _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
             _searchButton.alpha = 1.0;
             
-            _downloadView.alpha = 1.0;
-            _widgetsView.alpha = 1.0;
-            _destinationViewController.view.alpha = 1.0;
+            _downloadView.alpha = alphaEx;
+            _widgetsView.alpha = alphaEx;
+            _destinationViewController.view.alpha = alphaEx;
             
         }];
     }
@@ -760,14 +809,14 @@
 
 - (void)showBottomControls:(CGFloat)menuHeight
 {
-    if (_driveModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
             _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             _zoomButtonsView.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
-            _driveModeButton.alpha = 1.0;
+            _driveModeButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
             
             _optionsMenuButton.frame = CGRectMake(0.0, DeviceScreenHeight - 63.0 - menuHeight, _optionsMenuButton.bounds.size.width, _optionsMenuButton.bounds.size.height);
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
@@ -779,7 +828,7 @@
 
 - (void)hideBottomControls:(CGFloat)menuHeight
 {
-    if (_driveModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
@@ -838,6 +887,7 @@
     {
         self.contextMenuMode = NO;
         [self updateMapModeButton];
+        [self showTopControls];
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;

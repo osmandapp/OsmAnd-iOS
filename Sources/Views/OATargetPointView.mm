@@ -155,6 +155,9 @@
     
     BOOL _coordsHidden;
     NSString *_formattedCoords;
+    
+    BOOL _toolbarVisible;
+    CGFloat _toolbarHeight;
 }
 
 - (instancetype)init
@@ -557,7 +560,10 @@
             {
                 goFull = !_showFull && frame.size.height < _fullHeight;
                 goFullScreen = !_showFullScreen && frame.size.height > _fullHeight && self.customController && [self.customController supportFullScreen];
-                
+
+                if (!goFullScreen && self.customController && ![self.customController supportFullMenu] && [self.customController supportFullScreen])
+                    goFullScreen = YES;
+
                 _showFull = YES;
                 if (goFullScreen)
                 {
@@ -645,6 +651,8 @@
                 {
                     _showFullScreen = NO;
                     _showFull = (frame.size.height > _fullHeight);
+                    if (_showFull && self.customController && ![self.customController supportFullMenu])
+                        _showFull = NO;
                 }
                 else
                 {
@@ -733,24 +741,28 @@
     BOOL useGradient = (_activeTargetType != OATargetGPX) && ![self isLandscape];
     [self.customController useGradient:useGradient];
 
-    CGRect topToolbatFrame;
+    CGRect topToolbarFrame;
 
     if ([self isLandscape])
     {
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(- kInfoViewLanscapeWidth, 0.0, kInfoViewLanscapeWidth, f.size.height);
-        topToolbatFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, f.size.height);
     }
     else
     {
         CGRect f = self.customController.navBar.frame;
         self.customController.navBar.frame = CGRectMake(0.0, -f.size.height, DeviceScreenWidth, f.size.height);
-        topToolbatFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
+        topToolbarFrame = CGRectMake(0.0, 0.0, DeviceScreenWidth, f.size.height);
     }
     self.customController.navBar.hidden = NO;
     [self.parentView addSubview:self.customController.navBar];
     
-    [self.delegate targetSetTopControlsVisible:NO];
+    BOOL showTopControls = [self.customController showTopControls];
+    _toolbarVisible = YES;
+    _toolbarHeight = showTopControls ? topToolbarFrame.size.height : 20.0;
+    
+    [self.delegate targetSetTopControlsVisible:showTopControls];
     
     if (animated)
     {
@@ -758,14 +770,14 @@
         
         [UIView animateWithDuration:.3 animations:^{
             
-            self.customController.navBar.frame = topToolbatFrame;
+            self.customController.navBar.frame = topToolbarFrame;
         } completion:^(BOOL finished) {
             _toolbarAnimating = NO;
         }];
     }
     else
     {
-        self.customController.navBar.frame = topToolbatFrame;
+        self.customController.navBar.frame = topToolbarFrame;
     }
 }
 
@@ -784,6 +796,9 @@
         else
             newTopToolbarFrame.origin.y = -newTopToolbarFrame.size.height;
      
+        _toolbarVisible = NO;
+        _toolbarHeight = 20.0;
+
         [self.delegate targetSetTopControlsVisible:YES];
 
         if (animated)
@@ -803,6 +818,16 @@
             self.customController.navBar.hidden = YES;
         }
     }
+}
+
+- (BOOL)isToolbarVisible
+{
+    return _toolbarVisible;
+}
+
+- (CGFloat)toolbarHeight
+{
+    return _toolbarHeight;
 }
 
 - (void)showFullMenu
@@ -908,6 +933,9 @@
 
 - (void)clearCustomControllerIfNeeded
 {
+    _toolbarVisible = NO;
+    _toolbarHeight = 20.0;
+
     if (self.customController)
     {
         [self.customController removeFromParentViewController];
@@ -950,12 +978,12 @@
 
 - (void)updateButtonClose
 {
-    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) || (!_buttonRight.hidden) ? 0.0 : 1.0);
+    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) || (_targetPoint.type == OATargetGPXEdit) || (!_buttonRight.hidden) ? 0.0 : 1.0);
 }
 
 - (void)doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute);
     self.buttonsView.hidden = _hideButtons;
     [self updateButtonClose];
     
@@ -983,7 +1011,7 @@
         {
             OAFunctionalAddon *addon = _iapHelper.singleAddon;
             
-            if (self.activeTargetType == OATargetGPX && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+            if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit) && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
             {
                 [self.buttonMore setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
                 [self.buttonMore setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
@@ -1032,7 +1060,7 @@
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
     }
     
-    if (self.activeTargetType == OATargetGPX)
+    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
     {
         [_buttonFavorite setTitle:OALocalizedString(@"add_waypoint_short") forState:UIControlStateNormal];
         [_buttonFavorite setImage:[UIImage imageNamed:@"add_waypoint_to_track"] forState:UIControlStateNormal];
@@ -1146,14 +1174,11 @@
             [self showTopToolbar:YES];
     }
 
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPXRoute)
     {
         self.zoomView.alpha = 0.0;
         [self.parentView addSubview:self.zoomView];
-    }
 
-    if (_targetPoint.type == OATargetGPXRoute)
-    {
         if ([self.gestureRecognizers containsObject:_panGesture])
             [self removeGestureRecognizer:_panGesture];
     }
@@ -1773,7 +1798,7 @@
         _buttonMore.enabled = YES;
     }
     
-    if (self.activeTargetType == OATargetGPX)
+    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
         _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
     else
         _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
@@ -1800,7 +1825,7 @@
         self.customController.formattedCoords = _formattedCoords;
     }
     
-    if (_targetPoint.type == OATargetGPX)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit)
     {
         OAGPX *item = _targetPoint.targetObj;
         
@@ -2037,7 +2062,7 @@
     }
      */
     
-    if (self.activeTargetType == OATargetGPX)
+    if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
         [self.delegate targetPointAddWaypoint];
     else
         [self addFavorite];
@@ -2089,7 +2114,7 @@
             if (_targetPoint.type == OATargetWpt && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
                 continue;
 
-            if (self.activeTargetType == OATargetGPX && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
+            if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit) && [addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
                 continue;
             
             [titles addObject:addon.titleWide];
@@ -2098,7 +2123,7 @@
         }
 
         NSInteger addFavActionTag = -1;
-        if (self.activeTargetType == OATargetGPX && _targetPoint.type != OATargetFavorite)
+        if ((self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPX) && _targetPoint.type != OATargetFavorite)
         {
             [titles addObject:OALocalizedString(@"ctx_mnu_add_fav")];
             [images addObject:@"menu_star_icon"];
@@ -2132,7 +2157,7 @@
     }
     else if ([((OAFunctionalAddon *)functionalAddons[0]).addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint])
     {
-        if (self.activeTargetType == OATargetGPX)
+        if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
             [self addFavorite];
         else
             [self.delegate targetPointAddWaypoint];
@@ -2148,7 +2173,7 @@
     if (_showFullScreen)
         return;
     
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute)
     {
         [self.delegate targetGoToGPX];
     }
@@ -2261,7 +2286,7 @@
     if (!_buttonLeft.hidden)
         [self updateLeftButton];
     
-    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute) && self.customController)
+    if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
         [self updateCoordinateLabel];

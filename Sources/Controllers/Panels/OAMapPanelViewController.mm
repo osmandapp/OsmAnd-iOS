@@ -17,6 +17,7 @@
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAGPXItemViewController.h"
+#import "OAGPXEditItemViewController.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
@@ -134,7 +135,6 @@ typedef enum
     BOOL _activeTargetChildPushed;
     
     UIView *_shadeView;
-
 }
 
 - (instancetype)init
@@ -233,7 +233,9 @@ typedef enum
 
 - (void)viewWillLayoutSubviews
 {
-    if (_destinationViewController)
+    if ([self contextMenuMode])
+        [self doUpdateContextMenuToolbarLayout];
+    else if (_destinationViewController)
         [_destinationViewController updateFrame:YES];
     
     if (_shadowButton)
@@ -242,6 +244,16 @@ typedef enum
  
 @synthesize mapViewController = _mapViewController;
 @synthesize hudViewController = _hudViewController;
+
+- (void)doUpdateContextMenuToolbarLayout
+{
+    CGFloat contextMenuToolbarHeight = [self.targetMenuView toolbarHeight];
+    
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController updateContextMenuToolbarLayout:contextMenuToolbarHeight animated:YES];
+}
 
 - (void) infoSelectPressed
 {
@@ -422,7 +434,7 @@ typedef enum
         [_widgetsView updateGpxRec];
     });
     
-    if (_activeTargetActive && _activeTargetType == OATargetGPX && !_activeTargetObj)
+    if (_activeTargetActive && [self hasGpxActiveTargetType] && !_activeTargetObj)
     {
         [self targetHideMenu:.3 backButtonClicked:NO];
     }
@@ -542,16 +554,24 @@ typedef enum
 {
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
+
+    if ([self contextMenuMode])
+    {
+        if ([self.targetMenuView isToolbarVisible])
+            return UIStatusBarStyleLightContent;
+        else
+            return UIStatusBarStyleDefault;
+    }
     
     if (_hudViewController == nil)
         return UIStatusBarStyleDefault;
-
+    
     return _hudViewController.preferredStatusBarStyle;
 }
 
 - (BOOL)hasGpxActiveTargetType
 {
-    return _activeTargetType == OATargetGPX;
+    return _activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit;
 }
 
 - (void)onAppModeChanged
@@ -1272,6 +1292,16 @@ typedef enum
     }
 }
 
+- (BOOL)contextMenuMode
+{
+    if (_hudViewController == self.browseMapViewController)
+        return self.browseMapViewController.contextMenuMode;
+    else if (_hudViewController == self.driveModeViewController)
+        return self.driveModeViewController.contextMenuMode;
+    else
+        return NO;
+}
+
 - (void)enterContextMenuMode
 {
     if (_hudViewController == self.browseMapViewController)
@@ -1326,6 +1356,16 @@ typedef enum
             _activeViewControllerState = gpxItemViewControllerState;
             break;
         }
+
+        case OATargetGPXEdit:
+        {
+            OAGPXEditItemViewControllerState *gpxItemViewControllerState = (OAGPXEditItemViewControllerState *)([((OAGPXEditItemViewController *)self.targetMenuView.customController) getCurrentState]);
+            gpxItemViewControllerState.showFullScreen = self.targetMenuView.showFullScreen;
+            gpxItemViewControllerState.showCurrentTrack = (!_activeTargetObj || ((OAGPX *)_activeTargetObj).gpxFileName.length == 0);
+            
+            _activeViewControllerState = gpxItemViewControllerState;
+            break;
+        }
             
         default:
             break;
@@ -1340,6 +1380,11 @@ typedef enum
             [_mapViewController hideContextPinMarker];
             [self openTargetViewWithGPX:_activeTargetObj pushed:YES];
             break;
+
+        case OATargetGPXEdit:
+            [_mapViewController hideContextPinMarker];
+            [self openTargetViewWithGPXEdit:_activeTargetObj pushed:YES];
+            break;
             
         default:
             break;
@@ -1348,7 +1393,7 @@ typedef enum
 
 - (void)resetActiveTargetMenu
 {
-    if (_activeTargetType == OATargetGPX && _activeTargetObj)
+    if ([self hasGpxActiveTargetType] && _activeTargetObj)
         ((OAGPX *)_activeTargetObj).newGpx = NO;
     
     _activeTargetActive = NO;
@@ -1502,7 +1547,7 @@ typedef enum
     // Ask for track where to add waypoint
     if (names.count > 0)
     {
-        if (_activeTargetType == OATargetGPX)
+        if ([self hasGpxActiveTargetType])
         {
             if (_activeTargetObj)
             {
@@ -1681,144 +1726,200 @@ typedef enum
     
     _mapStateSaved = saveMapState;
     
-    if (_targetMenuView.targetPoint.type == OATargetFavorite)
+    switch (_targetMenuView.targetPoint.type)
     {
-        OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
-        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
+        case OATargetFavorite:
         {
-            int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
-            int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
-            
-            if ((int)(_targetLatitude * 10000.0) == favLat && (int)(_targetLongitude * 10000.0) == favLon)
+            OAFavoriteItem *item = [[OAFavoriteItem alloc] init];
+            for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations())
             {
-                item.favorite = favLoc;
-                break;
-            }
-        }
-        
-        [self.targetMenuView doInit:showFullMenu];
-        
-        OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithItem:item];
-        favoriteViewController.view.frame = self.view.frame;
-        [self.targetMenuView setCustomViewController:favoriteViewController];
-
-        [self.targetMenuView prepareNoInit];
-    }
-    else if (_targetMenuView.targetPoint.type == OATargetParking)
-    {
-        [self.targetMenuView doInit:showFullMenu];
-
-        OAParkingViewController *parking;
-        if (self.targetMenuView.targetPoint.targetObj)
-            parking = [[OAParkingViewController alloc] initWithParking:self.targetMenuView.targetPoint.targetObj];
-        else
-            parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
-
-        parking.parkingDelegate = self;
-        parking.view.frame = self.view.frame;
-        
-        [self.targetMenuView setCustomViewController:parking];
-        
-        [self.targetMenuView prepareNoInit];
-    }
-    else if (_targetMenuView.targetPoint.type == OATargetWiki)
-    {
-        NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        if (!contentLocale)
-            contentLocale = [[NSLocale preferredLanguages] firstObject];
-        
-        NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
-        if (!content)
-        {
-            contentLocale = @"";
-            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
-        }
-        if (!content && self.targetMenuView.targetPoint.localizedContent.count > 0)
-        {
-            contentLocale = self.targetMenuView.targetPoint.localizedContent.allKeys[0];
-            content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
-        }
+                int favLon = (int)(OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) * 10000.0);
+                int favLat = (int)(OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) * 10000.0);
                 
-        if (content)
+                if ((int)(_targetLatitude * 10000.0) == favLat && (int)(_targetLongitude * 10000.0) == favLon)
+                {
+                    item.favorite = favLoc;
+                    break;
+                }
+            }
+            
+            [self.targetMenuView doInit:showFullMenu];
+            
+            OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithItem:item];
+            favoriteViewController.view.frame = self.view.frame;
+            [self.targetMenuView setCustomViewController:favoriteViewController];
+            
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
+        case OATargetParking:
         {
             [self.targetMenuView doInit:showFullMenu];
             
-            OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithContent:content];
-            wiki.menuDelegate = self;
-            wiki.view.frame = self.view.frame;
+            OAParkingViewController *parking;
+            if (self.targetMenuView.targetPoint.targetObj)
+                parking = [[OAParkingViewController alloc] initWithParking:self.targetMenuView.targetPoint.targetObj];
+            else
+                parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
             
-            [self.targetMenuView setCustomViewController:wiki];
+            parking.parkingDelegate = self;
+            parking.view.frame = self.view.frame;
+            
+            [self.targetMenuView setCustomViewController:parking];
             
             [self.targetMenuView prepareNoInit];
+
+            break;
         }
-        else
+
+        case OATargetWiki:
         {
-            [self.targetMenuView prepare];
-        }
-    }
-    else if (_targetMenuView.targetPoint.type == OATargetWpt)
-    {
-        [self.targetMenuView doInit:showFullMenu];
-        
-        OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
-        wptViewController.mapViewController = self.mapViewController;
-        wptViewController.wptDelegate = self;
-        wptViewController.view.frame = self.view.frame;
-        [self.targetMenuView setCustomViewController:wptViewController];
-        
-        [self.targetMenuView prepareNoInit];
-    }
-    else if (_targetMenuView.targetPoint.type == OATargetGPX)
-    {
-        OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
-        BOOL showFull = (state && state.showFull) || (!state && showFullMenu);
-        BOOL showFullScreen = (state && state.showFullScreen);
-        [self.targetMenuView doInit:showFull showFullScreen:showFullScreen];
-        
-        OAGPXItemViewController *gpxViewController;
-        if (self.targetMenuView.targetPoint.targetObj)
-        {
-            if (state)
+            NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            if (!contentLocale)
+                contentLocale = [[NSLocale preferredLanguages] firstObject];
+            
+            NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+            if (!content)
             {
-                if (state.showCurrentTrack)
-                    gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
-                else
-                    gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:state];
+                contentLocale = @"";
+                content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+            }
+            if (!content && self.targetMenuView.targetPoint.localizedContent.count > 0)
+            {
+                contentLocale = self.targetMenuView.targetPoint.localizedContent.allKeys[0];
+                content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
+            }
+            
+            if (content)
+            {
+                [self.targetMenuView doInit:showFullMenu];
+                
+                OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithContent:content];
+                wiki.menuDelegate = self;
+                wiki.view.frame = self.view.frame;
+                
+                [self.targetMenuView setCustomViewController:wiki];
+                
+                [self.targetMenuView prepareNoInit];
             }
             else
             {
-                gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+                [self.targetMenuView prepare];
             }
-        }
-        else
-        {
-            gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
-            self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
-        }
-        
-        gpxViewController.view.frame = self.view.frame;
-        [self.targetMenuView setCustomViewController:gpxViewController];
-        
-        [self.targetMenuView prepareNoInit];
-    }
-    else if (_targetMenuView.targetPoint.type == OATargetGPXRoute)
-    {
-        OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)_targetMenuView.targetPoint.segmentIndex;
-        if (segmentType == kSegmentRouteWaypoints)
-            [self.targetMenuView doInit:YES showFullScreen:YES];
-        else
-            [self.targetMenuView doInit:NO showFullScreen:NO];
-        
-        OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
 
-        gpxViewController.view.frame = self.view.frame;
-        [self.targetMenuView setCustomViewController:gpxViewController];
-        
-        [self.targetMenuView prepareNoInit];
-    }
-    else
-    {
-        [self.targetMenuView prepare];
+            break;
+        }
+            
+        case OATargetWpt:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            
+            OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
+            wptViewController.mapViewController = self.mapViewController;
+            wptViewController.wptDelegate = self;
+            wptViewController.view.frame = self.view.frame;
+            [self.targetMenuView setCustomViewController:wptViewController];
+            
+            [self.targetMenuView prepareNoInit];
+
+            break;
+        }
+            
+        case OATargetGPX:
+        {
+            OAGPXItemViewControllerState *state = _activeViewControllerState ? (OAGPXItemViewControllerState *)_activeViewControllerState : nil;
+            BOOL showFull = (state && state.showFull) || (!state && showFullMenu);
+            BOOL showFullScreen = (state && state.showFullScreen);
+            [self.targetMenuView doInit:showFull showFullScreen:showFullScreen];
+            
+            OAGPXItemViewController *gpxViewController;
+            if (self.targetMenuView.targetPoint.targetObj)
+            {
+                if (state)
+                {
+                    if (state.showCurrentTrack)
+                        gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem:state];
+                    else
+                        gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:state];
+                }
+                else
+                {
+                    gpxViewController = [[OAGPXItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+                }
+            }
+            else
+            {
+                gpxViewController = [[OAGPXItemViewController alloc] initWithCurrentGPXItem];
+                self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
+            }
+            
+            gpxViewController.view.frame = self.view.frame;
+            [self.targetMenuView setCustomViewController:gpxViewController];
+            
+            [self.targetMenuView prepareNoInit];
+
+            break;
+        }
+            
+        case OATargetGPXEdit:
+        {
+            OAGPXEditItemViewControllerState *state = _activeViewControllerState ? (OAGPXEditItemViewControllerState *)_activeViewControllerState : nil;
+            BOOL showFull = (state && state.showFullScreen) || (!state && showFullMenu);
+            [self.targetMenuView doInit:showFull showFullScreen:showFull];
+            
+            OAGPXEditItemViewController *gpxViewController;
+            if (self.targetMenuView.targetPoint.targetObj)
+            {
+                if (state)
+                {
+                    if (state.showCurrentTrack)
+                        gpxViewController = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem:state];
+                    else
+                        gpxViewController = [[OAGPXEditItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj ctrlState:state];
+                }
+                else
+                {
+                    gpxViewController = [[OAGPXEditItemViewController alloc] initWithGPXItem:self.targetMenuView.targetPoint.targetObj];
+                }
+            }
+            else
+            {
+                gpxViewController = [[OAGPXEditItemViewController alloc] initWithCurrentGPXItem];
+                self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
+            }
+            
+            gpxViewController.view.frame = self.view.frame;
+            [self.targetMenuView setCustomViewController:gpxViewController];
+            
+            [self.targetMenuView prepareNoInit];
+
+            break;
+        }
+            
+        case OATargetGPXRoute:
+        {
+            OAGpxRouteSegmentType segmentType = (OAGpxRouteSegmentType)_targetMenuView.targetPoint.segmentIndex;
+            if (segmentType == kSegmentRouteWaypoints)
+                [self.targetMenuView doInit:YES showFullScreen:YES];
+            else
+                [self.targetMenuView doInit:NO showFullScreen:NO];
+            
+            OAGPXRouteViewController *gpxViewController = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
+            
+            gpxViewController.view.frame = self.view.frame;
+            [self.targetMenuView setCustomViewController:gpxViewController];
+            
+            [self.targetMenuView prepareNoInit];
+
+            break;
+        }
+            
+        default:
+        {
+            [self.targetMenuView prepare];
+        }
     }
     
     CGRect frame = self.targetMenuView.frame;
@@ -1946,7 +2047,7 @@ typedef enum
         switch (self.targetMenuView.targetPoint.type)
         {
             case OATargetGPX:
-                if (_activeTargetType == OATargetGPX && _activeTargetObj)
+                if ([self hasGpxActiveTargetType] && _activeTargetObj)
                     ((OAGPX *)_activeTargetObj).newGpx = NO;
                 popped = [OAGPXListViewController popToParent];
                 break;
@@ -2146,7 +2247,7 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
+    if (pushed && _activeTargetActive && [self hasGpxActiveTargetType])
         _activeTargetChildPushed = YES;
 
     [self showTargetPointMenu:YES showFullMenu:showFullMenu onComplete:^{
@@ -2216,11 +2317,74 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:!item.newGpx];
+    [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
+        [self enterContextMenuMode];
+        _activeTargetActive = YES;
+    }];
+}
+
+- (void)openTargetViewWithGPXEdit:(OAGPX *)item pushed:(BOOL)pushed
+{
+    BOOL showCurrentTrack = NO;
+    if (item == nil)
+    {
+        item = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        item.gpxTitle = OALocalizedString(@"track_recording_name");
+        showCurrentTrack = YES;
+    }
     
-    [self enterContextMenuMode];
+    [_mapViewController hideContextPinMarker];
     
-    _activeTargetActive = YES;
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = [item getNiceTitle];
+    
+    UIImage *icon = [UIImage imageNamed:@"icon_info"];
+    
+    targetPoint.type = OATargetGPXEdit;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = caption;
+    
+    if (_activeTargetType != OATargetGPX)
+        [self displayGpxOnMap:item];
+    
+    if (item.bounds.center.latitude == DBL_MAX)
+    {
+        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(renderView.target31);
+        targetPoint.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+        _targetLatitude = latLon.latitude;
+        _targetLongitude = latLon.longitude;
+    }
+    else
+    {
+        targetPoint.location = CLLocationCoordinate2DMake(item.bounds.center.latitude, item.bounds.center.longitude);
+    }
+    
+    targetPoint.title = _formattedTargetName;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = NO;
+    if (!showCurrentTrack)
+        targetPoint.targetObj = item;
+    
+    _activeTargetType = targetPoint.type;
+    _activeTargetObj = targetPoint.targetObj;
+    
+    _targetMenuView.activeTargetType = _activeTargetType;
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
+        [self enterContextMenuMode];
+        _activeTargetActive = YES;
+    }];
 }
 
 - (void)openTargetViewWithGPXRoute:(BOOL)pushed
@@ -2291,7 +2455,7 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    if (pushed && _activeTargetActive && _activeTargetType == OATargetGPX)
+    if (pushed && _activeTargetActive && [self hasGpxActiveTargetType])
         _activeTargetChildPushed = YES;
 
     if (!useCurrentRoute)

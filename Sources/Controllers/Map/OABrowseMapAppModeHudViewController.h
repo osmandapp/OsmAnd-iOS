@@ -24,6 +24,8 @@
 - (void)showDestinations;
 - (void)updateDestinationViewLayout:(BOOL)animated;
 
+- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated;
+
 - (BOOL)isOverlayUnderlayViewVisible;
 - (void)updateOverlayUnderlayView:(BOOL)show;
 

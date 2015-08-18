@@ -75,6 +75,9 @@
 
 - (void)applyTargetObjectChanges;
 
+- (BOOL)isToolbarVisible;
+- (CGFloat)toolbarHeight;
+
 @end
 
 

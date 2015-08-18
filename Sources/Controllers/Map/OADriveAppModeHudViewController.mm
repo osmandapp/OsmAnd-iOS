@@ -774,7 +774,30 @@
         
         [self updateWidgetsLayout:y + 5.0];
     }
+}
+
+- (void)updateContextMenuToolbarLayout:(CGFloat)toolbarHeight animated:(BOOL)animated
+{
+    CGFloat x = _compassBox.frame.origin.x;
+    CGSize size = _compassBox.frame.size;
+    CGFloat y = toolbarHeight + 1.0;
     
+    if (animated)
+    {
+        [UIView animateWithDuration:.2 animations:^{
+            if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+                _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+            
+            [self updateWidgetsLayout:y + 5.0];
+        }];
+    }
+    else
+    {
+        if (!CGRectEqualToRect(_compassBox.frame, CGRectMake(x, y, size.width, size.height)))
+            _compassBox.frame = CGRectMake(x, y, size.width, size.height);
+        
+        [self updateWidgetsLayout:y + 5.0];
+    }
 }
 
 - (void)showTopControls
@@ -783,13 +806,15 @@
     {
         [UIView animateWithDuration:.3 animations:^{
             
-            _currentPositionContainer.alpha = 1.0;
+            CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
             
-            _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _currentPositionContainer.alpha == 1.0 ? 1.0 : 0.0);
-            _widgetsView.alpha = 1.0;
-            _currentSpeedWidget.alpha = 1.0;
-            _currentAltitudeWidget.alpha = 1.0;
-            _destinationViewController.view.alpha = 1.0;
+            _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && (_currentPositionContainer.alpha == 1.0 || self.contextMenuMode) ? 1.0 : 0.0);
+            
+            _currentPositionContainer.alpha = alphaEx;
+            _widgetsView.alpha = alphaEx;
+            _currentSpeedWidget.alpha = alphaEx;
+            _currentAltitudeWidget.alpha = alphaEx;
+            _destinationViewController.view.alpha = alphaEx;
             
         }];
     }
@@ -815,7 +840,7 @@
 
 - (void)showBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_mapModeButton.alpha == 0.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             
@@ -834,7 +859,7 @@
 
 - (void)hideBottomControls:(CGFloat)menuHeight
 {
-    if (_optionsMenuButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
+    if (_mapModeButton.alpha == 1.0 || _mapModeButton.frame.origin.y != DeviceScreenHeight - 69.0 - menuHeight)
     {
         [UIView animateWithDuration:.3 animations:^{
             

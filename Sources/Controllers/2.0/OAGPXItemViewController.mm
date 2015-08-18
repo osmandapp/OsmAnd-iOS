@@ -570,6 +570,7 @@
                                                      break;
                                                  case 3:
                                                      // enter edit mode
+                                                     [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:self.gpx pushed:NO];
                                                      break;
                                                      
                                                  default:

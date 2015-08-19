@@ -376,7 +376,7 @@
                                                                       });
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
-    _panGesture.cancelsTouchesInView = NO;
+    //_panGesture.cancelsTouchesInView = NO;
     _panGesture.delegate = self;
 }
 

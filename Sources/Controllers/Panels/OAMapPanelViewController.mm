@@ -1316,9 +1316,15 @@ typedef enum
 - (void)enterContextMenuMode
 {
     if (_hudViewController == self.browseMapViewController)
+    {
+        self.browseMapViewController.showGoToMapButton = _activeTargetType == OATargetGPX;
         [self.browseMapViewController enterContextMenuMode];
+    }
     else if (_hudViewController == self.driveModeViewController)
+    {
+        self.driveModeViewController.showGoToMapButton = _activeTargetType == OATargetGPX;
         [self.driveModeViewController enterContextMenuMode];
+    }
 }
 
 - (void)restoreFromContextMenuMode
@@ -1705,6 +1711,9 @@ typedef enum
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated
 {
+    if (self.targetMenuView.targetPoint.type == OATargetGPX || self.targetMenuView.targetPoint.type == OATargetGPXEdit)
+        return;
+    
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
     [_mapViewController correctPosition:targetPoint31 originalCenter31:[OANativeUtilities convertFromPointI:_mainMapTarget31] leftInset:([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0) bottomInset:([self.targetMenuView isLandscape] ? 0.0 : newFrame.size.height) centerBBox:(_targetMode == EOATargetBBOX) animated:animated];
 }

@@ -604,7 +604,7 @@
 
 - (void)updateMapModeButton
 {
-    if (self.contextMenuMode)
+    if (self.showGoToMapButton)
     {
         [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
         [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
@@ -710,7 +710,7 @@
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
-    if (self.contextMenuMode)
+    if (self.showGoToMapButton)
     {
         [[OARootViewController instance].mapPanel hideContextMenu];
         return;

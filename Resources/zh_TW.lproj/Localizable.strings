@@ -93,7 +93,7 @@
 "gpx_cannot_import" = "無法匯入指定的 GPX 檔案";
 "gpx_export_title" = "匯出旅程";
 "gpx_export_select_track" = "請選擇要匯出的旅程";
-"add_waypoint" = "增加航點到軌跡";
+"add_waypoint" = "增加航點到旅程";
 "add_waypoint_short" = "增加航點";
 "gpx_import_desc" = "您可以匯入您的 GPX 檔案（共通的 GPS 資料格式）\n\n分享 GPX 檔案您可以從 Dropbox、電子郵件或任何其它來源來開啟檔案 - 在功能裡使用開啟";
 "gpx_no_tracks" = "沒有旅程";
@@ -460,3 +460,4 @@
 "download_map" = "下載地圖";
 "product_desc_trip_planning" = "使用這個外掛元件，計劃您的旅程、增加航點、測量目的地的距離";
 "product_desc_ext_trip_planning" = "旅程規劃外掛元件可以讓您在地圖上建立您的旅程、儲存它、測量連接兩點之間的直線距離等。建立了初步的行程規劃，而非完全的路線建構。";
+"edit_waypoint_short" = "編輯航點";

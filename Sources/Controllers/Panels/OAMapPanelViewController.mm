@@ -962,6 +962,26 @@ typedef enum
     }
 }
 
+-(NSString *)convertHTML:(NSString *)html
+{
+    NSScanner *myScanner;
+    NSString *text = nil;
+    myScanner = [NSScanner scannerWithString:html];
+    
+    while ([myScanner isAtEnd] == NO) {
+        
+        [myScanner scanUpToString:@"<" intoString:NULL] ;
+        
+        [myScanner scanUpToString:@">" intoString:&text] ;
+        
+        html = [html stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"%@>", text] withString:@""];
+    }
+    //
+    html = [html stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    return html;
+}
+
 -(void)onTargetPointSet:(NSNotification *)notification
 {
     NSDictionary *params = [notification userInfo];
@@ -1151,18 +1171,86 @@ typedef enum
     targetPoint.brand = brand;
     targetPoint.wheelchair = wheelchair;
     targetPoint.fuelTags = fuelTags;
-    targetPoint.desc = desc;
     
     if (desc.length > 0)
         targetPoint.titleAddress = desc;
     else
         targetPoint.titleAddress = roadTitle;    
     
+    
+    if (_activeTargetType == OATargetGPXEdit && ![objectType isEqualToString:@"waypoint"])
+    {
+        NSMutableString *ds =[NSMutableString string];
+        if (phone.length > 0)
+            [ds appendString:phone];
+        if (openingHours.length > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            [ds appendString:openingHours];
+        }
+        if (url.length > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            [ds appendString:url];
+        }
+        if (desc.length > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            [ds appendString:desc];
+        }
+        if (oper.length > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            [ds appendString:oper];
+        }
+        if (brand.length > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            [ds appendString:brand];
+        }
+        if (content.count > 0)
+        {
+            if (ds.length > 0)
+                [ds appendString:@"\n"];
+            
+            NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+            if (!contentLocale)
+                contentLocale = [[NSLocale preferredLanguages] firstObject];
+            
+            NSString *contentText = [content objectForKey:contentLocale];
+            if (!contentText)
+            {
+                contentLocale = @"";
+                contentText = [content objectForKey:contentLocale];
+            }
+            if (!contentText)
+            {
+                contentLocale = content.allKeys[0];
+                contentText = [content objectForKey:contentLocale];
+            }
+            
+            [ds appendString:[self convertHTML:contentText]];
+        }
+        
+        desc = [NSString stringWithString:ds];
+    }
+    
+    targetPoint.desc = desc;
+    
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        
         if (centerMap)
-            [self goToTargetPointDefault];        
+            [self goToTargetPointDefault];
+
+        if (_activeTargetType == OATargetGPXEdit && targetPoint.type != OATargetWpt)
+            [self targetPointAddWaypoint];
     }];
 }
 
@@ -1638,6 +1726,8 @@ typedef enum
     
     wptViewController.mapViewController = self.mapViewController;
     wptViewController.wptDelegate = self;
+    wptViewController.desc = self.targetMenuView.targetPoint.desc;
+    [wptViewController setItemDesc:self.targetMenuView.targetPoint.desc];
     
     [_mapViewController addNewWpt:wptViewController.wpt.point gpxFileName:gpxFileName];
     wptViewController.wpt.groups = _mapViewController.foundWptGroups;
@@ -1953,19 +2043,19 @@ typedef enum
             
         default:
         {
-            if (_activeTargetType == OATargetGPXEdit)
-            {
-                OAGPXEditToolbarViewController *toolbarViewController = [[OAGPXEditToolbarViewController alloc] init];
-                
-                toolbarViewController.view.frame = self.view.frame;
-                [self.targetMenuView setCustomViewController:toolbarViewController];
-                
-                [self.targetMenuView prepareNoInit];
-            }
-            else
-            {
+            //if (_activeTargetType == OATargetGPXEdit)
+            //{
+            //    OAGPXEditToolbarViewController *toolbarViewController = [[OAGPXEditToolbarViewController alloc] init];
+            //
+            //    toolbarViewController.view.frame = self.view.frame;
+            //    [self.targetMenuView setCustomViewController:toolbarViewController];
+            //
+            //    [self.targetMenuView prepareNoInit];
+            //}
+            //else
+            //{
                 [self.targetMenuView prepare];
-            }
+            //}
         }
     }
     

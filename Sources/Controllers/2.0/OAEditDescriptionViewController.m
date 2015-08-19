@@ -18,6 +18,7 @@
     CGFloat _keyboardHeight;
     BOOL _isNew;
     BOOL _readOnly;
+    BOOL _isEditing;
 }
 
 -(id)initWithDescription:(NSString *)desc isNew:(BOOL)isNew readOnly:(BOOL)readOnly
@@ -29,6 +30,7 @@
         _isNew = isNew;
         _readOnly = readOnly;
         _keyboardHeight = 0.0;
+        _isEditing = (desc.length == 0) && !readOnly;
     }
     return self;
 }
@@ -40,11 +42,36 @@
     [_saveButton setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
+- (BOOL)isHtml:(NSString *)text
+{
+    BOOL res = NO;
+    res = res || [text containsString:@"<html>"];
+    res = res || [text containsString:@"<body>"];
+    res = res || [text containsString:@"<div>"];
+    res = res || [text containsString:@"<a>"];
+    res = res || [text containsString:@"<p>"];
+    res = res || [text containsString:@"<html "];
+    res = res || [text containsString:@"<body "];
+    res = res || [text containsString:@"<div "];
+    res = res || [text containsString:@"<a "];
+    res = res || [text containsString:@"<p "];
+    return res;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    _textView.text = self.desc;
+    
     [self setupView];
+
+    NSString *textHtml;
+    if (![self isHtml:self.desc])
+        textHtml = [self.desc stringByReplacingOccurrencesOfString:@"\n" withString:@"<br/>"];
+    else
+        textHtml = self.desc;
+    
+    [_webView loadHTMLString:textHtml baseURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] bundlePath]]];
+    _textView.text = self.desc;
 }
 
 -(void)viewWillAppear:(BOOL)animated
@@ -71,6 +98,7 @@
 {
     [super viewWillLayoutSubviews];
     _textView.frame = CGRectMake(0.0, 64.0, DeviceScreenWidth, DeviceScreenHeight - _keyboardHeight - 64.0);
+    _webView.frame = _textView.frame;
 }
 
 - (void)didReceiveMemoryWarning
@@ -82,7 +110,21 @@
 -(void)setupView
 {
     _textView.textContainerInset = UIEdgeInsetsMake(5,5,5,5);
-    _saveButton.hidden = _readOnly;
+    
+    if (_isEditing)
+    {
+        _saveButton.hidden = NO;
+        _editButton.hidden = YES;
+        _textView.hidden = NO;
+        _webView.hidden = YES;
+    }
+    else
+    {
+        _editButton.hidden = _readOnly;
+        _saveButton.hidden = YES;
+        _textView.hidden = YES;
+        _webView.hidden = NO;
+    }
     _textView.editable = !_readOnly;
 }
 
@@ -153,6 +195,13 @@
         [self.delegate descriptionChanged];
     
     [self backButtonClicked:self];
+}
+
+- (IBAction)editClicked:(id)sender
+{
+    _isEditing = YES;
+    [self setupView];
+    [_textView becomeFirstResponder];
 }
 
 @end

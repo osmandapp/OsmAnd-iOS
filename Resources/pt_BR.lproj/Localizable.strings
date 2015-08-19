@@ -204,7 +204,7 @@
 "other_options" = "Outras opções";
 "add_parking" = "Adicionar como posição de estacionamento";
 "add_parking_short" = "Adicionar estacionamento";
-"add_waypoint" = "Adicionar parada ao trajeto";
+"add_waypoint" = "Adicionar parada à viagem";
 "add_waypoint_short" = "Adicionar parada";
 "more" = "Mais";
 "parking_marker" = "Marcador de estacionamento";
@@ -460,3 +460,4 @@
 "product_desc_ext_trip_planning" = "Complemento de planejamento de viagem permite que você crie sua viagem no mapa, salve, meça a distância entre os pontos ligados com linhas retas, etc. Criado por planejamento de viagem preliminar ao invés de rota por endereço.";
 "gpx_edit_mode" = "Modo edição";
 "go_to_map" = "Ir para o mapa";
+"edit_waypoint_short" = "Editar parada";

@@ -48,6 +48,7 @@
 
 - (void)viewDidLoad
 {
+    // did load
     [super viewDidLoad];
     
     _currentLocal = [NSLocale autoupdatingCurrentLocale];

@@ -100,4 +100,39 @@
     }  
 }
 
++ (BOOL) isBundledOcbfNewer
+{
+    NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
+    NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
+    
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    if (![fileManager fileExistsAtPath:cachedPathLib])
+    {
+        return NO;
+    }
+    else
+    {
+        NSDate *lastModifiedBundle = nil;
+        NSDate *lastModifiedLocal = nil;
+
+        NSError *error = nil;
+        NSDictionary *fileAttributes = [fileManager attributesOfItemAtPath:cachedPathBundle error:&error];
+        if (error)
+            NSLog(@"Error reading file attributes for: %@ - %@", cachedPathBundle, [error localizedDescription]);
+        
+        lastModifiedBundle = [fileAttributes fileModificationDate];
+
+        fileAttributes = [fileManager attributesOfItemAtPath:cachedPathLib error:&error];
+        if (error)
+            NSLog(@"Error reading file attributes for: %@ - %@", cachedPathLib, [error localizedDescription]);
+        
+        lastModifiedLocal = [fileAttributes fileModificationDate];
+
+        OALog(@"lastModifiedBundle : %@", lastModifiedBundle);
+        OALog(@"lastModifiedLocal : %@", lastModifiedLocal);
+        
+        return [lastModifiedBundle timeIntervalSince1970] > [lastModifiedLocal timeIntervalSince1970];
+    }
+}
+
 @end

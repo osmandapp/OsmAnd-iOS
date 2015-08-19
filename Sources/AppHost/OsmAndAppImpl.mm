@@ -31,6 +31,7 @@
 #import "OAGPXRouter.h"
 #import "OAHillshadeLayer.h"
 #import "OAMapCreatorHelper.h"
+#import "OAOcbfHelper.h"
 
 #include <algorithm>
 
@@ -225,7 +226,9 @@
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Resources/regions.ocbf"];
     
-    //[[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
+    if ([OAOcbfHelper isBundledOcbfNewer])
+        [[NSFileManager defaultManager] removeItemAtPath:ocbfPathLib error:nil];
+    
     if (![[NSFileManager defaultManager] fileExistsAtPath:ocbfPathLib])
     {
         NSError *error = nil;

@@ -11,5 +11,6 @@
 @interface OAOcbfHelper : NSObject
 
 + (void) downloadOcbfIfUpdated;
++ (BOOL) isBundledOcbfNewer;
 
 @end

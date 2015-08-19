@@ -249,7 +249,7 @@
 "other_options" = "Àteras optziones";
 "add_parking" = "Annanghe comente positzione de parchègiu";
 "add_parking_short" = "Annanghe parchègiu";
-"add_waypoint" = "Annanghe puntu mesanu a sa rasta";
+"add_waypoint" = "Annanghe puntu mesanu a su biàgiu";
 "add_waypoint_short" = "Annanghe puntu mesanu";
 "more" = "De prus";
 "parking_marker" = "Marcadore de parchègiu";
@@ -443,3 +443,14 @@
 "map_creator" = "Creadore Mapa";
 "local_names" = "Nùmenes locales";
 "open_map_settings" = "Aberi sas Impostaduras de sa mapa";
+"offline_maps" = "Mapas non in lìnia";
+"download_map" = "Iscàrriga mapa";
+"edit_waypoint_short" = "Modìfica puntu mesanu";
+"product_desc_trip_planning" = "Pranìfica su biàgiu tuo, annanghe puntos mesanos, mèdia sa distàntzia pro sa destinatzione impreande custu plugin";
+"history" = "Istòria";
+"today" = "Oe";
+"yesterday" = "Eris";
+"hist_select_remove" = "Pro piaghere ischerta sos elementos de s'istòria de burrare";
+"hist_remove_q" = "Boles burrare sos elementos de s'istòria?";
+"gpx_edit_mode" = "Modalidade de modìfica";
+"go_to_map" = "Bae a sa mapa";

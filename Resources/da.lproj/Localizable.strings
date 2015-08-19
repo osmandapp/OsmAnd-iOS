@@ -201,7 +201,7 @@
 "track_clear_q" = "Skal det aktuelle spor ryddes?";
 "menu_about" = "Om";
 "other_options" = "Andre valgmuligheder";
-"add_waypoint" = "Tilføj rutepunkt til spor";
+"add_waypoint" = "Tilføj rutepunkt til turen";
 "add_waypoint_short" = "Tilføj rutepunkt";
 "more" = "Mere";
 "time_limited" = "Tidsbegrænset";
@@ -460,3 +460,4 @@
 "download_map" = "Hent kort";
 "product_desc_trip_planning" = "Planlæg turen, tilføj rutepunkter, mål afstanden til destinationen ved hjælp af denne udvidelse";
 "product_desc_ext_trip_planning" = "Tur planlægningsudvidelse muliggør oprettelse af turen på kortet, gemme den, måle afstanden mellem punkter forbundet med lige linjer mv. Lavet til foreløbig tur planlægning snarere end en mere grundig rute planlægning.";
+"edit_waypoint_short" = "Rediger rutepunkt";

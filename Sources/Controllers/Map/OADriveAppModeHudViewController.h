@@ -17,6 +17,7 @@
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
+@property (nonatomic, assign) BOOL showGoToMapButton;
 
 - (void)enterContextMenuMode;
 - (void)restoreFromContextMenuMode;

@@ -742,6 +742,28 @@
     });
 }
 
+- (void) doDeleteAllPoints
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &tracksDB) == SQLITE_OK)
+        {
+            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@", POINT_NAME];
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(tracksDB, update_stmt, -1, &statement, NULL);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(tracksDB);
+        }
+    });
+}
+
 - (void)deleteWpt:(OAGpxWpt *)wpt
 {
     [currentTrack deleteWpt:wpt];
@@ -749,6 +771,15 @@
     points--;
     
     [self doDeletePointsLat:wpt.position.latitude lon:wpt.position.longitude time:wpt.time];
+}
+
+- (void)deleteAllWpts
+{
+    [currentTrack deleteAllWpts];
+    
+    points = 0;
+    
+    [self doDeleteAllPoints];
 }
 
 - (void)saveWpt:(OAGpxWpt *)wpt

@@ -78,6 +78,9 @@
 - (BOOL)isToolbarVisible;
 - (CGFloat)toolbarHeight;
 
+- (void)quickHide;
+- (void)quickShow;
+
 @end
 
 

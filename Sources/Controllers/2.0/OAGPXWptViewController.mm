@@ -75,14 +75,6 @@
         p.time = (long)[[NSDate date] timeIntervalSince1970];
         wpt.point = p;
         wpt.color = color;
-
-        /*
-        std::shared_ptr<OsmAnd::GpxDocument::GpxWpt> w;
-        w.reset(new OsmAnd::GpxDocument::GpxWpt());
-        [OAGPXDocument fillWpt:w usingWpt:wpt.point];
-        wpt.point.wpt = w;
-        w = nullptr;
-         */
         
         self.wpt = wpt;
     }
@@ -93,11 +85,14 @@
 {
     [super applyLocalization];
     
-    self.titleView.text = OALocalizedString(@"gpx_point");
+    if (self.newItem)
+        self.titleView.text = OALocalizedString(@"add_waypoint_short");
+    else
+        self.titleView.text = OALocalizedString(@"edit_waypoint_short");
 }
 
-- (void)viewDidLoad {
-    
+- (void)viewDidLoad
+{    
     [super viewDidLoad];
     
     OAAppSettings* settings = [OAAppSettings sharedManager];

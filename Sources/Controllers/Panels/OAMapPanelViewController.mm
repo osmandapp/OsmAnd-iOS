@@ -52,6 +52,8 @@
 #import "OAGPXRouter.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryItem.h"
+#import "OAGPXEditWptViewController.h"
+#import "OAGPXEditToolbarViewController.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -875,6 +877,8 @@ typedef enum
         
         [self destroyShadowButton];
 
+        [self.targetMenuView quickShow];
+
         self.sidePanelController.recognizesPanGesture = NO; //YES;
     }
 }
@@ -898,6 +902,8 @@ typedef enum
     [_mapSettings show:self parentViewController:nil animated:YES];
     
     [self createShadowButton:@selector(closeMapSettings) withLongPressEvent:nil topView:_mapSettings.view];
+    
+    [self.targetMenuView quickHide];
 
     self.sidePanelController.recognizesPanGesture = NO;
 }
@@ -992,6 +998,11 @@ typedef enum
     {
         [_mapViewController hideContextPinMarker];
         return;
+    }
+
+    if (_activeTargetType == OATargetGPXEdit && ![objectType isEqualToString:@"waypoint"])
+    {
+        objectType = nil;
     }
 
     // show context marker on map
@@ -1151,7 +1162,7 @@ typedef enum
     
     [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         if (centerMap)
-            [self goToTargetPointDefault];
+            [self goToTargetPointDefault];        
     }];
 }
 
@@ -1634,6 +1645,10 @@ typedef enum
     
     [wptViewController activateEditing];
     wptViewController.view.frame = self.view.frame;
+    
+    if (_activeTargetType == OATargetGPXEdit)
+        wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
+
     [self.targetMenuView setCustomViewController:wptViewController];
     [self.targetMenuView updateTargetPointType:OATargetWpt];
 
@@ -1816,10 +1831,21 @@ typedef enum
         {
             [self.targetMenuView doInit:showFullMenu];
             
-            OAGPXWptViewController *wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
+            OAGPXWptViewController *wptViewController;
+            if (_activeTargetType == OATargetGPXEdit)
+            {
+                wptViewController = [[OAGPXEditWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
+                [wptViewController activateEditing];
+            }
+            else
+            {
+                wptViewController = [[OAGPXWptViewController alloc] initWithItem:self.targetMenuView.targetPoint.targetObj];
+            }
+            
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
             wptViewController.view.frame = self.view.frame;
+            
             [self.targetMenuView setCustomViewController:wptViewController];
             
             [self.targetMenuView prepareNoInit];
@@ -1918,7 +1944,19 @@ typedef enum
             
         default:
         {
-            [self.targetMenuView prepare];
+            if (_activeTargetType == OATargetGPXEdit)
+            {
+                OAGPXEditToolbarViewController *toolbarViewController = [[OAGPXEditToolbarViewController alloc] init];
+                
+                toolbarViewController.view.frame = self.view.frame;
+                [self.targetMenuView setCustomViewController:toolbarViewController];
+                
+                [self.targetMenuView prepareNoInit];
+            }
+            else
+            {
+                [self.targetMenuView prepare];
+            }
         }
     }
     
@@ -2047,6 +2085,7 @@ typedef enum
         switch (self.targetMenuView.targetPoint.type)
         {
             case OATargetGPX:
+            case OATargetGPXEdit:
                 if ([self hasGpxActiveTargetType] && _activeTargetObj)
                     ((OAGPX *)_activeTargetObj).newGpx = NO;
                 popped = [OAGPXListViewController popToParent];
@@ -2256,7 +2295,6 @@ typedef enum
         else
             [self targetGoToPoint];
     }];
-
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item pushed:(BOOL)pushed
@@ -2352,7 +2390,7 @@ typedef enum
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = caption;
     
-    if (_activeTargetType != OATargetGPX)
+    if (_activeTargetType != OATargetGPXEdit)
         [self displayGpxOnMap:item];
     
     if (item.bounds.center.latitude == DBL_MAX)

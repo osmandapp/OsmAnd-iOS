@@ -25,12 +25,12 @@
 @interface OAGPXEditWptListViewController ()
 {
     OsmAndAppInstance _app;
+
     BOOL isDecelerating;
+    BOOL isMoving;
 }
 
-@property (strong, nonatomic) NSDictionary* groupedPoints;
-@property (strong, nonatomic) NSArray* unsortedPoints;
-@property (strong, nonatomic) NSArray* groups;
+@property (strong, nonatomic) NSMutableArray* unsortedPoints;
 
 @end
 
@@ -46,6 +46,7 @@
         [self setPoints:locationMarks];
         
         isDecelerating = NO;
+        isMoving = NO;
     }
     return self;
 }
@@ -70,7 +71,7 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self.tableView isEditing])
+    if ((isMoving || isDecelerating) && !forceUpdate)
         return;
     
     if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
@@ -99,9 +100,6 @@
         itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
         
     }];
-    
-    if (isDecelerating)
-        return;
     
     [self refreshVisibleRows];
 }
@@ -139,6 +137,8 @@
     [self generateData];
     [self updateDistanceAndDirection:YES];
     
+    [self.tableView setEditing:YES];
+    
     self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                     withHandler:@selector(updateDistanceAndDirection)
                                                                      andObserve:_app.locationServices.updateObserver];
@@ -146,6 +146,8 @@
 
 - (void)doViewDisappear
 {
+    [self.tableView setEditing:NO];
+
     if (self.locationServicesUpdateObserver) {
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
@@ -154,72 +156,36 @@
 
 -(void)generateData
 {
-    NSMutableSet *groups = [NSMutableSet set];
-    for (OAGpxWptItem *item in self.unsortedPoints)
-        [groups addObject:(item.point.type ? item.point.type : @"")];
-    
-    NSMutableArray *groupsArray = [[[groups allObjects]
-                                    sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2)
-                                    {
-                                        return [obj1 localizedCaseInsensitiveCompare:obj2];
-                                    }] mutableCopy];
-    
-    NSArray *sortedArr = [self.unsortedPoints sortedArrayUsingComparator:^NSComparisonResult(OAGpxWptItem *obj1, OAGpxWptItem *obj2) {
-        return [obj1.point.name localizedCaseInsensitiveCompare:obj2.point.name];
-    }];
-    
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    for (NSString *group in groupsArray)
-        [dict setObject:[NSMutableArray array] forKey:group];
-    
-    for (OAGpxWptItem *item in sortedArr)
-    {
-        NSString *group = item.point.type;
-        NSMutableArray *arr;
-        if (group.length > 0)
-            arr = [dict objectForKey:group];
-        else
-            arr = [dict objectForKey:@""];
-        
-        [arr addObject:item];
-    }
-    
-    self.groups = [NSArray arrayWithArray:groupsArray];
-    self.groupedPoints = [NSDictionary dictionaryWithDictionary:dict];
-    
-    [self.tableView reloadData];
 }
 
 - (void)resetData
 {
-    [self.tableView setEditing:NO];
 }
 
+- (void)refreshGpxDoc
+{
+    if (self.delegate)
+    {
+        NSMutableArray* arr = [NSMutableArray array];
+        for (OAGpxWptItem *item in self.unsortedPoints)
+        {
+            [arr addObject:item.point];
+        }
+        
+        [self.delegate refreshGpxDocWithPoints:[NSArray arrayWithArray:arr]];
+    }
+}
 
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    if (self.unsortedPoints.count == 0)
-        return 1;
-    
-    return self.groups.count;
+    return 1;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    if (self.unsortedPoints.count == 0)
-        return nil;
-    
-    if (self.groups.count > section)
-    {
-        NSString *group = self.groups[section];
-        return (group.length == 0 ? OALocalizedString(@"fav_no_group") : group);
-    }
-    else
-    {
-        return nil;
-    }
+    return OALocalizedString(@"gpx_waypoints");
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -227,7 +193,7 @@
     if (self.unsortedPoints.count == 0)
         return 1;
     
-    return ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[section]]).count;
+    return self.unsortedPoints.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -266,8 +232,12 @@
             
             OAGpxWptItem* item = [self getWptItem:indexPath];
             
+            NSMutableString *distanceStr = [NSMutableString stringWithString:item.distance];
+            if (item.point.type.length > 0)
+                [distanceStr appendFormat:@", %@", item.point.type];
+            
             [cell.titleView setText:item.point.name];
-            [cell.distanceView setText:item.distance];
+            [cell.distanceView setText:distanceStr];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             
             if (!cell.titleIcon.hidden) {
@@ -286,17 +256,26 @@
 
 -(OAGpxWptItem *)getWptItem:(NSIndexPath *)indexPath
 {
-    return ((NSMutableArray *)[self.groupedPoints objectForKey:self.groups[indexPath.section]])[indexPath.row];
+    return self.unsortedPoints[indexPath.row];
 }
 
-- (NSArray *)getSelectedItems
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray *indexPaths = [self.tableView indexPathsForSelectedRows];
-    NSMutableArray *arr = [NSMutableArray array];
-    for (NSIndexPath *indexPath in indexPaths)
-        [arr addObject:[self getWptItem:indexPath]];
+    return self.unsortedPoints.count > 0;
+}
+
+-(BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return self.unsortedPoints.count > 0;
+}
+
+-(void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath
+{
+    OAGpxWptItem* item = [self getWptItem:sourceIndexPath];
+    [self.unsortedPoints removeObject:item];
+    [self.unsortedPoints insertObject:item atIndex:destinationIndexPath.row];
     
-    return [NSArray arrayWithArray:arr];
+    [self refreshGpxDoc];
 }
 
 #pragma mark -
@@ -321,16 +300,54 @@
 
 #pragma mark - UITableViewDelegate
 
+- (void)tableView:(UITableView *)tableView willBeginReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    isMoving = YES;
+    //[self refreshAllRows];
+}
+
+- (void)tableView:(UITableView *)tableView didEndReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    isMoving = NO;
+    //[self refreshAllRows];
+}
+
+- (void)tableView:(UITableView *)tableView didCancelReorderingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    isMoving = NO;
+    //[self refreshAllRows];
+}
+
+- (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleNone;
+}
+
+-(NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath
+{
+    // Allow the proposed destination.
+    return proposedDestinationIndexPath;
+}
+
+- (BOOL)tableView:(UITableView *)tableView shouldIndentWhileEditingRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return NO;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.tableView.editing)
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (self.unsortedPoints.count == 0)
+    {
+        if (self.delegate)
+            [self.delegate callGpxEditMode];
         return;
+    }
     
     OAGpxWptItem* item = [self getWptItem:indexPath];
     [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
 }
-
-#pragma mark - UITableViewDelegate
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {

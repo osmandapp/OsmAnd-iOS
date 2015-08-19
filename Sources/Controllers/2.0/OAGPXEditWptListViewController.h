@@ -10,6 +10,14 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 
+@protocol OAGPXEditWptListViewControllerDelegate <NSObject>
+
+@optional
+- (void) callGpxEditMode;
+- (void) refreshGpxDocWithPoints:(NSArray *)points;
+
+@end
+
 @interface OAGPXEditWptListViewController : UITableViewController
 
 - (void)doViewAppear;
@@ -20,6 +28,7 @@
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
+@property (weak, nonatomic) id<OAGPXEditWptListViewControllerDelegate> delegate;
 
 @property NSTimeInterval lastUpdate;
 

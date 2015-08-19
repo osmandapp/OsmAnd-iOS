@@ -1139,7 +1139,7 @@ static OAGPXListViewController *parentController;
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
 
             [self doPush];
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:item pushed:YES];
+            [[OARootViewController instance].mapPanel openTargetViewWithGPXEdit:item pushed:YES];
         }
         else
         {

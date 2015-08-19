@@ -21,6 +21,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) btnCancelPressed;
 - (void) btnDeletePressed;
 
+- (void) addWaypoint;
+
 - (void) requestHeaderOnlyMode;
 - (void) requestFullScreenMode;
 
@@ -77,6 +79,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void)okPressed;
 - (void)cancelPressed;
 
+- (BOOL)hasContent;
 - (CGFloat)contentHeight;
 - (void)setContentBackgroundColor:(UIColor *)color;
 

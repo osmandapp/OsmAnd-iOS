@@ -57,7 +57,7 @@
 @end
 
 
-@interface OATargetPointView() <OATargetPointZoomViewDelegate>
+@interface OATargetPointView() <OATargetPointZoomViewDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
@@ -376,8 +376,8 @@
                                                                       });
     
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
-    //[self addGestureRecognizer:_panGesture];
-
+    _panGesture.cancelsTouchesInView = NO;
+    _panGesture.delegate = self;
 }
 
 - (void)startLocationUpdate
@@ -718,7 +718,7 @@
     if (_toolbarAnimating)
         return;
     
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && !landscape;
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && !landscape;
     [self.customController useGradient:useGradient];
     
     if (landscape)
@@ -738,7 +738,7 @@
     if (!self.customController || !self.customController.hasTopToolbar || !self.customController.navBar.hidden)
         return;
 
-    BOOL useGradient = (_activeTargetType != OATargetGPX) && ![self isLandscape];
+    BOOL useGradient = (_activeTargetType != OATargetGPX) && (_activeTargetType != OATargetGPXEdit) && ![self isLandscape];
     [self.customController useGradient:useGradient];
 
     CGRect topToolbarFrame;
@@ -983,7 +983,7 @@
 
 - (void)doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _activeTargetType == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute);
     self.buttonsView.hidden = _hideButtons;
     [self updateButtonClose];
     
@@ -1381,7 +1381,7 @@
     
     CGFloat hf = 0.0;
     
-    if (!self.customController)
+    if (!self.customController || ![self.customController hasContent])
     {
         CGFloat infoWidth = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
         
@@ -2049,6 +2049,26 @@
     [self.delegate targetPointAddFavorite];
 }
 
+- (void)quickHide
+{
+    [UIView animateWithDuration:.3 animations:^{
+       
+        self.alpha = 0.0;
+        if (self.customController && [self.customController hasTopToolbar])
+            self.customController.navBar.alpha = 0.0;
+    }];
+}
+
+- (void)quickShow
+{
+    [UIView animateWithDuration:.3 animations:^{
+        
+        self.alpha = 1.0;
+        if (self.customController && [self.customController hasTopToolbar])
+            self.customController.navBar.alpha = 1.0;
+    }];
+}
+
 #pragma mark - Actions
 
 - (IBAction)buttonFavoriteClicked:(id)sender
@@ -2368,6 +2388,11 @@
     [self.delegate targetHideMenu:.3 backButtonClicked:YES];
 }
 
+- (void) addWaypoint
+{
+    [self.delegate targetPointAddWaypoint];
+}
+
 #pragma mark - OATargetPointZoomViewDelegate
 
 - (void) zoomInPressed
@@ -2380,6 +2405,14 @@
 {
     if (self.delegate)
         [self.delegate targetZoomOut];
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+-(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch
+{
+    CGPoint p = [touch locationInView:self.topView];
+    return p.y < _topView.frame.size.height;
 }
 
 @end

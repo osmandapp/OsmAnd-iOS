@@ -62,7 +62,7 @@
 
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;
 {
-    return isViewVisible;
+    return isViewVisible || self.newItem;
 }
 
 - (BOOL)supportEditing

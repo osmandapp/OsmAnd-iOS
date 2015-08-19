@@ -36,6 +36,7 @@
 
 - (void)addWpt:(OAGpxWpt *)wpt;
 - (void)deleteWpt:(OAGpxWpt *)wpt;
+- (void)deleteAllWpts;
 - (void)saveWpt:(OAGpxWpt *)wpt;
 
 - (void) runSyncBlock:(void (^)(void))block;

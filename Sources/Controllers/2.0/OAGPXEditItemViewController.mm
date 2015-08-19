@@ -34,7 +34,7 @@
 @end
 
 
-@interface OAGPXEditItemViewController ()
+@interface OAGPXEditItemViewController ()<OAGPXEditWptListViewControllerDelegate>
 {
     OsmAndAppInstance _app;
     
@@ -239,7 +239,8 @@
     
     self.titleView.text = [self.gpx getNiceTitle];
     
-    _waypointsController = [[OAGPXEditWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];    
+    _waypointsController = [[OAGPXEditWptListViewController alloc] initWithLocationMarks:self.doc.locationMarks];
+    _waypointsController.delegate = self;
     _waypointsController.view.frame = self.contentView.bounds;
     [_waypointsController doViewAppear];
     [self.contentView addSubview:_waypointsController.view];
@@ -291,6 +292,31 @@
 - (void)updateMap
 {
     [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
+}
+
+
+#pragma mark - OAGPXEditWptListViewControllerDelegate
+
+-(void)callGpxEditMode
+{
+    if (self.delegate)
+        [self.delegate requestHeaderOnlyMode];
+}
+
+-(void)refreshGpxDocWithPoints:(NSArray *)points
+{
+    if (_showCurrentTrack)
+    {
+        [_savingHelper deleteAllWpts];
+        
+        for (OAGpxWpt *wpt in points)
+            [_savingHelper addWpt:wpt];
+    }
+    else
+    {
+        self.doc.locationMarks = points;
+        [self.doc saveTo:self.doc.fileName];
+    }
 }
 
 

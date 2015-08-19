@@ -158,24 +158,16 @@
         {
             [self.locationMarks removeObject:wpt];
             document->locationMarks.removeOne(wpt.wpt);
-            /*
-            if (!document->locationMarks.removeOne(wpt.wpt))
-                for (int i = 0; i < document->locationMarks.count(); i++)
-                {
-                    const auto& w = document->locationMarks[i];
-                    if ([OAUtilities doublesEqualUpToDigits:5 source:w->position.latitude destination:wpt.wpt->position.latitude] &&
-                        [OAUtilities doublesEqualUpToDigits:5 source:w->position.longitude destination:wpt.wpt->position.longitude])
-                    {
-                        document->locationMarks.removeAt(i);
-                        break;
-                    }
-                }
-            */
-            
             w.wpt = nullptr;
             break;
         }
     }
+}
+
+- (void)deleteAllWpts
+{
+    [self.locationMarks removeAllObjects];
+    document->locationMarks.clear();
 }
 
 - (void) addTrack:(OAGpxTrk *)t

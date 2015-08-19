@@ -50,6 +50,11 @@
     // override
 }
 
+- (BOOL)hasContent
+{
+    return YES; // override
+}
+
 - (CGFloat)contentHeight
 {
     return 0.0; // override

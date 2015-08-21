@@ -181,9 +181,9 @@
 "prch_addons" = "Addons";
 
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
-"prch_nau_q2_cell" = "Dowloading requires %@ over cellular network.";
+"prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
-"prch_nau_q2_wifi" = "Dowloading requires %@ over WiFi network.";
+"prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
 
@@ -218,8 +218,8 @@
 "res_no_space_free" = "is needed. Please free up some space.";
 "res_free_exp" = "You spent all free downloads. Please purchase continent to download / update the maps.";
 "res_upd_avail_q" = "An update is available for";
-"res_inst_avail_cell_q" = "Intallation of %@ needs %@ to be downloaded over cellular network.";
-"res_inst_avail_wifi_q" = "Intallation of %@ needs %@ to be downloaded over WiFi network.";
+"res_inst_avail_cell_q" = "Installation of %@ needs %@ to be downloaded over cellular network.";
+"res_inst_avail_wifi_q" = "Installation of %@ needs %@ to be downloaded over WiFi network.";
 "res_cancel_upd_q" = "You're going to cancel %@ update.";
 "data_will_be_lost" = "All downloaded data will be lost.";
 "res_cancel_inst_q" = "You're going to cancel %@ installation.";

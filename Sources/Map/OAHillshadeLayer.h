@@ -18,4 +18,6 @@
 - (NSData *)getBytes:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 - (UIImage *)getImage:(int)x y:(int)y zoom:(int)zoom timeHolder:(NSNumber**)timeHolder;
 
+- (void)removeFromDB:(NSString *)filename;
+
 @end

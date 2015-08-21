@@ -108,7 +108,7 @@
 #define kScreensToFlyWithAnimation 4.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
-#define kHillshadeOpacity 1.0f
+#define kHillshadeOpacity 0.7f
 
 #define kGpxLayerId 9
 #define kGpxRouteLayerId 10

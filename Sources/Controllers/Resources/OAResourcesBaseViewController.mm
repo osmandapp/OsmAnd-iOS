@@ -23,6 +23,7 @@
 #import "OAUtilities.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "OAHillshadeLayer.h"
 
 #include "Localization.h"
 #include <OsmAndCore/WorldRegions.h>
@@ -768,14 +769,26 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                              }
                              else
                              {
+                                 if (item.resourceType == OsmAndResourceType::HillshadeRegion)
+                                 {
+                                     NSString *filename = [_app.resourcesManager->getLocalResource(item.resourceId)->localPath.toNSString() lastPathComponent];
+                                     [[OAHillshadeLayer sharedInstance] removeFromDB:filename];
+                                 }
+                                 
                                  const auto success = _app.resourcesManager->uninstallResource(item.resourceId);
                                  if (!success)
                                  {
                                      OALog(@"Failed to uninstall resource %@ from %@",
                                            item.resourceId.toNSString(),
                                            item.resource->localPath.toNSString());
-                                 } else if (block) {
-                                     block();
+                                 }
+                                 else
+                                 {
+                                     if (item.resourceType == OsmAndResourceType::HillshadeRegion)
+                                         [_app.data.hillshadeResourcesChangeObservable notifyEvent];
+                                     
+                                     if (block)
+                                         block();
                                  }
                              }
                          }];

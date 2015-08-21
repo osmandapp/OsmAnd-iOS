@@ -183,6 +183,37 @@ const static int ZOOM_BOUNDARY = 15;
     }
 }
 
+- (void)removeFromDB:(NSString *)filename
+{
+    OALog(@"Removing hillshade file %@", filename);
+    @try
+    {
+        sqlite3 *db;
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [_databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &db) == SQLITE_OK)
+        {
+            NSString *query = @"DELETE FROM TILE_SOURCES WHERE filename=?";
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(db, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_text(statement, 1, [filename UTF8String], -1, SQLITE_TRANSIENT);
+            
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(db);
+        }
+    }
+    @catch(NSException *e)
+    {
+        OALog(@"Error: %@", e.description);
+    }
+}
+
 - (NSMutableDictionary *)readFiles:(NSMutableDictionary *)fileModified
 {
     NSMutableDictionary *rs = [NSMutableDictionary dictionary];
@@ -245,12 +276,15 @@ const static int ZOOM_BOUNDARY = 15;
 {
     @synchronized(_sync)
     {
+        NSData *res;
         NSArray *ts = [self getTileSource:x y:y zoom:zoom];
         for (NSString *t in ts)
         {
             OASQLiteTileSource *sqLiteTileSource = [_resources objectForKey:t];
             if (sqLiteTileSource)
-                return [sqLiteTileSource getBytes:x y:y zoom:zoom timeHolder:timeHolder];
+                res = [sqLiteTileSource getBytes:x y:y zoom:zoom timeHolder:timeHolder];
+            if (res)
+                return res;
         }
         return nil;
     }

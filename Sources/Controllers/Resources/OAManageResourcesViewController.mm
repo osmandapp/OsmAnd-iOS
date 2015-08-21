@@ -1858,7 +1858,7 @@ static BOOL _lackOfResources;
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
+            btnAcc.frame = CGRectMake(0.0, 0.0, 60.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
         else if ([cellTypeId isEqualToString:repositoryResourceCell])

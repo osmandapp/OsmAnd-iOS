@@ -25,7 +25,6 @@ OsmAnd::AlphaChannelPresence OAHillshadeMapLayerProvider::getAlphaChannelPresenc
 QByteArray OAHillshadeMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     NSData *data = [[OAHillshadeLayer sharedInstance] getBytes:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
-    //NSData *data = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"processing_tile_light" ofType:@"png" inDirectory:@"stubs/[ddf=2.0]"]];
     if (data)
         return QByteArray::fromNSData(data);
     else
@@ -71,5 +70,5 @@ OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMinZoom() const
 
 OsmAnd::ZoomLevel OAHillshadeMapLayerProvider::getMaxZoom() const
 {
-    return OsmAnd::ZoomLevel31;
+    return OsmAnd::ZoomLevel11;
 }

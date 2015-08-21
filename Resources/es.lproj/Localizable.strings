@@ -373,7 +373,7 @@
 "purchase_get" = "Obtener";
 "srtm_disabled" = "Curvas de nivel deshabilitado";
 "rendering_value_disabled_name" = "Desactivado";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Colorear según ámbito de la ruta";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Colorear según alcance de ruta";
 "rendering_value_walkingRoutesOSMC_name" = "Colorear según OSMC";
 "rendering_value_default_name" = "Predefinido";
 "rendering_attr_hikingRoutesOSMC_name" = "Superponer símbolo de senderismo";

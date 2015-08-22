@@ -281,7 +281,7 @@
 "other_options" = "Otras opciones";
 "add_parking" = "Añadir ubicación de estacionamiento";
 "add_parking_short" = "Añadir estacionamiento";
-"add_waypoint" = "Añadir punto de ruta a la traza";
+"add_waypoint" = "Añadir punto de ruta al viaje";
 "add_waypoint_short" = "Añadir punto de ruta";
 "more" = "Más";
 "parking_marker" = "Marca de estacionamiento";
@@ -458,3 +458,6 @@
 "hist_remove_q" = "¿Quiere quitar los elementos del historial?";
 "gpx_edit_mode" = "Modo edición";
 "go_to_map" = "Ir al mapa";
+"edit_waypoint_short" = "Editar punto de ruta";
+"product_desc_trip_planning" = "Planifique su viaje, añada puntos de ruta y mida la distancia a su destino, usando este complemento";
+"product_desc_ext_trip_planning" = "El complemento de Planificación de viaje, le permite crear y guardar su viaje en el mapa, medir la distancia entre puntos conectados con líneas rectas, etc. Creado para una planificación de viaje preliminar, en lugar de construcción de la ruta completa.";

@@ -135,11 +135,14 @@
 
 - (void)saveItemToStorage
 {
-    [OAGPXDocument fillWpt:self.wpt.point.wpt usingWpt:self.wpt.point];
-    [_mapViewController saveFoundWpt];
-    
-    if (self.wptDelegate && [self.wptDelegate respondsToSelector:@selector(changedWptItem)])
-        [self.wptDelegate changedWptItem];
+    if (self.wpt.point.wpt != nullptr)
+    {
+        [OAGPXDocument fillWpt:self.wpt.point.wpt usingWpt:self.wpt.point];
+        [_mapViewController saveFoundWpt];
+        
+        if (self.wptDelegate && [self.wptDelegate respondsToSelector:@selector(changedWptItem)])
+            [self.wptDelegate changedWptItem];
+    }
 }
 
 - (void)removeExistingItemFromCollection

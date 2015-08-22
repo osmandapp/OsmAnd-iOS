@@ -44,6 +44,8 @@
     
     BOOL _backButtonPressed;
     BOOL _editNameFirstTime;
+    
+    BOOL _askPreHide;
 }
 
 @synthesize editing = _editing;
@@ -191,16 +193,20 @@
 
 - (void) processButtonPress
 {
-    if (_backButtonPressed)
+    if (!_askPreHide)
     {
-        if (self.delegate)
-            [self.delegate btnCancelPressed];
+        if (_backButtonPressed)
+        {
+            if (self.delegate)
+                [self.delegate btnCancelPressed];
+        }
+        else
+        {
+            if (self.delegate)
+                [self.delegate btnOkPressed];
+        }
     }
-    else
-    {
-        if (self.delegate)
-            [self.delegate btnOkPressed];
-    }
+    
     _backButtonPressed = NO;
 }
 
@@ -400,6 +406,8 @@
 
 - (BOOL)preHide
 {
+    _askPreHide = YES;
+    
     if (self.wasEdited)
         return [self commitChangesAndExit];
     return YES; 
@@ -458,6 +466,8 @@
     _wasEdited = NO;
     
     [self processButtonPress];
+
+    _askPreHide = NO;
 }
 
 - (void)changeColorClicked

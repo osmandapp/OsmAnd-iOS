@@ -1635,6 +1635,26 @@ typedef enum
     if ([_mapViewController hasWptAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
         return;
     
+    if ([self hasGpxActiveTargetType])
+    {
+        if (_activeTargetObj)
+        {
+            OAGPX *gpx = (OAGPX *)_activeTargetObj;
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
+            [self targetPointAddWaypoint:path];
+        }
+        else
+        {
+            [self targetPointAddWaypoint:nil];
+        }
+        return;
+    }
+    else
+    {
+        [self targetPointAddWaypoint:nil];
+    }
+    
+    /*
     NSMutableArray *names = [NSMutableArray array];
     NSMutableArray *paths = [NSMutableArray array];
     
@@ -1717,7 +1737,7 @@ typedef enum
     {
         [self targetPointAddWaypoint:nil];
     }
-
+    */
 }
 
 - (void)targetPointAddWaypoint:(NSString *)gpxFileName

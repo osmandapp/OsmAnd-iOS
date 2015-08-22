@@ -768,43 +768,37 @@
 
 - (void)showTopControls
 {
-    if (_widgetsView.alpha == 0.0)
-    {
-        [UIView animateWithDuration:.3 animations:^{
-            
-            CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
-            
-            _statusBarView.alpha = 1.0;
-            _mapSettingsButton.alpha = 1.0;
-            _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
-            _searchButton.alpha = 1.0;
-            
-            _downloadView.alpha = alphaEx;
-            _widgetsView.alpha = alphaEx;
-            _destinationViewController.view.alpha = alphaEx;
-            
-        }];
-    }
+    [UIView animateWithDuration:.3 animations:^{
+        
+        CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
+        
+        _statusBarView.alpha = 1.0;
+        _mapSettingsButton.alpha = 1.0;
+        _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+        _searchButton.alpha = 1.0;
+        
+        _downloadView.alpha = alphaEx;
+        _widgetsView.alpha = alphaEx;
+        _destinationViewController.view.alpha = alphaEx;
+        
+    }];
 }
 
 - (void)hideTopControls
 {
-    if (_mapSettingsButton.alpha == 1.0)
-    {
-        [UIView animateWithDuration:.3 animations:^{
-            
-            _statusBarView.alpha = 0.0;
-
-            _compassBox.alpha = 0.0;
-            _mapSettingsButton.alpha = 0.0;
-            _searchButton.alpha = 0.0;
-            
-            _downloadView.alpha = 0.0;
-            _widgetsView.alpha = 0.0;
-            _destinationViewController.view.alpha = 0.0;
-            
-        }];
-    }
+    [UIView animateWithDuration:.3 animations:^{
+        
+        _statusBarView.alpha = 0.0;
+        
+        _compassBox.alpha = 0.0;
+        _mapSettingsButton.alpha = 0.0;
+        _searchButton.alpha = 0.0;
+        
+        _downloadView.alpha = 0.0;
+        _widgetsView.alpha = 0.0;
+        _destinationViewController.view.alpha = 0.0;
+        
+    }];
 }
 
 - (void)showBottomControls:(CGFloat)menuHeight

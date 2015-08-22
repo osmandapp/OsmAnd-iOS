@@ -2538,8 +2538,8 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
+    [self enterContextMenuMode];
     [self showTargetPointMenu:YES showFullMenu:!item.newGpx onComplete:^{
-        [self enterContextMenuMode];
         _activeTargetActive = YES;
     }];
 }

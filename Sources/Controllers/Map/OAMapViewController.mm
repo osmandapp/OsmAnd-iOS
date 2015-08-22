@@ -370,6 +370,7 @@
                                                           withHandler:@selector(onGpxRouteChanged)
                                                            andObserve:_gpxRouter.routeChangedObservable];
 
+    /*
     _app.resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                                  [self]
                                                                  (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -381,7 +382,7 @@
                                                                      merged << added << removed << updated;
                                                                      [self onLocalResourcesChanged:merged];
                                                                  });
-    
+    */
     
     _appModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onAppModeChanged)
@@ -2919,9 +2920,9 @@
             return;
         }
         
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        //    [self updateCurrentMapSource];
-        //});
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self updateCurrentMapSource];
+        });
     });
 }
 

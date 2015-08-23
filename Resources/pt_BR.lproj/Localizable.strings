@@ -182,7 +182,7 @@
 "res_free_exp" = "Você gastou todas as transferências gratuitas. Por favor, compre para baixar/atualizar os mapas.";
 "res_upd_avail_q" = "Uma atualização está disponível para";
 "res_inst_avail_cell_q" = "Instalação de %@ precisa de %@ para ser baixado pela rede celular.";
-"res_inst_avail_wifi_q" = "nstalação de %@ precisa de %@ para ser baixado através da rede WiFi.";
+"res_inst_avail_wifi_q" = "Instalação de %@ precisa de %@ para ser baixado através da rede WiFi.";
 "res_cancel_upd_q" = "Você vai cancelar a atualização de %@.";
 "data_will_be_lost" = "Todos os dados baixados serão perdidos.";
 "res_cancel_inst_q" = "Você vai cancelar a instalação de %@.";

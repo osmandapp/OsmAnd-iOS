@@ -327,8 +327,8 @@
 "track_save_short_q" = "Sporet er for kort, gem alligevel?";
 "gpx_import_desc" = "Importer GPX filer (fælles GPS dataformat)\n\nFor at dele GPX-filen, kan filen åbnes fra Dropbox, E-mail eller en anden kilde - brug Åbnes med funktionen";
 "res_no_space_free" = "er nødvendig. Frigør noget plads.";
-"res_inst_avail_cell_q" = "Intallation af %@ behøver %@ der bliver hentet over mobilnetværk.";
-"res_inst_avail_wifi_q" = "Intallation af %@ behøver %@ der bliver hentet over WiFi netværk.";
+"res_inst_avail_cell_q" = "Installation af %@ behøver %@ der bliver hentet over mobilnetværk.";
+"res_inst_avail_wifi_q" = "Installation af %@ behøver %@ der bliver hentet over WiFi netværk.";
 "res_updates_exp" = "Køb kontinenter for at opdatere kortene";
 "loc_access_denied_desc" = "Adgang til placeringstjeneste er blevet nægtet";
 "make_call" = "Foretag et opkald";

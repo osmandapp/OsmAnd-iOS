@@ -329,7 +329,7 @@
 "res_dmap" = "Mapa detallat";
 "prch_nau_q2_cell" = "La baixada requereix %@ per transmissió de dades.";
 "prch_nau_q2_wifi" = "La baixada requereix %@ per la xarxa WiFi.";
-"res_inst_avail_cell_q" = "La instal·lació de %@ implica baixar %@  de dades.";
+"res_inst_avail_cell_q" = "La instal·lació de %@ implica baixar %@  de dades de la xarxa.";
 "res_inst_avail_wifi_q" = "La instal·lació de %@ implica baixar %@ de dades per la xarxa WiFi.";
 "res_cancel_upd_q" = "Esteu a punt d'aturar l'actualització %@.";
 "res_cancel_inst_q" = "Esteu a punt d'aturar la instal·lació %@.";

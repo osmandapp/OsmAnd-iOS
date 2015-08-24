@@ -247,8 +247,8 @@
 "res_no_space_free" = "je potrebných. Prosím uvoľnite nejaké miesto.";
 "res_free_exp" = "Minuli ste všetky voľné sťahovania. Prosím zakúpte si svetadiel pre sťahovanie/aktualizáciu máp.";
 "res_upd_avail_q" = "Aktualizácia je k dispozícii pre";
-"res_inst_avail_cell_q" = "Inštalácia %@ potrebuje %@ stiahnuť cez mobilnú sieť.";
-"res_inst_avail_wifi_q" = "Inštalácia %@ potrebuje %@ stiahnuť cez WiFi sieť.";
+"res_inst_avail_cell_q" = "Inštalácia %@ potrebuje stiahnuť %@ cez mobilnú sieť.";
+"res_inst_avail_wifi_q" = "Inštalácia %@ potrebuje stiahnuť %@ cez WiFi sieť.";
 "res_cancel_upd_q" = "Chcete zrušiť aktualizáciu %@.";
 "data_will_be_lost" = "Všetky stiahnuté údaje sa stratia.";
 "res_cancel_inst_q" = "Chceš zrušiť inštaláciu %@.";

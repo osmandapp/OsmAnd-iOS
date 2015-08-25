@@ -412,7 +412,7 @@
 "est_travel_time" = "估算行程時間";
 "pedestrian" = "步行";
 "sorting" = "排序";
-"plugins" = "外掛元件管理";
+"plugins" = "外掛元件";
 "shared_string_later" = "隨後";
 "open_map_settings" = "開啟地圖設定";
 "plugin_popup_ski_title" = "打開滑雪地圖樣式";

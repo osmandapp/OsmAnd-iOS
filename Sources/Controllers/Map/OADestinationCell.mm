@@ -368,7 +368,7 @@
     if (!self.mapCenterArrow)
     {
         double distance = OsmAnd::Utilities::distance(self.currentLocation.longitude, self.currentLocation.latitude, destination.longitude, destination.latitude);
-        self.buttonOkVisible = distance < 20.0;
+        self.buttonOkVisible = distance < kDestinationMinDistanceCheckMarkVisibleMeters;
     }
 }
 

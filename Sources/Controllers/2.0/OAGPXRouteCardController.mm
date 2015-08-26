@@ -21,6 +21,7 @@
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
 
+#define kGpxRouteCardMaxRows 5
 
 @implementation OAGPXRouteCardController
 {
@@ -72,7 +73,7 @@
 
 - (NSInteger)rowsCount
 {
-    return (_items.count > 3 ? 3 : _items.count);
+    return (_items.count > kGpxRouteCardMaxRows ? kGpxRouteCardMaxRows : _items.count);
 }
 
 - (UITableViewCell *)cellForRow:(NSInteger)row
@@ -334,8 +335,8 @@
     {
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
         
-        if (_items.count > 2)
-            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
+        if (_items.count > kGpxRouteCardMaxRows - 1)
+            [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:kGpxRouteCardMaxRows - 1 inSection:self.section]] withRowAnimation:UITableViewRowAnimationTop];
     }
     
     [self.tableView endUpdates];

@@ -267,7 +267,7 @@
     NSTimeInterval yesterdayBeginTime = todayBeginTime - 60 * 60 * 24;
 
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-    [fmt setDateFormat:@"MMMM - yyyy"];
+    [fmt setDateFormat:@"LLLL - yyyy"];
     
     for(OAHistoryItem *item in allItems)
     {

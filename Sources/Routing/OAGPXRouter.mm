@@ -93,6 +93,11 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     return self;
 }
 
+- (BOOL)hasActiveRoute
+{
+    return self.gpx != nil;
+}
+
 - (void)setRouteWithGpx:(OAGPX *)gpx
 {
     _gpx = gpx;

@@ -4533,11 +4533,6 @@
             
             self.foundWptGroups = [groups allObjects];
             
-            // update map
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //[self initRendererWithGpxTracks];
-            });
-            
             return YES;
         }
         
@@ -4568,12 +4563,7 @@
             }
             
             self.foundWptGroups = [groups allObjects];
-            
-            // update map
-            dispatch_async(dispatch_get_main_queue(), ^{
-                //[self initRendererWithGpxTracks];
-            });
-            
+                        
             return YES;
         }
     }

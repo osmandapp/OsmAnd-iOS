@@ -36,6 +36,8 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 
 + (OAGPXRouter *)sharedInstance;
 
+- (BOOL)hasActiveRoute;
+
 - (void)setRouteWithGpx:(OAGPX *)gpx;
 - (void)cancelRoute;
 - (void)saveRoute;

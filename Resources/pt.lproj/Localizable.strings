@@ -339,3 +339,7 @@
 "sett_lang_show_trans" = "Nomes transliterados";
 "make_call" = "Ligar";
 "sett_lang_trans" = "transliterar";
+"shared_string_edit" = "Editar";
+"shared_string_dismiss" = "Descartar";
+"rendering_value_default_name" = "Predefinido";
+"rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";

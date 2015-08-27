@@ -22,6 +22,7 @@
 #import "OAGPXDatabase.h"
 #import "OAGPXRouter.h"
 #import "OAGPXRouteDocument.h"
+#import "OAEditTargetViewController.h"
 
 #import "OpeningHoursParser.h"
 #include "java/util/Calendar.h"
@@ -1067,7 +1068,10 @@
     }
     else
     {
-        [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
+        if (_targetPoint.type == OATargetFavorite && ![self newItem])
+            [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_edit_fav") forState:UIControlStateNormal];
+        else
+            [_buttonFavorite setTitle:OALocalizedString(@"ctx_mnu_add_fav") forState:UIControlStateNormal];
         [_buttonFavorite setImage:[UIImage imageNamed:@"menu_star_icon"] forState:UIControlStateNormal];
     }
     
@@ -1118,6 +1122,30 @@
     _infoDescText.hidden = _targetPoint.desc == nil;
     
     [self updateDirectionButton];
+}
+
+- (BOOL)newItem
+{
+    id targetObj = _targetPoint.targetObj;
+    if (!targetObj)
+        return NO;
+    
+    switch (_targetPoint.type)
+    {
+        case OATargetFavorite:
+            if (self.customController && [self.customController isKindOfClass:[OAEditTargetViewController class]])
+                return ((OAEditTargetViewController *)self.customController).newItem;
+            else
+                return NO;
+            break;
+        case OATargetGPX:
+            return ((OAGPX *)targetObj).newGpx;
+            break;
+            
+        default:
+            return NO;
+            break;
+    }
 }
 
 - (void)updateLeftButton
@@ -1800,8 +1828,8 @@
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
         _buttonFavorite.enabled = (_targetPoint.type != OATargetWpt);
-    else
-        _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
+    //else
+    //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
 }
 
 - (void)updateCoordinateLabel
@@ -2073,14 +2101,12 @@
 
 - (IBAction)buttonFavoriteClicked:(id)sender
 {
-    /*
-    if (self.targetPoint.type == OATargetWpt || self.targetPoint.type == OATargetFavorite)
+    if (/*self.targetPoint.type == OATargetWpt ||*/ self.targetPoint.type == OATargetFavorite)
     {
         [self showFullMenu];
         [self.customController activateEditing];
         return;
     }
-     */
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
         [self.delegate targetPointAddWaypoint];

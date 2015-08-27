@@ -20,14 +20,11 @@
 @implementation OAGPXRouteDocument
 {
     std::shared_ptr<OsmAnd::GpxDocument> document;
-    
-    int _lastIndex;
 }
 
 - (BOOL) loadFrom:(NSString *)filename
 {
     _syncObj = [[NSObject alloc] init];
-    _lastIndex = 0;
     
     document = OsmAnd::GpxDocument::loadFrom(QString::fromNSString(filename));
     return [self fetch:document];
@@ -191,11 +188,16 @@
                                     return NSOrderedSame;
                             }]];
     
-    if (self.locationPoints.count > 0)
-        _lastIndex = ((OAGpxRouteWptItem *)self.locationPoints[0]).point.index + 1;
-    
     [self buildActiveInactive];
     [self updateDistances];
+}
+
+- (int)getNextIndex
+{
+    if (self.locationPoints.count == 0)
+        return 0;
+    else
+        return ((OAGpxRouteWptItem *)[self.locationPoints lastObject]).point.index + 1;
 }
 
 - (void)buildActiveInactive
@@ -343,7 +345,7 @@
 {
     OAGpxRoutePoint *p = [[OAGpxRoutePoint alloc] initWithWpt:wpt];
     
-    p.index = _lastIndex++;
+    p.index = [self getNextIndex];
     [p applyRouteInfo];
     
     @synchronized(self.syncObj)

@@ -1635,26 +1635,6 @@ typedef enum
     if ([_mapViewController hasWptAt:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)])
         return;
     
-    if ([self hasGpxActiveTargetType])
-    {
-        if (_activeTargetObj)
-        {
-            OAGPX *gpx = (OAGPX *)_activeTargetObj;
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:gpx.gpxFileName];
-            [self targetPointAddWaypoint:path];
-        }
-        else
-        {
-            [self targetPointAddWaypoint:nil];
-        }
-        return;
-    }
-    else
-    {
-        [self targetPointAddWaypoint:nil];
-    }
-    
-    /*
     NSMutableArray *names = [NSMutableArray array];
     NSMutableArray *paths = [NSMutableArray array];
     
@@ -1689,7 +1669,7 @@ typedef enum
         
         [names insertObject:OALocalizedString(@"gpx_curr_new_track") atIndex:0];
         [paths insertObject:@"" atIndex:0];
-    
+        
         if (names.count > 5)
         {
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"gpx_select_track") cancelButtonItem:[RIButtonItem itemWithLabel:OALocalizedString(@"shared_string_cancel")] otherButtonItems: nil];
@@ -1731,13 +1711,12 @@ typedef enum
                                      }
                                  }];
         }
-
+        
     }
     else
     {
         [self targetPointAddWaypoint:nil];
     }
-    */
 }
 
 - (void)targetPointAddWaypoint:(NSString *)gpxFileName
@@ -1767,7 +1746,12 @@ typedef enum
 
     [self.targetMenuView setCustomViewController:wptViewController];
     [self.targetMenuView updateTargetPointType:OATargetWpt];
-
+    
+    if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+    {
+        [OAAppSettings sharedManager].mapSettingShowRecordingTrack = YES;
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
 }
 
 -(void)targetHideContextPinMarker

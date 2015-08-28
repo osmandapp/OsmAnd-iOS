@@ -2,7 +2,7 @@
 // Shared Strings
 "shared_string_back" = "Vissza";
 "shared_string_ok" = "OK";
-"shared_string_cancel" = "Mégse";
+"shared_string_cancel" = "Mégsem";
 "shared_string_no" = "Nem";
 "shared_string_yes" = "Igen";
 "shared_string_save" = "Mentés";
@@ -371,7 +371,7 @@
 "purchase_get" = "Beszerzés";
 "srtm_disabled" = "Szintvonalak letiltva";
 "rendering_value_walkingRoutesOSMC_name" = "Színezés a jelzés színe szerint";
-"rendering_value_walkingRoutesScopeOSMC_name" = "Színezés az útvonal besorolása szerint";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Színezés az útvonal hálózati szerepe szerint";
 "prch_wiki_info" = "A Wikipédia bővítmény Wikipédia információkat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";
 "prch_srtm_info" = "A szintvonalak bővítmény szintvonalakat engedélyez azokhoz a térképekhez, amelyekre jogosult, amelyet megvásárolt vagy az ingyenes kereten belül letöltött.";
 "time_open" = "Nyitva";

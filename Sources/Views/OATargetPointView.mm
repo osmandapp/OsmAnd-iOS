@@ -2231,7 +2231,8 @@
 
 - (IBAction)buttonCloseClicked:(id)sender
 {
-    [self.delegate targetHide];
+    if ([self preHide])
+        [self.delegate targetHide];
 }
 
 - (IBAction)buttonLeftClicked:(id)sender

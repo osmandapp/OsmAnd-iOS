@@ -51,6 +51,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 @property (nonatomic, readonly) BOOL wasEdited;
 @property (nonatomic, readonly) BOOL showingKeyboard;
 
+@property (nonatomic, readonly) BOOL actionButtonPressed;
+
 @property (nonatomic, assign) BOOL showCoords;
 @property (nonatomic, copy) NSString* formattedCoords;
 

@@ -1354,6 +1354,9 @@ typedef enum
 
 - (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture
 {
+    if (![self.targetMenuView preHide])
+        return;
+
     if ( gesture.state == UIGestureRecognizerStateEnded )
         [_mapViewController simulateContextMenuPress:gesture];
 }

@@ -104,6 +104,14 @@
     return NO;
 }
 
+-(BOOL)preHide
+{
+    if (self.newItem && !self.actionButtonPressed)
+        return NO;
+    else
+        return [super preHide];
+}
+
 - (void)okPressed
 {
     if (self.savedColorIndex != -1)

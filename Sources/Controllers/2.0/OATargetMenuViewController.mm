@@ -23,6 +23,7 @@
 {
     [super viewDidLoad];
     _navBar.hidden = YES;
+    _actionButtonPressed = NO;
 }
 
 - (void)didReceiveMemoryWarning
@@ -32,11 +33,13 @@
 
 - (IBAction)buttonOKPressed:(id)sender
 {
+    _actionButtonPressed = YES;
     [self okPressed];
 }
 
 - (IBAction)buttonCancelPressed:(id)sender
 {
+    _actionButtonPressed = YES;
     [self cancelPressed];
 }
 

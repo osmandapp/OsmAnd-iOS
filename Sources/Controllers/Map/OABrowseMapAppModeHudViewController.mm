@@ -168,12 +168,19 @@
 #endif
 
     if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+    {
         _driveModeButton.hidden = NO;
+        _driveModeButton.userInteractionEnabled = YES;
+    }
     else
+    {
         _driveModeButton.hidden = YES;
+        _driveModeButton.userInteractionEnabled = NO;
+    }
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+    _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
     
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
@@ -192,12 +199,14 @@
     
     constraint = [NSLayoutConstraint constraintWithItem:self.rulerLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0f constant:25];
     [self.view addConstraint:constraint];
-    self.rulerLabel.hidden = true;
+    self.rulerLabel.hidden = YES;
+    self.rulerLabel.userInteractionEnabled = NO;
     
     [self updateMapSettingsButton];
 
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
+    _debugButton.userInteractionEnabled = NO;
 #endif // !defined(OSMAND_IOS_DEV)
 }
 
@@ -244,7 +253,10 @@
         {
             [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
             if (!_driveModeButton.hidden)
+            {
                 self.rulerLabel.hidden = YES;
+                self.rulerLabel.userInteractionEnabled = NO;
+            }
         }
     });
     
@@ -402,11 +414,18 @@
     }
     
     if (_app.mapMode == OAMapModeFollow || _app.mapMode == OAMapModePositionTrack)
+    {
         _driveModeButton.hidden = NO;
+        _driveModeButton.userInteractionEnabled = YES;
+    }
     else
+    {
         _driveModeButton.hidden = YES;
+        _driveModeButton.userInteractionEnabled = NO;
+    }
     
     self.rulerLabel.hidden = !_driveModeButton.hidden;
+    self.rulerLabel.userInteractionEnabled = _driveModeButton.hidden;
 
     UIImage *backgroundImage;
     
@@ -473,6 +492,8 @@
         {
             [UIView animateWithDuration:.25 animations:^{
                 _compassBox.alpha = ([value floatValue] != 0.0 && _mapSettingsButton.alpha == 1.0 ? 1.0 : 0.0);
+            } completion:^(BOOL finished) {
+                _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
             }];
         }
     });
@@ -502,7 +523,10 @@
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
         if (!_driveModeButton.hidden)
+        {
             self.rulerLabel.hidden = YES;
+            self.rulerLabel.userInteractionEnabled = NO;
+        }
     });
 }
 
@@ -522,7 +546,10 @@
         
         [self.rulerLabel setRulerData:[_mapViewController calculateMapRuler]];
         if (!_driveModeButton.hidden)
+        {
             self.rulerLabel.hidden = YES;
+            self.rulerLabel.userInteractionEnabled = NO;
+        }
     });
 }
 
@@ -681,6 +708,7 @@
 - (void)onDebugButtonLongClicked:(id)sender
 {
     _debugButton.hidden = YES;
+    _debugButton.userInteractionEnabled = NO;
 }
 
 - (IBAction)onDebugButtonClicked:(id)sender
@@ -768,9 +796,9 @@
 
 - (void)showTopControls
 {
+    CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
+
     [UIView animateWithDuration:.3 animations:^{
-        
-        CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
         
         _statusBarView.alpha = 1.0;
         _mapSettingsButton.alpha = 1.0;
@@ -781,6 +809,16 @@
         _widgetsView.alpha = alphaEx;
         _destinationViewController.view.alpha = alphaEx;
         
+    } completion:^(BOOL finished) {
+        
+        _statusBarView.userInteractionEnabled = YES;
+        _mapSettingsButton.userInteractionEnabled = YES;
+        _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+        _searchButton.userInteractionEnabled = YES;
+        _downloadView.userInteractionEnabled = alphaEx > 0.0;
+        _widgetsView.userInteractionEnabled = alphaEx > 0.0;
+        _destinationViewController.view.userInteractionEnabled = alphaEx > 0.0;
+        
     }];
 }
 
@@ -789,14 +827,22 @@
     [UIView animateWithDuration:.3 animations:^{
         
         _statusBarView.alpha = 0.0;
-        
         _compassBox.alpha = 0.0;
         _mapSettingsButton.alpha = 0.0;
         _searchButton.alpha = 0.0;
-        
         _downloadView.alpha = 0.0;
         _widgetsView.alpha = 0.0;
         _destinationViewController.view.alpha = 0.0;
+        
+    } completion:^(BOOL finished) {
+        
+        _statusBarView.userInteractionEnabled = NO;
+        _compassBox.userInteractionEnabled = NO;
+        _mapSettingsButton.userInteractionEnabled = NO;
+        _searchButton.userInteractionEnabled = NO;
+        _downloadView.userInteractionEnabled = NO;
+        _widgetsView.userInteractionEnabled = NO;
+        _destinationViewController.view.userInteractionEnabled = NO;
         
     }];
 }
@@ -816,6 +862,14 @@
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            
+        } completion:^(BOOL finished) {
+            
+            _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.0;
+            _zoomButtonsView.userInteractionEnabled = YES;
+            _mapModeButton.userInteractionEnabled = YES;
+            _driveModeButton.userInteractionEnabled = _driveModeButton.alpha > 0.0;
+            
         }];
     }
 }
@@ -835,6 +889,14 @@
             _driveModeButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _driveModeButton.bounds.size.width, _driveModeButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtonsView.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtonsView.bounds.size.width, _zoomButtonsView.bounds.size.height);
+            
+        } completion:^(BOOL finished) {
+            
+            _optionsMenuButton.userInteractionEnabled = NO;
+            _zoomButtonsView.userInteractionEnabled = NO;
+            _mapModeButton.userInteractionEnabled = NO;
+            _driveModeButton.userInteractionEnabled = NO;
+            
         }];
     }
 }
@@ -870,6 +932,8 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _optionsMenuButton.userInteractionEnabled = NO;
         }];
     }
     [self updateMapModeButton];
@@ -886,6 +950,8 @@
         
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            _optionsMenuButton.userInteractionEnabled = YES;
         }];
     }
 }

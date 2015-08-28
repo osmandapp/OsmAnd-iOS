@@ -134,15 +134,17 @@
 
     _compassImage.transform = CGAffineTransformMakeRotation(-_mapViewController.mapRendererView.azimuth / 180.0f * M_PI);
     _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && _currentPositionContainer.alpha == 1.0 ? 1.0 : 0.0);
+    _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
 
     _zoomInButton.enabled = [_mapViewController canZoomIn];
     _zoomOutButton.enabled = [_mapViewController canZoomOut];
     
     OAUserInteractionInterceptorView* interceptorView = (OAUserInteractionInterceptorView*)self.view;
     interceptorView.delegate = self;
-
+    
 #if !defined(OSMAND_IOS_DEV)
     _debugButton.hidden = YES;
+    _debugButton.userInteractionEnabled = NO;
 #else
     UILongPressGestureRecognizer* debugLongPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                                  action:@selector(onDebugButtonLongClicked:)];
@@ -242,6 +244,7 @@
     }
     
     _currentAltitudeWidget.hidden = !_settings.settingShowAltInDriveMode;
+    _currentAltitudeWidget.userInteractionEnabled = !_currentAltitudeWidget.hidden;
     
     [self updateWidgetsLayout:y + 5.0];
 }
@@ -319,6 +322,7 @@
 - (void)onDebugButtonLongClicked:(id)sender
 {
     _debugButton.hidden = YES;
+    _debugButton.userInteractionEnabled = NO;
 }
 
 - (void)fadeInOptionalControlsWithDelay
@@ -347,6 +351,9 @@
                      animations:^{
                          self.zoomButtons.alpha = 0.0;
                          self.mapModeButton.alpha = 0.0;
+                     } completion:^(BOOL finished) {
+                         self.zoomButtons.userInteractionEnabled = NO;
+                         self.mapModeButton.userInteractionEnabled = NO;
                      }];
 }
 
@@ -356,6 +363,9 @@
                      animations:^{
                          self.zoomButtons.alpha = 1.0;
                          self.mapModeButton.alpha = 1.0;
+                     } completion:^(BOOL finished) {
+                         self.zoomButtons.userInteractionEnabled = YES;
+                         self.mapModeButton.userInteractionEnabled = YES;
                      }];
 }
 
@@ -654,6 +664,7 @@
     [_mapModeButton setImage:modeImage forState:UIControlStateNormal];
     
     _mapModeButton.hidden = (_app.mapMode != OAMapModeFree);
+    _mapModeButton.userInteractionEnabled = !_mapModeButton.hidden;
     
 }
 
@@ -672,6 +683,8 @@
         {
             [UIView animateWithDuration:.25 animations:^{
                 _compassBox.alpha = ([value floatValue] != 0.0 && _currentPositionContainer.alpha == 1.0 ? 1.0 : 0.0);
+            } completion:^(BOOL finished) {
+                _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
             }];
         }
     });
@@ -804,18 +817,27 @@
 {
     if (_currentPositionContainer.alpha == 0.0)
     {
+        CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
+
         [UIView animateWithDuration:.3 animations:^{
             
-            CGFloat alphaEx = self.contextMenuMode ? 0.0 : 1.0;
-            
             _compassBox.alpha = (_mapViewController.mapRendererView.azimuth != 0.0 && (_currentPositionContainer.alpha == 1.0 || self.contextMenuMode) ? 1.0 : 0.0);
-            
+
             _currentPositionContainer.alpha = alphaEx;
             _widgetsView.alpha = alphaEx;
             _currentSpeedWidget.alpha = alphaEx;
             _currentAltitudeWidget.alpha = alphaEx;
             _destinationViewController.view.alpha = alphaEx;
             
+        } completion:^(BOOL finished) {
+
+            _compassBox.userInteractionEnabled = _compassBox.alpha > 0.0;
+            _currentPositionContainer.userInteractionEnabled = alphaEx > 0.0;
+            _widgetsView.userInteractionEnabled = alphaEx > 0.0;
+            _currentSpeedWidget.userInteractionEnabled = alphaEx > 0.0;
+            _currentAltitudeWidget.userInteractionEnabled = alphaEx > 0.0;
+            _destinationViewController.view.userInteractionEnabled = alphaEx > 0.0;
+
         }];
     }
 }
@@ -827,13 +849,21 @@
         [UIView animateWithDuration:.3 animations:^{
             
             _currentPositionContainer.alpha = 0.0;
-            
             _compassBox.alpha = 0.0;
             _widgetsView.alpha = 0.0;
             _currentSpeedWidget.alpha = 0.0;
             _currentAltitudeWidget.alpha = 0.0;
             _destinationViewController.view.alpha = 0.0;
             
+        } completion:^(BOOL finished) {
+
+            _currentPositionContainer.userInteractionEnabled = NO;
+            _compassBox.userInteractionEnabled = NO;
+            _widgetsView.userInteractionEnabled = NO;
+            _currentSpeedWidget.userInteractionEnabled = NO;
+            _currentAltitudeWidget.userInteractionEnabled = NO;
+            _destinationViewController.view.userInteractionEnabled = NO;
+
         }];
     }
 }
@@ -845,6 +875,7 @@
         [UIView animateWithDuration:.3 animations:^{
             
             _optionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
+            
             _zoomButtons.alpha = 1.0;
             _mapModeButton.alpha = 1.0;
             _actionsMenuButton.alpha = (self.contextMenuMode ? 0.0 : 1.0);
@@ -853,6 +884,14 @@
             _actionsMenuButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _actionsMenuButton.bounds.size.width, _actionsMenuButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtons.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtons.bounds.size.width, _zoomButtons.bounds.size.height);
+            
+        } completion:^(BOOL finished) {
+            
+            _optionsMenuButton.userInteractionEnabled = _optionsMenuButton.alpha > 0.0;
+            _zoomButtons.userInteractionEnabled = YES;
+            _mapModeButton.userInteractionEnabled = YES;
+            _actionsMenuButton.userInteractionEnabled = _actionsMenuButton.alpha > 0.0;
+            
         }];
     }
 }
@@ -872,6 +911,13 @@
             _actionsMenuButton.frame = CGRectMake(57.0, DeviceScreenHeight - 63.0 - menuHeight, _actionsMenuButton.bounds.size.width, _actionsMenuButton.bounds.size.height);
             _mapModeButton.frame = CGRectMake(DeviceScreenWidth - 128.0, DeviceScreenHeight - 69.0 - menuHeight, _mapModeButton.bounds.size.width, _mapModeButton.bounds.size.height);
             _zoomButtons.frame = CGRectMake(DeviceScreenWidth - 68.0, DeviceScreenHeight - 129.0 - menuHeight, _zoomButtons.bounds.size.width, _zoomButtons.bounds.size.height);
+            
+        } completion:^(BOOL finished) {
+            
+            _optionsMenuButton.userInteractionEnabled = NO;
+            _zoomButtons.userInteractionEnabled = NO;
+            _mapModeButton.userInteractionEnabled = NO;
+            _actionsMenuButton.userInteractionEnabled = NO;
         }];
     }
 }
@@ -886,6 +932,9 @@
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 0.0;
             _actionsMenuButton.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            _optionsMenuButton.userInteractionEnabled = NO;
+            _actionsMenuButton.userInteractionEnabled = NO;
         }];
     }
 }
@@ -900,6 +949,9 @@
         [UIView animateWithDuration:.3 animations:^{
             _optionsMenuButton.alpha = 1.0;
             _actionsMenuButton.alpha = 1.0;
+        } completion:^(BOOL finished) {
+            _optionsMenuButton.userInteractionEnabled = YES;
+            _actionsMenuButton.userInteractionEnabled = YES;
         }];
     }
 }

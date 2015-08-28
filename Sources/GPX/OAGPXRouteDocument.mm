@@ -368,6 +368,8 @@
 
 - (void)removeRoutePoint:(OAGpxWpt *)wpt
 {
+    int routePointIndex = -1;
+    
     @synchronized(self.syncObj)
     {
         NSMutableArray *points = [NSMutableArray arrayWithArray:self.locationPoints];
@@ -376,6 +378,7 @@
             if ([OAUtilities doublesEqualUpToDigits:5 source:item.point.position.latitude destination:wpt.position.latitude] &&
                 [OAUtilities doublesEqualUpToDigits:5 source:item.point.position.longitude destination:wpt.position.longitude])
             {
+                routePointIndex = item.point.index;
                 [points removeObject:item];
                 break;
             }
@@ -395,10 +398,19 @@
         self.locationMarks = marks;
     }
     
-    [self buildActiveInactive];
-    
-    [[OAGPXRouter sharedInstance] refreshRoute];
-    [[OAGPXRouter sharedInstance].routeChangedObservable notifyEvent];
+    if (routePointIndex != -1)
+    {
+        @synchronized(self.syncObj)
+        {
+            if (routePointIndex < self.activePoints.count)
+            {
+                OAGpxRouteWptItem *item = self.activePoints[routePointIndex];
+                [self.activePoints removeObject:item];
+            }
+        }
+        
+        [self updatePointsArray];
+    }
 }
 
 - (void)moveToInactiveByIndex:(NSInteger)index

@@ -4343,6 +4343,8 @@
         [[OAGPXRouter sharedInstance] saveRouteIfModified];
         
         [self hideContextPinMarker];
+
+        return YES;
     }
     else
     {

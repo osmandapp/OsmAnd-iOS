@@ -1020,9 +1020,21 @@ typedef enum
         return;
     }
 
-    if (_activeTargetType == OATargetGPXEdit && ![objectType isEqualToString:@"waypoint"])
+    if (_activeTargetType == OATargetGPXEdit)
     {
-        objectType = nil;
+        if (![objectType isEqualToString:@"waypoint"])
+        {
+            objectType = nil;
+        }
+        else
+        {
+            NSString *path = ((OAGPX *)_activeTargetObj).gpxFileName;
+            if (_mapViewController.foundWpt && ![[_mapViewController.foundWptDocPath lastPathComponent] isEqualToString:path])
+            {
+                [_mapViewController hideContextPinMarker];
+                return;
+            }
+        }
     }
 
     // show context marker on map

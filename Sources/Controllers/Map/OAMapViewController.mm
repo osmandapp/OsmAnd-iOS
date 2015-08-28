@@ -1713,7 +1713,17 @@
         double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
         double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
         
-        if (obj1.sortIndex == obj2.sortIndex) {
+        NSLog(@"obj1 = %@ dist1 = %f, obj2 = %@ dist2 = %f", obj1.caption, dist1, obj2.caption, dist2);
+        
+        NSInteger index1 = obj1.sortIndex;
+        NSInteger index2 = obj2.sortIndex;
+        
+        if (index1 >= OAMapSymbolPOI)
+            index1 = OAMapSymbolPOI;
+        if (index2 >= OAMapSymbolPOI)
+            index2 = OAMapSymbolPOI;
+        
+        if (index1 == index2) {
             if (dist1 == dist2)
                 return NSOrderedSame;
             else
@@ -1721,7 +1731,7 @@
         }
         else
         {
-            return obj1.sortIndex < obj2.sortIndex ? NSOrderedAscending : NSOrderedDescending;
+            return index1 < index2 ? NSOrderedAscending : NSOrderedDescending;
         }
     }];
     

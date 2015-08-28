@@ -116,7 +116,7 @@
 
 -(BOOL)supportEditing
 {
-    return ![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
+    return YES;//![self.wpt.point isKindOfClass:[OAGpxRoutePoint class]];
 }
 
 -(void)deleteItem

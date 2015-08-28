@@ -274,16 +274,16 @@
 "rendering_category_others" = "Egyéb térképjellemzők";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Behajtási korlátozások megjelenítése";
-"rendering_attr_showSurfaceGrade_name" = "Útminőség megjelenítése";
-"rendering_attr_showSurfaces_name" = "Útfelület megjelenítése";
-"rendering_attr_moreDetailed_name" = "További részletek";
+"rendering_attr_showSurfaceGrade_name" = "Útminőség";
+"rendering_attr_showSurfaces_name" = "Útfelület";
+"rendering_attr_moreDetailed_name" = "Több részlet";
 "rendering_attr_subwayMode_name" = "Metró útvonalak";
 "rendering_attr_tramTrainRoutes_name" = "Villamos- és vasútvonalak";
 "rendering_attr_streetLighting_name" = "Közvilágítás";
 "rendering_attr_coloredBuildings_name" = "Épületek színezése típus szerint";
 "rendering_attr_alpineHiking_name" = "Alpesi túra besorolás (SAC)";
 "rendering_attr_osmcTraces_name" = "Turistajelzések rátét";
-"rendering_attr_showCycleRoutes_name" = "Kerékpárutak megjelenítése";
+"rendering_attr_showCycleRoutes_name" = "Kerékpáros útvonalak";
 "rendering_attr_hideBuildings_name" = "Épületek elrejtése";
 "rendering_attr_noPolygons_name" = "Poligonok elrejtése";
 "rendering_attr_noAdminboundaries_name" = "Határvonalak elrejtése";

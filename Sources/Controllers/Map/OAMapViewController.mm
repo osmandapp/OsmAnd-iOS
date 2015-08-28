@@ -1713,8 +1713,6 @@
         double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
         double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
         
-        NSLog(@"obj1 = %@ dist1 = %f, obj2 = %@ dist2 = %f", obj1.caption, dist1, obj2.caption, dist2);
-        
         NSInteger index1 = obj1.sortIndex;
         NSInteger index2 = obj2.sortIndex;
         

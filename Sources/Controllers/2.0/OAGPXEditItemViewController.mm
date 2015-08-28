@@ -34,7 +34,7 @@
 @end
 
 
-@interface OAGPXEditItemViewController ()<OAGPXEditWptListViewControllerDelegate>
+@interface OAGPXEditItemViewController ()<OAGPXEditWptListViewControllerDelegate, UIAlertViewDelegate>
 {
     OsmAndAppInstance _app;
     
@@ -142,7 +142,41 @@
 {
     _cancelPressed = YES;
     
-    [_mapViewController hideTempGpxTrack];
+    if (self.gpx.newGpx && self.gpx.wptPoints == 0)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        
+        if (self.showCurrentTrack)
+        {
+            settings.mapSettingTrackRecording = NO;
+            [[OASavingTrackHelper sharedInstance] clearData];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapViewController hideRecGpxTrack];
+            });
+        }
+        else
+        {
+            if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
+                [settings hideGpx:self.gpx.gpxFileName];
+                [_mapViewController hideTempGpxTrack];
+                [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
+            }
+            
+            [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+            [[OAGPXDatabase sharedDb] save];
+        }
+    }
+    else
+    {
+        if (self.gpx.newGpx)
+        {
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"create_new_trip") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", self.gpx.gpxTitle) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
+            alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+            [alert textFieldAtIndex:0].text = self.gpx.gpxTitle;
+            [alert show];
+            return;
+        }
+    }
     
     if (self.delegate)
         [self.delegate btnCancelPressed];
@@ -160,9 +194,12 @@
 
 - (BOOL)preHide
 {
-    [_mapViewController keepTempGpxTrackVisible];
-    [_mapViewController hideTempGpxTrack];
-    [self closePointsController];
+    if (!self.gpx.newGpx || self.gpx.wptPoints > 0 || self.gpx.points > 0)
+    {
+        [_mapViewController keepTempGpxTrackVisible];
+        [_mapViewController hideTempGpxTrack];
+        [self closePointsController];
+    }
     
     return YES;
 }
@@ -319,6 +356,71 @@
     }
 }
 
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        NSString* newName = [alertView textFieldAtIndex:0].text;
+        if (newName.length > 0)
+        {
+            self.gpx.gpxTitle = newName;
+            [[OAGPXDatabase sharedDb] save];
+            
+            OAGpxMetadata *metadata;
+            if (self.doc.metadata)
+            {
+                metadata = (OAGpxMetadata *)self.doc.metadata;
+            }
+            else
+            {
+                metadata = [[OAGpxMetadata alloc] init];
+                long time = 0;
+                if (self.doc.locationMarks.count > 0)
+                {
+                    time = ((OAGpxWpt *)self.doc.locationMarks[0]).time;
+                }
+                if (self.doc.tracks.count > 0)
+                {
+                    OAGpxTrk *track = self.doc.tracks[0];
+                    if (track.segments.count > 0)
+                    {
+                        OAGpxTrkSeg *seg = track.segments[0];
+                        if (seg.points.count > 0)
+                        {
+                            OAGpxTrkPt *p = seg.points[0];
+                            if (time > p.time)
+                                time = p.time;
+                        }
+                    }
+                }
+                
+                if (time == 0)
+                    metadata.time = (long)[[NSDate date] timeIntervalSince1970];
+                else
+                    metadata.time = time;
+            }
+            
+            metadata.name = newName;
+            
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+            [_mapViewController updateMetadata:metadata docPath:path];
+            
+            
+            [_mapViewController hideTempGpxTrack];
+
+            if (self.delegate)
+                [self.delegate btnCancelPressed];
+            
+            [self closePointsController];
+        }
+    }
+    else
+    {
+        _cancelPressed = NO;
+    }
+}
 
 @end
 

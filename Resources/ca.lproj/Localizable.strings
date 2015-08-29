@@ -166,7 +166,7 @@
 "rendering_attr_noAdminboundaries_name" = "Amaga els límits administratius";
 "rendering_attr_subwayMode_name" = "Rutes de metro";
 "download_now" = "Baixa el mapa ara";
-"res_banner_no_free_maps_title" = "No teniu cap mapa gratuït!";
+"res_banner_no_free_maps_title" = "No teniu cap mapa gratuït.";
 "res_catalog_upd" = "Actualització del catàleg";
 "res_world_map" = "Mapa mundial";
 "res_updates" = "Actualitzacions";
@@ -317,7 +317,7 @@
 "prch_items_failed" = "element(s) no s'han restaurat. Intenteu-ho altre cop.";
 // Resources
 "res_mapsres" = "Mapes i recursos";
-"res_banner_free_maps_title" = "Teniu %d mapes gratuïts!";
+"res_banner_free_maps_title" = "Teniu %d mapes gratuïts.";
 "res_banner_free_maps_desc" = "Podeu baixar %d mapes gratuïts, sense actualitzacions";
 "res_banner_no_free_maps_desc" = "Compreu mapes regionals o mundials";
 "res_search_world" = "Cerca a tot el món";

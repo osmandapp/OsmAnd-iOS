@@ -3611,6 +3611,7 @@
 		849E84491B84446C00FBC77A /* OAGPXEditToolbarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditToolbarViewController.h; path = Sources/Controllers/2.0/OAGPXEditToolbarViewController.h; sourceTree = "<group>"; };
 		849E844A1B84446C00FBC77A /* OAGPXEditToolbarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAGPXEditToolbarViewController.m; path = Sources/Controllers/2.0/OAGPXEditToolbarViewController.m; sourceTree = "<group>"; };
 		849E844B1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditToolbarViewController.xib; path = Sources/Controllers/2.0/OAGPXEditToolbarViewController.xib; sourceTree = "<group>"; };
+		84A8CEA51B94316900B0BDCB /* OAMapModeHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapModeHeaders.h; path = Controllers/Map/OAMapModeHeaders.h; sourceTree = "<group>"; };
 		84B0AE221AC69D33005E1F78 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPoint.h; path = Data/OATargetPoint.h; sourceTree = "<group>"; };
 		84B0AE231AC69D33005E1F78 /* OATargetPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetPoint.m; path = Data/OATargetPoint.m; sourceTree = "<group>"; };
 		84B0AE271AC82ED3005E1F78 /* OAPOIFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIFilter.h; sourceTree = "<group>"; };
@@ -5768,6 +5769,7 @@
 			isa = PBXGroup;
 			children = (
 				84D81EC71AA2FE77001098FD /* Destinations */,
+				84A8CEA51B94316900B0BDCB /* OAMapModeHeaders.h */,
 				BBA3AED0197500DE0039D991 /* OABrowseMapAppModeHudViewController.h */,
 				BBA3AED1197500DE0039D991 /* OABrowseMapAppModeHudViewController.mm */,
 				BBA3B01B1987CB1A0039D991 /* OADriveAppModeHudViewController.h */,

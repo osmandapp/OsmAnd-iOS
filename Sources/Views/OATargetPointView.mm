@@ -950,7 +950,7 @@
 
 - (void)updateUIOnInit
 {
-    if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXRoute)
+    if (_targetPoint.type == OATargetGPX)
     {
         OAGPX *item = _targetPoint.targetObj;
         _buttonRight.hidden = (item.newGpx || !item);
@@ -984,7 +984,7 @@
 
 - (void)doUpdateUI
 {
-    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _activeTargetType == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute);
+    _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute);
     self.buttonsView.hidden = _hideButtons;
     [self updateButtonClose];
     
@@ -2293,13 +2293,6 @@
     if (_targetPoint.type == OATargetGPX)
     {
         [self.delegate targetGoToGPXRoute];
-    }
-    else if (_targetPoint.type == OATargetGPXRoute)
-    {
-        [self.delegate targetHide];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            [[OAGPXRouter sharedInstance] saveRoute];
-        });
     }
 }
 

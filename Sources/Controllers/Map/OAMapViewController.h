@@ -48,6 +48,11 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
     OAMapSymbolLocation,
 };
 
+@class OAGpxWpt;
+@class OAGpxMetadata;
+@class OAGPXRouteDocument;
+
+
 @interface OAMapSymbol : NSObject
 
 @property (nonatomic) CLLocationCoordinate2D location;
@@ -75,12 +80,12 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 
+@property (nonatomic) OAGpxWpt *foundWpt;
+@property (nonatomic) NSArray *foundWptGroups;
+@property (nonatomic) NSString *foundWptDocPath;
+
 @end
 
-
-@class OAGpxWpt;
-@class OAGpxMetadata;
-@class OAGPXRouteDocument;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAMapModeHeaders.h"
 
 @class OADestinationViewController;
 @class InfoWidgetsView;
@@ -17,7 +18,7 @@
 @property (nonatomic) InfoWidgetsView *widgetsView;
 
 @property (nonatomic, assign) BOOL contextMenuMode;
-@property (nonatomic, assign) BOOL showGoToMapButton;
+@property (nonatomic, assign) EOAMapModeButtonType mapModeButtonType;
 
 - (void)enterContextMenuMode;
 - (void)restoreFromContextMenuMode;

@@ -1586,6 +1586,9 @@
                 else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
                 {
                     symbol.type = OAMapSymbolWpt;
+                    symbol.foundWpt = self.foundWpt;
+                    symbol.foundWptGroups = self.foundWptGroups;
+                    symbol.foundWptDocPath = self.foundWptDocPath;
                 }
 
                 symbol.caption = amenity->nativeName.toNSString();
@@ -1662,6 +1665,9 @@
                 else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
                 {
                     symbol.type = OAMapSymbolWpt;
+                    symbol.foundWpt = self.foundWpt;
+                    symbol.foundWptGroups = self.foundWptGroups;
+                    symbol.foundWptDocPath = self.foundWptDocPath;
                 }
                 
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
@@ -1745,6 +1751,14 @@
         {
             if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]])
                 s.location = CLLocationCoordinate2DMake(latTap, lonTap);
+            
+            if (s.type == OAMapSymbolWpt)
+            {
+                self.foundWpt = s.foundWpt;
+                self.foundWptGroups = s.foundWptGroups;
+                self.foundWptDocPath = s.foundWptDocPath;
+            }
+            
             [self postTargetNotification:s];
             return;
         }

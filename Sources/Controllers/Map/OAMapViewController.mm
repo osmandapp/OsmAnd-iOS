@@ -1714,13 +1714,20 @@
     
     _obfsDataInterface.reset();
 
+    BOOL gpxModeActive = [[OARootViewController instance].mapPanel gpxModeActive];
+    
     [foundSymbols sortUsingComparator:^NSComparisonResult(OAMapSymbol *obj1, OAMapSymbol *obj2) {
         
         double dist1 = OsmAnd::Utilities::distance(lonTap, latTap, obj1.location.longitude, obj1.location.latitude);
         double dist2 = OsmAnd::Utilities::distance(lonTap, latTap, obj2.location.longitude, obj2.location.latitude);
         
         NSInteger index1 = obj1.sortIndex;
+        if (gpxModeActive && obj1.type == OAMapSymbolWpt)
+            index1 = 0;
+        
         NSInteger index2 = obj2.sortIndex;
+        if (gpxModeActive && obj2.type == OAMapSymbolWpt)
+            index2 = 0;
         
         if (index1 >= OAMapSymbolPOI)
             index1 = OAMapSymbolPOI;

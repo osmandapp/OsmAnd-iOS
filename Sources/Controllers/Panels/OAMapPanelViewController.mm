@@ -1604,6 +1604,12 @@ typedef enum
     _shadeView = nil;
 }
 
+-(BOOL)gpxModeActive
+{
+    return (_activeTargetActive &&
+        (_activeTargetType == OATargetGPX || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute));
+}
+
 #pragma mark - OATargetPointViewDelegate
 
 - (void)targetViewEnableMapInteraction

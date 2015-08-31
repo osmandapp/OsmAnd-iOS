@@ -15,6 +15,14 @@ typedef enum
     
 } OAGpxRouteSegmentType;
 
+@interface OAGPXRouteViewControllerState : OATargetMenuViewControllerState
+
+@property (nonatomic, assign) BOOL showFullScreen;
+@property (nonatomic, assign) CGFloat scrollPos;
+@property (nonatomic, assign) BOOL showCurrentTrack;
+@property (nonatomic, assign) OAGpxRouteSegmentType segmentType;
+
+@end
 
 @interface OAGPXRouteViewController : OATargetMenuViewController
 
@@ -22,5 +30,6 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segmentView;
 
 - (instancetype)initWithSegmentType:(OAGpxRouteSegmentType)segmentType;
+- (instancetype)initWithCtrlState:(OAGPXRouteViewControllerState *)ctrlState;
 
 @end

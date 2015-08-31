@@ -35,6 +35,10 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
+
+@implementation OAGPXRouteViewControllerState
+@end
+
 @interface OAGPXRouteViewController () <OAGPXRouteWptListViewControllerDelegate>
 
 @end
@@ -84,6 +88,21 @@
     return self;
 }
 
+- (instancetype)initWithCtrlState:(OAGPXRouteViewControllerState *)ctrlState
+{
+    self = [super init];
+    if (self)
+    {
+        _app = [OsmAndApp instance];
+        _gpxRouter = [OAGPXRouter sharedInstance];
+        
+        _wasInit = NO;
+        _scrollPos = ctrlState.scrollPos;
+        _segmentType = ctrlState.segmentType;
+    }
+    return self;
+}
+
 - (void)cancelPressed
 {    
     if (self.delegate)
@@ -127,6 +146,16 @@
 - (BOOL)supportFullScreen
 {
     return _segmentType == kSegmentRouteWaypoints;
+}
+
+-(BOOL)supportEditing
+{
+    return NO;
+}
+
+- (BOOL)supportMapInteraction
+{
+    return YES;
 }
 
 -(BOOL)hasTopToolbar
@@ -196,6 +225,15 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (OATargetMenuViewControllerState *) getCurrentState
+{
+    OAGPXRouteViewControllerState *state = [[OAGPXRouteViewControllerState alloc] init];
+    state.scrollPos = _waypointsController.tableView.contentOffset.y;
+    state.segmentType = _segmentType;
+    
+    return state;
 }
 
 - (void)addBadge

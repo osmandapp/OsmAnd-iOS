@@ -35,6 +35,8 @@
 #import "OADownloadProgressView.h"
 #import "OADownloadTask.h"
 
+#import "OAGPXRouter.h"
+
 #include <OsmAndCore/Utilities.h>
 
 #define _(name) OAMapModeHudViewController__##name
@@ -329,11 +331,23 @@
 
 - (IBAction)onMapModeButtonClicked:(id)sender
 {
-    if (self.contextMenuMode && self.showGoToMapButton)
+    switch (self.mapModeButtonType)
     {
-        [[OARootViewController instance].mapPanel hideContextMenu];
-        return;
+        case EOAMapModeButtonTypeShowMap:
+            [[OARootViewController instance].mapPanel hideContextMenu];
+            return;
+            
+        case EOAMapModeButtonTypeNavigate:
+            [[OARootViewController instance].mapPanel targetHide];
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                [[OAGPXRouter sharedInstance] saveRoute];
+            });
+            return;
+            
+        default:
+            break;
     }
+
     
     OAMapMode newMode = _app.mapMode;
     switch (_app.mapMode)
@@ -387,10 +401,23 @@
 
 - (void)updateMapModeButton
 {
-    if (self.contextMenuMode && self.showGoToMapButton)
+    if (self.contextMenuMode)
     {
-        [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
-        [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
+        switch (self.mapModeButtonType)
+        {
+            case EOAMapModeButtonTypeShowMap:
+                [_mapModeButton setBackgroundImage:[UIImage imageNamed:@"bt_round_big"] forState:UIControlStateNormal];
+                [_mapModeButton setImage:[UIImage imageNamed:@"ic_dialog_map"] forState:UIControlStateNormal];
+                break;
+
+            case EOAMapModeButtonTypeNavigate:
+                [_mapModeButton setBackgroundImage:nil forState:UIControlStateNormal];
+                [_mapModeButton setImage:[UIImage imageNamed:@"bt_trip_start.png"] forState:UIControlStateNormal];
+                break;
+                
+            default:
+                break;
+        }
         return;
     }
     
@@ -944,7 +971,7 @@
     if (self.contextMenuMode)
     {
         self.contextMenuMode = NO;
-        self.showGoToMapButton = NO;
+        self.mapModeButtonType = EOAMapModeButtonRegular;
         [self updateMapModeButton];
         [self showTopControls];
         

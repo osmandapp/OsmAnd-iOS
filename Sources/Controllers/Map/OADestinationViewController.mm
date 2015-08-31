@@ -53,6 +53,8 @@
 
     OAAutoObserverProxy* _destinationsChangeObserver;
     OAAutoObserverProxy* _destinationRemoveObserver;
+    
+    NSTimeInterval _lastUpdate;
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -157,7 +159,11 @@
     NSArray *destinations = [OADestinationsHelper instance].sortedDestinations;
     
     OADestination *firstCellDestination = (destinations.count >= 1 ? destinations[0] : nil);
-    OADestination *secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
+    OADestination *secondCellDestination;
+    if ([OADestinationsHelper instance].dynamic2ndRowDestination)
+        secondCellDestination = [OADestinationsHelper instance].dynamic2ndRowDestination;
+    else
+        secondCellDestination = (destinations.count >= 2 ? destinations[1] : nil);
     
     if (firstCellDestination)
     {
@@ -611,6 +617,11 @@
                 [cell updateDirections:location direction:direction];
             }
         }
+        
+        if ([[NSDate date] timeIntervalSince1970] - _lastUpdate > 1.0)
+            [[OADestinationsHelper instance] apply2ndRowAutoSelection];
+        else
+            _lastUpdate = [[NSDate date] timeIntervalSince1970];
     });
 }
 

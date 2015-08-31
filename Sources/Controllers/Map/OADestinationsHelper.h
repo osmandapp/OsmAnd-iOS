@@ -8,11 +8,14 @@
 
 #import <Foundation/Foundation.h>
 
+#define kMinDistanceFor2ndRowAutoSelection 100.0
+
 @class OADestination;
 
 @interface OADestinationsHelper : NSObject
 
 @property (nonatomic, readonly) NSMutableArray *sortedDestinations;
+@property (nonatomic, readonly) OADestination *dynamic2ndRowDestination;
 
 + (OADestinationsHelper *)instance;
 
@@ -20,8 +23,9 @@
 
 - (void)addDestination:(OADestination *)destination;
 - (void)removeDestination:(OADestination *)destination;
-- (void)moveDestinationOnTop:(OADestination *)destination;
+- (void)moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected;
 - (void)moveRoutePointOnTop:(NSInteger)pointIndex;
+- (void)apply2ndRowAutoSelection;
 
 - (NSInteger)pureDestinationsCount;
 

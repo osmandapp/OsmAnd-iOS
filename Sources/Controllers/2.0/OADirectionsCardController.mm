@@ -136,7 +136,7 @@
     if (item.destination.hidden)
         [[OADestinationsHelper instance] showOnMap:item.destination];
  
-    [[OADestinationsHelper instance] moveDestinationOnTop:item.destination];
+    [[OADestinationsHelper instance] moveDestinationOnTop:item.destination wasSelected:YES];
     
     [[OARootViewController instance].mapPanel hideDestinationCardsView];
     [[OARootViewController instance].mapPanel openTargetViewWithDestination:item.destination];

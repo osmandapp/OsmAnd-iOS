@@ -25,6 +25,7 @@
         self.longitude = longitude;
         self.index = 0;
         self.hidden = NO;
+        self.manual = NO;
     }
     return self;
 }
@@ -74,6 +75,7 @@
 #define kDestinationRoutePointIndexName @"destination_route_point_index"
 
 #define kDestinationHidden @"destination_hidden"
+#define kDestinationManual @"destination_manual"
 
 - (void)encodeWithCoder:(NSCoder *)aCoder
 {
@@ -91,6 +93,7 @@
     [aCoder encodeObject:[NSNumber numberWithBool:_routeTargetPoint] forKey:kDestinationRouteTargetPointName];
     [aCoder encodeObject:[NSNumber numberWithInteger:_routePointIndex] forKey:kDestinationRoutePointIndexName];
     [aCoder encodeObject:[NSNumber numberWithBool:_hidden] forKey:kDestinationHidden];
+    [aCoder encodeObject:[NSNumber numberWithBool:_manual] forKey:kDestinationManual];
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -111,6 +114,7 @@
         _routeTargetPoint = [[aDecoder decodeObjectForKey:kDestinationRouteTargetPointName] boolValue];
         _routePointIndex = [[aDecoder decodeObjectForKey:kDestinationRoutePointIndexName] integerValue];
         _hidden = [[aDecoder decodeObjectForKey:kDestinationHidden] boolValue];
+        _manual = [[aDecoder decodeObjectForKey:kDestinationManual] boolValue];
     }
     return self;
 }

@@ -29,6 +29,8 @@
 
 @property (nonatomic) BOOL hidden;
 
+@property (nonatomic) BOOL manual;
+
 - (instancetype)initWithDesc:(NSString *)desc latitude:(double)latitude longitude:(double)longitude;
 - (double) distance:(double)latitude longitude:(double)longitude;
 - (NSString *) distanceStr:(double)latitude longitude:(double)longitude;

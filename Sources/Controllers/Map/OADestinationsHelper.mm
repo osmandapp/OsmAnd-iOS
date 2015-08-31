@@ -202,13 +202,13 @@
     {
         if (destination.routePoint && destination.routePointIndex == pointIndex)
         {
-            [self moveDestinationOnTop:destination];
+            [self moveDestinationOnTop:destination wasSelected:YES];
             break;
         }
     }
 }
 
-- (void)moveDestinationOnTop:(OADestination *)destination
+- (void)moveDestinationOnTop:(OADestination *)destination wasSelected:(BOOL)wasSelected
 {
     @synchronized(_syncObj)
     {
@@ -220,10 +220,77 @@
         [_sortedDestinations removeObject:destination];
         [_sortedDestinations insertObject:destination atIndex:newIndex];
         
+        if (wasSelected)
+        {
+            for (OADestination *d in self.sortedDestinations)
+                d.manual = NO;
+            
+            destination.manual = wasSelected;
+        }
+        
         [self refreshDestinationIndexes];
     }
     
     [_app.data.destinationsChangeObservable notifyEvent];
+}
+
+- (void)apply2ndRowAutoSelection
+{
+    BOOL wasSelected = NO;
+    
+    @synchronized(_syncObj)
+    {
+        if (self.sortedDestinations.count < 2)
+            return;
+        
+        CLLocation* currLoc = _app.locationServices.lastKnownLocation;
+        if (!currLoc)
+            return;
+        
+        double lat = currLoc.coordinate.latitude;
+        double lon = currLoc.coordinate.longitude;
+
+        BOOL isManualSelected = NO;
+        for (OADestination *destination in self.sortedDestinations)
+            if (destination.manual)
+            {
+                isManualSelected = YES;
+                break;
+            }
+        
+        BOOL isRoute = ((OADestination *)self.sortedDestinations[0]).routePoint;
+        
+        CGFloat distance = kMinDistanceFor2ndRowAutoSelection;
+        OADestination *closestDestination;
+        
+        for (OADestination *destination in self.sortedDestinations)
+        {
+            double destDist = [destination distance:lat longitude:lon];
+            if (((isRoute && !isManualSelected && destination.routePoint && !destination.routeTargetPoint) ||
+                 (!isRoute && !destination.routePoint)) && destDist < distance)
+            {
+                closestDestination = destination;
+                distance = destDist;
+            }
+        }
+        
+        if (closestDestination && closestDestination.index > 1)
+        {
+            if (closestDestination != _dynamic2ndRowDestination)
+            {
+                _dynamic2ndRowDestination = closestDestination;
+                wasSelected = YES;
+            }
+        }
+        else
+        {
+            wasSelected = _dynamic2ndRowDestination != nil;
+            _dynamic2ndRowDestination = nil;
+        }
+    }
+
+    if (wasSelected)
+        [_app.data.destinationsChangeObservable notifyEvent];
 }
 
 - (void)addDestination:(OADestination *)destination
@@ -246,6 +313,9 @@
         if (destination.parking)
             [OADestinationsHelper removeParkingReminderFromCalendar:destination];
 
+        if (destination == _dynamic2ndRowDestination)
+            _dynamic2ndRowDestination = nil;
+        
         [_app.data.destinations removeObject:destination];
         [_sortedDestinations removeObject:destination];
         

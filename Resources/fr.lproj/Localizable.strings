@@ -56,3 +56,4 @@
 "rendering_value_walkingRoutesOSMC_name" = "Couleur de l'itinéraire selon OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Couleur selon l'étendue de l'itinéraire";
 "rendering_attr_hikingRoutesOSMC_name" = "Afficher les itinéraires pédestres";
+"description" = "Description";

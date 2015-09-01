@@ -14,6 +14,7 @@
 
 @optional
 - (void) callGpxEditMode;
+- (void) callFullScreenMode;
 - (void) refreshGpxDocWithPoints:(NSArray *)points;
 
 @end
@@ -26,6 +27,8 @@
 - (void)generateData;
 - (void)resetData;
 
+- (NSArray *)getSelectedItems;
+
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 @property (weak, nonatomic) id<OAGPXEditWptListViewControllerDelegate> delegate;
@@ -34,5 +37,6 @@
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks;
 - (void)setPoints:(NSArray *)locationMarks;
+- (void)setLocalEditing:(BOOL)localEditing;
 
 @end

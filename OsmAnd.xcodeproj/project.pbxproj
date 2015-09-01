@@ -1774,6 +1774,9 @@
 		849E844F1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E844B1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib */; };
 		849E84501B84446C00FBC77A /* OAGPXEditToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E844B1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib */; };
 		849E84511B84446C00FBC77A /* OAGPXEditToolbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 849E844B1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib */; };
+		84A8CEA81B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */; };
+		84A8CEA91B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */; };
+		84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */; };
 		84B0AE241AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
 		84B0AE251AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
 		84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
@@ -3612,6 +3615,8 @@
 		849E844A1B84446C00FBC77A /* OAGPXEditToolbarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAGPXEditToolbarViewController.m; path = Sources/Controllers/2.0/OAGPXEditToolbarViewController.m; sourceTree = "<group>"; };
 		849E844B1B84446C00FBC77A /* OAGPXEditToolbarViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditToolbarViewController.xib; path = Sources/Controllers/2.0/OAGPXEditToolbarViewController.xib; sourceTree = "<group>"; };
 		84A8CEA51B94316900B0BDCB /* OAMapModeHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapModeHeaders.h; path = Controllers/Map/OAMapModeHeaders.h; sourceTree = "<group>"; };
+		84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapMarkersCollection.mm; path = Core/OAMapMarkersCollection.mm; sourceTree = "<group>"; };
+		84A8CEA71B94B91300B0BDCB /* OAMapMarkersCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapMarkersCollection.h; path = Core/OAMapMarkersCollection.h; sourceTree = "<group>"; };
 		84B0AE221AC69D33005E1F78 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPoint.h; path = Data/OATargetPoint.h; sourceTree = "<group>"; };
 		84B0AE231AC69D33005E1F78 /* OATargetPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetPoint.m; path = Data/OATargetPoint.m; sourceTree = "<group>"; };
 		84B0AE271AC82ED3005E1F78 /* OAPOIFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIFilter.h; sourceTree = "<group>"; };
@@ -5882,6 +5887,8 @@
 				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
 				848A3ECF1B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.h */,
 				848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */,
+				84A8CEA71B94B91300B0BDCB /* OAMapMarkersCollection.h */,
+				84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -8462,6 +8469,7 @@
 				3AFEEE5E1A0E516900900A47 /* OAPointTableViewCell.m in Sources */,
 				841766351B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				3ACA4AB31A0B93CE00ECC792 /* OASettingsTableViewCell.m in Sources */,
+				84A8CEA81B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D17231B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				84EE2DEE1AFD2D58007C9A94 /* OABannerView.m in Sources */,
 				3A8314861A07EB4C00473C38 /* OATargetPointView.mm in Sources */,
@@ -8662,6 +8670,7 @@
 				3ACA4AB41A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
 				841766361B721604002A08CB /* OAHistoryHelper.m in Sources */,
 				3A8314871A07ECCE00473C38 /* OATargetPointView.mm in Sources */,
+				84A8CEA91B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D17241B1C548E00A656F4 /* OAFavoriteViewController.mm in Sources */,
 				84EE2DEF1AFD2D58007C9A94 /* OABannerView.m in Sources */,
 				BB54F70A198913E000AB40D1 /* OAAppearance.m in Sources */,
@@ -8902,6 +8911,7 @@
 				BB54F71A19893B8200AB40D1 /* OAHUDRegularButton.m in Sources */,
 				BBA3AF58197FC4BB0039D991 /* UITableViewCell+getTableView.m in Sources */,
 				8470412C1B079C6D00594C72 /* OpeningHoursParser.java in Sources */,
+				84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */,
 				848D173F1B1C916A00A656F4 /* OATextLineViewCell.m in Sources */,
 				84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */,
 				3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,

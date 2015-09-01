@@ -16,6 +16,7 @@
 #import "PXAlertView.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXEditWptListViewController.h"
+#import "OAEditColorViewController.h"
 
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -34,7 +35,7 @@
 @end
 
 
-@interface OAGPXEditItemViewController ()<OAGPXEditWptListViewControllerDelegate, UIAlertViewDelegate>
+@interface OAGPXEditItemViewController ()<OAGPXEditWptListViewControllerDelegate, UIAlertViewDelegate, OAEditColorViewControllerDelegate>
 {
     OsmAndAppInstance _app;
     
@@ -53,6 +54,11 @@
 {
     OASavingTrackHelper *_savingHelper;
     OAGPXEditWptListViewController *_waypointsController;
+
+    OAEditColorViewController *_colorController;
+    CALayer *_horizontalLine;
+    
+    BOOL _localEditing;
 }
 
 @synthesize editing = _editing;
@@ -216,7 +222,6 @@
 
 - (void)activateEditing
 {
-    //
 }
 
 -(BOOL)showTopControls
@@ -299,6 +304,14 @@
             [_mapViewController showTempGpxTrack:self.gpx.gpxFileName];
         });
     }
+
+    _horizontalLine = [CALayer layer];
+    _horizontalLine.backgroundColor = [UIColorFromRGB(kBottomToolbarTopLineColor) CGColor];
+    self.editToolbarView.backgroundColor = UIColorFromRGB(kBottomToolbarBackgroundColor);
+    [self.editToolbarView.layer addSublayer:_horizontalLine];
+    _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
+    
+    [self updateWaypointsButtons];
 }
 
 - (void)didReceiveMemoryWarning
@@ -331,6 +344,164 @@
     [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
 }
 
+-(IBAction)buttonEditClicked:(id)sender
+{
+    _localEditing = !_localEditing;
+    [self updateEditingMode:_localEditing animated:YES];
+}
+
+- (void)updateWaypointsButtons
+{
+    self.buttonEdit.hidden = NO;
+    if (_localEditing)
+        [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit_active"] forState:UIControlStateNormal];
+    else
+        [self.buttonEdit setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
+    
+    NSInteger wptCount = self.doc.locationMarks.count;
+    self.buttonEdit.enabled = wptCount > 0;
+}
+
+- (void)updateEditingMode:(BOOL)value animated:(BOOL)animated
+{
+    if (value)
+        [self callFullScreenMode];
+    
+    [_waypointsController setLocalEditing:value];
+    [self updateWaypointsButtons];
+    
+    if (value)
+        self.titleView.text = OALocalizedString(@"editing_waypoints");
+    else
+        self.titleView.text = [self.gpx getNiceTitle];
+    
+    if (value)
+    {
+        _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
+        
+        CGSize cs = self.contentView.bounds.size;
+        CGRect f = self.editToolbarView.frame;
+        f.origin.y = cs.height - f.size.height;
+        
+        [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
+            self.editToolbarView.frame = f;
+            _waypointsController.view.frame = CGRectMake(0.0, 0.0, cs.width, cs.height - f.size.height);
+        }];
+    }
+    else
+    {
+        CGSize cs = self.contentView.bounds.size;
+        CGRect f = self.editToolbarView.frame;
+        f.origin.y = cs.height + 1.0;
+        
+        [UIView animateWithDuration:(animated ? .3 : 0.0) animations:^{
+            self.editToolbarView.frame = f;
+            _waypointsController.view.frame = self.contentView.bounds;
+        }];
+    }
+}
+
+- (IBAction)waypointsColorClicked:(id)sender
+{
+    [self changeColor];
+}
+
+- (IBAction)waypointsDeleteClicked:(id)sender
+{
+    [self deleteWaypoints];
+}
+
+- (void)changeColor
+{
+    NSArray *selectedRows = [_waypointsController getSelectedItems];
+    if ([selectedRows count] == 0)
+    {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"wpt_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    _colorController = [[OAEditColorViewController alloc] init];
+    _colorController.delegate = self;
+    [self.navController pushViewController:_colorController animated:YES];
+}
+
+- (void)deleteWaypoints
+{
+    NSArray *selectedRows = [_waypointsController getSelectedItems];
+    if ([selectedRows count] == 0)
+    {
+        UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:OALocalizedString(@"wpt_select") delegate:nil cancelButtonTitle:OALocalizedString(@"shared_string_ok") otherButtonTitles:nil];
+        [alert show];
+        return;
+    }
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"gpx_remove_wpts_q")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_no")
+                         otherTitle:OALocalizedString(@"shared_string_yes")
+                          otherDesc:nil
+                         otherImage:nil
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                             {
+                                 NSArray *items = [_waypointsController getSelectedItems];
+                                 if (_showCurrentTrack)
+                                 {
+                                     for (OAGpxWptItem *item in items)
+                                         [_savingHelper deleteWpt:item.point];
+                                     
+                                     // update map
+                                     [[_app trackRecordingObservable] notifyEvent];
+                                 }
+                                 else
+                                 {
+                                     NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                                     [_mapViewController deleteWpts:items docPath:path];
+                                     [self loadDoc];
+                                 }
+                                 
+                                 [_waypointsController setPoints:self.doc.locationMarks];
+                                 [_waypointsController generateData];
+                                 [self buttonEditClicked:nil];
+                                 if (self.delegate)
+                                     [self.delegate contentChanged];
+                             }
+                         }];
+}
+
+#pragma mark - OAEditColorViewControllerDelegate
+
+-(void)colorChanged
+{
+    NSArray *items = [_waypointsController getSelectedItems];
+    OAFavoriteColor *favCol = [[OADefaultFavorite builtinColors] objectAtIndex:_colorController.colorIndex];
+    
+    for (OAGpxWptItem *item in items)
+    {
+        item.color = favCol.color;
+        
+        if (_showCurrentTrack)
+        {
+            [OAGPXDocument fillWpt:item.point.wpt usingWpt:item.point];
+            [_savingHelper saveWpt:item.point];
+        }
+    }
+    
+    if (!_showCurrentTrack)
+    {
+        NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+        [_mapViewController updateWpts:items docPath:path updateMap:YES];
+    }
+    else
+    {
+        // update map
+        [[_app trackRecordingObservable] notifyEvent];
+    }
+    
+    [_waypointsController generateData];
+    [self buttonEditClicked:nil];
+}
 
 #pragma mark - OAGPXEditWptListViewControllerDelegate
 
@@ -338,6 +509,12 @@
 {
     if (self.delegate)
         [self.delegate requestHeaderOnlyMode];
+}
+
+- (void)callFullScreenMode
+{
+    if (self.delegate)
+        [self.delegate requestFullScreenMode];
 }
 
 -(void)refreshGpxDocWithPoints:(NSArray *)points

@@ -19,5 +19,6 @@
 @property (nonatomic, assign) CGFloat direction;
 @property (nonatomic) NSString* distance;
 @property (nonatomic, assign) double distanceMeters;
+@property (nonatomic, assign) BOOL selected;
 
 @end

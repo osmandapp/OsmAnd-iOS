@@ -2370,7 +2370,7 @@
 
 - (void)requestFullScreenMode
 {
-    if (![self isLandscape])
+    if (![self isLandscape] && !_showFullScreen)
     {
         _showFull = YES;
         _showFullScreen = YES;

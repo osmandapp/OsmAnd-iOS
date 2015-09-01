@@ -14,6 +14,7 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAIconTextTableViewCell.h"
+#import "OAMultiselectableHeaderView.h"
 
 #import "OsmAndApp.h"
 
@@ -22,7 +23,7 @@
 #include "Localization.h"
 
 
-@interface OAGPXEditWptListViewController ()
+@interface OAGPXEditWptListViewController ()<OAMultiselectableHeaderDelegate>
 {
     OsmAndAppInstance _app;
 
@@ -35,6 +36,10 @@
 @end
 
 @implementation OAGPXEditWptListViewController
+{
+    OAMultiselectableHeaderView *_headerView;
+    BOOL _localEditing;
+}
 
 - (id)initWithLocationMarks:(NSArray *)locationMarks
 {
@@ -51,6 +56,16 @@
     return self;
 }
 
+-(void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 32.0)];
+    _headerView.editable = NO;
+    _headerView.checkmarkIndent = 5.0;
+    _headerView.delegate = self;
+}
+
 - (void)setPoints:(NSArray *)locationMarks
 {
     NSMutableArray *arr = [NSMutableArray array];
@@ -62,6 +77,23 @@
     }
     
     self.unsortedPoints = arr;
+}
+
+- (void)setLocalEditing:(BOOL)localEditing;
+{
+    _localEditing = localEditing;
+
+    for (OAGpxWptItem *item in self.unsortedPoints)
+        item.selected = NO;
+
+    _headerView.editable = localEditing;
+    if (localEditing)
+    {
+        [_headerView setEditing:NO animated:NO];
+        [_headerView setEditing:localEditing animated:NO];
+    }
+    
+    [self.tableView reloadData];
 }
 
 - (void)updateDistanceAndDirection
@@ -105,10 +137,7 @@
 }
 
 - (void)refreshVisibleRows
-{
-    if ([self.tableView isEditing])
-        return;
-    
+{    
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self.tableView beginUpdates];
@@ -135,7 +164,6 @@
 - (void)doViewAppear
 {
     [self generateData];
-    [self updateDistanceAndDirection:YES];
     
     [self.tableView setEditing:YES];
     
@@ -156,6 +184,8 @@
 
 -(void)generateData
 {
+    [_headerView setTitleText:[NSString stringWithFormat:@"%@: %d", OALocalizedString(@"gpx_points"), self.unsortedPoints.count]];
+    [self updateDistanceAndDirection:YES];
 }
 
 - (void)resetData
@@ -175,6 +205,28 @@
         [self.delegate refreshGpxDocWithPoints:[NSArray arrayWithArray:arr]];
     }
 }
+
+- (NSArray *)getSelectedItems
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (OAGpxWptItem *item in self.unsortedPoints)
+    {
+        if (item.selected)
+            [arr addObject:item];
+    }
+    return [NSArray arrayWithArray:arr];
+}
+
+#pragma mark - OAMultiselectableHeaderDelegate
+
+-(void)headerCheckboxChanged:(id)sender value:(BOOL)value
+{
+    for (OAGpxWptItem *item in self.unsortedPoints)
+        item.selected = value;
+
+    [self.tableView reloadData];
+}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -210,7 +262,8 @@
             cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
+        if (cell)
+        {
             [cell.textView setText:OALocalizedString(@"add_waypoint")];
             [cell.iconView setImage: [UIImage imageNamed:@"add_waypoint_to_track"]];
         }
@@ -228,8 +281,8 @@
             cell = (OAPointTableViewCell *)[nib objectAtIndex:0];
         }
         
-        if (cell) {
-            
+        if (cell)
+        {
             OAGpxWptItem* item = [self getWptItem:indexPath];
             
             NSMutableString *distanceStr = [NSMutableString stringWithString:item.distance];
@@ -239,13 +292,42 @@
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];
             cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
-            
-            if (!cell.titleIcon.hidden) {
+
+            if (_localEditing)
+            {
+                cell.rightArrow.hidden = YES;
+                if (!item.selected)
+                    [cell.titleIcon setImage:[UIImage imageNamed:@"selection_unchecked"]];
+                else
+                    [cell.titleIcon setImage:[UIImage imageNamed:@"selection_checked"]];
+                
+                cell.titleIcon.hidden = NO;
+            }
+            else
+            {
+                cell.rightArrow.hidden = NO;
                 cell.titleIcon.hidden = YES;
-                CGRect f = cell.titleView.frame;
-                cell.titleView.frame = CGRectMake(f.origin.x - 23.0, f.origin.y, f.size.width + 23.0, f.size.height);
-                cell.directionImageView.frame = CGRectMake(cell.directionImageView.frame.origin.x - 23.0, cell.directionImageView.frame.origin.y, cell.directionImageView.frame.size.width, cell.directionImageView.frame.size.height);
-                cell.distanceView.frame = CGRectMake(cell.distanceView.frame.origin.x - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
+            }
+
+            if (!cell.titleIcon.hidden)
+            {
+                if (cell.titleView.frame.origin.x != 38.0)
+                {
+                    CGRect f = cell.titleView.frame;
+                    cell.titleView.frame = CGRectMake(38.0, f.origin.y, cell.frame.size.width - 83.0, f.size.height);
+                    cell.directionImageView.frame = CGRectMake(36.0, 28.0, 15.0, 15.0);
+                    cell.distanceView.frame = CGRectMake(54.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
+                }
+            }
+            else
+            {
+                if (cell.titleView.frame.origin.x != 15.0)
+                {
+                    CGRect f = cell.titleView.frame;
+                    cell.titleView.frame = CGRectMake(38.0 - 23.0, f.origin.y, cell.frame.size.width - 83.0 + 23.0, f.size.height);
+                    cell.directionImageView.frame = CGRectMake(36.0 - 23.0, 28.0, 15.0, 15.0);
+                    cell.distanceView.frame = CGRectMake(54.0 - 23.0, cell.distanceView.frame.origin.y, cell.distanceView.frame.size.width, cell.distanceView.frame.size.height);
+                }
             }
         }
         return cell;
@@ -336,8 +418,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    if (_localEditing && self.unsortedPoints.count > 0)
+    {
+        OAGpxWptItem* item = [self getWptItem:indexPath];
+        item.selected = !item.selected;
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        return;
+    }
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     if (self.unsortedPoints.count == 0)
     {
         if (self.delegate)
@@ -346,7 +436,7 @@
     }
     
     OAGpxWptItem* item = [self getWptItem:indexPath];
-    [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
+   [[OARootViewController instance].mapPanel openTargetViewWithWpt:item pushed:NO];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -367,6 +457,13 @@
     return 0.01;
 }
 
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (self.unsortedPoints.count == 0)
+        return nil;
+    
+    return _headerView;
+}
 
 @end
 

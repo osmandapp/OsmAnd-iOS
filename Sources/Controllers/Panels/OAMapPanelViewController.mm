@@ -2676,9 +2676,6 @@ typedef enum
     _targetMenuView.activeTargetType = _activeTargetType;
     [_targetMenuView setTargetPoint:targetPoint];
     
-    //if (pushed && _activeTargetActive && [self hasGpxActiveTargetType])
-    //    _activeTargetChildPushed = YES;
-
     if (!useCurrentRoute)
         [[OAGPXRouter sharedInstance] setRouteWithGpx:item];
     

@@ -21,6 +21,12 @@
 
 @interface OAGPXEditItemViewController : OATargetMenuViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonEdit;
+
+@property (weak, nonatomic) IBOutlet UIView *editToolbarView;
+@property (weak, nonatomic) IBOutlet UIButton *colorButton;
+@property (weak, nonatomic) IBOutlet UIButton *deleteButton;
+
 @property (nonatomic) OAGPX *gpx;
 
 @property (nonatomic, readonly) BOOL showCurrentTrack;

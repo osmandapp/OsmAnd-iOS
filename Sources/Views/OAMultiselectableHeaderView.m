@@ -18,6 +18,8 @@
     self = [super initWithFrame:frame];
     if (self)
     {
+        _checkmarkIndent = 8.0;
+        
         //self.backgroundColor = [UIColor redColor];
         _checkmark = [UIButton buttonWithType:UIButtonTypeCustom];
         _checkmark.frame = CGRectMake(0.0, 12.0 + (frame.size.height - 10.0) / 2.0 - 15.0, 30.0, 30.0);
@@ -31,7 +33,7 @@
         _title.textColor = [UIColor colorWithRed:0.427f green:0.427f blue:0.447f alpha:1.00f]; //6D6D72
         [self addSubview:self.title];
         
-        self.editable = YES;
+        _editable = YES;
         
         [self doUpdateLayout];
     }
@@ -48,6 +50,18 @@
     _checkmark.selected = !_checkmark.selected;
     if (self.delegate && [self.delegate respondsToSelector:@selector(headerCheckboxChanged:value:)])
         [self.delegate headerCheckboxChanged:self value:_checkmark.selected];
+}
+
+-(void)setEditable:(BOOL)editable
+{
+    _editable = editable;
+    if (!editable)
+    {
+        _editing = NO;
+        _checkmark.selected = NO;
+    }
+
+    [self doUpdateLayout];
 }
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated
@@ -77,7 +91,7 @@
     {
         _checkmark.alpha = 1.0;
         CGRect f = _checkmark.frame;
-        f.origin.x = 8.0;
+        f.origin.x = _checkmarkIndent;
         _checkmark.frame = f;
         
         f = _title.frame;

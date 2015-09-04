@@ -269,3 +269,112 @@
 "menu_feedback" = "Spätná väzba";
 "menu_about" = "O programe";
 "other_options" = "Ďalšie možnosti";
+"description" = "Popis";
+"add_parking" = "Pridať ako Polohu parkovania";
+"add_parking_short" = "Pridať Parkovanie";
+"add_waypoint" = "Pridať prechodný bod";
+"add_waypoint_short" = "Pridať prechodný bod";
+"edit_waypoint_short" = "Upraviť prechodný bod";
+"more" = "Viac";
+"parking_marker" = "Označenie parkovania";
+"time_limited" = "Časovo obmedzené";
+"pickup_car" = "Vyzdvihnutie auta";
+"pickup_car_at" = "Vyzdvihnutie vozidla o";
+"add_notification_calendar" = "Pridať upozornenie do kalendára";
+"parking_time_limited" = "Čas parkovania obmedzený na";
+"time_left" = "zostáva";
+"time_overdue" = "prekročený čas";
+"cannot_add_marker" = "Parkovanie sa nedá pridať";
+"cannot_add_marker_desc" = "Odstráňte aspoň jeden smer a skúste znova";
+"cannot_add_destination" = "Smer sa nedá pridať";
+// Units
+"units_km" = "km";
+"units_m" = "m";
+"units_mi" = "mi";
+"units_yd" = "yd";
+"units_ft" = "ft";
+"units_kmh" = "km/h";
+"units_mph" = "mi/h";
+"units_hour" = "h";
+"units_min" = "min";
+"units_sec" = "s";
+// Map
+"map_inst_det_map_q" = "Nainštalujte podrobné mapy, aby ste získali viac informácií o vašich miestach.";
+"map_remind" = "Pripomenúť neskôr";
+"map_no_address" = "Adresa zatiaľ nie je známa";
+// Import
+"import_title" = "Import údajov";
+"import_choose_type" = "Zvoľte si čo sa má importovať";
+"import_favorite" = "Obľúbené miesto";
+"import_failed" = "Import zlyhal";
+"import_cannot" = "Zadaný súbor sa nedá importovať";
+"import_gpx" = "GPX Stopa";
+// Alerts
+"alert_inet_needed" = "Internetové pripojenie je požadované na vykonanie tejto akcie. Prosím skontrolujte svoje internetové pripojenie.";
+// Context menu
+"ctx_mnu_edit_fav" = "Upraviť obľúbený bod";
+"ctx_mnu_add_fav" = "Pridať obľúbený bod";
+"ctx_mnu_share" = "Zdieľať";
+"ctx_mnu_direction" = "Smer";
+// Location Services
+"loc_access_denied" = "Prístup zamietnutý";
+"loc_access_denied_desc" = "Prístup k službe zisťovania polohy bol zamietnutý";
+// Colors
+"col_purple" = "Fialová";
+"col_green" = "Zelená";
+"col_yellow" = "Žltá";
+"col_orange" = "Oranžová";
+"col_gray" = "Šedá";
+"col_red" = "Červená";
+"col_blue" = "Modrá";
+"col_magenta" = "Purpurová";
+// World Regions
+"region_africa" = "Afrika";
+"region_asia" = "Ázia";
+"region_ausralia_and_oceania" = "Austrália a Oceánia";
+"region_central_america" = "Stredná Amerika";
+"region_europe" = "Európa";
+"region_north_america" = "Severná Amerika";
+"region_russia" = "Rusko";
+"region_south_america" = "Južná Amerika";
+// Help
+"help_quiz" = "Kvíz";
+"units_minutes_short" = "min";
+"units_seconds_short" = "s";
+"cannot_access_calendar" = "Nemôžem získať prístup do kalendára";
+"reminder_not_set_text" = "Pripomenutie nebolo nastavené, pretože nemáte povolenie prístupu ku kalendáru";
+//inapps
+"product_title_nautical" = "Námorná mapa";
+"product_desc_nautical" = "Námorná mapa celého sveta";
+"product_title_parking" = "Parkovacie miesto";
+"product_title_skimap" = "Lyžiarska mapa";
+"product_desc_skimap" = "Zjazdovky pre všetky lyžiarske strediská vo svete";
+"product_title_track_recording" = "Zaznamenávanie výletu";
+"product_title_trip_planning" = "Plánovanie cesty";
+"product_title_africa" = "Afrika";
+"product_desc_africa" = "Mapa Afriky";
+"product_title_australia" = "Austrália";
+"product_desc_australia" = "Mapa Austrálie";
+"product_title_centralamerica" = "Stredná Amerika";
+"product_desc_centralamerica" = "Mapa Strednej Ameriky";
+"product_title_europe" = "Európa";
+"product_desc_europe" = "Mapa Európy";
+"product_title_northamerica" = "Severná Amerika";
+"product_desc_northamerica" = "Mapa Severnej Ameriky";
+"product_title_russia" = "Rusko";
+"product_desc_russia" = "Mapa Ruska";
+"product_title_southamerica" = "Južná Amerika";
+"product_desc_southamerica" = "Mapa Južnej Ameriky";
+"product_title_allworld" = "Všetky mapy sveta";
+"product_desc_allworld" = "Mapa celého sveta";
+"product_title_asia" = "Ázia";
+"product_desc_asia" = "Mapa Ázie";
+"product_title_wiki" = "Wikipédia";
+"product_desc_wiki" = "Údaje Wikipédie";
+"product_title_srtm" = "Vrstevnice";
+"product_desc_srtm" = "Zobrazenie vrstevníc";
+"my_location" = "Moja poloha";
+"all_categories" = "Všetky kategórie";
+"get_unlimited_access" = "Získať neobmedzený prístup";
+"latitude" = "Zem. šírka";
+"longitude" = "Zem. dĺžka";

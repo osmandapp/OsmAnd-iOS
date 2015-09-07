@@ -180,7 +180,7 @@
     {
         if (self.gpx.newGpx)
         {
-            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"create_new_trip") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", self.gpx.gpxTitle) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_ok"), nil];
+            UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"create_new_trip") message:OALocalizedString(@"gpx_enter_new_name \"%@\"", self.gpx.gpxTitle) delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), OALocalizedString(@"shared_string_delete"), nil];
             alert.alertViewStyle = UIAlertViewStylePlainTextInput;
             [alert textFieldAtIndex:0].text = self.gpx.gpxTitle;
             [alert show];
@@ -589,58 +589,91 @@
 {
     if (buttonIndex != alertView.cancelButtonIndex)
     {
-        NSString* newName = [alertView textFieldAtIndex:0].text;
-        if (newName.length > 0)
+        if (buttonIndex == 1)
         {
-            self.gpx.gpxTitle = newName;
-            [[OAGPXDatabase sharedDb] save];
-            
-            OAGpxMetadata *metadata;
-            if (self.doc.metadata)
+            NSString* newName = [alertView textFieldAtIndex:0].text;
+            if (newName.length > 0)
             {
-                metadata = (OAGpxMetadata *)self.doc.metadata;
+                self.gpx.gpxTitle = newName;
+                [[OAGPXDatabase sharedDb] save];
+                
+                OAGpxMetadata *metadata;
+                if (self.doc.metadata)
+                {
+                    metadata = (OAGpxMetadata *)self.doc.metadata;
+                }
+                else
+                {
+                    metadata = [[OAGpxMetadata alloc] init];
+                    long time = 0;
+                    if (self.doc.locationMarks.count > 0)
+                    {
+                        time = ((OAGpxWpt *)self.doc.locationMarks[0]).time;
+                    }
+                    if (self.doc.tracks.count > 0)
+                    {
+                        OAGpxTrk *track = self.doc.tracks[0];
+                        if (track.segments.count > 0)
+                        {
+                            OAGpxTrkSeg *seg = track.segments[0];
+                            if (seg.points.count > 0)
+                            {
+                                OAGpxTrkPt *p = seg.points[0];
+                                if (time > p.time)
+                                    time = p.time;
+                            }
+                        }
+                    }
+                    
+                    if (time == 0)
+                        metadata.time = (long)[[NSDate date] timeIntervalSince1970];
+                    else
+                        metadata.time = time;
+                }
+                
+                metadata.name = newName;
+                
+                NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
+                [_mapViewController updateMetadata:metadata docPath:path];
+                
+                
+                [_mapViewController hideTempGpxTrack];
+                
+                if (self.delegate)
+                    [self.delegate btnCancelPressed];
+                
+                [self closePointsController];
+            }
+        }
+        else
+        {
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            
+            if (self.showCurrentTrack)
+            {
+                settings.mapSettingTrackRecording = NO;
+                [[OASavingTrackHelper sharedInstance] clearData];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [_mapViewController hideRecGpxTrack];
+                });
             }
             else
             {
-                metadata = [[OAGpxMetadata alloc] init];
-                long time = 0;
-                if (self.doc.locationMarks.count > 0)
-                {
-                    time = ((OAGpxWpt *)self.doc.locationMarks[0]).time;
-                }
-                if (self.doc.tracks.count > 0)
-                {
-                    OAGpxTrk *track = self.doc.tracks[0];
-                    if (track.segments.count > 0)
-                    {
-                        OAGpxTrkSeg *seg = track.segments[0];
-                        if (seg.points.count > 0)
-                        {
-                            OAGpxTrkPt *p = seg.points[0];
-                            if (time > p.time)
-                                time = p.time;
-                        }
-                    }
+                if ([settings.mapSettingVisibleGpx containsObject:self.gpx.gpxFileName]) {
+                    [settings hideGpx:self.gpx.gpxFileName];
+                    [_mapViewController hideTempGpxTrack];
+                    [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
                 }
                 
-                if (time == 0)
-                    metadata.time = (long)[[NSDate date] timeIntervalSince1970];
-                else
-                    metadata.time = time;
+                [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFileName];
+                [[OAGPXDatabase sharedDb] save];
             }
             
-            metadata.name = newName;
-            
-            NSString *path = [_app.gpxPath stringByAppendingPathComponent:self.gpx.gpxFileName];
-            [_mapViewController updateMetadata:metadata docPath:path];
-            
-            
-            [_mapViewController hideTempGpxTrack];
-
             if (self.delegate)
                 [self.delegate btnCancelPressed];
             
             [self closePointsController];
+
         }
     }
     else

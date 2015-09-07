@@ -119,9 +119,14 @@
 -(BOOL)preHide
 {
     if (self.newItem && !self.actionButtonPressed)
-        return NO;
+    {
+        [self removeNewItemFromCollection];
+        return YES;
+    }
     else
+    {
         return [super preHide];
+    }
 }
 
 - (void)okPressed

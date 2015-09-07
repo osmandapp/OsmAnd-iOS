@@ -1552,6 +1552,9 @@
 		8463101C1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101D1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
 		8463101E1A8E8951005B39F2 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8463101B1A8E8951005B39F2 /* Images.xcassets */; };
+		84683B1C1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84683B1A1B96DBD5009A6DE6 /* OAMapMarker.mm */; };
+		84683B1D1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84683B1A1B96DBD5009A6DE6 /* OAMapMarker.mm */; };
+		84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84683B1A1B96DBD5009A6DE6 /* OAMapMarker.mm */; };
 		8470410B1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
 		8470410C1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
 		8470410D1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
@@ -3516,6 +3519,8 @@
 		84630FD41A8E197E005B39F2 /* UniRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = UniRS.render.xml; path = ../resources/rendering_styles/UniRS.render.xml; sourceTree = "<group>"; };
 		846310051A8E463B005B39F2 /* default.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = default.render.xml; path = ../resources/rendering_styles/default.render.xml; sourceTree = "<group>"; };
 		8463101B1A8E8951005B39F2 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Resources/Images.xcassets; sourceTree = "<group>"; };
+		84683B1A1B96DBD5009A6DE6 /* OAMapMarker.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapMarker.mm; path = Core/OAMapMarker.mm; sourceTree = "<group>"; };
+		84683B1B1B96DBD5009A6DE6 /* OAMapMarker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapMarker.h; path = Core/OAMapMarker.h; sourceTree = "<group>"; };
 		847041081B07850900594C72 /* ic_small_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_time.png; path = Resources/Icons/ic_small_time.png; sourceTree = "<group>"; };
 		847041091B07850900594C72 /* ic_small_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@2x.png"; path = "Resources/Icons/ic_small_time@2x.png"; sourceTree = "<group>"; };
 		8470410A1B07850900594C72 /* ic_small_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@3x.png"; path = "Resources/Icons/ic_small_time@3x.png"; sourceTree = "<group>"; };
@@ -5088,6 +5093,17 @@
 			name = styles;
 			sourceTree = "<group>";
 		};
+		84683B191B96D996009A6DE6 /* Markers */ = {
+			isa = PBXGroup;
+			children = (
+				84A8CEA71B94B91300B0BDCB /* OAMapMarkersCollection.h */,
+				84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */,
+				84683B1B1B96DBD5009A6DE6 /* OAMapMarker.h */,
+				84683B1A1B96DBD5009A6DE6 /* OAMapMarker.mm */,
+			);
+			name = Markers;
+			sourceTree = "<group>";
+		};
 		847041281B079C6D00594C72 /* Java */ = {
 			isa = PBXGroup;
 			children = (
@@ -5879,6 +5895,7 @@
 		BBBE40B01854DD7C00F1C144 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				84683B191B96D996009A6DE6 /* Markers */,
 				BBBE454D1856544000F1C144 /* CoreResourcesFromBundleProvider.h */,
 				BBBE454E1856544000F1C144 /* CoreResourcesFromBundleProvider.mm */,
 				84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */,
@@ -5887,8 +5904,6 @@
 				84EB6BF91B68D5C8006D230F /* OAHillshadeMapLayerProvider.mm */,
 				848A3ECF1B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.h */,
 				848A3ED01B6FAEE70016F6F4 /* OASQLiteTileSourceMapLayerProvider.mm */,
-				84A8CEA71B94B91300B0BDCB /* OAMapMarkersCollection.h */,
-				84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -8402,6 +8417,7 @@
 				84E4417D1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				84185AFF1AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
 				BBA3AF1A197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
+				84683B1C1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				848A3EAD1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
 				3AC09BCB1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
@@ -8603,6 +8619,7 @@
 				84E4417E1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				84185B001AAA13C600F70328 /* OAPurchasesViewController.mm in Sources */,
 				BBA3AF1B197509B60039D991 /* OAManageResourcesViewController.mm in Sources */,
+				84683B1D1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				848A3EAE1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
 				3AC09BCC1A2783ED002698FE /* OAWebViewController.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
@@ -8942,6 +8959,7 @@
 				8420C1C51B411C81004EDAE6 /* OAPOIFavType.mm in Sources */,
 				84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */,
 				842431C61AEFD97E00925821 /* OAGPXRecTableViewCell.m in Sources */,
+				84683B1E1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				845E05D61B55149D00DFC2A7 /* OADestinationsHelper.mm in Sources */,
 				84E4417C1AF7582500F87542 /* PXAlertView.m in Sources */,
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,

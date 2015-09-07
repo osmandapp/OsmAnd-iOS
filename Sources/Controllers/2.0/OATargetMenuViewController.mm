@@ -93,6 +93,21 @@
     return NO; // override
 }
 
+- (void)goHeaderOnly
+{
+    // override
+}
+
+- (void)goFull
+{
+    // override
+}
+
+- (void)goFullScreen
+{
+    // override
+}
+
 -(BOOL)hasTopToolbar
 {
     return NO; // override

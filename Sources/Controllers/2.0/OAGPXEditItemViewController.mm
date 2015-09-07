@@ -58,6 +58,8 @@
     OAEditColorViewController *_colorController;
     CALayer *_horizontalLine;
     
+    OAGPXEditItemViewControllerState *_ctrlState;
+    
     BOOL _localEditing;
 }
 
@@ -87,6 +89,7 @@
         _app = [OsmAndApp instance];
         _wasInit = NO;
         _scrollPos = ctrlState.scrollPos;
+        _ctrlState = ctrlState;
         self.gpx = gpxItem;
         [self loadDoc];
     }
@@ -116,6 +119,7 @@
         _app = [OsmAndApp instance];
         
         _scrollPos = ctrlState.scrollPos;
+        _ctrlState = ctrlState;
         _savingHelper = [OASavingTrackHelper sharedInstance];
         
         [self updateCurrentGPXData];
@@ -312,6 +316,7 @@
     _horizontalLine.frame = CGRectMake(0.0, 0.0, self.contentView.bounds.size.width, 0.5);
     
     [self updateWaypointsButtons];
+    [self updateButtonsLayout];
 }
 
 - (void)didReceiveMemoryWarning
@@ -329,6 +334,16 @@
     return state;
 }
 
+-(void)goHeaderOnly
+{
+    [self updateButtonsLayout];
+}
+
+-(void)goFullScreen
+{
+    [self updateButtonsLayout];
+}
+
 - (void)closePointsController
 {
     if (_waypointsController)
@@ -344,10 +359,45 @@
     [[OARootViewController instance].mapPanel displayGpxOnMap:self.gpx];
 }
 
+-(IBAction)buttonMapClicked:(id)sender
+{
+    if (self.delegate)
+    {
+        if (![self.delegate isInFullScreenMode])
+            [self callFullScreenMode];
+        else
+            [self callGpxEditMode];
+    }
+}
+
 -(IBAction)buttonEditClicked:(id)sender
 {
     _localEditing = !_localEditing;
     [self updateEditingMode:_localEditing animated:YES];
+}
+
+- (void)updateButtonsLayout
+{
+    BOOL isInFullScreenMode = NO;
+    if (self.delegate)
+        isInFullScreenMode = [self.delegate isInFullScreenMode];
+    else if (_ctrlState)
+        isInFullScreenMode = _ctrlState.showFullScreen;
+    
+    if (isInFullScreenMode)
+    {
+        [self.buttonMap setImage:[UIImage imageNamed:@"left_menu_icon_map.png"] forState:UIControlStateNormal];
+        self.buttonMap.frame = CGRectMake(DeviceScreenWidth - 80.0, 20.0, 35.0, 44.0);
+        self.buttonMap.hidden = NO;
+        self.buttonEdit.hidden = NO;
+    }
+    else
+    {
+        [self.buttonMap setImage:[UIImage imageNamed:@"ic_list.png"] forState:UIControlStateNormal];
+        self.buttonMap.frame = self.buttonEdit.frame;
+        self.buttonEdit.hidden = YES;
+        self.buttonMap.hidden = NO;
+    }
 }
 
 - (void)updateWaypointsButtons

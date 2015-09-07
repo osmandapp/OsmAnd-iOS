@@ -64,6 +64,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (BOOL)supportFullScreen;
 - (BOOL)fullScreenWithoutHeader;
 
+- (void)goHeaderOnly;
+- (void)goFull;
+- (void)goFullScreen;
+
 - (BOOL)showTopControls;
 - (BOOL)supportMapInteraction;
 

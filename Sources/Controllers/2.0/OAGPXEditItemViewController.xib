@@ -9,6 +9,7 @@
             <connections>
                 <outlet property="buttonCancel" destination="8Gc-Nu-zqV" id="36j-DS-ur0"/>
                 <outlet property="buttonEdit" destination="Dh6-j7-oBw" id="vLW-ud-edG"/>
+                <outlet property="buttonMap" destination="b4P-nJ-3b6" id="7j0-Bp-Qrh"/>
                 <outlet property="colorButton" destination="I3R-6a-vo4" id="giT-U0-RlF"/>
                 <outlet property="contentView" destination="rye-kK-kmB" id="qyw-Tc-nEq"/>
                 <outlet property="deleteButton" destination="jEd-Xb-RCt" id="fG0-lY-KO2"/>
@@ -33,6 +34,15 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.29803921568627451" green="0.68627450980392157" blue="0.31372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </view>
+                        <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="b4P-nJ-3b6" userLabel="Map">
+                            <rect key="frame" x="240" y="20" width="35" height="43.5"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                            <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" image="left_menu_icon_map.png"/>
+                            <connections>
+                                <action selector="buttonMapClicked:" destination="-1" eventType="touchUpInside" id="p5v-BU-PbJ"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Dh6-j7-oBw" userLabel="Edit">
                             <rect key="frame" x="276" y="20" width="44" height="44"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
@@ -105,6 +115,7 @@
         <image name="change_item_color.png" width="25" height="25"/>
         <image name="delete_items.png" width="25" height="25"/>
         <image name="icon_edit.png" width="24" height="23"/>
+        <image name="left_menu_icon_map.png" width="25" height="23"/>
         <image name="menu_icon_back.png" width="11" height="21"/>
     </resources>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">

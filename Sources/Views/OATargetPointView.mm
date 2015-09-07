@@ -581,6 +581,14 @@
                 if (self.customController && [self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
                     [self showTopToolbar:YES];
                 
+                if (self.customController)
+                {
+                    if (goFullScreen)
+                        [self.customController goFullScreen];
+                    else if (goFull)
+                        [self.customController goFull];
+                }
+                
                 [self applyMapInteraction:_fullHeight];
             }
             else
@@ -592,6 +600,9 @@
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
 
+                if (self.customController && !_showFull)
+                    [self.customController goHeaderOnly];
+                
                 [self applyMapInteraction:h];
             }
             
@@ -681,6 +692,9 @@
                 if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
                     [self hideTopToolbar:YES];
                 
+                if (self.customController && !_showFull)
+                    [self.customController goHeaderOnly];
+
                 [self applyMapInteraction:(_showFull ? _fullHeight : h)];
                 
                 [UIView animateWithDuration:duration animations:^{
@@ -853,6 +867,9 @@
     
     if ([self.customController hasTopToolbar] && ([self.customController shouldShowToolbar:_showFull] || self.targetPoint.toolbarNeeded))
         [self showTopToolbar:YES];
+    
+    if (self.customController)
+        [self.customController goFull];
     
     [UIView animateWithDuration:.3 animations:^{
         
@@ -1201,7 +1218,15 @@
         if ([self.customController shouldShowToolbar:(_showFull || [self isLandscape])] || self.targetPoint.toolbarNeeded)
             [self showTopToolbar:YES];
     }
-
+    
+    if (self.customController)
+    {
+        if (_showFullScreen)
+            [self.customController goFullScreen];
+        else if (_showFull)
+            [self.customController goFull];
+    }
+    
     if (_targetPoint.type == OATargetGPXRoute)
     {
         self.zoomView.alpha = 0.0;
@@ -2360,6 +2385,9 @@
         if (self.customController && [self.customController hasTopToolbar] && (![self.customController shouldShowToolbar:_showFull] && !self.targetPoint.toolbarNeeded))
             [self hideTopToolbar:YES];
         
+        if (self.customController)
+            [self.customController goHeaderOnly];
+
         [self applyMapInteraction:h];
         
         [UIView animateWithDuration:.3 animations:^{
@@ -2374,6 +2402,10 @@
     {
         _showFull = YES;
         _showFullScreen = YES;
+
+        if (self.customController)
+            [self.customController goFullScreen];
+
         [UIView animateWithDuration:.3 animations:^{
             [self doLayoutSubviews];
         }];

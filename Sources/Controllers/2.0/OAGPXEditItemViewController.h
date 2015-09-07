@@ -21,6 +21,7 @@
 
 @interface OAGPXEditItemViewController : OATargetMenuViewController
 
+@property (weak, nonatomic) IBOutlet UIButton *buttonMap;
 @property (weak, nonatomic) IBOutlet UIButton *buttonEdit;
 
 @property (weak, nonatomic) IBOutlet UIView *editToolbarView;

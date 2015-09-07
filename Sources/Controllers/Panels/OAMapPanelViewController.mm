@@ -1025,6 +1025,11 @@ typedef enum
         if (![objectType isEqualToString:@"waypoint"])
         {
             objectType = nil;
+            if ([_mapViewController hasWptAt:CLLocationCoordinate2DMake(lat, lon)])
+            {
+                [_mapViewController findWpt:CLLocationCoordinate2DMake(lat, lon)];
+                objectType = @"waypoint";
+            }
         }
         else
         {

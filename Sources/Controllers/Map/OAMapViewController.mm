@@ -43,6 +43,8 @@
 #include "OAHillshadeMapLayerProvider.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 
+//#include "OAMapMarkersCollection.h"
+
 #include <OpenGLES/ES2/gl.h>
 
 #include <QtMath>
@@ -243,8 +245,7 @@
 
     std::shared_ptr<OsmAnd::ObfDataInterface> _obfsDataInterface;
     
-    // Favorites presenter
-    //std::shared_ptr<OsmAnd::FavoriteLocationsPresenter> _favoritesPresenter;
+    //std::shared_ptr<OAMapMarkersCollection> _testMarkersCollection;
 
     OAAutoObserverProxy* _appModeObserver;
     OAAppMode _lastAppMode;
@@ -3409,6 +3410,15 @@
         
         if (_app.data.underlayMapSource)
             [self doUpdateUnderlay];
+        
+        /*
+        if (_testMarkersCollection != nullptr)
+            [mapView removeKeyedSymbolsProvider:_testMarkersCollection];
+        
+        _testMarkersCollection = std::make_shared<OAMapMarkersCollection>();
+        [mapView addKeyedSymbolsProvider:_testMarkersCollection];
+         */
+
     }
 }
 

@@ -10,7 +10,7 @@
 #include <objc/objc.h>
 
 #include <OsmAndCore/Map/IMapKeyedSymbolsProvider.h>
-
+#include "OAMapMarker.h"
 
 class OAMapMarkersCollection : public OsmAnd::IMapKeyedSymbolsProvider
 {
@@ -18,13 +18,21 @@ class OAMapMarkersCollection : public OsmAnd::IMapKeyedSymbolsProvider
 private:
 protected:
     mutable QReadWriteLock _markersLock;
+
+    std::shared_ptr<QString> tmpStr;
+    std::shared_ptr<OsmAnd::MapSymbolsGroup> symbolsGroup;
+    
+    QHash< OsmAnd::IMapKeyedSymbolsProvider::Key, std::shared_ptr<OAMapMarker> > _markers;
+    
+    bool addMarker(const std::shared_ptr<OAMapMarker>& marker);
+
 public:
     OAMapMarkersCollection(const OsmAnd::ZoomLevel minZoom = OsmAnd::MinZoomLevel, const OsmAnd::ZoomLevel maxZoom = OsmAnd::MaxZoomLevel);
     virtual ~OAMapMarkersCollection();
     
-    //QList< std::shared_ptr<MapMarker> > getMarkers() const;
-    //bool removeMarker(const std::shared_ptr<MapMarker>& marker);
-    //void removeAllMarkers();
+    QList< std::shared_ptr<OAMapMarker> > getMarkers() const;
+    bool removeMarker(const std::shared_ptr<OAMapMarker>& marker);
+    void removeAllMarkers();
     
     const OsmAnd::ZoomLevel minZoom;
     const OsmAnd::ZoomLevel maxZoom;

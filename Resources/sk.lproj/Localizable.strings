@@ -379,3 +379,11 @@
 "latitude" = "Zem. šírka";
 "longitude" = "Zem. dĺžka";
 "all_world_popup_desc" = "Stiahnite si Svetovú základnú mapu, aby ste videli názvy krajín, hranice a ďalšie informácie";
+"turn_on_plugin" = "Zapnúť modul";
+"plugin_popup_nautical_title" = "Stiahnuť Námorné mapy";
+"go_to_downloads" = "Prejsť na sťahovanie";
+"plugin_popup_trip_planning_ask" = "Pre spustenie plánovania musíte aktivovať modul: <b>Plánovanie výletu</b>";
+"plugin_popup_nautical_desc" = "Prosím stiahnite si najprv Námorné mapy.\nPotom choďte do <b>Nastavenia mapy</b> > <b>Typ mapy</b> a zapnite štýl <b>Námorný</b>";
+"plugin_popup_srtm_title" = "Stiahnuť vrstevnice";
+"plugin_popup_srtm_desc" = "Ak chcete začať používať funkciu vrstevníc, prosím stiahnite si najprv vrstevnice regiónu";
+"plugin_popup_srtm_ask" = "Na stiahnutie vrstevní musíte zaktivovať modul: <b>Vrstevnice</b>";

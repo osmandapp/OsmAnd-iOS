@@ -13,7 +13,7 @@
 "fav_name" = "Nom";
 "fav_group" = "Groupe";
 "fav_groups" = "Groupes";
-"favorite" = "Favori";
+"favorite" = "Favoris";
 "fav_no_group" = "Aucun groupe";
 "shared_string_delete" = "Supprimer";
 "rendering_attr_streetLighting_name" = "Éclairage public";

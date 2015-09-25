@@ -22,7 +22,7 @@
 "groups" = "Grupper";
 "favorite" = "Favorit";
 "fav_no_group" = "Ingen gruppe";
-"fav_remove_q" = "Fjerne favorit?";
+"fav_remove_q" = "Fjern favorit?";
 "fav_create_group" = "Opret en ny gruppe";
 "fav_enter_group_name" = "Angiv gruppenavn";
 "fav_exists" = "Favorit med navnet \"%@\" findes allerede";
@@ -223,8 +223,8 @@
 "import_cannot" = "Den angivne fil kan ikke importeres";
 "import_gpx" = "GPX-spor";
 // Context menu
-"ctx_mnu_edit_fav" = "Redigere favorit";
-"ctx_mnu_add_fav" = "Tilføje favorit";
+"ctx_mnu_edit_fav" = "Rediger favorit";
+"ctx_mnu_add_fav" = "Tilføj favorit";
 "ctx_mnu_share" = "Del";
 "ctx_mnu_direction" = "Retning";
 "units_mph" = "mi/t";

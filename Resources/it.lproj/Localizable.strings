@@ -8,7 +8,7 @@
 "rendering_category_hide" = "Nascondi";
 "rendering_category_routes" = "Percorsi";
 "rendering_category_details" = "Dettagli";
-"rendering_category_transport" = "Trasporto";
+"rendering_category_transport" = "Trasporti pubblici";
 "rendering_category_others" = "Altri attributi della mappa";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Mostra le limitazioni di accesso";

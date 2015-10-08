@@ -177,8 +177,8 @@
 "res_no_space_free" = "szükséges. Szabadítson fel egy kis helyet.";
 "res_free_exp" = "Elköltötte az összes ingyenes letöltését. Vásároljon kontinenst a térképek letöltéséhez vagy frissítéséhez.";
 "res_upd_avail_q" = "Frissítés érhető el ehhez:";
-"res_inst_avail_cell_q" = "A(z) %@ telepítése %@ letöltését igényli mobilhálózaton keresztül.";
-"res_inst_avail_wifi_q" = "A(z) %@ telepítése %@ letöltését igényli WiFi-hálózaton keresztül.";
+"res_inst_avail_cell_q" = "%@ telepítése %@ letöltését igényli mobilhálózaton keresztül.";
+"res_inst_avail_wifi_q" = "%@ telepítése %@ letöltését igényli WiFi-hálózaton keresztül.";
 "res_cancel_upd_q" = "%@ frissítést fog megszakítani.";
 "data_will_be_lost" = "Minden letöltött adat el fog veszni.";
 "res_cancel_inst_q" = "%@ telepítést fog megszakítani.";
@@ -200,7 +200,7 @@
 "other_options" = "Egyéb beállítások";
 "add_parking" = "Hozzáadás parkolási pozícióként";
 "add_parking_short" = "Parkolás hozzáadása";
-"add_waypoint" = "Útvonalpont hozzáadása a nyomvonalhoz";
+"add_waypoint" = "Útpont hozzáadása a nyomvonalhoz";
 "add_waypoint_short" = "Útvonalpont hozzáadása";
 "more" = "Több";
 "parking_marker" = "Parkolásjelző";
@@ -438,3 +438,6 @@
 "show_region_on_map_title" = "Térkép letöltve";
 "show_region_on_map_desc" = "%@ térképe le lett töltve. Menjen a térképhez a használatának megkezdéséhez.";
 "show_region_on_map_go" = "Ugrás a térképhez";
+"offline_maps" = "Offline térképek";
+"download_map" = "Térkép letöltése";
+"edit_waypoint_short" = "Útpont szerkesztése";

@@ -137,7 +137,7 @@
 "intro_next" = "Dalej";
 "intro_welcome" = "Witamy w\nOsmAnd";
 "intro_promo" = "Globalne mapy offline";
-"intro_placeholder" = "wpisz nazwę swojego regionu";
+"intro_placeholder" = "Proszę wprowadzić nazwę swojego regionu";
 // Settings
 "sett_settings" = "Ustawienia";
 "sett_units" = "Jednostki";
@@ -158,7 +158,7 @@
 "download" = "Pobierz";
 "nothanks" = "Nie, dzięki";
 "download_now" = "Pobierz mapę teraz";
-"prch_failed" = "Zakup \"%@\" nie powiódł się";
+"prch_failed" = "Nie udało się zakupić „%@”";
 // Resources
 "res_mapsres" = "Mapy i zasoby";
 "res_installed" = "Zainstalowane";
@@ -168,3 +168,4 @@
 "res_region_map" = "Mapa regionu";
 "res_updates_avail" = "Dostępne aktualizacje";
 "res_deleting" = "Usuwanie...";
+"res_update_no_space" = "Brak miejsca dla uaktualnienia";

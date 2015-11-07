@@ -463,7 +463,7 @@
 "change_group" = "Change group";
 "change_color" = "Change color";
 "wpt_select" = "Please select waypoints";
-"gpx_remove_wpts_q" = "Do you want to remove seleted waypoints?";
+"gpx_remove_wpts_q" = "Do you want to remove selected waypoints?";
 "create_new_trip" = "Create new trip";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the trip";

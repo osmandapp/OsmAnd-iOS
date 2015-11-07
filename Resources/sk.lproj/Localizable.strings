@@ -387,3 +387,17 @@
 "plugin_popup_srtm_title" = "Stiahnuť vrstevnice";
 "plugin_popup_srtm_desc" = "Ak chcete začať používať funkciu vrstevníc, prosím stiahnite si najprv vrstevnice regiónu";
 "plugin_popup_srtm_ask" = "Na stiahnutie vrstevní musíte zaktivovať modul: <b>Vrstevnice</b>";
+"plugin_popup_wiki_ask" = "Na stiahnutie údajov z Wikipédie údajov musíte aktivovať plugin: <b>Wikipedia</b>";
+"time_open" = "Otvorené";
+"time_closed" = "Zatvorené";
+"time_will_close" = "Zatvorí o";
+"time_will_open" = "Otvorí o";
+"menu_active_trips" = "Zapnuté";
+"menu_all_trips" = "Všetky výlety";
+"total_time" = "Celkový čas";
+"moving_time" = "Čas pohybu";
+"change_group" = "Zmeniť skupinu";
+"change_color" = "Zmeniť farbu";
+"wpt_select" = "Prosím zvoľte body trasy";
+"gpx_remove_wpts_q" = "Chcete odstrániť zvolené body trasy?";
+"create_new_trip" = "Vytvoriť nový výlet";

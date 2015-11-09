@@ -441,3 +441,12 @@
 "offline_maps" = "Offline térképek";
 "download_map" = "Térkép letöltése";
 "edit_waypoint_short" = "Útpont szerkesztése";
+"sqlitedb_import_already_exists" = "A megadott sqlitedb fájl már létezik. Válasszon műveletet.";
+"local_names" = "Helyi nevek";
+"history" = "Előzmények";
+"today" = "Ma";
+"yesterday" = "Tegnap";
+"hist_select_remove" = "Válassza ki az eltávolítandó előzményelemeket";
+"hist_remove_q" = "El szeretné távolítani az előzményelemeket?";
+"gpx_edit_mode" = "Szerkesztő mód";
+"go_to_map" = "Ugrás a térképhez";

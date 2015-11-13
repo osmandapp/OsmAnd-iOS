@@ -36,7 +36,7 @@
 "rendering_attr_noAdminboundaries_name" = "Cua sas làcanas";
 "rendering_attr_noPolygons_name" = "Cua sos polìgonos";
 "rendering_attr_contourLines_name" = "Ammustra curvas de livellu";
-"favorite" = "Prefèrridu";
+"favorite" = "Preferidu";
 "OsmAnd Maps" = "Mapas OsmAnd";
 // Shared Strings
 "shared_string_back" = "In dae segus";
@@ -58,27 +58,27 @@
 "fav_no_group" = "Grupu perunu";
 "add_as" = "Annanghe comente";
 "fav_import" = "Importa";
-"fav_import_title" = "Importa sos prefèrridos";
-"fav_export_title" = "Esporta sos prefèrridos";
-"fav_select_remove" = "Pro piaghere ischerta sos prefèrridos de burrare";
-"fav_export_select" = "Pro piaghere ischerta sos prefèrridos de esportare";
-"fav_import_desc" = "Podes importare sos prefèrridos tuos comente puntos mesanos tramite documentos GPX (formatu datos GPS comune)\n\nPro cumpartzire su documentu favorites.gpx lu podes abèrrere dae Dropbox, Email, o cale si siat àeru modu - Imprea sa aina Aberi In.";
+"fav_import_title" = "Importa sos preferidos";
+"fav_export_title" = "Esporta sos preferidos";
+"fav_select_remove" = "Pro piaghere ischerta sos preferidos de burrare";
+"fav_export_select" = "Pro piaghere ischerta sos preferidos de esportare";
+"fav_import_desc" = "Podes importare sos preferidos tuos comente puntos mesanos pro mèdiu de documentos GPX (formatu datos GPS comune)\n\nPro cumpartzire su documentu favorites.gpx lu podes abèrrere dae Dropbox, Email, o cale si siat àeru modu - Imprea sa aina Aberi In.";
 "fav_create_group" = "Crea unu grupu nou";
 "fav_enter_group_name" = "Inserta su nùmene de su grupu";
-"fav_exists" = "Su prefèrridu cun su nùmene \"%@\" esistit giai";
+"fav_exists" = "Su preferidu cun su nùmene \"%@\" esistit giai";
 "fav_ignore" = "Ignora";
 "fav_rename" = "Torra a numenare";
 "fav_replace" = "Remplasa";
 "fav_replace_all" = "Remplasa totu";
-"fav_rename_q" = "Torra a numenare su prefèrridu";
-"fav_enter_new_name" = "Pro piaghere inserta unu nùmene nou pro su prefèrridu";
+"fav_rename_q" = "Torra a numenare su preferidu";
+"fav_enter_new_name" = "Pro piaghere inserta unu nùmene nou pro su preferidu";
 // POI
 "poi_insrease_radius" = "Aumenta su raju de chirca a";
 "poi_max_radius_reached" = "Raju de chirca màssimu segudadu";
 "poi_search_near_center" = "Sa chirca est fata a curtzu de su tzentru de sa mapa";
 "poi_hide" = "Cua";
 // My Places
-"favorites" = "Prefèrridos";
+"favorites" = "Preferidos";
 "tracks" = "Biàgios";
 // GPX
 "gpx_point" = "Puntu";
@@ -104,7 +104,7 @@
 "gpx_start" = "Comintzu";
 "gpx_finish" = "Fine";
 "gpx_avg_elev" = "Artària mèdia";
-"fav_remove_q" = "Bogare su prefèrridu?";
+"fav_remove_q" = "Bogare su preferidu?";
 "gpx_elev_range" = "Variedade artària";
 "gpx_updown" = "In susu/In giosso";
 "gpx_uphills_total" = "Totale artziadas";
@@ -115,13 +115,13 @@
 "track_continue_rec" = "Sighi a registrare";
 "track_continue_rec_q" = "Boles sighire a registrare?";
 "shared_string_and" = "e";
-"fav_select" = "Pro piaghere ischerta sos prefèrridos";
+"fav_select" = "Pro piaghere ischerta sos preferidos";
 "rendering_value_disabled_name" = "Disabilitadu";
 "shared_string_edit" = "Modìfica";
 "rendering_value_default_name" = "Predefinidu";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Coloratzione a segunda de sa casta de àndala";
 "rendering_value_walkingRoutesOSMC_name" = "Coloratzione a segunda de OSMC";
-"my_favorites" = "Prefèrridos meos";
+"my_favorites" = "Preferidos meos";
 "rec_interval" = "Intervallu de registratzione";
 "rec_interval_minimum" = "Mìnimu";
 "track_start_rec" = "Incumentza sa registratzione de sa rasta";
@@ -175,7 +175,7 @@
 "sett_arr_map" = "Tzentru de sa mapa";
 "sett_lang_local" = "Locale";
 "sett_lang_trans" = "transliteratzione";
-"sett_pref_lang" = "Limba prefèrrida";
+"sett_pref_lang" = "Limba preferida";
 "sett_lang_show_local" = "Ammustra nùmenes locales";
 "sett_lang_show_trans" = "Nùmenes transliterados";
 "maps" = "Mapas";
@@ -281,15 +281,15 @@
 // Import
 "import_title" = "Importa datos";
 "import_choose_type" = "Pro piaghere issèbera ite importare";
-"import_favorite" = "Prefèrridu";
+"import_favorite" = "Preferidu";
 "import_failed" = "Importatzione faddida";
 "import_cannot" = "Su documentu dislindadu non podet èssere importadu";
 "import_gpx" = "Rasta GPX";
 // Alerts
 "alert_inet_needed" = "Sa cunnessione a ìnternet est netzessària pro custa atzione. Pro piaghere cverìfica sa cunnessione tua.";
 // Context menu
-"ctx_mnu_edit_fav" = "Modìfica su prefèrridu";
-"ctx_mnu_add_fav" = "Annanghe unu prefèrridu";
+"ctx_mnu_edit_fav" = "Modìfica su preferidu";
+"ctx_mnu_add_fav" = "Annanghe unu preferidu";
 "ctx_mnu_share" = "Cumpartzi";
 "ctx_mnu_direction" = "Indicatziones";
 // Location Services
@@ -359,7 +359,7 @@
 "make_call" = "Faghe una mutida/cramada";
 "enter_description" = "Inserta una decritzione";
 "description" = "Descritzione";
-"enter_fav_name" = "Inserta su nùmene de su prefèrridu";
+"enter_fav_name" = "Inserta su nùmene de su preferidu";
 "res_installing" = "Installande...";
 "res_roads" = "Istradas";
 "res_srtm" = "Curvas de livellu";

@@ -182,3 +182,6 @@
 "res_update_no_space" = "Ni dovolj prostora za posodobitve";
 "shared_string_dismiss" = "Opusti";
 "description" = "Opis";
+"shared_string_modify" = "Spremeni";
+"shared_string_later" = "Kasneje";
+"download_map" = "Prejmi zemljevid";

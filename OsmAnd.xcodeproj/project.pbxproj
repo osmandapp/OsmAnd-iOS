@@ -2500,6 +2500,14 @@
 		8AF219861A7FCD380091071B /* OAIconTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextCell.xib */; };
 		8AF219871A7FD2780091071B /* OAIconTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextCell.xib */; };
 		8AF219881A7FD2790091071B /* OAIconTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8AF219841A7FCD380091071B /* OAIconTextCell.xib */; };
+		B59E574A1C03D28D00846FD3 /* InterfaceController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59E57491C03D28D00846FD3 /* InterfaceController.m */; };
+		B59E574D1C03D28D00846FD3 /* NotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59E574C1C03D28D00846FD3 /* NotificationController.m */; };
+		B59E57501C03D28D00846FD3 /* GlanceController.m in Sources */ = {isa = PBXBuildFile; fileRef = B59E574F1C03D28D00846FD3 /* GlanceController.m */; };
+		B59E57521C03D28D00846FD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B59E57511C03D28D00846FD3 /* Assets.xcassets */; };
+		B59E57571C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 App.app in Resources */ = {isa = PBXBuildFile; fileRef = B59E57561C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App.app */; };
+		B59E575D1C03D28E00846FD3 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B59E575B1C03D28E00846FD3 /* Interface.storyboard */; };
+		B59E575F1C03D28E00846FD3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B59E575E1C03D28E00846FD3 /* Assets.xcassets */; };
+		B59E57631C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = B59E57441C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275D419D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
 		BB0275D519D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
@@ -2909,6 +2917,20 @@
 /* End PBXBuildRule section */
 
 /* Begin PBXContainerItemProxy section */
+		B59E57581C03D28E00846FD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B59E57551C03D28D00846FD3;
+			remoteInfo = "OsmAnd Maps WatchKit 1 App";
+		};
+		B59E57611C03D28E00846FD3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B59E57431C03D28C00846FD3;
+			remoteInfo = "OsmAnd Maps WatchKit 1 Extension";
+		};
 		BBFE8EA31AC0190E003F9342 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = BB098CE91793F7FD00423944 /* Project object */;
@@ -2931,6 +2953,20 @@
 			remoteInfo = "Generate app.prefix";
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		B59E576A1C03D28E00846FD3 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				B59E57631C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
@@ -3927,6 +3963,20 @@
 		90FA13E852C14245A4ED3E9D /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		95D2AA6389A47C65DCBA754B /* Pods-dev.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.release.xcconfig"; path = "Pods/Target Support Files/Pods-dev/Pods-dev.release.xcconfig"; sourceTree = "<group>"; };
 		A0C4E6DAE9E8E9A08C3F24CF /* Pods-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-dev/Pods-dev.debug.xcconfig"; sourceTree = "<group>"; };
+		B59E57441C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "OsmAnd Maps WatchKit 1 Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B59E57471C03D28D00846FD3 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		B59E57481C03D28D00846FD3 /* InterfaceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InterfaceController.h; sourceTree = "<group>"; };
+		B59E57491C03D28D00846FD3 /* InterfaceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InterfaceController.m; sourceTree = "<group>"; };
+		B59E574B1C03D28D00846FD3 /* NotificationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NotificationController.h; sourceTree = "<group>"; };
+		B59E574C1C03D28D00846FD3 /* NotificationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NotificationController.m; sourceTree = "<group>"; };
+		B59E574E1C03D28D00846FD3 /* GlanceController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlanceController.h; sourceTree = "<group>"; };
+		B59E574F1C03D28D00846FD3 /* GlanceController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GlanceController.m; sourceTree = "<group>"; };
+		B59E57511C03D28D00846FD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B59E57531C03D28D00846FD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B59E57561C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps WatchKit 1 App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B59E575C1C03D28E00846FD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Interface.storyboard; sourceTree = "<group>"; };
+		B59E575E1C03D28E00846FD3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B59E57601C03D28E00846FD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQFlatAppearance.h; path = PodsExtensions/OAQFlatAppearance.h; sourceTree = "<group>"; };
 		BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQFlatAppearance.m; path = PodsExtensions/OAQFlatAppearance.m; sourceTree = "<group>"; };
 		BB0275D619D2EEC5009AFBA8 /* OACommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACommon.h; sourceTree = "<group>"; };
@@ -4135,6 +4185,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B59E57411C03D28C00846FD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB098CEE1793F7FD00423944 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -5426,6 +5483,40 @@
 			name = DestinationCards;
 			sourceTree = "<group>";
 		};
+		B59E57451C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B59E57481C03D28D00846FD3 /* InterfaceController.h */,
+				B59E57491C03D28D00846FD3 /* InterfaceController.m */,
+				B59E574B1C03D28D00846FD3 /* NotificationController.h */,
+				B59E574C1C03D28D00846FD3 /* NotificationController.m */,
+				B59E574E1C03D28D00846FD3 /* GlanceController.h */,
+				B59E574F1C03D28D00846FD3 /* GlanceController.m */,
+				B59E57511C03D28D00846FD3 /* Assets.xcassets */,
+				B59E57531C03D28D00846FD3 /* Info.plist */,
+				B59E57461C03D28D00846FD3 /* Supporting Files */,
+			);
+			path = "OsmAnd Maps WatchKit 1 Extension";
+			sourceTree = "<group>";
+		};
+		B59E57461C03D28D00846FD3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				B59E57471C03D28D00846FD3 /* PushNotificationPayload.apns */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B59E575A1C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 App */ = {
+			isa = PBXGroup;
+			children = (
+				B59E575B1C03D28E00846FD3 /* Interface.storyboard */,
+				B59E575E1C03D28E00846FD3 /* Assets.xcassets */,
+				B59E57601C03D28E00846FD3 /* Info.plist */,
+			);
+			path = "OsmAnd Maps WatchKit 1 App";
+			sourceTree = "<group>";
+		};
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
@@ -5434,6 +5525,8 @@
 				847041281B079C6D00594C72 /* Java */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
+				B59E57451C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 Extension */,
+				B59E575A1C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 App */,
 				BB098CF31793F7FD00423944 /* Frameworks */,
 				BB098CF21793F7FD00423944 /* Products */,
 				54241F3590BD4223CD756474 /* Pods */,
@@ -5446,6 +5539,8 @@
 				BB098CF11793F7FD00423944 /* OsmAnd DEV.app */,
 				BB451E9A18DCD224005FBE09 /* OsmAnd DEV.app */,
 				BBA3AFEE197FC4BB0039D991 /* OsmAnd Maps.app */,
+				B59E57441C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex */,
+				B59E57561C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -5975,6 +6070,39 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B59E57431C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B59E57671C03D28E00846FD3 /* Build configuration list for PBXNativeTarget "OsmAnd Maps WatchKit 1 Extension" */;
+			buildPhases = (
+				B59E57401C03D28C00846FD3 /* Sources */,
+				B59E57411C03D28C00846FD3 /* Frameworks */,
+				B59E57421C03D28C00846FD3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B59E57591C03D28E00846FD3 /* PBXTargetDependency */,
+			);
+			name = "OsmAnd Maps WatchKit 1 Extension";
+			productName = "OsmAnd Maps WatchKit 1 Extension";
+			productReference = B59E57441C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension.appex */;
+			productType = "com.apple.product-type.watchkit-extension";
+		};
+		B59E57551C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B59E57641C03D28E00846FD3 /* Build configuration list for PBXNativeTarget "OsmAnd Maps WatchKit 1 App" */;
+			buildPhases = (
+				B59E57541C03D28D00846FD3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "OsmAnd Maps WatchKit 1 App";
+			productName = "OsmAnd Maps WatchKit 1 App";
+			productReference = B59E57561C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App.app */;
+			productType = "com.apple.product-type.application.watchapp";
+		};
 		BB098CF01793F7FD00423944 /* OsmAnd DEV */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = BB098D0E1793F7FD00423944 /* Build configuration list for PBXNativeTarget "OsmAnd DEV" */;
@@ -6026,12 +6154,14 @@
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				BBA3AFEA197FC4BB0039D991 /* Copy Pods Resources */,
+				B59E576A1C03D28E00846FD3 /* Embed App Extensions */,
 			);
 			buildRules = (
 				847BAA051B0A2BB700C1CA80 /* PBXBuildRule */,
 			);
 			dependencies = (
 				BBFE8EA81AC0191C003F9342 /* PBXTargetDependency */,
+				B59E57621C03D28E00846FD3 /* PBXTargetDependency */,
 			);
 			name = "OsmAnd Maps";
 			productName = OsmAnd;
@@ -6048,8 +6178,16 @@
 				LastUpgradeCheck = 0610;
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
+					B59E57431C03D28C00846FD3 = {
+						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 92FT9NWE7M;
+					};
+					B59E57551C03D28D00846FD3 = {
+						CreatedOnToolsVersion = 7.1;
+						DevelopmentTeam = 92FT9NWE7M;
+					};
 					BB098CF01793F7FD00423944 = {
-						DevelopmentTeam = LM67P5MQ23;
+						DevelopmentTeam = 92FT9NWE7M;
 					};
 					BB451E1E18DCD224005FBE09 = {
 						DevelopmentTeam = LM67P5MQ23;
@@ -6060,7 +6198,7 @@
 						};
 					};
 					BBA3AF30197FC4BB0039D991 = {
-						DevelopmentTeam = LM67P5MQ23;
+						DevelopmentTeam = 92FT9NWE7M;
 					};
 					BBFE8E9D1AC018A2003F9342 = {
 						CreatedOnToolsVersion = 6.3;
@@ -6084,6 +6222,7 @@
 				be,
 				pl,
 				hu,
+				Base,
 			);
 			mainGroup = BB098CE81793F7FD00423944;
 			productRefGroup = BB098CF21793F7FD00423944 /* Products */;
@@ -6094,11 +6233,31 @@
 				BB451E1E18DCD224005FBE09 /* OsmAnd DEV (prebuilt Core) */,
 				BBA3AF30197FC4BB0039D991 /* OsmAnd Maps */,
 				BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */,
+				B59E57431C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension */,
+				B59E57551C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B59E57421C03D28C00846FD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B59E57521C03D28D00846FD3 /* Assets.xcassets in Resources */,
+				B59E57571C03D28E00846FD3 /* OsmAnd Maps WatchKit 1 App.app in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B59E57541C03D28D00846FD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B59E575F1C03D28E00846FD3 /* Assets.xcassets in Resources */,
+				B59E575D1C03D28E00846FD3 /* Interface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB098CEF1793F7FD00423944 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -8420,6 +8579,16 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B59E57401C03D28C00846FD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B59E574D1C03D28D00846FD3 /* NotificationController.m in Sources */,
+				B59E574A1C03D28D00846FD3 /* InterfaceController.m in Sources */,
+				B59E57501C03D28D00846FD3 /* GlanceController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		BB098CED1793F7FD00423944 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -9025,6 +9194,16 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		B59E57591C03D28E00846FD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B59E57551C03D28D00846FD3 /* OsmAnd Maps WatchKit 1 App */;
+			targetProxy = B59E57581C03D28E00846FD3 /* PBXContainerItemProxy */;
+		};
+		B59E57621C03D28E00846FD3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B59E57431C03D28C00846FD3 /* OsmAnd Maps WatchKit 1 Extension */;
+			targetProxy = B59E57611C03D28E00846FD3 /* PBXContainerItemProxy */;
+		};
 		BBFE8EA41AC0190E003F9342 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = BBFE8E9D1AC018A2003F9342 /* Generate app.prefix */;
@@ -9043,6 +9222,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		B59E575B1C03D28E00846FD3 /* Interface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				B59E575C1C03D28E00846FD3 /* Base */,
+			);
+			name = Interface.storyboard;
+			sourceTree = "<group>";
+		};
 		BB451DF318D8F7D7005FBE09 /* Localizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -9066,6 +9253,121 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B59E57651C03D28E00846FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IBSC_MODULE = OsmAnd_Maps_WatchKit_1_Extension;
+				INFOPLIST_FILE = "OsmAnd Maps WatchKit 1 App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Debug;
+		};
+		B59E57661C03D28E00846FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				IBSC_MODULE = OsmAnd_Maps_WatchKit_1_Extension;
+				INFOPLIST_FILE = "OsmAnd Maps WatchKit 1 App/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 4;
+				"TARGETED_DEVICE_FAMILY[sdk=iphonesimulator*]" = "1,4";
+			};
+			name = Release;
+		};
+		B59E57681C03D28E00846FD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd Maps WatchKit 1 Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		B59E57691C03D28E00846FD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = "OsmAnd Maps WatchKit 1 Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = net.osmand.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		BB098D0C1793F7FD00423944 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 847041141B0791FF00594C72 /* j2objcSettings.xcconfig */;
@@ -9207,6 +9509,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -9230,6 +9533,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -9327,6 +9631,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
@@ -9363,6 +9668,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OA-Prefix.pch";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
@@ -9408,6 +9714,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B59E57641C03D28E00846FD3 /* Build configuration list for PBXNativeTarget "OsmAnd Maps WatchKit 1 App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B59E57651C03D28E00846FD3 /* Debug */,
+				B59E57661C03D28E00846FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		B59E57671C03D28E00846FD3 /* Build configuration list for PBXNativeTarget "OsmAnd Maps WatchKit 1 Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B59E57681C03D28E00846FD3 /* Debug */,
+				B59E57691C03D28E00846FD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		BB098CEC1793F7FD00423944 /* Build configuration list for PBXProject "OsmAnd" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

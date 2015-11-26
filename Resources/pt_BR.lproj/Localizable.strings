@@ -290,7 +290,7 @@
 "rendering_attr_showCycleRoutes_name" = "Mostrar rotas para bicicletas";
 "rendering_attr_hideBuildings_name" = "Edifícios";
 "rendering_attr_noPolygons_name" = "Polígonos";
-"rendering_attr_noAdminboundaries_name" = "Limites";
+"rendering_attr_noAdminboundaries_name" = "Fronteiras";
 "rendering_attr_publicTransportMode_name" = "Rotas de ônibus e trólebus";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente de mapeador OSM";
@@ -393,7 +393,7 @@
 "change_group" = "Alterar grupo";
 "change_color" = "Alterar cor";
 "wpt_select" = "Por favor, selecione pontos de parada";
-"gpx_remove_wpts_q" = "Você quer apagar ponto de parada selecionado?";
+"gpx_remove_wpts_q" = "Você quer apagar o ponto de parada selecionado?";
 "create_new_trip" = "Criar nova viagem";
 "editing_waypoints" = "Editando paradas";
 "select_wpt_on_map" = "Selecionar ponto no mapa para adicionar à viagem";

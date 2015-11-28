@@ -289,7 +289,7 @@
 "rendering_attr_osmcTraces_name" = "Sobreposição de símbolo de montanhismo";
 "rendering_attr_showCycleRoutes_name" = "Mostrar rotas para bicicletas";
 "rendering_attr_hideBuildings_name" = "Edifícios";
-"rendering_attr_noPolygons_name" = "Polígonos";
+"rendering_attr_noPolygons_name" = "Polígonos de áreas";
 "rendering_attr_noAdminboundaries_name" = "Fronteiras";
 "rendering_attr_publicTransportMode_name" = "Rotas de ônibus e trólebus";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nível";

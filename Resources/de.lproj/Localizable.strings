@@ -259,9 +259,9 @@
 "poi_search_near_center" = "Ausgangspunkt der Suche ist die Kartenmitte";
 "track_recording" = "Spuraufzeichnung";
 "prch_nau_q2_cell" = "Das Herunterladen über eine Mobilfunkverbindung benötigt %@.";
-"prch_nau_q2_wifi" = "Das Herunterladen über WiFi-Netzwerk benötigt %@.";
-"res_inst_avail_cell_q" = "Installation von %@ benötigt %@ bei Download über Mobilfunknetz.";
-"res_inst_avail_wifi_q" = "Installation von %@ benötigt %@ bei Download über WLAN.";
+"prch_nau_q2_wifi" = "Das Herunterladen über ein WiFi-Netzwerk benötigt %@.";
+"res_inst_avail_cell_q" = "Installation von %@ benötigt %@ beim Download über das Mobilfunknetz.";
+"res_inst_avail_wifi_q" = "Installation von %@ benötigt %@ beim Download über das WLAN.";
 "parking_time_limited" = "Parkzeit besgrenzt auf";
 "time_left" = "übrig";
 "time_overdue" = "überfällig";
@@ -338,7 +338,7 @@
 "rendering_value_walkingRoutesOSMC_name" = "Routenfarbe gemäß OSMC";
 "shared_string_edit" = "Bearbeiten";
 "rendering_value_default_name" = "Standard";
-"shared_string_dismiss" = "Ablehnen";
+"shared_string_dismiss" = "Verwerfen";
 "rendering_attr_hikingRoutesOSMC_name" = "Wandersymboleinblendung";
 "shared_string_remove" = "Entfernen";
 "shared_string_modify" = "Ändern";
@@ -439,3 +439,10 @@
 "gpx_edit_mode" = "Bearbeitungsmodus";
 "go_to_map" = "Zur Karte gehen";
 "sqlitedb_import_title" = "Map-Creator-Datei importieren";
+// HUD
+"hud_heading" = "Überschrift";
+"product_desc_trip_planning" = "Mit diesem Plugin kannst du deine Fahrt planen, Wegpunkte hinzufügen und die Entfernung zu deinem Ziel messen";
+"plugins" = "Plugins";
+"plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> zu aktivieren, gehe bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";
+"plugin_popup_wiki_desc" = "Um das Wikipediaplugin zu nutzen, lade bitte die Wikipediadaten für die gewünschte Region herunter.";
+"gpx_import_desc" = "Du kannst deine GPX Dateien importieren (übliches GPS-Datenformat).\n\nUm die GPX Datei zu teilen kannst du die Datei von Dropbox, Email oder jeder anderen Quelle öffnen. - Benutze die \"öffnen in\" Funktion.";

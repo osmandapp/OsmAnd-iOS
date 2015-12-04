@@ -200,7 +200,7 @@
 "other_options" = "Egyéb beállítások";
 "add_parking" = "Hozzáadás parkolási pozícióként";
 "add_parking_short" = "Parkolás hozzáadása";
-"add_waypoint" = "Útpont hozzáadása a nyomvonalhoz";
+"add_waypoint" = "Útpont hozzáadása az utazáshoz";
 "add_waypoint_short" = "Útvonalpont hozzáadása";
 "more" = "Több";
 "parking_marker" = "Parkolásjelző";
@@ -450,3 +450,4 @@
 "hist_remove_q" = "El szeretné távolítani az előzményelemeket?";
 "gpx_edit_mode" = "Szerkesztő mód";
 "go_to_map" = "Ugrás a térképhez";
+"product_title_trip_planning" = "Utazástervezés";

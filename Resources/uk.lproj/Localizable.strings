@@ -70,3 +70,4 @@
 "fav_select_remove" = "Оберіть закладки для вилучення";
 "fav_export_select" = "Виберіть закладки для експорту";
 "shared_string_dismiss" = "Не надсилати";
+"description" = "Опис";

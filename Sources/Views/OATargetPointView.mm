@@ -32,6 +32,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
+#import "OASmartNaviWatchSession.h"
+
 @interface OATargetPointZoomView ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
@@ -2144,6 +2146,8 @@
     // http://osmand.net/go.html?lat=12.6313&lon=-7.9955&z=8&title=New+York The location was shared with you by OsmAnd
     
     UIImage *image = [self.mapView getGLScreenshot];
+    
+    [[OASmartNaviWatchSession sharedInstance] sendImageData:image];
     
     //NSString *title = [_targetPoint.title stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet alphanumericCharacterSet]];
     

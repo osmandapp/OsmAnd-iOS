@@ -115,6 +115,11 @@
       "scale" : "2x"
     },
     {
+      "idiom" : "ipad",
+      "size" : "83.5x83.5",
+      "scale" : "2x"
+    },
+    {
       "size" : "24x24",
       "idiom" : "watch",
       "scale" : "2x",
@@ -143,6 +148,7 @@
     {
       "size" : "40x40",
       "idiom" : "watch",
+      "filename" : "osmand-spot-ipad7@2x-1.png",
       "scale" : "2x",
       "role" : "appLauncher",
       "subtype" : "38mm"

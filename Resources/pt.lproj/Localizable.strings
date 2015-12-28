@@ -343,3 +343,6 @@
 "shared_string_dismiss" = "Descartar";
 "rendering_value_default_name" = "Predefinido";
 "rendering_attr_hikingRoutesOSMC_name" = "Sobreposição de símbolo de montanhismo";
+"rendering_value_disabled_name" = "Desactivado";
+"rendering_value_walkingRoutesScopeOSMC_name" = "Colorir de acordo com o estilo de rota";
+"rendering_value_walkingRoutesOSMC_name" = "Colorir de acordo com a OSMC";

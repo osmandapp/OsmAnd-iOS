@@ -89,6 +89,7 @@
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
+#import "OASmartNaviWatchSession.h"
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 30.0f
@@ -663,12 +664,61 @@
     
     [self refreshFavoritesMarkersCollection];
     
+    //add observer for SmartNaviWatch updates
+    [[OASmartNaviWatchSession sharedInstance] registerObserverForUpdates:self];
+    
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
     _forceDisplayDensityFactor = NO;
     _forcedDisplayDensityFactor = self.displayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
+}
+
+-(void)smartNaviWatchRequestLocationUpdate {
+    
+    OAMapRendererView* viewToRender = (OAMapRendererView*)self.view;
+    [viewToRender setZoom:17.0];    //TODO not sure if correct method to use this feature
+
+    //move to location
+    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
+    CGPoint myLocationScreen;
+    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
+//    [viewToRender convert:&myLocationI toScreen:&myLocationScreen];
+//    myLocationScreen.x *= viewToRender.contentScaleFactor;
+//    myLocationScreen.y *= viewToRender.contentScaleFactor;
+    [viewToRender setTarget31:myLocationI];
+    
+    //zoom to location
+    //TODO
+    
+
+//    [viewToRender setHidden:NO];
+//    [viewToRender resumeRendering];
+    
+    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:3];
+    for (int i=1; i<4; ++i) {
+        UIImage* renderedImage = [self renderImageFromMapScreen:viewToRender andZoomLevel:i];
+        [images addObject:renderedImage];
+    }
+    
+    
+//    UIImage* renderedImage2 = [viewToRender getGLScreenshot];
+    
+    [[OASmartNaviWatchSession sharedInstance] sendImageData:images];
+}
+
+-(UIImage*)renderImageFromMapScreen:(UIView*)viewToRender andZoomLevel:(int)zoomLevel {
+    
+    float lengthOfImage = viewToRender.bounds.size.width/zoomLevel;
+    
+    [viewToRender setHidden:NO];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(lengthOfImage, lengthOfImage), YES, 0);
+    [viewToRender drawViewHierarchyInRect:CGRectMake(-viewToRender.bounds.size.width/2+lengthOfImage/2, -viewToRender.bounds.size.height/2+lengthOfImage/2, viewToRender.bounds.size.width, viewToRender.bounds.size.height) afterScreenUpdates:NO];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 - (void)refreshFavoritesMarkersCollection

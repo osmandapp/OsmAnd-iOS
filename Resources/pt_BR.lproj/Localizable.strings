@@ -383,7 +383,7 @@
 "menu_all_trips" = "Todas as Viagens";
 "my_favorites" = "Meus Favoritos";
 "record_trip" = "Gravar sua viagem";
-"shared_string_remove" = "Apagar";
+"shared_string_remove" = "Excluir";
 "gpx_distance_points" = "Distância (pontos)";
 "gpx_max_speed" = "Velocidade máxima";
 "total_time" = "Tempo total";

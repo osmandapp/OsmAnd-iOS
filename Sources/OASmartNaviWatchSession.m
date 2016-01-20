@@ -10,10 +10,12 @@
 #import "OAIAPHelper.h"
 #import "OATargetPointView.h"
 #import "OAMapViewController.h"
+#import "OADestinationsHelper.h"
+#import "OAMapPanelViewController.h"
+#import "OARootViewController.h"
+#import "OAMapViewController.h"
 
 @implementation OASmartNaviWatchSession
-
-//@synthesize someProperty;
 
 #pragma mark Singleton Methods
 
@@ -29,6 +31,7 @@
 - (id)init {
     if (self = [super init]) {
         //init properties here
+        navigationController = [[OASmartNaviWatchNavigationController alloc] init];
     }
     return self;
 }
@@ -54,20 +57,12 @@
     return ![[OAIAPHelper sharedInstance] isProductDisabled:kInAppId_Addon_SmartNaviWatch];
 }
 
--(void)sendData:(NSData*)data {
+-(void)sendImageData:(NSArray *)imageData forLocation:(CLLocation*)location {
     WCSession* session = [WCSession defaultSession];
-    if (session.watchAppInstalled) {
-        
-    }
     
-    if (session.isPaired) {
-        [session updateApplicationContext:@{@"viewController2": @"item2"} error:nil];
-        
+    if (session.watchAppInstalled) {
+        //TODO show message
     }
-}
-
--(void)sendImageData:(NSArray *)imageData {
-    WCSession* session = [WCSession defaultSession];
     
     //scale picture to device resolution in order to save data
     
@@ -79,6 +74,25 @@
                 NSData *data = [OASmartNaviWatchSession imageDataWithImage:(UIImage*)[imageData objectAtIndex:i] scaledToSize:CGSizeMake(140, 140)];
                 [dataDict setObject:data forKey:[NSString stringWithFormat:@"image%d",i]];
             }
+            
+            //request location info
+            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+            NSString *address = [mapPanel findRoadNameByLat:location.coordinate.latitude lon:location.coordinate.longitude];
+
+            if (address != nil) {
+                [dataDict setObject:address forKey:@"locationInfo"];
+
+            }
+            
+            //TODO move this to some other method
+
+            
+            
+
+            //get routing data
+            NSDictionary *routingData = [navigationController getActiveRouteInfoForCurrentLocation:location.coordinate];
+            
+//            [dataDict setObject:routingData forKey:@"routingInfo"];
             
             [session sendMessage:dataDict
                     replyHandler:^(NSDictionary *reply) {

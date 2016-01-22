@@ -415,7 +415,7 @@
 "plugin_popup_srtm_title" = "Höhenlinien herunterladen";
 "plugin_popup_nautical_title" = "Seekarten herunterladen";
 "restore" = "Zurückgeben";
-"restore_all_purchases" = "Alle Einkäufe zurückgeben";
+"restore_all_purchases" = "Alle Einkäufe wiederherstellen";
 "no_statistics" = "Keine Statistik";
 "no_internet_avail" = "Kein Internet verfügbar";
 "no_internet_avail_desc_first" = "Bitte schalten Sie die Internetverbindung ein, um die Liste der Karten herunterzuladen";

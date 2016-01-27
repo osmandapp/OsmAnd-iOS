@@ -296,3 +296,17 @@
 "yesterday" = "Hier";
 "gpx_edit_mode" = "Mode édition";
 "show_region_on_map_title" = "Carte téléchargée";
+"tracks" = "Voyages";
+"gpx_import_title" = "Importer un voyage";
+"gpx_export_title" = "Exporter le voyage";
+"gpx_export_select_track" = "Merci de sélectionner le voyage à exporter";
+"gpx_route" = "Itinéraire";
+"gpx_route_time" = "Durée de l'itinéraire";
+"gpx_finish" = "Terminer";
+"rec_interval" = "Intervalle d'enregistrement";
+"gpx_distance_points" = "Distance (points)";
+"map_settings_style" = "Style de la carte";
+"intro_welcome" = "Bienvenue sur\nOsmAnd";
+"sett_units" = "Unités";
+"sett_zoom" = "Bouton de zoom";
+"sett_arr" = "Flèches de la carte";

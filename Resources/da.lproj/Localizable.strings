@@ -149,7 +149,7 @@
 "rendering_attr_coloredBuildings_name" = "Farvekod bygninger efter type";
 "rendering_attr_alpineHiking_name" = "Alpin vandreskala (SAC)";
 "rendering_attr_osmcTraces_name" = "Vandresymbol overlejring";
-"rendering_attr_showCycleRoutes_name" = "Vis cykelruter";
+"rendering_attr_showCycleRoutes_name" = "Cykelruter";
 "rendering_attr_hideBuildings_name" = "Skjul bygninger";
 "rendering_attr_noPolygons_name" = "Skjul polygoner";
 "rendering_attr_noAdminboundaries_name" = "Skjul grænser";

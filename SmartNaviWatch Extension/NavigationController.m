@@ -35,7 +35,7 @@
     
     if (delegate.waypoints != nil && delegate.waypoints.count > 0) {
         
-        [self.navigationTable setNumberOfRows:delegate.waypoints.count withRowType:@"NavigationItemId"];
+        [self.navigationTable setNumberOfRows:delegate.waypoints.count+1 withRowType:@"NavigationItemId"];
         
         NSLog(@"init table with size %d", self.navigationTable.numberOfRows);
         
@@ -51,10 +51,19 @@
             [row.nameLabel setText:wp.name];
             [row.distanceLabel setText:[NSString stringWithFormat:@"%.f m", wp.distance]];
             
-            UIImage *bearingImageFile = [UIImage imageNamed:[NSString stringWithFormat:@"map_pedestrian_bearing_%.f.png",wp.bearing]];
+            UIImage *bearingImageFile = [UIImage imageNamed:[NSString stringWithFormat:@"map_pedestrian_bearing_%i.png",(int)wp.bearing]];
             [row.bearingImage setImage:bearingImageFile];
             
         }
+        
+        // init target destination row
+        NavigationItem* row = [self.navigationTable rowControllerAtIndex:delegate.waypoints.count];
+        
+        [row.nameLabel setText:@"Target destination reached"];
+        [row.distanceLabel setText:@""];
+        
+        UIImage *targetImageFile = [UIImage imageNamed:@"map_target_point.png"];
+        [row.bearingImage setImage:targetImageFile];
         
         [self scrollToCurrentIndex];
 
@@ -74,7 +83,7 @@
 -(void)scrollToCurrentIndex {
     ExtensionDelegate *delegate = (ExtensionDelegate*)([WKExtension sharedExtension].delegate);
     // scroll to current index
-    [self.navigationTable scrollToRowAtIndex:[delegate.currentNavigationIndex integerValue]];
+    [self.navigationTable scrollToRowAtIndex:[delegate.currentNavigationIndex integerValue]+1];
 }
 
 -(void)initRouteData {

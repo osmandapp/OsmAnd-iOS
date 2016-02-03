@@ -40,7 +40,7 @@
                                         <items>
                                             <group width="1" height="0.40000000000000002" alignment="left" layout="vertical" id="OYy-ZA-kZ3">
                                                 <items>
-                                                    <imageView width="54" height="54" alignment="center" verticalAlignment="center" image="map_pedestrian_bearing_0.png" id="XrT-tG-5di"/>
+                                                    <imageView width="54" height="54" alignment="center" verticalAlignment="center" image="map_pedestrian_bearing_0.png" contentMode="center" id="XrT-tG-5di"/>
                                                 </items>
                                             </group>
                                             <group width="1" height="0.59999999999999998" alignment="left" verticalAlignment="bottom" layout="vertical" id="rW2-co-0B7">

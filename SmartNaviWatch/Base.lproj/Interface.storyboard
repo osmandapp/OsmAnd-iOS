@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="9515"/>
     </dependencies>
     <scenes>
-        <!--Interface Controller-->
+        <!--InterfaceController-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <controller id="AgC-eL-Hgc" customClass="InterfaceController">
+                <controller identifier="InterfaceController" id="AgC-eL-Hgc" customClass="InterfaceController">
                     <items>
                         <picker height="1" alignment="center" verticalAlignment="center" style="sequence" id="G8U-am-sli"/>
                     </items>
@@ -23,27 +23,30 @@
                     </menu>
                     <connections>
                         <outlet property="mapImages" destination="G8U-am-sli" id="ngg-bt-ncZ"/>
-                        <segue destination="BtR-tD-s0D" kind="relationship" relationship="nextPage" id="AlJ-L4-43C"/>
                     </connections>
                 </controller>
             </objects>
             <point key="canvasLocation" x="235" y="347.5"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--NavigationController-->
         <scene sceneID="pb8-Ko-Pat">
             <objects>
-                <controller id="BtR-tD-s0D" customClass="NavigationController">
+                <controller identifier="NavigationController" hidesWhenLoading="NO" id="BtR-tD-s0D" customClass="NavigationController">
                     <items>
-                        <table alignment="left" id="OO7-JS-xeV">
+                        <table alignment="left" verticalAlignment="center" id="OO7-JS-xeV">
                             <items>
                                 <tableRow identifier="NavigationItemId" selectable="NO" id="irY-Mo-xyC" customClass="NavigationItem">
-                                    <group key="rootItem" width="1" height="40" alignment="left" id="3HP-Z9-O6Y">
+                                    <group key="rootItem" width="1" height="0.90000000000000002" alignment="left" layout="vertical" id="3HP-Z9-O6Y">
                                         <items>
-                                            <imageView width="32" height="32" alignment="left" verticalAlignment="center" id="XrT-tG-5di"/>
-                                            <group width="1" height="1" alignment="left" layout="vertical" id="rW2-co-0B7">
+                                            <group width="1" height="0.40000000000000002" alignment="left" layout="vertical" id="OYy-ZA-kZ3">
                                                 <items>
-                                                    <label height="0.45000000000000001" alignment="left" text="&lt;Place&gt;" id="qdo-8Q-UhH"/>
-                                                    <label height="0.45000000000000001" alignment="left" text="&lt;100 m&gt;" id="uid-hI-j7V"/>
+                                                    <imageView width="54" height="54" alignment="center" verticalAlignment="center" image="map_pedestrian_bearing_0.png" id="XrT-tG-5di"/>
+                                                </items>
+                                            </group>
+                                            <group width="1" height="0.59999999999999998" alignment="left" verticalAlignment="bottom" layout="vertical" id="rW2-co-0B7">
+                                                <items>
+                                                    <label alignment="center" text="&lt;100 m&gt;" id="uid-hI-j7V"/>
+                                                    <label alignment="center" text="&lt;Place&gt;" textAlignment="center" numberOfLines="4" id="qdo-8Q-UhH"/>
                                                 </items>
                                             </group>
                                         </items>
@@ -64,15 +67,46 @@
             </objects>
             <point key="canvasLocation" x="453" y="347"/>
         </scene>
+        <!--ErrorMessageController-->
+        <scene sceneID="LTw-fA-Gq4">
+            <objects>
+                <controller identifier="ErrorMessageController" id="Fy1-aa-UbR" customClass="ErrorMessageController">
+                    <items>
+                        <label width="1" height="0.69999999999999996" alignment="left" text="Please open the OsmAnd App on your iPhone" textAlignment="center" numberOfLines="3" id="Bcp-Nf-eOV"/>
+                        <button width="1" alignment="left" title="OK" id="BLO-Fe-Odn">
+                            <connections>
+                                <action selector="dismissErrorMessageController" destination="Fy1-aa-UbR" id="Bxz-Mh-iJf"/>
+                            </connections>
+                        </button>
+                    </items>
+                    <connections>
+                        <outlet property="errorMessageLabel" destination="Bcp-Nf-eOV" id="6Cf-Cl-ezm"/>
+                    </connections>
+                </controller>
+            </objects>
+            <point key="canvasLocation" x="235" y="114"/>
+        </scene>
         <!--Glance Interface Controller-->
         <scene sceneID="BOz-TT-tkC">
             <objects>
                 <glanceController spacing="0.0" id="0uZ-2p-rRc" customClass="GlanceController">
                     <items>
-                        <group alignment="left" id="t8f-Gd-c4y"/>
-                        <group alignment="left" id="uCw-4Q-Ouw"/>
+                        <group alignment="left" id="t8f-Gd-c4y">
+                            <items>
+                                <label alignment="left" verticalAlignment="center" text="&lt;Place&gt;" numberOfLines="2" id="iW3-bP-cx2"/>
+                            </items>
+                        </group>
+                        <group alignment="left" id="uCw-4Q-Ouw">
+                            <items>
+                                <imageView alignment="left" id="udg-kD-0tm"/>
+                            </items>
+                        </group>
                     </items>
                     <edgeInsets key="margins" left="0.0" right="0.0" top="0.0" bottom="14"/>
+                    <connections>
+                        <outlet property="locationTitle" destination="iW3-bP-cx2" id="ggj-qu-nhI"/>
+                        <outlet property="mapImage" destination="udg-kD-0tm" id="enZ-2T-uJn"/>
+                    </connections>
                 </glanceController>
             </objects>
             <point key="canvasLocation" x="235" y="672"/>

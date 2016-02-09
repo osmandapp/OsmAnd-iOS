@@ -95,8 +95,9 @@
 /**
  *  gathers all the current information such as current image data, location
  *  and navigation instructions
+ *  @return: true if there is a registered observer
  */
--(void)initiateUpdate;
+-(BOOL)initiateUpdate;
 
 /**
  *  sets the active route of the OsmAnd navigation mode if any

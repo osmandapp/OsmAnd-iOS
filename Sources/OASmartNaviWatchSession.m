@@ -129,8 +129,6 @@
                 //handle reply from iPhone app here
             }
             errorHandler:^(NSError *error) {
-                //TODO code == 7007
-                // open Watch App in order to get navigation updates
                 NSString *message;
                 switch (error.code) {
                     case 7007: {
@@ -145,6 +143,7 @@
                 }
                 
                 if (![message isEqualToString:@""]) {
+                    //TODO show error in alert box not disabling the map rendering
 //                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Error") message:message delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
 //                    [alertView show];
                 }
@@ -177,8 +176,12 @@
     
 }
 
--(void)initiateUpdate {
-    [(OAMapViewController*)observer smartNaviWatchRequestLocationUpdate];
+-(BOOL)initiateUpdate {
+    if (observer) {
+        [(OAMapViewController*)observer smartNaviWatchRequestLocationUpdate];
+        return YES;
+    }
+    return NO;
 }
 
 

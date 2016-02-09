@@ -12,9 +12,29 @@
 
 
 @interface OASmartNaviWatchNavigationController : NSObject {
- 
+    
+    NSMutableArray *waypoints;
+    NSArray *activeRoute;
+    BOOL onRoute;
+
 }
 
--(NSDictionary*)getActiveRouteInfoForCurrentLocation:(CLLocationCoordinate2D)currentLocation;
+@property(nonatomic,assign) NSInteger currentIndexForRouting;
+
+/**
+ *  <#Description#>
+ *
+ *  @param currentLocation <#currentLocation description#>
+ *
+ *  @return <#return value description#>
+ */
+-(NSDictionary*)getActiveRouteInfoForCurrentLocation:(CLLocation*)currentLocation;
+
+- (float)getBearingFrom:(CLLocation*)fromLocation toCoordinate:(CLLocationCoordinate2D)toCoord;
+
+- (BOOL)calculateClosestWaypointIndexFromLocation:(CLLocation*)currentLocation;
+
+-(void)setActiveRouteForLocation:(CLLocation*)currentLocation;
+-(BOOL)hasActiveRoute:(CLLocation*)currentLocation;
 
 @end

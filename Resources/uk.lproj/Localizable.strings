@@ -10,7 +10,7 @@
 "shared_string_add" = "Додати";
 "rendering_attr_streetLighting_name" = "Вуличне освітлення";
 "rendering_attr_roadStyle_name" = "Стиль доріг";
-"rendering_value_default_name" = "За замовчуваням";
+"rendering_value_default_name" = "За замовчуванням";
 "rendering_value_orange_name" = "Помаранчевий";
 "rendering_value_germanRoadAtlas_name" = "Атлас доріг Німеччини";
 "rendering_value_highContrastRoads_name" = "Контрастні дороги";

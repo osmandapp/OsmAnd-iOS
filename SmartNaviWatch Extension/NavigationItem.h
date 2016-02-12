@@ -5,7 +5,11 @@
 //  Created by egloff on 23/01/16.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
-
+/*!
+ *  This model class represents a row, holding all the information
+ *  of a OASmartNaviWatchNavigationWaypoint.
+ *
+ */
 #import <Foundation/Foundation.h>
 #import <WatchKit/WatchKit.h>
 

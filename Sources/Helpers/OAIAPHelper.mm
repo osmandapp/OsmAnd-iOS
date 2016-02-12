@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import <Reachability.h>
+#import "OASmartNaviWatchSession.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
@@ -183,6 +184,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                                       kInAppId_Addon_Wiki,
                                       kInAppId_Addon_Srtm,
                                       kInAppId_Addon_TripPlanning,
+                                      kInAppId_Addon_SmartNaviWatch,
                                       nil];
         sharedInstance = [[self alloc] initWithProductIdentifiers:productIdentifiers];
     });
@@ -214,6 +216,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             kInAppId_Addon_Wiki,
             kInAppId_Addon_Srtm,
             kInAppId_Addon_TripPlanning,
+            kInAppId_Addon_SmartNaviWatch,
             nil];
 }
 
@@ -270,7 +273,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     {
         _wasProductListFetched = NO;
         
-        _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking, kInAppId_Addon_TripPlanning];
+        _freePluginsList = @[kInAppId_Addon_SkiMap, kInAppId_Addon_TrackRecording, kInAppId_Addon_Parking, kInAppId_Addon_TripPlanning, kInAppId_Addon_SmartNaviWatch];
 
         NSMutableArray *freeProds = [NSMutableArray array];
         for (NSString *prodId in _freePluginsList)
@@ -364,6 +367,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:[self getDisabledId:productIdentifier]];
     [self buildFunctionalAddonsArray];
     [[[OsmAndApp instance] addonsSwitchObservable] notifyEventWithKey:productIdentifier andValue:[NSNumber numberWithBool:YES]];
+
 }
 
 - (BOOL)isProductDisabled:(NSString *)productIdentifier
@@ -621,6 +625,10 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         return @"ic_plugin_wikipedia";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
         return @"ic_plugin_trip_planning";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_SmartNaviWatch]) {
+        return @"ic_plugin_smartNaviWatch";
+    }
+
     else
         return nil;
 }
@@ -641,6 +649,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         return @"img_plugin_wikipedia.jpg";
     else if ([productIdentifier isEqualToString:kInAppId_Addon_TripPlanning])
         return @"img_plugin_trip_planning.jpg";
+    else if ([productIdentifier isEqualToString:kInAppId_Addon_SmartNaviWatch])
+        return @"img_plugin_smartNaviWatch.jpg";
     else
         return nil;
 }

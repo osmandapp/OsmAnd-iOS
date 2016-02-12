@@ -54,6 +54,7 @@
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"
 #import "OAGPXEditToolbarViewController.h"
+#import "OASmartNaviWatchSession.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -630,7 +631,14 @@ typedef enum
     else if ([productIdentifier isEqualToString:kInAppId_Addon_Srtm])
     {
         [_app.data.mapLayerChangeObservable notifyEvent];
+    }     else if ([productIdentifier isEqualToString:kInAppId_Addon_SmartNaviWatch]) {
+        if ([value boolValue]) {
+            [[OASmartNaviWatchSession sharedInstance] activatePlugin];
+        } else {
+            [[OASmartNaviWatchSession sharedInstance] deactivatePlugin];
+        }
     }
+
 }
 
 - (void)saveMapStateIfNeeded
@@ -1875,6 +1883,9 @@ typedef enum
 -(void)targetGoToGPXRoute
 {
     [self openTargetViewWithGPXRoute:_activeTargetObj pushed:YES];
+    
+    // inform SmartNaviWatch for navigation update
+    [[OASmartNaviWatchSession sharedInstance] setActiveRouteWithForceRefresh:YES];
 }
 
 -(void)targetViewSizeChanged:(CGRect)newFrame animated:(BOOL)animated

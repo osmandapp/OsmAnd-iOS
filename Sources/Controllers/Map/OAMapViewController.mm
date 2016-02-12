@@ -676,36 +676,59 @@
 }
 
 -(void)smartNaviWatchRequestLocationUpdate {
-    
+
+    //get the current location
+    CLLocation* currentLocation = _app.locationServices.lastKnownLocation;
+
+    //get the view to render the images
     OAMapRendererView* viewToRender = (OAMapRendererView*)self.view;
-    [viewToRender setZoom:17.0];    //TODO not sure if correct method to use this feature
-
-    //move to location
-    CLLocation* myLocation = _app.locationServices.lastKnownLocation;
-    CGPoint myLocationScreen;
-    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
-//    [viewToRender convert:&myLocationI toScreen:&myLocationScreen];
-//    myLocationScreen.x *= viewToRender.contentScaleFactor;
-//    myLocationScreen.y *= viewToRender.contentScaleFactor;
-    [viewToRender setTarget31:myLocationI];
     
-    //zoom to location
-    //TODO
-    
-
-//    [viewToRender setHidden:NO];
-//    [viewToRender resumeRendering];
-    
-    NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:3];
-    for (int i=1; i<4; ++i) {
-        UIImage* renderedImage = [self renderImageFromMapScreen:viewToRender andZoomLevel:i];
-        [images addObject:renderedImage];
+    //ensure screen is not turned off
+    [viewToRender setHidden:NO];
+    if (viewToRender.isRenderingSuspended) {
+        //TODO does not work :(
+        //[viewToRender resumeRendering];
     }
     
+
+    //rotate in the appropriate angle
+    [viewToRender setAzimuth:currentLocation.course];
+
+    //zoom to an appropriate zoom level
+    [viewToRender setZoom:17.0];
     
-//    UIImage* renderedImage2 = [viewToRender getGLScreenshot];
+    //set portrait mode in order to fetch the correct images
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    });
     
-    [[OASmartNaviWatchSession sharedInstance] sendImageData:images];
+    //move to location
+    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude));
+    [viewToRender setTarget31:myLocationI];
+    
+    
+    //wait for map to be moved
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        
+        NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:3];
+        for (int i=1; i<4; ++i) {
+            UIImage* renderedImage = [self renderImageFromMapScreen:viewToRender andZoomLevel:i];
+            [images addObject:renderedImage];
+        }
+        
+        [[OASmartNaviWatchSession sharedInstance] sendImageData:images forLocation:currentLocation];
+        
+    });
+    
+
+
+    
+
 }
 
 -(UIImage*)renderImageFromMapScreen:(UIView*)viewToRender andZoomLevel:(int)zoomLevel {

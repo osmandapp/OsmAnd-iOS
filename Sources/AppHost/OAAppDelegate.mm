@@ -35,6 +35,9 @@
 
 #import "OAIntroViewController.h"
 
+#import "OAIAPHelper.h"
+#import "OASmartNaviWatchSession.h"
+
 #if defined(OSMAND_IOS_DEV)
 @interface OAAppDelegate() <BITHockeyManagerDelegate, BITCrashManagerDelegate>
 @end
@@ -141,7 +144,12 @@
     */
     
     //[application setStatusBarStyle:UIStatusBarStyleLightContent];
-
+    
+    //check if watch is initialized
+    if (![[OAIAPHelper sharedInstance] isProductDisabled:kInAppId_Addon_SmartNaviWatch]) {
+        [[OASmartNaviWatchSession sharedInstance] activatePlugin];
+    }
+    
     return YES;
 }
 
@@ -244,7 +252,6 @@
     device.batteryMonitoringEnabled = NO;
     [device endGeneratingDeviceOrientationNotifications];
 }
-
 
 #if defined(OSMAND_IOS_DEV)
 

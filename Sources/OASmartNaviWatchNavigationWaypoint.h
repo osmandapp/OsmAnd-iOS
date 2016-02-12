@@ -5,15 +5,31 @@
 //  Created by egloff on 18/01/16.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
+/*!
+ *  This model class represents a waypoint with name, position,
+ *  distance, bearing and whether the waypoint has been visited.
+ */
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_NAME @"name"
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_LATITUDE @"latitude"
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_LONGITUDE @"longitude"
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_DISTANCE @"distance"
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_BEARING @"bearing"
+/*!
+ */
 #define OA_SMARTNAVIWATCH_WAYPOINT_VISITED @"visited"
 
 @interface OASmartNaviWatchNavigationWaypoint : NSObject<NSCoding> {

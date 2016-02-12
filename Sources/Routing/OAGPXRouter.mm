@@ -18,6 +18,8 @@
 #import "OAUtilities.h"
 #import "OAMapStyleSettings.h"
 #import "OATspAnt.h"
+#import "OASmartNaviWatchNavigationWaypoint.h"
+#import "OASmartNaviWatchSession.h"
 
 /*
  - pedestrian slow       3 km/h
@@ -197,6 +199,8 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
 - (void)updateDistanceAndDirection
 {
     [self updateDistanceAndDirection:NO];
+    //TODO move this as an observable
+    [[OASmartNaviWatchSession sharedInstance] updateSignificantLocationChange:_app.locationServices.lastKnownLocation];
 }
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
@@ -376,6 +380,71 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
         else
             return NSOrderedSame;
     }];
+}
+
+-(NSArray *)getCurrentWaypointsForCurrentLocation:(CLLocation*)currentLocation {
+    
+    NSMutableArray *currentWaypoints = [[NSMutableArray alloc] init];
+    
+    // fetch active location data
+    
+    // 1. drawn waypoints if any
+    if (_routeDoc.activePoints.count > 0) {
+
+        return [self convertOALocationMarksToSmartNaviWaypointsWithData:_routeDoc.activePoints andLocation:currentLocation];
+        
+    } else if (_routeDoc.routes.count > 0) {
+        
+        // 2. gpx route if any
+        NSArray *points = ((OAGpxRte*)[_routeDoc.routes objectAtIndex:0]).points;
+        return [self convertOALocationMarksToSmartNaviWaypointsWithData:points andLocation:currentLocation];
+
+        
+    } else if (_routeDoc.tracks.count > 0) {
+        // 3. gpx track if any
+        OAGpxTrk *gpxTrk = ((OAGpxTrk*) [_routeDoc.tracks objectAtIndex:0]);
+        NSArray *segments = gpxTrk.segments;
+        if (segments.count > 0) {
+            OAGpxTrkSeg* segment = [segments objectAtIndex:0];
+            return [self convertOALocationMarksToSmartNaviWaypointsWithData:segment.points andLocation:currentLocation];
+        }
+    }
+    
+    return currentWaypoints;
+}
+
+-(NSString*)getTitleOfActiveRoute {
+    return [_gpx getNiceTitle];
+}
+
+-(NSArray*)convertOALocationMarksToSmartNaviWaypointsWithData:(NSArray*)locationMarks andLocation:(CLLocation*)currentLocation {
+    
+    NSMutableArray *currentWaypoints = [[NSMutableArray alloc] init];
+    CLLocation *lastLocation = currentLocation;
+
+    for (int i=0; i<locationMarks.count; ++i) {
+        OASmartNaviWatchNavigationWaypoint *waypoint = [[OASmartNaviWatchNavigationWaypoint alloc] init];
+
+        NSObject *locationObject = [locationMarks objectAtIndex:i];
+        OALocationMark *locationMark;
+        
+        // wptItem already has distance set, OALocatioMark needs to be extracted
+        if ([locationObject isKindOfClass:[OAGpxRouteWptItem class]]) {
+            OAGpxRouteWptItem* wptItem = (OAGpxRouteWptItem*)locationObject;
+            locationMark = wptItem.point;
+            [waypoint setDistance:wptItem.distanceMeters];
+        } else {
+            locationMark = (OALocationMark*)locationObject;
+            [waypoint setDistance: [lastLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:locationMark.position.latitude longitude:locationMark.position.longitude]]];
+        }
+        
+        [waypoint setPosition:locationMark.position];
+        [waypoint setName:locationMark.name];
+        lastLocation = [[CLLocation alloc] initWithLatitude:locationMark.position.latitude longitude:locationMark.position.longitude];
+        [currentWaypoints addObject:waypoint];
+        
+    }
+    return currentWaypoints;
 }
 
 @end

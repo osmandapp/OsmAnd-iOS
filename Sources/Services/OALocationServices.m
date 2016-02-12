@@ -16,6 +16,7 @@
 #import "OALog.h"
 #import "Localization.h"
 #import "OAAppSettings.h"
+#import "OASmartNaviWatchSession.h"
 
 #define _(name) OALocationServices__##name
 #define commonInit _(commonInit)
@@ -378,6 +379,10 @@
 
     // In case device is plugged-in, there's no reason to save battery
     if (batteryState == UIDeviceBatteryStateFull || batteryState == UIDeviceBatteryStateCharging)
+        return kCLLocationAccuracyBestForNavigation;
+
+    //enable better accuracy for SmartWatch Navigation
+    if ([[OASmartNaviWatchSession sharedInstance] checkIfPluginEnabled] && batteryState == UIDeviceBatteryStateUnplugged)
         return kCLLocationAccuracyBestForNavigation;
 
     // In case app is in navigation mode, also best possible is needed

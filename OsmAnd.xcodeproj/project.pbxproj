@@ -2503,6 +2503,9 @@
 		B50BD1CB1C4D797F00ED2DFF /* OASmartNaviWatchNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5185B831C4D51F9009D519D /* OASmartNaviWatchNavigationController.m */; };
 		B50BD1CE1C4D7BBE00ED2DFF /* OASmartNaviWatchNavigationWaypoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B50BD1CD1C4D7BBE00ED2DFF /* OASmartNaviWatchNavigationWaypoint.m */; };
 		B50BD1CF1C4D7BBF00ED2DFF /* OASmartNaviWatchNavigationWaypoint.m in Sources */ = {isa = PBXBuildFile; fileRef = B50BD1CD1C4D7BBE00ED2DFF /* OASmartNaviWatchNavigationWaypoint.m */; };
+		B517CE1D1C6FD952008DEDF9 /* wiki0.png in Resources */ = {isa = PBXBuildFile; fileRef = B517CE1A1C6FD952008DEDF9 /* wiki0.png */; };
+		B517CE1E1C6FD952008DEDF9 /* wiki1.png in Resources */ = {isa = PBXBuildFile; fileRef = B517CE1B1C6FD952008DEDF9 /* wiki1.png */; };
+		B517CE1F1C6FD952008DEDF9 /* wiki2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = B517CE1C1C6FD952008DEDF9 /* wiki2.jpg */; };
 		B5185B841C4D51F9009D519D /* OASmartNaviWatchNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = B5185B831C4D51F9009D519D /* OASmartNaviWatchNavigationController.m */; };
 		B52718A71C5FFE2700C936E1 /* OsmAnd_Maps_Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = B52718A61C5FFE2700C936E1 /* OsmAnd_Maps_Tests.m */; };
 		B5403DEA1C21942D0015E33F /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B5403DE81C21942D0015E33F /* Interface.storyboard */; };
@@ -2894,10 +2897,8 @@
 		B566AAAB1C52AB3900D834AD /* ic_plugin_smartNaviWatch@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = B566AAA61C52AB3900D834AD /* ic_plugin_smartNaviWatch@2x.png */; };
 		B566AAAC1C52AB3900D834AD /* ic_plugin_smartNaviWatch@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B566AAA71C52AB3900D834AD /* ic_plugin_smartNaviWatch@3x.png */; };
 		B566AAAD1C52AB3900D834AD /* ic_plugin_smartNaviWatch@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B566AAA71C52AB3900D834AD /* ic_plugin_smartNaviWatch@3x.png */; };
-		B586551B1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B586551A1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m */; };
-		B586551D1C637E6A00B9D689 /* OASmartNaviWatchNavigationWaypointTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B586551C1C637E6A00B9D689 /* OASmartNaviWatchNavigationWaypointTest.m */; };
+		B57290A81C6FEF0300D1611A /* OASmartNaviWatchNavigationControllerTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B586551A1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m */; };
 		B5D8D2F91C6371D800B6CF79 /* OASmartNaviWatchSession.m in Sources */ = {isa = PBXBuildFile; fileRef = B5499C5E1C243E7E000E36EB /* OASmartNaviWatchSession.m */; };
-		B5D8D3011C63734D00B6CF79 /* SmartNaviWatchTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D8D3001C63734D00B6CF79 /* SmartNaviWatchTests.m */; };
 		B5D8D30D1C637B1000B6CF79 /* OASmartNaviWatchSessionTest.m in Sources */ = {isa = PBXBuildFile; fileRef = B5D8D30C1C637B1000B6CF79 /* OASmartNaviWatchSessionTest.m */; };
 		B5DD3DCD1C21EEF90026DFC3 /* WatchConnectivity.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5DD3DCC1C21EEF90026DFC3 /* WatchConnectivity.framework */; };
 		BB0275D319D2EA5E009AFBA8 /* OAQFlatAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */; };
@@ -4392,6 +4393,9 @@
 		A0C4E6DAE9E8E9A08C3F24CF /* Pods-dev.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-dev.debug.xcconfig"; path = "Pods/Target Support Files/Pods-dev/Pods-dev.debug.xcconfig"; sourceTree = "<group>"; };
 		B50BD1CC1C4D7BBE00ED2DFF /* OASmartNaviWatchNavigationWaypoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASmartNaviWatchNavigationWaypoint.h; sourceTree = "<group>"; };
 		B50BD1CD1C4D7BBE00ED2DFF /* OASmartNaviWatchNavigationWaypoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASmartNaviWatchNavigationWaypoint.m; sourceTree = "<group>"; };
+		B517CE1A1C6FD952008DEDF9 /* wiki0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wiki0.png; sourceTree = "<group>"; };
+		B517CE1B1C6FD952008DEDF9 /* wiki1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wiki1.png; sourceTree = "<group>"; };
+		B517CE1C1C6FD952008DEDF9 /* wiki2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wiki2.jpg; sourceTree = "<group>"; };
 		B5185B821C4D51F9009D519D /* OASmartNaviWatchNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASmartNaviWatchNavigationController.h; sourceTree = "<group>"; };
 		B5185B831C4D51F9009D519D /* OASmartNaviWatchNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASmartNaviWatchNavigationController.m; sourceTree = "<group>"; };
 		B52718A41C5FFE2700C936E1 /* OsmAnd Maps Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OsmAnd Maps Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -4792,9 +4796,7 @@
 		B566AAA61C52AB3900D834AD /* ic_plugin_smartNaviWatch@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_plugin_smartNaviWatch@2x.png"; sourceTree = "<group>"; };
 		B566AAA71C52AB3900D834AD /* ic_plugin_smartNaviWatch@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_plugin_smartNaviWatch@3x.png"; sourceTree = "<group>"; };
 		B586551A1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASmartNaviWatchNavigationControllerTest.m; sourceTree = "<group>"; };
-		B586551C1C637E6A00B9D689 /* OASmartNaviWatchNavigationWaypointTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASmartNaviWatchNavigationWaypointTest.m; sourceTree = "<group>"; };
 		B5D8D2FE1C63734D00B6CF79 /* SmartNaviWatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SmartNaviWatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B5D8D3001C63734D00B6CF79 /* SmartNaviWatchTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SmartNaviWatchTests.m; sourceTree = "<group>"; };
 		B5D8D3021C63734D00B6CF79 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B5D8D30C1C637B1000B6CF79 /* OASmartNaviWatchSessionTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASmartNaviWatchSessionTest.m; sourceTree = "<group>"; };
 		B5DD3DCC1C21EEF90026DFC3 /* WatchConnectivity.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WatchConnectivity.framework; path = System/Library/Frameworks/WatchConnectivity.framework; sourceTree = SDKROOT; };
@@ -6323,6 +6325,16 @@
 			name = DestinationCards;
 			sourceTree = "<group>";
 		};
+		B517CE191C6FD951008DEDF9 /* wiki */ = {
+			isa = PBXGroup;
+			children = (
+				B517CE1A1C6FD952008DEDF9 /* wiki0.png */,
+				B517CE1B1C6FD952008DEDF9 /* wiki1.png */,
+				B517CE1C1C6FD952008DEDF9 /* wiki2.jpg */,
+			);
+			path = wiki;
+			sourceTree = "<group>";
+		};
 		B52718A51C5FFE2700C936E1 /* OsmAnd Maps Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -6788,11 +6800,9 @@
 		B5D8D2FF1C63734D00B6CF79 /* SmartNaviWatchTests */ = {
 			isa = PBXGroup;
 			children = (
-				B5D8D3001C63734D00B6CF79 /* SmartNaviWatchTests.m */,
 				B5D8D3021C63734D00B6CF79 /* Info.plist */,
 				B5D8D30C1C637B1000B6CF79 /* OASmartNaviWatchSessionTest.m */,
 				B586551A1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m */,
-				B586551C1C637E6A00B9D689 /* OASmartNaviWatchNavigationWaypointTest.m */,
 			);
 			path = SmartNaviWatchTests;
 			sourceTree = "<group>";
@@ -7327,6 +7337,7 @@
 		BBE57D4F17C2208600C349CC /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				B517CE191C6FD951008DEDF9 /* wiki */,
 				8463101B1A8E8951005B39F2 /* Images.xcassets */,
 				3AC639A61A1CF54F001D5E57 /* IntroImages */,
 				3AFEEE231A0E343600900A47 /* Icons */,
@@ -8207,6 +8218,7 @@
 				BB451E0118DA4176005FBE09 /* drive_mode_button.png in Resources */,
 				843E5D8A1AB341E000BE14BE /* menu_icon_back.png in Resources */,
 				843E5CE21AB341E000BE14BE /* icon_favorite_item_direction.png in Resources */,
+				B517CE1D1C6FD952008DEDF9 /* wiki0.png in Resources */,
 				845E07261B60E72300DFC2A7 /* ic_checkmark_small_enable@3x.png in Resources */,
 				845E05A61B53E61800DFC2A7 /* OADirectionCell.xib in Resources */,
 				84C41DF01AB8600D0089EABB /* ic_destination_pin_2.png in Resources */,
@@ -8496,6 +8508,7 @@
 				84185AB41AAA11B600F70328 /* ic_favorite_2@2x.png in Resources */,
 				845E072F1B616E4700DFC2A7 /* ic_restore_purchase@2x.png in Resources */,
 				8434BAB71B175AB7003FD0FC /* ic_poi_info_dots@2x.png in Resources */,
+				B517CE1F1C6FD952008DEDF9 /* wiki2.jpg in Resources */,
 				849E81791AFA5D6700549953 /* btn_map_type_icon_bike_selected.png in Resources */,
 				849E817C1AFA5D6700549953 /* btn_map_type_icon_bike_selected@2x.png in Resources */,
 				8441CB4D1B1370580033AC95 /* move_items.png in Resources */,
@@ -8676,6 +8689,7 @@
 				84E1DED11B0DFE64002A6946 /* bt_round_big@2x.png in Resources */,
 				84755A7E1B34640C005B95C1 /* my_location_marker_icon@3x.png in Resources */,
 				84F3A8F61B4DA93100D16EBC /* ic_trip_location@2x.png in Resources */,
+				B517CE1E1C6FD952008DEDF9 /* wiki1.png in Resources */,
 				84D81EE31AA30404001098FD /* ic_destination_arrow_small@2x.png in Resources */,
 				849E81A01AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
 				8412224F1B39CC5200F80F9E /* map_car_bearing@3x.png in Resources */,
@@ -10326,10 +10340,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B586551B1C637E4000B9D689 /* OASmartNaviWatchNavigationControllerTest.m in Sources */,
 				B5D8D30D1C637B1000B6CF79 /* OASmartNaviWatchSessionTest.m in Sources */,
-				B586551D1C637E6A00B9D689 /* OASmartNaviWatchNavigationWaypointTest.m in Sources */,
-				B5D8D3011C63734D00B6CF79 /* SmartNaviWatchTests.m in Sources */,
+				B57290A81C6FEF0300D1611A /* OASmartNaviWatchNavigationControllerTest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

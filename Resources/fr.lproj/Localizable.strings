@@ -310,3 +310,16 @@
 "sett_units" = "Unités";
 "sett_zoom" = "Bouton de zoom";
 "sett_arr" = "Flèches de la carte";
+"go_to_map" = "Aller à la carte";
+"gpx_curr_new_track" = "Voyage actuel";
+"from_location" = "loin";
+"time_will_close" = "Fermera dans";
+"time_will_open" = "S'ouvrira dans";
+"change_group" = "Changer de groupe";
+"change_color" = "Changer de couleur";
+"gpx_trip_groups" = "Groupes de voyage";
+"gpx_group_select" = "Sélection de groupe";
+"directions" = "Itinéraires";
+"plugins" = "Plugins";
+"open_map_settings" = "Ouvrez les paramètres de la carte";
+"plugin_popup_wiki_title" = "Télécharger Wikipedia";

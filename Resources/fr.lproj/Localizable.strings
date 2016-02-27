@@ -323,3 +323,5 @@
 "plugins" = "Plugins";
 "open_map_settings" = "Ouvrez les paramètres de la carte";
 "plugin_popup_wiki_title" = "Télécharger Wikipedia";
+"gpx_no_tracks" = "Il n'y a aucun voyage";
+"gpx_elev_range" = "Gamme d'élévation";

@@ -36,7 +36,7 @@
 "rendering_attr_osmcTraces_name" = "Symbol nakładki wędrówek";
 "rendering_attr_noAdminboundaries_name" = "Ukrywanie granic";
 "rendering_attr_noPolygons_name" = "Ukrywanie wielokątów";
-"rendering_attr_contourLines_name" = "Wyświetlanie poziomic";
+"rendering_attr_contourLines_name" = "Poziomice";
 "favorite" = "Ulubione";
 "shared_string_and" = "i";
 // Shared Strings

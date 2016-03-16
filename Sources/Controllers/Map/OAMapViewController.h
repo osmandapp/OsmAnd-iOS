@@ -179,4 +179,23 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(nonatomic) CGFloat forcedDisplayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
 
+/*!
+ *  moves the map to the current map location and sets the zoom level to 17,
+ *  rotates the map in the current course of direction,
+ *  puts the view in portrait mode and renders three images with different
+ *  zoom levels around it
+ *  initiates OASmartNaviWatchSession sending process
+ */
+-(void)smartNaviWatchRequestLocationUpdate;
+
+/*!
+ *  takes UIView and a zoom level and renders an image around the center
+ *
+ *  @param viewToRender the view to be rendered
+ *  @param zoomLevel    the zoom level 1 being the original aspect
+ *
+ *  @return the rendered UIImage
+ */
+-(UIImage*)renderImageFromMapScreen:(UIView*)viewToRender andZoomLevel:(int)zoomLevel;
+
 @end

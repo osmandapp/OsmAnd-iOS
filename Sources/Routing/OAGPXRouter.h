@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAObservable.h"
+#import <CoreLocation/CoreLocation.h>
 
 typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 {
@@ -60,5 +61,26 @@ typedef NS_ENUM(NSInteger, OAGPXRouteVariantType)
 - (CGFloat)getMovementSpeed:(OAGPXRouteVariantType)routeVariantType;
 
 - (void)sortRoute;
+
+/*!
+ *  fetches all the waypoints of the active route no matter what type it is
+ *  conserts the waypoints to OASmartNaviWatchNavigationWaypoint and put them in NSArray
+ *  the following order us uses: waypoints from 
+ *  1. _routeDoc.activeDocs if any
+ *  2. _routeDoc.routes if any
+ *  3._routeDox.tracks first segment of first track if available
+ *
+ *  @param currentLocation the current location
+ *
+ *  @return NSArray if OASmartNaviWatchNavigationWaypoint waypoints
+ */
+-(NSArray*)getCurrentWaypointsForCurrentLocation:(CLLocation*)currentLocation;
+
+/*!
+ *  fetch title of active route
+ *
+ *  @return NString title of active route
+ */
+-(NSString*)getTitleOfActiveRoute;
 
 @end

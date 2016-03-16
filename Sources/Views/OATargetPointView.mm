@@ -32,6 +32,8 @@
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocationsCollection.h>
 
+#import <QuartzCore/QuartzCore.h>
+
 @interface OATargetPointZoomView ()
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonZoomIn;
@@ -379,7 +381,9 @@
     _panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveToolbar:)];
     //_panGesture.cancelsTouchesInView = NO;
     _panGesture.delegate = self;
+    
 }
+
 
 - (void)startLocationUpdate
 {

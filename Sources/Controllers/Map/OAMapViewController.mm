@@ -89,6 +89,7 @@
 #import "OANativeUtilities.h"
 #import "OALog.h"
 #include "Localization.h"
+#import "OASmartNaviWatchSession.h"
 
 #define kElevationGestureMaxThreshold 50.0f
 #define kElevationMinAngle 30.0f
@@ -663,12 +664,84 @@
     
     [self refreshFavoritesMarkersCollection];
     
+    //add observer for SmartNaviWatch updates
+    [[OASmartNaviWatchSession sharedInstance] registerObserverForUpdates:self];
+    
 #if defined(OSMAND_IOS_DEV)
     _hideStaticSymbols = NO;
     _visualMetricsMode = OAVisualMetricsModeOff;
     _forceDisplayDensityFactor = NO;
     _forcedDisplayDensityFactor = self.displayDensityFactor;
 #endif // defined(OSMAND_IOS_DEV)
+}
+
+-(void)smartNaviWatchRequestLocationUpdate {
+
+    //get the current location
+    CLLocation* currentLocation = _app.locationServices.lastKnownLocation;
+
+    //get the view to render the images
+    OAMapRendererView* viewToRender = (OAMapRendererView*)self.view;
+    
+    //ensure screen is not turned off
+    [viewToRender setHidden:NO];
+    if (viewToRender.isRenderingSuspended) {
+        //TODO does not work :(
+        //[viewToRender resumeRendering];
+    }
+    
+
+    //rotate in the appropriate angle
+    [viewToRender setAzimuth:currentLocation.course];
+
+    //zoom to an appropriate zoom level
+    [viewToRender setZoom:17.0];
+    
+    //set portrait mode in order to fetch the correct images
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+    NSNumber *value = [NSNumber numberWithInt:UIInterfaceOrientationPortrait];
+    [[UIDevice currentDevice] setValue:value forKey:@"orientation"];
+    });
+    
+    //move to location
+    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(currentLocation.coordinate.latitude, currentLocation.coordinate.longitude));
+    [viewToRender setTarget31:myLocationI];
+    
+    
+    //wait for map to be moved
+    double delayInSeconds = 1.0;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        
+        NSMutableArray *images = [[NSMutableArray alloc] initWithCapacity:3];
+        for (int i=1; i<4; ++i) {
+            UIImage* renderedImage = [self renderImageFromMapScreen:viewToRender andZoomLevel:i];
+            [images addObject:renderedImage];
+        }
+        
+        [[OASmartNaviWatchSession sharedInstance] sendImageData:images forLocation:currentLocation];
+        
+    });
+    
+
+
+    
+
+}
+
+-(UIImage*)renderImageFromMapScreen:(UIView*)viewToRender andZoomLevel:(int)zoomLevel {
+    
+    float lengthOfImage = viewToRender.bounds.size.width/zoomLevel;
+    
+    [viewToRender setHidden:NO];
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(lengthOfImage, lengthOfImage), YES, 0);
+    [viewToRender drawViewHierarchyInRect:CGRectMake(-viewToRender.bounds.size.width/2+lengthOfImage/2, -viewToRender.bounds.size.height/2+lengthOfImage/2, viewToRender.bounds.size.width, viewToRender.bounds.size.height) afterScreenUpdates:NO];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
 }
 
 - (void)refreshFavoritesMarkersCollection

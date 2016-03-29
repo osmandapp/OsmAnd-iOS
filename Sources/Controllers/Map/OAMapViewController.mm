@@ -42,6 +42,8 @@
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
+#include "OAWebClient.h"
+#include <OsmAndCore/IWebClient.h>
 
 //#include "OAMapMarkersCollection.h"
 
@@ -175,6 +177,8 @@
     std::shared_ptr<OsmAnd::MapPrimitivesProvider> _mapPrimitivesProvider;
     std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProvider;
     
+    std::shared_ptr<OsmAnd::IWebClient> _webClient;
+
     NSString *_gpxDocFileTemp;
     NSString *_gpxDocFileRoute;
     NSArray *_geoInfoDocsGpxPaths;
@@ -334,6 +338,8 @@
     _gpxRouter = [OAGPXRouter sharedInstance];
     
     _firstAppear = YES;
+
+    _webClient = std::make_shared<OAWebClient>();
 
     _rendererSync = [[NSObject alloc] init];
 
@@ -1476,21 +1482,24 @@
     NSMutableArray *foundSymbols = [NSMutableArray array];
     
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;
-    CGPoint myLocationScreen;
-    OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
-    [mapView convert:&myLocationI toScreen:&myLocationScreen];
-    myLocationScreen.x *= mapView.contentScaleFactor;
-    myLocationScreen.y *= mapView.contentScaleFactor;
-    
-    if (fabs(myLocationScreen.x - touchPoint.x) < 20.0 && fabs(myLocationScreen.y - touchPoint.y) < 20.0)
+    if (myLocation)
     {
-        OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
-        symbol.caption = OALocalizedString(@"my_location");
-        symbol.type = OAMapSymbolMyLocation;
-        symbol.touchPoint = touchPoint;
-        symbol.location = myLocation.coordinate;
-        symbol.sortIndex = (NSInteger)symbol.type;
-        [foundSymbols addObject:symbol];
+        CGPoint myLocationScreen;
+        OsmAnd::PointI myLocationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude));
+        [mapView convert:&myLocationI toScreen:&myLocationScreen];
+        myLocationScreen.x *= mapView.contentScaleFactor;
+        myLocationScreen.y *= mapView.contentScaleFactor;
+        
+        if (fabs(myLocationScreen.x - touchPoint.x) < 20.0 && fabs(myLocationScreen.y - touchPoint.y) < 20.0)
+        {
+            OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+            symbol.caption = OALocalizedString(@"my_location");
+            symbol.type = OAMapSymbolMyLocation;
+            symbol.touchPoint = touchPoint;
+            symbol.location = myLocation.coordinate;
+            symbol.sortIndex = (NSInteger)symbol.type;
+            [foundSymbols addObject:symbol];
+        }
     }
     
     CGFloat delta = 10.0;
@@ -2569,53 +2578,57 @@
 
 - (void)onLocationServicesUpdate
 {
-    if (![self isViewLoaded])
-        return;
-    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
-
-    // Obtain fresh location and heading
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-
-    OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
-
-    // In case there's no known location, do nothing and hide all markers
-    if (newLocation == nil)
-    {
-        switch (variantType)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (![self isViewLoaded])
         {
-            case OAMapVariantCar:
+            return;
+        }
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        // Obtain fresh location and heading
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        
+        OAMapVariantType variantType = [OAMapStyleSettings getVariantType:_app.data.lastMapSource.variant];
+        
+        // In case there's no known location, do nothing and hide all markers
+        if (newLocation == nil)
+        {
+            switch (variantType)
+            {
+                case OAMapVariantCar:
                 _myLocationMarkerCar->setIsHidden(true);
                 _myCourseMarkerCar->setIsHidden(true);
                 break;
-            case OAMapVariantPedestrian:
+                case OAMapVariantPedestrian:
                 _myLocationMarkerPedestrian->setIsHidden(true);
                 _myCourseMarkerPedestrian->setIsHidden(true);
                 break;
-            case OAMapVariantBicycle:
+                case OAMapVariantBicycle:
                 _myLocationMarkerBicycle->setIsHidden(true);
                 _myCourseMarkerBicycle->setIsHidden(true);
                 break;
                 
-            default:
+                default:
                 _myLocationMarker->setIsHidden(true);
                 _myCourseMarker->setIsHidden(true);
                 break;
+            }
+            
+            return;
         }
         
-        return;
-    }
-
-    const OsmAnd::PointI newTarget31(
-                                     OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
-                                     OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-
-    // Update "My" markers
-    if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
-    {
-        switch (variantType)
+        const OsmAnd::PointI newTarget31(
+                                         OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
+                                         OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
+        
+        // Update "My" markers
+        if (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0)
         {
-            case OAMapVariantCar:
+            switch (variantType)
+            {
+                case OAMapVariantCar:
                 _myLocationMarkerCar->setIsHidden(true);
                 
                 _myCourseMarkerCar->setIsHidden(false);
@@ -2623,10 +2636,10 @@
                 _myCourseMarkerCar->setIsAccuracyCircleVisible(true);
                 _myCourseMarkerCar->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myCourseMarkerCar->setOnMapSurfaceIconDirection(_myCourseMainIconKeyCar,
-                                                              OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
+                                                                 OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
                 break;
                 
-            case OAMapVariantPedestrian:
+                case OAMapVariantPedestrian:
                 _myLocationMarkerPedestrian->setIsHidden(true);
                 
                 _myCourseMarkerPedestrian->setIsHidden(false);
@@ -2634,10 +2647,10 @@
                 _myCourseMarkerPedestrian->setIsAccuracyCircleVisible(true);
                 _myCourseMarkerPedestrian->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myCourseMarkerPedestrian->setOnMapSurfaceIconDirection(_myCourseMainIconKeyPedestrian,
-                                                              OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
+                                                                        OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
                 break;
                 
-            case OAMapVariantBicycle:
+                case OAMapVariantBicycle:
                 _myLocationMarkerBicycle->setIsHidden(true);
                 
                 _myCourseMarkerBicycle->setIsHidden(false);
@@ -2645,10 +2658,10 @@
                 _myCourseMarkerBicycle->setIsAccuracyCircleVisible(true);
                 _myCourseMarkerBicycle->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myCourseMarkerBicycle->setOnMapSurfaceIconDirection(_myCourseMainIconKeyBicycle,
-                                                              OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
+                                                                     OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
                 break;
                 
-            default:
+                default:
                 _myLocationMarker->setIsHidden(true);
                 
                 _myCourseMarker->setIsHidden(false);
@@ -2658,13 +2671,13 @@
                 _myCourseMarker->setOnMapSurfaceIconDirection(_myCourseMainIconKey,
                                                               OsmAnd::Utilities::normalizedAngleDegrees(newLocation.course + 180.0f));
                 break;
+            }
         }
-    }
-    else
-    {
-        switch (variantType)
+        else
         {
-            case OAMapVariantCar:
+            switch (variantType)
+            {
+                case OAMapVariantCar:
                 _myCourseMarkerCar->setIsHidden(true);
                 
                 _myLocationMarkerCar->setIsHidden(false);
@@ -2672,10 +2685,10 @@
                 _myLocationMarkerCar->setIsAccuracyCircleVisible(true);
                 _myLocationMarkerCar->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myLocationMarkerCar->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyCar,
-                                                                OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
+                                                                   OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
                 break;
-
-            case OAMapVariantPedestrian:
+                
+                case OAMapVariantPedestrian:
                 _myCourseMarkerPedestrian->setIsHidden(true);
                 
                 _myLocationMarkerPedestrian->setIsHidden(false);
@@ -2683,10 +2696,10 @@
                 _myLocationMarkerPedestrian->setIsAccuracyCircleVisible(true);
                 _myLocationMarkerPedestrian->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myLocationMarkerPedestrian->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyPedestrian,
-                                                                OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
+                                                                          OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
                 break;
-
-            case OAMapVariantBicycle:
+                
+                case OAMapVariantBicycle:
                 _myCourseMarkerBicycle->setIsHidden(true);
                 
                 _myLocationMarkerBicycle->setIsHidden(false);
@@ -2694,10 +2707,10 @@
                 _myLocationMarkerBicycle->setIsAccuracyCircleVisible(true);
                 _myLocationMarkerBicycle->setAccuracyCircleRadius(newLocation.horizontalAccuracy);
                 _myLocationMarkerBicycle->setOnMapSurfaceIconDirection(_myLocationHeadingIconKeyBicycle,
-                                                                OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
+                                                                       OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
                 break;
                 
-            default:
+                default:
                 _myCourseMarker->setIsHidden(true);
                 
                 _myLocationMarker->setIsHidden(false);
@@ -2707,115 +2720,116 @@
                 _myLocationMarker->setOnMapSurfaceIconDirection(_myLocationHeadingIconKey,
                                                                 OsmAnd::Utilities::normalizedAngleDegrees(newHeading + 180.0f));
                 break;
+            }
         }
-    }
-
-    // Wait for Map Mode changing animation if any, to prevent animation lags
-    if (_startChangingMapMode && [[NSDate date] timeIntervalSinceDate:_startChangingMapMode] < kOneSecondAnimatonTime)
+        
+        // Wait for Map Mode changing animation if any, to prevent animation lags
+        if (_startChangingMapMode && [[NSDate date] timeIntervalSinceDate:_startChangingMapMode] < kOneSecondAnimatonTime)
         return;
-    
-    // If map mode is position-track or follow, move to that position
-    if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
-    {
-        mapView.animator->pause();
-
-        const auto targetAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
-                                                                           OsmAnd::MapAnimator::AnimatedValue::Target);
-
-        mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
-                                                 OsmAnd::MapAnimator::AnimatedValue::Target);
-
-        if (_lastAppMode == OAAppModeBrowseMap)
+        
+        // If map mode is position-track or follow, move to that position
+        if (_app.mapMode == OAMapModePositionTrack || _app.mapMode == OAMapModeFollow)
         {
-            // For "follow-me" mode azimuth is also controlled
-            if (_app.mapMode == OAMapModeFollow)
+            mapView.animator->pause();
+            
+            const auto targetAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                               OsmAnd::MapAnimator::AnimatedValue::Target);
+            
+            mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                                                     OsmAnd::MapAnimator::AnimatedValue::Target);
+            
+            if (_lastAppMode == OAAppModeBrowseMap)
             {
-                const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
-                                                                                    OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-                mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
-                                                         OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-                
-                // Update azimuth if there's one
-                const auto direction = (_lastAppMode == OAAppModeBrowseMap)
-                ? newHeading
-                : newLocation.course;
-                if (!isnan(direction) && direction >= 0)
+                // For "follow-me" mode azimuth is also controlled
+                if (_app.mapMode == OAMapModeFollow)
                 {
-                    if (azimuthAnimation)
+                    const auto azimuthAnimation = mapView.animator->getCurrentAnimation(kLocationServicesAnimationKey,
+                                                                                        OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+                    mapView.animator->cancelCurrentAnimation(kUserInteractionAnimationKey,
+                                                             OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+                    
+                    // Update azimuth if there's one
+                    const auto direction = (_lastAppMode == OAAppModeBrowseMap)
+                    ? newHeading
+                    : newLocation.course;
+                    if (!isnan(direction) && direction >= 0)
                     {
-                        mapView.animator->cancelAnimation(azimuthAnimation);
-                        
-                        mapView.animator->animateAzimuthTo(direction,
-                                                           azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
-                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           kLocationServicesAnimationKey);
-                    }
-                    else
-                    {
-                        mapView.animator->animateAzimuthTo(direction,
-                                                           kOneSecondAnimatonTime,
-                                                           OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                           kLocationServicesAnimationKey);
+                        if (azimuthAnimation)
+                        {
+                            mapView.animator->cancelAnimation(azimuthAnimation);
+                            
+                            mapView.animator->animateAzimuthTo(direction,
+                                                               azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(),
+                                                               OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                               kLocationServicesAnimationKey);
+                        }
+                        else
+                        {
+                            mapView.animator->animateAzimuthTo(direction,
+                                                               kOneSecondAnimatonTime,
+                                                               OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                               kLocationServicesAnimationKey);
+                        }
                     }
                 }
-            }
-            
-            // And also update target
-            if (targetAnimation)
-            {
-                mapView.animator->cancelAnimation(targetAnimation);
                 
-                double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-                mapView.animator->animateTargetTo(newTarget31,
-                                                  duration,
-                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                  kLocationServicesAnimationKey);
+                // And also update target
+                if (targetAnimation)
+                {
+                    mapView.animator->cancelAnimation(targetAnimation);
+                    
+                    double duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
+                    mapView.animator->animateTargetTo(newTarget31,
+                                                      duration,
+                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                      kLocationServicesAnimationKey);
+                }
+                else
+                {
+                    if (_app.mapMode == OAMapModeFollow)
+                    {
+                        mapView.animator->animateTargetTo(newTarget31,
+                                                          kOneSecondAnimatonTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                          kLocationServicesAnimationKey);
+                    }
+                    else //if (_app.mapMode == OAMapModePositionTrack)
+                    {
+                        mapView.animator->animateTargetTo(newTarget31,
+                                                          kOneSecondAnimatonTime,
+                                                          OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                          kLocationServicesAnimationKey);
+                    }
+                }
             }
             else
             {
-                if (_app.mapMode == OAMapModeFollow)
+                double direction = newLocation.course;
+                //double direction = _app.locationServices.lastKnownHeading;
+                if (!isnan(direction) && direction >= 0)
                 {
-                    mapView.animator->animateTargetTo(newTarget31,
-                                                      kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                      kLocationServicesAnimationKey);
+                    // Set rotation
+                    mapView.azimuth = direction;
                 }
-                else //if (_app.mapMode == OAMapModePositionTrack)
-                {
-                    mapView.animator->animateTargetTo(newTarget31,
-                                                      kOneSecondAnimatonTime,
-                                                      OsmAnd::MapAnimator::TimingFunction::Linear,
-                                                      kLocationServicesAnimationKey);
-                }
+                CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
+                centerPoint.x *= mapView.contentScaleFactor;
+                centerPoint.y *= mapView.contentScaleFactor;
+                
+                // Convert point from screen to location
+                OsmAnd::PointI bottomLocation;
+                [mapView convert:centerPoint toLocation:&bottomLocation];
+                
+                OsmAnd::PointI targetCenter;
+                targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
+                targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
+                
+                mapView.target31 = targetCenter;
+                //NSLog(@"targetCenter2 %d %d", targetCenter.x, targetCenter.y);
             }
-        }
-        else
-        {
-            double direction = newLocation.course;
-            //double direction = _app.locationServices.lastKnownHeading;
-            if (!isnan(direction) && direction >= 0)
-            {
-                // Set rotation
-                mapView.azimuth = direction;
-            }
-            CGPoint centerPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 1.5);
-            centerPoint.x *= mapView.contentScaleFactor;
-            centerPoint.y *= mapView.contentScaleFactor;
             
-            // Convert point from screen to location
-            OsmAnd::PointI bottomLocation;
-            [mapView convert:centerPoint toLocation:&bottomLocation];
-            
-            OsmAnd::PointI targetCenter;
-            targetCenter.x = newTarget31.x + mapView.target31.x - bottomLocation.x;
-            targetCenter.y = newTarget31.y + mapView.target31.y - bottomLocation.y;
-
-            mapView.target31 = targetCenter;
-            //NSLog(@"targetCenter2 %d %d", targetCenter.x, targetCenter.y);
+            mapView.animator->resume();
         }
-
-        mapView.animator->resume();
-    }
+    });
 }
 
 - (void)onMapSettingsChanged
@@ -3302,7 +3316,7 @@
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
             OALog(@"Using '%@' online source from '%@' resource", lastMapSource.variant, mapSourceResource->id.toNSString());
 
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant));
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(lastMapSource.variant), _webClient);
             if (!onlineMapTileProvider)
             {
                 // Missing resource, shift to default
@@ -3509,7 +3523,7 @@
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
             OALog(@"Overlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
             
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant));
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.overlayMapSource.variant), _webClient);
             if (onlineMapTileProvider)
             {
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
@@ -3549,7 +3563,7 @@
             const auto& onlineTileSources = std::static_pointer_cast<const OsmAnd::ResourcesManager::OnlineTileSourcesMetadata>(mapSourceResource->metadata)->sources;
             OALog(@"Underlay Map: Using online source from '%@' resource", mapSourceResource->id.toNSString());
             
-            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant));
+            const auto onlineMapTileProvider = onlineTileSources->createProviderFor(QString::fromNSString(_app.data.underlayMapSource.variant), _webClient);
             if (onlineMapTileProvider)
             {
                 onlineMapTileProvider->setLocalCachePath(QString::fromNSString(_app.cachePath));
@@ -5002,12 +5016,19 @@
 {
     OAMapRendererView* renderView = (OAMapRendererView*)self.view;
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;
-    OsmAnd::PointI myLocation31(OsmAnd::Utilities::get31TileNumberX(myLocation.coordinate.longitude),
-                                OsmAnd::Utilities::get31TileNumberY(myLocation.coordinate.latitude));
-    
-    OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
-    
-    return (visibleArea.topLeft.x < myLocation31.x && visibleArea.topLeft.y < myLocation31.y && visibleArea.bottomRight.x > myLocation31.x && visibleArea.bottomRight.y > myLocation31.y);
+    if (myLocation)
+    {
+        OsmAnd::PointI myLocation31(OsmAnd::Utilities::get31TileNumberX(myLocation.coordinate.longitude),
+                                    OsmAnd::Utilities::get31TileNumberY(myLocation.coordinate.latitude));
+        
+        OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
+        
+        return (visibleArea.topLeft.x < myLocation31.x && visibleArea.topLeft.y < myLocation31.y && visibleArea.bottomRight.x > myLocation31.x && visibleArea.bottomRight.y > myLocation31.y);
+    }
+    else
+    {
+        return YES;
+    }
 }
 
 @end

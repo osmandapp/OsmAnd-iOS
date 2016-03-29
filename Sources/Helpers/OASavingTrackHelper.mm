@@ -554,31 +554,33 @@
     dispatch_async(syncQueue, ^{
         
         CLLocation* location = _app.locationServices.lastKnownLocation;
-        long locationTime = (long)[location.timestamp timeIntervalSince1970];
-        
-        BOOL record = NO;
-        isRecording = NO;
-        
-        if ([self isPointAccurateForRouting:location])
-        {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
+        if (location) {
+            long locationTime = (long)[location.timestamp timeIntervalSince1970];
             
-            if (settings.mapSettingTrackRecording
-                && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+            BOOL record = NO;
+            isRecording = NO;
+            
+            if ([self isPointAccurateForRouting:location])
             {
-                record = true;
+                OAAppSettings *settings = [OAAppSettings sharedManager];
+                
+                if (settings.mapSettingTrackRecording
+                    && locationTime - lastTimeUpdated > settings.mapSettingSaveTrackInterval)
+                {
+                    record = true;
+                }
+                
+                if (settings.mapSettingTrackRecording) {
+                    isRecording = true;
+                }
             }
             
-            if (settings.mapSettingTrackRecording) {
-                isRecording = true;
+            if (record)
+            {
+                [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
+                
+                [[_app trackRecordingObservable] notifyEvent];
             }
-        }
-        
-        if (record)
-        {
-            [self insertDataLat:location.coordinate.latitude lon:location.coordinate.longitude alt:location.altitude speed:location.speed hdop:location.horizontalAccuracy time:(long)[location.timestamp timeIntervalSince1970]];
-            
-            [[_app trackRecordingObservable] notifyEvent];
         }
         
     });

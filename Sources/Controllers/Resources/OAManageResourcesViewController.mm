@@ -1084,6 +1084,7 @@ static BOOL _lackOfResources;
                     return;
                 }
             }
+            return;
         }
 
         NSMutableArray *resourceItems = [self getResourceItems];

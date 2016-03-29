@@ -186,7 +186,6 @@
     
     // Obtain fresh location and heading
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    
     if (!newLocation)
         return;
     

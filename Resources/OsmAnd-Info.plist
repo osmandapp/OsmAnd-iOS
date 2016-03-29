@@ -20,29 +20,29 @@
 				<string>net.osmand.gpx</string>
 			</array>
 		</dict>
-        <dict>
-            <key>CFBundleTypeName</key>
-            <string>Map Creator SQLite Database</string>
-            <key>CFBundleTypeIconFiles</key>
-            <array/>
-            <key>CFBundleTypeExtensions</key>
-            <array>
-                <string>sqlitedb</string>
-            </array>
-            <key>CFBundleTypeMIMETypes</key>
-            <array>
-                <string>application/x-sqlite3</string>
-                <string>application/octet-stream</string>
-            </array>
-            <key>LSHandlerRank</key>
-            <string>Alternate</string>
-            <key>LSItemContentTypes</key>
-            <array>
-                <string>net.osmand.sqlitedb</string>
-            </array>
-            <key>NSPersistentStoreTypeKey</key>
-            <string>SQLite</string>
-        </dict>
+		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>sqlitedb</string>
+			</array>
+			<key>CFBundleTypeIconFiles</key>
+			<array/>
+			<key>CFBundleTypeMIMETypes</key>
+			<array>
+				<string>application/x-sqlite3</string>
+				<string>application/octet-stream</string>
+			</array>
+			<key>CFBundleTypeName</key>
+			<string>Map Creator SQLite Database</string>
+			<key>LSHandlerRank</key>
+			<string>Alternate</string>
+			<key>LSItemContentTypes</key>
+			<array>
+				<string>net.osmand.sqlitedb</string>
+			</array>
+			<key>NSPersistentStoreTypeKey</key>
+			<string>SQLite</string>
+		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
@@ -79,6 +79,11 @@
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This permission is required to use such features as: background GPX recording, navigation etc.</string>
 	<key>UIBackgroundModes</key>
@@ -94,6 +99,8 @@
 		<string>armv7</string>
 		<string>opengles-2</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<true/>
 	<key>UIStatusBarHidden</key>
 	<false/>
 	<key>UIStatusBarStyle</key>
@@ -136,29 +143,29 @@
 				<string>application/gpx+xml</string>
 			</dict>
 		</dict>
-        <dict>
-            <key>UTTypeIdentifier</key>
-            <string>net.osmand.sqlitedb</string>
-            <key>UTTypeDescription</key>
-            <string>Map Creator SQLite Database</string>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.database</string>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>sqlitedb</string>
-                </array>
-                <key>public.mime-type</key>
-                <array>
-                    <string>application/x-sqlite3</string>
-                    <string>application/octet-stream</string>
-                </array>
-            </dict>
-        </dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.database</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Map Creator SQLite Database</string>
+			<key>UTTypeIdentifier</key>
+			<string>net.osmand.sqlitedb</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sqlitedb</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-sqlite3</string>
+					<string>application/octet-stream</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 	<key>UTImportedTypeDeclarations</key>
 	<array>
@@ -182,29 +189,29 @@
 				<string>application/gpx+xml</string>
 			</dict>
 		</dict>
-        <dict>
-            <key>UTTypeIdentifier</key>
-            <string>net.osmand.sqlitedb</string>
-            <key>UTTypeDescription</key>
-            <string>Map Creator SQLite Database</string>
-            <key>UTTypeConformsTo</key>
-            <array>
-                <string>public.database</string>
-                <string>public.data</string>
-            </array>
-            <key>UTTypeTagSpecification</key>
-            <dict>
-                <key>public.filename-extension</key>
-                <array>
-                    <string>sqlitedb</string>
-                </array>
-                <key>public.mime-type</key>
-                <array>
-                    <string>application/x-sqlite3</string>
-                    <string>application/octet-stream</string>
-                </array>
-            </dict>
-        </dict>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.database</string>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Map Creator SQLite Database</string>
+			<key>UTTypeIdentifier</key>
+			<string>net.osmand.sqlitedb</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>sqlitedb</string>
+				</array>
+				<key>public.mime-type</key>
+				<array>
+					<string>application/x-sqlite3</string>
+					<string>application/octet-stream</string>
+				</array>
+			</dict>
+		</dict>
 	</array>
 </dict>
 </plist>

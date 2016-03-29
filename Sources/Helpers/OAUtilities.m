@@ -125,9 +125,9 @@
 + (void)getHMS:(NSTimeInterval)timeInterval hours:(int*)hours minutes:(int*)minutes seconds:(int*)seconds
 {
     long secondsL = lroundf(timeInterval);
-    *hours = abs(secondsL / 3600);
-    *minutes = abs((secondsL % 3600) / 60);
-    *seconds = abs(secondsL % 60);
+    *hours = abs((int)(secondsL / 3600));
+    *minutes = abs((int)((secondsL % 3600) / 60));
+    *seconds = abs((int)(secondsL % 60));
 }
 
 + (NSArray *) splitCoordinates:(NSString *)string
@@ -248,8 +248,8 @@
 + (NSString *) floatToStrTrimZeros:(CGFloat)number
 {
     NSString *str = [NSString stringWithFormat:@"%f", number];
-    int length = str.length;
-    for (int i = str.length; i > 0; i--)
+    long length = str.length;
+    for (long i = str.length; i > 0; i--)
     {
         if  ([str rangeOfString:@"."].location != NSNotFound)
         {

@@ -394,6 +394,11 @@
 
 - (void)updateSpeed
 {
+    if (!_lastCapturedLocation)
+    {
+        return;
+    }
+    
     const auto speed = MAX(_lastCapturedLocation.speed, 0);
 
     NSString *text = [_app getFormattedSpeed:speed drive:YES];
@@ -429,6 +434,11 @@
 
 - (void)updateAltitude
 {
+    if (!_lastCapturedLocation)
+    {
+        return;
+    }
+    
     NSString *text = [_app getFormattedAlt:_lastCapturedLocation.altitude];
 
 #if defined(OSMAND_IOS_DEV)
@@ -464,9 +474,8 @@
 {
     // If road is unknown, or no query has been performed, or distance between query points is more than X meters,
     // repeat query
-    if (!_road ||
-        _lastQueriedLocation == nil ||
-        [_lastQueriedLocation distanceFromLocation:_lastCapturedLocation] >= kMaxRoadDistanceInMeters)
+    if (_lastCapturedLocation && (!_road || _lastQueriedLocation == nil ||
+        [_lastQueriedLocation distanceFromLocation:_lastCapturedLocation] >= kMaxRoadDistanceInMeters))
     {
         [self restartLocationUpdateTimer];
 
@@ -520,14 +529,14 @@
         nativeTitle = nil;
     }
 
-    if (localizedTitle == nil)
+    if (localizedTitle == nil && location)
     {
         localizedTitle = [_app.locationFormatter stringFromCoordinate:location.coordinate];
     }
 
     if (nativeTitle == nil)
     {
-        if (location.course >= 0)
+        if (location && location.course >= 0)
         {
             NSString* course = [_app.locationFormatter stringFromBearing:location.course];
             nativeTitle = OALocalizedString(@"hud_heading %@", course);

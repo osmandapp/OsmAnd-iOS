@@ -40,6 +40,8 @@
 #include <OsmAndCore.h>
 #import "OAAppSettings.h"
 #include <OsmAndCore/IFavoriteLocation.h>
+#include <OsmAndCore/IWebClient.h>
+#include "OAWebClient.h"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -51,6 +53,7 @@
     OAMapMode _prevMapMode;
 
     OAResourcesInstaller* _resourcesInstaller;
+    std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
     OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
     
@@ -186,15 +189,19 @@
     NSString* worldMiniBasemapVersion = [worldMiniBasemapStampContents stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     OALog(@"Located shipped world mini-basemap (version %@) at %@", worldMiniBasemapVersion, _worldMiniBasemapFilename);
     
+    _webClient = std::make_shared<OAWebClient>();
+    
     _localResourcesChangedObservable = [[OAObservable alloc] init];
     _resourcesRepositoryUpdatedObservable = [[OAObservable alloc] init];
     _resourcesManager.reset(new OsmAnd::ResourcesManager(_dataDir.absoluteFilePath(QLatin1String("Resources")),
                                                          _documentsDir.absolutePath(),
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                          _worldMiniBasemapFilename != nil
-                                                            ? QString::fromNSString(_worldMiniBasemapFilename)
-                                                            : QString::null,
-                                                         QString::fromNSString(NSTemporaryDirectory())));
+                                                         ? QString::fromNSString(_worldMiniBasemapFilename)
+                                                         : QString::null,
+                                                         QString::fromNSString(NSTemporaryDirectory()),
+                                                         QString::fromNSString(@"http://download.osmand.net"),
+                                                         _webClient));
     _resourcesManager->localResourcesChangeObservable.attach((__bridge const void*)self,
                                                              [self]
                                                              (const OsmAnd::ResourcesManager* const resourcesManager,

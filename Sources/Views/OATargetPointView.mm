@@ -24,8 +24,7 @@
 #import "OAGPXRouteDocument.h"
 #import "OAEditTargetViewController.h"
 
-#import "OpeningHoursParser.h"
-#include "java/util/Calendar.h"
+#import "OAOpeningHoursParser.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -410,13 +409,16 @@
         // Obtain fresh location and heading
         OsmAndAppInstance app = [OsmAndApp instance];
         CLLocation* newLocation = app.locationServices.lastKnownLocation;
-        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-        CLLocationDirection newDirection =
-        (newLocation.speed >= 1 && newLocation.course >= 0.0f)
-        ? newLocation.course
-        : newHeading;
-        
-        [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
+        if (newLocation)
+        {
+            CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+            CLLocationDirection newDirection =
+            (newLocation.speed >= 1 && newLocation.course >= 0.0f)
+            ? newLocation.course
+            : newHeading;
+            
+            [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
+        }
         
         if (_targetPoint.type == OATargetParking && _targetPoint.targetObj)
         {
@@ -439,13 +441,16 @@
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         CLLocation* newLocation = app.locationServices.lastKnownLocation;
-        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-        CLLocationDirection newDirection =
-        (newLocation.speed >= 1 && newLocation.course >= 0.0f)
-        ? newLocation.course
-        : newHeading;
-        
-        [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
+        if (newLocation)
+        {
+            CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+            CLLocationDirection newDirection =
+            (newLocation.speed >= 1 && newLocation.course >= 0.0f)
+            ? newLocation.course
+            : newHeading;
+            
+            [self updateDirectionButton:newLocation.coordinate newDirection:newDirection];
+        }
     }
 }
 
@@ -1051,9 +1056,8 @@
     
     if (_targetPoint.openingHours)
     {
-        NetOsmandUtilOpeningHoursParser_OpeningHours *parser = [NetOsmandUtilOpeningHoursParser parseOpenedHoursWithNSString:_targetPoint.openingHours];
-        JavaUtilCalendar *cal = JavaUtilCalendar_getInstance();
-        BOOL isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+        OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_targetPoint.openingHours];
+        BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
         
         UIColor *color;
         if (isOpened)

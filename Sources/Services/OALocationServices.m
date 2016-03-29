@@ -303,17 +303,22 @@
 {
     //return [[CLLocation alloc] initWithLatitude:44.953197568579 longitude:34.097549412400];
 
-    if (_lastLocation != nil)
+    @synchronized(_lock)
+    {
         return _lastLocation;
-
-    return _manager.location;
+    }
 }
 
 - (CLLocationDirection)lastKnownHeading
 {
-    if (!isnan(_lastHeading))
-        return _lastHeading;
-    return _manager.heading.trueHeading;
+    @synchronized(_lock)
+    {
+        if (!isnan(_lastHeading)) {
+            return _lastHeading;
+        } else {
+            return 0;
+        }
+    }
 }
 
 @synthesize updateObserver = _updateObserver;
@@ -567,7 +572,15 @@
 
 - (NSString *)stringFromBearingToLocation:(CLLocation *)destinationLocation
 {
-    return [_app.locationFormatter stringFromBearingFromLocation:self.lastKnownLocation toLocation:destinationLocation];
+    CLLocation *location = self.lastKnownLocation;
+    if (location && destinationLocation)
+    {
+        return [_app.locationFormatter stringFromBearingFromLocation:location toLocation:destinationLocation];
+    }
+    else
+    {
+        return nil;
+    }
 }
 
 // Relative to north
@@ -578,12 +591,19 @@
 
 - (CGFloat)radiusFromBearingToLocation:(CLLocation *)destinationLocation sourceLocation:(CLLocation*)sourceLocation
 {
-    CLLocationCoordinate2D coord1 = sourceLocation.coordinate;
-    CLLocationCoordinate2D coord2 = destinationLocation.coordinate;
-    double distance, bearing;
-    [self computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-    
-    return bearing;
+    if (sourceLocation && destinationLocation)
+    {
+        CLLocationCoordinate2D coord1 = sourceLocation.coordinate;
+        CLLocationCoordinate2D coord2 = destinationLocation.coordinate;
+        double distance, bearing;
+        [self computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
+        
+        return bearing;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 - (CGFloat) radiusFromBearing:(CLLocationDegrees)bearing {

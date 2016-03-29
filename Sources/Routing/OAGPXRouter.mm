@@ -365,7 +365,14 @@ const double kMotionSpeedCar = 40.0 * kKmhToMps;
     for (int k = 0; k < ans.count; k++)
     {
         int ansK = [ans[k] intValue];
-        ((OAGpxRouteWptItem *)_routeDoc.activePoints[ansK]).point.index = k;
+        if (ansK >= 0 && ansK < _routeDoc.activePoints.count)
+        {
+            OAGpxRouteWptItem *wpt = (OAGpxRouteWptItem *)_routeDoc.activePoints[ansK];
+            if (wpt && wpt.point)
+            {
+                wpt.point.index = k;
+            }
+        }
     }
     
     [_routeDoc.activePoints sortUsingComparator:^NSComparisonResult(OAGpxRouteWptItem *item1, OAGpxRouteWptItem *item2) {

@@ -8,10 +8,8 @@
 
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
-#import "OpeningHoursParser.h"
+#import "OAOpeningHoursParser.h"
 #import "Localization.h"
-
-#include "java/util/Calendar.h"
 
 @implementation OAPointDescCell
 
@@ -54,14 +52,11 @@
         k += 5;
     }
     
-    NetOsmandUtilOpeningHoursParser_OpeningHours *parser = [NetOsmandUtilOpeningHoursParser parseOpenedHoursWithNSString:_openingHoursView.text];
-    JavaUtilCalendar *cal = JavaUtilCalendar_getInstance();
-    jlong currentTime = [cal getTimeInMillis];
-    BOOL isOpenedNow = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+    OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_openingHoursView.text];
+    BOOL isOpenedNow = [parser isOpenedForTime:[NSDate date]];
 
-    jlong newTime = currentTime + intervalMinutes * 60 * 1000;
-    [cal setTimeInMillisWithLong:newTime];
-    BOOL isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+    NSDate *newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + intervalMinutes * 60];
+    BOOL isOpened = [parser isOpenedForTime:newTime];
     if (isOpened == isOpenedNow)
         return (isOpenedNow ? OALocalizedString(@"time_open") : OALocalizedString(@"time_closed"));
 
@@ -72,9 +67,8 @@
     {
         imid = (imin + imax) / 2;
         
-        jlong newTime = currentTime + minutesArr[imid] * 60 * 1000;
-        [cal setTimeInMillisWithLong:newTime];
-        isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+        newTime = [NSDate dateWithTimeIntervalSince1970:[NSDate date].timeIntervalSince1970 + minutesArr[imid] * 60];
+        BOOL isOpened = [parser isOpenedForTime:newTime];
         if (isOpened == isOpenedNow)
             imin = imid + 1;
         else
@@ -102,9 +96,8 @@
     }
     else
     {
-        NetOsmandUtilOpeningHoursParser_OpeningHours *parser = [NetOsmandUtilOpeningHoursParser parseOpenedHoursWithNSString:_openingHoursView.text];
-        JavaUtilCalendar *cal = JavaUtilCalendar_getInstance();
-        BOOL isOpened = [parser isOpenedForTimeWithJavaUtilCalendar:cal];
+        OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_openingHoursView.text];
+        BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
         
         UIColor *color;
         if (isOpened)

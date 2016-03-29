@@ -152,7 +152,6 @@ static OAFavoriteListViewController *parentController;
     OsmAndAppInstance app = [OsmAndApp instance];
     // Obtain fresh location and heading
     CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    
     if (!newLocation)
         return;
     

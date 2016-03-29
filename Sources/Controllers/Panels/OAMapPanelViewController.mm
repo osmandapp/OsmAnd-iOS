@@ -919,17 +919,23 @@ typedef enum
     OsmAnd::PointI searchLocation;
 
     CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
-
-    double distanceFromMyLocation;
-    
-    if (!isMyLocationVisible)
+    OsmAnd::PointI myLocation;
+    double distanceFromMyLocation = 0;
+    if (newLocation)
     {
-        distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
-        if (distanceFromMyLocation > 15000)
+        myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+        if (!isMyLocationVisible)
         {
-            searchNearMapCenter = YES;
-            searchLocation = mapView.target31;
+            distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
+            if (distanceFromMyLocation > 15000)
+            {
+                searchNearMapCenter = YES;
+                searchLocation = mapView.target31;
+            }
+            else
+            {
+                searchLocation = myLocation;
+            }
         }
         else
         {
@@ -938,9 +944,11 @@ typedef enum
     }
     else
     {
-        searchLocation = myLocation;
+        searchNearMapCenter = YES;
+        searchLocation = mapView.target31;
     }
 
+    
     if (!_searchPOI)
         _searchPOI = [[OAPOISearchViewController alloc] init];
     _searchPOI.myLocation = searchLocation;

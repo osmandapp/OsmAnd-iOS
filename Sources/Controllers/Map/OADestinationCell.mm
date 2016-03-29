@@ -428,8 +428,11 @@
 
 - (void)updateDirections:(CLLocationCoordinate2D)myLocation direction:(CLLocationDirection)direction
 {
-    self.currentLocation = myLocation;
-    self.currentDirection = direction;
+    if (!isnan(myLocation.latitude))
+    {
+        self.currentLocation = myLocation;
+        self.currentDirection = direction;
+    }
     
     for (int i = 0; i < _destinations.count; i++)
     {

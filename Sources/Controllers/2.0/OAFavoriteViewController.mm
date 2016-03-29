@@ -179,7 +179,14 @@
 
 - (NSString *)getItemName
 {
-    return self.favorite.favorite->getTitle().toNSString();
+    if (!self.favorite.favorite->getTitle().isNull())
+    {
+        return self.favorite.favorite->getTitle().toNSString();
+    }
+    else
+    {
+        return @"";
+    }
 }
 
 - (void)setItemName:(NSString *)name
@@ -205,7 +212,14 @@
 
 - (NSString *)getItemGroup
 {
-    return self.favorite.favorite->getGroup().toNSString();
+    if (!self.favorite.favorite->getGroup().isNull())
+    {
+        return self.favorite.favorite->getGroup().toNSString();
+    }
+    else
+    {
+        return @"";
+    }
 }
 
 - (void)setItemGroup:(NSString *)groupName
@@ -220,7 +234,14 @@
 
 - (NSString *)getItemDesc
 {
-    return self.favorite.favorite->getDescription().toNSString();
+    if (!self.favorite.favorite->getDescription().isNull())
+    {
+        return self.favorite.favorite->getDescription().toNSString();
+    }
+    else
+    {
+        return @"";
+    }
 }
 
 - (void)setItemDesc:(NSString *)desc

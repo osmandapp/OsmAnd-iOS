@@ -384,6 +384,10 @@ typedef enum
         OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
         newLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
     }
+    if (!newLocation)
+    {
+        return;
+    }
     CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
     CLLocationDirection newDirection =
     (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
@@ -701,7 +705,7 @@ typedef enum
             
             if (cell)
             {
-                int coordsCount = _foundCoords.count;
+                NSUInteger coordsCount = _foundCoords.count;
                 
                 CGRect f = cell.textView.frame;
                 CGFloat oldX = f.origin.x;
@@ -966,7 +970,7 @@ typedef enum
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int row = indexPath.row;
+    NSInteger row = indexPath.row;
     
     if (_showCoordinates)
     {
@@ -976,7 +980,7 @@ typedef enum
             row--;
     }
     
-    int index = row - _dataArray.count;
+    NSInteger index = row - _dataArray.count;
     if (index >= 0 && index < _dataPoiArray.count)
     {
         OAPOI* item = _dataPoiArray[index];
@@ -995,7 +999,7 @@ typedef enum
 {
     [tableView deselectRowAtIndexPath:indexPath animated:NO];
     
-    int row = indexPath.row;
+    NSInteger row = indexPath.row;
 
     if (_poiInList && _dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined)
     {
@@ -1017,10 +1021,13 @@ typedef enum
     {
         if (row == 0)
         {
-            double lat = [_foundCoords[0] doubleValue];
-            double lon = [_foundCoords[1] doubleValue];
-            [self goToPoint:lat longitude:lon];
-            return;
+            if (_foundCoords.count > 1)
+            {
+                double lat = [_foundCoords[0] doubleValue];
+                double lon = [_foundCoords[1] doubleValue];
+                [self goToPoint:lat longitude:lon];
+                return;
+            }
         }
         else
         {
@@ -1542,19 +1549,22 @@ typedef enum
         return;
     
     CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
-    OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
-
-    _poiInList = NO;
-    [_searchPoiArray removeAllObjects];
-    _searchRadiusIndex = 0;
-    self.myLocation = myLocation;
-    
-    [self setSearchNearMapCenter:NO];
-    [UIView animateWithDuration:.25 animations:^{
-        [self.view layoutIfNeeded];
-    } completion:^(BOOL finished) {
-        [self generateData];
-    }];
+    if (newLocation)
+    {
+        OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
+        
+        _poiInList = NO;
+        [_searchPoiArray removeAllObjects];
+        _searchRadiusIndex = 0;
+        self.myLocation = myLocation;
+        
+        [self setSearchNearMapCenter:NO];
+        [UIView animateWithDuration:.25 animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            [self generateData];
+        }];
+    }
 }
 
 - (IBAction)textFieldValueChanged:(id)sender

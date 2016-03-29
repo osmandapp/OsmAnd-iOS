@@ -87,6 +87,10 @@
     
     // Obtain fresh location and heading
     CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+    if (!newLocation)
+    {
+        return;
+    }
     CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
     CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
     

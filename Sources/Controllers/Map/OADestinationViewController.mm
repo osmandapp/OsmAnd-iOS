@@ -256,14 +256,25 @@
     {
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-        CLLocationDirection newDirection =
-        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-        ? newLocation.course
-        : newHeading;
-        
-        *location = newLocation.coordinate;
-        *direction = newDirection;
+        if (!newLocation)
+        {
+            CLLocationCoordinate2D emptyCoords;
+            emptyCoords.latitude = NAN;
+            emptyCoords.longitude = NAN;
+            *location = emptyCoords;
+            *direction = NAN;
+        }
+        else
+        {
+            CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+            CLLocationDirection newDirection =
+            (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+            ? newLocation.course
+            : newHeading;
+            
+            *location = newLocation.coordinate;
+            *direction = newDirection;
+        }
     }
 }
 
@@ -532,7 +543,7 @@
     }
 
     UIColor *lastUsedColor;
-    for (int i = _app.data.destinations.count - 1; i >= 0; i--)
+    for (long i = _app.data.destinations.count - 1; i >= 0; i--)
     {
         OADestination *destination = _app.data.destinations[i];
         if (destination.color && !destination.parking && !destination.routePoint)
@@ -590,6 +601,8 @@
         
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
         CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
         CLLocationDirection newDirection =
         (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)

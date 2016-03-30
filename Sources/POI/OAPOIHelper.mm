@@ -15,6 +15,7 @@
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -111,7 +112,7 @@
 {
     if (!_phrases)
     {
-        NSString *lang = [[NSLocale preferredLanguages] firstObject];
+        NSString *lang = [OAUtilities currentLang];
 
         NSString *phrasesXmlPath = [[NSBundle mainBundle] pathForResource:@"phrases" ofType:@"xml" inDirectory:[NSString stringWithFormat:@"phrases/%@", lang]];
 

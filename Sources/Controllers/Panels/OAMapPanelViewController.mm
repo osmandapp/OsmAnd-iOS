@@ -1263,7 +1263,7 @@ typedef enum
             
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
             if (!contentLocale)
-                contentLocale = [[NSLocale preferredLanguages] firstObject];
+                contentLocale = [OAUtilities currentLang];
             
             NSString *contentText = [content objectForKey:contentLocale];
             if (!contentText)
@@ -1978,7 +1978,7 @@ typedef enum
         {
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
             if (!contentLocale)
-                contentLocale = [[NSLocale preferredLanguages] firstObject];
+                contentLocale = [OAUtilities currentLang];
             
             NSString *content = [self.targetMenuView.targetPoint.localizedContent objectForKey:contentLocale];
             if (!content)

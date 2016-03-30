@@ -50,4 +50,6 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 
 + (void)roundCornersOnView:(UIView *)view onTopLeft:(BOOL)tl topRight:(BOOL)tr bottomLeft:(BOOL)bl bottomRight:(BOOL)br radius:(CGFloat)radius;
 
++ (NSString *) currentLang;
+
 @end

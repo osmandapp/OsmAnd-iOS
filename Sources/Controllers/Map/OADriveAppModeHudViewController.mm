@@ -513,7 +513,7 @@
 
     if (road)
     {
-        const auto mainLanguage = QString::fromNSString([[NSLocale preferredLanguages] firstObject]);
+        const auto mainLanguage = QString::fromNSString([OAUtilities currentLang]);
         const auto localizedName = road->getCaptionInLanguage(mainLanguage);
         const auto nativeName = road->getCaptionInNativeLanguage();
 

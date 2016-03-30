@@ -3114,7 +3114,7 @@
 
             _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
 
-            NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
+            NSLog(@"%@", [OAUtilities currentLang]);
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
@@ -3142,7 +3142,7 @@
                     break;
             }
             
-            NSString *langId = [[NSLocale preferredLanguages] firstObject];
+            NSString *langId = [OAUtilities currentLang];
             if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
                 langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
             else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&
@@ -3338,7 +3338,7 @@
             
             _obfMapObjectsProvider.reset(new OsmAnd::ObfMapObjectsProvider(_app.resourcesManager->obfsCollection));
             
-            NSLog(@"%@", [[NSLocale preferredLanguages] firstObject]);
+            NSLog(@"%@", [OAUtilities currentLang]);
             
             OsmAnd::MapPresentationEnvironment::LanguagePreference langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
             
@@ -3366,7 +3366,7 @@
                     break;
             }
             
-            NSString *langId = [[NSLocale preferredLanguages] firstObject];
+            NSString *langId = [OAUtilities currentLang];
             if ([[OAAppSettings sharedManager] settingPrefMapLanguage])
                 langId = [[OAAppSettings sharedManager] settingPrefMapLanguage];
             else if ([[OAAppSettings sharedManager] settingMapLanguageShowLocal] &&

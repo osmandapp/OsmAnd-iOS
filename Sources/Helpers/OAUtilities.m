@@ -400,4 +400,10 @@
     }
 }
 
++ (NSString *) currentLang
+{
+    NSString *firstLanguage = [[NSLocale preferredLanguages] firstObject];
+    return [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
+}
+
 @end

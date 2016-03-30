@@ -62,7 +62,7 @@
     
     _contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];
     if (!_contentLocale)
-        _contentLocale = [[NSLocale preferredLanguages] firstObject];
+        _contentLocale = [OAUtilities currentLang];
     
     NSString *content = [self.localizedContent objectForKey:_contentLocale];
     if (!content)

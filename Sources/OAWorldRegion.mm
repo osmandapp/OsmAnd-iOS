@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
+#import "OAUtilities.h"
 
 @implementation OAWorldRegion
 {
@@ -205,7 +206,7 @@
 
 - (void)setLocalizedNamesFrom:(const QHash<QString, QString>&)localizedNames withExtraName:(NSString*)extraLocalizedName
 {
-    const auto citLocalizedName = localizedNames.constFind(QString::fromNSString([[NSLocale preferredLanguages] firstObject]));
+    const auto citLocalizedName = localizedNames.constFind(QString::fromNSString([OAUtilities currentLang]));
     if (citLocalizedName == localizedNames.cend())
         _localizedName = extraLocalizedName;
     else

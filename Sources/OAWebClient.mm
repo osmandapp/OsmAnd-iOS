@@ -78,7 +78,7 @@ QByteArray OAWebClient::downloadData(
         {
             if (requestResult != nullptr)
             {
-                requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(false, responseCode).get() : nullptr);
+                requestResult->reset(new OAHttpRequestResult(false, responseCode));
             }
             return QByteArray();
         }
@@ -87,7 +87,7 @@ QByteArray OAWebClient::downloadData(
         
         if (requestResult != nullptr)
         {
-            requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(true, responseCode).get() : nullptr);
+            requestResult->reset(new OAHttpRequestResult(true, responseCode));
         }
     }
     return res;
@@ -136,14 +136,14 @@ QString OAWebClient::downloadString(
         {
             if (requestResult != nullptr)
             {
-                requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(false, responseCode).get() : nullptr);
+                requestResult->reset(new OAHttpRequestResult(false, responseCode));
             }
             return QString::null;
         }
         
         if (requestResult != nullptr)
         {
-            requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(true, responseCode).get() : nullptr);
+            requestResult->reset(new OAHttpRequestResult(true, responseCode));
         }
         
         if (!charset.isNull() && charset.contains(QLatin1String("utf-8")))
@@ -181,7 +181,7 @@ bool OAWebClient::downloadFile(
         {
             if (requestResult != nullptr)
             {
-                requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(false, responseCode).get() : nullptr);
+                requestResult->reset(new OAHttpRequestResult(false, responseCode));
             }
             return false;
         }
@@ -204,7 +204,7 @@ bool OAWebClient::downloadFile(
         
         if (requestResult != nullptr)
         {
-            requestResult->reset(response ? std::make_shared<OAHttpRequestResult>(success, responseCode).get() : nullptr);
+            requestResult->reset(new OAHttpRequestResult(success, responseCode));
         }
     }
     return success;

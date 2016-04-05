@@ -151,8 +151,8 @@
 "rendering_attr_osmcTraces_name" = "Vandresymbol overlejring";
 "rendering_attr_showCycleRoutes_name" = "Cykelruter";
 "rendering_attr_hideBuildings_name" = "Skjul bygninger";
-"rendering_attr_noPolygons_name" = "Skjul polygoner";
-"rendering_attr_noAdminboundaries_name" = "Skjul grænser";
+"rendering_attr_noPolygons_name" = "Polygoner";
+"rendering_attr_noAdminboundaries_name" = "Grænser";
 "rendering_attr_publicTransportMode_name" = "Bus-, trolleybus-, shuttlebusruter";
 "rendering_attr_contourLines_name" = "Vis højdekurver";
 "rendering_attr_OSMMapperAssistant_name" = "OSM kortassistent";

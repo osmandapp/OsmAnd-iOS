@@ -10,6 +10,24 @@
 
 #import <UIKit/UIDevice.h>
 
+@implementation NSString (util)
+
+- (int) indexOf:(NSString *)text
+{
+    NSRange range = [self rangeOfString:text];
+    if (range.location != NSNotFound)
+    {
+        return (int)range.location;
+    }
+    else
+    {
+        return -1;
+    }
+}
+
+@end
+
+
 @implementation OAUtilities
 
 + (BOOL)iosVersionIsAtLeast:(NSString*)testVersion

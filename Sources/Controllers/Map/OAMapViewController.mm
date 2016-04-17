@@ -115,8 +115,6 @@
 #define kHillshadeOpacity 0.7f
 
 #define kGpxLayerId 9
-#define kGpxRouteLayerId 10
-#define kGpxTempLayerId 11
 #define kGpxRecLayerId 12
 #define kOverlayLayerId 5
 #define kUnderlayLayerId -5
@@ -192,17 +190,9 @@
 
     // Route gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxRoute;
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterRoute;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxRoute;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderRoute;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxRoute;
 
     // Temp gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxTemp;
-    std::shared_ptr<OsmAnd::GeoInfoPresenter> _gpxPresenterTemp;
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _rasterMapProviderGpxTemp;
-    std::shared_ptr<OsmAnd::MapPrimitivesProvider> _gpxPrimitivesProviderTemp;
-    std::shared_ptr<OsmAnd::MapObjectsSymbolsProvider> _mapObjectsSymbolsProviderGpxTemp;
     
     // Currently recording gpx
     QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > _geoInfoDocsGpxRec;
@@ -961,7 +951,7 @@
         // Calculate vertical distance between touches
         const auto touch1 = [gestureRecognizer locationOfTouch:0 inView:self.view];
         const auto touch2 = [gestureRecognizer locationOfTouch:1 inView:self.view];
-        const auto verticalDistance = fabsf(touch1.y - touch2.y);
+        const auto verticalDistance = std::abs(touch1.y - touch2.y);
 
         // Ignore this touch if vertical distance is too large
         if (verticalDistance >= kElevationGestureMaxThreshold)
@@ -2986,7 +2976,6 @@
             [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [self showRouteGpxTrack];
                 [self refreshGpxTracks];
             });
         });
@@ -3045,16 +3034,6 @@
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpx];
         _mapObjectsSymbolsProviderGpx.reset();
 
-        // Reset temp gpx
-        if (_mapObjectsSymbolsProviderGpxTemp)
-            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
-        _mapObjectsSymbolsProviderGpxTemp.reset();
-
-        // Reset route gpx
-        if (_mapObjectsSymbolsProviderGpxRoute)
-            [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
-        _mapObjectsSymbolsProviderGpxRoute.reset();
-
         // Reset currently recording gpx
         if (_mapObjectsSymbolsProviderGpxRec)
             [mapView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
@@ -3067,8 +3046,6 @@
         }
 
         [mapView resetProviderFor:kGpxLayerId];
-        [mapView resetProviderFor:kGpxRouteLayerId];
-        [mapView resetProviderFor:kGpxTempLayerId];
         [mapView resetProviderFor:kGpxRecLayerId];
 
         [mapView resetProviderFor:kHillshadeLayerId];
@@ -3076,12 +3053,8 @@
         [mapView resetProviderFor:kUnderlayLayerId];
 
         _gpxPrimitivesProvider.reset();
-        _gpxPrimitivesProviderTemp.reset();
-        _gpxPrimitivesProviderRoute.reset();
         _gpxPrimitivesProviderRec.reset();
         
-        _gpxPresenterTemp.reset();
-        _gpxPresenterRoute.reset();
         _gpxPresenterRec.reset();
         _gpxPresenter.reset();
 
@@ -3389,12 +3362,7 @@
             
         }
         
-        if (_gpxDocFileRoute)
-            [self showRouteGpxTrack];
-
-        if (_gpxDocFileTemp)
-            [self showTempGpxTrack:_gpxDocFileTemp];
-        else if ([OAAppSettings sharedManager].mapSettingShowRecordingTrack)
+        if (!_gpxDocFileTemp && [OAAppSettings sharedManager].mapSettingShowRecordingTrack)
             [self showRecGpxTrack];
         
         if (_gpxRouter.gpx && !_gpxDocFileRoute)
@@ -3402,14 +3370,12 @@
             [_gpxRouter.routeDoc buildRouteTrack];
             [self setGeoInfoDocsGpxRoute:_gpxRouter.routeDoc];
             [self setDocFileRoute:_gpxRouter.gpx.gpxFileName];
-            
-            [self showRouteGpxTrack];
         }
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self buildGpxInfoDocList];
             
-            if (!_geoInfoDocsGpx.isEmpty())
+            if (!_geoInfoDocsGpx.isEmpty() || !_geoInfoDocsGpxTemp.isEmpty() || !_geoInfoDocsGpxRoute.isEmpty())
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self initRendererWithGpxTracks];
                 });
@@ -3912,25 +3878,7 @@
 {
     @synchronized(_rendererSync)
     {
-        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
-        
-        if (_mapObjectsSymbolsProviderGpxRoute)
-            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
-        _mapObjectsSymbolsProviderGpxRoute.reset();
-        [rendererView resetProviderFor:kGpxRouteLayerId];
-        
-        _gpxPresenterRoute.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxRoute));
-        
-        if (_gpxPresenterRoute) {
-            const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
-            _gpxPrimitivesProviderRoute.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRoute->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
-            
-            _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRoute, false));
-            [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRouteLayerId];
-            
-            _mapObjectsSymbolsProviderGpxRoute.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRoute, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
-            [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
-        }
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
@@ -3938,17 +3886,7 @@
 {
     @synchronized(_rendererSync)
     {
-        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
-        
-        if (_mapObjectsSymbolsProviderGpxRoute)
-            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRoute];
-        _mapObjectsSymbolsProviderGpxRoute.reset();
-        
-        [rendererView resetProviderFor:kGpxRouteLayerId];
-        
-        _gpxPrimitivesProviderRoute.reset();
         _geoInfoDocsGpxRoute.clear();
-        _gpxPresenterRoute.reset();
         
         _gpxDocFileRoute = nil;
         
@@ -3963,45 +3901,23 @@
 
     @synchronized(_rendererSync)
     {
-        NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
-
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if ([settings.mapSettingVisibleGpx containsObject:fileName]) {
             _gpxDocFileTemp = nil;
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
             return;
         }
         
         _tempTrackShowing = YES;
 
-        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
+        if (![_gpxDocFileTemp isEqualToString:fileName] || _geoInfoDocsGpxTemp.isEmpty()) {
+            _geoInfoDocsGpxTemp.clear();
+            _gpxDocFileTemp = [fileName copy];
+            NSString *path = [_app.gpxPath stringByAppendingPathComponent:fileName];
+            _geoInfoDocsGpxTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
+        }
         
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            if (_mapObjectsSymbolsProviderGpxTemp)
-                [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
-            _mapObjectsSymbolsProviderGpxTemp.reset();
-            [rendererView resetProviderFor:kGpxTempLayerId];
-            
-            if (![_gpxDocFileTemp isEqualToString:fileName] || _geoInfoDocsGpxTemp.isEmpty()) {
-                _geoInfoDocsGpxTemp.clear();
-                _gpxDocFileTemp = [fileName copy];
-                _geoInfoDocsGpxTemp.append(OsmAnd::GpxDocument::loadFrom(QString::fromNSString(path)));
-            }
-            _gpxPresenterTemp.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpxTemp));
-            
-            //dispatch_async(dispatch_get_main_queue(), ^{
-                if (_gpxPresenterTemp) {
-                    const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
-                    _gpxPrimitivesProviderTemp.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterTemp->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
-                    
-                    _rasterMapProviderGpxTemp.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderTemp, false));
-                    [rendererView setProvider:_rasterMapProviderGpxTemp forLayer:kGpxTempLayerId];
-                    
-                    _mapObjectsSymbolsProviderGpxTemp.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderTemp, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
-                    [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
-                }
-            //});
-        //});
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
@@ -4010,19 +3926,11 @@
     @synchronized(_rendererSync)
     {
         _tempTrackShowing = NO;
-
-        OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
         
-        if (_mapObjectsSymbolsProviderGpxTemp)
-            [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxTemp];
-        _mapObjectsSymbolsProviderGpxTemp.reset();
-        
-        [rendererView resetProviderFor:kGpxTempLayerId];
-        
-        _gpxPrimitivesProviderTemp.reset();
         _geoInfoDocsGpxTemp.clear();
-        _gpxPresenterTemp.reset();
         _gpxDocFileTemp = nil;
+
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 }
 
@@ -4037,8 +3945,6 @@
         OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
         
         OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
-        
-        //dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
         if (_mapObjectsSymbolsProviderGpxRec)
             [rendererView removeTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
@@ -4067,18 +3973,13 @@
                     _gpxPrimitivesProviderRec.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenterRec->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
                     
                     _rasterMapProviderGpxRec.reset(new OsmAnd::MapRasterLayerProvider_Software(_gpxPrimitivesProviderRec, false));
-                    
-                    //dispatch_async(dispatch_get_main_queue(), ^{
                     [rendererView setProvider:_rasterMapProviderGpxRec forLayer:kGpxRecLayerId];
                     
                     _mapObjectsSymbolsProviderGpxRec.reset(new OsmAnd::MapObjectsSymbolsProvider(_gpxPrimitivesProviderRec, rasterTileSize, std::shared_ptr<const OsmAnd::SymbolRasterizer>(new OsmAnd::SymbolRasterizer())));
                     [rendererView addTiledSymbolsProvider:_mapObjectsSymbolsProviderGpxRec];
-                    //});
                 }
             }
         }];
-        //});
-        
     }
 }
 
@@ -4118,8 +4019,14 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         [settings showGpx:_gpxDocFileTemp];
         
-        if (!_geoInfoDocsGpx.isEmpty())
-            [self initRendererWithGpxTracks];
+        @synchronized(_rendererSync)
+        {
+            _tempTrackShowing = NO;
+            _geoInfoDocsGpxTemp.clear();
+            _gpxDocFileTemp = nil;
+        }
+
+        [self initRendererWithGpxTracks];
     }
 }
 
@@ -4842,7 +4749,7 @@
 {
     @synchronized(_rendererSync)
     {
-        if (_geoInfoDocsGpx.isEmpty())
+        if (_geoInfoDocsGpx.isEmpty() && _geoInfoDocsGpxTemp.isEmpty() && _geoInfoDocsGpxRoute.isEmpty())
             return;
         
         OAMapRendererView* rendererView = (OAMapRendererView*)self.view;
@@ -4852,9 +4759,12 @@
         _mapObjectsSymbolsProviderGpx.reset();
         [rendererView resetProviderFor:kGpxLayerId];
         
-        _gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(_geoInfoDocsGpx));
+        QList< std::shared_ptr<const OsmAnd::GeoInfoDocument> > docs;
+        docs << _geoInfoDocsGpx << _geoInfoDocsGpxTemp << _geoInfoDocsGpxRoute;
+        _gpxPresenter.reset(new OsmAnd::GeoInfoPresenter(docs));
         
-        if (_gpxPresenter) {
+        if (_gpxPresenter)
+        {
             const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor);
             _gpxPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_gpxPresenter->createMapObjectsProvider(), _mapPrimitiviser, rasterTileSize, OsmAnd::MapPrimitivesProvider::Mode::AllObjectsWithPolygonFiltering));
             
@@ -4882,7 +4792,7 @@
         _gpxPrimitivesProvider.reset();
         _geoInfoDocsGpx.clear();
         _gpxPresenter.reset();
-        _gpxDocFileTemp = nil;
+        //_gpxDocFileTemp = nil;
     }
 }
 

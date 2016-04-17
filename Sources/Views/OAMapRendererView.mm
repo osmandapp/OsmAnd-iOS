@@ -824,6 +824,21 @@
     return myImage;
 }
 
+- (BOOL) isGpuWorkerPaused
+{
+    return _renderer->isGpuWorkerPaused();
+}
+
+- (BOOL) suspendGpuWorker
+{
+    return _renderer->suspendGpuWorker();
+}
+
+- (BOOL) resumeGpuWorker
+{
+    return _renderer->resumeGpuWorker();
+}
+
 
 #if defined(OSMAND_IOS_DEV)
 @synthesize forceRenderingOnEachFrame = _forceRenderingOnEachFrame;

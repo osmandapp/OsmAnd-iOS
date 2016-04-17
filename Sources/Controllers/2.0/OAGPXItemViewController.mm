@@ -196,7 +196,6 @@
 - (BOOL)preHide
 {
     [_mapViewController keepTempGpxTrackVisible];
-    [_mapViewController hideTempGpxTrack];
     [self closePointsController];
     return YES;
 }
@@ -361,7 +360,7 @@
     
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
     badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
-    badgeLabel.text = [NSString stringWithFormat:@"%d", self.doc.locationMarks.count];
+    badgeLabel.text = [NSString stringWithFormat:@"%d", (int) self.doc.locationMarks.count];
     badgeLabel.textColor = UIColorFromRGB(0xFF8F00);
     badgeLabel.textAlignment = NSTextAlignmentCenter;
     [badgeLabel sizeToFit];

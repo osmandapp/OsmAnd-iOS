@@ -29,7 +29,7 @@
     UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:11];
     
     NSMutableString *distanceStr = [[[OsmAndApp instance] getFormattedDistance:distance] mutableCopy];
-    NSString *waypointsStr = [NSString stringWithFormat:@"%d", wptCount];
+    NSString *waypointsStr = [NSString stringWithFormat:@"%d", (int) wptCount];
     NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:tripDuration shortFormat:NO];
     
     NSMutableAttributedString *stringDistance = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", distanceStr]];

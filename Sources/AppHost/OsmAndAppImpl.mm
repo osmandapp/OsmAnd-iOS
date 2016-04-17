@@ -119,7 +119,12 @@
         _unitsMph = OALocalizedString(@"units_mph");
         
         // First of all, initialize user defaults
-        [[NSUserDefaults standardUserDefaults] registerDefaults:[self inflateInitialUserDefaults]];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults registerDefaults:[self inflateInitialUserDefaults]];
+        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
+        [defaults registerDefaults:defHideAllGPX];
+        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
+        [defaults registerDefaults:defResetSettings];
 
 #if defined(OSMAND_IOS_DEV)
         _debugSettings = [[OADebugSettings alloc] init];
@@ -164,6 +169,45 @@
 {
     NSError* versionError = nil;
     
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    BOOL hideAllGPX = [defaults boolForKey:@"hide_all_gpx"];
+    BOOL resetSettings = [defaults boolForKey:@"reset_settings"];
+    if (hideAllGPX)
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        [settings setMapSettingVisibleGpx:@[]];
+        [defaults setBool:NO forKey:@"hide_all_gpx"];
+        [defaults synchronize];
+    }
+    if (resetSettings)
+    {
+        int freeMaps = -1;
+        if ([defaults objectForKey:@"freeMapsAvailable"]) {
+            freeMaps = (int)[defaults integerForKey:@"freeMapsAvailable"];
+        }
+
+        NSString *appDomain = [[NSBundle mainBundle] bundleIdentifier];
+        [defaults removePersistentDomainForName:appDomain];
+        [defaults synchronize];
+        
+        if (freeMaps != -1) {
+            [defaults setInteger:freeMaps forKey:@"freeMapsAvailable"];
+        }
+        
+        [defaults registerDefaults:[self inflateInitialUserDefaults]];
+        NSDictionary *defHideAllGPX = [NSDictionary dictionaryWithObject:@"NO" forKey:@"hide_all_gpx"];
+        [defaults registerDefaults:defHideAllGPX];
+        NSDictionary *defResetSettings = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_settings"];
+        [defaults registerDefaults:defResetSettings];
+
+        _data = [OAAppData defaults];
+        [defaults setObject:[NSKeyedArchiver archivedDataWithRootObject:_data]
+                         forKey:kAppData];
+        [defaults setBool:NO forKey:@"hide_all_gpx"];
+        [defaults setBool:NO forKey:@"reset_settings"];
+        [defaults synchronize];
+    }
+
     OALog(@"GIT_COMMIT_HASH = %@", [[NSBundle mainBundle] infoDictionary][@"GIT_COMMIT_HASH"]);
 
     OALog(@"Data path: %@", _dataPath);
@@ -175,7 +219,7 @@
     
     // Unpack app data
     _data = [NSKeyedUnarchiver unarchiveObjectWithData:[[NSUserDefaults standardUserDefaults] dataForKey:kAppData]];
-
+    
     // Get location of a shipped world mini-basemap and it's version stamp
     _worldMiniBasemapFilename = [[NSBundle mainBundle] pathForResource:@"WorldMiniBasemap"
                                                                 ofType:@"obf"

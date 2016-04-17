@@ -334,14 +334,21 @@
     switch (self.mapModeButtonType)
     {
         case EOAMapModeButtonTypeShowMap:
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [_mapViewController keepTempGpxTrackVisible];
+            });
             [[OARootViewController instance].mapPanel hideContextMenu];
+        }
             return;
             
         case EOAMapModeButtonTypeNavigate:
+        {
             [[OARootViewController instance].mapPanel targetHide];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 [[OAGPXRouter sharedInstance] saveRoute];
             });
+        }
             return;
             
         default:

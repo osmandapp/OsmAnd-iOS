@@ -1534,6 +1534,9 @@
 		845E07421B62946800DFC2A7 /* img_plugin_trip_planning.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 845E07411B62946800DFC2A7 /* img_plugin_trip_planning.jpg */; };
 		845E07431B62946800DFC2A7 /* img_plugin_trip_planning.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 845E07411B62946800DFC2A7 /* img_plugin_trip_planning.jpg */; };
 		845E07441B62946800DFC2A7 /* img_plugin_trip_planning.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 845E07411B62946800DFC2A7 /* img_plugin_trip_planning.jpg */; };
+		84609C881CBBF2EF00C0A723 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84609C871CBBF2EF00C0A723 /* Settings.bundle */; };
+		84609C891CBBF2EF00C0A723 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84609C871CBBF2EF00C0A723 /* Settings.bundle */; };
+		84609C8A1CBBF2EF00C0A723 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 84609C871CBBF2EF00C0A723 /* Settings.bundle */; };
 		84630FC01A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
 		84630FC11A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
 		84630FC21A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */; };
@@ -3485,6 +3488,7 @@
 		845E07361B62637900DFC2A7 /* ic_plugin_trip_planning@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_trip_planning@2x.png"; path = "Resources/Icons/ic_plugin_trip_planning@2x.png"; sourceTree = "<group>"; };
 		845E07371B62637900DFC2A7 /* ic_plugin_trip_planning@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_plugin_trip_planning@3x.png"; path = "Resources/Icons/ic_plugin_trip_planning@3x.png"; sourceTree = "<group>"; };
 		845E07411B62946800DFC2A7 /* img_plugin_trip_planning.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = img_plugin_trip_planning.jpg; path = Resources/Icons/img_plugin_trip_planning.jpg; sourceTree = "<group>"; };
+		84609C871CBBF2EF00C0A723 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = SOURCE_ROOT; };
 		84630FBE1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAGPXTrackAnalysis.h; sourceTree = "<group>"; };
 		84630FBF1A8DEC9A005B39F2 /* OAGPXTrackAnalysis.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXTrackAnalysis.mm; sourceTree = "<group>"; };
 		84630FCF1A8E197E005B39F2 /* LightRS.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = LightRS.render.xml; path = ../resources/rendering_styles/LightRS.render.xml; sourceTree = "<group>"; };
@@ -4264,6 +4268,7 @@
 			isa = PBXGroup;
 			children = (
 				3AC40ABE19DDC409002FBC40 /* OA-Prefix.pch */,
+				84609C871CBBF2EF00C0A723 /* Settings.bundle */,
 			);
 			name = "Support files";
 			sourceTree = "<group>";
@@ -6784,6 +6789,7 @@
 				84EE2DB61AFCC4F5007C9A94 /* bt_bought_addon_disabled@2x.png in Resources */,
 				842431FE1AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				843E5D901AB341E000BE14BE /* menu_share_icon.png in Resources */,
+				84609C881CBBF2EF00C0A723 /* Settings.bundle in Resources */,
 				844499421AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
 				849E812B1AFA142F00549953 /* OATimeCell.xib in Resources */,
 				8470410B1B07850900594C72 /* ic_small_time.png in Resources */,
@@ -7520,6 +7526,7 @@
 				842431FF1AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				843E5D911AB341E000BE14BE /* menu_share_icon.png in Resources */,
 				844499431AAA14A800ACA20D /* OAPurchasesViewController.xib in Resources */,
+				84609C891CBBF2EF00C0A723 /* Settings.bundle in Resources */,
 				849E812C1AFA142F00549953 /* OATimeCell.xib in Resources */,
 				8470410C1B07850900594C72 /* ic_small_time.png in Resources */,
 				BB451E9618DCD224005FBE09 /* HUD_menu_button.png in Resources */,
@@ -8234,6 +8241,7 @@
 				8412224E1B39CC5200F80F9E /* map_car_bearing@2x.png in Resources */,
 				84CCE80E1B7509A90059A82A /* ic_dialog_map@2x.png in Resources */,
 				84F3A8B91B4DA93100D16EBC /* bt_trip_start@2x.png in Resources */,
+				84609C8A1CBBF2EF00C0A723 /* Settings.bundle in Resources */,
 				84BD09021AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */,
 				843E5D051AB341E000BE14BE /* icon_star_fill@3x.png in Resources */,
 				84EE2DB51AFCC4F5007C9A94 /* bt_bought_addon_disabled.png in Resources */,

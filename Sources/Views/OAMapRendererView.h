@@ -69,6 +69,10 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
 
 - (UIImage*) getGLScreenshot;
 
+- (BOOL) isGpuWorkerPaused;
+- (BOOL) suspendGpuWorker;
+- (BOOL) resumeGpuWorker;
+
 @property(nonatomic) CGFloat displayDensityFactor;
 @property(nonatomic) OsmAnd::PointI target31;
 @property(nonatomic) OsmAnd::ZoomLevel zoomLevel;

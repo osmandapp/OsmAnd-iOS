@@ -207,7 +207,6 @@
     if (!self.gpx.newGpx || self.gpx.wptPoints > 0 || self.gpx.points > 0)
     {
         [_mapViewController keepTempGpxTrackVisible];
-        [_mapViewController hideTempGpxTrack];
         [self closePointsController];
     }
     

@@ -455,12 +455,15 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     NSMutableArray *arr = [NSMutableArray array];
     for (SKProduct * skProduct in response.products)
     {
-        OALog(@"Found product: %@ %@ %0.2f",
-              skProduct.productIdentifier,
-              skProduct.localizedTitle,
-              skProduct.price.floatValue);
-        OAProduct *p = [[OAProduct alloc] initWithSkProduct:skProduct];
-        [arr addObject:p];
+        if (skProduct)
+        {
+            OALog(@"Found product: %@ %@ %0.2f",
+                  skProduct.productIdentifier,
+                  skProduct.localizedTitle,
+                  skProduct.price.floatValue);
+            OAProduct *p = [[OAProduct alloc] initWithSkProduct:skProduct];
+            [arr addObject:p];
+        }
     }
     
     if (_products.count == 0)
@@ -550,45 +553,65 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductsRestoredNotification object:[NSNumber numberWithInteger:_transactionErrors] userInfo:nil];
 }
 
-- (void)completeTransaction:(SKPaymentTransaction *)transaction {
-    OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-    
-    if ([[self.class inAppsMaps] containsObject:transaction.payment.productIdentifier])
-        _isAnyMapPurchased = YES;
-
-    [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-}
-
-- (void)restoreTransaction:(SKPaymentTransaction *)transaction {
-    OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
-    
-    if ([[self.class inAppsMaps] containsObject:transaction.originalTransaction.payment.productIdentifier])
-        _isAnyMapPurchased = YES;
-
-    [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
-    [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
-}
-
-- (void)failedTransaction:(SKPaymentTransaction *)transaction {
-    
-    OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
-    if (transaction.error.code != SKErrorPaymentCancelled)
+- (void)completeTransaction:(SKPaymentTransaction *)transaction
+{
+    if (transaction)
     {
-        OALog(@"Transaction error: %@", transaction.error.localizedDescription);
-
-        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:transaction.payment.productIdentifier userInfo:nil];
-    
-    } else {
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+        if (transaction.payment && transaction.payment.productIdentifier)
+        {
+            OALog(@"completeTransaction - %@", transaction.payment.productIdentifier);
+            
+            if ([[self.class inAppsMaps] containsObject:transaction.payment.productIdentifier])
+                _isAnyMapPurchased = YES;
+            
+            [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
+        }
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
-
-    [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
 }
 
-- (void)provideContentForProductIdentifier:(NSString *)productIdentifier {
-    
+- (void)restoreTransaction:(SKPaymentTransaction *)transaction
+{
+    if (transaction)
+    {
+        if (transaction.originalTransaction && transaction.originalTransaction.payment && transaction.originalTransaction.payment.productIdentifier)
+        {
+            OALog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
+            
+            if ([[self.class inAppsMaps] containsObject:transaction.originalTransaction.payment.productIdentifier])
+                _isAnyMapPurchased = YES;
+            
+            [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
+        }
+        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
+    }
+}
+
+- (void)failedTransaction:(SKPaymentTransaction *)transaction
+{
+    if (transaction)
+    {
+        if (transaction.payment && transaction.payment.productIdentifier)
+        {
+            OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
+            if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
+            {
+                OALog(@"Transaction error: %@", transaction.error.localizedDescription);
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:transaction.payment.productIdentifier userInfo:nil];
+                
+            }
+            else
+            {
+                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:nil];
+            }
+        }
+        [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
+    }
+}
+
+- (void)provideContentForProductIdentifier:(NSString *)productIdentifier
+{
     [_purchasedProductIdentifiers addObject:productIdentifier];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:productIdentifier];
     [[NSUserDefaults standardUserDefaults] synchronize];
@@ -597,8 +620,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
     [self buildFunctionalAddonsArray];
 }
 
-- (void)restoreCompletedTransactions {
-    
+- (void)restoreCompletedTransactions
+{
     _restoringPurchases = YES;
     _transactionErrors = 0;
     

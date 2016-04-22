@@ -301,7 +301,11 @@
 - (void)productPurchaseFailed:(NSNotification *)notification
 {
     NSString * identifier = notification.object;
-    OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+    OAProduct *product = nil;
+    if (identifier)
+    {
+        product = [[OAIAPHelper sharedInstance] product:identifier];
+    }
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [_loadProductsProgressHUD hide:YES];

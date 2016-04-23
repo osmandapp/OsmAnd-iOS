@@ -10,7 +10,7 @@
 "shared_string_delete" = "Usuń";
 "shared_string_add" = "Dodaj";
 "rendering_attr_streetLighting_name" = "Oświetlenie ulicy";
-"rendering_attr_roadStyle_name" = "Styl rysowania drogi";
+"rendering_attr_roadStyle_name" = "Styl dróg";
 "rendering_value__name" = "Domyślna";
 "rendering_value_orange_name" = "Pomarańczowy";
 "rendering_value_germanRoadAtlas_name" = "Niemiecki atlas drogowy";
@@ -34,8 +34,8 @@
 "rendering_attr_showCycleRoutes_name" = "Ścieżki rowerowe";
 "rendering_attr_alpineHiking_name" = "Skala wspinaczki alpinistycznej (SAC)";
 "rendering_attr_osmcTraces_name" = "Symbol nakładki wędrówek";
-"rendering_attr_noAdminboundaries_name" = "Ukrywanie granic";
-"rendering_attr_noPolygons_name" = "Ukrywanie wielokątów";
+"rendering_attr_noAdminboundaries_name" = "Granice";
+"rendering_attr_noPolygons_name" = "Wielokąty";
 "rendering_attr_contourLines_name" = "Poziomice";
 "favorite" = "Ulubione";
 "shared_string_and" = "i";
@@ -89,7 +89,7 @@
 "gpx_export" = "Eksportuj";
 "import_export" = "Importuj/Eksportuj";
 "gpx_import_title" = "Importuj wycieczkę";
-"rendering_value_default_name" = "Domyślnie";
+"rendering_value_default_name" = "Domyślna";
 "rendering_value_disabled_name" = "Wyłączony";
 "shared_string_edit" = "Edytuj";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Kolorowanie wg przeznaczenia trasy";

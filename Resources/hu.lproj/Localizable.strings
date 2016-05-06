@@ -451,3 +451,5 @@
 "gpx_edit_mode" = "Szerkesztő mód";
 "go_to_map" = "Ugrás a térképhez";
 "product_title_trip_planning" = "Utazástervezés";
+"sqlitedb_import_title" = "Map Creator fájl importálása";
+"map_creator" = "Map Creator";

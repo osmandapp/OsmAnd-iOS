@@ -164,3 +164,7 @@
 "gpx_cannot_import" = "Неможливо імпортувати файл GPX";
 "gpx_export_title" = "Експорт подорожі";
 "gpx_export_select_track" = "Оберіть подорож для експорту";
+"download_map" = "Завантажити мапу";
+"gpx_elev_range" = "Діапазон висот";
+"gpx_uphills_total" = "Загальний підйом";
+"track_continue_rec_q" = "Бажаєте продовжити запис?";

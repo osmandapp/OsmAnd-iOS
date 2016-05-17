@@ -506,6 +506,9 @@
 		8420EEFA1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
 		8420EEFB1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
 		8420EEFC1B1EE7C000797AC4 /* OAEditDescriptionViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */; };
+		8423634B1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */; };
+		8423634C1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */; };
+		8423634D1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */; };
 		842431681AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		842431691AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
 		8424316A1AE939B400925821 /* welcome_wide.png in Resources */ = {isa = PBXBuildFile; fileRef = 842431671AE939B400925821 /* welcome_wide.png */; };
@@ -3107,6 +3110,8 @@
 		8420EEF41B1EE7C000797AC4 /* OAEditDescriptionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAEditDescriptionViewController.h; path = Sources/Controllers/2.0/OAEditDescriptionViewController.h; sourceTree = "<group>"; };
 		8420EEF51B1EE7C000797AC4 /* OAEditDescriptionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAEditDescriptionViewController.m; path = Sources/Controllers/2.0/OAEditDescriptionViewController.m; sourceTree = "<group>"; };
 		8420EEF61B1EE7C000797AC4 /* OAEditDescriptionViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAEditDescriptionViewController.xib; path = Sources/Controllers/2.0/OAEditDescriptionViewController.xib; sourceTree = "<group>"; };
+		842363491CEB83C9009F87D8 /* OAFreeMemoryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFreeMemoryView.h; path = Views/OAFreeMemoryView.h; sourceTree = "<group>"; };
+		8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAFreeMemoryView.m; path = Views/OAFreeMemoryView.m; sourceTree = "<group>"; };
 		842431671AE939B400925821 /* welcome_wide.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = welcome_wide.png; path = Resources/IntroImages/welcome_wide.png; sourceTree = "<group>"; };
 		8424316B1AEA19C700925821 /* OAOcbfHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAOcbfHelper.h; sourceTree = "<group>"; };
 		8424316C1AEA19C700925821 /* OAOcbfHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOcbfHelper.m; sourceTree = "<group>"; };
@@ -5496,6 +5501,8 @@
 				848D171C1B1C47B200A656F4 /* OAButton.m */,
 				84EE2DEC1AFD2D58007C9A94 /* OABannerView.h */,
 				84EE2DED1AFD2D58007C9A94 /* OABannerView.m */,
+				842363491CEB83C9009F87D8 /* OAFreeMemoryView.h */,
+				8423634A1CEB83C9009F87D8 /* OAFreeMemoryView.m */,
 				84E441801AF7BDD200F87542 /* OATrackIntervalDialogView.h */,
 				84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */,
 				84C0FB191AF3B86200D4BAF8 /* InfoWidgetsView.h */,
@@ -8492,6 +8499,7 @@
 				84CCE7F71B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				849E813E1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBBDADAB18BC965100E4A359 /* OAObservable.m in Sources */,
+				8423634B1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */,
 				BBA3AECB197500B60039D991 /* OADebugActionsViewController.mm in Sources */,
 				BB54F70E1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				84F3A93D1B4EC3C900D16EBC /* MGSwipeTableCell.m in Sources */,
@@ -8695,6 +8703,7 @@
 				84CCE7F81B73C2230059A82A /* OAPOIHistoryType.mm in Sources */,
 				849E813F1AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				BBA3AEB919710E1E0039D991 /* OADefaultFavorite.m in Sources */,
+				8423634C1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */,
 				BB451E2B18DCD224005FBE09 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				BB54F70F1989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				84F3A93E1B4EC3C900D16EBC /* MGSwipeTableCell.m in Sources */,
@@ -8924,6 +8933,7 @@
 				BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */,
 				845E06641B5D274600DFC2A7 /* OATspAnt.m in Sources */,
 				848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */,
+				8423634D1CEB83C9009F87D8 /* OAFreeMemoryView.m in Sources */,
 				848D17581B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				84BFC2341A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */,

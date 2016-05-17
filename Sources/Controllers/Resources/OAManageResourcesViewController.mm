@@ -30,6 +30,7 @@
 #import "OAInAppCell.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "OAFreeMemoryView.h"
 
 #include "Localization.h"
 
@@ -89,6 +90,8 @@ struct RegionResources
 
     NSMutableArray* _allSubregionItems;
 
+    NSInteger _freeMemorySection;
+
     NSMutableArray* _regionMapItems;
     NSMutableArray* _localRegionMapItems;
     NSInteger _regionMapSection;
@@ -123,6 +126,7 @@ struct RegionResources
     BOOL _displayBanner;
     BOOL _displayBannerPurchaseAllMaps;
     OABannerView *_bannerView;
+    OAFreeMemoryView *_freeMemoryView;
     NSInteger _bannerSection;
     NSString *_purchaseInAppId;
     
@@ -253,6 +257,8 @@ static BOOL _lackOfResources;
         [self updateBannerDimensions:DeviceScreenWidth];
         _bannerView.buttonTitle = OALocalizedString(@"shared_string_buy");
     }
+    
+    _freeMemoryView = [[OAFreeMemoryView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 64.0)];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -1027,6 +1033,8 @@ static BOOL _lackOfResources;
         if (_displayBanner)
             _bannerSection = _lastUnusedSectionIndex++;
         
+        _freeMemorySection = _lastUnusedSectionIndex++;
+
         // Updates always go first
         if (_currentScope == kAllResourcesScope && [_outdatedResourceItems count] > 0 && self.region == _app.worldRegion)
             _outdatedResourcesSection = _lastUnusedSectionIndex++;
@@ -1394,6 +1402,9 @@ static BOOL _lackOfResources;
 
     if (section == _bannerSection)
         return _bannerView;
+
+    if (section == _freeMemorySection)
+        return _freeMemoryView;
     
     return nil;
 }
@@ -1405,6 +1416,9 @@ static BOOL _lackOfResources;
 
     if (section == _bannerSection)
         return _bannerView.bounds.size.height;
+
+    if (section == _freeMemorySection)
+        return _freeMemoryView.bounds.size.height;
     
     if (section == 0)
         return 56.0;
@@ -1424,6 +1438,8 @@ static BOOL _lackOfResources;
 
     if (_bannerSection >= 0)
         sectionsCount++;
+    if (_freeMemorySection >= 0)
+        sectionsCount++;
     if (_localResourcesSection >= 0)
         sectionsCount++;
     if (_outdatedResourcesSection >= 0)
@@ -1442,6 +1458,8 @@ static BOOL _lackOfResources;
         return [_searchResults count];
 
     if (section == _bannerSection)
+        return 0;
+    if (section == _freeMemorySection)
         return 0;
     if (section == _outdatedResourcesSection)
         return 1;

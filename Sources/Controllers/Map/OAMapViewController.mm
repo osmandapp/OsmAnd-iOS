@@ -125,6 +125,20 @@
 #define deinit _(deinit)
 
 @implementation OAMapSymbol
+
+-(BOOL)isPlace
+{
+    if (_isPlace)
+    {
+        return YES;
+    }
+    else if (_poiType && _poiType.tag)
+    {
+        return [_poiType.tag isEqualToString:@"place"];
+    }
+    return NO;
+}
+
 @end
 
 
@@ -1581,9 +1595,13 @@
                 {
                     symbol.icon = [symbol.poiType mapIcon];
                     if ([symbol.poiType.name isEqualToString:@"wiki_place"])
+                    {
                         symbol.type = OAMapSymbolWiki;
+                    }
                     else
+                    {
                         symbol.type = OAMapSymbolPOI;
+                    }
                 }
                 else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
                 {

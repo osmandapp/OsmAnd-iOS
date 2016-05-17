@@ -322,6 +322,11 @@
     return _renderer->suspendSymbolsUpdate();
 }
 
+- (BOOL)isIdle
+{
+    return _renderer->isIdle();
+}
+
 - (BOOL)resumeSymbolsUpdate
 {
     return _renderer->resumeSymbolsUpdate();

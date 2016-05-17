@@ -323,21 +323,34 @@ typedef enum
     {
         if (indexPath.row > 0)
         {
-            Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
-            if (_mapSettingType == EMapSettingOverlay)
-                app.data.overlayMapSource = item.mapSource;
-            else
-                app.data.underlayMapSource = item.mapSource;
+            [vwController waitForIdle];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                Item* item = [_onlineMapSources objectAtIndex:indexPath.row - 1];
+                if (_mapSettingType == EMapSettingOverlay)
+                {
+                    app.data.overlayMapSource = item.mapSource;
+                }
+                else
+                {
+                    app.data.underlayMapSource = item.mapSource;
+                }
+                [tableView reloadData];
+            });
         }
         else
         {
             if (_mapSettingType == EMapSettingOverlay)
+            {
                 app.data.overlayMapSource = nil;
+            }
             else
+            {
                 app.data.underlayMapSource = nil;
+            }
+            [tableView reloadData];
         }
         
-        [tableView reloadData];
     }
 }
 

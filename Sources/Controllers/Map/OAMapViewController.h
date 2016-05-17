@@ -168,6 +168,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property(readonly) CGFloat displayDensityFactor;
 
 @property(readonly) OAObservable* framePreparedObservable;
+@property(readonly) OAObservable* idleObservable;
 
 @property(nonatomic, assign) BOOL minimap;
 

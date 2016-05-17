@@ -428,6 +428,8 @@
     _zoomObservable = [[OAObservable alloc] init];
     _mapObservable = [[OAObservable alloc] init];
     _framePreparedObservable = [[OAObservable alloc] init];
+    _idleObservable = [[OAObservable alloc] init];
+    
     _stateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                withHandler:@selector(onMapRendererStateChanged:withKey:)];
     _settingsObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -1947,7 +1949,7 @@
     {
         _animationDoneCounter--;
     }
-    
+        
     [_framePreparedObservable notifyEvent];
 }
 
@@ -3391,14 +3393,7 @@
         if (_app.data.underlayMapSource)
             [self doUpdateUnderlay];
         
-        /*
-        if (_testMarkersCollection != nullptr)
-            [mapView removeKeyedSymbolsProvider:_testMarkersCollection];
-        
-        _testMarkersCollection = std::make_shared<OAMapMarkersCollection>();
-        [mapView addKeyedSymbolsProvider:_testMarkersCollection];
-         */
-
+        [self waitForIdle];
     }
 }
 
@@ -3542,6 +3537,8 @@
             }
         }
     }
+    
+    [self waitForIdle];
 }
 
 - (void)onLayersConfigurationChanged
@@ -4939,6 +4936,21 @@
     {
         return YES;
     }
+}
+
+- (void)waitForIdle
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:.5];
+        int counter = 0;
+        OAMapRendererView* renderView = (OAMapRendererView*)self.view;
+        while (![renderView isIdle] && counter < 100)
+        {
+            [NSThread sleepForTimeInterval:.05];
+            counter++;
+        }
+        [_idleObservable notifyEvent];
+    });
 }
 
 @end

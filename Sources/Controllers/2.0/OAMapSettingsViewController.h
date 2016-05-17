@@ -56,6 +56,8 @@ typedef enum
 -(void)hide:(BOOL)hideAll animated:(BOOL)animated;
 -(void)hide:(BOOL)hideAll animated:(BOOL)animated duration:(CGFloat)duration;
 
+-(void)waitForIdle;
+
 -(instancetype)init;
 
 -(id)initWithSettingsScreen:(EMapSettingsScreen)settingsScreen;

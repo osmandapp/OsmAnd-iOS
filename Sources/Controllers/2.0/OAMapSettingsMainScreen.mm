@@ -61,19 +61,24 @@
 }
 
 - (void)changeMapTypeButtonClicked:(id)sender
-{    
-    int tag = ((UIButton*)sender).tag;
+{
+    [vwController waitForIdle];
     
-    OAMapSource* mapSource = app.data.lastMapSource;
-    NSString *name = mapSource.name;
-    const auto resource = app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
-    NSString* resourceId = resource->id.toNSString();
-    
-    OAMapVariantType selectedType = (OAMapVariantType)tag;
-    NSString *variant = [OAMapStyleSettings getVariantStr:selectedType];
-    
-    mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
-    app.data.lastMapSource = mapSource;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSInteger tag = ((UIButton*)sender).tag;
+        
+        OAMapSource* mapSource = app.data.lastMapSource;
+        NSString *name = mapSource.name;
+        const auto resource = app.resourcesManager->getResource(QString::fromNSString(mapSource.resourceId));
+        NSString* resourceId = resource->id.toNSString();
+        
+        OAMapVariantType selectedType = (OAMapVariantType)tag;
+        NSString *variant = [OAMapStyleSettings getVariantStr:selectedType];
+        
+        mapSource = [[OAMapSource alloc] initWithResource:resourceId andVariant:variant name:name];
+        app.data.lastMapSource = mapSource;
+    });
 }
 
 - (NSString *)getMapLangValueStr

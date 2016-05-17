@@ -337,11 +337,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
-    Item* item = [collection objectAtIndex:indexPath.row];
-    app.data.lastMapSource = item.mapSource;
-
-    [tableView reloadData];
+    [vwController waitForIdle];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        NSMutableArray* collection = (indexPath.section == kOfflineSourcesSection) ? _offlineMapSources : _onlineMapSources;
+        Item* item = [collection objectAtIndex:indexPath.row];
+        app.data.lastMapSource = item.mapSource;
+        
+        [tableView reloadData];
+    });
 }
 
 

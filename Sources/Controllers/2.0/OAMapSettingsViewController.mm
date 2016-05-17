@@ -63,6 +63,7 @@
     BOOL isAppearFirstTime;
     BOOL isOnlineMapSource;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
+    OAAutoObserverProxy* _idleObserver;
 }
 
 @property (nonatomic) NSArray* tableData;
@@ -81,6 +82,9 @@
 
     UIPanGestureRecognizer *_panGesture;
     CALayer *_horizontalLine;
+    
+    BOOL _waitForIdle;
+    MBProgressHUD *_progressHUD;
 }
 
 @synthesize screenObj, customParam;
@@ -525,6 +529,11 @@
 {
     [super viewDidLoad];
 
+    UIView *topView = [[[UIApplication sharedApplication] windows] lastObject];
+    _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
+    _progressHUD.minShowTime = .5f;
+    [topView addSubview:_progressHUD];
+
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     [self.containerView.layer addSublayer:_horizontalLine];
@@ -584,6 +593,12 @@
     _lastMapSourceChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                              withHandler:@selector(onLastMapSourceChanged)
                                                               andObserve:_app.data.lastMapSourceChangeObservable];
+
+    OAMapViewController* mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    
+    _idleObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onIdle)
+                                                              andObserve:mapViewController.idleObservable];
 
     self.view.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, DeviceScreenHeight);
 }
@@ -667,6 +682,23 @@
     });
 }
 
+- (void)onIdle
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_waitForIdle)
+        {
+            _waitForIdle = NO;
+            [_progressHUD hide:YES];
+        }
+    });
+}
+
+-(void)waitForIdle
+{
+    _waitForIdle = YES;
+    [_progressHUD show:YES];
+}
+
 #pragma mark - Orientation
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
@@ -680,8 +712,6 @@
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
     return UIInterfaceOrientationPortrait;
 }
-
-
 
 
         

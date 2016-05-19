@@ -463,3 +463,4 @@
 "edit_waypoint_short" = "Rediger rutepunkt";
 "device_memory" = "Lagerplads";
 "free_memory" = "Tilgængelig %@";
+"gpx_waypoint" = "Rutepunkt";

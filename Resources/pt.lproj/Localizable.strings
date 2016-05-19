@@ -347,3 +347,5 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Colorir de acordo com o estilo de rota";
 "rendering_value_walkingRoutesOSMC_name" = "Colorir de acordo com a OSMC";
 "shared_string_remove" = "Remover";
+"device_memory" = "Memória do aparelho";
+"free_memory" = "Livre %@";

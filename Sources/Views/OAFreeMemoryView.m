@@ -64,7 +64,7 @@
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];;
     _titleLabel.numberOfLines = 1;
-    _titleLabel.text = @"Device memory";
+    _titleLabel.text = NSLocalizedString(@"device_memory", nil);
     [self addSubview:_titleLabel];
     
     _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
@@ -129,7 +129,7 @@
     _tmpVal = tempValue / capValue;
     _freeVal = availValue / capValue;
 
-    _freeMemLabel.text = [NSString stringWithFormat:@"%@ Free", [self getFormattedSize:deviceMemoryAvailable]];
+    _freeMemLabel.text = [NSString stringWithFormat:NSLocalizedString(@"free_memory", nil), [self getFormattedSize:deviceMemoryAvailable]];
 }
 
 - (NSString *) getFormattedSize:(double)size

@@ -424,3 +424,5 @@
 "directions" = "Indicazioni";
 "sorting" = "Ordine";
 "plugins" = "Componenti aggiuntivi";
+"device_memory" = "Memoria dispositivo";
+"free_memory" = "Libera %@";

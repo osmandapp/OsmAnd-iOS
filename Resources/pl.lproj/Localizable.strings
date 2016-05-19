@@ -169,3 +169,5 @@
 "res_updates_avail" = "Dostępne aktualizacje";
 "res_deleting" = "Usuwanie...";
 "res_update_no_space" = "Brak miejsca dla uaktualnienia";
+"device_memory" = "Pamięć urządzenia";
+"free_memory" = "Wolne %@";

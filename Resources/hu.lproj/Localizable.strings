@@ -453,3 +453,5 @@
 "product_title_trip_planning" = "Utazástervezés";
 "sqlitedb_import_title" = "Map Creator fájl importálása";
 "map_creator" = "Map Creator";
+"device_memory" = "Eszköz memóriája";
+"free_memory" = "%@ szabad";

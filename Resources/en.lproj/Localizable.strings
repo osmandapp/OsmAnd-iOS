@@ -526,5 +526,5 @@
 "go_to_map" = "Go to Map";
 
 "device_memory" = "Device memory";
-"free_memory" = "Free %@"
+"free_memory" = "Free %@";
 

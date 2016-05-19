@@ -461,3 +461,5 @@
 "product_desc_trip_planning" = "Planifiqueu el vostre viatge, afegiu fites, mesureu la distància fins el vostre destí utilitzant aquest connector";
 "product_desc_ext_trip_planning" = "El connector de planificació de viatges us permet crear el vostre trajecte en el mapa, desar-lo, mesurar la distància entre punts separats per línies rectes, etc. S'ha creat com un planificador de viatges preliminar més que no pas un constructor de rutes exhaustiu.";
 "edit_waypoint_short" = "Edita la fita";
+"device_memory" = "Memòria del dispositiu";
+"free_memory" = "%@ disponible";

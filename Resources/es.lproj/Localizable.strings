@@ -465,3 +465,5 @@
 "edit_waypoint_short" = "Editar punto de ruta";
 "product_desc_trip_planning" = "Planifique su viaje, añada puntos de referencia, mida la distancia a su destino usando este complemento";
 "product_desc_ext_trip_planning" = "El complemento de Planificación de viaje, le permite crear y guardar su viaje en el mapa, medir la distancia entre puntos conectados con líneas rectas, etc.. Creado para la planificación de un viaje preliminar, en lugar de construir la ruta completa.";
+"device_memory" = "Memoria del dispositivo";
+"free_memory" = "Libre %@";

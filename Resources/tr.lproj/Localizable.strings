@@ -458,3 +458,5 @@
 "res_hillshade" = "Hillshade";
 "plugin_popup_ski_desc" = "<b>Kayak harita</b> stil üzerinde açmak için lütfen <b>Harita ayarları</b> ' na gidin > <b>türü göster</b>";
 "plugin_popup_nautical_desc" = "İlk deniz haritaları indirin.\n<b>Harita ayarları</b> ' na gidin > <b>türü eşleştirmek</b> ve <b>deniz</b> tarzı açmak";
+"device_memory" = "Cihaz hafızası";
+"free_memory" = "Ücretsiz %@";

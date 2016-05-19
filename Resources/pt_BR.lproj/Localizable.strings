@@ -461,3 +461,5 @@
 "gpx_edit_mode" = "Modo edição";
 "go_to_map" = "Ir para o mapa";
 "edit_waypoint_short" = "Editar parada";
+"device_memory" = "Memória do aparelho";
+"free_memory" = "Livre %@";

@@ -418,3 +418,5 @@
 "history" = "Гісторыя";
 "today" = "Сёньня";
 "yesterday" = "Учора";
+"device_memory" = "Памяць прыстасаваньня";
+"free_memory" = "Вольна %@";

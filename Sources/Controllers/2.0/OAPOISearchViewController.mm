@@ -565,10 +565,10 @@ typedef enum
             self.searchStringPrev = nil;
             
             NSMutableArray *arr = [NSMutableArray array];
-            NSArray *categories = [OAPOIHelper sharedInstance].poiCategories.allKeys;
+            NSArray *categories = [OAPOIHelper sharedInstance].poiCategories;
             if (_showTopList)
             {
-                NSArray *filters = [OAPOIHelper sharedInstance].poiFilters.allKeys;
+                NSArray *filters = [OAPOIHelper sharedInstance].poiFilters;
                 
                 for (OAPOICategory *c in categories)
                     if (c.top)
@@ -870,14 +870,14 @@ typedef enum
             OAPOIType* item = obj;
             
             CGRect f = cell.textView.frame;
-            if (item.categoryLocalized.length == 0)
+            if (item.category.nameLocalized.length == 0)
                 f.origin.y = 14.0;
             else
                 f.origin.y = 8.0;
             cell.textView.frame = f;
 
             [cell.textView setText:item.nameLocalized];
-            [cell.descView setText:item.categoryLocalized];
+            [cell.descView setText:item.category.nameLocalized];
             [cell.iconView setImage: [item icon]];
         }
         return cell;
@@ -897,14 +897,14 @@ typedef enum
             OAPOIFilter* item = obj;
             
             CGRect f = cell.textView.frame;
-            if (item.categoryLocalized.length == 0)
+            if (item.category.nameLocalized.length == 0)
                 f.origin.y = 14.0;
             else
                 f.origin.y = 8.0;
             cell.textView.frame = f;
             
             [cell.textView setText:item.nameLocalized];
-            [cell.descView setText:item.categoryLocalized];
+            [cell.descView setText:item.category.nameLocalized];
             [cell.iconView setImage: [item icon]];
         }
         return cell;
@@ -1268,32 +1268,32 @@ typedef enum
             for (OAPOIType *poi in searchableContent) {
                 
                 if ([nextStr localizedCaseInsensitiveCompare:poi.nameLocalized] == NSOrderedSame &&
-                    [_currentScopeCategoryName isEqualToString:poi.category])
+                    [_currentScopeCategoryName isEqualToString:poi.category.name])
                 {
                     _currentScope = EPOIScopeType;
                     _currentScopePoiTypeName = poi.name;
                     _currentScopePoiTypeNameLoc = poi.nameLocalized;
-                    _currentScopeFilterName = poi.filter;
-                    _currentScopeFilterNameLoc = poi.filterLocalized;
-                    _currentScopeCategoryName = poi.category;
-                    _currentScopeCategoryNameLoc = poi.categoryLocalized;
+                    _currentScopeFilterName = poi.filter.name;
+                    _currentScopeFilterNameLoc = poi.filter.nameLocalized;
+                    _currentScopeCategoryName = poi.category.name;
+                    _currentScopeCategoryNameLoc = poi.category.nameLocalized;
                     
                     return;
                 }
             }
-            searchableContent = [OAPOIHelper sharedInstance].poiFilters.allKeys;
+            searchableContent = [OAPOIHelper sharedInstance].poiFilters;
             for (OAPOIFilter *filter in searchableContent) {
                 
                 if ([nextStr localizedCaseInsensitiveCompare:filter.nameLocalized] == NSOrderedSame &&
-                    [_currentScopeCategoryName isEqualToString:filter.category])
+                    [_currentScopeCategoryName isEqualToString:filter.category.name])
                 {
                     _currentScope = EPOIScopeFilter;
                     _currentScopePoiTypeName = nil;
                     _currentScopePoiTypeNameLoc = nil;
                     _currentScopeFilterName = filter.name;
                     _currentScopeFilterNameLoc = filter.nameLocalized;
-                    _currentScopeCategoryName = filter.category;
-                    _currentScopeCategoryNameLoc = filter.categoryLocalized;
+                    _currentScopeCategoryName = filter.category.name;
+                    _currentScopeCategoryNameLoc = filter.category.nameLocalized;
                     
                     return;
                 }
@@ -1314,27 +1314,27 @@ typedef enum
             _currentScope = EPOIScopeType;
             _currentScopePoiTypeName = poi.name;
             _currentScopePoiTypeNameLoc = poi.nameLocalized;
-            _currentScopeFilterName = poi.filter;
-            _currentScopeFilterNameLoc = poi.filterLocalized;
-            _currentScopeCategoryName = poi.category;
-            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+            _currentScopeFilterName = poi.filter.name;
+            _currentScopeFilterNameLoc = poi.filter.nameLocalized;
+            _currentScopeCategoryName = poi.category.name;
+            _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
             break;
         }
-        else if ([str localizedCaseInsensitiveCompare:poi.filterLocalized] == NSOrderedSame)
+        else if ([str localizedCaseInsensitiveCompare:poi.filter.nameLocalized] == NSOrderedSame)
         {
             found = YES;
             _currentScope = EPOIScopeFilter;
             _currentScopePoiTypeName = nil;
             _currentScopePoiTypeNameLoc = nil;
-            _currentScopeFilterName = poi.filter;
-            _currentScopeFilterNameLoc = poi.filterLocalized;
-            _currentScopeCategoryName = poi.category;
-            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+            _currentScopeFilterName = poi.filter.name;
+            _currentScopeFilterNameLoc = poi.filter.nameLocalized;
+            _currentScopeCategoryName = poi.category.name;
+            _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
             break;
         }
-        else if ([str localizedCaseInsensitiveCompare:poi.categoryLocalized] == NSOrderedSame)
+        else if ([str localizedCaseInsensitiveCompare:poi.category.nameLocalized] == NSOrderedSame)
         {
             found = YES;
             _currentScope = EPOIScopeCategory;
@@ -1342,8 +1342,8 @@ typedef enum
             _currentScopePoiTypeNameLoc = nil;
             _currentScopeFilterName = nil;
             _currentScopeFilterNameLoc = nil;
-            _currentScopeCategoryName = poi.category;
-            _currentScopeCategoryNameLoc = poi.categoryLocalized;
+            _currentScopeCategoryName = poi.category.name;
+            _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
             break;
         }
@@ -1351,7 +1351,7 @@ typedef enum
     
     if (!found)
     {
-        NSArray* searchableContent = [OAPOIHelper sharedInstance].poiCategories.allKeys;
+        NSArray* searchableContent = [OAPOIHelper sharedInstance].poiCategories;
         for (OAPOICategory *category in searchableContent)
         {
             if ([str localizedCaseInsensitiveCompare:category.nameLocalized] == NSOrderedSame)
@@ -1416,7 +1416,7 @@ typedef enum
     
     if (_currentScope == EPOIScopeUndefined)
     {
-        NSArray *sortedCategories = [[OAPOIHelper sharedInstance].poiCategories.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
+        NSArray *sortedCategories = [[OAPOIHelper sharedInstance].poiCategories sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory* obj1, OAPOICategory* obj2) {
             return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
         }];
         
@@ -1424,7 +1424,7 @@ typedef enum
             if ([self beginWithOrAfterSpace:str text:c.nameLocalized] || [self beginWithOrAfterSpace:str text:c.name])
                 [_dataArrayTemp addObject:c];
 
-        NSArray *sortedFilters = [[OAPOIHelper sharedInstance].poiFilters.allKeys sortedArrayUsingComparator:^NSComparisonResult(OAPOIFilter* obj1, OAPOIFilter* obj2) {
+        NSArray *sortedFilters = [[OAPOIHelper sharedInstance].poiFilters sortedArrayUsingComparator:^NSComparisonResult(OAPOIFilter* obj1, OAPOIFilter* obj2) {
             return [obj1.nameLocalized localizedCaseInsensitiveCompare:obj2.nameLocalized];
         }];
         
@@ -1453,9 +1453,9 @@ typedef enum
             if ((!poi.category && !poi.filter) || poi.mapOnly)
                 continue;
             
-            if (_currentScopeCategoryName && ![poi.category isEqualToString:_currentScopeCategoryName])
+            if (_currentScopeCategoryName && ![poi.category.name isEqualToString:_currentScopeCategoryName])
                 continue;
-            if (_currentScopeFilterName && ![poi.filter isEqualToString:_currentScopeFilterName])
+            if (_currentScopeFilterName && ![poi.filter.name isEqualToString:_currentScopeFilterName])
                 continue;
             if (_currentScopePoiTypeName && ![poi.name isEqualToString:_currentScopePoiTypeName])
                 continue;
@@ -1476,7 +1476,7 @@ typedef enum
                 else
                     [typesOthersArray addObject:poi];
             }
-            else if ([self beginWithOrAfterSpace:str text:poi.filterLocalized] || [self beginWithOrAfterSpace:str text:poi.filter])
+            else if ([self beginWithOrAfterSpace:str text:poi.filter.nameLocalized] || [self beginWithOrAfterSpace:str text:poi.filter.name])
             {
                 [typesOthersArray addObject:poi];
             }
@@ -1717,7 +1717,7 @@ typedef enum
 
 -(void)poiFound:(OAPOI *)poi
 {
-    if (_currentScope == EPOIScopeFilter && ![poi.type.filter isEqualToString:_currentScopeFilterName])
+    if (_currentScope == EPOIScopeFilter && ![poi.type.filter.name isEqualToString:_currentScopeFilterName])
         return;
 
     [_searchPoiArray addObject:poi];
@@ -1770,8 +1770,7 @@ typedef enum
                 poi.latitude = latLon.latitude;
                 poi.longitude = latLon.longitude;
                 
-                OAPOIFavType *favType = [[OAPOIFavType alloc] init];
-                favType.name = OALocalizedString(@"favorite");
+                OAPOIFavType *favType = [[OAPOIFavType alloc] initWithName:OALocalizedString(@"favorite")];
                 favType.nameLocalized = OALocalizedString(@"favorite");
                 poi.type = favType;
                 
@@ -1790,8 +1789,7 @@ typedef enum
                 poi.latitude = item.latitude;
                 poi.longitude = item.longitude;
                 
-                OAPOIHistoryType *historyType = [[OAPOIHistoryType alloc] init];
-                historyType.name = OALocalizedString(@"history");
+                OAPOIHistoryType *historyType = [[OAPOIHistoryType alloc] initWithName:OALocalizedString(@"history")];
                 historyType.nameLocalized = OALocalizedString(@"history");
                 historyType.hType = item.hType;
                 poi.type = historyType;

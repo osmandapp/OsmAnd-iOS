@@ -1404,24 +1404,12 @@
 
 - (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues descFieldLoc:(NSString *)descFieldLoc
 {
-    NSMutableArray *fuelTagsArr = [NSMutableArray array];
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
-
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
+    
     for (const auto& entry : decodedValues)
     {
-        if (entry.declaration->tagName == QString("phone"))
-            symbol.phone = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName == QString("operator"))
-            symbol.oper = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName == QString("brand"))
-            symbol.brand = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName == QString("wheelchair"))
-            symbol.wheelchair = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName == QString("opening_hours"))
-            symbol.openingHours = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName == QString("website"))
-            symbol.url = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName.startsWith(QString("content")))
+        if (entry.declaration->tagName.startsWith(QString("content")))
         {
             NSString *key = entry.declaration->tagName.toNSString();
             NSString *loc;
@@ -1432,19 +1420,23 @@
             
             [content setObject:entry.value.toString().toNSString() forKey:loc];
         }
-        else if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
-            symbol.desc = entry.value.toString().toNSString();
-        else if (entry.declaration->tagName.startsWith(QString("fuel:")) && (entry.value.toString() == QString("yes")))
+        else
         {
-            [fuelTagsArr addObject:entry.declaration->tagName.right(entry.declaration->tagName.length() - 5).toNSString()];
+            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
         
-        if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+        if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
+        {
             symbol.desc = entry.value.toString().toNSString();
+        }
+        else if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+        {
+            symbol.desc = entry.value.toString().toNSString();
+        }
+        
     }
-    if (fuelTagsArr.count > 0)
-        symbol.fuelTags = [NSArray arrayWithArray:fuelTagsArr];
     
+    symbol.values = values;
     symbol.localizedContent = [NSDictionary dictionaryWithDictionary:content];
 }
 
@@ -1842,23 +1834,10 @@
     if (symbol.icon)
         [userInfo setObject:symbol.icon forKey:@"icon"];
 
-    if (symbol.phone)
-        [userInfo setObject:symbol.phone forKey:@"phone"];
-    if (symbol.openingHours)
-        [userInfo setObject:symbol.openingHours forKey:@"openingHours"];
-    if (symbol.url)
-        [userInfo setObject:symbol.url forKey:@"url"];
+    if (symbol.values)
+        [userInfo setObject:symbol.values forKey:@"values"];
     if (symbol.desc)
         [userInfo setObject:symbol.desc forKey:@"desc"];
-
-    if (symbol.oper)
-        [userInfo setObject:symbol.oper forKey:@"oper"];
-    if (symbol.brand)
-        [userInfo setObject:symbol.brand forKey:@"brand"];
-    if (symbol.wheelchair)
-        [userInfo setObject:symbol.wheelchair forKey:@"wheelchair"];
-    if (symbol.fuelTags)
-        [userInfo setObject:symbol.fuelTags forKey:@"fuelTags"];
     if (symbol.localizedNames)
         [userInfo setObject:symbol.localizedNames forKey:@"names"];
     if (symbol.localizedContent)
@@ -3247,7 +3226,7 @@
                                                         if (category && type)
                                                         {
                                                             OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
-                                                            if (poiType && [poiType.filter isEqualToString:_poiFilterName])
+                                                            if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
                                                                 res = true;
                                                         }
                                                     }

@@ -7,17 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAPOIBaseType.h"
 
-@interface OAPOICategory : NSObject<NSCopying>
+@class OAPOIType;
+@class OAPOIFilter;
 
-@property (nonatomic) NSString *name;
+@interface OAPOICategory : OAPOIBaseType
+
+@property (nonatomic) NSArray<OAPOIType *> *poiTypes;
+@property (nonatomic) NSArray<OAPOIFilter *> *poiFilters;
 @property (nonatomic) NSString *tag;
 
-@property (nonatomic) NSString *nameLocalizedEN;
-@property (nonatomic) NSString *nameLocalized;
-
-@property (nonatomic) BOOL top;
-
-- (UIImage *)icon;
+- (void)addPoiType:(OAPOIType *)poiType;
+- (void)addPoiFilter:(OAPOIFilter *)poiFilter;
 
 @end

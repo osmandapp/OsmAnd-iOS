@@ -55,7 +55,7 @@
         QString title = QString::fromNSString(formattedLocation);
         
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        int defaultColor = 0;
+        NSInteger defaultColor = 0;
         if ([userDefaults objectForKey:kFavoriteDefaultColorKey])
             defaultColor = [userDefaults integerForKey:kFavoriteDefaultColorKey];
         

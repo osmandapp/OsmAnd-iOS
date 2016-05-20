@@ -24,6 +24,7 @@
 @property (nonatomic) NSString *distance;
 @property (nonatomic, assign) double direction;
 
+@property (nonatomic) NSDictionary *values;
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
 

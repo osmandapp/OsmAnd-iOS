@@ -138,16 +138,14 @@
         for (OAPOIType *poiType in _poiTypes)
         {
             poiType.nameLocalized = [self getPhrase:poiType.name];
-            poiType.categoryLocalized = [self getPhrase:poiType.category];
-            poiType.filterLocalized = [self getPhrase:poiType.filter];
         }
-        for (OAPOICategory *c in _poiCategories.allKeys)
+        for (OAPOICategory *c in _poiCategories)
+        {
             c.nameLocalized = [self getPhrase:c.name];
-
-        for (OAPOIFilter *f in _poiFilters.allKeys)
+        }
+        for (OAPOIFilter *f in _poiFilters)
         {
             f.nameLocalized = [self getPhrase:f.name];
-            f.categoryLocalized = [self getPhrase:f.category];
         }
     }
     
@@ -156,32 +154,27 @@
         for (OAPOIType *poiType in _poiTypes)
         {
             poiType.nameLocalizedEN = [self getPhraseEN:poiType.name];
-            poiType.categoryLocalizedEN = [self getPhraseEN:poiType.category];
-            poiType.filterLocalizedEN = [self getPhraseEN:poiType.filter];
             
             if (_phrases.count == 0)
             {
                 poiType.nameLocalized = poiType.nameLocalizedEN;
-                poiType.categoryLocalized = poiType.categoryLocalizedEN;
-                poiType.filterLocalized = poiType.filterLocalizedEN;
             }
         }
-        for (OAPOICategory *c in _poiCategories.allKeys)
+        for (OAPOICategory *c in _poiCategories)
         {
             c.nameLocalizedEN = [self getPhraseEN:c.name];
             if (_phrases.count == 0)
+            {
                 c.nameLocalized = c.nameLocalizedEN;
+            }
         }
-        
-        for (OAPOIFilter *f in _poiFilters.allKeys)
+        for (OAPOIFilter *f in _poiFilters)
         {
             f.nameLocalizedEN = [self getPhraseEN:f.name];
-            f.categoryLocalizedEN = [self getPhraseEN:f.category];
             
             if (_phrases.count == 0)
             {
                 f.nameLocalized = f.nameLocalizedEN;
-                f.categoryLocalized = f.categoryLocalizedEN;
             }
         }
     }
@@ -213,29 +206,11 @@
     }
 }
 
-- (NSArray *)poiTypesForCategory:(NSString *)categoryName
-{
-    for (OAPOICategory *c in _poiCategories.allKeys)
-        if ([c.name isEqualToString:categoryName])
-            return [_poiCategories objectForKey:c];
-
-    return nil;
-}
-
-- (NSArray *)poiTypesForFilter:(NSString *)filterName
-{
-    for (OAPOIFilter *f in _poiFilters.allKeys)
-        if ([f.name isEqualToString:filterName])
-            return [_poiFilters objectForKey:f];
-    
-    return nil;
-}
-
 - (NSArray *)poiFiltersForCategory:(NSString *)categoryName
 {
     NSMutableArray *res = [NSMutableArray array];
-    for (OAPOIFilter *f in _poiFilters.allKeys)
-        if ([f.category isEqualToString:categoryName])
+    for (OAPOIFilter *f in _poiFilters)
+        if ([f.category.name isEqualToString:categoryName])
             [res addObject:f];
     
     return [NSArray arrayWithArray:res];
@@ -253,7 +228,7 @@
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name
 {
     for (OAPOIType *t in _poiTypes)
-        if ([t.category isEqualToString:category] && [t.name isEqualToString:name])
+        if ([t.category.name isEqualToString:category] && [t.name isEqualToString:name])
             return t;
     
     return nil;
@@ -403,6 +378,7 @@
     
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
+    NSMutableDictionary *values = [NSMutableDictionary dictionary];
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     
     NSString *descFieldLoc;
@@ -425,13 +401,9 @@
             
             [content setObject:entry.value.toString().toNSString() forKey:loc];
         }
-
-        
-        // phone, website, description
-        if (entry.declaration->tagName == QString("opening_hours"))
+        else
         {
-            poi.hasOpeningHours = YES;
-            poi.openingHours = entry.value.toString().toNSString();
+            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
         
         if (_prefLang && !poi.nameLocalized)
@@ -442,11 +414,22 @@
         }
         
         if (entry.declaration->tagName.startsWith(QString("description")) && !poi.desc)
+        {
             poi.desc = entry.value.toString().toNSString();
+        }
         if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
+        {
             poi.desc = entry.value.toString().toNSString();
+        }
+
+        if (entry.declaration->tagName == QString("opening_hours"))
+        {
+            poi.hasOpeningHours = YES;
+            poi.openingHours = entry.value.toString().toNSString();
+        }
     }
     
+    poi.values = values;
     poi.localizedContent = [NSDictionary dictionaryWithDictionary:content];
     
     if (!poi.nameLocalized)
@@ -467,9 +450,8 @@
     OAPOIType *type = [self getPoiTypeByCategory:category name:subCategory];
     if (!type)
     {
-        type = [[OAPOIType alloc] init];
-        type.category = category;
-        type.name = subCategory;
+        OAPOICategory *c = [[OAPOICategory alloc] initWithName:category];
+        type = [[OAPOIType alloc] initWithName:subCategory category:c];
         type.nameLocalized = [self getPhrase:subCategory];
         type.nameLocalizedEN = [self getPhraseEN:subCategory];
     }

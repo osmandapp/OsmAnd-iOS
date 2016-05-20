@@ -31,7 +31,6 @@
             UIColor* color = [UIColor colorWithRed:favorite->getColor().r/255.0 green:favorite->getColor().g/255.0 blue:favorite->getColor().b/255.0 alpha:1.0];
             
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-
             return favCol.icon;
         }
     }

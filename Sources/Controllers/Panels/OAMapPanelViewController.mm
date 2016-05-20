@@ -1004,15 +1004,8 @@ typedef enum
 
     BOOL isPlace = ([params objectForKey:@"place"] != nil);
 
-    NSString *phone = [params objectForKey:@"phone"];
-    NSString *openingHours = [params objectForKey:@"openingHours"];
-    NSString *url = [params objectForKey:@"url"];
     NSString *desc = [params objectForKey:@"desc"];
-
-    NSString *oper = [params objectForKey:@"oper"];
-    NSString *brand = [params objectForKey:@"brand"];
-    NSString *wheelchair = [params objectForKey:@"wheelchair"];
-    NSArray *fuelTags = [params objectForKey:@"fuelTags"];
+    NSDictionary *values = [params objectForKey:@"values"];
 
     NSDictionary *names = [params objectForKey:@"names"];
     NSDictionary *content = [params objectForKey:@"content"];
@@ -1204,16 +1197,9 @@ typedef enum
     targetPoint.zoom = renderView.zoom;
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
-    targetPoint.phone = phone;
-    targetPoint.openingHours = openingHours;
-    targetPoint.url = url;
+    targetPoint.values = values;
     targetPoint.localizedNames = names;
     targetPoint.localizedContent = content;
-
-    targetPoint.oper = oper;
-    targetPoint.brand = brand;
-    targetPoint.wheelchair = wheelchair;
-    targetPoint.fuelTags = fuelTags;
     
     if (desc.length > 0)
         targetPoint.titleAddress = desc;
@@ -1223,6 +1209,8 @@ typedef enum
     
     if (_activeTargetType == OATargetGPXEdit && ![objectType isEqualToString:@"waypoint"])
     {
+        /* TODO Fix it
+         
         NSMutableString *ds =[NSMutableString string];
         if (phone.length > 0)
             [ds appendString:phone];
@@ -1281,6 +1269,7 @@ typedef enum
         }
         
         desc = [NSString stringWithString:ds];
+         */
     }
     
     targetPoint.desc = desc;
@@ -2136,19 +2125,7 @@ typedef enum
             
         default:
         {
-            //if (_activeTargetType == OATargetGPXEdit)
-            //{
-            //    OAGPXEditToolbarViewController *toolbarViewController = [[OAGPXEditToolbarViewController alloc] init];
-            //
-            //    toolbarViewController.view.frame = self.view.frame;
-            //    [self.targetMenuView setCustomViewController:toolbarViewController];
-            //
-            //    [self.targetMenuView prepareNoInit];
-            //}
-            //else
-            //{
-                [self.targetMenuView prepare];
-            //}
+            [self.targetMenuView prepare];
         }
     }
     

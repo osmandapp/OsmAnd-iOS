@@ -11,18 +11,31 @@
 
 @implementation OAPOIFilter
 
+- (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
+{
+    self = [super initWithName:name];
+    if (self)
+    {
+        _category = category;
+    }
+    return self;
+}
+
 - (UIImage *)icon
 {
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
+    UIImage *img = [super icon];
     if (!img)
-        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.category]];
-    
-    return [OAUtilities applyScaleFactorToImage:img];
+    {
+        img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.category.name]];
+        return [OAUtilities applyScaleFactorToImage:img];
+    }
+    return img;
 }
 
 -(BOOL)isEqual:(id)object
 {
-    if ([object isKindOfClass:[OAPOIFilter class]]) {
+    if ([object isKindOfClass:[OAPOIFilter class]])
+    {
         OAPOIFilter *obj = object;
         return [self.name isEqualToString:obj.name];
     }
@@ -31,26 +44,19 @@
 
 -(NSUInteger)hash
 {
-    return [_name hash] + (_category ? [_category hash] : 1);
+    return [self.name hash] + (self.category ? [self.category hash] : 1);
 }
 
-#pragma mark NSCopying
-
-- (id)copyWithZone:(NSZone *)zone
+- (void)addPoiType:(OAPOIType *)poiType
 {
-    OAPOIFilter* clone = [[OAPOIFilter allocWithZone:zone] init];
-    
-    clone.name = self.name;
-    clone.nameLocalized = self.nameLocalized;
-    clone.nameLocalizedEN = self.nameLocalizedEN;
-
-    clone.category = self.category;
-    clone.categoryLocalized = self.categoryLocalized;
-    clone.categoryLocalizedEN = self.categoryLocalizedEN;
-    
-    clone.top = self.top;
-
-    return clone;
+    if (!_poiTypes)
+    {
+        _poiTypes = @[poiType];
+    }
+    else
+    {
+        _poiTypes = [_poiTypes arrayByAddingObject:poiType];
+    }
 }
 
 @end

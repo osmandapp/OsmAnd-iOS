@@ -36,8 +36,8 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 @interface OAPOIParser : NSObject
 
 @property(nonatomic) NSArray *poiTypes;
-@property(nonatomic) NSDictionary *poiCategories;
-@property(nonatomic) NSDictionary *poiFilters;
+@property(nonatomic) NSArray *poiCategories;
+@property(nonatomic) NSArray *poiFilters;
 @property(nonatomic, weak) id<OAPOITypesParserDelegate> delegate;
 @property(nonatomic) BOOL error;
 @property(nonatomic) NSString *fileName;

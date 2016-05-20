@@ -8,19 +8,15 @@
 
 #import "OAPOICategory.h"
 #import "OAUtilities.h"
+#import "OAPOIType.h"
+#import "OAPOIFilter.h"
 
 @implementation OAPOICategory
 
-- (UIImage *)icon
-{
-    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name]];
-
-    return [OAUtilities applyScaleFactorToImage:img];
-}
-
 -(BOOL)isEqual:(id)object
 {
-    if ([object isKindOfClass:[OAPOICategory class]]) {
+    if ([object isKindOfClass:[OAPOICategory class]])
+    {
         OAPOICategory *obj = object;
         return [self.name isEqualToString:obj.name];
     }
@@ -29,22 +25,31 @@
 
 -(NSUInteger)hash
 {
-    return [_name hash] + (_tag ? [_tag hash] : 1);
+    return [self.name hash] + (self.tag ? [self.tag hash] : 1);
 }
 
-#pragma mark NSCopying
-
-- (id)copyWithZone:(NSZone *)zone
+- (void)addPoiType:(OAPOIType *)poiType
 {
-    OAPOICategory* clone = [[OAPOICategory allocWithZone:zone] init];
-    
-    clone.name = self.name;
-    clone.tag = self.tag;
-    clone.top = self.top;
-    clone.nameLocalized = self.nameLocalized;
-    clone.nameLocalizedEN = self.nameLocalizedEN;
-    
-    return clone;
+    if (!_poiTypes)
+    {
+        _poiTypes = @[poiType];
+    }
+    else
+    {
+        _poiTypes = [_poiTypes arrayByAddingObject:poiType];
+    }
+}
+
+- (void)addPoiFilter:(OAPOIFilter *)poiFilter
+{
+    if (!_poiFilters)
+    {
+        _poiFilters = @[poiFilter];
+    }
+    else
+    {
+        _poiFilters = [_poiFilters arrayByAddingObject:poiFilter];
+    }
 }
 
 @end

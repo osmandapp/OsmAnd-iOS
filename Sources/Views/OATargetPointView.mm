@@ -106,35 +106,10 @@
 
     UIScrollView *_infoView;
     
-    CALayer *_horizontalLineInfo1;
-    CALayer *_horizontalLineInfo2;
-    CALayer *_horizontalLineInfo3;
-    CALayer *_horizontalLineInfo4;
-    CALayer *_horizontalLineInfo5;
-    CALayer *_horizontalLineInfo6;
-    
     UIFont *_infoFont;
     
     UIImageView *_infoCoordsImage;
     UIButton *_infoCoordsText;
-    UIImageView *_infoPhoneImage;
-    UIButton *_infoPhoneText;
-    UIImageView *_infoOpeningHoursImage;
-    UIButton *_infoOpeningHoursText;
-    UIImageView *_infoUrlImage;
-    UIButton *_infoUrlText;
-
-    UIImageView *_infoOperatorImage;
-    UIButton *_infoOperatorText;
-    UIImageView *_infoBrandImage;
-    UIButton *_infoBrandText;
-    UIImageView *_infoWheelchairImage;
-    UIButton *_infoWheelchairText;
-    UIImageView *_infoFuelImage;
-    UIButton *_infoFuelText;
-
-    UIImageView *_infoDescImage;
-    UITextView *_infoDescText;
     
     CGFloat _frameTop;
 
@@ -216,120 +191,20 @@
     
     self.buttonDirection.imageView.clipsToBounds = NO;
     self.buttonDirection.imageView.contentMode = UIViewContentModeCenter;
-
-    _horizontalLineInfo1 = [CALayer layer];
-    _horizontalLineInfo1.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _horizontalLineInfo2 = [CALayer layer];
-    _horizontalLineInfo2.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _horizontalLineInfo3 = [CALayer layer];
-    _horizontalLineInfo3.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _horizontalLineInfo4 = [CALayer layer];
-    _horizontalLineInfo4.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _horizontalLineInfo5 = [CALayer layer];
-    _horizontalLineInfo5.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
-    _horizontalLineInfo6 = [CALayer layer];
-    _horizontalLineInfo6.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
     
     _infoView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 100.0)];
     _infoView.backgroundColor = UIColorFromRGB(0xf2f2f2);
 
-    [_infoView.layer addSublayer:_horizontalLineInfo1];
-    [_infoView.layer addSublayer:_horizontalLineInfo2];
-    [_infoView.layer addSublayer:_horizontalLineInfo3];
-    [_infoView.layer addSublayer:_horizontalLineInfo4];
-    [_infoView.layer addSublayer:_horizontalLineInfo5];
-    [_infoView.layer addSublayer:_horizontalLineInfo6];
-    
     _infoFont = [UIFont fontWithName:@"AvenirNext-Medium" size:14.0];
     
     _infoCoordsImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
     _infoCoordsImage.contentMode = UIViewContentModeCenter;
     [_infoView addSubview:_infoCoordsImage];
-
-    _infoPhoneImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_phone_number"]];
-    _infoPhoneImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoPhoneImage];
-    
-    _infoOpeningHoursImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_working_time"]];
-    _infoOpeningHoursImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoOpeningHoursImage];
-
-    _infoUrlImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_website"]];
-    _infoUrlImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoUrlImage];
-
-
-    _infoOperatorImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_operator"]];
-    _infoOperatorImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoOperatorImage];
-
-    _infoBrandImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_operator"]];
-    _infoBrandImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoBrandImage];
-
-    _infoWheelchairImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
-    _infoWheelchairImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoWheelchairImage];
-
-    _infoFuelImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
-    _infoFuelImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoFuelImage];
-
-    
-    _infoDescImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_description"]];
-    _infoDescImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoDescImage];
     
     _infoCoordsText = [UIButton buttonWithType:UIButtonTypeSystem];
     [self setupInfoButton:_infoCoordsText];
     _infoCoordsText.userInteractionEnabled = NO;
     [_infoView addSubview:_infoCoordsText];
-
-    _infoPhoneText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoPhoneText];
-    [_infoPhoneText addTarget:self action:@selector(callPhone) forControlEvents:UIControlEventTouchUpInside];
-    [_infoView addSubview:_infoPhoneText];
-    
-    _infoOpeningHoursText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoOpeningHoursText];
-    _infoOpeningHoursText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoOpeningHoursText];
-    
-    _infoUrlText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoUrlText];
-    _infoUrlText.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-    [_infoUrlText addTarget:self action:@selector(callUrl) forControlEvents:UIControlEventTouchUpInside];
-    [_infoView addSubview:_infoUrlText];
-    
-
-    _infoOperatorText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoOperatorText];
-    _infoOperatorText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoOperatorText];
-
-    _infoBrandText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoBrandText];
-    _infoBrandText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoBrandText];
-
-    _infoWheelchairText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoWheelchairText];
-    _infoWheelchairText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoWheelchairText];
-
-    _infoFuelText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoFuelText];
-    _infoFuelText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoFuelText];
-
-    
-    _infoDescText = [[UITextView alloc] init];
-    _infoDescText.font = [_infoFont copy];
-    _infoDescText.textColor = [UIColor blackColor];
-    _infoDescText.backgroundColor = self.backgroundColor;
-    _infoDescText.editable = NO;
-    _infoDescText.selectable = NO;
-    [_infoView addSubview:_infoDescText];
     
     [self doUpdateUI];
 
@@ -887,24 +762,24 @@
     [self.delegate targetViewSizeChanged:frame animated:YES];
 }
 
-- (void)callUrl
++ (void)callUrl:(NSString *)url
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[_targetPoint.url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
 }
 
-- (NSString *)stripNonDigits:(NSString *)input
++ (NSString *)stripNonDigits:(NSString *)input
 {
     NSCharacterSet *doNotWant = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
     return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
 }
 
-- (void)callPhone
+- (void)callPhone:(NSString *)phonesString
 {
-    NSArray* phones = [_targetPoint.phone componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
+    NSArray* phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
     NSMutableArray *parsedPhones = [NSMutableArray array];
     for (NSString *phone in phones)
     {
-        NSString *p = [self stripNonDigits:phone];
+        NSString *p = [OATargetPointView stripNonDigits:phone];
         [parsedPhones addObject:p];
     }
     
@@ -1054,6 +929,7 @@
         _buttonMore.hidden = YES;
     }
     
+    /*
     if (_targetPoint.openingHours)
     {
         OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_targetPoint.openingHours];
@@ -1066,6 +942,7 @@
             color = UIColorFromRGB(0xDA3A3A);
         [_infoOpeningHoursText setTitleColor:color forState:UIControlStateNormal];
     }
+     */
     
     if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking)
     {
@@ -1115,32 +992,6 @@
     
     _infoCoordsImage.hidden = !coordsHidden;
     _infoCoordsText.hidden = !coordsHidden;
-
-    _infoPhoneImage.hidden = _targetPoint.phone == nil;
-    _infoPhoneText.hidden = _targetPoint.phone == nil;
-    
-    _infoOpeningHoursImage.hidden = _targetPoint.openingHours == nil;
-    _infoOpeningHoursText.hidden = _targetPoint.openingHours == nil;
-    
-    _infoUrlImage.hidden = _targetPoint.url == nil;
-    _infoUrlText.hidden = _targetPoint.url == nil;
-
-    
-    _infoOperatorImage.hidden = _targetPoint.oper == nil;
-    _infoOperatorText.hidden = _targetPoint.oper == nil;
-
-    _infoBrandImage.hidden = _targetPoint.brand == nil;
-    _infoBrandText.hidden = _targetPoint.brand == nil;
-
-    _infoWheelchairImage.hidden = _targetPoint.wheelchair == nil;
-    _infoWheelchairText.hidden = _targetPoint.wheelchair == nil;
-
-    _infoFuelImage.hidden = _targetPoint.fuelTags.count == 0;
-    _infoFuelText.hidden = _targetPoint.fuelTags.count == 0;
-
-    
-    _infoDescImage.hidden = _targetPoint.desc == nil;
-    _infoDescText.hidden = _targetPoint.desc == nil;
     
     [self updateDirectionButton];
 }
@@ -1179,7 +1030,7 @@
 
 - (BOOL)hasInfo
 {
-    return _coordsHidden || _targetPoint.phone || _targetPoint.openingHours || _targetPoint.url || _targetPoint.desc || (self.customController && [self.customController contentHeight] > 0.0);
+    return _coordsHidden || (self.customController && [self.customController contentHeight] > 0.0);
 }
 
 - (void)applyTargetObjectChanges
@@ -1450,140 +1301,6 @@
             _infoCoordsImage.frame = CGRectMake(0.0, hf, 50.0, ih);
             _infoCoordsText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
             [_infoCoordsText setTitle:_formattedCoords forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo4.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo4.hidden = NO;
-        }
-        else
-        {
-            _horizontalLineInfo4.hidden = YES;
-        }
-        
-        if (_targetPoint.phone)
-        {
-            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.phone width:infoWidth - 55.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, s.height + 16.0);
-            
-            _infoPhoneImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoPhoneText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoPhoneText setTitle:_targetPoint.phone forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo1.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo1.hidden = NO;
-        }
-        else
-        {
-            _horizontalLineInfo1.hidden = YES;
-        }
-        
-        if (_targetPoint.openingHours)
-        {
-            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.openingHours width:infoWidth - 55.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, s.height + 16.0);
-            
-            _infoOpeningHoursImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoOpeningHoursText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoOpeningHoursText setTitle:_targetPoint.openingHours forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo2.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo2.hidden = NO;
-        }
-        else
-        {
-            _horizontalLineInfo2.hidden = YES;
-        }
-        
-        
-        if (_targetPoint.oper)
-        {
-            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.oper width:infoWidth - 55.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, s.height + 16.0);
-            
-            _infoOperatorImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoOperatorText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoOperatorText setTitle:_targetPoint.oper forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo5.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo5.hidden = NO;
-        }
-        else
-        {
-            _horizontalLineInfo5.hidden = YES;
-        }
-        
-        if (_targetPoint.brand)
-        {
-            if (!_targetPoint.oper || ![_targetPoint.oper isEqualToString:_targetPoint.brand])
-            {
-                CGSize s = [OAUtilities calculateTextBounds:_targetPoint.brand width:infoWidth - 55.0 font:_infoFont];
-                CGFloat ih = MAX(44.0, s.height + 16.0);
-                
-                _infoBrandImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-                _infoBrandText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-                [_infoBrandText setTitle:_targetPoint.brand forState:UIControlStateNormal];
-                
-                hf += ih;
-                
-                _horizontalLineInfo6.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-                _horizontalLineInfo6.hidden = NO;
-            }
-            else
-            {
-                _infoBrandImage.hidden = YES;
-                _infoBrandText.hidden = YES;
-                _horizontalLineInfo6.hidden = YES;
-            }
-        }
-        else
-        {
-            _horizontalLineInfo6.hidden = YES;
-        }
-        
-        
-        
-        if (_targetPoint.url)
-        {
-            CGFloat ih = 44.0;
-            
-            _infoUrlImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoUrlText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoUrlText setTitle:_targetPoint.url forState:UIControlStateNormal];
-            
-            hf += ih;
-            
-            _horizontalLineInfo3.frame = CGRectMake(15.0, hf - 1.0, infoWidth - 15.0, .5);
-            _horizontalLineInfo3.hidden = NO;
-        }
-        else
-        {
-            _horizontalLineInfo3.hidden = YES;
-        }
-        
-        if (_targetPoint.desc)
-        {
-            CGFloat hText = 150.0;
-            if (landscape)
-                hText = 80.0;
-            
-            CGSize s = [OAUtilities calculateTextBounds:_targetPoint.desc width:infoWidth - 50.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, (s.height > 24.0 ? s.height + 36.0 : s.height + 16.0));
-            
-            _infoDescImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoDescText.frame = CGRectMake(50.0, hf, infoWidth - 50.0, ih - 1.0);
-            _infoDescText.text = _targetPoint.desc;
-            
-            if (ih == 44.0)
-                _infoDescText.contentInset = UIEdgeInsetsMake(4,-4,0,0);
-            else
-                _infoDescText.contentInset = UIEdgeInsetsMake(0,-4,0,0);
             
             hf += ih;
         }
@@ -1968,7 +1685,7 @@
     }
     else if (_targetPoint.type == OATargetGPXRoute)
     {
-        int wptCount = [OAGPXRouter sharedInstance].routeDoc.activePoints.count;
+        int wptCount = (int)[OAGPXRouter sharedInstance].routeDoc.activePoints.count;
         NSTimeInterval tripDuration = [[OAGPXRouter sharedInstance] getRouteDuration];
         
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];

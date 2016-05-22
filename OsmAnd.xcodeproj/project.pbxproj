@@ -9571,7 +9571,7 @@
 					"-lz_static",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "83a4fa0e-4ec2-4b39-9f0c-8cbc24451688";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
@@ -9607,7 +9607,7 @@
 					"-lz_static",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "83a4fa0e-4ec2-4b39-9f0c-8cbc24451688";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};

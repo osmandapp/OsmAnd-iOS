@@ -10,8 +10,10 @@
 
 @class OAPOI;
 
-@interface OAPoiViewController : OATargetMenuViewController
+@interface OAPOIViewController : OATargetMenuViewController<UITableViewDataSource, UITableViewDelegate>
 
-- (id)initWithPoi:(OAPOI *)poi;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+- (id)initWithPOI:(OAPOI *)poi;
 
 @end

@@ -167,6 +167,8 @@ static const char *kMapAttributeName = "map";
 static NSUInteger kMapAttributeNameLength = 4;
 static const char *kOrderAttributeName = "order";
 static NSUInteger kOrderAttributeNameLength = 6;
+static const char *kTypeAttributeName = "type";
+static NSUInteger kTypeAttributeNameLength = 5;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -316,6 +318,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     int order = 0;
     BOOL mapOnly = NO;
     BOOL reference = NO;
+    BOOL isText = NO;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -364,6 +367,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             order = [value intValue];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kTypeAttributeName,
+                              kTypeAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            isText = [[value lowercaseString] isEqualToString:@"text"];
+        }
     }
     
     OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
@@ -373,6 +385,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.reference = reference;
     poiType.mapOnly = mapOnly;
     poiType.order = order;
+    poiType.isText = isText;
 
     [_pTypes addObject:poiType];
     
@@ -414,6 +427,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     int order = 0;
     BOOL mapOnly = NO;
     BOOL reference = NO;
+    BOOL isText = NO;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -462,6 +476,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             order = [value intValue];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kTypeAttributeName,
+                              kTypeAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            isText = [[value lowercaseString] isEqualToString:@"text"];
+        }
     }
     
     OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
@@ -472,6 +495,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.reference = reference;
     poiType.mapOnly = mapOnly;
     poiType.order = order;
+    poiType.isText = isText;
     [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
     
     if (_currentPOIType)

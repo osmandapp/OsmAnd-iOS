@@ -21,6 +21,7 @@
 @property (nonatomic) OAPOICategory *category;
 @property (nonatomic) OAPOIFilter *filter;
 
+@property (nonatomic, assign) BOOL isText;
 @property (nonatomic, assign) BOOL reference;
 @property (nonatomic, assign) BOOL mapOnly;
 

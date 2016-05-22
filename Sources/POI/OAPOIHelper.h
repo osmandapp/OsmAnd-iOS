@@ -14,6 +14,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 @class OAPOI;
 @class OAPOIType;
+@class OAPOIBaseType;
 
 @protocol OAPOISearchDelegate
 
@@ -43,6 +44,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
+- (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name;
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

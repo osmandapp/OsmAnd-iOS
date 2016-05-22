@@ -1582,7 +1582,7 @@
 {
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
 
-    if (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0)
+    if ([_targetPoint isLocationHiddenInTitle])
     {
         _coordsHidden = YES;
         self.addressStr = _targetPoint.titleAddress;
@@ -1763,7 +1763,7 @@
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
     
-    self.customController.showCoords = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
+    self.customController.showCoords = [_targetPoint isLocationHiddenInTitle];
 
     if (self.superview)
     {

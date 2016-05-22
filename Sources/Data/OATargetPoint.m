@@ -10,4 +10,9 @@
 
 @implementation OATargetPoint
 
+-(BOOL)isLocationHiddenInTitle
+{
+    return (self.titleAddress.length > 0 && [self.title rangeOfString:self.titleAddress].length == 0);
+}
+
 @end

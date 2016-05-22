@@ -8,6 +8,7 @@
 
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
+#import "OAPOIBaseType.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
@@ -138,14 +139,26 @@
         for (OAPOIType *poiType in _poiTypes)
         {
             poiType.nameLocalized = [self getPhrase:poiType.name];
+            for (OAPOIType *add in poiType.poiAdditionals)
+            {
+                add.nameLocalized = [self getPhrase:add.name];
+            }
         }
         for (OAPOICategory *c in _poiCategories)
         {
             c.nameLocalized = [self getPhrase:c.name];
+            for (OAPOIType *add in c.poiAdditionals)
+            {
+                add.nameLocalized = [self getPhrase:add.name];
+            }
         }
         for (OAPOIFilter *f in _poiFilters)
         {
             f.nameLocalized = [self getPhrase:f.name];
+            for (OAPOIType *add in f.poiAdditionals)
+            {
+                add.nameLocalized = [self getPhrase:add.name];
+            }
         }
     }
     
@@ -154,10 +167,17 @@
         for (OAPOIType *poiType in _poiTypes)
         {
             poiType.nameLocalizedEN = [self getPhraseEN:poiType.name];
-            
             if (_phrases.count == 0)
             {
                 poiType.nameLocalized = poiType.nameLocalizedEN;
+            }
+            for (OAPOIType *add in poiType.poiAdditionals)
+            {
+                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                if (_phrases.count == 0)
+                {
+                    add.nameLocalized = add.nameLocalizedEN;
+                }
             }
         }
         for (OAPOICategory *c in _poiCategories)
@@ -167,6 +187,14 @@
             {
                 c.nameLocalized = c.nameLocalizedEN;
             }
+            for (OAPOIType *add in c.poiAdditionals)
+            {
+                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                if (_phrases.count == 0)
+                {
+                    add.nameLocalized = add.nameLocalizedEN;
+                }
+            }
         }
         for (OAPOIFilter *f in _poiFilters)
         {
@@ -175,6 +203,14 @@
             if (_phrases.count == 0)
             {
                 f.nameLocalized = f.nameLocalizedEN;
+            }
+            for (OAPOIType *add in f.poiAdditionals)
+            {
+                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                if (_phrases.count == 0)
+                {
+                    add.nameLocalized = add.nameLocalizedEN;
+                }
             }
         }
     }
@@ -231,6 +267,52 @@
         if ([t.category.name isEqualToString:category] && [t.name isEqualToString:name])
             return t;
     
+    return nil;
+}
+
+- (OAPOIType *) getPoiAdditionalByKey:(OAPOIBaseType *)p name:(NSString *)name
+{
+    NSArray<OAPOIType *> *pp = p.poiAdditionals;
+    if (pp)
+    {
+        for (OAPOIType *pt in pp)
+        {
+            if ([pt.name isEqualToString:name])
+            {
+                return pt;
+            }
+        }
+    }
+    return nil;
+}
+
+- (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name
+{
+    OAPOIType *add = nil;
+    for (OAPOICategory *pc in _poiCategories)
+    {
+        add = [self getPoiAdditionalByKey:pc name:name];
+        if (add)
+        {
+            return add;
+        }
+        for (OAPOIFilter *pf in pc.poiFilters)
+        {
+            add = [self getPoiAdditionalByKey:pf name:name];
+            if (add)
+            {
+                return add;
+            }
+        }
+        for (OAPOIType *p in pc.poiTypes)
+        {
+            add = [self getPoiAdditionalByKey:p name:name];
+            if (add)
+            {
+                return add;
+            }
+        }
+    }
     return nil;
 }
 
@@ -357,14 +439,11 @@
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
     
-    //NSLog(@">>> name=%@ id=%lld", amenity->nativeName.toNSString(), (uint64_t)amenity->id);
-
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
 
     const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
     for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
     {
-        //NSLog(@"loc %@=%@", entry.key().toNSString(), entry.value().toNSString());
         if (lang != QString::null && entry.key() == lang)
             poi.nameLocalized = entry.value().toNSString();
 
@@ -375,62 +454,15 @@
         [names setObject:poi.name forKey:@""];
     
     poi.localizedNames = [NSDictionary dictionaryWithDictionary:names];
-    
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    NSMutableDictionary *content = [NSMutableDictionary dictionary];
-    
-    NSString *descFieldLoc;
-    if (_prefLang)
-        descFieldLoc = [@"description:" stringByAppendingString:_prefLang];
-
     const auto& decodedValues = amenity->getDecodedValues();
-    for(const auto& entry : decodedValues)
+    for (const auto& entry : decodedValues)
     {
-        //NSLog(@"dec %@=%@", entry.key().toNSString(), (s.length > 50 ? [s substringToIndex:50] : s));
-
-        if (entry.declaration->tagName.startsWith(QString("content")))
-        {
-            NSString *key = entry.declaration->tagName.toNSString();
-            NSString *loc;
-            if (key.length > 8)
-                loc = [[key substringFromIndex:8] lowercaseString];
-            else
-                loc = @"";
-            
-            [content setObject:entry.value.toString().toNSString() forKey:loc];
-        }
-        else
-        {
-            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
-        }
-        
-        if (_prefLang && !poi.nameLocalized)
-        {
-            const QString langTag = QString("name:").append(QString::fromNSString(_prefLang));
-            if (entry.declaration->tagName == langTag)
-                poi.nameLocalized = entry.value.toString().toNSString();
-        }
-        
-        if (entry.declaration->tagName.startsWith(QString("description")) && !poi.desc)
-        {
-            poi.desc = entry.value.toString().toNSString();
-        }
-        if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
-        {
-            poi.desc = entry.value.toString().toNSString();
-        }
-
-        if (entry.declaration->tagName == QString("opening_hours"))
-        {
-            poi.hasOpeningHours = YES;
-            poi.openingHours = entry.value.toString().toNSString();
-        }
+        [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
     }
-    
     poi.values = values;
-    poi.localizedContent = [NSDictionary dictionaryWithDictionary:content];
     
     if (!poi.nameLocalized)
         poi.nameLocalized = amenity->nativeName.toNSString();
@@ -441,8 +473,6 @@
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
         return;
-    
-    //NSLog(@"id=%ld poi.name=%@ lat=%f lon=%f", (long)(amenity->id), poi.name, poi.latitude, poi.longitude);
     
     NSString *category = catList.first().category.toNSString();
     NSString *subCategory = catList.first().subcategory.toNSString();

@@ -42,6 +42,7 @@
 #import "OATrackIntervalDialogView.h"
 #import "OAParkingViewController.h"
 #import "OAFavoriteViewController.h"
+#import "OAPOIViewController.h"
 #import "OAWikiMenuViewController.h"
 #import "OAWikiWebViewController.h"
 #import "OAGPXWptViewController.h"
@@ -54,6 +55,7 @@
 #import "OAHistoryItem.h"
 #import "OAGPXEditWptViewController.h"
 #import "OAGPXEditToolbarViewController.h"
+#import "OAPOI.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1130,7 +1132,24 @@ typedef enum
     }
     
     if (targetPoint.type == OATargetLocation && poiType)
+    {
+        OAPOI *poi = [[OAPOI alloc] init];
+        poi.latitude = lat;
+        poi.longitude = lon;
+        poi.type = poiType;
+        poi.name = caption;
+        poi.nameLocalized = caption;
+        poi.localizedNames = names;
+        poi.values = values;
+
+        if (poi.name.length == 0)
+            poi.name = poiType.name;
+        if (poi.nameLocalized.length == 0)
+            poi.nameLocalized = poiType.nameLocalized;
+        
         targetPoint.type = OATargetPOI;
+        targetPoint.targetObj = poi;
+    }
     
     NSString *roadTitle;
     if (!isPlace)
@@ -1963,6 +1982,23 @@ typedef enum
             break;
         }
 
+        case OATargetPOI:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            
+            OAPOIViewController *poiViewController = [[OAPOIViewController alloc] initWithPOI:self.targetMenuView.targetPoint.targetObj];
+            poiViewController.showCoords = [self.targetMenuView.targetPoint isLocationHiddenInTitle];
+            poiViewController.formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetMenuView.targetPoint.location];
+
+            poiViewController.view.frame = self.view.frame;
+            
+            [self.targetMenuView setCustomViewController:poiViewController];
+            
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+        
         case OATargetWiki:
         {
             NSString *contentLocale = [[OAAppSettings sharedManager] settingPrefMapLanguage];

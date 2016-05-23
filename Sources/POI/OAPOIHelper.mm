@@ -138,26 +138,26 @@
     {
         for (OAPOIType *poiType in _poiTypes)
         {
-            poiType.nameLocalized = [self getPhrase:poiType.name];
+            poiType.nameLocalized = [self getPhrase:poiType];
             for (OAPOIType *add in poiType.poiAdditionals)
             {
-                add.nameLocalized = [self getPhrase:add.name];
+                add.nameLocalized = [self getPhrase:add];
             }
         }
         for (OAPOICategory *c in _poiCategories)
         {
-            c.nameLocalized = [self getPhrase:c.name];
+            c.nameLocalized = [self getPhrase:c];
             for (OAPOIType *add in c.poiAdditionals)
             {
-                add.nameLocalized = [self getPhrase:add.name];
+                add.nameLocalized = [self getPhrase:add];
             }
         }
         for (OAPOIFilter *f in _poiFilters)
         {
-            f.nameLocalized = [self getPhrase:f.name];
+            f.nameLocalized = [self getPhrase:f];
             for (OAPOIType *add in f.poiAdditionals)
             {
-                add.nameLocalized = [self getPhrase:add.name];
+                add.nameLocalized = [self getPhrase:add];
             }
         }
     }
@@ -166,14 +166,14 @@
     {
         for (OAPOIType *poiType in _poiTypes)
         {
-            poiType.nameLocalizedEN = [self getPhraseEN:poiType.name];
+            poiType.nameLocalizedEN = [self getPhraseEN:poiType];
             if (_phrases.count == 0)
             {
                 poiType.nameLocalized = poiType.nameLocalizedEN;
             }
             for (OAPOIType *add in poiType.poiAdditionals)
             {
-                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                add.nameLocalizedEN = [self getPhraseEN:add];
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
@@ -182,14 +182,14 @@
         }
         for (OAPOICategory *c in _poiCategories)
         {
-            c.nameLocalizedEN = [self getPhraseEN:c.name];
+            c.nameLocalizedEN = [self getPhraseEN:c];
             if (_phrases.count == 0)
             {
                 c.nameLocalized = c.nameLocalizedEN;
             }
             for (OAPOIType *add in c.poiAdditionals)
             {
-                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                add.nameLocalizedEN = [self getPhraseEN:add];
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
@@ -198,7 +198,7 @@
         }
         for (OAPOIFilter *f in _poiFilters)
         {
-            f.nameLocalizedEN = [self getPhraseEN:f.name];
+            f.nameLocalizedEN = [self getPhraseEN:f];
             
             if (_phrases.count == 0)
             {
@@ -206,7 +206,7 @@
             }
             for (OAPOIType *add in f.poiAdditionals)
             {
-                add.nameLocalizedEN = [self getPhraseEN:add.name];
+                add.nameLocalizedEN = [self getPhraseEN:add];
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
@@ -216,12 +216,17 @@
     }
 }
 
--(NSString *)getPhrase:(NSString *)name 
+-(NSString *)getPhrase:(OAPOIBaseType *)type
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    if (type.baseLangType)
+    {
+        return [NSString stringWithFormat:@"%@ (%@)", [self getPhrase:type.baseLangType], [OAUtilities translatedLangName:type.lang]];
+    }
+    
+    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", type.name]];
     if (!phrase)
     {
-        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        return [[type.name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }
     else
     {
@@ -229,12 +234,17 @@
     }
 }
 
--(NSString *)getPhraseEN:(NSString *)name
+-(NSString *)getPhraseEN:(OAPOIBaseType *)type
 {
-    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    if (type.baseLangType)
+    {
+        return [self getPhraseEN:type.baseLangType];
+    }
+
+    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", type.name]];
     if (!phrase)
     {
-        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+        return [[type.name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     }
     else
     {
@@ -482,8 +492,8 @@
     {
         OAPOICategory *c = [[OAPOICategory alloc] initWithName:category];
         type = [[OAPOIType alloc] initWithName:subCategory category:c];
-        type.nameLocalized = [self getPhrase:subCategory];
-        type.nameLocalizedEN = [self getPhraseEN:subCategory];
+        type.nameLocalized = [self getPhrase:type];
+        type.nameLocalizedEN = [self getPhraseEN:type];
     }
     poi.type = type;
     

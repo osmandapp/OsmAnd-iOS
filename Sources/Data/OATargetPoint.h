@@ -33,8 +33,6 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) NSString *titleSecond;
 @property (nonatomic) NSString *titleAddress;
 
-@property (nonatomic) NSString *desc;
-
 @property (nonatomic) NSDictionary *values;
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;

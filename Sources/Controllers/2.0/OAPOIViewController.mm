@@ -12,7 +12,8 @@
 #import "OAOpeningHoursParser.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
-#import "OAIconTextTableViewCell.h"
+#import "OATargetInfoViewCell.h"
+#import "OAEditDescriptionViewController.h"
 
 @interface OARowInfo : NSObject
 
@@ -27,6 +28,9 @@
 @property (nonatomic) BOOL isUrl;
 @property (nonatomic) int order;
 @property (nonatomic) NSString *name;
+
+@property (nonatomic) int height;
+@property (nonatomic) BOOL moreText;
 
 - (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order name:(NSString *)name isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
 
@@ -65,8 +69,9 @@
 @implementation OAPOIViewController
 {
     NSMutableArray<OARowInfo *> *_rows;
-    NSInteger _contentHeight;
+    CGFloat _contentHeight;
     OAPOIHelper *_poiHelper;
+    UIColor *_contentColor;
 }
 
 - (instancetype)init
@@ -89,6 +94,11 @@
     return self;
 }
 
+- (BOOL)supportFullScreen
+{
+    return NO;
+}
+
 - (UIImage *) getIcon:(NSString *)fileName
 {
     UIImage *img = nil;
@@ -105,11 +115,16 @@
         img = [UIImage imageNamed:fileName];
     }
 
+    return [self applyColor:img];
+}
+
+- (UIImage *)applyColor:(UIImage *)image
+{
+    UIImage *img = image;
     if (img)
     {
         img = [OAUtilities tintImageWithColor:img color:UIColorFromRGB(0x727272)];
     }
-    
     return img;
 }
 
@@ -121,6 +136,12 @@
     
     _rows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
+    
+    if (self.poi.type && ![self.poi.nameLocalized isEqualToString:self.poi.type.nameLocalized])
+    {
+        UIImage *icon = [self applyColor:[self.poi.type icon]];
+        [_rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:self.poi.type.nameLocalized textColor:nil isText:NO needLinks:NO order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+    }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
         BOOL cont = NO;
@@ -151,7 +172,7 @@
         }
         else if ([key isEqualToString:@"opening_hours"])
         {
-            iconId = @"ic_action_time.png";
+            iconId = @"ic_working_time.png";
             
             OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:value];
             BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
@@ -159,23 +180,25 @@
         }
         else if ([key isEqualToString:@"phone"])
         {
-            iconId = @"ic_action_call_dark.png";
+            iconId = @"ic_phone_number.png";
+            textColor = UIColorFromRGB(kHyperlinkColor);
             isPhoneNumber = YES;
         }
         else if ([key isEqualToString:@"website"])
         {
-            iconId = @"ic_world_globe_dark.png";
+            iconId = @"ic_website.png";
+            textColor = UIColorFromRGB(kHyperlinkColor);
             isUrl = YES;
         }
         else
         {
             if ([key rangeOfString:@"description"].length != 0)
             {
-                iconId = @"ic_action_note_dark.png";
+                iconId = @"ic_description.png";
             }
             else
             {
-                iconId = @"ic_action_info_dark.png";
+                iconId = @"ic_operator.png";
             }
             if (pType)
             {
@@ -192,7 +215,7 @@
                 else
                 {
                     isText = YES;
-                    isDescription = [iconId isEqualToString:@"ic_action_note_dark.png"];
+                    isDescription = [iconId isEqualToString:@"ic_description.png"];
                     textPrefix = pType.nameLocalized;
                 }
                 if (!isDescription && !icon)
@@ -205,12 +228,12 @@
                 }
                 if (!icon && isText)
                 {
-                    iconId = @"ic_action_note_dark.png";
+                    iconId = @"ic_description.png";
                 }
             }
             else
             {
-                textPrefix = [key capitalizedStringWithLocale:[NSLocale currentLocale]];
+                textPrefix = [OAUtilities capitalizeFirstLetterAndLowercase:key];
             }
         }
         
@@ -218,59 +241,70 @@
         {
             if (isDescription)
             {
-                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_action_note_dark.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
             }
             else
             {
                 [_rows addObject:[[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder name:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl]];
             }
         }
-        
-        [descriptions sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
-            if (row1.order < row2.order)
-            {
-                return NSOrderedAscending;
-            }
-            else if (row1.order == row2.order)
-            {
-                return [row1.name localizedCompare:row2.name];
-            }
-            else
-            {
-                return NSOrderedDescending;
-            }
-        }];
-        
-        NSString *langSuffix = [NSString stringWithFormat:@":%@", prefLang];
-        OARowInfo *descInPrefLang = nil;
-        for (OARowInfo *desc in descriptions)
-        {
-            if (desc.key.length > langSuffix.length
-                && [[desc.key substringFromIndex:desc.key.length - langSuffix.length] isEqualToString:langSuffix])
-            {
-                descInPrefLang = desc;
-                break;
-            }
-        }
-        if (descInPrefLang)
-        {
-            [descriptions removeObject:descInPrefLang];
-            [descriptions insertObject:descInPrefLang atIndex:0];
-        }
-
-        for (OARowInfo *desc in descriptions)
-        {
-            [_rows addObject:desc];
-        }
-        
     }];
-
-    if (self.showCoords)
+    
+    [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
+        if (row1.order < row2.order)
+        {
+            return NSOrderedAscending;
+        }
+        else if (row1.order == row2.order)
+        {
+            return [row1.name localizedCompare:row2.name];
+        }
+        else
+        {
+            return NSOrderedDescending;
+        }
+    }];
+    
+    NSString *langSuffix = [NSString stringWithFormat:@":%@", prefLang];
+    OARowInfo *descInPrefLang = nil;
+    for (OARowInfo *desc in descriptions)
     {
-        [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_action_get_my_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+        if (desc.key.length > langSuffix.length
+            && [[desc.key substringFromIndex:desc.key.length - langSuffix.length] isEqualToString:langSuffix])
+        {
+            descInPrefLang = desc;
+            break;
+        }
+    }
+    if (descInPrefLang)
+    {
+        [descriptions removeObject:descInPrefLang];
+        [descriptions insertObject:descInPrefLang atIndex:0];
     }
     
-    _contentHeight = _rows.count * 44.0;
+    for (OARowInfo *desc in descriptions)
+    {
+        [_rows addObject:desc];
+    }
+
+    [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+    
+    CGFloat h = 0;
+    CGFloat textWidth = self.tableView.bounds.size.width - 60.0;
+    for (OARowInfo *row in _rows)
+    {
+        NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
+        CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+        CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+        
+        CGFloat rowHeight = MAX(bounds.height, 21.0) + 12.0 + 11.0;
+        row.height = rowHeight;
+        row.moreText = fullBounds.height > bounds.height;
+        
+        h += rowHeight;
+    }
+    
+    _contentHeight = h;
 }
 
 - (CGFloat)contentHeight
@@ -281,6 +315,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.tableView.separatorInset = UIEdgeInsetsMake(0, 50, 0, 0);
     [self buildRows];
 }
 
@@ -297,7 +332,8 @@
 - (void)setContentBackgroundColor:(UIColor *)color
 {
     [super setContentBackgroundColor:color];
-    _tableView.backgroundColor = color;
+    self.tableView.backgroundColor = color;
+    _contentColor = color;
 }
 
 
@@ -315,23 +351,30 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString* const reusableIdentifierText = @"OAIconTextTableViewCell";
+    static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
-    OAIconTextTableViewCell* cell;
-    cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+    OATargetInfoViewCell* cell;
+    cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-        cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.arrowIconView.hidden = YES;
-        [cell showImage:YES];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
+        cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
     }
+    if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+    {
+        cell.iconView.contentMode = UIViewContentModeCenter;
+    }
+    else
+    {
+        cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+    }
+    cell.backgroundColor = _contentColor;
     cell.iconView.image = info.icon;
     cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
     cell.textView.textColor = info.textColor;
+    cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
     
     return cell;
 }
@@ -352,11 +395,28 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 44.0;
+    OARowInfo *info = _rows[indexPath.row];
+    return info.height;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    OARowInfo *info = _rows[indexPath.row];
+    if (info.isPhoneNumber)
+    {
+        [OAUtilities callPhone:info.text];
+    }
+    else if (info.isUrl)
+    {
+        [OAUtilities callUrl:info.text];
+    }
+    else if (info.isText && info.moreText)
+    {
+        OAEditDescriptionViewController *_editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO readOnly:YES];
+        [self.navController pushViewController:_editDescController animated:YES];
+    }
 }
 
 @end

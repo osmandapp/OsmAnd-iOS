@@ -10,6 +10,7 @@
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
+#import "OAAppSettings.h"
 
 // called from libxml functions
 @interface OAPOIParser (LibXMLParserMethods)
@@ -169,6 +170,8 @@ static const char *kOrderAttributeName = "order";
 static NSUInteger kOrderAttributeNameLength = 6;
 static const char *kTypeAttributeName = "type";
 static NSUInteger kTypeAttributeNameLength = 5;
+static const char *kLangAttributeName = "lang";
+static NSUInteger kLangAttributeNameLength = 5;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -182,7 +185,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         NSString *tag = nil;
         BOOL top = NO;
         
-        for(int i = 0; i < attributeCount; i++)
+        for (int i = 0; i < attributeCount; i++)
         {
             if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
                             kNameAttributeNameLength))
@@ -226,7 +229,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         NSString *name = nil;
         BOOL top = NO;
 
-        for(int i = 0; i < attributeCount; i++)
+        for (int i = 0; i < attributeCount; i++)
         {
             if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
                             kNameAttributeNameLength))
@@ -267,7 +270,32 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     }
     else if (0 == strncmp((const char *)localname, kPoiAdditionalElementName, kPoiAdditionalElementNameLength))
     {
-        [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes];
+        BOOL lang = NO;
+        
+        for (int i = 0; i < attributeCount; i++)
+        {
+            if (0 == strncmp((const char*)attributes[i].localname, kLangAttributeName,
+                             kLangAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                lang = [[value lowercaseString] isEqualToString:@"true"];
+                break;
+            }
+        }
+        
+        OAPOIBaseType *baseType = [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:nil baseType:nil];
+        if (lang)
+        {
+            for (NSString *lng in [[OAAppSettings sharedManager] mapLanguages])
+            {
+                [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:lng baseType:baseType];
+            }
+            [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:@"en" baseType:nil];
+        }
     }
 }
 
@@ -405,7 +433,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 }
 
 - (OAPOIType *)parsePoiAdditional:(const xmlChar *)localname attributeCount:(int)attributeCount
-                 attributes:(xmlSAX2Attributes *)attributes
+                       attributes:(xmlSAX2Attributes *)attributes lang:(NSString *)lang baseType:(OAPOIBaseType *)baseType
 {
     if (!_currentPOICategory)
     {
@@ -487,9 +515,20 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         }
     }
     
+    if (lang)
+    {
+        name = [name stringByAppendingString:[NSString stringWithFormat:@":%@", lang]];
+    }
+    if (lang && tag)
+    {
+        tag = [tag stringByAppendingString:[NSString stringWithFormat:@":%@", lang]];
+    }
+    
     OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
     poiType.filter = _currentPOIFilter;
     poiType.tag = _currentPOICategory.tag;
+    poiType.baseLangType = baseType;
+    poiType.lang = lang;
     poiType.tag = tag ? tag : _currentPOICategory.tag;
     poiType.value = value;
     poiType.reference = reference;

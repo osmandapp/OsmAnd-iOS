@@ -7,7 +7,8 @@
 //
 
 #import "OAUtilities.h"
-
+#import "PXAlertView.h"
+#import "Localization.h"
 #import <UIKit/UIDevice.h>
 
 @implementation NSString (util)
@@ -423,5 +424,73 @@
     NSString *firstLanguage = [[NSLocale preferredLanguages] firstObject];
     return [[firstLanguage componentsSeparatedByString:@"-"] firstObject];
 }
+
++ (NSString *) capitalizeFirstLetterAndLowercase:(NSString *)s
+{
+    if (s && s.length > 1)
+    {
+        return [[[s substringToIndex:1] uppercaseStringWithLocale:[NSLocale currentLocale]] stringByAppendingString:[[s substringFromIndex:1] lowercaseStringWithLocale:[NSLocale currentLocale]]];
+    }
+    else
+    {
+        return s;
+    }
+}
+
++ (NSString *)translatedLangName:(NSString *)lang
+{
+    NSString *langName = [[NSLocale currentLocale] displayNameForKey:NSLocaleIdentifier value:lang];
+    if (!langName)
+        langName = lang;
+    return langName;
+}
+
+
++ (void)callUrl:(NSString *)url
+{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
+}
+
++ (NSString *)stripNonDigits:(NSString *)input
+{
+    NSCharacterSet *doNotWant = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
+    return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
+}
+
++ (void)callPhone:(NSString *)phonesString
+{
+    NSArray* phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
+    NSMutableArray *parsedPhones = [NSMutableArray array];
+    for (NSString *phone in phones)
+    {
+        NSString *p = [OAUtilities stripNonDigits:phone];
+        [parsedPhones addObject:p];
+    }
+    
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 0; i <parsedPhones.count; i++)
+        [images addObject:@"ic_phone_number"];
+    
+    [PXAlertView showAlertWithTitle:OALocalizedString(@"make_call")
+                            message:nil
+                        cancelTitle:OALocalizedString(@"shared_string_cancel")
+                        otherTitles:parsedPhones
+                          otherDesc:nil
+                        otherImages:images
+                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
+                             if (!cancelled)
+                                 for (int i = 0; i < parsedPhones.count; i++)
+                                 {
+                                     if (buttonIndex == i)
+                                     {
+                                         NSString *p = parsedPhones[i];
+                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
+                                         break;
+                                     }
+                                 }
+                         }];
+    
+}
+
 
 @end

@@ -41,6 +41,7 @@
 
 #define kBottomToolbarBackgroundColor 0xf9f9f9
 #define kBottomToolbarTopLineColor 0xC4C4C4
+#define kHyperlinkColor 0x007aff
 
 #define kDestinationMinDistanceCheckMarkVisibleMeters 50.0
 

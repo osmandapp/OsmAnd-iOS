@@ -1424,16 +1424,6 @@
         {
             [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
-        
-        if (entry.declaration->tagName.startsWith(QString("description")) && !symbol.desc)
-        {
-            symbol.desc = entry.value.toString().toNSString();
-        }
-        else if (descFieldLoc && entry.declaration->tagName == QString::fromNSString(descFieldLoc))
-        {
-            symbol.desc = entry.value.toString().toNSString();
-        }
-        
     }
     
     symbol.values = values;
@@ -1836,8 +1826,6 @@
 
     if (symbol.values)
         [userInfo setObject:symbol.values forKey:@"values"];
-    if (symbol.desc)
-        [userInfo setObject:symbol.desc forKey:@"desc"];
     if (symbol.localizedNames)
         [userInfo setObject:symbol.localizedNames forKey:@"names"];
     if (symbol.localizedContent)

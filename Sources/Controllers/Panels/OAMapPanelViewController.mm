@@ -1006,7 +1006,6 @@ typedef enum
 
     BOOL isPlace = ([params objectForKey:@"place"] != nil);
 
-    NSString *desc = [params objectForKey:@"desc"];
     NSDictionary *values = [params objectForKey:@"values"];
 
     NSDictionary *names = [params objectForKey:@"names"];
@@ -1147,6 +1146,12 @@ typedef enum
         if (poi.nameLocalized.length == 0)
             poi.nameLocalized = poiType.nameLocalized;
         
+        UIImage *poiIcon = [poiType icon];
+        if (poiIcon)
+        {
+            icon = [OAUtilities tintImageWithColor:poiIcon color:UIColorFromRGB(0xfd8f25)] ;
+        }
+        
         targetPoint.type = OATargetPOI;
         targetPoint.targetObj = poi;
     }
@@ -1219,11 +1224,7 @@ typedef enum
     targetPoint.values = values;
     targetPoint.localizedNames = names;
     targetPoint.localizedContent = content;
-    
-    if (desc.length > 0)
-        targetPoint.titleAddress = desc;
-    else
-        targetPoint.titleAddress = roadTitle;    
+    targetPoint.titleAddress = roadTitle;
     
     
     if (_activeTargetType == OATargetGPXEdit && ![objectType isEqualToString:@"waypoint"])
@@ -1290,8 +1291,6 @@ typedef enum
         desc = [NSString stringWithString:ds];
          */
     }
-    
-    targetPoint.desc = desc;
     
     [_targetMenuView setTargetPoint:targetPoint];
     
@@ -1815,8 +1814,6 @@ typedef enum
     
     wptViewController.mapViewController = self.mapViewController;
     wptViewController.wptDelegate = self;
-    wptViewController.desc = self.targetMenuView.targetPoint.desc;
-    [wptViewController setItemDesc:self.targetMenuView.targetPoint.desc];
     
     [_mapViewController addNewWpt:wptViewController.wpt.point gpxFileName:gpxFileName];
     wptViewController.wpt.groups = _mapViewController.foundWptGroups;

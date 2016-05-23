@@ -65,7 +65,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) OAMapSymbolType type;
 @property (nonatomic) NSInteger sortIndex;
 
-@property (nonatomic) NSString *desc;
 @property (nonatomic) NSDictionary *values;
 
 @property (nonatomic) BOOL isPlace;

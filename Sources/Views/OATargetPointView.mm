@@ -762,52 +762,6 @@
     [self.delegate targetViewSizeChanged:frame animated:YES];
 }
 
-+ (void)callUrl:(NSString *)url
-{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding]]];
-}
-
-+ (NSString *)stripNonDigits:(NSString *)input
-{
-    NSCharacterSet *doNotWant = [[NSCharacterSet characterSetWithCharactersInString:@"+0123456789"] invertedSet];
-    return [[input componentsSeparatedByCharactersInSet: doNotWant] componentsJoinedByString: @""];
-}
-
-- (void)callPhone:(NSString *)phonesString
-{
-    NSArray* phones = [phonesString componentsSeparatedByCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@",:;."]];
-    NSMutableArray *parsedPhones = [NSMutableArray array];
-    for (NSString *phone in phones)
-    {
-        NSString *p = [OATargetPointView stripNonDigits:phone];
-        [parsedPhones addObject:p];
-    }
-    
-    NSMutableArray *images = [NSMutableArray array];
-    for (int i = 0; i <parsedPhones.count; i++)
-        [images addObject:@"ic_phone_number"];
-    
-    [PXAlertView showAlertWithTitle:OALocalizedString(@"make_call")
-                            message:nil
-                        cancelTitle:OALocalizedString(@"shared_string_cancel")
-                        otherTitles:parsedPhones
-                          otherDesc:nil
-                        otherImages:images
-                         completion:^(BOOL cancelled, NSInteger buttonIndex) {
-                             if (!cancelled)
-                                 for (int i = 0; i < parsedPhones.count; i++)
-                                 {
-                                     if (buttonIndex == i)
-                                     {
-                                         NSString *p = parsedPhones[i];
-                                         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
-                                         break;
-                                     }
-                                 }
-                         }];
-    
-}
-
 - (void)prepare
 {
     [self doInit:NO];
@@ -928,22 +882,7 @@
         _backView4.hidden = YES;
         _buttonMore.hidden = YES;
     }
-    
-    /*
-    if (_targetPoint.openingHours)
-    {
-        OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:_targetPoint.openingHours];
-        BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
         
-        UIColor *color;
-        if (isOpened)
-            color = UIColorFromRGB(0x2BBE31);
-        else
-            color = UIColorFromRGB(0xDA3A3A);
-        [_infoOpeningHoursText setTitleColor:color forState:UIControlStateNormal];
-    }
-     */
-    
     if (_targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking)
     {
         [_buttonDirection setTitle:OALocalizedString(@"shared_string_dismiss") forState:UIControlStateNormal];
@@ -976,7 +915,7 @@
     if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
         [self.zoomView removeFromSuperview];
     
-    BOOL coordsHidden = (_targetPoint.titleAddress.length > 0 && [_targetPoint.title rangeOfString:_targetPoint.titleAddress].length == 0);
+    BOOL coordsHidden = [_targetPoint isLocationHiddenInTitle];
     
     if (_targetPoint.type == OATargetGPXRoute)
     {
@@ -1411,7 +1350,7 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 40.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
     
     CGFloat width = self.frame.size.width;
     

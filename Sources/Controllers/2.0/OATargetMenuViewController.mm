@@ -41,6 +41,16 @@
     return OALocalizedString(@"sett_arr_loc");
 }
 
+- (NSAttributedString *)getAttributedTypeStr
+{
+    return nil;
+}
+
+- (NSAttributedString *)getAttributedCommonTypeStr
+{
+    return nil;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

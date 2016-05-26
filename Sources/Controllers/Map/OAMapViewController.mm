@@ -1770,6 +1770,7 @@
         symbol.type = OAMapSymbolLocation;
         symbol.touchPoint = touchPoint;
         symbol.location = CLLocationCoordinate2DMake(lat, lon);
+        symbol.poiType = [[OAPOILocationType alloc] init];
         [OAMapViewController postTargetNotification:symbol];
     }
 }

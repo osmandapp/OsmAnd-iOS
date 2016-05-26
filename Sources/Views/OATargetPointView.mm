@@ -1434,13 +1434,22 @@
 {
     if (self.customController)
     {
-        NSString *typeStr = [self.customController getTypeStr];
-        if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
+        NSAttributedString *attributedTypeStr = [self.customController getAttributedTypeStr];
+        if (attributedTypeStr)
         {
-            typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            [_coordinateLabel setAttributedText:attributedTypeStr];
+            [_coordinateLabel setTextColor:UIColorFromRGB(0x969696)];
+            return;
         }
-        
-        self.addressStr = typeStr;
+        else
+        {
+            NSString *typeStr = [self.customController getTypeStr];
+            if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
+            {
+                typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+            }
+            self.addressStr = typeStr;
+        }
     }
     else
     {
@@ -1655,6 +1664,7 @@
             
             _targetPoint.title = favoriteLocation->getTitle().toNSString();
             [_addressLabel setText:_targetPoint.title];
+            [self updateAddressLabel];
             _targetPoint.icon = [UIImage imageNamed:favCol.iconName];
             _imageView.image = _targetPoint.icon;
         });

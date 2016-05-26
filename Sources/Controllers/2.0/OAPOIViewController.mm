@@ -144,8 +144,11 @@
     if (self.poi.type)
     {
         OAPOIBaseType *poiType = self.poi.type.filter ? self.poi.type.filter : self.poi.type.category;
-        UIImage *icon = [self applyColor:[poiType icon]];
-        [_rows addObject:[[OARowInfo alloc] initWithKey:poiType.name icon:icon textPrefix:nil text:poiType.nameLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        if (poiType)
+        {
+            UIImage *icon = [self applyColor:[poiType icon]];
+            [_rows addObject:[[OARowInfo alloc] initWithKey:poiType.name icon:icon textPrefix:nil text:poiType.nameLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        }
     }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {

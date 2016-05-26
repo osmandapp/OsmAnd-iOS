@@ -103,8 +103,57 @@
     return self;
 }
 
+-(NSAttributedString *)getAttributedTypeStr
+{
+    int wptCount = (int)_gpxRouter.routeDoc.activePoints.count;
+    NSTimeInterval tripDuration = [_gpxRouter getRouteDuration];
+    
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
+    UIFont *font = [UIFont fontWithName:@"AvenirNext-Medium" size:12];
+    
+    NSString *waypointsStr = [NSString stringWithFormat:@"%d", wptCount];
+    NSString *timeMovingStr = [[OsmAndApp instance] getFormattedTimeInterval:tripDuration shortFormat:NO];
+    
+    NSMutableAttributedString *stringWaypoints = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", waypointsStr]];
+    NSMutableAttributedString *stringTimeMoving;
+    if (tripDuration > 0)
+        stringTimeMoving = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"   %@", timeMovingStr]];
+    
+    NSTextAttachment *waypointsAttachment = [[NSTextAttachment alloc] init];
+    waypointsAttachment.image = [UIImage imageNamed:@"ic_gpx_points.png"];
+    
+    NSTextAttachment *timeMovingAttachment;
+    if (tripDuration > 0)
+    {
+        NSString *imageName = [_gpxRouter getRouteVariantTypeSmallIconName];
+        timeMovingAttachment = [[NSTextAttachment alloc] init];
+        timeMovingAttachment.image = [UIImage imageNamed:imageName];
+    }
+    
+    NSAttributedString *waypointsStringWithImage = [NSAttributedString attributedStringWithAttachment:waypointsAttachment];
+    NSAttributedString *timeMovingStringWithImage;
+    if (tripDuration > 0)
+        timeMovingStringWithImage = [NSAttributedString attributedStringWithAttachment:timeMovingAttachment];
+    
+    [stringWaypoints replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:waypointsStringWithImage];
+    [stringWaypoints addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+    if (tripDuration > 0)
+    {
+        [stringTimeMoving replaceCharactersInRange:NSMakeRange(1, 1) withAttributedString:timeMovingStringWithImage];
+        [stringTimeMoving addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(1, 1)];
+    }
+    
+    [string appendAttributedString:stringWaypoints];
+    if (stringTimeMoving)
+        [string appendAttributedString:stringTimeMoving];
+    
+    [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+
+    return string;
+}
+
 - (void)cancelPressed
-{    
+{
     if (self.delegate)
         [self.delegate btnCancelPressed];
     
@@ -246,7 +295,7 @@
     
     UILabel *badgeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 50.0)];
     badgeLabel.font = [UIFont fontWithName:@"AvenirNext-Medium" size:11.0];
-    badgeLabel.text = [NSString stringWithFormat:@"%d", _gpxRouter.routeDoc.locationMarks.count];
+    badgeLabel.text = [NSString stringWithFormat:@"%d", (int)_gpxRouter.routeDoc.locationMarks.count];
     badgeLabel.textColor = [self getNavBarColor];
     badgeLabel.textAlignment = NSTextAlignmentCenter;
     [badgeLabel sizeToFit];

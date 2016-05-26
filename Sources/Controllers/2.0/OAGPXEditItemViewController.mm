@@ -26,6 +26,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXRouter.h"
+#import "OAGPXItemViewController.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -127,6 +128,11 @@
         _showCurrentTrack = YES;
     }
     return self;
+}
+
+-(NSAttributedString *)getAttributedTypeStr
+{
+    return [OAGPXItemViewController getAttributedTypeStr:self.gpx];
 }
 
 - (void)updateCurrentGPXData

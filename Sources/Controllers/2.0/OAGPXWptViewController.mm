@@ -56,7 +56,7 @@
         
         // Create wpt
         NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        int defaultColor = 0;
+        NSInteger defaultColor = 0;
         if ([userDefaults objectForKey:kWptDefaultColorKey])
             defaultColor = [userDefaults integerForKey:kWptDefaultColorKey];
         
@@ -92,7 +92,7 @@
 }
 
 - (void)viewDidLoad
-{    
+{
     [super viewDidLoad];
     
     OAAppSettings* settings = [OAAppSettings sharedManager];

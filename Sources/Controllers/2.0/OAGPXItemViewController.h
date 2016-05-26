@@ -60,4 +60,6 @@ typedef enum
 - (id)initWithCurrentGPXItem;
 - (id)initWithCurrentGPXItem:(OAGPXItemViewControllerState *)ctrlState;
 
++(NSAttributedString *)getAttributedTypeStr:(OAGPX *)item;
+
 @end

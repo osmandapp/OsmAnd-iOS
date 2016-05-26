@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #include <OsmAndCore.h>
+#include <OsmAndCore/Data/Amenity.h>
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
@@ -51,5 +52,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 -(void)findPOIsByKeyword:(NSString *)keyword;
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 -(BOOL)breakSearch;
+
++ (void)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(NSString *)nativeName nameLocalized:(NSMutableString *)nameLocalized names:(NSMutableDictionary *)names;
++ (void)processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
 
 @end

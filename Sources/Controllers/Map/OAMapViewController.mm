@@ -38,6 +38,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
 #import "OAMapCreatorHelper.h"
+#import "OAPOI.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -1402,7 +1403,7 @@
     [self pointContextMenuGestureDetected:recognizer];
 }
 
-- (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues descFieldLoc:(NSString *)descFieldLoc
+- (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
 {
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
@@ -1427,7 +1428,38 @@
     }
     
     symbol.values = values;
-    symbol.localizedContent = [NSDictionary dictionaryWithDictionary:content];
+    symbol.localizedContent = content;
+}
+
+- (void)processAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity symbol:(OAMapSymbol *)symbol
+{
+    const auto& decodedCategories = amenity->getDecodedCategories();
+    if (!decodedCategories.isEmpty())
+    {
+        const auto& entry = decodedCategories.first();
+        if (!symbol.poiType)
+            symbol.poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
+    }
+
+    symbol.caption = amenity->nativeName.toNSString();
+    
+    NSMutableDictionary *names = [NSMutableDictionary dictionary];
+    NSMutableString *nameLocalized = [NSMutableString string];
+    [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:symbol.caption nameLocalized:nameLocalized names:names];
+    if (nameLocalized.length > 0)
+        symbol.caption = nameLocalized;
+    symbol.localizedNames = names;
+    
+    const auto decodedValues = amenity->getDecodedValues();
+    [self processSymbolFields:symbol decodedValues:decodedValues];
+    
+    if (symbol.poiType)
+    {
+        if ([symbol.poiType.name isEqualToString:@"wiki_place"])
+            symbol.type = OAMapSymbolWiki;
+        else
+            symbol.type = OAMapSymbolPOI;
+    }
 }
 
 - (void)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
@@ -1559,77 +1591,25 @@
             if (amenitySymbolGroup != nullptr)
             {
                 const auto amenity = amenitySymbolGroup->amenity;
+                [self processAmenity:amenity symbol:symbol];
 
-                NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-                NSString *descFieldLoc;
-                if (prefLang)
-                    descFieldLoc = [@"description:" stringByAppendingString:prefLang];
-                
-                const auto& decodedCategories = amenity->getDecodedCategories();
-                if (!decodedCategories.isEmpty())
-                {
-                    const auto& entry = decodedCategories.first();
-                    if (!symbol.poiType)
-                        symbol.poiType = [poiHelper getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
-                }
-
-                if (symbol.poiType)
-                {
-                    symbol.icon = [symbol.poiType mapIcon];
-                    if ([symbol.poiType.name isEqualToString:@"wiki_place"])
-                    {
-                        symbol.type = OAMapSymbolWiki;
-                    }
-                    else
-                    {
-                        symbol.type = OAMapSymbolPOI;
-                    }
-                }
-                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                if (!symbol.poiType && [self findWpt:CLLocationCoordinate2DMake(lat, lon)])
                 {
                     symbol.type = OAMapSymbolWpt;
                     symbol.foundWpt = self.foundWpt;
                     symbol.foundWptGroups = self.foundWptGroups;
                     symbol.foundWptDocPath = self.foundWptDocPath;
                 }
-
-                symbol.caption = amenity->nativeName.toNSString();
-
-                NSMutableDictionary *names = [NSMutableDictionary dictionary];
-                const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                {
-                    if (lang != QString::null && entry.key() == lang)
-                        symbol.caption = entry.value().toNSString();
-                    
-                    [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-                }
-                
-                if (![names objectForKey:@""])
-                    [names setObject:amenity->nativeName.toNSString() forKey:@""];
-                
-                symbol.localizedNames = [NSDictionary dictionaryWithDictionary:names];
-                
-                const auto decodedValues = amenity->getDecodedValues();
-                [self processSymbolFields:symbol decodedValues:decodedValues descFieldLoc:descFieldLoc];
             }
             else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
             {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
-                
-                NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-
                 if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
                 {
                     std::shared_ptr<const OsmAnd::Amenity> amenity;
                     if (_obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity))
                     {
-                        NSString *descFieldLoc;
-                        if (prefLang)
-                            descFieldLoc = [@"description:" stringByAppendingString:prefLang];
-                        
-                        const auto& decodedValues = amenity->getDecodedValues();
-                        [self processSymbolFields:symbol decodedValues:decodedValues descFieldLoc:descFieldLoc];
+                        [self processAmenity:amenity symbol:symbol];
                     }
                 }
                 
@@ -1692,7 +1672,7 @@
                                 if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(sym))
                                 {
                                     NSString *s = rasterMapSymbol->content.toNSString();
-                                    if (symbol.caption)
+                                    if (symbol.caption && ![s hasPrefix:symbol.caption])
                                         symbol.captionExt = s;
                                     if (!symbol.caption && (!symbol.buildingNumber || ![s isEqualToString:symbol.buildingNumber]))
                                         symbol.caption = s;
@@ -1768,7 +1748,7 @@
                 self.foundWptDocPath = s.foundWptDocPath;
             }
             
-            [self postTargetNotification:s];
+            [OAMapViewController postTargetNotification:s];
             return;
         }
     
@@ -1785,11 +1765,11 @@
         symbol.type = OAMapSymbolLocation;
         symbol.touchPoint = touchPoint;
         symbol.location = CLLocationCoordinate2DMake(lat, lon);
-        [self postTargetNotification:symbol];
+        [OAMapViewController postTargetNotification:symbol];
     }
 }
 
-- (void)postTargetNotification:(OAMapSymbol *)symbol
++ (void)postTargetNotification:(OAMapSymbol *)symbol
 {    
     if (!symbol.caption)
         symbol.caption = @"";
@@ -1802,6 +1782,9 @@
     
     if (symbol.isPlace)
         [userInfo setObject:@"yes" forKey:@"place"];
+
+    if (symbol.centerMap)
+        [userInfo setObject:@"yes" forKey:@"centerMap"];
 
     if (symbol.type == OAMapSymbolFavorite)
         [userInfo setObject:@"favorite" forKey:@"objectType"];
@@ -1834,6 +1817,24 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
                                                       userInfo:userInfo];
+}
+
++ (OAMapSymbol *)getMapSymbol:(OAPOI *)poi
+{
+    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+    symbol.caption = poi.nameLocalized.length > 0 ? poi.nameLocalized : poi.name;
+    symbol.poiType = poi.type;
+    if ([symbol.poiType.name isEqualToString:@"wiki_place"])
+        symbol.type = OAMapSymbolWiki;
+    else
+        symbol.type = OAMapSymbolPOI;
+    symbol.location = CLLocationCoordinate2DMake(poi.latitude, poi.longitude);
+    symbol.icon = [poi icon];
+    symbol.values = poi.values;
+    symbol.localizedNames = poi.localizedNames;
+    symbol.localizedContent = poi.localizedContent;
+    
+    return symbol;
 }
 
 -(UIImage *)findIconAtPoint:(OsmAnd::PointI)touchPoint
@@ -2170,38 +2171,6 @@
         _animatedPin.layer.anchorPoint = CGPointMake(0.5, 1.0);
         [_animatedPin.layer addAnimation:animation forKey:@"popup"];
         
-        /*
-        const CGFloat kDropCompressAmount = 0.1;
-        
-        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform"];
-        animation.duration = 0.1;
-        animation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn];
-        animation.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeTranslation(0, -100, 0)];
-        animation.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-        
-        CABasicAnimation *animation2 = [CABasicAnimation animationWithKeyPath:@"transform"];
-        animation2.duration = 0.10;
-        animation2.beginTime = animation.duration;
-        animation2.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        animation2.toValue = [NSValue valueWithCATransform3D:CATransform3DScale(CATransform3DMakeTranslation(0, _animatedPin.layer.frame.size.height * kDropCompressAmount, 0), 1.0, 1.0 - kDropCompressAmount, 1.0)];
-        animation2.fillMode = kCAFillModeForwards;
-        
-        CABasicAnimation *animation3 = [CABasicAnimation animationWithKeyPath:@"transform"];
-        animation3.duration = 0.15;
-        animation3.beginTime = animation.duration + animation2.duration;
-        animation3.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
-        animation3.toValue = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-        animation3.fillMode = kCAFillModeForwards;
-        
-        CAAnimationGroup *group = [CAAnimationGroup animation];
-        group.animations = [NSArray arrayWithObjects:animation, animation2, animation3, nil];
-        group.duration = animation.duration + animation2.duration + animation3.duration;
-        group.fillMode = kCAFillModeForwards;
-        
-        group.delegate = self;
-        
-        [_animatedPin.layer addAnimation:group forKey:nil];
-         */
         [self.view addSubview:_animatedPin];
     }
     else
@@ -3187,74 +3156,7 @@
 
             if (_showPoiOnMap)
             {
-                auto categoriesFilter = QHash<QString, QStringList>();
-                if (_poiCategoryName && _poiTypeName) {
-                    categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList(QString::fromNSString(_poiTypeName)));
-                } else if (_poiCategoryName) {
-                    categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
-                }
-                
-                OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter = ([self]
-                                                (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
-                                                {
-                                                    bool res = false;
-                                                    
-                                                    if (_poiFilterName)
-                                                    {
-                                                        NSString *category;
-                                                        NSString *type;
-                                                        const auto& decodedCategories = amenity->getDecodedCategories();
-                                                        if (!decodedCategories.isEmpty())
-                                                        {
-                                                            const auto& entry = decodedCategories.first();
-                                                            category = entry.category.toNSString();
-                                                            type = entry.subcategory.toNSString();
-                                                        }
-                                                        
-                                                        if (category && type)
-                                                        {
-                                                            OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
-                                                            if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
-                                                                res = true;
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        res = true;
-                                                    }
-                                                    
-                                                    if (res && _poiKeyword)
-                                                    {
-                                                        NSString *name = amenity->nativeName.toNSString();
-
-                                                        NSString *nameLocalized;
-                                                        const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                                                        for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                                                        {
-                                                            if (lang != QString::null && entry.key() == lang)
-                                                                nameLocalized = entry.value().toNSString();
-                                                        }
-                                                        
-                                                        if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
-                                                        {
-                                                            res = true;
-                                                        }
-                                                        else
-                                                        {
-                                                            res = false;
-                                                        }
-
-                                                    }
-                                                    
-                                                    return res;
-                                                });
-                
-                if (categoriesFilter.count() > 0)
-                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-                else
-                    _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
-
-                [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+                [self doShowPoiOnMap];
             }
 
 #if defined(OSMAND_IOS_DEV)
@@ -3392,8 +3294,90 @@
     _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self updateCurrentMapSource];
+        [self doShowPoiOnMap];
     });
+}
+
+- (void)doShowPoiOnMap
+{
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        auto categoriesFilter = QHash<QString, QStringList>();
+        if (_poiCategoryName && _poiTypeName) {
+            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList(QString::fromNSString(_poiTypeName)));
+        } else if (_poiCategoryName) {
+            categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
+        }
+        
+        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter = ([self]
+                                                                      (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
+                                                                      {
+                                                                          bool res = false;
+                                                                          
+                                                                          if (_poiFilterName)
+                                                                          {
+                                                                              NSString *category;
+                                                                              NSString *type;
+                                                                              const auto& decodedCategories = amenity->getDecodedCategories();
+                                                                              if (!decodedCategories.isEmpty())
+                                                                              {
+                                                                                  const auto& entry = decodedCategories.first();
+                                                                                  category = entry.category.toNSString();
+                                                                                  type = entry.subcategory.toNSString();
+                                                                              }
+                                                                              
+                                                                              if (category && type)
+                                                                              {
+                                                                                  OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
+                                                                                  if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
+                                                                                      res = true;
+                                                                              }
+                                                                          }
+                                                                          else
+                                                                          {
+                                                                              res = true;
+                                                                          }
+                                                                          
+                                                                          if (res && _poiKeyword)
+                                                                          {
+                                                                              NSString *name = amenity->nativeName.toNSString();
+                                                                              
+                                                                              NSString *nameLocalized;
+                                                                              const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+                                                                              for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                                                                              {
+                                                                                  if (lang != QString::null && entry.key() == lang)
+                                                                                      nameLocalized = entry.value().toNSString();
+                                                                              }
+                                                                              
+                                                                              if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
+                                                                              {
+                                                                                  res = true;
+                                                                              }
+                                                                              else
+                                                                              {
+                                                                                  res = false;
+                                                                              }
+                                                                              
+                                                                          }
+                                                                          
+                                                                          return res;
+                                                                      });
+        
+
+        if (categoriesFilter.count() > 0)
+        {
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+        }
+        else
+        {
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+        }
+        
+        [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+    }
 }
 
 - (void)hidePoi
@@ -3404,7 +3388,16 @@
     _showPoiOnMap = NO;
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self updateCurrentMapSource];
+        OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+        
+        @synchronized(_rendererSync)
+        {
+            if (_amenitySymbolsProvider)
+            {
+                [mapView removeTiledSymbolsProvider:_amenitySymbolsProvider];
+                _amenitySymbolsProvider.reset();
+            }
+        }
     });
 }
 

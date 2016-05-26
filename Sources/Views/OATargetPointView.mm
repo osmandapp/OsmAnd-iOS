@@ -103,13 +103,6 @@
     CALayer *_verticalLine1;
     CALayer *_verticalLine2;
     CALayer *_verticalLine3;
-
-    UIScrollView *_infoView;
-    
-    UIFont *_infoFont;
-    
-    UIImageView *_infoCoordsImage;
-    UIButton *_infoCoordsText;
     
     CGFloat _frameTop;
 
@@ -127,9 +120,6 @@
 
     OATargetPointType _previousTargetType;
     UIImage *_previousTargetIcon;
-    
-    BOOL _coordsHidden;
-    NSString *_formattedCoords;
     
     BOOL _toolbarVisible;
     CGFloat _toolbarHeight;
@@ -164,10 +154,10 @@
         else if ([v isKindOfClass:[OATargetPointZoomView class]])
             self.zoomView = (OATargetPointZoomView *)v;
     }
-
+    
     if (self && self.zoomView)
         self.zoomView.delegate = self;
-
+    
     if (self)
     {
         self.frame = frame;
@@ -176,35 +166,12 @@
     return self;
 }
 
-- (void) setupInfoButton:(UIButton *)button
-{
-    button.titleLabel.font = [_infoFont copy];
-    [button setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    button.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-}
-
 -(void)awakeFromNib
 {
     _iapHelper = [OAIAPHelper sharedInstance];
     
     self.buttonDirection.imageView.clipsToBounds = NO;
     self.buttonDirection.imageView.contentMode = UIViewContentModeCenter;
-    
-    _infoView = [[UIScrollView alloc] initWithFrame:CGRectMake(0.0, 0.0, 320.0, 100.0)];
-    _infoView.backgroundColor = UIColorFromRGB(0xf2f2f2);
-
-    _infoFont = [UIFont fontWithName:@"AvenirNext-Medium" size:14.0];
-    
-    _infoCoordsImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"ic_coordinates"]];
-    _infoCoordsImage.contentMode = UIViewContentModeCenter;
-    [_infoView addSubview:_infoCoordsImage];
-    
-    _infoCoordsText = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self setupInfoButton:_infoCoordsText];
-    _infoCoordsText.userInteractionEnabled = NO;
-    [_infoView addSubview:_infoCoordsText];
     
     [self doUpdateUI];
 
@@ -400,14 +367,6 @@
                     cf.size.height = 0;
                 self.customController.contentView.frame = cf;
             }
-            else
-            {
-                CGRect cf = _infoView.frame;
-                cf.size.height = f.size.height - h;
-                if (cf.size.height < 0)
-                    cf.size.height = 0;
-                _infoView.frame = cf;
-            }
         }
         
         if (![self isLandscape] && [self hasInfo] && !_hideButtons)
@@ -494,15 +453,6 @@
                     cf.size.height = 0;
                 if (self.customController.contentView.frame.size.height < cf.size.height)
                     self.customController.contentView.frame = cf;
-            }
-            else
-            {
-                CGRect cf = _infoView.frame;
-                cf.size.height = frame.size.height - h;
-                if (cf.size.height < 0)
-                    cf.size.height = 0;
-                if (_infoView.frame.size.height < cf.size.height)
-                    _infoView.frame = cf;
             }
 
             [UIView animateWithDuration:.3 animations:^{
@@ -843,12 +793,7 @@
     
     if (self.customController.contentView)
     {
-        [_infoView removeFromSuperview];
         [self insertSubview:self.customController.contentView atIndex:0];
-    }
-    else
-    {
-        [self insertSubview:_infoView atIndex:0];
     }
     
     if (_buttonsCount > 3)
@@ -915,8 +860,6 @@
     if (_targetPoint.type != OATargetGPX && _targetPoint.type != OATargetGPXRoute)
         [self.zoomView removeFromSuperview];
     
-    BOOL coordsHidden = [_targetPoint isLocationHiddenInTitle];
-    
     if (_targetPoint.type == OATargetGPXRoute)
     {
         [self updateLeftButton];
@@ -928,9 +871,6 @@
         _buttonLeft.hidden = YES;
         _imageView.hidden = NO;
     }
-    
-    _infoCoordsImage.hidden = !coordsHidden;
-    _infoCoordsText.hidden = !coordsHidden;
     
     [self updateDirectionButton];
 }
@@ -969,7 +909,7 @@
 
 - (BOOL)hasInfo
 {
-    return _coordsHidden || (self.customController && [self.customController contentHeight] > 0.0);
+    return self.customController && [self.customController contentHeight] > 0.0;
 }
 
 - (void)applyTargetObjectChanges
@@ -1129,7 +1069,6 @@
                 
             } completion:^(BOOL finished) {
                 
-                [_infoView removeFromSuperview];
                 [self.zoomView removeFromSuperview];
                 [self removeFromSuperview];
             
@@ -1149,7 +1088,6 @@
             if (self.zoomView.superview)
                 _zoomView.alpha = 0.0;
 
-            [_infoView removeFromSuperview];
             [self.zoomView removeFromSuperview];
             [self removeFromSuperview];
             
@@ -1228,27 +1166,7 @@
     
     CGFloat hf = 0.0;
     
-    if (!self.customController || ![self.customController hasContent])
-    {
-        CGFloat infoWidth = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
-        
-        if (_coordsHidden)
-        {
-            CGSize s = [OAUtilities calculateTextBounds:_formattedCoords width:infoWidth - 55.0 font:_infoFont];
-            CGFloat ih = MAX(44.0, s.height + 16.0);
-            
-            _infoCoordsImage.frame = CGRectMake(0.0, hf, 50.0, ih);
-            _infoCoordsText.frame = CGRectMake(50.0, hf, infoWidth - 55.0, ih - 1.0);
-            [_infoCoordsText setTitle:_formattedCoords forState:UIControlStateNormal];
-            
-            hf += ih;
-        }
-        
-        hf -= 1.0;
-        _infoView.contentSize = CGSizeMake((landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth), hf);
-        hf = MIN(hf, DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
-    }
-    else
+    if (self.customController && [self.customController hasContent])
     {
         CGFloat chFull;
         CGFloat chFullScreen;
@@ -1356,16 +1274,11 @@
     
     if (landscape)
     {
-        CGFloat y = _topView.frame.origin.y + _topView.frame.size.height;
-        _infoView.frame = CGRectMake(0.0, y, width, DeviceScreenHeight - y - kOATargetPointButtonsViewHeight);
-        
         if (self.customController.contentView)
             self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
     }
     else
     {
-        _infoView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, _fullInfoHeight);
-
         if (self.customController.contentView)
             self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
     }
@@ -1460,7 +1373,7 @@
         _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
         OADestination *d = _targetPoint.targetObj;
-        [self updateCoordinateLabel];
+        [self updateAddressLabel];
         if (d && d.carPickupDateEnabled)
             [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
     }
@@ -1469,7 +1382,7 @@
         _imageView.image = _targetPoint.icon;
         double distance = [OAGPXRouter sharedInstance].routeDoc.totalDistance;
         self.addressLabel.text = [[OsmAndApp instance] getFormattedDistance:distance];
-        [self updateCoordinateLabel];
+        [self updateAddressLabel];
     }
     else
     {
@@ -1497,7 +1410,7 @@
         }
         
         [_addressLabel setText:t];
-        [self updateCoordinateLabel];
+        [self updateAddressLabel];
     }
     
     if (_targetPoint.type == OATargetParking)
@@ -1517,27 +1430,18 @@
     //    _buttonFavorite.enabled = (_targetPoint.type != OATargetFavorite);
 }
 
-- (void)updateCoordinateLabel
+- (void)updateAddressLabel
 {
-    _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetPoint.location];
-
-    if ([_targetPoint isLocationHiddenInTitle])
+    if (self.customController)
     {
-        _coordsHidden = YES;
+        //self.addressStr = self.customController.typeText;
         self.addressStr = _targetPoint.titleAddress;
     }
     else
     {
-        _coordsHidden = NO;
-        self.addressStr = _formattedCoords;
+        self.addressStr = _targetPoint.titleAddress;
     }
-    
-    if (self.customController)
-    {
-        self.customController.showCoords = _coordsHidden;
-        self.customController.formattedCoords = _formattedCoords;
-    }
-    
+        
     if (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit)
     {
         OAGPX *item = _targetPoint.targetObj;
@@ -1701,9 +1605,10 @@
     self.customController.delegate = self;
     self.customController.navController = self.navController;
     [self.customController setContentBackgroundColor:UIColorFromRGB(0xf2f2f2)];
+    self.customController.location = self.targetPoint.location;
     
-    self.customController.showCoords = [_targetPoint isLocationHiddenInTitle];
-
+    self.customController.view.frame = self.frame;
+    
     if (self.superview)
     {
         [self doUpdateUI];
@@ -2014,7 +1919,7 @@
     if ((_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute) && self.customController)
     {
         _targetPoint.targetObj = [self.customController getTargetObj];
-        [self updateCoordinateLabel];
+        [self updateAddressLabel];
 
         OAGPX *item = _targetPoint.targetObj;
         if (!item.newGpx)

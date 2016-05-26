@@ -1603,12 +1603,6 @@
 		8489EEC51CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		8489EEC61CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
-		848A14BF1B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14BD1B209FC100A31AE7 /* OAWikiMenuViewController.m */; };
-		848A14C01B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14BD1B209FC100A31AE7 /* OAWikiMenuViewController.m */; };
-		848A14C11B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14BD1B209FC100A31AE7 /* OAWikiMenuViewController.m */; };
-		848A14C21B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14BE1B209FC100A31AE7 /* OAWikiMenuViewController.xib */; };
-		848A14C31B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14BE1B209FC100A31AE7 /* OAWikiMenuViewController.xib */; };
-		848A14C41B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848A14BE1B209FC100A31AE7 /* OAWikiMenuViewController.xib */; };
 		848A14C81B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
 		848A14C91B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
 		848A14CA1B209FF600A31AE7 /* OAWikiWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */; };
@@ -1927,6 +1921,18 @@
 		84BD09001AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
 		84BD09011AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
 		84BD09021AB16174006DA3F7 /* menu_item_update_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */; };
+		84BE7D2B1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D291CF6C636001D8D78 /* OAWikiMenuViewController.m */; };
+		84BE7D2C1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D291CF6C636001D8D78 /* OAWikiMenuViewController.m */; };
+		84BE7D2D1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D291CF6C636001D8D78 /* OAWikiMenuViewController.m */; };
+		84BE7D2E1CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D2A1CF6C636001D8D78 /* OAWikiMenuViewController.xib */; };
+		84BE7D2F1CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D2A1CF6C636001D8D78 /* OAWikiMenuViewController.xib */; };
+		84BE7D301CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D2A1CF6C636001D8D78 /* OAWikiMenuViewController.xib */; };
+		84BE7D371CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */; };
+		84BE7D381CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */; };
+		84BE7D391CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */; };
+		84BE7D3C1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
+		84BE7D3D1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
+		84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
 		84BFA3151B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		84BFA3161B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
@@ -3542,9 +3548,6 @@
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		8489EEC31CAA622200BC0C38 /* OAWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebClient.h; path = Core/OAWebClient.h; sourceTree = "<group>"; };
 		8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebClient.mm; sourceTree = "<group>"; };
-		848A14BC1B209FC100A31AE7 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiMenuViewController.h; path = Sources/Controllers/2.0/OAWikiMenuViewController.h; sourceTree = "<group>"; };
-		848A14BD1B209FC100A31AE7 /* OAWikiMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWikiMenuViewController.m; path = Sources/Controllers/2.0/OAWikiMenuViewController.m; sourceTree = "<group>"; };
-		848A14BE1B209FC100A31AE7 /* OAWikiMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWikiMenuViewController.xib; path = Sources/Controllers/2.0/OAWikiMenuViewController.xib; sourceTree = "<group>"; };
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
 		848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWikiWebViewController.m; path = Sources/Controllers/2.0/OAWikiWebViewController.m; sourceTree = "<group>"; };
 		848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWikiWebViewController.xib; path = Sources/Controllers/2.0/OAWikiWebViewController.xib; sourceTree = "<group>"; };
@@ -3689,6 +3692,12 @@
 		84BD088D1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_my_data_icon@3x.png"; sourceTree = "<group>"; };
 		84BD088E1AB16174006DA3F7 /* menu_item_settings_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_settings_icon@3x.png"; sourceTree = "<group>"; };
 		84BD088F1AB16174006DA3F7 /* menu_item_update_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "menu_item_update_icon@3x.png"; sourceTree = "<group>"; };
+		84BE7D281CF6C636001D8D78 /* OAWikiMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiMenuViewController.h; path = Sources/Controllers/2.0/OAWikiMenuViewController.h; sourceTree = "<group>"; };
+		84BE7D291CF6C636001D8D78 /* OAWikiMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWikiMenuViewController.m; path = Sources/Controllers/2.0/OAWikiMenuViewController.m; sourceTree = "<group>"; };
+		84BE7D2A1CF6C636001D8D78 /* OAWikiMenuViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWikiMenuViewController.xib; path = Sources/Controllers/2.0/OAWikiMenuViewController.xib; sourceTree = "<group>"; };
+		84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWebViewCell.xib; path = Resources/Controllers/Cells/OAWebViewCell.xib; sourceTree = "<group>"; };
+		84BE7D3A1CF6CB09001D8D78 /* OAWebViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebViewCell.h; path = Controllers/Cells/OAWebViewCell.h; sourceTree = "<group>"; };
+		84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWebViewCell.m; path = Controllers/Cells/OAWebViewCell.m; sourceTree = "<group>"; };
 		84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACoreResourcesAmenityIconProvider.h; path = Core/OACoreResourcesAmenityIconProvider.h; sourceTree = "<group>"; };
 		84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACoreResourcesAmenityIconProvider.mm; path = Core/OACoreResourcesAmenityIconProvider.mm; sourceTree = "<group>"; };
 		84BFC2261A989C4600D807B4 /* OAMapSettingsMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsMainScreen.h; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.h; sourceTree = "<group>"; };
@@ -4379,6 +4388,7 @@
 				848D174B1B1C979100A656F4 /* OAGroupViewCell.xib */,
 				848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */,
 				84BA1DD61CF33C5D00BF3D96 /* OATargetInfoViewCell.xib */,
+				84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -4386,6 +4396,8 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
+				84BE7D3A1CF6CB09001D8D78 /* OAWebViewCell.h */,
+				84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */,
 				84BA1DDD1CF33C8900BF3D96 /* OATargetInfoViewCell.h */,
 				84BA1DDE1CF33C8900BF3D96 /* OATargetInfoViewCell.m */,
 				845E05A91B53E68D00DFC2A7 /* OADirectionTableViewCell.h */,
@@ -5133,9 +5145,9 @@
 		848A14BB1B20979F00A31AE7 /* Wiki */ = {
 			isa = PBXGroup;
 			children = (
-				848A14BC1B209FC100A31AE7 /* OAWikiMenuViewController.h */,
-				848A14BD1B209FC100A31AE7 /* OAWikiMenuViewController.m */,
-				848A14BE1B209FC100A31AE7 /* OAWikiMenuViewController.xib */,
+				84BE7D281CF6C636001D8D78 /* OAWikiMenuViewController.h */,
+				84BE7D291CF6C636001D8D78 /* OAWikiMenuViewController.m */,
+				84BE7D2A1CF6C636001D8D78 /* OAWikiMenuViewController.xib */,
 				848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */,
 				848A14C61B209FF600A31AE7 /* OAWikiWebViewController.m */,
 				848A14C71B209FF600A31AE7 /* OAWikiWebViewController.xib */,
@@ -6337,6 +6349,7 @@
 				84185AF31AAA124D00F70328 /* ic_height.png in Resources */,
 				849E81B21AFA5D6700549953 /* btn_map_type_icon_walk_selected@2x.png in Resources */,
 				84F3A8B41B4DA93100D16EBC /* bt_trip_start.png in Resources */,
+				84BE7D2E1CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */,
 				84E4421A1AF8A07500F87542 /* track_recording_stop@3x.png in Resources */,
 				8441CB621B1370580033AC95 /* selection_unchecked@2x.png in Resources */,
 				845E06FA1B60D71100DFC2A7 /* OAPluginPopupViewController.xib in Resources */,
@@ -6688,7 +6701,6 @@
 				84BD08F41AB16174006DA3F7 /* menu_item_install_icon@3x.png in Resources */,
 				843257AD1A9DAE9400A7964E /* ic_map_resources@3x.png in Resources */,
 				8454DA551B31774F00E5A5C5 /* ic_mode_pedestrian.png in Resources */,
-				848A14C21B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */,
 				84F3A96A1B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.xib in Resources */,
 				843E5CB81AB341E000BE14BE /* favorite_share_icon.png in Resources */,
 				841222701B39CC5200F80F9E /* my_location_marker_heading_icon2@2x.png in Resources */,
@@ -6699,6 +6711,7 @@
 				843E5D121AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
 				84BD08FA1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A61AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
+				84BE7D371CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */,
 				84EE2DB91AFCC4F5007C9A94 /* bt_bought_addon_disabled@3x.png in Resources */,
 				BB451DCC18D70B5B005FBE09 /* HUD_right_narrowbutton_bg.png in Resources */,
 				BB451EF918E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
@@ -7079,6 +7092,7 @@
 				849E81B31AFA5D6700549953 /* btn_map_type_icon_walk_selected@2x.png in Resources */,
 				84F3A8B51B4DA93100D16EBC /* bt_trip_start.png in Resources */,
 				84E4421B1AF8A07500F87542 /* track_recording_stop@3x.png in Resources */,
+				84BE7D2F1CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */,
 				8441CB631B1370580033AC95 /* selection_unchecked@2x.png in Resources */,
 				845E06FB1B60D71100DFC2A7 /* OAPluginPopupViewController.xib in Resources */,
 				84E1DEC31B0DFDE9002A6946 /* bt_round_big_blue.png in Resources */,
@@ -7429,7 +7443,6 @@
 				843257AE1A9DAE9400A7964E /* ic_map_resources@3x.png in Resources */,
 				844499801AAA1FC000ACA20D /* ic_tabbar_maps_normal@2x.png in Resources */,
 				8454DA561B31774F00E5A5C5 /* ic_mode_pedestrian.png in Resources */,
-				848A14C31B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */,
 				84F3A96B1B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.xib in Resources */,
 				843E5CB91AB341E000BE14BE /* favorite_share_icon.png in Resources */,
 				84BA1DDB1CF33C5D00BF3D96 /* OATargetInfoViewCell.xib in Resources */,
@@ -7441,6 +7454,7 @@
 				843E5D131AB341E000BE14BE /* left_menu_icon_quiz.png in Resources */,
 				84BD08FB1AB16174006DA3F7 /* menu_item_my_data_icon@3x.png in Resources */,
 				844499A71AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
+				84BE7D381CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */,
 				84EE2DBA1AFCC4F5007C9A94 /* bt_bought_addon_disabled@3x.png in Resources */,
 				8A7077191A83C25A005E019B /* OATextViewCell.xib in Resources */,
 				BB451EFA18E68E7A005FBE09 /* HUD_debug_pin_filled_button.png in Resources */,
@@ -7713,6 +7727,7 @@
 				84185ABF1AAA11B600F70328 /* ic_favorite_3@2x.png in Resources */,
 				8431E7741B380D010063C9AF /* ic_dialog_export@2x.png in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
+				84BE7D391CF6CAE3001D8D78 /* OAWebViewCell.xib in Resources */,
 				BBA3AF91197FC4BB0039D991 /* HUD_right_halfbutton_bg.png in Resources */,
 				849E817B1AFA5D6700549953 /* btn_map_type_icon_bike_selected.png in Resources */,
 				84E1DED31B0DFE64002A6946 /* bt_round_big@2x.png in Resources */,
@@ -7978,7 +7993,6 @@
 				84E2DB5E1AB720FA001A7FEC /* left_menu_icon_about@3x.png in Resources */,
 				845E06DC1B5FF17400DFC2A7 /* img_plugin_nautical.jpg in Resources */,
 				8431E7711B380D010063C9AF /* ic_dialog_export.png in Resources */,
-				848A14C41B209FC100A31AE7 /* OAWikiMenuViewController.xib in Resources */,
 				8431E77D1B380D010063C9AF /* left_menu_icon_trips@2x.png in Resources */,
 				843E5D081AB341E000BE14BE /* icon_star.png in Resources */,
 				BBA3AFB3197FC4BB0039D991 /* HUD_left_halfbutton_bg@2x.png in Resources */,
@@ -8076,6 +8090,7 @@
 				845E06CA1B5FF17400DFC2A7 /* ic_tabbar_purchases_normal@2x.png in Resources */,
 				84185AAA1AAA11B600F70328 /* ic_favorite_1.png in Resources */,
 				84185ADA1AAA11B600F70328 /* ic_favorite_6@2x.png in Resources */,
+				84BE7D301CF6C636001D8D78 /* OAWikiMenuViewController.xib in Resources */,
 				843E5D921AB341E000BE14BE /* menu_share_icon.png in Resources */,
 				84F3A8E01B4DA93100D16EBC /* ic_trip_bike@3x.png in Resources */,
 				849E81871AFA5D6700549953 /* btn_map_type_icon_car@2x.png in Resources */,
@@ -8546,6 +8561,7 @@
 				84683B1C1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				848A3EAD1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
 				3AC09BCB1A2783ED002698FE /* OAWebViewController.m in Sources */,
+				84BE7D2B1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */,
 				BBA858EA17C222BD00AADCC7 /* OAMapRendererView.mm in Sources */,
 				3A91739A1A09203D000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				84F989451B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
@@ -8664,7 +8680,6 @@
 				BBA3B02819880DEC0039D991 /* OANavigationController.m in Sources */,
 				84B4FD831A92179600A147BA /* OAGPXDetailsTableViewCell.m in Sources */,
 				84B4FD5E1A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
-				848A14BF1B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */,
 				84064DDA1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				84770A041A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				3AFEEE961A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
@@ -8705,6 +8720,7 @@
 				3ACE8D4019F43004003F1D42 /* OAMapRulerView.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
 				84064DEC1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
+				84BE7D3C1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
 				844056091AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				8420C1C31B411C81004EDAE6 /* OAPOIFavType.mm in Sources */,
@@ -8753,6 +8769,7 @@
 				84683B1D1B96DBD5009A6DE6 /* OAMapMarker.mm in Sources */,
 				848A3EAE1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
 				3AC09BCC1A2783ED002698FE /* OAWebViewController.m in Sources */,
+				84BE7D2C1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */,
 				BB451E2718DCD224005FBE09 /* OAMapRendererView.mm in Sources */,
 				3A91739C1A09277F000B22C5 /* OAOptionsPanelBlackViewController.m in Sources */,
 				84F989461B5157A0009C443C /* OAGPXRouteCardController.mm in Sources */,
@@ -8871,7 +8888,6 @@
 				BB451E3218DCD224005FBE09 /* OAUserInteractionPassThroughView.m in Sources */,
 				84B4FD841A92179600A147BA /* OAGPXDetailsTableViewCell.m in Sources */,
 				84B4FD5F1A91C7FB00A147BA /* OAMapStyleSettings.mm in Sources */,
-				848A14C01B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */,
 				84064DDB1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */,
 				84770A051A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				3AFEEE971A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
@@ -8912,6 +8928,7 @@
 				3ACE8D4119F4F53D003F1D42 /* OAMapRulerView.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
 				84064DED1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
+				84BE7D3D1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
 				8440560A1AA8575D00B107E6 /* OAMapSettingsOverlayUnderlayScreen.mm in Sources */,
 				8420C1C41B411C81004EDAE6 /* OAPOIFavType.mm in Sources */,
@@ -9043,7 +9060,6 @@
 				BBA3AFF819854D8F0039D991 /* OAResourcesInstaller.mm in Sources */,
 				BBA3AF51197FC4BB0039D991 /* OAMapPanelViewController.mm in Sources */,
 				84B4FD931A9222FE00A147BA /* OAGPXElevationTableViewCell.m in Sources */,
-				848A14C11B209FC100A31AE7 /* OAWikiMenuViewController.m in Sources */,
 				BBA3AF52197FC4BB0039D991 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
 				84F9894C1B53AABF009C443C /* OADirectionsCardController.mm in Sources */,
@@ -9081,6 +9097,7 @@
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
 				BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
+				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBA3AF5B197FC4BB0039D991 /* OAMapViewController.mm in Sources */,
 				BBA3AF5C197FC4BB0039D991 /* OARootViewController.m in Sources */,
 				842432681AF0BC0300925821 /* OASavingTrackHelper.mm in Sources */,
@@ -9105,6 +9122,7 @@
 				848D171F1B1C47B200A656F4 /* OAButton.m in Sources */,
 				8420EEF91B1EE7C000797AC4 /* OAEditDescriptionViewController.m in Sources */,
 				8441CB6C1B1370B50033AC95 /* OAMultiselectableHeaderView.m in Sources */,
+				84BE7D2D1CF6C636001D8D78 /* OAWikiMenuViewController.m in Sources */,
 				84147A451B25E0EA0091E57F /* OAEditTargetViewController.mm in Sources */,
 				84D81EEE1AA30500001098FD /* OADestinationViewController.mm in Sources */,
 				BBA3AF60197FC4BB0039D991 /* OAQuickDialogTableDelegate.m in Sources */,

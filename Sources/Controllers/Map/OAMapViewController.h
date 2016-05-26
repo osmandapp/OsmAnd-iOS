@@ -68,6 +68,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) NSDictionary *values;
 
 @property (nonatomic) BOOL isPlace;
+@property (nonatomic) BOOL centerMap;
 
 @property (nonatomic) NSDictionary *localizedNames;
 @property (nonatomic) NSDictionary *localizedContent;
@@ -156,6 +157,9 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
+
++ (void)postTargetNotification:(OAMapSymbol *)symbol;
++ (OAMapSymbol *)getMapSymbol:(OAPOI *)poi;
 
 @property(readonly) CGFloat displayDensityFactor;
 

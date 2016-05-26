@@ -59,7 +59,6 @@
 - (UIView *)bottomMostView;
 
 - (BOOL)isLandscape;
-- (BOOL)hasInfo;
 
 - (void)doInit:(BOOL)showFull;
 - (void)doInit:(BOOL)showFull showFullScreen:(BOOL)showFullScreen;

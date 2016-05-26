@@ -1619,39 +1619,10 @@ typedef enum
     touchPoint.x *= mapRendererView.contentScaleFactor;
     touchPoint.y *= mapRendererView.contentScaleFactor;
     
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    
-    //if (poi.type)
-    //    [userInfo setObject:poi.type forKey:@"poiType"];
-    
-    if (poi.type && [poi.type.name isEqualToString:@"wiki_place"])
-        [userInfo setObject:@"wiki" forKey:@"objectType"];
-    
-    [userInfo setObject:@"yes" forKey:@"centerMap"];
-    [userInfo setObject:poi.nameLocalized forKey:@"caption"];
-    [userInfo setObject:[NSNumber numberWithDouble:latLon.latitude] forKey:@"lat"];
-    [userInfo setObject:[NSNumber numberWithDouble:latLon.longitude] forKey:@"lon"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.x] forKey:@"touchPoint.x"];
-    [userInfo setObject:[NSNumber numberWithFloat:touchPoint.y] forKey:@"touchPoint.y"];
-    
-    if ([poi hasOpeningHours])
-        [userInfo setObject:poi.openingHours forKey:@"openingHours"];
-    if (poi.desc)
-        [userInfo setObject:poi.desc forKey:@"desc"];
-
-    if (poi.localizedNames)
-        [userInfo setObject:poi.localizedNames forKey:@"names"];
-    if (poi.localizedContent)
-        [userInfo setObject:poi.localizedContent forKey:@"content"];
-    
-    
-    UIImage *icon = (poi.type ? [poi.type mapIcon] : nil);
-    if (icon)
-        [userInfo setObject:icon forKey:@"icon"];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
-                                                        object:self
-                                                      userInfo:userInfo];
+    OAMapSymbol *symbol = [OAMapViewController getMapSymbol:poi];
+    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
+    symbol.centerMap = YES;
+    [OAMapViewController postTargetNotification:symbol];
     
     [self dismissViewControllerAnimated:YES completion:nil];
 }

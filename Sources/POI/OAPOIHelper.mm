@@ -24,7 +24,6 @@
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/Utilities.h>
-#include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Search/ISearch.h>
 #include <OsmAndCore/Search/BaseSearch.h>
 #include <OsmAndCore/Search/AmenitiesByNameSearch.h>
@@ -442,6 +441,17 @@
 -(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry
 {
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+    
+    if (amenity->categories.isEmpty())
+        return;
+    
+    const auto& catList = amenity->getDecodedCategories();
+    if (catList.isEmpty())
+        return;
+    
+    NSString *category = catList.first().category.toNSString();
+    NSString *subCategory = catList.first().subcategory.toNSString();
+
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
     
     OAPOI *poi = [[OAPOI alloc] init];
@@ -450,42 +460,22 @@
     poi.name = amenity->nativeName.toNSString();
     
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
-
-    const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-    for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-    {
-        if (lang != QString::null && entry.key() == lang)
-            poi.nameLocalized = entry.value().toNSString();
-
-        [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
-    }
+    NSMutableString *nameLocalized = [NSMutableString string];
+    [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:poi.name nameLocalized:nameLocalized names:names];
+    if (nameLocalized.length > 0)
+        poi.nameLocalized = nameLocalized;
+    poi.localizedNames = names;
     
-    if (![names objectForKey:@""])
-        [names setObject:poi.name forKey:@""];
-    
-    poi.localizedNames = [NSDictionary dictionaryWithDictionary:names];
     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
     
+    NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    const auto& decodedValues = amenity->getDecodedValues();
-    for (const auto& entry : decodedValues)
-    {
-        [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
-    }
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
     poi.values = values;
+    poi.localizedContent = content;
     
     if (!poi.nameLocalized)
         poi.nameLocalized = amenity->nativeName.toNSString();
-
-    if (amenity->categories.isEmpty())
-        return;
-        
-    const auto& catList = amenity->getDecodedCategories();
-    if (catList.isEmpty())
-        return;
-    
-    NSString *category = catList.first().category.toNSString();
-    NSString *subCategory = catList.first().subcategory.toNSString();
     
     OAPOIType *type = [self getPoiTypeByCategory:category name:subCategory];
     if (!type)
@@ -509,6 +499,45 @@
     
     if (_delegate)
         [_delegate poiFound:poi];
+}
+
++ (void)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(NSString *)nativeName nameLocalized:(NSMutableString *)nameLocalized names:(NSMutableDictionary *)names
+{
+    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    
+    const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
+    for(const auto& entry : OsmAnd::rangeOf(localizedNames))
+    {
+        if (lang != QString::null && entry.key() == lang)
+            [nameLocalized appendString:entry.value().toNSString()];
+        
+        [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
+    }
+    
+    if (![names objectForKey:@""])
+        [names setObject:nativeName forKey:@""];
+}
+
++ (void)processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values
+{
+    for (const auto& entry : decodedValues)
+    {
+        if (entry.declaration->tagName.startsWith(QString("content")))
+        {
+            NSString *key = entry.declaration->tagName.toNSString();
+            NSString *loc;
+            if (key.length > 8)
+                loc = [[key substringFromIndex:8] lowercaseString];
+            else
+                loc = @"";
+            
+            [content setObject:entry.value.toString().toNSString() forKey:loc];
+        }
+        else
+        {
+            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
+        }
+    }
 }
 
 @end

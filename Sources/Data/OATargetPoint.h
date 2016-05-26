@@ -45,6 +45,4 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 @property (nonatomic) BOOL toolbarNeeded;
 @property (nonatomic) NSInteger segmentIndex;
 
-- (BOOL)isLocationHiddenInTitle;
-
 @end

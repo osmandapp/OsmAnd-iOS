@@ -8,6 +8,7 @@
 
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
+#import "OsmAndApp.h"
 
 @implementation OATargetMenuViewControllerState
 
@@ -18,6 +19,11 @@
 @end
 
 @implementation OATargetMenuViewController
+
+- (void)setLocation:(CLLocationCoordinate2D)location
+{
+    _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
+}
 
 - (void)viewDidLoad
 {

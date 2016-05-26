@@ -2,13 +2,14 @@
 //  OAWikiMenuViewController.m
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 04/06/15.
-//  Copyright (c) 2015 OsmAnd. All rights reserved.
+//  Created by Alexey Kulish on 26/05/16.
+//  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
 #import "OAWikiMenuViewController.h"
+#import "OAPOI.h"
 
-@interface OAWikiMenuViewController ()
+@interface OAWikiMenuViewController ()<OARowInfoDelegate>
 
 @end
 
@@ -17,37 +18,18 @@
     NSString *_content;
 }
 
-- (id)initWithContent:(NSString *)content
+- (id)initWithPOI:(OAPOI *)poi content:(NSString *)content
 {
-    self = [super init];
+    self = [super initWithPOI:poi];
     if (self)
     {
         _content = content;
+        OARowInfo* contentRow = [[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_description.png"] textPrefix:nil text:content textColor:nil isText:YES needLinks:NO order:1 typeName:@"" isPhoneNumber:NO isUrl:NO];
+        contentRow.isHtml = YES;
+        contentRow.delegate = self;
+        self.additionalRows = @[contentRow];
     }
     return self;
-}
-
-
-- (CGFloat)contentHeight
-{
-    return 148.0;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    if (_content)
-        [self.webView loadHTMLString:_content baseURL:nil];
-    
-    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doTap)];
-    [self.contentView addGestureRecognizer:tapGesture];
-}
-
-- (void)doTap
-{
-    if (self.menuDelegate && [self.menuDelegate respondsToSelector:@selector(openWiki:)])
-        [self.menuDelegate openWiki:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -56,5 +38,13 @@
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark - OARowInfoDelegate
+
+- (void)onRowClick:(OATargetMenuViewController *)sender rowInfo:(OARowInfo *)rowInfo
+{
+    if (self.menuDelegate && [self.menuDelegate respondsToSelector:@selector(openWiki:)])
+        [self.menuDelegate openWiki:self];
+}
 
 @end
+

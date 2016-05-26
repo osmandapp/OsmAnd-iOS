@@ -85,7 +85,7 @@
     
     [self setupView];
     [self.tableView beginUpdates];
-    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:(self.showCoords ? 1 : 0) inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
+    [self.tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]] withRowAnimation:UITableViewRowAnimationBottom];
     [self.tableView endUpdates];
     if (self.delegate)
         [self.delegate contentHeightChanged:[self contentHeight]];
@@ -363,7 +363,7 @@
     CGRect keyboardFrame = [[[aNotification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGPoint convertedPoint = [self.contentView.superview convertPoint:self.contentView.frame.origin toView:[UIApplication sharedApplication].keyWindow.rootViewController.view];
     
-    CGFloat minBottom = ABS(convertedPoint.y) + 44.0 + (self.showCoords ? 44.0 : 0.0);
+    CGFloat minBottom = ABS(convertedPoint.y) + 44.0 + 44.0;
     CGFloat keyboardTop = DeviceScreenHeight - keyboardFrame.size.height;
 
     BOOL needOffsetViews = minBottom > keyboardTop;
@@ -497,6 +497,11 @@
     self.name = [((UITextField*)sender) text];
 }
 
+- (BOOL)hasDescription
+{
+    return [self supportEditing] || self.desc.length > 0;
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -507,9 +512,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.editing)
-        return 4 + (self.showCoords ? 1 : 0) - (![self supportEditing] && self.desc.length == 0 ? 1 : 0);
+        return 5 - (![self hasDescription] ? 1 : 0);
     else
-        return 3 + (self.showCoords ? 1 : 0) - (![self supportEditing] && self.desc.length == 0 ? 1 : 0);
+        return 4 - (![self hasDescription] ? 1 : 0);
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -520,36 +525,34 @@
     static NSString* const reusableIdentifierTextViewCell = @"OATextViewTableViewCell";
     static NSString* const reusableIdentifierTextMultiViewCell = @"OATextMultiViewCell";
     
-    int index = indexPath.row;
+    NSInteger index = indexPath.row;
     if (!self.editing)
+    {
         index++;
-    if (!self.showCoords)
-        index++;
+    }
     
-    if (!self.editing && self.showCoords && index == 1)
-        index = 0;
-    
+    if (indexPath.row == [tableView numberOfRowsInSection:0] - 1)
+    {
+        OAIconTextTableViewCell* cell;
+        cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+            cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
+            cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            cell.arrowIconView.hidden = YES;
+            CGRect frame = CGRectMake(15.0, cell.textView.frame.origin.y, cell.textView.frame.size.width, cell.textView.frame.size.height);
+            cell.textView.frame = frame;
+        }
+        cell.textView.text = self.formattedCoords;
+        
+        return cell;
+    }
+
     switch (index)
     {
         case 0:
-        {
-            OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
-            if (cell == nil)
-            {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
-                cell.backgroundColor = UIColorFromRGB(0xf2f2f2);
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.arrowIconView.hidden = YES;
-                CGRect frame = CGRectMake(15.0, cell.textView.frame.origin.y, cell.textView.frame.size.width, cell.textView.frame.size.height);
-                cell.textView.frame = frame;
-            }
-            cell.textView.text = self.formattedCoords;
-            
-            return cell;
-        }
-        case 1:
         {
             OATextViewTableViewCell* cell;
             cell = (OATextViewTableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextViewCell];
@@ -574,7 +577,7 @@
                 return cell;
             }
         }
-        case 2:
+        case 1:
         {
             OAColorViewCell* cell;
             cell = (OAColorViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierColorCell];
@@ -595,7 +598,7 @@
             
             return cell;
         }
-        case 3:
+        case 2:
         {
             OAGroupViewCell* cell;
             cell = (OAGroupViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierGroupCell];
@@ -615,7 +618,7 @@
             
             return cell;
         }
-        case 4:
+        case 3:
         {
             OATextMultiViewCell* cell;
             cell = (OATextMultiViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierTextMultiViewCell];
@@ -678,13 +681,11 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    int index = indexPath.row;
+    NSInteger index = indexPath.row;
     if (!self.editing)
         index++;
-    if (!self.showCoords)
-        index++;
     
-    if (index == 4) // description
+    if (index == 3) // description
         return _descHeight;
     else
         return 44.0;
@@ -694,37 +695,35 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    int index = indexPath.row;
+    NSInteger index = indexPath.row;
     if (!self.editing)
-        index++;
-    if (!self.showCoords)
         index++;
     
     switch (index)
     {
-        case 0: // coords
+        case 0: // name
         {
             break;
         }
-        case 1: // name
-        {
-            break;
-        }
-        case 2: // color
+        case 1: // color
         {
             if ([self supportEditing])
                 [self changeColorClicked];
             break;
         }
-        case 3: // group
+        case 2: // group
         {
             if ([self supportEditing])
                 [self changeGroupClicked];
             break;
         }
-        case 4: // description
+        case 3: // description
         {
             [self changeDescriptionClicked];
+            break;
+        }
+        case 4: // coords
+        {
             break;
         }
             

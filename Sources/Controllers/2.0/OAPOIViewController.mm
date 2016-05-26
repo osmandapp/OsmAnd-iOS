@@ -13,32 +13,12 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OATargetInfoViewCell.h"
+#import "OAWebViewCell.h"
 #import "OAEditDescriptionViewController.h"
-
-@interface OARowInfo : NSObject
-
-@property (nonatomic) NSString *key;
-@property (nonatomic) UIImage *icon;
-@property (nonatomic) NSString *text;
-@property (nonatomic) NSString *textPrefix;
-@property (nonatomic) UIColor *textColor;
-@property (nonatomic) BOOL isText;
-@property (nonatomic) BOOL needLinks;
-@property (nonatomic) BOOL isPhoneNumber;
-@property (nonatomic) BOOL isUrl;
-@property (nonatomic) int order;
-@property (nonatomic) NSString *name;
-
-@property (nonatomic) int height;
-@property (nonatomic) BOOL moreText;
-
-- (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order name:(NSString *)name isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
-
-@end
 
 @implementation OARowInfo
 
-- (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order name:(NSString *)name isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
+- (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl
 {
     self = [super init];
     if (self)
@@ -51,7 +31,7 @@
         _isText = isText;
         _needLinks = needLinks;
         _order = order;
-        _name = name;
+        _typeName = typeName;
         _isPhoneNumber = isPhoneNumber;
         _isUrl = isUrl;
     }
@@ -60,11 +40,6 @@
 
 @end
 
-@interface OAPOIViewController ()
-
-@property (nonatomic) OAPOI *poi;
-
-@end
 
 @implementation OAPOIViewController
 {
@@ -89,7 +64,7 @@
     self = [self init];
     if (self)
     {
-        self.poi = poi;
+        _poi = poi;
     }
     return self;
 }
@@ -140,7 +115,7 @@
     if (self.poi.type && ![self.poi.nameLocalized isEqualToString:self.poi.type.nameLocalized])
     {
         UIImage *icon = [self applyColor:[self.poi.type icon]];
-        [_rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:self.poi.type.nameLocalized textColor:nil isText:NO needLinks:NO order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+        [_rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:self.poi.type.nameLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
@@ -165,8 +140,12 @@
             poiTypeOrder = pType.order;
             poiTypeKeyName = pType.name;
         }
-        
-        if ([key hasPrefix:@"name:"])
+
+        if ([key hasPrefix:@"wiki_lang"])
+        {
+            cont = YES;
+        }
+        else if ([key hasPrefix:@"name:"])
         {
             cont = YES;
         }
@@ -241,14 +220,19 @@
         {
             if (isDescription)
             {
-                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+                [descriptions addObject:[[OARowInfo alloc] initWithKey:key icon:[self getIcon:@"ic_description.png"] textPrefix:textPrefix text:value textColor:nil isText:YES needLinks:YES order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
             }
             else
             {
-                [_rows addObject:[[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder name:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl]];
+                [_rows addObject:[[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl]];
             }
         }
     }];
+    
+    if (self.additionalRows)
+    {
+        [_rows addObjectsFromArray:self.additionalRows];
+    }
     
     [_rows sortUsingComparator:^NSComparisonResult(OARowInfo *row1, OARowInfo *row2) {
         if (row1.order < row2.order)
@@ -257,7 +241,7 @@
         }
         else if (row1.order == row2.order)
         {
-            return [row1.name localizedCompare:row2.name];
+            return [row1.typeName localizedCompare:row2.typeName];
         }
         else
         {
@@ -287,20 +271,30 @@
         [_rows addObject:desc];
     }
 
-    [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 name:@"" isPhoneNumber:NO isUrl:NO]];
+    [_rows addObject:[[OARowInfo alloc] initWithKey:nil icon:[self getIcon:@"ic_coordinates_location.png"] textPrefix:nil text:self.formattedCoords textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     
     CGFloat h = 0;
     CGFloat textWidth = self.tableView.bounds.size.width - 60.0;
     for (OARowInfo *row in _rows)
     {
-        NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
-        CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
-        CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
-        
-        CGFloat rowHeight = MAX(bounds.height, 21.0) + 12.0 + 11.0;
-        row.height = rowHeight;
-        row.moreText = fullBounds.height > bounds.height;
-        
+        CGFloat rowHeight;
+        if (row.isHtml)
+        {
+            rowHeight = 200.0 + 12.0 + 11.0;
+            row.height = rowHeight;
+            row.moreText = YES;
+        }
+        else
+        {
+            NSString *text = row.textPrefix.length == 0 ? row.text : [NSString stringWithFormat:@"%@: %@", row.textPrefix, row.text];
+            CGSize fullBounds = [OAUtilities calculateTextBounds:text width:textWidth font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+            CGSize bounds = [OAUtilities calculateTextBounds:text width:textWidth height:150.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:15.0]];
+            
+            rowHeight = MAX(bounds.height, 21.0) + 12.0 + 11.0;
+            row.height = rowHeight;
+            row.moreText = fullBounds.height > bounds.height;
+            
+        }
         h += rowHeight;
     }
     
@@ -339,11 +333,6 @@
 
 #pragma mark - UITableViewDataSource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _rows.count;
@@ -352,31 +341,59 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
+    static NSString* const reusableIdentifierWeb = @"OAWebViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
-    OATargetInfoViewCell* cell;
-    cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
-    if (cell == nil)
+    if (!info.isHtml)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
-        cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
-    }
-    if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
-    {
-        cell.iconView.contentMode = UIViewContentModeCenter;
+        OATargetInfoViewCell* cell;
+        cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
+            cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
+        }
+        if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+        {
+            cell.iconView.contentMode = UIViewContentModeCenter;
+        }
+        else
+        {
+            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        }
+        cell.backgroundColor = _contentColor;
+        cell.iconView.image = info.icon;
+        cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+        cell.textView.textColor = info.textColor;
+        cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
+    
+        return cell;
     }
     else
     {
-        cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        OAWebViewCell* cell;
+        cell = (OAWebViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierWeb];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWebViewCell" owner:self options:nil];
+            cell = (OAWebViewCell *)[nib objectAtIndex:0];
+        }
+        if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+        {
+            cell.iconView.contentMode = UIViewContentModeCenter;
+        }
+        else
+        {
+            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+        }
+        cell.backgroundColor = _contentColor;
+        cell.webView.backgroundColor = _contentColor;
+        cell.iconView.image = info.icon;
+        [cell.webView loadHTMLString:info.text  baseURL:nil];
+
+        return cell;
     }
-    cell.backgroundColor = _contentColor;
-    cell.iconView.image = info.icon;
-    cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
-    cell.textView.textColor = info.textColor;
-    cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
-    
-    return cell;
 }
 
 
@@ -404,7 +421,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     OARowInfo *info = _rows[indexPath.row];
-    if (info.isPhoneNumber)
+    if (info.delegate)
+    {
+        [info.delegate onRowClick:self rowInfo:info];
+    }
+    else if (info.isPhoneNumber)
     {
         [OAUtilities callPhone:info.text];
     }

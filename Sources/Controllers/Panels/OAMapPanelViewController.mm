@@ -1130,7 +1130,7 @@ typedef enum
         caption = item.point.name;
     }
     
-    if (targetPoint.type == OATargetLocation && poiType)
+    if ((targetPoint.type == OATargetLocation || targetPoint.type == OATargetWiki) && poiType)
     {
         OAPOI *poi = [[OAPOI alloc] init];
         poi.latitude = lat;
@@ -1152,7 +1152,10 @@ typedef enum
             icon = [OAUtilities tintImageWithColor:poiIcon color:UIColorFromRGB(0xfd8f25)] ;
         }
         
-        targetPoint.type = OATargetPOI;
+        if (targetPoint.type != OATargetWiki)
+        {
+            targetPoint.type = OATargetPOI;
+        }
         targetPoint.targetObj = poi;
     }
     
@@ -1668,7 +1671,7 @@ typedef enum
     self.targetMenuView.targetPoint.type = OATargetFavorite;
     
     [favoriteViewController activateEditing];
-    favoriteViewController.view.frame = self.view.frame;
+    
     [self.targetMenuView setCustomViewController:favoriteViewController];
     [self.targetMenuView updateTargetPointType:OATargetFavorite];
 }
@@ -1714,7 +1717,7 @@ typedef enum
 {
     OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
     parking.parkingDelegate = self;
-    parking.view.frame = self.view.frame;
+    
     [self.targetMenuView setCustomViewController:parking];
     [self.targetMenuView updateTargetPointType:OATargetParking];
 }
@@ -1826,14 +1829,13 @@ typedef enum
     self.targetMenuView.targetPoint.targetObj = wptViewController.wpt;
     
     [wptViewController activateEditing];
-    wptViewController.view.frame = self.view.frame;
+    
+    [self.targetMenuView setCustomViewController:wptViewController];
+    [self.targetMenuView updateTargetPointType:OATargetWpt];
     
     if (_activeTargetType == OATargetGPXEdit)
         wptViewController.navBarBackground.backgroundColor = UIColorFromRGB(0x4caf50);
 
-    [self.targetMenuView setCustomViewController:wptViewController];
-    [self.targetMenuView updateTargetPointType:OATargetWpt];
-    
     if (!gpxFileName && ![OAAppSettings sharedManager].mapSettingShowRecordingTrack)
     {
         [OAAppSettings sharedManager].mapSettingShowRecordingTrack = YES;
@@ -1951,9 +1953,8 @@ typedef enum
             [self.targetMenuView doInit:showFullMenu];
             
             OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithItem:item];
-            favoriteViewController.view.frame = self.view.frame;
-            [self.targetMenuView setCustomViewController:favoriteViewController];
             
+            [self.targetMenuView setCustomViewController:favoriteViewController];
             [self.targetMenuView prepareNoInit];
             
             break;
@@ -1970,10 +1971,8 @@ typedef enum
                 parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
             
             parking.parkingDelegate = self;
-            parking.view.frame = self.view.frame;
             
             [self.targetMenuView setCustomViewController:parking];
-            
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -1984,13 +1983,8 @@ typedef enum
             [self.targetMenuView doInit:showFullMenu];
             
             OAPOIViewController *poiViewController = [[OAPOIViewController alloc] initWithPOI:self.targetMenuView.targetPoint.targetObj];
-            poiViewController.showCoords = [self.targetMenuView.targetPoint isLocationHiddenInTitle];
-            poiViewController.formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:self.targetMenuView.targetPoint.location];
 
-            poiViewController.view.frame = self.view.frame;
-            
             [self.targetMenuView setCustomViewController:poiViewController];
-            
             [self.targetMenuView prepareNoInit];
             
             break;
@@ -2018,12 +2012,10 @@ typedef enum
             {
                 [self.targetMenuView doInit:showFullMenu];
                 
-                OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithContent:content];
+                OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithPOI:self.targetMenuView.targetPoint.targetObj content:content];
                 wiki.menuDelegate = self;
-                wiki.view.frame = self.view.frame;
                 
                 [self.targetMenuView setCustomViewController:wiki];
-                
                 [self.targetMenuView prepareNoInit];
             }
             else
@@ -2051,10 +2043,8 @@ typedef enum
             
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
-            wptViewController.view.frame = self.view.frame;
             
             [self.targetMenuView setCustomViewController:wptViewController];
-            
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2088,9 +2078,7 @@ typedef enum
                 self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
             }
             
-            gpxViewController.view.frame = self.view.frame;
             [self.targetMenuView setCustomViewController:gpxViewController];
-            
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2123,9 +2111,7 @@ typedef enum
                 self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
             }
             
-            gpxViewController.view.frame = self.view.frame;
             [self.targetMenuView setCustomViewController:gpxViewController];
-            
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2148,9 +2134,7 @@ typedef enum
                 gpxViewController = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
             }
             
-            gpxViewController.view.frame = self.view.frame;
             [self.targetMenuView setCustomViewController:gpxViewController];
-            
             [self.targetMenuView prepareNoInit];
 
             break;

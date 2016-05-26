@@ -14,7 +14,6 @@
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
-@property (assign, nonatomic) CLLocationCoordinate2D location;
 @property (assign, nonatomic) BOOL newItem;
 
 @property (nonatomic, copy) NSString *name;

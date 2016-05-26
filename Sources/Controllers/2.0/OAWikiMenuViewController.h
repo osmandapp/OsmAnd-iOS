@@ -2,11 +2,11 @@
 //  OAWikiMenuViewController.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 04/06/15.
-//  Copyright (c) 2015 OsmAnd. All rights reserved.
+//  Created by Alexey Kulish on 26/05/16.
+//  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OATargetMenuViewController.h"
+#import "OAPoiViewController.h"
 
 @class OAWikiMenuViewController;
 
@@ -17,12 +17,10 @@
 
 @end
 
-@interface OAWikiMenuViewController : OATargetMenuViewController
-
-@property (weak, nonatomic) IBOutlet UIWebView *webView;
+@interface OAWikiMenuViewController : OAPOIViewController
 
 @property (weak, nonatomic) id<OAWikiMenuDelegate> menuDelegate;
 
-- (id)initWithContent:(NSString *)content;
+- (id)initWithPOI:(OAPOI *)poi content:(NSString *)content;
 
 @end

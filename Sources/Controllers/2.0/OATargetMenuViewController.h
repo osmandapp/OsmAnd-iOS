@@ -7,6 +7,7 @@
 //
 
 #import "OASuperViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
@@ -53,8 +54,8 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 @property (nonatomic, readonly) BOOL actionButtonPressed;
 
-@property (nonatomic, assign) BOOL showCoords;
-@property (nonatomic, copy) NSString* formattedCoords;
+@property (nonatomic, assign) CLLocationCoordinate2D location;
+@property (nonatomic, readonly) NSString *formattedCoords;
 
 @property (weak, nonatomic) id<OATargetMenuViewControllerDelegate> delegate;
 

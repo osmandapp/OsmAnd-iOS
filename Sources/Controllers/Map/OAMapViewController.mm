@@ -39,6 +39,7 @@
 #import "OAIAPHelper.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
+#import "OAPOILocationType.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -1650,6 +1651,10 @@
                     symbol.foundWpt = self.foundWpt;
                     symbol.foundWptGroups = self.foundWptGroups;
                     symbol.foundWptDocPath = self.foundWptDocPath;
+                }
+                else
+                {
+                    symbol.poiType = [[OAPOILocationType alloc] init];
                 }
                 
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);

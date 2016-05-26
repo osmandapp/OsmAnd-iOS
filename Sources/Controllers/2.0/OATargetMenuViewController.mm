@@ -9,6 +9,7 @@
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "Localization.h"
 
 @implementation OATargetMenuViewControllerState
 
@@ -23,6 +24,21 @@
 - (void)setLocation:(CLLocationCoordinate2D)location
 {
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
+}
+
+- (BOOL)needAddress
+{
+    return YES;
+}
+
+- (NSString *)getTypeStr
+{
+    return [self getCommonTypeStr];
+}
+
+- (NSString *)getCommonTypeStr
+{
+    return OALocalizedString(@"sett_arr_loc");
 }
 
 - (void)viewDidLoad

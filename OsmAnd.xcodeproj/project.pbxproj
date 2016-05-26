@@ -1933,6 +1933,9 @@
 		84BE7D3C1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
 		84BE7D3D1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
 		84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */; };
+		84BE7D411CF7238D001D8D78 /* OAPOILocationType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */; };
+		84BE7D421CF7238D001D8D78 /* OAPOILocationType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */; };
+		84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */; };
 		84BFA3151B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		84BFA3161B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
 		84BFA3171B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */; };
@@ -3698,6 +3701,8 @@
 		84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAWebViewCell.xib; path = Resources/Controllers/Cells/OAWebViewCell.xib; sourceTree = "<group>"; };
 		84BE7D3A1CF6CB09001D8D78 /* OAWebViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebViewCell.h; path = Controllers/Cells/OAWebViewCell.h; sourceTree = "<group>"; };
 		84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAWebViewCell.m; path = Controllers/Cells/OAWebViewCell.m; sourceTree = "<group>"; };
+		84BE7D3F1CF7238D001D8D78 /* OAPOILocationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOILocationType.h; sourceTree = "<group>"; };
+		84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPOILocationType.mm; sourceTree = "<group>"; };
 		84BFA3131B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACoreResourcesAmenityIconProvider.h; path = Core/OACoreResourcesAmenityIconProvider.h; sourceTree = "<group>"; };
 		84BFA3141B679CEC00A4AEBD /* OACoreResourcesAmenityIconProvider.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACoreResourcesAmenityIconProvider.mm; path = Core/OACoreResourcesAmenityIconProvider.mm; sourceTree = "<group>"; };
 		84BFC2261A989C4600D807B4 /* OAMapSettingsMainScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsMainScreen.h; path = Sources/Controllers/2.0/OAMapSettingsMainScreen.h; sourceTree = "<group>"; };
@@ -5316,6 +5321,8 @@
 				84B0AE281AC82ED3005E1F78 /* OAPOIFilter.m */,
 				84C41E691AB962350089EABB /* OAPOIType.h */,
 				84C41E6A1AB962350089EABB /* OAPOIType.m */,
+				84BE7D3F1CF7238D001D8D78 /* OAPOILocationType.h */,
+				84BE7D401CF7238D001D8D78 /* OAPOILocationType.mm */,
 				8420C1C11B411C81004EDAE6 /* OAPOIFavType.h */,
 				8420C1C21B411C81004EDAE6 /* OAPOIFavType.mm */,
 				84CCE7F51B73C2230059A82A /* OAPOIHistoryType.h */,
@@ -8719,6 +8726,7 @@
 				3AFEEE671A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4019F43004003F1D42 /* OAMapRulerView.m in Sources */,
 				BBBDADA818BC963800E4A359 /* OAAutoObserverProxy.m in Sources */,
+				84BE7D411CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				84064DEC1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
 				84BE7D3C1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBA3AEBC197122FD0039D991 /* OAQuickDialogTableDelegate.m in Sources */,
@@ -8927,6 +8935,7 @@
 				3AFEEE681A0E5A7C00900A47 /* OAIconTextTableViewCell.m in Sources */,
 				3ACE8D4119F4F53D003F1D42 /* OAMapRulerView.m in Sources */,
 				BB451E3818DCD224005FBE09 /* OAAutoObserverProxy.m in Sources */,
+				84BE7D421CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				84064DED1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */,
 				84BE7D3D1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,
 				BBE1D2B0190D186F00D90F0A /* OsmAndAppImpl.mm in Sources */,
@@ -9151,6 +9160,7 @@
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
+				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,
 				84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */,
 			);

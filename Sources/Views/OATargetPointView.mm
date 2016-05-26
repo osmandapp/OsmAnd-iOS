@@ -1434,8 +1434,13 @@
 {
     if (self.customController)
     {
-        //self.addressStr = self.customController.typeText;
-        self.addressStr = _targetPoint.titleAddress;
+        NSString *typeStr = [self.customController getTypeStr];
+        if (_targetPoint.titleAddress.length > 0 && ![_targetPoint.title hasPrefix:_targetPoint.titleAddress])
+        {
+            typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
+        }
+        
+        self.addressStr = typeStr;
     }
     else
     {

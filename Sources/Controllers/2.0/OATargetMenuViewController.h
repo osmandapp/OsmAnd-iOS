@@ -61,6 +61,10 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (id)getTargetObj;
 
+- (BOOL)needAddress;
+- (NSString *)getTypeStr;
+- (NSString *)getCommonTypeStr;
+
 - (BOOL)supportFullMenu;
 - (BOOL)supportFullScreen;
 - (BOOL)fullScreenWithoutHeader;

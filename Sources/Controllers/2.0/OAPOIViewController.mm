@@ -15,6 +15,7 @@
 #import "OATargetInfoViewCell.h"
 #import "OAWebViewCell.h"
 #import "OAEditDescriptionViewController.h"
+#import "Localization.h"
 
 @implementation OARowInfo
 
@@ -69,6 +70,34 @@
     return self;
 }
 
+- (NSString *)getTypeStr;
+{
+    OAPOIType *type = self.poi.type;
+    NSMutableString *str = [NSMutableString string];
+    if ([self.poi.nameLocalized isEqualToString:self.poi.type.nameLocalized])
+    {
+        if (type.filter && type.filter.nameLocalized)
+        {
+            [str appendString:type.filter.nameLocalized];
+        }
+        else if (type.category && type.category.nameLocalized)
+        {
+            [str appendString:type.category.nameLocalized];
+        }
+    }
+    else if (type.nameLocalized)
+    {
+        [str appendString:type.nameLocalized];
+    }
+    
+    if (str.length == 0)
+    {
+        return [self getCommonTypeStr];
+    }
+    
+    return str;
+}
+
 - (BOOL)supportFullScreen
 {
     return NO;
@@ -112,10 +141,11 @@
     _rows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     
-    if (self.poi.type && ![self.poi.nameLocalized isEqualToString:self.poi.type.nameLocalized])
+    if (self.poi.type)
     {
-        UIImage *icon = [self applyColor:[self.poi.type icon]];
-        [_rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:self.poi.type.nameLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
+        OAPOIBaseType *poiType = self.poi.type.filter ? self.poi.type.filter : self.poi.type.category;
+        UIImage *icon = [self applyColor:[poiType icon]];
+        [_rows addObject:[[OARowInfo alloc] initWithKey:poiType.name icon:icon textPrefix:nil text:poiType.nameLocalized textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {

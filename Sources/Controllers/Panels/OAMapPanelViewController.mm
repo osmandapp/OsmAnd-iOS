@@ -56,6 +56,7 @@
 #import "OAGPXEditWptViewController.h"
 #import "OAGPXEditToolbarViewController.h"
 #import "OAPOI.h"
+#import "OAPOILocationType.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1130,40 +1131,11 @@ typedef enum
         caption = item.point.name;
     }
     
-    if ((targetPoint.type == OATargetLocation || targetPoint.type == OATargetWiki) && poiType)
-    {
-        OAPOI *poi = [[OAPOI alloc] init];
-        poi.latitude = lat;
-        poi.longitude = lon;
-        poi.type = poiType;
-        poi.name = caption;
-        poi.nameLocalized = caption;
-        poi.localizedNames = names;
-        poi.values = values;
-
-        if (poi.name.length == 0)
-            poi.name = poiType.name;
-        if (poi.nameLocalized.length == 0)
-            poi.nameLocalized = poiType.nameLocalized;
-        
-        UIImage *poiIcon = [poiType icon];
-        if (poiIcon)
-        {
-            icon = [OAUtilities tintImageWithColor:poiIcon color:UIColorFromRGB(0xfd8f25)] ;
-        }
-        
-        if (targetPoint.type != OATargetWiki)
-        {
-            targetPoint.type = OATargetPOI;
-        }
-        targetPoint.targetObj = poi;
-    }
-    
     NSString *roadTitle;
     if (!isPlace)
         roadTitle = [self findRoadNameByLat:lat lon:lon];
 
-    if (caption.length == 0 && targetPoint.type == OATargetLocation)
+    if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
     {
         if (!roadTitle || roadTitle.length == 0)
         {
@@ -1209,6 +1181,35 @@ typedef enum
     else
     {
         _formattedTargetName = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:CLLocationCoordinate2DMake(lat, lon)];
+    }
+    
+    if ((targetPoint.type == OATargetLocation || targetPoint.type == OATargetWiki) && poiType)
+    {
+        OAPOI *poi = [[OAPOI alloc] init];
+        poi.latitude = lat;
+        poi.longitude = lon;
+        poi.type = poiType;
+        poi.name = caption;
+        poi.nameLocalized = caption;
+        poi.localizedNames = names;
+        poi.values = values;
+        
+        if (poi.name.length == 0)
+            poi.name = poiType.name;
+        if (poi.nameLocalized.length == 0)
+            poi.nameLocalized = poiType.nameLocalized;
+        if (poi.nameLocalized.length == 0)
+            poi.nameLocalized = _formattedTargetName;
+        
+        _formattedTargetName = poi.nameLocalized;
+        
+        icon = [poiType icon];
+        
+        if (targetPoint.type != OATargetWiki)
+        {
+            targetPoint.type = OATargetPOI;
+        }
+        targetPoint.targetObj = poi;
     }
     
     _targetMode = EOATargetPoint;

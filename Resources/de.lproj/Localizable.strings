@@ -318,7 +318,7 @@
 "prch_nau_q3" = "Du kannst es später installieren über die Karten & Resourcen.";
 "res_banner_free_maps_title" = "Du hast %d freie Karten!";
 "parking_marker" = "Parkmarkierung";
-"pickup_car" = "zum Auto gehen";
+"pickup_car" = "Zum Auto gehen";
 "cannot_add_marker" = "Kann den Parkplatz nicht hinzufügen";
 "cannot_add_marker_desc" = "Bitte mindestens eine Richtung entfernen und nochmal versuchen";
 "cannot_add_destination" = "Kann nicht Richtung ergänzen";
@@ -448,15 +448,15 @@
 "gpx_import_desc" = "Du kannst deine GPX Dateien importieren (übliches GPS-Datenformat).\n\nUm die GPX Datei zu teilen kannst du die Datei von Dropbox, Email oder jeder anderen Quelle öffnen. - Benutze die \"öffnen in\" Funktion.";
 "product_desc_ext_nautical" = "OsmAnd See-Karten-Ansicht ist ein Plugin für die OsmAnd Maps & Navigation App. Dies ist eine detaillierte grafische Darstellung von Ozeanen, Seen, Küsten und Flüssen. Die Karte beinhaltetet unter anderem verschieden Informationen wie Segelrouten, Navigationslichter, gefährliche Gebiete, Gebiete in denen das Segel oder Ankern erlaubt bzw. verboten ist.\n\nHinweise zum Gebrauch: Es wird sehr empfohlen, die See-Karte herunterzuladen, um unabhängig von anderen detaillierten Karten zu sein. Um die See-Karten-Ansicht zu aktivieren, tippe auf den Karten Button um die Kartentyp auf \"See-Karten\" zu stellen.\n\nHinweis: Alle professionelle Seefahrer sind verpflichtet eine offizielle Seekarte bei sich auf dem Schiff zu haben.\n\nDie OsmAnd See-Karten basiert auf den Daten des OpenSeaMap Projekts. Während die OpenSeaMap Karten momentan nicht mit den offiziellen Seekarten konkurrieren kann, kann sie trotzdem von Freizeitsegler zur Orientierung oder Routenplanung verwendet werden.";
 "product_desc_ext_parking" = "OsmAnd-Parkplatz-Plugin erinnert Sie in Ihre Parkposition. Es ist ein Plug-in für die OsmAnd Karten&Navigations-App.\nWählen Sie eine zeitlich begrenzte Erinnerung (nur eine Markierung auf der Karte) oder eine zeitlich unbegrenzte mit einem Alarm nach Zeitablauf aus (beinhaltet auch eine Markierung auf der Karte). Bitte aktivieren Sie das Plugin im Plugins-Menü, um es zu verwenden.";
-"product_desc_ext_track_recording" = "Nehme deine Strecken auf und speichere diese manuell mit dem OsmAnd Streckenaufzeichnung Plug-in. Exportiere deine Strecke als GPX, teile diese oder nutze sie als Unterstützung für das OpenStreetMap Projekt. Ein nützliches Werkzeug für Jogger, Wanderer und jedem der interessiert ist Strecken aufzuzeichnen.";
+"product_desc_ext_track_recording" = "Nehme deine Strecken auf und speichere diese manuell mit dem OsmAnd Streckenaufzeichnungs-Plug-in. Exportiere deine Strecke als GPX, teile diese oder nutze sie als Unterstützung für das OpenStreetMap Projekt. Ein nützliches Werkzeug für Jogger, Wanderer und jedem der interessiert ist Strecken aufzuzeichnen.";
 "plugin_popup_wiki_ask" = "Um Wikipedia-Daten herunterladen zu können, müssen Sie das Plugin aktivieren: <b>Wikipedia</b>";
 "go_to_downloads" = "Gehe zu Downloads";
 "turn_on_plugin" = "Aktivieren Sie das Plugin";
 "all_world_popup_desc" = "Lade die Weltkarte herunter um Ländernamen, Grenzen und andere Informationen zu sehen";
 "sqlitedb_import_already_exists" = "Die angegebene sqlitedb Datei gibt es bereits. Bitte Aktion auswählen.";
 "product_desc_ext_skimap" = "OsmAnd Ski-Karten-Ansicht ist ein Plug-in für die OsmAnd Maps&Navigation App, hergestellt um in Wintersportgebieten zu navigieren. Dieses Plug-in stellt Informationen über Skipisten, Skilifte und sogar farbige Linien, über den Schwirigkeitsgrad der einzelnen Spuren, zur Verfügung. Du erhälst Informationen über die Skistrecken als auch auf die umliegende Infrastruktur.\n\nHinweise zum Gebrauch: Aktivieren Sie das Plug-in im OsmAnd Menü , tippen Sie auf die Schaltfläche Karte und setzen Sie den Kartentyp auf Ski-Karte.\n";
-"product_desc_ext_wiki" = "Hole dir Informationen zu Sehenswürdigkeiten in der Nähe von Wikipedia. Es ist dein Tasche Offline Führer - nur aktiviere das Wikipedia-Plugin und genieße Artikel über Objekte um dich herum.";
-"prch_wiki_info" = "Wikipedia Addon aktiviert Wikipedia Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
+"product_desc_ext_wiki" = "Hole dir Informationen zu Sehenswürdigkeiten in der Nähe von Wikipedia. Es ist dein Offline-Taschenführer - einfach das Wikipedia-Plugin aktivieren und Artikel über Objekte um dich herum genießen.";
+"prch_wiki_info" = "Wikipedia-Addon aktiviert Wikipedia-Informationen für berechtigte Karten welche sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "prch_srtm_info" = "Höhenlinien-Addon aktiviert Höhenlinien für berechtigte Karten, die Sie gekauft oder innerhalb des freien Limits heruntergeladen haben.";
 "plugin_popup_srtm_desc" = "Um die Höhenlinien zu nutzen zu können, bitte die entsprechenden Höhendaten herunterladen";
 "plugin_popup_srtm_ask" = "Um Höhendaten herunterladen zu können, bitte das <b>Höhenlinien Plugin</b> aktivieren";

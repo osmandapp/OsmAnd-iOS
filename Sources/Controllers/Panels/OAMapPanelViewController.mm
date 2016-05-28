@@ -1695,7 +1695,7 @@ typedef enum
 {
     if (_targetDestination)
     {
-        if (self.targetMenuView.targetPoint.type != OATargetDestination)
+        if (self.targetMenuView.targetPoint.type != OATargetDestination && self.targetMenuView.targetPoint.type != OATargetParking)
             return;
 
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -463,3 +463,5 @@
 "edit_waypoint_short" = "Edita la fita";
 "device_memory" = "Memòria del dispositiu";
 "free_memory" = "%@ disponible";
+"gpx_waypoint" = "Fita";
+"menu_my_waypoints" = "Les meves fites";

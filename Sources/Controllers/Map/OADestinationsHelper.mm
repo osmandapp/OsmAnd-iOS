@@ -189,7 +189,7 @@
 - (NSInteger)pureDestinationsCount
 {
     NSInteger res = 0;
-    for (OADestination *destination in self.sortedDestinations)
+    for (OADestination *destination in _app.data.destinations)
         if (!destination.routePoint)
             res++;
 

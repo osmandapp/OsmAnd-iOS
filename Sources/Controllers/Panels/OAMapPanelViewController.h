@@ -38,6 +38,7 @@
 
 - (BOOL)gpxModeActive;
 
+- (void)destinationsAdded;
 - (void)openDestinationCardsView;
 - (void)hideDestinationCardsView;
 - (void)hideDestinationCardsViewAnimated:(BOOL)animated;

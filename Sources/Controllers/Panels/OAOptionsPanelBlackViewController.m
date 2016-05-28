@@ -25,6 +25,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMaps;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyData;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMyTrips;
+@property (weak, nonatomic) IBOutlet UIButton *menuButtonMyWaypoints;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonSettings;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonMapsAndResources;
 @property (weak, nonatomic) IBOutlet UIButton *menuButtonQuiz;
@@ -68,7 +69,8 @@
             self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, small + 2.0, buttonHeight);
             self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, small + 2.0, buttonHeight);
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
+            self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, small + 2.0, buttonHeight);
             
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
@@ -86,7 +88,8 @@
             self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, small + 2.0, buttonHeight);
             self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, small + 2.0, buttonHeight);
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, small + 2.0, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
+            self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, small + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, small + 2.0, buttonHeight);
 
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, small + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, small + 2.0, buttonHeight);
@@ -107,7 +110,8 @@
             self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, big + 2.0, buttonHeight);
             self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, big + 2.0, buttonHeight);
             self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, big + 2.0, buttonHeight);
-            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, big + 2.0, buttonHeight);
+            self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, big + 2.0, buttonHeight);
+            self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, big + 2.0, buttonHeight);
             
             self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, big + 2.0, buttonHeight);
             self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, big + 2.0, buttonHeight);
@@ -122,12 +126,13 @@
 
             self.scrollView.frame = CGRectMake(0.0, topY, viewWidth, scrollHeight);
             
-            if (7 * buttonHeight < self.scrollView.frame.size.height) {
+            if (8 * buttonHeight < self.scrollView.frame.size.height) {
                 
                 self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
                 
                 self.menuButtonSettings.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 3.0 + 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonQuiz.frame = CGRectMake(-2.0, scrollHeight - buttonHeight * 2.0 + 0.0, viewWidth + 2.0, buttonHeight);
@@ -140,13 +145,14 @@
                 self.menuButtonMaps.frame = CGRectMake(-2.0, 0.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyData.frame = CGRectMake(-2.0, buttonHeight * 1.0 - 1.0, viewWidth + 2.0, buttonHeight);
                 self.menuButtonMyTrips.frame = CGRectMake(-2.0, buttonHeight * 2.0 - 2.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMyWaypoints.frame = CGRectMake(-2.0, buttonHeight * 3.0 - 3.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonMapsAndResources.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
                 
-                self.menuButtonSettings.frame = CGRectMake(-2.0, buttonHeight * 4.0 - 4.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonQuiz.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
-                self.menuButtonHelp.frame = CGRectMake(-2.0, buttonHeight * 6.0 - 6.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonSettings.frame = CGRectMake(-2.0, buttonHeight * 5.0 - 5.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonQuiz.frame = CGRectMake(-2.0, buttonHeight * 6.0 - 6.0, viewWidth + 2.0, buttonHeight);
+                self.menuButtonHelp.frame = CGRectMake(-2.0, buttonHeight * 7.0 - 7.0, viewWidth + 2.0, buttonHeight);
 
-                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 6.0 - 6.0 + buttonHeight);
+                self.scrollView.contentSize = CGSizeMake(viewWidth, buttonHeight * 7.0 - 7.0 + buttonHeight);
             }
             
         }
@@ -164,6 +170,7 @@
     [_menuButtonMaps setTitle:OALocalizedString(@"map_settings_map") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"my_favorites") forState:UIControlStateNormal];
     [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setTitle:OALocalizedString(@"menu_my_waypoints") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonQuiz setTitle:OALocalizedString(@"menu_feedback") forState:UIControlStateNormal];
@@ -183,6 +190,9 @@
 
     self.menuButtonMyTrips.layer.borderColor = [borderColor CGColor];
     self.menuButtonMyTrips.layer.borderWidth = 0.5;
+
+    self.menuButtonMyWaypoints.layer.borderColor = [borderColor CGColor];
+    self.menuButtonMyWaypoints.layer.borderWidth = 0.5;
 
     self.menuButtonMapsAndResources.layer.borderColor = [borderColor CGColor];
     self.menuButtonMapsAndResources.layer.borderWidth = 0.5;
@@ -226,6 +236,13 @@
         OAGPXListViewController* gpxViewController = [[OAGPXListViewController alloc] init];
         [self.navigationController pushViewController:gpxViewController animated:YES];
     }
+}
+
+- (IBAction)myWaypointsButtonClicked:(id)sender
+{
+    [self.sidePanelController toggleLeftPanel:self];
+    [[OARootViewController instance].mapPanel destinationsAdded];
+    [[OARootViewController instance].mapPanel openDestinationCardsView];
 }
 
 - (IBAction)settingsButtonClicked:(id)sender

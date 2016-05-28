@@ -370,7 +370,7 @@
 
 - (BOOL)hasActiveItems
 {
-    int count = _items.count;
+    NSInteger count = _items.count;
     for (OADestinationItem *item in _items)
     {
         if (item.destination.hidden)

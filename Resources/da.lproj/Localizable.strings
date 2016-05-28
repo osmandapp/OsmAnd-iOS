@@ -465,3 +465,4 @@
 "free_memory" = "Tilgængelig %@";
 "gpx_waypoint" = "Rutepunkt";
 "menu_my_waypoints" = "Mine rutepunkter";
+"menu_my_directions" = "Kørselsvejledninger";

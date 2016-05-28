@@ -465,3 +465,4 @@
 "free_memory" = "Libre %@";
 "gpx_waypoint" = "Punto de ruta";
 "menu_my_waypoints" = "Mis puntos de ruta";
+"menu_my_directions" = "Mis direcciones";

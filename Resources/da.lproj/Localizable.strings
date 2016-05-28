@@ -464,3 +464,4 @@
 "device_memory" = "Lagerplads";
 "free_memory" = "Tilgængelig %@";
 "gpx_waypoint" = "Rutepunkt";
+"menu_my_waypoints" = "Mine rutepunkter";

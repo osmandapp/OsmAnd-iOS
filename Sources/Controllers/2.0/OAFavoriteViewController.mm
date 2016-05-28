@@ -90,57 +90,9 @@
     return self;
 }
 
--(BOOL)needAddress
-{
-    return NO;
-}
-
-- (NSString *)getTypeStr
-{
-    NSString *group = [self getItemGroup];
-    if (group.length > 0)
-    {
-        return group;
-    }
-    else
-    {
-        return [self getCommonTypeStr];
-    }
-}
-
 - (NSString *)getCommonTypeStr
 {
     return OALocalizedString(@"favorite");
-}
-
-- (NSAttributedString *)getAttributedTypeStr
-{
-    return [self getAttributedTypeStr:[self getTypeStr]];
-}
-
-- (NSAttributedString *)getAttributedCommonTypeStr
-{
-    return [self getAttributedTypeStr:[self getCommonTypeStr]];
-}
-
-- (NSAttributedString *)getAttributedTypeStr:(NSString *)group
-{
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
-    UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
-    
-    NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
-    NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
-    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x727272)];
-    
-    NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
-    [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];
-    [stringGroup addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
-    
-    [string appendAttributedString:stringGroup];
-
-    [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
-    
-    return string;
 }
 
 - (void)applyLocalization

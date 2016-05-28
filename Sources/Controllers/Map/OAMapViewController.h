@@ -17,6 +17,7 @@
 
 #define kNotificationSetTargetPoint @"kNotificationSetTargetPoint"
 #define kNotificationNoSymbolFound @"kNotificationNoSymbolFound"
+#define kNotificationMapGestureAction @"kNotificationMapGestureAction"
 #define kNotificationContextMarkerClicked @"kNotificationContextMarkerClicked"
 #define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
 
@@ -134,7 +135,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 - (void)postTargetNotification:(OAMapSymbol *)symbol;
 
-- (void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (BOOL)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
 - (void)showRouteGpxTrack;
 - (void)hideRouteGpxTrack;

@@ -51,6 +51,26 @@
     return nil;
 }
 
+- (NSAttributedString *)getAttributedTypeStr:(NSString *)group
+{
+    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
+    UIFont *font = [UIFont fontWithName:@"AvenirNext-Regular" size:15.0];
+    
+    NSMutableAttributedString *stringGroup = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"  %@", group]];
+    NSTextAttachment *groupAttachment = [[NSTextAttachment alloc] init];
+    groupAttachment.image = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_small_group.png"] color:UIColorFromRGB(0x727272)];
+    
+    NSAttributedString *groupStringWithImage = [NSAttributedString attributedStringWithAttachment:groupAttachment];
+    [stringGroup replaceCharactersInRange:NSMakeRange(0, 1) withAttributedString:groupStringWithImage];
+    [stringGroup addAttribute:NSBaselineOffsetAttributeName value:[NSNumber numberWithFloat:-2.0] range:NSMakeRange(0, 1)];
+    
+    [string appendAttributedString:stringGroup];
+    
+    [string addAttribute:NSFontAttributeName value:font range:NSMakeRange(0, string.length)];
+    
+    return string;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

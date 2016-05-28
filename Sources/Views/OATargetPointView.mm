@@ -59,6 +59,8 @@
 
 @interface OATargetPointView() <OATargetPointZoomViewDelegate, UIGestureRecognizerDelegate>
 
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+
 @property (weak, nonatomic) IBOutlet UIView *topView;
 
 @property (weak, nonatomic) IBOutlet UIImageView *topImageView;
@@ -74,7 +76,6 @@
 @property (weak, nonatomic) IBOutlet OAButton *buttonMore;
 
 @property (weak, nonatomic) IBOutlet UIButton *buttonShadow;
-@property (weak, nonatomic) IBOutlet UIButton *buttonClose;
 @property (weak, nonatomic) IBOutlet UIButton *buttonRight;
 
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
@@ -114,7 +115,6 @@
     BOOL _sliding;
     BOOL _toolbarAnimating;
     CGPoint _topViewStartSlidingPos;
-    CGPoint _buttonsViewStartSlidingPos;
     
     UIPanGestureRecognizer *_panGesture;
 
@@ -183,10 +183,10 @@
     _buttonMore.hidden = YES;
 
     // drop shadow
-    [_topView.layer setShadowColor:[UIColor blackColor].CGColor];
-    [_topView.layer setShadowOpacity:0.3];
-    [_topView.layer setShadowRadius:3.0];
-    [_topView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    [_containerView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_containerView.layer setShadowOpacity:0.3];
+    [_containerView.layer setShadowRadius:3.0];
+    [_containerView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     _horizontalLine = [CALayer layer];
     _horizontalLine.backgroundColor = [[UIColor colorWithWhite:0.50 alpha:0.3] CGColor];
@@ -334,7 +334,6 @@
     {
         _sliding = YES;
         _topViewStartSlidingPos = self.frame.origin;
-        _buttonsViewStartSlidingPos = _buttonsView.frame.origin;
     }
     
     if ([gesture state] == UIGestureRecognizerStateChanged)
@@ -369,15 +368,6 @@
             }
         }
         
-        if (![self isLandscape] && [self hasInfo] && !_hideButtons)
-        {
-            CGFloat by = _buttonsViewStartSlidingPos.y - translatedPoint.y * 1.3;
-            if (f.size.height < h && by <= _topView.frame.origin.y + _topView.frame.size.height)
-                _buttonsView.center = CGPointMake(_buttonsView.center.x, _topView.frame.origin.y + _topView.frame.size.height + _buttonsView.bounds.size.height / 2.0);
-            else
-                _buttonsView.center = CGPointMake(_buttonsView.center.x, f.size.height - _buttonsView.bounds.size.height / 2.0);
-        }
-
         self.frame = f;
         
         [self updateZoomViewFrame];
@@ -458,11 +448,6 @@
             [UIView animateWithDuration:.3 animations:^{
                 self.frame = frame;
                 [self updateZoomViewFrame];
-                [self updateButtonClose];
-                if (![self isLandscape] && !_hideButtons)
-                {
-                    _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
-                }
             } completion:^(BOOL finished) {
                 if (!goFull)
                 {
@@ -531,12 +516,6 @@
                     
                     self.frame = frame;
                     [self updateZoomViewFrame];
-                    [self updateButtonClose];
-
-                    if (![self isLandscape] && !_hideButtons)
-                    {
-                        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, DeviceScreenWidth, kOATargetPointButtonsViewHeight);
-                    }
                     
                 } completion:^(BOOL finished) {
                     _sliding = NO;
@@ -552,7 +531,8 @@
                 if (duration > .3)
                     duration = .3;
                 
-                [self.delegate targetHideMenu:duration backButtonClicked:NO];
+                [self.delegate targetHide];
+                //[self.delegate targetHideMenu:duration backButtonClicked:NO];
             }
         }
     }
@@ -704,9 +684,6 @@
     [UIView animateWithDuration:.3 animations:^{
         
         self.frame = frame;
-        
-        if (![self isLandscape] && _hideButtons)
-            _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - frame.origin.y + 1.0, _buttonsView.bounds.size.width, _buttonsView.bounds.size.height);
     }];
     
     [self.delegate targetViewSizeChanged:frame animated:YES];
@@ -778,16 +755,18 @@
     [self updateUIOnInit];
 }
 
-- (void)updateButtonClose
+- (BOOL)closeDenied
 {
-    _buttonClose.alpha = ((_hideButtons && _showFull) || (_targetPoint.type == OATargetGPXRoute) || (_targetPoint.type == OATargetGPXEdit) || (!_buttonRight.hidden) ? 0.0 : 1.0);
+    return (_hideButtons && _showFull)
+        || (_targetPoint.type == OATargetGPXRoute)
+        || (_targetPoint.type == OATargetGPXEdit)
+        || (!_buttonRight.hidden);
 }
 
 - (void)doUpdateUI
 {
     _hideButtons = (_targetPoint.type == OATargetGPX || _targetPoint.type == OATargetGPXEdit || _targetPoint.type == OATargetGPXRoute || _activeTargetType == OATargetGPXEdit || _activeTargetType == OATargetGPXRoute);
     self.buttonsView.hidden = _hideButtons;
-    [self updateButtonClose];
     
     _buttonsCount = 3 + (_iapHelper.functionalAddons.count > 0 ? 1 : 0);
     
@@ -921,6 +900,7 @@
             OAGpxWptItem *item = _targetPoint.targetObj;
             _targetPoint.title = item.point.name;
             [_addressLabel setText:_targetPoint.title];
+            [self updateAddressLabel];
             
             UIColor* color = item.color;
             OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
@@ -1116,6 +1096,14 @@
         return YES;
 }
 
+- (void)hideByMapGesture
+{
+    if (self.customController && ![self.customController supportMapInteraction])
+    {
+        [self.delegate targetHideMenuByMapGesture];
+    }
+}
+
 - (UIView *)bottomMostView
 {
     return self;
@@ -1156,13 +1144,18 @@
         [self updateToolbarFrame:landscape];
 
     _topImageView.hidden = (landscape || ![self hasInfo]);
-
-    [self updateButtonClose];
     
     if (landscape)
-        _topView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, kOATargetPointTopViewHeight);
+    {
+        _topView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, kOATargetPointTopViewHeight);
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+    }
     else
-        _topView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, kOATargetPointTopViewHeight);
+    {
+        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointTopViewHeight);
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+    }
+    
     
     CGFloat hf = 0.0;
     
@@ -1208,7 +1201,7 @@
     
     _fullInfoHeight = hf;
 
-    hf += _topView.frame.size.height + (_hideButtons ? 0.0 : _buttonsView.frame.size.height) + kOATargetPointTopPanTreshold;
+    hf += _containerView.frame.size.height + kOATargetPointTopPanTreshold;
     
     CGRect frame = self.frame;
     frame.size.width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
@@ -1272,16 +1265,8 @@
     
     CGFloat width = self.frame.size.width;
     
-    if (landscape)
-    {
-        if (self.customController.contentView)
-            self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
-    }
-    else
-    {
-        if (self.customController.contentView)
-            self.customController.contentView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, self.customController.contentView.frame.size.height);
-    }
+    if (self.customController.contentView)
+        self.customController.contentView.frame = CGRectMake(0.0, _containerView.frame.origin.y + _containerView.frame.size.height, width, self.customController.contentView.frame.size.height);
     
     _addressLabel.frame = CGRectMake(textX, 3.0, width - textX - 40.0, 36.0);
 
@@ -1295,14 +1280,9 @@
         _buttonShadow.frame = CGRectMake(_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
     else
         _buttonShadow.frame = CGRectMake(0.0, 0.0, width - 50.0, 73.0);
-    
-    _buttonClose.frame = CGRectMake(width - 36.0, 0.0, 36.0, 36.0);
-    
-    if (_hideButtons)
-        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y + 1.0, width, kOATargetPointButtonsViewHeight);
-    else
-        _buttonsView.frame = CGRectMake(0.0, DeviceScreenHeight - self.frame.origin.y - kOATargetPointButtonsViewHeight, width, kOATargetPointButtonsViewHeight);
-    
+        
+    _buttonsView.frame = CGRectMake(0.0, _topView.frame.origin.y + _topView.frame.size.height, width, kOATargetPointButtonsViewHeight);
+
     CGFloat backViewWidth = floor(_buttonsView.frame.size.width / _buttonsCount);
     CGFloat x = 0.0;
     _backView1.frame = CGRectMake(x, 1.0, backViewWidth, _buttonsView.frame.size.height - 1.0);
@@ -1491,7 +1471,7 @@
     {
         [self doUpdateUI];
         [self doLayoutSubviews];
-        [self showFullMenu];
+        //[self showFullMenu];
     }
 }
 
@@ -1696,12 +1676,6 @@
     {
         [self.delegate targetGoToPoint];
     }
-}
-
-- (IBAction)buttonCloseClicked:(id)sender
-{
-    if ([self preHide])
-        [self.delegate targetHide];
 }
 
 - (IBAction)buttonLeftClicked:(id)sender

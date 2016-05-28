@@ -81,6 +81,11 @@
     return self;
 }
 
+- (NSString *)getCommonTypeStr
+{
+    return OALocalizedString(@"gpx_waypoint");
+}
+
 - (void)applyLocalization
 {
     [super applyLocalization];
@@ -194,7 +199,8 @@
 - (void)setItemGroup:(NSString *)groupName
 {
     self.wpt.point.type = groupName;
-    
+    [self saveItemToStorage];
+   
     if (![self.wpt.groups containsObject:groupName] && groupName.length > 0)
         self.wpt.groups = [self.wpt.groups arrayByAddingObject:groupName];
 }

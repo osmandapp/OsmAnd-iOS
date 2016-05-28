@@ -70,6 +70,7 @@
 
 // GPX
 "gpx_point" = "Point";
+"gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Export";

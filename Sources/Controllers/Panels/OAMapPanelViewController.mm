@@ -172,6 +172,7 @@ typedef enum
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onTargetPointSet:) name:kNotificationSetTargetPoint object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onNoSymbolFound:) name:kNotificationNoSymbolFound object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onContextMarkerClicked:) name:kNotificationContextMarkerClicked object:nil];
 
     _hudInvalidated = NO;
@@ -858,7 +859,7 @@ typedef enum
 
 - (void)hideContextMenu
 {
-    [self targetHideMenu:.3 backButtonClicked:NO];
+    [self targetHideMenu:.2 backButtonClicked:NO];
 }
 
 -(void)closeMapSettings
@@ -963,6 +964,11 @@ typedef enum
 -(void)onNoSymbolFound:(NSNotification *)notification
 {
     //[self hideTargetPointMenu];
+}
+
+-(void)onMapGestureAction:(NSNotification *)notification
+{
+    [self.targetMenuView hideByMapGesture];
 }
 
 -(void)onContextMarkerClicked:(NSNotification *)notification
@@ -1398,12 +1404,15 @@ typedef enum
 
 -(void)destroyShadowButton
 {
-    [_shadowButton removeFromSuperview];
-    if (_shadowLongPress) {
-        [_shadowButton removeGestureRecognizer:_shadowLongPress];
-        _shadowLongPress = nil;
+    if (_shadowButton)
+    {
+        [_shadowButton removeFromSuperview];
+        if (_shadowLongPress) {
+            [_shadowButton removeGestureRecognizer:_shadowLongPress];
+            _shadowLongPress = nil;
+        }
+        self.shadowButton = nil;
     }
-    self.shadowButton = nil;
 }
 
 - (void)shadowTargetPointLongPress:(UILongPressGestureRecognizer*)gesture
@@ -1921,7 +1930,7 @@ typedef enum
             [self showTargetPointMenu:saveMapState showFullMenu:showFullMenu onComplete:onComplete];
             _activeTargetChildPushed = activeTargetChildPushed;
             
-        } hideActiveTarget:YES shadowButtonAction:NO];
+        } hideActiveTarget:YES mapGestureAction:NO];
         
         return;
     }
@@ -2167,15 +2176,13 @@ typedef enum
 
     [self.targetMenuView show:YES onComplete:^{
         
-        [self createShadowButton:@selector(hideTargetPointMenuByShadow) withLongPressEvent:@selector(shadowTargetPointLongPress:) topView:[self.targetMenuView bottomMostView]];
-        
         self.sidePanelController.recognizesPanGesture = NO;
     }];
 }
 
-- (void)hideTargetPointMenuByShadow
+- (void)targetHideMenuByMapGesture
 {
-    [self hideTargetPointMenu:.3 onComplete:nil hideActiveTarget:NO shadowButtonAction:YES];
+    [self hideTargetPointMenu:.2 onComplete:nil hideActiveTarget:NO mapGestureAction:YES];
 }
 
 -(void)targetSetTopControlsVisible:(BOOL)visible
@@ -2190,7 +2197,7 @@ typedef enum
 
 -(void)hideTargetPointMenu
 {
-    [self hideTargetPointMenu:.3 onComplete:nil];
+    [self hideTargetPointMenu:.2 onComplete:nil];
 }
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration
@@ -2200,12 +2207,12 @@ typedef enum
 
 -(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete
 {
-    [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO shadowButtonAction:NO];
+    [self hideTargetPointMenu:animationDuration onComplete:onComplete hideActiveTarget:NO mapGestureAction:NO];
 }
 
--(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget shadowButtonAction:(BOOL)shadowButtonAction
+-(void)hideTargetPointMenu:(CGFloat)animationDuration onComplete:(void (^)(void))onComplete hideActiveTarget:(BOOL)hideActiveTarget mapGestureAction:(BOOL)mapGestureAction
 {
-    if (shadowButtonAction && self.targetMenuView.targetPoint.type == OATargetGPX)
+    if (mapGestureAction && self.targetMenuView.targetPoint.type == OATargetGPX)
     {
         [self.targetMenuView requestHeaderOnlyMode];
         return;

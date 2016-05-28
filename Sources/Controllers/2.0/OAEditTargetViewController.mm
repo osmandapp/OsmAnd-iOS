@@ -57,6 +57,39 @@
     return UIStatusBarStyleLightContent;
 }
 
+-(BOOL)needAddress
+{
+    return NO;
+}
+
+- (NSString *)getTypeStr
+{
+    NSString *group = [self getItemGroup];
+    if (group.length > 0)
+    {
+        return group;
+    }
+    else
+    {
+        return [self getCommonTypeStr];
+    }
+}
+
+- (NSString *)getCommonTypeStr
+{
+    return OALocalizedString(@"gpx_point");
+}
+
+- (NSAttributedString *)getAttributedTypeStr
+{
+    return [self getAttributedTypeStr:[self getTypeStr]];
+}
+
+- (NSAttributedString *)getAttributedCommonTypeStr
+{
+    return [self getAttributedTypeStr:[self getCommonTypeStr]];
+}
+
 - (BOOL)hasTopToolbar
 {
     return YES;

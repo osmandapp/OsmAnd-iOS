@@ -72,6 +72,8 @@
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 - (BOOL)preHide;
 
+- (void)hideByMapGesture;
+
 - (void)applyTargetObjectChanges;
 
 - (BOOL)isToolbarVisible;
@@ -96,6 +98,7 @@
 -(void)targetHideContextPinMarker;
 -(void)targetHide;
 -(void)targetHideMenu:(CGFloat)animationDuration backButtonClicked:(BOOL)backButtonClicked;
+-(void)targetHideMenuByMapGesture;
 -(void)targetGoToPoint;
 -(void)targetGoToGPX;
 -(void)targetGoToGPXRoute;

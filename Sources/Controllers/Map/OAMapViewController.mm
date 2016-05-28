@@ -1018,6 +1018,8 @@
     // If gesture has just began, just capture current zoom
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+        [self postMapGestureAction];
+
         // When user gesture has began, stop all animations
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
@@ -1093,6 +1095,8 @@
     
     if (recognizer.state == UIGestureRecognizerStateBegan && recognizer.numberOfTouches > 0)
     {
+        [self postMapGestureAction];
+
         // Get location of the gesture
         CGPoint touchPoint = [recognizer locationOfTouch:0 inView:self.view];
         touchPoint.x *= mapView.contentScaleFactor;
@@ -1192,6 +1196,8 @@
     // Zeroify accumulated rotation on gesture begin
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+        [self postMapGestureAction];
+
         // When user gesture has began, stop all animations
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
@@ -1272,6 +1278,11 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        [self postMapGestureAction];
+    }
+    
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
@@ -1317,6 +1328,11 @@
     
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
     
+    if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
+        [self postMapGestureAction];
+    }
+
     // Handle gesture only when it is ended
     if (recognizer.state != UIGestureRecognizerStateEnded)
         return;
@@ -1373,6 +1389,8 @@
 
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
+        [self postMapGestureAction];
+
         // When user gesture has began, stop all animations
         mapView.animator->pause();
         mapView.animator->cancelAllAnimations();
@@ -1399,9 +1417,9 @@
     }
 }
 
--(void)simulateContextMenuPress:(UIGestureRecognizer*)recognizer
+-(BOOL)simulateContextMenuPress:(UIGestureRecognizer*)recognizer
 {
-    [self pointContextMenuGestureDetected:recognizer];
+    return [self pointContextMenuGestureDetected:recognizer];
 }
 
 - (void)processSymbolFields:(OAMapSymbol *)symbol decodedValues:(const QList<OsmAnd::Amenity::DecodedValue>)decodedValues
@@ -1463,11 +1481,11 @@
     }
 }
 
-- (void)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
+- (BOOL)pointContextMenuGestureDetected:(UIGestureRecognizer*)recognizer
 {
     // Ignore gesture if we have no view
     if (![self isViewLoaded])
-        return;
+        return NO;
 
     OAMapRendererView* mapView = (OAMapRendererView*)self.view;
 
@@ -1483,7 +1501,9 @@
     double lat = OsmAnd::Utilities::get31LatitudeY(touchLocation.y);
     
     if (recognizer.state == UIGestureRecognizerStateBegan)
+    {
         [self setupMapArrowsLocation:CLLocationCoordinate2DMake(lat, lon)];
+    }
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
         recognizer.state == UIGestureRecognizerStateCancelled)
@@ -1495,7 +1515,7 @@
     
     // Capture only last state
     if (recognizer.state != UIGestureRecognizerStateEnded)
-        return;
+        return NO;
     
     double lonTap = lon;
     double latTap = lat;
@@ -1739,7 +1759,7 @@
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
                                                                 object:self
                                                               userInfo:nil];
-            return;
+            return YES;
         }
         else
         {
@@ -1754,7 +1774,7 @@
             }
             
             [OAMapViewController postTargetNotification:s];
-            return;
+            return YES;
         }
     
     // if single press and no symbol found - exit
@@ -1763,6 +1783,7 @@
         [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNoSymbolFound
                                                             object:self
                                                           userInfo:nil];
+        return NO;
     }
     else
     {
@@ -1772,6 +1793,7 @@
         symbol.location = CLLocationCoordinate2DMake(lat, lon);
         symbol.poiType = [[OAPOILocationType alloc] init];
         [OAMapViewController postTargetNotification:symbol];
+        return YES;
     }
 }
 
@@ -1869,6 +1891,13 @@
     if (![self isViewLoaded])
         return nil;
     return (OAMapRendererView*)self.view;
+}
+
+- (void)postMapGestureAction
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationMapGestureAction
+                                                        object:self
+                                                      userInfo:nil];
 }
 
 @synthesize stateObservable = _stateObservable;

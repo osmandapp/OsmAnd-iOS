@@ -464,3 +464,4 @@
 "device_memory" = "Memoria del dispositivo";
 "free_memory" = "Libre %@";
 "gpx_waypoint" = "Punto de ruta";
+"menu_my_waypoints" = "Mis puntos de ruta";

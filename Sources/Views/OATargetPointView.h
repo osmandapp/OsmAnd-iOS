@@ -13,10 +13,7 @@
 #import "OATargetPoint.h"
 
 #define kOATargetPointTopPanTreshold 16.0
-#define kOATargetPointViewHeightPortrait 125.0 + kOATargetPointTopPanTreshold
-#define kOATargetPointViewHeightLandscape 125.0 + kOATargetPointTopPanTreshold
 #define kInfoViewLanscapeWidth 320.0
-#define kOATargetPointTopViewHeight 73.0
 #define kOATargetPointButtonsViewHeight 53.0
 #define kOATargetPointViewFullHeightKoef 0.66
 
@@ -54,7 +51,7 @@
 -(void)setParentViewInstance:(UIView *)parentView;
 -(void)updateTargetPointType:(OATargetPointType)targetType;
 
--(void)setCustomViewController:(OATargetMenuViewController *)customController;
+-(void)setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu;
 
 - (UIView *)bottomMostView;
 

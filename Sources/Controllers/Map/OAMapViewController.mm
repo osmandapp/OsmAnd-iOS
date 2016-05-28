@@ -3314,8 +3314,11 @@
         
         if (_app.data.underlayMapSource)
             [self doUpdateUnderlay];
-        
-        [self waitForIdle];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
+            [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
+        });
     }
 }
 
@@ -3551,7 +3554,10 @@
         }
     }
     
-    [self waitForIdle];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
+        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
+    });
 }
 
 - (void)onLayersConfigurationChanged
@@ -4954,14 +4960,6 @@
 - (void)waitForIdle
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [NSThread sleepForTimeInterval:.5];
-        int counter = 0;
-        OAMapRendererView* renderView = (OAMapRendererView*)self.view;
-        while (![renderView isIdle] && counter < 100)
-        {
-            [NSThread sleepForTimeInterval:.05];
-            counter++;
-        }
         [_idleObservable notifyEvent];
     });
 }

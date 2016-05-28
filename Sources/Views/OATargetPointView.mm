@@ -323,10 +323,8 @@
     CGPoint translatedPoint = [gesture translationInView:self.superview];
     CGPoint translatedVelocity = [gesture velocityInView:self.superview];
     
-    CGFloat h = kOATargetPointViewHeightPortrait;
-    if ([self isLandscape])
-        h = kOATargetPointViewHeightLandscape;
-    
+    CGFloat h = _containerView.frame.size.height + kOATargetPointTopPanTreshold;
+
     if (_hideButtons)
         h -= kOATargetPointButtonsViewHeight;
 
@@ -1132,28 +1130,49 @@
 
 - (void)doLayoutSubviews
 {
-    CGFloat h = kOATargetPointViewHeightPortrait;
     BOOL landscape = [self isLandscape];
-    if (landscape)
-        h = kOATargetPointViewHeightLandscape;
+    BOOL hasVisibleToolbar = self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden;
+    CGFloat topViewTop = 0.0;
+    if (hasVisibleToolbar)
+    {
+        [self updateToolbarFrame:landscape];
+    }
+    else if (_showFullScreen || landscape)
+    {
+        topViewTop = 20.0;
+    }
+
+    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
+    CGFloat width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
+    
+    CGFloat labelPreferredWidth = width - textX - 40.0;
+    
+    _addressLabel.preferredMaxLayoutWidth = labelPreferredWidth;
+    _addressLabel.frame = CGRectMake(textX, 10.0, labelPreferredWidth, 1000.0);
+    [_addressLabel sizeToFit];
+    
+    _coordinateLabel.preferredMaxLayoutWidth = labelPreferredWidth;
+    _coordinateLabel.frame = CGRectMake(textX, _addressLabel.frame.origin.y + _addressLabel.frame.size.height + 4.0, labelPreferredWidth, 1000.0);
+    [_coordinateLabel sizeToFit];
+    
+    CGFloat topViewHeight = _coordinateLabel.frame.origin.y + _coordinateLabel.frame.size.height + 10.0;
+
+    CGFloat h = kOATargetPointTopPanTreshold + topViewHeight + kOATargetPointButtonsViewHeight;
     
     if (_hideButtons)
         h -= kOATargetPointButtonsViewHeight;
     
-    if (self.customController && [self.customController hasTopToolbar] && !self.customController.navBar.hidden)
-        [self updateToolbarFrame:landscape];
-
     _topImageView.hidden = (landscape || ![self hasInfo]);
     
     if (landscape)
     {
-        _topView.frame = CGRectMake(0.0, 0.0, kInfoViewLanscapeWidth, kOATargetPointTopViewHeight);
-        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+        _topView.frame = CGRectMake(0.0, topViewTop, kInfoViewLanscapeWidth, topViewHeight);
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, kInfoViewLanscapeWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
     }
     else
     {
-        _topView.frame = CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointTopViewHeight);
-        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
+        _topView.frame = CGRectMake(0.0, topViewTop, DeviceScreenWidth, topViewHeight);
+        _containerView.frame = CGRectMake(0.0, kOATargetPointTopPanTreshold, DeviceScreenWidth, _topView.frame.origin.y + _topView.frame.size.height + (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight));
     }
     
     
@@ -1170,7 +1189,7 @@
             if (self.customController.editing)
                 chFull = MAX(DeviceScreenHeight - (_hideButtons ? 0.0 : kOATargetPointButtonsViewHeight) - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? self.customController.navBar.bounds.size.height : 0.0), (self.customController.showingKeyboard ? [self.customController contentHeight] : 0.0));
             else
-                chFull = DeviceScreenHeight - kOATargetPointViewHeightLandscape + (_hideButtons ? kOATargetPointButtonsViewHeight : 0.0) - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? self.customController.navBar.bounds.size.height : 0.0) - kOATargetPointTopPanTreshold;
+                chFull = DeviceScreenHeight - _containerView.frame.size.height - ([self.customController hasTopToolbar] && !self.customController.navBar.hidden ? self.customController.navBar.bounds.size.height : 0.0);
             
             f.size.height = chFull;
         }
@@ -1181,13 +1200,13 @@
             else
                 chFull = MIN([self.customController contentHeight], DeviceScreenHeight * kOATargetPointViewFullHeightKoef - h);
 
-            chFullScreen = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height : 20.0) - kOATargetPointTopViewHeight;
+            chFullScreen = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height : 20.0) - _containerView.frame.size.height;
 
             if (_showFullScreen)
             {
                 f.size.height = chFullScreen;
                 if (self.customController && [self.customController fullScreenWithoutHeader])
-                    f.size.height += kOATargetPointTopViewHeight;
+                    f.size.height += topViewHeight;
             }
             else
             {
@@ -1204,7 +1223,7 @@
     hf += _containerView.frame.size.height + kOATargetPointTopPanTreshold;
     
     CGRect frame = self.frame;
-    frame.size.width = (landscape ? kInfoViewLanscapeWidth : DeviceScreenWidth);
+    frame.size.width = width;
     if (_showFull && !landscape)
     {
         if (_showFullScreen)
@@ -1212,7 +1231,7 @@
             frame.origin.y = (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0);
             
             if (self.customController && [self.customController fullScreenWithoutHeader])
-                frame.origin.y -= kOATargetPointTopViewHeight;
+                frame.origin.y -= topViewHeight;
             
             frame.size.height = DeviceScreenHeight - frame.origin.y;
         }
@@ -1250,7 +1269,7 @@
     
     _frameTop = frame.origin.y;
     _fullHeight = hf;
-    _fullScreenHeight = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0);
+    _fullScreenHeight = DeviceScreenHeight - (self.customController && self.customController.navBar.hidden == NO ? self.customController.navBar.bounds.size.height - kOATargetPointTopPanTreshold : 20.0) - (hasVisibleToolbar ? 0.0 : 20.0);
     
     if (_imageView.image)
     {
@@ -1261,20 +1280,8 @@
             _imageView.contentMode = UIViewContentModeTop;
     }
     
-    CGFloat textX = (_imageView.image || !_buttonLeft.hidden ? 50.0 : 16.0) + (_targetPoint.type == OATargetGPXRoute || _targetPoint.type == OATargetDestination || _targetPoint.type == OATargetParking ? 10.0 : 0.0);
-    
-    CGFloat width = self.frame.size.width;
-    
     if (self.customController.contentView)
         self.customController.contentView.frame = CGRectMake(0.0, _containerView.frame.origin.y + _containerView.frame.size.height, width, self.customController.contentView.frame.size.height);
-    
-    _addressLabel.frame = CGRectMake(textX, 3.0, width - textX - 40.0, 36.0);
-
-    CGFloat clh = [OAUtilities calculateTextBounds:_coordinateLabel.text width:width - textX - 40.0 font:[UIFont fontWithName:@"AvenirNext-Regular" size:12.0]].height;
-    if (clh < 20)
-        _coordinateLabel.frame = CGRectMake(textX, 35.0, width - textX - 40.0, 30.0);
-    else
-        _coordinateLabel.frame = CGRectMake(textX, 35.0, width - textX - 40.0, 36.0);
     
     if (!_buttonLeft.hidden)
         _buttonShadow.frame = CGRectMake(_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0, 0.0, width - 50.0 - (_buttonLeft.frame.origin.x + _buttonLeft.frame.size.width + 5.0), 73.0);
@@ -1352,9 +1359,9 @@
     {
         _imageView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_addressLabel setText:OALocalizedString(@"parking_marker")];
-        OADestination *d = _targetPoint.targetObj;
         [self updateAddressLabel];
-        if (d && d.carPickupDateEnabled)
+        id d = _targetPoint.targetObj;
+        if (d && [d isKindOfClass:[OADestination class]] && ((OADestination *)d).carPickupDateEnabled)
             [OADestinationCell setParkingTimerStr:_targetPoint.targetObj label:self.coordinateLabel shortText:NO];
     }
     else if (_targetPoint.type == OATargetGPXRoute)
@@ -1455,7 +1462,7 @@
     self.parentView = parentView;
 }
 
--(void)setCustomViewController:(OATargetMenuViewController *)customController
+-(void)setCustomViewController:(OATargetMenuViewController *)customController needFullMenu:(BOOL)needFullMenu
 {
     [self clearCustomControllerIfNeeded];
 
@@ -1471,7 +1478,10 @@
     {
         [self doUpdateUI];
         [self doLayoutSubviews];
-        //[self showFullMenu];
+        if (needFullMenu)
+        {
+            [self showFullMenu];
+        }
     }
 }
 
@@ -1550,7 +1560,7 @@
 
 - (IBAction)buttonFavoriteClicked:(id)sender
 {
-    if (/*self.targetPoint.type == OATargetWpt ||*/ self.targetPoint.type == OATargetFavorite)
+    if (self.targetPoint.type == OATargetFavorite)
     {
         [self showFullMenu];
         [self.customController activateEditing];
@@ -1558,9 +1568,13 @@
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)
+    {
         [self.delegate targetPointAddWaypoint];
+    }
     else
+    {
         [self addFavorite];
+    }
 }
 
 - (IBAction)buttonShareClicked:(id)sender {
@@ -1793,9 +1807,7 @@
         _showFull = NO;
         _showFullScreen = NO;
 
-        CGFloat h = kOATargetPointViewHeightPortrait;
-        if ([self isLandscape])
-            h = kOATargetPointViewHeightLandscape;
+        CGFloat h = _containerView.frame.size.height + kOATargetPointTopPanTreshold;
         
         if (_hideButtons)
             h -= kOATargetPointButtonsViewHeight;

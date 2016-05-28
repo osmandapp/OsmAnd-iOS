@@ -194,7 +194,7 @@ typedef enum
     _mapViewController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     // Setup target point menu
-    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, kOATargetPointViewHeightPortrait)];
+    self.targetMenuView = [[OATargetPointView alloc] initWithFrame:CGRectMake(0.0, 0.0, DeviceScreenWidth, 140.0)];
     self.targetMenuView.delegate = self;
     [self.targetMenuView setMapViewInstance:_mapViewController.view];
     [self.targetMenuView setParentViewInstance:self.view];
@@ -964,6 +964,7 @@ typedef enum
 -(void)onNoSymbolFound:(NSNotification *)notification
 {
     //[self hideTargetPointMenu];
+    [self.targetMenuView hideByMapGesture];
 }
 
 -(void)onMapGestureAction:(NSNotification *)notification
@@ -1682,7 +1683,7 @@ typedef enum
     
     [favoriteViewController activateEditing];
     
-    [self.targetMenuView setCustomViewController:favoriteViewController];
+    [self.targetMenuView setCustomViewController:favoriteViewController needFullMenu:YES];
     [self.targetMenuView updateTargetPointType:OATargetFavorite];
 }
 
@@ -1728,7 +1729,7 @@ typedef enum
     OAParkingViewController *parking = [[OAParkingViewController alloc] initWithCoordinate:CLLocationCoordinate2DMake(_targetLatitude, _targetLongitude)];
     parking.parkingDelegate = self;
     
-    [self.targetMenuView setCustomViewController:parking];
+    [self.targetMenuView setCustomViewController:parking needFullMenu:YES];
     [self.targetMenuView updateTargetPointType:OATargetParking];
 }
 
@@ -1840,7 +1841,7 @@ typedef enum
     
     [wptViewController activateEditing];
     
-    [self.targetMenuView setCustomViewController:wptViewController];
+    [self.targetMenuView setCustomViewController:wptViewController needFullMenu:YES];
     [self.targetMenuView updateTargetPointType:OATargetWpt];
     
     if (_activeTargetType == OATargetGPXEdit)
@@ -1964,7 +1965,7 @@ typedef enum
             
             OAFavoriteViewController *favoriteViewController = [[OAFavoriteViewController alloc] initWithItem:item];
             
-            [self.targetMenuView setCustomViewController:favoriteViewController];
+            [self.targetMenuView setCustomViewController:favoriteViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
             
             break;
@@ -1982,7 +1983,7 @@ typedef enum
             
             parking.parkingDelegate = self;
             
-            [self.targetMenuView setCustomViewController:parking];
+            [self.targetMenuView setCustomViewController:parking needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -1994,7 +1995,7 @@ typedef enum
             
             OAPOIViewController *poiViewController = [[OAPOIViewController alloc] initWithPOI:self.targetMenuView.targetPoint.targetObj];
 
-            [self.targetMenuView setCustomViewController:poiViewController];
+            [self.targetMenuView setCustomViewController:poiViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
             
             break;
@@ -2025,7 +2026,7 @@ typedef enum
                 OAWikiMenuViewController *wiki = [[OAWikiMenuViewController alloc] initWithPOI:self.targetMenuView.targetPoint.targetObj content:content];
                 wiki.menuDelegate = self;
                 
-                [self.targetMenuView setCustomViewController:wiki];
+                [self.targetMenuView setCustomViewController:wiki needFullMenu:NO];
                 [self.targetMenuView prepareNoInit];
             }
             else
@@ -2054,7 +2055,7 @@ typedef enum
             wptViewController.mapViewController = self.mapViewController;
             wptViewController.wptDelegate = self;
             
-            [self.targetMenuView setCustomViewController:wptViewController];
+            [self.targetMenuView setCustomViewController:wptViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2088,7 +2089,7 @@ typedef enum
                 self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
             }
             
-            [self.targetMenuView setCustomViewController:gpxViewController];
+            [self.targetMenuView setCustomViewController:gpxViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2121,7 +2122,7 @@ typedef enum
                 self.targetMenuView.targetPoint.targetObj = gpxViewController.gpx;
             }
             
-            [self.targetMenuView setCustomViewController:gpxViewController];
+            [self.targetMenuView setCustomViewController:gpxViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2144,7 +2145,7 @@ typedef enum
                 gpxViewController = [[OAGPXRouteViewController alloc] initWithSegmentType:segmentType];
             }
             
-            [self.targetMenuView setCustomViewController:gpxViewController];
+            [self.targetMenuView setCustomViewController:gpxViewController needFullMenu:NO];
             [self.targetMenuView prepareNoInit];
 
             break;
@@ -2713,7 +2714,7 @@ typedef enum
     
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
 
-    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : kOATargetPointTopViewHeight + 160.0));
+    CGSize screenBBox = CGSizeMake(DeviceScreenWidth - ([self.targetMenuView isLandscape] ? kInfoViewLanscapeWidth : 0.0), DeviceScreenHeight - ([self.targetMenuView isLandscape] ? 0.0 : 233.0));
     _targetZoom = [self getZoomForBounds:item.bounds mapSize:screenBBox];
     _targetMode = (_targetZoom > 0.0 ? EOATargetBBOX : EOATargetPoint);
     

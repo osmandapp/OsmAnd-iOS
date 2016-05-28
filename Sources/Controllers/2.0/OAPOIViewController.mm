@@ -102,7 +102,7 @@
 
 - (BOOL)supportFullScreen
 {
-    return NO;
+    return self.poi.type && ![self.poi.type isKindOfClass:[OAPOILocationType class]];
 }
 
 - (UIImage *) getIcon:(NSString *)fileName

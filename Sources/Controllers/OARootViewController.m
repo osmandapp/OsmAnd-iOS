@@ -358,12 +358,16 @@
                                                                      
                                                                      [self closeMenuAndPanelsAnimated:NO];
                                                                      
+                                                                     [self.navigationController pushViewController:incomingURLViewController
+                                                                                                          animated:YES];
                                                                      // Open incoming-URL view controller as menu
+                                                                     /*
                                                                      [self openMenu:incomingURLViewController
                                                                            fromRect:CGRectZero
                                                                              inView:self.view
                                                                            ofParent:self
                                                                            animated:YES];
+                                                                      */
                                                                      
                                                                  }],
           
@@ -376,12 +380,16 @@
                                    
                                    [self closeMenuAndPanelsAnimated:NO];
                                    
+                                   [self.navigationController pushViewController:incomingURLViewController
+                                                                        animated:YES];
                                    // Open incoming-URL view controller as menu
+                                   /*
                                    [self openMenu:incomingURLViewController
                                          fromRect:CGRectZero
                                            inView:self.view
                                          ofParent:self
                                          animated:YES];
+                                    */
                                    
                                }],
           

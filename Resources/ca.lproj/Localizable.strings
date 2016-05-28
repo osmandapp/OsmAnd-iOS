@@ -465,3 +465,4 @@
 "free_memory" = "%@ disponible";
 "gpx_waypoint" = "Fita";
 "menu_my_waypoints" = "Les meves fites";
+"menu_my_directions" = "Els meus llocs";

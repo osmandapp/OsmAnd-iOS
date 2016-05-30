@@ -565,9 +565,16 @@ typedef enum
 
     if ([self contextMenuMode])
     {
-        if ([self.targetMenuView isToolbarVisible])
+        if ([self.targetMenuView isToolbarVisible] || [self.targetMenuView isInFullScreenMode] || [self.targetMenuView isLandscape])
             return UIStatusBarStyleLightContent;
         else
+            return UIStatusBarStyleDefault;
+    }
+    else if (self.targetMenuView.superview)
+    {
+        if ([self.targetMenuView isToolbarVisible])
+            return UIStatusBarStyleLightContent;
+        else if ([self.targetMenuView isInFullScreenMode] || [self.targetMenuView isLandscape])
             return UIStatusBarStyleDefault;
     }
     

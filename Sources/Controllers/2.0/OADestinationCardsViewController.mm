@@ -491,7 +491,7 @@
     if (_sections.count >= sectionsCount)
         [self.tableView insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(_sections.count - 1, ABS(_sections.count - sectionsCount) + 1)] withRowAnimation:UITableViewRowAnimationBottom];
     
-    if (_sections.count == 0 || [_sections[0] isKindOfClass:[OAHistoryCardController class]])
+    //if (_sections.count == 0 || [_sections[0] isKindOfClass:[OAHistoryCardController class]])
         [[OARootViewController instance].mapPanel hideDestinationCardsView];
 }
 

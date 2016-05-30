@@ -1142,7 +1142,7 @@ typedef enum
     NSString *roadTitle;
     if (!isPlace)
         roadTitle = [self findRoadNameByLat:lat lon:lon];
-
+    
     if (caption.length == 0 && (targetPoint.type == OATargetLocation || targetPoint.type == OATargetPOI))
     {
         if (!roadTitle || roadTitle.length == 0)

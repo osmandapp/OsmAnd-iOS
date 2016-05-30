@@ -40,6 +40,7 @@
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAPOILocationType.h"
+#import "OAPOIMyLocationType.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -1539,6 +1540,7 @@
             symbol.touchPoint = touchPoint;
             symbol.location = myLocation.coordinate;
             symbol.sortIndex = (NSInteger)symbol.type;
+            symbol.poiType = [[OAPOIMyLocationType alloc] init];
             [foundSymbols addObject:symbol];
         }
     }

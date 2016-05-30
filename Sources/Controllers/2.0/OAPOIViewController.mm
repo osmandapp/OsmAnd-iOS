@@ -13,6 +13,7 @@
 #import "OAPOILocationType.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAPOIMyLocationType.h"
 
 @interface OAPOIViewController ()
 
@@ -74,7 +75,9 @@
 
 - (BOOL)supportFullScreen
 {
-    return self.poi.type && ![self.poi.type isKindOfClass:[OAPOILocationType class]];
+    return self.poi.type
+                && ![self.poi.type isKindOfClass:[OAPOILocationType class]]
+                && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]];
 }
 
 - (void)buildRows:(NSMutableArray<OARowInfo *> *)rows
@@ -85,7 +88,9 @@
     
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     
-    if (self.poi.type && ![self.poi.type isKindOfClass:[OAPOILocationType class]])
+    if (self.poi.type
+        && ![self.poi.type isKindOfClass:[OAPOILocationType class]]
+        && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]])
     {
         UIImage *icon = [self applyColor:[self.poi.type icon]];
         [rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:[self getTypeStr] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];

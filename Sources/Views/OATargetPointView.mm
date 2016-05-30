@@ -811,6 +811,7 @@
         [_buttonDirection setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
         [_buttonDirection setImage:[UIImage imageNamed:@"ic_trip_removepoint"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:[UIColor redColor]];
+        _buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
     else
     {
@@ -818,6 +819,7 @@
         [_buttonDirection setTitleColor:UIColorFromRGB(0x666666) forState:UIControlStateNormal];
         [_buttonDirection setImage:[UIImage imageNamed:@"menu_direction_icon_2"] forState:UIControlStateNormal];
         [_buttonDirection setTintColor:UIColorFromRGB(0x666666)];
+        _buttonDirection.imageView.transform = CGAffineTransformIdentity;
     }
     
     if (self.activeTargetType == OATargetGPX || self.activeTargetType == OATargetGPXEdit)

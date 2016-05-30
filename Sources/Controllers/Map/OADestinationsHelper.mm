@@ -352,7 +352,7 @@
         [self refreshDestinationIndexes];
     }
     
-    [_app.data.destinationRemoveObservable notifyEventWithKey:destination];
+    [_app.data.destinationsChangeObservable notifyEvent];
 }
 
 - (void)addHistoryItem:(OADestination *)destination

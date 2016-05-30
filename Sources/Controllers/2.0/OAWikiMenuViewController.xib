@@ -7,8 +7,8 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAWikiMenuViewController">
             <connections>
-                <outlet property="contentView" destination="aGD-FU-Qgr" id="heA-KM-ZKc"/>
-                <outlet property="tableView" destination="PI3-T6-6nZ" id="Jb1-IA-ico"/>
+                <outlet property="contentView" destination="viq-Lz-CDO" id="70i-NX-0zW"/>
+                <outlet property="tableView" destination="Ue8-lO-cTQ" id="kB3-Pl-hE5"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,17 +17,17 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="aGD-FU-Qgr">
-                    <rect key="frame" x="0.0" y="68" width="320" height="345"/>
+                <view contentMode="scaleToFill" id="viq-Lz-CDO">
+                    <rect key="frame" x="0.0" y="135" width="320" height="345"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="PI3-T6-6nZ">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="Ue8-lO-cTQ">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <outlet property="dataSource" destination="-1" id="SXL-p7-D9n"/>
-                                <outlet property="delegate" destination="-1" id="byQ-yK-hZI"/>
+                                <outlet property="dataSource" destination="-1" id="oCf-fb-OtJ"/>
+                                <outlet property="delegate" destination="-1" id="Dq9-iw-fDF"/>
                             </connections>
                         </tableView>
                     </subviews>
@@ -36,7 +36,7 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="271" y="319"/>
+            <point key="canvasLocation" x="353" y="355"/>
         </view>
     </objects>
 </document>

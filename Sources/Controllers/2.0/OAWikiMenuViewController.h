@@ -2,11 +2,11 @@
 //  OAWikiMenuViewController.h
 //  OsmAnd
 //
-//  Created by Alexey Kulish on 26/05/16.
+//  Created by Alexey Kulish on 29/05/16.
 //  Copyright © 2016 OsmAnd. All rights reserved.
 //
 
-#import "OAPoiViewController.h"
+#import "OAPOIViewController.h"
 
 @class OAWikiMenuViewController;
 

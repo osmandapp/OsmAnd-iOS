@@ -343,13 +343,16 @@
     
     [CATransaction setCompletionBlock:^{
         
-        if (_items.count > 0)
+        if ([self hasActiveItems])
         {
-            [self refreshVisibleRows];
-            [self refreshSwipeButtons];
+            if (_items.count > 0)
+            {
+                [self refreshVisibleRows];
+                [self refreshSwipeButtons];
+            }
+            
+            [self.tableView reloadData];
         }
-        
-        [self.tableView reloadData];
         
         _isAnimating = NO;
     }];
@@ -358,7 +361,7 @@
 
     [_items removeObject:item];
     
-    if (![self hasActiveItems])
+    if (_items.count == 0)
         [self removeCard];
     else
         [self.tableView deleteRowsAtIndexPaths:@[_activeIndexPath] withRowAnimation:UITableViewRowAnimationLeft];
@@ -366,6 +369,11 @@
     [self.tableView endUpdates];
     
     [CATransaction commit];
+    
+    if (![self hasActiveItems] && _items.count > 0)
+    {
+        [[OARootViewController instance].mapPanel hideDestinationCardsView];
+    }
 }
 
 - (BOOL)hasActiveItems

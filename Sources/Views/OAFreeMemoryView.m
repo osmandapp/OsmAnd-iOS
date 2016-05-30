@@ -7,6 +7,7 @@
 //
 
 #import "OAFreeMemoryView.h"
+#import "Localization.h"
 
 @implementation OAFreeMemoryView
 {
@@ -64,7 +65,7 @@
     _titleLabel.textColor = [UIColor blackColor];
     _titleLabel.font = [UIFont fontWithName:@"AvenirNext-Regular" size:14.0];;
     _titleLabel.numberOfLines = 1;
-    _titleLabel.text = NSLocalizedString(@"device_memory", nil);
+    _titleLabel.text = OALocalizedString(@"device_memory");
     [self addSubview:_titleLabel];
     
     _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
@@ -129,20 +130,20 @@
     _tmpVal = tempValue / capValue;
     _freeVal = availValue / capValue;
 
-    _freeMemLabel.text = [NSString stringWithFormat:NSLocalizedString(@"free_memory", nil), [self getFormattedSize:deviceMemoryAvailable]];
+    _freeMemLabel.text = [NSString stringWithFormat:OALocalizedString(@"free_memory"), [self getFormattedSize:deviceMemoryAvailable]];
 }
 
 - (NSString *) getFormattedSize:(double)size
 {
     NSString *sizeStr;
     if (size >= 1024 * 1024 * 1024) {
-        sizeStr = [NSString stringWithFormat:@"%02.2lf %@", size / (1024.0 * 1024.0 * 1024.0), NSLocalizedString(@"GB", nil)];
+        sizeStr = [NSString stringWithFormat:@"%02.2lf %@", size / (1024.0 * 1024.0 * 1024.0), OALocalizedString(@"GB")];
     } else if (size >= 1024 * 1024) {
-        sizeStr = [NSString stringWithFormat:@"%.1lf %@", size / (1024.0 * 1024.0), NSLocalizedString(@"MB", nil)];
+        sizeStr = [NSString stringWithFormat:@"%.1lf %@", size / (1024.0 * 1024.0), OALocalizedString(@"MB")];
     } else if (size == 0) {
-        sizeStr = [NSString stringWithFormat:@"0 %@", NSLocalizedString(@"kB", nil)];
+        sizeStr = [NSString stringWithFormat:@"0 %@", OALocalizedString(@"kB")];
     } else {
-        sizeStr = [NSString stringWithFormat:@"%.0lf %@", size / 1024, NSLocalizedString(@"kB", nil)];
+        sizeStr = [NSString stringWithFormat:@"%.0lf %@", size / 1024, OALocalizedString(@"kB")];
     }
     return sizeStr;
 }

@@ -81,7 +81,9 @@
     OAAutoObserverProxy* _mapLocationObserver;
     OAAutoObserverProxy* _appearanceObserver;
 
+    OAMapPanelViewController *_mapPanelViewController;
     OAMapViewController* _mapViewController;
+
     UIPanGestureRecognizer* _grMove;
     
     OAAutoObserverProxy* _dayNightModeObserver;
@@ -118,6 +120,7 @@
 {
     _app = [OsmAndApp instance];
 
+    _mapPanelViewController = [OARootViewController instance].mapPanel;
     _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
     
     _mapModeObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -493,12 +496,12 @@
 
 - (IBAction)onMapSettingsButtonClick:(id)sender
 {
-    [((OAMapPanelViewController *)self.parentViewController) mapSettingsButtonClick:sender];
+    [_mapPanelViewController mapSettingsButtonClick:sender];
 }
 
 - (IBAction)onSearchButtonClick:(id)sender
 {
-    [((OAMapPanelViewController *)self.parentViewController) searchButtonClick:sender];
+    [_mapPanelViewController searchButtonClick:sender];
 }
 
 
@@ -607,16 +610,20 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+    if ([self destinationsHidden])
         return UIStatusBarStyleDefault;
     else
         return UIStatusBarStyleLightContent;
 }
 
+- (BOOL)destinationsHidden
+{
+    return _destinationViewController.navBarHidden && [OADestinationsHelper instance].sortedDestinations.count == 0;
+}
+
 - (void)showDestinations
 {
-    if (![self.view.subviews containsObject:_destinationViewController.view] &&
-        [OADestinationsHelper instance].sortedDestinations.count > 0)
+    if (![self.view.subviews containsObject:_destinationViewController.view])
     {
         [self.view addSubview:_destinationViewController.view];
         [self.view insertSubview:self.statusBarView aboveSubview:_destinationViewController.view];
@@ -653,7 +660,7 @@
             if (_downloadView)
                 _downloadView.frame = [self getDownloadViewFrame];
             
-            if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+            if ([self destinationsHidden])
                 _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
             else
                 _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);
@@ -674,7 +681,7 @@
         if (_downloadView)
             _downloadView.frame = [self getDownloadViewFrame];
 
-        if ([OADestinationsHelper instance].sortedDestinations.count == 0)
+        if ([self destinationsHidden])
             _statusBarView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.5];
         else
             _statusBarView.backgroundColor = UIColorFromRGB(0x021e33);

@@ -170,7 +170,7 @@
     [_menuButtonMaps setTitle:OALocalizedString(@"map_settings_map") forState:UIControlStateNormal];
     [_menuButtonMyData setTitle:OALocalizedString(@"my_favorites") forState:UIControlStateNormal];
     [_menuButtonMyTrips setTitle:OALocalizedString(@"menu_my_trips") forState:UIControlStateNormal];
-    [_menuButtonMyWaypoints setTitle:OALocalizedString(@"menu_my_waypoints") forState:UIControlStateNormal];
+    [_menuButtonMyWaypoints setTitle:OALocalizedString(@"menu_my_directions") forState:UIControlStateNormal];
     [_menuButtonMapsAndResources setTitle:OALocalizedString(@"res_mapsres") forState:UIControlStateNormal];
     [_menuButtonSettings setTitle:OALocalizedString(@"sett_settings") forState:UIControlStateNormal];
     [_menuButtonQuiz setTitle:OALocalizedString(@"menu_feedback") forState:UIControlStateNormal];
@@ -241,8 +241,7 @@
 - (IBAction)myWaypointsButtonClicked:(id)sender
 {
     [self.sidePanelController toggleLeftPanel:self];
-    [[OARootViewController instance].mapPanel destinationsAdded];
-    [[OARootViewController instance].mapPanel openDestinationCardsView];
+    [[OARootViewController instance].mapPanel showCards];
 }
 
 - (IBAction)settingsButtonClicked:(id)sender

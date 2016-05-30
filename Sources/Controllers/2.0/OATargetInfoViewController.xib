@@ -5,10 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAPOIViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OATargetInfoViewController">
             <connections>
-                <outlet property="contentView" destination="jwb-hk-YMN" id="I0F-7w-LQ9"/>
-                <outlet property="tableView" destination="9KE-Nl-75y" id="uFj-PF-Kqx"/>
+                <outlet property="contentView" destination="vHY-wD-UuP" id="L2A-V2-sfB"/>
+                <outlet property="tableView" destination="gMU-eo-CWF" id="ysN-ef-a6j"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -17,17 +17,17 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view contentMode="scaleToFill" id="jwb-hk-YMN">
+                <view contentMode="scaleToFill" id="vHY-wD-UuP">
                     <rect key="frame" x="0.0" y="135" width="320" height="345"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
-                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="9KE-Nl-75y">
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="gMU-eo-CWF">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="345"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <outlet property="dataSource" destination="-1" id="Pzr-GG-Fdf"/>
-                                <outlet property="delegate" destination="-1" id="LXd-Th-WE6"/>
+                                <outlet property="dataSource" destination="-1" id="r6G-YA-1k5"/>
+                                <outlet property="delegate" destination="-1" id="5Gi-U2-DKP"/>
                             </connections>
                         </tableView>
                     </subviews>
@@ -36,7 +36,7 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics"/>
-            <point key="canvasLocation" x="241" y="370"/>
+            <point key="canvasLocation" x="213" y="337"/>
         </view>
     </objects>
 </document>

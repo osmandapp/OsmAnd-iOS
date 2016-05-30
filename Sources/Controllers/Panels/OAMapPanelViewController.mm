@@ -22,6 +22,7 @@
 #import <UIViewController+JASidePanel.h>
 #import "OADestinationCardsViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "OATargetDestinationViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -1971,6 +1972,17 @@ typedef enum
             break;
         }
             
+        case OATargetDestination:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            OATargetDestinationViewController *destViewController = [[OATargetDestinationViewController alloc] initWithDestination:self.targetMenuView.targetPoint.targetObj];
+            
+            [self.targetMenuView setCustomViewController:destViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+
         case OATargetParking:
         {
             [self.targetMenuView doInit:showFullMenu];
@@ -2828,6 +2840,22 @@ typedef enum
     _mainMapZoom = _targetZoom;
 }
 
+- (void)showDestinations
+{
+    if (_hudViewController == self.browseMapViewController)
+        [self.browseMapViewController showDestinations];
+    else if (_hudViewController == self.driveModeViewController)
+        [self.driveModeViewController showDestinations];
+}
+
+- (void)showCards
+{
+    _destinationViewController.navBarHidden = [OADestinationsHelper instance].sortedDestinations.count > 0;
+    [self showDestinations];
+    [_destinationViewController updateFrame:NO];
+    [self openDestinationCardsView];
+}
+
 #pragma mark - OAParkingDelegate
 
 - (void)addParking:(OAParkingViewController *)sender
@@ -2901,10 +2929,7 @@ typedef enum
 
 - (void)destinationsAdded
 {
-    if (_hudViewController == self.browseMapViewController)
-        [self.browseMapViewController showDestinations];
-    else if (_hudViewController == self.driveModeViewController)
-        [self.driveModeViewController showDestinations];
+    [self showDestinations];
 }
 
 - (void)openDestinationCardsView
@@ -2913,6 +2938,8 @@ typedef enum
     
     if (!cardsController.view.superview)
     {
+        [self hideTargetPointMenu];
+
         CGFloat y = _destinationViewController.view.frame.origin.y + _destinationViewController.view.frame.size.height;
         CGFloat h = DeviceScreenHeight - y;
     
@@ -2926,6 +2953,7 @@ typedef enum
         
         [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         
+        if (_destinationViewController)
         [self.destinationViewController updateCloseButton];
         
         [UIView animateWithDuration:.25 animations:^{
@@ -2950,7 +2978,15 @@ typedef enum
     
         [cardsController doViewWillDisappear];
         
-        [self.destinationViewController updateCloseButton];
+        if (!_destinationViewController.navBarHidden)
+        {
+            _destinationViewController.navBarHidden = YES;
+            [_destinationViewController updateFrame:YES];
+        }
+        else
+        {
+            [self.destinationViewController updateCloseButton];
+        }
         
         if (animated)
         {

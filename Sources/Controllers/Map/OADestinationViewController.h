@@ -23,8 +23,13 @@
 
 @interface OADestinationViewController : UIViewController<OADestinatioCellProtocol>
 
+@property (weak, nonatomic) IBOutlet UIView *navBarView;
+@property (weak, nonatomic) IBOutlet UILabel *titleLabel;
+@property (weak, nonatomic) IBOutlet UIButton *backButton;
+
 @property (nonatomic, assign) BOOL singleLineOnly;
 @property (nonatomic, assign) CGFloat top;
+@property (nonatomic, assign) BOOL navBarHidden;
 @property (weak, nonatomic) id<OADestinationViewControllerProtocol> delegate;
 
 - (void)startLocationUpdate;

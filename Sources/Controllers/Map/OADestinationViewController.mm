@@ -20,6 +20,7 @@
 #import "OADestinationCardsViewController.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"
+#import "Localization.h"
 
 #import <OsmAndCore.h>
 #import <OsmAndCore/Utilities.h>
@@ -55,6 +56,8 @@
     OAAutoObserverProxy* _destinationRemoveObserver;
     
     NSTimeInterval _lastUpdate;
+    
+    BOOL _navBarHidden;
 }
 
 -(instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -103,10 +106,26 @@
 {
     [super viewDidLoad];
     
+    self.titleLabel.text = OALocalizedString(@"menu_my_directions");
+    [self.backButton setTitle:OALocalizedString(@"shared_string_back") forState:UIControlStateNormal];
+    
+    self.navBarHidden = YES;
+    
     if ([OADestinationsHelper instance].sortedDestinations.count > 0)
     {
         [self refreshCells];
     }
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    self.navBarHidden = YES;
+}
+
+- (IBAction)backButtonPress:(id)sender
+{
+    [self openHideDestinationCardsView:sender];
 }
 
 - (void)onRouteDefined
@@ -294,6 +313,9 @@
     
     NSInteger destinationsCount = MIN(2, [OADestinationsHelper instance].sortedDestinations.count);
     
+    self.navBarView.hidden = destinationsCount > 0 || _navBarHidden;
+    CGFloat navBarHeight = !_navBarHidden ? self.navBarView.bounds.size.height : 0.0;
+    
     if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation))
     {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
@@ -301,7 +323,7 @@
             _singleLineMode = YES;
             CGFloat h = 50.0;
             if (destinationsCount == 0)
-                h = 0.0;
+                h = navBarHeight;
             
             frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
@@ -317,6 +339,8 @@
 
             if (destinationsCount > 0)
                 h = 50.0 + 35.0 * (destinationsCount - 1.0);
+            else
+                h = navBarHeight;
 
             if (h < 0.0)
                 h = 0.0;
@@ -337,7 +361,7 @@
             _singleLineMode = YES;
             CGFloat h = 50.0;
             if (destinationsCount == 0)
-                h = 0.0;
+                h = navBarHeight;
             
             frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
@@ -351,7 +375,7 @@
             _singleLineMode = YES;
             CGFloat h = 50.0;
             if (destinationsCount == 0)
-                h = 0.0;
+                h = navBarHeight;
             
             frame = CGRectMake(0.0, _top, DeviceScreenWidth, h);
             
@@ -683,7 +707,6 @@
             [_delegate destinationViewMoveTo:destination];
     }
 }
-
 
 - (void)updateCloseButton
 {

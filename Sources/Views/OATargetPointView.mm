@@ -1096,7 +1096,12 @@
 
 - (void)hideByMapGesture
 {
-    if (self.customController && ![self.customController supportMapInteraction])
+    if (self.customController)
+    {
+        if (![self.customController supportMapInteraction])
+            [self.delegate targetHideMenuByMapGesture];
+    }
+    else
     {
         [self.delegate targetHideMenuByMapGesture];
     }

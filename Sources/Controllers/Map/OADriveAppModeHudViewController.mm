@@ -789,8 +789,7 @@
 
 - (void)showDestinations
 {
-    if (![self.view.subviews containsObject:_destinationViewController.view] &&
-        [OADestinationsHelper instance].sortedDestinations.count > 0)
+    if (![self.view.subviews containsObject:_destinationViewController.view])
     {
         [self.view addSubview:_destinationViewController.view];
         [self.view insertSubview:self.currentPositionContainer aboveSubview:_destinationViewController.view];

@@ -1099,7 +1099,10 @@ typedef enum
                 break;
             }
         }
-
+        if (targetPoint.type == OATargetLocation && !poiType)
+        {
+            poiType = [[OAPOILocationType alloc] init];
+        }
     }
     else if (objectType && [objectType isEqualToString:@"destination"])
     {
@@ -1120,6 +1123,10 @@ typedef enum
                 
                 break;
             }
+        }
+        if (!targetPoint.targetObj && targetPoint.type == OATargetLocation && !poiType)
+        {
+            poiType = [[OAPOILocationType alloc] init];
         }
     }
     else if (objectType && [objectType isEqualToString:@"wiki"])

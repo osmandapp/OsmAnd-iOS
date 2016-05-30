@@ -1609,6 +1609,12 @@
 		848300BE1CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
 		848300BF1CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
 		848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
+		848300C51CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */; };
+		848300C61CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */; };
+		848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */; };
+		848300C81CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */; };
+		848300C91CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */; };
+		848300CA1CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */; };
 		8489EEC51CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		8489EEC61CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
 		8489EEC71CAA623E00BC0C38 /* OAWebClient.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */; };
@@ -3578,6 +3584,9 @@
 		848300B51CFAD7A50018B27B /* OATargetDestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetDestinationViewController.xib; path = Sources/Controllers/2.0/OATargetDestinationViewController.xib; sourceTree = "<group>"; };
 		848300BC1CFCAA680018B27B /* OAPOIMyLocationType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIMyLocationType.h; sourceTree = "<group>"; };
 		848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOIMyLocationType.m; sourceTree = "<group>"; };
+		848300C21CFCC11A0018B27B /* OATargetHistoryItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetHistoryItemViewController.h; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.h; sourceTree = "<group>"; };
+		848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetHistoryItemViewController.m; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.m; sourceTree = "<group>"; };
+		848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetHistoryItemViewController.xib; path = Sources/Controllers/2.0/OATargetHistoryItemViewController.xib; sourceTree = "<group>"; };
 		8489EEC31CAA622200BC0C38 /* OAWebClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWebClient.h; path = Core/OAWebClient.h; sourceTree = "<group>"; };
 		8489EEC41CAA623E00BC0C38 /* OAWebClient.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWebClient.mm; sourceTree = "<group>"; };
 		848A14C51B209FF600A31AE7 /* OAWikiWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAWikiWebViewController.h; path = Sources/Controllers/2.0/OAWikiWebViewController.h; sourceTree = "<group>"; };
@@ -5195,6 +5204,16 @@
 			name = Destinations;
 			sourceTree = "<group>";
 		};
+		848300C11CFCC0E30018B27B /* History */ = {
+			isa = PBXGroup;
+			children = (
+				848300C21CFCC11A0018B27B /* OATargetHistoryItemViewController.h */,
+				848300C31CFCC11A0018B27B /* OATargetHistoryItemViewController.m */,
+				848300C41CFCC11A0018B27B /* OATargetHistoryItemViewController.xib */,
+			);
+			name = History;
+			sourceTree = "<group>";
+		};
 		848A14BB1B20979F00A31AE7 /* Wiki */ = {
 			isa = PBXGroup;
 			children = (
@@ -5246,6 +5265,7 @@
 		848D17081B188B5600A656F4 /* TargetMenu */ = {
 			isa = PBXGroup;
 			children = (
+				848300C11CFCC0E30018B27B /* History */,
 				848300B21CFAD7220018B27B /* Destinations */,
 				84A5D9AC1CEDFB05003F0D26 /* POI */,
 				84A5D9AB1CEDF99A003F0D26 /* Favorite */,
@@ -6362,6 +6382,7 @@
 				3AFEEE341A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				843E5D9F1AB341E000BE14BE /* onmap_placeholder@3x.png in Resources */,
 				842431F21AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
+				848300C81CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */,
 				84F3A9021B4DA93100D16EBC /* ic_trip_pedestrian@3x.png in Resources */,
 				84BA1DD11CF338E400BF3D96 /* ic_coordinates_location.png in Resources */,
 				84E441B71AF8A07500F87542 /* add_waypoint_to_track@3x.png in Resources */,
@@ -7110,6 +7131,7 @@
 				3AFEEE351A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				843E5DA01AB341E000BE14BE /* onmap_placeholder@3x.png in Resources */,
 				842431F31AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
+				848300C91CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */,
 				84F3A9031B4DA93100D16EBC /* ic_trip_pedestrian@3x.png in Resources */,
 				84E441B81AF8A07500F87542 /* add_waypoint_to_track@3x.png in Resources */,
 				843E5CC81AB341E000BE14BE /* icon_direction@3x.png in Resources */,
@@ -7805,6 +7827,7 @@
 				84E1DED31B0DFE64002A6946 /* bt_round_big@2x.png in Resources */,
 				84F3A8FB1B4DA93100D16EBC /* ic_trip_location@3x.png in Resources */,
 				84EE2DAC1AFBF840007C9A94 /* icon_info@2x.png in Resources */,
+				848300CA1CFCC11A0018B27B /* OATargetHistoryItemViewController.xib in Resources */,
 				84B30AD41B9DF2B0008E5A43 /* ic_list@2x.png in Resources */,
 				BBA3AF94197FC4BB0039D991 /* menu_item_maps_and_resources_icon.png in Resources */,
 				845E05CE1B55129100DFC2A7 /* ic_destination_pin_3_small@2x.png in Resources */,
@@ -8749,6 +8772,7 @@
 				845E06F31B60D6D700DFC2A7 /* OAPluginPopupViewController.mm in Sources */,
 				84F3A9671B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.mm in Sources */,
 				84F3A8881B4C44D300D16EBC /* OAGPXRouter.mm in Sources */,
+				848300C51CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84BFC2321A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				84B4FD9F1A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84F989401B515569009C443C /* OADestinationCardBaseController.mm in Sources */,
@@ -8961,6 +8985,7 @@
 				845E06F41B60D6D700DFC2A7 /* OAPluginPopupViewController.mm in Sources */,
 				84F3A9681B4F9D0400D16EBC /* OAGPXRouteGroupsViewController.mm in Sources */,
 				84F3A8891B4C44D300D16EBC /* OAGPXRouter.mm in Sources */,
+				848300C61CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84BFC2331A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				84B4FDA01A92358600A147BA /* OAGPXPointTableViewCell.m in Sources */,
 				84F989411B515569009C443C /* OADestinationCardBaseController.mm in Sources */,
@@ -9237,6 +9262,7 @@
 				84185A7F1AA99ABE00F70328 /* OAIAPHelper.mm in Sources */,
 				8417A6711B2596D600EA1D17 /* OAGPXWptViewController.mm in Sources */,
 				848A3EAF1B6A14030016F6F4 /* OASQLiteTileSource.m in Sources */,
+				848300C71CFCC11A0018B27B /* OATargetHistoryItemViewController.m in Sources */,
 				84E441791AF7582500F87542 /* PXAlertView+Customization.m in Sources */,
 				84BE7D431CF7238D001D8D78 /* OAPOILocationType.mm in Sources */,
 				842431781AEE1B2600925821 /* OAOverlayUnderlayView.m in Sources */,

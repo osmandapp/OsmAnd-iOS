@@ -22,6 +22,7 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
     OATargetGPX,
     OATargetGPXRoute,
     OATargetGPXEdit,
+    OATargetHistoryItem,
 };
 
 @interface OATargetPoint : NSObject

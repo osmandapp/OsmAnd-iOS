@@ -23,6 +23,7 @@
 #import "OADestinationCardsViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
+#import "OATargetHistoryItemViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -1983,6 +1984,17 @@ typedef enum
             break;
         }
 
+        case OATargetHistoryItem:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            OATargetHistoryItemViewController *hItemViewController = [[OATargetHistoryItemViewController alloc] initWithHistoryItem:self.targetMenuView.targetPoint.targetObj];
+            
+            [self.targetMenuView setCustomViewController:hItemViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+            
         case OATargetParking:
         {
             [self.targetMenuView doInit:showFullMenu];
@@ -2394,7 +2406,7 @@ typedef enum
 
 - (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed
 {
-    [self openTargetViewWithHistoryItem:item pushed:pushed showFullMenu:YES];
+    [self openTargetViewWithHistoryItem:item pushed:pushed showFullMenu:NO];
 }
 
 - (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu
@@ -2415,8 +2427,8 @@ typedef enum
     NSString *caption = item.name;    
     UIImage *icon = [item icon];
     
-    targetPoint.type = OATargetLocation;
-    
+    targetPoint.type = OATargetHistoryItem;
+
     _targetMenuView.isAddressFound = YES;
     _formattedTargetName = [self findRoadNameByLat:lat lon:lon];
     _targetMode = EOATargetPoint;

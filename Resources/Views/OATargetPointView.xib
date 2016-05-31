@@ -16,7 +16,7 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_poi_info_dots.png" id="fIE-MR-h8E">
-                            <rect key="frame" x="145" y="-16" width="30" height="16"/>
+                            <rect key="frame" x="145" y="-9" width="30" height="16"/>
                             <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </imageView>
                         <view contentMode="scaleToFill" id="lwK-8v-Cab">
@@ -256,7 +256,7 @@
         <image name="HUD_compass_bg.png" width="41" height="41"/>
         <image name="bt_trip_start.png" width="45" height="45"/>
         <image name="ic_mode_pedestrian.png" width="18" height="18"/>
-        <image name="ic_poi_info_dots.png" width="37" height="16"/>
+        <image name="ic_poi_info_dots.png" width="36" height="9"/>
         <image name="ic_route_modebg.png" width="44" height="44"/>
         <image name="menu_direction_icon.png" width="22" height="22"/>
         <image name="menu_share_icon.png" width="22" height="22"/>

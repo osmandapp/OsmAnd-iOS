@@ -480,3 +480,5 @@
 "go_to_map" = "Перейти на карту";
 "device_memory" = "Память устройства";
 "free_memory" = "Свободно %@";
+"gpx_waypoint" = "Путевая точка";
+"menu_my_directions" = "Мои направления";

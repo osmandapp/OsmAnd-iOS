@@ -76,7 +76,7 @@
 "map_settings_offline" = "Stile für Offline Karten";
 "map_settings_online" = "Online Karten";
 "map_settings_transp" = "Transparenz";
-"intro_download" = "Karte\nherunterladen";
+"intro_download" = "Karte herunterladen";
 "intro_next" = "nächster";
 "intro_welcome" = "Willkommen bei\nOsmAnd";
 "intro_promo" = "Globale Offline Karten";
@@ -169,7 +169,7 @@
 "import_title" = "Daten importieren";
 "import_favorite" = "Favorit";
 "import_failed" = "Import fehlgeschlagen";
-"import_cannot" = "Die angegebene Datei kann nicht importiert werden";
+"import_cannot" = "Die ausgewählte Datei konnte nicht importiert werden";
 // Context menu
 "ctx_mnu_edit_fav" = "Favorit bearbeiten";
 "ctx_mnu_add_fav" = "Favorit hinzufügen";
@@ -305,7 +305,7 @@
 "map_settings_overunder" = "Überlagerung / Unterlagerung";
 "shared_string_and" = "und";
 "hud_no_movement" = "Keine Bewegung";
-"fav_import_desc" = "Sie können Ihre Favoriten als Wegpunkte in einer GPX-Datei (gewöhnliches GPS-Datenformat) importieren\n\nZum Veröffentlichen der favorites.gpx-Datei können Sie eine Datei von Dropbox, E-Mail oder jeder anderen Quelle öffnen - verwenden Sie die Funktion Öffnen in.";
+"fav_import_desc" = "Sie können Ihre Favoriten als Wegpunkte aus einer GPX-Datei (gewöhnliches GPS-Datenformat) importieren\n\nZum Teilen dieser favorites.gpx-Datei können Sie eine Datei von Dropbox, E-Mail oder jeder anderen Quelle öffnen - verwenden Sie dafür die Funktion 'Öffnen in'.";
 "gpx_route_time" = "Routenzeit";
 "track_clear" = "leere aktuellen Track";
 "track_clear_q" = "Möchtest Du den aktuellen Track leeren?";
@@ -344,11 +344,11 @@
 "shared_string_modify" = "Ändern";
 "shared_string_later" = "Später";
 "my_favorites" = "Meine Favoriten";
-"fav_select" = "Bitte wählen Sie Favoriten aus";
+"fav_select" = "Bitte Favoriten auswählen";
 "gpx_route" = "Route";
-"gpx_uphldownhl" = "Bergaufwärts/Bergabwärts";
+"gpx_uphldownhl" = "Bergauf/Bergab";
 "gpx_elev_range" = "Höhenbereich";
-"gpx_uphills_total" = "Bergaufwärts gesamt";
+"gpx_uphills_total" = "Bergauf gesamt";
 "record_trip" = "Zeichnen Sie Ihren Ausflug auf";
 "gpx_distance_points" = "Entfernung (Punkte)";
 "gpx_max_speed" = "Höchstgeschwindigkeit";
@@ -440,7 +440,7 @@
 "go_to_map" = "Zur Karte gehen";
 "sqlitedb_import_title" = "Map-Creator-Datei importieren";
 // HUD
-"hud_heading" = "Überschrift";
+"hud_heading" = "Richtung";
 "product_desc_trip_planning" = "Mit diesem Plugin kannst du deine Fahrt planen, Wegpunkte hinzufügen und die Entfernung zu deinem Ziel messen";
 "plugins" = "Plugins";
 "plugin_popup_ski_desc" = "Um den <b>Skikartenstil</b> einzuschalten, gehen Sie bitte zu <b>Karte konfigurieren</b> > <b>Kartendarstellung</b>";

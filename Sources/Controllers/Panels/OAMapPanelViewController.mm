@@ -2410,7 +2410,7 @@ typedef enum
     
     [_targetMenuView setTargetPoint:targetPoint];
     
-    [self showTargetPointMenu:YES showFullMenu:YES onComplete:^{
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
         if (pushed)
             [self goToTargetPointDefault];
         else

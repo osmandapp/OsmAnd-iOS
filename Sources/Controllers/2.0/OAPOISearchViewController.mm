@@ -1071,6 +1071,16 @@ typedef enum
             [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.nameLocalized icon:[item icon] pushed:NO];
             [self dismissViewControllerAnimated:YES completion:nil];
         }
+        else if ([item.type isKindOfClass:[OAPOIHistoryType class]])
+        {
+            OAHistoryItem *hist = [[OAHistoryItem alloc] init];
+            hist.name = item.name;
+            hist.latitude = item.latitude;
+            hist.longitude = item.longitude;
+            hist.hType = ((OAPOIHistoryType *)item.type).hType;
+            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:hist pushed:NO];
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }
         else
         {
             [self addHistoryItem:item];

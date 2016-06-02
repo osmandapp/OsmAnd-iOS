@@ -460,3 +460,5 @@
 "product_desc_ext_nautical" = "Námorné mapy OsmAnd sú zásuvným modulom pre aplikáciu OsmAnd Mapy & Navigácia. Obsahuje detailné znázornenie oceánov, morí, pobreží a riek. Mapy poskytujú informácie o námorných trasách, navigačných svetlách, nebezpečných oblastiach, miestach kde sa nesmie plaviť alebo kotviť, atď.\n\nPoužitie: odporúča sa stiahnuť základnú námornú mapu, aby bolo možné vidieť mapy bez ohľadu na to, či je stiahnutá aj podrobná mapa. Pre zapnutie Námorných máp, stlačte tlačidlo mapy a nastavte typ mapy na Námorné.\n\nPoznámka: Všetci profesionálni moreplavci sú povinní mať na svojich lodiach oficiálne námorné mapy.\n\nNámorné mapy OsmAnd sú založené na údajoch z projektu OpenSeaMap. Mapy OpenSeaMap v súčasnosti nemôžu konkurovať oficiálnym námorným mapám, môžu však byť použité rekreačnými lodivodmi na orientáciu a plánovanie trasy.";
 "device_memory" = "Pomnilnik naprave";
 "free_memory" = "Na voljo je še %@";
+"gpx_waypoint" = "Bod cesty";
+"menu_my_directions" = "Moje pokyny";

@@ -1432,7 +1432,7 @@ static BOOL _lackOfResources;
         return 1;
 
     if (_currentScope == kLocalResourcesScope)
-        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0);
+        return ([_localResourceItems count] > 0 ? 1 : 0) + ([_localRegionMapItems count] > 0 ? 1 : 0) + (_localSqliteItems.count > 0 ? 1 : 0) + 1;
 
     NSInteger sectionsCount = 0;
 
@@ -1689,7 +1689,7 @@ static BOOL _lackOfResources;
             cellTypeId = installedResourcesSubmenuCell;
             title = OALocalizedString(@"res_installed");
             
-            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count, OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
+            subtitle = [NSString stringWithFormat:@"%d %@ - %@", (int)(_localResourceItems.count + _localRegionMapItems.count + _localSqliteItems.count), OALocalizedString(@"res_maps_inst"), [NSByteCountFormatter stringFromByteCount:_totalInstalledSize countStyle:NSByteCountFormatterCountStyleFile]];
         }
         else if (indexPath.section == _resourcesSection && _resourcesSection >= 0)
         {
@@ -1917,7 +1917,7 @@ static BOOL _lackOfResources;
 
     if ([cellTypeId isEqualToString:outdatedResourcesSubmenuCell])
     {
-        [_updateCouneView setText:[NSString stringWithFormat:@"%d", _outdatedResourceItems.count]];
+        [_updateCouneView setText:[NSString stringWithFormat:@"%d", (int)_outdatedResourceItems.count]];
         cell.accessoryView = _updateCouneView;
     }
 

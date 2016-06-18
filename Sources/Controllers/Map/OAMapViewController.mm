@@ -1439,11 +1439,11 @@
             else
                 loc = @"";
             
-            [content setObject:entry.value.toString().toNSString() forKey:loc];
+            [content setObject:entry.value.toNSString() forKey:loc];
         }
         else
         {
-            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
+            [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
     }
     

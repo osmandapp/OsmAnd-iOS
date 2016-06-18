@@ -365,12 +365,7 @@
         const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
         
         searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
-        searchCriteria->sourceFilter = ([self]
-                                        (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
-                                        {
-                                            return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
-                                            
-                                        });
+        searchCriteria->obfInfoAreaFilter = _visibleArea;
         
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
         search->performSearch(*searchCriteria,
@@ -383,15 +378,7 @@
     } else {
         
         const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
-        
-        searchCriteria->sourceFilter = ([self]
-                                        (const std::shared_ptr<const OsmAnd::ObfInfo>& obfInfo)
-                                        {
-                                            return true;
-                                            //return obfInfo->containsDataFor(&_visibleArea, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI));
-                                            
-                                        });
-        
+                
         auto categoriesFilter = QHash<QString, QStringList>();
         if (categoryName && typeName) {
             categoriesFilter.insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
@@ -531,11 +518,11 @@
             else
                 loc = @"";
             
-            [content setObject:entry.value.toString().toNSString() forKey:loc];
+            [content setObject:entry.value.toNSString() forKey:loc];
         }
         else
         {
-            [values setObject:entry.value.toString().toNSString() forKey:entry.declaration->tagName.toNSString()];
+            [values setObject:entry.value.toNSString() forKey:entry.declaration->tagName.toNSString()];
         }
     }
 }

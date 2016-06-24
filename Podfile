@@ -5,30 +5,38 @@ platform :ios, '6.0'
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
 
-link_with 'OsmAnd Maps'
-pod 'AFNetworking', '~> 2.5.1'
-pod 'AFDownloadRequestOperation', '~> 2.0.1'
-pod 'JASidePanels', '~> 1.3.2'
-pod 'Reachability', '~> 3.1.1'
-pod 'UIAlertView-Blocks', '~> 1.0'
-pod 'UIActionSheet-Blocks', '~> 1.0.1'
-pod 'DACircularProgress', '~> 2.2.0'
-pod 'FFCircularProgressView', '~> 0.4'
-pod 'QuickDialog/Core', :head
-pod 'QuickDialog/Extras', '~> 1.0'
-pod 'FormatterKit', '~> 1.8.0'
-pod 'SWTableViewCell', '~> 0.3.7'
-pod 'RegexKitLite', '~> 4.0'
-pod 'MBProgressHUD', '~> 0.9.1'
-pod 'CocoaSecurity', '~> 1.2.4'
-pod 'MYBlurIntroductionView', '~> 1.0.3'
-pod 'TPKeyboardAvoiding', '~> 1.2.6'
-pod 'HTAutocompleteTextField', '~> 1.3.1'
+def defaultPods
+    pod 'AFNetworking', '~> 2.5.1'
+    pod 'AFDownloadRequestOperation', '~> 2.0.1'
+    pod 'JASidePanels', '~> 1.3.2'
+    pod 'Reachability', '~> 3.1.1'
+    pod 'UIAlertView-Blocks', '~> 1.0'
+    pod 'UIActionSheet-Blocks', '~> 1.0.1'
+    pod 'DACircularProgress', '~> 2.2.0'
+    pod 'FFCircularProgressView', '~> 0.4'
+    pod 'QuickDialog', :subspecs => ["Core", "Extras"], :git => 'https://github.com/escoz/QuickDialog.git'
+    pod 'FormatterKit', '~> 1.8.0'
+    pod 'SWTableViewCell', '~> 0.3.7'
+    pod 'RegexKitLite', '~> 4.0'
+    pod 'MBProgressHUD', '~> 0.9.1'
+    pod 'CocoaSecurity', '~> 1.2.4'
+    pod 'MYBlurIntroductionView', '~> 1.0.3'
+    pod 'TPKeyboardAvoiding', '~> 1.2.6'
+    pod 'HTAutocompleteTextField', '~> 1.3.1'
+end
+
+target 'OsmAnd Maps' do
+    defaultPods
+end
 
 # Development-only dependencies
-target :dev do
-    link_with 'OsmAnd DEV', 'OsmAnd DEV (prebuilt Core)'
+target 'OsmAnd DEV' do
+    defaultPods
+    pod 'HockeySDK', '~> 3.6.2'
+end
 
+target 'OsmAnd DEV (prebuilt Core)' do
+    defaultPods
     pod 'HockeySDK', '~> 3.6.2'
 end
 

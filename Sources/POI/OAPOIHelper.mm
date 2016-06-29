@@ -401,6 +401,22 @@
                                       {
                                           const auto street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
                                           NSLog(@"STREET === %@ group=%@", street->nativeName.toNSString(), street->streetGroup != nullptr ? street->streetGroup->nativeName.toNSString() : @"NO");
+                                          
+                                          const auto& dataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
+                                          
+                                          const auto& buildings =
+                                          dataInterface->loadBuildingsFromStreets(
+                                                                               QList<std::shared_ptr<const OsmAnd::Street>>() << street,
+                                                                               nullptr,
+                                                                               nullptr,
+                                                                               [self]
+                                                                               (const std::shared_ptr<const OsmAnd::Building>& building)
+                                                                               {
+                                                                                   NSLog(@"FOUND_BUILDING === %@", building->nativeName.toNSString());
+                                                                                   return true;
+                                                                               },
+                                                                               nullptr);
+                                          
                                           break;
                                       }
                                           
@@ -408,7 +424,7 @@
                                       {
                                           const auto streetGroup = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(address);
                                           NSLog(@"STREET_GROUP === %@", streetGroup->nativeName.toNSString());
-                                          
+                                          /*
                                           const auto& dataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
                                           
                                           const auto& streets =
@@ -424,7 +440,7 @@
                                                                                  },
                                                                                  nullptr);
                                           
-                                          
+                                          */
                                           break;
                                       }
                                           

@@ -12,6 +12,7 @@
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/Building.h>
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};

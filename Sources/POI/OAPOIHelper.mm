@@ -22,13 +22,18 @@
 #include <OsmAndCore/Data/DataCommonTypes.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
+#include <OsmAndCore/Data/ObfAddressSectionInfo.h>
 #include <OsmAndCore/FunctorQueryController.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/ISearch.h>
 #include <OsmAndCore/Search/BaseSearch.h>
 #include <OsmAndCore/Search/AmenitiesByNameSearch.h>
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
+#include <OsmAndCore/Search/AddressesByNameSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/Data/ObfAddressSectionReader.h>
 
 #define kSearchLimitRaw 5000
 #define kRadiusKmToMetersKoef 1200.0
@@ -362,6 +367,7 @@
     
     if (_radius == 0.0) {
         
+        /*
         const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
         
         searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
@@ -375,6 +381,60 @@
                                   [self onPOIFound:resultEntry];
                               },
                               ctrl);
+        
+         */
+        // Address search example
+        const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
+        
+        searchCriteria->name = QString::fromNSString(keyword ? keyword : @"");
+        searchCriteria->obfInfoAreaFilter = _visibleArea;
+        
+        const auto search = std::shared_ptr<const OsmAnd::AddressesByNameSearch>(new OsmAnd::AddressesByNameSearch(obfsCollection));
+        search->performSearch(*searchCriteria,
+                              [self]
+                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                              {
+                                  const auto address = ((OsmAnd::AddressesByNameSearch::ResultEntry&)resultEntry).address;
+                                  switch (address->addressType)
+                                  {
+                                      case OsmAnd::AddressType::Street:
+                                      {
+                                          const auto street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
+                                          NSLog(@"STREET === %@ group=%@", street->nativeName.toNSString(), street->streetGroup != nullptr ? street->streetGroup->nativeName.toNSString() : @"NO");
+                                          break;
+                                      }
+                                          
+                                      case OsmAnd::AddressType::StreetGroup:
+                                      {
+                                          const auto streetGroup = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(address);
+                                          NSLog(@"STREET_GROUP === %@", streetGroup->nativeName.toNSString());
+                                          
+                                          const auto& dataInterface = _app.resourcesManager->obfsCollection->obtainDataInterface();
+                                          
+                                          const auto& streets =
+                                            dataInterface->loadStreetsFromGroups(
+                                                                                 QList<std::shared_ptr<const OsmAnd::StreetGroup>>() << streetGroup,
+                                                                                 nullptr,
+                                                                                 nullptr,
+                                                                                 [self]
+                                                                                 (const std::shared_ptr<const OsmAnd::Street>& street)
+                                                                                 {
+                                                                                     NSLog(@"FOUND_STREET === %@", street->nativeName.toNSString());
+                                                                                     return true;
+                                                                                 },
+                                                                                 nullptr);
+                                          
+                                          
+                                          break;
+                                      }
+                                          
+                                      default:
+                                          break;
+                                  }
+                              },
+                              ctrl);
+         
+        
     } else {
         
         const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);

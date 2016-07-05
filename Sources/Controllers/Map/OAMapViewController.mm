@@ -1521,6 +1521,12 @@
     double lonTap = lon;
     double latTap = lat;
     
+    if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]])
+    {
+        [[OAPOIHelper sharedInstance] geocode:latTap longitude:lonTap];
+        return YES;
+    }
+
     NSMutableArray *foundSymbols = [NSMutableArray array];
     
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;

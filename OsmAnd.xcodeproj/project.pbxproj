@@ -5579,12 +5579,12 @@
 		BB098CE81793F7FD00423944 = {
 			isa = PBXGroup;
 			children = (
+				BB098CF31793F7FD00423944 /* Frameworks */,
+				0FBE528DFE22A018C3A5A9D9 /* Pods */,
+				BB098CF21793F7FD00423944 /* Products */,
 				BBA858EB17C222C500AADCC7 /* README.md */,
 				BBE57D4F17C2208600C349CC /* Resources */,
 				BB098CFA1793F7FD00423944 /* Sources */,
-				BB098CF31793F7FD00423944 /* Frameworks */,
-				BB098CF21793F7FD00423944 /* Products */,
-				0FBE528DFE22A018C3A5A9D9 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};

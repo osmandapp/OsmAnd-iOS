@@ -31,6 +31,8 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/Search/AddressesByNameSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+#include <OsmAndCore/Search/ReverseGeocoder.h>
+#include <OsmAndCore/CachingRoadLocator.h>
 
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/ObfAddressSectionReader.h>
@@ -340,6 +342,32 @@
 {
     int radius = -1;
     [self findPOIsByKeyword:keyword categoryName:nil poiTypeName:nil radiusIndex:&radius];
+}
+
+-(void)geocode:(double)latitude longitude:(double)longitude
+{
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    std::shared_ptr<OsmAnd::CachingRoadLocator> roadLocator;
+    roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
+    
+    const auto geocoder = std::shared_ptr<const OsmAnd::ReverseGeocoder>(new OsmAnd::ReverseGeocoder(obfsCollection, roadLocator));
+    const std::shared_ptr<OsmAnd::ReverseGeocoder::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::ReverseGeocoder::Criteria>(new OsmAnd::ReverseGeocoder::Criteria);
+    searchCriteria->latLon = OsmAnd::LatLon(latitude, longitude);
+    
+    geocoder->performSearch(*searchCriteria,
+                            [self]
+                            (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                            {
+                                const auto result = (OsmAnd::ReverseGeocoder::ResultEntry&)resultEntry;
+                                NSString *resultString = result.toString().toNSString();
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"Geocoding result" message:resultString delegate:nil cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                                    [alert show];
+                                });
+                                
+                            });
+    
+    
 }
 
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radiusIndex:(int *)radiusIndex

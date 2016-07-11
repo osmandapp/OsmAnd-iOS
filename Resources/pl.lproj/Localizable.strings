@@ -1,7 +1,7 @@
 "OsmAnd Maps" = "OsmAnd";
 "rendering_attr_hideBuildings_name" = "Ukrywanie budynków";
 "rendering_attr_OSMMapperAssistant_name" = "Asystent mapowania OSM";
-"shared_string_ok" = "OK";
+"shared_string_ok" = "Zatwierdź";
 "shared_string_cancel" = "Anuluj";
 "shared_string_yes" = "Tak";
 "shared_string_no" = "Nie";
@@ -95,7 +95,7 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Kolorowanie wg przeznaczenia trasy";
 "rendering_value_walkingRoutesOSMC_name" = "Kolorowanie wg zasad OSMC";
 "rendering_attr_hikingRoutesOSMC_name" = "Symbol nakładki wędrówek";
-"shared_string_dismiss" = "Odrzuć";
+"shared_string_dismiss" = "Anuluj";
 "description" = "Opis";
 "shared_string_remove" = "Usuń";
 "shared_string_modify" = "Modyfikuj";

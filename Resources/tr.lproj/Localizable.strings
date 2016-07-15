@@ -304,7 +304,7 @@
 "rendering_attr_noPolygons_name" = "Çokgenler gizle";
 "rendering_attr_noAdminboundaries_name" = "Sınırları gizle";
 "rendering_attr_publicTransportMode_name" = "Otobüs, troleybüs, mekik yolları";
-"rendering_attr_contourLines_name" = "Göster kontur çizgileri";
+"rendering_attr_contourLines_name" = "Çevre çizgileri göster";
 "rendering_attr_OSMMapperAssistant_name" = "OSM Eşleştiricisi Yardımcısı";
 "rendering_attr_roadStyle_name" = "Yol tarzı";
 "rendering_value_default_name" = "Standart";
@@ -458,5 +458,5 @@
 "res_hillshade" = "Hillshade";
 "plugin_popup_ski_desc" = "<b>Kayak harita</b> stil üzerinde açmak için lütfen <b>Harita ayarları</b> ' na gidin > <b>türü göster</b>";
 "plugin_popup_nautical_desc" = "İlk deniz haritaları indirin.\n<b>Harita ayarları</b> ' na gidin > <b>türü eşleştirmek</b> ve <b>deniz</b> tarzı açmak";
-"device_memory" = "Cihaz hafızası";
+"device_memory" = "Aygıt belleği";
 "free_memory" = "Ücretsiz %@";

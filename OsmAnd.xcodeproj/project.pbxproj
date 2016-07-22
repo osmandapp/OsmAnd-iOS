@@ -2556,6 +2556,9 @@
 		8A337E931A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E941A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
 		8A337E951A839AA500F5D01E /* OAViewTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */; };
+		8A4866651D426C7000AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
+		8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
+		8A4866671D426CAE00AD2051 /* libqtpcre.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A4866641D426C7000AD2051 /* libqtpcre.a */; };
 		8A7077181A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
 		8A7077191A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
 		8A70771A1A83C25A005E019B /* OATextViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A7077141A83C25A005E019B /* OATextViewCell.xib */; };
@@ -3998,6 +4001,7 @@
 		84F989481B53AABF009C443C /* OADirectionsCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OADirectionsCardController.h; path = Sources/Controllers/2.0/OADirectionsCardController.h; sourceTree = "<group>"; };
 		84F989491B53AABF009C443C /* OADirectionsCardController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OADirectionsCardController.mm; path = Sources/Controllers/2.0/OADirectionsCardController.mm; sourceTree = "<group>"; };
 		8A337E8F1A839AA500F5D01E /* OAViewTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAViewTextCell.xib; path = Resources/Controllers/Cells/OAViewTextCell.xib; sourceTree = "<group>"; };
+		8A4866641D426C7000AD2051 /* libqtpcre.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libqtpcre.a; path = "../core/externals/qtbase-ios/upstream.patched.ios.clang/lib/libqtpcre.a"; sourceTree = "<group>"; };
 		8A7077141A83C25A005E019B /* OATextViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATextViewCell.xib; path = Resources/Controllers/Cells/OATextViewCell.xib; sourceTree = "<group>"; };
 		8A70771B1A84A7BF005E019B /* OAFavoriteImportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAFavoriteImportViewController.h; path = Sources/Controllers/2.0/OAFavoriteImportViewController.h; sourceTree = "<group>"; };
 		8A70771C1A84A7BF005E019B /* OAFavoriteImportViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAFavoriteImportViewController.mm; path = Sources/Controllers/2.0/OAFavoriteImportViewController.mm; sourceTree = "<group>"; };
@@ -4241,6 +4245,7 @@
 				BB2545BE1798254B00E80B58 /* QuartzCore.framework in Frameworks */,
 				BB2545BC1798253E00E80B58 /* OpenGLES.framework in Frameworks */,
 				BB098CF51793F7FD00423944 /* UIKit.framework in Frameworks */,
+				8A4866651D426C7000AD2051 /* libqtpcre.a in Frameworks */,
 				BB098CF71793F7FD00423944 /* Foundation.framework in Frameworks */,
 				BB098CF91793F7FD00423944 /* CoreGraphics.framework in Frameworks */,
 				BBBDADB918BCF53500E4A359 /* CoreLocation.framework in Frameworks */,
@@ -4263,6 +4268,7 @@
 				84C41E7A1AB9EE990089EABB /* libxml2.dylib in Frameworks */,
 				84185A811AA99FFF00F70328 /* StoreKit.framework in Frameworks */,
 				BB451E4618DCD224005FBE09 /* Security.framework in Frameworks */,
+				8A4866671D426CAE00AD2051 /* libqtpcre.a in Frameworks */,
 				BB451E4718DCD224005FBE09 /* CoreText.framework in Frameworks */,
 				BB451E4818DCD224005FBE09 /* QuartzCore.framework in Frameworks */,
 				BB451E4918DCD224005FBE09 /* OpenGLES.framework in Frameworks */,
@@ -4304,6 +4310,7 @@
 				BBA3AF75197FC4BB0039D991 /* QuartzCore.framework in Frameworks */,
 				BBA3AF76197FC4BB0039D991 /* OpenGLES.framework in Frameworks */,
 				BBA3AF77197FC4BB0039D991 /* UIKit.framework in Frameworks */,
+				8A4866661D426CAE00AD2051 /* libqtpcre.a in Frameworks */,
 				BBA3AF78197FC4BB0039D991 /* Foundation.framework in Frameworks */,
 				BBA3AF79197FC4BB0039D991 /* CoreGraphics.framework in Frameworks */,
 				BBA3AF7A197FC4BB0039D991 /* CoreLocation.framework in Frameworks */,
@@ -5629,6 +5636,7 @@
 				BBB34EA2179BB42A004C5567 /* libQt5Core.a */,
 				BBB34EA3179BB42A004C5567 /* libQt5Network.a */,
 				BBB34EA4179BB42A004C5567 /* libQt5Sql.a */,
+				8A4866641D426C7000AD2051 /* libqtpcre.a */,
 				BBB34EA8179BBD21004C5567 /* libz.dylib */,
 				BBB34EE6179BF2A7004C5567 /* libiconv.dylib */,
 				BB32C04819262B80007999A0 /* libbz2.dylib */,
@@ -6140,6 +6148,7 @@
 				BB098CEF1793F7FD00423944 /* Resources */,
 				2C57EB91D95D4B45DFDE7D79 /* [CP] Embed Pods Frameworks */,
 				B365603B504B9FF946C5EBBF /* [CP] Copy Pods Resources */,
+				C412AD32A3E9493A6A34D368 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6161,6 +6170,7 @@
 				BB451E5318DCD224005FBE09 /* Resources */,
 				5DD410AA719F22B82E00DE78 /* [CP] Embed Pods Frameworks */,
 				A877544EBAE36AA00F578057 /* [CP] Copy Pods Resources */,
+				8BC32286733CEE3BD67B7750 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -6182,6 +6192,7 @@
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				192C8350BEB8A6EDB2BEF221 /* [CP] Embed Pods Frameworks */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
+				12704CDCD013BFE51F7FE8E8 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -8512,6 +8523,21 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		12704CDCD013BFE51F7FE8E8 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		192C8350BEB8A6EDB2BEF221 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8602,6 +8628,21 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		8BC32286733CEE3BD67B7750 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd DEV (prebuilt Core)/Pods-OsmAnd DEV (prebuilt Core)-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		A5E49D3487041FD0E2C5FF6D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -8660,6 +8701,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#!/bin/sh\n\n\"$PROJECT_DIR/generate-appprefix.sh\"";
+			showEnvVarsInLog = 0;
+		};
+		C412AD32A3E9493A6A34D368 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd DEV/Pods-OsmAnd DEV-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -9497,6 +9553,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9520,6 +9580,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -9543,6 +9607,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -9580,6 +9648,10 @@
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-lOsmAndCore_static_standalone",
@@ -9614,7 +9686,7 @@
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -9650,7 +9722,7 @@
 				INFOPLIST_PREPROCESSOR_DEFINITIONS = "OSMAND_BUNDLE_ID=net.osmand.maps";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/admin/osmand/binaries/ios.clang-iphoneos/Debug",
+					"$(PROJECT_DIR)",
 				);
 				OTHER_LDFLAGS = (
 					"$(inherited)",

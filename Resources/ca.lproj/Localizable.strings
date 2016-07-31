@@ -263,7 +263,7 @@
 "rendering_category_hide" = "Amaga";
 "rendering_category_routes" = "Rutes";
 "rendering_category_details" = "Detalls";
-"rendering_category_transport" = "Transport";
+"rendering_category_transport" = "Transport col·lectiu";
 "rendering_category_others" = "Altres atributs del mapa";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Mostra les restriccions d'accés";

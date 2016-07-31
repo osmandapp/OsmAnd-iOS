@@ -1,11 +1,11 @@
 "rendering_attr_OSMMapperAssistant_name" = "Assistente mapadura OSM";
 "shared_string_ok" = "Atzeta";
-"shared_string_cancel" = "Burra";
+"shared_string_cancel" = "Iscantzella";
 "shared_string_yes" = "Eja";
 "shared_string_no" = "Nono";
 "shared_string_or" = "o";
 "shared_string_save" = "Sarba";
-"shared_string_delete" = "Burra";
+"shared_string_delete" = "Iscantzella";
 "shared_string_add" = "Annanghe";
 "rendering_attr_streetLighting_name" = "Illuminatzione pùblica";
 "rendering_attr_roadStyle_name" = "Istile disinnu de sas istradas";

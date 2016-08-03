@@ -16,9 +16,9 @@
 "rendering_value_germanRoadAtlas_name" = "Niemiecki atlas drogowy";
 "rendering_value_highContrastRoads_name" = "Wysoki kontrast dróg";
 "rendering_value_americanRoadAtlas_name" = "Amerykański atlas drogowy";
-"rendering_attr_publicTransportMode_name" = "Trasy autobusowe, trolejbusowe, transportowe";
-"rendering_attr_tramTrainRoutes_name" = "Trasy tramwajowe i kolejowe";
-"rendering_attr_subwayMode_name" = "Trasy metra";
+"rendering_attr_publicTransportMode_name" = "Linie autobusowe, trolejbusowe, transportowe";
+"rendering_attr_tramTrainRoutes_name" = "Linie tramwajowe i kolejowe";
+"rendering_attr_subwayMode_name" = "Linie metra";
 // Rendering categories
 "rendering_category_hide" = "Ukrywanie";
 "rendering_category_routes" = "Trasy";

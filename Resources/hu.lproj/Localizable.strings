@@ -457,3 +457,4 @@
 "free_memory" = "%@ szabad";
 "gpx_waypoint" = "Útpont";
 "menu_my_directions" = "Célpontjaim";
+"product_desc_trip_planning" = "Tervezd meg az utazásodat, adj hozzá útvonalpontokat, mérd meg a távolságot a célpontig ezzel a bővítménnyel";

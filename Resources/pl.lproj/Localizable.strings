@@ -89,7 +89,7 @@
 "gpx_export" = "Eksportuj";
 "import_export" = "Importuj/Eksportuj";
 "gpx_import_title" = "Importuj wycieczkę";
-"rendering_value_default_name" = "Domyślna";
+"rendering_value_default_name" = "Domyślnie";
 "rendering_value_disabled_name" = "Wyłączony";
 "shared_string_edit" = "Edytuj";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Kolorowanie wg przeznaczenia trasy";

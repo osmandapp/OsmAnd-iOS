@@ -455,3 +455,5 @@
 "map_creator" = "Map Creator";
 "device_memory" = "Eszköz memóriája";
 "free_memory" = "%@ szabad";
+"gpx_waypoint" = "Útpont";
+"menu_my_directions" = "Célpontjaim";

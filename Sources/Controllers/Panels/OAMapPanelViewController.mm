@@ -2980,7 +2980,7 @@ typedef enum
         [_hudViewController.view insertSubview:cardsController.view belowSubview:_destinationViewController.view];
         
         if (_destinationViewController)
-        [self.destinationViewController updateCloseButton];
+            [self.destinationViewController updateCloseButton];
         
         [UIView animateWithDuration:.25 animations:^{
             cardsController.view.frame = CGRectMake(0.0, y, DeviceScreenWidth, h);

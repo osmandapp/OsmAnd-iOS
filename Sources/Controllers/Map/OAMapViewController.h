@@ -133,8 +133,6 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
 - (void)hideContextPinMarker;
 
-- (void)postTargetNotification:(OAMapSymbol *)symbol;
-
 - (BOOL)simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
 
 - (void)showRouteGpxTrack;

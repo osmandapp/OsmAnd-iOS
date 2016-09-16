@@ -192,7 +192,7 @@
             symbol.touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenHeight / 2.0);
             symbol.type = OAMapSymbolContext;
             
-            [mapViewController postTargetNotification:symbol];
+            [OAMapViewController postTargetNotification:symbol];
         });
         
         return YES;

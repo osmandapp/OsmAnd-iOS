@@ -145,7 +145,7 @@
 @end
 
 
-@interface OAMapViewController ()
+@interface OAMapViewController ()<CAAnimationDelegate>
 @end
 
 @implementation OAMapViewController
@@ -1800,7 +1800,7 @@
 }
 
 + (void)postTargetNotification:(OAMapSymbol *)symbol
-{    
+{
     if (!symbol.caption)
         symbol.caption = @"";
     if (!symbol.buildingNumber)

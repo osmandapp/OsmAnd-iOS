@@ -185,48 +185,51 @@
     
     if (cell)
     {
-        [cell.btnPrice removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-        cell.btnPrice.tag = indexPath.row;
-        [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
-        
-        NSString *identifier;
-        NSString *title;
-        NSString *desc;
-        NSString *price;
-        UIImage *imgTitle;
-
-        identifier = [OAIAPHelper inAppsAddons][indexPath.row];
-        imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
-        if (!imgTitle)
-            imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
-
-        cell.imgIconBackground.hidden = NO;
-
-        OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
-        if (product)
-        {
-            title = product.localizedTitle;
-            desc = product.localizedDescription;
-            if (product.price)
+        [UIView performWithoutAnimation:^{
+            [cell.btnPrice removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+            cell.btnPrice.tag = indexPath.row;
+            [cell.btnPrice addTarget:self action:@selector(buttonPurchaseClicked:) forControlEvents:UIControlEventTouchUpInside];
+            
+            NSString *identifier;
+            NSString *title;
+            NSString *desc;
+            NSString *price;
+            UIImage *imgTitle;
+            
+            identifier = [OAIAPHelper inAppsAddons][indexPath.row];
+            imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
+            if (!imgTitle)
+                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+            
+            cell.imgIconBackground.hidden = NO;
+            
+            OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+            if (product)
             {
-                [_numberFormatter setLocale:product.priceLocale];
-                price = [_numberFormatter stringFromNumber:product.price];
+                title = product.localizedTitle;
+                desc = product.localizedDescription;
+                if (product.price)
+                {
+                    [_numberFormatter setLocale:product.priceLocale];
+                    price = [_numberFormatter stringFromNumber:product.price];
+                }
+                else
+                {
+                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                }
             }
-            else
-            {
-                price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
-            }
-        }
-        
-        [cell.imgIcon setImage:imgTitle];
-        [cell.lbTitle setText:title];
-        [cell.lbDescription setText:desc];
-        [cell.btnPrice setTitle:price forState:UIControlStateNormal];
-        
-        BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
-        BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
-        
-        [cell setPurchased:purchased disabled:disabled];
+            
+            [cell.imgIcon setImage:imgTitle];
+            [cell.lbTitle setText:title];
+            [cell.lbDescription setText:desc];
+            [cell.btnPrice setTitle:price forState:UIControlStateNormal];
+            
+            BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
+            BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+            
+            [cell setPurchased:purchased disabled:disabled];
+            [cell.btnPrice layoutIfNeeded];
+        }];
     }
     
     return cell;

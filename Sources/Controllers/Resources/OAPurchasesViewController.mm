@@ -214,71 +214,74 @@
     BOOL allWorldMapsPurchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:kInAppId_Region_All_World];
     
     if (cell) {
-        
-        cell.btnPrice.userInteractionEnabled = NO;
-        
-        NSString *identifier;
-        NSString *title;
-        NSString *desc;
-        NSString *price;
-        UIImage *imgTitle;
-        
-        if (indexPath.section == _pluginsSection)
-        {
-            identifier = _addonsPurchased[indexPath.row];
-            imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
-            if (!imgTitle)
-                imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
-            cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xF0F0F0).CGColor;            
-            cell.imgIconBackground.hidden = NO;
-            cell.btnPrice.hidden = YES;
+        [UIView performWithoutAnimation:^{
+            cell.btnPrice.userInteractionEnabled = NO;
             
-        }
-        else if (indexPath.section == _mapsSection)
-        {
-            identifier = [OAIAPHelper inAppsMaps][indexPath.row];
-            imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
-            cell.imgIconBackground.hidden = YES;
-            cell.btnPrice.hidden = NO;
-        }
-        else if (indexPath.section == _restoreSection)
-        {
-            identifier = nil;
-            imgTitle = [UIImage imageNamed:@"ic_restore_purchase"];
-            title = OALocalizedString(@"restore_all_purchases");
-            cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xff8f00).CGColor;
-            cell.imgIconBackground.hidden = NO;
-            cell.btnPrice.hidden = YES;
-        }
-        
-        OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
-        if (product)
-        {
-            title = product.localizedTitle;
-            desc = product.localizedDescription;
-            if (product.price)
+            NSString *identifier;
+            NSString *title;
+            NSString *desc;
+            NSString *price;
+            UIImage *imgTitle;
+            
+            if (indexPath.section == _pluginsSection)
             {
-                [_numberFormatter setLocale:product.priceLocale];
-                price = [_numberFormatter stringFromNumber:product.price];
+                identifier = _addonsPurchased[indexPath.row];
+                imgTitle = [UIImage imageNamed:[OAIAPHelper productIconName:identifier]];
+                if (!imgTitle)
+                    imgTitle = [UIImage imageNamed:@"img_app_purchase_2.png"];
+                cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xF0F0F0).CGColor;
+                cell.imgIconBackground.hidden = NO;
+                cell.btnPrice.hidden = YES;
+                
             }
-            else
+            else if (indexPath.section == _mapsSection)
             {
-                price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                identifier = [OAIAPHelper inAppsMaps][indexPath.row];
+                imgTitle = [UIImage imageNamed:@"img_app_purchase_1.png"];
+                cell.imgIconBackground.hidden = YES;
+                cell.btnPrice.hidden = NO;
             }
-        }
-
-        [cell.imgIcon setImage:imgTitle];
-        [cell.lbTitle setText:title];
-        [cell.lbDescription setText:desc];
-        [cell.btnPrice setTitle:price forState:UIControlStateNormal];
-        
-        BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
-        BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
-        
-        if (indexPath.section == _mapsSection)
-            [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
-        else  if (indexPath.section == _pluginsSection)
-            [cell setPurchased:purchased disabled:disabled];
+            else if (indexPath.section == _restoreSection)
+            {
+                identifier = nil;
+                imgTitle = [UIImage imageNamed:@"ic_restore_purchase"];
+                title = OALocalizedString(@"restore_all_purchases");
+                cell.imgIconBackground.layer.backgroundColor = UIColorFromRGB(0xff8f00).CGColor;
+                cell.imgIconBackground.hidden = NO;
+                cell.btnPrice.hidden = YES;
+            }
+            
+            OAProduct *product = [[OAIAPHelper sharedInstance] product:identifier];
+            if (product)
+            {
+                title = product.localizedTitle;
+                desc = product.localizedDescription;
+                if (product.price)
+                {
+                    [_numberFormatter setLocale:product.priceLocale];
+                    price = [_numberFormatter stringFromNumber:product.price];
+                }
+                else
+                {
+                    price = [OALocalizedString(@"shared_string_buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
+                }
+            }
+            
+            [cell.imgIcon setImage:imgTitle];
+            [cell.lbTitle setText:title];
+            [cell.lbDescription setText:desc];
+            [cell.btnPrice setTitle:price forState:UIControlStateNormal];
+            
+            BOOL purchased = [[OAIAPHelper sharedInstance] productPurchasedIgnoreDisable:identifier];
+            BOOL disabled = [[OAIAPHelper sharedInstance] isProductDisabled:identifier];
+            
+            if (indexPath.section == _mapsSection)
+                [cell setPurchased:(purchased || allWorldMapsPurchased) disabled:NO];
+            else  if (indexPath.section == _pluginsSection)
+                [cell setPurchased:purchased disabled:disabled];
+            
+            [cell.btnPrice layoutIfNeeded];
+        }];
     }
     
     return cell;

@@ -31,6 +31,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAFreeMemoryView.h"
+#import "OAFirebaseHelper.h"
 
 #include "Localization.h"
 
@@ -2420,6 +2421,8 @@ static BOOL _lackOfResources;
 
 - (IBAction)btnToolbarPluginsClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"plugins_open"];
+
     OAPluginsViewController *pluginsViewController = [[OAPluginsViewController alloc] init];
     pluginsViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:pluginsViewController animated:NO];
@@ -2427,6 +2430,8 @@ static BOOL _lackOfResources;
 
 - (IBAction)btnToolbarPurchasesClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"purchases_open"];
+
     OAPurchasesViewController *purchasesViewController = [[OAPurchasesViewController alloc] init];
     purchasesViewController.openFromSplash = _openFromSplash;
     [self.navigationController pushViewController:purchasesViewController animated:NO];
@@ -2437,6 +2442,8 @@ static BOOL _lackOfResources;
 
 - (void) bannerButtonPressed
 {
+    [OAFirebaseHelper logEvent:@"banner_pressed"];
+
     if (self.region == _app.worldRegion && !_displayBannerPurchaseAllMaps)
     {
         _displayBannerPurchaseAllMaps = YES;

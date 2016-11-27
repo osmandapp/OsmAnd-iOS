@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import <Reachability.h>
+#import "OAFirebaseHelper.h"
 
 NSString *const OAIAPProductPurchasedNotification = @"OAIAPProductPurchasedNotification";
 NSString *const OAIAPProductPurchaseFailedNotification = @"OAIAPProductPurchaseFailedNotification";
@@ -414,7 +415,9 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 - (void)buyProduct:(OAProduct *)product
 {
     OALog(@"Buying %@...", product.productIdentifier);
-    
+
+    [OAFirebaseHelper logEvent:[@"inapp_buy_" stringByAppendingString:product.productIdentifier]];
+     
     _restoringPurchases = NO;
     
     if (product.skProductRef)
@@ -522,7 +525,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
 // Sent when the transaction array has changed (additions or state changes).  Client should check state of transactions and finish as appropriate.
 - (void)paymentQueue:(SKPaymentQueue *)queue updatedTransactions:(NSArray *)transactions
 {
-    for (SKPaymentTransaction * transaction in transactions) {
+    for (SKPaymentTransaction * transaction in transactions)
+    {
         switch (transaction.transactionState)
         {
             case SKPaymentTransactionStatePurchased:
@@ -538,7 +542,6 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
                 break;
         }
     };
-
 }
 
 // Sent when all transactions from the user's purchase history have successfully been added back to the queue.
@@ -564,6 +567,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             if ([[self.class inAppsMaps] containsObject:transaction.payment.productIdentifier])
                 _isAnyMapPurchased = YES;
             
+            [OAFirebaseHelper logEvent:[@"inapp_purchased_" stringByAppendingString:transaction.payment.productIdentifier]];
+
             [self provideContentForProductIdentifier:transaction.payment.productIdentifier];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -581,6 +586,8 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
             if ([[self.class inAppsMaps] containsObject:transaction.originalTransaction.payment.productIdentifier])
                 _isAnyMapPurchased = YES;
             
+            [OAFirebaseHelper logEvent:[@"inapp_restored_" stringByAppendingString:transaction.originalTransaction.payment.productIdentifier]];
+
             [self provideContentForProductIdentifier:transaction.originalTransaction.payment.productIdentifier];
         }
         [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -594,6 +601,7 @@ NSString *const OAIAPProductsRestoredNotification = @"OAIAPProductsRestoredNotif
         if (transaction.payment && transaction.payment.productIdentifier)
         {
             OALog(@"failedTransaction - %@", transaction.payment.productIdentifier);
+            [OAFirebaseHelper logEvent:[@"inapp_failed_" stringByAppendingString:transaction.payment.productIdentifier]];
             if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
             {
                 OALog(@"Transaction error: %@", transaction.error.localizedDescription);

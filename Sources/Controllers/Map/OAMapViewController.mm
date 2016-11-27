@@ -650,7 +650,8 @@
         .setBaseOrder(-210000)
         .setIsHidden(true)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:@"ic_map_pin"])
-        .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
+        .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .buildAndAddToCollection(_contextPinMarkersCollection);
     
     // Create favorites presenter
@@ -701,7 +702,8 @@
         .setIsHidden(false)
         .setPinIcon([OANativeUtilities skBitmapFromPngResource:favCol.iconName])
         .setPosition(favLoc->getPosition31())
-        .setPinIconAlignment(OsmAnd::MapMarker::Center)
+        .setPinIconVerticalAlignment(OsmAnd::MapMarker::CenterVertical)
+        .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
         .buildAndAddToCollection(_favoritesMarkersCollection);
         
     }
@@ -4921,7 +4923,8 @@
     .setIsHidden(false)
     .setPinIcon([OANativeUtilities skBitmapFromPngResource:markerResourceName])
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
-    .setPinIconAlignment((OsmAnd::MapMarker::PinIconAlignment)(OsmAnd::MapMarker::Top | OsmAnd::MapMarker::CenterHorizontal))
+    .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
+    .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
     .setAccuracyCircleBaseColor(col)
     .buildAndAddToCollection(_destinationPinMarkersCollection);
 }

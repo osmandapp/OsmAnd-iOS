@@ -1,6 +1,6 @@
 source "https://github.com/CocoaPods/Specs.git"
 
-platform :ios, '6.0'
+platform :ios, '7.0'
 
 xcodeproj 'OsmAnd'
 workspace 'OsmAnd'
@@ -23,6 +23,7 @@ def defaultPods
     pod 'MYBlurIntroductionView', '~> 1.0.3'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
+    pod 'Firebase/Core'
 end
 
 target 'OsmAnd Maps' do
@@ -30,15 +31,15 @@ target 'OsmAnd Maps' do
 end
 
 # Development-only dependencies
-target 'OsmAnd DEV' do
-    defaultPods
-    pod 'HockeySDK', '~> 3.6.2'
-end
+#target 'OsmAnd DEV' do
+#    defaultPods
+#    pod 'HockeySDK', '~> 3.6.2'
+#end
 
-target 'OsmAnd DEV (prebuilt Core)' do
-    defaultPods
-    pod 'HockeySDK', '~> 3.6.2'
-end
+#target 'OsmAnd DEV (prebuilt Core)' do
+#    defaultPods
+#    pod 'HockeySDK', '~> 3.6.2'
+#end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

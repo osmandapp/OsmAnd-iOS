@@ -208,8 +208,6 @@
         [defaults synchronize];
     }
 
-    OALog(@"GIT_COMMIT_HASH = %@", [[NSBundle mainBundle] infoDictionary][@"GIT_COMMIT_HASH"]);
-
     OALog(@"Data path: %@", _dataPath);
     OALog(@"Documents path: %@", _documentsPath);
     OALog(@"GPX path: %@", _gpxPath);

@@ -10,11 +10,6 @@
 
 #import <UIKit/UIKit.h>
 
-#if defined(OSMAND_IOS_DEV)
-#import <HockeySDK/HockeySDK.h>
-#import <HockeySDK/BITCrashManagerDelegate.h>
-#endif // defined(OSMAND_IOS_DEV)
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
@@ -34,12 +29,7 @@
 #include <OsmAndCore/FunctorLogSink.h>
 
 #import "OAIntroViewController.h"
-
-#if defined(OSMAND_IOS_DEV)
-@interface OAAppDelegate() <BITHockeyManagerDelegate, BITCrashManagerDelegate>
-@end
-#endif // defined(OSMAND_IOS_DEV)
-
+#import "Firebase.h"
 
 @implementation OAAppDelegate
 {
@@ -51,13 +41,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-#if defined(OSMAND_IOS_DEV)
-    // Initialize HockeyApp SDK
-    [[BITHockeyManager sharedHockeyManager] configureWithIdentifier:@"d0e3531de653eb594ed116297d16a284" delegate:self];
-    [[BITHockeyManager sharedHockeyManager] startManager];
-    [[BITHockeyManager sharedHockeyManager].authenticator authenticateInstallation];
-#endif // defined(OSMAND_IOS_DEV)
-
+    // Use Firebase library to configure APIs
+    [FIRApp configure];
+    
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
     [device beginGeneratingDeviceOrientationNotifications];

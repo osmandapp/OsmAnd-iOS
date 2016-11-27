@@ -59,6 +59,7 @@
 #import "OAGPXEditToolbarViewController.h"
 #import "OAPOI.h"
 #import "OAPOILocationType.h"
+#import "OAFirebaseHelper.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -909,6 +910,8 @@ typedef enum
 
 - (void)mapSettingsButtonClick:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"configure_map_open"];
+    
     [self removeGestureRecognizers];
     
     _mapSettings = [[OAMapSettingsViewController alloc] init];
@@ -923,6 +926,8 @@ typedef enum
 
 - (void)searchButtonClick:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"search_open"];
+
     [self removeGestureRecognizers];
 
     OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
@@ -2876,6 +2881,8 @@ typedef enum
 
 - (void)showCards
 {
+    [OAFirebaseHelper logEvent:@"destinations_open"];
+
     _destinationViewController.navBarHidden = [OADestinationsHelper instance].sortedDestinations.count > 0;
     [self showDestinations];
     [_destinationViewController updateFrame:NO];

@@ -18,6 +18,7 @@
 #import <UIViewController+JASidePanel.h>
 
 #import "OARootViewController.h"
+#import "OAFirebaseHelper.h"
 
 @interface OAOptionsPanelBlackViewController () <UINavigationControllerDelegate>
 
@@ -221,12 +222,16 @@
 
 - (IBAction)myDataButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"favorites_open"];
+
     OAFavoriteListViewController* settingsViewController = [[OAFavoriteListViewController alloc] init];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (IBAction)myTripsButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"trips_open"];
+
     if ([[OARootViewController instance].mapPanel hasGpxActiveTargetType])
     {
         [self.sidePanelController toggleLeftPanel:self];
@@ -246,18 +251,24 @@
 
 - (IBAction)settingsButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"settings_open"];
+
     OASettingsViewController* settingsViewController = [[OASettingsViewController alloc] initWithSettingsType:kSettingsScreenGeneral];
     [self.navigationController pushViewController:settingsViewController animated:YES];
 }
 
 - (IBAction)mapsAndResourcesButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"download_maps_open"];
+
     OASuperViewController* resourcesViewController = [[UIStoryboard storyboardWithName:@"Resources" bundle:nil] instantiateInitialViewController];
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 
 - (IBAction)helpButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"help_open"];
+
     // Data is powered by OpenStreetMap ODbL, &#169; http://www.openstreetmap.org/copyright
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:@"" message:@"Copyright OsmAnd 2015\n\nData is powered by OpenStreetMap ODbL, ©\nhttp://www.openstreetmap.org/copyright" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
     [alert show];
@@ -265,6 +276,8 @@
 
 - (IBAction)quizButtonClicked:(id)sender
 {
+    [OAFirebaseHelper logEvent:@"quiz_open"];
+
     OAWebViewController* quizViewController = [[OAWebViewController alloc] initWithUrl:@"http://www.osmand.net/ios-poll.html"];
     [self.navigationController pushViewController:quizViewController animated:YES];
 }

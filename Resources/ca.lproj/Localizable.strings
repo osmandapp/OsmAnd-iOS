@@ -466,3 +466,19 @@
 "gpx_waypoint" = "Fita";
 "menu_my_waypoints" = "Les meves fites";
 "menu_my_directions" = "Els meus llocs";
+// Shared Strings
+"shared_string_select" = "Selecciona";
+"shared_string_of" = "de";
+"first_usage_greeting" = "Obteniu indicacions i descobriu nous llocs sense connexió a Internet";
+"get_started" = "Comença";
+"first_usage_wizard_desc" = "Permeteu a OsmAnd determinar la vostra localització i suggerir-vos els  mapes a baixar d'aquesta zona.";
+"location_not_found" = "No s'ha determinat la localització";
+"search_my_location" = "Cerca la meva localització";
+"no_inet_connection" = "Sense connexió a Internet";
+"no_inet_connection_desc_map" = "És necessari per baixar mapes.";
+"try_again" = "Torneu-ho a provar";
+"search_location" = "Cercant localització…";
+"search_map" = "Cercant mapa…";
+"search_another_country" = "Selecciona un altre país";
+"skip_map_downloading" = "Omet els mapes en procés de baixada";
+"skip_map_downloading_desc" = "No teniu cap mapa instal·lat per consultar sense internet. En podeu triar un de la llista o baixar-ne més tard via Menú - Gestiona fitxers de mapes";

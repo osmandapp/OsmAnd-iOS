@@ -469,7 +469,7 @@
 // Shared Strings
 "shared_string_select" = "Selecciona";
 "shared_string_of" = "de";
-"first_usage_greeting" = "Obteniu indicacions i descobriu nous llocs sense connexió a Internet";
+"first_usage_greeting" = "Obteniu indicacions i descobriu llocs nous sense connexió a Internet";
 "get_started" = "Comença";
 "first_usage_wizard_desc" = "Permeteu a OsmAnd determinar la vostra localització i suggerir-vos els  mapes a baixar d'aquesta zona.";
 "location_not_found" = "No s'ha determinat la localització";

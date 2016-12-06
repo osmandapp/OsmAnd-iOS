@@ -15,5 +15,6 @@
 
 + (NSArray<NSString *> *)getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region;
 + (void)prepareData;
++ (BOOL)lackOfResources;
 
 @end

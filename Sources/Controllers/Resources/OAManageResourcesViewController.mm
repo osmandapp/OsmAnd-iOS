@@ -608,6 +608,11 @@ static BOOL _lackOfResources;
     }
 }
 
++ (BOOL) lackOfResources
+{
+    return _lackOfResources;
+}
+
 + (void)prepareData
 {
     _lackOfResources = NO;

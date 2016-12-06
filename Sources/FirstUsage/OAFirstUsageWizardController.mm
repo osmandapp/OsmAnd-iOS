@@ -591,6 +591,9 @@ typedef enum
 {
     if (_location)
     {
+        if ([OAManageResourcesViewController lackOfResources])
+            [OAManageResourcesViewController prepareData];
+
         CLLocationCoordinate2D latLon = _location.coordinate;
         const auto rm = _app.resourcesManager;
         NSMutableArray<OAWorldRegion *> *mapRegions = [[_app.worldRegion queryAtLat:latLon.latitude lon:latLon.longitude] mutableCopy];

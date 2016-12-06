@@ -318,7 +318,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return nameStr;
 }
 
-- (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_
++ (BOOL)isSpaceEnoughToDownloadAndUnpackOf:(ResourceItem*)item_
 {
     if ([item_ isKindOfClass:[RepositoryResourceItem class]])
     {
@@ -328,6 +328,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item_ isKindOfClass:[LocalResourceItem class]])
     {
+        OsmAndAppInstance _app = [OsmAndApp instance];
         const auto resource = _app.resourcesManager->getResourceInRepository(item_.resourceId);
 
         return [self isSpaceEnoughToDownloadAndUnpackResource:resource];
@@ -336,13 +337,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return NO;
 }
 
-- (BOOL)isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
++ (BOOL)isSpaceEnoughToDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
 {
+    OsmAndAppInstance _app = [OsmAndApp instance];
     uint64_t spaceNeeded = resource->packageSize + resource->size;
     return (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
 }
 
-- (BOOL)verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
++ (BOOL)verifySpaceAvailableToDownloadAndUnpackOf:(ResourceItem*)item_
                                          asUpdate:(BOOL)isUpdate
 {
     if ([item_ isKindOfClass:[RepositoryResourceItem class]])
@@ -360,6 +362,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         LocalResourceItem* item = (LocalResourceItem*)item_;
 
+        OsmAndAppInstance _app = [OsmAndApp instance];
         const auto resource = _app.resourcesManager->getResourceInRepository(item.resourceId);
 
         return [self verifySpaceAvailableDownloadAndUnpackResource:resource
@@ -373,10 +376,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return NO;
 }
 
-- (BOOL)verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
++ (BOOL)verifySpaceAvailableDownloadAndUnpackResource:(const std::shared_ptr<const OsmAnd::ResourcesManager::ResourceInRepository>&)resource
                                      withResourceName:(NSString*)resourceName
                                              asUpdate:(BOOL)isUpdate
 {
+    OsmAndAppInstance _app = [OsmAndApp instance];
     uint64_t spaceNeeded = resource->packageSize + resource->size;
     BOOL isEnoughSpace = (_app.freeSpaceAvailableOnDevice >= spaceNeeded);
 
@@ -390,7 +394,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return isEnoughSpace;
 }
 
-- (void)showNotEnoughSpaceAlertFor:(NSString*)resourceName
++ (void)showNotEnoughSpaceAlertFor:(NSString*)resourceName
                           withSize:(unsigned long long)size
                           asUpdate:(BOOL)isUpdate
 {
@@ -433,7 +437,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     return YES;
 #endif
     
-    int tasksCount = _app.downloadsManager.keysOfDownloadTasks.count;
+    NSInteger tasksCount = _app.downloadsManager.keysOfDownloadTasks.count;
     
     if (region.regionId == nil || [region isInPurchasedArea] || ([OAIAPHelper freeMapsAvailable] > 0 && tasksCount < [OAIAPHelper freeMapsAvailable])) {
         return YES;
@@ -475,7 +479,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                     withRegionName:YES
                                   withResourceType:YES];
 
-    if (![self verifySpaceAvailableDownloadAndUnpackResource:resourceInRepository
+    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:resourceInRepository
                                             withResourceName:resourceName
                                                     asUpdate:YES])
     {
@@ -533,7 +537,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                     withRegionName:YES
                                   withResourceType:YES];
 
-    if (![self verifySpaceAvailableDownloadAndUnpackResource:item.resource
+    if (![self.class verifySpaceAvailableDownloadAndUnpackResource:item.resource
                                             withResourceName:resourceName
                                                     asUpdate:YES])
     {

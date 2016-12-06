@@ -139,7 +139,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                             
                             //NSLog(@"found name=%@ bbox=(%f,%f)(%f,%f)", foundRegion.name, foundRegion.bboxTopLeft.latitude, foundRegion.bboxTopLeft.longitude, foundRegion.bboxBottomRight.latitude, foundRegion.bboxBottomRight.longitude);
 
-                            if (foundRegion && foundRegion.superregion)
+                            if (foundRegion && foundRegion.superregion && !task.silentInstall)
                             {
                                 dispatch_async(dispatch_get_main_queue(), ^{
                                     [OAPluginPopupViewController showRegionOnMap:foundRegion];

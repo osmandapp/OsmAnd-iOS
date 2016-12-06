@@ -44,5 +44,6 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly, copy) NSError *error;
 
 @property int installResourceRetry;
+@property BOOL silentInstall;
 
 @end

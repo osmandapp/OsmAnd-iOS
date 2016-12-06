@@ -152,6 +152,21 @@ static NSMutableArray* _searchableWorldwideRegionItems;
 
 static BOOL _lackOfResources;
 
++ (NSArray<NSString *> *)getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region
+{
+    const auto citRegionResources = _resourcesByRegions.constFind(region);
+    if (citRegionResources == _resourcesByRegions.cend())
+        return nil;
+    const auto& regionResources = *citRegionResources;
+    
+    NSMutableArray<NSString *> *res = [NSMutableArray array];
+    for (const auto& resource : regionResources.repositoryResources)
+    {
+        [res addObject:resource->id.toNSString()];
+    }
+    return [NSArray arrayWithArray:res];
+}
+
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

@@ -45,7 +45,8 @@
 - (instancetype)initFrom:(const std::shared_ptr<const OsmAnd::WorldRegion>&)region
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
         _worldRegion = region;
         _regionId = _worldRegion->fullRegionName.toNSString();
@@ -54,9 +55,10 @@
         
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
-        
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);
         _bboxBottomRight = CLLocationCoordinate2DMake(latLonBottomRight.latitude, latLonBottomRight.longitude);
+
+        //OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@ bbox=(%f,%f),(%f,%f)", _regionId, _downloadsIdPrefix, _nativeName, _bboxTopLeft.latitude, _bboxTopLeft.longitude, _bboxBottomRight.latitude, _bboxBottomRight.longitude);
 
         //if ([_regionId rangeOfString:@"alaska"].location != NSNotFound)
         //    OALog(@"regionId = %@ downloadsIdPrefix = %@ nativeName = %@", _regionId, _downloadsIdPrefix, _nativeName);
@@ -65,7 +67,7 @@
         
         if (!_localizedName && _nativeName.length == 0)
         {
-            for(const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(region->mapObject->captions)))
+            for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(region->mapObject->captions)))
             {
                 const auto& rule = *region->mapObject->attributeMapping->decodeMap.getRef(entry.key());
                 //NSLog(@"tag=%@ value=%@", rule.tag.toNSString(), rule.value.toNSString());
@@ -127,6 +129,73 @@
 
 - (void)deinit
 {
+}
+
+- (double) getArea
+{
+    double area = 0.0;
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+    {
+        for (int i = 1; i < _worldRegion->mapObject->points31.count(); i++)
+        {
+            double ax = _worldRegion->mapObject->points31.at(i - 1).x;
+            double bx = _worldRegion->mapObject->points31.at(i).x;
+            double ay = _worldRegion->mapObject->points31.at(i - 1).y;
+            double by = _worldRegion->mapObject->points31.at(i).y;
+            area += (bx + ax) * (by - ay) / 1.631E10;
+        }
+    }
+    return ABS(area);
+}
+
+- (BOOL) contain:(double) lat lon:(double) lon
+{
+    BOOL res = NO;
+    if (_worldRegion != nullptr && _worldRegion->mapObject != nullptr && _worldRegion->mapObject->points31.count() > 1)
+    {
+        OsmAnd::PointI p31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+        int t = 0;
+        for (int i = 1; i < _worldRegion->mapObject->points31.count(); i++) {
+            int fx = [self.class ray_intersect_x:_worldRegion->mapObject->points31.at(i).x y:_worldRegion->mapObject->points31.at(i).y middleY:p31.y prevX:_worldRegion->mapObject->points31.at(i - 1).x prevY:_worldRegion->mapObject->points31.at(i - 1).y];
+            if (INT_MIN != fx && p31.x >= fx)
+                t++;
+        }
+        return t % 2 == 1;
+    }
+    return res;
+}
+
++ (int) ray_intersect_x:(int) x y:(int) y middleY:(int) middleY prevX:(int) prevX prevY:(int) prevY
+{
+    // prev node above line
+    // x,y node below line
+    if (prevY > y)
+    {
+        int tx = x;
+        int ty = y;
+        x = prevX;
+        y = prevY;
+        prevX = tx;
+        prevY = ty;
+    }
+    if (y == middleY || prevY == middleY)
+        middleY -= 1;
+
+    if (prevY > middleY || y < middleY)
+    {
+        return INT_MIN;
+    }
+    else
+    {
+        if (y == prevY)
+        {
+            // the node on the boundary !!!
+            return x;
+        }
+        // that tested on all cases (left/right)
+        double rx = x + ((double) middleY - y) * ((double) x - prevX) / (((double) y - prevY));
+        return (int) rx;
+    }
 }
 
 @synthesize regionId = _regionId;
@@ -437,5 +506,24 @@
         return YES;
     return NO;
 }
+
+- (BOOL) isBoundary
+{
+    return _worldRegion != nullptr && _worldRegion->boundary;
+}
+
+- (NSArray<OAWorldRegion *> *) queryAtLat:(double)lat lon:(double)lon
+{
+    NSMutableArray<OAWorldRegion *> *res = [NSMutableArray array];
+    for (OAWorldRegion *region in _flattenedSubregions)
+    {
+        if (lat <= region.bboxTopLeft.latitude && lat >= region.bboxBottomRight.latitude && lon >= region.bboxTopLeft.longitude && lon <= region.bboxBottomRight.longitude && ![self isBoundary])
+        {
+            [res addObject:region];
+        }
+    }
+    return [NSArray arrayWithArray:res];
+}
+
 
 @end

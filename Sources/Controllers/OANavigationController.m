@@ -8,7 +8,8 @@
 
 #import "OANavigationController.h"
 #import "OASuperViewController.h"
-#import "OAIntroViewController.h"
+#import "OAFirstUsageWelcomeController.h"
+#import "OAFirstUsageWizardController.h"
 
 @interface OANavigationController ()
 @end
@@ -48,7 +49,8 @@
 }
 
 - (NSUInteger) supportedInterfaceOrientations {
-    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
+    if ([self.visibleViewController isKindOfClass:[OAFirstUsageWelcomeController class]]
+        || [self.visibleViewController isKindOfClass:[OAFirstUsageWizardController class]])
     {
         if (UIInterfaceOrientationIsPortrait(_initOrientation))
             return UIInterfaceOrientationMaskPortrait;
@@ -59,8 +61,11 @@
 }
 
 - (UIInterfaceOrientation) preferredInterfaceOrientationForPresentation {
-    if ([[self visibleViewController] isKindOfClass:[OAIntroViewController class]])
+    if ([self.visibleViewController isKindOfClass:[OAFirstUsageWelcomeController class]]
+        || [self.visibleViewController isKindOfClass:[OAFirstUsageWizardController class]])
+    {
         return _initOrientation;
+    }
     return [self.visibleViewController interfaceOrientation];
 }
 

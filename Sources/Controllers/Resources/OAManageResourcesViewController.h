@@ -13,6 +13,7 @@
 
 @property (nonatomic, assign) BOOL openFromSplash;
 
++ (NSArray<NSString *> *)getResourcesInRepositoryIdsyRegion:(OAWorldRegion *)region;
 + (void)prepareData;
 
 @end

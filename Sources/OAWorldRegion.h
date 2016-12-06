@@ -34,6 +34,10 @@
 - (BOOL)purchased;
 - (BOOL)isInPurchasedArea;
 
+- (NSArray<OAWorldRegion *> *) queryAtLat:(double)lat lon:(double)lon;
+- (double) getArea;
+- (BOOL) contain:(double) lat lon:(double) lon;
+
 + (OAWorldRegion*)loadFrom:(NSString*)ocbfFilename;
 
 @end

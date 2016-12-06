@@ -254,5 +254,6 @@
 @synthesize error = _error;
 
 @synthesize installResourceRetry = _installResourceRetry;
+@synthesize silentInstall = _silentInstall;
 
 @end

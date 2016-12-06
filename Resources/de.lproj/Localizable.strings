@@ -468,3 +468,17 @@
 "free_memory" = "Frei %@";
 "gpx_waypoint" = "Wegpunkt";
 "menu_my_directions" = "Meine Ziele";
+// Shared Strings
+"shared_string_select" = "Auswählen";
+"first_usage_greeting" = "Erhalten Sie Wegbeschreibungen und entdecken Sie neue Orte ohne Internetverbindung";
+"get_started" = "Erste Schritte";
+"first_usage_wizard_desc" = "Lassen Sie OsmAnd Ihren Standort bestimmen und Karten für diese Region zum Herunterladen vorschlagen.";
+"location_not_found" = "Position nicht gefunden";
+"search_my_location" = "Meinen Standort suchen";
+"no_inet_connection" = "Keine Internetverbindung";
+"no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
+"try_again" = "Erneut versuchen";
+"search_location" = "Standort wird gesucht…";
+"search_map" = "Karte wird gesucht…";
+"search_another_country" = "Eine andere Region auswählen";
+"skip_map_downloading" = "Herunterladen der Karten überspringen";

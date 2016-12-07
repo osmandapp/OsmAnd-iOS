@@ -601,11 +601,10 @@ typedef enum
         OAWorldRegion *selectedRegion = nil;
         if (mapRegions.count > 0)
         {
-            for (OAWorldRegion *region : mapRegions)
-            {
+            [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (![region contain:latLon.latitude lon:latLon.longitude])
                     [mapRegions removeObject:region];
-            }
+            }];
             
             double smallestArea = DBL_MAX;
             for (OAWorldRegion *region : mapRegions)
@@ -785,9 +784,17 @@ typedef enum
 
 - (IBAction)goToMapPress:(id)sender
 {
-    //if (location != null) {
-    //   showOnMap(new LatLon(location.getLatitude(), location.getLongitude()), 13);
-    //}
+    if (_location)
+    {
+        OsmAnd::PointI locationI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_location.coordinate.latitude, _location.coordinate.longitude));
+        Point31 point31;
+        point31.x = locationI.x;
+        point31.y = locationI.y;
+        _app.data.mapLastViewedState.target31 = point31;
+        _app.data.mapLastViewedState.zoom = 13.0;
+
+        [self closeWizard];
+    }
 }
 
 - (void) startDownload:(RepositoryResourceItem *)item

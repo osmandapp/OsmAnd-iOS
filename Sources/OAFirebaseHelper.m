@@ -13,12 +13,12 @@
 
 + (void)logEvent:(nonnull NSString *)name
 {
-    //[FIRAnalytics logEventWithName:name parameters:nil];
+    [FIRAnalytics logEventWithName:name parameters:nil];
 }
 
 + (void)setUserProperty:(nullable NSString *)value forName:(nonnull NSString *)name
 {
-    //[FIRAnalytics setUserPropertyString:value forName:name];
+    [FIRAnalytics setUserPropertyString:value forName:name];
 }
 
 @end

@@ -42,7 +42,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Use Firebase library to configure APIs
-    //[FIRApp configure];
+    [FIRApp configure];
     
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
@@ -60,7 +60,7 @@
     [_app initialize];
     
     // Update app execute counter
-    int execCount = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
+    NSInteger execCount = [[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
     [[NSUserDefaults standardUserDefaults] setInteger:++execCount forKey:kAppExecCounter];
     [[NSUserDefaults standardUserDefaults] synchronize];
     // Create window
@@ -71,8 +71,17 @@
     self.window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [self.window makeKeyAndVisible];
 
+    BOOL mapInstalled = NO;
+    for (const auto& resource : _app.resourcesManager->getLocalResources())
+    {
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+        {
+            mapInstalled = YES;
+            break;
+        }
+    }
     // Show intro screen
-    if (execCount == 1 || true)
+    if (execCount == 1 || !mapInstalled)
     {
         OAFirstUsageWelcomeController* welcome = [[OAFirstUsageWelcomeController alloc] init];
         [self.rootViewController.navigationController pushViewController:welcome animated:NO];

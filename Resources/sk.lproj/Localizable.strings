@@ -462,3 +462,19 @@
 "free_memory" = "Voľné %@";
 "gpx_waypoint" = "Bod cesty";
 "menu_my_directions" = "Moje pokyny";
+"skip_map_downloading" = "Preskočiť sťahovanie máp";
+"search_another_country" = "Zvoľte inú oblasť";
+"search_map" = "Hľadá sa mapa…";
+"first_usage_wizard_desc" = "Nechajte OsmAnd určiť Vašu polohu a navrhnúť mapy, ktoré sa dajú stiahnuť pre daný región.";
+"location_not_found" = "Poloha sa nenašla";
+"no_inet_connection" = "Nie je pripojenie na Internet";
+"no_inet_connection_desc_map" = "Potrebné na stiahnutie máp.";
+"search_location" = "Hľadá sa poloha…";
+"first_usage_greeting" = "Získajte pokyny a objavte nové miesta bez pripojenia na Internet";
+"search_my_location" = "Hľadať moju polohu";
+"get_started" = "Začať";
+// Shared Strings
+"shared_string_select" = "Zvoliť";
+"try_again" = "Skúsiť znovu";
+"shared_string_of" = "z";
+"skip_map_downloading_desc" = "Nemáte nainštalovanú žiadnu mapu. Môžete vybrať mapu zo zoznamu alebo stiahnuť neskôr cez Menu - Spravovať mapové súbory";

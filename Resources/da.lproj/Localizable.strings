@@ -466,3 +466,19 @@
 "gpx_waypoint" = "Rutepunkt";
 "menu_my_waypoints" = "Mine rutepunkter";
 "menu_my_directions" = "Kørselsvejledninger";
+// Shared Strings
+"shared_string_select" = "Vælg";
+"shared_string_of" = "af";
+"first_usage_greeting" = "Få rutevejledning og opdag nye steder uden internetforbindelse";
+"get_started" = "Kom i gang";
+"first_usage_wizard_desc" = "Lad OsmAnd bestemme placeringen og foreslå at hente kort for regionen.";
+"location_not_found" = "Placering ikke fundet";
+"search_my_location" = "Søg min placering";
+"no_inet_connection" = "Ingen internetforbindelse";
+"no_inet_connection_desc_map" = "Nødvendig for at hente kort.";
+"try_again" = "Prøv igen";
+"search_location" = "Søger placering…";
+"search_map" = "Søger på kort…";
+"search_another_country" = "Vælg en anden region";
+"skip_map_downloading" = "Spring over hentning af kort";
+"skip_map_downloading_desc" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";

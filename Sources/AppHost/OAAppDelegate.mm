@@ -41,8 +41,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+#if !defined(OSMAND_IOS_DEV)
     // Use Firebase library to configure APIs
     [FIRApp configure];
+#endif // defined(OSMAND_IOS_DEV)
     
     // Configure device
     UIDevice* device = [UIDevice currentDevice];

@@ -14,6 +14,7 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OAPOIMyLocationType.h"
+#import "OACollapsableLabelView.h"
 
 @interface OAPOIViewController ()
 
@@ -97,7 +98,7 @@
     }
     
     [self.poi.values enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *value, BOOL * _Nonnull stop) {
-        BOOL cont = NO;
+        BOOL skip = NO;
         NSString *iconId = nil;
         UIImage *icon = nil;
         UIColor *textColor = nil;
@@ -109,6 +110,9 @@
         BOOL isUrl = NO;
         int poiTypeOrder = 0;
         NSString *poiTypeKeyName = @"";
+        BOOL collapsable = NO;
+        BOOL collapsed = YES;
+        UIView *collapsableView = nil;
         
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
         OAPOIType *pType = nil;
@@ -121,11 +125,11 @@
         
         if ([key hasPrefix:@"wiki_lang"])
         {
-            cont = YES;
+            skip = YES;
         }
         else if ([key hasPrefix:@"name:"])
         {
-            cont = YES;
+            skip = YES;
         }
         else if ([key isEqualToString:@"opening_hours"])
         {
@@ -134,6 +138,11 @@
             OAOpeningHoursParser *parser = [[OAOpeningHoursParser alloc] initWithOpeningHours:value];
             BOOL isOpened = [parser isOpenedForTime:[NSDate date]];
             textColor = isOpened ? UIColorFromRGB(0x2BBE31) : UIColorFromRGB(0xDA3A3A);
+
+            collapsable = YES;
+            collapsed = YES;            
+            collapsableView = [[OACollapsableLabelView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            ((OACollapsableLabelView *)collapsableView).label.text = value;
         }
         else if ([key isEqualToString:@"phone"])
         {
@@ -194,7 +203,7 @@
             }
         }
         
-        if (!cont)
+        if (!skip)
         {
             if (isDescription)
             {
@@ -202,7 +211,11 @@
             }
             else
             {
-                [rows addObject:[[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl]];
+                OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:key icon:(icon ? icon : [self getIcon:iconId]) textPrefix:textPrefix text:value textColor:textColor isText:isText needLinks:needLinks order:poiTypeOrder typeName:poiTypeKeyName isPhoneNumber:isPhoneNumber isUrl:isUrl];
+                rowInfo.collapsable = collapsable;
+                rowInfo.collapsed = collapsed;
+                rowInfo.collapsableView = collapsableView;
+                [rows addObject:rowInfo];
             }
         }
     }];

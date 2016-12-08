@@ -1574,6 +1574,10 @@
 		847A20A21DF9551F003C1246 /* DebugHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EEA18E60F12005FBE09 /* DebugHUD.xib */; };
 		847A20A41DF9581F003C1246 /* cityview.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 847A20A31DF9581F003C1246 /* cityview.render.xml */; };
 		847A20A51DF95A9E003C1246 /* cityview.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 847A20A31DF9581F003C1246 /* cityview.render.xml */; };
+		847A20A81DF9DD70003C1246 /* OACollapsableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A20A71DF9DD70003C1246 /* OACollapsableView.m */; };
+		847A20A91DF9DD70003C1246 /* OACollapsableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A20A71DF9DD70003C1246 /* OACollapsableView.m */; };
+		847A20AC1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */; };
+		847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */ = {isa = PBXBuildFile; fileRef = 847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */; };
 		848300B81CFAD7A50018B27B /* OATargetDestinationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300B41CFAD7A50018B27B /* OATargetDestinationViewController.m */; };
 		848300BB1CFAD7A50018B27B /* OATargetDestinationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300B51CFAD7A50018B27B /* OATargetDestinationViewController.xib */; };
 		848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
@@ -2663,6 +2667,10 @@
 		847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OsmAnd Maps copy-Info.plist"; path = "/Users/admin/OsmAnd/ios/OsmAnd Maps copy-Info.plist"; sourceTree = "<absolute>"; };
 		847A20A31DF9581F003C1246 /* cityview.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = cityview.render.xml; path = ../resources/rendering_styles/cityview.render.xml; sourceTree = "<group>"; };
+		847A20A61DF9DD70003C1246 /* OACollapsableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableView.h; path = Sources/Controllers/2.0/OACollapsableView.h; sourceTree = "<group>"; };
+		847A20A71DF9DD70003C1246 /* OACollapsableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACollapsableView.m; path = Sources/Controllers/2.0/OACollapsableView.m; sourceTree = "<group>"; };
+		847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableLabelView.h; path = Sources/Controllers/2.0/OACollapsableLabelView.h; sourceTree = "<group>"; };
+		847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OACollapsableLabelView.m; path = Sources/Controllers/2.0/OACollapsableLabelView.m; sourceTree = "<group>"; };
 		848300B31CFAD7A50018B27B /* OATargetDestinationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetDestinationViewController.h; path = Sources/Controllers/2.0/OATargetDestinationViewController.h; sourceTree = "<group>"; };
 		848300B41CFAD7A50018B27B /* OATargetDestinationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetDestinationViewController.m; path = Sources/Controllers/2.0/OATargetDestinationViewController.m; sourceTree = "<group>"; };
 		848300B51CFAD7A50018B27B /* OATargetDestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetDestinationViewController.xib; path = Sources/Controllers/2.0/OATargetDestinationViewController.xib; sourceTree = "<group>"; };
@@ -4380,6 +4388,10 @@
 				848D17091B188BAA00A656F4 /* OATargetMenuViewController.h */,
 				848D170A1B188BAA00A656F4 /* OATargetMenuViewController.mm */,
 				848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */,
+				847A20A61DF9DD70003C1246 /* OACollapsableView.h */,
+				847A20A71DF9DD70003C1246 /* OACollapsableView.m */,
+				847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */,
+				847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -7046,6 +7058,7 @@
 				847A1CD61DF94E9B003C1246 /* OAGPXRouteCardController.mm in Sources */,
 				847A1CD71DF94E9B003C1246 /* OAObservable.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
+				847A20A91DF9DD70003C1246 /* OACollapsableView.m in Sources */,
 				847A1CD91DF94E9B003C1246 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				847A1CDA1DF94E9B003C1246 /* OANativeUtilities.mm in Sources */,
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
@@ -7091,6 +7104,7 @@
 				847A1D031DF94E9B003C1246 /* OAFreeMemoryView.m in Sources */,
 				847A1D041DF94E9B003C1246 /* OAColorViewCell.m in Sources */,
 				847A1D051DF94E9B003C1246 /* OAMapSettingsMapTypeScreen.mm in Sources */,
+				847A20AD1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				847A1D061DF94E9B003C1246 /* OANavigationController.m in Sources */,
 				847A1D071DF94E9B003C1246 /* OAPOIBaseType.m in Sources */,
 				847A1D081DF94E9B003C1246 /* OABrowseMapAppModeHudViewController.mm in Sources */,
@@ -7322,6 +7336,7 @@
 				BBA3AF53197FC4BB0039D991 /* OALog.mm in Sources */,
 				84F9894C1B53AABF009C443C /* OADirectionsCardController.mm in Sources */,
 				3A426F481A18F2F700DE5B1D /* OASwitchTableViewCell.m in Sources */,
+				847A20AC1DF9E150003C1246 /* OACollapsableLabelView.m in Sources */,
 				BBA3B0021986446F0039D991 /* OAResourcesBaseViewController.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
@@ -7348,6 +7363,7 @@
 				3A02BFB71A31F2FA0019377F /* OAGPXListViewController.mm in Sources */,
 				BBA3AF59197FC4BB0039D991 /* OAWorldRegion.mm in Sources */,
 				3ACA4AA91A0B8BA000ECC792 /* OASettingsViewController.m in Sources */,
+				847A20A81DF9DD70003C1246 /* OACollapsableView.m in Sources */,
 				3ACA4AB51A0B954900ECC792 /* OASettingsTableViewCell.m in Sources */,
 				BBA3AF5A197FC4BB0039D991 /* UIViewController+OARootViewController.m in Sources */,
 				843E5C381AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,

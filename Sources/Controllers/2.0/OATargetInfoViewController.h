@@ -7,6 +7,7 @@
 //
 
 #import "OATargetMenuViewController.h"
+#import "OACollapsableView.h"
 
 @class OARowInfo;
 
@@ -29,6 +30,9 @@
 @property (nonatomic) BOOL needLinks;
 @property (nonatomic) BOOL isPhoneNumber;
 @property (nonatomic) BOOL isUrl;
+@property (nonatomic) BOOL collapsable;
+@property (nonatomic) OACollapsableView *collapsableView;
+@property (nonatomic) BOOL collapsed;
 @property (nonatomic) int order;
 @property (nonatomic) NSString *typeName;
 
@@ -38,6 +42,8 @@
 @property (weak, nonatomic) id<OARowInfoDelegate> delegate;
 
 - (instancetype)initWithKey:(NSString *)key icon:(UIImage *)icon textPrefix:(NSString *)textPrefix text:(NSString *)text textColor:(UIColor *)textColor isText:(BOOL)isText needLinks:(BOOL)needLinks order:(int)order typeName:(NSString *)typeName isPhoneNumber:(BOOL)isPhoneNumber isUrl:(BOOL)isUrl;
+
+- (int)getRawHeight;
 
 @end
 
@@ -50,7 +56,7 @@
 - (BOOL)needCoords;
 - (void)buildRows:(NSMutableArray<OARowInfo *> *)rows;
 
-- (UIImage *) getIcon:(NSString *)fileName;
+- (UIImage *)getIcon:(NSString *)fileName;
 - (UIImage *)applyColor:(UIImage *)image;
 
 @end

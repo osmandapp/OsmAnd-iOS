@@ -35,6 +35,19 @@
     return self;
 }
 
+-(int)height
+{
+    if (_collapsable && _collapsableView && !_collapsed)
+        return _height + _collapsableView.frame.size.height;
+    else
+        return _height;
+}
+
+- (int)getRawHeight
+{
+    return _height;
+}
+
 @end
 
 
@@ -210,6 +223,16 @@
         cell.textView.textColor = info.textColor;
         cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
         
+        if (info.collapsable)
+        {
+            cell.collapsableView = info.collapsableView;
+            [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+        }
+        else if (cell.collapsable)
+        {
+            [cell resetCollapsable];
+        }
+        
         return cell;
     }
     else
@@ -258,6 +281,14 @@
     return info.height;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    OARowInfo *info = _rows[indexPath.row];
+    if (info.collapsable)
+        [info.collapsableView adjustHeightForWidth:tableView.frame.size.width];
+    return info.height;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -266,6 +297,11 @@
     if (info.delegate)
     {
         [info.delegate onRowClick:self rowInfo:info];
+    }
+    else if (info.collapsable)
+    {
+        info.collapsed = !info.collapsed;
+        [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
     }
     else if (info.isPhoneNumber)
     {

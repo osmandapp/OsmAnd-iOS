@@ -228,7 +228,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                             @"Ski-map" : @"Ski map",
                             @"UniRS" : @"UniRS",
                             @"Touring-view_(more-contrast-and-details).render" : @"Touring view",
-                            @"LightRS" : @"LightRS"};
+                            @"LightRS" : @"LightRS",
+                            @"Depends-template" : @"City view"};
     
 }
 

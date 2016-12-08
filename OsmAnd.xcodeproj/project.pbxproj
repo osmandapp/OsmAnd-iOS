@@ -1572,6 +1572,8 @@
 		847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */ = {isa = PBXBuildFile; fileRef = BBBAFE15198A32E000573FFA /* OADebugSettings.h */; };
 		847A20A11DF95238003C1246 /* OADebugSettings.mm in Sources */ = {isa = PBXBuildFile; fileRef = BBBAFE16198A32E000573FFA /* OADebugSettings.mm */; };
 		847A20A21DF9551F003C1246 /* DebugHUD.xib in Resources */ = {isa = PBXBuildFile; fileRef = BB451EEA18E60F12005FBE09 /* DebugHUD.xib */; };
+		847A20A41DF9581F003C1246 /* cityview.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 847A20A31DF9581F003C1246 /* cityview.render.xml */; };
+		847A20A51DF95A9E003C1246 /* cityview.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 847A20A31DF9581F003C1246 /* cityview.render.xml */; };
 		848300B81CFAD7A50018B27B /* OATargetDestinationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300B41CFAD7A50018B27B /* OATargetDestinationViewController.m */; };
 		848300BB1CFAD7A50018B27B /* OATargetDestinationViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848300B51CFAD7A50018B27B /* OATargetDestinationViewController.xib */; };
 		848300C01CFCAA680018B27B /* OAPOIMyLocationType.m in Sources */ = {isa = PBXBuildFile; fileRef = 848300BD1CFCAA680018B27B /* OAPOIMyLocationType.m */; };
@@ -2660,6 +2662,7 @@
 		84770A031A8CF91D00585175 /* OAGPXDocument.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXDocument.mm; sourceTree = "<group>"; };
 		847A209A1DF94E9B003C1246 /* OsmAnd Maps DEV.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OsmAnd Maps DEV.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		847A209B1DF94E9B003C1246 /* OsmAnd Maps copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "OsmAnd Maps copy-Info.plist"; path = "/Users/admin/OsmAnd/ios/OsmAnd Maps copy-Info.plist"; sourceTree = "<absolute>"; };
+		847A20A31DF9581F003C1246 /* cityview.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = cityview.render.xml; path = ../resources/rendering_styles/cityview.render.xml; sourceTree = "<group>"; };
 		848300B31CFAD7A50018B27B /* OATargetDestinationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetDestinationViewController.h; path = Sources/Controllers/2.0/OATargetDestinationViewController.h; sourceTree = "<group>"; };
 		848300B41CFAD7A50018B27B /* OATargetDestinationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetDestinationViewController.m; path = Sources/Controllers/2.0/OATargetDestinationViewController.m; sourceTree = "<group>"; };
 		848300B51CFAD7A50018B27B /* OATargetDestinationViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetDestinationViewController.xib; path = Sources/Controllers/2.0/OATargetDestinationViewController.xib; sourceTree = "<group>"; };
@@ -4252,6 +4255,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				847A20A31DF9581F003C1246 /* cityview.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
@@ -5314,6 +5318,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				847A20A51DF95A9E003C1246 /* cityview.render.xml in Resources */,
 				847A20A21DF9551F003C1246 /* DebugHUD.xib in Resources */,
 				847A1D971DF94E9B003C1246 /* ic_trip_visitedpoint@3x.png in Resources */,
 				847A1D981DF94E9B003C1246 /* track_save.png in Resources */,
@@ -6165,6 +6170,7 @@
 				849E81A21AFA5D6700549953 /* btn_map_type_icon_view_selected@2x.png in Resources */,
 				84387B351ABCAB6F00504DA7 /* OAIconTextDescCell.xib in Resources */,
 				845E05BF1B55129100DFC2A7 /* ic_destination_pin_1_small@3x.png in Resources */,
+				847A20A41DF9581F003C1246 /* cityview.render.xml in Resources */,
 				841222571B39CC5200F80F9E /* map_pedestrian_bearing@2x.png in Resources */,
 				845E06141B5956E800DFC2A7 /* ic_destination_pin_4.png in Resources */,
 				841503051DEED6AE007FAC50 /* ic_firstscreen_map@3x.png in Resources */,

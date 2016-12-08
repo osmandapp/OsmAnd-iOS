@@ -181,9 +181,13 @@
                                     @"type": @"OASettingsCell"}];
         
         for (NSString *cName in categories)
-            [categoriesList addObject:@{@"name": [styleSettings getCategoryTitle:cName],
-                                        @"value": @"",
-                                        @"type": @"OASettingsCell"}];
+        {
+            NSString *t = [styleSettings getCategoryTitle:cName];
+            if (![[t lowercaseString] isEqualToString:@"ui_hidden"])
+                [categoriesList addObject:@{@"name": t,
+                                            @"value": @"",
+                                            @"type": @"OASettingsCell"}];
+        }
         for (OAMapStyleParameter *p in topLevelParams)
             [categoriesList addObject:@{@"name": p.title,
                                         @"value": [p getValueTitle],

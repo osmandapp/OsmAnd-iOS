@@ -23,6 +23,7 @@
 
 - (void)setLocation:(CLLocationCoordinate2D)location
 {
+    _location = location;
     _formattedCoords = [[[OsmAndApp instance] locationFormatterDigits] stringFromCoordinate:location];
 }
 
@@ -126,6 +127,11 @@
 }
 
 - (BOOL)supportMapInteraction
+{
+    return NO; // override
+}
+
+- (BOOL)showNearestWiki;
 {
     return NO; // override
 }

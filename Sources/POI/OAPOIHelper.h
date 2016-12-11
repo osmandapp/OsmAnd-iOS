@@ -36,6 +36,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic) OsmAnd::PointI myLocation;
 
 @property (weak, nonatomic) id<OAPOISearchDelegate> delegate;
+@property (weak, nonatomic) id<OAPOISearchDelegate> tempDelegate;
 
 + (OAPOIHelper *)sharedInstance;
 
@@ -51,6 +52,9 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 -(void)findPOIsByKeyword:(NSString *)keyword;
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
+
++(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
+
 -(BOOL)breakSearch;
 
 + (void)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(NSString *)nativeName nameLocalized:(NSMutableString *)nameLocalized names:(NSMutableDictionary *)names;

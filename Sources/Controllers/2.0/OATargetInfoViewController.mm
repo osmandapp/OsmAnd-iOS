@@ -9,9 +9,15 @@
 #import "OATargetInfoViewController.h"
 #import "OAUtilities.h"
 #import "OATargetInfoViewCell.h"
+#import "OATargetInfoCollapsableViewCell.h"
 #import "OAWebViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "Localization.h"
+#import "OAPOIHelper.h"
+#import "OAPOI.h"
+#import "OACollapsableWikiView.h"
+
+#include <OsmAndCore/Utilities.h>
 
 @implementation OARowInfo
 
@@ -22,6 +28,7 @@
     {
         _key = key;
         _icon = icon;
+        _icon = [_icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         _textPrefix = textPrefix;
         _text = text;
         _textColor = textColor;
@@ -56,6 +63,7 @@
     NSMutableArray<OARowInfo *> *_rows;
     CGFloat _contentHeight;
     UIColor *_contentColor;
+    NSArray<OAPOI *> *_nearestWiki;
 }
 
 - (BOOL)needCoords
@@ -79,16 +87,6 @@
         img = [UIImage imageNamed:fileName];
     }
     
-    return [self applyColor:img];
-}
-
-- (UIImage *)applyColor:(UIImage *)image
-{
-    UIImage *img = image;
-    if (img)
-    {
-        img = [OAUtilities tintImageWithColor:img color:UIColorFromRGB(0x727272)];
-    }
     return img;
 }
 
@@ -122,6 +120,21 @@
             return NSOrderedDescending;
         }
     }];
+    
+    if ([self showNearestWiki])
+    {
+        [self processNearestWiki];
+        if (_nearestWiki.count > 0)
+        {
+            UIImage *icon = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_wiki_place", [OAUtilities drawablePostfix]]];
+            OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", NSLocalizedString(@"wiki_around", nil), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            wikiRowInfo.collapsable = YES;
+            wikiRowInfo.collapsed = YES;
+            wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
+            ((OACollapsableWikiView *)wikiRowInfo.collapsableView).nearestWiki = _nearestWiki;
+            [_rows addObject:wikiRowInfo];
+        }
+    }
     
     if ([self needCoords])
     {
@@ -185,6 +198,40 @@
     _contentColor = color;
 }
 
+- (void)processNearestWiki
+{
+    OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
+    NSMutableArray<OAPOI *> *wiki = [[OAPOIHelper findPOIsByTagName:@"wikipedia" location:locI categoryName:nil poiTypeName:nil radius:250] mutableCopy];
+    [wiki addObjectsFromArray:[OAPOIHelper findPOIsByTagName:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250]];
+    
+    [wiki sortUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
+     {
+         double distance1 = obj1.distanceMeters;
+         double distance2 = obj2.distanceMeters;
+         
+         return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
+     }];
+    
+    id targetObj = [self getTargetObj];
+    if (targetObj && [targetObj isKindOfClass:[OAPOI class]])
+    {
+        OAPOI *poi = targetObj;
+        for (OAPOI *w in wiki)
+        {
+            if (poi.obfId != 0 && w.obfId == poi.obfId)
+            {
+                [wiki removeObject:w];
+                break;
+            }
+        }
+    }
+    _nearestWiki = [NSArray arrayWithArray:wiki];
+}
+
+-(BOOL)showNearestWiki
+{
+    return YES;
+}
 
 #pragma mark - UITableViewDataSource
 
@@ -196,44 +243,60 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString* const reusableIdentifierText = @"OATargetInfoViewCell";
+    static NSString* const reusableIdentifierCollapsable = @"OATargetInfoCollapsableViewCell";
     static NSString* const reusableIdentifierWeb = @"OAWebViewCell";
     
     OARowInfo *info = _rows[indexPath.row];
     
     if (!info.isHtml)
     {
-        OATargetInfoViewCell* cell;
-        cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
-        if (cell == nil)
+        if (info.collapsable)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
-            cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
-        }
-        if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
-        {
-            cell.iconView.contentMode = UIViewContentModeCenter;
+            OATargetInfoCollapsableViewCell* cell;
+            cell = (OATargetInfoCollapsableViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierCollapsable];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoCollapsableViewCell" owner:self options:nil];
+                cell = (OATargetInfoCollapsableViewCell *)[nib objectAtIndex:0];
+            }
+            if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+                cell.iconView.contentMode = UIViewContentModeCenter;
+            else
+                cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            cell.backgroundColor = _contentColor;
+            cell.iconView.image = info.icon;
+            cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+            cell.textView.textColor = info.textColor;
+            cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
+
+            cell.collapsableView = info.collapsableView;
+            [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
+            
+            return cell;
         }
         else
         {
-            cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            OATargetInfoViewCell* cell;
+            cell = (OATargetInfoViewCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierText];
+            if (cell == nil)
+            {
+                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OATargetInfoViewCell" owner:self options:nil];
+                cell = (OATargetInfoViewCell *)[nib objectAtIndex:0];
+            }
+            if (info.icon.size.width < cell.iconView.frame.size.width && info.icon.size.height < cell.iconView.frame.size.height)
+                cell.iconView.contentMode = UIViewContentModeCenter;
+            else
+                cell.iconView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            cell.backgroundColor = _contentColor;
+            cell.iconView.image = info.icon;
+            cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
+            cell.textView.textColor = info.textColor;
+            cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
+
+            return cell;
         }
-        cell.backgroundColor = _contentColor;
-        cell.iconView.image = info.icon;
-        cell.textView.text = info.textPrefix.length == 0 ? info.text : [NSString stringWithFormat:@"%@: %@", info.textPrefix, info.text];
-        cell.textView.textColor = info.textColor;
-        cell.textView.numberOfLines = info.height > 44.0 ? 20 : 1;
-        
-        if (info.collapsable)
-        {
-            cell.collapsableView = info.collapsableView;
-            [cell setCollapsed:info.collapsed rawHeight:[info getRawHeight]];
-        }
-        else if (cell.collapsable)
-        {
-            [cell resetCollapsable];
-        }
-        
-        return cell;
     }
     else
     {

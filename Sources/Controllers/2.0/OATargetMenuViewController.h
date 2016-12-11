@@ -79,6 +79,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 
 - (BOOL)showTopControls;
 - (BOOL)supportMapInteraction;
+- (BOOL)showNearestWiki;
 
 - (BOOL)hasTopToolbar;
 - (BOOL)shouldShowToolbar:(BOOL)isViewVisible;

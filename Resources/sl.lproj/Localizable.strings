@@ -186,3 +186,17 @@
 "shared_string_later" = "Kasneje";
 "download_map" = "Prejmi zemljevid";
 "device_memory" = "Pomnilnik naprave";
+"skip_map_downloading" = "Preskoči prejemanje zemljevidov";
+"search_another_country" = "Izberi drugo državo";
+"search_map" = "Iskanje zemljevidov …";
+"first_usage_wizard_desc" = "Naj program OsmAnd določi trenutno mesto in predlaga zemljevid za prejem.";
+"location_not_found" = "Mesta ni mogoče najti";
+"no_inet_connection" = "Ni internetne povezave";
+"no_inet_connection_desc_map" = "Zahtevano je prejemanje zemljevidov";
+"search_location" = "Iskanje mesta …";
+"first_usage_greeting" = "Pridobi mesta in razišči nove kraje brez internetne povezave";
+"search_my_location" = "Poišči moje mesto";
+"get_started" = "Kako začeti ...";
+// Shared Strings
+"shared_string_select" = "Izberi";
+"try_again" = "Poskusi znova";

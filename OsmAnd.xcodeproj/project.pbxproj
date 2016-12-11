@@ -28,10 +28,6 @@
 		3AC40AC819DDC58F002FBC40 /* OADownloadProgressView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC019DDC43F002FBC40 /* OADownloadProgressView.xib */; };
 		3AC40ACF19DDC66A002FBC40 /* Btn-Pause@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40AC919DDC663002FBC40 /* Btn-Pause@2x.png */; };
 		3AC40AD019DDC66A002FBC40 /* Btn-Play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */; };
-		3AC639A01A1CEB1D001D5E57 /* OAIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */; };
-		3AC639A21A1CEB20001D5E57 /* OAIntroViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.mm */; };
-		3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */; };
-		3AC639BE1A1E344E001D5E57 /* OAInitViewPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639B81A1E344E001D5E57 /* OAInitViewPanel.xib */; };
 		3AC639C21A1E4E71001D5E57 /* search_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639BF1A1E4E71001D5E57 /* search_icon@2x.png */; };
 		3AC639C61A1E6220001D5E57 /* icon_drive_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639C31A1E6220001D5E57 /* icon_drive_mode@2x.png */; };
 		3AC639CA1A1E62B9001D5E57 /* icon_map_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639C71A1E62B9001D5E57 /* icon_map_mode@2x.png */; };
@@ -73,6 +69,7 @@
 		3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE951A110BFD00900A47 /* OATextViewTableViewCell.m */; };
 		3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */; };
 		3AFEEEA11A13722500900A47 /* OAMapSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */; };
+		3BDE3452C3D2899398ACC0EB /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		84064DDC1B83175B00033C47 /* OAGPXEditItemViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */; };
 		84064DDF1B83175B00033C47 /* OAGPXEditItemViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */; };
 		84064DEE1B83237F00033C47 /* OAGPXEditWptListViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84064DEA1B83237F00033C47 /* OAGPXEditWptListViewController.mm */; };
@@ -594,7 +591,6 @@
 		847A1CC41DF94E9B003C1246 /* OATrackIntervalDialogView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84E441811AF7BDD200F87542 /* OATrackIntervalDialogView.m */; };
 		847A1CC51DF94E9B003C1246 /* OAGPXRouteCardHeaderView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 845E05D81B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm */; };
 		847A1CC61DF94E9B003C1246 /* OAFirstUsageWizardController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 841A111A1DEC18A9009558D3 /* OAFirstUsageWizardController.mm */; };
-		847A1CC71DF94E9B003C1246 /* OAInitViewPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */; };
 		847A1CC81DF94E9B003C1246 /* OAGPXDocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84770A031A8CF91D00585175 /* OAGPXDocument.mm */; };
 		847A1CC91DF94E9B003C1246 /* OAQStringPickerElement.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3AE89196BDF150039D991 /* OAQStringPickerElement.m */; };
 		847A1CCA1DF94E9B003C1246 /* OAGPXRouteViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8420C1D31B43D6B4004EDAE6 /* OAGPXRouteViewController.mm */; };
@@ -627,7 +623,6 @@
 		847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417A6801B25C29300EA1D17 /* OAEditGroupViewController.m */; };
 		847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */; };
 		847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845E05AA1B53E68D00DFC2A7 /* OADirectionTableViewCell.m */; };
-		847A1CE81DF94E9B003C1246 /* OAIntroViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.mm */; };
 		847A1CE91DF94E9B003C1246 /* OAPOISearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */; };
 		847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
 		847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
@@ -799,7 +794,6 @@
 		847A1D921DF94E9B003C1246 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EA8179BBD21004C5567 /* libz.dylib */; };
 		847A1D931DF94E9B003C1246 /* libbz2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BB32C04819262B80007999A0 /* libbz2.dylib */; };
 		847A1D941DF94E9B003C1246 /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BBB34EE6179BF2A7004C5567 /* libiconv.dylib */; };
-		847A1D951DF94E9B003C1246 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
 		847A1D971DF94E9B003C1246 /* ic_trip_visitedpoint@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A9481B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png */; };
 		847A1D981DF94E9B003C1246 /* track_save.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E441AE1AF8A07500F87542 /* track_save.png */; };
 		847A1D991DF94E9B003C1246 /* bg_title@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 848A14CF1B223A4C00A31AE7 /* bg_title@2x.png */; };
@@ -822,7 +816,6 @@
 		847A1DAA1DF94E9B003C1246 /* ic_favorite_4.png in Resources */ = {isa = PBXBuildFile; fileRef = 84185A901AAA11B600F70328 /* ic_favorite_4.png */; };
 		847A1DAB1DF94E9B003C1246 /* OATargetMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 848D170B1B188BAA00A656F4 /* OATargetMenuViewController.xib */; };
 		847A1DAC1DF94E9B003C1246 /* three_dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 84CC524F1AA5DD55000063CF /* three_dots.png */; };
-		847A1DAD1DF94E9B003C1246 /* OAIntroViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */; };
 		847A1DAE1DF94E9B003C1246 /* icon_gpx_fill@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3A02BFBB1A31FA820019377F /* icon_gpx_fill@2x.png */; };
 		847A1DAF1DF94E9B003C1246 /* check@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8431E7B31B3877B80063C9AF /* check@3x.png */; };
 		847A1DB01DF94E9B003C1246 /* OAGPXWptViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8417A66E1B2596D600EA1D17 /* OAGPXWptViewController.xib */; };
@@ -867,7 +860,6 @@
 		847A1DD71DF94E9B003C1246 /* HUD_debug_actions_button.png in Resources */ = {isa = PBXBuildFile; fileRef = BB451EE418E60EBB005FBE09 /* HUD_debug_actions_button.png */; };
 		847A1DD81DF94E9B003C1246 /* ic_dialog_export@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8431E76B1B380D010063C9AF /* ic_dialog_export@3x.png */; };
 		847A1DD91DF94E9B003C1246 /* ic_trip_car@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84F3A8AA1B4DA93100D16EBC /* ic_trip_car@3x.png */; };
-		847A1DDA1DF94E9B003C1246 /* OAInitViewPanel.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AC639B81A1E344E001D5E57 /* OAInitViewPanel.xib */; };
 		847A1DDB1DF94E9B003C1246 /* Touring-view_(more-contrast-and-details).render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84630FD31A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml */; };
 		847A1DDC1DF94E9B003C1246 /* btn_map_type_icon_view@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 849E81651AFA5D6700549953 /* btn_map_type_icon_view@2x.png */; };
 		847A1DDD1DF94E9B003C1246 /* add_waypoint_to_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E4418A1AF8A07500F87542 /* add_waypoint_to_track@2x.png */; };
@@ -1651,6 +1643,12 @@
 		84A819FD1CFACC80000C9E8C /* OAWikiMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 84A819F91CFACC80000C9E8C /* OAWikiMenuViewController.m */; };
 		84A81A001CFACC80000C9E8C /* OAWikiMenuViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84A819FA1CFACC80000C9E8C /* OAWikiMenuViewController.xib */; };
 		84A8CEAA1B94B91300B0BDCB /* OAMapMarkersCollection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */; };
+		84ACE1AF1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */; };
+		84ACE1B01DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */; };
+		84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */; };
+		84ACE1B41DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */; };
+		84AD39E21DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */; };
+		84AD39E31DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */; };
 		84B0AE261AC69D33005E1F78 /* OATargetPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE231AC69D33005E1F78 /* OATargetPoint.m */; };
 		84B0AE2B1AC82ED3005E1F78 /* OAPOIFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 84B0AE281AC82ED3005E1F78 /* OAPOIFilter.m */; };
 		84B30AD11B9DF2B0008E5A43 /* ic_list.png in Resources */ = {isa = PBXBuildFile; fileRef = 84B30ACC1B9DF2B0008E5A43 /* ic_list.png */; };
@@ -2024,9 +2022,12 @@
 		BBA3B0241988053C0039D991 /* OAUserInteractionInterceptorView.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B0211988053C0039D991 /* OAUserInteractionInterceptorView.m */; };
 		BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = BBA3B02719880DEC0039D991 /* OANavigationController.m */; };
 		D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */; };
+		EA323960BC7664B5753D166A /* libPods-OsmAnd Maps DEV.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.release.xcconfig"; sourceTree = "<group>"; };
+		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		3A02BFB21A31F2FA0019377F /* OAGPXListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXListViewController.h; path = Sources/Controllers/2.0/OAGPXListViewController.h; sourceTree = "<group>"; };
 		3A02BFB31A31F2FA0019377F /* OAGPXListViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXListViewController.mm; path = Sources/Controllers/2.0/OAGPXListViewController.mm; sourceTree = "<group>"; };
 		3A02BFB41A31F2FA0019377F /* OAGPXListViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXListViewController.xib; path = Sources/Controllers/2.0/OAGPXListViewController.xib; sourceTree = "<group>"; };
@@ -2057,12 +2058,6 @@
 		3AC40ACA19DDC663002FBC40 /* Btn-Play@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Btn-Play@2x.png"; sourceTree = "<group>"; };
 		3AC40AD119DEB80F002FBC40 /* Btn-Pause.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Btn-Pause.png"; sourceTree = "<group>"; };
 		3AC40AD219DEB80F002FBC40 /* Btn-Play.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Btn-Play.png"; sourceTree = "<group>"; };
-		3AC639991A1CE1FC001D5E57 /* OAIntroViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAIntroViewController.h; path = Sources/Controllers/2.0/OAIntroViewController.h; sourceTree = "<group>"; };
-		3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAIntroViewController.mm; path = Sources/Controllers/2.0/OAIntroViewController.mm; sourceTree = "<group>"; };
-		3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIntroViewController.xib; path = Sources/Controllers/2.0/OAIntroViewController.xib; sourceTree = "<group>"; };
-		3AC639B61A1E344E001D5E57 /* OAInitViewPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAInitViewPanel.h; path = Controllers/2.0/Init/OAInitViewPanel.h; sourceTree = "<group>"; };
-		3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAInitViewPanel.m; path = Controllers/2.0/Init/OAInitViewPanel.m; sourceTree = "<group>"; };
-		3AC639B81A1E344E001D5E57 /* OAInitViewPanel.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAInitViewPanel.xib; path = Controllers/2.0/Init/OAInitViewPanel.xib; sourceTree = "<group>"; };
 		3AC639BF1A1E4E71001D5E57 /* search_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "search_icon@2x.png"; path = "Resources/Icons/search_icon@2x.png"; sourceTree = "<group>"; };
 		3AC639C31A1E6220001D5E57 /* icon_drive_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_drive_mode@2x.png"; path = "Resources/Icons/icon_drive_mode@2x.png"; sourceTree = "<group>"; };
 		3AC639C71A1E62B9001D5E57 /* icon_map_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon_map_mode@2x.png"; path = "Resources/Icons/icon_map_mode@2x.png"; sourceTree = "<group>"; };
@@ -2116,7 +2111,6 @@
 		3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsViewController.mm; path = Sources/Controllers/2.0/OAMapSettingsViewController.mm; sourceTree = "<group>"; };
 		3AFEEE9B1A13722500900A47 /* OAMapSettingsViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAMapSettingsViewController.xib; path = Sources/Controllers/2.0/OAMapSettingsViewController.xib; sourceTree = "<group>"; };
 		3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV (prebuilt Core).a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		47E7DA602F74BD87D3A6579F /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
 		84064DD71B83175B00033C47 /* OAGPXEditItemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGPXEditItemViewController.h; path = Sources/Controllers/2.0/OAGPXEditItemViewController.h; sourceTree = "<group>"; };
 		84064DD81B83175B00033C47 /* OAGPXEditItemViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGPXEditItemViewController.mm; path = Sources/Controllers/2.0/OAGPXEditItemViewController.mm; sourceTree = "<group>"; };
 		84064DD91B83175B00033C47 /* OAGPXEditItemViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAGPXEditItemViewController.xib; path = Sources/Controllers/2.0/OAGPXEditItemViewController.xib; sourceTree = "<group>"; };
@@ -2775,6 +2769,11 @@
 		84A8CEA51B94316900B0BDCB /* OAMapModeHeaders.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapModeHeaders.h; path = Controllers/Map/OAMapModeHeaders.h; sourceTree = "<group>"; };
 		84A8CEA61B94B91300B0BDCB /* OAMapMarkersCollection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapMarkersCollection.mm; path = Core/OAMapMarkersCollection.mm; sourceTree = "<group>"; };
 		84A8CEA71B94B91300B0BDCB /* OAMapMarkersCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapMarkersCollection.h; path = Core/OAMapMarkersCollection.h; sourceTree = "<group>"; };
+		84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OATargetInfoCollapsableViewCell.xib; path = Resources/Controllers/Cells/OATargetInfoCollapsableViewCell.xib; sourceTree = "<group>"; };
+		84ACE1B11DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetInfoCollapsableViewCell.h; path = Controllers/Cells/OATargetInfoCollapsableViewCell.h; sourceTree = "<group>"; };
+		84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetInfoCollapsableViewCell.m; path = Controllers/Cells/OATargetInfoCollapsableViewCell.m; sourceTree = "<group>"; };
+		84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OACollapsableWikiView.h; path = Sources/Controllers/2.0/OACollapsableWikiView.h; sourceTree = "<group>"; };
+		84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACollapsableWikiView.mm; path = Sources/Controllers/2.0/OACollapsableWikiView.mm; sourceTree = "<group>"; };
 		84B0AE221AC69D33005E1F78 /* OATargetPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OATargetPoint.h; path = Data/OATargetPoint.h; sourceTree = "<group>"; };
 		84B0AE231AC69D33005E1F78 /* OATargetPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OATargetPoint.m; path = Data/OATargetPoint.m; sourceTree = "<group>"; };
 		84B0AE271AC82ED3005E1F78 /* OAPOIFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOIFilter.h; sourceTree = "<group>"; };
@@ -3093,8 +3092,8 @@
 		8A70772E1A86C0A3005E019B /* OALocalResourceInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OALocalResourceInfoCell.m; path = Controllers/Resources/OALocalResourceInfoCell.m; sourceTree = "<group>"; };
 		8AF2197D1A7FAE400091071B /* OAPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPointCell.xib; path = Resources/Controllers/Cells/OAPointCell.xib; sourceTree = "<group>"; };
 		8AF219841A7FCD380091071B /* OAIconTextCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAIconTextCell.xib; path = Resources/Controllers/Cells/OAIconTextCell.xib; sourceTree = "<group>"; };
+		9D405D1CF2C6C1F8E22DD72D /* Pods-OsmAnd Maps DEV.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps DEV.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV.debug.xcconfig"; sourceTree = "<group>"; };
 		A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		B2925E44FD83D26CF3EDE9EF /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		BB0275D119D2EA5E009AFBA8 /* OAQFlatAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQFlatAppearance.h; path = PodsExtensions/OAQFlatAppearance.h; sourceTree = "<group>"; };
 		BB0275D219D2EA5E009AFBA8 /* OAQFlatAppearance.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQFlatAppearance.m; path = PodsExtensions/OAQFlatAppearance.m; sourceTree = "<group>"; };
 		BB0275D619D2EEC5009AFBA8 /* OACommon.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACommon.h; sourceTree = "<group>"; };
@@ -3298,6 +3297,8 @@
 		CE3A0DDD19A103740035B296 /* OAQLabelElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQLabelElement.h; path = Common/OAQLabelElement.h; sourceTree = "<group>"; };
 		CE3A0DDE19A103740035B296 /* OAQLabelElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAQLabelElement.m; path = Common/OAQLabelElement.m; sourceTree = "<group>"; };
 		D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OsmAnd Maps DEV.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3336,7 +3337,7 @@
 				847A1D921DF94E9B003C1246 /* libz.dylib in Frameworks */,
 				847A1D931DF94E9B003C1246 /* libbz2.dylib in Frameworks */,
 				847A1D941DF94E9B003C1246 /* libiconv.dylib in Frameworks */,
-				847A1D951DF94E9B003C1246 /* libPods-OsmAnd Maps.a in Frameworks */,
+				EA323960BC7664B5753D166A /* libPods-OsmAnd Maps DEV.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3376,6 +3377,7 @@
 				BBA3AF80197FC4BB0039D991 /* libbz2.dylib in Frameworks */,
 				BBA3AF81197FC4BB0039D991 /* libiconv.dylib in Frameworks */,
 				D9220D589AB10998C41392A2 /* libPods-OsmAnd Maps.a in Frameworks */,
+				3BDE3452C3D2899398ACC0EB /* libPods-OsmAnd Maps.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3385,8 +3387,10 @@
 		0FBE528DFE22A018C3A5A9D9 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				47E7DA602F74BD87D3A6579F /* Pods-OsmAnd Maps.debug.xcconfig */,
-				B2925E44FD83D26CF3EDE9EF /* Pods-OsmAnd Maps.release.xcconfig */,
+				2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */,
+				F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */,
+				9D405D1CF2C6C1F8E22DD72D /* Pods-OsmAnd Maps DEV.debug.xcconfig */,
+				1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -3461,22 +3465,11 @@
 			name = IntroImages;
 			sourceTree = "<group>";
 		};
-		3AC639B51A1E343F001D5E57 /* Init */ = {
-			isa = PBXGroup;
-			children = (
-				3AC639B61A1E344E001D5E57 /* OAInitViewPanel.h */,
-				3AC639B71A1E344E001D5E57 /* OAInitViewPanel.m */,
-				3AC639B81A1E344E001D5E57 /* OAInitViewPanel.xib */,
-			);
-			name = Init;
-			sourceTree = "<group>";
-		};
 		3ACA4A931A0A0CAB00ECC792 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				841766501B7355F6002A08CB /* History */,
 				84F9892A1B5101D3009C443C /* DestinationCards */,
-				84F989281B510180009C443C /* Intro */,
 				84F989271B510172009C443C /* Others */,
 				84F989261B51014D009C443C /* MapSettings */,
 				84F989251B510147009C443C /* Settings */,
@@ -3491,7 +3484,6 @@
 		3ACA4A991A0A0F4500ECC792 /* 2.0 */ = {
 			isa = PBXGroup;
 			children = (
-				3AC639B51A1E343F001D5E57 /* Init */,
 				3ACA4A9D1A0B87C100ECC792 /* OASuperViewController.h */,
 				3ACA4A9E1A0B87C100ECC792 /* OASuperViewController.m */,
 			);
@@ -3529,6 +3521,7 @@
 				848D175E1B1CC6CA00A656F4 /* OATextMultiViewCell.xib */,
 				84BA1DD61CF33C5D00BF3D96 /* OATargetInfoViewCell.xib */,
 				84BE7D331CF6CAE3001D8D78 /* OAWebViewCell.xib */,
+				84ACE1AC1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -3536,10 +3529,12 @@
 		3ACA4AB01A0B933600ECC792 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				84BE7D3A1CF6CB09001D8D78 /* OAWebViewCell.h */,
-				84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */,
+				84ACE1B11DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.h */,
+				84ACE1B21DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m */,
 				84BA1DDD1CF33C8900BF3D96 /* OATargetInfoViewCell.h */,
 				84BA1DDE1CF33C8900BF3D96 /* OATargetInfoViewCell.m */,
+				84BE7D3A1CF6CB09001D8D78 /* OAWebViewCell.h */,
+				84BE7D3B1CF6CB09001D8D78 /* OAWebViewCell.m */,
 				845E05A91B53E68D00DFC2A7 /* OADirectionTableViewCell.h */,
 				845E05AA1B53E68D00DFC2A7 /* OADirectionTableViewCell.m */,
 				84F3A90E1B4E671B00D16EBC /* OAGPXRouteWaypointTableViewCell.h */,
@@ -4392,6 +4387,8 @@
 				847A20A71DF9DD70003C1246 /* OACollapsableView.m */,
 				847A20AA1DF9E150003C1246 /* OACollapsableLabelView.h */,
 				847A20AB1DF9E150003C1246 /* OACollapsableLabelView.m */,
+				84AD39E01DFDA5DB00DDB466 /* OACollapsableWikiView.h */,
+				84AD39E11DFDA5DB00DDB466 /* OACollapsableWikiView.mm */,
 			);
 			name = TargetMenu;
 			sourceTree = "<group>";
@@ -4637,16 +4634,6 @@
 			name = Others;
 			sourceTree = "<group>";
 		};
-		84F989281B510180009C443C /* Intro */ = {
-			isa = PBXGroup;
-			children = (
-				3AC639991A1CE1FC001D5E57 /* OAIntroViewController.h */,
-				3AC6399A1A1CE1FC001D5E57 /* OAIntroViewController.mm */,
-				3AC6399B1A1CE1FC001D5E57 /* OAIntroViewController.xib */,
-			);
-			name = Intro;
-			sourceTree = "<group>";
-		};
 		84F9892A1B5101D3009C443C /* DestinationCards */ = {
 			isa = PBXGroup;
 			children = (
@@ -4740,6 +4727,7 @@
 				D7856750C4861FC13C888E24 /* libPods-OsmAnd DEV.a */,
 				3B25E5CC46EA81B5524F61E3 /* libPods-OsmAnd DEV (prebuilt Core).a */,
 				A89055AC5E5B86AD6F0B725F /* libPods-OsmAnd Maps.a */,
+				E679AA1B946C5D6D5E0791E3 /* libPods-OsmAnd Maps DEV.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -5240,7 +5228,6 @@
 				847A1D961DF94E9B003C1246 /* Resources */,
 				847A20941DF94E9B003C1246 /* [CP] Embed Pods Frameworks */,
 				847A20951DF94E9B003C1246 /* [CP] Copy Pods Resources */,
-				847A20961DF94E9B003C1246 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -5346,6 +5333,7 @@
 				847A1DA21DF94E9B003C1246 /* OAGPXWptListViewController.xib in Resources */,
 				847A1DA31DF94E9B003C1246 /* icon_star@2x.png in Resources */,
 				847A1DA41DF94E9B003C1246 /* btn_map_type_icon_walk_selected@3x.png in Resources */,
+				84ACE1B01DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				847A1DA51DF94E9B003C1246 /* selection_unchecked@2x.png in Resources */,
 				847A1DA61DF94E9B003C1246 /* ic_tabbar_maps_normal@2x.png in Resources */,
 				847A1DA71DF94E9B003C1246 /* menu_direction_icon_2@2x.png in Resources */,
@@ -5354,7 +5342,6 @@
 				847A1DAA1DF94E9B003C1246 /* ic_favorite_4.png in Resources */,
 				847A1DAB1DF94E9B003C1246 /* OATargetMenuViewController.xib in Resources */,
 				847A1DAC1DF94E9B003C1246 /* three_dots.png in Resources */,
-				847A1DAD1DF94E9B003C1246 /* OAIntroViewController.xib in Resources */,
 				847A1DAE1DF94E9B003C1246 /* icon_gpx_fill@2x.png in Resources */,
 				847A1DAF1DF94E9B003C1246 /* check@3x.png in Resources */,
 				847A1DB01DF94E9B003C1246 /* OAGPXWptViewController.xib in Resources */,
@@ -5399,7 +5386,6 @@
 				847A1DD71DF94E9B003C1246 /* HUD_debug_actions_button.png in Resources */,
 				847A1DD81DF94E9B003C1246 /* ic_dialog_export@3x.png in Resources */,
 				847A1DD91DF94E9B003C1246 /* ic_trip_car@3x.png in Resources */,
-				847A1DDA1DF94E9B003C1246 /* OAInitViewPanel.xib in Resources */,
 				847A1DDB1DF94E9B003C1246 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				847A1DDC1DF94E9B003C1246 /* btn_map_type_icon_view@2x.png in Resources */,
 				847A1DDD1DF94E9B003C1246 /* add_waypoint_to_track@2x.png in Resources */,
@@ -6126,7 +6112,6 @@
 				84185AC51AAA11B600F70328 /* ic_favorite_4.png in Resources */,
 				848D17111B188BAA00A656F4 /* OATargetMenuViewController.xib in Resources */,
 				84CC52531AA5DD55000063CF /* three_dots.png in Resources */,
-				3AC639A01A1CEB1D001D5E57 /* OAIntroViewController.xib in Resources */,
 				3A02BFBF1A31FA820019377F /* icon_gpx_fill@2x.png in Resources */,
 				8431E7BC1B3877B80063C9AF /* check@3x.png in Resources */,
 				8417A6741B2596D600EA1D17 /* OAGPXWptViewController.xib in Resources */,
@@ -6171,7 +6156,6 @@
 				BBA3AF8E197FC4BB0039D991 /* HUD_debug_actions_button.png in Resources */,
 				8431E7771B380D010063C9AF /* ic_dialog_export@3x.png in Resources */,
 				84F3A8E91B4DA93100D16EBC /* ic_trip_car@3x.png in Resources */,
-				3AC639BE1A1E344E001D5E57 /* OAInitViewPanel.xib in Resources */,
 				84630FF61A8E197E005B39F2 /* Touring-view_(more-contrast-and-details).render.xml in Resources */,
 				849E81991AFA5D6700549953 /* btn_map_type_icon_view@2x.png in Resources */,
 				84E441B61AF8A07500F87542 /* add_waypoint_to_track@2x.png in Resources */,
@@ -6710,6 +6694,7 @@
 				BBA3AFD5197FC4BB0039D991 /* menu_item_settings_icon.png in Resources */,
 				84E2DB4F1AB720FA001A7FEC /* HUD_configure_map.png in Resources */,
 				84F3A8FE1B4DA93100D16EBC /* ic_trip_pedestrian.png in Resources */,
+				84ACE1AF1DFDD77E008FE164 /* OATargetInfoCollapsableViewCell.xib in Resources */,
 				84F989331B510212009C443C /* OADestinationCardsViewController.xib in Resources */,
 				BBA3AFD6197FC4BB0039D991 /* HUD_debug_button@2x.png in Resources */,
 				845E06441B5956E800DFC2A7 /* waypoint_map_enable@2x.png in Resources */,
@@ -6963,7 +6948,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		847A20951DF94E9B003C1246 /* [CP] Copy Pods Resources */ = {
@@ -6978,22 +6963,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		847A20961DF94E9B003C1246 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps-frameworks.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-OsmAnd Maps DEV/Pods-OsmAnd Maps DEV-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -7040,7 +7010,6 @@
 				847A1CC41DF94E9B003C1246 /* OATrackIntervalDialogView.m in Sources */,
 				847A1CC51DF94E9B003C1246 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				847A1CC61DF94E9B003C1246 /* OAFirstUsageWizardController.mm in Sources */,
-				847A1CC71DF94E9B003C1246 /* OAInitViewPanel.m in Sources */,
 				847A1CC81DF94E9B003C1246 /* OAGPXDocument.mm in Sources */,
 				847A1CC91DF94E9B003C1246 /* OAQStringPickerElement.m in Sources */,
 				847A1CCA1DF94E9B003C1246 /* OAGPXRouteViewController.mm in Sources */,
@@ -7059,6 +7028,7 @@
 				847A1CD71DF94E9B003C1246 /* OAObservable.m in Sources */,
 				847A1CD81DF94E9B003C1246 /* OAPOIHistoryType.mm in Sources */,
 				847A20A91DF9DD70003C1246 /* OACollapsableView.m in Sources */,
+				84AD39E31DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
 				847A1CD91DF94E9B003C1246 /* CoreResourcesFromBundleProvider.mm in Sources */,
 				847A1CDA1DF94E9B003C1246 /* OANativeUtilities.mm in Sources */,
 				847A1CDB1DF94E9B003C1246 /* OAMultiDestinationCell.mm in Sources */,
@@ -7074,7 +7044,6 @@
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
-				847A1CE81DF94E9B003C1246 /* OAIntroViewController.mm in Sources */,
 				847A1CE91DF94E9B003C1246 /* OAPOISearchViewController.mm in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */,
@@ -7210,6 +7179,7 @@
 				847A1D6C1DF94E9B003C1246 /* OAMapSettingsGpxScreen.mm in Sources */,
 				847A1D6D1DF94E9B003C1246 /* OAIAPHelper.mm in Sources */,
 				847A1D6E1DF94E9B003C1246 /* OAGPXWptViewController.mm in Sources */,
+				84ACE1B41DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				847A1D6F1DF94E9B003C1246 /* OASQLiteTileSource.m in Sources */,
 				847A1D701DF94E9B003C1246 /* OATargetHistoryItemViewController.m in Sources */,
 				847A1D711DF94E9B003C1246 /* PXAlertView+Customization.m in Sources */,
@@ -7240,6 +7210,7 @@
 				8424316F1AEA19C700925821 /* OAOcbfHelper.m in Sources */,
 				84A819EB1CFAC4CD000C9E8C /* OATargetInfoViewController.mm in Sources */,
 				BBA3AF3A197FC4BB0039D991 /* OAMapRendererView.mm in Sources */,
+				84ACE1B31DFDD7EF008FE164 /* OATargetInfoCollapsableViewCell.m in Sources */,
 				84F1F9B91DE83C64001AA520 /* OAFirebaseHelper.m in Sources */,
 				84BA1DE11CF33C8900BF3D96 /* OATargetInfoViewCell.m in Sources */,
 				3ACA4AA61A0B8B8300ECC792 /* OASuperViewController.m in Sources */,
@@ -7254,7 +7225,6 @@
 				84E441841AF7BDD200F87542 /* OATrackIntervalDialogView.m in Sources */,
 				845E05DB1B58F59300DFC2A7 /* OAGPXRouteCardHeaderView.mm in Sources */,
 				841A111C1DEC18A9009558D3 /* OAFirstUsageWizardController.mm in Sources */,
-				3AC639BB1A1E344E001D5E57 /* OAInitViewPanel.m in Sources */,
 				84770A061A8CF91D00585175 /* OAGPXDocument.mm in Sources */,
 				BBA3AF3B197FC4BB0039D991 /* OAQStringPickerElement.m in Sources */,
 				8420C1D71B43D6B4004EDAE6 /* OAGPXRouteViewController.mm in Sources */,
@@ -7287,7 +7257,6 @@
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
-				3AC639A21A1CEB20001D5E57 /* OAIntroViewController.mm in Sources */,
 				84387B1F1ABB1A6100504DA7 /* OAPOISearchViewController.mm in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.m in Sources */,
@@ -7380,6 +7349,7 @@
 				84E4417F1AF7582500F87542 /* UIAlertView+PXAlertViewOverride.m in Sources */,
 				3AC40AC619DDC583002FBC40 /* OADownloadProgressView.m in Sources */,
 				848300B81CFAD7A50018B27B /* OATargetDestinationViewController.m in Sources */,
+				84AD39E21DFDA5DB00DDB466 /* OACollapsableWikiView.mm in Sources */,
 				BB54F7101989143000AB40D1 /* OADaytimeAppearance.m in Sources */,
 				8432E2731AC068D60082CFC6 /* OASearchMoreCell.m in Sources */,
 				84C41E771AB9EE580089EABB /* OAPOIParser.m in Sources */,
@@ -7461,7 +7431,7 @@
 /* Begin XCBuildConfiguration section */
 		847A20981DF94E9B003C1246 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 47E7DA602F74BD87D3A6579F /* Pods-OsmAnd Maps.debug.xcconfig */;
+			baseConfigurationReference = 9D405D1CF2C6C1F8E22DD72D /* Pods-OsmAnd Maps DEV.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -7510,7 +7480,7 @@
 		};
 		847A20991DF94E9B003C1246 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2925E44FD83D26CF3EDE9EF /* Pods-OsmAnd Maps.release.xcconfig */;
+			baseConfigurationReference = 1282460E521223DA0F804AE7 /* Pods-OsmAnd Maps DEV.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -7700,7 +7670,7 @@
 		};
 		BBA3AFEC197FC4BB0039D991 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 47E7DA602F74BD87D3A6579F /* Pods-OsmAnd Maps.debug.xcconfig */;
+			baseConfigurationReference = 2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -7743,7 +7713,7 @@
 		};
 		BBA3AFED197FC4BB0039D991 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B2925E44FD83D26CF3EDE9EF /* Pods-OsmAnd Maps.release.xcconfig */;
+			baseConfigurationReference = F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;

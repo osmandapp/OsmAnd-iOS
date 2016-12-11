@@ -419,29 +419,69 @@
 
 }
 
--(BOOL)breakSearch
++(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
 {
-    _breakSearch = !_isSearchDone;
-    return _breakSearch;
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      // should break?
+                                                      return false;
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    
+    auto categoriesFilter = QHash<QString, QStringList>();
+    if (categoryName && typeName) {
+        categoriesFilter.insert(QString::fromNSString(categoryName), QStringList(QString::fromNSString(typeName)));
+    } else if (categoryName) {
+        categoriesFilter.insert(QString::fromNSString(categoryName), QStringList());
+    }
+    searchCriteria->categoriesFilter = categoriesFilter;
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(radius, location);
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    search->performSearch(*searchCriteria,
+                          [&arr, &tagName, &location]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                              if (poi && (!tagName || [poi.values valueForKey:tagName]))
+                              {
+                                  const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
+                                  [arr addObject:poi];
+                              }
+                          },
+                          ctrl);
+    
+    return [NSArray arrayWithArray:arr];
 }
 
--(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry
++(OAPOI *)parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry
 {
+    OAPOIHelper *helper = [OAPOIHelper sharedInstance];
+    
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     
     if (amenity->categories.isEmpty())
-        return;
+        return nil;
     
     const auto& catList = amenity->getDecodedCategories();
     if (catList.isEmpty())
-        return;
+        return nil;
     
     NSString *category = catList.first().category.toNSString();
     NSString *subCategory = catList.first().subcategory.toNSString();
-
+    
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(amenity->position31);
     
     OAPOI *poi = [[OAPOI alloc] init];
+    poi.obfId = amenity->id;
     poi.latitude = latLon.latitude;
     poi.longitude = latLon.longitude;
     poi.name = amenity->nativeName.toNSString();
@@ -453,8 +493,6 @@
         poi.nameLocalized = nameLocalized;
     poi.localizedNames = names;
     
-    poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
-    
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
     [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
@@ -464,28 +502,46 @@
     if (!poi.nameLocalized)
         poi.nameLocalized = amenity->nativeName.toNSString();
     
-    OAPOIType *type = [self getPoiTypeByCategory:category name:subCategory];
+    OAPOIType *type = [helper getPoiTypeByCategory:category name:subCategory];
     if (!type)
     {
         OAPOICategory *c = [[OAPOICategory alloc] initWithName:category];
         type = [[OAPOIType alloc] initWithName:subCategory category:c];
-        type.nameLocalized = [self getPhrase:type];
-        type.nameLocalizedEN = [self getPhraseEN:type];
+        type.nameLocalized = [helper getPhrase:type];
+        type.nameLocalizedEN = [helper getPhraseEN:type];
     }
     poi.type = type;
     
     if (type.mapOnly)
-        return;
+        return nil;
     
     if (poi.name.length == 0)
         poi.name = type.name;
     if (poi.nameLocalized.length == 0)
         poi.nameLocalized = type.nameLocalized;
     
-    _limitCounter--;
-    
-    if (_delegate)
-        [_delegate poiFound:poi];
+    return poi;
+}
+
+-(BOOL)breakSearch
+{
+    _breakSearch = !_isSearchDone;
+    return _breakSearch;
+}
+
+-(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry
+{
+    OAPOI *poi = [self.class parsePOI:resultEntry];
+    if (poi)
+    {
+        const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
+        
+        _limitCounter--;
+        
+        if (_delegate)
+            [_delegate poiFound:poi];
+    }
 }
 
 + (void)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(NSString *)nativeName nameLocalized:(NSMutableString *)nameLocalized names:(NSMutableDictionary *)names

@@ -81,6 +81,16 @@
                 && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]];
 }
 
+-(id)getTargetObj
+{
+    return self.poi;
+}
+
+-(BOOL)showNearestWiki
+{
+    return YES;
+}
+
 - (void)buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
@@ -93,7 +103,7 @@
         && ![self.poi.type isKindOfClass:[OAPOILocationType class]]
         && ![self.poi.type isKindOfClass:[OAPOIMyLocationType class]])
     {
-        UIImage *icon = [self applyColor:[self.poi.type icon]];
+        UIImage *icon = [self.poi.type icon];
         [rows addObject:[[OARowInfo alloc] initWithKey:self.poi.type.name icon:icon textPrefix:nil text:[self getTypeStr] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO]];
     }
     
@@ -112,7 +122,7 @@
         NSString *poiTypeKeyName = @"";
         BOOL collapsable = NO;
         BOOL collapsed = YES;
-        UIView *collapsableView = nil;
+        OACollapsableView *collapsableView = nil;
         
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
         OAPOIType *pType = nil;

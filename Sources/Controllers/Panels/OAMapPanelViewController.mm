@@ -1017,6 +1017,7 @@ typedef enum
 -(void)onTargetPointSet:(NSNotification *)notification
 {
     NSDictionary *params = [notification userInfo];
+    unsigned long long obfId = [[params objectForKey:@"obfId"] unsignedLongLongValue];
     OAPOIType *poiType = [params objectForKey:@"poiType"];
     NSString *objectType = [params objectForKey:@"objectType"];
     NSString *caption = [params objectForKey:@"caption"];
@@ -1214,6 +1215,7 @@ typedef enum
     if ((targetPoint.type == OATargetLocation || targetPoint.type == OATargetWiki) && poiType)
     {
         OAPOI *poi = [[OAPOI alloc] init];
+        poi.obfId = obfId;
         poi.latitude = lat;
         poi.longitude = lon;
         poi.type = poiType;

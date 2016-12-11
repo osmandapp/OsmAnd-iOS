@@ -1463,6 +1463,7 @@
             symbol.poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:entry.category.toNSString() name:entry.subcategory.toNSString()];
     }
 
+    symbol.obfId = amenity->id;
     symbol.caption = amenity->nativeName.toNSString();
     
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
@@ -1809,6 +1810,7 @@
         symbol.buildingNumber = @"";
     
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    [userInfo setObject:[NSNumber numberWithUnsignedLongLong:symbol.obfId] forKey:@"obfId"];
     if (symbol.poiType)
         [userInfo setObject:symbol.poiType forKey:@"poiType"];
     
@@ -1854,6 +1856,7 @@
 + (OAMapSymbol *)getMapSymbol:(OAPOI *)poi
 {
     OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+    symbol.obfId = poi.obfId;
     symbol.caption = poi.nameLocalized.length > 0 ? poi.nameLocalized : poi.name;
     symbol.poiType = poi.type;
     if ([symbol.poiType.name isEqualToString:@"wiki_place"])

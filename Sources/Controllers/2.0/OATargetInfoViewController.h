@@ -57,6 +57,5 @@
 - (void)buildRows:(NSMutableArray<OARowInfo *> *)rows;
 
 - (UIImage *)getIcon:(NSString *)fileName;
-- (UIImage *)applyColor:(UIImage *)image;
 
 @end

@@ -11,6 +11,7 @@
 
 @interface OAPOI : NSObject
 
+@property (nonatomic) unsigned long long obfId;
 @property (nonatomic) NSString *name;
 @property (nonatomic) OAPOIType *type;
 @property (nonatomic) NSString *nameLocalized;

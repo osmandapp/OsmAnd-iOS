@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @interface OAMapSymbol : NSObject
 
+@property (nonatomic) unsigned long long obfId;
 @property (nonatomic) CLLocationCoordinate2D location;
 @property (nonatomic) CGPoint touchPoint;
 @property (nonatomic) OAPOIType *poiType;

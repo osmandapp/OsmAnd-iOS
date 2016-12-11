@@ -20,7 +20,6 @@ def defaultPods
     pod 'RegexKitLite', '~> 4.0'
     pod 'MBProgressHUD', '~> 0.9.1'
     pod 'CocoaSecurity', '~> 1.2.4'
-    pod 'MYBlurIntroductionView', '~> 1.0.3'
     pod 'TPKeyboardAvoiding', '~> 1.2.6'
     pod 'HTAutocompleteTextField', '~> 1.3.1'
     pod 'Firebase/Core'
@@ -30,16 +29,9 @@ target 'OsmAnd Maps' do
     defaultPods
 end
 
-# Development-only dependencies
-#target 'OsmAnd DEV' do
-#    defaultPods
-#    pod 'HockeySDK', '~> 3.6.2'
-#end
-
-#target 'OsmAnd DEV (prebuilt Core)' do
-#    defaultPods
-#    pod 'HockeySDK', '~> 3.6.2'
-#end
+target 'OsmAnd Maps DEV' do
+    defaultPods
+end
 
 # Make changes to Pods.xcconfig: 
 #  - HEADER_SEARCH_PATHS need to inherit project settings

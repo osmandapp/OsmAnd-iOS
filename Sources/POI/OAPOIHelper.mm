@@ -141,6 +141,8 @@
             for (OAPOIType *add in poiType.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
+                if (add.poiAdditionalCategory)
+                    add.poiAdditionalCategoryLocalized = [self getPhraseByName:add.poiAdditionalCategory];
             }
         }
         for (OAPOICategory *c in _poiCategories)
@@ -149,6 +151,8 @@
             for (OAPOIType *add in c.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
+                if (add.poiAdditionalCategory)
+                    add.poiAdditionalCategoryLocalized = [self getPhraseByName:add.poiAdditionalCategory];
             }
         }
         for (OAPOIFilter *f in _poiFilters)
@@ -157,6 +161,8 @@
             for (OAPOIType *add in f.poiAdditionals)
             {
                 add.nameLocalized = [self getPhrase:add];
+                if (add.poiAdditionalCategory)
+                    add.poiAdditionalCategoryLocalized = [self getPhraseByName:add.poiAdditionalCategory];
             }
         }
     }
@@ -176,6 +182,8 @@
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
+                    if (add.poiAdditionalCategory)
+                        add.poiAdditionalCategoryLocalized = [self getPhraseENByName:add.poiAdditionalCategory];
                 }
             }
         }
@@ -192,6 +200,8 @@
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
+                    if (add.poiAdditionalCategory)
+                        add.poiAdditionalCategoryLocalized = [self getPhraseENByName:add.poiAdditionalCategory];
                 }
             }
         }
@@ -209,46 +219,46 @@
                 if (_phrases.count == 0)
                 {
                     add.nameLocalized = add.nameLocalizedEN;
+                    if (add.poiAdditionalCategory)
+                        add.poiAdditionalCategoryLocalized = [self getPhraseENByName:add.poiAdditionalCategory];
                 }
             }
         }
     }
 }
 
+-(NSString *)getPhraseByName:(NSString *)name
+{
+    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    if (!phrase)
+        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    else
+        return phrase;
+}
+
+-(NSString *)getPhraseENByName:(NSString *)name
+{
+    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    if (!phrase)
+        return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
+    else
+        return phrase;
+}
+
 -(NSString *)getPhrase:(OAPOIBaseType *)type
 {
     if (type.baseLangType)
-    {
         return [NSString stringWithFormat:@"%@ (%@)", [self getPhrase:type.baseLangType], [OAUtilities translatedLangName:type.lang]];
-    }
-    
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", type.name]];
-    if (!phrase)
-    {
-        return [[type.name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    }
-    else
-    {
-        return phrase;
-    }
+
+    return [self getPhraseByName:type.name];
 }
 
 -(NSString *)getPhraseEN:(OAPOIBaseType *)type
 {
     if (type.baseLangType)
-    {
         return [self getPhraseEN:type.baseLangType];
-    }
 
-    NSString *phrase = [_phrasesEN objectForKey:[NSString stringWithFormat:@"poi_%@", type.name]];
-    if (!phrase)
-    {
-        return [[type.name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
-    }
-    else
-    {
-        return phrase;
-    }
+    return [self getPhraseENByName:type.name];
 }
 
 - (NSArray *)poiFiltersForCategory:(NSString *)categoryName

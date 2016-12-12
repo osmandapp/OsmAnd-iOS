@@ -48,6 +48,9 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
 - (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name;
 
+-(NSString *)getPhraseByName:(NSString *)name;
+-(NSString *)getPhraseENByName:(NSString *)name;
+
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
 -(void)findPOIsByKeyword:(NSString *)keyword;

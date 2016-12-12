@@ -30,6 +30,8 @@
 @property (nonatomic) OAPOIBaseType *parentType;
 
 @property (weak, nonatomic) OAPOI *parent;
+@property (nonatomic) NSString *poiAdditionalCategory;
+@property (nonatomic) NSString *poiAdditionalCategoryLocalized;
 
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
 

@@ -44,6 +44,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     OAPOIType *_currentPOIType;
     OAPOICategory *_currentPOICategory;
     OAPOIFilter *_currentPOIFilter;
+    NSString *_currentPOIAdditionalCategory;
     NSMutableString *_propertyValue;
     NSOperationQueue *_retrieverQueue;
 }
@@ -65,7 +66,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     _pFilters = [NSMutableArray array];
 
     self.fileName = fileName;
-    [self parseForData];
+    [self parseData];
 }
 
 - (void)getPOITypesAsync:(NSString*)fileName {
@@ -122,7 +123,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 }
 
 
-- (BOOL)parseForData
+- (BOOL)parseData
 {
     BOOL success = NO;
     
@@ -153,6 +154,8 @@ static const char *kPoiReferenceElementName = "poi_reference";
 static NSUInteger kPoiReferenceElementNameLength = 14;
 static const char *kPoiAdditionalElementName = "poi_additional";
 static NSUInteger kPoiAdditionalElementNameLength = 15;
+static const char *kPoiAdditionalCategoryElementName = "poi_additional_category";
+static NSUInteger kPoiAdditionalCategoryElementNameLength = 24;
 
 static const char *kNameAttributeName = "name";
 static NSUInteger kNameAttributeNameLength = 5;
@@ -268,6 +271,23 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         _currentPOIType = [self parsePoiType:localname attributeCount:attributeCount attributes:attributes];
     }
+    else if (0 == strncmp((const char *)localname, kPoiAdditionalCategoryElementName, kPoiAdditionalCategoryElementNameLength))
+    {
+        NSString *name = nil;
+        for (int i = 0; i < attributeCount; i++)
+        {
+            if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
+                             kNameAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                name = [[NSString alloc] initWithBytes:attributes[i].value
+                                                length:length
+                                              encoding:NSUTF8StringEncoding];
+                break;
+            }
+        }
+        _currentPOIAdditionalCategory = name;
+    }
     else if (0 == strncmp((const char *)localname, kPoiAdditionalElementName, kPoiAdditionalElementNameLength))
     {
         BOOL lang = NO;
@@ -301,15 +321,21 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 
 - (void)endElement:(const xmlChar *)localname prefix:(const xmlChar *)prefix uri:(const xmlChar *)URI
 {
-    if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength)) {
+    if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
+    {
         _currentPOIFilter = nil;
-        
-    } else if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength)) {
+    }
+    else if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength))
+    {
         _currentPOICategory = nil;
-
-    } else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength)) {
+    }
+    else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength))
+    {
         _currentPOIType = nil;
-    
+    }
+    else if(0 == strncmp((const char *)localname, kPoiAdditionalCategoryElementName, kPoiAdditionalCategoryElementNameLength))
+    {
+        _currentPOIAdditionalCategory = nil;
     }
 }
 
@@ -536,6 +562,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.order = order;
     poiType.isText = isText;
     [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
+    poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
     
     if (_currentPOIType)
     {

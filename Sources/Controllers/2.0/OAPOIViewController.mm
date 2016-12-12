@@ -125,6 +125,9 @@
         OACollapsableView *collapsableView = nil;
         
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:key];
+        if (!pt && value && value.length > 0 && value.length < 50)
+            pt = [_poiHelper getAnyPoiAdditionalTypeByKey:[NSString stringWithFormat:@"%@_%@", key, value]];
+
         OAPOIType *pType = nil;
         if (pt)
         {
@@ -166,6 +169,26 @@
             textColor = UIColorFromRGB(kHyperlinkColor);
             isUrl = YES;
         }
+        else if ([key isEqualToString:@"cuisine"])
+        {
+            iconId = @"ic_action_cuisine";
+            NSMutableString *sb = [NSMutableString string];
+            NSArray* arr = [value componentsSeparatedByString: @";"];
+            if (arr.count > 0)
+            {
+                for (NSString *c in arr)
+                {
+                    if (sb.length > 0) {
+                        [sb appendString:@", "];
+                    } else {
+                        [sb appendString:[_poiHelper getPhraseByName:@"cuisine"]];
+                        [sb appendString:@": "];
+                    }
+                    [sb appendString:[_poiHelper getPhraseByName:[[@"cuisine_" stringByAppendingString:c] lowercaseString]]];
+                }
+            }
+            value = sb;
+        }
         else
         {
             if ([key rangeOfString:@"description"].length != 0)
@@ -186,7 +209,11 @@
                 }
                 if (!pType.isText)
                 {
-                    value = pType.nameLocalized;
+                    if (pType.poiAdditionalCategory) {
+                        value = [NSString stringWithFormat:@"%@: %@", pType.poiAdditionalCategoryLocalized, pType.nameLocalized];
+                    } else {
+                        value = pType.nameLocalized;
+                    }
                 }
                 else
                 {

@@ -3498,7 +3498,7 @@
 				84F989261B51014D009C443C /* MapSettings */,
 				84F989251B510147009C443C /* Settings */,
 				848D17081B188B5600A656F4 /* TargetMenu */,
-				84387B191ABAFFE800504DA7 /* POI */,
+				84387B191ABAFFE800504DA7 /* Search */,
 				3A02BFB11A31F2DD0019377F /* GPX */,
 				3A02BFB01A31F2D30019377F /* Favorite */,
 			);
@@ -4275,14 +4275,14 @@
 			name = FirstUsage;
 			sourceTree = "<group>";
 		};
-		84387B191ABAFFE800504DA7 /* POI */ = {
+		84387B191ABAFFE800504DA7 /* Search */ = {
 			isa = PBXGroup;
 			children = (
 				84387B1A1ABB1A6100504DA7 /* OAPOISearchViewController.h */,
 				84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */,
 				84387B1C1ABB1A6100504DA7 /* OAPOISearchViewController.xib */,
 			);
-			name = POI;
+			name = Search;
 			sourceTree = "<group>";
 		};
 		84630FC81A8E1947005B39F2 /* styles */ = {

@@ -169,6 +169,12 @@
             textColor = UIColorFromRGB(kHyperlinkColor);
             isUrl = YES;
         }
+        else if ([key isEqualToString:@"wikipedia"])
+        {
+            iconId = @"ic_website.png";
+            textColor = UIColorFromRGB(kHyperlinkColor);
+            isUrl = YES;
+        }
         else if ([key isEqualToString:@"cuisine"])
         {
             iconId = @"ic_cuisine.png";

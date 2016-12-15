@@ -1524,7 +1524,7 @@
     double lonTap = lon;
     double latTap = lat;
     
-    NSMutableArray *foundSymbols = [NSMutableArray array];
+    NSMutableArray<OAMapSymbol *> *foundSymbols = [NSMutableArray array];
     
     CLLocation* myLocation = _app.locationServices.lastKnownLocation;
     if (myLocation)
@@ -1588,21 +1588,27 @@
             else
             {
                 for (const auto& fav : _favoritesMarkersCollection->getMarkers())
-                    if (markerGroup->getMapMarker() == fav.get())
+                {
+                    if (markerGroup->getMapMarker() == fav.get() && ![self containSymbolId:fav->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
                     {
+                        symbol.symbolId = fav->markerId;
                         symbol.type = OAMapSymbolFavorite;
                         lon = OsmAnd::Utilities::get31LongitudeX(fav->getPosition().x);
                         lat = OsmAnd::Utilities::get31LatitudeY(fav->getPosition().y);
                         break;
                     }
+                }
                 for (const auto& dest : _destinationPinMarkersCollection->getMarkers())
-                    if (markerGroup->getMapMarker() == dest.get())
+                {
+                    if (markerGroup->getMapMarker() == dest.get() && ![self containSymbolId:dest->markerId obfId:0 wpt:nil symbolGroupId:nil symbols:foundSymbols])
                     {
+                        symbol.symbolId = dest->markerId;
                         symbol.type = OAMapSymbolDestination;
                         lon = OsmAnd::Utilities::get31LongitudeX(dest->getPosition().x);
                         lat = OsmAnd::Utilities::get31LatitudeY(dest->getPosition().y);
                         break;
                     }
+                }
             }
         }
         
@@ -1617,23 +1623,30 @@
             if (amenitySymbolGroup != nullptr)
             {
                 const auto amenity = amenitySymbolGroup->amenity;
-                [self processAmenity:amenity symbol:symbol];
-
-                if (!symbol.poiType && [self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                if (![self containSymbolId:0 obfId:amenity->id wpt:nil symbolGroupId:nil symbols:foundSymbols])
                 {
-                    symbol.type = OAMapSymbolWpt;
-                    symbol.foundWpt = self.foundWpt;
-                    symbol.foundWptGroups = self.foundWptGroups;
-                    symbol.foundWptDocPath = self.foundWptDocPath;
+                    [self processAmenity:amenity symbol:symbol];
+                    
+                    if (!symbol.poiType && [self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
+                    {
+                        symbol.type = OAMapSymbolWpt;
+                        symbol.foundWpt = self.foundWpt;
+                        symbol.foundWptGroups = self.foundWptGroups;
+                        symbol.foundWptDocPath = self.foundWptDocPath;
+                    }
                 }
             }
             else if (objSymbolGroup != nullptr && objSymbolGroup->mapObject != nullptr)
             {
                 const std::shared_ptr<const OsmAnd::MapObject> mapObject = objSymbolGroup->mapObject;
+                BOOL amenityFound = NO;
+                BOOL amenityExists = NO;
                 if (const auto& obfMapObject = std::dynamic_pointer_cast<const OsmAnd::ObfMapObject>(objSymbolGroup->mapObject))
                 {
                     std::shared_ptr<const OsmAnd::Amenity> amenity;
-                    if (_obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity))
+                    amenityFound = _obfsDataInterface->findAmenityForObfMapObject(obfMapObject, &amenity);
+                    amenityExists = amenityFound && [self containSymbolId:0 obfId:amenity->id wpt:nil symbolGroupId:nil symbols:foundSymbols];
+                    if (amenityFound && !amenityExists)
                     {
                         [self processAmenity:amenity symbol:symbol];
                     }
@@ -1648,17 +1661,15 @@
                         continue;
                     }
                     
-                    //NSLog(@"%@=%@", rule.tag.toNSString(), rule.value.toNSString());
-
                     if (rule.tag == QString("place"))
                         symbol.isPlace = YES;
                     
                     if (rule.tag == QString("highway") && rule.value != QString("bus_stop"))
                         doSkip = YES;
-
+                    
                     if (rule.tag == QString("contour"))
                         doSkip = YES;
-
+                    
                     if (!symbol.poiType)
                         symbol.poiType = [poiHelper getPoiType:rule.tag.toNSString() value:rule.value.toNSString()];
                 }
@@ -1670,7 +1681,7 @@
                     else
                         symbol.type = OAMapSymbolPOI;
                 }
-                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)])
+                else if ([self findWpt:CLLocationCoordinate2DMake(lat, lon)] && ![self containSymbolId:0 obfId:0 wpt:self.foundWpt symbolGroupId:nil symbols:foundSymbols])
                 {
                     symbol.type = OAMapSymbolWpt;
                     symbol.foundWpt = self.foundWpt;
@@ -1685,6 +1696,7 @@
                 OsmAnd::MapSymbolsGroup* symbolGroup = dynamic_cast<OsmAnd::MapSymbolsGroup*>(symbolInfo.mapSymbol->groupPtr);
                 if (symbolGroup != nullptr)
                 {
+                    symbol.symbolGroupId = symbolGroup->toString().toNSString();
                     std::shared_ptr<OsmAnd::MapSymbol> mapIconSymbol = symbolGroup->getFirstSymbolWithContentClass(OsmAnd::MapSymbol::ContentClass::Icon);
                     if (mapIconSymbol != nullptr)
                         if (const auto rasterMapSymbol = std::dynamic_pointer_cast<const OsmAnd::RasterMapSymbol>(mapIconSymbol))
@@ -1718,6 +1730,9 @@
             symbol.sortIndex = (((symbol.caption && symbol.caption.length > 0) || symbol.poiType) && symbol.icon) ?  10 : 20;
         else
             symbol.sortIndex = (NSInteger)symbol.type;
+        
+        if ([self containSymbolId:symbol.symbolId obfId:symbol.obfId wpt:symbol.foundWpt symbolGroupId:symbol.symbolGroupId symbols:foundSymbols])
+            doSkip = YES;
         
         if (!doSkip)
             [foundSymbols addObject:symbol];
@@ -1759,6 +1774,7 @@
     }];
     
     for (OAMapSymbol *s in foundSymbols)
+    {
         if (s.type == OAMapSymbolContext)
         {
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationContextMarkerClicked
@@ -1766,21 +1782,29 @@
                                                               userInfo:nil];
             return YES;
         }
-        else
+    }
+
+    if (foundSymbols.count == 1)
+    {
+        OAMapSymbol *s = foundSymbols[0];
+        if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]])
+            s.location = CLLocationCoordinate2DMake(latTap, lonTap);
+        
+        if (s.type == OAMapSymbolWpt)
         {
-            if ([recognizer isKindOfClass:[UILongPressGestureRecognizer class]])
-                s.location = CLLocationCoordinate2DMake(latTap, lonTap);
-            
-            if (s.type == OAMapSymbolWpt)
-            {
-                self.foundWpt = s.foundWpt;
-                self.foundWptGroups = s.foundWptGroups;
-                self.foundWptDocPath = s.foundWptDocPath;
-            }
-            
-            [OAMapViewController postTargetNotification:s];
-            return YES;
+            self.foundWpt = s.foundWpt;
+            self.foundWptGroups = s.foundWptGroups;
+            self.foundWptDocPath = s.foundWptDocPath;
         }
+        
+        [OAMapViewController postTargetNotification:s];
+        return YES;
+    }
+    else if (foundSymbols.count > 1)
+    {
+        [self.class postTargetNotification:foundSymbols latitude:latTap longitude:lonTap];
+        return YES;
+    }
     
     // if single press and no symbol found - exit
     if ([recognizer isKindOfClass:[UITapGestureRecognizer class]])
@@ -1802,52 +1826,33 @@
     }
 }
 
+- (BOOL)containSymbolId:(int)symbolId obfId:(unsigned long long)obfId wpt:(OAGpxWpt *)wpt symbolGroupId:(NSString *)symbolGroupId symbols:(NSArray<OAMapSymbol *> *)symbols
+{
+    for (OAMapSymbol *s in symbols)
+    {
+        if ((s.obfId > 0 && s.obfId == obfId) || (s.symbolId > 0 && s.symbolId == symbolId) || (s.foundWpt && s.foundWpt == wpt) || (s.symbolGroupId && [s.symbolGroupId isEqualToString:symbolGroupId]))
+        {
+            return YES;
+        }
+    }
+    return NO;
+}
+
++ (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude
+{
+    NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
+    [userInfo setObject:symbolArray forKey:@"symbols"];
+    [userInfo setObject:[NSNumber numberWithDouble:latitude] forKey:@"latitude"];
+    [userInfo setObject:[NSNumber numberWithDouble:longitude] forKey:@"longitude"];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
+                                                        object:self
+                                                      userInfo:userInfo];
+}
+
 + (void)postTargetNotification:(OAMapSymbol *)symbol
 {
-    if (!symbol.caption)
-        symbol.caption = @"";
-    if (!symbol.buildingNumber)
-        symbol.buildingNumber = @"";
-    
     NSMutableDictionary *userInfo = [NSMutableDictionary dictionary];
-    [userInfo setObject:[NSNumber numberWithUnsignedLongLong:symbol.obfId] forKey:@"obfId"];
-    if (symbol.poiType)
-        [userInfo setObject:symbol.poiType forKey:@"poiType"];
-    
-    if (symbol.isPlace)
-        [userInfo setObject:@"yes" forKey:@"place"];
-
-    if (symbol.centerMap)
-        [userInfo setObject:@"yes" forKey:@"centerMap"];
-
-    if (symbol.type == OAMapSymbolFavorite)
-        [userInfo setObject:@"favorite" forKey:@"objectType"];
-    else if (symbol.type == OAMapSymbolDestination)
-        [userInfo setObject:@"destination" forKey:@"objectType"];
-    else if (symbol.type == OAMapSymbolWpt)
-        [userInfo setObject:@"waypoint" forKey:@"objectType"];
-    else if (symbol.type == OAMapSymbolWiki)
-        [userInfo setObject:@"wiki" forKey:@"objectType"];
-
-    [userInfo setObject:symbol.caption forKey:@"caption"];
-    if (symbol.captionExt)
-        [userInfo setObject:symbol.captionExt forKey:@"captionExt"];
-    
-    [userInfo setObject:symbol.buildingNumber forKey:@"buildingNumber"];
-    [userInfo setObject:[NSNumber numberWithDouble:symbol.location.latitude] forKey:@"lat"];
-    [userInfo setObject:[NSNumber numberWithDouble:symbol.location.longitude] forKey:@"lon"];
-    [userInfo setObject:[NSNumber numberWithFloat:symbol.touchPoint.x] forKey:@"touchPoint.x"];
-    [userInfo setObject:[NSNumber numberWithFloat:symbol.touchPoint.y] forKey:@"touchPoint.y"];
-    if (symbol.icon)
-        [userInfo setObject:symbol.icon forKey:@"icon"];
-
-    if (symbol.values)
-        [userInfo setObject:symbol.values forKey:@"values"];
-    if (symbol.localizedNames)
-        [userInfo setObject:symbol.localizedNames forKey:@"names"];
-    if (symbol.localizedContent)
-        [userInfo setObject:symbol.localizedContent forKey:@"content"];
-
+    [userInfo setObject:@[symbol] forKey:@"symbols"];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetTargetPoint
                                                         object:self
                                                       userInfo:userInfo];

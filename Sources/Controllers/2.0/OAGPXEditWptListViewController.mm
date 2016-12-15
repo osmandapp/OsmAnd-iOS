@@ -289,9 +289,16 @@
         {
             OAGpxWptItem* item = [self getWptItem:indexPath];
             
-            NSMutableString *distanceStr = [NSMutableString stringWithString:item.distance];
+            NSMutableString *distanceStr = [NSMutableString string];
+            if (item.distance)
+                [distanceStr appendString:item.distance];
+
             if (item.point.type.length > 0)
-                [distanceStr appendFormat:@", %@", item.point.type];
+            {
+                if (distanceStr.length > 0)
+                    [distanceStr appendString:@", "];
+                [distanceStr appendString:item.point.type];
+            }
             
             [cell.titleView setText:item.point.name];
             [cell.distanceView setText:distanceStr];

@@ -45,5 +45,10 @@ typedef NS_ENUM(NSInteger, OATargetPointType)
 
 @property (nonatomic) BOOL toolbarNeeded;
 @property (nonatomic) NSInteger segmentIndex;
+@property (nonatomic) BOOL centerMap;
+@property (nonatomic) BOOL addressFound;
+
+@property (nonatomic) NSAttributedString *ctrlAttrTypeStr;
+@property (nonatomic) NSString *ctrlTypeStr;
 
 @end

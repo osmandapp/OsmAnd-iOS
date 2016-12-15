@@ -56,6 +56,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 
 @interface OAMapSymbol : NSObject
 
+@property (nonatomic) int symbolId;
 @property (nonatomic) unsigned long long obfId;
 @property (nonatomic) CLLocationCoordinate2D location;
 @property (nonatomic) CGPoint touchPoint;
@@ -78,6 +79,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @property (nonatomic) OAGpxWpt *foundWpt;
 @property (nonatomic) NSArray *foundWptGroups;
 @property (nonatomic) NSString *foundWptDocPath;
+
+@property (nonatomic) NSString* symbolGroupId;
 
 @end
 
@@ -158,6 +161,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
 
++ (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
 + (void)postTargetNotification:(OAMapSymbol *)symbol;
 + (OAMapSymbol *)getMapSymbol:(OAPOI *)poi;
 

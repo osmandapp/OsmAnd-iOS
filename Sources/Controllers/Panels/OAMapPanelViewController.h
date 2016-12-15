@@ -44,6 +44,7 @@
 - (void)hideDestinationCardsViewAnimated:(BOOL)animated;
 - (void)openHideDestinationCardsView;
 
+- (void)showContextMenu:(OATargetPoint *) targetPoint;
 - (void)hideContextMenu;
 
 - (void)closeMapSettings;

@@ -171,7 +171,7 @@
         }
         else if ([key isEqualToString:@"cuisine"])
         {
-            iconId = @"ic_action_cuisine";
+            iconId = @"ic_cuisine.png";
             NSMutableString *sb = [NSMutableString string];
             NSArray* arr = [value componentsSeparatedByString: @";"];
             if (arr.count > 0)

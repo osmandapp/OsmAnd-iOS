@@ -473,7 +473,7 @@
 "get_started" = "Kom i gang";
 "first_usage_wizard_desc" = "Lad OsmAnd bestemme placeringen og foreslå at hente kort for regionen.";
 "location_not_found" = "Placering ikke fundet";
-"search_my_location" = "Søg min placering";
+"search_my_location" = "Søg efter placering";
 "no_inet_connection" = "Ingen internetforbindelse";
 "no_inet_connection_desc_map" = "Nødvendig for at hente kort.";
 "try_again" = "Prøv igen";

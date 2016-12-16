@@ -483,3 +483,4 @@
 "skip_map_downloading" = "Omitir descargas de mapas";
 "skip_map_downloading_desc" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego mediante el Menú - Gestionar mapas";
 "wiki_around" = "Artículos de Wikipedia cercanos";
+"categories" = "Categorías";

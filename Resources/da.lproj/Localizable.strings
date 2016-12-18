@@ -484,3 +484,4 @@
 "skip_map_downloading_desc" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";
 "wiki_around" = "Wikipedia artikler i nærheden";
 "categories" = "Kategorier";
+"items_selected" = "%d valgt";

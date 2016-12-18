@@ -8,6 +8,7 @@
 
 #import "OAFirstUsageWelcomeController.h"
 #import "OAFirstUsageWizardController.h"
+#import "Localization.h"
 
 @interface OAFirstUsageWelcomeController ()
 
@@ -21,8 +22,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    _lbDescription.text = NSLocalizedString(@"first_usage_greeting", nil);
-    [_btnStart setTitle:NSLocalizedString(@"get_started", nil) forState:UIControlStateNormal];
+    _lbDescription.text = OALocalizedString(@"first_usage_greeting");
+    [_btnStart setTitle:OALocalizedString(@"get_started") forState:UIControlStateNormal];
 }
 
 - (void)didReceiveMemoryWarning {

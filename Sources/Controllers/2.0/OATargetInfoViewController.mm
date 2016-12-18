@@ -127,7 +127,7 @@
         if (_nearestWiki.count > 0)
         {
             UIImage *icon = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_wiki_place", [OAUtilities drawablePostfix]]];
-            OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", NSLocalizedString(@"wiki_around", nil), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
+            OARowInfo *wikiRowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:[NSString stringWithFormat:@"%@ (%d)", OALocalizedString(@"wiki_around"), (int)_nearestWiki.count] textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             wikiRowInfo.collapsable = YES;
             wikiRowInfo.collapsed = YES;
             wikiRowInfo.collapsableView = [[OACollapsableWikiView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];

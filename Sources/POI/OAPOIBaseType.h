@@ -29,5 +29,6 @@
 - (void)addPoiAdditional:(OAPOIType *)poiType;
 
 - (UIImage *)icon;
+- (NSString *)iconName;
 
 @end

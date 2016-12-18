@@ -7,6 +7,8 @@
 //
 
 #import "OAHistoryItem.h"
+#import "OADefaultFavorite.h"
+#import "OAUtilities.h"
 
 @implementation OAHistoryItem
 
@@ -22,7 +24,26 @@
 
 -(UIImage *)icon
 {
-    return (self.hType == OAHistoryTypeParking ? [UIImage imageNamed:@"ic_parking_pin_small"] : [UIImage imageNamed:@"ic_map_pin_small"]);
+    if (self.hType == OAHistoryTypeParking)
+    {
+        return [UIImage imageNamed:@"ic_parking_pin_small"];
+    }
+    else if (self.iconName.length > 0)
+    {
+        if (self.hType == OAHistoryTypeFavorite)
+        {
+            UIImage *img = [UIImage imageNamed:self.iconName];
+            if (img)
+                return img;
+        }
+        else
+        {
+            UIImage *img = [UIImage imageNamed:self.iconName];
+            if (img)
+                return [OAUtilities applyScaleFactorToImage:img];
+        }
+    }
+    return [UIImage imageNamed:@"ic_map_pin_small"];
 }
 
 @end

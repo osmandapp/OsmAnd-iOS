@@ -18,6 +18,8 @@
 #define POINT_COL_LON @"flon"
 #define POINT_COL_NAME @"fname"
 #define POINT_COL_TYPE @"ftype"
+#define POINT_COL_ICON_NAME @"ficonname"
+#define POINT_COL_TYPE_NAME @"ftypename"
 
 @implementation OAHistoryDB
 {
@@ -77,12 +79,17 @@
         else
         {
             // Upgrade if needed
-            /*
             if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
             {
                 char *errMsg;
-                
-                const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TABLE_NAME, POINT_COL_COLOR] UTF8String];
+                const char *sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TABLE_NAME, POINT_COL_ICON_NAME] UTF8String];
+                if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                {
+                    //Failed to add column. Already exists;
+                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
+
+                sql_stmt = [[NSString stringWithFormat:@"ALTER TABLE %@ ADD COLUMN %@ text", TABLE_NAME, POINT_COL_TYPE_NAME] UTF8String];
                 if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {
                     //Failed to add column. Already exists;
@@ -93,7 +100,6 @@
             {
                 // Failed to upate database
             }
-             */
         }
         
     });
@@ -107,8 +113,13 @@
            (int64_t)[[name dataUsingEncoding:NSUTF8StringEncoding] crc32];
 }
 
-- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type
+- (void)addPoint:(double)latitude longitude:(double)longitude time:(NSTimeInterval)time name:(NSString *)name type:(OAHistoryType)type iconName:(NSString *)iconName typeName:(NSString *)typeName
 {
+    if (!iconName)
+        iconName = @"";
+    if (!typeName)
+        typeName = @"";
+    
     dispatch_async(dbQueue, ^{
         sqlite3_stmt    *statement;
         
@@ -116,7 +127,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE];
+            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@, %@, %@, %@, %@, %@) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME];
             
             const char *update_stmt = [query UTF8String];
             
@@ -127,6 +138,8 @@
             sqlite3_bind_double(statement, 4, longitude);
             sqlite3_bind_text(statement, 5, [name UTF8String], -1, SQLITE_TRANSIENT);
             sqlite3_bind_int(statement, 6, type);
+            sqlite3_bind_text(statement, 7, [iconName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 8, [typeName UTF8String], -1, SQLITE_TRANSIENT);
             
             sqlite3_step(statement);
             sqlite3_finalize(statement);
@@ -170,7 +183,7 @@
         
         if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
         {
-            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, TABLE_NAME]];
+            NSMutableString *querySQL = [NSMutableString stringWithString:[NSString stringWithFormat:@"SELECT ROWID, %@, %@, %@, %@, %@, %@, %@, %@ FROM %@", POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME, TABLE_NAME]];
             
             if (selectPostfix)
                 [querySQL appendFormat:@" %@", selectPostfix];
@@ -200,6 +213,14 @@
                     
                     OAHistoryType type = sqlite3_column_int(statement, 6);
 
+                    NSString *iconName;
+                    if (sqlite3_column_text(statement, 7) != nil)
+                        iconName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 7)];
+
+                    NSString *typeName;
+                    if (sqlite3_column_text(statement, 8) != nil)
+                        typeName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 8)];
+
                     NSDate *date = [NSDate dateWithTimeIntervalSince1970:time];
                     
                     item.hId = hId;
@@ -209,6 +230,8 @@
                     item.longitude = lon;
                     item.name = name;
                     item.hType = type;
+                    item.iconName = iconName;
+                    item.typeName = typeName;
                     
                     [arr addObject:item];
                 }
@@ -223,12 +246,20 @@
 
 - (NSArray *)getSearchHistoryPoints:(int)count
 {
-    return [self getPoints:[NSString stringWithFormat:@"GROUP BY %@ HAVING MAX(%@)", POINT_COL_HASH, POINT_COL_TIME] limit:count];
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ > %d GROUP BY %@ HAVING MAX(%@)", POINT_COL_TYPE, (int)OAHistoryTypeUnknown, POINT_COL_HASH, POINT_COL_TIME] limit:count];
 }
 
-- (NSArray *)getPointsHavingKnownType:(int)count
+- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
 {
-    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ > %d", POINT_COL_TYPE, OAHistoryTypeUnknown] limit:count];
+    NSMutableString *arrayStr = [NSMutableString string];
+    for (NSNumber *t in types)
+    {
+        if (arrayStr.length > 0)
+            [arrayStr appendString:@","];
+        [arrayStr appendFormat:@"%d", [t intValue]];
+    }
+    return [self getPoints:[NSString stringWithFormat:@"WHERE %@ in (%@)", POINT_COL_TYPE, arrayStr] limit:limit];
 }
+
 
 @end

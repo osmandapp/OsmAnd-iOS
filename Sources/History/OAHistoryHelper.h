@@ -16,6 +16,9 @@
 @property (readonly) OAObservable* historyPointRemoveObservable;
 @property (readonly) OAObservable* historyPointsRemoveObservable;
 
+@property (readonly, nonatomic) NSArray<NSNumber *> *destinationTypes;
+@property (readonly, nonatomic) NSArray<NSNumber *> *searchTypes;
+
 + (OAHistoryHelper*)sharedInstance;
 
 - (void)addPoint:(OAHistoryItem *)item;
@@ -23,8 +26,7 @@
 - (void)removePoints:(NSArray *)items;
 
 - (NSArray *)getAllPoints;
-- (NSArray *)getLastPointsWithLimit:(int)count;
-- (NSArray *)getSearchHistoryPoints:(int)count;
-- (NSArray *)getPointsHavingKnownType:(int)count;
+- (NSArray *)getSearchHistoryPoints:(int)limit;
+- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit;
 
 @end

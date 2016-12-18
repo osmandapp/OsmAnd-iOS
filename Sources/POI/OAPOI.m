@@ -25,6 +25,14 @@
         return nil; //[UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-hdpi/mx_%@", self.name]];
 }
 
+- (NSString *)iconName
+{
+    if (_type)
+        return [_type iconName];
+    else
+        return nil;
+}
+
 -(void)setValues:(NSDictionary *)values
 {
     _values = values;

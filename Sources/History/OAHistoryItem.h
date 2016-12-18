@@ -16,6 +16,8 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeDirection,
     OAHistoryTypeParking,
     OAHistoryTypeRouteWpt,
+    OAHistoryTypeFavorite,
+    OAHistoryTypePOI,
 };
 
 @property (nonatomic) int64_t hId;
@@ -26,8 +28,14 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 
 @property (nonatomic) NSDate *date;
 @property (nonatomic) NSString *name;
+@property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *typeName;
 
 @property (nonatomic) OAHistoryType hType;
+
+@property (nonatomic) NSString *distance;
+@property (nonatomic, assign) double distanceMeters;
+@property (nonatomic, assign) double direction;
 
 - (UIImage *)icon;
 

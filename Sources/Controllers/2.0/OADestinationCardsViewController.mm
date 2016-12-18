@@ -301,7 +301,8 @@
         [sections addObject:directionsCardController];
     }
 
-    if ([[OAHistoryHelper sharedInstance] getPointsHavingKnownType:1].count > 0)
+    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+    if ([helper getPointsHavingTypes:helper.destinationTypes limit:1].count > 0)
     {
         OAHistoryCardController *historyCardController;
         for (OADestinationCardBaseController *card in _sections)

@@ -29,6 +29,9 @@
     self = [super init];
     if (self)
     {
+        _destinationTypes = @[@(OAHistoryTypeDirection), @(OAHistoryTypeParking), @(OAHistoryTypeRouteWpt)];
+        _searchTypes = @[@(OAHistoryTypeFavorite), @(OAHistoryTypePOI)];
+
         _db = [[OAHistoryDB alloc] init];
         _historyPointAddObservable = [[OAObservable alloc] init];
         _historyPointRemoveObservable = [[OAObservable alloc] init];
@@ -39,7 +42,7 @@
 
 - (void)addPoint:(OAHistoryItem *)item
 {
-    [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType];
+    [_db addPoint:item.latitude longitude:item.longitude time:[item.date timeIntervalSince1970] name:item.name type:item.hType iconName:item.iconName typeName:item.typeName];
     [_historyPointAddObservable notifyEventWithKey:item];
 }
 
@@ -62,19 +65,14 @@
     return [_db getPoints:nil limit:0];
 }
 
-- (NSArray *)getLastPointsWithLimit:(int)count
+- (NSArray *)getSearchHistoryPoints:(int)limit
 {
-    return [_db getPoints:nil limit:count];
+    return [_db getSearchHistoryPoints:limit];
 }
 
-- (NSArray *)getSearchHistoryPoints:(int)count
+- (NSArray *)getPointsHavingTypes:(NSArray<NSNumber *> *)types limit:(int)limit
 {
-    return [_db getSearchHistoryPoints:count];
-}
-
-- (NSArray *)getPointsHavingKnownType:(int)count
-{
-    return [_db getPointsHavingKnownType:count];
+    return [_db getPointsHavingTypes:types limit:limit];
 }
 
 @end

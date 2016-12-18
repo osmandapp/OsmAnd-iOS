@@ -30,5 +30,6 @@
 @property (nonatomic) NSDictionary *localizedContent;
 
 - (UIImage *)icon;
+- (NSString *)iconName;
 
 @end

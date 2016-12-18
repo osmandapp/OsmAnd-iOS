@@ -29,6 +29,11 @@
     return [OAUtilities applyScaleFactorToImage:img];
 }
 
+- (NSString *)iconName
+{
+    return [NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], self.name];
+}
+
 -(BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[OAPOIBaseType class]]) {

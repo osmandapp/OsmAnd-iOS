@@ -32,6 +32,6 @@
 
 + (OAFavoriteColor *)nearestFavColor:(UIColor *)sourceColor;
 
-+ (NSArray*)builtinColors;
++ (NSArray *)builtinColors;
 
 @end

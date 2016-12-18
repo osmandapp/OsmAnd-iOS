@@ -38,4 +38,25 @@
     return nil;
 }
 
+-(NSString *)iconName
+{
+    NSString *name;
+    const auto allFavorites = [OsmAndApp instance].favoritesCollection->getFavoriteLocations();
+    
+    // create favorite groups
+    for(const auto& favorite : allFavorites)
+    {
+        OsmAnd::LatLon latLon = favorite->getLatLon();
+        if ([OAUtilities doublesEqualUpToDigits:5 source:latLon.longitude destination:self.parent.longitude] &&
+            [OAUtilities doublesEqualUpToDigits:5 source:latLon.latitude destination:self.parent.latitude])
+        {
+            UIColor* color = [UIColor colorWithRed:favorite->getColor().r/255.0 green:favorite->getColor().g/255.0 blue:favorite->getColor().b/255.0 alpha:1.0];
+            
+            OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+            return favCol.iconName;
+        }
+    }
+    return name;
+}
+
 @end

@@ -82,7 +82,8 @@
 {
     [_items removeAllObjects];
 
-    NSArray *arr = [[OAHistoryHelper sharedInstance] getPointsHavingKnownType:HISTORY_CARD_ROWS];
+    OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
+    NSArray *arr = [helper getPointsHavingTypes:helper.destinationTypes limit:HISTORY_CARD_ROWS];
     
     for (OAHistoryItem *item in arr)
     {

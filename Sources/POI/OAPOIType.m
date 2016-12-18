@@ -32,6 +32,11 @@
     return img;
 }
 
+-(NSString *)iconName
+{
+    return [NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value];
+}
+
 - (UIImage *)mapIcon
 {
     UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mm_%@", [OAUtilities drawablePostfix], self.name]];

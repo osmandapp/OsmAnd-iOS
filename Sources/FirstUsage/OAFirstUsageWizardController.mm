@@ -133,26 +133,26 @@ typedef enum
                                                                 andObserve:_app.downloadsManager.completedObservable];
 
     // Init wizard
-    _lbTitle.text = NSLocalizedString(@"download_map", nil);
-    _lbDescription.text = NSLocalizedString(@"first_usage_wizard_desc", nil);
-    [_btnSkip setTitle:NSLocalizedString(@"intro_skip", nil) forState:UIControlStateNormal];
+    _lbTitle.text = OALocalizedString(@"download_map");
+    _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
+    [_btnSkip setTitle:OALocalizedString(@"intro_skip") forState:UIControlStateNormal];
     
     // Init no location view
-    _lbLocationNotFound.text = NSLocalizedString(@"location_not_found", nil);
-    [_btnSearchLocation setTitle:NSLocalizedString(@"search_my_location", nil) forState:UIControlStateNormal];
+    _lbLocationNotFound.text = OALocalizedString(@"location_not_found");
+    [_btnSearchLocation setTitle:OALocalizedString(@"search_my_location") forState:UIControlStateNormal];
 
     // Init no inet view
-    _lbNoInet.text = NSLocalizedString(@"no_inet_connection", nil);
-    _lbNoInteDesc.text = NSLocalizedString(@"no_inet_connection_desc_map", nil);
-    [_btnTryAgain setTitle:NSLocalizedString(@"try_again", nil) forState:UIControlStateNormal];
+    _lbNoInet.text = OALocalizedString(@"no_inet_connection");
+    _lbNoInteDesc.text = OALocalizedString(@"no_inet_connection_desc_map");
+    [_btnTryAgain setTitle:OALocalizedString(@"try_again") forState:UIControlStateNormal];
 
     // Init searching location view
-    _lbSearchingLocation.text = NSLocalizedString(@"search_location", nil);
-    [_btnSearchingLocation setTitle:NSLocalizedString(@"download", nil) forState:UIControlStateNormal];
+    _lbSearchingLocation.text = OALocalizedString(@"search_location");
+    [_btnSearchingLocation setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
 
     // Init searching map view
-    _lbSearchingMap.text = NSLocalizedString(@"search_map", nil);
-    [_btnSearchingMap setTitle:NSLocalizedString(@"download", nil) forState:UIControlStateNormal];
+    _lbSearchingMap.text = OALocalizedString(@"search_map");
+    [_btnSearchingMap setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
 
     // Init download map view
     UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(4.0, 4.0)];
@@ -160,13 +160,13 @@ typedef enum
     maskLayer.frame = self.view.bounds;
     maskLayer.path  = maskPath.CGPath;
     _btnDownload.layer.mask = maskLayer;
-    [_btnDownload setTitle:NSLocalizedString(@"download", nil) forState:UIControlStateNormal];
-    [_btnSelectMap setTitle:NSLocalizedString(@"search_another_country", nil) forState:UIControlStateNormal];
+    [_btnDownload setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
+    [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
     // Init progress view
     _btnRestart1.hidden = YES;
     _btnRestart2.hidden = YES;
-    [_btnGoToMap setTitle:NSLocalizedString(@"show_region_on_map_go", nil) forState:UIControlStateNormal];
+    [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
     
     [self startWizard];
 }
@@ -223,7 +223,7 @@ typedef enum
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"skip_map_downloading", nil) message:NSLocalizedString(@"skip_map_downloading_desc", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"shared_string_cancel", nil) otherButtonTitles:NSLocalizedString(@"intro_skip", nil), NSLocalizedString(@"shared_string_select", nil), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles:OALocalizedString(@"intro_skip"), OALocalizedString(@"shared_string_select"), nil];
     alert.tag = ALERT_SKIP;
     [alert show];
 }

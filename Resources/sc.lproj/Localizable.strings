@@ -455,3 +455,23 @@
 "gpx_edit_mode" = "Modalidade de modìfica";
 "go_to_map" = "Bae a sa mapa";
 "device_memory" = "Memòria dispositivu";
+"wiki_around" = "Artìculos de Wikipedia a curtzu";
+"skip_map_downloading" = "Brinca s'iscarrigamentu de sas mapas";
+// Shared Strings
+"shared_string_select" = "Ischerta";
+"shared_string_of" = "de";
+"gpx_waypoint" = "Puntu de coladòrgiu";
+"menu_my_directions" = "Diretziones meas";
+"free_memory" = "Lìbera %@";
+"first_usage_greeting" = "Retzi indicatziones e iscoberi logos noos chene una connessione a ìnternet";
+"get_started" = "Incumintza";
+"first_usage_wizard_desc" = "Lassa agatare sa positzione tua a OsmAnd e faghe·ti impositare sas mapas de iscarrigare pro cussa regione.";
+"location_not_found" = "Positzione non agatada";
+"search_my_location" = "Chirca sa positzione mea";
+"no_inet_connection" = "Peruna connessione a ìnternet";
+"no_inet_connection_desc_map" = "Nde b'est bisòngiu pro iscarrigare mapas.";
+"try_again" = "Torra a proare";
+"search_location" = "Chirchende sa positzione…";
+"search_map" = "Chirchende sa mapa…";
+"search_another_country" = "Issèbera un'àtera regione";
+"categories" = "Categorias";

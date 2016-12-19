@@ -483,3 +483,4 @@
 "skip_map_downloading" = "Omet els mapes en procés de baixada";
 "skip_map_downloading_desc" = "No teniu cap mapa instal·lat per consultar sense internet. En podeu triar un de la llista o baixar-ne més tard via Menú - Gestiona fitxers de mapes";
 "wiki_around" = "Articles de la zona a la Viquipèdia";
+"categories" = "Categories";

@@ -201,8 +201,8 @@
 - (void)processNearestWiki
 {
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
-    NSMutableArray<OAPOI *> *wiki = [[OAPOIHelper findPOIsByTagName:@"wikipedia" location:locI categoryName:nil poiTypeName:nil radius:250] mutableCopy];
-    [wiki addObjectsFromArray:[OAPOIHelper findPOIsByTagName:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250]];
+    NSMutableArray<OAPOI *> *wiki = [[OAPOIHelper findPOIsByTagName:@"wikipedia" name:nil location:locI categoryName:nil poiTypeName:nil radius:250] mutableCopy];
+    [wiki addObjectsFromArray:[OAPOIHelper findPOIsByTagName:nil name:nil location:locI categoryName:@"osmwiki" poiTypeName:nil radius:250]];
     
     [wiki sortUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
      {

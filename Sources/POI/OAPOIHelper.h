@@ -56,7 +56,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 -(void)findPOIsByKeyword:(NSString *)keyword;
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 
-+(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
++(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
 
 -(BOOL)breakSearch;
 

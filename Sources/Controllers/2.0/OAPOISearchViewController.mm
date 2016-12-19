@@ -1666,7 +1666,45 @@
 
 -(void)didSelectHistoryItem:(OAHistoryItem *)item
 {
-    [self goToPoint:item.latitude longitude:item.longitude];
+    if (item.hType == OAHistoryTypeFavorite)
+    {
+        BOOL foundFav = NO;
+        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations()) {
+            
+            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:item.longitude]
+                && [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:item.latitude]
+                && [item.name isEqualToString:favLoc->getTitle().toNSString()])
+            {
+                UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
+                OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
+
+                if ([item.iconName isEqualToString:favCol.iconName])
+                {
+                    foundFav = YES;
+                    [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.name icon:item.icon pushed:NO];
+                    break;
+                }
+            }
+        }
+        
+        if (!foundFav)
+            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
+    }
+    else if (item.hType == OAHistoryTypePOI)
+    {
+        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.latitude, item.longitude));
+        NSArray<OAPOI *> *pois = [OAPOIHelper findPOIsByTagName:nil name:item.name location:locI categoryName:nil poiTypeName:nil radius:10];
+        
+        if (pois.count > 0)
+            [self goToPoint:pois[0]];
+        else
+            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
+    }
+    else
+    {
+        [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

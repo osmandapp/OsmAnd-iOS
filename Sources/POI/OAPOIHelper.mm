@@ -429,7 +429,7 @@
 
 }
 
-+(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
++(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius
 {
     OsmAndAppInstance _app = [OsmAndApp instance];
     const auto& obfsCollection = _app.resourcesManager->obfsCollection;
@@ -456,11 +456,11 @@
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
     NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
     search->performSearch(*searchCriteria,
-                          [&arr, &tagName, &location]
+                          [&arr, &tagName, &name, &location]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
-                              if (poi && (!tagName || [poi.values valueForKey:tagName]))
+                              if (poi && (!tagName || [poi.values valueForKey:tagName]) && (!name || [poi.nameLocalized isEqualToString:name]))
                               {
                                   const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                   poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);

@@ -812,6 +812,7 @@
 
 - (void)updateEditingMode:(BOOL)value animated:(BOOL)animated
 {
+    [_waypointsController.tableView beginUpdates];
     [_waypointsController setEditing:value animated:YES];
     [self updateWaypointsButtons];
     
@@ -844,6 +845,7 @@
             _waypointsController.view.frame = self.contentView.bounds;
         }];
     }
+    [_waypointsController.tableView endUpdates];
 }
 
 - (IBAction)segmentClicked:(id)sender

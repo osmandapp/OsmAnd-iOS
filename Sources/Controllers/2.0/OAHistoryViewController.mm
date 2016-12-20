@@ -470,6 +470,7 @@
 
 - (IBAction)editButtonClicked:(id)sender
 {
+    [self.tableView beginUpdates];
     [self.tableView setEditing:![self.tableView isEditing] animated:YES];
     
     if ([self.tableView isEditing])
@@ -484,6 +485,7 @@
         [self.editButton setImage:[UIImage imageNamed:@"icon_edit"] forState:UIControlStateNormal];
         [self.backButton setHidden:NO];
     }
+    [self.tableView endUpdates];
 }
 
 - (IBAction)goRootScreen:(id)sender {

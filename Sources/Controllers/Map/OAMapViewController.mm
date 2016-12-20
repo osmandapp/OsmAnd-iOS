@@ -3525,6 +3525,11 @@
             }
         }
     }
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [NSThread cancelPreviousPerformRequestsWithTarget:self selector:@selector(waitForIdle) object:nil];
+        [self performSelector:@selector(waitForIdle) withObject:nil afterDelay:1.0];
+    });
 }
 
 - (void)doUpdateUnderlay

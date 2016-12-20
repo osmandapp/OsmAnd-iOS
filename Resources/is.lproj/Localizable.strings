@@ -1,45 +1,40 @@
-
 "OsmAnd Maps" = "OsmAnd Maps";
-
 // Shared Strings
-"shared_string_select" = "Select";
+"shared_string_select" = "Velja";
 "shared_string_back" = "Back";
-"shared_string_ok" = "OK";
-"shared_string_cancel" = "Cancel";
-"shared_string_no" = "No";
-"shared_string_yes" = "Yes";
-"shared_string_save" = "Save";
+"shared_string_ok" = "Í lagi";
+"shared_string_cancel" = "Hætta við";
+"shared_string_no" = "Nei";
+"shared_string_yes" = "Já";
+"shared_string_save" = "Vista";
 "shared_string_done" = "Done";
-"shared_string_update" = "Update";
+"shared_string_update" = "Uppfæra";
 "shared_string_install" = "Install";
 "shared_string_uninstall" = "Uninstall";
-"shared_string_delete" = "Delete";
-"shared_string_remove" = "Remove";
-"shared_string_dismiss" = "Dismiss";
-"shared_string_add" = "Add";
+"shared_string_delete" = "Eyða";
+"shared_string_remove" = "Fjarlægja";
+"shared_string_dismiss" = "Hunsa";
+"shared_string_add" = "Bæta við";
 "shared_string_buy" = "Buy";
 "shared_string_buy_for" = "for";
-"shared_string_or" = "or";
-"shared_string_and" = "and";
-"shared_string_edit" = "Edit";
+"shared_string_or" = "eða";
+"shared_string_and" = "og";
+"shared_string_edit" = "Breyta";
 "shared_string_modify" = "Modify";
 "shared_string_later" = "Later";
 "shared_string_of" = "of";
-
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
-
 // HUD
 "hud_heading" = "Heading";
 "hud_no_movement" = "No movement";
-
 // Favorites
 "fav_color" = "Color";
 "fav_colors" = "Colors";
 "fav_name" = "Name";
 "fav_group" = "Group";
 "groups" = "Groups";
-"favorite" = "Favorite";
+"favorite" = "Eftirlæti";
 "my_favorites" = "My Favorites";
 "fav_no_group" = "No group";
 "fav_remove_q" = "Remove favorite?";
@@ -59,37 +54,30 @@
 "fav_rename_q" = "Rename favorite";
 "fav_enter_new_name" = "Please enter new name for the favorite";
 "fav_select" = "Please select favorites";
-
 // POI
 "poi_insrease_radius" = "Increase search radius to";
 "poi_max_radius_reached" = "Maximum search radius reached";
 "poi_search_near_center" = "Search is performed near the center of the map";
 "poi_hide" = "Hide";
-
 // My Places
 "favorites" = "Favorites";
 "tracks" = "Trips";
-
 // GPX
 "gpx_point" = "Point";
 "gpx_waypoint" = "Waypoint";
 "gpx_waypoints" = "Waypoints";
 "gpx_points" = "Point(s)";
 "gpx_export" = "Export";
-
 "import_export" = "Import/Export";
-
 "gpx_import_title" = "Import trip";
 "gpx_import_already_exists" = "The specified trip file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-
 "gpx_export_title" = "Export trip";
 "gpx_export_select_track" = "Please select trip for Export";
 "gpx_import_desc" = "You can import your GPX files (common GPS data format)\n\nTo share the GPX file you can open file from Dropbox, Email, or any other source - Use Open In function";
 "gpx_no_tracks" = "There are no trips";
-
 "gpx_remove" = "Remove trip?";
 "gpx_stat" = "Statistics";
 "gpx_route" = "Route";
@@ -119,17 +107,14 @@
 "track_clear_q" = "Do you want to clear current track?";
 "show_info" = "Show Info";
 "record_trip" = "Record your trip";
-
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "gpx_speed" = "Speed";
-
 // Map settings
 "m_style_overview" = "Overview";
 "m_style_car" = "Car";
 "m_style_walk" = "Walking";
 "m_style_bicycle" = "Bicycle";
-
 "map_settings_map" = "Map";
 "map_settings_show" = "Show on map";
 "map_settings_type" = "Map type";
@@ -146,7 +131,6 @@
 "map_settings_transp" = "Transparency";
 "map_settings_avail_lay" = "Available layers";
 "map_settings_hillshade" = "Hillshade";
-
 // Intro
 "intro_skip" = "Skip";
 "intro_download" = "Download\nmap";
@@ -154,7 +138,6 @@
 "intro_welcome" = "Welcome to\nOsmAnd";
 "intro_promo" = "Global offline maps";
 "intro_placeholder" = "enter the name of your region";
-
 // Settings
 "sett_settings" = "Settings";
 "sett_units" = "Units";
@@ -170,32 +153,26 @@
 "sett_arr" = "Map arrows";
 "sett_arr_loc" = "Location";
 "sett_arr_map" = "Map center";
-
 "sett_lang_local" = "Local";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "sett_lang_show_trans" = "Transliterate names";
-
 "maps" = "Maps";
 "purchases" = "Purchases";
-
 // Purchases
 "prch_addons" = "Addons";
-
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-
 "download" = "Download";
 "nothanks" = "No, thanks";
 "download_now" = "Download map now";
 "prch_failed" = "Purchase of \"%@\" has failed";
 "prch_items_failed" = "item(s) were not restored. Please try again.";
-
 // Resources
 "res_mapsres" = "Maps & Resources";
 "res_installed" = "Installed";
@@ -237,14 +214,12 @@
 "res_updates_no_space" = "Not enough space to install %d update(s). %@ is needed. Please free up some space.";
 "res_updates_avail_q" = "update(s) are available.";
 "res_updates_exp" = "Please purchase continent(s) to update the maps";
-
 // Menu
 "menu_my_places" = "My Places";
 "menu_my_trips" = "My Trips";
 "menu_my_directions" = "My Directions";
 "menu_feedback" = "Feedback";
 "menu_about" = "About";
-
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -263,7 +238,6 @@
 "cannot_add_marker" = "Cannot add Parking";
 "cannot_add_marker_desc" = "Please remove one direction at least and retry";
 "cannot_add_destination" = "Cannot add Direction";
-
 // Units
 "units_km" = "km";
 "units_m" = "m";
@@ -272,17 +246,13 @@
 "units_ft" = "ft";
 "units_kmh" = "km/h";
 "units_mph" = "mph";
-
 "units_hour" = "h";
 "units_min" = "min";
 "units_sec" = "sec";
-
-
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";
 "map_remind" = "Remind me later";
 "map_no_address" = "Address is not known yet";
-
 // Import
 "import_title" = "Import data";
 "import_choose_type" = "Please choose what to import";
@@ -290,20 +260,16 @@
 "import_failed" = "Import failed";
 "import_cannot" = "The specified file cannot be imported";
 "import_gpx" = "GPX Track";
-
 // Alerts
 "alert_inet_needed" = "Internet connection required to perform this action. Please check your Internet connection.";
-
 // Context menu
 "ctx_mnu_edit_fav" = "Edit favorite";
 "ctx_mnu_add_fav" = "Add favorite";
 "ctx_mnu_share" = "Share";
 "ctx_mnu_direction" = "Direction";
-
 // Location Services
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
-
 // Colors
 "col_purple" = "Purple";
 "col_green" = "Green";
@@ -313,7 +279,6 @@
 "col_red" = "Red";
 "col_blue" = "Blue";
 "col_magenta" = "Magenta";
-
 // World Regions
 "region_africa" = "Africa";
 "region_asia" = "Asia";
@@ -323,72 +288,61 @@
 "region_north_america" = "North America";
 "region_russia" = "Russia";
 "region_south_america" = "South America";
-
 // Help
 "help_quiz" = "Quiz";
-
 // Rendering categories
-"rendering_category_hide" = "Hide";
-"rendering_category_routes" = "Routes";
-"rendering_category_details" = "Details";
-"rendering_category_transport" = "Transport";
-"rendering_category_others" = "Other map attributes";
-
+"rendering_category_hide" = "Fela";
+"rendering_category_routes" = "Leiðir";
+"rendering_category_details" = "Nánar";
+"rendering_category_transport" = "Samgöngur";
+"rendering_category_others" = "Önnur eigindi korts";
 // Rendering attributes
 "rendering_attr_showAccess_name" = "Show access restrictions";
-"rendering_attr_showSurfaceGrade_name" = "Show road quality";
-"rendering_attr_showSurfaces_name" = "Show road surface";
-"rendering_attr_moreDetailed_name" = "More details";
-"rendering_attr_subwayMode_name" = "Subway routes";
-"rendering_attr_tramTrainRoutes_name" = "Tram and train routes";
-"rendering_attr_streetLighting_name" = "Street lighting";
-"rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
+"rendering_attr_showSurfaceGrade_name" = "Sýna gæði vega";
+"rendering_attr_showSurfaces_name" = "Sýna yfirborð vega";
+"rendering_attr_moreDetailed_name" = "Nánari upplýsingar";
+"rendering_attr_subwayMode_name" = "Leiðir neðanjarðarlesta";
+"rendering_attr_tramTrainRoutes_name" = "Leiðir lesta og sporvagna";
+"rendering_attr_streetLighting_name" = "Götulýsing";
+"rendering_attr_coloredBuildings_name" = "Lita byggingar eftir gerð";
 "rendering_attr_alpineHiking_name" = "Alpine hiking scale (SAC)";
 "rendering_attr_hikingRoutesOSMC_name" = "Hiking symbol overlay";
-"rendering_attr_showCycleRoutes_name" = "Show cycle routes";
+"rendering_attr_showCycleRoutes_name" = "Sýna hjólaleiðir";
 "rendering_attr_hideBuildings_name" = "Hide buildings";
 "rendering_attr_noPolygons_name" = "Hide polygons";
 "rendering_attr_noAdminboundaries_name" = "Hide boundaries";
-"rendering_attr_publicTransportMode_name" = "Bus, trolleybus, shuttle routes";
-"rendering_attr_contourLines_name" = "Show contour lines";
+"rendering_attr_publicTransportMode_name" = "Strætisvagnaleiðir, sporvagnar og skutluleiðir";
+"rendering_attr_contourLines_name" = "Birta hæðarlínur";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
-"rendering_attr_roadStyle_name" = "Road style";
-"rendering_value_default_name" = "Default";
-"rendering_value_disabled_name" = "Disabled";
-"rendering_value_orange_name" = "Orange";
-"rendering_value_germanRoadAtlas_name" = "German road atlas";
-"rendering_value_highContrastRoads_name" = "High contrast roads";
-"rendering_value_americanRoadAtlas_name" = "American road atlas";
+"rendering_attr_roadStyle_name" = "Stíll götu";
+"rendering_value_default_name" = "Sjálfgefið";
+"rendering_value_disabled_name" = "Óvirkt";
+"rendering_value_orange_name" = "Appelsínugult";
+"rendering_value_germanRoadAtlas_name" = "Þýsk vegakort";
+"rendering_value_highContrastRoads_name" = "Götukort með mikil birtuskil";
+"rendering_value_americanRoadAtlas_name" = "Amerísk vegakort";
 "rendering_value_walkingRoutesOSMC_name" = "Coloring according to OSMC";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Coloring according to route scope";
-
 "units_minutes_short" = "min";
 "units_seconds_short" = "sec";
-
 "cannot_access_calendar" = "Cannot access Calendar";
 "reminder_not_set_text" = "The reminder was not set since you are not allowed access to the Calendar";
-
 //inapps
 "product_title_nautical" = "Nautical map";
 "product_desc_nautical" = "Nautical map of all world";
 "product_desc_ext_nautical" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-
 "product_title_parking" = "Parking Position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "product_desc_ext_parking" = "OsmAnd Parking Plugin reminds you of your parking position. It is a plugin for OsmAnd Maps&Navigation app.\nChoose a time-independent reminder (only a marker on the map) or a time-limited one with alarm upon time expiration (includes also a marker on the map). To use the plugin, enable it in the Plugins menu.";
-
 "product_title_skimap" = "Ski map";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "product_desc_ext_skimap" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-
 "product_title_track_recording" = "Trip recording";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "product_desc_ext_track_recording" = "Record your trips and save them manually using OsmAnd Trip recording plugin. Export your trip as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their trips.";
-
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
-
 "product_title_africa" = "Africa";
 "product_desc_africa" = "Map of Africa";
 "product_title_australia" = "Australia";
@@ -407,33 +361,28 @@
 "product_desc_allworld" = "Map of All World";
 "product_title_asia" = "Asia";
 "product_desc_asia" = "Map of Asia";
-
 "product_title_wiki" = "Wikipedia";
 "product_desc_wiki" = "Wikipedia data";
 "product_desc_ext_wiki" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "product_title_srtm" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
 "product_desc_ext_srtm" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
-
 "latitude" = "Latitude";
 "longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-
 "enter_description" = "Enter description";
-"description" = "Description";
+"description" = "Lýsing";
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing...";
 "res_roads" = "Roads";
 "res_srtm" = "Contour lines";
 "res_wiki" = "Wikipedia";
 "res_hillshade" = "Hillshade";
-
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -444,24 +393,19 @@
 "enter_name" = "Enter name";
 "not_selected" = "Not selected";
 "language" = "Language";
-
 "you_searching" = "You are searching";
 "from_location" = "away";
-
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "purchase_get" = "Get";
 "srtm_disabled" = "Contour lines disabled";
 "prch_wiki_info" = "Wikipedia addon enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines addon enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-
 "time_open" = "Open";
 "time_closed" = "Closed";
 "time_will_close" = "Will close in";
 "time_will_open" = "Will open in";
-
 "menu_active_trips" = "Active";
 "menu_all_trips" = "All Trips";
-
 "total_time" = "Total time";
 "moving_time" = "Moving time";
 "change_group" = "Change group";
@@ -473,7 +417,6 @@
 "select_wpt_on_map" = "Select point on map to add to the trip";
 "gpx_rename_q" = "Rename trip";
 "gpx_enter_new_name" = "Please enter new name for the trip";
-
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "gpx_deactivated" = "Deactivated";
 "gpx_trip_groups" = "Trip groups";
@@ -481,14 +424,11 @@
 "show_all" = "Show all";
 "directions" = "Directions";
 "parking" = "Parking";
-
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
-
 "plugins" = "Plugins";
 "open_map_settings" = "Open Map Settings";
-
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
@@ -499,24 +439,18 @@
 "plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
 "plugin_popup_nautical_title" = "Download Nautical maps";
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
-
 "plugin_popup_trip_planning_ask" = "To start planning the trip you need to activate plugin: <b>Trip planning</b>";
-
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
-
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
-
 "no_statistics" = "No statistics";
-
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 "show_region_on_map_title" = "Map downloaded";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
-
 "sqlitedb_import_title" = "Import Map Creator file";
 "sqlitedb_import_already_exists" = "The specified sqlitedb file is already exists. Please choose action.";
 "map_creator" = "Map Creator";
@@ -528,29 +462,20 @@
 "hist_remove_q" = "Do you want to remove history items?";
 "gpx_edit_mode" = "Edit mode";
 "go_to_map" = "Go to Map";
-
-"device_memory" = "Device memory";
+"device_memory" = "Minni tækis";
 "free_memory" = "Free %@";
-
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
-"get_started" = "Get started";
-
-"first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
-
-"location_not_found" = "Location not found";
-"search_my_location" = "Search my location";
-
-"no_inet_connection" = "No Internet connection";
-"no_inet_connection_desc_map" = "Required to download maps.";
-"try_again" = "Try again";
-
-"search_location" = "Searching location…";
-"search_map" = "Searching map…";
-"search_another_country" = "Select another region";
-
-"skip_map_downloading" = "Skip downloading maps";
+"get_started" = "Komast í gang";
+"first_usage_wizard_desc" = "Leyfðu OsmAnd að finna út staðsetninguna þína og stinga upp á kortum fyrir það svæði til að sækja.";
+"location_not_found" = "Staðsetningin fannst ekki";
+"search_my_location" = "Leita á staðsetningunni minni";
+"no_inet_connection" = "Engin internettenging";
+"no_inet_connection_desc_map" = "Nauðsynleg til að sækja kort.";
+"try_again" = "Reyndu aftur";
+"search_location" = "Leita að stað…";
+"search_map" = "Leita að korti…";
+"search_another_country" = "Velja annað svæði";
+"skip_map_downloading" = "Sleppa því að ná í kort";
 "skip_map_downloading_desc" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
-
-"wiki_around" = "Nearby Wikipedia articles";
-
-
+"wiki_around" = "Wikipedia-greinar í nágrenninu";
+"categories" = "Flokkar";

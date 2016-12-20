@@ -13,7 +13,7 @@
 "shared_string_uninstall" = "Uninstall";
 "shared_string_delete" = "Eyða";
 "shared_string_remove" = "Fjarlægja";
-"shared_string_dismiss" = "Hunsa";
+"shared_string_dismiss" = "Hafna";
 "shared_string_add" = "Bæta við";
 "shared_string_buy" = "Buy";
 "shared_string_buy_for" = "for";
@@ -311,7 +311,7 @@
 "rendering_attr_hideBuildings_name" = "Hide buildings";
 "rendering_attr_noPolygons_name" = "Hide polygons";
 "rendering_attr_noAdminboundaries_name" = "Hide boundaries";
-"rendering_attr_publicTransportMode_name" = "Strætisvagnaleiðir, sporvagnar og skutluleiðir";
+"rendering_attr_publicTransportMode_name" = "strætisvagn,strætó,áætlanabifreið,sporvagn,rafknúinn strætisvagn,skutla";
 "rendering_attr_contourLines_name" = "Birta hæðarlínur";
 "rendering_attr_OSMMapperAssistant_name" = "OSM mapper assistant";
 "rendering_attr_roadStyle_name" = "Stíll götu";

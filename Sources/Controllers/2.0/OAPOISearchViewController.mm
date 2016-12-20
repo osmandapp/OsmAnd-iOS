@@ -46,6 +46,12 @@
 #define kBarActionViewHeight 44.0
 #define kTabsHeight 40.0
 
+typedef NS_ENUM(NSInteger, BarActionType)
+{
+    BarActionNone = 0,
+    BarActionShownMap,
+    BarActionEditHistory,
+};
 
 @interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OAPOISearchDelegate, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate>
 
@@ -59,6 +65,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnMyLocation;
 
 @property (weak, nonatomic) IBOutlet UIView *barActionView;
+@property (weak, nonatomic) IBOutlet UIButton *barActionLeftImageButton;
 @property (weak, nonatomic) IBOutlet UIImageView *barActionImageView;
 @property (weak, nonatomic) IBOutlet UIButton *barActionTextButton;
 @property (weak, nonatomic) IBOutlet UIButton *barActionImageButton;
@@ -126,6 +133,9 @@
     UIPageViewController *_pageController;
     OACategoriesTableViewController *_categoriesViewController;
     OAHistoryTableViewController *_historyViewController;
+    
+    BarActionType _barActionType;
+    BOOL _historyEditing;
 }
 
 - (instancetype)init
@@ -189,11 +199,6 @@
     [_tabs setTitle:OALocalizedString(@"categories") forSegmentAtIndex:1];
     [_tabs setSelectedSegmentIndex:0];
     
-    UIImage *mapImage = [UIImage imageNamed:@"waypoint_map_disable.png"];
-    mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-    _barActionImageView.image = mapImage;
-    [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
-
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];
     _tblMove.delegate = self;
@@ -270,13 +275,70 @@
     [self unregisterKeyboardNotifications];
 }
 
-- (void)appplicationIsActive:(NSNotification *)notification {
+- (void)appplicationIsActive:(NSNotification *)notification
+{
     [self showSearchIcon];
 }
 
 -(void)viewWillLayoutSubviews
 {
     [self updateNavbar];
+}
+
+- (void)setupBarActionView:(BarActionType)type title:(NSString *)title
+{
+    if (_barActionType == type)
+        return;
+    
+    switch (type)
+    {
+        case BarActionShownMap:
+        {
+            _barActionLeftImageButton.hidden = YES;
+            UIImage *mapImage = [UIImage imageNamed:@"waypoint_map_disable.png"];
+            mapImage = [mapImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            _barActionImageView.image = mapImage;
+            _barActionImageView.hidden = NO;
+            
+            [UIView performWithoutAnimation:^{
+                if (title)
+                    [_barActionTextButton setTitle:title forState:UIControlStateNormal];
+                else
+                    [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                
+                [_barActionTextButton layoutIfNeeded];
+            }];
+            _barActionTextButton.hidden = NO;
+            _barActionTextButton.userInteractionEnabled = YES;
+            
+            [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
+            _barActionImageButton.hidden = NO;
+
+            break;
+        }
+
+        case BarActionEditHistory:
+        {
+            _barActionImageView.hidden = YES;
+            [_barActionLeftImageButton setImage:[UIImage imageNamed:@"ic_close.png"] forState:UIControlStateNormal];
+            _barActionLeftImageButton.hidden = NO;
+            
+            [UIView performWithoutAnimation:^{
+                [_barActionTextButton setTitle:title forState:UIControlStateNormal];
+                [_barActionTextButton layoutIfNeeded];
+            }];
+            _barActionTextButton.hidden = NO;
+            _barActionTextButton.userInteractionEnabled = NO;
+
+            [_barActionImageButton setImage:[UIImage imageNamed:@"icon_remove.png"] forState:UIControlStateNormal];
+            _barActionImageButton.hidden = NO;
+
+            break;
+        }
+        default:
+            break;
+    }
+    _barActionType = type;
 }
 
 - (void)updateTabsVisibility
@@ -335,9 +397,36 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)barActionLeftImgButtonPress:(id)sender
+{
+    switch (_barActionType) {
+        case BarActionEditHistory:
+            [_historyViewController editDone];
+            [self finishHistoryEditing];
+            break;
+            
+        default:
+            break;
+    }
+}
+
 - (IBAction)barActionImgButtonPress:(id)sender
 {
-    
+    switch (_barActionType) {
+        case BarActionEditHistory:
+            [_historyViewController deleteSelected];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)finishHistoryEditing
+{
+    _historyEditing = NO;
+    [self setupBarActionView:BarActionNone title:nil];
+    [self.view setNeedsLayout];
 }
 
 -(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
@@ -369,14 +458,21 @@
 
 -(void)updateNavbar
 {
-    BOOL showBarActionView = _poiInList && _dataPoiArray.count > 0 && _currentScope != EPOIScopeUndefined;
+    BOOL showBarActionView = _barActionType != BarActionNone;
+    BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchString.length == 0;
+    BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
     CGRect frame = _topView.frame;
-    frame.size.height = kInitialSearchToolbarHeight + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + ([self tabsVisible] ? kTabsHeight : 0.0);
+    frame.size.height = (showInputView ? kInitialSearchToolbarHeight : 20.0) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
     
+    _textField.hidden = !showInputView;
+    _btnCancel.hidden = !showInputView;
     _barActionView.hidden = !showBarActionView;
     _searchNearCenterView.hidden = !showMapCenterSearch;
+    _tabs.hidden = !showTabs;
 
+    _barActionView.frame = CGRectMake(0.0, showInputView ? 60.0 : 20.0, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
+    
     _topView.frame = frame;
     _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
     _pageController.view.frame = _tableView.frame;
@@ -461,7 +557,7 @@
     
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateDistancesAndSort];
-        [_historyViewController updateDistancesAndSort];
+        [_historyViewController updateDistanceAndDirection];
     });
 }
 
@@ -576,6 +672,9 @@
     if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
         _searchRadiusIndex = 0;
     
+    if (_currentScope == EPOIScopeUndefined)
+        [self setupBarActionView:BarActionNone title:nil];
+
     NSString *searchStr = [self.searchString copy];
 
     if (![searchStr isEqualToString:self.searchStringPrev] || _dataInvalidated)
@@ -628,6 +727,8 @@
                         _initData = YES;
                         _poiInList = YES;
                         [self updateDistanceAndDirection];
+                        if (_currentScope != EPOIScopeUndefined)
+                            [self setupBarActionView:BarActionShownMap title:nil];
                         [self updateNavbar];
                     }
                     else
@@ -657,7 +758,6 @@
             self.searchStringPrev = nil;
             
             NSMutableArray *arr = [NSMutableArray array];
-            NSArray *historyArr = [NSMutableArray array];
             NSArray *categories = [OAPOIHelper sharedInstance].poiCategories;
             if (_showTopList)
             {
@@ -671,8 +771,6 @@
                     if (f.top)
                         [arr addObject:f];
                 
-                OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
-                historyArr = [helper getPointsHavingTypes:helper.searchTypes limit:0];
             }
             else
             {
@@ -708,12 +806,7 @@
                     if (_categoriesViewController.dataArray.count > 0)
                         [_categoriesViewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
                     
-                    _historyViewController.dataArray = historyArr;
-                    [_historyViewController.tableView reloadData];
-                    if (_historyViewController.dataArray.count > 0)
-                        [_historyViewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                    [_historyViewController updateDistancesAndSort];
-
+                    [_historyViewController reloadData];
                     self.dataArray = [NSMutableArray array];
                 }
                 else
@@ -1578,6 +1671,8 @@
                 _initData = !_increasingSearchRadius;
                 [self updateDistanceAndDirection];
                 _increasingSearchRadius = NO;
+                if (_currentScope != EPOIScopeUndefined)
+                    [self setupBarActionView:BarActionShownMap title:nil];
             }
             else
             {
@@ -1705,6 +1800,30 @@
         [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void)enterHistoryEditingMode
+{
+    _historyEditing = YES;
+    [self setupBarActionView:BarActionEditHistory title:@""];
+    [self.view setNeedsLayout];
+}
+
+- (void)exitHistoryEditingMode
+{
+    [self finishHistoryEditing];
+}
+
+- (void)historyItemsSelected:(int)count
+{
+    [UIView performWithoutAnimation:^{
+        if (count > 0)
+            [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"items_selected"), count] forState:UIControlStateNormal];
+        else
+            [_barActionTextButton setTitle:@"" forState:UIControlStateNormal];
+        
+        [_barActionTextButton layoutIfNeeded];
+    }];
 }
 
 #pragma mark - UIGestureRecognizerDelegate

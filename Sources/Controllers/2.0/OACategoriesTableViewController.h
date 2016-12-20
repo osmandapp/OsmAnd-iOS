@@ -10,7 +10,7 @@
 
 @protocol OACategoryTableDelegate
 
-@optional
+@required
 
 - (void)didSelectCategoryItem:(id)item;
 

@@ -13,21 +13,27 @@
 
 @protocol OAHistoryTableDelegate
 
-@optional
+@required
 
 - (void)didSelectHistoryItem:(OAHistoryItem *)item;
+- (void)enterHistoryEditingMode;
+- (void)exitHistoryEditingMode;
+- (void)historyItemsSelected:(int)count;
 
 @end
 
 @interface OAHistoryTableViewController : UITableViewController
 
-@property (nonatomic) NSArray* dataArray;
 @property (nonatomic) BOOL searchNearMapCenter;
 @property (nonatomic, assign) OsmAnd::PointI myLocation;
 
 @property (weak, nonatomic) id<OAHistoryTableDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame;
-- (void)updateDistancesAndSort;
+- (void)reloadData;
+- (void)updateDistanceAndDirection;
+
+- (void)deleteSelected;
+- (void)editDone;
 
 @end

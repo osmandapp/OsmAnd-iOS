@@ -61,7 +61,7 @@
             if (sqlite3_open(dbpath, &historyDB) == SQLITE_OK)
             {
                 char *errMsg;
-                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE] UTF8String];
+                const char *sql_stmt = [[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (%@ integer, %@ integer, %@ double, %@ double, %@ text, %@ integer, %@ text, %@ text)", TABLE_NAME, POINT_COL_HASH, POINT_COL_TIME, POINT_COL_LAT, POINT_COL_LON, POINT_COL_NAME, POINT_COL_TYPE, POINT_COL_ICON_NAME, POINT_COL_TYPE_NAME] UTF8String];
                 
                 if (sqlite3_exec(historyDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
                 {

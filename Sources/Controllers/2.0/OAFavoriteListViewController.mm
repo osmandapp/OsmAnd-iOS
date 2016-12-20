@@ -118,6 +118,7 @@ static OAFavoriteListViewController *parentController;
     [_sortedHeaderView setTitleText:OALocalizedString(@"favorites")];
     
     _menuHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
+    _menuHeaderView.editable = NO;
     [_menuHeaderView setTitleText:OALocalizedString(@"import_export")];
     
     _editToolbarView.hidden = YES;
@@ -605,6 +606,7 @@ static OAFavoriteListViewController *parentController;
 
 - (IBAction)editButtonClicked:(id)sender
 {
+    [self.favoriteTableView beginUpdates];
     [self.favoriteTableView setEditing:![self.favoriteTableView isEditing] animated:YES];
     
     if ([self.favoriteTableView isEditing])
@@ -640,6 +642,7 @@ static OAFavoriteListViewController *parentController;
         [self.directionButton setHidden:NO];
     
     }
+    [self.favoriteTableView endUpdates];
 }
 
 - (IBAction)shareButtonClicked:(id)sender

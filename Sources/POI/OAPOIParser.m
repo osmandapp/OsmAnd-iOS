@@ -34,8 +34,10 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 @implementation OAPOIParser {
     
     NSMutableArray<OAPOIType *> *_pTypes;
+    NSMutableDictionary<NSString *, OAPOIType *> *_pTypesByName;
     NSMutableArray<OAPOICategory *> *_pCategories;
     NSMutableArray<OAPOIFilter *> *_pFilters;
+    NSMutableArray<OAPOIType *> *_textPoiAdditionals;
     
     xmlParserCtxtPtr _xmlParserContext;
     
@@ -59,23 +61,28 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     return self;
 }
 
-- (void)getPOITypesSync:(NSString*)fileName {
-    
+- (void)commonInit:(NSString*)fileName
+{
     _pTypes = [NSMutableArray array];
+    _pTypesByName = [NSMutableDictionary dictionary];
     _pCategories = [NSMutableArray array];
     _pFilters = [NSMutableArray array];
-
+    _textPoiAdditionals = [NSMutableArray array];
+    _otherMapCategory = [[OAPOICategory alloc] initWithName:@"Other"];
+    [_pCategories addObject:_otherMapCategory];
+    
     self.fileName = fileName;
+}
+
+- (void)getPOITypesSync:(NSString*)fileName
+{
+    [self commonInit:fileName];
     [self parseData];
 }
 
-- (void)getPOITypesAsync:(NSString*)fileName {
-    
-    _pTypes = [NSMutableArray array];
-    _pCategories = [NSMutableArray array];
-    _pFilters = [NSMutableArray array];
-
-    self.fileName = fileName;
+- (void)getPOITypesAsync:(NSString*)fileName
+{
+    [self commonInit:fileName];
     
     // make an operation so we can push it into the queue
     SEL method = @selector(parseForData);
@@ -107,8 +114,10 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     else
     {
         self.poiTypes = _pTypes;
+        self.poiTypesByName = _pTypesByName;
         self.poiCategories = _pCategories;
         self.poiFilters = _pFilters;
+        self.textPoiAdditionals = _textPoiAdditionals;
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(parserFinished)])
         {
@@ -442,6 +451,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.isText = isText;
 
     [_pTypes addObject:poiType];
+    if (!reference)
+        [_pTypesByName setObject:poiType forKey:poiType.name];
     
     // Category
     if (_currentPOICategory)
@@ -462,18 +473,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                        attributes:(xmlSAX2Attributes *)attributes lang:(NSString *)lang baseType:(OAPOIBaseType *)baseType
 {
     if (!_currentPOICategory)
-    {
-        OAPOICategory *c = [[OAPOICategory alloc] initWithName:@"Other"];
-        if ([_pCategories containsObject:c])
-        {
-            _currentPOICategory = _pCategories[[_pCategories indexOfObject:c]];
-        }
-        else
-        {
-            _currentPOICategory = c;
-            [_pCategories addObject:_currentPOICategory];
-        }        
-    }
+        _currentPOICategory = _otherMapCategory;
     
     NSString *name = nil;
     NSString *tag = nil;
@@ -563,6 +563,9 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.isText = isText;
     [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
     poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
+    
+    if (isText)
+        [_textPoiAdditionals addObject:poiType];
     
     if (_currentPOIType)
     {

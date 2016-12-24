@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <libxml/tree.h>
 
-@class OAPOIType;
+@class OAPOIType, OAPOICategory, OAPOIFilter;
 
 @protocol OAPOITypesParserDelegate <NSObject>
 
@@ -35,9 +35,12 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 
 @interface OAPOIParser : NSObject
 
-@property(nonatomic) NSArray *poiTypes;
-@property(nonatomic) NSArray *poiCategories;
-@property(nonatomic) NSArray *poiFilters;
+@property(nonatomic) NSArray<OAPOIType *> *poiTypes;
+@property(nonatomic) NSDictionary<NSString *, OAPOIType *> *poiTypesByName;
+@property(nonatomic) NSArray<OAPOICategory *> *poiCategories;
+@property(nonatomic) OAPOICategory *otherMapCategory;
+@property(nonatomic) NSArray<OAPOIFilter *> *poiFilters;
+@property(nonatomic) NSArray<OAPOIType *> *textPoiAdditionals;
 @property(nonatomic, weak) id<OAPOITypesParserDelegate> delegate;
 @property(nonatomic) BOOL error;
 @property(nonatomic) NSString *fileName;

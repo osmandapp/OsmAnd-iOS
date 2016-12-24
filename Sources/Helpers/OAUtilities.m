@@ -26,6 +26,16 @@
     }
 }
 
+- (NSString *) trim
+{
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+}
+
+- (NSString *) lowerCase
+{
+    return [self lowercaseStringWithLocale:[NSLocale currentLocale]];
+}
+
 @end
 
 
@@ -491,6 +501,5 @@
                          }];
     
 }
-
 
 @end

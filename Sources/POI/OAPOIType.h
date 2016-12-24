@@ -28,6 +28,7 @@
 @property (nonatomic, assign) int order;
 
 @property (nonatomic) OAPOIBaseType *parentType;
+@property (nonatomic) OAPOIType *referenceType;
 
 @property (weak, nonatomic) OAPOI *parent;
 @property (nonatomic) NSString *poiAdditionalCategory;

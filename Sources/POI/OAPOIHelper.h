@@ -7,15 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAResultMatcher.h"
 #include <OsmAndCore.h>
 #include <OsmAndCore/Data/Amenity.h>
 
 #define kSearchLimit 200
 const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
-@class OAPOI;
-@class OAPOIType;
-@class OAPOIBaseType;
+@class OAPOI, OAPOIType, OAPOIBaseType, OAPOICategory, OAPOIFilter;
+@class OASearchPoiTypeFilter;
 
 @protocol OAPOISearchDelegate
 
@@ -29,9 +29,13 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, readonly) BOOL isSearchDone;
 @property (nonatomic, assign) int searchLimit;
 
-@property (nonatomic, readonly) NSArray *poiTypes;
-@property (nonatomic, readonly) NSArray *poiCategories;
-@property (nonatomic, readonly) NSArray *poiFilters;
+@property (nonatomic, readonly) NSArray<OAPOIType *> *poiTypes;
+@property (nonatomic, readonly) NSDictionary<NSString *, OAPOIType *> *poiTypesByName;
+@property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategories;
+@property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategoriesNoOther;
+@property (nonatomic, readonly) OAPOICategory *otherPoiCategory;
+@property (nonatomic, readonly) OAPOICategory *otherMapCategory;
+@property (nonatomic, readonly) NSArray<OAPOIFilter *> *poiFilters;
 
 @property (nonatomic) OsmAnd::PointI myLocation;
 
@@ -42,14 +46,23 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (void)updatePhrases;
 
+- (BOOL) isRegisteredType:(OAPOICategory *)t;
 - (NSArray *)poiFiltersForCategory:(NSString *)categoryName;
 
 - (OAPOIType *)getPoiType:(NSString *)tag value:(NSString *)value;
+- (OAPOIType *)getPoiTypeByName:(NSString *)name;
+- (OAPOIBaseType *)getAnyPoiTypeByName:(NSString *)name;
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
-- (OAPOIBaseType *) getAnyPoiAdditionalTypeByKey:(NSString *)name;
+- (OAPOIBaseType *)getAnyPoiAdditionalTypeByKey:(NSString *)name;
+- (OAPOIType *)getTextPoiAdditionalByKey:(NSString *)name;
 
 -(NSString *)getPhraseByName:(NSString *)name;
 -(NSString *)getPhraseENByName:(NSString *)name;
+
+-(NSString *)getPoiStringWithoutType:(OAPOI *)poi;
+
+- (OAPOICategory *) getPoiCategoryByName:(NSString *)name;
+- (OAPOICategory *) getPoiCategoryByName:(NSString *)name create:(BOOL)create;
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 
@@ -57,6 +70,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 -(void)findPOIsByKeyword:(NSString *)keyword categoryName:(NSString *)category poiTypeName:(NSString *)type radiusIndex:(int *)radiusIndex;
 
 +(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius;
++(NSArray<OAPOI *> *)findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
++(NSArray<OAPOI *> *)findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
 
 -(BOOL)breakSearch;
 

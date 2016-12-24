@@ -391,15 +391,25 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (IBAction)barActionTextButtonPress:(id)sender
 {
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    NSString *str = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
-    [self dismissViewControllerAnimated:YES completion:nil];
+    switch (_barActionType)
+    {
+        case BarActionShownMap:
+        {
+            OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+            NSString *str = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+            [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            break;
+        }
+        default:
+            break;
+    }
 }
 
 - (IBAction)barActionLeftImgButtonPress:(id)sender
 {
-    switch (_barActionType) {
+    switch (_barActionType)
+    {
         case BarActionEditHistory:
             [_historyViewController editDone];
             [self finishHistoryEditing];
@@ -412,11 +422,18 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (IBAction)barActionImgButtonPress:(id)sender
 {
-    switch (_barActionType) {
+    switch (_barActionType)
+    {
+        case BarActionShownMap:
+        {
+            //
+            break;
+        }
         case BarActionEditHistory:
+        {
             [_historyViewController deleteSelected];
             break;
-            
+        }
         default:
             break;
     }
@@ -1739,7 +1756,16 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)didSelectCategoryItem:(id)obj
 {
-    if ([obj isKindOfClass:[OAPOIFilter class]])
+    if (!obj)
+    {
+        if (_currentScope == EPOIScopeUndefined && _showTopList)
+        {
+            _showTopList = NO;
+            [self generateData];
+            [self updateTabsVisibility];
+        }
+    }
+    else if ([obj isKindOfClass:[OAPOIFilter class]])
     {
         OAPOIFilter* item = obj;
         self.searchString = [item.nameLocalized stringByAppendingString:@" "];

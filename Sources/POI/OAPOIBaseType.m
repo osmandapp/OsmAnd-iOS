@@ -8,9 +8,32 @@
 
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAUtilities.h"
 
+static NSMutableSet<NSString *> *nullTypeSetInstance;
+
+@interface OAPOIBaseType ()
+
+@property (nonatomic, readwrite) NSString *name;
+
+@end
+
 @implementation OAPOIBaseType
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    OAPOIBaseType *clone = [[self class] allocWithZone:zone];
+    clone.name = [self.name copyWithZone:zone];
+    clone.nameLocalizedEN = [self.nameLocalizedEN copyWithZone:zone];
+    clone.nameLocalized = [self.nameLocalized copyWithZone:zone];
+    clone.top = self.top;
+    clone.baseLangType = [self.baseLangType copyWithZone:zone];
+    clone.lang = [self.lang copyWithZone:zone];
+    clone.poiAdditionals = [self.poiAdditionals copyWithZone:zone];
+    clone.poiAdditionalsCategorized = [self.poiAdditionalsCategorized copyWithZone:zone];
+    return clone;
+}
 
 - (instancetype)initWithName:(NSString *)name
 {
@@ -56,13 +79,35 @@
 - (void)addPoiAdditional:(OAPOIType *)poiType
 {
     if (!_poiAdditionals)
-    {
         _poiAdditionals = @[poiType];
-    }
     else
-    {
         _poiAdditionals = [_poiAdditionals arrayByAddingObject:poiType];
+    
+    if (poiType.poiAdditionalCategory)
+    {
+        if (!_poiAdditionalsCategorized)
+            _poiAdditionalsCategorized = @[poiType];
+        else
+            [_poiAdditionalsCategorized arrayByAddingObject:poiType];
     }
+}
+
+- (NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    return nil; // override
+}
+
++(NSMutableSet<NSString *> *)nullSet
+{
+    if (!nullTypeSetInstance)
+        nullTypeSetInstance = [NSMutableSet set];
+    
+    return nullTypeSetInstance;
+}
+
++(BOOL)isNullSet:(NSMutableSet<NSString *> *)set
+{
+    return set == [self.class nullSet];
 }
 
 @end

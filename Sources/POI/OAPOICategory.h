@@ -21,4 +21,8 @@
 - (void)addPoiType:(OAPOIType *)poiType;
 - (void)addPoiFilter:(OAPOIFilter *)poiFilter;
 
+- (OAPOIType *) getPoiTypeByKeyName:(NSString *)name;
+
++ (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMutableDictionary<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes;
+
 @end

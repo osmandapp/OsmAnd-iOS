@@ -23,6 +23,8 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 @interface NSString (util)
 
 - (int) indexOf:(NSString *)text;
+- (NSString *) trim;
+- (NSString *) lowerCase;
 
 @end
 

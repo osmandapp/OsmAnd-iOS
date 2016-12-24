@@ -17,6 +17,8 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAUtilities.h"
+#import "OASearchPoiTypeFilter.h"
+#import "OACollatorStringMatcher.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/Data/DataCommonTypes.h>
@@ -47,6 +49,8 @@
     OsmAnd::ZoomLevel _zoomLevel;
     
     NSString *_prefLang;
+    
+    NSArray<OAPOIType *> *_textPoiAdditionals;
 }
 
 + (OAPOIHelper *)sharedInstance {
@@ -66,6 +70,7 @@
         _searchLimit = kSearchLimitRaw;
         _isSearchDone = YES;
         [self readPOI];
+        [self findDefaultOtherCategory];
         [self updateReferences];
         [self updatePhrases];
     }
@@ -79,8 +84,35 @@
     OAPOIParser *parser = [[OAPOIParser alloc] init];
     [parser getPOITypesSync:poiXmlPath];
     _poiTypes = parser.poiTypes;
+    _poiTypesByName = parser.poiTypesByName;
     _poiCategories = parser.poiCategories;
+    _textPoiAdditionals = parser.textPoiAdditionals;
+    _otherMapCategory = parser.otherMapCategory;
+    
+    NSMutableArray *categories = [_poiCategories mutableCopy];
+    for (OAPOICategory *c in categories)
+        if ([c.name isEqualToString:@"Other"])
+        {
+            [categories removeObject:c];
+            break;
+        }
+    _poiCategoriesNoOther = categories;
+    
     _poiFilters = parser.poiFilters;
+}
+
+- (void) findDefaultOtherCategory
+{
+    OAPOICategory *pc = [self getPoiCategoryByName:@"user_defined_other"];
+    if (!pc)
+        NSLog(@"!!! 'user_defined_other' category not found");
+
+    _otherMapCategory = pc;
+}
+
+- (BOOL) isRegisteredType:(OAPOICategory *)t
+{
+    return [self getPoiCategoryByName:t.name] != _otherPoiCategory;
 }
 
 - (void)updateReferences
@@ -94,18 +126,10 @@
             {
                 p.tag = pType.tag;
                 p.value = pType.value;
+                p.referenceType = pType;
             }
         }
     }
-}
-
-- (OAPOIType *)getPoiTypeByName:(NSString *)name
-{
-    for (OAPOIType *p in _poiTypes)
-        if ([p.name isEqualToString:name] && !p.reference)
-            return p;
-
-    return nil;
 }
 
 - (void)updatePhrases
@@ -280,6 +304,30 @@
     return nil;
 }
 
+- (OAPOIType *)getPoiTypeByName:(NSString *)name
+{
+    return [_poiTypesByName objectForKey:name];
+}
+
+- (OAPOIBaseType *)getAnyPoiTypeByName:(NSString *)name
+{
+    for (OAPOICategory *pc in _poiCategories)
+    {
+        if ([pc.name isEqualToString:name])
+            return pc;
+
+        for (OAPOIFilter *pf in pc.poiFilters)
+        {
+            if ([pf.name isEqualToString:name])
+                return pf;
+        }
+        OAPOIType *pt = [pc getPoiTypeByKeyName:name];
+        if (pt && !pt.reference)
+            return pt;
+    }
+    return nil;
+}
+
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name
 {
     for (OAPOIType *t in _poiTypes)
@@ -333,6 +381,65 @@
         }
     }
     return nil;
+}
+
+- (NSString *) getPoiStringWithoutType:(OAPOI *)poi
+{
+    OAPOIType *pt = poi.type;
+    NSString *nm;
+    if (pt)
+        nm = pt.nameLocalized;
+
+    NSString *n = poi.nameLocalized;
+    if (nm && [n indexOf:nm] != -1)
+    {
+        // type is contained in name e.g.
+        // n = "Bakery the Corner"
+        // type = "Bakery"
+        // no need to repeat this
+        return n;
+    }
+    if (n.length == 0)
+        return nm;
+
+    return [NSString stringWithFormat:@"%@ %@", nm, n];
+}
+
+- (OAPOIType *) getTextPoiAdditionalByKey:(NSString *)name
+{
+    for (OAPOIType *pt in _textPoiAdditionals)
+    {
+        if ([pt.name isEqualToString:name])
+            return pt;
+    }
+    return nil;
+}
+
+- (OAPOICategory *) getPoiCategoryByName:(NSString *)name
+{
+    return [self getPoiCategoryByName:name create:NO];
+}
+
+- (OAPOICategory *) getPoiCategoryByName:(NSString *)name create:(BOOL)create
+{
+    if ([name isEqualToString:@"leisure"] && !create)
+        name = @"entertainment";
+
+    if ([name isEqualToString:@"historic"] && !create)
+        name = @"tourism";
+    
+    for (OAPOICategory *p in _poiCategories)
+    {
+        if ([p.name caseInsensitiveCompare:name] == 0)
+            return p;
+    }
+    if (create)
+    {
+        OAPOICategory *lastCategory = [[OAPOICategory alloc] initWithName:name];
+        _poiCategories = [_poiCategories arrayByAddingObject:lastCategory];
+        return lastCategory;
+    }
+    return self.otherPoiCategory;
 }
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
@@ -465,6 +572,109 @@
                                   const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                   poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, amenity->position31);
                                   [arr addObject:poi];
+                              }
+                          },
+                          ctrl);
+    
+    return [NSArray arrayWithArray:arr];
+}
+
++(NSArray<OAPOI *> *)findPOIsByFilter:(OASearchPoiTypeFilter *)filter topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    if (filter && ![filter isEmpty])
+    {
+        OsmAndAppInstance _app = [OsmAndApp instance];
+        const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+        
+        std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+        ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
+                                                      (const OsmAnd::FunctorQueryController* const controller)
+                                                      {
+                                                          // should break?
+                                                          return matcher && [matcher isCancelled];
+                                                      }));
+        
+        const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+        OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
+        OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
+        searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+        
+        const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+        search->performSearch(*searchCriteria,
+                              [&arr, &filter, &matcher]
+                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                              {
+                                  OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                                  if (poi && [filter accept:poi.type.category subcategory:poi.type.name])
+                                  {
+                                      if (matcher)
+                                          [matcher publish:poi];
+                                      
+                                      [arr addObject:poi];
+                                  }
+                              },
+                              ctrl);
+    }
+    return [NSArray arrayWithArray:arr];
+}
+
++(NSArray<OAPOI *> *)findPOIsByName:(NSString *)query topLatitude:(double)topLatitude leftLongitude:(double)leftLongitude bottomLatitude:(double)bottomLatitude rightLongitude:(double)rightLongitude matcher:(OAResultMatcher<OAPOI *> *)matcher
+{
+    OACollatorStringMatcher *mt = [[OACollatorStringMatcher alloc] initWithPart:query mode:CHECK_STARTS_FROM_SPACE];
+    NSMutableArray<OAPOI *> *arr = [NSMutableArray array];
+    OsmAndAppInstance _app = [OsmAndApp instance];
+    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+    
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([&matcher]
+                                                  (const OsmAnd::FunctorQueryController* const controller)
+                                                  {
+                                                      // should break?
+                                                      return matcher && [matcher isCancelled];
+                                                  }));
+    
+    const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+    OsmAnd::PointI topLeftPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(topLatitude, leftLongitude));
+    OsmAnd::PointI bottomRightPoint31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(bottomLatitude, rightLongitude));
+    searchCriteria->bbox31 = OsmAnd::AreaI(topLeftPoint31, bottomRightPoint31);
+    
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+    search->performSearch(*searchCriteria,
+                          [&arr, &mt, &matcher]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              OAPOI *poi = [OAPOIHelper parsePOI:resultEntry];
+                              if (poi)
+                              {
+                                  BOOL __block matches = [mt matches:[poi.name lowerCase]] || [mt matches:[poi.nameLocalized lowerCase]];
+                                  if (!matches)
+                                  {
+                                      for (NSString *s in poi.localizedNames)
+                                      {
+                                          matches = [mt matches:[s lowerCase]];
+                                          if (matches)
+                                              break;
+                                      }
+                                      if (!matches)
+                                      {
+                                          [poi.values enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString *  _Nonnull value, BOOL * _Nonnull stop) {
+                                              if ([key indexOf:@"_name"] != -1)
+                                              {
+                                                  matches = [mt matches:value];
+                                                  if (matches)
+                                                      *stop = YES;
+                                              }
+                                          }];
+                                      }
+                                  }
+                                  if (matches)
+                                  {
+                                      if (matcher)
+                                          [matcher publish:poi];
+                                      
+                                      [arr addObject:poi];
+                                  }
                               }
                           },
                           ctrl);

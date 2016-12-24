@@ -8,8 +8,17 @@
 
 #import "OAPOIFilter.h"
 #import "OAUtilities.h"
+#import "OAPOIType.h"
 
 @implementation OAPOIFilter
+
+-(id)copyWithZone:(NSZone *)zone
+{
+    OAPOIFilter* clone = [super copyWithZone:zone];
+    clone.poiTypes = [self.poiTypes copyWithZone:zone];
+    clone.category = [self.category copyWithZone:zone];
+    return clone;
+}
 
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
 {
@@ -57,6 +66,20 @@
     {
         _poiTypes = [_poiTypes arrayByAddingObject:poiType];
     }
+}
+
+-(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
+{
+    if (![acceptedTypes objectForKey:self.category])
+        [acceptedTypes setObject:[NSMutableSet set] forKey:self.category];
+
+    NSMutableSet<NSString *> *set = [acceptedTypes objectForKey:self.category];
+    for (OAPOIType *pt in _poiTypes)
+    {
+        [set addObject:pt.name];
+    }
+    [OAPOICategory addReferenceTypes:self.poiTypes acceptedTypes:acceptedTypes];
+    return acceptedTypes;
 }
 
 @end

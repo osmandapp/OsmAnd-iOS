@@ -67,9 +67,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.delegate && indexPath.row < _dataArray.count)
+    if (self.delegate)
     {
-        [self.delegate didSelectCategoryItem:_dataArray[indexPath.row]];
+        if (indexPath.row < _dataArray.count)
+            [self.delegate didSelectCategoryItem:_dataArray[indexPath.row]];
+        else
+            [self.delegate didSelectCategoryItem:nil];
     }
 }
 

@@ -14,6 +14,9 @@
 #import "OAUtilities.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
+#import <sqlite3.h>
+#import "OALog.h"
+#import "OAAppSettings.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -28,6 +31,327 @@ static NSString* const UDF_PARKING = @"parking";
 
 static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOOD_SHOP, UDF_FUEL, UDF_SIGHTSEEING, UDF_EMERGENCY,
                                          UDF_PUBLIC_TRANSPORT, UDF_ACCOMMODATION, UDF_RESTAURANTS, UDF_PARKING];
+
+
+#define DATABASE_NAME @"poi_filters"
+#define FILTER_NAME @"poi_filters"
+#define FILTER_COL_NAME @"name"
+#define FILTER_COL_ID @"id"
+#define FILTER_COL_FILTERBYNAME @"filterbyname"
+#define FILTER_TABLE_CREATE @"CREATE TABLE poi_filters (name, id, filterbyname);"
+
+#define CATEGORIES_NAME @"categories"
+#define CATEGORIES_FILTER_ID @"filter_id"
+#define CATEGORIES_COL_CATEGORY @"category"
+#define CATEGORIES_COL_SUBCATEGORY @"subcategory"
+#define CATEGORIES_TABLE_CREATE @"CREATE TABLE categories (filter_id, category, subcategory);"
+
+@interface OAPOIFilterDbHelper : NSObject
+
+@end
+
+@implementation OAPOIFilterDbHelper
+{
+    sqlite3 *filtersDB;
+    NSString *databasePath;
+    dispatch_queue_t dbQueue;
+    dispatch_queue_t syncQueue;
+    OAPOIHelper *_poiHelper;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        dbQueue = dispatch_queue_create("uifilters_dbQueue", DISPATCH_QUEUE_SERIAL);
+        syncQueue = dispatch_queue_create("uifilters_syncQueue", DISPATCH_QUEUE_SERIAL);
+        
+        _poiHelper = [OAPOIHelper sharedInstance];
+        
+        [self createDb];
+    }
+    return self;
+}
+
+- (void)createDb
+{
+    NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Library/UIFilters"];
+    databasePath = [dir stringByAppendingString:@"/uifilters.db"];
+    
+    BOOL isDir = YES;
+    if (![[NSFileManager defaultManager] fileExistsAtPath:dir isDirectory:&isDir])
+        [[NSFileManager defaultManager] createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:nil];
+    
+    dispatch_sync(dbQueue, ^{
+        
+        NSFileManager *filemgr = [NSFileManager defaultManager];
+        const char *dbpath = [databasePath UTF8String];
+        
+        if ([filemgr fileExistsAtPath: databasePath ] == NO)
+        {
+            if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+            {
+                char *errMsg;
+                const char *sql_stmt = [FILTER_TABLE_CREATE UTF8String];
+                if (sqlite3_exec(filtersDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                    OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                if (errMsg != NULL) sqlite3_free(errMsg);
+                
+                sql_stmt = [CATEGORIES_TABLE_CREATE UTF8String];
+                if (sqlite3_exec(filtersDB, sql_stmt, NULL, NULL, &errMsg) != SQLITE_OK)
+                    OALog(@"Failed to create table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
+                if (errMsg != NULL) sqlite3_free(errMsg);
+                
+                sqlite3_close(filtersDB);
+            }
+            else
+            {
+                // Failed to open/create database
+            }
+        }
+        else
+        {
+            // Upgrade if needed
+        }
+        
+    });
+    
+}
+
+- (BOOL) addFilter:(OAPOIUIFilter *)p addOnlyCategories:(BOOL)addOnlyCategories
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+        {
+            if (!addOnlyCategories)
+            {
+                NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@) VALUES (?, ?, ?)", FILTER_NAME, FILTER_COL_NAME, FILTER_COL_ID, FILTER_COL_FILTERBYNAME];
+                const char *update_stmt = [query UTF8String];
+                
+                sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+                sqlite3_bind_text(statement, 1, [p.name UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(statement, 2, [p.filterId UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_bind_text(statement, 3, [p.filterByName UTF8String], -1, SQLITE_TRANSIENT);
+                sqlite3_step(statement);
+                sqlite3_finalize(statement);
+            }
+            
+            NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@) VALUES (?, ?, ?)", CATEGORIES_NAME, CATEGORIES_FILTER_ID, CATEGORIES_COL_CATEGORY, CATEGORIES_COL_SUBCATEGORY];
+            const char *update_stmt = [query UTF8String];
+            
+            NSDictionary<OAPOICategory *, NSSet<NSString *> *> *types = [p getAcceptedTypes];
+            for (OAPOICategory *a in types.allKeys)
+            {
+                if ([types objectForKey:a] == [OAPOIBaseType nullSet])
+                {
+                    sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+                    sqlite3_bind_text(statement, 1, [p.filterId UTF8String], -1, SQLITE_TRANSIENT);
+                    sqlite3_bind_text(statement, 2, [a.name UTF8String], -1, SQLITE_TRANSIENT);
+                    sqlite3_bind_null(statement, 3);
+                    sqlite3_step(statement);
+                    sqlite3_finalize(statement);
+                }
+                else
+                {
+                    for (NSString *s in [types objectForKey:a])
+                    {
+                        sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+                        sqlite3_bind_text(statement, 1, [p.filterId UTF8String], -1, SQLITE_TRANSIENT);
+                        sqlite3_bind_text(statement, 2, [a.name UTF8String], -1, SQLITE_TRANSIENT);
+                        sqlite3_bind_text(statement, 3, [s UTF8String], -1, SQLITE_TRANSIENT);
+                        sqlite3_step(statement);
+                        sqlite3_finalize(statement);
+                    }
+                }
+            }
+            
+            sqlite3_close(filtersDB);
+        }
+    });
+    return YES;
+}
+
+- (NSArray<OAPOIUIFilter *> *) getFilters
+{
+    NSMutableArray<OAPOIUIFilter *> *list = [NSMutableArray array];
+    
+    dispatch_sync(dbQueue, ^{
+        
+        const char *dbpath = [databasePath UTF8String];
+        sqlite3_stmt *statement;
+        
+        if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+        {
+            NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@ FROM %@", CATEGORIES_FILTER_ID, CATEGORIES_COL_CATEGORY, CATEGORIES_COL_SUBCATEGORY, CATEGORIES_NAME];
+            
+            NSMutableDictionary<NSString *, NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *> *map = [NSMutableDictionary dictionary];
+            
+            const char *query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(filtersDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    NSString *filterId;
+                    if (sqlite3_column_text(statement, 0) != nil)
+                        filterId = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
+
+                    NSString *category;
+                    if (sqlite3_column_text(statement, 1) != nil)
+                        category = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+
+                    NSString *subCategory;
+                    if (sqlite3_column_text(statement, 2) != nil)
+                        subCategory = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
+
+                    if (![map objectForKey:filterId])
+                        [map setObject:[NSMutableDictionary dictionary] forKey:filterId];
+                    
+                    NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *m = [map objectForKey:filterId];
+                    OAPOICategory *a = [_poiHelper getPoiCategoryByName:[category lowerCase] create:NO];
+                    if (!subCategory)
+                    {
+                        [m setObject:[OAPOIBaseType nullSet] forKey:a];
+                    }
+                    else
+                    {
+                        if (![m objectForKey:a])
+                            [m setObject:[NSMutableSet set] forKey:a];
+                        
+                        [[m objectForKey:a] addObject:subCategory];
+                    }
+
+                }
+                sqlite3_finalize(statement);
+            }
+            
+            querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@ FROM %@", FILTER_COL_ID, FILTER_COL_NAME, FILTER_COL_FILTERBYNAME, FILTER_NAME];
+            
+            query_stmt = [querySQL UTF8String];
+            if (sqlite3_prepare_v2(filtersDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
+            {
+                while (sqlite3_step(statement) == SQLITE_ROW)
+                {
+                    NSString *filterId;
+                    if (sqlite3_column_text(statement, 0) != nil)
+                        filterId = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 0)];
+                    
+                    NSString *name;
+                    if (sqlite3_column_text(statement, 1) != nil)
+                        name = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 1)];
+                    
+                    NSString *filterByName;
+                    if (sqlite3_column_text(statement, 2) != nil)
+                        filterByName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
+                    
+                    if (![map objectForKey:filterId])
+                        [map setObject:[NSMutableDictionary dictionary] forKey:filterId];
+                    
+                    if ([map objectForKey:filterId])
+                    {
+                        OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:name filterId:filterId acceptedTypes:[map objectForKey:filterId]];
+                        filter.savedFilterByName = filterByName;
+                        [list addObject:filter];
+                    }
+                }
+                sqlite3_finalize(statement);
+            }
+            
+            sqlite3_close(filtersDB);
+        }
+    });
+    
+    return [NSArray arrayWithArray:list];
+}
+
+- (BOOL) editFilter:(OAPOIUIFilter *)filter
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+        {
+            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@=?", CATEGORIES_NAME, CATEGORIES_FILTER_ID];
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_text(statement, 1, [filter.filterId UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(filtersDB);
+        }
+    });
+    return YES;
+}
+
+- (void) updateName:(OAPOIUIFilter *)filter
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+        {
+            NSString *query = [NSString stringWithFormat:@"UPDATE %@ SET %@=?, %@=? WHERE %@=?", FILTER_NAME, FILTER_COL_FILTERBYNAME, FILTER_COL_NAME, FILTER_COL_ID];
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_text(statement, 1, [filter.filterByName UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 2, [filter.name UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_bind_text(statement, 3, [filter.filterId UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(filtersDB);
+        }
+    });
+}
+
+- (BOOL) deleteFilter:(NSString *)filterId
+{
+    dispatch_async(dbQueue, ^{
+        sqlite3_stmt    *statement;
+        
+        const char *dbpath = [databasePath UTF8String];
+        
+        if (sqlite3_open(dbpath, &filtersDB) == SQLITE_OK)
+        {
+            NSString *query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@=?", FILTER_NAME, FILTER_COL_ID];
+            
+            const char *update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_text(statement, 1, [filterId UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            query = [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@=?", CATEGORIES_NAME, CATEGORIES_FILTER_ID];
+            
+            update_stmt = [query UTF8String];
+            
+            sqlite3_prepare_v2(filtersDB, update_stmt, -1, &statement, NULL);
+            sqlite3_bind_text(statement, 1, [filterId UTF8String], -1, SQLITE_TRANSIENT);
+            sqlite3_step(statement);
+            sqlite3_finalize(statement);
+            
+            sqlite3_close(filtersDB);
+        }
+    });
+    return YES;
+}
+
+@end
+
 
 @implementation OAPOIFiltersHelper
 {
@@ -179,9 +503,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     OAPOIFilterDbHelper *helper = [self openDbHelper];
     if (helper)
     {
-        NSArray<OAPOIUIFilter *> *userDefined = [helper getFilters:[helper getReadableDatabase]];
+        NSArray<OAPOIUIFilter *> *userDefined = [helper getFilters];
         [userDefinedFilters addObjectsFromArray:userDefined];
-        [helper close];
     }
     return userDefinedFilters;
 }
@@ -206,10 +529,10 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         // user defined
         [top addObjectsFromArray:[self getUserDefinedPoiFilters]];
         if ([self getLocalWikiPOIFilter])
-            [top addObjectsFromArray:[self getLocalWikiPOIFilter]];
+            [top addObject:[self getLocalWikiPOIFilter]];
 
         // default
-        for (OAPOIFilter *t in [_poiHelper getTopVisibleFilters])
+        for (OAPOIBaseType *t in [_poiHelper getTopVisibleFilters])
         {
             OAPOIUIFilter *f = [[OAPOIUIFilter alloc] initWithBasePoiType:t idSuffix:@""];
             [top addObject:f];
@@ -223,325 +546,168 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return result;
 }
 
-private PoiFilterDbHelper openDbHelper() {
-    if (!application.getPoiTypes().isInit()) {
-        return null;
-    }
-    return new PoiFilterDbHelper(application.getPoiTypes(), application);
+- (OAPOIFilterDbHelper *) openDbHelper
+{
+    if (![_poiHelper isInit])
+        return nil;
+
+    return [[OAPOIFilterDbHelper alloc] init];
 }
 
-public boolean removePoiFilter(OAPOIUIFilter * filter) {
-    if (filter.getFilterId().equals(OAPOIUIFilter *.CUSTOM_FILTER_ID) ||
-        filter.getFilterId().equals(OAPOIUIFilter *.BY_NAME_FILTER_ID) ||
-        filter.getFilterId().startsWith(OAPOIUIFilter *.STD_PREFIX)) {
-        return false;
+- (BOOL) removePoiFilter:(OAPOIUIFilter *)filter
+{
+    if ([filter.filterId isEqualToString:CUSTOM_FILTER_ID] ||
+        [filter.filterId isEqualToString:BY_NAME_FILTER_ID] ||
+        [filter.filterId hasPrefix:STD_PREFIX])
+    {
+        return NO;
     }
-    PoiFilterDbHelper helper = openDbHelper();
-    if (helper == null) {
-        return false;
+    
+    OAPOIFilterDbHelper *helper = [self openDbHelper];
+    if (!helper)
+        return NO;
+
+    BOOL res = [helper deleteFilter:filter.filterId];
+    if (res)
+    {
+        NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
+        [copy removeObject:filter];
+        _cacheTopStandardFilters = copy;
     }
-    boolean res = helper.deleteFilter(helper.getWritableDatabase(), filter);
-    if (res) {
-        ArrayList<OAPOIUIFilter *> copy = new ArrayList<>(cacheTopStandardFilters);
-        copy.remove(filter);
-        cacheTopStandardFilters = copy;
-    }
-    helper.close();
     return res;
 }
 
-public boolean createPoiFilter(OAPOIUIFilter * filter) {
-    PoiFilterDbHelper helper = openDbHelper();
-    if (helper == null) {
-        return false;
+- (BOOL) createPoiFilter:(OAPOIUIFilter *)filter
+{
+    OAPOIFilterDbHelper *helper = [self openDbHelper];
+    if (!helper)
+        return NO;
+
+    BOOL res = [helper deleteFilter:filter.filterId];
+    NSMutableArray<OAPOIUIFilter *> *filtersToRemove = [NSMutableArray array];
+    for (OAPOIUIFilter *f in _cacheTopStandardFilters)
+    {
+        if ([f.filterId isEqualToString:filter.filterId])
+            [filtersToRemove addObject:f];
     }
-    boolean res = helper.deleteFilter(helper.getWritableDatabase(), filter);
-    Iterator<OAPOIUIFilter *> it = cacheTopStandardFilters.iterator();
-    while (it.hasNext()) {
-        if (it.next().getFilterId().equals(filter.getFilterId())) {
-            it.remove();
-        }
+    [_cacheTopStandardFilters removeObjectsInArray:filtersToRemove];
+    
+    res = [helper addFilter:filter addOnlyCategories:NO];
+    if (res)
+    {
+        NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
+        [copy addObject:filter];
+        [copy sortUsingComparator:[OAPOIUIFilter getComparator]];
+        _cacheTopStandardFilters = copy;
     }
-    res = helper.addFilter(filter, helper.getWritableDatabase(), false);
-    if (res) {
-        ArrayList<OAPOIUIFilter *> copy = new ArrayList<>(cacheTopStandardFilters);
-        copy.add(filter);
-        Collections.sort(copy);
-        cacheTopStandardFilters = copy;
-    }
-    helper.close();
     return res;
 }
 
-public boolean editPoiFilter(OAPOIUIFilter * filter) {
-    if (filter.getFilterId().equals(OAPOIUIFilter *.CUSTOM_FILTER_ID) ||
-        filter.getFilterId().equals(OAPOIUIFilter *.BY_NAME_FILTER_ID) || filter.getFilterId().startsWith(OAPOIUIFilter *.STD_PREFIX)) {
-        return false;
+- (BOOL) editPoiFilter:(OAPOIUIFilter *)filter
+{
+    if ([filter.filterId isEqualToString:CUSTOM_FILTER_ID] ||
+        [filter.filterId isEqualToString:BY_NAME_FILTER_ID] ||
+        [filter.filterId hasPrefix:STD_PREFIX])
+    {
+        return NO;
     }
-    PoiFilterDbHelper helper = openDbHelper();
-    if (helper != null) {
-        boolean res = helper.editFilter(helper.getWritableDatabase(), filter);
-        helper.close();
+    OAPOIFilterDbHelper *helper = [self openDbHelper];
+    if (helper)
+    {
+        BOOL res = [helper editFilter:filter];
         return res;
     }
-    return false;
+    return NO;
 }
 
-@NonNull
-public Set<OAPOIUIFilter *> getSelectedPoiFilters() {
-    return selectedPoiFilters;
+- (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters
+{
+    return [NSSet setWithSet:_selectedPoiFilters];
 }
 
-public void addSelectedPoiFilter(OAPOIUIFilter * filter) {
-    selectedPoiFilters.add(filter);
-    saveSelectedPoiFilters();
+- (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter
+{
+    [_selectedPoiFilters addObject:filter];
+    [self saveSelectedPoiFilters];
 }
 
-public void removeSelectedPoiFilter(OAPOIUIFilter * filter) {
-    selectedPoiFilters.remove(filter);
-    saveSelectedPoiFilters();
+- (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter
+{
+    [_selectedPoiFilters removeObject:filter];
+    [self saveSelectedPoiFilters];
 }
 
-public boolean isShowingAnyPoi() {
-    return !selectedPoiFilters.isEmpty();
+- (BOOL) isShowingAnyPoi
+{
+    return _selectedPoiFilters.count > 0;
 }
 
-public void clearSelectedPoiFilters() {
-    selectedPoiFilters.clear();
-    saveSelectedPoiFilters();
+- (void) clearSelectedPoiFilters
+{
+    [_selectedPoiFilters removeAllObjects];
+    [self saveSelectedPoiFilters];
 }
 
-public NSString * getFiltersName(Set<OAPOIUIFilter *> filters) {
-    if (filters.isEmpty()) {
-        return application.getResources().getString(R.string.shared_string_none);
-    } else {
-        List<NSString *> names = new ArrayList<>();
-        for (OAPOIUIFilter * filter : filters) {
-            names.add(filter.getName());
-        }
-        return android.text.TextUtils.join(", ", names);
+- (NSString *) getFiltersName:(NSSet<OAPOIUIFilter *> *)filters
+{
+    if (filters.count == 0)
+    {
+        return OALocalizedString(@"shared_string_none");
     }
-}
-
-public NSString * getSelectedPoiFiltersName() {
-    return getFiltersName(selectedPoiFilters);
-}
-
-public boolean isPoiFilterSelected(OAPOIUIFilter * filter) {
-    return selectedPoiFilters.contains(filter);
-}
-
-public boolean isPoiFilterSelected(NSString * filterId) {
-    for (OAPOIUIFilter * filter : selectedPoiFilters) {
-        if (filter.filterId.equals(filterId)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-public void loadSelectedPoiFilters() {
-    Set<NSString *> filters = application.getSettings().getSelectedPoiFilters();
-    for (NSString * f : filters) {
-        OAPOIUIFilter * filter = getFilterById(f);
-        if (filter != null) {
-            selectedPoiFilters.add(filter);
-        }
-    }
-}
-
-public void saveSelectedPoiFilters() {
-    Set<NSString *> filters = new HashSet<>();
-    for (OAPOIUIFilter * f : selectedPoiFilters) {
-        filters.add(f.filterId);
-    }
-    application.getSettings().setSelectedPoiFilters(filters);
-}
-
-public class PoiFilterDbHelper {
-    
-    public static final NSString * DATABASE_NAME = "poi_filters"; //$NON-NLS-1$
-    private static final int DATABASE_VERSION = 5;
-    private static final NSString * FILTER_NAME = "poi_filters"; //$NON-NLS-1$
-    private static final NSString * FILTER_COL_NAME = "name"; //$NON-NLS-1$
-    private static final NSString * FILTER_COL_ID = "id"; //$NON-NLS-1$
-    private static final NSString * FILTER_COL_FILTERBYNAME = "filterbyname"; //$NON-NLS-1$
-    private static final NSString * FILTER_TABLE_CREATE = "CREATE TABLE " + FILTER_NAME + " (" + //$NON-NLS-1$ //$NON-NLS-2$
-				FILTER_COL_NAME + ", " + FILTER_COL_ID + ", " + FILTER_COL_FILTERBYNAME + ");"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    
-    
-    private static final NSString * CATEGORIES_NAME = "categories"; //$NON-NLS-1$
-    private static final NSString * CATEGORIES_FILTER_ID = "filter_id"; //$NON-NLS-1$
-    private static final NSString * CATEGORIES_COL_CATEGORY = "category"; //$NON-NLS-1$
-    private static final NSString * CATEGORIES_COL_SUBCATEGORY = "subcategory"; //$NON-NLS-1$
-    private static final NSString * CATEGORIES_TABLE_CREATE = "CREATE TABLE " + CATEGORIES_NAME + " (" + //$NON-NLS-1$ //$NON-NLS-2$
-				CATEGORIES_FILTER_ID + ", " + CATEGORIES_COL_CATEGORY + ", " + CATEGORIES_COL_SUBCATEGORY + ");"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-    private OsmandApplication context;
-    private SQLiteConnection conn;
-    private MapPoiTypes mapPoiTypes;
-    
-    PoiFilterDbHelper(MapPoiTypes mapPoiTypes, OsmandApplication context) {
-        this.mapPoiTypes = mapPoiTypes;
-        this.context = context;
-    }
-    
-    public SQLiteConnection getWritableDatabase() {
-        return openConnection(false);
-    }
-    
-    public void close() {
-        if (conn != null) {
-            conn.close();
-            conn = null;
-        }
-    }
-    
-    public SQLiteConnection getReadableDatabase() {
-        return openConnection(true);
-    }
-    
-    private SQLiteConnection openConnection(boolean readonly) {
-        conn = context.getSQLiteAPI().getOrCreateDatabase(DATABASE_NAME, readonly);
-        if (conn.getVersion() == 0 || DATABASE_VERSION != conn.getVersion()) {
-            if (readonly) {
-                conn.close();
-                conn = context.getSQLiteAPI().getOrCreateDatabase(DATABASE_NAME, readonly);
-            }
-            if (conn.getVersion() == 0) {
-                conn.setVersion(DATABASE_VERSION);
-                onCreate(conn);
-            } else {
-                onUpgrade(conn, conn.getVersion(), DATABASE_VERSION);
-            }
+    else
+    {
+        NSMutableString *names = [NSMutableString string];
+        for (OAPOIUIFilter *filter in filters)
+        {
+            if (names.length > 0)
+                [names appendString:@", "];
             
+            [names appendString:filter.name];
         }
-        return conn;
+        return [NSString stringWithString:names];
     }
-    
-    public void onCreate(SQLiteConnection conn) {
-        conn.execSQL(FILTER_TABLE_CREATE);
-        conn.execSQL(CATEGORIES_TABLE_CREATE);
+}
+
+- (NSString *) getSelectedPoiFiltersName
+{
+    return [self getFiltersName:_selectedPoiFilters];
+}
+
+- (BOOL) isPoiFilterSelected:(OAPOIUIFilter *)filter
+{
+    return [_selectedPoiFilters containsObject:filter];
+}
+
+- (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId
+{
+    for (OAPOIUIFilter *filter in _selectedPoiFilters)
+    {
+        if ([filter.filterId isEqualToString:filterId])
+            return YES;
     }
-    
-    
-    public void onUpgrade(SQLiteConnection conn, int oldVersion, int newVersion) {
-        if (newVersion <= 5) {
-            deleteOldFilters(conn);
-        }
-        conn.setVersion(newVersion);
+    return NO;
+}
+
+- (void) loadSelectedPoiFilters
+{
+    NSArray<NSString *> *filters = [OAAppSettings sharedManager].selectedPoiFilters;
+    for (NSString *f in filters)
+    {
+        OAPOIUIFilter *filter = [self getFilterById:f];
+        if (filter)
+            [_selectedPoiFilters addObject:filter];
     }
-    
-    private void deleteOldFilters(SQLiteConnection conn) {
-        for (NSString * toDel : DEL) {
-            deleteFilter(conn, "user_" + toDel);
-        }
+}
+
+- (void) saveSelectedPoiFilters
+{
+    NSMutableArray<NSString *> *filters = [NSMutableArray array];
+    for (OAPOIUIFilter *f in _selectedPoiFilters)
+    {
+        [filters addObject:f.filterId];
     }
-    
-    protected boolean addFilter(OAPOIUIFilter * p, SQLiteConnection db, boolean addOnlyCategories) {
-        if (db != null) {
-            if (!addOnlyCategories) {
-                db.execSQL("INSERT INTO " + FILTER_NAME + " VALUES (?, ?, ?)", new Object[]{p.getName(), p.getFilterId(), p.getFilterByName()}); //$NON-NLS-1$ //$NON-NLS-2$
-            }
-            Map<PoiCategory, LinkedHashSet<NSString *>> types = p.getAcceptedTypes();
-            SQLiteStatement insertCategories = db.compileStatement("INSERT INTO " + CATEGORIES_NAME + " VALUES (?, ?, ?)"); //$NON-NLS-1$ //$NON-NLS-2$
-            for (PoiCategory a : types.keySet()) {
-                if (types.get(a) == null) {
-                    insertCategories.bindString(1, p.getFilterId());
-                    insertCategories.bindString(2, a.getKeyName());
-                    insertCategories.bindNull(3);
-                    insertCategories.execute();
-                } else {
-                    for (NSString * s : types.get(a)) {
-                        insertCategories.bindString(1, p.getFilterId());
-                        insertCategories.bindString(2, a.getKeyName());
-                        insertCategories.bindString(3, s);
-                        insertCategories.execute();
-                    }
-                }
-            }
-            insertCategories.close();
-            return true;
-        }
-        return false;
-    }
-    
-    protected List<OAPOIUIFilter *> getFilters(SQLiteConnection conn) {
-        ArrayList<OAPOIUIFilter *> list = new ArrayList<OAPOIUIFilter *>();
-        if (conn != null) {
-            SQLiteCursor query = conn.rawQuery("SELECT " + CATEGORIES_FILTER_ID + ", " + CATEGORIES_COL_CATEGORY + "," + CATEGORIES_COL_SUBCATEGORY + " FROM " +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                                               CATEGORIES_NAME, null);
-            Map<NSString *, Map<PoiCategory, LinkedHashSet<NSString *>>> map = new LinkedHashMap<NSString *, Map<PoiCategory, LinkedHashSet<NSString *>>>();
-            if (query.moveToFirst()) {
-                do {
-                    NSString * filterId = query.getString(0);
-                    if (!map.containsKey(filterId)) {
-                        map.put(filterId, new LinkedHashMap<PoiCategory, LinkedHashSet<NSString *>>());
-                    }
-                    Map<PoiCategory, LinkedHashSet<NSString *>> m = map.get(filterId);
-                    PoiCategory a = mapPoiTypes.getPoiCategoryByName(query.getString(1).toLowerCase(), false);
-                    NSString * subCategory = query.getString(2);
-                    if (subCategory == null) {
-                        m.put(a, null);
-                    } else {
-                        if (m.get(a) == null) {
-                            m.put(a, new LinkedHashSet<NSString *>());
-                        }
-                        m.get(a).add(subCategory);
-                    }
-                } while (query.moveToNext());
-            }
-            query.close();
-            
-            query = conn.rawQuery("SELECT " + FILTER_COL_ID + ", " + FILTER_COL_NAME + "," + FILTER_COL_FILTERBYNAME + " FROM " +  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-                                  FILTER_NAME, null);
-            if (query.moveToFirst()) {
-                do {
-                    NSString * filterId = query.getString(0);
-                    if (map.containsKey(filterId)) {
-                        OAPOIUIFilter * filter = new OAPOIUIFilter *(query.getString(1), filterId,
-                                                                     map.get(filterId), application);
-                        filter.setSavedFilterByName(query.getString(2));
-                        list.add(filter);
-                    }
-                } while (query.moveToNext());
-            }
-            query.close();
-        }
-        return list;
-    }
-    
-    protected boolean editFilter(SQLiteConnection conn, OAPOIUIFilter * filter) {
-        if (conn != null) {
-            conn.execSQL("DELETE FROM " + CATEGORIES_NAME + " WHERE " + CATEGORIES_FILTER_ID + " = ?",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                         new Object[]{filter.getFilterId()});
-            addFilter(filter, conn, true);
-            updateName(conn, filter);
-            return true;
-        }
-        return false;
-    }
-    
-    private void updateName(SQLiteConnection db, OAPOIUIFilter * filter) {
-        db.execSQL("UPDATE " + FILTER_NAME + " SET " + FILTER_COL_FILTERBYNAME + " = ?, " + FILTER_COL_NAME + " = ? " + " WHERE " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-                   + FILTER_COL_ID + "= ?", new Object[]{filter.getFilterByName(), filter.getName(), filter.getFilterId()}); //$NON-NLS-1$
-    }
-    
-    protected boolean deleteFilter(SQLiteConnection db, OAPOIUIFilter * p) {
-        NSString * key = p.getFilterId();
-        return deleteFilter(db, key);
-    }
-    
-    private boolean deleteFilter(SQLiteConnection db, NSString * key) {
-        if (db != null) {
-            db.execSQL("DELETE FROM " + FILTER_NAME + " WHERE " + FILTER_COL_ID + " = ?", new Object[]{key}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            db.execSQL(
-                       "DELETE FROM " + CATEGORIES_NAME + " WHERE " + CATEGORIES_FILTER_ID + " = ?", new Object[]{key}); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-            return true;
-        }
-        return false;
-    }
-    
-    
+    [[OAAppSettings sharedManager] setSelectedPoiFilters:filters];
 }
 
 @end
+

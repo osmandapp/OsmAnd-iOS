@@ -143,6 +143,7 @@
         filterId = [STD_PREFIX stringByAppendingString:@"combined"];
         name = [filtersHelper getFiltersName:filtersToMerge];
     }
+    return self;
 }
 
 + (NSComparator) getComparator

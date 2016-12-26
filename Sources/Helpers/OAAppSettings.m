@@ -68,6 +68,8 @@
         _mapSettingActiveRouteFileName = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteFileNameKey];
         _mapSettingActiveRouteVariantType = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingActiveRouteVariantTypeKey] ? [[NSUserDefaults standardUserDefaults] integerForKey:mapSettingActiveRouteVariantTypeKey] : 0;
 
+        _selectedPoiFilters = [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:selectedPoiFiltersKey] : @[];
+
     }
     return self;
 }
@@ -181,6 +183,12 @@
 {
     _mapSettingVisibleGpx = mapSettingVisibleGpx;
     [[NSUserDefaults standardUserDefaults] setObject:_mapSettingVisibleGpx forKey:mapSettingVisibleGpxKey];
+}
+
+-(void)setSelectedPoiFilters:(NSArray<NSString *> *)selectedPoiFilters
+{
+    _selectedPoiFilters = selectedPoiFilters;
+    [[NSUserDefaults standardUserDefaults] setObject:_selectedPoiFilters forKey:selectedPoiFiltersKey];
 }
 
 -(void)setMapSettingShowRecordingTrack:(BOOL)mapSettingShowRecordingTrack

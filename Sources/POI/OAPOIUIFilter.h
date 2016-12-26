@@ -14,7 +14,7 @@ static NSString* const USER_PREFIX = @"user_";
 static NSString* const CUSTOM_FILTER_ID = @"user_custom_id";
 static NSString* const BY_NAME_FILTER_ID = @"user_by_name";
 
-@class OAPOI, OAPOIBaseType, OAPOICategory;
+@class OAPOI, OAPOIBaseType, OAPOIType, OAPOICategory;
 
 @interface OAAmenityNameFilter : NSObject
 
@@ -43,12 +43,47 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
 - (instancetype)initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSArray<NSString *> *> *)accTypes;
+- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype)initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
 - (NSArray<OAPOI *> *) searchAmenitiesInternal:(double)lat lon:(double)lon topLatitude:(double)topLatitude bottomLatitude:(double)bottomLatitude leftLongitude:(double)leftLongitude rightLongitude:(double)rightLongitude zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
 
 + (NSComparator) getComparator;
+
+- (NSDictionary<OAPOICategory *, NSSet<NSString *> *> *) getAcceptedTypes;
+
+- (void)updateFilterResults;
+- (NSArray<OAPOI *> *) searchAgain:(double)lat lon:(double)lon;
+- (NSArray<OAPOI *> *) searchFurther:(double)latitude longitude:(double)longitude matcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (BOOL) isSearchFurtherAvailable;
+- (NSString *) getSearchArea:(BOOL)next;
+- (void) clearPreviousZoom;
+- (void) clearCurrentResults;
+- (NSArray<OAPOI *> *) initializeNewSearch:(double)lat lon:(double)lon firstTimeLimit:(int)firstTimeLimit  matcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (NSArray<OAPOI *> *) searchAmenities:(double)top left:(double)left bottom:(double)bottom right:(double)right zoom:(int)zoom matcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (OAAmenityNameFilter *) getNameFilter:(NSString *)filter;
+- (NSString *) getNameToken24H;
+- (NSString *) getNameTokenOpen;
+- (NSObject *) getIconResource;
+- (OAResultMatcher<OAPOI *> *)wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
+- (NSString *)getName;
+- (NSString *) getGeneratedName:(int)chars;
+- (NSSet<NSString *> *) getAcceptedSubtypes:(OAPOICategory *)type;
+- (BOOL) isTypeAccepted:(OAPOICategory *)t;
+- (void) clearFilter;
+- (BOOL) areAllTypesAccepted;
+- (void) updateTypesToAccept:(OAPOIBaseType *)pt;
+- (void) combineWithPoiFilter:(OAPOIUIFilter *)f;
+- (void) combineWithPoiFilters:(NSSet<OAPOIUIFilter *> *)filters;
++ (void) combineStandardPoiFilters:(NSMutableSet<OAPOIUIFilter *> *)filters;
+- (void) replaceWithPoiFilter:(OAPOIUIFilter *)f;
+- (int) getAcceptedTypesCount;
+- (void) selectSubTypesToAccept:(OAPOICategory *)t accept:(NSMutableSet<NSString *> *)accept;
+- (void) setTypeToAccept:(OAPOICategory *)poiCategory b:(BOOL)b;
+- (NSDictionary<NSString *, OAPOIType *> *) getPoiAdditionals;
+- (NSString *) getIconId;
+- (BOOL)accept:(OAPOICategory *)type subcategory:(NSString *)subcategory;
+- (BOOL)isEmpty;
 
 @end

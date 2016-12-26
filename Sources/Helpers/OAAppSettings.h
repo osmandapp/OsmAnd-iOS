@@ -39,6 +39,8 @@
 #define mapSettingActiveRouteFileNameKey @"mapSettingActiveRouteFileNameKey"
 #define mapSettingActiveRouteVariantTypeKey @"mapSettingActiveRouteVariantTypeKey"
 
+#define selectedPoiFiltersKey @"selectedPoiFiltersKey"
+
 
 @interface OAAppSettings : NSObject
 
@@ -87,6 +89,8 @@
 
 @property (nonatomic) NSString* mapSettingActiveRouteFileName;
 @property (nonatomic) int mapSettingActiveRouteVariantType;
+
+@property (nonatomic) NSArray<NSString *> *selectedPoiFilters;
 
 -(void)showGpx:(NSString *)fileName;
 -(void)hideGpx:(NSString *)fileName;

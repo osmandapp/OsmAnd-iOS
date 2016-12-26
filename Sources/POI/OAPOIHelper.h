@@ -44,6 +44,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 + (OAPOIHelper *)sharedInstance;
 
+- (BOOL)isInit;
+
 - (void)updatePhrases;
 
 - (BOOL) isRegisteredType:(OAPOICategory *)t;
@@ -63,6 +65,8 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 - (OAPOICategory *) getPoiCategoryByName:(NSString *)name;
 - (OAPOICategory *) getPoiCategoryByName:(NSString *)name create:(BOOL)create;
+
+- (NSArray<OAPOIBaseType *> *) getTopVisibleFilters;
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom;
 

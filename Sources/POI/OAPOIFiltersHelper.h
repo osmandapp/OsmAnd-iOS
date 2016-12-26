@@ -14,4 +14,29 @@
 
 + (OAPOIFiltersHelper *)sharedInstance;
 
+- (OAPOIUIFilter *) getSearchByNamePOIFilter;
+- (OAPOIUIFilter *) getCustomPOIFilter;
+- (OAPOIUIFilter *) getLocalWikiPOIFilter;
+- (OAPOIUIFilter *) getShowAllPOIFilter;
+- (OAPOIUIFilter *) getFilterById:(NSString *)filterId;
+- (void) reloadAllPoiFilters;
+- (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters;
+- (NSArray<OAPOIUIFilter *> *) getSearchPoiFilters;
+- (NSArray<OAPOIUIFilter *> *) getTopDefinedPoiFilters;
+- (BOOL) removePoiFilter:(OAPOIUIFilter *)filter;
+- (BOOL) createPoiFilter:(OAPOIUIFilter *)filter;
+- (BOOL) editPoiFilter:(OAPOIUIFilter *)filter;
+- (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters;
+- (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter;
+- (void) removeSelectedPoiFilter:(OAPOIUIFilter *)filter;
+- (BOOL) isShowingAnyPoi;
+- (void) clearSelectedPoiFilters;
+- (NSString *) getFiltersName:(NSSet<OAPOIUIFilter *> *)filters;
+- (NSString *) getSelectedPoiFiltersName;
+- (BOOL) isPoiFilterSelected:(OAPOIUIFilter *)filter;
+- (BOOL) isPoiFilterSelectedByFilterId:(NSString *)filterId;
+- (void) loadSelectedPoiFilters;
+- (void) saveSelectedPoiFilters;
+
+
 @end

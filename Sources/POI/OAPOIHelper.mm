@@ -51,6 +51,8 @@
     NSString *_prefLang;
     
     NSArray<OAPOIType *> *_textPoiAdditionals;
+    
+    BOOL _isInit;
 }
 
 + (OAPOIHelper *)sharedInstance {
@@ -73,8 +75,14 @@
         [self findDefaultOtherCategory];
         [self updateReferences];
         [self updatePhrases];
+        _isInit = YES;
     }
     return self;
+}
+
+- (BOOL) isInit
+{
+    return _isInit;
 }
 
 - (void)readPOI
@@ -440,6 +448,26 @@
         return lastCategory;
     }
     return self.otherPoiCategory;
+}
+
+- (NSArray<OAPOIBaseType *> *) getTopVisibleFilters
+{
+    NSMutableArray<OAPOIBaseType *> *lf = [NSMutableArray array];
+    for (OAPOICategory *pc in _poiCategories)
+    {
+        if (pc.top)
+            [lf addObject:pc];
+
+        for (OAPOIFilter *p in pc.poiFilters)
+        {
+            if (p.top)
+                [lf addObject:p];
+        }
+    }
+    [lf sortUsingComparator:^NSComparisonResult(OAPOIBaseType * _Nonnull obj1, OAPOIBaseType * _Nonnull obj2) {
+        return [obj1.nameLocalized localizedCompare:obj2.nameLocalized];
+    }];
+    return lf;
 }
 
 -(void)setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom

@@ -486,3 +486,9 @@
 "wiki_around" = "Wikipedia Artikel in der Nähe";
 "categories" = "Kategorien";
 "items_selected" = "%d ausgewählt";
+"custom_search" = "Benutzerdefinierte Suche";
+"poi_filter_custom_filter" = "Benutzerdefinierter Filter";
+"poi_filter_closest_poi" = "Nächstgelegene POIs";
+"shared_string_is_open_24_7" = "24/7 geöffnet";
+"shared_string_is_open" = "Jetzt offen";
+"poi_filter_by_name" = "Nach Name suchen";

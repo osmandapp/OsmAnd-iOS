@@ -22,6 +22,7 @@
 #import "OASearchMoreCell.h"
 #import "OAPointDescCell.h"
 #import "OAIconTextDescCell.h"
+#import "OAIconButtonCell.h"
 
 
 @implementation OAPOISearchHelper
@@ -31,7 +32,7 @@
     return dataArray.count +
         dataPoiArray.count +
         (currentScope != EPOIScopeUndefined && searchRadiusIndex <= searchRadiusIndexMax ? 1 : 0) +
-        (currentScope == EPOIScopeUndefined && showTopList ? 1 : 0) +
+        (currentScope == EPOIScopeUndefined && showTopList ? 2 : 0) +
         (showCoordinates ? 1 : 0);
 }
 
@@ -138,28 +139,50 @@
     {
         if (currentScope == EPOIScopeUndefined && showTopList)
         {
-            OAIconTextTableViewCell* cell;
-            cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
-            if (cell == nil)
+            if (row >= dataArray.count + dataPoiArray.count + 1)
             {
-                NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
-                cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                OAIconButtonCell* cell;
+                cell = (OAIconButtonCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconButtonCell"];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconButtonCell" owner:self options:nil];
+                    cell = (OAIconButtonCell *)[nib objectAtIndex:0];
+                }
+                
+                if (cell)
+                {
+                    cell.contentView.backgroundColor = [UIColor whiteColor];
+                    [cell setImage:[UIImage imageNamed:@"search_icon.png"] tint:YES];
+                    [cell.textView setText:OALocalizedString(@"custom_search")];
+                    [cell.iconView setImage: nil];
+                }
+                return cell;
             }
-            
-            if (cell)
+            else
             {
-                cell.contentView.backgroundColor = [UIColor whiteColor];
-                cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
-                [cell.textView setTextColor:[UIColor blackColor]];
+                OAIconTextTableViewCell* cell;
+                cell = (OAIconTextTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextTableViewCell"];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextCell" owner:self options:nil];
+                    cell = (OAIconTextTableViewCell *)[nib objectAtIndex:0];
+                }
                 
-                CGRect f = cell.textView.frame;
-                f.origin.y = 14.0;
-                cell.textView.frame = f;
-                
-                [cell.textView setText:OALocalizedString(@"all_categories")];
-                [cell.iconView setImage: nil];
+                if (cell)
+                {
+                    cell.contentView.backgroundColor = [UIColor whiteColor];
+                    cell.arrowIconView.image = [UIImage imageNamed:@"menu_cell_pointer.png"];
+                    [cell.textView setTextColor:[UIColor blackColor]];
+                    
+                    CGRect f = cell.textView.frame;
+                    f.origin.y = 14.0;
+                    cell.textView.frame = f;
+                    
+                    [cell.textView setText:OALocalizedString(@"all_categories")];
+                    [cell.iconView setImage: nil];
+                }
+                return cell;
             }
-            return cell;
         }
         else
         {

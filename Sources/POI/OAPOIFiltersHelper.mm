@@ -652,7 +652,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 {
     if (filters.count == 0)
     {
-        return OALocalizedString(@"shared_string_none");
+        return OALocalizedString(@"map_settings_none");
     }
     else
     {

@@ -557,7 +557,7 @@
 
 - (BOOL) isTypeAccepted:(OAPOICategory *)t
 {
-    return [acceptedTypes objectForKey:t];
+    return [acceptedTypes objectForKey:t] != nil;
 }
 
 - (void) clearFilter

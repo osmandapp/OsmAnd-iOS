@@ -485,3 +485,9 @@
 "wiki_around" = "Wikipedia artikler i nærheden";
 "categories" = "Kategorier";
 "items_selected" = "%d valgt";
+"custom_search" = "Brugerdefineret søgning";
+"poi_filter_custom_filter" = "Brugerdefineret filter";
+"poi_filter_closest_poi" = "Nærmeste interessepunkter";
+"shared_string_is_open_24_7" = "Åben 24/7";
+"shared_string_is_open" = "Åben nu";
+"poi_filter_by_name" = "Søg via navn";

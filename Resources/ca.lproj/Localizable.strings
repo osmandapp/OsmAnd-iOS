@@ -485,3 +485,9 @@
 "wiki_around" = "Articles de la zona a la Viquipèdia";
 "categories" = "Categories";
 "items_selected" = "%d seleccionats";
+"custom_search" = "Cerca personalitzada";
+"poi_filter_custom_filter" = "Filtre personalitzat";
+"poi_filter_closest_poi" = "PDI més propers";
+"shared_string_is_open_24_7" = "Obert 24h/7d";
+"shared_string_is_open" = "Obert ara mateix";
+"poi_filter_by_name" = "Cerca pel nom";

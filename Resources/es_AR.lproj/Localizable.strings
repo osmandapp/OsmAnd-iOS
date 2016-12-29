@@ -485,3 +485,14 @@
 "wiki_around" = "Artículos de Wikipedia cercanos";
 "categories" = "Categorías";
 "items_selected" = "%d elegidos";
+"shared_string_all" = "Todos";
+"custom_search" = "Personalizar búsqueda";
+"poi_filter_custom_filter" = "Filtro propio";
+"poi_filter_closest_poi" = "PDIs más cercanos";
+"shared_string_is_open_24_7" = "Abierto 24/7";
+"shared_string_is_open" = "Abierto ahora";
+"poi_filter_by_name" = "Buscar por nombre";
+"subcategories" = "Subcategorías";
+"select_all" = "Marcar todos";
+"create_custom_poi" = "Crear filtro personalizado";
+"selected_categories" = "Categorías elegidas";

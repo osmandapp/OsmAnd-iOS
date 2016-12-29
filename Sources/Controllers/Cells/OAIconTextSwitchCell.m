@@ -37,13 +37,12 @@ static UIFont *_textFont;
 {
     if (descHidden)
     {
-        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text]);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + 1.0);
     }
     else
     {
-        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + descTextFullHeight);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + descTextFullHeight + 1.0);
     }
-    return defaultCellHeight;
 }
 
 -(void)layoutSubviews

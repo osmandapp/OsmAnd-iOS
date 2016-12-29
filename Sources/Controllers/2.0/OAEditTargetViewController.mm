@@ -19,7 +19,6 @@
 #import "OAIconTextTableViewCell.h"
 #import <UIAlertView+Blocks.h>
 
-#import "OATextLineViewCell.h"
 #import "OAColorViewCell.h"
 #import "OAGroupViewCell.h"
 #import "OATextViewTableViewCell.h"

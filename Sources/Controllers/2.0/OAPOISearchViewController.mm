@@ -1787,7 +1787,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 -(void)createPOIUIFilter
 {
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] init];
-    [self presentViewController:customPOI animated:YES completion:nil];
+    [self.navigationController pushViewController:customPOI animated:YES];
 }
 
 -(void)editPOIUIFilter:(id)item

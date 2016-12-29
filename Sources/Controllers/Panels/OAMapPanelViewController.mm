@@ -977,7 +977,11 @@ typedef enum
     _searchPOI.myLocation = searchLocation;
     _searchPOI.distanceFromMyLocation = distanceFromMyLocation;
     _searchPOI.searchNearMapCenter = searchNearMapCenter;
-    [self.navigationController presentViewController:_searchPOI animated:YES completion:nil];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchPOI];
+    navController.navigationBarHidden = YES;
+    navController.automaticallyAdjustsScrollViewInsets = NO;
+    navController.edgesForExtendedLayout = UIRectEdgeNone;
+    [self.navigationController presentViewController:navController animated:YES completion:nil];
 }
 
 -(void)onNoSymbolFound:(NSNotification *)notification

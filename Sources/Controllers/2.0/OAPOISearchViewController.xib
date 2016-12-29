@@ -32,16 +32,6 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="grouped" rowHeight="50" sectionHeaderHeight="18" sectionFooterHeight="18" id="6VS-zr-H5j">
-                    <rect key="frame" x="0.0" y="195" width="320" height="285"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                    <inset key="separatorInset" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    <connections>
-                        <outlet property="dataSource" destination="-1" id="a8r-7Q-nZu"/>
-                        <outlet property="delegate" destination="-1" id="Azk-Uh-VEQ"/>
-                    </connections>
-                </tableView>
                 <view clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" id="RXJ-Yy-wKG">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="148"/>
                     <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
@@ -150,6 +140,16 @@
                     </subviews>
                     <color key="backgroundColor" red="0.9882352941176471" green="0.4823529411764706" blue="0.031372549019607843" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" style="grouped" rowHeight="50" sectionHeaderHeight="18" sectionFooterHeight="18" id="6VS-zr-H5j">
+                    <rect key="frame" x="0.0" y="195" width="320" height="285"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <inset key="separatorInset" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
+                    <connections>
+                        <outlet property="dataSource" destination="-1" id="a8r-7Q-nZu"/>
+                        <outlet property="delegate" destination="-1" id="Azk-Uh-VEQ"/>
+                    </connections>
+                </tableView>
             </subviews>
             <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>

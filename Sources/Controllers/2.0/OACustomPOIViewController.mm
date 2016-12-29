@@ -11,6 +11,7 @@
 #import "OAPOICategory.h"
 #import "OAIconTextSwitchCell.h"
 #import "OAPOISearchHelper.h"
+#import "OASelectSubcategoryViewController.h"
 
 @interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -38,7 +39,7 @@
 
 - (IBAction)cancelPress:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - UITableViewDataSource
@@ -79,7 +80,6 @@
         [cell.textView setText:item.nameLocalized];
         [cell.iconView setImage: [item icon]];
         cell.descView.hidden = YES;
-        //[cell layoutIfNeeded];
     }
     return cell;
 }
@@ -88,6 +88,15 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return _dataArray.count;
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    OAPOICategory* item = _dataArray[indexPath.row];
+    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item];
+    [self.navigationController pushViewController:subcatController animated:YES];
 }
 
 @end

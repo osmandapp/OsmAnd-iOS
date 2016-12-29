@@ -37,16 +37,23 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="ic_action_additional_option.png" id="Jcq-JH-owC">
-                        <rect key="frame" x="213" y="0.0" width="50" height="50"/>
+                        <rect key="frame" x="213" y="0.0" width="30" height="50"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </imageView>
                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" id="jVg-oN-Wl8">
-                        <rect key="frame" x="258" y="9" width="51" height="31"/>
+                        <rect key="frame" x="253" y="9" width="51" height="31"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     </switch>
                 </subviews>
             </tableViewCellContentView>
-            <point key="canvasLocation" x="71" y="21.5"/>
+            <connections>
+                <outlet property="descView" destination="i9d-dF-GdE" id="jgR-G9-vqS"/>
+                <outlet property="detailsIconView" destination="Jcq-JH-owC" id="Umx-5u-zuZ"/>
+                <outlet property="iconView" destination="6xA-WM-rOn" id="Ydw-Vj-g5F"/>
+                <outlet property="switchView" destination="jVg-oN-Wl8" id="Q1b-9e-ik6"/>
+                <outlet property="textView" destination="ic7-ec-MuQ" id="NTD-J8-qlm"/>
+            </connections>
+            <point key="canvasLocation" x="-67" y="-172.5"/>
         </tableViewCell>
     </objects>
     <resources>

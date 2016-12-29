@@ -493,3 +493,6 @@
 "poi_filter_by_name" = "Søg via navn";
 "subcategories" = "Underkategorier";
 "select_all" = "Vælg alle";
+"selected_categories" = "Valgte kategorier";
+"create_custom_poi" = "Opret brugerdefineret filter";
+"shared_string_all" = "Alle";

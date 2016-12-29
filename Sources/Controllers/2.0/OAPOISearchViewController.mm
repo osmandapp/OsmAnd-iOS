@@ -30,6 +30,8 @@
 #import "OACategoriesTableViewController.h"
 #import "OAHistoryTableViewController.h"
 #import "OACustomPOIViewController.h"
+#import "OAPOIFiltersHelper.h"
+#import "OAPOIUIFilter.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -1786,7 +1788,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)createPOIUIFilter
 {
-    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] init];
+    OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
+    [filter clearFilter];
+    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
     [self.navigationController pushViewController:customPOI animated:YES];
 }
 

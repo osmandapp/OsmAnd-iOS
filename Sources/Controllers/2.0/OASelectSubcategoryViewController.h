@@ -10,8 +10,19 @@
 
 @class OAPOICategory;
 
+@protocol OASelectSubcategoryDelegate
+
+@required
+
+- (void)selectSubcategoryCancel;
+- (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
+
+@end
+
 @interface OASelectSubcategoryViewController : OASuperViewController
 
-- (instancetype)initWithCategory:(OAPOICategory *)category;
+@property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
+
+- (instancetype)initWithCategory:(OAPOICategory *)category selectAll:(BOOL)selectAll;
 
 @end

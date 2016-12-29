@@ -29,6 +29,7 @@
 #import "OAPOISearchHelper.h"
 #import "OACategoriesTableViewController.h"
 #import "OAHistoryTableViewController.h"
+#import "OACustomPOIViewController.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -187,7 +188,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
     _categoriesViewController.searchNearMapCenter = _searchNearMapCenter;
-
+    
     _historyViewController = [[OAHistoryTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _historyViewController.delegate = self;
     _historyViewController.searchNearMapCenter = _searchNearMapCenter;
@@ -1781,6 +1782,17 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _showTopList = NO;
         [self updateTextField:self.searchString];
     }
+}
+
+-(void)createPOIUIFilter
+{
+    OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] init];
+    [self presentViewController:customPOI animated:YES completion:nil];
+}
+
+-(void)editPOIUIFilter:(id)item
+{
+    
 }
 
 #pragma mark - OAHistoryTableDelegate

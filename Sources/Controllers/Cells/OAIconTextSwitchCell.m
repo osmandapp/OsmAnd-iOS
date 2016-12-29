@@ -11,11 +11,14 @@
 
 #define textMarginVertical 5.0
 #define minTextHeight 38.0
+#define deltaTextWidth 158.0
 #define descTextFullHeight 25.0
 #define imageSize 50.0
 
 #define defaultCellHeight 51.0
 #define defaultCellContentHeight 50.0
+
+static UIFont *_textFont;
 
 @implementation OAIconTextSwitchCell
 
@@ -30,15 +33,15 @@
     // Configure the view for the selected state
 }
 
-- (CGFloat) getCellHeight
++ (CGFloat) getHeight:(NSString *)text descHidden:(BOOL)descHidden cellWidth:(CGFloat)cellWidth
 {
-    if (self.descView.hidden)
+    if (descHidden)
     {
-        return MAX(defaultCellHeight, [self getTextViewHeightWithWidth:self.textView.bounds.size.width]);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text]);
     }
     else
     {
-        return MAX(defaultCellHeight, [self getTextViewHeightWithWidth:self.textView.bounds.size.width] + descTextFullHeight);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + descTextFullHeight);
     }
     return defaultCellHeight;
 }
@@ -51,11 +54,11 @@
     CGFloat h = self.bounds.size.height;
     
     self.iconView.center = CGPointMake(imageSize / 2, h / 2);
-    self.detailsIconView.center = CGPointMake(w - 82, h / 2);
-    self.switchView.center = CGPointMake(w - 38, h / 2);
+    self.detailsIconView.center = CGPointMake(w - 92, h / 2);
+    self.switchView.center = CGPointMake(w - 42, h / 2);
     
-    CGFloat textWidth = self.detailsIconView.frame.origin.x - (imageSize + 1.0);
-    CGFloat textHeight = [self getTextViewHeightWithWidth:textWidth];
+    CGFloat textWidth = w - deltaTextWidth;
+    CGFloat textHeight = [self.class getTextViewHeightWithWidth:w text:self.textView.text];
 
     if (self.descView.hidden)
     {
@@ -68,9 +71,12 @@
     }
 }
 
-- (CGFloat) getTextViewHeightWithWidth:(CGFloat)width
++ (CGFloat) getTextViewHeightWithWidth:(CGFloat)width text:(NSString *)text
 {
-    return [OAUtilities calculateTextBounds:self.textView.text width:width font:self.textView.font].height + textMarginVertical * 2;
+    if (!_textFont)
+        _textFont = [UIFont fontWithName:@"AvenirNext-Regular" size:16.0];
+    
+    return [OAUtilities calculateTextBounds:text width:width font:_textFont].height + textMarginVertical * 2;
 }
 
 @end

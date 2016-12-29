@@ -9,6 +9,7 @@
 #import "OACategoriesTableViewController.h"
 #import "Localization.h"
 #import "OAPOISearchHelper.h"
+#import "OACustomPOIViewController.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -70,9 +71,17 @@
     if (self.delegate)
     {
         if (indexPath.row < _dataArray.count)
+        {
             [self.delegate didSelectCategoryItem:_dataArray[indexPath.row]];
-        else
+        }
+        else if (indexPath.row == _dataArray.count)
+        {
             [self.delegate didSelectCategoryItem:nil];
+        }
+        else
+        {
+            [self.delegate createPOIUIFilter];
+        }
     }
 }
 

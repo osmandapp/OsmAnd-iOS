@@ -13,9 +13,10 @@
 @required
 
 - (void)didSelectCategoryItem:(id)item;
+- (void)createPOIUIFilter;
+- (void)editPOIUIFilter:(id)item;
 
 @end
-
 
 @interface OACategoriesTableViewController : UITableViewController
 

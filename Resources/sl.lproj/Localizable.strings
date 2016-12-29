@@ -201,3 +201,15 @@
 "shared_string_select" = "Izberi";
 "try_again" = "Poskusi znova";
 "wiki_around" = "Bližnja mesta s članki Wikipedije";
+"subcategories" = "Podkategorije";
+"selected_categories" = "Izbrane kategorije";
+"sett_lang_trans" = "prečrkovanje";
+"res_type" = "Vrsta";
+"shared_string_all" = "Vse";
+"create_custom_poi" = "Ustvari filter po meri";
+"custom_search" = "Iskanje po meri";
+"shared_string_is_open_24_7" = "Odprto 24/7";
+"shared_string_is_open" = "Odpri";
+"poi_filter_by_name" = "Iskanje po imenu";
+"poi_filter_closest_poi" = "Najbližje točke POI";
+"poi_filter_custom_filter" = "Filter po meri";

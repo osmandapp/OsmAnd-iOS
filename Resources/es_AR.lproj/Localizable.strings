@@ -496,3 +496,4 @@
 "select_all" = "Marcar todos";
 "create_custom_poi" = "Crear filtro personalizado";
 "selected_categories" = "Categorías elegidas";
+"new_filter_desc" = "Ingresa el nombre del nuevo filtro, se añadirá en tu lista de Categorías.";

@@ -496,3 +496,4 @@
 "selected_categories" = "Valgte kategorier";
 "create_custom_poi" = "Opret brugerdefineret filter";
 "shared_string_all" = "Alle";
+"new_filter_desc" = "Angiv et navn for det nye filter, det vil blive tilføjet til Kategorier.";

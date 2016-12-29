@@ -28,16 +28,19 @@
 @implementation OASelectSubcategoryViewController
 {
     OAMultiselectableHeaderView *_headerView;
+    NSArray<NSString *> *_keys;
     NSArray<NSString *> *_data;
     OAPOICategory *_category;
+    BOOL _selectAll;
 }
 
-- (instancetype)initWithCategory:(OAPOICategory *)category
+- (instancetype)initWithCategory:(OAPOICategory *)category selectAll:(BOOL)selectAll
 {
     self = [super init];
     if (self)
     {
         _category = category;
+        _selectAll = selectAll;
         [self initData];
     }
     return self;
@@ -47,12 +50,20 @@
 {
     if (_category)
     {
-        NSMutableArray<NSString *> *arr = [NSMutableArray array];
-        for (OAPOIType *pt in _category.poiTypes)
+        NSMutableArray<OAPOIType *> *arr = [NSMutableArray arrayWithArray:_category.poiTypes];
+        [arr sortUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull str1, OAPOIType * _Nonnull str2) {
+            return [str1.nameLocalized localizedCaseInsensitiveCompare:str2.nameLocalized];
+        }];
+
+        NSMutableArray<NSString *> *keys = [NSMutableArray array];
+        NSMutableArray<NSString *> *data = [NSMutableArray array];
+        for (OAPOIType *pt in arr)
         {
-            [arr addObject:pt.nameLocalized];
+            [keys addObject:pt.name];
+            [data addObject:pt.nameLocalized];
         }
-        _data = [NSArray arrayWithArray:arr];
+        _data = [NSArray arrayWithArray:data];
+        _keys = [NSArray arrayWithArray:keys];
     }
 }
 
@@ -73,6 +84,9 @@
     _headerView.delegate = self;
     
     self.tableView.editing = YES;
+    if (_selectAll)
+        for (int i = 0; i < _data.count; i++)
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
 }
 
 -(void)applyLocalization
@@ -82,11 +96,24 @@
 
 - (IBAction)cancelPress:(id)sender
 {
+    if (_delegate)
+        [_delegate selectSubcategoryCancel];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)donePress:(id)sender
 {
+    if (_delegate)
+    {
+        NSMutableSet<NSString *> *selectedKeys = [NSMutableSet set];
+        NSArray<NSIndexPath *> *rows = [self.tableView indexPathsForSelectedRows];
+        for (NSIndexPath *index in rows)
+            [selectedKeys addObject:_keys[index.row]];
+
+        [_delegate selectSubcategoryDone:_category keys:selectedKeys allSelected:_keys.count == selectedKeys.count];
+    }
+
     [self.navigationController popViewControllerAnimated:YES];
 }
 

@@ -8,6 +8,10 @@
 
 #import "OASuperViewController.h"
 
+@class OAPOIUIFilter;
+
 @interface OACustomPOIViewController : OASuperViewController
+
+- (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 
 @end

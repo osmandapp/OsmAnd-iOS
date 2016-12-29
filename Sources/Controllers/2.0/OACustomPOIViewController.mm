@@ -12,29 +12,64 @@
 #import "OAIconTextSwitchCell.h"
 #import "OAPOISearchHelper.h"
 #import "OASelectSubcategoryViewController.h"
+#import "OAPOIUIFilter.h"
+#import "OAPOIFiltersHelper.h"
+#import "Localization.h"
+#import "OAUtilities.h"
 
-@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface OACustomPOIViewController () <UITableViewDataSource, UITableViewDelegate, OASelectSubcategoryDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 @property (weak, nonatomic) IBOutlet UILabel *textView;
 
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet UILabel *bottomTextView;
+@property (weak, nonatomic) IBOutlet UILabel *bottomBtnView;
+
 @end
 
 @implementation OACustomPOIViewController
 {
+    OAPOIFiltersHelper *_filterHelper;
+    OAPOIUIFilter *_filter;
     NSArray<OAPOICategory *> *_dataArray;
+    BOOL _editMode;
+    BOOL _bottomViewVisible;
+}
+
+- (instancetype)initWithFilter:(OAPOIUIFilter *)filter
+{
+    self = [super init];
+    if (self)
+    {
+        _filterHelper = [OAPOIFiltersHelper sharedInstance];
+        _filter = filter;
+        _editMode = _filter != [_filterHelper getCustomPOIFilter];
+        [self initData];
+    }
+    return self;
+}
+
+- (void) initData
+{
+    _dataArray = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
+    _dataArray = [_dataArray sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
+        return [c1.nameLocalized localizedCaseInsensitiveCompare:c2.nameLocalized];
+    }];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    _dataArray = [OAPOIHelper sharedInstance].poiCategoriesNoOther;
-    _dataArray = [_dataArray sortedArrayUsingComparator:^NSComparisonResult(OAPOICategory * _Nonnull c1, OAPOICategory * _Nonnull c2) {
-        return [c1.nameLocalized localizedCaseInsensitiveCompare:c2.nameLocalized];
-    }];
+    
+    _bottomView.frame = CGRectMake(0, self.view.frame.size.height + 1, self.view.frame.size.width, _bottomView.bounds.size.height);
+    
+    if (_editMode)
+        self.textView.text = _filter.name;
+    else
+        self.textView.text = OALocalizedString(@"create_custom_poi");
 }
 
 - (IBAction)cancelPress:(id)sender
@@ -42,11 +77,72 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+- (void) saveFilter
+{
+    [_filterHelper editPoiFilter:_filter];
+    if (!_editMode)
+    {
+        if ([_filter isEmpty])
+        {
+            if (_bottomViewVisible)
+            {
+                [UIView animateWithDuration:.25 animations:^{
+                    _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+                }];
+            }
+            _bottomViewVisible = NO;
+        }
+        else
+        {
+            self.bottomTextView.text = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"selected_categories"), [_filter getAcceptedTypesCount]];
+
+            if (!_bottomViewVisible)
+            {
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+                [UIView animateWithDuration:.25 animations:^{
+                    _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
+                }];
+            }
+            _bottomViewVisible = YES;
+        }
+    }
+}
+
+#pragma mark - OASelectSubcategoryDelegate
+
+- (void)selectSubcategoryCancel
+{
+    [self.tableView reloadData];
+}
+
+- (void)selectSubcategoryDone:(OAPOICategory *)category keys:(NSMutableSet<NSString *> *)keys allSelected:(BOOL)allSelected;
+{
+    if (allSelected)
+    {
+        [_filter selectSubTypesToAccept:category accept:[OAPOIBaseType nullSet]];
+    }
+    else if (keys.count == 0)
+    {
+        [_filter setTypeToAccept:category b:NO];
+    }
+    else
+    {
+        [_filter selectSubTypesToAccept:category accept:keys];
+    }
+    
+    [self saveFilter];
+    [self.tableView reloadData];
+}
+
+
 #pragma mark - UITableViewDataSource
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForFooter];
+    if (_bottomViewVisible)
+        return _bottomView.bounds.size.height + [OAPOISearchHelper getHeightForFooter];
+    else
+        return [OAPOISearchHelper getHeightForFooter];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -68,18 +164,54 @@
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSwitchCell" owner:self options:nil];
         cell = (OAIconTextSwitchCell *)[nib objectAtIndex:0];
+        cell.iconView.tintColor = UIColorFromRGB(0x727272);
     }
     
     if (cell)
     {
+        [cell.switchView removeTarget:self action:@selector(toggle:) forControlEvents:UIControlEventValueChanged];
         cell.contentView.backgroundColor = [UIColor whiteColor];
         [cell.textView setTextColor:[UIColor blackColor]];
         
         OAPOICategory* item = _dataArray[indexPath.row];
+        BOOL isSelected = [_filter isTypeAccepted:item];
         
+        cell.switchView.tag = indexPath.row;
+        [cell.switchView addTarget:self action:@selector(toggle:) forControlEvents:UIControlEventValueChanged];
+
         [cell.textView setText:item.nameLocalized];
-        [cell.iconView setImage: [item icon]];
-        cell.descView.hidden = YES;
+        
+        if (isSelected)
+        {
+            [cell.iconView setImage: [item icon]];
+            cell.descView.hidden = NO;
+            cell.switchView.on = YES;
+            
+            NSSet<NSString *> *subtypes = [_filter getAcceptedSubtypes:item];
+            if (subtypes == [OAPOIBaseType nullSet])
+            {
+                cell.descView.text = OALocalizedString(@"shared_string_all");
+            }
+            else
+            {
+                NSMutableString *str = [NSMutableString string];
+                for (NSString *st in subtypes)
+                {
+                    if (str.length > 0)
+                        [str appendString:@", "];
+                    
+                    [str appendString:st];
+                }
+                cell.descView.text = str;
+            }
+        }
+        else
+        {
+            UIImage *img = [[item icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            [cell.iconView setImage: img];
+            cell.descView.hidden = YES;
+            cell.switchView.on = NO;
+        }
     }
     return cell;
 }
@@ -95,8 +227,36 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     OAPOICategory* item = _dataArray[indexPath.row];
-    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item];
+    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item selectAll:NO];
+    subcatController.delegate = self;
     [self.navigationController pushViewController:subcatController animated:YES];
+}
+
+- (void)toggle:(id)sender
+{
+    if ([sender isKindOfClass:[UISwitch class]])
+    {
+        UISwitch *sw = (UISwitch *) sender;
+        if (sw.tag >= 0 && sw.tag < _dataArray.count)
+        {
+            OAPOICategory *item = _dataArray[sw.tag];
+            if (sw.on)
+            {
+                OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item selectAll:YES];
+                subcatController.delegate = self;
+                [self.navigationController pushViewController:subcatController animated:YES];
+            }
+            else
+            {
+                [_filter setTypeToAccept:item b:NO];
+                [self saveFilter];
+                
+                [self.tableView beginUpdates];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sw.tag inSection:0]] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView endUpdates];
+            }
+        }
+    }
 }
 
 @end

@@ -10,7 +10,17 @@
 
 @class OAPOIUIFilter;
 
+@protocol OACustomPOIViewDelegate
+
+@required
+
+- (void) searchByUIFilter:(OAPOIUIFilter *)filter;
+
+@end
+
 @interface OACustomPOIViewController : OASuperViewController
+
+@property (weak, nonatomic) id<OACustomPOIViewDelegate> delegate;
 
 - (instancetype)initWithFilter:(OAPOIUIFilter *)filter;
 

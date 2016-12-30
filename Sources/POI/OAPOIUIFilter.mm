@@ -113,7 +113,7 @@
 }
 
 // constructor for user defined filters
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
+- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSSet<NSString *> *> *)accTypes
 {
     self = [self init];
     if (self)
@@ -125,9 +125,14 @@
         filterId = fId;
         name = nm;
         if (!accTypes)
+        {
             [self initSearchAll];
+        }
         else
-            [acceptedTypes addEntriesFromDictionary:accTypes];
+        {
+            NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *aTypes = [NSMutableDictionary dictionaryWithDictionary:accTypes];
+            [acceptedTypes addEntriesFromDictionary:aTypes];
+        }
         
         [self updatePoiAdditionals];
     }
@@ -750,6 +755,12 @@
 -(BOOL)isEmpty
 {
     return acceptedTypes.count == 0 && currentSearchResult.count == 0;
+}
+
++ (UIImage *) getUserIcon
+{
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_user_defined", [OAUtilities drawablePostfix]]];
+    return [OAUtilities applyScaleFactorToImage:img];
 }
 
 - (BOOL)isEqual:(id)object

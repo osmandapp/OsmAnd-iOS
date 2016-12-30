@@ -56,7 +56,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BarActionEditHistory,
 };
 
-@interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OAPOISearchDelegate, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate>
+@interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OAPOISearchDelegate, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -72,6 +72,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (weak, nonatomic) IBOutlet UIImageView *barActionImageView;
 @property (weak, nonatomic) IBOutlet UIButton *barActionTextButton;
 @property (weak, nonatomic) IBOutlet UIButton *barActionImageButton;
+@property (weak, nonatomic) IBOutlet UIButton *saveFilterButton;
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
@@ -120,11 +121,16 @@ typedef NS_ENUM(NSInteger, BarActionType)
     NSString *_currentScopeCategoryNameLoc;
     NSString *_currentScopeFilterName;
     NSString *_currentScopeFilterNameLoc;
+    NSString *_currentScopeUIFilterName;
+    NSString *_currentScopeUIFilterNameLoc;
 
     EPOIScope _coreFoundScope;
     NSString *_coreFoundScopePoiTypeName;
     NSString *_coreFoundScopeCategoryName;
     NSString *_coreFoundScopeFilterName;
+    NSString *_coreFoundScopeUIFilterName;
+    
+    OAPOIUIFilter *_filter;
 
     BOOL _dataInvalidated;
 
@@ -442,6 +448,27 @@ typedef NS_ENUM(NSInteger, BarActionType)
     }
 }
 
+- (IBAction)saveFilterButtonPress:(id)sender
+{
+    if (_filter)
+        [self saveCustomFilter];
+}
+
+- (void) saveCustomFilter
+{
+    UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
+    [alert textFieldAtIndex:0].text = _filter.name;
+    [alert show];
+}
+
+- (void) setFilter:(OAPOIUIFilter *)filter
+{
+    _filter = filter;
+    _coreFoundScopeUIFilterName = nil;
+    _saveFilterButton.hidden = _filter == nil || _filter != [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
+}
+
 - (void)finishHistoryEditing
 {
     _historyEditing = NO;
@@ -677,6 +704,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
         [_currentScopeCategoryName isEqualToString:_coreFoundScopeCategoryName] : _coreFoundScopeCategoryName == nil) &&
     (_currentScopeFilterName ?
         [_currentScopeFilterName isEqualToString:_coreFoundScopeFilterName] : _coreFoundScopeFilterName == nil) &&
+    (_currentScopeUIFilterName ?
+        [_currentScopeUIFilterName isEqualToString:_coreFoundScopeUIFilterName] : _coreFoundScopeUIFilterName == nil) &&
     (_currentScopePoiTypeName ?
         [_currentScopePoiTypeName isEqualToString:_coreFoundScopePoiTypeName] : _coreFoundScopePoiTypeName == nil);
 }
@@ -782,15 +811,15 @@ typedef NS_ENUM(NSInteger, BarActionType)
             if (_showTopList)
             {
                 NSArray *filters = [OAPOIHelper sharedInstance].poiFilters;
-                
                 for (OAPOICategory *c in categories)
                     if (c.top)
                         [arr addObject:c];
-                
                 for (OAPOIFilter *f in filters)
                     if (f.top)
                         [arr addObject:f];
-                
+
+                NSArray<OAPOIUIFilter *> *uiFilters = [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters];
+                [arr addObjectsFromArray:uiFilters];
             }
             else
             {
@@ -807,11 +836,15 @@ typedef NS_ENUM(NSInteger, BarActionType)
                     str1 = ((OAPOICategory *)obj1).nameLocalized;
                 else if ([obj1 isKindOfClass:[OAPOIFilter class]])
                     str1 = ((OAPOIFilter *)obj1).nameLocalized;
+                else if ([obj1 isKindOfClass:[OAPOIUIFilter class]])
+                    str1 = ((OAPOIUIFilter *)obj1).name;
 
                 if ([obj2 isKindOfClass:[OAPOICategory class]])
                     str2 = ((OAPOICategory *)obj2).nameLocalized;
                 else if ([obj2 isKindOfClass:[OAPOIFilter class]])
                     str2 = ((OAPOIFilter *)obj2).nameLocalized;
+                else if ([obj2 isKindOfClass:[OAPOIUIFilter class]])
+                    str2 = ((OAPOIUIFilter *)obj2).name;
 
                 return [str1 localizedCaseInsensitiveCompare:str2];
             }];
@@ -1048,6 +1081,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
             return _currentScopeFilterNameLoc;
         case EPOIScopeType:
             return _currentScopePoiTypeNameLoc;
+        case EPOIScopeUIFilter:
+            return _currentScopeUIFilterNameLoc;
             
         default:
             break;
@@ -1064,6 +1099,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
             return _currentScopeFilterName;
         case EPOIScopeType:
             return _currentScopePoiTypeName;
+        case EPOIScopeUIFilter:
+            return _currentScopeUIFilterName;
             
         default:
             break;
@@ -1168,7 +1205,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
         return;
     }
     
-    
     BOOL trailingSpace = [[firstToken substringFromIndex:firstToken.length - 1] isEqualToString:@" "];
     
     NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -1215,6 +1251,26 @@ typedef NS_ENUM(NSInteger, BarActionType)
         return;
     }
     
+    if (_currentScope == EPOIScopeUndefined && _filter && [firstToken hasPrefix:_filter.name])
+    {
+        _currentScope = EPOIScopeUIFilter;
+        _currentScopePoiTypeName = nil;
+        _currentScopePoiTypeNameLoc = nil;
+        _currentScopeFilterName = nil;
+        _currentScopeFilterNameLoc = nil;
+        _currentScopeCategoryName = nil;
+        _currentScopeCategoryNameLoc = nil;
+        _currentScopeUIFilterName = _filter.filterId;
+        _currentScopeUIFilterNameLoc = _filter.name;
+        return;
+    }
+    else if (_currentScope == EPOIScopeUIFilter && (!_filter || ![firstToken hasPrefix:_filter.name]))
+    {
+        _currentScope = EPOIScopeUndefined;
+        _currentScopeUIFilterName = nil;
+        _currentScopeUIFilterNameLoc = nil;
+    }
+
     BOOL found = NO;
     
     NSString *str = [firstToken stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -1292,6 +1348,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _currentScopeFilterNameLoc = nil;
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
+        _currentScopeUIFilterName = nil;
+        _currentScopeUIFilterNameLoc = nil;
     }
 }
 
@@ -1305,7 +1363,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     self.dataArrayTemp = [NSMutableArray array];
     
     // If case searchString is empty, there are no results
-    if (searchString == nil || [searchString length] == 0)
+    if (searchString == nil || [searchString length] == 0 || _currentScope == EPOIScopeUIFilter)
         return;
     
     // In case searchString has only spaces, also nothing to do here
@@ -1378,7 +1436,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             
             if (!str)
             {
-                // remove POI Types if search string ie empty
+                // remove POI Types if search string is empty
                 //if (!poi.filter || _currentScope == EPOIScopeFilter)
                 //    [typesOthersArray addObject:poi];
             }
@@ -1491,6 +1549,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     else
     {
         _showTopList = YES;
+        [self setFilter:nil];
         self.searchString = nil;
     }
     
@@ -1547,6 +1606,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _coreFoundScope = EPOIScopeUndefined;
     _coreFoundScopeCategoryName = nil;
     _coreFoundScopeFilterName = nil;
+    _coreFoundScopeUIFilterName = nil;
     _coreFoundScopePoiTypeName = nil;
 
     _needRestartSearch = YES;
@@ -1580,7 +1640,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
         [poiHelper setVisibleScreenDimensions:[mapRendererView getVisibleBBox31] zoomLevel:mapRendererView.zoomLevel];
         poiHelper.myLocation = self.myLocation;
         
-        if (_currentScope == EPOIScopeUndefined)
+        if (_currentScope == EPOIScopeUIFilter)
+            [poiHelper findPOIsByFilter:_filter radiusIndex:&_searchRadiusIndex];
+        else if (_currentScope == EPOIScopeUndefined)
             [poiHelper findPOIsByKeyword:self.searchString];
         else
             [poiHelper findPOIsByKeyword:self.searchString categoryName:_currentScopeCategoryName poiTypeName:_currentScopePoiTypeName radiusIndex:&_searchRadiusIndex];
@@ -1678,6 +1740,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _coreFoundScope = _currentScope;
         _coreFoundScopeCategoryName = _currentScopeCategoryName;
         _coreFoundScopeFilterName = _currentScopeFilterName;
+        _coreFoundScopeUIFilterName = _currentScopeUIFilterName;
         _coreFoundScopePoiTypeName = _currentScopePoiTypeName;
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -1784,6 +1847,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _showTopList = NO;
         [self updateTextField:self.searchString];
     }
+    else if ([obj isKindOfClass:[OAPOIUIFilter class]])
+    {
+        [self searchByUIFilter:(OAPOIUIFilter *)obj];
+    }
 }
 
 -(void)createPOIUIFilter
@@ -1791,6 +1858,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
+    customPOI.delegate = self;
     [self.navigationController pushViewController:customPOI animated:YES];
 }
 
@@ -1873,6 +1941,39 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
 {
     return YES;
+}
+
+#pragma mark - OACustomPOIViewDelegate
+
+-(void)searchByUIFilter:(OAPOIUIFilter *)filter
+{
+    [self setFilter:filter];
+    self.searchString = [filter.name stringByAppendingString:@" "];
+    _enteringScope = YES;
+    _showTopList = NO;
+    [self updateTextField:self.searchString];
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex != alertView.cancelButtonIndex)
+    {
+        NSString* newName = [[alertView textFieldAtIndex:0].text trim];
+        if (newName.length > 0)
+        {
+            OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filter getAcceptedTypes]];
+            if (_filter.filterByName.length > 0)
+                [nFilter setSavedFilterByName:_filter.filterByName];
+            
+            if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
+            {
+                //app.getSearchUICore().refreshCustomPoiFilters();
+                [self searchByUIFilter:nFilter];
+            }
+        }
+    }
 }
 
 @end

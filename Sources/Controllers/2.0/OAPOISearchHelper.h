@@ -14,6 +14,7 @@ typedef enum
     EPOIScopeCategory,
     EPOIScopeFilter,
     EPOIScopeType,
+    EPOIScopeUIFilter,
     
 } EPOIScope;
 

@@ -566,5 +566,5 @@
 "select_all" = "Select all";
 "create_custom_poi" = "Create custom filter";
 "selected_categories" = "Selected categories";
-
+"new_filter_desc" = "Please enter a name for the new filter, this will be added to your Categories tab.";
 

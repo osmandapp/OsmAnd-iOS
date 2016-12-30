@@ -19,6 +19,7 @@
                 <outlet property="btnCancel" destination="bYO-Dn-GFh" id="lth-z2-S4H"/>
                 <outlet property="btnMyLocation" destination="e1Y-Hy-MAc" id="rbZ-3N-fCY"/>
                 <outlet property="lbSearchNearCenter" destination="3Bg-94-gKB" id="FW6-AS-OBF"/>
+                <outlet property="saveFilterButton" destination="nC8-n5-rMQ" id="JXJ-Md-2uC"/>
                 <outlet property="searchNearCenterView" destination="nAm-m2-DN3" id="Y1D-Se-dkM"/>
                 <outlet property="tableView" destination="6VS-zr-H5j" id="g6A-fW-sL8"/>
                 <outlet property="tabs" destination="tnw-2i-3EL" id="R6H-qO-sad"/>
@@ -120,6 +121,17 @@
                                     <state key="normal" image="position_track_map_mode_button.png"/>
                                     <connections>
                                         <action selector="barActionImgButtonPress:" destination="-1" eventType="touchUpInside" id="9ip-kf-eD6"/>
+                                    </connections>
+                                </button>
+                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="nC8-n5-rMQ">
+                                    <rect key="frame" x="201" y="0.0" width="67" height="44"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                    <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="16"/>
+                                    <state key="normal" title="SAVE">
+                                        <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </state>
+                                    <connections>
+                                        <action selector="saveFilterButtonPress:" destination="-1" eventType="touchUpInside" id="cFW-f8-z6h"/>
                                     </connections>
                                 </button>
                             </subviews>

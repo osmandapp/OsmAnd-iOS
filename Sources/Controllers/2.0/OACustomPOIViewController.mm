@@ -65,11 +65,20 @@
     [super viewDidLoad];
     
     _bottomView.frame = CGRectMake(0, self.view.frame.size.height + 1, self.view.frame.size.width, _bottomView.bounds.size.height);
+    [_bottomView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewPress:)]];
     
     if (_editMode)
         self.textView.text = _filter.name;
     else
         self.textView.text = OALocalizedString(@"create_custom_poi");
+}
+
+- (IBAction)bottomViewPress:(id)sender
+{
+    if (_delegate)
+        [_delegate searchByUIFilter:_filter];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)cancelPress:(id)sender

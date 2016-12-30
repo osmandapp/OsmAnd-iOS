@@ -16,6 +16,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAHistoryItem.h"
+#import "OAPOIUIFilter.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextExTableViewCell.h"
@@ -300,6 +301,30 @@
                 cell.distanceView.frame = frame;
                 cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
             }
+        }
+        return cell;
+    }
+    else if ([obj isKindOfClass:[OAPOIUIFilter class]])
+    {
+        OAIconTextDescCell* cell;
+        cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextDescCell" owner:self options:nil];
+            cell = (OAIconTextDescCell *)[nib objectAtIndex:0];
+        }
+        
+        if (cell)
+        {
+            OAPOIUIFilter* item = obj;
+            
+            CGRect f = cell.textView.frame;
+            f.origin.y = 14.0;
+            cell.textView.frame = f;
+            
+            [cell.textView setText:item.name];
+            [cell.descView setText:@""];
+            [cell.iconView setImage: [OAPOIUIFilter getUserIcon]];
         }
         return cell;
     }

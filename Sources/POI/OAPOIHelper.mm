@@ -13,6 +13,7 @@
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"
 #import "OAPOIParser.h"
+#import "OAPOIUIFilter.h"
 #import "OAPhrasesParser.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
@@ -562,6 +563,79 @@
     if (_delegate)
         [_delegate searchDone:_breakSearch];
 
+}
+
+-(void)findPOIsByFilter:(OAPOIUIFilter *)filter radiusIndex:(int *)radiusIndex
+{
+    _isSearchDone = NO;
+    _breakSearch = NO;
+    if (*radiusIndex  < 0)
+        _radius = 0.0;
+    else
+        _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
+    
+    if (filter && ![filter isEmpty])
+    {
+        const auto& obfsCollection = _app.resourcesManager->obfsCollection;
+        
+        std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+        ctrl.reset(new OsmAnd::FunctorQueryController([self]
+                                                      (const OsmAnd::FunctorQueryController* const controller)
+                                                      {
+                                                          // should break?
+                                                          return (_radius == 0.0 && _limitCounter < 0) || _breakSearch;
+                                                      }));
+        
+        _limitCounter = _searchLimit;
+        
+        _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+        
+        const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+        
+        auto categoriesFilter = QHash<QString, QStringList>();
+        NSDictionary<OAPOICategory *, NSSet<NSString *> *> *types = [filter getAcceptedTypes];
+        for (OAPOICategory *category in types.allKeys)
+        {
+            QStringList list = QStringList();
+            NSSet<NSString *> *subcategories = [types objectForKey:category];
+            if (subcategories != [OAPOIBaseType nullSet])
+            {
+                for (NSString *sub in subcategories)
+                    list << QString::fromNSString(sub);
+            }
+            categoriesFilter.insert(QString::fromNSString(category.name), list);
+        }
+        searchCriteria->categoriesFilter = categoriesFilter;
+        
+        while (true)
+        {
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
+            
+            const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+            search->performSearch(*searchCriteria,
+                                  [self]
+                                  (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                  {
+                                      [self onPOIFound:resultEntry];
+                                  },
+                                  ctrl);
+            
+            if (_limitCounter == _searchLimit && _radius < 12000.0)
+            {
+                *radiusIndex += 1;
+                _radius = kSearchRadiusKm[*radiusIndex] * kRadiusKmToMetersKoef;
+            }
+            else
+            {
+                break;
+            }
+        }
+    }
+    
+    _isSearchDone = YES;
+    
+    if (_delegate)
+        [_delegate searchDone:_breakSearch];
 }
 
 +(NSArray<OAPOI *> *)findPOIsByTagName:(NSString *)tagName name:(NSString *)name location:(OsmAnd::PointI)location categoryName:(NSString *)categoryName poiTypeName:(NSString *)typeName radius:(int)radius

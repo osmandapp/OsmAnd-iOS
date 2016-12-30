@@ -496,3 +496,4 @@
 "shared_string_all" = "Totes";
 "create_custom_poi" = "Crea filtre personalitzat";
 "selected_categories" = "Categories seleccionades";
+"new_filter_desc" = "Introduïu un nom pel nou filtre amb el que s'afegirà a la vostra pestanya de categories.";

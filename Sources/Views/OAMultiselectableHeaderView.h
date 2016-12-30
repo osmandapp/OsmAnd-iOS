@@ -22,10 +22,12 @@
 @property (nonatomic, assign) NSInteger section;
 @property (nonatomic, assign) BOOL editable;
 @property (nonatomic, weak) id<OAMultiselectableHeaderDelegate> delegate;
+@property (nonatomic, assign) BOOL selected;
 
 @property (nonatomic, assign) NSInteger checkmarkIndent;
 
 - (void)setEditing:(BOOL)editing animated:(BOOL)animated;
 - (void)setTitleText:(NSString *)title;
+
 
 @end

@@ -594,8 +594,8 @@
 		846F036B1E12D54C00DB4772 /* OACustomPOIViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 846F03681E12D54C00DB4772 /* OACustomPOIViewController.mm */; };
 		846F036C1E12D54C00DB4772 /* OACustomPOIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846F03691E12D54C00DB4772 /* OACustomPOIViewController.xib */; };
 		846F036D1E12D54C00DB4772 /* OACustomPOIViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846F03691E12D54C00DB4772 /* OACustomPOIViewController.xib */; };
-		846F03711E15416600DB4772 /* OASelectSubcategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.m */; };
-		846F03721E15416600DB4772 /* OASelectSubcategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.m */; };
+		846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.mm */; };
+		846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.mm */; };
 		846F03731E15416600DB4772 /* OASelectSubcategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846F03701E15416600DB4772 /* OASelectSubcategoryViewController.xib */; };
 		846F03741E15416600DB4772 /* OASelectSubcategoryViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 846F03701E15416600DB4772 /* OASelectSubcategoryViewController.xib */; };
 		8470410D1B07850900594C72 /* ic_small_time.png in Resources */ = {isa = PBXBuildFile; fileRef = 847041081B07850900594C72 /* ic_small_time.png */; };
@@ -2750,7 +2750,7 @@
 		846F03681E12D54C00DB4772 /* OACustomPOIViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OACustomPOIViewController.mm; path = Sources/Controllers/2.0/OACustomPOIViewController.mm; sourceTree = "<group>"; };
 		846F03691E12D54C00DB4772 /* OACustomPOIViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OACustomPOIViewController.xib; path = Sources/Controllers/2.0/OACustomPOIViewController.xib; sourceTree = "<group>"; };
 		846F036E1E15416600DB4772 /* OASelectSubcategoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OASelectSubcategoryViewController.h; path = Sources/Controllers/2.0/OASelectSubcategoryViewController.h; sourceTree = "<group>"; };
-		846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OASelectSubcategoryViewController.m; path = Sources/Controllers/2.0/OASelectSubcategoryViewController.m; sourceTree = "<group>"; };
+		846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OASelectSubcategoryViewController.mm; path = Sources/Controllers/2.0/OASelectSubcategoryViewController.mm; sourceTree = "<group>"; };
 		846F03701E15416600DB4772 /* OASelectSubcategoryViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OASelectSubcategoryViewController.xib; path = Sources/Controllers/2.0/OASelectSubcategoryViewController.xib; sourceTree = "<group>"; };
 		847041081B07850900594C72 /* ic_small_time.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_small_time.png; path = Resources/Icons/ic_small_time.png; sourceTree = "<group>"; };
 		847041091B07850900594C72 /* ic_small_time@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_time@2x.png"; path = "Resources/Icons/ic_small_time@2x.png"; sourceTree = "<group>"; };
@@ -4403,7 +4403,7 @@
 				846F03681E12D54C00DB4772 /* OACustomPOIViewController.mm */,
 				846F03691E12D54C00DB4772 /* OACustomPOIViewController.xib */,
 				846F036E1E15416600DB4772 /* OASelectSubcategoryViewController.h */,
-				846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.m */,
+				846F036F1E15416600DB4772 /* OASelectSubcategoryViewController.mm */,
 				846F03701E15416600DB4772 /* OASelectSubcategoryViewController.xib */,
 			);
 			name = Search;
@@ -7206,7 +7206,7 @@
 				847A1CB41DF94E9B003C1246 /* OAManageResourcesViewController.mm in Sources */,
 				847A1CB51DF94E9B003C1246 /* OAGPXRouteGroupsViewController.mm in Sources */,
 				847A1CB61DF94E9B003C1246 /* OAOcbfHelper.m in Sources */,
-				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.m in Sources */,
+				846F03721E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				84772BAA1E0AB2D100E65884 /* OAResultMatcher.m in Sources */,
 				847A1CB71DF94E9B003C1246 /* OATargetInfoViewController.mm in Sources */,
 				847A1CB81DF94E9B003C1246 /* OAMapRendererView.mm in Sources */,
@@ -7575,7 +7575,7 @@
 				843E5C381AB22FE400BE14BE /* OAMapStylesCell.m in Sources */,
 				3AFEEE981A110BFD00900A47 /* OATextViewTableViewCell.m in Sources */,
 				840ED48B1B457B6A00A7E58A /* OAGpxRoutePoint.mm in Sources */,
-				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.m in Sources */,
+				846F03711E15416600DB4772 /* OASelectSubcategoryViewController.mm in Sources */,
 				BBA3B01F1987CB1A0039D991 /* OADriveAppModeHudViewController.mm in Sources */,
 				84B4FD5B1A912F7E00A147BA /* OAGPXDatabase.mm in Sources */,
 				84BE7D3E1CF6CB09001D8D78 /* OAWebViewCell.m in Sources */,

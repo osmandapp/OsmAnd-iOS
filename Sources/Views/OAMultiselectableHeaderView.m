@@ -48,6 +48,7 @@
 -(void)checkPress:(id)sender
 {
     _checkmark.selected = !_checkmark.selected;
+    _selected = _checkmark.selected;
     if (self.delegate && [self.delegate respondsToSelector:@selector(headerCheckboxChanged:value:)])
         [self.delegate headerCheckboxChanged:self value:_checkmark.selected];
 }
@@ -58,7 +59,7 @@
     if (!editable)
     {
         _editing = NO;
-        _checkmark.selected = NO;
+        [self setSelected:NO];
     }
 
     [self doUpdateLayout];
@@ -70,7 +71,10 @@
         return;
     
     _editing = editing;
-    _checkmark.selected = NO;
+    if (!editing)
+        [self setSelected:NO];
+    else
+        _checkmark.selected = _selected;
     
     if (animated)
     {
@@ -83,6 +87,12 @@
         [self doUpdateLayout];
     }
     
+}
+
+-(void)setSelected:(BOOL)selected
+{
+    _selected = selected;
+    _checkmark.selected = selected;
 }
 
 - (void)doUpdateLayout

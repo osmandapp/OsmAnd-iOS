@@ -493,3 +493,6 @@
 "poi_filter_by_name" = "Cerca pel nom";
 "subcategories" = "Subcategories";
 "select_all" = "Selecciona-ho tot";
+"shared_string_all" = "Totes";
+"create_custom_poi" = "Crea filtre personalitzat";
+"selected_categories" = "Categories seleccionades";

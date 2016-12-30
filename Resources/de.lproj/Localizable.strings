@@ -492,3 +492,8 @@
 "shared_string_is_open_24_7" = "24/7 geöffnet";
 "shared_string_is_open" = "Jetzt offen";
 "poi_filter_by_name" = "Nach Name suchen";
+"shared_string_all" = "Alle";
+"subcategories" = "Unterkategorien";
+"select_all" = "Alle auswählen";
+"create_custom_poi" = "Benutzerdefinierten Filter erstellen";
+"selected_categories" = "Ausgewählte Kategorien";

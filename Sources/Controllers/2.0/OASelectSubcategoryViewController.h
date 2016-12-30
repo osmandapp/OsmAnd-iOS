@@ -23,6 +23,6 @@
 
 @property (nonatomic, weak) id<OASelectSubcategoryDelegate> delegate;
 
-- (instancetype)initWithCategory:(OAPOICategory *)category selectAll:(BOOL)selectAll;
+- (instancetype)initWithCategory:(OAPOICategory *)category subcategories:(NSSet<NSString *> *)subcategories selectAll:(BOOL)selectAll;
 
 @end

@@ -199,8 +199,7 @@
                 {
                     if (str.length > 0)
                         [str appendString:@", "];
-                    
-                    [str appendString:st];
+                    [str appendString:[[OAPOIHelper sharedInstance] getPhraseByName:st]];
                 }
                 cell.descView.text = str;
             }
@@ -227,7 +226,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     OAPOICategory* item = _dataArray[indexPath.row];
-    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item selectAll:NO];
+    OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item subcategories:[_filter getAcceptedSubtypes:item] selectAll:[_filter getAcceptedSubtypes:item] == [OAPOIBaseType nullSet]];
     subcatController.delegate = self;
     [self.navigationController pushViewController:subcatController animated:YES];
 }
@@ -242,7 +241,7 @@
             OAPOICategory *item = _dataArray[sw.tag];
             if (sw.on)
             {
-                OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item selectAll:YES];
+                OASelectSubcategoryViewController *subcatController = [[OASelectSubcategoryViewController alloc] initWithCategory:item subcategories:[_filter getAcceptedSubtypes:item] selectAll:YES];
                 subcatController.delegate = self;
                 [self.navigationController pushViewController:subcatController animated:YES];
             }

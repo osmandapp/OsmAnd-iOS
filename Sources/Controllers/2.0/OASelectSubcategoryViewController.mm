@@ -13,6 +13,7 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
+#import "OAPOIHelper.h"
 
 @interface OASelectSubcategoryViewController () <UITableViewDataSource, UITableViewDelegate, OAMultiselectableHeaderDelegate>
 
@@ -31,15 +32,17 @@
     NSArray<NSString *> *_keys;
     NSArray<NSString *> *_data;
     OAPOICategory *_category;
+    NSSet<NSString *> *_subcategories;
     BOOL _selectAll;
 }
 
-- (instancetype)initWithCategory:(OAPOICategory *)category selectAll:(BOOL)selectAll
+- (instancetype)initWithCategory:(OAPOICategory *)category subcategories:(NSSet<NSString *> *)subcategories selectAll:(BOOL)selectAll
 {
     self = [super init];
     if (self)
     {
         _category = category;
+        _subcategories = subcategories;
         _selectAll = selectAll;
         [self initData];
     }
@@ -50,18 +53,24 @@
 {
     if (_category)
     {
-        NSMutableArray<OAPOIType *> *arr = [NSMutableArray arrayWithArray:_category.poiTypes];
-        [arr sortUsingComparator:^NSComparisonResult(OAPOIType * _Nonnull str1, OAPOIType * _Nonnull str2) {
-            return [str1.nameLocalized localizedCaseInsensitiveCompare:str2.nameLocalized];
+        OAPOIHelper *helper = [OAPOIHelper sharedInstance];
+        NSMutableDictionary<NSString *, NSString *> *subMap = [NSMutableDictionary dictionary];
+        for (NSString *name in _subcategories)
+            [subMap setObject:[helper getPhraseByName:name] forKey:name];
+
+        for (OAPOIType *pt in _category.poiTypes)
+            [subMap setObject:pt.nameLocalized forKey:pt.name];
+        
+        NSMutableArray<NSString *> *keys = [NSMutableArray arrayWithArray:subMap.allKeys];
+        NSMutableArray<NSString *> *data = [NSMutableArray arrayWithArray:subMap.allValues];
+        
+        [keys sortUsingComparator:^NSComparisonResult(NSString * _Nonnull name1, NSString * _Nonnull name2) {
+            return [[subMap objectForKey:name1] localizedCaseInsensitiveCompare:[subMap objectForKey:name2]];
+        }];
+        [data sortUsingComparator:^NSComparisonResult(NSString * _Nonnull nameLoc1, NSString * _Nonnull nameLoc2) {
+            return [nameLoc1 localizedCaseInsensitiveCompare:nameLoc2];
         }];
 
-        NSMutableArray<NSString *> *keys = [NSMutableArray array];
-        NSMutableArray<NSString *> *data = [NSMutableArray array];
-        for (OAPOIType *pt in arr)
-        {
-            [keys addObject:pt.name];
-            [data addObject:pt.nameLocalized];
-        }
         _data = [NSArray arrayWithArray:data];
         _keys = [NSArray arrayWithArray:keys];
     }
@@ -85,8 +94,25 @@
     
     self.tableView.editing = YES;
     if (_selectAll)
+    {
+        _headerView.selected = YES;
+        [self.tableView beginUpdates];
         for (int i = 0; i < _data.count; i++)
             [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self.tableView endUpdates];
+    }
+    else
+    {
+        _headerView.selected = _subcategories.count == _keys.count;
+        [self.tableView beginUpdates];
+        for (int i = 0; i < _keys.count; i++)
+        {
+            NSString *name = _keys[i];
+            if ([_subcategories containsObject:name])
+                [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+        [self.tableView endUpdates];
+    }
 }
 
 -(void)applyLocalization

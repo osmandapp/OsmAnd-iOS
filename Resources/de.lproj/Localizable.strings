@@ -497,3 +497,4 @@
 "select_all" = "Alle auswählen";
 "create_custom_poi" = "Benutzerdefinierten Filter erstellen";
 "selected_categories" = "Ausgewählte Kategorien";
+"new_filter_desc" = "Bitte geben Sie einen Namen für den neuen Filter ein. Dieser wird zur Liste der Kategorien hinzugefügt.";

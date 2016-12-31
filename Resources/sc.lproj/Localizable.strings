@@ -483,3 +483,7 @@
 "poi_filter_by_name" = "Chirca pro nùmene";
 "subcategories" = "Suta-categorias";
 "select_all" = "Ischerta totu";
+"shared_string_all" = "Totus";
+"create_custom_poi" = "Crea unu filtru personalizadu";
+"selected_categories" = "Categorias ischertadas";
+"new_filter_desc" = "Pro praghere inserta unu nùmene pro su filtru nou. L'as a agatare in sa lista de sas Categorias.";

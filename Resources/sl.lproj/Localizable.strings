@@ -213,3 +213,4 @@
 "poi_filter_by_name" = "Iskanje po imenu";
 "poi_filter_closest_poi" = "Najbližje točke POI";
 "poi_filter_custom_filter" = "Filter po meri";
+"new_filter_desc" = "Vpisati je treba ime novega filtra, ki se bo pojavilo na seznamu kategorij.";

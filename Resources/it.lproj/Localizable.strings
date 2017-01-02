@@ -53,7 +53,7 @@
 "fav_create_group" = "Crea un nuovo gruppo";
 "fav_enter_group_name" = "Inserisci il nome del gruppo";
 "rendering_attr_OSMMapperAssistant_name" = "Assistente mappatore OSM";
-"rendering_attr_contourLines_name" = "Visualizza curve di livello";
+"rendering_attr_contourLines_name" = "Visualizza le isoipse";
 "fav_import_desc" = "Puoi importare i tuoi favoriti come punti intermedi tramite file GPX (formato dati GPS comune)\n\nPer condividere il file favorites.gpx puoi aprirlo da Dropbox, Email, o qualsiasi altro modo - Usa la funzione Apri In.";
 "fav_exists" = "Il preferito  con il nome \"%@\" esiste già";
 "fav_ignore" = "Ignora";

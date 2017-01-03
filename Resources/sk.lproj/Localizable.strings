@@ -484,9 +484,9 @@
 "items_selected" = "%d vybraných";
 "custom_search" = "Vlastné vyhľadávanie";
 "poi_filter_custom_filter" = "Vlastný filter";
-"poi_filter_closest_poi" = "Najbližší bod záujmu";
+"poi_filter_closest_poi" = "Najbližšie body záujmu";
 "shared_string_is_open_24_7" = "Otvorené nonstop";
-"shared_string_is_open" = "Otvoriť";
+"shared_string_is_open" = "Otvorené";
 "poi_filter_by_name" = "Hľadať podľa názvu";
 "subcategories" = "Podkategórie";
 "select_all" = "Vybrať všetko";

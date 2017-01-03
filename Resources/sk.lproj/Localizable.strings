@@ -480,3 +480,16 @@
 "skip_map_downloading_desc" = "Nemáte nainštalovanú žiadnu mapu. Môžete vybrať mapu zo zoznamu alebo stiahnuť neskôr cez Menu - Spravovať mapové súbory";
 "wiki_around" = "Blízke články Wikipedie";
 "categories" = "Kategórie";
+"shared_string_all" = "Všetky";
+"items_selected" = "%d vybraných";
+"custom_search" = "Vlastné vyhľadávanie";
+"poi_filter_custom_filter" = "Vlastný filter";
+"poi_filter_closest_poi" = "Najbližší bod záujmu";
+"shared_string_is_open_24_7" = "Otvorené nonstop";
+"shared_string_is_open" = "Otvoriť";
+"poi_filter_by_name" = "Hľadať podľa názvu";
+"subcategories" = "Podkategórie";
+"select_all" = "Vybrať všetko";
+"create_custom_poi" = "Vytvoriť vlastný filter";
+"selected_categories" = "Vybrané kategórie";
+"new_filter_desc" = "Prosím zadajte názov pre nový filter, ktorý bude pridaný na záložku Kategórie.";

@@ -16,6 +16,6 @@
 @property (weak, nonatomic) IBOutlet UIImageView *detailsIconView;
 @property (weak, nonatomic) IBOutlet UISwitch *switchView;
 
-+ (CGFloat) getHeight:(NSString *)text descHidden:(BOOL)descHidden cellWidth:(CGFloat)cellWidth;
++ (CGFloat) getHeight:(NSString *)text descHidden:(BOOL)descHidden detailsIconHidden:(BOOL)detailsIconHidden cellWidth:(CGFloat)cellWidth;
 
 @end

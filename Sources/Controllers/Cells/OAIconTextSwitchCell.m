@@ -14,6 +14,7 @@
 #define deltaTextWidth 158.0
 #define descTextFullHeight 25.0
 #define imageSize 50.0
+#define detailsIconWidth 30.0
 
 #define defaultCellHeight 51.0
 #define defaultCellContentHeight 50.0
@@ -33,15 +34,15 @@ static UIFont *_textFont;
     // Configure the view for the selected state
 }
 
-+ (CGFloat) getHeight:(NSString *)text descHidden:(BOOL)descHidden cellWidth:(CGFloat)cellWidth
++ (CGFloat) getHeight:(NSString *)text descHidden:(BOOL)descHidden detailsIconHidden:(BOOL)detailsIconHidden cellWidth:(CGFloat)cellWidth
 {
     if (descHidden)
     {
-        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + 1.0);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth + (detailsIconHidden ? detailsIconWidth : 0.0) text:text] + 1.0);
     }
     else
     {
-        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth text:text] + descTextFullHeight + 1.0);
+        return MAX(defaultCellHeight, [self.class getTextViewHeightWithWidth:cellWidth - deltaTextWidth + (detailsIconHidden ? detailsIconWidth : 0.0) text:text] + descTextFullHeight + 1.0);
     }
 }
 
@@ -56,7 +57,7 @@ static UIFont *_textFont;
     self.detailsIconView.center = CGPointMake(w - 92, h / 2);
     self.switchView.center = CGPointMake(w - 42, h / 2);
     
-    CGFloat textWidth = w - deltaTextWidth;
+    CGFloat textWidth = w - deltaTextWidth + (self.detailsIconView.hidden ? detailsIconWidth : 0.0);
     CGFloat textHeight = [self.class getTextViewHeightWithWidth:w text:self.textView.text];
 
     if (self.descView.hidden)

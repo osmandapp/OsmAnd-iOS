@@ -469,3 +469,20 @@
 "free_memory" = "Libre %@";
 "gpx_waypoint" = "Punto de ruta";
 "menu_my_directions" = "Mis lugares";
+// Shared Strings
+"shared_string_select" = "Selecciona";
+"shared_string_of" = "de";
+"shared_string_all" = "Todos";
+"first_usage_greeting" = "Obtén indicaciones y descubre nuevos lugares sin conexión a Internet";
+"get_started" = "Empieza";
+"first_usage_wizard_desc" = "Deja que OsmAnd determine tu ubicación y sugiera mapas que descargar para esa región.";
+"location_not_found" = "Ubicación no encontrada";
+"search_my_location" = "Buscar mi ubicación";
+"no_inet_connection" = "No hay conexión a Internet";
+"no_inet_connection_desc_map" = "Necesario para descargar mapas.";
+"try_again" = "Vuelve a intentarlo";
+"search_location" = "Búscando ubicación…";
+"search_map" = "Buscando mapa…";
+"search_another_country" = "Selecciona otra región";
+"skip_map_downloading" = "Saltar descarga de mapas";
+"skip_map_downloading_desc" = "No tienes ningún mapa descargado. Puedes elegir un mapa de la lista o descargar mapas más tarde vía menú - Gestionar archivos de mapa";

@@ -497,3 +497,9 @@
 "create_custom_poi" = "Opret brugerdefineret filter";
 "shared_string_all" = "Alle";
 "new_filter_desc" = "Angiv et navn for det nye filter, det vil blive tilføjet til Kategorier.";
+"shared_string_filters" = "Filtre";
+"edit_filter" = "Rediger kategorier";
+"shared_string_save_as" = "Gem som";
+"delete_filter" = "Slet filter";
+"save_filter" = "Gem filter";
+"edit_filter_delete_dialog_title" = "Slet det valgte filter?";

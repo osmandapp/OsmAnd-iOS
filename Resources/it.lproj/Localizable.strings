@@ -428,3 +428,6 @@
 "free_memory" = "Libera %@";
 "gpx_waypoint" = "Punto via";
 "product_desc_ext_parking" = "OsmAnd parcheggio Plugin vi ricorda la posizione di parcheggio. Si tratta di un plugin per le mappe di OsmAnd&Navigazione app.\nScegliere un promemoria di indipendente dal tempo (solo un indicatore sulla mappa) o un tempo limitato con allarme alla scadenza del tempo (include anche un marcatore sulla mappa). Per utilizzare il plugin, attivarlo nel menu Plugins.";
+"shared_string_of" = "di";
+"shared_string_all" = "Tutto";
+"plugin_popup_ski_title" = "Attiva lo stile mappa Ski";

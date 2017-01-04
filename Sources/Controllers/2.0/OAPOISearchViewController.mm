@@ -32,6 +32,7 @@
 #import "OACustomPOIViewController.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
+#import "OAPOIFilterViewController.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -56,7 +57,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BarActionEditHistory,
 };
 
-@interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OAPOISearchDelegate, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate>
+@interface OAPOISearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OAPOISearchDelegate, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate,
+    OAPOIFilterViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -72,7 +74,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (weak, nonatomic) IBOutlet UIImageView *barActionImageView;
 @property (weak, nonatomic) IBOutlet UIButton *barActionTextButton;
 @property (weak, nonatomic) IBOutlet UIButton *barActionImageButton;
-@property (weak, nonatomic) IBOutlet UIButton *saveFilterButton;
+
+@property (weak, nonatomic) IBOutlet UIView *bottomView;
+@property (weak, nonatomic) IBOutlet UIButton *bottomTextBtn;
+@property (weak, nonatomic) IBOutlet UIButton *bottomImageBtn;
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
@@ -145,6 +150,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     BarActionType _barActionType;
     BOOL _historyEditing;
+    
+    BOOL _bottomViewVisible;
 }
 
 - (instancetype)init
@@ -181,11 +188,20 @@ typedef NS_ENUM(NSInteger, BarActionType)
 -(void)applyLocalization
 {
     [_btnCancel setTitle:OALocalizedString(@"poi_hide") forState:UIControlStateNormal];
+    [_bottomTextBtn setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    // drop shadow
+    [_bottomView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_bottomView.layer setShadowOpacity:0.3];
+    [_bottomView.layer setShadowRadius:3.0];
+    [_bottomView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    _bottomView.hidden = YES;
 
     _pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     _pageController.dataSource = self;
@@ -435,7 +451,13 @@ typedef NS_ENUM(NSInteger, BarActionType)
     {
         case BarActionShownMap:
         {
-            //
+            if (_currentScope == EPOIScopeUIFilter)
+            {
+                NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:_filter filterByName:nextStr];
+                filterViewController.delegate = self;
+                [self.navigationController pushViewController:filterViewController animated:YES];
+            }
             break;
         }
         case BarActionEditHistory:
@@ -448,10 +470,15 @@ typedef NS_ENUM(NSInteger, BarActionType)
     }
 }
 
-- (IBAction)saveFilterButtonPress:(id)sender
+- (IBAction)bottomTextButtonPress:(id)sender
 {
     if (_filter)
         [self saveCustomFilter];
+}
+
+- (IBAction)bottomImageButtonPress:(id)sender
+{
+    [self setBottomViewVisible:NO];
 }
 
 - (void) saveCustomFilter
@@ -466,7 +493,41 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     _filter = filter;
     _coreFoundScopeUIFilterName = nil;
-    _saveFilterButton.hidden = _filter == nil || _filter != [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
+    [self setBottomViewVisible:_filter && ![_filter isEmpty] && _filter == [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter]];
+}
+
+- (void)setBottomViewVisible:(BOOL)visible
+{
+    if (visible)
+    {
+        if (!_bottomViewVisible)
+        {
+            _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            _bottomView.hidden = NO;
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height -= _bottomView.bounds.size.height;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            }];
+        }
+        _bottomViewVisible = YES;
+    }
+    else
+    {
+        if (_bottomViewVisible)
+        {
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            } completion:^(BOOL finished) {
+                _bottomView.hidden = YES;
+            }];
+        }
+        _bottomViewVisible = NO;
+    }
 }
 
 - (void)finishHistoryEditing
@@ -521,7 +582,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _barActionView.frame = CGRectMake(0.0, showInputView ? 60.0 : 20.0, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
     
     _topView.frame = frame;
-    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height);
+    _tableView.frame = CGRectMake(0.0, frame.size.height, frame.size.width, DeviceScreenHeight - frame.size.height - (_bottomViewVisible ? _bottomView.bounds.size.height : 0.0));
     _pageController.view.frame = _tableView.frame;
 }
 
@@ -1754,14 +1815,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 _initData = !_increasingSearchRadius;
                 [self updateDistanceAndDirection];
                 _increasingSearchRadius = NO;
-                if (_currentScope != EPOIScopeUndefined)
-                    [self setupBarActionView:BarActionShownMap title:nil];
             }
             else
             {
                 [_tableView reloadData];
             }
 
+            if (_currentScope != EPOIScopeUndefined)
+                [self setupBarActionView:BarActionShownMap title:nil];
             [self showSearchIcon];
             [self updateNavbar];
         });
@@ -1949,6 +2010,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     [self setFilter:filter];
     self.searchString = [filter.name stringByAppendingString:@" "];
+    _dataInvalidated = YES;
+    _currentScope = EPOIScopeUndefined;
     _enteringScope = YES;
     _showTopList = NO;
     [self updateTextField:self.searchString];
@@ -1971,8 +2034,42 @@ typedef NS_ENUM(NSInteger, BarActionType)
             {
                 //app.getSearchUICore().refreshCustomPoiFilters();
                 [self searchByUIFilter:nFilter];
+                [self.navigationController popToRootViewControllerAnimated:YES];
             }
         }
+    }
+}
+
+#pragma mark - OAPOIFilterViewDelegate
+
+- (BOOL) updateFilter
+{
+    [self searchByUIFilter:_filter];
+    return YES;
+}
+
+- (BOOL) saveFilter
+{
+    [self saveCustomFilter];
+    return NO;
+}
+
+- (BOOL) removeFilter
+{    
+    if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:_filter])
+    {
+        //app.getSearchUICore().refreshCustomPoiFilters();
+        
+        [self setFilter:nil];
+        self.searchString = nil;
+        _enteringScope = YES;
+        _showTopList = YES;
+        [self updateTextField:self.searchString];
+        return YES;
+    }
+    else
+    {
+        return NO;
     }
 }
 

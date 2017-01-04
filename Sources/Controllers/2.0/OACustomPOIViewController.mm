@@ -63,14 +63,25 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    _bottomView.frame = CGRectMake(0, self.view.frame.size.height + 1, self.view.frame.size.width, _bottomView.bounds.size.height);
+
+    // drop shadow
+    [_bottomView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_bottomView.layer setShadowOpacity:0.3];
+    [_bottomView.layer setShadowRadius:3.0];
+    [_bottomView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+
+    _bottomView.hidden = YES;
     [_bottomView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(bottomViewPress:)]];
     
     if (_editMode)
+    {
         self.textView.text = _filter.name;
+    }
     else
+    {
         self.textView.text = OALocalizedString(@"create_custom_poi");
+        self.bottomBtnView.text = [OALocalizedString(@"sett_show") upperCase];
+    }
 }
 
 - (IBAction)bottomViewPress:(id)sender
@@ -93,27 +104,48 @@
     {
         if ([_filter isEmpty])
         {
-            if (_bottomViewVisible)
-            {
-                [UIView animateWithDuration:.25 animations:^{
-                    _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
-                }];
-            }
-            _bottomViewVisible = NO;
+            [self setBottomViewVisibility:NO];
         }
         else
         {
             self.bottomTextView.text = [NSString stringWithFormat:@"%@: %d", OALocalizedString(@"selected_categories"), [_filter getAcceptedTypesCount]];
 
-            if (!_bottomViewVisible)
-            {
-                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
-                [UIView animateWithDuration:.25 animations:^{
-                    _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
-                }];
-            }
-            _bottomViewVisible = YES;
+            [self setBottomViewVisibility:YES];
         }
+    }
+}
+
+- (void) setBottomViewVisibility:(BOOL)visible
+{
+    if (visible)
+    {
+        if (!_bottomViewVisible)
+        {
+            _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            _bottomView.hidden = NO;
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height -= _bottomView.bounds.size.height;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height - _bottomView.bounds.size.height, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            }];
+        }
+        _bottomViewVisible = YES;
+    }
+    else
+    {
+        if (_bottomViewVisible)
+        {
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _bottomView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _bottomView.bounds.size.height);
+            } completion:^(BOOL finished) {
+                _bottomView.hidden = YES;
+            }];
+        }
+        _bottomViewVisible = NO;
     }
 }
 
@@ -148,10 +180,7 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (_bottomViewVisible)
-        return _bottomView.bounds.size.height + [OAPOISearchHelper getHeightForFooter];
-    else
-        return [OAPOISearchHelper getHeightForFooter];
+    return [OAPOISearchHelper getHeightForFooter];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -162,7 +191,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OAPOICategory* item = _dataArray[indexPath.row];
-    return [OAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YES cellWidth:tableView.bounds.size.width];
+    return [OAIconTextSwitchCell getHeight:item.nameLocalized descHidden:YES detailsIconHidden:NO cellWidth:tableView.bounds.size.width];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

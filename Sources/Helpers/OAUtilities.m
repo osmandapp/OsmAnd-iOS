@@ -36,6 +36,11 @@
     return [self lowercaseStringWithLocale:[NSLocale currentLocale]];
 }
 
+- (NSString *) upperCase
+{
+    return [self uppercaseStringWithLocale:[NSLocale currentLocale]];
+}
+
 @end
 
 

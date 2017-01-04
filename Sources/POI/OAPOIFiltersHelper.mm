@@ -289,6 +289,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             sqlite3_close(filtersDB);
         }
     });
+    [self addFilter:filter addOnlyCategories:YES];
+    [self updateName:filter];
     return YES;
 }
 
@@ -362,6 +364,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     NSMutableArray<OAPOIUIFilter *> *_cacheTopStandardFilters;
     NSMutableSet<OAPOIUIFilter *> *_selectedPoiFilters;
     
+    OAPOIFilterDbHelper *_helper;
     OAPOIHelper *_poiHelper;
 }
 
@@ -382,6 +385,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     {
         _cacheTopStandardFilters = [NSMutableArray array];
         _selectedPoiFilters = [NSMutableSet set];
+        _helper = [[OAPOIFilterDbHelper alloc] init];
         _poiHelper = [OAPOIHelper sharedInstance];
     }
     return self;
@@ -500,12 +504,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 - (NSArray<OAPOIUIFilter *> *) getUserDefinedPoiFilters
 {
     NSMutableArray<OAPOIUIFilter *> *userDefinedFilters = [NSMutableArray array];
-    OAPOIFilterDbHelper *helper = [self openDbHelper];
-    if (helper)
-    {
-        NSArray<OAPOIUIFilter *> *userDefined = [helper getFilters];
-        [userDefinedFilters addObjectsFromArray:userDefined];
-    }
+    NSArray<OAPOIUIFilter *> *userDefined = [_helper getFilters];
+    [userDefinedFilters addObjectsFromArray:userDefined];
     return userDefinedFilters;
 }
 
@@ -546,14 +546,6 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return result;
 }
 
-- (OAPOIFilterDbHelper *) openDbHelper
-{
-    if (![_poiHelper isInit])
-        return nil;
-
-    return [[OAPOIFilterDbHelper alloc] init];
-}
-
 - (BOOL) removePoiFilter:(OAPOIUIFilter *)filter
 {
     if ([filter.filterId isEqualToString:CUSTOM_FILTER_ID] ||
@@ -563,11 +555,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         return NO;
     }
     
-    OAPOIFilterDbHelper *helper = [self openDbHelper];
-    if (!helper)
-        return NO;
-
-    BOOL res = [helper deleteFilter:filter.filterId];
+    BOOL res = [_helper deleteFilter:filter.filterId];
     if (res)
     {
         NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
@@ -579,11 +567,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 
 - (BOOL) createPoiFilter:(OAPOIUIFilter *)filter
 {
-    OAPOIFilterDbHelper *helper = [self openDbHelper];
-    if (!helper)
-        return NO;
-
-    BOOL res = [helper deleteFilter:filter.filterId];
+    BOOL res = [_helper deleteFilter:filter.filterId];
     NSMutableArray<OAPOIUIFilter *> *filtersToRemove = [NSMutableArray array];
     for (OAPOIUIFilter *f in _cacheTopStandardFilters)
     {
@@ -592,7 +576,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
     [_cacheTopStandardFilters removeObjectsInArray:filtersToRemove];
     
-    res = [helper addFilter:filter addOnlyCategories:NO];
+    res = [_helper addFilter:filter addOnlyCategories:NO];
     if (res)
     {
         NSMutableArray<OAPOIUIFilter *> *copy = [NSMutableArray arrayWithArray:_cacheTopStandardFilters];
@@ -611,13 +595,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     {
         return NO;
     }
-    OAPOIFilterDbHelper *helper = [self openDbHelper];
-    if (helper)
-    {
-        BOOL res = [helper editFilter:filter];
-        return res;
-    }
-    return NO;
+
+    return [_helper editFilter:filter];
 }
 
 - (NSSet<OAPOIUIFilter *> *) getSelectedPoiFilters

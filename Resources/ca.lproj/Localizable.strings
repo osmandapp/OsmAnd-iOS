@@ -503,3 +503,4 @@
 "delete_filter" = "Esborra el filtre";
 "save_filter" = "Desa el filtre";
 "edit_filter_delete_dialog_title" = "Voleu eliminar el filtre seleccionat?";
+"apply_filters" = "Aplica els filtres";

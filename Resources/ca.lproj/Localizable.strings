@@ -497,3 +497,9 @@
 "create_custom_poi" = "Crea filtre personalitzat";
 "selected_categories" = "Categories seleccionades";
 "new_filter_desc" = "Introduïu un nom pel nou filtre amb el que s'afegirà a la vostra pestanya de categories.";
+"shared_string_filters" = "Filtres";
+"edit_filter" = "Edita les categories";
+"shared_string_save_as" = "Desa com";
+"delete_filter" = "Esborra el filtre";
+"save_filter" = "Desa el filtre";
+"edit_filter_delete_dialog_title" = "Voleu eliminar el filtre seleccionat?";

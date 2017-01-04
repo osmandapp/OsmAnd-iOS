@@ -498,3 +498,9 @@
 "create_custom_poi" = "Benutzerdefinierten Filter erstellen";
 "selected_categories" = "Ausgewählte Kategorien";
 "new_filter_desc" = "Bitte geben Sie einen Namen für den neuen Filter ein. Dieser wird zur Liste der Kategorien hinzugefügt.";
+"shared_string_filters" = "Filter";
+"edit_filter" = "Kategorien bearbeiten";
+"shared_string_save_as" = "Speichern als";
+"delete_filter" = "Filter löschen";
+"save_filter" = "Filter speichern";
+"edit_filter_delete_dialog_title" = "Ausgewählten Filter löschen?";

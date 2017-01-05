@@ -55,6 +55,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 
 - (NSDictionary<OAPOICategory *, NSSet<NSString *> *> *) getAcceptedTypes;
 
+- (void)setFilterByName:(NSString *)filter;
 - (void)updateFilterResults;
 - (NSArray<OAPOI *> *) searchAgain:(double)lat lon:(double)lon;
 - (NSArray<OAPOI *> *) searchFurther:(double)latitude longitude:(double)longitude matcher:(OAResultMatcher<OAPOI *> *)matcher;

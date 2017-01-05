@@ -38,7 +38,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSMutableArray<OAPOICategory *> *_pCategories;
     NSMutableArray<OAPOIFilter *> *_pFilters;
     NSMutableArray<OAPOIType *> *_textPoiAdditionals;
-    
+    NSMutableDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
+
     xmlParserCtxtPtr _xmlParserContext;
     
     BOOL _done;
@@ -49,6 +50,13 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSString *_currentPOIAdditionalCategory;
     NSMutableString *_propertyValue;
     NSOperationQueue *_retrieverQueue;
+
+    NSMutableSet<NSString *> *_currentCategoryPoiAdditionalsCategories;
+    NSMutableSet<NSString *> *_currentFilterPoiAdditionalsCategories;
+    NSMutableSet<NSString *> *_currentTypePoiAdditionalsCategories;
+    NSMutableDictionary<OAPOIBaseType *, NSMutableSet<NSString *> *> *_abstractTypeAdditionalCategories;
+    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *_categoryPoiAdditionalMap;
+
 }
 
 - (instancetype)init
@@ -68,9 +76,16 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     _pCategories = [NSMutableArray array];
     _pFilters = [NSMutableArray array];
     _textPoiAdditionals = [NSMutableArray array];
+    _poiAdditionalCategoryIcons = [NSMutableDictionary dictionary];
     _otherMapCategory = [[OAPOICategory alloc] initWithName:@"Other"];
     [_pCategories addObject:_otherMapCategory];
     
+    _currentCategoryPoiAdditionalsCategories = [NSMutableSet set];
+    _currentFilterPoiAdditionalsCategories = [NSMutableSet set];
+    _currentTypePoiAdditionalsCategories = [NSMutableSet set];
+    _abstractTypeAdditionalCategories = [NSMutableDictionary dictionary];
+    _categoryPoiAdditionalMap = [NSMutableDictionary dictionary];
+
     self.fileName = fileName;
 }
 
@@ -102,6 +117,20 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSData *poiData = [NSData dataWithContentsOfFile:self.fileName];
     xmlParseChunk(_xmlParserContext, (const char *)[poiData bytes], (int)[poiData length], 0);
     xmlParseChunk(_xmlParserContext, NULL, 0, 1);
+
+    [_abstractTypeAdditionalCategories enumerateKeysAndObjectsUsingBlock:^(OAPOIBaseType * _Nonnull key, NSMutableSet<NSString *> * _Nonnull value, BOOL * _Nonnull stop) {
+       
+        for (NSString *category in value)
+        {
+            NSArray<OAPOIType *> *poiAdditionals = [_categoryPoiAdditionalMap objectForKey:category];
+            if (poiAdditionals)
+            {
+                for (OAPOIType *poiType in poiAdditionals)
+                    [self buildPoiAdditionalReference:poiType parent:key];
+            }
+        }
+    }];
+        
     _done = YES;
     
     if (self.error)
@@ -118,6 +147,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         self.poiCategories = _pCategories;
         self.poiFilters = _pFilters;
         self.textPoiAdditionals = _textPoiAdditionals;
+        self.poiAdditionalCategoryIcons = _poiAdditionalCategoryIcons;
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(parserFinished)])
         {
@@ -131,6 +161,60 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     return success;
 }
 
+- (OAPOIType *) buildPoiAdditionalReference:(OAPOIType *)poiAdditional  parent:(OAPOIBaseType *)parent
+{
+    OAPOICategory *lastCategory = nil;
+    OAPOIFilter *lastFilter = nil;
+    OAPOIType *lastType = nil;
+    OAPOIType *ref = nil;
+    if ([parent isKindOfClass:[OAPOICategory class]])
+    {
+        lastCategory = (OAPOICategory *)parent;
+        ref = [[OAPOIType alloc] initWithName:poiAdditional.name category:lastCategory];
+    }
+    else if ([parent isKindOfClass:[OAPOIFilter class]])
+    {
+        lastFilter = (OAPOIFilter *)parent;
+        ref = [[OAPOIType alloc] initWithName:poiAdditional.name category:lastCategory filter:lastFilter];
+    }
+    else if ([parent isKindOfClass:[OAPOIType class]])
+    {
+        lastType = (OAPOIType *)parent;
+        ref = [[OAPOIType alloc] initWithName:poiAdditional.name category:lastType.category filter:lastType.filter];
+    }
+    if (!ref)
+        return nil;
+
+    if (poiAdditional.reference)
+        [ref setReferenceType:poiAdditional.referenceType];
+    else
+        [ref setReferenceType:poiAdditional];
+    
+    ref.baseLangType = poiAdditional.baseLangType;
+    ref.lang = poiAdditional.lang;
+    [ref setAdditional:(!lastType ? lastType : (!lastFilter ? lastFilter : lastCategory))];
+    ref.top = poiAdditional.top;
+    ref.isText = poiAdditional.isText;
+    ref.order = poiAdditional.order;
+    ref.tag = poiAdditional.tag;
+    //ref.setNotEditableOsm(poiAdditional.isNotEditableOsm());
+    ref.value = poiAdditional.value;
+    //ref.setOsmTag2(poiAdditional.getOsmTag2());
+    //ref.setOsmValue2(poiAdditional.getOsmValue2());
+    ref.poiAdditionalCategory = poiAdditional.poiAdditionalCategory;
+    ref.filterOnly = poiAdditional.filterOnly;
+    if (!lastType)
+        [lastType addPoiAdditional:ref];
+    else if (!lastFilter)
+        [lastFilter addPoiAdditional:ref];
+    else if (!lastCategory)
+        [lastCategory addPoiAdditional:ref];
+    
+    if (ref.isText)
+        [_textPoiAdditionals addObject:ref];
+
+    return ref;
+}
 
 - (BOOL)parseData
 {
@@ -184,6 +268,14 @@ static const char *kTypeAttributeName = "type";
 static NSUInteger kTypeAttributeNameLength = 5;
 static const char *kLangAttributeName = "lang";
 static NSUInteger kLangAttributeNameLength = 5;
+static const char *kPoiAdditionalCategoryAttributeName = "poi_additional_category";
+static NSUInteger kPoiAdditionalCategoryAttributeNameLength = 24;
+static const char *kExcludedPoiAdditionalCategoryAttributeName = "excluded_poi_additional_category";
+static NSUInteger kExcludedPoiAdditionalCategoryAttributeNameLength = 33;
+static const char *kFilterOnlyAttributeName = "filter_only";
+static NSUInteger kFilterOnlyAttributeNameLength = 12;
+static const char *kIconAttributeName = "icon";
+static NSUInteger kIconAttributeNameLength = 5;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -196,6 +288,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         NSString *name = nil;
         NSString *tag = nil;
         BOOL top = NO;
+        NSArray<NSString *> *poiAdditionalCategories = nil;
+        NSArray<NSString *> *excludedPoiAdditionalCategories = nil;
         
         for (int i = 0; i < attributeCount; i++)
         {
@@ -225,11 +319,39 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 
                 top = [[value lowercaseString] isEqualToString:@"true"];
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kPoiAdditionalCategoryAttributeName,
+                                  kPoiAdditionalCategoryAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                poiAdditionalCategories = [value componentsSeparatedByString:@","];
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kExcludedPoiAdditionalCategoryAttributeName,
+                                  kExcludedPoiAdditionalCategoryAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
+            }
         }
 
         _currentPOICategory = [[OAPOICategory alloc] initWithName:name];
         _currentPOICategory.tag = tag;
         _currentPOICategory.top = top;
+        
+        if (poiAdditionalCategories.count > 0)
+            [_currentCategoryPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+        if (excludedPoiAdditionalCategories.count > 0)
+        {
+            [_currentPOICategory addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+            [_currentCategoryPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOICategory.excludedPoiAdditionalCategories]];
+        }
         
         if (![_pCategories containsObject:_currentPOICategory])
         {
@@ -240,6 +362,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         NSString *name = nil;
         BOOL top = NO;
+        NSArray<NSString *> *poiAdditionalCategories = nil;
+        NSArray<NSString *> *excludedPoiAdditionalCategories = nil;
 
         for (int i = 0; i < attributeCount; i++)
         {
@@ -261,10 +385,40 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 
                 top = [[value lowercaseString] isEqualToString:@"true"];
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kPoiAdditionalCategoryAttributeName,
+                                  kPoiAdditionalCategoryAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                poiAdditionalCategories = [value componentsSeparatedByString:@","];
+            }
+            else if (0 == strncmp((const char*)attributes[i].localname, kExcludedPoiAdditionalCategoryAttributeName,
+                                  kExcludedPoiAdditionalCategoryAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                           length:length
+                                                         encoding:NSUTF8StringEncoding];
+                
+                excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
+            }
         }
         
         _currentPOIFilter = [[OAPOIFilter alloc] initWithName:name category:_currentPOICategory];
         _currentPOIFilter.top = top;
+        
+        [_currentFilterPoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
+        if (poiAdditionalCategories.count > 0)
+            [_currentFilterPoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+        if (excludedPoiAdditionalCategories.count > 0)
+        {
+            [_currentPOIFilter addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+            [_currentFilterPoiAdditionalsCategories minusSet:[NSSet setWithArray:_currentPOIFilter.excludedPoiAdditionalCategories]];
+        }
+
         if (_currentPOICategory)
         {
             [_currentPOICategory addPoiFilter:_currentPOIFilter];
@@ -283,6 +437,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     else if (0 == strncmp((const char *)localname, kPoiAdditionalCategoryElementName, kPoiAdditionalCategoryElementNameLength))
     {
         NSString *name = nil;
+        NSString *icon = nil;
         for (int i = 0; i < attributeCount; i++)
         {
             if (0 == strncmp((const char*)attributes[i].localname, kNameAttributeName,
@@ -294,6 +449,18 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                               encoding:NSUTF8StringEncoding];
                 break;
             }
+            else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
+                             kIconAttributeNameLength))
+            {
+                int length = (int) (attributes[i].end - attributes[i].value);
+                icon = [[NSString alloc] initWithBytes:attributes[i].value
+                                                length:length
+                                              encoding:NSUTF8StringEncoding];
+                break;
+            }
+
+            if (icon)
+                [_poiAdditionalCategoryIcons setObject:icon forKey:name];
         }
         _currentPOIAdditionalCategory = name;
     }
@@ -316,7 +483,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
         }
         
-        OAPOIBaseType *baseType = [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:nil baseType:nil];
+        OAPOIType *baseType = [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:nil baseType:nil];
         if (lang)
         {
             for (NSString *lng in [[OAAppSettings sharedManager] mapLanguages])
@@ -325,6 +492,18 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
             [self parsePoiAdditional:localname attributeCount:attributeCount attributes:attributes lang:@"en" baseType:nil];
         }
+        
+        if (_currentPOIAdditionalCategory)
+        {
+            NSMutableArray<OAPOIType *> *categoryAdditionals = [_categoryPoiAdditionalMap objectForKey:_currentPOIAdditionalCategory];
+            if (!categoryAdditionals)
+            {
+                categoryAdditionals = [NSMutableArray array];
+                [_categoryPoiAdditionalMap setObject:categoryAdditionals forKey:_currentPOIAdditionalCategory];
+            }
+            [categoryAdditionals addObject:baseType];
+        }
+
     }
 }
 
@@ -332,14 +511,29 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 {
     if(0 == strncmp((const char *)localname, kPoiFilterElementName, kPoiFilterElementNameLength))
     {
+        if (_currentFilterPoiAdditionalsCategories.count > 0)
+        {
+            [_abstractTypeAdditionalCategories setObject:_currentFilterPoiAdditionalsCategories forKey:_currentPOIFilter];
+            [_currentFilterPoiAdditionalsCategories removeAllObjects];
+        }
         _currentPOIFilter = nil;
     }
     else if(0 == strncmp((const char *)localname, kPoiCategoryElementName, kPoiCategoryElementNameLength))
     {
+        if (_currentCategoryPoiAdditionalsCategories.count > 0)
+        {
+            [_abstractTypeAdditionalCategories setObject:_currentCategoryPoiAdditionalsCategories forKey:_currentPOICategory];
+            [_currentCategoryPoiAdditionalsCategories removeAllObjects];
+        }
         _currentPOICategory = nil;
     }
     else if(0 == strncmp((const char *)localname, kPoiTypeElementName, kPoiTypeElementNameLength))
     {
+        if (_currentTypePoiAdditionalsCategories.count > 0)
+        {
+            [_abstractTypeAdditionalCategories setObject:_currentTypePoiAdditionalsCategories forKey:_currentPOIType];
+            [_currentTypePoiAdditionalsCategories removeAllObjects];
+        }
         _currentPOIType = nil;
     }
     else if(0 == strncmp((const char *)localname, kPoiAdditionalCategoryElementName, kPoiAdditionalCategoryElementNameLength))
@@ -382,6 +576,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     BOOL mapOnly = NO;
     BOOL reference = NO;
     BOOL isText = NO;
+    NSArray<NSString *> *poiAdditionalCategories = nil;
+    NSArray<NSString *> *excludedPoiAdditionalCategories = nil;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -439,6 +635,26 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             isText = [[value lowercaseString] isEqualToString:@"text"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kPoiAdditionalCategoryAttributeName,
+                              kPoiAdditionalCategoryAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            poiAdditionalCategories = [value componentsSeparatedByString:@","];
+        }
+        else if (0 == strncmp((const char*)attributes[i].localname, kExcludedPoiAdditionalCategoryAttributeName,
+                              kExcludedPoiAdditionalCategoryAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
+        }
     }
     
     OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];
@@ -453,7 +669,17 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     [_pTypes addObject:poiType];
     if (!reference)
         [_pTypesByName setObject:poiType forKey:poiType.name];
-    
+
+    [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentCategoryPoiAdditionalsCategories allObjects]];
+    [_currentTypePoiAdditionalsCategories addObjectsFromArray:[_currentFilterPoiAdditionalsCategories allObjects]];
+    if (poiAdditionalCategories.count > 0)
+        [_currentTypePoiAdditionalsCategories addObjectsFromArray:poiAdditionalCategories];
+    if (excludedPoiAdditionalCategories.count > 0)
+    {
+        [poiType addExcludedPoiAdditionalCategories:excludedPoiAdditionalCategories];
+        [_currentTypePoiAdditionalsCategories minusSet:[NSSet setWithArray:poiType.excludedPoiAdditionalCategories]];
+    }
+
     // Category
     if (_currentPOICategory)
     {
@@ -482,6 +708,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     BOOL mapOnly = NO;
     BOOL reference = NO;
     BOOL isText = NO;
+    BOOL filterOnly = NO;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -539,6 +766,15 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             isText = [[value lowercaseString] isEqualToString:@"text"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kFilterOnlyAttributeName,
+                              kFilterOnlyAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            filterOnly = [[value lowercaseString] isEqualToString:@"true"];
+        }
     }
     
     if (lang)
@@ -561,6 +797,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.mapOnly = mapOnly;
     poiType.order = order;
     poiType.isText = isText;
+    poiType.filterOnly = filterOnly;
     [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
     poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
     

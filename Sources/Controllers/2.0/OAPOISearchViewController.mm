@@ -135,7 +135,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
     NSString *_coreFoundScopeFilterName;
     NSString *_coreFoundScopeUIFilterName;
     
+    OAPOIBaseType *_poiBaseType;
     OAPOIUIFilter *_filter;
+    OAPOIUIFilter *_filterToSave;
 
     BOOL _dataInvalidated;
 
@@ -458,6 +460,21 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 filterViewController.delegate = self;
                 [self.navigationController pushViewController:filterViewController animated:YES];
             }
+            else if (_poiBaseType)
+            {
+                OAPOIUIFilter *custom = [[OAPOIFiltersHelper sharedInstance] getFilterById:[STD_PREFIX stringByAppendingString:_poiBaseType.name]];
+                if (custom)
+                {
+                    [custom setFilterByName:nil];
+                    [custom clearFilter];
+                    [custom updateTypesToAccept:_poiBaseType];
+
+                    NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:nextStr];
+                    filterViewController.delegate = self;
+                    [self.navigationController pushViewController:filterViewController animated:YES];
+                }
+            }
             break;
         }
         case BarActionEditHistory:
@@ -473,7 +490,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (IBAction)bottomTextButtonPress:(id)sender
 {
     if (_filter)
-        [self saveCustomFilter];
+        [self doSaveFilter:_filter];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -481,11 +498,12 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self setBottomViewVisible:NO];
 }
 
-- (void) saveCustomFilter
+- (void) doSaveFilter:(OAPOIUIFilter *)filter
 {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
     alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert textFieldAtIndex:0].text = _filter.name;
+    [alert textFieldAtIndex:0].text = filter.name;
+    _filterToSave = filter;
     [alert show];
 }
 
@@ -1288,6 +1306,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                     _currentScopeCategoryName = poi.category.name;
                     _currentScopeCategoryNameLoc = poi.category.nameLocalized;
                     
+                    _poiBaseType = poi;
                     return;
                 }
             }
@@ -1305,6 +1324,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                     _currentScopeCategoryName = filter.category.name;
                     _currentScopeCategoryNameLoc = filter.category.nameLocalized;
                     
+                    _poiBaseType = filter;
                     return;
                 }
             }
@@ -1321,6 +1341,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _currentScopeFilterNameLoc = nil;
         _currentScopeCategoryName = nil;
         _currentScopeCategoryNameLoc = nil;
+        _poiBaseType = nil;
         _currentScopeUIFilterName = _filter.filterId;
         _currentScopeUIFilterNameLoc = _filter.name;
         return;
@@ -1349,6 +1370,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             _currentScopeCategoryName = poi.category.name;
             _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
+            _poiBaseType = poi;
             break;
         }
         else if ([str localizedCaseInsensitiveCompare:poi.filter.nameLocalized] == NSOrderedSame)
@@ -1362,6 +1384,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             _currentScopeCategoryName = poi.category.name;
             _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
+            _poiBaseType = poi.filter;
             break;
         }
         else if ([str localizedCaseInsensitiveCompare:poi.category.nameLocalized] == NSOrderedSame)
@@ -1375,6 +1398,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             _currentScopeCategoryName = poi.category.name;
             _currentScopeCategoryNameLoc = poi.category.nameLocalized;
             
+            _poiBaseType = poi.category;
             break;
         }
     }
@@ -1395,6 +1419,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 _currentScopeCategoryName = category.name;
                 _currentScopeCategoryNameLoc = category.nameLocalized;
                 
+                _poiBaseType = category;
                 break;
             }
         }
@@ -1411,6 +1436,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _currentScopeCategoryNameLoc = nil;
         _currentScopeUIFilterName = nil;
         _currentScopeUIFilterNameLoc = nil;
+        _poiBaseType = nil;
     }
 }
 
@@ -2026,9 +2052,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
         NSString* newName = [[alertView textFieldAtIndex:0].text trim];
         if (newName.length > 0)
         {
-            OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filter getAcceptedTypes]];
-            if (_filter.filterByName.length > 0)
-                [nFilter setSavedFilterByName:_filter.filterByName];
+            OAPOIUIFilter *nFilter = [[OAPOIUIFilter alloc] initWithName:newName filterId:nil acceptedTypes:[_filterToSave getAcceptedTypes]];
+            if (_filterToSave.filterByName.length > 0)
+                [nFilter setSavedFilterByName:_filterToSave.filterByName];
             
             if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
             {
@@ -2042,21 +2068,21 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 #pragma mark - OAPOIFilterViewDelegate
 
-- (BOOL) updateFilter
+- (BOOL) updateFilter:(OAPOIUIFilter *)filter
 {
-    [self searchByUIFilter:_filter];
+    [self searchByUIFilter:filter];
     return YES;
 }
 
-- (BOOL) saveFilter
+- (BOOL) saveFilter:(OAPOIUIFilter *)filter
 {
-    [self saveCustomFilter];
+    [self doSaveFilter:filter];
     return NO;
 }
 
-- (BOOL) removeFilter
+- (BOOL) removeFilter:(OAPOIUIFilter *)filter
 {    
-    if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:_filter])
+    if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
     {
         //app.getSearchUICore().refreshCustomPoiFilters();
         

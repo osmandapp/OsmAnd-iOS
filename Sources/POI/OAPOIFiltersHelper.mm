@@ -383,7 +383,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     self = [super init];
     if (self)
     {
-        _cacheTopStandardFilters = [NSMutableArray array];
+        _cacheTopStandardFilters = nil;
         _selectedPoiFilters = [NSMutableSet set];
         _helper = [[OAPOIFilterDbHelper alloc] init];
         _poiHelper = [OAPOIHelper sharedInstance];
@@ -463,7 +463,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     }
     OAPOIUIFilter *ff = [self getFilterById:filterId filters:@[[self getCustomPOIFilter], [self getSearchByNamePOIFilter],
                                                                [self getLocalWikiPOIFilter], [self getShowAllPOIFilter]]];
-    if (!ff)
+    if (ff)
         return ff;
 
     if ([filterId hasPrefix:STD_PREFIX])

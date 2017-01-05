@@ -55,8 +55,10 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 - (OAPOIType *)getPoiTypeByName:(NSString *)name;
 - (OAPOIBaseType *)getAnyPoiTypeByName:(NSString *)name;
 - (OAPOIType *)getPoiTypeByCategory:(NSString *)category name:(NSString *)name;
+- (OAPOIType *)getPoiTypeByKeyInCategory:(OAPOICategory *)category name:(NSString *)name;
 - (OAPOIBaseType *)getAnyPoiAdditionalTypeByKey:(NSString *)name;
 - (OAPOIType *)getTextPoiAdditionalByKey:(NSString *)name;
+- (NSString *)getPoiAdditionalCategoryIcon:(NSString *)category;
 
 -(NSString *)getPhraseByName:(NSString *)name;
 -(NSString *)getPhraseENByName:(NSString *)name;

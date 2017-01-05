@@ -23,11 +23,13 @@
 @property (nonatomic) NSString *lang;
 @property (nonatomic) NSArray<OAPOIType *> *poiAdditionals;
 @property (nonatomic) NSArray<OAPOIType *> *poiAdditionalsCategorized;
+@property (nonatomic) NSArray<NSString *> *excludedPoiAdditionalCategories;
 
 - (instancetype)initWithName:(NSString *)name;
 
 - (BOOL)isAdditional;
 - (void)addPoiAdditional:(OAPOIType *)poiType;
+- (void)addExcludedPoiAdditionalCategories:(NSArray<NSString *> *)excluded;
 
 - (NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;
 

@@ -52,6 +52,7 @@
     NSString *_prefLang;
     
     NSArray<OAPOIType *> *_textPoiAdditionals;
+    NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
     
     BOOL _isInit;
 }
@@ -96,6 +97,7 @@
     _poiTypesByName = parser.poiTypesByName;
     _poiCategories = parser.poiCategories;
     _textPoiAdditionals = parser.textPoiAdditionals;
+    _poiAdditionalCategoryIcons = parser.poiAdditionalCategoryIcons;
     _otherMapCategory = parser.otherMapCategory;
     
     NSMutableArray *categories = [_poiCategories mutableCopy];
@@ -346,6 +348,14 @@
     return nil;
 }
 
+- (OAPOIType *)getPoiTypeByKeyInCategory:(OAPOICategory *)category name:(NSString *)name
+{
+    if (category)
+        return [category getPoiTypeByKeyName:name];
+    
+    return nil;
+}
+
 - (OAPOIType *) getPoiAdditionalByKey:(OAPOIBaseType *)p name:(NSString *)name
 {
     NSArray<OAPOIType *> *pp = p.poiAdditionals;
@@ -449,6 +459,11 @@
         return lastCategory;
     }
     return self.otherPoiCategory;
+}
+
+- (NSString *) getPoiAdditionalCategoryIcon:(NSString *)category
+{
+    return [_poiAdditionalCategoryIcons objectForKey:category];
 }
 
 - (NSArray<OAPOIBaseType *> *) getTopVisibleFilters

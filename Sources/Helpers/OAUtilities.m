@@ -58,6 +58,9 @@
 
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image
 {
+    if (!image)
+        return nil;
+    
     @autoreleasepool
     {
         CGFloat scaleFactor = [[UIScreen mainScreen] scale];
@@ -505,6 +508,21 @@
                                  }
                          }];
     
+}
+
++ (UIImage *)getMxIcon:(NSString *)name
+{
+    UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], name]];
+    
+    return [OAUtilities applyScaleFactorToImage:img];
+}
+
++ (UIImage *)getTintableImage:(UIImage *)image
+{
+    if (image)
+        return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    else
+        return nil;
 }
 
 @end

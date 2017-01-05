@@ -40,6 +40,17 @@
     return self;
 }
 
+- (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category filter:(OAPOIFilter *)filter
+{
+    self = [super initWithName:name];
+    if (self)
+    {
+        _category = category;
+        _filter = filter;
+    }
+    return self;
+}
+
 - (UIImage *)icon
 {
     UIImage *img = [super icon];

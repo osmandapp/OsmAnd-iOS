@@ -24,6 +24,7 @@
 @property (nonatomic, assign) BOOL isText;
 @property (nonatomic, assign) BOOL reference;
 @property (nonatomic, assign) BOOL mapOnly;
+@property (nonatomic, assign) BOOL filterOnly;
 
 @property (nonatomic, assign) int order;
 
@@ -35,6 +36,7 @@
 @property (nonatomic) NSString *poiAdditionalCategoryLocalized;
 
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
+- (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category filter:(OAPOIFilter *)filter;
 
 - (void)setAdditional:(OAPOIBaseType *)parentType;
 

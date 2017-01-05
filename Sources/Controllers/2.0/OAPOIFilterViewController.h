@@ -14,9 +14,9 @@
 
 @required
 
-- (BOOL) updateFilter;
-- (BOOL) saveFilter;
-- (BOOL) removeFilter;
+- (BOOL) updateFilter:(OAPOIUIFilter *)filter;
+- (BOOL) saveFilter:(OAPOIUIFilter *)filter;
+- (BOOL) removeFilter:(OAPOIUIFilter *)filter;
 
 @end
 

@@ -36,6 +36,7 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 
 + (void)clearTmpDirectory;
 
++ (UIImage *)getMxIcon:(NSString *)name;
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
 + (NSString *)drawablePostfix;
 + (void)layoutComplexButton:(UIButton*)button;
@@ -49,6 +50,7 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (NSArray *) splitCoordinates:(NSString *)string;
 + (NSString *) floatToStrTrimZeros:(CGFloat)number;
 
++ (UIImage *)getTintableImage:(UIImage *)image;
 + (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color;
 
 + (NSString *)colorToString:(UIColor *)color;

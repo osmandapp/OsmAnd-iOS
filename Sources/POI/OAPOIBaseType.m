@@ -97,6 +97,14 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
     return nil; // override
 }
 
+- (void) addExcludedPoiAdditionalCategories:(NSArray<NSString *> *)excluded
+{
+    if (!_excludedPoiAdditionalCategories)
+        _excludedPoiAdditionalCategories = [NSArray array];
+    
+    _excludedPoiAdditionalCategories = [_excludedPoiAdditionalCategories arrayByAddingObjectsFromArray:excluded];
+}
+
 +(NSMutableSet<NSString *> *)nullSet
 {
     if (!nullTypeSetInstance)

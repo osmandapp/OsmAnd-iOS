@@ -214,3 +214,8 @@
 "poi_filter_closest_poi" = "Najbližje točke POI";
 "poi_filter_custom_filter" = "Filter po meri";
 "new_filter_desc" = "Vpisati je treba ime novega filtra, ki se bo pojavilo na seznamu kategorij.";
+"edit_filter" = "Uredi kategorije";
+"shared_string_filters" = "Filtri";
+"save_filter" = "Shrani filter";
+"delete_filter" = "Izbriši filter";
+"edit_filter_delete_dialog_title" = "Ali želite izbrisati izbrani filter?";

@@ -493,3 +493,9 @@
 "create_custom_poi" = "Vytvoriť vlastný filter";
 "selected_categories" = "Vybrané kategórie";
 "new_filter_desc" = "Prosím zadajte názov pre nový filter, ktorý bude pridaný na záložku Kategórie.";
+"shared_string_filters" = "Filtre";
+"edit_filter" = "Upraviť kategórie";
+"shared_string_save_as" = "Uložiť ako";
+"delete_filter" = "Vymazať filter";
+"save_filter" = "Uložiť filter";
+"edit_filter_delete_dialog_title" = "Vymazať vybraný filter?";

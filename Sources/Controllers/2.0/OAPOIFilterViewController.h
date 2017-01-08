@@ -14,7 +14,7 @@
 
 @required
 
-- (BOOL) updateFilter:(OAPOIUIFilter *)filter;
+- (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter;
 - (BOOL) saveFilter:(OAPOIUIFilter *)filter;
 - (BOOL) removeFilter:(OAPOIUIFilter *)filter;
 

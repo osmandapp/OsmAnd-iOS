@@ -622,16 +622,22 @@
         }
         searchCriteria->categoriesFilter = categoriesFilter;
         
+        OAAmenityNameFilter *nameFilter = nil;
+        if (filter.filterByName.length > 0)
+            nameFilter = [filter getNameFilter:filter.filterByName];
+        
         while (true)
         {
             searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(_radius, _myLocation);
             
             const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
             search->performSearch(*searchCriteria,
-                                  [self]
+                                  [self, &nameFilter]
                                   (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                   {
-                                      [self onPOIFound:resultEntry];
+                                      OAPOI *poi = [self.class parsePOI:resultEntry];
+                                      if (!nameFilter || [nameFilter accept:poi])
+                                          [self onPOIFound:resultEntry poi:poi];
                                   },
                                   ctrl);
             
@@ -869,6 +875,20 @@
 -(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry
 {
     OAPOI *poi = [self.class parsePOI:resultEntry];
+    if (poi)
+    {
+        const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+        poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, amenity->position31);
+        
+        _limitCounter--;
+        
+        if (_delegate)
+            [_delegate poiFound:poi];
+    }
+}
+
+-(void)onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry poi:(OAPOI *)poi
+{
     if (poi)
     {
         const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;

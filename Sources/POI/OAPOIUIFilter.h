@@ -39,7 +39,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) NSString *filterByName;
 @property (nonatomic) NSString *savedFilterByName;
 @property (nonatomic, readonly) NSArray<OAPOI *> *currentSearchResult;
-
+@property (nonatomic, readonly) OAPOIBaseType *baseType;
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
 - (instancetype)initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;

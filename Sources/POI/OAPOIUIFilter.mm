@@ -590,6 +590,7 @@
 
 - (void) updateTypesToAccept:(OAPOIBaseType *)pt
 {
+    _baseType = pt;
     [pt putTypes:acceptedTypes];
     if ([pt isKindOfClass:[OAPOIType class]] && [((OAPOIType *) pt) isAdditional] && ((OAPOIType *) pt).parentType)
         [self fillPoiAdditionals:((OAPOIType *) pt).parentType allFromCategory:YES];

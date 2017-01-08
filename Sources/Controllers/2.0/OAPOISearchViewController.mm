@@ -797,8 +797,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     [self acquireCurrentScope];
     
-    if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
-        _searchRadiusIndex = 0;
+    //if (_currentScope != EPOIScopeUndefined && ![self isCoreSearchResultActual])
+    //    _searchRadiusIndex = 0;
     
     if (_currentScope == EPOIScopeUndefined)
         [self setupBarActionView:BarActionNone title:nil];
@@ -810,6 +810,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
         // Stop active core search
         [[OAPOIHelper sharedInstance] breakSearch];
     }
+
+    if (!searchStr || _showTopList)
+        _searchRadiusIndex = 0;
 
     if (searchStr)
     {
@@ -1936,7 +1939,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     }
     else if ([obj isKindOfClass:[OAPOIUIFilter class]])
     {
-        [self searchByUIFilter:(OAPOIUIFilter *)obj];
+        [self searchByUIFilter:(OAPOIUIFilter *)obj nameFilter:@""];
     }
 }
 
@@ -2032,10 +2035,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 #pragma mark - OACustomPOIViewDelegate
 
--(void)searchByUIFilter:(OAPOIUIFilter *)filter
+-(void)searchByUIFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
     [self setFilter:filter];
-    self.searchString = [filter.name stringByAppendingString:@" "];
+    self.searchString = [NSString stringWithFormat:@"%@ %@", filter.name, nameFilter.length > 0 && [filter isStandardFilter] ? [nameFilter stringByAppendingString:@" "] : @""];
     _dataInvalidated = YES;
     _currentScope = EPOIScopeUndefined;
     _enteringScope = YES;
@@ -2059,7 +2062,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
             {
                 //app.getSearchUICore().refreshCustomPoiFilters();
-                [self searchByUIFilter:nFilter];
+                [self searchByUIFilter:nFilter nameFilter:@""];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
         }
@@ -2068,9 +2071,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 #pragma mark - OAPOIFilterViewDelegate
 
-- (BOOL) updateFilter:(OAPOIUIFilter *)filter
+- (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
-    [self searchByUIFilter:filter];
+    //app.getSearchUICore().refreshCustomPoiFilters();
+    [self searchByUIFilter:filter nameFilter:nameFilter];
     return YES;
 }
 

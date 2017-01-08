@@ -86,6 +86,9 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UILabel *descView;
 @property (weak, nonatomic) IBOutlet UIButton *btnMore;
 
+@property (weak, nonatomic) IBOutlet UIView *applyView;
+@property (weak, nonatomic) IBOutlet UIButton *applyButton;
+
 @end
 
 @implementation OAPOIFilterViewController
@@ -103,6 +106,8 @@ typedef enum
     OAPOIFiltersHelper *_helper;
     
     NSDictionary<NSNumber *, NSMutableArray<OAPOIFilterListItem *> *> *_groups;
+    
+    BOOL _applyViewVisible;
 }
 
 - (instancetype)initWithFilter:(OAPOIUIFilter * _Nonnull)filter filterByName:(NSString * _Nullable)filterByName
@@ -146,6 +151,7 @@ typedef enum
 -(void)applyLocalization
 {
     _textView.text = OALocalizedString(@"shared_string_filters");
+    [_applyButton setTitle:[OALocalizedString(@"apply_filters") upperCase] forState:UIControlStateNormal];
 }
 
 - (void)viewDidLoad
@@ -153,12 +159,26 @@ typedef enum
     [super viewDidLoad];
     
     _descView.text = _filter.name;
+    
+    // drop shadow
+    [_applyView.layer setShadowColor:[UIColor blackColor].CGColor];
+    [_applyView.layer setShadowOpacity:0.3];
+    [_applyView.layer setShadowRadius:3.0];
+    [_applyView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    
+    _applyView.hidden = YES;
 }
 
 - (IBAction)closePress:(id)sender
 {
-    if (!_delegate || [_delegate updateFilter:_filter])
-        [self.navigationController popViewControllerAnimated:YES];
+    if (_delegate)
+    {
+        if (![_filter isStandardFilter])
+            [_delegate updateFilter:_filter nameFilter:@""];
+        else
+            [_delegate updateFilter:_filter nameFilter:_nameFilterTextOrig];
+    }
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (IBAction)morePress:(id)sender
@@ -298,19 +318,19 @@ typedef enum
              
 - (NSSet<NSString *> *) getExcludedPoiAdditionalCategories
 {
-    NSMutableSet<NSString *> __block *excludedPoiAdditionalCategories = [NSMutableSet set];
+    NSMutableSet<NSString *> *excludedPoiAdditionalCategories = [NSMutableSet set];
     if ([_filter getAcceptedTypes].count == 0)
         return excludedPoiAdditionalCategories;
     
-    OAPOIHelper __block *poiTypes = [OAPOIHelper sharedInstance];
-    OAPOICategory __block *topCategory = nil;
+    OAPOIHelper *poiTypes = [OAPOIHelper sharedInstance];
+    OAPOICategory *topCategory = nil;
+    if ([_filter.baseType isKindOfClass:[OAPOICategory class]])
+        topCategory = (OAPOICategory *) _filter.baseType;
+    
     NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *accTypes = [_filter getAcceptedTypes];
     for (OAPOICategory *key in accTypes.keyEnumerator)
     {
         NSSet<NSString *> *value = [accTypes objectForKey:key];
-        
-        if (!topCategory)
-            topCategory = key;
         
         if (value != [OAPOIBaseType nullSet])
         {
@@ -522,18 +542,93 @@ typedef enum
     [self updateApplyButton];
 }
 
+- (void) toggleCheckbox:(UISwitch *)checkBox
+{
+    NSInteger section = checkBox.tag >> 10;
+    NSInteger row = checkBox.tag & 0x3ff;
+    OAPOIFilterListItem *item = [self getItem:[NSIndexPath indexPathForRow:row inSection:section]];
+    if (item && item.type == SWITCH_ITEM)
+    {
+        item.checked = checkBox.on;
+        if (item.checked)
+            [_selectedPoiAdditionals addObject:item.keyName];
+        else
+            [_selectedPoiAdditionals removeObject:item.keyName];
+    }
+    
+    [self updateApplyButton];
+}
+
 - (void) updateApplyButton
 {
     BOOL hasChanges = ![_nameFilterText isEqualToString:_nameFilterTextOrig] || ![_selectedPoiAdditionals isEqualToSet:_selectedPoiAdditionalsOrig];
-    //_applyFilterButton.hidden = !hasChanges;
+    [self setApplyViewVisible:hasChanges];
+}
+
+- (IBAction)applyButtonPress:(id)sender
+{
+    [self applyFilterFields];
+    
+    if (![_filter isStandardFilter])
+    {
+        [_filter setSavedFilterByName:_filter.filterByName];
+        if ([_helper editPoiFilter:_filter])
+        {
+            if (!_delegate || [_delegate updateFilter:_filter nameFilter:@""])
+                [self.navigationController popViewControllerAnimated:YES];
+        }
+    }
+    else
+    {
+        if (!_delegate || [_delegate updateFilter:_filter nameFilter:[_nameFilterText trim]])
+            [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
+- (void)setApplyViewVisible:(BOOL)visible
+{
+    if (visible)
+    {
+        if (!_applyViewVisible)
+        {
+            _applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
+            _applyView.hidden = NO;
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height -= _applyView.bounds.size.height;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _applyView.frame = CGRectMake(0, self.view.bounds.size.height - _applyView.bounds.size.height, self.view.bounds.size.width, _applyView.bounds.size.height);
+            }];
+        }
+        _applyViewVisible = YES;
+    }
+    else
+    {
+        if (_applyViewVisible)
+        {
+            CGRect tableFrame = _tableView.frame;
+            tableFrame.size.height = self.view.bounds.size.height - tableFrame.origin.y;
+            [UIView animateWithDuration:.25 animations:^{
+                _tableView.frame = tableFrame;
+                _applyView.frame = CGRectMake(0, self.view.bounds.size.height + 1, self.view.bounds.size.width, _applyView.bounds.size.height);
+            } completion:^(BOOL finished) {
+                _applyView.hidden = YES;
+            }];
+        }
+        _applyViewVisible = NO;
+    }
 }
 
 #pragma mark - UITableViewDataSource
 
 -(OAPOIFilterListItem *) getItem:(NSIndexPath *)indexPath
 {
+    if (indexPath.section < 0 || indexPath.section > _groups.count - 1)
+        return nil;
+    
     NSMutableArray<OAPOIFilterListItem *> *items = [_groups objectForKey:[NSNumber numberWithInteger:indexPath.section]];
-    if (!items || items.count - 1 < indexPath.row)
+    
+    if (!items || indexPath.row < 0 || indexPath.row > items.count - 1)
         return nil;
     
     return items[indexPath.row];
@@ -629,6 +724,9 @@ typedef enum
             
             if (cell)
             {
+                [cell.switchView removeTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
+                cell.switchView.tag = (indexPath.section << 10) + indexPath.row;
+                [cell.switchView addTarget:self action:@selector(toggleCheckbox:) forControlEvents:UIControlEventValueChanged];
                 if (item.icon)
                 {
                     cell.iconView.image = item.icon;

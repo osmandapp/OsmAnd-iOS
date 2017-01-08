@@ -487,3 +487,9 @@
 "create_custom_poi" = "Crea unu filtru personalizadu";
 "selected_categories" = "Categorias ischertadas";
 "new_filter_desc" = "Pro praghere inserta unu nùmene pro su filtru nou. L'as a agatare in sa lista de sas Categorias.";
+"shared_string_filters" = "Filtros";
+"edit_filter" = "Acontza sas categorias";
+"delete_filter" = "Iscantzella sos filtros";
+"save_filter" = "Sarba sos filtros";
+"edit_filter_delete_dialog_title" = "Iscantzellare su filtru ischertadu?";
+"apply_filters" = "Àplica sos filtros";

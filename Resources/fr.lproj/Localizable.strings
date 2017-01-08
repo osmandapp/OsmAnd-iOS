@@ -446,7 +446,7 @@
 "no_inet_connection" = "Aucune connexion Internet";
 "no_inet_connection_desc_map" = "Indispensable pour télécharger des cartes.";
 "search_location" = "Recherche de la position…";
-"first_usage_greeting" = "Suivez des itinéraires et découvrez de nouveaux lieux sans connexion Internet";
+"first_usage_greeting" = "Visualisez les cartes hors ligne, laissez-vous guider sur vos itinéraires sans connexion Internet et découvrez de nouveaux lieux.";
 "search_my_location" = "Rechercher ma position";
 "get_started" = "Démarrer";
 "shared_string_is_open_24_7" = "Ouvert 24/7";
@@ -459,3 +459,4 @@
 "poi_filter_custom_filter" = "Filtre personnalisé";
 "edit_filter_delete_dialog_title" = "Supprimer le filtre sélectionné ?";
 "try_again" = "Essayer à nouveau";
+"apply_filters" = "Appliquer les filtres";

@@ -504,3 +504,4 @@
 "save_filter" = "Gem filter";
 "edit_filter_delete_dialog_title" = "Slet det valgte filter?";
 "apply_filters" = "Anvend filtre";
+"filter_poi_hint" = "Filtrer efter navn";

@@ -500,3 +500,4 @@
 "save_filter" = "Uložiť filter";
 "edit_filter_delete_dialog_title" = "Vymazať vybraný filter?";
 "apply_filters" = "Použiť filtre";
+"filter_poi_hint" = "Filtrovať podľa názvu";

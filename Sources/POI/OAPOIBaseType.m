@@ -21,20 +21,6 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 
 @implementation OAPOIBaseType
 
--(id)copyWithZone:(NSZone *)zone
-{
-    OAPOIBaseType *clone = [[self class] allocWithZone:zone];
-    clone.name = [self.name copyWithZone:zone];
-    clone.nameLocalizedEN = [self.nameLocalizedEN copyWithZone:zone];
-    clone.nameLocalized = [self.nameLocalized copyWithZone:zone];
-    clone.top = self.top;
-    clone.baseLangType = [self.baseLangType copyWithZone:zone];
-    clone.lang = [self.lang copyWithZone:zone];
-    clone.poiAdditionals = [self.poiAdditionals copyWithZone:zone];
-    clone.poiAdditionalsCategorized = [self.poiAdditionalsCategorized copyWithZone:zone];
-    return clone;
-}
-
 - (instancetype)initWithName:(NSString *)name
 {
     self = [super init];
@@ -88,11 +74,11 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
         if (!_poiAdditionalsCategorized)
             _poiAdditionalsCategorized = @[poiType];
         else
-            [_poiAdditionalsCategorized arrayByAddingObject:poiType];
+            _poiAdditionalsCategorized = [_poiAdditionalsCategorized arrayByAddingObject:poiType];
     }
 }
 
-- (NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes
 {
     return nil; // override
 }

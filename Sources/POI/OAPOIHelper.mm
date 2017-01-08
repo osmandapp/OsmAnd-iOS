@@ -118,7 +118,7 @@
     if (!pc)
         NSLog(@"!!! 'user_defined_other' category not found");
 
-    _otherMapCategory = pc;
+    _otherPoiCategory = pc;
 }
 
 - (BOOL) isRegisteredType:(OAPOICategory *)t
@@ -608,8 +608,8 @@
         const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
         
         auto categoriesFilter = QHash<QString, QStringList>();
-        NSDictionary<OAPOICategory *, NSSet<NSString *> *> *types = [filter getAcceptedTypes];
-        for (OAPOICategory *category in types.allKeys)
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [filter getAcceptedTypes];
+        for (OAPOICategory *category in types.keyEnumerator)
         {
             QStringList list = QStringList();
             NSSet<NSString *> *subcategories = [types objectForKey:category];

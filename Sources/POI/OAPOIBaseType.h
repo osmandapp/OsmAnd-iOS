@@ -10,7 +10,7 @@
 
 @class OAPOIType, OAPOICategory;
 
-@interface OAPOIBaseType : NSObject<NSCopying>
+@interface OAPOIBaseType : NSObject
 
 @property (nonatomic, readonly) NSString *name;
 
@@ -31,7 +31,7 @@
 - (void)addPoiAdditional:(OAPOIType *)poiType;
 - (void)addExcludedPoiAdditionalCategories:(NSArray<NSString *> *)excluded;
 
-- (NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)acceptedTypes;
 
 +(NSMutableSet<NSString *> *)nullSet;
 +(BOOL)isNullSet:(NSMutableSet<NSString *> *)set;

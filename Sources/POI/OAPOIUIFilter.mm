@@ -48,8 +48,8 @@
 
 @interface OAPOIUIFilter ()
 
-@property (nonatomic) NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes;
-@property (nonatomic) NSMutableDictionary<NSString *, OAPOIType *> *poiAdditionals;
+@property (nonatomic) NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *acceptedTypes;
+@property (nonatomic) NSMapTable<NSString *, OAPOIType *> *poiAdditionals;
 
 @end
 
@@ -72,8 +72,8 @@
         distanceInd = 0;
         distanceToSearchValues = @[@1, @2, @5, @10, @20, @50, @100, @200, @500];
         
-        acceptedTypes = [NSMutableDictionary dictionary];
-        poiAdditionals = [NSMutableDictionary dictionary];
+        acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+        poiAdditionals = [NSMapTable strongToStrongObjectsMapTable];
         poiHelper = [OAPOIHelper sharedInstance];
         filtersHelper = [OAPOIFiltersHelper sharedInstance];
         app = [OsmAndApp instance];
@@ -113,7 +113,7 @@
 }
 
 // constructor for user defined filters
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSSet<NSString *> *> *)accTypes
+- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes
 {
     self = [self init];
     if (self)
@@ -130,8 +130,9 @@
         }
         else
         {
-            NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *aTypes = [NSMutableDictionary dictionaryWithDictionary:accTypes];
-            [acceptedTypes addEntriesFromDictionary:aTypes];
+            NSEnumerator<OAPOICategory *> *e = accTypes.keyEnumerator;
+            for (OAPOICategory *c in e)
+                [acceptedTypes setObject:[accTypes objectForKey:c] forKey:c];
         }
         
         [self updatePoiAdditionals];
@@ -394,8 +395,8 @@
         }
         if (poiAdds)
         {
-            NSMutableDictionary<OAPOIType *, OAPOIType *> *textPoiAdditionalsMap = [NSMutableDictionary dictionary];
-            NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategoriesMap = [NSMutableDictionary dictionary];
+            NSMapTable<OAPOIType *, OAPOIType *> *textPoiAdditionalsMap = [NSMapTable strongToStrongObjectsMapTable];
+            NSMapTable<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategoriesMap = [NSMapTable strongToStrongObjectsMapTable];
             for (OAPOIType *pt in poiAdds)
             {
                 NSString *category = pt.poiAdditionalCategory;
@@ -415,7 +416,7 @@
                         [textPoiAdditionalsMap setObject:textPoiType forKey:pt];
                 }
             }
-            for (NSMutableArray<OAPOIType *> *types in poiAdditionalCategoriesMap.allValues)
+            for (NSMutableArray<OAPOIType *> *types in poiAdditionalCategoriesMap.objectEnumerator)
             {
                 BOOL acceptedAnyInCategory = NO;
                 for (OAPOIType *p in types)
@@ -567,7 +568,7 @@
 
 - (void) clearFilter
 {
-    acceptedTypes = [NSMutableDictionary dictionary];
+    acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
     [poiAdditionals removeAllObjects];
     _filterByName = nil;
     [self clearCurrentResults];
@@ -628,7 +629,9 @@
 - (void) updatePoiAdditionals
 {
     [poiAdditionals removeAllObjects];
-    [acceptedTypes enumerateKeysAndObjectsUsingBlock:^(OAPOICategory * _Nonnull category, NSMutableSet<NSString *> * _Nonnull set, BOOL * _Nonnull stop) {
+    for (OAPOICategory *category in acceptedTypes.keyEnumerator)
+    {
+        NSMutableSet<NSString *> *set = [acceptedTypes objectForKey:category];
         [self fillPoiAdditionals:category allFromCategory:set == [OAPOIBaseType nullSet]];
         if (set != [OAPOIBaseType nullSet])
         {
@@ -639,7 +642,7 @@
                     [self fillPoiAdditionals:subtype allFromCategory:NO];
             }
         }
-    }];
+    }
     [self addOtherPoiAdditionals];
 }
 
@@ -654,8 +657,11 @@
 
 - (void) combineWithPoiFilter:(OAPOIUIFilter *)f
 {
-    [acceptedTypes addEntriesFromDictionary:f.acceptedTypes];
-    [poiAdditionals addEntriesFromDictionary:f.poiAdditionals];
+    for (OAPOICategory *key in f.acceptedTypes.keyEnumerator)
+        [acceptedTypes setObject:[f.acceptedTypes objectForKey:key] forKey:key];
+
+    for (NSString *key in f.poiAdditionals.keyEnumerator)
+        [poiAdditionals setObject:[f.poiAdditionals objectForKey:key] forKey:key];
 }
 
 - (void) combineWithPoiFilters:(NSSet<OAPOIUIFilter *> *)filters
@@ -698,9 +704,9 @@
     return (int)acceptedTypes.count;
 }
 
-- (NSDictionary<OAPOICategory *, NSSet<NSString *> *> *) getAcceptedTypes
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes
 {
-    return [NSDictionary dictionaryWithDictionary:acceptedTypes];
+    return acceptedTypes;
 }
 
 - (void) selectSubTypesToAccept:(OAPOICategory *)t accept:(NSMutableSet<NSString *> *)accept
@@ -719,9 +725,9 @@
     [self updatePoiAdditionals];
 }
 
-- (NSDictionary<NSString *, OAPOIType *> *) getPoiAdditionals
+- (NSMapTable<NSString *, OAPOIType *> *) getPoiAdditionals
 {
-    return [NSDictionary dictionaryWithDictionary:poiAdditionals];
+    return poiAdditionals;
 }
 
 - (NSString *) getIconId

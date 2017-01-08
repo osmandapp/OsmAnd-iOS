@@ -304,7 +304,10 @@ typedef enum
     
     OAPOIHelper __block *poiTypes = [OAPOIHelper sharedInstance];
     OAPOICategory __block *topCategory = nil;
-    [[_filter getAcceptedTypes] enumerateKeysAndObjectsUsingBlock:^(OAPOICategory * _Nonnull key, NSSet<NSString *> * _Nonnull value, BOOL * _Nonnull stop) {
+    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *accTypes = [_filter getAcceptedTypes];
+    for (OAPOICategory *key in accTypes.keyEnumerator)
+    {
+        NSSet<NSString *> *value = [accTypes objectForKey:key];
         
         if (!topCategory)
             topCategory = key;
@@ -336,7 +339,7 @@ typedef enum
                 [excluded removeAllObjects];
             }
         }
-    }];
+    }
     
     if (topCategory && topCategory.excludedPoiAdditionalCategories)
         [excludedPoiAdditionalCategories addObjectsFromArray:topCategory.excludedPoiAdditionalCategories];
@@ -449,10 +452,15 @@ typedef enum
         
         if (additionalsMap.count > 0)
         {
-            [additionalsMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSMutableArray<OAPOIType *> * _Nonnull value, BOOL * _Nonnull stop) {
+            NSArray<NSString *> *keys = [additionalsMap.allKeys sortedArrayUsingComparator:^NSComparisonResult(NSString * _Nonnull s1, NSString * _Nonnull s2) {
+                return [s1 localizedCaseInsensitiveCompare:s2];
+            }];
+            
+            for (NSString *category in keys)
+            {
+                NSMutableArray<OAPOIType *> *value = [additionalsMap objectForKey:category];
                
-                NSString *category = key;
-                NSString *categoryLocalizedName = [poiTypes getPoiCategoryByName:category].nameLocalized;
+                NSString *categoryLocalizedName = [poiTypes getPhraseByName:category];
                 BOOL expanded = ![_collapsedCategories containsObject:category];
                 BOOL showAll = [_showAllCategories containsObject:category];
                 
@@ -494,10 +502,30 @@ typedef enum
                 }
 
                 [groups setObject:items forKey:[NSNumber numberWithInt:groupId]];
-            }];
+            }
         }
     }
     _groups = [NSDictionary dictionaryWithDictionary:groups];
+}
+
+- (void) toggleCheckbox:(OAPOIFilterListItem *)item checkBox:(UISwitch *)checkBox isChecked:(BOOL)isChecked
+{
+    if (checkBox)
+        [checkBox setOn:isChecked animated:YES];
+    
+    item.checked = isChecked;
+    if (item.checked)
+        [_selectedPoiAdditionals addObject:item.keyName];
+    else
+        [_selectedPoiAdditionals removeObject:item.keyName];
+
+    [self updateApplyButton];
+}
+
+- (void) updateApplyButton
+{
+    BOOL hasChanges = ![_nameFilterText isEqualToString:_nameFilterTextOrig] || ![_selectedPoiAdditionals isEqualToSet:_selectedPoiAdditionalsOrig];
+    //_applyFilterButton.hidden = !hasChanges;
 }
 
 #pragma mark - UITableViewDataSource
@@ -513,7 +541,10 @@ typedef enum
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForFooter];
+    if (section == _groups.count - 1)
+        return [OAPOISearchHelper getHeightForFooter];
+    else
+        return 0.01;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
@@ -592,6 +623,8 @@ typedef enum
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextSwitchCell" owner:self options:nil];
                 cell = (OAIconTextSwitchCell *)[nib objectAtIndex:0];
                 cell.iconView.tintColor = UIColorFromRGB(0x727272);
+                cell.descView.hidden = YES;
+                cell.detailsIconView.hidden = YES;
             }
             
             if (cell)
@@ -639,6 +672,55 @@ typedef enum
         }
         default:
             return nil;
+    }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    OAPOIFilterListItem *item = [self getItem:indexPath];
+    if (!item)
+        return;
+    
+    switch (item.type)
+    {
+        case GROUP_HEADER:
+        {
+            if (item.category)
+            {
+                if ([_collapsedCategories containsObject:item.category])
+                    [_collapsedCategories removeObject:item.category];
+                else
+                    [_collapsedCategories addObject:item.category];
+                
+                [self updateGroups];
+                [tableView reloadData];
+            }
+            break;
+        }
+        case SWITCH_ITEM:
+        {
+            OAIconTextSwitchCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+            if (cell)
+            {
+                UISwitch *switchView = cell.switchView;
+                [self toggleCheckbox:item checkBox:switchView isChecked:!switchView.on];
+            }
+            break;
+        }
+        case BUTTON_ITEM:
+        {
+            if (item.category)
+            {
+                [_showAllCategories addObject:item.category];
+                [self updateGroups];
+                [tableView reloadData];
+            }
+            break;
+        }
+        default:
+            break;
     }
 }
 

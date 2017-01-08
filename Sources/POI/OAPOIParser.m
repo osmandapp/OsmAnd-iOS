@@ -34,7 +34,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 @implementation OAPOIParser {
     
     NSMutableArray<OAPOIType *> *_pTypes;
-    NSMutableDictionary<NSString *, OAPOIType *> *_pTypesByName;
+    NSMapTable<NSString *, OAPOIType *> *_pTypesByName;
     NSMutableArray<OAPOICategory *> *_pCategories;
     NSMutableArray<OAPOIFilter *> *_pFilters;
     NSMutableArray<OAPOIType *> *_textPoiAdditionals;
@@ -54,8 +54,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSMutableSet<NSString *> *_currentCategoryPoiAdditionalsCategories;
     NSMutableSet<NSString *> *_currentFilterPoiAdditionalsCategories;
     NSMutableSet<NSString *> *_currentTypePoiAdditionalsCategories;
-    NSMutableDictionary<OAPOIBaseType *, NSMutableSet<NSString *> *> *_abstractTypeAdditionalCategories;
-    NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *_categoryPoiAdditionalMap;
+    NSMapTable<OAPOIBaseType *, NSMutableSet<NSString *> *> *_abstractTypeAdditionalCategories;
+    NSMapTable<NSString *, NSMutableArray<OAPOIType *> *> *_categoryPoiAdditionalMap;
 
 }
 
@@ -72,7 +72,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
 - (void)commonInit:(NSString*)fileName
 {
     _pTypes = [NSMutableArray array];
-    _pTypesByName = [NSMutableDictionary dictionary];
+    _pTypesByName = [NSMapTable strongToStrongObjectsMapTable];
     _pCategories = [NSMutableArray array];
     _pFilters = [NSMutableArray array];
     _textPoiAdditionals = [NSMutableArray array];
@@ -83,8 +83,8 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     _currentCategoryPoiAdditionalsCategories = [NSMutableSet set];
     _currentFilterPoiAdditionalsCategories = [NSMutableSet set];
     _currentTypePoiAdditionalsCategories = [NSMutableSet set];
-    _abstractTypeAdditionalCategories = [NSMutableDictionary dictionary];
-    _categoryPoiAdditionalMap = [NSMutableDictionary dictionary];
+    _abstractTypeAdditionalCategories = [NSMapTable strongToStrongObjectsMapTable];
+    _categoryPoiAdditionalMap = [NSMapTable strongToStrongObjectsMapTable];
 
     self.fileName = fileName;
 }
@@ -118,8 +118,10 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     xmlParseChunk(_xmlParserContext, (const char *)[poiData bytes], (int)[poiData length], 0);
     xmlParseChunk(_xmlParserContext, NULL, 0, 1);
 
-    [_abstractTypeAdditionalCategories enumerateKeysAndObjectsUsingBlock:^(OAPOIBaseType * _Nonnull key, NSMutableSet<NSString *> * _Nonnull value, BOOL * _Nonnull stop) {
-       
+    NSEnumerator<OAPOIBaseType *> *keys = _abstractTypeAdditionalCategories.keyEnumerator;
+    for (OAPOIBaseType *key in keys)
+    {
+        NSMutableSet<NSString *> *value = [_abstractTypeAdditionalCategories objectForKey:key];
         for (NSString *category in value)
         {
             NSArray<OAPOIType *> *poiAdditionals = [_categoryPoiAdditionalMap objectForKey:category];
@@ -129,7 +131,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
                     [self buildPoiAdditionalReference:poiType parent:key];
             }
         }
-    }];
+    }
         
     _done = YES;
     
@@ -203,11 +205,11 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     //ref.setOsmValue2(poiAdditional.getOsmValue2());
     ref.poiAdditionalCategory = poiAdditional.poiAdditionalCategory;
     ref.filterOnly = poiAdditional.filterOnly;
-    if (!lastType)
+    if (lastType)
         [lastType addPoiAdditional:ref];
-    else if (!lastFilter)
+    else if (lastFilter)
         [lastFilter addPoiAdditional:ref];
-    else if (!lastCategory)
+    else if (lastCategory)
         [lastCategory addPoiAdditional:ref];
     
     if (ref.isText)
@@ -447,7 +449,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 name = [[NSString alloc] initWithBytes:attributes[i].value
                                                 length:length
                                               encoding:NSUTF8StringEncoding];
-                break;
             }
             else if (0 == strncmp((const char*)attributes[i].localname, kIconAttributeName,
                              kIconAttributeNameLength))
@@ -456,7 +457,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 icon = [[NSString alloc] initWithBytes:attributes[i].value
                                                 length:length
                                               encoding:NSUTF8StringEncoding];
-                break;
             }
 
             if (icon)
@@ -479,7 +479,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                          encoding:NSUTF8StringEncoding];
                 
                 lang = [[value lowercaseString] isEqualToString:@"true"];
-                break;
             }
         }
         
@@ -503,7 +502,6 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             }
             [categoryAdditionals addObject:baseType];
         }
-
     }
 }
 
@@ -513,7 +511,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentFilterPoiAdditionalsCategories.count > 0)
         {
-            [_abstractTypeAdditionalCategories setObject:_currentFilterPoiAdditionalsCategories forKey:_currentPOIFilter];
+            [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentFilterPoiAdditionalsCategories] forKey:_currentPOIFilter];
             [_currentFilterPoiAdditionalsCategories removeAllObjects];
         }
         _currentPOIFilter = nil;
@@ -522,7 +520,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentCategoryPoiAdditionalsCategories.count > 0)
         {
-            [_abstractTypeAdditionalCategories setObject:_currentCategoryPoiAdditionalsCategories forKey:_currentPOICategory];
+            [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentCategoryPoiAdditionalsCategories] forKey:_currentPOICategory];
             [_currentCategoryPoiAdditionalsCategories removeAllObjects];
         }
         _currentPOICategory = nil;
@@ -531,7 +529,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentTypePoiAdditionalsCategories.count > 0)
         {
-            [_abstractTypeAdditionalCategories setObject:_currentTypePoiAdditionalsCategories forKey:_currentPOIType];
+            [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentTypePoiAdditionalsCategories] forKey:_currentPOIType];
             [_currentTypePoiAdditionalsCategories removeAllObjects];
         }
         _currentPOIType = nil;
@@ -569,6 +567,9 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
 - (OAPOIType *)parsePoiType:(const xmlChar *)localname attributeCount:(int)attributeCount
                  attributes:(xmlSAX2Attributes *)attributes
 {
+    if (!_currentPOICategory)
+        _currentPOICategory = _otherMapCategory;
+
     NSString *name = nil;
     NSString *tag = nil;
     NSString *value = nil;
@@ -709,6 +710,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     BOOL reference = NO;
     BOOL isText = NO;
     BOOL filterOnly = NO;
+    BOOL top = NO;
     
     for(int i = 0; i < attributeCount; i++)
     {
@@ -775,6 +777,16 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                                                      encoding:NSUTF8StringEncoding];
             filterOnly = [[value lowercaseString] isEqualToString:@"true"];
         }
+        else if (0 == strncmp((const char*)attributes[i].localname, kTopAttributeName,
+                              kTopAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            NSString *value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+            
+            top = [[value lowercaseString] isEqualToString:@"true"];
+        }
     }
     
     if (lang)
@@ -798,6 +810,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     poiType.order = order;
     poiType.isText = isText;
     poiType.filterOnly = filterOnly;
+    poiType.top = top;
     [poiType setAdditional:_currentPOIType ? _currentPOIType : (_currentPOIFilter ? _currentPOIFilter : _currentPOICategory)];
     poiType.poiAdditionalCategory = _currentPOIAdditionalCategory;
     

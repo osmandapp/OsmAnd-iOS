@@ -13,15 +13,6 @@
 
 @implementation OAPOICategory
 
--(id)copyWithZone:(NSZone *)zone
-{
-    OAPOICategory* clone = [super copyWithZone:zone];
-    clone.poiTypes = [self.poiTypes copyWithZone:zone];
-    clone.poiFilters = [self.poiFilters copyWithZone:zone];
-    clone.tag = [self.tag copyWithZone:zone];
-    return clone;
-}
-
 -(BOOL)isEqual:(id)object
 {
     if ([object isKindOfClass:[OAPOICategory class]])
@@ -71,14 +62,14 @@
     return nil;
 }
 
-- (NSMutableDictionary<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMutableDictionary<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
+- (NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *) putTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
 {
     [acceptedTypes setObject:[OAPOIBaseType nullSet] forKey:self];
     [self.class addReferenceTypes:self.poiTypes acceptedTypes:acceptedTypes];
     return acceptedTypes;
 }
 
-+ (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMutableDictionary<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
++ (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes
 {
     for (OAPOIType *pt in pTypes)
     {

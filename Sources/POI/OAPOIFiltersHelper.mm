@@ -144,8 +144,8 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@, %@, %@) VALUES (?, ?, ?)", CATEGORIES_NAME, CATEGORIES_FILTER_ID, CATEGORIES_COL_CATEGORY, CATEGORIES_COL_SUBCATEGORY];
             const char *update_stmt = [query UTF8String];
             
-            NSDictionary<OAPOICategory *, NSSet<NSString *> *> *types = [p getAcceptedTypes];
-            for (OAPOICategory *a in types.allKeys)
+            NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [p getAcceptedTypes];
+            for (OAPOICategory *a in types.keyEnumerator)
             {
                 if ([types objectForKey:a] == [OAPOIBaseType nullSet])
                 {
@@ -189,7 +189,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         {
             NSString *querySQL = [NSString stringWithFormat:@"SELECT %@, %@, %@ FROM %@", CATEGORIES_FILTER_ID, CATEGORIES_COL_CATEGORY, CATEGORIES_COL_SUBCATEGORY, CATEGORIES_NAME];
             
-            NSMutableDictionary<NSString *, NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *> *map = [NSMutableDictionary dictionary];
+            NSMapTable<NSString *, NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *> *map = [NSMapTable strongToStrongObjectsMapTable];
             
             const char *query_stmt = [querySQL UTF8String];
             if (sqlite3_prepare_v2(filtersDB, query_stmt, -1, &statement, NULL) == SQLITE_OK)
@@ -209,9 +209,9 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
                         subCategory = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
 
                     if (![map objectForKey:filterId])
-                        [map setObject:[NSMutableDictionary dictionary] forKey:filterId];
+                        [map setObject:[NSMapTable strongToStrongObjectsMapTable] forKey:filterId];
                     
-                    NSMutableDictionary<OAPOICategory *, NSMutableSet<NSString *> *> *m = [map objectForKey:filterId];
+                    NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *m = [map objectForKey:filterId];
                     OAPOICategory *a = [_poiHelper getPoiCategoryByName:[category lowerCase] create:NO];
                     if (!subCategory)
                     {
@@ -249,7 +249,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
                         filterByName = [[NSString alloc] initWithUTF8String:(const char *) sqlite3_column_text(statement, 2)];
                     
                     if (![map objectForKey:filterId])
-                        [map setObject:[NSMutableDictionary dictionary] forKey:filterId];
+                        [map setObject:[NSMapTable strongToStrongObjectsMapTable] forKey:filterId];
                     
                     if ([map objectForKey:filterId])
                     {
@@ -406,7 +406,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 {
     if (!_customPOIFilter)
     {
-        OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:OALocalizedString(@"poi_filter_custom_filter") filterId:CUSTOM_FILTER_ID acceptedTypes:[NSDictionary dictionary]];
+        OAPOIUIFilter *filter = [[OAPOIUIFilter alloc] initWithName:OALocalizedString(@"poi_filter_custom_filter") filterId:CUSTOM_FILTER_ID acceptedTypes:[NSMapTable strongToStrongObjectsMapTable]];
         filter.isStandardFilter = YES;
         _customPOIFilter = filter;
     }

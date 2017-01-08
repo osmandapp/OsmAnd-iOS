@@ -23,6 +23,6 @@
 
 - (OAPOIType *) getPoiTypeByKeyName:(NSString *)name;
 
-+ (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMutableDictionary<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes;
++ (void) addReferenceTypes:(NSArray<OAPOIType *> *)pTypes acceptedTypes:(NSMapTable<OAPOICategory *,  NSMutableSet<NSString *> *> *)acceptedTypes;
 
 @end

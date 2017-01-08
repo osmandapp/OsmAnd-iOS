@@ -11,25 +11,6 @@
 
 @implementation OAPOIType
 
--(id)copyWithZone:(NSZone *)zone
-{
-    OAPOIType* clone = [super copyWithZone:zone];
-    clone.tag = [self.tag copyWithZone:zone];
-    clone.value = [self.value copyWithZone:zone];
-    clone.category = [self.category copyWithZone:zone];
-    clone.filter = [self.filter copyWithZone:zone];
-    clone.parentType = [self.parentType copyWithZone:zone];
-    clone.referenceType = [self.referenceType copyWithZone:zone];
-    clone.parent = self.parent;
-    clone.poiAdditionalCategory = [self.poiAdditionalCategory copyWithZone:zone];
-    clone.poiAdditionalCategoryLocalized = [self.poiAdditionalCategoryLocalized copyWithZone:zone];
-    clone.isText = self.isText;
-    clone.reference = self.reference;
-    clone.mapOnly = self.mapOnly;
-    clone.order = self.order;
-    return clone;
-}
-
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
 {
     self = [super initWithName:name];
@@ -102,7 +83,7 @@
 }
 
 
--(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
+-(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
 {
     if (self.isAdditional)
         return [_parentType putTypes:acceptedTypes];

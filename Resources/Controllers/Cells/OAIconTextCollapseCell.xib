@@ -26,7 +26,7 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Title" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l3O-lh-YFI">
                         <rect key="frame" x="51" y="0.0" width="226" height="50"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <fontDescription key="fontDescription" name="AvenirNext-Bold" family="Avenir Next" pointSize="15"/>
+                        <fontDescription key="fontDescription" name="AvenirNext-Medium" family="Avenir Next" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -37,6 +37,11 @@
                     </imageView>
                 </subviews>
             </tableViewCellContentView>
+            <connections>
+                <outlet property="iconView" destination="Qn1-bX-smA" id="Krb-E1-csN"/>
+                <outlet property="rightIconView" destination="5cb-dg-Yi6" id="HUM-m2-bgr"/>
+                <outlet property="textView" destination="l3O-lh-YFI" id="uUP-yB-6GW"/>
+            </connections>
             <point key="canvasLocation" x="43" y="84.5"/>
         </tableViewCell>
     </objects>

@@ -12,14 +12,6 @@
 
 @implementation OAPOIFilter
 
--(id)copyWithZone:(NSZone *)zone
-{
-    OAPOIFilter* clone = [super copyWithZone:zone];
-    clone.poiTypes = [self.poiTypes copyWithZone:zone];
-    clone.category = [self.category copyWithZone:zone];
-    return clone;
-}
-
 - (instancetype)initWithName:(NSString *)name category:(OAPOICategory *)category;
 {
     self = [super initWithName:name];
@@ -68,7 +60,7 @@
     }
 }
 
--(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMutableDictionary<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
+-(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)putTypes:(NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *)acceptedTypes
 {
     if (![acceptedTypes objectForKey:self.category])
         [acceptedTypes setObject:[NSMutableSet set] forKey:self.category];

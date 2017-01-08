@@ -30,7 +30,7 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 @property (nonatomic, assign) int searchLimit;
 
 @property (nonatomic, readonly) NSArray<OAPOIType *> *poiTypes;
-@property (nonatomic, readonly) NSDictionary<NSString *, OAPOIType *> *poiTypesByName;
+@property (nonatomic, readonly) NSMapTable<NSString *, OAPOIType *> *poiTypesByName;
 @property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategories;
 @property (nonatomic, readonly) NSArray<OAPOICategory *> *poiCategoriesNoOther;
 @property (nonatomic, readonly) OAPOICategory *otherPoiCategory;

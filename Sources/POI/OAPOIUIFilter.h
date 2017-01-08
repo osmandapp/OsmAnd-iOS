@@ -43,7 +43,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 @property (nonatomic, readonly) NSArray<NSNumber *> *distanceToSearchValues;
 
 - (instancetype)initWithBasePoiType:(OAPOIBaseType *)type idSuffix:(NSString *)idSuffix;
-- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSDictionary<OAPOICategory *, NSSet<NSString *> *> *)accTypes;
+- (instancetype)initWithName:(NSString *)nm filterId:(NSString *)fId acceptedTypes:(NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *)accTypes;
 - (instancetype)initWithFiltersToMerge:(NSSet<OAPOIUIFilter *> *)filtersToMerge;
 
 - (BOOL) isAutomaticallyIncreaseSearch;
@@ -53,7 +53,7 @@ typedef BOOL(^OAAmenityNameFilterAccept)(OAPOI * poi);
 
 + (UIImage *) getUserIcon;
 
-- (NSDictionary<OAPOICategory *, NSSet<NSString *> *> *) getAcceptedTypes;
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes;
 
 - (void)setFilterByName:(NSString *)filter;
 - (void)updateFilterResults;

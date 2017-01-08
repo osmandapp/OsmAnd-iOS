@@ -36,7 +36,7 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 @interface OAPOIParser : NSObject
 
 @property(nonatomic) NSArray<OAPOIType *> *poiTypes;
-@property(nonatomic) NSDictionary<NSString *, OAPOIType *> *poiTypesByName;
+@property(nonatomic) NSMapTable<NSString *, OAPOIType *> *poiTypesByName;
 @property(nonatomic) NSArray<OAPOICategory *> *poiCategories;
 @property(nonatomic) OAPOICategory *otherMapCategory;
 @property(nonatomic) NSArray<OAPOIFilter *> *poiFilters;

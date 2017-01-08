@@ -227,10 +227,12 @@
     }
     
     // Sort items
+    /*
     NSArray *sortedArrayGroups = [self.groupsAndItems sortedArrayUsingComparator:^NSComparisonResult(SearchHistoryTableGroup* obj1, SearchHistoryTableGroup* obj2) {
         return [obj1.groupName localizedCaseInsensitiveCompare:obj2.groupName];
     }];
     [self.groupsAndItems setArray:sortedArrayGroups];
+     */
     
     int i = 0;
     for (SearchHistoryTableGroup *group in self.groupsAndItems)

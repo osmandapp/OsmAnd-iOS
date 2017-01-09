@@ -502,3 +502,4 @@
 "poi_filter_closest_poi" = "PDIs más cercanos";
 "poi_filter_custom_filter" = "Filtro personal";
 "edit_filter_delete_dialog_title" = "¿Eliminar el filtro seleccionado?";
+"apply_filters" = "Aplicar filtros";

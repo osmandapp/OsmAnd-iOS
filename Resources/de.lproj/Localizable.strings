@@ -504,3 +504,5 @@
 "delete_filter" = "Filter löschen";
 "save_filter" = "Filter speichern";
 "edit_filter_delete_dialog_title" = "Ausgewählten Filter löschen?";
+"apply_filters" = "Filter anwenden";
+"filter_poi_hint" = "Nach Name filtern";

@@ -51,6 +51,7 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 + (NSString *) floatToStrTrimZeros:(CGFloat)number;
 
 + (UIImage *)getTintableImage:(UIImage *)image;
++ (UIImage *)getTintableImageNamed:(NSString *)name;
 + (UIImage *)tintImageWithColor:(UIImage *)source color:(UIColor *)color;
 
 + (NSString *)colorToString:(UIColor *)color;

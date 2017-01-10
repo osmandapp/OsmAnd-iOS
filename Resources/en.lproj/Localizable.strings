@@ -575,4 +575,6 @@
 "save_filter" = "Save filter";
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Apply filters";
+"filter_poi_hint" = "Filter by name";
+
 

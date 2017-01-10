@@ -15,7 +15,7 @@
 
 - (int) indexOf:(NSString *)text
 {
-    NSRange range = [self rangeOfString:text];
+    NSRange range = [self rangeOfString:text options:0 range:NSMakeRange(0, self.length) locale:[NSLocale currentLocale]];
     if (range.location != NSNotFound)
     {
         return (int)range.location;
@@ -519,6 +519,15 @@
 
 + (UIImage *)getTintableImage:(UIImage *)image
 {
+    if (image)
+        return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    else
+        return nil;
+}
+
++ (UIImage *)getTintableImageNamed:(NSString *)name
+{
+    UIImage *image = [UIImage imageNamed:name];
     if (image)
         return [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     else

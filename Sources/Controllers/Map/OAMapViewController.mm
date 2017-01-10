@@ -41,6 +41,7 @@
 #import "OAPOI.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
+#import "OAPOIUIFilter.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -171,6 +172,8 @@
 
     // show poi on map
     BOOL _showPoiOnMap;
+    OAPOIUIFilter *_poiUiFilter;
+    OAAmenityNameFilter *_poiUiNameFilter;
     NSString *_poiCategoryName;
     NSString *_poiFilterName;
     NSString *_poiTypeName;
@@ -3342,9 +3345,21 @@
     _poiTypeName = type;
     _poiKeyword = keyword;
     _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self doShowPoiOnMap];
+    });
+}
+
+- (void)showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword
+{
+    _showPoiOnMap = YES;
+    _poiUiFilter = uiFilter;
+    _poiKeyword = keyword;
+    _prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self doShowPoiUiFilterOnMap];
     });
 }
 
@@ -3361,62 +3376,142 @@
             categoriesFilter.insert(QString::fromNSString(_poiCategoryName), QStringList());
         }
         
-        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter = ([self]
-                                                                      (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
-                                                                      {
-                                                                          bool res = false;
-                                                                          
-                                                                          if (_poiFilterName)
-                                                                          {
-                                                                              NSString *category;
-                                                                              NSString *type;
-                                                                              const auto& decodedCategories = amenity->getDecodedCategories();
-                                                                              if (!decodedCategories.isEmpty())
-                                                                              {
-                                                                                  const auto& entry = decodedCategories.first();
-                                                                                  category = entry.category.toNSString();
-                                                                                  type = entry.subcategory.toNSString();
-                                                                              }
-                                                                              
-                                                                              if (category && type)
-                                                                              {
-                                                                                  OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
-                                                                                  if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
-                                                                                      res = true;
-                                                                              }
-                                                                          }
-                                                                          else
-                                                                          {
-                                                                              res = true;
-                                                                          }
-                                                                          
-                                                                          if (res && _poiKeyword)
-                                                                          {
-                                                                              NSString *name = amenity->nativeName.toNSString();
-                                                                              
-                                                                              NSString *nameLocalized;
-                                                                              const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
-                                                                              for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
-                                                                              {
-                                                                                  if (lang != QString::null && entry.key() == lang)
-                                                                                      nameLocalized = entry.value().toNSString();
-                                                                              }
-                                                                              
-                                                                              if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
-                                                                              {
-                                                                                  res = true;
-                                                                              }
-                                                                              else
-                                                                              {
-                                                                                  res = false;
-                                                                              }
-                                                                              
-                                                                          }
-                                                                          
-                                                                          return res;
-                                                                      });
+        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
+        ([self]
+         (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
+         {
+             bool res = false;
+             
+             if (_poiFilterName)
+             {
+                 NSString *category;
+                 NSString *type;
+                 const auto& decodedCategories = amenity->getDecodedCategories();
+                 if (!decodedCategories.isEmpty())
+                 {
+                     const auto& entry = decodedCategories.first();
+                     category = entry.category.toNSString();
+                     type = entry.subcategory.toNSString();
+                 }
+                 
+                 if (category && type)
+                 {
+                     OAPOIType *poiType = [[OAPOIHelper sharedInstance] getPoiTypeByCategory:category name:type];
+                     if (poiType && [poiType.filter.name isEqualToString:_poiFilterName])
+                         res = true;
+                 }
+             }
+             else
+             {
+                 res = true;
+             }
+             
+             if (res && _poiKeyword)
+             {
+                 NSString *name = amenity->nativeName.toNSString();
+                 
+                 NSString *nameLocalized;
+                 const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+                 for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                 {
+                     if (lang != QString::null && entry.key() == lang)
+                         nameLocalized = entry.value().toNSString();
+                 }
+                 
+                 if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
+                 {
+                     res = true;
+                 }
+                 else
+                 {
+                     res = false;
+                 }
+                 
+             }
+             
+             return res;
+         });
         
 
+        if (categoriesFilter.count() > 0)
+        {
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+        }
+        else
+        {
+            _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, nullptr, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));
+        }
+        
+        [mapView addTiledSymbolsProvider:_amenitySymbolsProvider];
+    }
+}
+
+- (void)doShowPoiUiFilterOnMap
+{
+    if (!_poiUiFilter || [_poiUiFilter isEmpty])
+        return;
+    
+    OAMapRendererView* mapView = (OAMapRendererView*)self.view;
+    
+    @synchronized(_rendererSync)
+    {
+        auto categoriesFilter = QHash<QString, QStringList>();
+        NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *types = [_poiUiFilter getAcceptedTypes];
+        for (OAPOICategory *category in types.keyEnumerator)
+        {
+            QStringList list = QStringList();
+            NSSet<NSString *> *subcategories = [types objectForKey:category];
+            if (subcategories != [OAPOIBaseType nullSet])
+            {
+                for (NSString *sub in subcategories)
+                    list << QString::fromNSString(sub);
+            }
+            categoriesFilter.insert(QString::fromNSString(category.name), list);
+        }
+        
+        if (_poiUiFilter.filterByName.length > 0)
+            _poiUiNameFilter = [_poiUiFilter getNameFilter:_poiUiFilter.filterByName];
+        else
+            _poiUiNameFilter = nil;
+            
+        OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
+        ([self]
+         (const std::shared_ptr<const OsmAnd::Amenity>& amenity)
+         {
+             bool res = true;
+             if (_poiUiNameFilter)
+             {
+                 OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+                 res = [_poiUiNameFilter accept:poi];
+             }
+             
+             if (res && _poiKeyword)
+             {
+                 NSString *name = amenity->nativeName.toNSString();
+                 
+                 NSString *nameLocalized;
+                 const QString lang = (_prefLang ? QString::fromNSString(_prefLang) : QString::null);
+                 for(const auto& entry : OsmAnd::rangeOf(amenity->localizedNames))
+                 {
+                     if (lang != QString::null && entry.key() == lang)
+                         nameLocalized = entry.value().toNSString();
+                 }
+                 
+                 if (_poiKeyword.length == 0 || [self beginWith:_poiKeyword text:nameLocalized] || [self beginWithAfterSpace:_poiKeyword text:nameLocalized] || [self beginWith:_poiKeyword text:name] || [self beginWithAfterSpace:_poiKeyword text:name])
+                 {
+                     res = true;
+                 }
+                 else
+                 {
+                     res = false;
+                 }
+                 
+             }
+             
+             return res;
+         });
+        
+        
         if (categoriesFilter.count() > 0)
         {
             _amenitySymbolsProvider.reset(new OsmAnd::AmenitySymbolsProvider(_app.resourcesManager->obfsCollection, &categoriesFilter, amenityFilter, std::make_shared<OACoreResourcesAmenityIconProvider>(OsmAnd::getCoreResourcesProvider(), self.displayDensityFactor, 1.0)));

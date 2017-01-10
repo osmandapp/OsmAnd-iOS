@@ -10,4 +10,7 @@
 
 @interface OAIconTextFieldCell : UITableViewCell
 
+@property (weak, nonatomic) IBOutlet UIImageView *iconView;
+@property (weak, nonatomic) IBOutlet UITextField *textField;
+
 @end

@@ -52,6 +52,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @class OAGpxWpt;
 @class OAGpxMetadata;
 @class OAGPXRouteDocument;
+@class OAPOIUIFilter;
 
 
 @interface OAMapSymbol : NSObject
@@ -150,6 +151,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (void)hideRecGpxTrack;
 
 - (void)showPoiOnMap:(NSString *)category type:(NSString *)type filter:(NSString *)filter keyword:(NSString *)keyword;
+- (void)showPoiOnMap:(OAPOIUIFilter *)uiFilter keyword:(NSString *)keyword;
 - (void)hidePoi;
 
 - (void)addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude;

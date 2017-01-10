@@ -7,7 +7,9 @@
 //
 
 #import "OACollatorStringMatcher.h"
+#import "OAUtilities.h"
 
+static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWidthInsensitiveSearch;
 
 @implementation OACollatorStringMatcher
 {
@@ -21,7 +23,7 @@
     self = [super init];
     if (self)
     {
-        _part = [part lowercaseStringWithLocale:[NSLocale currentLocale]];
+        _part = [part lowerCase];
         _mode = mode;
     }
     return self;
@@ -76,8 +78,12 @@
     //		return true;
     
     if (base.length <= part.length)
-        return [base localizedCompare:part] == 0;
+        return [base localizedCaseInsensitiveCompare:part] == NSOrderedSame;
     
+    NSRange range = [base rangeOfString:part options:comparisonOptions range:NSMakeRange(0, base.length) locale:[NSLocale currentLocale]];
+    return (range.location != NSNotFound);
+    
+    /*
     for (int pos = 0; pos <= base.length - part.length + 1; pos++)
     {
         NSString *temp = [base substringFromIndex:pos];
@@ -85,19 +91,20 @@
         for (NSInteger length = temp.length; length >= 0; length--)
         {
             NSString *temp2 = [temp substringToIndex:length];
-            if ([temp2 localizedCompare:part])
+            if ([temp2 localizedCaseInsensitiveCompare:part] == NSOrderedSame)
                 return YES;
         }
     }
     
     return NO;
+    */
 }
 
 + (int) cindexOf:(int)start part:(NSString *)part base:(NSString *)base
 {
     for (int pos = start; pos <= base.length - part.length; pos++)
     {
-        if ([[base substringWithRange:NSMakeRange(pos, part.length)] localizedCompare:part] == 0)
+        if ([[base substringWithRange:NSMakeRange(pos, part.length)] localizedCaseInsensitiveCompare:part] == NSOrderedSame)
             return pos;
     }
     return -1;
@@ -113,7 +120,7 @@
  */
 + (BOOL) cstartsWith:(NSString *)searchInParam theStart:(NSString *)theStart checkBeginning:(BOOL)checkBeginning checkSpaces:(BOOL)checkSpaces equals:(BOOL)equals
 {
-    NSString *searchIn = [searchInParam lowercaseStringWithLocale:[NSLocale currentLocale]];
+    NSString *searchIn = [searchInParam lowerCase];
     NSInteger startLength = theStart.length;
     NSInteger searchInLength = searchIn.length;
     if (startLength == 0)
@@ -125,7 +132,7 @@
     // simulate starts with for collator
     if (checkBeginning)
     {
-        BOOL starts = [[searchIn substringToIndex:startLength] localizedCompare:theStart] == 0;
+        BOOL starts = [[searchIn substringToIndex:startLength] localizedCaseInsensitiveCompare:theStart] == NSOrderedSame;
         if (starts)
         {
             if (equals)
@@ -147,7 +154,7 @@
         {
             if ([self.class isSpace:[searchIn characterAtIndex:i - 1]] && ![self.class isSpace:[searchIn characterAtIndex:i]])
             {
-                if ([[searchIn substringWithRange:NSMakeRange(i, startLength)] localizedCompare:theStart] == 0)
+                if ([[searchIn substringWithRange:NSMakeRange(i, startLength)] localizedCaseInsensitiveCompare:theStart] == NSOrderedSame)
                 {
                     if (equals)
                     {

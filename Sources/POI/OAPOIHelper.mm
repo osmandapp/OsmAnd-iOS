@@ -264,7 +264,7 @@
 
 -(NSString *)getPhraseByName:(NSString *)name
 {
-    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", name]];
+    NSString *phrase = [_phrases objectForKey:[NSString stringWithFormat:@"poi_%@", [name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
     if (!phrase)
         return [[name capitalizedString] stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     else
@@ -807,9 +807,13 @@
 
 +(OAPOI *)parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry
 {
-    OAPOIHelper *helper = [OAPOIHelper sharedInstance];
-    
     const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+    return [self.class parsePOIByAmenity:amenity];
+}
+
++(OAPOI *)parsePOIByAmenity:(std::shared_ptr<const OsmAnd::Amenity>)amenity
+{
+    OAPOIHelper *helper = [OAPOIHelper sharedInstance];
     
     if (amenity->categories.isEmpty())
         return nil;

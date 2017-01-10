@@ -23,12 +23,14 @@ static UIFont *_textFont;
 
 @implementation OAIconTextSwitchCell
 
-- (void)awakeFromNib {
+- (void)awakeFromNib
+{
     [super awakeFromNib];
     // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
+- (void)setSelected:(BOOL)selected animated:(BOOL)animated
+{
     [super setSelected:selected animated:animated];
 
     // Configure the view for the selected state
@@ -58,7 +60,7 @@ static UIFont *_textFont;
     self.switchView.center = CGPointMake(w - 42, h / 2);
     
     CGFloat textWidth = w - deltaTextWidth + (self.detailsIconView.hidden ? detailsIconWidth : 0.0);
-    CGFloat textHeight = [self.class getTextViewHeightWithWidth:w text:self.textView.text];
+    CGFloat textHeight = [self.class getTextViewHeightWithWidth:textWidth text:self.textView.text];
 
     if (self.descView.hidden)
     {

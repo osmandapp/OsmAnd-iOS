@@ -404,7 +404,7 @@
                 if (!types)
                 {
                     types = [NSMutableArray array];
-                    [poiAdditionalCategoriesMap setObject:types forKey:category];;
+                    [poiAdditionalCategoriesMap setObject:types forKey:category ? category : @""];
                 }
                 [types addObject:pt];
                 

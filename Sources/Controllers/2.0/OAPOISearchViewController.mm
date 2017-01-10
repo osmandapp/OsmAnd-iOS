@@ -424,7 +424,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
         {
             OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
             NSString *str = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
+            if (_currentScope == EPOIScopeUIFilter && _filter)
+                [mapVC showPoiOnMap:_filter keyword:str];
+            else
+                [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
             [self dismissViewControllerAnimated:YES completion:nil];
             break;
         }
@@ -641,7 +644,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(keyboardWillBeHidden:)
                                                  name:UIKeyboardWillHideNotification object:nil];
-    
 }
 
 - (void)unregisterKeyboardNotifications
@@ -653,8 +655,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:UIKeyboardWillHideNotification
                                                   object:nil];
-    
 }
+
 // Called when the UIKeyboardDidShowNotification is sent.
 - (void)keyboardWillShow:(NSNotification*)aNotification
 {
@@ -888,6 +890,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
             self.searchStringPrev = nil;
             
+            OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
             NSMutableArray *arr = [NSMutableArray array];
             NSArray *categories = [OAPOIHelper sharedInstance].poiCategories;
             if (_showTopList)
@@ -900,7 +903,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                     if (f.top)
                         [arr addObject:f];
 
-                NSArray<OAPOIUIFilter *> *uiFilters = [[OAPOIFiltersHelper sharedInstance] getUserDefinedPoiFilters];
+                NSArray<OAPOIUIFilter *> *uiFilters = [filtersHelper getUserDefinedPoiFilters];
                 [arr addObjectsFromArray:uiFilters];
             }
             else
@@ -930,6 +933,13 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
                 return [str1 localizedCaseInsensitiveCompare:str2];
             }];
+            
+            if (_showTopList)
+            {
+                if ([filtersHelper getLocalWikiPOIFilter])
+                    sortedArrayItems = [sortedArrayItems arrayByAddingObject:[filtersHelper getLocalWikiPOIFilter]];
+                sortedArrayItems = [sortedArrayItems arrayByAddingObject:[filtersHelper getShowAllPOIFilter]];
+            }
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 

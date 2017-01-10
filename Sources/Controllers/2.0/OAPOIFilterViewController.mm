@@ -21,6 +21,7 @@
 #import "OAIconTextCollapseCell.h"
 #import "OAIconTextSwitchCell.h"
 #import "OAIconButtonCell.h"
+#import "OAIconTextFieldCell.h"
 
 typedef enum
 {
@@ -77,7 +78,7 @@ typedef enum
 @end
 
 
-@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate>
+@interface OAPOIFilterViewController () <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *topView;
@@ -107,7 +108,11 @@ typedef enum
     
     NSDictionary<NSNumber *, NSMutableArray<OAPOIFilterListItem *> *> *_groups;
     
+    UIView *_textFieldHeaderView;
+    OAIconTextFieldCell *_textFieldCell;
     BOOL _applyViewVisible;
+
+    UIPanGestureRecognizer *_tblMove;
 }
 
 - (instancetype)initWithFilter:(OAPOIUIFilter * _Nonnull)filter filterByName:(NSString * _Nullable)filterByName
@@ -158,6 +163,10 @@ typedef enum
 {
     [super viewDidLoad];
     
+    _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
+                                                       action:@selector(moveGestureDetected:)];
+    _tblMove.delegate = self;
+
     _descView.text = _filter.name;
     
     // drop shadow
@@ -167,6 +176,92 @@ typedef enum
     [_applyView.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
     
     _applyView.hidden = YES;
+    
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextFieldCell" owner:self options:nil];
+    _textFieldCell = (OAIconTextFieldCell *)[nib objectAtIndex:0];
+    _textFieldCell.backgroundColor = [UIColor whiteColor];
+    _textFieldCell.iconView.image = [OAUtilities getTintableImageNamed:@"search_icon"];
+    _textFieldCell.textField.placeholder = OALocalizedString(@"filter_poi_hint");
+    _textFieldCell.textField.text = _nameFilterText;
+    [_textFieldCell.textField addTarget:self action:@selector(filterTextChanged:) forControlEvents:UIControlEventEditingChanged];
+    
+    _textFieldHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _tableView.bounds.size.width, 51.0)];
+    _textFieldHeaderView.backgroundColor = [UIColor groupTableViewBackgroundColor];
+    _textFieldHeaderView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    [_textFieldHeaderView addSubview:_textFieldCell];
+    
+    UIView *topSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, _textFieldHeaderView.bounds.size.width, 0.5)];
+    topSeparatorView.backgroundColor = _tableView.separatorColor;
+    topSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_textFieldHeaderView addSubview:topSeparatorView];
+
+    UIView *bottomSeparatorView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 51.5, _textFieldHeaderView.bounds.size.width, 0.5)];
+    bottomSeparatorView.backgroundColor = _tableView.separatorColor;
+    bottomSeparatorView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [_textFieldHeaderView addSubview:bottomSeparatorView];
+}
+
+-(void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self registerForKeyboardNotifications];
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self unregisterKeyboardNotifications];
+}
+
+- (void)filterTextChanged:(id)sender
+{
+    UITextField *textField = (UITextField *)sender;
+    _nameFilterText = textField.text;
+    [self updateApplyButton];
+}
+
+-(void)moveGestureDetected:(id)sender
+{
+    [_textFieldCell.textField resignFirstResponder];
+}
+
+// keyboard notifications register+process
+- (void)registerForKeyboardNotifications
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillBeHidden:)
+                                                 name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void)unregisterKeyboardNotifications
+{
+    //unregister the keyboard notifications while not visible
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillShowNotification
+                                                  object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self
+                                                    name:UIKeyboardWillHideNotification
+                                                  object:nil];
+}
+
+// Called when the UIKeyboardDidShowNotification is sent.
+- (void)keyboardWillShow:(NSNotification*)aNotification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view addGestureRecognizer:_tblMove];
+    });
+}
+
+// Called when the UIKeyboardWillHideNotification is sent
+- (void)keyboardWillBeHidden:(NSNotification*)aNotification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.view removeGestureRecognizer:_tblMove];
+    });
 }
 
 - (IBAction)closePress:(id)sender
@@ -278,7 +373,10 @@ typedef enum
             }
         }
         if ([filterByName trim].length > 0 && _nameFilterText.length == 0)
+        {
             _nameFilterText = [filterByName trim];
+            _nameFilterTextOrig = [NSString stringWithString:_nameFilterText];
+        }
     }
 }
 
@@ -290,7 +388,7 @@ typedef enum
         if (!category)
             category = @"";
 
-        if (!excludedPoiAdditionalCategories && [excludedPoiAdditionalCategories containsObject:category])
+        if (excludedPoiAdditionalCategories && [excludedPoiAdditionalCategories containsObject:category])
             continue;
         
         if ([_collapsedCategories containsObject:category] && !extractAll)
@@ -326,6 +424,10 @@ typedef enum
     OAPOICategory *topCategory = nil;
     if ([_filter.baseType isKindOfClass:[OAPOICategory class]])
         topCategory = (OAPOICategory *) _filter.baseType;
+    else if ([_filter.baseType isKindOfClass:[OAPOIFilter class]])
+        topCategory = ((OAPOIFilter *) _filter.baseType).category;
+    else if ([_filter.baseType isKindOfClass:[OAPOIType class]])
+        topCategory = ((OAPOIType *) _filter.baseType).category;
     
     NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *accTypes = [_filter getAcceptedTypes];
     for (OAPOICategory *key in accTypes.keyEnumerator)
@@ -443,7 +545,7 @@ typedef enum
 {
     OAPOIHelper *poiTypes = [OAPOIHelper sharedInstance];
     
-    int __block groupId = 0;
+    int __block groupId = -1;
     NSMutableDictionary<NSNumber *, NSMutableArray<OAPOIFilterListItem *> *> *groups = [NSMutableDictionary dictionary];
     
     NSDictionary<NSString *, OAPOIType *> *poiAdditionals = [_filter getPoiAdditionals];
@@ -452,9 +554,10 @@ typedef enum
     
     if (![excludedPoiAdditionalCategories containsObject:@"opening_hours"])
     {
+        groupId++;
+
         NSString *keyNameOpen = [[OALocalizedString(@"shared_string_is_open") stringByReplacingOccurrencesOfString:@" " withString:@"_"] lowerCase];
 
-        groupId = 0;
         NSMutableArray<OAPOIFilterListItem *> *items = [NSMutableArray array];
         
         [items addObject:[[OAPOIFilterListItem alloc] initWithType:SWITCH_ITEM icon:[UIImage imageNamed:@"ic_working_time.png"] text:OALocalizedString(@"shared_string_is_open") groupIndex:groupId expandable:NO expanded:NO checked:[_selectedPoiAdditionals containsObject:keyNameOpen] category:nil keyName:keyNameOpen]];
@@ -544,6 +647,8 @@ typedef enum
 
 - (void) toggleCheckbox:(UISwitch *)checkBox
 {
+    [self moveGestureDetected:nil];
+    
     NSInteger section = checkBox.tag >> 10;
     NSInteger row = checkBox.tag & 0x3ff;
     OAPOIFilterListItem *item = [self getItem:[NSIndexPath indexPathForRow:row inSection:section]];
@@ -644,7 +749,18 @@ typedef enum
 
 -(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return [OAPOISearchHelper getHeightForHeader];
+    if (section == 0)
+        return 51.0 + [OAPOISearchHelper getHeightForHeader];
+    else
+        return [OAPOISearchHelper getHeightForHeader];
+}
+
+-(UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    if (section == 0)
+        return _textFieldHeaderView;
+    else
+        return nil;
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -658,7 +774,7 @@ typedef enum
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return _groups.count;
+    return MAX(1, _groups.count);
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -776,6 +892,7 @@ typedef enum
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self moveGestureDetected:nil];
     
     OAPOIFilterListItem *item = [self getItem:indexPath];
     if (!item)
@@ -864,6 +981,13 @@ typedef enum
         default:
             break;
     }
+}
+
+#pragma mark - UIGestureRecognizerDelegate
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
 }
 
 @end

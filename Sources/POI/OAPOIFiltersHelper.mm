@@ -440,12 +440,19 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
     return _showAllPOIFilter;
 }
 
+- (void) hidePoiFilters
+{
+    [_selectedPoiFilters removeAllObjects];
+}
 
 - (OAPOIUIFilter *) getFilterById:(NSString *)filterId filters:(NSArray<OAPOIUIFilter *> *)filters
 {
+    if (!filterId)
+        return nil;
+
     for (OAPOIUIFilter *pf in filters)
     {
-        if ([pf.filterId isEqualToString:filterId])
+        if (pf && pf.filterId && [pf.filterId isEqualToString:filterId])
             return pf;
     }
     return nil;

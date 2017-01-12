@@ -460,3 +460,4 @@
 "edit_filter_delete_dialog_title" = "Supprimer le filtre sélectionné ?";
 "try_again" = "Essayer à nouveau";
 "apply_filters" = "Appliquer les filtres";
+"filter_poi_hint" = "Filtrer par nom";

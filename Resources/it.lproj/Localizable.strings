@@ -431,3 +431,5 @@
 "shared_string_of" = "di";
 "shared_string_all" = "Tutto";
 "plugin_popup_ski_title" = "Attiva lo stile mappa Ski";
+"new_filter_desc" = "Inserisci il nome del nuovo filtro, verrà aggiunto nella tua scheda delle Categorie.";
+"first_usage_greeting" = "Ottieni indicazioni e scopri nuovi luoghi offline";

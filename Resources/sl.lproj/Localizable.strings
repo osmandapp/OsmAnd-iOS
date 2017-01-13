@@ -219,3 +219,5 @@
 "save_filter" = "Shrani filter";
 "delete_filter" = "Izbriši filter";
 "edit_filter_delete_dialog_title" = "Ali želite izbrisati izbrani filter?";
+"apply_filters" = "Uveljavi filtre";
+"filter_poi_hint" = "Filtriraj po imenu";

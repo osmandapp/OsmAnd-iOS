@@ -61,6 +61,7 @@
 #import "OAPOILocationType.h"
 #import "OAFirebaseHelper.h"
 #import "OATargetMultiView.h"
+#import "OAGeocoder.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1434,10 +1435,10 @@ typedef enum
         }
         else
         {
-            if (buildingNumber.length > 0)
-                addressString = [NSString stringWithFormat:@"%@, %@", roadTitle, buildingNumber];
-            else
-                addressString = roadTitle;
+            //if (buildingNumber.length > 0)
+            //    addressString = [NSString stringWithFormat:@"%@, %@", roadTitle, buildingNumber];
+            //else
+            addressString = roadTitle;
             isAddressFound = YES;
         }
     }
@@ -1515,6 +1516,9 @@ typedef enum
 
 - (NSString *)findRoadNameByLat:(double)lat lon:(double)lon
 {
+    return [[OAGeocoder instance] geocodeLat:lat lon:lon];
+    
+    /*
     std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
     _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
     
@@ -1539,10 +1543,6 @@ typedef enum
     if (road)
     {
         NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        
-        //for (const auto& entry : OsmAnd::rangeOf(road->captions))
-        //    NSLog(@"%d=%@", entry.key(), entry.value().toNSString());
-        
         if (prefLang)
         {
             const auto mainLanguage = QString::fromNSString(prefLang);
@@ -1569,6 +1569,7 @@ typedef enum
     }
     
     return roadTitle;
+    */
 }
 
 - (void)goToTargetPointDefault

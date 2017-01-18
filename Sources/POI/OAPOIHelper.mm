@@ -572,7 +572,7 @@
             }
         }
     }
-        
+
     _isSearchDone = YES;
     
     if (_delegate)

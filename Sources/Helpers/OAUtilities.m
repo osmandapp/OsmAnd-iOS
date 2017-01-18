@@ -15,7 +15,12 @@
 
 - (int) indexOf:(NSString *)text
 {
-    NSRange range = [self rangeOfString:text options:0 range:NSMakeRange(0, self.length) locale:[NSLocale currentLocale]];
+    return [self indexOf:text start:0];
+}
+
+- (int) indexOf:(NSString *)text start:(NSInteger)start
+{
+    NSRange range = [self rangeOfString:text options:0 range:NSMakeRange(start, self.length) locale:[NSLocale currentLocale]];
     if (range.location != NSNotFound)
     {
         return (int)range.location;
@@ -24,6 +29,11 @@
     {
         return -1;
     }
+}
+
+- (NSString *) add:(NSString *)str
+{
+    return [self stringByAppendingString:str];
 }
 
 - (NSString *) trim

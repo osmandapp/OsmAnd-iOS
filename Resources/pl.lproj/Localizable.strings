@@ -32,7 +32,7 @@
 "rendering_attr_showSurfaceGrade_name" = "Jakość dróg";
 "rendering_attr_showSurfaces_name" = "Nawierzchnia dróg";
 "rendering_attr_showCycleRoutes_name" = "Ścieżki rowerowe";
-"rendering_attr_alpineHiking_name" = "Skala wspinaczki alpinistycznej (SAC)";
+"rendering_attr_alpineHiking_name" = "Klasyfikacja trudności wspinaczki alpinistycznej (SAC)";
 "rendering_attr_osmcTraces_name" = "Symbol nakładki wędrówek";
 "rendering_attr_noAdminboundaries_name" = "Granice";
 "rendering_attr_noPolygons_name" = "Wielokąty";

@@ -61,7 +61,7 @@
 #import "OAPOILocationType.h"
 #import "OAFirebaseHelper.h"
 #import "OATargetMultiView.h"
-#import "OAGeocoder.h"
+#import "OAReverseGeocoder.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -1516,7 +1516,7 @@ typedef enum
 
 - (NSString *)findRoadNameByLat:(double)lat lon:(double)lon
 {
-    return [[OAGeocoder instance] geocodeLat:lat lon:lon];
+    return [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
     
     /*
     std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;

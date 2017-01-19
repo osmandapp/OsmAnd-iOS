@@ -1855,8 +1855,8 @@
 		84E1DED01B0DFE64002A6946 /* bt_round_big.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E1DECB1B0DFE64002A6946 /* bt_round_big.png */; };
 		84E1DED31B0DFE64002A6946 /* bt_round_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E1DECC1B0DFE64002A6946 /* bt_round_big@2x.png */; };
 		84E1DED61B0DFE64002A6946 /* bt_round_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E1DECD1B0DFE64002A6946 /* bt_round_big@3x.png */; };
-		84E297531E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */; };
-		84E297541E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */; };
+		84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */; };
+		84E297541E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */; };
 		84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
 		84E297571E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
 		84E2DB461AB720FA001A7FEC /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB191AB720FA001A7FEC /* HUD_compass.png */; };
@@ -3102,8 +3102,8 @@
 		84E1DECB1B0DFE64002A6946 /* bt_round_big.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = bt_round_big.png; path = Resources/Icons/bt_round_big.png; sourceTree = "<group>"; };
 		84E1DECC1B0DFE64002A6946 /* bt_round_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bt_round_big@2x.png"; path = "Resources/Icons/bt_round_big@2x.png"; sourceTree = "<group>"; };
 		84E1DECD1B0DFE64002A6946 /* bt_round_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bt_round_big@3x.png"; path = "Resources/Icons/bt_round_big@3x.png"; sourceTree = "<group>"; };
-		84E297511E2F4A08006EA6B1 /* OAGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGeocoder.h; path = Helpers/OAGeocoder.h; sourceTree = "<group>"; };
-		84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGeocoder.mm; path = Helpers/OAGeocoder.mm; sourceTree = "<group>"; };
+		84E297511E2F4A08006EA6B1 /* OAReverseGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAReverseGeocoder.h; path = Helpers/OAReverseGeocoder.h; sourceTree = "<group>"; };
+		84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAReverseGeocoder.mm; path = Helpers/OAReverseGeocoder.mm; sourceTree = "<group>"; };
 		84E297551E2FD80A006EA6B1 /* topo.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = topo.render.xml; path = ../resources/rendering_styles/topo.render.xml; sourceTree = "<group>"; };
 		84E2DB191AB720FA001A7FEC /* HUD_compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HUD_compass.png; path = Resources/Icons/HUD_compass.png; sourceTree = "<group>"; };
 		84E2DB1A1AB720FA001A7FEC /* HUD_compass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HUD_compass@2x.png"; path = "Resources/Icons/HUD_compass@2x.png"; sourceTree = "<group>"; };
@@ -5396,8 +5396,8 @@
 				84F1F9B81DE83C64001AA520 /* OAFirebaseHelper.m */,
 				84772BAB1E0AB3F900E65884 /* OAMapUtils.h */,
 				84772BAC1E0AB3F900E65884 /* OAMapUtils.mm */,
-				84E297511E2F4A08006EA6B1 /* OAGeocoder.h */,
-				84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */,
+				84E297511E2F4A08006EA6B1 /* OAReverseGeocoder.h */,
+				84E297521E2F4A08006EA6B1 /* OAReverseGeocoder.mm */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -7446,7 +7446,7 @@
 				847A1D241DF94E9B003C1246 /* OAWebClient.mm in Sources */,
 				847A1D251DF94E9B003C1246 /* OASliderCell.m in Sources */,
 				845AFB501E264E9300170026 /* OASearchSettings.mm in Sources */,
-				84E297541E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */,
+				84E297541E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
 				847A1D261DF94E9B003C1246 /* OAHistoryItem.m in Sources */,
 				847A1D271DF94E9B003C1246 /* OAPhrasesParser.m in Sources */,
 				845AFB5C1E264EE800170026 /* OASearchUICore.mm in Sources */,
@@ -7679,7 +7679,7 @@
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,
-				84E297531E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */,
+				84E297531E2F4A08006EA6B1 /* OAReverseGeocoder.mm in Sources */,
 				848A3EB41B6A141B0016F6F4 /* OAHillshadeLayer.m in Sources */,
 				84686AC11E056F0500DA09BC /* OAPOISearchHelper.mm in Sources */,
 				84064DF71B83907600033C47 /* OAGPXEditWptViewController.mm in Sources */,

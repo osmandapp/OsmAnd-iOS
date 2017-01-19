@@ -6,7 +6,7 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import "OAGeocoder.h"
+#import "OAReverseGeocoder.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 
@@ -23,12 +23,12 @@
 #include <OsmAndCore/Data/Road.h>
 
 
-@implementation OAGeocoder
+@implementation OAReverseGeocoder
 
-+ (OAGeocoder *)instance
++ (OAReverseGeocoder *)instance
 {
     static dispatch_once_t once;
-    static OAGeocoder * sharedInstance;
+    static OAReverseGeocoder * sharedInstance;
     dispatch_once(&once, ^{
     
         sharedInstance = [[self alloc] init];
@@ -36,7 +36,7 @@
     return sharedInstance;
 }
 
-- (NSString *) geocodeLat:(double)lat lon:(double)lon
+- (NSString *) lookupAddressAtLat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;

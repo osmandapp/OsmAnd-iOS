@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface OAGeocoder : NSObject
+@interface OAReverseGeocoder : NSObject
 
-+ (OAGeocoder *)instance;
++ (OAReverseGeocoder *)instance;
 
-- (NSString *) geocodeLat:(double)lat lon:(double)lon;
+- (NSString *) lookupAddressAtLat:(double)lat lon:(double)lon;
 
 @end

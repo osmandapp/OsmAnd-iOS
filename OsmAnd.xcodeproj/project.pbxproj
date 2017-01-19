@@ -1857,6 +1857,8 @@
 		84E1DED61B0DFE64002A6946 /* bt_round_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E1DECD1B0DFE64002A6946 /* bt_round_big@3x.png */; };
 		84E297531E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */; };
 		84E297541E2F4A08006EA6B1 /* OAGeocoder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */; };
+		84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
+		84E297571E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
 		84E2DB461AB720FA001A7FEC /* HUD_compass.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB191AB720FA001A7FEC /* HUD_compass.png */; };
 		84E2DB491AB720FA001A7FEC /* HUD_compass@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB1A1AB720FA001A7FEC /* HUD_compass@2x.png */; };
 		84E2DB4C1AB720FA001A7FEC /* HUD_compass@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB1B1AB720FA001A7FEC /* HUD_compass@3x.png */; };
@@ -3102,6 +3104,7 @@
 		84E1DECD1B0DFE64002A6946 /* bt_round_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bt_round_big@3x.png"; path = "Resources/Icons/bt_round_big@3x.png"; sourceTree = "<group>"; };
 		84E297511E2F4A08006EA6B1 /* OAGeocoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAGeocoder.h; path = Helpers/OAGeocoder.h; sourceTree = "<group>"; };
 		84E297521E2F4A08006EA6B1 /* OAGeocoder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAGeocoder.mm; path = Helpers/OAGeocoder.mm; sourceTree = "<group>"; };
+		84E297551E2FD80A006EA6B1 /* topo.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = topo.render.xml; path = ../resources/rendering_styles/topo.render.xml; sourceTree = "<group>"; };
 		84E2DB191AB720FA001A7FEC /* HUD_compass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = HUD_compass.png; path = Resources/Icons/HUD_compass.png; sourceTree = "<group>"; };
 		84E2DB1A1AB720FA001A7FEC /* HUD_compass@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HUD_compass@2x.png"; path = "Resources/Icons/HUD_compass@2x.png"; sourceTree = "<group>"; };
 		84E2DB1B1AB720FA001A7FEC /* HUD_compass@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "HUD_compass@3x.png"; path = "Resources/Icons/HUD_compass@3x.png"; sourceTree = "<group>"; };
@@ -4508,6 +4511,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				84E297551E2FD80A006EA6B1 /* topo.render.xml */,
 				844499B71AAF816E00ACA20D /* skimap.render.xml */,
 				84CC524B1AA5A539000063CF /* nautical.render.xml */,
 				846310051A8E463B005B39F2 /* default.render.xml */,
@@ -5625,6 +5629,7 @@
 				847A1DB51DF94E9B003C1246 /* ic_trip_direction@3x.png in Resources */,
 				847A1DB61DF94E9B003C1246 /* img_purchase_banner_portrait.png in Resources */,
 				847A1DB71DF94E9B003C1246 /* my_location_marker_heading_icon2.png in Resources */,
+				84E297571E2FD80B006EA6B1 /* topo.render.xml in Resources */,
 				847A1DB81DF94E9B003C1246 /* OAGPXElevationCell.xib in Resources */,
 				847A1DB91DF94E9B003C1246 /* left_menu_icon_quiz@2x.png in Resources */,
 				847A1DBA1DF94E9B003C1246 /* OAHistoryViewController.xib in Resources */,
@@ -7030,6 +7035,7 @@
 				845E07131B60E72300DFC2A7 /* ic_checkmark_big_enable.png in Resources */,
 				8454DA3F1B31774F00E5A5C5 /* ic_mode_bike@2x.png in Resources */,
 				84E1DED61B0DFE64002A6946 /* bt_round_big@3x.png in Resources */,
+				84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */,
 				BB2726FA19CB3878007C5613 /* routing.xml in Resources */,
 				843E5CB41AB341E000BE14BE /* favorite_import_icon.png in Resources */,
 				841222541B39CC5200F80F9E /* map_pedestrian_bearing.png in Resources */,

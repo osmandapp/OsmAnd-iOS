@@ -20,6 +20,7 @@
 #include <OsmAndCore/Data/Building.h>
 #include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/Road.h>
 
 
 @implementation OAGeocoder
@@ -70,25 +71,12 @@
         {
             [geocodingResult appendString:object->streetGroup->getName(lang, transliterate).toNSString()];
         }
-        /*
-        else if (object->point)
+        else if (object->road && object->road->hasGeocodingAccess())
         {
-            RouteDataObject rd = object.point.getRoad();
-            String sname = rd.getName(lang, transliterate);
-            if (Algorithms.isEmpty(sname)) {
-                sname = "";
-            }
-            String ref = rd.getRef(lang, transliterate, true);
-            if (!Algorithms.isEmpty(ref)) {
-                if (!Algorithms.isEmpty(sname)) {
-                    sname += ", ";
-                }
-                sname += ref;
-            }
-            geocodingResult = sname;
-            relevantDistance = object.getDistanceP();
+            QString sname = object->road->getName(lang, transliterate);
+            if (!sname.isNull())
+                [geocodingResult appendString:sname.toNSString()];
         }
-        */
     }
         
     return [NSString stringWithString:geocodingResult];

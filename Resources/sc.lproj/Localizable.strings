@@ -493,3 +493,7 @@
 "save_filter" = "Sarba sos filtros";
 "edit_filter_delete_dialog_title" = "Iscantzellare su filtru ischertadu?";
 "apply_filters" = "Àplica sos filtros";
+"filter_poi_hint" = "Filtra pro nùmene";
+"skip_map_downloading_desc" = "Non tenes mapas non in lìnia installadas. Podes isseberare una mapa dae sa lista o iscarrigare mapas prus a tardu pro mèdiu de Menù - Amministra sos documentos de sas mapas";
+"items_selected" = "%d ischertada(s)";
+"shared_string_save_as" = "Sarba comente";

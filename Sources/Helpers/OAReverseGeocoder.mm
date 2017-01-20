@@ -22,6 +22,8 @@
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Road.h>
 
+#include <OsmAndCore/Search/AddressesByNameSearch.h>
+
 
 @implementation OAReverseGeocoder
 
@@ -78,8 +80,56 @@
                 [geocodingResult appendString:sname.toNSString()];
         }
     }
-        
+    
+    //[self testAddressSearch:@"про" lat:lat lon:lon];
+    
     return [NSString stringWithString:geocodingResult];
+}
+
+- (void) testAddressSearch:(NSString *)query lat:(double)lat lon:(double)lon
+{
+    NSLog(@"\n--- Start search: %@ ---", query);
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    
+    //_prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
+    
+    OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(10000, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon)));
+
+    const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
+    
+    searchCriteria->name = QString::fromNSString(query ? query : @"");
+    searchCriteria->includeStreets = true;
+    searchCriteria->streetGroupTypesMask = OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown);
+    searchCriteria->bbox31 = bbox31;
+    searchCriteria->obfInfoAreaFilter = bbox31;
+    
+    const auto search = std::shared_ptr<const OsmAnd::AddressesByNameSearch>(new OsmAnd::AddressesByNameSearch(obfsCollection));
+    const auto result = search->performSearch(*searchCriteria);
+    
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    QString lang = QString::fromNSString([settings settingPrefMapLanguage]);
+    bool transliterate = [settings settingMapLanguageTranslit];
+
+    for (auto& res : result)
+    {
+        NSString *name;
+        if (res.address->addressType == OsmAnd::AddressType::Street)
+        {
+            const auto street = std::dynamic_pointer_cast<const OsmAnd::Street>(res.address);
+            name = [NSString stringWithFormat:@"%@, %@", street->getName(lang, transliterate).toNSString(), street->streetGroup->getName(lang, transliterate).toNSString()];
+        }
+        else
+        {
+            name = res.address->getName(lang, transliterate).toNSString();
+        }
+        OsmAnd::LatLon pos = OsmAnd::Utilities::convert31ToLatLon(res.address->position31);
+        NSLog(@">> %@ (%f km)", name, OsmAnd::Utilities::distance(lon, lat, pos.longitude, pos.latitude) / 1000);
+    }
+    
+    NSLog(@"+++ Finish search +++\n");
+
 }
 
 @end

@@ -247,3 +247,95 @@
 "try_again" = "Spróbuj ponownie";
 "track_save" = "Zapisz bieżący ślad";
 "track_continue_rec" = "Kontynuuj zapis";
+"shared_string_of" = "od";
+"gpx_remove" = "Usunąć trasę?";
+"gpx_uphldownhl" = "podjazdy/zjazdy";
+"gpx_import_desc" = "Można importować pliki GPX (wspólny format danych GPS)\n\naby udostępnić plik GPX można go otworzyć z pliku, Dropbox, E-maila lub innego źródła - wykorzystanie otwarcia w funkcji";
+"gpx_updown" = "Góra/Dół";
+"track_recording" = "Nagrywanie śladu";
+"track_recording_name" = "Aktualny ślad";
+"track_stop_rec" = "Zatrzymaj nagrywanie";
+"track_new_segment" = "Rozpocznij nowy segment";
+"track_continue_rec_q" = "Czy chcesz kontynuować nagrywanie?";
+"rec_interval" = "Częstość rejestrowania";
+"track_start_rec" = "Rozpocznij rejestrowanie GPX";
+"track_clear" = "Wyczyść bieżący ślad";
+"track_clear_q" = "Czy chcesz wyczyścić bieżący ślad?";
+"show_info" = "Pokaż informacje";
+"record_trip" = "Nagraj swój ślad";
+"gpx_distance_points" = "Odległość (punkty)";
+"sett_lang_local" = "Lokalne";
+"prch_nau_q2_cell" = "Pobieranie wymaga % @ za pośrednictwem sieci komórkowej.";
+"incur_high_charges" = "Może to spowodować wysokie opłaty.";
+"prch_nau_q2_wifi" = "Pobieranie wymaga % @ za pośrednictwem sieci Wi-Fi.";
+"prch_items_failed" = "elementy nie zostały przywrócone. Proszę spróbować ponownie.";
+"res_banner_free_maps_desc" = "Możesz pobrać darmowe mapy %d, bez aktualizacji";
+"res_banner_no_free_maps_desc" = "Należy zakupić mapy regionów lub mapy całego świata";
+"res_wsea_map" = "Żeglugowy znak orientacyjny";
+"res_wmap" = "Podstawowa mapa świata";
+"res_map_of_region" = "Regiony";
+"res_install_no_space" = "Za mało miejsca, aby zainstalować";
+"res_no_space_free" = "jest potrzebne. Proszę zwolnić trochę miejsca.";
+"res_upd_avail_q" = "Aktualizacja jest dostępna";
+"res_inst_avail_cell_q" = "Instalacja % @ potrzebuje % @ za pośrednictwem sieci komórkowej.";
+"res_inst_avail_wifi_q" = "Instalacja % @ potrzebuje % @ za pośrednictwem sieci Wi-Fi.";
+"data_will_be_lost" = "Wszystkie pobrane dane zostaną utracone.";
+"res_uninst_managed_q" = "Masz zamiar odinstalować % @. Można go ponownie zainstalować go później z katalogu.";
+"res_details" = "Szczegóły";
+"res_unknown" = "Nieznany";
+"res_size" = "Rozmiar";
+"res_update_all" = "Aktualizuj wszystko";
+"res_updates_no_space" = "Za mało miejsca, aby zainstalować aktualizacje %d. % @ jest potrzebne. Proszę zwolnić trochę miejsca.";
+"res_updates_avail_q" = "aktualizacje są dostępne.";
+// Menu
+"menu_my_places" = "Miejsca";
+"menu_my_trips" = "Ślady";
+"menu_my_directions" = "Nawigacja";
+"other_options" = "Inne opcje";
+"add_parking" = "Oznacz położenie parkowania";
+"add_waypoint" = "Dodaj punkt do GPX";
+"edit_waypoint_short" = "Edytuj punkt GPX";
+"more" = "Więcej";
+"time_limited" = "Parking ograniczony czasow";
+"pickup_car" = "Odbierz samochód z parkingu";
+"parking_time_limited" = "Czas parkowania ograniczony do";
+// Units
+"units_km" = "km";
+"units_yd" = "jardy";
+"units_kmh" = "km/h";
+"units_mph" = "mph";
+"units_hour" = "h";
+"units_min" = "min";
+"map_remind" = "Przypomnij mi później";
+"map_no_address" = "Adres nie jest znany";
+// Import
+"import_title" = "Importowanie danych";
+"import_favorite" = "Ulubione";
+"import_failed" = "Importowanie nie powiodło się";
+"import_cannot" = "Określony plik nie może być przywożone";
+"import_gpx" = "Trasa GPX";
+// Alerts
+"alert_inet_needed" = "Wymagane jest połączenie z Internetem do wykonania tej akcji. Proszę sprawdzić swoje połączenie internetowe.";
+// Context menu
+"ctx_mnu_edit_fav" = "Edytuj Ulubione";
+"ctx_mnu_add_fav" = "Dodaj ulubione";
+"ctx_mnu_share" = "Udostępnij";
+// Location Services
+"loc_access_denied" = "Odmowa dostępu";
+"loc_access_denied_desc" = "Odmówiono dostępu do usługi lokalizacji";
+// Colors
+"col_purple" = "Fioletowy";
+"col_green" = "Zielony";
+"col_yellow" = "Żółty";
+"col_orange" = "Pomarańczowy";
+"col_gray" = "Szary";
+"col_red" = "Czerwony";
+"col_blue" = "Niebieski";
+"col_magenta" = "Purpurowy";
+// Help
+"help_quiz" = "Quiz";
+"cannot_access_calendar" = "Nie można uzyskać dostępu do kalendarza";
+//inapps
+"product_title_nautical" = "Widok morski";
+"product_desc_nautical" = "Morskie mapy całego świata";
+"product_title_parking" = "Położenie zaparkowanego samochodu";

@@ -11,10 +11,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OAObjectType.h"
 
-#include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Data/Address.h>
-
-typedef OsmAnd::ResourcesManager::LocalResource LocalResource;
+#include <OsmAndCore/Data/Amenity.h>
 
 @class OASearchPhrase;
 
@@ -24,8 +22,10 @@ typedef OsmAnd::ResourcesManager::LocalResource LocalResource;
 @property (nonatomic) OASearchPhrase *requiredSearchPhrase;
 
 @property (nonatomic) NSObject *object;
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> address;
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
 @property (nonatomic) EOAObjectType objectType;
-@property (nonatomic, assign) std::shared_ptr<LocalResource> file;
+@property (nonatomic) NSString *resourceId;
 
 @property (nonatomic) double priority;
 @property (nonatomic) double priorityDistance;
@@ -41,8 +41,8 @@ typedef OsmAnd::ResourcesManager::LocalResource LocalResource;
 
 @property (nonatomic) NSString *localeRelatedObjectName;
 @property (nonatomic) NSObject *relatedObject;
-@property (nonatomic, assign) std::shared_ptr<LocalResource> relatedFile;
-@property (nonatomic, assign) std::shared_ptr<OsmAnd::Address> relatedAddress;
+@property (nonatomic) NSString *relatedResourceId;
+@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> relatedAddress;
 @property (nonatomic) double distRelatedObjectName;
 
 

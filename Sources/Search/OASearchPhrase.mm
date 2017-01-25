@@ -12,8 +12,11 @@
 #import "OAUtilities.h"
 #import "QuadRect.h"
 #import "OACollatorStringMatcher.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/Data/ObfMapSectionInfo.h>
 
 static NSString *DELIMITER = @" ";
 static NSString *ALLDELIMITERS = @" ,";
@@ -79,7 +82,9 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 
 @implementation OASearchPhrase
 {
-    QList<std::shared_ptr<LocalResource>> _indexes;
+    NSMutableArray<NSString *> *_indexes;
+    OsmAndAppInstance _app;
+    NSMapTable<NSString *, NSObject *> *_resourceLocations;
 }
 
 + (void) initialize
@@ -99,6 +104,9 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     self = [super init];
     if (self)
     {
+        _app = [OsmAndApp instance];
+        _resourceLocations = [NSMapTable strongToStrongObjectsMapTable];
+        
         self.settings = settings;
 
         self.words = [NSMutableArray array];
@@ -257,7 +265,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     if (!l)
         return nil;
     
-    float coeff = 1;//(float) (1000 / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
+    float coeff = (float) (1000 / OsmAnd::Utilities::getTileDistanceWidth(ZOOM_TO_SEARCH_POI));
     double tx = OsmAnd::Utilities::getTileNumberX(ZOOM_TO_SEARCH_POI, l.coordinate.longitude);
     double ty = OsmAnd::Utilities::getTileNumberY(ZOOM_TO_SEARCH_POI, l.coordinate.latitude);
     double topLeftX = MAX(0, tx - coeff);
@@ -270,20 +278,21 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return self.cache1kmRect;
 }
 
-- (QList<std::shared_ptr<LocalResource>>) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
+- (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt
 {
     QuadRect *rect = meters > 0 ? [self getRadiusBBoxToSearch:meters] : nil;
     return [self getOfflineIndexes:rect dt:dt];
     
 }
 
-- (BOOL) containsData:(std::shared_ptr<LocalResource>)localResource rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes
+- (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes
 {
-    return [self containsData:localResource rect:rect desiredDataTypes:desiredDataTypes zoomLevel:OsmAnd::InvalidZoomLevel];
+    return [self containsData:localResourceId rect:rect desiredDataTypes:desiredDataTypes zoomLevel:OsmAnd::InvalidZoomLevel];
 }
 
-- (BOOL) containsData:(std::shared_ptr<LocalResource>)localResource rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
+- (BOOL) containsData:(NSString *)localResourceId rect:(QuadRect *)rect desiredDataTypes:(OsmAnd::ObfDataTypesMask)desiredDataTypes zoomLevel:(OsmAnd::ZoomLevel)zoomLevel
 {
+    const auto& localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(localResourceId));
     const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
     if (obfMetadata)
     {
@@ -296,43 +305,43 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return NO;
 }
 
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt
+- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt
 {
-    QList<std::shared_ptr<LocalResource>> indexes = !_indexes.empty() ? _indexes : [self.settings getOfflineIndexes];
-    QList<std::shared_ptr<LocalResource>> result;
+    NSArray<NSString *> *indexes = _indexes ? _indexes : [self.settings getOfflineIndexes];
+    NSMutableArray<NSString *> *result;
     if (rect)
     {
-        for (const auto& res : indexes)
+        for (NSString *resId in indexes)
         {
             if (dt == P_DATA_TYPE_POI)
             {
-                if ([self containsData:res rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)])
-                    result << res;
+                if ([self containsData:resId rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)])
+                    [result addObject:resId];
             }
             else if (dt == P_DATA_TYPE_ADDRESS)
             {
                 // containsAddressData not all maps supported
-                if ([self containsData:res rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)])
-                    result << res;
+                if ([self containsData:resId rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::POI)])
+                    [result addObject:resId];
             }
             else if (dt == P_DATA_TYPE_ROUTING)
             {
-                if ([self containsData:res rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Routing) zoomLevel:OsmAnd::ZoomLevel15])
-                    result << res;
+                if ([self containsData:resId rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Routing) zoomLevel:OsmAnd::ZoomLevel15])
+                    [result addObject:resId];
             }
             else
             {
-                if ([self containsData:res rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Map) zoomLevel:OsmAnd::ZoomLevel15])
-                    result << res;
+                if ([self containsData:resId rect:rect desiredDataTypes:OsmAnd::ObfDataTypesMask().set(OsmAnd::ObfDataType::Map) zoomLevel:OsmAnd::ZoomLevel15])
+                    [result addObject:resId];
             }
         }
     }
     return result;
 }
 
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes
+- (NSArray<NSString *> *) getOfflineIndexes
 {
-    if (!_indexes.empty())
+    if (_indexes)
         return _indexes;
     
     return [self.settings getOfflineIndexes];
@@ -520,53 +529,71 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     return [self.settings getOriginalLocation];
 }
 
-/*
-public void selectFile(BinaryMapIndexReader object) {
-    if(indexes == null) {
-        indexes = new ArrayList<>();
-    }
-    if(!this.indexes.contains(object)) {
-        this.indexes.add(object);
-    }
+- (void) selectFile:(NSString *)resourceId
+{
+    if (!_indexes)
+        _indexes = [NSMutableArray array];
+    
+    if (![_indexes containsObject:resourceId])
+        [_indexes addObject:resourceId];
 }
 
-public void sortFiles() {
-    if(indexes == null) {
-        indexes = new ArrayList<>(getOfflineIndexes());
+- (CLLocation *) getLocation:(NSString *)resourceId
+{
+    NSObject *obj = [_resourceLocations objectForKey:resourceId];
+    if (obj)
+    {
+        if ([obj isKindOfClass:[CLLocation class]])
+            return (CLLocation *)obj;
+        else
+            return nil;
     }
-    final LatLon ll = getLastTokenLocation();
-    if(ll != null) {
-        Collections.sort(indexes, new Comparator<BinaryMapIndexReader>() {
-            Map<BinaryMapIndexReader, LatLon> locations = new HashMap<>();
-            
-            @Override
-            public int compare(BinaryMapIndexReader o1, BinaryMapIndexReader o2) {
-                LatLon rc1 = getLocation(o1);
-                LatLon rc2 = getLocation(o2);
-                double d1 = rc1 == null ? 10000000d : MapUtils.getDistance(rc1, ll);
-                double d2 = rc2 == null ? 10000000d : MapUtils.getDistance(rc2, ll);
-                return Double.compare(d1, d2);
+    
+    CLLocation *location;
+    const auto& localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
+    if (localResource)
+    {
+        const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
+        if (obfMetadata)
+        {
+            if (!obfMetadata->obfFile->obfInfo->mapSections.empty())
+            {
+                const auto rc1 = obfMetadata->obfFile->obfInfo->mapSections.first()->getCenterLatLon().getValuePtrOrNullptr();
+                if (rc1 != nullptr)
+                    location = [[CLLocation alloc] initWithLatitude:rc1->latitude longitude:rc1->longitude];
             }
-            
-            private LatLon getLocation(BinaryMapIndexReader o1) {
-                if(locations.containsKey(o1)) {
-                    return locations.get(o1);
-                }
-                LatLon rc1 = null;
-                if(o1.containsMapData()) {
-                    rc1 = o1.getMapIndexes().get(0).getCenterLatLon();
-                } else {
-                    rc1 = o1.getRegionCenter();
-                }
-                locations.put(o1, rc1);
-                return rc1;
+            else
+            {
+                const auto rc1 = obfMetadata->obfFile->obfInfo->getRegionCenter().getValuePtrOrNullptr();
+                if (rc1 != nullptr)
+                    location = [[CLLocation alloc] initWithLatitude:rc1->latitude longitude:rc1->longitude];
             }
-        });
+        }
     }
+
+    [_resourceLocations setObject:(location ? location : [NSNull null]) forKey:resourceId];
+    return location;
 }
 
- */
-
+- (void) sortFiles
+{
+    if (!_indexes)
+        _indexes = [NSMutableArray arrayWithArray:[self getOfflineIndexes]];
+    
+    CLLocation *ll = [self getLastTokenLocation];
+    if (ll)
+    {
+        [_indexes sortUsingComparator:^NSComparisonResult(NSString * _Nonnull id1, NSString * _Nonnull id2) {
+            
+            CLLocation *rc1 = [self getLocation:id1];
+            CLLocation *rc2 = [self getLocation:id2];
+            double d1 = !rc1 ? 10000000.0 : [rc1 distanceFromLocation:ll];
+            double d2 = !rc2 ? 10000000.0 : [rc2 distanceFromLocation:ll];
+            return [[NSNumber numberWithDouble:d1] compare:[NSNumber numberWithDouble:d2]];
+            
+        }];
+    }
+}
 
 - (void) countUnknownWordsMatch:(OASearchResult *)sr
 {

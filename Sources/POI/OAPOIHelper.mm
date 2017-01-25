@@ -53,7 +53,8 @@
     
     NSArray<OAPOIType *> *_textPoiAdditionals;
     NSDictionary<NSString *, NSString *> *_poiAdditionalCategoryIcons;
-    
+    NSMapTable<NSString *, NSString *> *_deprecatedTags;
+
     BOOL _isInit;
 }
 
@@ -99,6 +100,7 @@
     _textPoiAdditionals = parser.textPoiAdditionals;
     _poiAdditionalCategoryIcons = parser.poiAdditionalCategoryIcons;
     _otherMapCategory = parser.otherMapCategory;
+    _deprecatedTags = parser.deprecatedTags;
     
     NSMutableArray *categories = [_poiCategories mutableCopy];
     for (OAPOICategory *c in categories)
@@ -119,6 +121,12 @@
         NSLog(@"!!! 'user_defined_other' category not found");
 
     _otherPoiCategory = pc;
+}
+
+- (NSString *) replaceDeprecatedSubtype:(NSString *)subtype
+{
+    NSString *result = [_deprecatedTags objectForKey:subtype];
+    return result ? result : subtype;
 }
 
 - (BOOL) isRegisteredType:(OAPOICategory *)t

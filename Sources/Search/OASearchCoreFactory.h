@@ -37,6 +37,8 @@ static const int SEARCH_AMENITY_BY_NAME_PRIORITY = 700;
 static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_POI_TYPE = 700;
 static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 
+static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
+static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchBaseAPI : OASearchCoreAPI
 
@@ -50,10 +52,35 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 
 @end
 
+@interface OASearchAmenityByNameAPI : OASearchBaseAPI
+
+@end
+
+@interface OASearchStreetByCityAPI : OASearchBaseAPI
+
+@end
+
+@interface OASearchBuildingAndIntersectionsByStreetAPI : OASearchBaseAPI
+
+@end
+
+@interface SearchAmenityTypesAPI : OASearchBaseAPI
+
+@end
+
+@interface SearchAmenityByTypeAPI : OASearchBaseAPI
+
+@end
+
+@interface SearchStreetByCityAPI : OASearchBaseAPI
+
+@end
+
+@interface SearchBuildingAndIntersectionsByStreetAPI : OASearchBaseAPI
+
+@end
 
 @interface OASearchCoreFactory : NSObject
 
-@property (nonatomic, readonly) double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE; // 0.001
-@property (nonatomic, readonly) double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE; // 0.005
 
 @end

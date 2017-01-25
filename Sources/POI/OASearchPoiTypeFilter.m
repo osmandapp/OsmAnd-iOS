@@ -27,14 +27,23 @@
     return NO;
 }
 
-- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction;
+- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
 {
     self = [super init];
     if (self) {
         _acceptFunction = aFunction;
         _emptyFunction = eFunction;
+        _getAcceptedTypesFunction = tFunction;
     }
     return self;
+}
+
+- (NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *) getAcceptedTypes
+{
+    if (_getAcceptedTypesFunction)
+        return _getAcceptedTypesFunction();
+
+    return nil;
 }
 
 @end

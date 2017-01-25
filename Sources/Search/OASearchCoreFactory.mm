@@ -5,20 +5,50 @@
 //  Created by Alexey Kulish on 11/01/2017.
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
+//  1f038fceb974312796791f7c135272f14e9b2417
 
 #import "OASearchCoreFactory.h"
 #import "OASearchPhrase.h"
 #import "OASearchResult.h"
+#import "OASearchWord.h"
+#import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "QuadRect.h"
 
+#import "OAPOIBaseType.h"
+#import "OAPOIType.h"
+#import "OAPOIFilter.h"
+#import "OAPOICategory.h"
+#import "OAPOIHelper.h"
+#import "OACustomSearchPoiFilter.h"
+#import "OAPOI.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
+#include <OsmAndCore/Data/Building.h>
+#include <OsmAndCore/Data/Street.h>
 #include <OsmAndCore/Data/StreetGroup.h>
+#include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/QuadTree.h>
 #include <OsmAndCore/PointsAndAreas.h>
+#include <OsmAndCore/ObfDataInterface.h>
+#include <OsmAndCore/ResourcesManager.h>
+#include <OsmAndCore/Search/AddressesByNameSearch.h>
+#include <OsmAndCore/Search/AmenitiesByNameSearch.h>
+#include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
+#include <OsmAndCore/FunctorQueryController.h>
+
+
+@interface OASearchCoreFactory ()
+
++ (NSString *) stripBraces:(NSString *)localeName;
++ (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
++ (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names;
++ (BOOL) isLastWordCityGroup:(OASearchPhrase *)p;
+
+@end
 
 
 @interface OASearchBaseAPI ()
@@ -63,58 +93,6 @@
 
 @end
 
-/*
-@interface OASearchRegionByNameAPI ()
-
-@end
-
-@implementation OASearchRegionByNameAPI
-
--(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
-{
-    OsmAndAppInstance _app = [OsmAndApp instance];
-    const auto& obfsCollection = _app.resourcesManager->obfsCollection;
-    
-    obfsCollection->getObfFiles().first()->obfInfo->mapSections.first()->
-    
-    for (BinaryMapIndexReader bmir : phrase.getOfflineIndexes()) {
-        if (bmir.getRegionCenter() != null) {
-            SearchResult sr = new SearchResult(phrase);
-            sr.localeName = bmir.getRegionName();
-            sr.object = bmir;
-            sr.file = bmir;
-            sr.priority = SEARCH_REGION_OBJECT_PRIORITY;
-            sr.objectType = ObjectType.REGION;
-            sr.location = bmir.getRegionCenter();
-            sr.preferredZoom = 6;
-            if (phrase.getUnknownSearchWordLength() <= 1 && phrase.isNoSelectedType()) {
-                resultMatcher.publish(sr);
-            } else if (phrase.getNameStringMatcher().matches(sr.localeName)) {
-                resultMatcher.publish(sr);
-            }
-        }
-    }
-    return true;
-}
-
-@Override
-public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-    return false;
-}
-
-@Override
-public int getSearchPriority(SearchPhrase p) {
-    if(!p.isNoSelectedType()) {
-        return -1;
-    }
-    return SEARCH_REGION_API_PRIORITY;
-}
-
-@end
-
-*/
-
-@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI;
 
 @interface OASearchAddressByNameAPI ()
 
@@ -125,9 +103,11 @@ public int getSearchPriority(SearchPhrase p) {
     int DEFAULT_ADDRESS_BBOX_RADIUS;
     int LIMIT;
 
-    OsmAnd::QuadTree<std::shared_ptr<OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType> *_townCitiesQR;
+    NSMutableArray<NSString *> *_townCities;
+    std::shared_ptr<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>> _townCitiesQR;
 
-    QList<std::shared_ptr<OsmAnd::StreetGroup>> _resArray;
+    QList<std::shared_ptr<const OsmAnd::StreetGroup>> _resArray;
+    QHash<std::shared_ptr<const OsmAnd::StreetGroup>, QString> _streetGroupResourceIds;
     OASearchStreetByCityAPI *_cityApi;
     OASearchBuildingAndIntersectionsByStreetAPI *_streetsApi;
 }
@@ -140,7 +120,8 @@ public int getSearchPriority(SearchPhrase p) {
         DEFAULT_ADDRESS_BBOX_RADIUS = 100 * 1000;
         LIMIT = 10000;
         
-        _townCitiesQR = new OsmAnd::QuadTree<std::shared_ptr<OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(8u));
+        _townCities = [NSMutableArray array];
+        _townCitiesQR = std::make_shared<OsmAnd::QuadTree<std::shared_ptr<const OsmAnd::StreetGroup>, OsmAnd::AreaI::CoordType>>(OsmAnd::AreaI::largestPositive(), static_cast<uintmax_t>(8u));
         
         _cityApi = cityApi;
         _streetsApi = streetsApi;
@@ -161,7 +142,7 @@ public int getSearchPriority(SearchPhrase p) {
     
     return SEARCH_ADDRESS_BY_NAME_API_PRIORITY_RADIUS2;
 }
-/*
+
 -(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
     // case when street is not found for given city is covered by SearchStreetByCityAPI
@@ -183,51 +164,73 @@ public int getSearchPriority(SearchPhrase p) {
     return YES;
 }
 
-
 - (void) initAndSearchCities:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+
     QuadRect *bbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 20];
-    const auto offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
-    for (const auto r : offlineIndexes)
+    NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
+    for (NSString *resId in offlineIndexes)
     {
-        if(!_townCities.contains(r))
+        if (![_townCities containsObject:resId])
         {
-            //BinaryMapIndexReader.buildAddressRequest(null);
-            const auto l = r->getCities(null, BinaryMapAddressReaderAdapter.CITY_TOWN_TYPE);
-            townCities.put(r, l);
-            for(City c  : l) {
-                LatLon cl = c.getLocation();
-                c.setReferenceFile(r);
-                int y = MapUtils.get31TileNumberY(cl.getLatitude());
-                int x = MapUtils.get31TileNumberX(cl.getLongitude());
-                QuadRect qr = new QuadRect(x, y, x, y);
-                townCitiesQR.insert(c, qr);
+            [_townCities addObject:resId];
+            QString rId = QString::fromNSString(resId);
+            const auto& r = app.resourcesManager->getLocalResource(rId);
+            const auto dataInterface = obfsCollection->obtainDataInterface({r});
+            QList< std::shared_ptr<const OsmAnd::StreetGroup> > l;
+            dataInterface->loadStreetGroups(&l, nullptr, OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown));
+            
+            for (const auto& c : l)
+            {
+                auto city = std::static_pointer_cast<const OsmAnd::StreetGroup>(c);
+                _streetGroupResourceIds.insert(city, rId);
+                OsmAnd::LatLon cl = OsmAnd::Utilities::convert31ToLatLon(city->position31);
+                int y = OsmAnd::Utilities::get31TileNumberY(cl.latitude);
+                int x = OsmAnd::Utilities::get31TileNumberX(cl.longitude);
+                const OsmAnd::AreaI qr(x, y, x, y);
+                _townCitiesQR->insert(city, qr);
             }
         }
     }
-    if (phrase.isNoSelectedType() && bbox != null && phrase.isUnknownSearchWordPresent()) {
-        NameStringMatcher nm = phrase.getNameStringMatcher();
-        resArray.clear();
-        resArray = townCitiesQR.queryInBox(bbox, resArray);
+    if ([phrase isNoSelectedType] && bbox && [phrase isUnknownSearchWordPresent])
+    {
+        OANameStringMatcher *nm = [phrase getNameStringMatcher];
+        _resArray.clear();
+        const OsmAnd::AreaI area(bbox.left, bbox.top, bbox.right, bbox.bottom);
+        _townCitiesQR->query(area, _resArray);
         int limit = 0;
-        for (City c : resArray) {
-            SearchResult res = new SearchResult(phrase);
-            res.object = c;
-            res.file = (BinaryMapIndexReader) c.getReferenceFile();
-            res.localeName = c.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-            res.otherNames = c.getAllNames(true);
-            res.localeRelatedObjectName = res.file.getRegionName();
-            res.relatedObject = res.file;
-            res.location = c.getLocation();
+        for (const auto& c : _resArray)
+        {
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.address = c;
+            res.resourceId = _streetGroupResourceIds.value(c).toNSString();
+            res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
+            if (!c->localizedNames.isEmpty())
+            {
+                NSMutableArray<NSString *> *names = [NSMutableArray array];
+                for (const auto& name : c->localizedNames.values())
+                     [names addObject:name.toNSString()];
+                res.otherNames = names;
+            }
+            
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(res.resourceId));
+            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+            if (obfMetadata)
+                res.localeRelatedObjectName = obfMetadata->obfFile->getRegionName().toNSString();
+
+            res.relatedResourceId = res.resourceId;
+            OsmAnd::LatLon loc = OsmAnd::Utilities::convert31ToLatLon(c->position31);
+            res.location = [[CLLocation alloc] initWithLatitude:loc.latitude longitude:loc.longitude];
             res.priority = SEARCH_ADDRESS_BY_NAME_PRIORITY;
             res.priorityDistance = 0.1;
-            res.objectType = ObjectType.CITY;
-            if(nm.matches(res.localeName) || nm.matches(res.otherNames)) {
-                subSearchApiOrPublish(phrase, resultMatcher, res, cityApi);
-            }
-            if(limit++ > LIMIT * phrase.getRadiusLevel()) {
+            res.objectType = CITY;
+            if ([nm matches:res.localeName] || [nm matchesMap:res.otherNames])
+                [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
+            
+            if (limit++ > LIMIT * [phrase getRadiusLevel])
                 break;
-            }
         }
     }
 }
@@ -235,140 +238,810 @@ public int getSearchPriority(SearchPhrase p) {
 
 - (void) searchByName:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    if(phrase.getRadiusLevel() > 1 || phrase.getUnknownSearchWordLength() > 3 || phrase.getUnknownSearchWords().size() > 0) {
-        final boolean locSpecified = phrase.getLastTokenLocation() != null;
-        LatLon loc = phrase.getLastTokenLocation();
-        final List<SearchResult> immediateResults = new ArrayList<>();
-        final QuadRect streetBbox = phrase.getRadiusBBoxToSearch(DEFAULT_ADDRESS_BBOX_RADIUS);
-        final QuadRect postcodeBbox = phrase.getRadiusBBoxToSearch(DEFAULT_ADDRESS_BBOX_RADIUS * 5);
-        final QuadRect villagesBbox = phrase.getRadiusBBoxToSearch(DEFAULT_ADDRESS_BBOX_RADIUS * 3);
-        final QuadRect cityBbox = phrase.getRadiusBBoxToSearch(DEFAULT_ADDRESS_BBOX_RADIUS * 5); // covered by separate search before
-        final int priority = phrase.isNoSelectedType() ?
-        SEARCH_ADDRESS_BY_NAME_PRIORITY : SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2;
-        final BinaryMapIndexReader[] currentFile = new BinaryMapIndexReader[1];
-        ResultMatcher<MapObject> rm = new ResultMatcher<MapObject>() {
-            int limit = 0;
-            @Override
-            public boolean publish(MapObject object) {
-                if(isCancelled()) {
-                    return false;
-                }
-                SearchResult sr = new SearchResult(phrase);
-                sr.object = object;
-                sr.file = currentFile[0];
-                sr.localeName = object.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                sr.otherNames = object.getAllNames(true);
-                sr.localeRelatedObjectName = sr.file.getRegionName();
-                sr.relatedObject = sr.file;
-                sr.location = object.getLocation();
-                sr.priorityDistance = 1;
-                sr.priority = priority;
-                int y = MapUtils.get31TileNumberY(object.getLocation().getLatitude());
-                int x = MapUtils.get31TileNumberX(object.getLocation().getLongitude());
-                List<City> closestCities = null;
-                if (object instanceof Street) {
-                    if(locSpecified && !streetBbox.contains(x, y, x, y)) {
-                        return false;
-                    }
-                    if(object.getName().startsWith("<")) {
-                        return false;
-                    }
-                    if(!phrase.getNameStringMatcher().matches(stripBraces(sr.localeName))) {
-                        sr.priorityDistance = 5;
-                    }
-                    sr.objectType = ObjectType.STREET;
-                    sr.localeRelatedObjectName = ((Street)object).getCity().getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                    sr.relatedObject = ((Street)object).getCity();
-                } else if (object instanceof City) {
-                    CityType type = ((City)object).getType();
-                    if (type == CityType.CITY || type == CityType.TOWN) {
-                        if(phrase.isNoSelectedType()) {
-                            // ignore city/town
-                            return false;
-                        }
-                        if (locSpecified && !cityBbox.contains(x, y, x, y)) {
-                            return false;
-                        }
-                        
-                        sr.objectType = ObjectType.CITY;
-                        sr.priorityDistance = 0.1;
-                    } else if (((City)object).isPostcode()) {
-                        if (locSpecified && !postcodeBbox.contains(x, y, x, y)) {
-                            return false;
-                        }
-                        sr.objectType = ObjectType.POSTCODE;
-                    }  else {
-                        if (locSpecified && !villagesBbox.contains(x, y, x, y)) {
-                            return false;
-                        }
-                        City c = null;
-                        if(closestCities == null) {
-                            closestCities = townCitiesQR.queryInBox(villagesBbox, new ArrayList<City>());
-                        }
-                        double minDist = -1;
-                        double pDist = -1;
-                        for(City s : closestCities) {
-                            double ll = MapUtils.getDistance(s.getLocation(), object.getLocation());
-                            double pd = s.getType() == CityType.CITY ? ll : ll * 10;
-                            if(minDist == -1 || pd < pDist) {
-                                c = s;
-                                minDist = ll;
-                                pDist = pd ;
-                            }
-                        }
-                        if(c != null) {
-                            sr.localeRelatedObjectName = c.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                            sr.relatedObject = c;
-                            sr.distRelatedObjectName = minDist;
-                        }
-                        sr.objectType = ObjectType.VILLAGE;
-                    }
+    if ([phrase getRadiusLevel] > 1 || [phrase getUnknownSearchWordLength] > 3 || [phrase getUnknownSearchWords].count > 0)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+
+        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+        bool transliterate = [[phrase getSettings] isTransliterate];
+
+        BOOL locSpecified = [phrase getLastTokenLocation] != nil;
+        CLLocation *loc = [phrase getLastTokenLocation];
+        NSMutableArray<OASearchResult *> *immediateResults = [NSMutableArray array];
+        QuadRect *streetBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS];
+        QuadRect *postcodeBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
+        QuadRect *villagesBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 3];
+        QuadRect *cityBbox = [phrase getRadiusBBoxToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5]; // covered by separate search before
+        int priority = [phrase isNoSelectedType] ? SEARCH_ADDRESS_BY_NAME_PRIORITY : SEARCH_ADDRESS_BY_NAME_PRIORITY_RADIUS2;
+        
+        NSString *currentResId;
+        NSString *currentRegionName;
+        NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:DEFAULT_ADDRESS_BBOX_RADIUS * 5 dt:P_DATA_TYPE_ADDRESS];
+        
+        const auto& obfsCollection = app.resourcesManager->obfsCollection;
+        const auto search = std::shared_ptr<const OsmAnd::AddressesByNameSearch>(new OsmAnd::AddressesByNameSearch(obfsCollection));
+        
+        int limit = 0;
+        std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+        ctrl.reset(new OsmAnd::FunctorQueryController([self, limit, &phrase, &resultMatcher]
+                                                      (const OsmAnd::IQueryController* const controller)
+                                                      {
+                                                          return limit > LIMIT * [phrase getRadiusLevel] || [resultMatcher isCancelled];
+                                                      }));
+
+        const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
+        
+        searchCriteria->name = QString::fromNSString([[phrase getUnknownSearchWord] lowerCase]);
+        searchCriteria->includeStreets = true;
+        searchCriteria->matcherMode = [phrase isUnknownSearchWordComplete] ? OsmAnd::StringMatcherMode::CHECK_EQUALS_FROM_SPACE : OsmAnd::StringMatcherMode::CHECK_STARTS_FROM_SPACE;
+        
+        if (locSpecified)
+        {
+            searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters([phrase getRadiusSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5], OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(loc.coordinate.latitude, loc.coordinate.longitude)));
+        }
+        
+        for (NSString *resId in offlineIndexes)
+        {
+            currentResId = resId;
+            [immediateResults removeAllObjects];
+            
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+            const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(r->metadata);
+            if (obfMetadata)
+                currentRegionName = obfMetadata->obfFile->getRegionName().toNSString();
+            
+            searchCriteria->localResources = {r};
+
+            search->performSearch(*searchCriteria,
+                                  [self, &limit, &ctrl, &phrase, &currentResId, priority, &lang, transliterate, currentRegionName, locSpecified, &streetBbox, &postcodeBbox, &villagesBbox, &cityBbox, &immediateResults]
+                                  (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                  {
+                                      if (ctrl->isAborted())
+                                          return false;
+                                      
+                                      const auto& address = ((OsmAnd::AddressesByNameSearch::ResultEntry&)resultEntry).address;
+                                      
+                                      OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+                                      sr.address = address;
+                                      sr.resourceId = currentResId;
+                                      sr.localeName = address->getName(lang, transliterate).toNSString();
+                                      sr.otherNames = [OASearchCoreFactory getAllNames:address->localizedNames];
+                                      sr.localeRelatedObjectName = currentRegionName;
+                                      sr.relatedResourceId = sr.resourceId;
+                                      sr.location = [OASearchCoreFactory getLocation:address->position31];
+                                      sr.priorityDistance = 1;
+                                      sr.priority = priority;
+                                      int y = address->position31.y;
+                                      int x = address->position31.x;
+                                      QList<std::shared_ptr<const OsmAnd::StreetGroup>> closestCities;
+                                      BOOL closestCitiesRequested = NO;
+                                      if (address->addressType == OsmAnd::AddressType::Street)
+                                      {
+                                          if (locSpecified && ![streetBbox contains:x top:y right:x bottom:y])
+                                              return false;
+                                          
+                                          if (address->nativeName.startsWith("<"))
+                                              return false;
+                                          
+                                          if (![[phrase getNameStringMatcher] matches:[OASearchCoreFactory stripBraces:sr.localeName]])
+                                              sr.priorityDistance = 5;
+                                          
+                                          const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
+                                          sr.objectType = STREET;
+                                          sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
+                                          sr.relatedAddress = street->streetGroup;
+                                      }
+                                      else if (address->addressType == OsmAnd::AddressType::StreetGroup)
+                                      {
+                                          const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(address);
+                                          if (city->type == OsmAnd::ObfAddressStreetGroupType::CityOrTown)
+                                          {
+                                              if([phrase isNoSelectedType])
+                                                  return false; // ignore city/town
+                                              
+                                              if (locSpecified && ![cityBbox contains:x top:y right:x bottom:y])
+                                                  return false;
+                                              
+                                              sr.objectType = CITY;
+                                              sr.priorityDistance = 0.1;
+                                          }
+                                          else if (city->type == OsmAnd::ObfAddressStreetGroupType::Postcode)
+                                          {
+                                              if (locSpecified && ![postcodeBbox contains:x top:y right:x bottom:y])
+                                                  return false;
+                                              
+                                              sr.objectType = POSTCODE;
+                                          }
+                                          else
+                                          {
+                                              if (locSpecified && ![villagesBbox contains:x top:y right:x bottom:y])
+                                                  return false;
+                                              
+                                              std::shared_ptr<const OsmAnd::StreetGroup> c;
+                                              if (!closestCitiesRequested)
+                                              {
+                                                  const OsmAnd::AreaI villagesArea(villagesBbox.left, villagesBbox.top, villagesBbox.right, villagesBbox.bottom);
+                                                  _townCitiesQR->query(villagesArea, closestCities);
+                                                  closestCitiesRequested = YES;
+                                              }
+                                              double minDist = -1;
+                                              double pDist = -1;
+                                              for(auto& s : closestCities)
+                                              {
+                                                  double ll = OsmAnd::Utilities::distance31(s->position31, address->position31);
+                                                  double pd = s->subtype == OsmAnd::ObfAddressStreetGroupSubtype::City ? ll : ll * 10;
+                                                  if (minDist == -1 || pd < pDist)
+                                                  {
+                                                      c = s;
+                                                      minDist = ll;
+                                                      pDist = pd ;
+                                                  }
+                                              }
+                                              if (c)
+                                              {
+                                                  sr.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
+                                                  sr.relatedAddress = c;
+                                                  sr.distRelatedObjectName = minDist;
+                                              }
+                                              sr.objectType = VILLAGE;
+                                          }
+                                      }
+                                      else
+                                      {
+                                          return false;
+                                      }
+                                      limit++;
+                                      [immediateResults addObject:sr];
+                                      return false;
+                                  },
+                                  ctrl);
+            
+            for (OASearchResult *res in immediateResults)
+            {
+                if (res.objectType == STREET)
+                {
+                    const auto & street = std::dynamic_pointer_cast<const OsmAnd::Street>(res.address);
+                    const auto& ct = street->streetGroup;
+                    NSMutableArray<NSString *> *otherNames = [OASearchCoreFactory getAllNames:ct->localizedNames];
+                    [phrase countUnknownWordsMatch:res localeName:ct->getName(lang, transliterate).toNSString() otherNames:otherNames];
+                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
                 } else {
-                    return false;
-                }
-                limit ++;
-                immediateResults.add(sr);
-                return false;
-            }
-            
-            
-            
-            @Override
-            public boolean isCancelled() {
-                return limit > LIMIT * phrase.getRadiusLevel() ||
-                resultMatcher.isCancelled();
-            }
-        };
-        Iterator<BinaryMapIndexReader> offlineIterator = phrase.getRadiusOfflineIndexes(DEFAULT_ADDRESS_BBOX_RADIUS * 5,
-                                                                                        SearchPhraseDataType.ADDRESS);
-        while (offlineIterator.hasNext()) {
-            BinaryMapIndexReader r = offlineIterator.next();
-            currentFile[0] = r;
-            immediateResults.clear();
-            SearchRequest<MapObject> req = BinaryMapIndexReader.buildAddressByNameRequest(rm, phrase
-                                                                                          .getUnknownSearchWord().toLowerCase(),
-                                                                                          phrase.isUnknownSearchWordComplete() ? StringMatcherMode.CHECK_EQUALS_FROM_SPACE
-                                                                                          : StringMatcherMode.CHECK_STARTS_FROM_SPACE);
-            if (locSpecified) {
-                req.setBBoxRadius(loc.getLatitude(), loc.getLongitude(),
-                                  phrase.getRadiusSearch(DEFAULT_ADDRESS_BBOX_RADIUS * 5));
-            }
-            r.searchAddressDataByName(req);
-            for (SearchResult res : immediateResults) {
-                if(res.objectType == ObjectType.STREET) {
-                    City ct = ((Street) res.object).getCity();
-                    phrase.countUnknownWordsMatch(res, ct.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate()),
-                                                  ct.getAllNames(true));
-                    subSearchApiOrPublish(phrase, resultMatcher, res, streetsApi);
-                } else {
-                    subSearchApiOrPublish(phrase, resultMatcher, res, cityApi);
+                    [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
                 }
             }
-            resultMatcher.apiSearchRegionFinished(this, r, phrase);
+            [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
         }
     }
 }
 
+@end
+
+
+@interface OASearchAmenityByNameAPI ()
+
+@end
+
+@implementation OASearchAmenityByNameAPI
+{
+    int LIMIT;
+    int BBOX_RADIUS;
+    int BBOX_RADIUS_INSIDE; // to support city search for basemap
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        LIMIT = 10000;
+        BBOX_RADIUS = 500 * 1000;
+        BBOX_RADIUS_INSIDE = 10000 * 1000;
+    }
+    return self;
+}
+
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (![phrase isUnknownSearchWordPresent])
+        return false;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+    bool transliterate = [[phrase getSettings] isTransliterate];
+
+    NSString *currentResId;
+    NSArray<NSString *> *offlineIndexes = [phrase getRadiusOfflineIndexes:BBOX_RADIUS dt:P_DATA_TYPE_POI];
+    OANameStringMatcher *nm = [phrase getNameStringMatcher];
+    QuadRect *bbox = [phrase getRadiusBBoxToSearch:BBOX_RADIUS_INSIDE];
+    
+    int limit = 0;
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self, limit, &phrase, &resultMatcher]
+                                                  (const OsmAnd::IQueryController* const controller)
+                                                  {
+                                                      return [resultMatcher isCancelled] && (limit < LIMIT);
+                                                  }));
+
+    const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
+    
+    searchCriteria->name = QString::fromNSString([phrase getUnknownSearchWord]);
+    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.left, bbox.top, bbox.right, bbox.bottom);
+    searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
+    
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
+
+    for (NSString *resId in offlineIndexes)
+    {
+        currentResId = resId;
+        
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        searchCriteria->localResources = {r};
+
+        search->performSearch(*searchCriteria,
+                              [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher]
+                              (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                              {
+                                  if (limit++ > LIMIT)
+                                      return false;
+                                  
+                                  const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                  OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+                                  sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames];
+                                  sr.localeName = amenity->getName(lang, transliterate).toNSString();
+                                  if ([phrase isUnknownSearchWordComplete])
+                                  {
+                                      if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames])
+                                          return false;
+                                  }
+                                  sr.amenity = amenity;
+                                  sr.preferredZoom = 17;
+                                  sr.resourceId = currentResId;
+                                  sr.location = [OASearchCoreFactory getLocation:amenity->position31];
+                                  
+                                  if (amenity->subType == QStringLiteral("city") ||
+                                      amenity->subType == QStringLiteral("country"))
+                                  {
+                                      sr.priorityDistance = SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE;
+                                      sr.preferredZoom = amenity->subType == QStringLiteral("country") ? 7 : 13;
+                                  }
+                                  else if (amenity->subType == QStringLiteral("town"))
+                                  {
+                                      sr.priorityDistance = SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE;
+                                  }
+                                  else
+                                  {
+                                      sr.priorityDistance = 1;
+                                  }
+                                  sr.priority = SEARCH_AMENITY_BY_NAME_PRIORITY;
+                                  [phrase countUnknownWordsMatch:sr];
+                                  sr.objectType = POI;
+                                  [resultMatcher publish:sr];
+                                  
+                                  return false;
+                              },
+                              ctrl);
+        
+        [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+    }
+
+    return true;
+}
+
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    if ([p hasObjectType:POI] || ![p isUnknownSearchWordPresent])
+        return -1;
+    
+    if ([p hasObjectType:POI_TYPE])
+        return -1;
+    
+    if ([p getUnknownSearchWordLength] > 3 || [p getRadiusLevel] > 1)
+        return SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR;
+    
+    return -1;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return [super isSearchMoreAvailable:phrase] && [self getSearchPriority:phrase] != -1;
+}
+
+@end
+
+
+@interface SearchAmenityTypesAPI ()
+
+@end
+
+@implementation SearchAmenityTypesAPI
+{
+    NSArray<OAPOIBaseType *> *_topVisibleFilters;
+    NSArray<OAPOICategory *> *_categories;
+    NSMutableArray<OACustomSearchPoiFilter *> *_customPoiFilters;
+    NSMutableArray<NSNumber *> *_customPoiFiltersPriorites ;
+    OAPOIHelper *_types;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _types = [OAPOIHelper sharedInstance];
+        _customPoiFilters = [NSMutableArray array];
+        _customPoiFiltersPriorites = [NSMutableArray array];
+        _topVisibleFilters = [_types getTopVisibleFilters];
+        _categories = _types.poiCategoriesNoOther;
+    }
+    return self;
+}
+
+- (void) clearCustomFilters
+{
+    [_customPoiFilters removeAllObjects];
+    [_customPoiFiltersPriorites removeAllObjects];
+}
+
+- (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority
+{
+    [_customPoiFilters addObject:poiFilter];
+    [_customPoiFiltersPriorites addObject:[NSNumber numberWithInt:priority]];
+}
+
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    NSMutableArray<OAPOIBaseType *> *results = [NSMutableArray array];
+    OANameStringMatcher *nm = [phrase getNameStringMatcher];
+    for (OAPOIBaseType *pf in _topVisibleFilters)
+    {
+        if (![phrase isUnknownSearchWordPresent] || [nm matches:pf.nameLocalized])
+            [results addObject:pf];
+    }
+    if ([phrase isUnknownSearchWordPresent])
+    {
+        for (OAPOICategory *c in _categories)
+        {
+            if (![results containsObject:c] && [nm matches:c.nameLocalized])
+                [results addObject:c];
+        }
+        
+        NSEnumerator<OAPOIType *> *poiTypesEnum = _types.poiTypesByName.objectEnumerator;
+        for (OAPOIType *pt in poiTypesEnum)
+        {
+            if (pt.category != _types.otherMapCategory)
+            {
+                if (![results containsObject:pt] && ([nm matches:[pt.name stringByReplacingOccurrencesOfString:@"_" withString:@" "] ] || [nm matches:pt.nameLocalized]))
+                {
+                    [results addObject:pt];
+                }
+                if (pt.poiAdditionals) {
+                    for (OAPOIType *a in pt.poiAdditionals)
+                    {
+                        if (!a.reference && ![results containsObject:a] && ([nm matches:a.name] || [nm matches:a.nameLocalized]))
+                            [results addObject:a];
+                    }
+                }
+            }
+        }
+    }
+    for (OAPOIBaseType *pt in results)
+    {
+        OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+        res.localeName = pt.nameLocalized;
+        res.object = pt;
+        res.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+        res.priorityDistance = 0;
+        res.objectType = POI_TYPE;
+        [resultMatcher publish:res];
+    }
+    for (int i = 0; i < _customPoiFilters.count; i++)
+    {
+        OACustomSearchPoiFilter *csf = [_customPoiFilters objectAtIndex:i];
+        int p = [[_customPoiFiltersPriorites objectAtIndex:i] intValue];
+        if (![phrase isUnknownSearchWordPresent] || [nm matches:[csf getName]])
+        {
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.localeName = [csf getName];
+            res.object = csf;
+            res.priority = SEARCH_AMENITY_TYPE_PRIORITY + p;
+            res.objectType = POI_TYPE;
+            [resultMatcher publish:res];
+        }
+    }
+    
+    return true;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    if ([p hasObjectType:POI] || [p hasObjectType:POI_TYPE])
+        return -1;
+    
+    if (![p isNoSelectedType] && ![p isUnknownSearchWordPresent])
+        return -1;
+    
+    return SEARCH_AMENITY_TYPE_API_PRIORITY;
+}
+
+@end
+
+
+@interface SearchAmenityByTypeAPI ()
+
+@end
+
+@implementation SearchAmenityByTypeAPI
+{
+    OAPOIHelper *_types;
+    NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *_acceptedTypes;
+
+    std::shared_ptr<const OsmAnd::Amenity> _currentAmenity;
+    QString _lang;
+    bool _transliterate;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _types = [OAPOIHelper sharedInstance];
+        _acceptedTypes = [NSMapTable strongToStrongObjectsMapTable];
+    }
+    return self;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return [self getSearchPriority:phrase] != -1 && [super isSearchMoreAvailable:phrase];
+}
+
+- (void) updateTypesToAccept:(OAPOIBaseType *)pt
+{
+    [pt putTypes:_acceptedTypes];
+    if ([pt isKindOfClass:[OAPOIType class]] && [((OAPOIType *)pt) isAdditional] && ((OAPOIType *)pt).parentType)
+        [self fillPoiAdditionals:((OAPOIType *)pt).parentType];
+    else
+        [self fillPoiAdditionals:pt];
+}
+
+- (void) fillPoiAdditionals:(OAPOIBaseType *)pt
+{
+    if ([pt isKindOfClass:[OAPOIFilter class]])
+    {
+        for (OAPOIType *ps in ((OAPOIFilter *)pt).poiTypes)
+            [self fillPoiAdditionals:ps];
+    }
+}
+
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if ([phrase isLastWord:POI_TYPE])
+    {
+        NSObject *obj = [phrase getLastSelectedWord].result.object;
+        OASearchPoiTypeFilter *ptf;
+        if ([obj isKindOfClass:[OAPOIBaseType class]])
+            ptf = [self getPoiTypeFilter:(OAPOIBaseType *)obj];
+        else if ([obj isKindOfClass:[OASearchPoiTypeFilter class]])
+            ptf = (OASearchPoiTypeFilter *)obj;
+        else
+            [NSException raise:NSInvalidArgumentException format:@"LastSelectedWord result contains wrong object"];
+
+        OsmAndAppInstance app = [OsmAndApp instance];
+        _lang = QString::fromNSString([[phrase getSettings] getLang]);
+        _transliterate = [[phrase getSettings] isTransliterate];
+
+        QuadRect *bbox = [phrase getRadiusBBoxToSearch:10000];
+        
+        std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+        ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
+                                                      (const OsmAnd::IQueryController* const controller)
+                                                      {
+                                                          return [resultMatcher isCancelled];
+                                                      }));
+        
+        const std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesInAreaSearch::Criteria>(new OsmAnd::AmenitiesInAreaSearch::Criteria);
+
+        NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *acceptedTypes = [ptf getAcceptedTypes];
+        if (acceptedTypes.count > 0)
+        {
+            auto categoriesFilter = QHash<QString, QStringList>();
+            for (OAPOICategory *category in acceptedTypes.keyEnumerator)
+            {
+                NSMutableSet<NSString *> *subcategories = [acceptedTypes objectForKey:category];
+                QString categoryName = QString::fromNSString(category.name);
+                if (subcategories != [OAPOIBaseType nullSet] && subcategories.count > 0)
+                {
+                    QStringList subcatList;
+                    for (NSString *subcategory in subcategories)
+                        subcatList.push_back(QString::fromNSString(subcategory));
+
+                    categoriesFilter.insert(categoryName, subcatList);
+                }
+                else
+                {
+                    categoriesFilter.insert(categoryName, QStringList());
+                }
+            }
+            searchCriteria->categoriesFilter = categoriesFilter;
+        }
+        searchCriteria->bbox31 = OsmAnd::AreaI(bbox.left, bbox.top, bbox.right, bbox.bottom);
+        
+        const auto& obfsCollection = app.resourcesManager->obfsCollection;
+        const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
+
+        NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes];
+        for (NSString *resId in offlineIndexes)
+        {
+            OAResultMatcher<OAPOI *> *rm = [self getResultMatcher:phrase resultMatcher:resultMatcher resourceId:resId];
+            if([obj isKindOfClass:[OACustomSearchPoiFilter class]])
+                rm = [((OACustomSearchPoiFilter *)obj) wrapResultMatcher:rm];
+            
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+            searchCriteria->localResources = {r};
+
+            search->performSearch(*searchCriteria,
+                                  [self, &rm]
+                                  (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                                  {
+                                      const auto amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
+                                      OAPOI *poi = [OAPOIHelper parsePOIByAmenity:amenity];
+                                      if (poi)
+                                      {
+                                          _currentAmenity = amenity;
+                                          [rm publish:poi];
+                                      }
+                                  },
+                                  ctrl);
+
+            [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+        }
+    }
+    return true;
+}
+
+- (OAResultMatcher<OAPOI *> *) getResultMatcher:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher resourceId:(NSString *)selected
+{
+    OANameStringMatcher *ns = [phrase getNameStringMatcher];
+    return [[OAResultMatcher<OAPOI *> alloc] initWithPublishFunc:^BOOL(OAPOI *__autoreleasing *poi) {
+
+        OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+        res.localeName = _currentAmenity->getName(_lang, _transliterate).toNSString();
+        res.otherNames = [OASearchCoreFactory getAllNames:_currentAmenity->localizedNames];
+        if (res.localeName.length == 0)
+        {
+            OAPOIBaseType *st = [_types getAnyPoiTypeByName:_currentAmenity->subType.toNSString()];
+            if (st)
+                res.localeName = st.nameLocalized;
+            else
+                res.localeName = _currentAmenity->subType.toNSString();
+        }
+        if ([phrase isUnknownSearchWordPresent] && !([ns matches:res.localeName] || [ns matchesMap:res.otherNames]))
+            return false;
+        
+        res.preferredZoom = 17;
+        res.resourceId = selected;
+        res.location = [OASearchCoreFactory getLocation:_currentAmenity->position31];
+        res.priority = SEARCH_AMENITY_BY_TYPE_PRIORITY;
+        res.priorityDistance = 1;
+
+        res.objectType = POI;
+        res.object = *poi;
+        res.amenity = qMove(_currentAmenity);
+        
+        [resultMatcher publish:res];
+        return false;
+    
+    } cancelledFunc:^BOOL{
+        
+        return [resultMatcher isCancelled];
+    }];
+}
+
+- (OASearchPoiTypeFilter *) getPoiTypeFilter:(OAPOIBaseType *)pt
+{
+    [_acceptedTypes removeAllObjects];
+    [self updateTypesToAccept:pt];
+    
+    return [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
+
+        if (!type)
+            return YES;
+        
+        if (![_types isRegisteredType:type])
+            type = _types.otherPoiCategory;
+        
+        NSSet<NSString *> *set = [_acceptedTypes objectForKey:type];
+        if (!set)
+            return NO;
+        
+        if (set == [OAPOIBaseType nullSet])
+            return YES;
+        
+        return [set containsObject:subcategory];
+    
+    } emptyFunction:^BOOL{
+        
+        return NO;
+        
+    } getTypesFunction:^NSMapTable<OAPOICategory *, NSMutableSet<NSString *> *> *{
+        
+        return _acceptedTypes;
+    }];
+}
+
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    if([p isLastWord:POI_TYPE] && [p getLastTokenLocation])
+        return SEARCH_AMENITY_BY_TYPE_PRIORITY;
+    
+    return -1;
+}
+
+@end
+
+
+@interface SearchBuildingAndIntersectionsByStreetAPI ()
+
+@end
+
+@implementation SearchBuildingAndIntersectionsByStreetAPI
+{
+    std::shared_ptr<const OsmAnd::Street> _cacheBuilding;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+    }
+    return self;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+/*
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+
+    OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
+    const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(lastSelectedWord.result.resourceId));
+    const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+    
+    std::shared_ptr<const OsmAnd::Street> s;
+    int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
+    if ([phrase isLastWord:STREET])
+        s = std::dynamic_pointer_cast<const OsmAnd::Street>(lastSelectedWord.result.address);
+    
+    if ([OASearchCoreFactory isLastWordCityGroup:phrase])
+    {
+        priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
+        const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(lastSelectedWord.result.address);
+        QHash< std::shared_ptr<const OsmAnd::StreetGroup>, QList< std::shared_ptr<const OsmAnd::Street> > >* streetsMap;
+        bool res = dataInterface->loadStreetsFromGroups({city}, streetsMap);
+        if (res && !streetsMap->isEmpty())
+        {
+            const auto& streets = streetsMap->values()[0];
+            if (streets.size() == 1)
+            {
+                s = streets[0];
+            }
+            else
+            {
+                for (const auto& st : streets)
+                {
+                    if (st->nativeName == city->nativeName || st->nativeName == (QStringLiteral("<") + city->nativeName + QStringLiteral(">")))
+                    {
+                        s = st;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+    
+    if (s)
+    {
+        NSString *lw = [phrase getUnknownSearchWord];
+        OANameStringMatcher *sm = [phrase getNameStringMatcher];
+        if (_cacheBuilding != s)
+        {
+            _cacheBuilding = s;
+            
+            std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+            ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
+                                                          (const OsmAnd::IQueryController* const controller)
+                                                          {
+                                                              return [resultMatcher isCancelled];
+                                                          }));
+
+            bool res = dataInterface->preloadBuildings(s, ctrl);
+            if (res)
+            {
+                std::sort(s->buildings, [](const std::shared_ptr<const OsmAnd::Building>& o1, const std::shared_ptr<const OsmAnd::Building>& o2)
+                {
+                    int i1 = Algorithms.extractFirstIntegerNumber(o1.getName());
+                    int i2 = Algorithms.extractFirstIntegerNumber(o2.getName());
+                    if (i1 == i2) {
+                        return 0;
+                    }
+                    return Algorithms.compare(i1, i2);
+                });
+            }
+        }
+        for(Building b : s.getBuildings()) {
+            SearchResult res = new SearchResult(phrase);
+            boolean interpolation = b.belongsToInterpolation(lw);
+            if(!sm.matches(b.getName()) && !interpolation) {
+                continue;
+            }
+            
+            res.localeName = b.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
+            res.otherNames = b.getAllNames(true);
+            res.object = b;
+            res.file = file;
+            res.priority = priority;
+            res.priorityDistance = 0;
+            res.relatedObject = s;
+            res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
+            res.objectType = ObjectType.HOUSE;
+            if(interpolation) {
+                res.location = b.getLocation(b.interpolation(lw));
+            } else {
+                res.location = b.getLocation();
+            }
+            res.preferredZoom = 17;
+            resultMatcher.publish(res);
+        }
+        if(!Algorithms.isEmpty(lw) && !Character.isDigit(lw.charAt(0))) {
+            for(Street street : s.getIntersectedStreets()) {
+                SearchResult res = new SearchResult(phrase);
+                if(!sm.matches(street.getName()) && !sm.matches(street.getAllNames(true))) {
+                    continue;
+                }
+                res.otherNames = street.getAllNames(true);
+                res.localeName = street.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
+                res.object = street;
+                res.file = file;
+                res.relatedObject = s;
+                res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
+                res.priorityDistance = 0;
+                res.objectType = ObjectType.STREET_INTERSECTION;
+                res.location = street.getLocation();
+                res.preferredZoom = 16;
+                resultMatcher.publish(res);
+            }
+        }
+        
+        
+        
+    }
+    return true;
+}
+
+
+@Override
+public int getSearchPriority(SearchPhrase p) {
+    if(isLastWordCityGroup(p)) {
+        return SEARCH_BUILDING_BY_CITY_PRIORITY;
+    }
+    if(!p.isLastWord(ObjectType.STREET)) {
+        return -1;
+    }
+    return SEARCH_BUILDING_BY_STREET_PRIORITY;
+}
+*/
 @end
 
 
@@ -379,8 +1052,7 @@ public int getSearchPriority(SearchPhrase p) {
     self = [super init];
     if (self)
     {
-        _SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
-        _SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
+        //
     }
     return self;
 }
@@ -388,371 +1060,44 @@ public int getSearchPriority(SearchPhrase p) {
 + (NSString *) stripBraces:(NSString *)localeName
 {
     int i = [localeName indexOf:@"("];
-    NSString *retName = localeName;
+    NSString *retName;
     if (i > -1)
     {
         retName = [localeName substringToIndex:i];
-        int j = [localeName indexOf:@"')'" start:i];
+        int j = [localeName indexOf:@")" start:i];
         if (j > -1)
-            retName = [[[retName trim] add:@" "] add:[localeName substringFromIndex:j]];
+            retName = [NSString stringWithFormat:@"%@ %@", [retName trim], [localeName substringFromIndex:j]];
+    }
+    else
+    {
+        retName = localeName;
     }
     return retName;
 }
 
++ (CLLocation *) getLocation:(const OsmAnd::PointI)position31
+{
+    const OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(position31);
+    return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
+}
+
++ (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names
+{
+    NSMutableArray<NSString *> *otherNames = [NSMutableArray array];
+    if (!names.isEmpty())
+    {
+        for (const auto n : names.values())
+            [otherNames addObject:n.toNSString()];
+    }
+    return otherNames;
+}
+
++ (BOOL) isLastWordCityGroup:(OASearchPhrase *)p
+{
+    return [p isLastWord:CITY] || [p isLastWord:POSTCODE] || [p isLastWord:VILLAGE];
+}
+
 /*
-public static class SearchAmenityByNameAPI extends SearchBaseAPI {
-    private static final int LIMIT = 10000;
-    private static final int BBOX_RADIUS = 500 * 1000;
-    private static final int BBOX_RADIUS_INSIDE = 10000 * 1000; // to support city search for basemap
- 
- 
-    @Override
-    public boolean search(final SearchPhrase phrase, final SearchResultMatcher resultMatcher) throws IOException {
-        if(!phrase.isUnknownSearchWordPresent()) {
-            return false;
-        }
-        final BinaryMapIndexReader[] currentFile = new BinaryMapIndexReader[1];
-        Iterator<BinaryMapIndexReader> offlineIterator = phrase.getRadiusOfflineIndexes(BBOX_RADIUS,
-                                                                                        SearchPhraseDataType.POI);
-        final NameStringMatcher nm = phrase.getNameStringMatcher();
-        QuadRect bbox = phrase.getRadiusBBoxToSearch(BBOX_RADIUS_INSIDE);
-        SearchRequest<Amenity> req = BinaryMapIndexReader.buildSearchPoiRequest(
-                                                                                (int)bbox.centerX(), (int)bbox.centerY(),
-                                                                                phrase.getUnknownSearchWord(),
-                                                                                (int)bbox.left, (int)bbox.right,
-                                                                                (int)bbox.top, (int)bbox.bottom,
-                                                                                new ResultMatcher<Amenity>() {
-                                                                                    int limit = 0;
-                                                                                    @Override
-                                                                                    public boolean publish(Amenity object) {
-                                                                                        if(limit ++ > LIMIT) {
-                                                                                            return false;
-                                                                                        }
-                                                                                        SearchResult sr = new SearchResult(phrase);
-                                                                                        sr.otherNames = object.getAllNames(true);
-                                                                                        sr.localeName = object.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                                                                                        if(phrase.isUnknownSearchWordComplete()) {
-                                                                                            if(!nm.matches(sr.localeName) && !nm.matches(sr.otherNames)) {
-                                                                                                return false;
-                                                                                            }
-                                                                                        }
-                                                                                        sr.object = object;
-                                                                                        sr.preferredZoom = 17;
-                                                                                        sr.file = currentFile[0];
-                                                                                        sr.location = object.getLocation();
-                                                                                        if(object.getSubType().equals("city") ||
-                                                                                           object.getSubType().equals("country")) {
-                                                                                            sr.priorityDistance = SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE;
-                                                                                            sr.preferredZoom = object.getSubType().equals("country") ? 7 : 13;
-                                                                                        } else if(object.getSubType().equals("town")) {
-                                                                                            sr.priorityDistance = SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE;
-                                                                                        } else {
-                                                                                            sr.priorityDistance = 1;
-                                                                                        }
-                                                                                        sr.priority = SEARCH_AMENITY_BY_NAME_PRIORITY;
-                                                                                        phrase.countUnknownWordsMatch(sr);
-                                                                                        sr.objectType = ObjectType.POI;
-                                                                                        resultMatcher.publish(sr);
-                                                                                        return false;
-                                                                                    }
-                                                                                    
-                                                                                    @Override
-                                                                                    public boolean isCancelled() {
-                                                                                        return resultMatcher.isCancelled() && (limit < LIMIT) ;
-                                                                                    }
-                                                                                });
-        while (offlineIterator.hasNext()) {
-            BinaryMapIndexReader r = offlineIterator.next();
-            currentFile[0] = r;
-            r.searchPoiByName(req);
-            
-            resultMatcher.apiSearchRegionFinished(this, r, phrase);
-        }
-        return true;
-    }
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        if(p.hasObjectType(ObjectType.POI) ||
-           !p.isUnknownSearchWordPresent()) {
-            return -1;
-        }
-        if(p.hasObjectType(ObjectType.POI_TYPE)) {
-            return -1;
-        }
-        if(p.getUnknownSearchWordLength() > 3 || p.getRadiusLevel() > 1) {
-            return SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR;
-        }
-        return -1;
-    }
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        return super.isSearchMoreAvailable(phrase) && getSearchPriority(phrase) != -1;
-    }
-}
-
-
-public static class SearchAmenityTypesAPI extends SearchBaseAPI {
-    
-    private Map<String, PoiType> translatedNames = new LinkedHashMap<>();
-    private List<PoiFilter> topVisibleFilters;
-    private List<PoiCategory> categories;
-    private List<CustomSearchPoiFilter> customPoiFilters = new ArrayList<>();
-    private TIntArrayList customPoiFiltersPriorites = new TIntArrayList();
-    private MapPoiTypes types;
-    
-    public SearchAmenityTypesAPI(MapPoiTypes types) {
-        this.types = types;
-    }
-    
-    public void clearCustomFilters() {
-        this.customPoiFilters.clear();
-        this.customPoiFiltersPriorites.clear();
-    }
-    
-    public void addCustomFilter(CustomSearchPoiFilter poiFilter, int priority) {
-        this.customPoiFilters.add(poiFilter);
-        this.customPoiFiltersPriorites.add(priority);
-    }
-    
-    @Override
-    public boolean search(SearchPhrase phrase, SearchResultMatcher resultMatcher) throws IOException {
-        if(translatedNames.isEmpty()) {
-            translatedNames = types.getAllTranslatedNames(false);
-            topVisibleFilters = types.getTopVisibleFilters();
-            categories = types.getCategories(false);
-        }
-        //			results.clear();
-        List<AbstractPoiType> results = new ArrayList<AbstractPoiType>() ;
-        NameStringMatcher nm = phrase.getNameStringMatcher();
-        for (PoiFilter pf : topVisibleFilters) {
-            if (!phrase.isUnknownSearchWordPresent() || nm.matches(pf.getTranslation())) {
-                results.add(pf);
-            }
-        }
-        if (phrase.isUnknownSearchWordPresent()) {
-            for (PoiCategory c : categories) {
-                if (!results.contains(c) && nm.matches(c.getTranslation())) {
-                    results.add(c);
-                }
-            }
-            Iterator<Entry<String, PoiType>> it = translatedNames.entrySet().iterator();
-            while (it.hasNext()) {
-                Entry<String, PoiType> e = it.next();
-                PoiType pt = e.getValue();
-                if (pt.getCategory() != types.getOtherMapCategory()) {
-                    if (!results.contains(pt) && (nm.matches(e.getKey()) || nm.matches(pt.getTranslation()))) {
-                        results.add(pt);
-                    }
-                    List<PoiType> additionals = pt.getPoiAdditionals();
-                    if (additionals != null) {
-                        for (PoiType a : additionals) {
-                            if (!a.isReference() && !results.contains(a) && (nm.matches(a.getKeyName()) || nm.matches(a.getTranslation()))) {
-                                results.add(a);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        for (AbstractPoiType pt : results) {
-            SearchResult res = new SearchResult(phrase);
-            res.localeName = pt.getTranslation();
-            res.object = pt;
-            res.priority = SEARCH_AMENITY_TYPE_PRIORITY;
-            res.priorityDistance = 0;
-            res.objectType = ObjectType.POI_TYPE;
-            resultMatcher.publish(res);
-        }
-        for (int i = 0; i < customPoiFilters.size(); i++) {
-            CustomSearchPoiFilter csf = customPoiFilters.get(i);
-            int p = customPoiFiltersPriorites.get(i);
-            if (!phrase.isUnknownSearchWordPresent() || nm.matches(csf.getName())) {
-                SearchResult res = new SearchResult(phrase);
-                res.localeName = csf.getName();
-                res.object = csf;
-                res.priority = SEARCH_AMENITY_TYPE_PRIORITY + p;
-                res.objectType = ObjectType.POI_TYPE;
-                resultMatcher.publish(res);
-            }
-        }
-        
-        return true;
-    }
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        return false;
-    }
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        if (p.hasObjectType(ObjectType.POI) || p.hasObjectType(ObjectType.POI_TYPE)) {
-            return -1;
-        }
-        if(!p.isNoSelectedType() && !p.isUnknownSearchWordPresent()) {
-            return -1;
-        }
-        return SEARCH_AMENITY_TYPE_API_PRIORITY;
-    }
-}
-
-public static class SearchAmenityByTypeAPI extends SearchBaseAPI {
-    
-    private MapPoiTypes types;
-    
-    public SearchAmenityByTypeAPI(MapPoiTypes types) {
-        this.types = types;
-    }
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        return getSearchPriority(phrase) != -1 && super.isSearchMoreAvailable(phrase);
-    }
-    
-    private Map<PoiCategory, LinkedHashSet<String>> acceptedTypes = new LinkedHashMap<PoiCategory,
-				LinkedHashSet<String>>();
-    private Map<String, PoiType> poiAdditionals = new HashMap<String, PoiType>();
-    public void updateTypesToAccept(AbstractPoiType pt) {
-        pt.putTypes(acceptedTypes);
-        if (pt instanceof PoiType && ((PoiType) pt).isAdditional() && ((PoiType) pt).getParentType() != null) {
-            fillPoiAdditionals(((PoiType) pt).getParentType());
-        } else {
-            fillPoiAdditionals(pt);
-        }
-    }
-    
-    private void fillPoiAdditionals(AbstractPoiType pt) {
-        for (PoiType add : pt.getPoiAdditionals()) {
-            poiAdditionals.put(add.getKeyName().replace('_', ':').replace(' ', ':'), add);
-            poiAdditionals.put(add.getTranslation().replace(' ', ':').toLowerCase(), add);
-        }
-        if (pt instanceof PoiFilter && !(pt instanceof PoiCategory)) {
-            for (PoiType ps : ((PoiFilter) pt).getPoiTypes()) {
-                fillPoiAdditionals(ps);
-            }
-        }
-    }
-    
-    @Override
-    public boolean search(final SearchPhrase phrase, final SearchResultMatcher resultMatcher) throws IOException {
-        if(phrase.isLastWord(ObjectType.POI_TYPE)) {
-            Object obj = phrase.getLastSelectedWord().getResult().object;
-            SearchPoiTypeFilter ptf;
-            if(obj instanceof AbstractPoiType) {
-                ptf = getPoiTypeFilter((AbstractPoiType) obj);
-            } else if (obj instanceof SearchPoiTypeFilter) {
-                ptf = (SearchPoiTypeFilter) obj;
-            } else {
-                throw new UnsupportedOperationException();
-            }
-            
-            QuadRect bbox = phrase.getRadiusBBoxToSearch(10000);
-            List<BinaryMapIndexReader> oo = phrase.getOfflineIndexes();
-            for (BinaryMapIndexReader o : oo) {
-                ResultMatcher<Amenity> rm = getResultMatcher(phrase, resultMatcher, o);
-                if(obj instanceof CustomSearchPoiFilter) {
-                    rm = ((CustomSearchPoiFilter) obj).wrapResultMatcher(rm);
-                }
-                SearchRequest<Amenity> req = BinaryMapIndexReader.buildSearchPoiRequest(
-                                                                                        (int)bbox.left, (int)bbox.right,
-                                                                                        (int)bbox.top, (int)bbox.bottom, -1, ptf,
-                                                                                        rm);
-                o.searchPoi(req);
-                resultMatcher.apiSearchRegionFinished(this, o, phrase);
-            }
-        }
-        return true;
-    }
-    
-    private ResultMatcher<Amenity> getResultMatcher(final SearchPhrase phrase, final SearchResultMatcher resultMatcher,
-                                                    final BinaryMapIndexReader selected) {
-        final NameStringMatcher ns = phrase.getNameStringMatcher();
-        return new ResultMatcher<Amenity>() {
-            
-            @Override
-            public boolean publish(Amenity object) {
-                SearchResult res = new SearchResult(phrase);
-                res.localeName = object.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.otherNames = object.getAllNames(true);
-                if (Algorithms.isEmpty(res.localeName)) {
-                    AbstractPoiType st = types.getAnyPoiTypeByKey(object.getSubType());
-                    if (st != null) {
-                        res.localeName = st.getTranslation();
-                    } else {
-                        res.localeName = object.getSubType();
-                    }
-                }
-                if (phrase.isUnknownSearchWordPresent()
-                    && !(ns.matches(res.localeName) || ns.matches(res.otherNames))) {
-                    return false;
-                }
-                
-                res.object = object;
-                res.preferredZoom = 17;
-                res.file = selected;
-                res.location = object.getLocation();
-                res.priority = SEARCH_AMENITY_BY_TYPE_PRIORITY;
-                res.priorityDistance = 1;
-                res.objectType = ObjectType.POI;
-                resultMatcher.publish(res);
-                return false;
-            }
-            
-            @Override
-            public boolean isCancelled() {
-                return resultMatcher.isCancelled();
-            }
-        };
-        
-    }
-    
-    private SearchPoiTypeFilter getPoiTypeFilter(AbstractPoiType pt) {
-        
-        acceptedTypes.clear();
-        poiAdditionals.clear();
-        updateTypesToAccept(pt);
-        return new SearchPoiTypeFilter() {
-            
-            @Override
-            public boolean isEmpty() {
-                return false;
-            }
-            
-            @Override
-            public boolean accept(PoiCategory type, String subtype) {
-                if (type == null) {
-                    return true;
-                }
-                if (!types.isRegisteredType(type)) {
-                    type = types.getOtherPoiCategory();
-                }
-                if (!acceptedTypes.containsKey(type)) {
-                    return false;
-                }
-                LinkedHashSet<String> set = acceptedTypes.get(type);
-                if (set == null) {
-                    return true;
-                }
-                return set.contains(subtype);
-            }
-        };
-    }
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        if(p.isLastWord(ObjectType.POI_TYPE) &&
-           p.getLastTokenLocation() != null) {
-            return SEARCH_AMENITY_BY_TYPE_PRIORITY;
-        }
-        return -1;
-    }
-    
-}
-
-
-
 public static class SearchStreetByCityAPI extends SearchBaseAPI {
     
     private SearchBaseAPI streetsAPI;
@@ -819,143 +1164,6 @@ public static class SearchStreetByCityAPI extends SearchBaseAPI {
     }
     
 }
-
-public static boolean isLastWordCityGroup(SearchPhrase p ) {
-    return p.isLastWord(ObjectType.CITY) || p.isLastWord(ObjectType.POSTCODE) ||
-				p.isLastWord(ObjectType.VILLAGE);
-}
-
-public static class SearchBuildingAndIntersectionsByStreetAPI extends SearchBaseAPI {
-    Street cacheBuilding;
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        return false;
-    }
-    
-    @Override
-    public boolean search(SearchPhrase phrase, final SearchResultMatcher resultMatcher) throws IOException {
-        Street s = null;
-        int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
-        if(phrase.isLastWord(ObjectType.STREET)) {
-            s =  (Street) phrase.getLastSelectedWord().getResult().object;
-        }
-        if(isLastWordCityGroup(phrase)) {
-            priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
-            Object o = phrase.getLastSelectedWord().getResult().object;
-            if(o instanceof City) {
-                List<Street> streets = ((City) o).getStreets();
-                if(streets.size() == 1) {
-                    s = streets.get(0);
-                } else {
-                    for(Street st : streets) {
-                        if(st.getName().equals(((City) o).getName()) ||
-                           st.getName().equals("<"+((City) o).getName()+">")) {
-                            s = st;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-        
-        if(s != null) {
-            BinaryMapIndexReader file = phrase.getLastSelectedWord().getResult().file;
-            String lw = phrase.getUnknownSearchWord();
-            NameStringMatcher sm = phrase.getNameStringMatcher();
-            if (cacheBuilding != s) {
-                cacheBuilding = s;
-                SearchRequest<Building> sr = BinaryMapIndexReader
-                .buildAddressRequest(new ResultMatcher<Building>() {
-                    
-                    @Override
-                    public boolean publish(Building object) {
-                        return true;
-                    }
-                    
-                    @Override
-                    public boolean isCancelled() {
-                        return resultMatcher.isCancelled();
-                    }
-                });
-                file.preloadBuildings(s, sr);
-                Collections.sort(s.getBuildings(), new Comparator<Building>() {
-                    
-                    @Override
-                    public int compare(Building o1, Building o2) {
-                        int i1 = Algorithms.extractFirstIntegerNumber(o1.getName());
-                        int i2 = Algorithms.extractFirstIntegerNumber(o2.getName());
-                        if (i1 == i2) {
-                            return 0;
-                        }
-                        return Algorithms.compare(i1, i2);
-                    }
-                });
-            }
-            for(Building b : s.getBuildings()) {
-                SearchResult res = new SearchResult(phrase);
-                boolean interpolation = b.belongsToInterpolation(lw);
-                if(!sm.matches(b.getName()) && !interpolation) {
-                    continue;
-                }
-                
-                res.localeName = b.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.otherNames = b.getAllNames(true);
-                res.object = b;
-                res.file = file;
-                res.priority = priority;
-                res.priorityDistance = 0;
-                res.relatedObject = s;
-                res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.objectType = ObjectType.HOUSE;
-                if(interpolation) {
-                    res.location = b.getLocation(b.interpolation(lw));
-                } else {
-                    res.location = b.getLocation();
-                }
-                res.preferredZoom = 17;
-                resultMatcher.publish(res);
-            }
-            if(!Algorithms.isEmpty(lw) && !Character.isDigit(lw.charAt(0))) {
-                for(Street street : s.getIntersectedStreets()) {
-                    SearchResult res = new SearchResult(phrase);
-                    if(!sm.matches(street.getName()) && !sm.matches(street.getAllNames(true))) {
-                        continue;
-                    }
-                    res.otherNames = street.getAllNames(true);
-                    res.localeName = street.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                    res.object = street;
-                    res.file = file;
-                    res.relatedObject = s;
-                    res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                    res.priorityDistance = 0;
-                    res.objectType = ObjectType.STREET_INTERSECTION;
-                    res.location = street.getLocation();
-                    res.preferredZoom = 16;
-                    resultMatcher.publish(res);
-                }
-            }
-            
-            
-            
-        }
-        return true;
-    }
-    
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        if(isLastWordCityGroup(p)) {
-            return SEARCH_BUILDING_BY_CITY_PRIORITY;
-        }
-        if(!p.isLastWord(ObjectType.STREET)) {
-            return -1;
-        }
-        return SEARCH_BUILDING_BY_STREET_PRIORITY;
-    }
-}
-
-
 
 
 public static class SearchLocationAndUrlAPI extends SearchBaseAPI {

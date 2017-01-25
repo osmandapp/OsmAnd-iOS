@@ -9,15 +9,14 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "OASearchResult.h"
 
 @interface OASearchSettings : NSObject
 
 - (instancetype)initWithSettings:(OASearchSettings *)s;
-- (instancetype)initWithIndexes:(QList<std::shared_ptr<LocalResource>>)offlineIndexes;
+- (instancetype)initWithIndexes:(NSArray<NSString *> *)resourceIds;
 
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes;
-- (void) setOfflineIndexes:(QList<std::shared_ptr<LocalResource>>)offlineIndexes;
+- (NSArray<NSString *> *) getOfflineIndexes;
+- (void) setOfflineIndexes:(NSArray<NSString *> *)resourceIds;
 
 - (int) getRadiusLevel;
 - (NSString *) getLang;

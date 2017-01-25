@@ -19,6 +19,6 @@
 
 - (OAResultMatcher<OAPOI *> *) wrapResultMatcher:(OAResultMatcher<OAPOI *> *)matcher;
 
-- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction;
+- (instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction;
 
 @end

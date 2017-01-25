@@ -42,6 +42,7 @@ typedef struct _xmlSAX2Attributes xmlSAX2Attributes;
 @property(nonatomic) NSArray<OAPOIFilter *> *poiFilters;
 @property(nonatomic) NSArray<OAPOIType *> *textPoiAdditionals;
 @property(nonatomic) NSDictionary<NSString *, NSString *> *poiAdditionalCategoryIcons;
+@property(nonatomic) NSMapTable<NSString *, NSString *> *deprecatedTags;
 @property(nonatomic, weak) id<OAPOITypesParserDelegate> delegate;
 @property(nonatomic) BOOL error;
 @property(nonatomic) NSString *fileName;

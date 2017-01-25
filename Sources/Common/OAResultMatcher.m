@@ -15,7 +15,7 @@
     if (_publishFunction)
         return _publishFunction(&object);
 
-    return NO;
+    return YES;
 }
 
 - (BOOL) isCancelled

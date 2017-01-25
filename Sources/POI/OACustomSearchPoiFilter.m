@@ -26,9 +26,9 @@
     return nil; // override
 }
 
--(instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction
+-(instancetype)initWithAcceptFunc:(OASearchPoiTypeFilterAccept)aFunction emptyFunction:(OASearchPoiTypeFilterIsEmpty)eFunction getTypesFunction:(OASearchPoiTypeFilterGetTypes)tFunction
 {
-    return [super initWithAcceptFunc:aFunction emptyFunction:eFunction];
+    return [super initWithAcceptFunc:aFunction emptyFunction:eFunction getTypesFunction:tFunction];
 }
 
 @end

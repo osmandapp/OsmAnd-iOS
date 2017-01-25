@@ -93,15 +93,13 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     
-    //_prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    
     OsmAnd::AreaI bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(10000, OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon)));
 
     const std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AddressesByNameSearch::Criteria>(new OsmAnd::AddressesByNameSearch::Criteria);
     
     searchCriteria->name = QString::fromNSString(query ? query : @"");
     searchCriteria->includeStreets = true;
-    searchCriteria->streetGroupTypesMask = OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown);
+    //searchCriteria->streetGroupTypesMask = OsmAnd::ObfAddressStreetGroupTypesMask().set(OsmAnd::ObfAddressStreetGroupType::CityOrTown);
     searchCriteria->bbox31 = bbox31;
     searchCriteria->obfInfoAreaFilter = bbox31;
     
@@ -129,7 +127,6 @@
     }
     
     NSLog(@"+++ Finish search +++\n");
-
 }
 
 @end

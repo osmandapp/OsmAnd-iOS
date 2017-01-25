@@ -18,6 +18,7 @@
 - (NSArray<OASearchResult *> *) getRequestResults;
 - (int) getCount;
 - (void) apiSearchFinished:(OASearchCoreAPI *)api phrase:(OASearchPhrase *)phrase;
+- (void) apiSearchRegionFinished:(OASearchCoreAPI *)api resourceId:(NSString *)resourceId phrase:(OASearchPhrase *)phrase;
 
 -(BOOL)publish:(OASearchResult *)object;
 

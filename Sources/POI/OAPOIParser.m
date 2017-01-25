@@ -56,7 +56,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     NSMutableSet<NSString *> *_currentTypePoiAdditionalsCategories;
     NSMapTable<OAPOIBaseType *, NSMutableSet<NSString *> *> *_abstractTypeAdditionalCategories;
     NSMapTable<NSString *, NSMutableArray<OAPOIType *> *> *_categoryPoiAdditionalMap;
-
+    NSMapTable<NSString *, NSString *> *_deprecatedTags;
 }
 
 - (instancetype)init
@@ -85,6 +85,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
     _currentTypePoiAdditionalsCategories = [NSMutableSet set];
     _abstractTypeAdditionalCategories = [NSMapTable strongToStrongObjectsMapTable];
     _categoryPoiAdditionalMap = [NSMapTable strongToStrongObjectsMapTable];
+    _deprecatedTags = [NSMapTable strongToStrongObjectsMapTable];
 
     self.fileName = fileName;
 }
@@ -150,6 +151,7 @@ static xmlSAXHandler simpleSAXHandlerStruct;
         self.poiFilters = _pFilters;
         self.textPoiAdditionals = _textPoiAdditionals;
         self.poiAdditionalCategoryIcons = _poiAdditionalCategoryIcons;
+        self.deprecatedTags = _deprecatedTags;
         
         if (self.delegate && [self.delegate respondsToSelector:@selector(parserFinished)])
         {
@@ -278,6 +280,8 @@ static const char *kFilterOnlyAttributeName = "filter_only";
 static NSUInteger kFilterOnlyAttributeNameLength = 12;
 static const char *kIconAttributeName = "icon";
 static NSUInteger kIconAttributeNameLength = 5;
+static const char *kDeprecatedOfAttributeName = "deprecated_of";
+static NSUInteger kDeprecatedOfAttributeNameLength = 14;
 
 
 - (void)elementFound:(const xmlChar *)localname prefix:(const xmlChar *)prefix
@@ -529,7 +533,9 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     {
         if (_currentTypePoiAdditionalsCategories.count > 0)
         {
-            [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentTypePoiAdditionalsCategories] forKey:_currentPOIType];
+            if (_currentPOIType)
+                [_abstractTypeAdditionalCategories setObject:[NSMutableSet setWithSet:_currentTypePoiAdditionalsCategories] forKey:_currentPOIType];
+            
             [_currentTypePoiAdditionalsCategories removeAllObjects];
         }
         _currentPOIType = nil;
@@ -577,6 +583,7 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
     BOOL mapOnly = NO;
     BOOL reference = NO;
     BOOL isText = NO;
+    NSString *deprecatedOf = nil;
     NSArray<NSString *> *poiAdditionalCategories = nil;
     NSArray<NSString *> *excludedPoiAdditionalCategories = nil;
     
@@ -606,6 +613,14 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
         {
             int length = (int) (attributes[i].end - attributes[i].value);
             value = [[NSString alloc] initWithBytes:attributes[i].value
+                                                       length:length
+                                                     encoding:NSUTF8StringEncoding];
+        }
+        else if (0 == strncmp((const char*)attributes[i].localname, kDeprecatedOfAttributeName,
+                              kDeprecatedOfAttributeNameLength))
+        {
+            int length = (int) (attributes[i].end - attributes[i].value);
+            deprecatedOf = [[NSString alloc] initWithBytes:attributes[i].value
                                                        length:length
                                                      encoding:NSUTF8StringEncoding];
         }
@@ -656,6 +671,12 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
             
             excludedPoiAdditionalCategories = [value componentsSeparatedByString:@","];
         }
+    }
+    
+    if (deprecatedOf)
+    {
+        [_deprecatedTags setObject:deprecatedOf forKey:name];
+        return nil;
     }
     
     OAPOIType *poiType = [[OAPOIType alloc] initWithName:name category:_currentPOICategory];

@@ -20,7 +20,7 @@
 
 @implementation OASearchSettings
 {
-    QList<std::shared_ptr<LocalResource>> _offlineIndexes;
+    NSArray<NSString *> *_resourceIds;
 }
 
 - (instancetype)init
@@ -51,26 +51,25 @@
     return self;
 }
 
-- (instancetype)initWithIndexes:(QList<std::shared_ptr<LocalResource>>)offlineIndexes
+- (instancetype)initWithIndexes:(NSArray<NSString *> *)resourceIds;
 {
     self = [self init];
     if (self)
     {
-        [self setOfflineIndexes:offlineIndexes];
+        [self setOfflineIndexes:resourceIds];
     }
     return self;
 }
 
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes
+- (NSArray<NSString *> *) getOfflineIndexes;
 {
-    return _offlineIndexes;
+    return _resourceIds;
 }
 
-- (void) setOfflineIndexes:(QList<std::shared_ptr<LocalResource>>)offlineIndexes
+- (void) setOfflineIndexes:(NSArray<NSString *> *)resourceIds;
 {
-    _offlineIndexes = offlineIndexes;
+    _resourceIds = resourceIds;
 }
-
 
 - (int) getRadiusLevel
 {

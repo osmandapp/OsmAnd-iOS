@@ -71,8 +71,12 @@ typedef NS_ENUM(NSInteger, EOASearchPhraseDataType)
 - (void) countUnknownWordsMatch:(OASearchResult *)sr localeName:(NSString *)localeName otherNames:(NSMutableArray<NSString *> *)otherNames;
 - (int) getRadiusSearch:(int)meters;
 
-- (QList<std::shared_ptr<LocalResource>>) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt;
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt;
-- (QList<std::shared_ptr<LocalResource>>) getOfflineIndexes;
+- (NSArray<NSString *> *) getRadiusOfflineIndexes:(int)meters dt:(EOASearchPhraseDataType)dt;
+- (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt;
+- (NSArray<NSString *> *) getOfflineIndexes;
+
+- (void) selectFile:(NSString *)resourceId;
+- (void) sortFiles;
+
 
 @end

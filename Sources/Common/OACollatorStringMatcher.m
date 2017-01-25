@@ -63,20 +63,6 @@ static NSStringCompareOptions comparisonOptions = NSCaseInsensitiveSearch | NSWi
  */
 + (BOOL) ccontains:(NSString *)base part:(NSString *)part
 {
-    //		int pos = 0;
-    //		if (part.length() > 3) {
-    //			// improve searching by searching first 3 characters
-    //			pos = cindexOf(collator, pos, part.substring(0, 3), base);
-    //			if (pos == -1) {
-    //				return false;
-    //			}
-    //		}
-    //		pos = cindexOf(collator, pos, part, base);
-    //		if (pos == -1) {
-    //			return false;
-    //		}
-    //		return true;
-    
     if (base.length <= part.length)
         return [base localizedCaseInsensitiveCompare:part] == NSOrderedSame;
     

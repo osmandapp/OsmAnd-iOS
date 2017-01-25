@@ -75,18 +75,18 @@
     }
 }
 
-/*
-public void apiSearchRegionFinished(SearchCoreAPI api, BinaryMapIndexReader region, SearchPhrase phrase) {
-    if(matcher != null) {
-        SearchResult sr = new SearchResult(phrase);
-        sr.objectType = ObjectType.SEARCH_API_REGION_FINISHED;
+- (void) apiSearchRegionFinished:(OASearchCoreAPI *)api resourceId:(NSString *)resourceId phrase:(OASearchPhrase *)phrase
+{
+    if (_matcher)
+    {
+        OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+        sr.objectType = SEARCH_API_REGION_FINISHED;
         sr.object = api;
-        sr.parentSearchResult = parentSearchResult;
-        sr.file = region;
-        matcher.publish(sr);
+        sr.parentSearchResult = _parentSearchResult;
+        sr.resourceId = resourceId;
+        [_matcher publish:sr];
     }
 }
-*/
 
 -(BOOL)publish:(OASearchResult *)object
 {

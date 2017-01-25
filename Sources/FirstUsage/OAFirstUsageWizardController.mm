@@ -155,11 +155,7 @@ typedef enum
     [_btnSearchingMap setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
 
     // Init download map view
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(4.0, 4.0)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = self.view.bounds;
-    maskLayer.path  = maskPath.CGPath;
-    _btnDownload.layer.mask = maskLayer;
+    [self updateDownloadButtonLayer];
     [_btnDownload setTitle:OALocalizedString(@"download") forState:UIControlStateNormal];
     [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
@@ -204,6 +200,15 @@ typedef enum
     }
 }
 
+- (void)updateDownloadButtonLayer
+{
+    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(4.0, 4.0)];
+    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+    maskLayer.frame = self.view.bounds;
+    maskLayer.path  = maskPath.CGPath;
+    _btnDownload.layer.mask = maskLayer;
+}
+
 - (void)showCard:(UIView *)cardView
 {
     [self clearSubViews];
@@ -218,7 +223,9 @@ typedef enum
         float fh = v.frame.origin.y + v.frame.size.height;
         h = MAX(fh, h);
     }
-    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, source.frame.size.width, h);
+    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, _cardView.frame.size.width, h);
+    if (source == _viewDownloadMap)
+        [self updateDownloadButtonLayer];
 }
 
 - (IBAction)skipPress:(id)sender

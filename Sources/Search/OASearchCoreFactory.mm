@@ -29,6 +29,7 @@
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/Data/Building.h>
 #include <OsmAndCore/Data/Street.h>
+#include <OsmAndCore/Data/StreetIntersection.h>
 #include <OsmAndCore/Data/StreetGroup.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/QuadTree.h>
@@ -45,6 +46,7 @@
 
 + (NSString *) stripBraces:(NSString *)localeName;
 + (CLLocation *) getLocation:(const OsmAnd::PointI)position31;
++ (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno;
 + (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names;
 + (BOOL) isLastWordCityGroup:(OASearchPhrase *)p;
 
@@ -550,11 +552,11 @@
 @end
 
 
-@interface SearchAmenityTypesAPI ()
+@interface OASearchAmenityTypesAPI ()
 
 @end
 
-@implementation SearchAmenityTypesAPI
+@implementation OASearchAmenityTypesAPI
 {
     NSArray<OAPOIBaseType *> *_topVisibleFilters;
     NSArray<OAPOICategory *> *_categories;
@@ -672,11 +674,11 @@
 @end
 
 
-@interface SearchAmenityByTypeAPI ()
+@interface OASearchAmenityByTypeAPI ()
 
 @end
 
-@implementation SearchAmenityByTypeAPI
+@implementation OASearchAmenityByTypeAPI
 {
     OAPOIHelper *_types;
     NSMapTable<OAPOICategory *,NSMutableSet<NSString *> *> *_acceptedTypes;
@@ -887,11 +889,11 @@
 @end
 
 
-@interface SearchBuildingAndIntersectionsByStreetAPI ()
+@interface OASearchBuildingAndIntersectionsByStreetAPI ()
 
 @end
 
-@implementation SearchBuildingAndIntersectionsByStreetAPI
+@implementation OASearchBuildingAndIntersectionsByStreetAPI
 {
     std::shared_ptr<const OsmAnd::Street> _cacheBuilding;
 }
@@ -909,14 +911,17 @@
 {
     return NO;
 }
-/*
+
 -(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     OsmAndAppInstance app = [OsmAndApp instance];
+    QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+    bool transliterate = [[phrase getSettings] isTransliterate];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
     OASearchWord *lastSelectedWord = [phrase getLastSelectedWord];
-    const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(lastSelectedWord.result.resourceId));
+    NSString *resId = lastSelectedWord.result.resourceId;
+    const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
     const auto& dataInterface = obfsCollection->obtainDataInterface({r});
     
     std::shared_ptr<const OsmAnd::Street> s;
@@ -924,15 +929,21 @@
     if ([phrase isLastWord:STREET])
         s = std::dynamic_pointer_cast<const OsmAnd::Street>(lastSelectedWord.result.address);
     
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
+                                                  (const OsmAnd::IQueryController* const controller)
+                                                  {
+                                                      return [resultMatcher isCancelled];
+                                                  }));
+
     if ([OASearchCoreFactory isLastWordCityGroup:phrase])
     {
         priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
         const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(lastSelectedWord.result.address);
-        QHash< std::shared_ptr<const OsmAnd::StreetGroup>, QList< std::shared_ptr<const OsmAnd::Street> > >* streetsMap;
-        bool res = dataInterface->loadStreetsFromGroups({city}, streetsMap);
-        if (res && !streetsMap->isEmpty())
+        bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
+        if (res)
         {
-            const auto& streets = streetsMap->values()[0];
+            const auto& streets = city->streets;
             if (streets.size() == 1)
             {
                 s = streets[0];
@@ -953,95 +964,172 @@
     
     if (s)
     {
-        NSString *lw = [phrase getUnknownSearchWord];
+        QString lw = QString::fromNSString([phrase getUnknownSearchWord]);
         OANameStringMatcher *sm = [phrase getNameStringMatcher];
         if (_cacheBuilding != s)
         {
             _cacheBuilding = s;
             
-            std::shared_ptr<const OsmAnd::IQueryController> ctrl;
-            ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
-                                                          (const OsmAnd::IQueryController* const controller)
-                                                          {
-                                                              return [resultMatcher isCancelled];
-                                                          }));
-
-            bool res = dataInterface->preloadBuildings(s, ctrl);
+            bool res = dataInterface->preloadBuildings({std::const_pointer_cast<OsmAnd::Street>(s)}, ctrl);
             if (res)
             {
-                std::sort(s->buildings, [](const std::shared_ptr<const OsmAnd::Building>& o1, const std::shared_ptr<const OsmAnd::Building>& o2)
+                const auto& ms = std::const_pointer_cast<OsmAnd::Street>(s);
+                std::sort(ms->buildings, [](const std::shared_ptr<const OsmAnd::Building>& o1, const std::shared_ptr<const OsmAnd::Building>& o2)
                 {
-                    int i1 = Algorithms.extractFirstIntegerNumber(o1.getName());
-                    int i2 = Algorithms.extractFirstIntegerNumber(o2.getName());
-                    if (i1 == i2) {
-                        return 0;
-                    }
-                    return Algorithms.compare(i1, i2);
+                    int i1 = OsmAnd::Utilities::extractFirstInteger(o1->nativeName);
+                    int i2 = OsmAnd::Utilities::extractFirstInteger(o2->nativeName);
+                    return i1 < i2;
                 });
             }
         }
-        for(Building b : s.getBuildings()) {
-            SearchResult res = new SearchResult(phrase);
-            boolean interpolation = b.belongsToInterpolation(lw);
-            if(!sm.matches(b.getName()) && !interpolation) {
+        for (const auto& b : s->buildings)
+        {
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            bool interpolation = b->belongsToInterpolation(lw);
+            if (![sm matches:b->nativeName.toNSString()] && !interpolation)
                 continue;
-            }
             
-            res.localeName = b.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-            res.otherNames = b.getAllNames(true);
-            res.object = b;
-            res.file = file;
+            res.localeName = b->getName(lang, transliterate).toNSString();
+            res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames];
+            res.address = b;
+            res.resourceId = resId;
             res.priority = priority;
             res.priorityDistance = 0;
-            res.relatedObject = s;
-            res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-            res.objectType = ObjectType.HOUSE;
-            if(interpolation) {
-                res.location = b.getLocation(b.interpolation(lw));
-            } else {
-                res.location = b.getLocation();
-            }
+            res.relatedAddress = s;
+            res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
+            res.objectType = HOUSE;
+            if (interpolation)
+                res.location = [OASearchCoreFactory getLocation:b hno:lw];
+            else
+                res.location = [OASearchCoreFactory getLocation:b->position31];
             res.preferredZoom = 17;
-            resultMatcher.publish(res);
+            
+            [resultMatcher publish:res];
         }
-        if(!Algorithms.isEmpty(lw) && !Character.isDigit(lw.charAt(0))) {
-            for(Street street : s.getIntersectedStreets()) {
-                SearchResult res = new SearchResult(phrase);
-                if(!sm.matches(street.getName()) && !sm.matches(street.getAllNames(true))) {
+        if (lw.isEmpty() && !lw[0].isDigit())
+        {
+            for (const auto& streetIntersection : s->intersectedStreets)
+            {
+                const auto& street = streetIntersection->street;
+                OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+                if (![sm matches:street->nativeName.toNSString()] && ![sm matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames]])
                     continue;
-                }
-                res.otherNames = street.getAllNames(true);
-                res.localeName = street.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.object = street;
-                res.file = file;
-                res.relatedObject = s;
-                res.localeRelatedObjectName = s.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
+                
+                res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames];
+                res.localeName = street->getName(lang, transliterate).toNSString();
+                res.address = street;
+                res.resourceId = resId;
+                res.relatedAddress = s;
+                res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
-                res.objectType = ObjectType.STREET_INTERSECTION;
-                res.location = street.getLocation();
+                res.objectType = STREET_INTERSECTION;
+                res.location = [OASearchCoreFactory getLocation:street->position31];
                 res.preferredZoom = 16;
-                resultMatcher.publish(res);
+                
+                [resultMatcher publish:res];
             }
         }
-        
-        
-        
     }
     return true;
 }
 
-
-@Override
-public int getSearchPriority(SearchPhrase p) {
-    if(isLastWordCityGroup(p)) {
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    if ([OASearchCoreFactory isLastWordCityGroup:p])
         return SEARCH_BUILDING_BY_CITY_PRIORITY;
-    }
-    if(!p.isLastWord(ObjectType.STREET)) {
+    
+    if (![p isLastWord:STREET])
         return -1;
-    }
+    
     return SEARCH_BUILDING_BY_STREET_PRIORITY;
 }
-*/
+
+@end
+
+
+@interface OASearchStreetByCityAPI ()
+
+@end
+
+@implementation OASearchStreetByCityAPI
+{
+    int LIMIT;
+    OASearchBaseAPI *_streetsAPI;
+}
+
+- (instancetype)initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI
+{
+    self = [super init];
+    if (self)
+    {
+        LIMIT = 10000;
+        _streetsAPI = streetsAPI;
+    }
+    return self;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return [phrase getRadiusLevel] == 1 && [self getSearchPriority:phrase] != -1;
+}
+
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    OASearchWord *sw = [phrase getLastSelectedWord];
+    if ([OASearchCoreFactory isLastWordCityGroup:phrase] && sw.result && sw.result.resourceId)
+    {
+        OsmAndAppInstance app = [OsmAndApp instance];
+        QString lang = QString::fromNSString([[phrase getSettings] getLang]);
+        bool transliterate = [[phrase getSettings] isTransliterate];
+
+        const auto& c = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(sw.result.address);
+        if (c->streets.isEmpty())
+        {
+            const auto& obfsCollection = app.resourcesManager->obfsCollection;
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(sw.result.resourceId));
+            const auto& dataInterface = obfsCollection->obtainDataInterface({r});
+            dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(c)});
+        }
+        
+        int limit = 0;
+        OANameStringMatcher *nm = [phrase getNameStringMatcher];
+        for (const auto& object : c->streets) {
+            
+            OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+            res.localeName = object->getName(lang, transliterate).toNSString();
+            res.otherNames = [OASearchCoreFactory getAllNames:object->localizedNames];
+            if (object->nativeName.startsWith('<'))
+                continue; // streets related to city
+            
+            if ([phrase isUnknownSearchWordPresent] && !([nm matches:res.localeName] || [nm matchesMap:res.otherNames]))
+                continue;
+            
+            res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
+            res.address = object;
+            res.preferredZoom = 17;
+            res.resourceId = sw.result.resourceId;
+            res.location = [OASearchCoreFactory getLocation:object->position31];
+            res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
+            //res.priorityDistance = 1;
+            res.objectType = STREET;
+            
+            [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsAPI];
+            if (limit++ > LIMIT)
+                break;
+        }
+        return true;
+    }
+    return true;
+}
+
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    if ([OASearchCoreFactory isLastWordCityGroup:p])
+        return SEARCH_STREET_BY_CITY_PRIORITY;
+    
+    return -1;
+}
+
 @end
 
 
@@ -1081,6 +1169,19 @@ public int getSearchPriority(SearchPhrase p) {
     return [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
 }
 
++ (CLLocation *) getLocation:(const std::shared_ptr<const OsmAnd::Building>&)building hno:(const QString&)hno
+{
+    float interpolation = building->evaluateInterpolation(hno);
+    CLLocation *loc = [self.class getLocation:building->position31];
+    CLLocation *latLon2 = [self.class getLocation:building->interpolationPosition31];
+
+    double lat1 = loc.coordinate.latitude;
+    double lat2 = latLon2.coordinate.longitude;
+    double lon1 = loc.coordinate.longitude;
+    double lon2 = latLon2.coordinate.longitude;
+    return [[CLLocation alloc] initWithLatitude:interpolation * (lat2 - lat1) + lat1 longitude:interpolation * (lon2 - lon1) + lon1];
+}
+
 + (NSMutableArray<NSString *> *) getAllNames:(const QHash<QString, QString>&)names
 {
     NSMutableArray<NSString *> *otherNames = [NSMutableArray array];
@@ -1098,73 +1199,6 @@ public int getSearchPriority(SearchPhrase p) {
 }
 
 /*
-public static class SearchStreetByCityAPI extends SearchBaseAPI {
-    
-    private SearchBaseAPI streetsAPI;
-    public SearchStreetByCityAPI(SearchBuildingAndIntersectionsByStreetAPI streetsAPI) {
-        this.streetsAPI = streetsAPI;
-    }
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        // case when street is not found for given city is covered here
-        return phrase.getRadiusLevel() == 1 && getSearchPriority(phrase) != -1;
-    }
-    
-    private static int LIMIT = 10000;
-    @Override
-    public boolean search(SearchPhrase phrase, SearchResultMatcher resultMatcher) throws IOException {
-        SearchWord sw = phrase.getLastSelectedWord();
-        if (isLastWordCityGroup(phrase) && sw.getResult() != null && sw.getResult().file != null) {
-            City c = (City) sw.getResult().object;
-            if (c.getStreets().isEmpty()) {
-                sw.getResult().file.preloadStreets(c, null);
-            }
-            int limit = 0;
-            NameStringMatcher nm = phrase.getNameStringMatcher();
-            for (Street object : c.getStreets()) {
-                
-                SearchResult res = new SearchResult(phrase);
-                res.localeName = object.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.otherNames = object.getAllNames(true);
-                if(object.getName().startsWith("<")) {
-                    // streets related to city
-                    continue;
-                }
-                if (phrase.isUnknownSearchWordPresent()
-                    && !(nm.matches(res.localeName) || nm.matches(res.otherNames))) {
-                    continue;
-                }
-                res.localeRelatedObjectName = c.getName(phrase.getSettings().getLang(), phrase.getSettings().isTransliterate());
-                res.object = object;
-                res.preferredZoom = 17;
-                res.file = sw.getResult().file;
-                res.location = object.getLocation();
-                res.priority = SEARCH_STREET_BY_CITY_PRIORITY;
-                //res.priorityDistance = 1;
-                res.objectType = ObjectType.STREET;
-                subSearchApiOrPublish(phrase, resultMatcher, res, streetsAPI);
-                if (limit++ > LIMIT) {
-                    break;
-                }
-                
-            }
-            return true;
-        }
-        return true;
-    }
-    
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        if(isLastWordCityGroup(p)) {
-            return SEARCH_STREET_BY_CITY_PRIORITY;
-        }
-        return -1;
-    }
-    
-}
-
 
 public static class SearchLocationAndUrlAPI extends SearchBaseAPI {
     

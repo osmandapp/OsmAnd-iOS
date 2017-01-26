@@ -56,6 +56,14 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @end
 
+@interface OASearchAmenityTypesAPI : OASearchBaseAPI
+
+@end
+
+@interface OASearchAmenityByTypeAPI : OASearchBaseAPI
+
+@end
+
 @interface OASearchStreetByCityAPI : OASearchBaseAPI
 
 @end
@@ -64,21 +72,10 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @end
 
-@interface SearchAmenityTypesAPI : OASearchBaseAPI
+@interface OASearchLocationAndUrlAPI : OASearchBaseAPI
 
 @end
 
-@interface SearchAmenityByTypeAPI : OASearchBaseAPI
-
-@end
-
-@interface SearchStreetByCityAPI : OASearchBaseAPI
-
-@end
-
-@interface SearchBuildingAndIntersectionsByStreetAPI : OASearchBaseAPI
-
-@end
 
 @interface OASearchCoreFactory : NSObject
 

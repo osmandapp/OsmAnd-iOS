@@ -41,6 +41,8 @@
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/FunctorQueryController.h>
 
+#include <GeographicLib/GeoCoords.hpp>
+
 
 @interface OASearchCoreFactory ()
 
@@ -639,8 +641,8 @@
     }
     for (int i = 0; i < _customPoiFilters.count; i++)
     {
-        OACustomSearchPoiFilter *csf = [_customPoiFilters objectAtIndex:i];
-        int p = [[_customPoiFiltersPriorites objectAtIndex:i] intValue];
+        OACustomSearchPoiFilter *csf = _customPoiFilters[i];
+        int p = _customPoiFiltersPriorites[i].intValue;
         if (![phrase isUnknownSearchWordPresent] || [nm matches:[csf getName]])
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
@@ -1133,6 +1135,463 @@
 @end
 
 
+@interface OASearchLocationAndUrlAPI ()
+
+@end
+
+@implementation OASearchLocationAndUrlAPI
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        //
+    }
+    return self;
+}
+
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
+{
+    return NO;
+}
+
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    if (![phrase isUnknownSearchWordPresent])
+        return NO;
+    
+    BOOL parseUrl = [self parseUrl:phrase resultMatcher:resultMatcher];
+    if (!parseUrl)
+        [self parseLocation:phrase resultMatcher:resultMatcher];
+    
+    return [super search:phrase resultMatcher:resultMatcher];
+}
+
+- (BOOL) isKindOfNumber:(NSString *)s
+{
+    for (int i = 0; i < s.length; i ++)
+    {
+        unichar c = [s characterAtIndex:i];
+        if (c >= '0' && c <= '9')
+        {
+        }
+        else if (c == ':' || c == '.' || c == '#' || c == ',' || c == '-' || c == '\'' || c == '"')
+        {
+        }
+        else
+        {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (CLLocation *) parsePartialLocation:(NSString *)s
+{
+    s = [s trim];
+    if (s.length == 0
+             || !([s characterAtIndex:0] == '-'
+             || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
+             || [s characterAtIndex:0] == 'S' || [s characterAtIndex:0] == 's'
+             || [s characterAtIndex:0] == 'N' || [s characterAtIndex:0] == 'n'
+             || [s indexOf:@"://"] != -1))
+    {
+        return nil;
+    }
+    
+    NSMutableArray<NSNumber *> *d = [NSMutableArray array];
+    NSMutableArray *all = [NSMutableArray array];
+    NSMutableArray<NSString *> *strings = [NSMutableArray array];
+    [self splitObjects:s d:d all:all strings:strings];
+    if (d.count == 0)
+        return nil;
+    
+    double lat = [self parse1Coordinate:all begin:0 end:(int)all.count];
+    return [[CLLocation alloc] initWithLatitude:lat longitude:0];
+}
+
+- (CLLocation *) parseLocation:(NSString *)s
+{
+    s = [s trim];
+    if (s.length == 0
+        || !([s characterAtIndex:0] == '-'
+             || [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:[s characterAtIndex:0]]
+             || [s characterAtIndex:0] == 'S' || [s characterAtIndex:0] == 's'
+             || [s characterAtIndex:0] == 'N' || [s characterAtIndex:0] == 'n'
+             || [s indexOf:@"://"] != -1))
+    {
+        return nil;
+    }
+
+    NSMutableArray<NSNumber *> *d = [NSMutableArray array];
+    NSMutableArray *all = [NSMutableArray array];
+    NSMutableArray<NSString *> *strings = [NSMutableArray array];
+    [self splitObjects:s d:d all:all strings:strings];
+    if (d.count == 0)
+        return nil;
+
+    // detect UTM
+    if (all.count == 4 && d.count == 3 && [all[1] isKindOfClass:[NSString class]])
+    {
+        unichar ch = [((NSString *)all[1]) characterAtIndex:0];
+        if ([[NSCharacterSet letterCharacterSet] characterIsMember:ch])
+        {
+            try
+            {
+                GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', d[1].doubleValue, d[2].doubleValue);
+                return [[CLLocation alloc] initWithLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
+            }
+            catch(GeographicLib::GeographicErr err)
+            {
+                return nil;
+            }
+        }
+    }
+    
+    if (all.count == 3 && d.count == 2 && [all[1] isKindOfClass:[NSString class]])
+    {
+        unichar ch = [((NSString *)all[1]) characterAtIndex:0];
+        NSString *combined = strings[2];
+        if ([[NSCharacterSet letterCharacterSet] characterIsMember:ch])
+        {
+            try {
+                NSString *east = [combined substringToIndex:combined.length / 2];
+                NSString *north = [combined substringFromIndex:combined.length / 2];
+                try
+                {
+                    GeographicLib::GeoCoords geoCoords(d[0].intValue, ch == 'n' || ch == 'N', east.doubleValue, north.doubleValue);
+                    return [[CLLocation alloc] initWithLatitude:geoCoords.Latitude() longitude:geoCoords.Longitude()];
+                }
+                catch(GeographicLib::GeographicErr err)
+                {
+                    // ignore
+                }
+            }
+            catch (NSException *e)
+            {
+                // ignore
+            }
+        }
+    }
+    
+    // try to find split lat/lon position
+    int jointNumbers = 0;
+    int lastJoin = 0;
+    int degSplit = -1;
+    int degType = -1; // 0 - degree, 1 - minutes, 2 - seconds
+    bool finishDegSplit = false;
+    int northSplit = -1;
+    int eastSplit = -1;
+    for (int i = 1; i < all.count; i++ )
+    {
+        if ([all[i - 1] isKindOfClass:[NSNumber class]] && [all[i] isKindOfClass:[NSNumber class]])
+        {
+            jointNumbers ++;
+            lastJoin = i;
+        }
+        if ([all[i] isEqualToString:@"n"] || [all[i] isEqualToString:@"s"] ||
+            [all[i] isEqualToString:@"N"] || [all[i] isEqualToString:@"S"])
+        {
+            northSplit = i + 1;
+        }
+        if ([all[i] isEqualToString:@"e"] || [all[i] isEqualToString:@"w"] ||
+            [all[i] isEqualToString:@"E"] || [all[i] isEqualToString:@"W"])
+        {
+            eastSplit = i;
+        }
+        int dg = -1;
+        if ([all[i] isEqualToString:@"°"])
+            dg = 0;
+        else if ([all[i] isEqualToString:@"\'"] || [all[i] isEqualToString:@"′"])
+            dg = 1;
+        else if ([all[i] isEqualToString:@"″"] || [all[i] isEqualToString:@"\""])
+            dg = 2;
+        
+        if (dg != -1)
+        {
+            if (!finishDegSplit)
+            {
+                if (degType < dg)
+                {
+                    degSplit = i + 1;
+                    degType = dg;
+                }
+                else
+                {
+                    finishDegSplit = true;
+                    degType = dg;
+                }
+            }
+            else
+            {
+                if (degType < dg)
+                    degType = dg;
+                else
+                    degSplit = -1; // reject delimiter
+            }
+        }
+    }
+    
+    int split = -1;
+    if (jointNumbers == 1)
+        split = lastJoin;
+    
+    if (northSplit != -1 && northSplit < all.count -1)
+        split = northSplit;
+    else if (eastSplit != -1 && eastSplit < all.count -1)
+        split = eastSplit;
+    else if (degSplit != -1 && degSplit < all.count -1)
+        split = degSplit;
+    
+    if (split != -1)
+    {
+        double lat = [self parse1Coordinate:all begin:0 end:split];
+        double lon = [self parse1Coordinate:all begin:split end:(int)all.count];
+        return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+    }
+    if (d.count == 2)
+        return [[CLLocation alloc] initWithLatitude:d[0].doubleValue longitude:d[1].doubleValue];
+
+    // simple url case
+    if ([s indexOf:@"://"] != -1)
+    {
+        double lat = 0;
+        double lon = 0;
+        bool only2decimals = true;
+        for (int i = 0; i < d.count; i++)
+        {
+            if (d[i].doubleValue != d[i].intValue)
+            {
+                if (lat == 0)
+                    lat = d[i].doubleValue;
+                else if (lon == 0)
+                    lon = d[i].doubleValue;
+                else
+                    only2decimals = false;
+            }
+        }
+        if (lat != 0 && lon != 0 && only2decimals)
+            return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+    }
+
+    // split by equal number of digits
+    if (d.count > 2 && d.count % 2 == 0)
+    {
+        int ind = (int)(d.count / 2) + 1;
+        int splitEq = -1;
+        for (int i = 0; i < all.count; i++)
+        {
+            if ([all[i] isKindOfClass:[NSNumber class]])
+                ind --;
+
+            if (ind == 0)
+            {
+                splitEq = i;
+                break;
+            }
+        }
+        if (splitEq != -1)
+        {
+            double lat = [self parse1Coordinate:all begin:0 end:splitEq];
+            double lon = [self parse1Coordinate:all begin:splitEq end:(int)all.count];
+            return [[CLLocation alloc] initWithLatitude:lat longitude:lon];
+        }
+    }
+    return nil;
+}
+
+- (double) parse1Coordinate:(NSMutableArray *)all begin:(int)begin end:(int)end
+{
+    bool neg = false;
+    double d = 0;
+    int type = 0; // degree - 0, minutes - 1, seconds = 2
+    NSNumber *prevDouble = nil;
+    for (int i = begin; i <= end; i++)
+    {
+        id o = i == end ? @"" : all[i];
+        NSString *s = @"";
+        NSNumber *n;
+        if ([o isKindOfClass:[NSString class]])
+            s = (NSString *)o;
+        else if ([o isKindOfClass:[NSNumber class]])
+            n = (NSNumber *)o;
+        
+        if ([s isEqualToString:@"S"] || [s isEqualToString:@"W"])
+            neg = !neg;
+
+        if (prevDouble)
+        {
+            if ([s isEqualToString:@"°"])
+                type = 0;
+            else if ([s isEqualToString:@"′"])  //o.equals("'")  ' can be used as delimeter ignore it
+                type = 1;
+            else if([s isEqualToString:@"\""] || [s isEqualToString:@"″"])
+                type = 2;
+            
+            if (type == 0)
+            {
+                double ld = prevDouble.doubleValue;
+                if(ld < 0)
+                {
+                    ld = -ld;
+                    neg = true;
+                }
+                d += ld;
+            }
+            else if (type == 1)
+            {
+                d += prevDouble.doubleValue / 60.f;
+            }
+            else
+            { //if (type == 1)
+                d += prevDouble.doubleValue / 3600.f;
+            }
+            type++;
+        }
+        prevDouble = n;
+    }
+    
+    if (neg)
+        d = -d;
+
+    return d;
+}
+
+- (void) splitObjects:(NSString *)s d:(NSMutableArray<NSNumber *> *)d all:(NSMutableArray *)all strings:(NSMutableArray<NSString *> *)strings
+{
+    bool digit = false;
+    int word = -1;
+    for(int i = 0; i <= s.length; i++)
+    {
+        unichar ch = i == s.length ? ' ' : [s characterAtIndex:i];
+        bool dg = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch];
+        bool nonwh = ch != ',' && ch != ' ' && ch != ';';
+        if (ch == '.' || dg || ch == '-' )
+        {
+            if (!digit)
+            {
+                if (word != -1)
+                {
+                    [all addObject:[s substringWithRange:NSMakeRange(word, i - word)]];
+                    [strings addObject:[s substringWithRange:NSMakeRange(word, i - word)]];
+                }
+                digit = true;
+                word = i;
+            }
+            else
+            {
+                if(word == -1)
+                    word = i;
+            }
+        }
+        else
+        {
+            NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
+            if (digit)
+            {
+                double dl;
+                if ([[NSScanner scannerWithString:str] scanDouble:&dl])
+                {
+                    [d addObject:[NSNumber numberWithDouble:dl]];
+                    [all addObject:[NSNumber numberWithDouble:dl]];
+                    [strings addObject:str];
+                    digit = false;
+                    word = -1;
+                }
+            }
+            if (nonwh)
+            {
+                if (![[NSCharacterSet letterCharacterSet] characterIsMember:ch])
+                {
+                    if (word != -1)
+                    {
+                        [all addObject:str];
+                        [strings addObject:str];
+                    }
+                    [all addObject:[s substringWithRange:NSMakeRange(i, 1)]];;
+                    [strings addObject:[s substringWithRange:NSMakeRange(i, 1)]];
+                    word = -1;
+                }
+                else if (word == -1)
+                {
+                    word = i;
+                }
+            }
+            else
+            {
+                if (word != -1)
+                {
+                    [all addObject:str];
+                    [strings addObject:str];
+                }
+                word = -1;
+            }
+        }
+    }
+}
+
+- (void) parseLocation:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    NSString *lw = [phrase getUnknownSearchPhrase];
+    CLLocation *l = [self parseLocation:lw];
+    if (l)
+    {
+        OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
+        sp.priority = SEARCH_LOCATION_PRIORITY;
+        sp.object = sp.location = l;
+        sp.localeName = [NSString stringWithFormat:@"%f, %f", (float) sp.location.coordinate.latitude, (float) sp.location.coordinate.longitude];
+        sp.objectType = LOCATION;
+        sp.wordsSpan = lw;
+        [resultMatcher publish:sp];
+    }
+    else if ([phrase isNoSelectedType])
+    {
+        CLLocation *ll = [self parsePartialLocation:lw];
+        if (ll)
+        {
+            OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
+            sp.priority = SEARCH_LOCATION_PRIORITY;
+            sp.object = sp.location = ll;
+            sp.localeName = [NSString stringWithFormat:@"%f, <input> f", (float) sp.location.coordinate.latitude];
+            sp.objectType = PARTIAL_LOCATION;
+            [resultMatcher publish:sp];
+        }
+    }
+}
+
+- (BOOL) parseUrl:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    /*
+    NSString *text = [phrase getUnknownSearchPhrase];
+    GeoParsedPoint pnt = GeoPointParserUtil.parse(text);
+    if (pnt && pnt.isGeoPoint())
+    {
+        OASearchResult *sp = [[OASearchResult alloc] initWithPhrase:phrase];
+        sp.priority = 0;
+        sp.object = pnt;
+        sp.wordsSpan = text;
+        sp.location = new LatLon(pnt.getLatitude(), pnt.getLongitude());
+        sp.localeName = ((float)pnt.getLatitude()) +", " + ((float) pnt.getLongitude());
+        if(pnt.getZoom() > 0)
+            sp.preferredZoom = pnt.getZoom();
+        
+        sp.objectType = ObjectType.LOCATION;
+        [resultMatcher publish:sp];
+        return true;
+    }
+    */
+    return false;
+}
+
+-(int)getSearchPriority:(OASearchPhrase *)p
+{
+    return SEARCH_LOCATION_PRIORITY;
+}
+
+@end
+
+
 @implementation OASearchCoreFactory
 
 - (instancetype)init
@@ -1197,378 +1656,5 @@
 {
     return [p isLastWord:CITY] || [p isLastWord:POSTCODE] || [p isLastWord:VILLAGE];
 }
-
-/*
-
-public static class SearchLocationAndUrlAPI extends SearchBaseAPI {
-    
-    @Override
-    public boolean isSearchMoreAvailable(SearchPhrase phrase) {
-        return false;
-    }
-    
-    //		newFormat = PointDescription.FORMAT_DEGREES;
-    //		newFormat = PointDescription.FORMAT_MINUTES;
-    //		newFormat = PointDescription.FORMAT_SECONDS;
-    public void testUTM() {
-        double northing = 0;
-        double easting = 0;
-        String zone = "";
-        char c = zone.charAt(zone.length() -1);
-        int z = Integer.parseInt(zone.substring(0, zone.length() - 1));
-        UTMPoint upoint = new UTMPoint(northing, easting, z, c);
-        LatLonPoint ll = upoint.toLatLonPoint();
-        LatLon loc = new LatLon(ll.getLatitude(), ll.getLongitude());
-    }
-    
-    @Override
-    public boolean search(SearchPhrase phrase, SearchResultMatcher resultMatcher) throws IOException {
-        if(!phrase.isUnknownSearchWordPresent()) {
-            return false;
-        }
-        boolean parseUrl = parseUrl(phrase, resultMatcher);
-        if(!parseUrl) {
-            parseLocation(phrase, resultMatcher);
-        }
-        return super.search(phrase, resultMatcher);
-    }
-    private boolean isKindOfNumber(String s) {
-        for(int i = 0; i < s.length(); i ++) {
-            char c = s.charAt(i);
-            if(c >= '0' && c <= '9') {
-            } else if(c == ':' || c == '.' || c == '#' || c == ',' || c == '-' || c == '\'' || c == '"') {
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }
-    
-    LatLon parsePartialLocation(String s) {
-        s = s.trim();
-        if(s.length() == 0 || !(s.charAt(0) == '-' || Character.isDigit(s.charAt(0))
-                                || s.charAt(0) == 'S' || s.charAt(0) == 's' 
-                                || s.charAt(0) == 'N' || s.charAt(0) == 'n' 
-                                || s.contains("://"))) {
-            return null;
-        }
-        List<Double> d = new ArrayList<>();
-        List<Object> all = new ArrayList<>();
-        List<String> strings = new ArrayList<>();
-        splitObjects(s, d, all, strings);
-        if(d.size() == 0) {
-            return null;
-        }
-        double lat = parse1Coordinate(all, 0, all.size());
-        return new LatLon(lat, 0);
-    }
-    
-    LatLon parseLocation(String s) {
-        s = s.trim();
-        if(s.length() == 0 || !(s.charAt(0) == '-' || Character.isDigit(s.charAt(0))
-                                || s.charAt(0) == 'S' || s.charAt(0) == 's' 
-                                || s.charAt(0) == 'N' || s.charAt(0) == 'n' 
-                                || s.contains("://"))) {
-            return null;
-        }
-        List<Double> d = new ArrayList<>();
-        List<Object> all = new ArrayList<>();
-        List<String> strings = new ArrayList<>();
-        splitObjects(s, d, all, strings);
-        if(d.size() == 0) {
-            return null;
-        }
-        // detect UTM
-        if (all.size() == 4 && d.size() == 3 && all.get(1) instanceof String) {
-            char ch = all.get(1).toString().charAt(0);
-            if (Character.isLetter(ch)) {
-                UTMPoint upoint = new UTMPoint(d.get(2), d.get(1), d.get(0).intValue(), ch);
-                LatLonPoint ll = upoint.toLatLonPoint();
-                return new LatLon(ll.getLatitude(), ll.getLongitude());
-            }
-        }
-        
-        if (all.size() == 3 && d.size() == 2 && all.get(1) instanceof String) {
-            char ch = all.get(1).toString().charAt(0);
-            String combined = strings.get(2);
-            if (Character.isLetter(ch)) {
-                try {
-                    String east = combined.substring(0, combined.length() / 2);
-                    String north = combined.substring(combined.length() / 2, combined.length());
-                    UTMPoint upoint = new UTMPoint(Double.parseDouble(north), Double.parseDouble(east), d.get(0)
-                                                   .intValue(), ch);
-                    LatLonPoint ll = upoint.toLatLonPoint();
-                    return new LatLon(ll.getLatitude(), ll.getLongitude());
-                } catch (NumberFormatException e) {
-                }
-            }
-        }
-        // try to find split lat/lon position
-        int jointNumbers = 0;
-        int lastJoin = 0;
-        int degSplit = -1;
-        int degType = -1; // 0 - degree, 1 - minutes, 2 - seconds
-        boolean finishDegSplit = false;
-        int northSplit = -1;
-        int eastSplit = -1;
-        for(int i = 1; i < all.size(); i++ ) {
-            if(all.get(i - 1) instanceof Double && all.get(i) instanceof Double) {
-                jointNumbers ++;
-                lastJoin = i;
-            }
-            if(all.get(i).equals("n") || all.get(i).equals("s") || 
-               all.get(i).equals("N") || all.get(i).equals("S")) {
-                northSplit = i + 1;
-            }
-            if(all.get(i).equals("e") || all.get(i).equals("w") || 
-               all.get(i).equals("E") || all.get(i).equals("W")) {
-                eastSplit = i;
-            }
-            int dg = -1;
-            if (all.get(i).equals("°")) {
-                dg = 0;
-            } else if (all.get(i).equals("\'") || all.get(i).equals("′")) {
-                dg = 1;
-            } else if (all.get(i).equals("″") || all.get(i).equals("\"")) {
-                dg = 2;
-            }
-            if (dg != -1) {
-                if (!finishDegSplit) {
-                    if (degType < dg) {
-                        degSplit = i + 1;
-                        degType = dg;
-                    } else {
-                        finishDegSplit = true;
-                        degType = dg;
-                    }
-                } else {
-                    if (degType < dg) {
-                        degType = dg;
-                    } else {
-                        // reject delimiter
-                        degSplit = -1;
-                    }
-                }
-            }
-        }
-        int split = -1;
-        if(jointNumbers == 1) {
-            split = lastJoin;
-        }
-        if(northSplit != -1 && northSplit < all.size() -1) {
-            split = northSplit;
-        } else if(eastSplit != -1 && eastSplit < all.size() -1) {
-            split = eastSplit;
-        } else if(degSplit != -1 && degSplit < all.size() -1) {
-            split = degSplit;
-        }
-        
-        if(split != -1) {
-            double lat = parse1Coordinate(all, 0, split);
-            double lon = parse1Coordinate(all, split, all.size());
-            return new LatLon(lat, lon);
-        }
-        if(d.size() == 2) {
-            return new LatLon(d.get(0), d.get(1));
-        }
-        // simple url case
-        if (s.contains("://")) {
-            double lat = 0;
-            double lon = 0;
-            boolean only2decimals = true;
-            for (int i = 0; i < d.size(); i++) {
-                if (d.get(i).doubleValue() != d.get(i).intValue()) {
-                    if (lat == 0) {
-                        lat = d.get(i);
-                    } else if (lon == 0) {
-                        lon = d.get(i);
-                    } else {
-                        only2decimals = false;
-                    }
-                }
-            }
-            if (lat != 0 && lon != 0 && only2decimals) {
-                return new LatLon(lat, lon);
-            }
-        }
-        // split by equal number of digits
-        if (d.size() > 2 && d.size() % 2 == 0) {
-            int ind = d.size() / 2 + 1;
-            int splitEq = -1;
-            for (int i = 0; i < all.size(); i++) {
-                if(all.get(i) instanceof Double) {
-                    ind --;
-                }
-                if(ind == 0) {
-                    splitEq = i;
-                    break;
-                }
-            }
-            if (splitEq != -1) {
-                double lat = parse1Coordinate(all, 0, splitEq);
-                double lon = parse1Coordinate(all, splitEq, all.size());
-                return new LatLon(lat, lon);
-            }
-        }
-        return null;
-        
-    }
-    
-    public double parse1Coordinate(List<Object> all, int begin, int end) {
-        boolean neg = false;
-        double d = 0;
-        int type = 0; // degree - 0, minutes - 1, seconds = 2
-        Double prevDouble = null;
-        for(int i = begin; i <= end; i++) {
-            Object o = i == end ? "" : all.get(i);
-            if(o.equals("S") || o.equals("W"))  {
-                neg = !neg;
-            }
-            if (prevDouble != null) {
-                if(o.equals("°")) {
-                    type = 0;
-                } else if(o.equals("′")) { //o.equals("'")
-                    // ' can be used as delimeter ignore it
-                    type = 1;
-                } else if(o.equals("\"") || o.equals("″")) {
-                    type = 2;
-                }
-                if (type == 0) {
-                    double ld = prevDouble.doubleValue();
-                    if(ld < 0) {
-                        ld = -ld;
-                        neg = true;
-                    }
-                    d += ld;
-                } else if (type == 1) {
-                    d += prevDouble.doubleValue() / 60.f;
-                } else { //if (type == 1)
-                    d += prevDouble.doubleValue() / 3600.f;
-                }
-                type++;
-            }
-            if(o instanceof Double) {
-                prevDouble = (Double) o;
-            } else {
-                prevDouble = null;
-            }
-        }
-        if(neg) {
-            d = -d;
-        }
-        return d;
-    }
-    
-    private void splitObjects(String s, List<Double> d, List<Object> all, List<String> strings) {
-        boolean digit = false;
-        int word = -1;
-        for(int i = 0; i <= s.length(); i++) {
-            char ch = i == s.length() ? ' ' : s.charAt(i);
-            boolean dg = Character.isDigit(ch);
-            boolean nonwh = ch != ',' && ch != ' ' && ch != ';';
-            if (ch == '.' || dg || ch == '-' ) {
-                if(!digit) {
-                    if(word != -1) {
-                        all.add(s.substring(word, i));
-                        strings.add(s.substring(word, i));
-                    }
-                    digit = true;
-                    word = i;
-                } else {
-                    if(word == -1) {
-                        word = i;
-                    }
-                    // if digit
-                    // continue
-                }
-            } else {
-                if(digit){
-                    try {
-                        double dl = Double.parseDouble(s.substring(word, i));
-                        d.add(dl);
-                        all.add(dl);
-                        strings.add(s.substring(word, i));
-                        digit = false;
-                        word = -1;
-                    } catch (NumberFormatException e) {
-                    }
-                }
-                if(nonwh) {
-                    if(!Character.isLetter(ch)) {
-                        if(word != -1) {
-                            all.add(s.substring(word, i));
-                            strings.add(s.substring(word, i));
-                        }
-                        all.add(s.substring(i, i + 1));
-                        strings.add(s.substring(i, i +1));
-                        word = -1;
-                    } else if(word == -1) {
-                        word = i;
-                    } 
-                } else {
-                    if(word != -1) {
-                        all.add(s.substring(word, i));
-                        strings.add(s.substring(word, i));
-                    }
-                    word = -1;
-                }
-            }
-        }
-    }
-    
-    private void parseLocation(SearchPhrase phrase, SearchResultMatcher resultMatcher) {
-        String lw = phrase.getUnknownSearchPhrase();
-        LatLon l = parseLocation(lw);
-        if (l != null) {
-            SearchResult sp = new SearchResult(phrase);
-            sp.priority = SEARCH_LOCATION_PRIORITY;
-            sp.object = sp.location = l;
-            sp.localeName = ((float) sp.location.getLatitude()) + ", " + ((float) sp.location.getLongitude());
-            sp.objectType = ObjectType.LOCATION;
-            sp.wordsSpan = lw;
-            resultMatcher.publish(sp);
-        } else if (phrase.isNoSelectedType()) {
-            LatLon ll = parsePartialLocation(lw);
-            if (ll != null) {
-                SearchResult sp = new SearchResult(phrase);
-                sp.priority = SEARCH_LOCATION_PRIORITY;
-                
-                sp.object = sp.location = ll;
-                sp.localeName = ((float) sp.location.getLatitude()) + ", <input> ";
-                sp.objectType = ObjectType.PARTIAL_LOCATION;
-                resultMatcher.publish(sp);
-            }
-        }
-    }
-    
-    
-    
-    private boolean parseUrl(SearchPhrase phrase, SearchResultMatcher resultMatcher) {
-        String text = phrase.getUnknownSearchPhrase();
-        GeoParsedPoint pnt = GeoPointParserUtil.parse(text);
-        if(pnt != null && pnt.isGeoPoint()) {
-            SearchResult sp = new SearchResult(phrase);
-            sp.priority = 0;
-            sp.object = pnt;
-            sp.wordsSpan = text;
-            sp.location = new LatLon(pnt.getLatitude(), pnt.getLongitude());
-            sp.localeName = ((float)pnt.getLatitude()) +", " + ((float) pnt.getLongitude());
-            if(pnt.getZoom() > 0) {
-                sp.preferredZoom = pnt.getZoom();
-            }
-            sp.objectType = ObjectType.LOCATION;
-            resultMatcher.publish(sp);
-            return true;
-        }
-        return false;
-    }
-    
-    @Override
-    public int getSearchPriority(SearchPhrase p) {
-        return SEARCH_LOCATION_PRIORITY;
-    }
-}
-
- */
 
 @end

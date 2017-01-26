@@ -42,6 +42,10 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchBaseAPI : OASearchCoreAPI
 
+-(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
+-(int)getSearchPriority:(OASearchPhrase *)p;
+-(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase;
+
 @end
 
 //@interface OASearchRegionByNameAPI : OASearchBaseAPI

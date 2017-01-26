@@ -1806,6 +1806,8 @@
 		84C0FB1D1AF3B86200D4BAF8 /* InfoWidgetsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C0FB1A1AF3B86200D4BAF8 /* InfoWidgetsView.m */; };
 		84C0FB211AF3B87900D4BAF8 /* InfoWidgetsView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */; };
 		84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
+		84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
+		84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
 		84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */; };
 		84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */; };
 		84C41DD71AB8600D0089EABB /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */; };
@@ -3042,6 +3044,7 @@
 		84C0FB1E1AF3B87900D4BAF8 /* InfoWidgetsView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = InfoWidgetsView.xib; path = Resources/Views/InfoWidgetsView.xib; sourceTree = "<group>"; };
 		84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursParser.h; path = Helpers/OAOpeningHoursParser.h; sourceTree = "<group>"; };
 		84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOpeningHoursParser.m; path = Helpers/OAOpeningHoursParser.m; sourceTree = "<group>"; };
+		84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGeographicLib_STATIC.a; path = "../../osmand/binaries/ios.clang-iphonesimulator/Debug/libGeographicLib_STATIC.a"; sourceTree = "<group>"; };
 		84C3D83C1B28ABB800C1507E /* OAMapSettingsLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.h; sourceTree = "<group>"; };
 		84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsLanguageScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.mm; sourceTree = "<group>"; };
 		84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsPreferredLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsPreferredLanguageScreen.h; sourceTree = "<group>"; };
@@ -3492,6 +3495,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
 				847A1D761DF94E9B003C1246 /* FirebaseAnalytics.framework in Frameworks */,
 				847A1D771DF94E9B003C1246 /* EventKit.framework in Frameworks */,
 				847A1D781DF94E9B003C1246 /* libexpat_static.a in Frameworks */,
@@ -3531,6 +3535,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */,
 				84F1F9B61DE82E30001AA520 /* FirebaseAnalytics.framework in Frameworks */,
 				84EE2D951AFB8F91007C9A94 /* EventKit.framework in Frameworks */,
 				8440E2DA1ABEA7370088856A /* libexpat_static.a in Frameworks */,
@@ -4945,6 +4950,7 @@
 		BB098CF31793F7FD00423944 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */,
 				84F1F9B51DE82E30001AA520 /* FirebaseAnalytics.framework */,
 				84EE2D941AFB8F91007C9A94 /* EventKit.framework */,
 				8440E2D11ABEA7360088856A /* libexpat_static.a */,
@@ -7956,6 +7962,7 @@
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
+					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";
@@ -8024,6 +8031,7 @@
 					"${PROJECT_DIR}/../core/externals/glm/upstream.patched",
 					"${PROJECT_DIR}/../core/externals/boost/upstream.patched",
 					/usr/include/libxml2,
+					"${PROJECT_DIR}/../core/externals/geographiclib/upstream.patched/include",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/Resources/OsmAnd-Info.plist";
 				INFOPLIST_PREFIX_HEADER = "";

@@ -497,3 +497,12 @@
 "skip_map_downloading_desc" = "Non tenes mapas non in lìnia installadas. Podes isseberare una mapa dae sa lista o iscarrigare mapas prus a tardu pro mèdiu de Menù - Amministra sos documentos de sas mapas";
 "items_selected" = "%d ischertada(s)";
 "shared_string_save_as" = "Sarba comente";
+"shared_string_from" = "dae";
+"city_type_suburb" = "Trighinzu - apendìtziu";
+"city_type_hamlet" = "Bidditzolu";
+"city_type_village" = "Bidda";
+"city_type_town" = "Tzidadina";
+"city_type_city" = "Tzitade";
+"city_type_district" = "Distretu";
+"city_type_neighbourhood" = "Bighinadu";
+"postcode" = "Còdighe postale";

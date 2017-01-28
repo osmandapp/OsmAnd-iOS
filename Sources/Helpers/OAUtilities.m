@@ -66,6 +66,16 @@
     return ([[[UIDevice currentDevice] systemVersion] compare:testVersion options:NSNumericSearch] == NSOrderedSame);
 }
 
++ (NSComparisonResult)compareInt:(int)x y:(int)y
+{
+    return (x < y) ? NSOrderedAscending : ((x == y) ? NSOrderedSame : NSOrderedDescending);
+}
+
++ (NSComparisonResult)compareDouble:(double)x y:(double)y
+{
+    return [[NSNumber numberWithDouble:x] compare:[NSNumber numberWithDouble:y]];
+}
+
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image
 {
     if (!image)

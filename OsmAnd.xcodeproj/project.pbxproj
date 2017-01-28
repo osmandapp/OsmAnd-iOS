@@ -1808,6 +1808,8 @@
 		84C3863B1C9EBB7F0080E245 /* OAOpeningHoursParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */; };
 		84C3C1801E3A1D0F000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
 		84C3C1811E3A1D1E000C77A5 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */; };
+		84C3C1841E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */; };
+		84C3C1851E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */; };
 		84C3D8401B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */; };
 		84C3D8451B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84C3D8421B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.mm */; };
 		84C41DD71AB8600D0089EABB /* follow_map_mode_button.png in Resources */ = {isa = PBXBuildFile; fileRef = 84C41DAA1AB8600C0089EABB /* follow_map_mode_button.png */; };
@@ -3045,6 +3047,8 @@
 		84C386371C9EBB7F0080E245 /* OAOpeningHoursParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAOpeningHoursParser.h; path = Helpers/OAOpeningHoursParser.h; sourceTree = "<group>"; };
 		84C386381C9EBB7F0080E245 /* OAOpeningHoursParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OAOpeningHoursParser.m; path = Helpers/OAOpeningHoursParser.m; sourceTree = "<group>"; };
 		84C3C17F1E3A1D0F000C77A5 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGeographicLib_STATIC.a; path = "../../osmand/binaries/ios.clang-iphonesimulator/Debug/libGeographicLib_STATIC.a"; sourceTree = "<group>"; };
+		84C3C1821E3B88F2000C77A5 /* OAQuickSearchHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickSearchHelper.h; path = Search/OAQuickSearchHelper.h; sourceTree = "<group>"; };
+		84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAQuickSearchHelper.mm; path = Search/OAQuickSearchHelper.mm; sourceTree = "<group>"; };
 		84C3D83C1B28ABB800C1507E /* OAMapSettingsLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.h; sourceTree = "<group>"; };
 		84C3D83D1B28ABB800C1507E /* OAMapSettingsLanguageScreen.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAMapSettingsLanguageScreen.mm; path = Sources/Controllers/2.0/OAMapSettingsLanguageScreen.mm; sourceTree = "<group>"; };
 		84C3D8411B28BD3B00C1507E /* OAMapSettingsPreferredLanguageScreen.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAMapSettingsPreferredLanguageScreen.h; path = Sources/Controllers/2.0/OAMapSettingsPreferredLanguageScreen.h; sourceTree = "<group>"; };
@@ -4509,6 +4513,8 @@
 				845AFB5A1E264EE800170026 /* OASearchUICore.mm */,
 				840021451E28D4D70035F944 /* OASearchResultMatcher.h */,
 				840021461E28D4D70035F944 /* OASearchResultMatcher.mm */,
+				84C3C1821E3B88F2000C77A5 /* OAQuickSearchHelper.h */,
+				84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -7317,6 +7323,7 @@
 				847A1CB01DF94E9B003C1246 /* OADownloadTask_AFURLSessionManager.m in Sources */,
 				847A1CB11DF94E9B003C1246 /* OAMapViewState.m in Sources */,
 				847A1CB21DF94E9B003C1246 /* OATargetMenuViewController.mm in Sources */,
+				84C3C1851E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
 				84BEEE521DFF021000750848 /* OATargetMultiView.mm in Sources */,
 				847A1CB31DF94E9B003C1246 /* OAFirstUsageWelcomeController.m in Sources */,
 				847A1CB41DF94E9B003C1246 /* OAManageResourcesViewController.mm in Sources */,
@@ -7682,6 +7689,7 @@
 				84686AD31E0AA68800DA09BC /* OAPOIFiltersHelper.mm in Sources */,
 				BBA3B00719864A730039D991 /* OAOutdatedResourcesViewController.mm in Sources */,
 				84387B3A1ABCABC600504DA7 /* OAIconTextDescCell.m in Sources */,
+				84C3C1841E3B88F2000C77A5 /* OAQuickSearchHelper.mm in Sources */,
 				BBA3AF57197FC4BB0039D991 /* OAUserInteractionPassThroughView.m in Sources */,
 				84686AB01E05282500DA09BC /* OACategoriesTableViewController.mm in Sources */,
 				846F035A1E12550D00DB4772 /* OAIconButtonCell.m in Sources */,

@@ -52,7 +52,11 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 //
 //@end
 
+@class OASearchStreetByCityAPI, OASearchBuildingAndIntersectionsByStreetAPI, OACustomSearchPoiFilter;
+
 @interface OASearchAddressByNameAPI : OASearchBaseAPI
+
+- (instancetype)initWithCityApi:(OASearchStreetByCityAPI *)cityApi streetsApi:(OASearchBuildingAndIntersectionsByStreetAPI *)streetsApi;
 
 @end
 
@@ -62,6 +66,9 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
 @interface OASearchAmenityTypesAPI : OASearchBaseAPI
 
+- (void) clearCustomFilters;
+- (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority;
+
 @end
 
 @interface OASearchAmenityByTypeAPI : OASearchBaseAPI
@@ -69,6 +76,8 @@ static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 @end
 
 @interface OASearchStreetByCityAPI : OASearchBaseAPI
+
+- (instancetype)initWithAPI:(OASearchBuildingAndIntersectionsByStreetAPI *) streetsAPI;
 
 @end
 

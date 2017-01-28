@@ -38,6 +38,9 @@ alpha:((float)((rgbValue & 0xFF))/255.0)]
 
 + (void)clearTmpDirectory;
 
++ (NSComparisonResult)compareInt:(int)x y:(int)y;
++ (NSComparisonResult)compareDouble:(double)x y:(double)y;
+
 + (UIImage *)getMxIcon:(NSString *)name;
 + (UIImage *)applyScaleFactorToImage:(UIImage *)image;
 + (NSString *)drawablePostfix;

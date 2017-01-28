@@ -26,6 +26,7 @@
 "shared_string_later" = "Later";
 "shared_string_of" = "of";
 "shared_string_all" = "All";
+"shared_string_from" = "from";
 
 "offline_maps" = "Offline Maps";
 "download_map" = "Download map";
@@ -576,5 +577,14 @@
 "edit_filter_delete_dialog_title" = "Delete selected filter?";
 "apply_filters" = "Apply filters";
 "filter_poi_hint" = "Filter by name";
+
+"city_type_suburb" = "Suburb";
+"city_type_hamlet" = "Hamlet";
+"city_type_village" = "Village";
+"city_type_town" = "Town";
+"city_type_city" = "City";
+"city_type_district" = "District";
+"city_type_neighbourhood" = "Neighbourhood";
+"postcode" = "Postcode";
 
 

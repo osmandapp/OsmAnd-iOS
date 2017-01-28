@@ -42,6 +42,7 @@
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"
+#import "OAQuickSearchHelper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include "OAHillshadeMapLayerProvider.h"
@@ -4158,6 +4159,10 @@
     }
 }
 
+- (void) setWptData:(OASearchWptAPI *)wptApi
+{
+    [wptApi setWptData:_geoInfoDocsGpx paths:_geoInfoDocsGpxPaths];
+}
 -(void)buildGpxInfoDocList
 {
     NSMutableArray *paths = [NSMutableArray array];

@@ -17,9 +17,9 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
+#import "OARootViewController.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/GeoInfoDocument.h>
 
 static const int SEARCH_FAVORITE_API_PRIORITY = 50;
 static const int SEARCH_FAVORITE_API_CATEGORY_PRIORITY = 50;
@@ -106,6 +106,22 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 
 
 @implementation OASearchWptAPI
+{
+    QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> _geoDocList;
+    NSArray *_paths;
+}
+
+- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>&)geoDocList paths:(NSArray *)paths
+{
+    _geoDocList.append(geoDocList);
+    _paths = [NSArray arrayWithArray:paths];
+}
+
+- (void) resetWptData
+{
+    _geoDocList.clear();
+    _paths = nil;
+}
 
 -(BOOL)isSearchMoreAvailable:(OASearchPhrase *)phrase
 {
@@ -117,8 +133,10 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     if ([phrase isEmpty])
         return NO;
     
-    QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>> list;
-    for (const auto& gpx : list)
+    [[OARootViewController instance].mapPanel.mapViewController setWptData:self];
+
+    int i = 0;
+    for (const auto& gpx : _geoDocList)
     {
         for (const auto& point : gpx->locationMarks)
         {
@@ -129,6 +147,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             sr.objectType = WPT;
             sr.location = [[CLLocation alloc] initWithLatitude:point->position.latitude longitude:point->position.longitude];
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
+            sr.localeRelatedObjectName = _paths.count < i ? [_paths[i] lastPathComponent] : @"GPX";
             sr.relatedGpx = gpx;
             sr.preferredZoom = 17;
             if ([phrase getUnknownSearchWordLength] <= 1 && [phrase isNoSelectedType])
@@ -136,6 +155,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
             else if ([[phrase getNameStringMatcher] matches:sr.localeName])
                 [resultMatcher publish:sr];
         }
+        i++;
     }
     return YES;
 }
@@ -195,6 +215,17 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 {
     OASearchUICore *_core;
     OASearchResultCollection *_resultCollection;
+}
+
++ (OAQuickSearchHelper *)instance
+{
+    static dispatch_once_t once;
+    static OAQuickSearchHelper * sharedInstance;
+    dispatch_once(&once, ^{
+        sharedInstance = [[self alloc] init];
+        [sharedInstance initSearchUICore];
+    });
+    return sharedInstance;
 }
 
 - (instancetype)init

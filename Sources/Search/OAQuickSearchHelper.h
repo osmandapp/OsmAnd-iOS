@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "OASearchCoreFactory.h"
 
+#include <OsmAndCore.h>
+#include <OsmAndCore/GeoInfoDocument.h>
+
 @class OASearchUICore, OASearchResultCollection;
 
 @interface OASearchFavoritesAPI : OASearchBaseAPI
@@ -21,6 +24,8 @@
 
 @interface OASearchWptAPI : OASearchBaseAPI
 
+- (void) setWptData:(QList<std::shared_ptr<const OsmAnd::GeoInfoDocument>>&)geoDocList paths:(NSArray *)paths;
+
 @end
 
 @interface OASearchHistoryAPI : OASearchBaseAPI
@@ -30,10 +35,11 @@
 
 @interface OAQuickSearchHelper : NSObject
 
++ (OAQuickSearchHelper *)instance;
+
 - (OASearchUICore *) getCore;
 - (OASearchResultCollection *) getResultCollection;
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection;
-- (void) initSearchUICore;
 - (void) refreshCustomPoiFilters;
 
 @end

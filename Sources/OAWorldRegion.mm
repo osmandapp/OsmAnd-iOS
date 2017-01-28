@@ -525,5 +525,30 @@
     return [NSArray arrayWithArray:res];
 }
 
+- (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude
+{
+    NSMutableArray<OAWorldRegion *> *mapRegions = [[self queryAtLat:latitude lon:longitude] mutableCopy];
+    
+    OAWorldRegion *selectedRegion = nil;
+    if (mapRegions.count > 0)
+    {
+        [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![region contain:latitude lon:longitude])
+                [mapRegions removeObject:region];
+        }];
+        
+        double smallestArea = DBL_MAX;
+        for (OAWorldRegion *region : mapRegions)
+        {
+            double area = [region getArea];
+            if (area < smallestArea)
+            {
+                smallestArea = area;
+                selectedRegion = region;
+            }
+        }
+    }
+    return selectedRegion;
+}
 
 @end

@@ -419,6 +419,12 @@
 		84451A371AA050B3003F4D8D /* ic_close@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84451A2E1AA050B3003F4D8D /* ic_close@3x.png */; };
 		844D203C1E364F7600AC5626 /* icudt52l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 844D203B1E364F7600AC5626 /* icudt52l.dat */; };
 		844D203D1E364F8C00AC5626 /* icudt52l.dat in Resources */ = {isa = PBXBuildFile; fileRef = 844D203B1E364F7600AC5626 /* icudt52l.dat */; };
+		844E079C1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E079A1E3C82F400EFC525 /* OAQuickSearchViewController.mm */; };
+		844E079D1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E079A1E3C82F400EFC525 /* OAQuickSearchViewController.mm */; };
+		844E079E1E3C82F400EFC525 /* OAQuickSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E079B1E3C82F400EFC525 /* OAQuickSearchViewController.xib */; };
+		844E079F1E3C82F400EFC525 /* OAQuickSearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 844E079B1E3C82F400EFC525 /* OAQuickSearchViewController.xib */; };
+		844E07A21E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E07A11E3CC46800EFC525 /* OAQuickSearchListItem.mm */; };
+		844E07A31E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 844E07A11E3CC46800EFC525 /* OAQuickSearchListItem.mm */; };
 		844F32AB1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AC1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AE1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m */; };
@@ -2612,6 +2618,11 @@
 		84451A2D1AA050B3003F4D8D /* ic_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_close@2x.png"; path = "Resources/Icons/ic_close@2x.png"; sourceTree = "<group>"; };
 		84451A2E1AA050B3003F4D8D /* ic_close@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_close@3x.png"; path = "Resources/Icons/ic_close@3x.png"; sourceTree = "<group>"; };
 		844D203B1E364F7600AC5626 /* icudt52l.dat */ = {isa = PBXFileReference; lastKnownFileType = file; name = icudt52l.dat; path = ../resources/misc/icu4c/icudt52l.dat; sourceTree = "<group>"; };
+		844E07991E3C82F400EFC525 /* OAQuickSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickSearchViewController.h; path = Sources/Controllers/2.0/OAQuickSearchViewController.h; sourceTree = "<group>"; };
+		844E079A1E3C82F400EFC525 /* OAQuickSearchViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAQuickSearchViewController.mm; path = Sources/Controllers/2.0/OAQuickSearchViewController.mm; sourceTree = "<group>"; };
+		844E079B1E3C82F400EFC525 /* OAQuickSearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAQuickSearchViewController.xib; path = Sources/Controllers/2.0/OAQuickSearchViewController.xib; sourceTree = "<group>"; };
+		844E07A01E3CC46800EFC525 /* OAQuickSearchListItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAQuickSearchListItem.h; path = Sources/Controllers/2.0/OAQuickSearchListItem.h; sourceTree = "<group>"; };
+		844E07A11E3CC46800EFC525 /* OAQuickSearchListItem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAQuickSearchListItem.mm; path = Sources/Controllers/2.0/OAQuickSearchListItem.mm; sourceTree = "<group>"; };
 		844F32A91E0D685D00B5CDBC /* OASearchPoiTypeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchPoiTypeFilter.h; sourceTree = "<group>"; };
 		844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASearchPoiTypeFilter.m; sourceTree = "<group>"; };
 		844F32AD1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACustomSearchPoiFilter.h; sourceTree = "<group>"; };
@@ -4488,6 +4499,11 @@
 				8474AB921E1CD73000355F88 /* OAPOIFilterViewController.h */,
 				8474AB931E1CD73000355F88 /* OAPOIFilterViewController.mm */,
 				8474AB941E1CD73000355F88 /* OAPOIFilterViewController.xib */,
+				844E07991E3C82F400EFC525 /* OAQuickSearchViewController.h */,
+				844E079A1E3C82F400EFC525 /* OAQuickSearchViewController.mm */,
+				844E079B1E3C82F400EFC525 /* OAQuickSearchViewController.xib */,
+				844E07A01E3CC46800EFC525 /* OAQuickSearchListItem.h */,
+				844E07A11E3CC46800EFC525 /* OAQuickSearchListItem.mm */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -4513,8 +4529,6 @@
 				845AFB5A1E264EE800170026 /* OASearchUICore.mm */,
 				840021451E28D4D70035F944 /* OASearchResultMatcher.h */,
 				840021461E28D4D70035F944 /* OASearchResultMatcher.mm */,
-				84C3C1821E3B88F2000C77A5 /* OAQuickSearchHelper.h */,
-				84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */,
 			);
 			name = Search;
 			sourceTree = "<group>";
@@ -5382,6 +5396,8 @@
 		BBAD5B97192733820043590F /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				84C3C1821E3B88F2000C77A5 /* OAQuickSearchHelper.h */,
+				84C3C1831E3B88F2000C77A5 /* OAQuickSearchHelper.mm */,
 				841766381B721E58002A08CB /* NSData+CRC32.h */,
 				841766391B721E58002A08CB /* NSData+CRC32.m */,
 				842432641AF0BC0300925821 /* OASavingTrackHelper.h */,
@@ -6069,6 +6085,7 @@
 				847A1F541DF94E9B003C1246 /* ic_favorite_8@2x.png in Resources */,
 				847A1F551DF94E9B003C1246 /* waypoint_map_disable.png in Resources */,
 				847A1F561DF94E9B003C1246 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
+				844E079F1E3C82F400EFC525 /* OAQuickSearchViewController.xib in Resources */,
 				847A1F571DF94E9B003C1246 /* ic_favorite_2@3x.png in Resources */,
 				847A1F581DF94E9B003C1246 /* ic_dialog_edit.png in Resources */,
 				847A1F591DF94E9B003C1246 /* ic_mode_pedestrian@2x.png in Resources */,
@@ -6808,6 +6825,7 @@
 				8434BAB91B175AB7003FD0FC /* ic_poi_info_dots@2x.png in Resources */,
 				849E81B11AFA5D6700549953 /* btn_map_type_icon_walk_selected.png in Resources */,
 				84C41DDA1AB8600D0089EABB /* follow_map_mode_button@2x.png in Resources */,
+				844E079E1E3C82F400EFC525 /* OAQuickSearchViewController.xib in Resources */,
 				84E2DB581AB720FA001A7FEC /* left_menu_icon_about.png in Resources */,
 				8412224B1B39CC5200F80F9E /* map_car_bearing.png in Resources */,
 				843E5CD81AB341E000BE14BE /* icon_edit.png in Resources */,
@@ -7306,6 +7324,7 @@
 				847A20A01DF95238003C1246 /* OADebugSettings.h in Sources */,
 				847A20A11DF95238003C1246 /* OADebugSettings.mm in Sources */,
 				847A209C1DF951F2003C1246 /* OADebugActionsViewController.h in Sources */,
+				844E07A31E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
 				847A209D1DF951F2003C1246 /* OADebugActionsViewController.mm in Sources */,
 				847A209E1DF951F2003C1246 /* OADebugHudViewController.h in Sources */,
 				847A209F1DF951F2003C1246 /* OADebugHudViewController.mm in Sources */,
@@ -7439,6 +7458,7 @@
 				847A1D141DF94E9B003C1246 /* OAGPXElevationTableViewCell.m in Sources */,
 				84BEEE4E1DFEF7A700750848 /* OATargetPointViewCell.mm in Sources */,
 				847A1D151DF94E9B003C1246 /* QuickDialogTableView+ElementByIndexAccessor.m in Sources */,
+				844E079D1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
 				845AFB481E261E9000170026 /* OASearchPhrase.mm in Sources */,
 				847A1D161DF94E9B003C1246 /* OALog.mm in Sources */,
 				847A1D171DF94E9B003C1246 /* OADirectionsCardController.mm in Sources */,
@@ -7661,6 +7681,7 @@
 				848D17581B1C97C100A656F4 /* OAColorViewCell.m in Sources */,
 				84BFC2341A98DD1500D807B4 /* OAMapSettingsMapTypeScreen.mm in Sources */,
 				BBA3B02A19880DEC0039D991 /* OANavigationController.m in Sources */,
+				844E079C1E3C82F400EFC525 /* OAQuickSearchViewController.mm in Sources */,
 				8431CF441CEEF58500018C9C /* OAPOIBaseType.m in Sources */,
 				8474AB951E1CD73000355F88 /* OAPOIFilterViewController.mm in Sources */,
 				BBA3AF4D197FC4BB0039D991 /* OABrowseMapAppModeHudViewController.mm in Sources */,
@@ -7779,6 +7800,7 @@
 				849E81401AFA158D00549953 /* OADateTimePickerTableViewCell.m in Sources */,
 				84772BB21E0AE32100E65884 /* OACollatorStringMatcher.m in Sources */,
 				84F989421B515569009C443C /* OADestinationCardBaseController.mm in Sources */,
+				844E07A21E3CC46800EFC525 /* OAQuickSearchListItem.mm in Sources */,
 				3AC639E01A1FAA6F001D5E57 /* OAViewTextTableViewCell.m in Sources */,
 				840021471E28D4D70035F944 /* OASearchResultMatcher.mm in Sources */,
 				BBA3AF64197FC4BB0039D991 /* OAQColorPickerElement.m in Sources */,

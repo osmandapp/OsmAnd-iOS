@@ -32,6 +32,7 @@
 #import "OAHillshadeLayer.h"
 #import "OAMapCreatorHelper.h"
 #import "OAOcbfHelper.h"
+#import "OAQuickSearchHelper.h"
 
 #include <algorithm>
 
@@ -323,6 +324,7 @@
     [OAManageResourcesViewController prepareData];
     
     [OAPOIHelper sharedInstance];
+    [OAQuickSearchHelper instance];
     
     _appMode = OAAppModeBrowseMap;
     _appModeObservable = [[OAObservable alloc] init];

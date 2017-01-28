@@ -53,7 +53,7 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 @class OAGpxMetadata;
 @class OAGPXRouteDocument;
 @class OAPOIUIFilter;
-
+@class OASearchWptAPI;
 
 @interface OAMapSymbol : NSObject
 
@@ -162,6 +162,8 @@ typedef NS_ENUM(NSInteger, OAMapSymbolType)
 - (BOOL)deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL)updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
 - (BOOL)updateMetadata:(OAGpxMetadata *)metadata docPath:(NSString *)docPath;
+
+- (void) setWptData:(OASearchWptAPI *)wptApi;
 
 + (void)postTargetNotification:(NSArray<OAMapSymbol *> *)symbolArray latitude:(double)latitude longitude:(double)longitude;
 + (void)postTargetNotification:(OAMapSymbol *)symbol;

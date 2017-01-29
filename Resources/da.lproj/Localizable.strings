@@ -505,3 +505,12 @@
 "edit_filter_delete_dialog_title" = "Slet det valgte filter?";
 "apply_filters" = "Anvend filtre";
 "filter_poi_hint" = "Filtrer efter navn";
+"postcode" = "Postnummer";
+"shared_string_from" = "fra";
+"city_type_district" = "Distrikt";
+"city_type_neighbourhood" = "Kvarter";
+"city_type_suburb" = "Forstad";
+"city_type_hamlet" = "lille landsby";
+"city_type_village" = "Landsby";
+"city_type_town" = "By";
+"city_type_city" = "Stor by";

@@ -505,3 +505,12 @@
 "edit_filter_delete_dialog_title" = "Voleu eliminar el filtre seleccionat?";
 "apply_filters" = "Aplica els filtres";
 "filter_poi_hint" = "Filtre per nom";
+"shared_string_from" = "des de";
+"city_type_suburb" = "Barri";
+"city_type_hamlet" = "Llogaret";
+"city_type_village" = "Vila";
+"city_type_town" = "Poble";
+"city_type_city" = "Ciutat";
+"city_type_district" = "Districte";
+"city_type_neighbourhood" = "Barri";
+"postcode" = "Codi postal";

@@ -474,7 +474,7 @@
 "get_started" = "Erste Schritte";
 "first_usage_wizard_desc" = "Lass OsmAnd den Standort bestimmen und Karten zum Herunterladen für die aktuelle Region vorschlagen.";
 "location_not_found" = "Position nicht gefunden";
-"search_my_location" = "Meinen Standort suchen";
+"search_my_location" = "Meinen Standort bestimmen";
 "no_inet_connection" = "Keine Internetverbindung";
 "no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
 "try_again" = "Erneut versuchen";

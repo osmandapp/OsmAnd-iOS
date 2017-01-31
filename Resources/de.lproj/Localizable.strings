@@ -472,7 +472,7 @@
 "shared_string_select" = "Auswählen";
 "first_usage_greeting" = "Erhalten Sie Wegbeschreibungen und entdecken Sie neue Orte ohne Internetverbindung";
 "get_started" = "Erste Schritte";
-"first_usage_wizard_desc" = "Lassen Sie OsmAnd Ihren Standort bestimmen und Karten für diese Region zum Herunterladen vorschlagen.";
+"first_usage_wizard_desc" = "Lass OsmAnd den Standort bestimmen und Karten zum Herunterladen für die aktuelle Region vorschlagen.";
 "location_not_found" = "Position nicht gefunden";
 "search_my_location" = "Meinen Standort suchen";
 "no_inet_connection" = "Keine Internetverbindung";

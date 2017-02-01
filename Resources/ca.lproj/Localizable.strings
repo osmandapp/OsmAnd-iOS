@@ -514,3 +514,9 @@
 "city_type_district" = "Districte";
 "city_type_neighbourhood" = "Barri";
 "postcode" = "Codi postal";
+"show_something_on_map" = "Mostra %@ en el mapa";
+"search_POI_level_btn" = "Cerca'n més";
+"shared_string_street" = "Carrer";
+"shared_string_building" = "Edifici";
+"shared_string_street_intersection" = "Cruïlla";
+"shared_string_address" = "Adreça";

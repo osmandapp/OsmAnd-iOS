@@ -586,5 +586,11 @@
 "city_type_district" = "District";
 "city_type_neighbourhood" = "Neighbourhood";
 "postcode" = "Postcode";
+"show_something_on_map" = "Show %@ on the map";
+"search_POI_level_btn" = "Find more";
 
+"shared_string_street" = "Street";
+"shared_string_building" = "Building";
+"shared_string_street_intersection" = "Street intersection";
+"shared_string_address" = "Address";
 

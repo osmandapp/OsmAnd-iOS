@@ -30,6 +30,7 @@
 @property (weak, nonatomic) id<OAHistoryTableDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame;
+
 - (void)reloadData;
 - (void)updateDistanceAndDirection;
 

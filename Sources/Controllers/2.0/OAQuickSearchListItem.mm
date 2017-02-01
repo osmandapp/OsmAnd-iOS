@@ -22,6 +22,7 @@
 #import "OAPOI.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAWorldRegion.h"
+#import "OAStreet.h"
 
 #include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Street.h>
@@ -32,6 +33,7 @@
 @implementation OAQuickSearchListItem
 {
     OASearchResult *_searchResult;
+    OADistanceDirection *_distanceDirection;
 }
 
 - (instancetype)initWithSearchResult:(OASearchResult *)searchResult
@@ -40,7 +42,8 @@
     if (self)
     {
         _searchResult = searchResult;
-        
+        if (searchResult.location)
+            _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude];
     }
     return self;
 }
@@ -50,23 +53,23 @@
     return _searchResult;
 }
 
-+ (NSString *) getCityTypeStr:(OsmAnd::ObfAddressStreetGroupSubtype)type
++ (NSString *) getCityTypeStr:(EOACitySubType)type
 {
     switch (type)
     {
-        case OsmAnd::ObfAddressStreetGroupSubtype::City:
+        case CITY_SUBTYPE_CITY:
             return OALocalizedString(@"city_type_city");
-        case OsmAnd::ObfAddressStreetGroupSubtype::Town:
+        case CITY_SUBTYPE_TOWN:
             return OALocalizedString(@"city_type_town");
-        case OsmAnd::ObfAddressStreetGroupSubtype::Village:
+        case CITY_SUBTYPE_VILLAGE:
             return OALocalizedString(@"city_type_village");
-        case OsmAnd::ObfAddressStreetGroupSubtype::Hamlet:
+        case CITY_SUBTYPE_HAMLET:
             return OALocalizedString(@"city_type_hamlet");
-        case OsmAnd::ObfAddressStreetGroupSubtype::Suburb:
+        case CITY_SUBTYPE_SUBURB:
             return OALocalizedString(@"city_type_suburb");
-        case OsmAnd::ObfAddressStreetGroupSubtype::District:
+        case CITY_SUBTYPE_DISTRICT:
             return OALocalizedString(@"city_type_district");
-        case OsmAnd::ObfAddressStreetGroupSubtype::Neighbourhood:
+        case CITY_SUBTYPE_NEIGHBOURHOOD:
             return OALocalizedString(@"city_type_neighbourhood");
         default:
             return OALocalizedString(@"city_type_city");
@@ -123,8 +126,8 @@
     {
         case CITY:
         {
-            const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(searchResult.address);
-            return [self.class getCityTypeStr:city->subtype];
+            OACity *city = (OACity *)searchResult.object;
+            return [self.class getCityTypeStr:city.subType];
         }
         case POSTCODE:
         {
@@ -132,21 +135,21 @@
         }
         case VILLAGE:
         {
-            const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(searchResult.address);
+            OACity *city = (OACity *)searchResult.object;
             if (searchResult.localeRelatedObjectName.length > 0)
             {
                 if (searchResult.distRelatedObjectName > 0)
                 {
-                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city->subtype], [[OsmAndApp instance] getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [[OsmAndApp instance] getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
                 }
                 else
                 {
-                    return [NSString stringWithFormat:@"%@, %@", [self getCityTypeStr:city->subtype], searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@, %@", [self getCityTypeStr:city.subType], searchResult.localeRelatedObjectName];
                 }
             }
             else
             {
-                return [self.class getCityTypeStr:city->subtype];
+                return [self.class getCityTypeStr:city.subType];
             }
         }
         case STREET:
@@ -171,9 +174,9 @@
         {
             if (searchResult.relatedObject)
             {
-                const auto& relatedStreet = std::dynamic_pointer_cast<const OsmAnd::Street>(searchResult.relatedAddress);
-                if (relatedStreet->streetGroup)
-                    return [NSString stringWithFormat:@"%@, %@", searchResult.localeRelatedObjectName, relatedStreet->streetGroup->getName(QString::fromNSString([[searchResult.requiredSearchPhrase getSettings] getLang]), true).toNSString()];
+                OAStreet *relatedStreet = (OAStreet *)searchResult.relatedObject;
+                if (relatedStreet.city)
+                    return [NSString stringWithFormat:@"%@, %@", searchResult.localeRelatedObjectName, [relatedStreet.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES]];
                 else
                     return searchResult.localeRelatedObjectName;
             }
@@ -181,9 +184,9 @@
         }
         case STREET_INTERSECTION:
         {
-            const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(searchResult.address);
-            if (street->streetGroup)
-                return street->streetGroup->getName(QString::fromNSString([[searchResult.requiredSearchPhrase getSettings] getLang]), true).toNSString();
+            OAStreet *street = (OAStreet *)searchResult.object;
+            if (street.city)
+                return [street.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES];
 
             return @"";
         }
@@ -252,17 +255,41 @@
         case RECENT_OBJ:
         {
             OAHistoryItem *item = (OAHistoryItem *) searchResult.object;
-            return item.typeName ? item.typeName : @"";
+            return item.typeName && item.name ? item.typeName : OALocalizedString(@"history");
         }
         case WPT:
         {
             return searchResult.localeRelatedObjectName;
         }
         case UNKNOWN_NAME_FILTER:
+        {
             break;
+        }
+        default:
+            break;
+            
     }
     return [OAObjectType toString:searchResult.objectType];
 }
 
+- (OADistanceDirection *) getEvaluatedDistanceDirection
+{
+    if (_distanceDirection)
+        [_distanceDirection evaluateDistanceDirection];
+    
+    return _distanceDirection;
+}
+
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
+{
+    if (_distanceDirection)
+        [_distanceDirection setMapCenterCoordinate:mapCenterCoordinate];
+}
+
+- (void) resetMapCenterSearch
+{
+    if (_distanceDirection)
+        [_distanceDirection resetMapCenterSearch];
+}
 
 @end

@@ -33,6 +33,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFilterViewController.h"
+#import "OAQuickSearchListItem.h"
+#import "OAQuickSearchMoreListItem.h"
 
 #import "OASearchUICore.h"
 #import "OASearchCoreFactory.h"
@@ -41,6 +43,7 @@
 #import "OASearchPhrase.h"
 #import "OASearchResult.h"
 #import "OASearchSettings.h"
+#import "OAQuickSearchTableController.h"
 
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
@@ -61,11 +64,11 @@
 typedef NS_ENUM(NSInteger, BarActionType)
 {
     BarActionNone = 0,
-    BarActionShownMap,
+    BarActionShowOnMap,
     BarActionEditHistory,
 };
 
-@interface OAQuickSearchViewController () <UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate>
+@interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OACustomPOIViewDelegate, UIAlertViewDelegate, OAPOIFilterViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *topView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -88,14 +91,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
-
-@property (nonatomic) NSMutableArray* dataArray;
-@property (nonatomic) NSMutableArray* dataArrayTemp;
-@property (nonatomic) NSMutableArray* dataPoiArray;
-@property (nonatomic) NSMutableArray* searchPoiArray;
-
-@property (nonatomic) NSString* searchString;
-@property (nonatomic) NSString* searchStringPrev;
+@property (nonatomic) NSString* searchQuery;
 
 @property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
@@ -104,25 +100,32 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (strong, nonatomic) dispatch_queue_t searchDispatchQueue;
 @property (strong, nonatomic) dispatch_queue_t updateDispatchQueue;
 
+@property (nonatomic) BOOL decelerating;
+@property (nonatomic) BOOL paused;
+@property (nonatomic) BOOL foundPartialLocation;
+@property (nonatomic) BOOL interruptedSearch;
+@property (nonatomic) BOOL searching;
+@property (nonatomic) BOOL runSearchFirstTime;
+@property (nonatomic) BOOL poiFilterApplied;
+
+@property (nonatomic) OAQuickSearchHelper *searchHelper;
+@property (nonatomic) OASearchUICore *searchUICore;
+@property (nonatomic) CLLocationCoordinate2D searchLocation;
+
+
 @end
 
 @implementation OAQuickSearchViewController
 {
-    BOOL isDecelerating;
-    BOOL _isSearching;
-    BOOL _paused;
-    
     UIPanGestureRecognizer *_tblMove;
     
     UIImageView *_leftImgView;
     UIActivityIndicatorView *_activityIndicatorView;
     
-    int _searchRadiusIndex;
-    int _searchRadiusIndexMax;
-
-    OAPOIBaseType *_poiBaseType;
     OAPOIUIFilter *_filter;
     OAPOIUIFilter *_filterToSave;
+
+    OAQuickSearchTableController *_tableController;
 
     UIPageViewController *_pageController;
     OACategoriesTableViewController *_categoriesViewController;
@@ -132,13 +135,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     BOOL _historyEditing;
     
     BOOL _bottomViewVisible;
-    BOOL _showTopList;
-    BOOL _dataInvalidated;
-
-    OAQuickSearchHelper *_searchHelper;
-    OASearchUICore *_searchUICore;
 }
-/*
+
 - (instancetype)init
 {
     self = [super init];
@@ -151,11 +149,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)commonInit
 {
-    _searchHelper = [OAQuickSearchHelper instance];
-    _searchUICore = [_searchHelper getCore];
-    
-    _searchRadiusIndexMax = (sizeof kSearchRadiusKm) / (sizeof kSearchRadiusKm[0]) - 1;
-    _showTopList = YES;
 }
 
 -(void)applyLocalization
@@ -167,6 +160,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
+    self.tableView.dataSource = _tableController;
+    self.tableView.delegate = _tableController;
+    if (_searchNearMapCenter)
+        [_tableController setMapCenterCoordinate:_searchLocation];
+    else
+        [_tableController resetMapCenterSearch];
     
     // drop shadow
     [_bottomView.layer setShadowColor:[UIColor blackColor].CGColor];
@@ -184,7 +185,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
-    _categoriesViewController.searchNearMapCenter = _searchNearMapCenter;
+    if (_searchNearMapCenter)
+        [_categoriesViewController setMapCenterCoordinate:_searchLocation];
+    else
+        [_categoriesViewController resetMapCenterSearch];
     
     _historyViewController = [[OAHistoryTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _historyViewController.delegate = self;
@@ -214,18 +218,17 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [_textField.leftView addSubview:_leftImgView];
     [_textField.leftView addSubview:_activityIndicatorView];
     
+    [self setupSearch];
+
     [self showSearchIcon];
-    [self generateData];
-    
     [self updateSearchNearMapCenterLabel];
-    
     [self showTabs];
 }
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    isDecelerating = NO;
-    _paused = NO;
+    self.decelerating = NO;
+    self.paused = NO;
     
     [self setupView];
     
@@ -237,6 +240,13 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self registerForKeyboardNotifications];
     
     [super viewWillAppear:animated];
+    
+    if ([self getResultCollection])
+    {
+        [self updateSearchResult:[self getResultCollection] append:false];
+        if (self.interruptedSearch || [self.searchUICore isSearchMoreAvailable:[self.searchUICore getPhrase]])
+            [self addMoreButton];
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -246,27 +256,17 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self showSearchIcon];
     [self.textField becomeFirstResponder];
     
-    if (_dataInvalidated)
-    {
-        if (!self.searchString && _currentScope == EPOIScopeUndefined && !_showTopList)
-            _showTopList = YES;
-        
-        [self generateData];
-    }
-    else if (!self.searchString && _currentScope == EPOIScopeUndefined && !_showTopList)
-    {
-        _showTopList = YES;
-        [self generateData];
-    }
+    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     
-    _paused = YES;
+    self.paused = YES;
  
-    if (self.locationServicesUpdateObserver) {
+    if (self.locationServicesUpdateObserver)
+    {
         [self.locationServicesUpdateObserver detach];
         self.locationServicesUpdateObserver = nil;
     }
@@ -284,6 +284,35 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self updateNavbar];
 }
 
+- (void) setupSearch
+{
+    // Setup search core
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    self.searchHelper = [OAQuickSearchHelper instance];
+    self.searchUICore = [self.searchHelper getCore];
+
+    [self setResultCollection:nil];
+    [self.searchUICore resetPhrase];
+    
+    OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
+    settings = [settings setLang:locale transliterateIfMissing:transliterate];
+    [self.searchUICore updateSettings:settings];
+    
+    __weak OAQuickSearchViewController *weakSelf = self;
+    self.searchUICore.onResultsComplete = ^void() {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            weakSelf.searching = false;
+            if (!weakSelf.paused)
+            {
+                [weakSelf showSearchIcon];
+                if ([weakSelf.searchUICore isSearchMoreAvailable:[weakSelf.searchUICore getPhrase]])
+                    [weakSelf addMoreButton];
+            }
+        });
+    };
+}
+
 - (void)setupBarActionView:(BarActionType)type title:(NSString *)title
 {
     if (_barActionType == type)
@@ -291,7 +320,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     switch (type)
     {
-        case BarActionShownMap:
+        case BarActionShowOnMap:
         {
             _barActionLeftImageButton.hidden = YES;
             UIImage *mapImage = [UIImage imageNamed:@"waypoint_map_disable.png"];
@@ -299,19 +328,33 @@ typedef NS_ENUM(NSInteger, BarActionType)
             _barActionImageView.image = mapImage;
             _barActionImageView.hidden = NO;
             
+            OASearchWord *word = [[self.searchUICore getPhrase] getLastSelectedWord];
             [UIView performWithoutAnimation:^{
                 if (title)
+                {
                     [_barActionTextButton setTitle:title forState:UIControlStateNormal];
+                }
+                else if (self.textField.text.length > 0)
+                {
+                    if (word && word.result)
+                        [_barActionTextButton setTitle:OALocalizedString(@"show_something_on_map", word.result.localeName) forState:UIControlStateNormal];
+                    else
+                        [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                }
                 else
+                {
                     [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
+                }
                 
                 [_barActionTextButton layoutIfNeeded];
             }];
             _barActionTextButton.hidden = NO;
             _barActionTextButton.userInteractionEnabled = YES;
             
+
             [_barActionImageButton setImage:[UIImage imageNamed:@"ic_search_filter.png"] forState:UIControlStateNormal];
-            _barActionImageButton.hidden = NO;
+            BOOL filterButtonVisible = word && word.getType == POI_TYPE;
+            _barActionImageButton.hidden = !filterButtonVisible;
             
             break;
         }
@@ -340,16 +383,12 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _barActionType = type;
 }
 
-- (void)updateTabsVisibility
+- (void)updateTabsVisibility:(BOOL)show
 {
-    if (_showTopList && ![self tabsVisible])
-    {
+    if (show && ![self tabsVisible])
         [self showTabs];
-    }
-    else if (!_showTopList && [self tabsVisible])
-    {
+    else if (!show && [self tabsVisible])
         [self hideTabs];
-    }
 }
 
 - (BOOL)tabsVisible
@@ -392,15 +431,65 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     switch (_barActionType)
     {
-        case BarActionShownMap:
+        case BarActionShowOnMap:
         {
-            OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-            NSString *str = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-            if (_currentScope == EPOIScopeUIFilter && _filter)
-                [mapVC showPoiOnMap:_filter keyword:str];
+            OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
+            if ([searchPhrase isNoSelectedType] || [searchPhrase isLastWord:POI_TYPE])
+            {
+                OAPOIUIFilter *filter;
+                if ([searchPhrase isNoSelectedType])
+                {
+                    filter = [[OAPOIFiltersHelper sharedInstance] getSearchByNamePOIFilter];
+                    if ([searchPhrase getUnknownSearchWord].length > 0)
+                    {
+                        [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
+                        [filter clearCurrentResults];
+                    }
+                }
+                else if ([[searchPhrase getLastSelectedWord].result.object isKindOfClass:[OAPOIBaseType class]])
+                {
+                    if ([searchPhrase isNoSelectedType])
+                    {
+                        filter = [[OAPOIUIFilter alloc] initWithBasePoiType:nil idSuffix:@""];
+                    }
+                    else
+                    {
+                        OAPOIBaseType *abstractPoiType = (OAPOIBaseType *) [searchPhrase getLastSelectedWord].result.object;
+                        filter = [[OAPOIUIFilter alloc] initWithBasePoiType:abstractPoiType idSuffix:@""];
+                    }
+                    if ([searchPhrase getUnknownSearchWord].length > 0)
+                        [filter setFilterByName:[searchPhrase getUnknownSearchWord]];
+                }
+                else
+                {
+                    filter = (OAPOIUIFilter *) [searchPhrase getLastSelectedWord].result.object;
+                }
+                [[OAPOIFiltersHelper sharedInstance] clearSelectedPoiFilters];
+                [[OAPOIFiltersHelper sharedInstance] addSelectedPoiFilter:filter];
+                
+                OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+                [mapVC showPoiOnMap:filter keyword:[[searchPhrase getUnknownSearchPhrase] trim]];
+                [self dismissViewControllerAnimated:YES completion:nil];
+
+                //mapActivity.getContextMenu().closeActiveToolbar();
+                //showToolbar();
+                //getMapActivity().refreshMap();
+                //hide();
+            }
             else
-                [mapVC showPoiOnMap:_currentScopeCategoryName type:_currentScopePoiTypeName filter:_currentScopeFilterName keyword:str];
-            [self dismissViewControllerAnimated:YES completion:nil];
+            {
+                OASearchWord *word = [searchPhrase getLastSelectedWord];
+                if (word && [word getLocation])
+                {
+                    OASearchResult *searchResult = word.result;
+                    [OAQuickSearchTableController showOnMap:searchResult delegate:self];
+
+                    //[self addHistoryItem:item type:OAHistoryType];
+                    //hideToolbar();
+                    //reloadHistory();
+                    //hide();
+                }
+            }
             break;
         }
         default:
@@ -426,28 +515,37 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     switch (_barActionType)
     {
-        case BarActionShownMap:
+        case BarActionShowOnMap:
         {
-            if (_currentScope == EPOIScopeUIFilter)
+            OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
+            if ([searchPhrase isLastWord:POI_TYPE])
             {
-                NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:_filter filterByName:nextStr];
-                filterViewController.delegate = self;
-                [self.navigationController pushViewController:filterViewController animated:YES];
-            }
-            else if (_poiBaseType)
-            {
-                OAPOIUIFilter *custom = [[OAPOIFiltersHelper sharedInstance] getFilterById:[STD_PREFIX stringByAppendingString:_poiBaseType.name]];
-                if (custom)
+                NSString *filterByName = [[searchPhrase getUnknownSearchPhrase] trim];
+                NSObject *object = [searchPhrase getLastSelectedWord].result.object;
+                if ([object isKindOfClass:[OAPOIUIFilter class]])
                 {
-                    [custom setFilterByName:nil];
-                    [custom clearFilter];
-                    [custom updateTypesToAccept:_poiBaseType];
+                    OAPOIUIFilter *model = (OAPOIUIFilter *) object;
+                    if (model.savedFilterByName.length > 0)
+                        [model setFilterByName:model.savedFilterByName];
                     
-                    NSString *nextStr = [[self nextToken:self.searchString] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-                    OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:nextStr];
+                    OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:model filterByName:filterByName];
                     filterViewController.delegate = self;
                     [self.navigationController pushViewController:filterViewController animated:YES];
+                }
+                else if ([object isKindOfClass:[OAPOIBaseType class]])
+                {
+                    OAPOIBaseType *abstractPoiType = (OAPOIBaseType *)object;
+                    OAPOIUIFilter *custom = [[OAPOIFiltersHelper sharedInstance] getFilterById:[STD_PREFIX stringByAppendingString:abstractPoiType.name]];
+                    if (custom)
+                    {
+                        [custom setFilterByName:nil];
+                        [custom clearFilter];
+                        [custom updateTypesToAccept:abstractPoiType];
+
+                        OAPOIFilterViewController *filterViewController = [[OAPOIFilterViewController alloc] initWithFilter:custom filterByName:filterByName];
+                        filterViewController.delegate = self;
+                        [self.navigationController pushViewController:filterViewController animated:YES];
+                    }
                 }
             }
             break;
@@ -473,6 +571,18 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [self setBottomViewVisible:NO];
 }
 
+- (void) updateBarActionView
+{
+    if (!_historyEditing)
+    {
+        if (self.textField.text.length > 0)
+            [self setupBarActionView:BarActionShowOnMap title:nil];
+        else
+            [self setupBarActionView:BarActionNone title:nil];
+        [self.view setNeedsLayout];
+    }
+}
+
 - (void) doSaveFilter:(OAPOIUIFilter *)filter
 {
     UIAlertView* alert = [[UIAlertView alloc] initWithTitle:OALocalizedString(@"enter_name") message:OALocalizedString(@"new_filter_desc") delegate:self cancelButtonTitle:OALocalizedString(@"shared_string_cancel") otherButtonTitles: OALocalizedString(@"shared_string_save"), nil];
@@ -485,7 +595,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (void) setFilter:(OAPOIUIFilter *)filter
 {
     _filter = filter;
-    _coreFoundScopeUIFilterName = nil;
     [self setBottomViewVisible:_filter && ![_filter isEmpty] && _filter == [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter]];
 }
 
@@ -536,11 +645,21 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     if (self.isViewLoaded)
     {
-        _historyViewController.searchNearMapCenter = searchNearMapCenter;
-        _categoriesViewController.searchNearMapCenter = searchNearMapCenter;
+        if (searchNearMapCenter)
+        {
+            _historyViewController.myLocation = _myLocation;
+            _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            [_categoriesViewController setMapCenterCoordinate:_searchLocation];
+            [_tableController setMapCenterCoordinate:_searchLocation];
+        }
+        else
+        {
+            _historyViewController.searchNearMapCenter = searchNearMapCenter;
+            [_categoriesViewController resetMapCenterSearch];
+            [_tableController resetMapCenterSearch];
+        }
         [self updateSearchNearMapCenterLabel];
         
-        _dataInvalidated = YES;
         [self.view setNeedsLayout];
     }
 }
@@ -548,20 +667,18 @@ typedef NS_ENUM(NSInteger, BarActionType)
 -(void)setMyLocation:(OsmAnd::PointI)myLocation
 {
     _myLocation = myLocation;
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(myLocation);
+    _searchLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
     
     if (self.isViewLoaded)
-    {
-        _historyViewController.myLocation = myLocation;
-        _dataInvalidated = YES;
         [self.view setNeedsLayout];
-    }
 }
 
 -(void)updateNavbar
 {
     BOOL showBarActionView = _barActionType != BarActionNone;
     BOOL showInputView = _barActionType != BarActionEditHistory;
-    BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchString.length == 0;
+    BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
     CGRect frame = _topView.frame;
     frame.size.height = (showInputView ? kInitialSearchToolbarHeight : 20.0) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
@@ -648,92 +765,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)updateDistanceAndDirection
 {
-    if (!_poiInList)
+    if (self.decelerating || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
         return;
-    
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !_initData)
-        return;
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateDistancesAndSort];
+        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+        [self refreshVisibleRows];
         [_historyViewController updateDistanceAndDirection];
     });
-}
-
--(void)updateDistancesAndSort
-{
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (_searchNearMapCenter)
-    {
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
-        newLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
-    }
-    if (!newLocation)
-    {
-        return;
-    }
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    NSMutableArray *arr = [NSMutableArray array];
-    double radius = kSearchRadiusKm[_searchRadiusIndex] * 1000.0;
-    
-    [_dataPoiArray enumerateObjectsUsingBlock:^(id item, NSUInteger idx, BOOL *stop) {
-        
-        if ([item isKindOfClass:[OAPOI class]])
-        {
-            OAPOI *itemData = item;
-            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                              newLocation.coordinate.latitude,
-                                                              itemData.longitude, itemData.latitude);
-            
-            itemData.distance = [app getFormattedDistance:distance];
-            itemData.distanceMeters = distance;
-            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.latitude longitude:itemData.longitude]];
-            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-            
-            if (_currentScope == EPOIScopeUndefined || distance <= radius)
-                [arr addObject:item];
-        }
-        else
-        {
-            [arr addObject:item];
-        }
-        
-    }];
-    
-    if ([arr count] > 0)
-    {
-        NSArray *sortedArray = [arr sortedArrayUsingComparator:^NSComparisonResult(OAPOI *obj1, OAPOI *obj2)
-                                {
-                                    double distance1 = obj1.distanceMeters;
-                                    double distance2 = obj2.distanceMeters;
-                                    
-                                    return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
-                                }];
-        
-        [_dataPoiArray setArray:sortedArray];
-    }
-    else
-    {
-        [_dataPoiArray setArray:arr];
-    }
-    
-    if (isDecelerating)
-        return;
-    
-    [_tableView reloadData];
-    if (_initData && _dataPoiArray.count > 0)
-    {
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-    }
-    _initData = NO;
 }
 
 - (void)refreshVisibleRows
@@ -748,77 +787,25 @@ typedef NS_ENUM(NSInteger, BarActionType)
     // Dispose of any resources that can be recreated.
 }
 
--(void)generateData
+- (void) reloadCategories
 {
-    // hide poi
-    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
-    [mapVC hidePoi];
-    
-    if (_currentScope == EPOIScopeUndefined)
-        [self setupBarActionView:BarActionNone title:nil];
-    
-    NSString *searchStr = [self.searchString copy];
-    if (!searchStr || _showTopList)
-        _searchRadiusIndex = 0;
-    
-    if (searchStr)
-    {
-        if ([searchStr isEqualToString:self.searchStringPrev] && !_dataInvalidated)
-            return;
-        else
-            self.searchStringPrev = [searchStr copy];
-        
-        _dataInvalidated = NO;
-        [self startCoreSearch];
-    }
-    else
-    {
-        dispatch_async(self.updateDispatchQueue, ^{
-            
-            self.searchStringPrev = nil;
-            
-            OASearchResultCollection *res = [_searchUICore shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
-            NSMutableArray<OAQuickSearchListItem *> rows = [NSMutableArray array];
-            if (res)
-            {
-                for (OASearchResult *sr in [res getCurrentSearchResults])
-                    [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
- 
-                rows.add(new CustomSearchButton(app, new OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        PoiUIFilter filter = app.getPoiFilters().getCustomPOIFilter();
-                        filter.clearFilter();
-                        QuickSearchCustomPoiFragment.showDialog(
-                                                                QuickSearchDialogFragment.this, filter.getFilterId());
-                    }
-                }));
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self showSearchIcon];
-
-                _categoriesViewController.dataArray = rows;
-                [_categoriesViewController.tableView reloadData];
-                if (_categoriesViewController.dataArray.count > 0)
-                    [_categoriesViewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                
-                [_historyViewController reloadData];
-                self.dataArray = [NSMutableArray array];
-                
-                self.dataPoiArray = [NSMutableArray array];
-                [self refreshTable];
-            });
-        });
-    }
+    [_categoriesViewController reloadData];
 }
 
--(void)refreshTable
+- (void) reloadHistory
 {
-    [_tableView reloadData];
-    if (_dataArray.count > 0 || _dataPoiArray.count > 0)
-        [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    [_historyViewController reloadData];
+}
+
+- (void) hidePoi
+{
+    OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
+    [mapVC hidePoi];
+}
+
+-(void)updateData:(NSMutableArray<OAQuickSearchListItem *> *)dataArray append:(BOOL)append
+{
+    [_tableController updateData:dataArray append:append];
 }
 
 -(void)updateTextField:(NSString *)text
@@ -827,8 +814,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _textField.text = t;
     
     [self.view setNeedsLayout];
-    [self generateData];
-    [self updateTabsVisibility];
 }
 
 -(void)setupView
@@ -862,40 +847,45 @@ typedef NS_ENUM(NSInteger, BarActionType)
     CLLocation* newLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
     if (newLocation)
     {
-        OsmAnd::PointI myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
-        
-        _poiInList = NO;
-        [_searchPoiArray removeAllObjects];
-        _searchRadiusIndex = 0;
-        self.myLocation = myLocation;
-        _historyViewController.myLocation = myLocation;
-        
+        self.myLocation = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(newLocation.coordinate.latitude, newLocation.coordinate.longitude));
         [self setSearchNearMapCenter:NO];
+        
         [UIView animateWithDuration:.25 animations:^{
             [self.view layoutIfNeeded];
         } completion:^(BOOL finished) {
-            [self generateData];
+            //[self generateData];
         }];
     }
 }
 
 - (IBAction)textFieldValueChanged:(id)sender
 {
-    if (_textField.text.length > 0)
+    NSString *newQueryText = _textField.text;
+    //updateClearButtonAndHint();
+    //updateClearButtonVisibility(true);
+    BOOL textEmpty = newQueryText.length == 0;
+    [self updateTabsVisibility:textEmpty];
+    if (textEmpty && self.poiFilterApplied)
     {
-        self.searchString = _textField.text;
-        _showTopList = NO;
+        self.poiFilterApplied = NO;
+        [self reloadCategories];
     }
-    else
+    if ([self.searchQuery localizedCaseInsensitiveCompare:newQueryText] != NSOrderedSame)
     {
-        _showTopList = YES;
-        [self setFilter:nil];
-        self.searchString = nil;
+        self.searchQuery = newQueryText;
+        if (self.searchQuery.length == 0)
+            [self.searchUICore resetPhrase];
+        else
+            [self runSearch];
+        
     }
-    
+    else if (self.runSearchFirstTime)
+    {
+        self.runSearchFirstTime = NO;
+        [self runSearch];
+    }
+
     [self.view setNeedsLayout];
-    [self generateData];
-    [self updateTabsVisibility];
 }
 
 - (void)goToPoint:(double)latitude longitude:(double)longitude
@@ -931,44 +921,43 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void) setResultCollection:(OASearchResultCollection *)resultCollection
 {
-    [_searchHelper setResultCollection:resultCollection];
+    [self.searchHelper setResultCollection:resultCollection];
 }
 
 - (OASearchResultCollection *) getResultCollection
 {
-    return [_searchHelper getResultCollection];
+    return [self.searchHelper getResultCollection];
 }
 
 -(void)runSearch
 {
-    [self runSearch:self.searchString];
+    [self runSearch:self.searchQuery];
 }
 
 - (void) runSearch:(NSString *)text
 {
     [self showSearchIcon];
-    OASearchSettings *settings = [[_searchUICore getPhrase] getSettings];
+    OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
     if ([settings getRadiusLevel] != 1)
-        [_searchUICore updateSettings:[settings setRadiusLevel:1]];
+        [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
     
-    [self runCoreSearch:text, true, false];
+    [self runCoreSearch:text updateResult:YES searchMore:NO];
 }
 
 - (void) runCoreSearch:(NSString *)text updateResult:(BOOL)updateResult searchMore:(BOOL)searchMore
 {
-    foundPartialLocation = false;
-    //updateToolbarButton();
-    interruptedSearch = false;
-    searching = true;
-    cancelPrev = true;
+    self.foundPartialLocation = false;
+    [self updateBarActionView];
+    self.interruptedSearch = false;
+    self.searching = true;
     
-    OASearchResultCollection *regionResultCollection;
-    OASearchCoreAPI *regionResultApi;
-    NSMutableArray<OASearchResult *> *results = [NSMutableArray array];
+    OASearchResultCollection __block *regionResultCollection;
+    OASearchCoreAPI __block *regionResultApi;
+    NSMutableArray<OASearchResult *> __block *results = [NSMutableArray array];
 
-    OASearchResultCollection *c = [_searchUICore search:text matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
+    OASearchResultCollection *c = [self.searchUICore search:text matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object) {
         
-        if (_paused)
+        if (self.paused)
         {
             if (results.count > 0)
                 [[self getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
@@ -987,7 +976,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 OASearchResultCollection *regionCollection = regionResultCollection;
                 BOOL hasRegionCollection = (searchApi == regionApi && regionCollection);
                 if (hasRegionCollection)
-                    apiResults = [regionCollection getCurrentSearchResults];
+                    apiResults = [NSMutableArray arrayWithArray:[regionCollection getCurrentSearchResults]];
                 else
                     apiResults = results;
                 
@@ -1020,17 +1009,152 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
     } cancelledFunc:^BOOL {
         
-        return _paused;
+        return self.paused;
     }]];
     
     if (!searchMore)
     {
         [self setResultCollection:nil];
         if (!updateResult)
-            [self updateSearchResult:nil NO];
+            [self updateSearchResult:nil append:NO];
     }
     if (updateResult)
-        [self updateSearchResult:c NO];
+        [self updateSearchResult:c append:NO];
+}
+
+- (void) showApiResults:(NSArray<OASearchResult *> *)apiResults phrase:(OASearchPhrase *)phrase hasRegionCollection:(BOOL)hasRegionCollection
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!_paused)
+        {
+            BOOL append = [self getResultCollection] != nil;
+            if (append)
+            {
+                [[self getResultCollection] addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
+            }
+            else
+            {
+                OASearchResultCollection *resCollection = [[OASearchResultCollection alloc] initWithPhrase:phrase];
+                [resCollection addSearchResults:apiResults resortAll:YES removeDuplicates:YES];
+                [self setResultCollection:resCollection];
+            }
+            if (!hasRegionCollection)
+                [self updateSearchResult:[self getResultCollection] append:append];
+        }
+    });
+}
+
+- (void) showRegionResults:(OASearchResultCollection *)regionResultCollection
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!_paused)
+        {
+            if ([self getResultCollection])
+            {
+                OASearchResultCollection *resCollection = [[self getResultCollection] combineWithCollection:regionResultCollection resort:YES removeDuplicates:YES];
+                [self updateSearchResult:resCollection append:YES];
+            }
+            else
+            {
+                [self updateSearchResult:regionResultCollection append:NO];
+            }
+        }
+    });
+}
+
+- (void) completeQueryWithObject:(OASearchResult *)sr
+{
+    if ([sr.object isKindOfClass:[OAPOIType class]] && [((OAPOIType *) sr.object) isAdditional])
+    {
+        OAPOIType *additional = (OAPOIType *) sr.object;
+        OAPOIBaseType *parent = additional.parentType;
+        if (parent)
+        {
+            OAPOIUIFilter *custom = [[OAPOIFiltersHelper sharedInstance] getFilterById:[NSString stringWithFormat:@"%@%@", STD_PREFIX, parent.name]];
+            if (custom)
+            {
+                [custom clearFilter];
+                [custom updateTypesToAccept:parent];
+                [custom setFilterByName:[[additional.name stringByReplacingOccurrencesOfString:@"_" withString:@":"] lowerCase]];
+                
+                OASearchPhrase *phrase = [self.searchUICore getPhrase];
+                sr = [[OASearchResult alloc] initWithPhrase:phrase];
+                sr.localeName = custom.name;
+                sr.object = custom;
+                sr.priority = SEARCH_AMENITY_TYPE_PRIORITY;
+                sr.priorityDistance = 0;
+                sr.objectType = POI_TYPE;
+            }
+        }
+    }
+    [self.searchUICore selectSearchResult:sr];
+    NSString *txt = [[self.searchUICore getPhrase] getText:YES];
+    self.searchQuery = txt;
+    [self updateTextField:txt];
+    [self updateBarActionView];
+    OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+    if ([settings getRadiusLevel] != 1)
+        [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
+    
+    [self runCoreSearch:txt updateResult:NO searchMore:NO];
+}
+
+- (void) replaceQueryWithUiFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
+{
+    OASearchPhrase *searchPhrase = [self.searchUICore getPhrase];
+    if ([searchPhrase isLastWord:POI_TYPE])
+    {
+        self.poiFilterApplied = YES;
+        OASearchResult *sr = [searchPhrase getLastSelectedWord].result;
+        sr.object = filter;
+        sr.localeName = [filter getName];
+        [[self.searchUICore getPhrase] syncWordsWithResults];
+        NSString *txt = [[filter getName] stringByAppendingString:(nameFilter.length > 0 && [filter isStandardFilter] ? [@" " stringByAppendingString:nameFilter] : @" ")];
+        self.searchQuery = txt;
+        [self updateTextField:txt];
+        [self updateBarActionView];
+        [self runCoreSearch:txt updateResult:NO searchMore:NO];
+    }
+}
+
+- (void) clearLastWord
+{
+    if (self.textField.text.length > 0)
+    {
+        NSString *newText = [[self.searchUICore getPhrase] getTextWithoutLastWord];
+        [self updateTextField:newText];
+    }
+}
+
+- (void) addMoreButton
+{
+    OAQuickSearchMoreListItem *moreListItem = [[OAQuickSearchMoreListItem alloc] initWithName:OALocalizedString(@"search_POI_level_btn") onClickFunction:^(id sender) {
+
+        if (!self.interruptedSearch)
+        {
+            OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
+            [self.searchUICore updateSettings:[settings setRadiusLevel:[settings getRadiusLevel] + 1]];
+        }
+        [self runCoreSearch:self.searchQuery updateResult:NO searchMore:YES];
+    }];
+
+    if (!_paused)
+        [_tableController addItem:moreListItem];
+}
+
+- (void) updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append
+{
+    if (!_paused)
+    {
+        NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
+        if (res && [res getCurrentSearchResults].count > 0)
+            for (OASearchResult *sr in [res getCurrentSearchResults])
+                [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+
+        [self updateData:rows append:append];
+    }
 }
 
 #pragma mark - UITextFieldDelegate
@@ -1064,6 +1188,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 }
 
 #pragma mark - UIPageViewControllerDelegate
+
 -(void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray<UIViewController *> *)previousViewControllers transitionCompleted:(BOOL)completed
 {
     if (pageViewController.viewControllers[0] == _historyViewController)
@@ -1072,97 +1197,36 @@ typedef NS_ENUM(NSInteger, BarActionType)
         _tabs.selectedSegmentIndex = 1;
 }
 
-#pragma mark - OACategoryTableDelegate
+#pragma mark - OAQuickSearchTableController
 
--(void)didSelectCategoryItem:(id)obj
+- (void) didSelectResult:(OASearchResult *)result
 {
-    if (!obj)
-    {
-        if (_currentScope == EPOIScopeUndefined && _showTopList)
-        {
-            _showTopList = NO;
-            [self generateData];
-            [self updateTabsVisibility];
-        }
-    }
-    else if ([obj isKindOfClass:[OAPOIFilter class]])
-    {
-        OAPOIFilter* item = obj;
-        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringScope = YES;
-        _showTopList = NO;
-        [self updateTextField:self.searchString];
-    }
-    else if ([obj isKindOfClass:[OAPOICategory class]])
-    {
-        OAPOICategory* item = obj;
-        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringScope = YES;
-        _showTopList = NO;
-        [self updateTextField:self.searchString];
-    }
-    else if ([obj isKindOfClass:[OAPOIUIFilter class]])
-    {
-        [self searchByUIFilter:(OAPOIUIFilter *)obj nameFilter:@""];
-    }
+    [self completeQueryWithObject:result];
 }
 
--(void)createPOIUIFilter
+- (void) didShowOnMap:(OASearchResult *)result
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - OACategoryTableDelegate
+
+-(void) createPOIUIFIlter
 {
     OAPOIUIFilter *filter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
     [filter clearFilter];
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOI.delegate = self;
-    [self.navigationController pushViewController:customPOI animated:YES];
-}
-
--(void)editPOIUIFilter:(id)item
-{
-    
+    [self.navigationController pushViewController:customPOI animated:YES];    
 }
 
 #pragma mark - OAHistoryTableDelegate
 
 -(void)didSelectHistoryItem:(OAHistoryItem *)item
 {
-    if (item.hType == OAHistoryTypeFavorite)
-    {
-        BOOL foundFav = NO;
-        for (const auto& favLoc : [OsmAndApp instance].favoritesCollection->getFavoriteLocations()) {
-            
-            if ([OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LongitudeX(favLoc->getPosition31().x) destination:item.longitude]
-                && [OAUtilities doublesEqualUpToDigits:5 source:OsmAnd::Utilities::get31LatitudeY(favLoc->getPosition31().y) destination:item.latitude]
-                && [item.name isEqualToString:favLoc->getTitle().toNSString()])
-            {
-                UIColor* color = [UIColor colorWithRed:favLoc->getColor().r/255.0 green:favLoc->getColor().g/255.0 blue:favLoc->getColor().b/255.0 alpha:1.0];
-                OAFavoriteColor *favCol = [OADefaultFavorite nearestFavColor:color];
-                
-                if ([item.iconName isEqualToString:favCol.iconName])
-                {
-                    foundFav = YES;
-                    [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.name icon:item.icon pushed:NO];
-                    break;
-                }
-            }
-        }
-        
-        if (!foundFav)
-            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
-    }
-    else if (item.hType == OAHistoryTypePOI)
-    {
-        OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(item.latitude, item.longitude));
-        NSArray<OAPOI *> *pois = [OAPOIHelper findPOIsByTagName:nil name:item.name location:locI categoryName:nil poiTypeName:nil radius:10];
-        
-        if (pois.count > 0)
-            [self goToPoint:pois[0]];
-        else
-            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
-    }
-    else
-    {
-        [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:item pushed:NO];
-    }
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang transliterate:transliterate];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -1199,15 +1263,13 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 #pragma mark - OACustomPOIViewDelegate
 
--(void)searchByUIFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
+-(void)searchByUIFilter:(OAPOIUIFilter *)filter
 {
+    /*
     [self setFilter:filter];
-    self.searchString = [NSString stringWithFormat:@"%@ %@", filter.name, nameFilter.length > 0 && [filter isStandardFilter] ? [nameFilter stringByAppendingString:@" "] : @""];
-    _dataInvalidated = YES;
-    _currentScope = EPOIScopeUndefined;
-    _enteringScope = YES;
-    _showTopList = NO;
-    [self updateTextField:self.searchString];
+    self.searchQuery = [NSString stringWithFormat:@"%@ %@", filter.name, nameFilter.length > 0 && [filter isStandardFilter] ? [nameFilter stringByAppendingString:@" "] : @""];
+    [self updateTextField:self.searchQuery];
+     */
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -1225,8 +1287,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
             
             if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
             {
-                //app.getSearchUICore().refreshCustomPoiFilters();
-                [self searchByUIFilter:nFilter nameFilter:@""];
+                [self.searchHelper refreshCustomPoiFilters];
+                [self searchByUIFilter:nFilter];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
         }
@@ -1237,8 +1299,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
-    //app.getSearchUICore().refreshCustomPoiFilters();
-    [self searchByUIFilter:filter nameFilter:nameFilter];
+    [self.searchHelper refreshCustomPoiFilters];
+    [self searchByUIFilter:filter];
     return YES;
 }
 
@@ -1252,13 +1314,11 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
     {
-        //app.getSearchUICore().refreshCustomPoiFilters();
+        [self.searchHelper refreshCustomPoiFilters];
         
         [self setFilter:nil];
-        self.searchString = nil;
-        _enteringScope = YES;
-        _showTopList = YES;
-        [self updateTextField:self.searchString];
+        self.searchQuery = nil;
+        [self updateTextField:self.searchQuery];
         return YES;
     }
     else
@@ -1267,167 +1327,27 @@ typedef NS_ENUM(NSInteger, BarActionType)
     }
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    return 1;
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForHeader];
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForFooter];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getNumberOfRows:_dataArray dataPoiArray:_dataPoiArray currentScope:_currentScope showCoordinates:_showCoordinates showTopList:_showTopList poiInList:_poiInList searchRadiusIndex:_searchRadiusIndex searchRadiusIndexMax:_searchRadiusIndexMax];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OAPOISearchHelper getCellForRowAtIndexPath:indexPath tableView:tableView dataArray:_dataArray dataPoiArray:_dataPoiArray currentScope:_currentScope poiInList:_poiInList showCoordinates:_showCoordinates foundCoords:_foundCoords showTopList:_showTopList searchRadiusIndex:_searchRadiusIndex searchRadiusIndexMax:_searchRadiusIndexMax searchNearMapCenter:_searchNearMapCenter];
-}
-
 #pragma mark - UIScrollViewDelegate
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    isDecelerating = YES;
+    self.decelerating = YES;
 }
 
 // Load images for all onscreen rows when scrolling is finished
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (!decelerate) {
-        isDecelerating = NO;
+        self.decelerating = NO;
         //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    isDecelerating = NO;
+    self.decelerating = NO;
     //[self refreshVisibleRows];
 }
 
-#pragma mark - UITableViewDelegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OAPOISearchHelper getHeightForRowAtIndexPath:indexPath tableView:tableView dataArray:_dataArray dataPoiArray:_dataPoiArray showCoordinates:_showCoordinates];
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    [tableView deselectRowAtIndexPath:indexPath animated:NO];
-    
-    NSInteger row = indexPath.row;
-    
-    if (_showCoordinates)
-    {
-        if (row == 0)
-        {
-            if (_foundCoords.count > 1)
-            {
-                double lat = [_foundCoords[0] doubleValue];
-                double lon = [_foundCoords[1] doubleValue];
-                [self goToPoint:lat longitude:lon];
-                return;
-            }
-        }
-        else
-        {
-            row--;
-        }
-    }
-    
-    if (row >= _dataArray.count + _dataPoiArray.count)
-    {
-        if (_currentScope == EPOIScopeUndefined && _showTopList)
-        {
-            _showTopList = NO;
-            [self generateData];
-            return;
-        }
-        else if (_searchRadiusIndex < _searchRadiusIndexMax)
-        {
-            _searchRadiusIndex++;
-            _ignoreSearchResult = NO;
-            _increasingSearchRadius = YES;
-            dispatch_async(dispatch_get_main_queue(), ^
-                           {
-                               [self startCoreSearch];
-                           });
-        }
-        return;
-    }
-    
-    id obj;
-    if (row >= _dataArray.count)
-        obj = _dataPoiArray[row - _dataArray.count];
-    else
-        obj = _dataArray[row];
-    
-    if ([obj isKindOfClass:[OAPOI class]])
-    {
-        OAPOI* item = obj;
-        
-        if ([item.type isKindOfClass:[OAPOIFavType class]])
-        {
-            [self addHistoryItem:item type:OAHistoryTypeFavorite];
-            
-            [[OARootViewController instance].mapPanel openTargetViewWithFavorite:item.latitude longitude:item.longitude caption:item.nameLocalized icon:[item icon] pushed:NO];
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-        else if ([item.type isKindOfClass:[OAPOIHistoryType class]])
-        {
-            OAHistoryItem *hist = [[OAHistoryItem alloc] init];
-            hist.name = item.name;
-            hist.latitude = item.latitude;
-            hist.longitude = item.longitude;
-            hist.hType = ((OAPOIHistoryType *)item.type).hType;
-            [[OARootViewController instance].mapPanel openTargetViewWithHistoryItem:hist pushed:NO];
-            [self dismissViewControllerAnimated:YES completion:nil];
-        }
-        else
-        {
-            [self addHistoryItem:item type:OAHistoryTypePOI];
-            
-            NSString *name = item.nameLocalized;
-            if (!name)
-                name = item.type.nameLocalized;
-            
-            [self goToPoint:item];
-        }
-    }
-    else if ([obj isKindOfClass:[OAPOIType class]])
-    {
-        OAPOIType* item = obj;
-        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringScope = YES;
-        [self updateTextField:self.searchString];
-    }
-    else if ([obj isKindOfClass:[OAPOIFilter class]])
-    {
-        OAPOIFilter* item = obj;
-        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringScope = YES;
-        [self updateTextField:self.searchString];
-    }
-    else if ([obj isKindOfClass:[OAPOICategory class]])
-    {
-        OAPOICategory* item = obj;
-        self.searchString = [item.nameLocalized stringByAppendingString:@" "];
-        _enteringScope = YES;
-        [self updateTextField:self.searchString];
-    }
-}
-
-*/
 @end

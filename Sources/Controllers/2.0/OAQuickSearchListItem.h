@@ -7,16 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
-#include <OsmAndCore/Data/DataCommonTypes.h>
+#import "OADistanceDirection.h"
+#import "OACity.h"
 
 @class OASearchResult;
 
 @interface OAQuickSearchListItem : NSObject
 
+- (instancetype)initWithSearchResult:(OASearchResult *)searchResult;
+
 - (OASearchResult *) getSearchResult;
-+ (NSString *) getCityTypeStr:(OsmAnd::ObfAddressStreetGroupSubtype)type;
++ (NSString *) getCityTypeStr:(EOACitySubType)type;
 - (NSString *) getName;
 + (NSString *) getName:(OASearchResult *)searchResult;
 + (NSString *) getTypeName:(OASearchResult *)searchResult;
+
+- (OADistanceDirection *) getEvaluatedDistanceDirection;
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
+- (void) resetMapCenterSearch;
 
 @end

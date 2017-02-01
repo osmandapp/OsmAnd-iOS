@@ -122,7 +122,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     UIImageView *_leftImgView;
     UIActivityIndicatorView *_activityIndicatorView;
     
-    OAPOIUIFilter *_filter;
     OAPOIUIFilter *_filterToSave;
 
     OAQuickSearchTableController *_tableController;
@@ -258,8 +257,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     [self showSearchIcon];
     [self.textField becomeFirstResponder];
-    
-    
 }
 
 -(void)viewWillDisappear:(BOOL)animated
@@ -567,8 +564,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (IBAction)bottomTextButtonPress:(id)sender
 {
-    if (_filter)
-        [self doSaveFilter:_filter];
+    OAPOIUIFilter *customFilter = [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter];
+    if (customFilter)
+        [self doSaveFilter:customFilter];
 }
 
 - (IBAction)bottomImageButtonPress:(id)sender
@@ -596,12 +594,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [alert textFieldAtIndex:0].text = filter.name;
     _filterToSave = filter;
     [alert show];
-}
-
-- (void) setFilter:(OAPOIUIFilter *)filter
-{
-    _filter = filter;
-    [self setBottomViewVisible:_filter && ![_filter isEmpty] && _filter == [[OAPOIFiltersHelper sharedInstance] getCustomPOIFilter]];
 }
 
 - (void)setBottomViewVisible:(BOOL)visible
@@ -1270,11 +1262,23 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)searchByUIFilter:(OAPOIUIFilter *)filter
 {
-    /*
-    [self setFilter:filter];
-    self.searchQuery = [NSString stringWithFormat:@"%@ %@", filter.name, nameFilter.length > 0 && [filter isStandardFilter] ? [nameFilter stringByAppendingString:@" "] : @""];
-    [self updateTextField:self.searchQuery];
-     */
+    OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:[_searchUICore getPhrase]];
+    sr.localeName = [filter getName];
+    sr.object = filter;
+    sr.priority = 0;
+    sr.objectType = POI_TYPE;
+    [_searchUICore selectSearchResult:sr];
+    
+    NSString *txt = [[filter getName] stringByAppendingString:@" "];
+    self.searchQuery = txt;
+    [self updateTextField:txt];
+    OASearchSettings *settings = [[_searchUICore getPhrase] getSettings];
+    if ([settings getRadiusLevel] != 1)
+        [_searchUICore updateSettings:[settings setRadiusLevel:1]];
+
+    [self runCoreSearch:txt updateResult:NO searchMore:NO];
+    
+    [self setBottomViewVisible:YES];
 }
 
 #pragma mark - UIAlertViewDelegate
@@ -1293,7 +1297,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
             if ([[OAPOIFiltersHelper sharedInstance] createPoiFilter:nFilter])
             {
                 [self.searchHelper refreshCustomPoiFilters];
-                [self searchByUIFilter:nFilter];
+                [self replaceQueryWithUiFilter:nFilter nameFilter:@""];
+                [self reloadCategories];
+                [self setBottomViewVisible:NO];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
         }
@@ -1305,7 +1311,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 - (BOOL) updateFilter:(OAPOIUIFilter *)filter nameFilter:(NSString *)nameFilter
 {
     [self.searchHelper refreshCustomPoiFilters];
-    [self searchByUIFilter:filter];
+    [self replaceQueryWithUiFilter:filter nameFilter:nameFilter];
     return YES;
 }
 
@@ -1320,10 +1326,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
     if ([[OAPOIFiltersHelper sharedInstance] removePoiFilter:filter])
     {
         [self.searchHelper refreshCustomPoiFilters];
-        
-        [self setFilter:nil];
-        self.searchQuery = nil;
-        [self updateTextField:self.searchQuery];
+        [self reloadCategories];
+        [self clearLastWord];
         return YES;
     }
     else

@@ -946,11 +946,12 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 [self showSearchIcon];
                 if (_showTopList)
                 {
+                    /*
                     _categoriesViewController.dataArray = [NSMutableArray arrayWithArray:sortedArrayItems];
                     [_categoriesViewController.tableView reloadData];
                     if (_categoriesViewController.dataArray.count > 0)
                         [_categoriesViewController.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-                    
+                    */
                     [_historyViewController reloadData];
                     self.dataArray = [NSMutableArray array];
                 }

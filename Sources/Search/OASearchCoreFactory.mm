@@ -213,7 +213,7 @@
         for (const auto& c : _resArray)
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-            res.object = [[OACity alloc] initWithAddress:c];
+            res.object = [[OACity alloc] initWithCity:c];
             res.resourceId = _streetGroupResourceIds.value(c).toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
             if (!c->localizedNames.isEmpty())
@@ -475,7 +475,7 @@
     const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
     
     searchCriteria->name = QString::fromNSString([phrase getUnknownSearchWord]);
-    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.left, bbox.top, bbox.right, bbox.bottom);
+    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
     
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -504,6 +504,7 @@
                                       if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames])
                                           return false;
                                   }
+                                  sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.amenity = amenity;
                                   sr.preferredZoom = 17;
                                   sr.resourceId = currentResId;
@@ -781,7 +782,7 @@
             }
             searchCriteria->categoriesFilter = categoriesFilter;
         }
-        searchCriteria->bbox31 = OsmAnd::AreaI(bbox.left, bbox.top, bbox.right, bbox.bottom);
+        searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
         
         const auto& obfsCollection = app.resourcesManager->obfsCollection;
         const auto search = std::shared_ptr<const OsmAnd::AmenitiesInAreaSearch>(new OsmAnd::AmenitiesInAreaSearch(obfsCollection));
@@ -1468,7 +1469,7 @@
 {
     bool digit = false;
     int word = -1;
-    for(int i = 0; i <= s.length; i++)
+    for (int i = 0; i <= s.length; i++)
     {
         unichar ch = i == s.length ? ' ' : [s characterAtIndex:i];
         bool dg = [[NSCharacterSet decimalDigitCharacterSet] characterIsMember:ch];
@@ -1487,15 +1488,15 @@
             }
             else
             {
-                if(word == -1)
+                if (word == -1)
                     word = i;
             }
         }
         else
         {
-            NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
             if (digit)
             {
+                NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
                 double dl;
                 if ([[NSScanner scannerWithString:str] scanDouble:&dl])
                 {
@@ -1512,6 +1513,7 @@
                 {
                     if (word != -1)
                     {
+                        NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
                         [all addObject:str];
                         [strings addObject:str];
                     }
@@ -1528,6 +1530,7 @@
             {
                 if (word != -1)
                 {
+                    NSString *str = [s substringWithRange:NSMakeRange(word, i - word)];
                     [all addObject:str];
                     [strings addObject:str];
                 }

@@ -38,7 +38,22 @@
     if (!img)
     {
         img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@_%@", [OAUtilities drawablePostfix], self.tag, self.value]];
-        return [OAUtilities applyScaleFactorToImage:img];
+        if (img)
+        {
+            return [OAUtilities applyScaleFactorToImage:img];
+        }
+        else if (self.parentType)
+        {
+            return [self.parentType icon];
+        }
+        else if (self.filter)
+        {
+            return [self.filter icon];
+        }
+        else if (self.category)
+        {
+            return [self.category icon];
+        }
     }
     return img;
 }

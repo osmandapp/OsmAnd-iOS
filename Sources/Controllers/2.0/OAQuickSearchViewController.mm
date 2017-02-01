@@ -149,6 +149,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)commonInit
 {
+    self.searchQuery = @"";
 }
 
 -(void)applyLocalization
@@ -162,6 +163,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     [super viewDidLoad];
     
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
+    _tableController.delegate = self;
     self.tableView.dataSource = _tableController;
     self.tableView.delegate = _tableController;
     if (_searchNearMapCenter)
@@ -185,6 +187,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
+    _categoriesViewController.tableDelegate = self;
     if (_searchNearMapCenter)
         [_categoriesViewController setMapCenterCoordinate:_searchLocation];
     else
@@ -337,7 +340,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 else if (self.textField.text.length > 0)
                 {
                     if (word && word.result)
-                        [_barActionTextButton setTitle:OALocalizedString(@"show_something_on_map", word.result.localeName) forState:UIControlStateNormal];
+                        [_barActionTextButton setTitle:[NSString stringWithFormat:OALocalizedString(@"show_something_on_map"), word.result.localeName] forState:UIControlStateNormal];
                     else
                         [_barActionTextButton setTitle:OALocalizedString(@"map_settings_show") forState:UIControlStateNormal];
                 }
@@ -389,6 +392,8 @@ typedef NS_ENUM(NSInteger, BarActionType)
         [self showTabs];
     else if (!show && [self tabsVisible])
         [self hideTabs];
+
+    [self updateBarActionView];
 }
 
 - (BOOL)tabsVisible
@@ -579,6 +584,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             [self setupBarActionView:BarActionShowOnMap title:nil];
         else
             [self setupBarActionView:BarActionNone title:nil];
+        
         [self.view setNeedsLayout];
     }
 }
@@ -812,8 +818,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 {
     NSString *t = (text ? text : @"");
     _textField.text = t;
-    
-    [self.view setNeedsLayout];
+    [self textFieldValueChanged:_textField];
 }
 
 -(void)setupView

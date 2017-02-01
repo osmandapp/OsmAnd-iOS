@@ -296,7 +296,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
     const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
     if (obfMetadata)
     {
-        OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+        OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
         if (zoomLevel == OsmAnd::InvalidZoomLevel)
             return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
         else
@@ -308,7 +308,7 @@ static const int ZOOM_TO_SEARCH_POI = 16;
 - (NSArray<NSString *> *) getOfflineIndexes:(QuadRect *)rect dt:(EOASearchPhraseDataType)dt
 {
     NSArray<NSString *> *indexes = _indexes ? _indexes : [self.settings getOfflineIndexes];
-    NSMutableArray<NSString *> *result;
+    NSMutableArray<NSString *> *result = [NSMutableArray array];
     if (rect)
     {
         for (NSString *resId in indexes)

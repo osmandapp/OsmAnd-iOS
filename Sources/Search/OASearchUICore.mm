@@ -468,7 +468,7 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
             if (TIMEOUT_BETWEEN_CHARS > 0)
                 [NSThread sleepForTimeInterval:TIMEOUT_BETWEEN_CHARS];
             
-            if([rm isCancelled])
+            if ([rm isCancelled])
                 return;
             
             [self searchInBackground:phrase matcher:rm];

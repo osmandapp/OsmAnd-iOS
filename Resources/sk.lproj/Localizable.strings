@@ -510,3 +510,9 @@
 "city_type_district" = "Okres";
 "city_type_neighbourhood" = "Okolie";
 "postcode" = "Poštové smerovacie číslo";
+"show_something_on_map" = "Zobraziť %@ na mape";
+"search_POI_level_btn" = "Nájsť viac";
+"shared_string_street" = "Ulica";
+"shared_string_building" = "Budova";
+"shared_string_street_intersection" = "Križovatka ulíc";
+"shared_string_address" = "Adresa";

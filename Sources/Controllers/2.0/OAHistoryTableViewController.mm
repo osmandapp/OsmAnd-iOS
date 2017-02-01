@@ -16,6 +16,7 @@
 #import "Localization.h"
 #import "OAPointDescCell.h"
 #import "OAUtilities.h"
+#import "OADistanceDirection.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -23,13 +24,66 @@
 @interface SearchHistoryTableItem : NSObject
 
 @property (nonatomic) OAHistoryItem *item;
-@property (nonatomic, assign) CGFloat distanceMeters;
-@property (nonatomic) NSString *distance;
-@property (nonatomic, assign) CGFloat direction;
+
+- (OADistanceDirection *) getEvaluatedDistanceDirection;
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
+- (void) resetMapCenterSearch;
 
 @end
 
 @implementation SearchHistoryTableItem
+{
+    OADistanceDirection *_distanceDirection;
+}
+
+- (instancetype)initWithItem:(OAHistoryItem *)item
+{
+    self = [super init];
+    if (self)
+    {
+        _item = item;
+        _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude];
+    }
+    return self;
+}
+
+- (instancetype)initWithItem:(OAHistoryItem *)item mapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
+{
+    self = [super init];
+    if (self)
+    {
+        _item = item;
+        _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude mapCenterCoordinate:mapCenterCoordinate];
+    }
+    return self;
+}
+
+-(void)setItem:(OAHistoryItem *)item
+{
+    _item = item;
+    _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude];
+}
+
+- (OADistanceDirection *) getEvaluatedDistanceDirection
+{
+    if (_distanceDirection)
+        [_distanceDirection evaluateDistanceDirection];
+    
+    return _distanceDirection;
+}
+
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
+{
+    if (_distanceDirection)
+        [_distanceDirection setMapCenterCoordinate:mapCenterCoordinate];
+}
+
+- (void) resetMapCenterSearch
+{
+    if (_distanceDirection)
+        [_distanceDirection resetMapCenterSearch];
+}
+
 
 @end
 
@@ -79,7 +133,7 @@
 
 @implementation OAHistoryTableViewController
 {
-    BOOL isDecelerating;
+    BOOL _decelerating;
     NSArray *_headerViews;
     BOOL _wasAnyDeleted;
 }
@@ -107,7 +161,8 @@
 {
     [super viewWillAppear:animated];
 
-    isDecelerating = NO;
+    _decelerating = NO;
+    [self reloadData];
 }
 
 -(void) longTapHandler:(UILongPressGestureRecognizer *)gestureRecognizer
@@ -177,7 +232,7 @@
 
 -(void)generateData:(BOOL)doReload
 {
-    self.groupsAndItems = [[NSMutableArray alloc] init];
+    self.groupsAndItems = [NSMutableArray array];
     NSMutableArray *headerViews = [NSMutableArray array];
     
     OAHistoryHelper *helper = [OAHistoryHelper sharedInstance];
@@ -189,6 +244,9 @@
     NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
     [fmt setDateFormat:@"LLLL - yyyy"];
     
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
+    CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+
     for (OAHistoryItem *item in allItems)
     {
         NSString *groupName;
@@ -221,8 +279,12 @@
             [self.groupsAndItems addObject:grp];
         }
         
-        SearchHistoryTableItem *tableItem = [[SearchHistoryTableItem alloc] init];
-        tableItem.item = item;
+        SearchHistoryTableItem *tableItem;
+        if (_searchNearMapCenter)
+            tableItem = [[SearchHistoryTableItem alloc] initWithItem:item mapCenterCoordinate:myLocation];
+        else
+            tableItem = [[SearchHistoryTableItem alloc] initWithItem:item];
+        
         [grp.groupItems addObject:tableItem];
     }
     
@@ -257,46 +319,27 @@
     _headerViews = [NSArray arrayWithArray:headerViews];
 }
 
-- (void)updateDistanceAndDirection
+-(void)setSearchNearMapCenter:(BOOL)searchNearMapCenter
 {
-    if ([self.tableView isEditing])
-        return;
+    _searchNearMapCenter = searchNearMapCenter;
     
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (_searchNearMapCenter)
-    {
-        OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
-        newLocation = [[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude];
-    }
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
+    OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(_myLocation);
+    CLLocationCoordinate2D myLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
     for (SearchHistoryTableGroup *group in self.groupsAndItems)
-    {
         for (SearchHistoryTableItem *dataItem in group.groupItems)
         {
-            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                              newLocation.coordinate.latitude,
-                                                              dataItem.item.longitude, dataItem.item.latitude);
-            
-            dataItem.distance = [app getFormattedDistance:distance];
-            dataItem.distanceMeters = distance;
-            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
-            dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            if (searchNearMapCenter)
+                [dataItem setMapCenterCoordinate:myLocation];
+            else
+                [dataItem resetMapCenterSearch];
         }
-    }
-    
-    if (isDecelerating)
+}
+
+- (void)updateDistanceAndDirection
+{
+    if ([self.tableView isEditing] || _decelerating)
         return;
-    
+        
     [self refreshVisibleRows];
 }
 
@@ -404,7 +447,9 @@
     cell.openingHoursView.hidden = YES;
     cell.timeIcon.hidden = YES;
     
-    [cell.distanceView setText:dataItem.distance];
+    OADistanceDirection *distDir = [dataItem getEvaluatedDistanceDirection];
+    
+    [cell.distanceView setText:distDir.distance];
     if (_searchNearMapCenter)
     {
         cell.directionImageView.hidden = YES;
@@ -418,7 +463,7 @@
         CGRect frame = cell.distanceView.frame;
         frame.origin.x = 69.0;
         cell.distanceView.frame = frame;
-        cell.directionImageView.transform = CGAffineTransformMakeRotation(dataItem.direction);
+        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
     }
 }
 
@@ -518,19 +563,19 @@
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    isDecelerating = YES;
+    _decelerating = YES;
 }
 
 // Load images for all onscreen rows when scrolling is finished
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
     if (!decelerate)
-        isDecelerating = NO;
+        _decelerating = NO;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    isDecelerating = NO;
+    _decelerating = NO;
 }
 
 #pragma mark - UIGestureRecognizerDelegate

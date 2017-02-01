@@ -17,7 +17,7 @@
 @class OAGpxWptItem;
 @class OAGPX;
 @class OADestination;
-@class OAHistoryItem;
+@class OAHistoryItem, OAAddress;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 
@@ -58,6 +58,7 @@
 
 - (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithFavorite:(double)lat longitude:(double)lon caption:(NSString *)caption icon:(UIImage *)icon pushed:(BOOL)pushed;
+- (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed;
 - (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed;
 - (void)openTargetViewWithHistoryItem:(OAHistoryItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 

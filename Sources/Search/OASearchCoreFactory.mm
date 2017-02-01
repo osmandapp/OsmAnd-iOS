@@ -24,6 +24,11 @@
 #import "OAPOIHelper.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAPOI.h"
+#import "OAAddress.h"
+#import "OABuilding.h"
+#import "OAStreet.h"
+#import "OACity.h"
+#import "OAStreetIntersection.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -208,7 +213,7 @@
         for (const auto& c : _resArray)
         {
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
-            res.address = c;
+            res.object = [[OACity alloc] initWithAddress:c];
             res.resourceId = _streetGroupResourceIds.value(c).toNSString();
             res.localeName = c->getName(QString::fromNSString([[phrase getSettings] getLang]), [[phrase getSettings] isTransliterate]).toNSString();
             if (!c->localizedNames.isEmpty())
@@ -306,7 +311,6 @@
                                       const auto& address = ((OsmAnd::AddressesByNameSearch::ResultEntry&)resultEntry).address;
                                       
                                       OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
-                                      sr.address = address;
                                       sr.resourceId = currentResId;
                                       sr.localeName = address->getName(lang, transliterate).toNSString();
                                       sr.otherNames = [OASearchCoreFactory getAllNames:address->localizedNames];
@@ -331,13 +335,15 @@
                                               sr.priorityDistance = 5;
                                           
                                           const auto& street = std::dynamic_pointer_cast<const OsmAnd::Street>(address);
+                                          sr.object = [[OAStreet alloc] initWithStreet:street];
                                           sr.objectType = STREET;
                                           sr.localeRelatedObjectName = street->streetGroup->getName(lang, transliterate).toNSString();
-                                          sr.relatedAddress = street->streetGroup;
+                                          sr.relatedObject = [[OACity alloc] initWithCity:street->streetGroup];
                                       }
                                       else if (address->addressType == OsmAnd::AddressType::StreetGroup)
                                       {
                                           const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(address);
+                                          sr.object = [[OACity alloc] initWithCity:city];
                                           if (city->type == OsmAnd::ObfAddressStreetGroupType::CityOrTown)
                                           {
                                               if([phrase isNoSelectedType])
@@ -384,7 +390,7 @@
                                               if (c)
                                               {
                                                   sr.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
-                                                  sr.relatedAddress = c;
+                                                  sr.relatedObject = [[OACity alloc] initWithCity:c];
                                                   sr.distRelatedObjectName = minDist;
                                               }
                                               sr.objectType = VILLAGE;
@@ -404,10 +410,10 @@
             {
                 if (res.objectType == STREET)
                 {
-                    const auto & street = std::dynamic_pointer_cast<const OsmAnd::Street>(res.address);
-                    const auto& ct = street->streetGroup;
-                    NSMutableArray<NSString *> *otherNames = [OASearchCoreFactory getAllNames:ct->localizedNames];
-                    [phrase countUnknownWordsMatch:res localeName:ct->getName(lang, transliterate).toNSString() otherNames:otherNames];
+                    OAStreet *street = (OAStreet *)res.object;
+                    OACity *ct = street.city;
+                    NSMutableArray<NSString *> *otherNames = [NSMutableArray arrayWithArray:ct.localizedNames.allValues];
+                    [phrase countUnknownWordsMatch:res localeName:[ct getNameQ:lang transliterate:transliterate] otherNames:otherNames];
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_streetsApi];
                 } else {
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
@@ -929,7 +935,7 @@
     std::shared_ptr<const OsmAnd::Street> s;
     int priority = SEARCH_BUILDING_BY_STREET_PRIORITY;
     if ([phrase isLastWord:STREET])
-        s = std::dynamic_pointer_cast<const OsmAnd::Street>(lastSelectedWord.result.address);
+        s = ((OAStreet *)lastSelectedWord.result.object).street;
     
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, &resultMatcher]
@@ -941,7 +947,7 @@
     if ([OASearchCoreFactory isLastWordCityGroup:phrase])
     {
         priority = SEARCH_BUILDING_BY_CITY_PRIORITY;
-        const auto& city = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(lastSelectedWord.result.address);
+        const auto& city = ((OACity *)lastSelectedWord.result.object).city;
         bool res = dataInterface->preloadStreets({std::const_pointer_cast<OsmAnd::StreetGroup>(city)}, ctrl);
         if (res)
         {
@@ -993,11 +999,11 @@
             
             res.localeName = b->getName(lang, transliterate).toNSString();
             res.otherNames = [OASearchCoreFactory getAllNames:b->localizedNames];
-            res.address = b;
+            res.object = [[OABuilding alloc] initWithBuilding:b];
             res.resourceId = resId;
             res.priority = priority;
             res.priorityDistance = 0;
-            res.relatedAddress = s;
+            res.relatedObject = [[OAStreet alloc] initWithStreet:s];
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
             res.objectType = HOUSE;
             if (interpolation)
@@ -1019,9 +1025,9 @@
                 
                 res.otherNames = [OASearchCoreFactory getAllNames:street->localizedNames];
                 res.localeName = street->getName(lang, transliterate).toNSString();
-                res.address = street;
+                res.object = [[OAStreet alloc] initWithStreet:street];
                 res.resourceId = resId;
-                res.relatedAddress = s;
+                res.relatedObject = [[OAStreet alloc] initWithStreet:s];
                 res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
                 res.priorityDistance = 0;
                 res.objectType = STREET_INTERSECTION;
@@ -1084,7 +1090,7 @@
         QString lang = QString::fromNSString([[phrase getSettings] getLang]);
         bool transliterate = [[phrase getSettings] isTransliterate];
 
-        const auto& c = std::dynamic_pointer_cast<const OsmAnd::StreetGroup>(sw.result.address);
+        const auto& c = ((OACity *)sw.result.object).city;
         if (c->streets.isEmpty())
         {
             const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -1107,7 +1113,7 @@
                 continue;
             
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
-            res.address = object;
+            res.object = [[OAStreet alloc] initWithStreet:object];
             res.preferredZoom = 17;
             res.resourceId = sw.result.resourceId;
             res.location = [OASearchCoreFactory getLocation:object->position31];

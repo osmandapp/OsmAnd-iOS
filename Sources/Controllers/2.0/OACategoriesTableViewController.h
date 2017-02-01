@@ -7,24 +7,31 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+
+@class OAQuickSearchListItem;
 
 @protocol OACategoryTableDelegate
 
 @required
 
-- (void)didSelectCategoryItem:(id)item;
-- (void)createPOIUIFilter;
-- (void)editPOIUIFilter:(id)item;
+- (void) createPOIUIFIlter;
 
 @end
 
 @interface OACategoriesTableViewController : UITableViewController
 
-@property (nonatomic) NSArray* dataArray;
-@property (nonatomic) BOOL searchNearMapCenter;
+@property (nonatomic) NSArray<OAQuickSearchListItem *> *dataArray;
+@property (nonatomic, readonly) BOOL searchNearMapCenter;
+@property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
 
 @property (weak, nonatomic) id<OACategoryTableDelegate> delegate;
 
 - (instancetype)initWithFrame:(CGRect)frame;
+
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
+- (void) resetMapCenterSearch;
+
+- (void) reloadData;
 
 @end

@@ -10,12 +10,21 @@
 #import "Localization.h"
 #import "OAPOISearchHelper.h"
 #import "OACustomPOIViewController.h"
+#import "OASearchUICore.h"
+#import "OAQuickSearchHelper.h"
+#import "OAQuickSearchListItem.h"
+#import "OASearchCoreFactory.h"
+#import "OACustomSearchButton.h"
+#import "OAQuickSearchTableController.h"
 
 @interface OACategoriesTableViewController ()
 
 @end
 
 @implementation OACategoriesTableViewController
+{
+    OAQuickSearchTableController *_tableController;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame
 {
@@ -30,59 +39,54 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+
+    _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
+    self.tableView.dataSource = _tableController;
+    self.tableView.delegate = _tableController;
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+-(void)viewWillAppear:(BOOL)animated
 {
-    return 1;
+    [super viewWillAppear:animated];
+    [self reloadData];
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (void) generateData
 {
-    return [OAPOISearchHelper getHeightForHeader];
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getHeightForFooter];
-}
-
--(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OAPOISearchHelper getHeightForRowAtIndexPath:indexPath tableView:tableView dataArray:_dataArray dataPoiArray:nil showCoordinates:NO];
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return [OAPOISearchHelper getNumberOfRows:_dataArray dataPoiArray:nil currentScope:EPOIScopeUndefined showCoordinates:NO showTopList:YES poiInList:NO searchRadiusIndex:0 searchRadiusIndexMax:0];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return [OAPOISearchHelper getCellForRowAtIndexPath:indexPath tableView:tableView dataArray:_dataArray dataPoiArray:nil currentScope:EPOIScopeUndefined poiInList:NO showCoordinates:NO foundCoords:nil showTopList:YES searchRadiusIndex:0 searchRadiusIndexMax:0 searchNearMapCenter:_searchNearMapCenter];
-}
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (self.delegate)
+    OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
+    NSMutableArray<OAQuickSearchListItem *> *rows = [NSMutableArray array];
+    if (res)
     {
-        if (indexPath.row < _dataArray.count)
-        {
-            [self.delegate didSelectCategoryItem:_dataArray[indexPath.row]];
-        }
-        else if (indexPath.row == _dataArray.count)
-        {
-            [self.delegate didSelectCategoryItem:nil];
-        }
-        else
-        {
-            [self.delegate createPOIUIFilter];
-        }
+        for (OASearchResult *sr in [res getCurrentSearchResults])
+            [rows addObject:[[OAQuickSearchListItem alloc] initWithSearchResult:sr]];
+        
+        [rows addObject:[[OACustomSearchButton alloc] initWithClickFunction:^(id sender) {
+            if (self.delegate)
+                [self.delegate createPOIUIFIlter];
+        }]];
     }
+    self.dataArray = [NSArray arrayWithArray:rows];
+}
+
+- (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
+{
+    _mapCenterCoordinate = mapCenterCoordinate;
+    _searchNearMapCenter = YES;
+    [_tableController setMapCenterCoordinate:mapCenterCoordinate];
+}
+
+- (void) resetMapCenterSearch
+{
+    _searchNearMapCenter = NO;
+    [_tableController resetMapCenterSearch];
+}
+
+- (void) reloadData
+{
+    [self generateData];
+    [self.tableView reloadData];
+    if (self.dataArray.count > 0)
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 @end

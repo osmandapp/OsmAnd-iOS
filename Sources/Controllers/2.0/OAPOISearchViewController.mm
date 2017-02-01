@@ -213,7 +213,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
     _categoriesViewController = [[OACategoriesTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _categoriesViewController.delegate = self;
-    _categoriesViewController.searchNearMapCenter = _searchNearMapCenter;
+    //_categoriesViewController.searchNearMapCenter = _searchNearMapCenter;
     
     _historyViewController = [[OAHistoryTableViewController alloc] initWithFrame:_pageController.view.bounds];
     _historyViewController.delegate = self;
@@ -565,7 +565,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     if (self.isViewLoaded)
     {
         _historyViewController.searchNearMapCenter = searchNearMapCenter;
-        _categoriesViewController.searchNearMapCenter = searchNearMapCenter;
+        //_categoriesViewController.searchNearMapCenter = searchNearMapCenter;
         [self updateSearchNearMapCenterLabel];
 
         _dataInvalidated = YES;
@@ -1960,11 +1960,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     OACustomPOIViewController *customPOI = [[OACustomPOIViewController alloc] initWithFilter:filter];
     customPOI.delegate = self;
     [self.navigationController pushViewController:customPOI animated:YES];
-}
-
--(void)editPOIUIFilter:(id)item
-{
-    
 }
 
 #pragma mark - OAHistoryTableDelegate

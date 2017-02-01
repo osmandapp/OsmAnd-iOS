@@ -32,7 +32,7 @@
 #import "OADestinationViewController.h"
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
-#import "OAPOISearchViewController.h"
+#import "OAQuickSearchViewController.h"
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
@@ -62,6 +62,11 @@
 #import "OAFirebaseHelper.h"
 #import "OATargetMultiView.h"
 #import "OAReverseGeocoder.h"
+#import "OAAddress.h"
+#import "OABuilding.h"
+#import "OAStreet.h"
+#import "OAStreetIntersection.h"
+#import "OACity.h"
 
 #import <UIAlertView+Blocks.h>
 #import <UIAlertView-Blocks/RIButtonItem.h>
@@ -131,7 +136,7 @@ typedef enum
     OADestination *_targetDestination;
 
     OAMapSettingsViewController *_mapSettings;
-    OAPOISearchViewController *_searchPOI;
+    OAQuickSearchViewController *_searchViewController;
     UILongPressGestureRecognizer *_shadowLongPress;
     
     BOOL _customStatusBarStyleNeeded;
@@ -973,12 +978,12 @@ typedef enum
     }
 
     
-    if (!_searchPOI)
-        _searchPOI = [[OAPOISearchViewController alloc] init];
-    _searchPOI.myLocation = searchLocation;
-    _searchPOI.distanceFromMyLocation = distanceFromMyLocation;
-    _searchPOI.searchNearMapCenter = searchNearMapCenter;
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchPOI];
+    if (!_searchViewController)
+        _searchViewController = [[OAQuickSearchViewController alloc] init];
+    _searchViewController.myLocation = searchLocation;
+    _searchViewController.distanceFromMyLocation = distanceFromMyLocation;
+    _searchViewController.searchNearMapCenter = searchNearMapCenter;
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
     navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
@@ -1517,59 +1522,6 @@ typedef enum
 - (NSString *)findRoadNameByLat:(double)lat lon:(double)lon
 {
     return [[OAReverseGeocoder instance] lookupAddressAtLat:lat lon:lon];
-    
-    /*
-    std::shared_ptr<OsmAnd::CachingRoadLocator> _roadLocator;
-    _roadLocator.reset(new OsmAnd::CachingRoadLocator(_app.resourcesManager->obfsCollection));
-    
-    std::shared_ptr<const OsmAnd::Road> road;
-    
-    const OsmAnd::PointI position31(
-                                    OsmAnd::Utilities::get31TileNumberX(lon),
-                                    OsmAnd::Utilities::get31TileNumberY(lat));
-    
-    road = _roadLocator->findNearestRoad(position31,
-                                         kMaxRoadDistanceInMeters,
-                                         OsmAnd::RoutingDataLevel::Detailed,
-                                         [self]
-                                         (const std::shared_ptr<const OsmAnd::Road>& road)
-                                         {
-                                             return road->containsTag(QString("highway")) && road->captions.count() > 0;
-                                         });
-    
-    NSString* localizedTitle;
-    NSString* nativeTitle;
-    NSString* roadTitle;
-    if (road)
-    {
-        NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-        if (prefLang)
-        {
-            const auto mainLanguage = QString::fromNSString(prefLang);
-            const auto localizedName = road->getCaptionInLanguage(mainLanguage);
-            if (!localizedName.isNull())
-                localizedTitle = localizedName.toNSString();
-        }
-        const auto nativeName = road->getCaptionInNativeLanguage();
-        if (!nativeName.isNull())
-            nativeTitle = nativeName.toNSString();
-    }
-    
-    if (localizedTitle)
-    {
-        roadTitle = localizedTitle;
-    }
-    else if (nativeTitle)
-    {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        if (settings.settingMapLanguageTranslit)
-            roadTitle = OsmAnd::ICU::transliterateToLatin(road->getCaptionInNativeLanguage()).toNSString();
-        else
-            roadTitle = nativeTitle;
-    }
-    
-    return roadTitle;
-    */
 }
 
 - (void)goToTargetPointDefault
@@ -2632,6 +2584,53 @@ typedef enum
     targetPoint.touchPoint = touchPoint;
     targetPoint.icon = icon;
     targetPoint.toolbarNeeded = pushed;
+    
+    [_targetMenuView setTargetPoint:targetPoint];
+    
+    [self showTargetPointMenu:YES showFullMenu:NO onComplete:^{
+        if (pushed)
+            [self goToTargetPointDefault];
+        else
+            [self targetGoToPoint];
+    }];
+}
+
+- (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed
+{
+    double lat = address.latitude;
+    double lon = address.longitude;
+    
+    [_mapViewController showContextPinMarker:lat longitude:lon animated:NO];
+    
+    OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
+    
+    CGPoint touchPoint = CGPointMake(DeviceScreenWidth / 2.0, DeviceScreenWidth / 2.0);
+    touchPoint.x *= renderView.contentScaleFactor;
+    touchPoint.y *= renderView.contentScaleFactor;
+    
+    OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
+    
+    NSString *caption = name.length == 0 ? address.name : name;
+    NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
+    UIImage *icon = [address icon];
+    
+    targetPoint.type = OATargetAddress;
+    
+    _targetMenuView.isAddressFound = YES;
+    _formattedTargetName = description;
+    _targetMode = EOATargetPoint;
+    _targetLatitude = lat;
+    _targetLongitude = lon;
+    _targetZoom = 16.0;
+    
+    targetPoint.location = CLLocationCoordinate2DMake(lat, lon);
+    targetPoint.title = caption;
+    targetPoint.titleAddress = description;
+    targetPoint.zoom = _targetZoom;
+    targetPoint.touchPoint = touchPoint;
+    targetPoint.icon = icon;
+    targetPoint.toolbarNeeded = pushed;
+    targetPoint.targetObj = address;
     
     [_targetMenuView setTargetPoint:targetPoint];
     

@@ -10,8 +10,8 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "OAObjectType.h"
+#import "OAGPXDocument.h"
 
-#include <OsmAndCore/Data/Address.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/GeoInfoDocument.h>
@@ -24,7 +24,6 @@
 @property (nonatomic) OASearchPhrase *requiredSearchPhrase;
 
 @property (nonatomic) NSObject *object;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> address;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::Amenity> amenity;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::IFavoriteLocation> favorite;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::GeoInfoDocument::LocationMark> wpt;
@@ -47,7 +46,6 @@
 @property (nonatomic) NSString *localeRelatedObjectName;
 @property (nonatomic) NSObject *relatedObject;
 @property (nonatomic) NSString *relatedResourceId;
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::Address> relatedAddress;
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::GeoInfoDocument> relatedGpx;
 @property (nonatomic) double distRelatedObjectName;
 

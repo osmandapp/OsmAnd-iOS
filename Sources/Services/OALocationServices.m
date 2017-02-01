@@ -593,8 +593,25 @@
 {
     if (sourceLocation && destinationLocation)
     {
+        return [self radiusFromBearingToLatitude:destinationLocation.coordinate.latitude longitude:destinationLocation.coordinate.longitude sourceLocation:sourceLocation];
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude
+{
+    return [self radiusFromBearingToLatitude:latitude longitude:longitude sourceLocation:self.lastKnownLocation];
+}
+
+- (CGFloat)radiusFromBearingToLatitude:(double)latitude longitude:(double)longitude sourceLocation:(CLLocation*)sourceLocation
+{
+    if (sourceLocation)
+    {
         CLLocationCoordinate2D coord1 = sourceLocation.coordinate;
-        CLLocationCoordinate2D coord2 = destinationLocation.coordinate;
+        CLLocationCoordinate2D coord2 = CLLocationCoordinate2DMake(latitude, longitude);
         double distance, bearing;
         [self computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
         

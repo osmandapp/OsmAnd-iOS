@@ -514,3 +514,9 @@
 "city_type_village" = "Landsby";
 "city_type_town" = "By";
 "city_type_city" = "Stor by";
+"show_something_on_map" = "Vis %@ på kortet";
+"search_POI_level_btn" = "Find flere";
+"shared_string_street" = "Gade";
+"shared_string_building" = "Bygning";
+"shared_string_street_intersection" = "Gadekryds";
+"shared_string_address" = "Adresse";

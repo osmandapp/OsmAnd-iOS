@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OASearchUICore.h"
 #import "OASearchPhrase.h"
+#import "OASearchSettings.h"
 #import "OASearchResultMatcher.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"
@@ -257,6 +258,7 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
 
 - (void) initSearchUICore
 {
+    [self setResourcesForSearchUICore];
     [_core initApi];
     
     // Register favorites search api
@@ -282,6 +284,17 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
     for (OACustomSearchPoiFilter *udf in [poiFilters getUserDefinedPoiFilters])
         [_core addCustomSearchPoiFilter:udf priority:0];
+}
+
+- (void) setResourcesForSearchUICore
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    NSMutableArray<NSString *> *resIds = [NSMutableArray array];
+    for (const auto& resource : app.resourcesManager->getLocalResources())
+        if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+            [resIds addObject:resource->id.toNSString()];
+            
+    [[_core getSearchSettings] setOfflineIndexes:[NSArray arrayWithArray:resIds]];
 }
 
 @end

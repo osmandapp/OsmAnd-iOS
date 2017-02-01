@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OAQuickSearchTableController.h"
 
 @class OAQuickSearchListItem;
 
@@ -21,11 +22,11 @@
 
 @interface OACategoriesTableViewController : UITableViewController
 
-@property (nonatomic) NSArray<OAQuickSearchListItem *> *dataArray;
 @property (nonatomic, readonly) BOOL searchNearMapCenter;
 @property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
 
 @property (weak, nonatomic) id<OACategoryTableDelegate> delegate;
+@property (weak, nonatomic) id<OAQuickSearchTableDelegate> tableDelegate;
 
 - (instancetype)initWithFrame:(CGRect)frame;
 

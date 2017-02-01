@@ -396,6 +396,63 @@
                 }
                 return cell;
             }
+            case FAVORITE:
+            {
+                //
+                break;
+            }
+            case WPT:
+            {
+                //
+                break;
+            }
+            case CITY:
+            case VILLAGE:
+            case POSTCODE:
+            case STREET:
+            case HOUSE:
+            case STREET_INTERSECTION:
+            {
+                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
+                
+                OAPointDescCell* cell;
+                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+                if (cell == nil)
+                {
+                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
+                }
+                
+                if (cell)
+                {
+                    OAAddress *address = (OAAddress *)res.object;
+                    [cell.titleView setText:[item getName]];
+                    cell.titleIcon.image = [address icon];
+                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                    [cell updateDescVisibility];
+                    cell.openingHoursView.hidden = YES;
+                    cell.timeIcon.hidden = YES;
+                    
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    [cell.distanceView setText:distDir.distance];
+                    if (self.searchNearMapCenter)
+                    {
+                        cell.directionImageView.hidden = YES;
+                        CGRect frame = cell.distanceView.frame;
+                        frame.origin.x = 51.0;
+                        cell.distanceView.frame = frame;
+                    }
+                    else
+                    {
+                        cell.directionImageView.hidden = NO;
+                        CGRect frame = cell.distanceView.frame;
+                        frame.origin.x = 69.0;
+                        cell.distanceView.frame = frame;
+                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
+                    }
+                }
+                return cell;
+            }
             case POI:
             {
                 static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
@@ -410,14 +467,14 @@
                 
                 if (cell)
                 {
-                    OAPOI* item = (OAPOI *)res.object;
-                    [cell.titleView setText:item.nameLocalized];
-                    cell.titleIcon.image = [item icon];
-                    [cell.descView setText:item.type.nameLocalized];
+                    OAPOI *poi = (OAPOI *)res.object;
+                    [cell.titleView setText:[item getName]];
+                    cell.titleIcon.image = [poi icon];
+                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
                     [cell updateDescVisibility];
-                    if (item.hasOpeningHours)
+                    if (poi.hasOpeningHours)
                     {
-                        [cell.openingHoursView setText:item.openingHours];
+                        [cell.openingHoursView setText:poi.openingHours];
                         cell.timeIcon.hidden = NO;
                         [cell updateOpeningTimeInfo];
                     }
@@ -427,7 +484,8 @@
                         cell.timeIcon.hidden = YES;
                     }
                     
-                    [cell.distanceView setText:item.distance];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
                         cell.directionImageView.hidden = YES;
@@ -441,7 +499,7 @@
                         CGRect frame = cell.distanceView.frame;
                         frame.origin.x = 69.0;
                         cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(item.direction);
+                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
                     }
                 }
                 return cell;

@@ -11,6 +11,20 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OAQuickSearchViewController">
             <connections>
+                <outlet property="barActionImageButton" destination="xxr-Ry-7EI" id="WcC-zy-EVK"/>
+                <outlet property="barActionImageView" destination="lkj-I7-Gca" id="PmV-Ar-RNH"/>
+                <outlet property="barActionLeftImageButton" destination="t5P-96-kKl" id="mCR-aV-bhD"/>
+                <outlet property="barActionTextButton" destination="un9-Ji-EfT" id="YKX-mZ-9bN"/>
+                <outlet property="barActionView" destination="LwJ-HJ-apZ" id="yvg-1Z-Gjx"/>
+                <outlet property="bottomImageBtn" destination="6Pb-It-gb8" id="wxX-nV-V9e"/>
+                <outlet property="bottomTextBtn" destination="Xqh-Cv-Gkf" id="cGM-Ru-XaF"/>
+                <outlet property="bottomView" destination="Imh-K6-6e1" id="EIM-6x-3dl"/>
+                <outlet property="btnCancel" destination="l2Q-Jt-wak" id="fnc-zm-DwP"/>
+                <outlet property="btnMyLocation" destination="nF8-WL-lIG" id="tWy-XG-95Q"/>
+                <outlet property="lbSearchNearCenter" destination="i6j-Go-2PQ" id="OUX-6r-hyi"/>
+                <outlet property="searchNearCenterView" destination="5O8-Pt-l6E" id="KA4-oW-RvZ"/>
+                <outlet property="tableView" destination="o9I-Kc-Ruy" id="lMf-jY-L94"/>
+                <outlet property="tabs" destination="HUB-ml-bM7" id="yZV-xl-mWd"/>
                 <outlet property="textField" destination="gwj-kj-eiW" id="bdy-hd-dxU"/>
                 <outlet property="topView" destination="4sr-KJ-Tkc" id="xSa-cG-dr7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
@@ -31,6 +45,7 @@
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
                             <connections>
+                                <action selector="textFieldValueChanged:" destination="-1" eventType="editingChanged" id="zqD-yl-w8R"/>
                                 <outlet property="delegate" destination="-1" id="MDF-f7-86X"/>
                             </connections>
                         </textField>
@@ -42,6 +57,9 @@
                                 <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </state>
+                            <connections>
+                                <action selector="btnCancelClicked:" destination="-1" eventType="touchUpInside" id="gcf-x2-mdG"/>
+                            </connections>
                         </button>
                         <view contentMode="scaleToFill" id="5O8-Pt-l6E">
                             <rect key="frame" x="0.0" y="60" width="320" height="44"/>
@@ -60,6 +78,9 @@
                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="12"/>
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" image="position_track_map_mode_button.png"/>
+                                    <connections>
+                                        <action selector="btnMyLocationClicked:" destination="-1" eventType="touchUpInside" id="AT3-gi-o9P"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -79,6 +100,9 @@
                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="12"/>
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" image="ic_close.png"/>
+                                    <connections>
+                                        <action selector="barActionLeftImgButtonPress:" destination="-1" eventType="touchUpInside" id="Vn6-zh-Pjq"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="un9-Ji-EfT">
                                     <rect key="frame" x="44" y="0.0" width="234" height="44"/>
@@ -87,6 +111,9 @@
                                     <state key="normal" title="Show on map">
                                         <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </state>
+                                    <connections>
+                                        <action selector="barActionTextButtonPress:" destination="-1" eventType="touchUpInside" id="4EE-9m-XqX"/>
+                                    </connections>
                                 </button>
                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="xxr-Ry-7EI" userLabel="Bar Action Img Button">
                                     <rect key="frame" x="276" y="0.0" width="44" height="44"/>
@@ -94,6 +121,9 @@
                                     <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="12"/>
                                     <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <state key="normal" image="position_track_map_mode_button.png"/>
+                                    <connections>
+                                        <action selector="barActionImgButtonPress:" destination="-1" eventType="touchUpInside" id="qCS-wy-eXU"/>
+                                    </connections>
                                 </button>
                             </subviews>
                             <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -106,6 +136,9 @@
                                 <segment title="Categories"/>
                             </segments>
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <connections>
+                                <action selector="tabChanged:" destination="-1" eventType="valueChanged" id="EA2-5C-oms"/>
+                            </connections>
                         </segmentedControl>
                     </subviews>
                     <color key="backgroundColor" red="0.98823529409999999" green="0.4823529412" blue="0.031372549020000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -126,6 +159,9 @@
                             <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="12"/>
                             <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" image="ic_close.png"/>
+                            <connections>
+                                <action selector="bottomImageButtonPress:" destination="-1" eventType="touchUpInside" id="AVo-b0-oEE"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="Xqh-Cv-Gkf">
                             <rect key="frame" x="54.5" y="0.0" width="210" height="57"/>
@@ -134,6 +170,9 @@
                             <state key="normal" title="SAVE">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
+                            <connections>
+                                <action selector="bottomTextButtonPress:" destination="-1" eventType="touchUpInside" id="SYJ-Xd-8we"/>
+                            </connections>
                         </button>
                     </subviews>
                     <color key="backgroundColor" red="0.1843137255" green="0.47843137250000001" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

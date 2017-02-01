@@ -15,7 +15,6 @@
 #import "OAQuickSearchListItem.h"
 #import "OASearchCoreFactory.h"
 #import "OACustomSearchButton.h"
-#import "OAQuickSearchTableController.h"
 
 @interface OACategoriesTableViewController ()
 
@@ -51,6 +50,12 @@
     [self reloadData];
 }
 
+-(void)setTableDelegate:(id<OAQuickSearchTableDelegate>)tableDelegate
+{
+    _tableDelegate = tableDelegate;
+    _tableController.delegate = tableDelegate;
+}
+
 - (void) generateData
 {
     OASearchResultCollection *res = [[[OAQuickSearchHelper instance] getCore] shallowSearch:[OASearchAmenityTypesAPI class] text:@"" matcher:nil];
@@ -65,7 +70,7 @@
                 [self.delegate createPOIUIFIlter];
         }]];
     }
-    self.dataArray = [NSArray arrayWithArray:rows];
+    [_tableController updateData:[NSArray arrayWithArray:rows] append:NO];
 }
 
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate
@@ -84,9 +89,6 @@
 - (void) reloadData
 {
     [self generateData];
-    [self.tableView reloadData];
-    if (self.dataArray.count > 0)
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
 }
 
 @end

@@ -506,3 +506,9 @@
 "city_type_district" = "Distretu";
 "city_type_neighbourhood" = "Bighinadu";
 "postcode" = "Còdighe postale";
+"show_something_on_map" = "Ammustra %@ in sa mapa";
+"search_POI_level_btn" = "Agàtane àteros";
+"shared_string_street" = "Istrada";
+"shared_string_building" = "Edifìtziu";
+"shared_string_street_intersection" = "Rugrada";
+"shared_string_address" = "Indiritzu";

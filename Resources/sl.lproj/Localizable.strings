@@ -221,3 +221,14 @@
 "edit_filter_delete_dialog_title" = "Ali želite izbrisati izbrani filter?";
 "apply_filters" = "Uveljavi filtre";
 "filter_poi_hint" = "Filtriraj po imenu";
+"postcode" = "Poštna številka";
+"shared_string_from" = "od";
+"city_type_district" = "Območje";
+"city_type_neighbourhood" = "Soseska";
+"shared_string_address" = "Naslov";
+"city_type_suburb" = "Predmestje";
+"city_type_hamlet" = "Zaselek";
+"city_type_village" = "Vas";
+"city_type_town" = "Kraj";
+"city_type_city" = "Mesto";
+"search_POI_level_btn" = "Več zadetkov";

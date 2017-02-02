@@ -449,6 +449,11 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
     return _phrase;
 }
 
+- (void) cancelSearch
+{
+    [_requestNumber incrementAndGet];
+}
+
 - (OASearchResultCollection *) search:(NSString *)text matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
     int request = [_requestNumber incrementAndGet];
@@ -520,7 +525,8 @@ static const int DEPTH_TO_CHECK_SAME_SEARCH_RESULTS = 20;
         {
             [api search:phrase resultMatcher:matcher];
             
-            [matcher apiSearchFinished:api phrase:phrase];
+            if (![matcher isCancelled])
+                [matcher apiSearchFinished:api phrase:phrase];
         }
         catch (NSException *e)
         {

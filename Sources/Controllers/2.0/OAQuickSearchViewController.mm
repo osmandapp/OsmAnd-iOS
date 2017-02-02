@@ -862,6 +862,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
     //updateClearButtonVisibility(true);
     BOOL textEmpty = newQueryText.length == 0;
     [self updateTabsVisibility:textEmpty];
+    [self showSearchIcon];
     if (textEmpty && self.poiFilterApplied)
     {
         self.poiFilterApplied = NO;
@@ -871,10 +872,14 @@ typedef NS_ENUM(NSInteger, BarActionType)
     {
         self.searchQuery = newQueryText;
         if (self.searchQuery.length == 0)
+        {
             [self.searchUICore resetPhrase];
+            [self.searchUICore cancelSearch];
+        }
         else
+        {
             [self runSearch];
-        
+        }
     }
     else if (self.runSearchFirstTime)
     {
@@ -933,7 +938,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void) runSearch:(NSString *)text
 {
-    [self showSearchIcon];
+    [self showWaitingIndicator];
     OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];

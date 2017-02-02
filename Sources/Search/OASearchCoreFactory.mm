@@ -408,6 +408,9 @@
             
             for (OASearchResult *res in immediateResults)
             {
+                if ([resultMatcher isCancelled])
+                    break;
+                
                 if (res.objectType == STREET)
                 {
                     OAStreet *street = (OAStreet *)res.object;
@@ -419,7 +422,9 @@
                     [self subSearchApiOrPublish:phrase resultMatcher:resultMatcher res:res api:_cityApi];
                 }
             }
-            [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+            
+            if (![resultMatcher isCancelled])
+                [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
         }
     }
 }
@@ -532,8 +537,9 @@
                                   return false;
                               },
                               ctrl);
-        
-        [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+
+        if (![resultMatcher isCancelled])
+            [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
     }
 
     return true;
@@ -638,6 +644,9 @@
     }
     for (OAPOIBaseType *pt in results)
     {
+        if ([resultMatcher isCancelled])
+            break;
+        
         OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
         res.localeName = pt.nameLocalized;
         res.object = pt;
@@ -648,6 +657,9 @@
     }
     for (int i = 0; i < _customPoiFilters.count; i++)
     {
+        if ([resultMatcher isCancelled])
+            break;
+        
         OACustomSearchPoiFilter *csf = _customPoiFilters[i];
         int p = _customPoiFiltersPriorites[i].intValue;
         if (![phrase isUnknownSearchWordPresent] || [nm matches:[csf getName]])
@@ -811,7 +823,8 @@
                                   },
                                   ctrl);
 
-            [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
+            if (![resultMatcher isCancelled])
+                [resultMatcher apiSearchRegionFinished:self resourceId:resId phrase:phrase];
         }
     }
     return true;
@@ -993,6 +1006,9 @@
         }
         for (const auto& b : s->buildings)
         {
+            if ([resultMatcher isCancelled])
+                break;
+            
             OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
             bool interpolation = b->belongsToInterpolation(lw);
             if (![sm matches:b->nativeName.toNSString()] && !interpolation)
@@ -1019,6 +1035,9 @@
         {
             for (const auto& streetIntersection : s->intersectedStreets)
             {
+                if ([resultMatcher isCancelled])
+                    break;
+                
                 const auto& street = streetIntersection->street;
                 OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
                 if (![sm matches:street->nativeName.toNSString()] && ![sm matchesMap:[OASearchCoreFactory getAllNames:street->localizedNames]])

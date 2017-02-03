@@ -1471,8 +1471,7 @@
     symbol.caption = amenity->nativeName.toNSString();
     
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
-    NSMutableString *nameLocalized = [NSMutableString string];
-    [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:symbol.caption nameLocalized:nameLocalized names:names];
+    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
     if (nameLocalized.length > 0)
         symbol.caption = nameLocalized;
     symbol.localizedNames = names;

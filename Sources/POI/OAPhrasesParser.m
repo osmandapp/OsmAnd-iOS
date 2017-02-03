@@ -145,6 +145,8 @@ defaultAttributeCount:(int)defaultAttributeCount attributes:(xmlSAX2Attributes *
                 _currentName = [[NSString alloc] initWithBytes:attributes[i].value
                                                                 length:length
                                                               encoding:NSUTF8StringEncoding];
+                if ([_currentName isEqualToString:@"poi_amenity_atm"])
+                    _currentName = @"poi_osmand_amenity_atm";
             }
         }
         _parsingString = YES;

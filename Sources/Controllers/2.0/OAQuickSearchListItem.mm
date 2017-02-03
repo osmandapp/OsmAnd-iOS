@@ -229,7 +229,7 @@
         case POI:
         {
             OAPOI *poi = (OAPOI *) searchResult.object;
-            return poi.type.nameLocalized;
+            return [[self.class getName:searchResult] isEqualToString:poi.type.nameLocalized] ? @"" : poi.type.nameLocalized;
         }
         case LOCATION:
         {

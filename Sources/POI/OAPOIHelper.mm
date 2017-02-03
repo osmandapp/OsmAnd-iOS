@@ -32,6 +32,7 @@
 #include <OsmAndCore/Search/AmenitiesByNameSearch.h>
 #include <OsmAndCore/Search/AmenitiesInAreaSearch.h>
 #include <OsmAndCore/QKeyValueIterator.h>
+#include <OsmAndCore/ICU.h>
 
 #define kSearchLimitRaw 5000
 #define kRadiusKmToMetersKoef 1200.0
@@ -842,8 +843,7 @@
     poi.name = amenity->nativeName.toNSString();
     
     NSMutableDictionary *names = [NSMutableDictionary dictionary];
-    NSMutableString *nameLocalized = [NSMutableString string];
-    [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:poi.name nameLocalized:nameLocalized names:names];
+    NSString *nameLocalized = [OAPOIHelper processLocalizedNames:amenity->localizedNames nativeName:amenity->nativeName names:names];
     if (nameLocalized.length > 0)
         poi.nameLocalized = nameLocalized;
     poi.localizedNames = names;
@@ -855,7 +855,7 @@
     poi.localizedContent = content;
     
     if (!poi.nameLocalized)
-        poi.nameLocalized = amenity->nativeName.toNSString();
+        poi.nameLocalized = poi.name;
     
     OAPOIType *type = [helper getPoiTypeByCategory:category name:subCategory];
     if (!type)
@@ -913,21 +913,31 @@
     }
 }
 
-+ (void)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(NSString *)nativeName nameLocalized:(NSMutableString *)nameLocalized names:(NSMutableDictionary *)names
++ (NSString *)processLocalizedNames:(QHash<QString, QString>)localizedNames nativeName:(QString)nativeName names:(NSMutableDictionary *)names
 {
-    NSString *prefLang = [[OAAppSettings sharedManager] settingPrefMapLanguage];
-    
+    NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+
     const QString lang = (prefLang ? QString::fromNSString(prefLang) : QString::null);
+    QString nameLocalized;
     for(const auto& entry : OsmAnd::rangeOf(localizedNames))
     {
         if (lang != QString::null && entry.key() == lang)
-            [nameLocalized appendString:entry.value().toNSString()];
+            nameLocalized = entry.value();
         
         [names setObject:entry.value().toNSString() forKey:entry.key().toNSString()];
     }
     
+    if (nameLocalized.isNull())
+        nameLocalized = nativeName;
+    
     if (![names objectForKey:@""])
-        [names setObject:nativeName forKey:@""];
+        [names setObject:nativeName.toNSString() forKey:@""];
+    
+    if (!nameLocalized.isNull() && transliterate)
+        nameLocalized = OsmAnd::ICU::transliterateToLatin(nameLocalized);
+    
+    return nameLocalized.isNull() ? @"" : nameLocalized.toNSString();
 }
 
 + (void)processDecodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values

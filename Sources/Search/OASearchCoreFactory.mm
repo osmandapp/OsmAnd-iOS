@@ -502,6 +502,7 @@
                                   
                                   const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
                                   OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
+                                  sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames];
                                   sr.localeName = amenity->getName(lang, transliterate).toNSString();
                                   if ([phrase isUnknownSearchWordComplete])
@@ -509,7 +510,6 @@
                                       if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames])
                                           return false;
                                   }
-                                  sr.object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.amenity = amenity;
                                   sr.preferredZoom = 17;
                                   sr.resourceId = currentResId;

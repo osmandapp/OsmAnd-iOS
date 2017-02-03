@@ -55,7 +55,7 @@
     return _lastCalculationTime == -1 || (_lastCalculationTime > 0 && [[NSDate date] timeIntervalSince1970] - _lastCalculationTime > 0.3);
 }
 
-- (BOOL) evaluateDistanceDirection
+- (BOOL) evaluateDistanceDirection:(BOOL)decelerating
 {
     if ([self isInvalidated])
     {
@@ -71,7 +71,7 @@
             _distanceMeters = distance;
             _direction = 0;
         }
-        else
+        else if (!decelerating || _lastCalculationTime == -1)
         {
             _lastCalculationTime = [[NSDate date] timeIntervalSince1970];
             CLLocation *location = app.locationServices.lastKnownLocation;

@@ -25,7 +25,7 @@
 
 @property (nonatomic) OAHistoryItem *item;
 
-- (OADistanceDirection *) getEvaluatedDistanceDirection;
+- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
 - (void) resetMapCenterSearch;
 
@@ -64,10 +64,10 @@
     _distanceDirection = [[OADistanceDirection alloc] initWithLatitude:item.latitude longitude:item.longitude];
 }
 
-- (OADistanceDirection *) getEvaluatedDistanceDirection
+- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating
 {
     if (_distanceDirection)
-        [_distanceDirection evaluateDistanceDirection];
+        [_distanceDirection evaluateDistanceDirection:decelerating];
     
     return _distanceDirection;
 }
@@ -447,7 +447,7 @@
     cell.openingHoursView.hidden = YES;
     cell.timeIcon.hidden = YES;
     
-    OADistanceDirection *distDir = [dataItem getEvaluatedDistanceDirection];
+    OADistanceDirection *distDir = [dataItem getEvaluatedDistanceDirection:_decelerating];
     
     [cell.distanceView setText:distDir.distance];
     if (_searchNearMapCenter)

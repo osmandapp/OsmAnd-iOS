@@ -56,9 +56,10 @@
 @implementation OAQuickSearchTableController
 {
     NSMutableArray<OAQuickSearchListItem *> *_dataArray;
+    BOOL _decelerating;
 }
 
-- (instancetype)initWithTableView:(UITableView *)tableView
+- (instancetype) initWithTableView:(UITableView *)tableView
 {
     self = [super init];
     if (self)
@@ -71,7 +72,13 @@
     return self;
 }
 
-+ (void)goToPoint:(double)latitude longitude:(double)longitude
+- (void) updateDistanceAndDirection
+{
+    if (!_decelerating)
+        [self.tableView reloadData];
+}
+
++ (void) goToPoint:(double)latitude longitude:(double)longitude
 {
     OAPOI *poi = [[OAPOI alloc] init];
     poi.latitude = latitude;
@@ -81,7 +88,7 @@
     [self goToPoint:poi];
 }
 
-+ (void)goToPoint:(OAPOI *)poi
++ (void) goToPoint:(OAPOI *)poi
 {
     const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
@@ -423,7 +430,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
                     [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
@@ -464,7 +471,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
                     [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
@@ -511,7 +518,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
                     [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
@@ -562,7 +569,7 @@
                         cell.timeIcon.hidden = YES;
                     }
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
                     [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
@@ -604,7 +611,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection];
+                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
                     [cell.distanceView setText:distDir.distance];
                     if (self.searchNearMapCenter)
                     {
@@ -806,6 +813,25 @@
             }
         }
     }    
+}
+
+#pragma mark - UIScrollViewDelegate
+
+- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
+{
+    _decelerating = YES;
+}
+
+// Load images for all onscreen rows when scrolling is finished
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    if (!decelerate)
+        _decelerating = NO;
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    _decelerating = NO;
 }
 
 @end

@@ -27,6 +27,6 @@
 - (void) resetMapCenterSearch;
 
 - (BOOL) isInvalidated;
-- (BOOL) evaluateDistanceDirection;
+- (BOOL) evaluateDistanceDirection:(BOOL)decelerating;
 
 @end

@@ -40,8 +40,6 @@
     [super viewDidLoad];
 
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
-    self.tableView.dataSource = _tableController;
-    self.tableView.delegate = _tableController;
 }
 
 -(void)viewWillAppear:(BOOL)animated

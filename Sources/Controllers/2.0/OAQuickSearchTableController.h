@@ -26,7 +26,9 @@
 @property (nonatomic, readonly) BOOL searchNearMapCenter;
 @property (nonatomic, readonly) CLLocationCoordinate2D mapCenterCoordinate;
 
-- (instancetype)initWithTableView:(UITableView *)tableView;
+- (instancetype) initWithTableView:(UITableView *)tableView;
+
+- (void) updateDistanceAndDirection;
 
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
 - (void) resetMapCenterSearch;

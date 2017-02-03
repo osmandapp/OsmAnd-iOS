@@ -272,10 +272,10 @@
     return [OAObjectType toString:searchResult.objectType];
 }
 
-- (OADistanceDirection *) getEvaluatedDistanceDirection
+- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating
 {
     if (_distanceDirection)
-        [_distanceDirection evaluateDistanceDirection];
+        [_distanceDirection evaluateDistanceDirection:decelerating];
     
     return _distanceDirection;
 }

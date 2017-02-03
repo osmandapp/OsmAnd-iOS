@@ -22,7 +22,7 @@
 + (NSString *) getName:(OASearchResult *)searchResult;
 + (NSString *) getTypeName:(OASearchResult *)searchResult;
 
-- (OADistanceDirection *) getEvaluatedDistanceDirection;
+- (OADistanceDirection *) getEvaluatedDistanceDirection:(BOOL)decelerating;
 - (void) setMapCenterCoordinate:(CLLocationCoordinate2D)mapCenterCoordinate;
 - (void) resetMapCenterSearch;
 

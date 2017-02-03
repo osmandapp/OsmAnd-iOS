@@ -100,7 +100,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (strong, nonatomic) dispatch_queue_t searchDispatchQueue;
 @property (strong, nonatomic) dispatch_queue_t updateDispatchQueue;
 
-@property (nonatomic) BOOL decelerating;
 @property (nonatomic) BOOL paused;
 @property (nonatomic) BOOL foundPartialLocation;
 @property (nonatomic) BOOL interruptedSearch;
@@ -163,8 +162,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
     _tableController.delegate = self;
-    self.tableView.dataSource = _tableController;
-    self.tableView.delegate = _tableController;
     if (_searchNearMapCenter)
         [_tableController setMapCenterCoordinate:_searchLocation];
     else
@@ -229,7 +226,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)viewWillAppear:(BOOL)animated
 {
-    self.decelerating = NO;
     self.paused = NO;
     
     [self setupView];
@@ -667,6 +663,9 @@ typedef NS_ENUM(NSInteger, BarActionType)
     _myLocation = myLocation;
     OsmAnd::LatLon latLon = OsmAnd::Utilities::convert31ToLatLon(myLocation);
     _searchLocation = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+
+    OASearchSettings *settings = [[self.searchUICore getSearchSettings] setOriginalLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.latitude longitude:_searchLocation.longitude]];
+    [self.searchUICore updateSettings:settings];
     
     if (self.isViewLoaded)
         [self.view setNeedsLayout];
@@ -763,21 +762,15 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)updateDistanceAndDirection
 {
-    if (self.decelerating || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+    if (_searchNearMapCenter || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-        [self refreshVisibleRows];
+        [_tableController updateDistanceAndDirection];
         [_historyViewController updateDistanceAndDirection];
     });
 }
-
-- (void)refreshVisibleRows
-{
-    [_tableView reloadData];
-}
-
 
 - (void)didReceiveMemoryWarning
 {
@@ -1340,28 +1333,5 @@ typedef NS_ENUM(NSInteger, BarActionType)
         return NO;
     }
 }
-
-#pragma mark - UIScrollViewDelegate
-
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
-{
-    self.decelerating = YES;
-}
-
-// Load images for all onscreen rows when scrolling is finished
-- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
-{
-    if (!decelerate) {
-        self.decelerating = NO;
-        //[self refreshVisibleRows];
-    }
-}
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    self.decelerating = NO;
-    //[self refreshVisibleRows];
-}
-
 
 @end

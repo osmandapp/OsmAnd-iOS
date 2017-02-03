@@ -664,10 +664,14 @@ typedef enum
     [self updateApplyButton];
 }
 
+- (BOOL) hasChanges
+{
+    return ![_nameFilterText isEqualToString:_nameFilterTextOrig] || ![_selectedPoiAdditionals isEqualToSet:_selectedPoiAdditionalsOrig];
+}
+
 - (void) updateApplyButton
 {
-    BOOL hasChanges = ![_nameFilterText isEqualToString:_nameFilterTextOrig] || ![_selectedPoiAdditionals isEqualToSet:_selectedPoiAdditionalsOrig];
-    [self setApplyViewVisible:hasChanges];
+    [self setApplyViewVisible:[self hasChanges]];
 }
 
 - (IBAction)applyButtonPress:(id)sender
@@ -949,6 +953,8 @@ typedef enum
     switch (actionSheet.tag)
     {
         case EMenuStandard:
+            if ([self hasChanges])
+                [self applyFilterFields];
             if (self.delegate && [self.delegate saveFilter:_filter])
                 [self.navigationController popViewControllerAnimated:YES];
             
@@ -965,7 +971,8 @@ typedef enum
             }
             else if (buttonIndex == 2)
             {
-                [self applyFilterFields];
+                if ([self hasChanges])
+                    [self applyFilterFields];
                 if (self.delegate && [self.delegate saveFilter:_filter])
                     [self.navigationController popViewControllerAnimated:YES];
             }

@@ -1316,22 +1316,22 @@
             jointNumbers ++;
             lastJoin = i;
         }
-        if ([all[i] isEqualToString:@"n"] || [all[i] isEqualToString:@"s"] ||
-            [all[i] isEqualToString:@"N"] || [all[i] isEqualToString:@"S"])
+        if ([strings[i] isEqualToString:@"n"] || [strings[i] isEqualToString:@"s"] ||
+            [strings[i] isEqualToString:@"N"] || [strings[i] isEqualToString:@"S"])
         {
             northSplit = i + 1;
         }
-        if ([all[i] isEqualToString:@"e"] || [all[i] isEqualToString:@"w"] ||
-            [all[i] isEqualToString:@"E"] || [all[i] isEqualToString:@"W"])
+        if ([strings[i] isEqualToString:@"e"] || [strings[i] isEqualToString:@"w"] ||
+            [strings[i] isEqualToString:@"E"] || [strings[i] isEqualToString:@"W"])
         {
             eastSplit = i;
         }
         int dg = -1;
-        if ([all[i] isEqualToString:@"°"])
+        if ([strings[i] isEqualToString:@"°"])
             dg = 0;
-        else if ([all[i] isEqualToString:@"\'"] || [all[i] isEqualToString:@"′"])
+        else if ([strings[i] isEqualToString:@"\'"] || [strings[i] isEqualToString:@"′"])
             dg = 1;
-        else if ([all[i] isEqualToString:@"″"] || [all[i] isEqualToString:@"\""])
+        else if ([strings[i] isEqualToString:@"″"] || [strings[i] isEqualToString:@"\""])
             dg = 2;
         
         if (dg != -1)

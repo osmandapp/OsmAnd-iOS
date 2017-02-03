@@ -467,6 +467,12 @@
 		844E07EA1E42354000EFC525 /* ic_action_intersection.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07CF1E42319700EFC525 /* ic_action_intersection.png */; };
 		844E07EB1E42354000EFC525 /* ic_action_intersection@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07D01E42319700EFC525 /* ic_action_intersection@2x.png */; };
 		844E07EC1E42354000EFC525 /* ic_action_intersection@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07D11E42319700EFC525 /* ic_action_intersection@3x.png */; };
+		844E07F01E44D8E900EFC525 /* ic_action_world_globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07ED1E44D8E800EFC525 /* ic_action_world_globe.png */; };
+		844E07F11E44D8E900EFC525 /* ic_action_world_globe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07EE1E44D8E800EFC525 /* ic_action_world_globe@2x.png */; };
+		844E07F21E44D8E900EFC525 /* ic_action_world_globe@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07EF1E44D8E900EFC525 /* ic_action_world_globe@3x.png */; };
+		844E07F31E44D96300EFC525 /* ic_action_world_globe.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07ED1E44D8E800EFC525 /* ic_action_world_globe.png */; };
+		844E07F41E44D96300EFC525 /* ic_action_world_globe@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07EE1E44D8E800EFC525 /* ic_action_world_globe@2x.png */; };
+		844E07F51E44D96300EFC525 /* ic_action_world_globe@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 844E07EF1E44D8E900EFC525 /* ic_action_world_globe@3x.png */; };
 		844F32AB1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AC1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */; };
 		844F32AF1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = 844F32AE1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.m */; };
@@ -2695,6 +2701,9 @@
 		844E07DB1E4231C100EFC525 /* ic_action_street_name.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_street_name.png; path = Resources/Icons/ic_action_street_name.png; sourceTree = "<group>"; };
 		844E07DC1E4231C200EFC525 /* ic_action_street_name@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_street_name@2x.png"; path = "Resources/Icons/ic_action_street_name@2x.png"; sourceTree = "<group>"; };
 		844E07DD1E4231C200EFC525 /* ic_action_street_name@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_street_name@3x.png"; path = "Resources/Icons/ic_action_street_name@3x.png"; sourceTree = "<group>"; };
+		844E07ED1E44D8E800EFC525 /* ic_action_world_globe.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_action_world_globe.png; path = Resources/Icons/ic_action_world_globe.png; sourceTree = "<group>"; };
+		844E07EE1E44D8E800EFC525 /* ic_action_world_globe@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_world_globe@2x.png"; path = "Resources/Icons/ic_action_world_globe@2x.png"; sourceTree = "<group>"; };
+		844E07EF1E44D8E900EFC525 /* ic_action_world_globe@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_world_globe@3x.png"; path = "Resources/Icons/ic_action_world_globe@3x.png"; sourceTree = "<group>"; };
 		844F32A91E0D685D00B5CDBC /* OASearchPoiTypeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASearchPoiTypeFilter.h; sourceTree = "<group>"; };
 		844F32AA1E0D685D00B5CDBC /* OASearchPoiTypeFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASearchPoiTypeFilter.m; sourceTree = "<group>"; };
 		844F32AD1E0D82FA00B5CDBC /* OACustomSearchPoiFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACustomSearchPoiFilter.h; sourceTree = "<group>"; };
@@ -3888,6 +3897,9 @@
 		3AFEEE231A0E343600900A47 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				844E07ED1E44D8E800EFC525 /* ic_action_world_globe.png */,
+				844E07EE1E44D8E800EFC525 /* ic_action_world_globe@2x.png */,
+				844E07EF1E44D8E900EFC525 /* ic_action_world_globe@3x.png */,
 				844E07DB1E4231C100EFC525 /* ic_action_street_name.png */,
 				844E07DC1E4231C200EFC525 /* ic_action_street_name@2x.png */,
 				844E07DD1E4231C200EFC525 /* ic_action_street_name@3x.png */,
@@ -5847,6 +5859,7 @@
 				847A1DFD1DF94E9B003C1246 /* ic_plugin_wikipedia@3x.png in Resources */,
 				847A1DFE1DF94E9B003C1246 /* ic_list.png in Resources */,
 				847A1DFF1DF94E9B003C1246 /* OATrackIntervalDialogView.xib in Resources */,
+				844E07F41E44D96300EFC525 /* ic_action_world_globe@2x.png in Resources */,
 				847A1E001DF94E9B003C1246 /* nautical.render.xml in Resources */,
 				847A1E011DF94E9B003C1246 /* HUD_button_bg@2x.png in Resources */,
 				847A1E021DF94E9B003C1246 /* OATextMultiViewCell.xib in Resources */,
@@ -6122,6 +6135,7 @@
 				847A1F071DF94E9B003C1246 /* left_menu_icon_trips@2x.png in Resources */,
 				847A1F081DF94E9B003C1246 /* icon_star.png in Resources */,
 				847A1F091DF94E9B003C1246 /* HUD_left_halfbutton_bg@2x.png in Resources */,
+				844E07F31E44D96300EFC525 /* ic_action_world_globe.png in Resources */,
 				847A1F0A1DF94E9B003C1246 /* ic_favorite_2@2x.png in Resources */,
 				847A1F0B1DF94E9B003C1246 /* ic_destination_pin_2@2x.png in Resources */,
 				847A1F0C1DF94E9B003C1246 /* onmap_placeholder.png in Resources */,
@@ -6144,6 +6158,7 @@
 				847A1F1D1DF94E9B003C1246 /* ic_list@3x.png in Resources */,
 				847A1F1E1DF94E9B003C1246 /* ic_favorite_4@2x.png in Resources */,
 				847A1F1F1DF94E9B003C1246 /* ic_working_time@3x.png in Resources */,
+				844E07F51E44D96300EFC525 /* ic_action_world_globe@3x.png in Resources */,
 				847A1F201DF94E9B003C1246 /* ic_parking_pin_small.png in Resources */,
 				847A1F211DF94E9B003C1246 /* OADirectionCell.xib in Resources */,
 				847A1F221DF94E9B003C1246 /* ic_waypoint_up@2x.png in Resources */,
@@ -7004,6 +7019,7 @@
 				84BE7D491CF759E2001D8D78 /* map_small_group.png in Resources */,
 				3AC09BD01A2783ED002698FE /* OAWebViewController.xib in Resources */,
 				84185AEC1AAA11B600F70328 /* ic_favorite_8@2x.png in Resources */,
+				844E07F21E44D8E900EFC525 /* ic_action_world_globe@3x.png in Resources */,
 				845E06381B5956E800DFC2A7 /* waypoint_map_disable.png in Resources */,
 				BBA3AFC1197FC4BB0039D991 /* HUD_right_narrowbutton_bg@2x.png in Resources */,
 				84185AB91AAA11B600F70328 /* ic_favorite_2@3x.png in Resources */,
@@ -7192,10 +7208,12 @@
 				84263A181B39D36A00CECF1C /* my_course_marker_icon.png in Resources */,
 				844499A81AAA1FFA00ACA20D /* img_app_purchase_2@3x.png in Resources */,
 				844499661AAA1FC000ACA20D /* ic_tabbar_addons_active@2x.png in Resources */,
+				844E07F01E44D8E900EFC525 /* ic_action_world_globe.png in Resources */,
 				84F3A9781B4FC7FB00D16EBC /* ic_trip_sort@2x.png in Resources */,
 				84E2DB491AB720FA001A7FEC /* HUD_compass@2x.png in Resources */,
 				BBA3AFDA197FC4BB0039D991 /* NavigationAppModeHUD.xib in Resources */,
 				845E07191B60E72300DFC2A7 /* ic_checkmark_big_enable@3x.png in Resources */,
+				844E07F11E44D8E900EFC525 /* ic_action_world_globe@2x.png in Resources */,
 				843E5D9B1AB341E000BE14BE /* menu_star_icon@3x.png in Resources */,
 				845E07131B60E72300DFC2A7 /* ic_checkmark_big_enable.png in Resources */,
 				8454DA3F1B31774F00E5A5C5 /* ic_mode_bike@2x.png in Resources */,

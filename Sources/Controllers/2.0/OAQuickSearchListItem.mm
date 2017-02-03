@@ -237,7 +237,7 @@
             if (!searchResult.localeRelatedObjectName)
             {
                 OAWorldRegion *region = [[OsmAndApp instance].worldRegion findAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
-                searchResult.localeRelatedObjectName = !region ? @"" : region.nativeName;
+                searchResult.localeRelatedObjectName = !region ? @"" : region.localizedName;
             }
             return searchResult.localeRelatedObjectName;
         }

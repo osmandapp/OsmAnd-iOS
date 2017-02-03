@@ -301,9 +301,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
             weakSelf.searching = false;
             if (!weakSelf.paused)
             {
-                [weakSelf showSearchIcon];
                 if ([weakSelf.searchUICore isSearchMoreAvailable:[weakSelf.searchUICore getPhrase]])
                     [weakSelf addMoreButton];
+
+                [weakSelf showSearchIcon];
             }
         });
     };
@@ -808,6 +809,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 -(void)setupView
 {
+    NSString *locale = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    OASearchSettings *settings = [[self.searchUICore getSearchSettings] setLang:locale transliterateIfMissing:transliterate];
+    [self.searchUICore updateSettings:settings];
 }
 
 - (void)addHistoryItem:(OAPOI *)poi type:(OAHistoryType)type
@@ -991,7 +996,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
             }
             case PARTIAL_LOCATION:
             {
-                //[self showLocationToolbar];
+                // do not show
                 break;
             }
             default:
@@ -1136,7 +1141,10 @@ typedef NS_ENUM(NSInteger, BarActionType)
     }];
 
     if (!_paused)
+    {
         [_tableController addItem:moreListItem];
+        [_tableController.tableView reloadData];
+    }
 }
 
 - (void) updateSearchResult:(OASearchResultCollection *)res append:(BOOL)append

@@ -33,6 +33,7 @@
 #import "OADistanceDirection.h"
 #import "OAPOIUIFilter.h"
 #import "OADefaultFavorite.h"
+#import "OAPOILocationType.h"
 
 #import "OAIconTextTableViewCell.h"
 #import "OAIconTextExTableViewCell.h"
@@ -78,28 +79,37 @@
         [self.tableView reloadData];
 }
 
-+ (void) goToPoint:(double)latitude longitude:(double)longitude
++ (CGPoint) showPinAtLatitude:(double)latitude longitude:(double)longitude
 {
-    OAPOI *poi = [[OAPOI alloc] init];
-    poi.latitude = latitude;
-    poi.longitude = longitude;
-    poi.nameLocalized = @"";
-    
-    [self goToPoint:poi];
-}
-
-+ (void) goToPoint:(OAPOI *)poi
-{
-    const OsmAnd::LatLon latLon(poi.latitude, poi.longitude);
+    const OsmAnd::LatLon latLon(latitude, longitude);
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OAMapRendererView* mapRendererView = (OAMapRendererView*)mapVC.view;
     Point31 pos = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(latLon)];
     [mapVC goToPosition:pos andZoom:kDefaultZoomOnShow animated:YES];
-    [mapVC showContextPinMarker:poi.latitude longitude:poi.longitude animated:NO];
+    [mapVC showContextPinMarker:latLon.latitude longitude:latLon.longitude animated:NO];
     
     CGPoint touchPoint = CGPointMake(mapRendererView.bounds.size.width / 2.0, mapRendererView.bounds.size.height / 2.0);
     touchPoint.x *= mapRendererView.contentScaleFactor;
     touchPoint.y *= mapRendererView.contentScaleFactor;
+    return touchPoint;
+}
+
++ (void) goToPoint:(double)latitude longitude:(double)longitude
+{
+    CGPoint touchPoint = [self.class showPinAtLatitude:latitude longitude:longitude];
+    
+    OAMapSymbol *symbol = [[OAMapSymbol alloc] init];
+    symbol.type = OAMapSymbolLocation;
+    symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
+    symbol.location = CLLocationCoordinate2DMake(latitude, longitude);
+    symbol.poiType = [[OAPOILocationType alloc] init];
+    symbol.centerMap = YES;
+    [OAMapViewController postTargetNotification:symbol];
+}
+
++ (void) goToPoint:(OAPOI *)poi
+{
+    CGPoint touchPoint = [self.class showPinAtLatitude:poi.latitude longitude:poi.longitude];
     
     OAMapSymbol *symbol = [OAMapViewController getMapSymbol:poi];
     symbol.touchPoint = CGPointMake(touchPoint.x, touchPoint.y);
@@ -195,6 +205,11 @@
 - (void) updateData:(NSArray<OAQuickSearchListItem *> *)data  append:(BOOL)append
 {
     _dataArray = [NSMutableArray arrayWithArray:data];
+    if (self.searchNearMapCenter)
+    {
+        for (OAQuickSearchListItem *item in _dataArray)
+            [item setMapCenterCoordinate:self.mapCenterCoordinate];
+    }
 
     [_tableView reloadData];
     if (!append && _dataArray.count > 0)
@@ -302,6 +317,41 @@
     }
 }
 
+- (OAPointDescCell *) getPointDescCell
+{
+    static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
+    
+    OAPointDescCell* cell;
+    cell = (OAPointDescCell *)[self.tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
+    if (cell == nil)
+    {
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
+        cell = (OAPointDescCell *)[nib objectAtIndex:0];
+    }
+    return cell;
+}
+
+- (void) setCellDistanceDirection:(OAPointDescCell *)cell item:(OAQuickSearchListItem *)item
+{
+    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
+    [cell.distanceView setText:distDir.distance];
+    if (self.searchNearMapCenter)
+    {
+        cell.directionImageView.hidden = YES;
+        CGRect frame = cell.distanceView.frame;
+        frame.origin.x = 51.0;
+        cell.distanceView.frame = frame;
+    }
+    else
+    {
+        cell.directionImageView.hidden = NO;
+        CGRect frame = cell.distanceView.frame;
+        frame.origin.x = 69.0;
+        cell.distanceView.frame = frame;
+        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
+    }
+}
+
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -355,67 +405,23 @@
             case LOCATION:
             case PARTIAL_LOCATION:
             {
-                OAIconTextExTableViewCell* cell;
-                cell = (OAIconTextExTableViewCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextExTableViewCell"];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAIconTextExCell" owner:self options:nil];
-                    cell = (OAIconTextExTableViewCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
-                    BOOL partial = res.objectType == PARTIAL_LOCATION;
-                    CLLocationCoordinate2D coords = ((CLLocation *)res.object).coordinate;
+                    [cell.titleView setText:[item getName]];
+                    cell.titleIcon.image = [[UIImage imageNamed:@"ic_action_world_globe"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+                    [cell.descView setText:[OAQuickSearchListItem getTypeName:res]];
+                    [cell updateDescVisibility];
+                    cell.openingHoursView.hidden = YES;
+                    cell.timeIcon.hidden = YES;
                     
-                    CGRect f = cell.textView.frame;
-                    CGFloat oldX = f.origin.x;
-                    f.origin.x = 12.0;
-                    f.origin.y = 14.0;
-                    
-                    if (partial)
-                        f.size.width = tableView.frame.size.width - 24.0;
-                    else
-                        f.size.width += (oldX - f.origin.x);
-                    
-                    cell.textView.frame = f;
-                    
-                    NSString *text = @"";
-                    if (partial)
-                    {
-                        NSString *coord1 = [OAUtilities floatToStrTrimZeros:coords.latitude];
-                        
-                        text = [NSString stringWithFormat:@"%@ %@ %@ #.## %@ ##’##’##.#", OALocalizedString(@"latitude"), coord1, OALocalizedString(@"longitude"), OALocalizedString(@"shared_string_or")];
-                        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                        cell.arrowIconView.hidden = YES;
-                    }
-                    else
-                    {
-                        NSString *coord1 = [OAUtilities floatToStrTrimZeros:coords.latitude];
-                        NSString *coord2 = [OAUtilities floatToStrTrimZeros:coords.longitude];
-                        
-                        text = [NSString stringWithFormat:@"%@: %@, %@", OALocalizedString(@"sett_arr_loc"), coord1, coord2];
-                        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-                        cell.arrowIconView.hidden = NO;
-                    }
-                    
-                    [cell.textView setText:text];
-                    [cell.iconView setImage: nil];
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
             case FAVORITE:
             {
-                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-                
-                OAPointDescCell* cell;
-                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
-                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
                     const auto& favorite = res.favorite;
@@ -430,38 +436,13 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
-                    [cell.distanceView setText:distDir.distance];
-                    if (self.searchNearMapCenter)
-                    {
-                        cell.directionImageView.hidden = YES;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 51.0;
-                        cell.distanceView.frame = frame;
-                    }
-                    else
-                    {
-                        cell.directionImageView.hidden = NO;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 69.0;
-                        cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
-                    }
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
             case WPT:
             {
-                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-                
-                OAPointDescCell* cell;
-                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
-                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
                     [cell.titleView setText:[item getName]];
@@ -471,23 +452,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
-                    [cell.distanceView setText:distDir.distance];
-                    if (self.searchNearMapCenter)
-                    {
-                        cell.directionImageView.hidden = YES;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 51.0;
-                        cell.distanceView.frame = frame;
-                    }
-                    else
-                    {
-                        cell.directionImageView.hidden = NO;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 69.0;
-                        cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
-                    }
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
@@ -498,16 +463,7 @@
             case HOUSE:
             case STREET_INTERSECTION:
             {
-                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-                
-                OAPointDescCell* cell;
-                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
-                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
                     OAAddress *address = (OAAddress *)res.object;
@@ -518,38 +474,13 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
-                    [cell.distanceView setText:distDir.distance];
-                    if (self.searchNearMapCenter)
-                    {
-                        cell.directionImageView.hidden = YES;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 51.0;
-                        cell.distanceView.frame = frame;
-                    }
-                    else
-                    {
-                        cell.directionImageView.hidden = NO;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 69.0;
-                        cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
-                    }
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
             case POI:
             {
-                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-                
-                OAPointDescCell* cell;
-                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
-                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
                     OAPOI *poi = (OAPOI *)res.object;
@@ -569,38 +500,13 @@
                         cell.timeIcon.hidden = YES;
                     }
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
-                    [cell.distanceView setText:distDir.distance];
-                    if (self.searchNearMapCenter)
-                    {
-                        cell.directionImageView.hidden = YES;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 51.0;
-                        cell.distanceView.frame = frame;
-                    }
-                    else
-                    {
-                        cell.directionImageView.hidden = NO;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 69.0;
-                        cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
-                    }
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
             case RECENT_OBJ:
             {
-                static NSString* const reusableIdentifierPoint = @"OAPointDescCell";
-                
-                OAPointDescCell* cell;
-                cell = (OAPointDescCell *)[tableView dequeueReusableCellWithIdentifier:reusableIdentifierPoint];
-                if (cell == nil)
-                {
-                    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAPointDescCell" owner:self options:nil];
-                    cell = (OAPointDescCell *)[nib objectAtIndex:0];
-                }
-                
+                OAPointDescCell* cell = [self getPointDescCell];
                 if (cell)
                 {
                     OAHistoryItem* historyItem = (OAHistoryItem *)res.object;
@@ -611,23 +517,7 @@
                     cell.openingHoursView.hidden = YES;
                     cell.timeIcon.hidden = YES;
                     
-                    OADistanceDirection *distDir = [item getEvaluatedDistanceDirection:_decelerating];
-                    [cell.distanceView setText:distDir.distance];
-                    if (self.searchNearMapCenter)
-                    {
-                        cell.directionImageView.hidden = YES;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 51.0;
-                        cell.distanceView.frame = frame;
-                    }
-                    else
-                    {
-                        cell.directionImageView.hidden = NO;
-                        CGRect frame = cell.distanceView.frame;
-                        frame.origin.x = 69.0;
-                        cell.distanceView.frame = frame;
-                        cell.directionImageView.transform = CGAffineTransformMakeRotation(distDir.direction);
-                    }
+                    [self setCellDistanceDirection:cell item:item];
                 }
                 return cell;
             }
@@ -805,6 +695,10 @@
                     || sr.objectType == STREET_INTERSECTION)
                 {
                     [self.class showOnMap:sr delegate:self.delegate];
+                }
+                else if (sr.objectType == PARTIAL_LOCATION)
+                {
+                    // nothing
                 }
                 else
                 {

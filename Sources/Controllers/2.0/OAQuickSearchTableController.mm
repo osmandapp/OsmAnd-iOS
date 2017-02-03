@@ -523,7 +523,7 @@
             }
             case POI_TYPE:
             {
-                if ([res.object isKindOfClass:[OAPOIUIFilter class]])
+                if ([res.object isKindOfClass:[OACustomSearchPoiFilter class]])
                 {
                     OAIconTextDescCell* cell;
                     cell = (OAIconTextDescCell *)[tableView dequeueReusableCellWithIdentifier:@"OAIconTextDescCell"];
@@ -535,13 +535,24 @@
                     
                     if (cell)
                     {
+                        OACustomSearchPoiFilter *filter = (OACustomSearchPoiFilter *) res.object;
+                        UIImage *icon;
+                        NSObject *res = [filter getIconResource];
+                        if ([res isKindOfClass:[NSString class]])
+                        {
+                            NSString *iconName = (NSString *)res;
+                            icon = [OAUtilities getMxIcon:iconName];
+                        }
+                        if (!icon)
+                            icon = [OAUtilities getMxIcon:@"user_defined"];
+                        
                         CGRect f = cell.textView.frame;
                         f.origin.y = 14.0;
                         cell.textView.frame = f;
                         
                         [cell.textView setText:[item getName]];
                         [cell.descView setText:@""];
-                        [cell.iconView setImage: [OAPOIUIFilter getUserIcon]];
+                        [cell.iconView setImage:icon];
                     }
                     return cell;
                 }

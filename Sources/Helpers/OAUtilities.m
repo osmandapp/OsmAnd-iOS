@@ -533,8 +533,10 @@
 + (UIImage *)getMxIcon:(NSString *)name
 {
     UIImage *img = [UIImage imageNamed:[NSString stringWithFormat:@"style-icons/drawable-%@/mx_%@", [OAUtilities drawablePostfix], name]];
-    
-    return [OAUtilities applyScaleFactorToImage:img];
+    if (img)
+        return [OAUtilities applyScaleFactorToImage:img];
+    else
+        return nil;
 }
 
 + (UIImage *)getTintableImage:(UIImage *)image

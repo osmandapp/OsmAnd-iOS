@@ -272,10 +272,6 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     [_core registerAPI:[[OASearchHistoryAPI alloc] init]];
     
     [self refreshCustomPoiFilters];
-    
-    OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
-    [_core addCustomSearchPoiFilter:[poiFilters getLocalWikiPOIFilter] priority:1];
-    [_core addCustomSearchPoiFilter:[poiFilters getShowAllPOIFilter] priority:1];
 }
 
 - (void) refreshCustomPoiFilters
@@ -284,6 +280,9 @@ static const int SEARCH_HISTORY_OBJECT_PRIORITY = 53;
     OAPOIFiltersHelper *poiFilters = [OAPOIFiltersHelper sharedInstance];
     for (OACustomSearchPoiFilter *udf in [poiFilters getUserDefinedPoiFilters])
         [_core addCustomSearchPoiFilter:udf priority:0];
+
+    [_core addCustomSearchPoiFilter:[poiFilters getLocalWikiPOIFilter] priority:1];
+    [_core addCustomSearchPoiFilter:[poiFilters getShowAllPOIFilter] priority:1];
 }
 
 - (void) setResourcesForSearchUICore

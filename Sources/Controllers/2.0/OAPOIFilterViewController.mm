@@ -965,6 +965,7 @@ typedef enum
             }
             else if (buttonIndex == 2)
             {
+                [self applyFilterFields];
                 if (self.delegate && [self.delegate saveFilter:_filter])
                     [self.navigationController popViewControllerAnimated:YES];
             }

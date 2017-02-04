@@ -18,6 +18,9 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
     OAHistoryTypeRouteWpt,
     OAHistoryTypeFavorite,
     OAHistoryTypePOI,
+    OAHistoryTypeAddress,
+    OAHistoryTypeWpt,
+    OAHistoryTypeLocation,
 };
 
 @property (nonatomic) int64_t hId;

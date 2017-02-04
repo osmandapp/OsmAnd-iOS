@@ -281,7 +281,6 @@
 		8434BAB61B175AB7003FD0FC /* ic_poi_info_dots.png in Resources */ = {isa = PBXBuildFile; fileRef = 8434BAB11B175AB7003FD0FC /* ic_poi_info_dots.png */; };
 		8434BAB91B175AB7003FD0FC /* ic_poi_info_dots@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8434BAB21B175AB7003FD0FC /* ic_poi_info_dots@2x.png */; };
 		8434BABC1B175AB7003FD0FC /* ic_poi_info_dots@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8434BAB31B175AB7003FD0FC /* ic_poi_info_dots@3x.png */; };
-		84387B1F1ABB1A6100504DA7 /* OAPOISearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */; };
 		84387B221ABB1A6100504DA7 /* OAPOISearchViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 84387B1C1ABB1A6100504DA7 /* OAPOISearchViewController.xib */; };
 		84387B271ABB369700504DA7 /* OAPOICategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B241ABB369700504DA7 /* OAPOICategory.m */; };
 		84387B2C1ABB36A600504DA7 /* OAPOI.m in Sources */ = {isa = PBXBuildFile; fileRef = 84387B291ABB36A600504DA7 /* OAPOI.m */; };
@@ -769,7 +768,6 @@
 		847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8417A6801B25C29300EA1D17 /* OAEditGroupViewController.m */; };
 		847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3AFEEE9A1A13722500900A47 /* OAMapSettingsViewController.mm */; };
 		847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 845E05AA1B53E68D00DFC2A7 /* OADirectionTableViewCell.m */; };
-		847A1CE91DF94E9B003C1246 /* OAPOISearchViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */; };
 		847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 848D17131B188D9700A656F4 /* OAParkingViewController.mm */; };
 		847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */ = {isa = PBXBuildFile; fileRef = BB451EB718E1938F005FBE09 /* OALocationServices.m */; };
 		847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = BB0275D819D2EF41009AFBA8 /* OAUtilities.m */; };
@@ -2522,8 +2520,6 @@
 		8434BAB11B175AB7003FD0FC /* ic_poi_info_dots.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = ic_poi_info_dots.png; path = Resources/Icons/ic_poi_info_dots.png; sourceTree = "<group>"; };
 		8434BAB21B175AB7003FD0FC /* ic_poi_info_dots@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_poi_info_dots@2x.png"; path = "Resources/Icons/ic_poi_info_dots@2x.png"; sourceTree = "<group>"; };
 		8434BAB31B175AB7003FD0FC /* ic_poi_info_dots@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_poi_info_dots@3x.png"; path = "Resources/Icons/ic_poi_info_dots@3x.png"; sourceTree = "<group>"; };
-		84387B1A1ABB1A6100504DA7 /* OAPOISearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OAPOISearchViewController.h; path = Sources/Controllers/2.0/OAPOISearchViewController.h; sourceTree = "<group>"; };
-		84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OAPOISearchViewController.mm; path = Sources/Controllers/2.0/OAPOISearchViewController.mm; sourceTree = "<group>"; };
 		84387B1C1ABB1A6100504DA7 /* OAPOISearchViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = OAPOISearchViewController.xib; path = Sources/Controllers/2.0/OAPOISearchViewController.xib; sourceTree = "<group>"; };
 		84387B231ABB369700504DA7 /* OAPOICategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAPOICategory.h; sourceTree = "<group>"; };
 		84387B241ABB369700504DA7 /* OAPOICategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAPOICategory.m; sourceTree = "<group>"; };
@@ -4584,8 +4580,6 @@
 			children = (
 				84686ABF1E056F0500DA09BC /* OAPOISearchHelper.h */,
 				84686AC01E056F0500DA09BC /* OAPOISearchHelper.mm */,
-				84387B1A1ABB1A6100504DA7 /* OAPOISearchViewController.h */,
-				84387B1B1ABB1A6100504DA7 /* OAPOISearchViewController.mm */,
 				84387B1C1ABB1A6100504DA7 /* OAPOISearchViewController.xib */,
 				84686AAD1E05282500DA09BC /* OACategoriesTableViewController.h */,
 				84686AAE1E05282500DA09BC /* OACategoriesTableViewController.mm */,
@@ -7585,7 +7579,6 @@
 				847A1CE51DF94E9B003C1246 /* OAEditGroupViewController.m in Sources */,
 				847A1CE61DF94E9B003C1246 /* OAMapSettingsViewController.mm in Sources */,
 				847A1CE71DF94E9B003C1246 /* OADirectionTableViewCell.m in Sources */,
-				847A1CE91DF94E9B003C1246 /* OAPOISearchViewController.mm in Sources */,
 				847A1CEA1DF94E9B003C1246 /* OAParkingViewController.mm in Sources */,
 				847A1CEB1DF94E9B003C1246 /* OALocationServices.m in Sources */,
 				847A1CEC1DF94E9B003C1246 /* OAUtilities.m in Sources */,
@@ -7832,7 +7825,6 @@
 				8417A6841B25C29300EA1D17 /* OAEditGroupViewController.m in Sources */,
 				3AFEEE9E1A13722500900A47 /* OAMapSettingsViewController.mm in Sources */,
 				845E05AD1B53E68D00DFC2A7 /* OADirectionTableViewCell.m in Sources */,
-				84387B1F1ABB1A6100504DA7 /* OAPOISearchViewController.mm in Sources */,
 				848D17171B188D9700A656F4 /* OAParkingViewController.mm in Sources */,
 				BBA3AF45197FC4BB0039D991 /* OALocationServices.m in Sources */,
 				BB0275DB19D2EF41009AFBA8 /* OAUtilities.m in Sources */,

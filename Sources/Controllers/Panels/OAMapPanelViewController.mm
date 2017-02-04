@@ -24,6 +24,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
+#import "OATargetAddressViewController.h"
 
 #import <EventKit/EventKit.h>
 
@@ -2136,6 +2137,17 @@ typedef enum
             break;
         }
 
+        case OATargetAddress:
+        {
+            [self.targetMenuView doInit:showFullMenu];
+            OATargetAddressViewController *addressViewController = [[OATargetAddressViewController alloc] initWithAddress:self.targetMenuView.targetPoint.targetObj];
+            
+            [self.targetMenuView setCustomViewController:addressViewController needFullMenu:NO];
+            [self.targetMenuView prepareNoInit];
+            
+            break;
+        }
+
         case OATargetHistoryItem:
         {
             [self.targetMenuView doInit:showFullMenu];
@@ -2610,7 +2622,10 @@ typedef enum
     
     OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
     
-    NSString *caption = name.length == 0 ? address.name : name;
+    NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage;
+    BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit;
+    
+    NSString *caption = name.length == 0 ? [address getName:lang transliterate:transliterate] : name;
     NSString *description = typeName.length == 0 ?  [address getAddressTypeName] : typeName;
     UIImage *icon = [address icon];
     

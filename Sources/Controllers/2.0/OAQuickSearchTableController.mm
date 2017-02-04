@@ -248,6 +248,12 @@
                 [[OARootViewController instance].mapPanel openTargetViewWithFavorite:fav pushed:NO];
                 break;
             }
+            case CITY:
+            case STREET:
+            {
+                [[OARootViewController instance].mapPanel openTargetViewWithAddress:(OAAddress *)searchResult.object name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO];
+                break;
+            }
             case HOUSE:
             {
                 OABuilding *building = (OABuilding *)searchResult.object;
@@ -256,13 +262,13 @@
                 if ([searchResult.relatedObject isKindOfClass:[OACity class]])
                 {
                     OACity *city = (OACity * )searchResult.relatedObject;
-                    name = [NSString stringWithFormat:@"%@ %@", [city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES], name];
+                    name = [NSString stringWithFormat:@"%@ %@", [city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:[[searchResult.requiredSearchPhrase getSettings] isTransliterate]], name];
                 }
                 else if ([searchResult.relatedObject isKindOfClass:[OAStreet class]])
                 {
                     OAStreet *street = (OAStreet * )searchResult.relatedObject;
-                    NSString *s = [street getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES];
-                    typeNameHouse = [street.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:YES];
+                    NSString *s = [street getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:[[searchResult.requiredSearchPhrase getSettings] isTransliterate]];
+                    typeNameHouse = [street.city getName:[[searchResult.requiredSearchPhrase getSettings] getLang] transliterate:[[searchResult.requiredSearchPhrase getSettings] isTransliterate]];
                     name = [NSString stringWithFormat:@"%@ %@", s, name];
                 }
                 else if (searchResult.localeRelatedObjectName)

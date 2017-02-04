@@ -304,6 +304,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
                 if ([weakSelf.searchUICore isSearchMoreAvailable:[weakSelf.searchUICore getPhrase]])
                     [weakSelf addMoreButton];
 
+                [weakSelf updateBarActionView];
                 [weakSelf showSearchIcon];
             }
         });
@@ -312,9 +313,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (void)setupBarActionView:(BarActionType)type title:(NSString *)title
 {
-    if (_barActionType == type)
-        return;
-    
     switch (type)
     {
         case BarActionShowOnMap:
@@ -1093,7 +1091,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
     NSString *txt = [[self.searchUICore getPhrase] getText:YES];
     self.searchQuery = txt;
     [self updateTextField:txt];
-    [self updateBarActionView];
     OASearchSettings *settings = [[self.searchUICore getPhrase] getSettings];
     if ([settings getRadiusLevel] != 1)
         [self.searchUICore updateSettings:[settings setRadiusLevel:1]];
@@ -1114,7 +1111,6 @@ typedef NS_ENUM(NSInteger, BarActionType)
         NSString *txt = [[filter getName] stringByAppendingString:(nameFilter.length > 0 && [filter isStandardFilter] ? [@" " stringByAppendingString:nameFilter] : @" ")];
         self.searchQuery = txt;
         [self updateTextField:txt];
-        [self updateBarActionView];
         [self runCoreSearch:txt updateResult:NO searchMore:NO];
     }
 }
@@ -1164,6 +1160,12 @@ typedef NS_ENUM(NSInteger, BarActionType)
 
 - (BOOL)textFieldShouldClear:(UITextField *)textField
 {
+    if (textField.text.length > 0)
+    {
+        NSString *newText = [[self.searchUICore getPhrase] getTextWithoutLastWord];
+        [self updateTextField:newText];
+        return NO;
+    }
     return YES;
 }
 
